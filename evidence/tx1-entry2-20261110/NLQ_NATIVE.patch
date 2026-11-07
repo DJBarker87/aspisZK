@@ -1,0 +1,305 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+@@ -168,3 +169,7 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++#[path="NLQ_native.rs"]
++mod NLQ_native;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLQ_native.rs
+@@ -0,0 +1,70 @@
++//! Native fidelity witnesses against the ACTUAL frozen entry/process/stage1.
++//! Payload extent two is a malformed-length partition; no valid-length credit.
++use super::*;
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use std::rc::Rc;
++fn counter(a:&AccountInfo)->isize {unsafe{*Rc::as_ptr(&a.data).cast::<isize>()}}
++fn check(mode:u8,bad:bool){
++ let program=Pubkey::new_from_array(kani::any());
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut money:u64=kani::any();let saved_money=money;
++ let mut data:[u8;2]=kani::any();let byte0=data[0];let byte1=data[1];
++ let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut money,&mut data,&owner,kani::any(),kani::any());
++ let accounts=[a.clone(),a.clone(),a];
++ let instruction=[3,11];
++ let result=match mode {
++  0=>process_r1_cost_probe_instruction(&program,&accounts,&instruction),
++  1=>r1_pool_adapter::process(&program,&accounts,&instruction),
++  _=>r1_pool_adapter::NLQ_adapter::invoke_stage1(&program,&accounts,&instruction),
++ };
++ if bad {assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++ else {assert_eq!(result,Err(ProgramError::InvalidArgument));}
++ assert_eq!(counter(&accounts[0]),0);assert_eq!(counter(&accounts[1]),0);assert_eq!(counter(&accounts[2]),0);
++ let guard=accounts[0].try_borrow_mut_data().unwrap();
++ assert_eq!(guard.len(),2);assert_eq!(guard[0],byte0);assert_eq!(guard[1],byte1);drop(guard);
++ assert_eq!(accounts[0].lamports(),saved_money);
++ assert!(core::ptr::eq(accounts[0].key,&key));assert!(core::ptr::eq(accounts[0].owner,&owner));
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn entry_eleven_duplicate(){check(0,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn entry_eleven_model_control(){check(0,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn process_eleven_duplicate(){check(1,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn process_eleven_model_control(){check(1,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage1_eleven_duplicate(){check(2,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage1_eleven_model_control(){check(2,true)}
++
++fn error_reply(_:verifier::Error)->ProgramError {ProgramError::InvalidInstructionData}
++fn check_first(bad:bool){
++ use aspis_statement::pool_v1::{PoolV1PrivateTransferPublicV1,PoolV1PairLatePublicStatementV1,PoolV1PairLiveSnapshotV1,PoolV1PairVerifiedAfterstateV1};
++ use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
++ use aspis_core::field::M31;
++ let zero=[M31(0);8];
++ let transfer=PoolV1PrivateTransferPublicV1{pool:[0;32],deployment_domain:[0;32],anchor_sequence:0,anchor_root:zero,nullifier:zero,asset_id:M31(0),recipient_commitment:zero,change_commitment:zero};
++ let late=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:zero,frontier:[zero;20]},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:0,next_root:zero,next_frontier:[zero;20]}};
++ let public_bytes:[u8;2]=kani::any();let proof:[u8;2]=kani::any();
++ let p0=public_bytes[0];let p1=public_bytes[1];let r0=proof[0];let r1=proof[1];
++ let result=first_decoded(Public::Transfer(&transfer,&late),&public_bytes,&proof,11);
++ if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}
++ else {assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++ assert_eq!(public_bytes[0],p0);assert_eq!(public_bytes[1],p1);assert_eq!(proof[0],r0);assert_eq!(proof[1],r1);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::error,error_reply)]
++fn first_wrong_split(){check_first(false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::error,error_reply)]
++fn first_wrong_split_control(){check_first(true)}
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -971,3 +971,7 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)]
++#[path="NLQ_adapter.rs"]
++pub(crate) mod NLQ_adapter;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLQ_adapter.rs
+@@ -0,0 +1,83 @@
++pub(crate) fn invoke_stage1(program:&super::Pubkey,accounts:&[super::AccountInfo<'_>],data:&[u8])->super::ProgramResult {super::stage1(program,accounts,data)}
++
++use super::{Pubkey,AccountInfo,ProgramError,ProgramResult};
++fn scalar_reply(program:&Pubkey)->ProgramResult {
++ let key=program.to_bytes();
++ match key[0]&7 {
++  0=>Ok(()),1=>Err(ProgramError::InvalidInstructionData),
++  2=>Err(ProgramError::InvalidAccountData),3=>Err(ProgramError::InvalidArgument),
++  4=>Err(ProgramError::AccountAlreadyInitialized),5=>Err(ProgramError::AccountBorrowFailed),
++  _=>Err(ProgramError::Custom(u32::from_le_bytes([key[1],key[2],key[3],key[4]]))),
++ }
++}
++// Local record carried by the oracle's declared writable account region.
++// It logs ALL parent arguments and a returning scalar reply; no static state.
++fn dispatch_oracle(program:&Pubkey,accounts:&[AccountInfo<'_>],data:&[u8])->ProgramResult {
++ let fields=[program as *const Pubkey as usize as u64,accounts.as_ptr() as usize as u64,
++  accounts.len() as u64,data.as_ptr() as usize as u64,data.len() as u64,
++  data[1] as u64,1u64];
++ let mut cp=accounts[2].try_borrow_mut_data().unwrap();
++ for i in 0..7 {let bytes=fields[i].to_le_bytes();for j in 0..8 {cp[i*8+j]=bytes[j];}}
++ drop(cp);scalar_reply(program)
++}
++fn word(data:&[u8],i:usize)->u64 {
++ u64::from_le_bytes([data[i*8],data[i*8+1],data[i*8+2],data[i*8+3],
++  data[i*8+4],data[i*8+5],data[i*8+6],data[i*8+7]])
++}
++fn dispatch_check(entry:bool,bad:bool,frame:bool) {
++ let program=Pubkey::new_from_array(kani::any());
++ let k0=Pubkey::new_from_array(kani::any());let k1=Pubkey::new_from_array(kani::any());let k2=Pubkey::new_from_array(kani::any());
++ kani::assume(k0!=k1&&k0!=k2&&k1!=k2);
++ let owner=Pubkey::new_from_array(kani::any());
++ let mut m0:u64=kani::any();let mut m1:u64=kani::any();let mut m2:u64=kani::any();
++ let mut d0=[0u8;58295];let mut d1=[0u8;1880];let mut d2:[u8;1768]=kani::any();
++ let a0=AccountInfo::new(&k0,kani::any(),kani::any(),&mut m0,&mut d0,&owner,kani::any(),kani::any());
++ let a1=AccountInfo::new(&k1,kani::any(),kani::any(),&mut m1,&mut d1,&owner,kani::any(),kani::any());
++ let a2=AccountInfo::new(&k2,kani::any(),kani::any(),&mut m2,&mut d2,&owner,kani::any(),kani::any());
++ // Every three-handle alias partition is represented by these selections.
++ let b1=if !frame&&kani::any::<bool>(){a0.clone()}else{a1.clone()};
++ let b2=if frame {a2.clone()}else{match kani::any::<u8>()%3 {0=>a0.clone(),1=>b1.clone(),_=>a2.clone()}};
++ let accounts=[a0,b1,b2];
++ let data=[3,if kani::any::<bool>(){10}else{11}];
++ let observed:usize=if frame {kani::any()}else{56};kani::assume(observed>=56&&observed<1768);
++ let old=accounts[2].try_borrow_data().unwrap()[observed];
++ let money=[accounts[0].lamports(),accounts[1].lamports(),accounts[2].lamports()];
++ let result=if entry {crate::process_r1_cost_probe_instruction(&program,&accounts,&data)}else{super::process(&program,&accounts,&data)};
++ if !frame {assert_eq!(result,scalar_reply(&program));}
++ let cp=accounts[2].try_borrow_data().unwrap();
++ if !frame {
++ assert_eq!(word(&cp,0),&program as *const Pubkey as usize as u64);
++ assert_eq!(word(&cp,1),accounts.as_ptr() as usize as u64);
++ assert_eq!(word(&cp,2),3);
++ assert_eq!(word(&cp,3),data.as_ptr() as usize as u64);
++ assert_eq!(word(&cp,4),2);assert_eq!(word(&cp,5),data[1] as u64);
++ assert_eq!(word(&cp,6),if bad {0}else{1});
++ } else {assert_eq!(cp[observed],if bad {old^1}else{old});}
++ drop(cp);
++ assert_eq!(accounts[0].lamports(),money[0]);assert_eq!(accounts[1].lamports(),money[1]);assert_eq!(accounts[2].lamports(),money[2]);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::stage1,dispatch_oracle)]
++fn process_tx1_cut(){dispatch_check(false,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::stage1,dispatch_oracle)]
++fn process_tx1_cut_control(){dispatch_check(false,true,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,dispatch_oracle)]
++fn entry_tx1_cut(){dispatch_check(true,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::process,dispatch_oracle)]
++fn entry_tx1_cut_control(){dispatch_check(true,true,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::stage1,dispatch_oracle)]
++fn process_tx1_frame_window(){dispatch_check(false,false,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::stage1,dispatch_oracle)]
++fn process_tx1_frame_window_control(){dispatch_check(false,true,true)}
+--- a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
+@@ -479,3 +479,7 @@
+     let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+     stage2_owned(program_id, &owned, data, current_slot)
+ }
++
++#[cfg(kani)]
++#[path="NLQ_owned.rs"]
++mod NLQ_owned;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLQ_owned.rs
+@@ -0,0 +1,108 @@
++use super::*;
++fn metadata_reply(_: &Pubkey,accounts:&[OwnedAccount],_:&[u8])->Result<Vec<u8>,ProgramError>{
++ let value=(accounts[0].is_writable as u32)|((accounts[2].is_writable as u32)<<1);
++ Err(ProgramError::Custom(value))
++}
++fn metadata_check(coalesced:bool){
++ let program=Pubkey::new_from_array(kani::any());
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut money:u64=kani::any();let original_money=money;
++ let mut data:[u8;2]=kani::any();let x=data[0];let y=data[1];
++ let first=AccountInfo::new(&key,false,false,&mut money,&mut data,&owner,false,0);
++ let second=first.clone();let mut third=first.clone();third.is_writable=true;
++ let accounts=[first,second,third];
++ let result=super::stage1(&program,&accounts,&[3,10]);
++ if coalesced {assert!(result==Err(ProgramError::Custom(0))||result==Err(ProgramError::Custom(3)));}
++ else {assert_eq!(result,Err(ProgramError::Custom(2)));}
++ assert!(!accounts[0].is_writable);assert!(accounts[2].is_writable);
++ let guard=accounts[0].try_borrow_mut_data().unwrap();assert_eq!(guard[0],x);assert_eq!(guard[1],y);drop(guard);
++ assert_eq!(accounts[0].lamports(),original_money);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::stage1_owned,metadata_reply)]
++fn alias_metadata_arguments(){metadata_check(false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::stage1_owned,metadata_reply)]
++fn alias_metadata_coalesced_control(){metadata_check(true)}
++fn guard_check(owned:bool,count_guard:bool,bad:bool){
++ let program=Pubkey::new_from_array(kani::any());
++ let instruction=if count_guard {[3,if kani::any::<bool>(){10}else{11}]} else {let d:[u8;2]=kani::any();kani::assume(d!=[3,10]&&d!=[3,11]);d};
++ if owned {
++  let make=|| OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Err(ProgramError::InvalidAccountData),bytes:Err(ProgramError::AccountBorrowFailed)};
++  let storage=[make(),make(),make()];let accounts=if count_guard {&storage[..1]}else{&storage[..]};
++  let before=(accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable);
++  let result=super::stage1_owned(&program,accounts,&instruction);
++  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++  if count_guard {
++  assert_eq!((accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable),before);
++  assert_eq!(accounts[0].length,Err(ProgramError::InvalidAccountData));assert_eq!(accounts[0].bytes,Err(ProgramError::AccountBorrowFailed));
++  }
++ } else {
++  let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut money:u64=kani::any();let before=money;
++  let mut bytes:[u8;2]=kani::any();let saved=bytes;
++  let account=AccountInfo::new(&key,kani::any(),kani::any(),&mut money,&mut bytes,&owner,kani::any(),kani::any());
++  let accounts=[account.clone(),account.clone(),account.clone(),account];
++  let n=if count_guard {let n:usize=kani::any();kani::assume(n<=4&&n!=3);n}else{3};
++  let result=super::stage1(&program,&accounts[..n],&instruction);
++  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++  let guard=accounts[0].try_borrow_mut_data().unwrap();assert_eq!(guard[0],saved[0]);assert_eq!(guard[1],saved[1]);drop(guard);assert_eq!(accounts[0].lamports(),before);
++ }
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_instruction(){guard_check(false,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_instruction_control(){guard_check(false,false,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_count(){guard_check(false,true,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_count_control(){guard_check(false,true,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
++fn guard_owned_instruction(){guard_check(true,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
++fn guard_owned_instruction_control(){guard_check(true,false,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
++fn guard_owned_count(){guard_check(true,true,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
++fn guard_owned_count_control(){guard_check(true,true,true)}
++// ProgramResult interface calibration for future process/entry contracts.
++// No frozen function contract is claimed or installed by these controls.
++#[kani::ensures(|r| *r==Err(ProgramError::Custom(x as u32)))]
++fn program_result_record(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::ensures(|r| *r!=Err(ProgramError::Custom(x as u32)))]
++fn program_result_invert(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::ensures(|r| r.is_err())]
++fn program_result_weak(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r.is_err())]
++fn program_result_badframe(x:&mut [u8;2])->ProgramResult{x[1]=x[1].wrapping_add(1);Err(ProgramError::Custom(0))}
++#[kani::proof_for_contract(program_result_record)]
++fn contract_program_result(){program_result_record(kani::any());}
++#[kani::proof_for_contract(program_result_invert)]
++fn contract_program_result_invert(){program_result_invert(kani::any());}
++#[kani::proof_for_contract(program_result_weak)]
++fn contract_program_result_weak(){program_result_weak(kani::any());}
++#[kani::proof]
++fn contract_program_result_real(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof] #[kani::stub_verified(program_result_weak)]
++fn contract_program_result_unimplied(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof_for_contract(program_result_badframe)]
++fn contract_program_result_frame(){let mut x:[u8;2]=kani::any();program_result_badframe(&mut x);}
++#[kani::proof] #[kani::stub_verified(program_result_record)]
++fn contract_program_result_caller(){let x:u8=kani::any();assert_eq!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof] #[kani::stub_verified(program_result_record)]
++fn contract_program_result_caller_control(){let x:u8=kani::any();assert_ne!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
++
++fn guard_unreachable<const N:usize>(_: &[&OwnedAccount;N])->ProgramResult {assert!(false,"guard reached distinct child");Err(ProgramError::InvalidArgument)}

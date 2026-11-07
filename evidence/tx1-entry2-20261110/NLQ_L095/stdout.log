@@ -1,0 +1,73 @@
+theorem NLQ_EntryRejection.rejected : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
+  (a : Slice A) (d : Slice U8) (world : F),
+  Hiq_DispatchSource.pool_route.admitted d = ok false →
+    entry children p a d world =
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := world, events := [Event.admitted world d (ok false)] } :=
+fun {A F C} children p a d world branch =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | Result.fail e =>
+                  { result := Result.fail e, post := world,
+                    events := [Event.admitted world d (Hiq_DispatchSource.pool_route.admitted d)] }
+                | Result.div =>
+                  { result := Result.div, post := world,
+                    events := [Event.admitted world d (Hiq_DispatchSource.pool_route.admitted d)] }
+                | ok x =>
+                  prepend [Event.admitted world d (Hiq_DispatchSource.pool_route.admitted d)]
+                    ((fun admitted =>
+                        if admitted = true then process children p a d world
+                        else
+                          {
+                            result :=
+                              ok
+                                (core.result.Result.Err
+                                  AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                            post := world, events := [] })
+                      x))
+              branch)
+            (congr
+              (congr
+                (congrArg Run.mk
+                  (congrArg Run.result
+                    (ite_cond_eq_false (process children p a d world)
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := world, events := [] }
+                      Bool.false_eq_true)))
+                (congrArg Run.post
+                  (ite_cond_eq_false (process children p a d world)
+                    {
+                      result :=
+                        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                      post := world, events := [] }
+                    Bool.false_eq_true)))
+              (Eq.trans
+                (congr
+                  (congrArg HAppend.hAppend
+                    (congrFun' (congrArg List.cons (congrArg (Event.admitted world d) branch)) []))
+                  (congrArg Run.events
+                    (ite_cond_eq_false (process children p a d world)
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := world, events := [] }
+                      Bool.false_eq_true)))
+                (List.append_nil [Event.admitted world d (ok false)])))))
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := world, events := [Event.admitted world d (ok false)] })
+      (eq_self
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := world, events := [Event.admitted world d (ok false)] }))
+'NLQ_EntryRejection.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryRejection.fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryRejection.div' depends on axioms: [propext, Classical.choice, Quot.sound]

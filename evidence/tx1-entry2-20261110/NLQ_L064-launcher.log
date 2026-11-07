@@ -1,0 +1,44 @@
+{"attempt": "NLQ_L064", "exit_status": 1, "wall_seconds": 19.89749140199274, "peak_rss_kib": "5985816", "swaps": "0", "print_axioms": ["'NLQ_SnapshotEvents.chronology' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_SnapshotEvents.lean:15:1: error: Tactic `rfl` failed: The left-hand side
+  (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+    (match (G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())).result with
+      | fail err =>
+        { result := fail err, events := (G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())).events }
+      | div => { result := div, events := (G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())).events }
+      | ok a =>
+        {
+          result :=
+            (match (G a.2 2 1768 1768 (ok ())).result with
+              | fail err => { result := fail err, events := (G a.2 2 1768 1768 (ok ())).events }
+              | div
+...
+events }
+        | ok a =>
+          {
+            result :=
+              (match (G a.2 2 1768 1768 (ok ())).result with
+                | fail err => { result := fail err, events := (G a.2 2 1768 1768 (ok ())).events }
+                | div => { result := div, events := (G a.2 2 1768 1768 (ok ())).events }
+                | ok a_1 =>
+                  { result := (pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) a.1 a_1.1, a_1.2)).result,
+                    events :=
+                      (G a.2 2 1768 1768 (ok ())).events ++
+                        (pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) a.1 a_1.1, a_1.2)).events }).result,
+            events :=
+              (G (returned (ready e 0 []) 0 58295 58295) 1 1880 1880 (ok ())).events ++
+                (match (G a.2 2 1768 1768 (ok ())).result with
+                  | fail err => { result := fail err, events := (G a.2 2 1768 1768 (ok ())).events }
+                  | div => { result := div, events := (G a.2 2 1768 1768 (ok ())).events }
+                  | ok a_1 =>
+                    { result := (pure (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) a.1 a_1.1, a_1.2)).result,
+                      events :=
+                        (G a.2 2 1768 1768 (ok ())).events ++
+                          (pure
+                              (NLQ_SnapshotFold.owned3 (e.snapshot 0 58295 58295) a.1 a_1.1,
+                                a_1.2)).events }).events }).events =
+    (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+      ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+        (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events)
+'NLQ_SnapshotEvents.chronology' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf16efde09ee84cdfa969754246d647a8.scope; invocation ID: 22c0c8aafe0f431689ccd21461934c69

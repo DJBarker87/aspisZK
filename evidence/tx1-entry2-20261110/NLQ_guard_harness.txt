@@ -1,0 +1,21 @@
+fn guard_check(owned:bool,count_guard:bool,bad:bool){
+ let program=Pubkey::new_from_array(kani::any());
+ let instruction=if count_guard {[3,if kani::any::<bool>(){10}else{11}]} else {let d:[u8;2]=kani::any();kani::assume(d!=[3,10]&&d!=[3,11]);d};
+ if owned {
+  let accounts=[OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Err(ProgramError::InvalidAccountData),bytes:Err(ProgramError::AccountBorrowFailed)}];
+  let before=(accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable);
+  let result=super::stage1_owned(&program,&accounts,&instruction);
+  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
+  assert_eq!((accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable),before);
+  assert_eq!(accounts[0].length,Err(ProgramError::InvalidAccountData));assert_eq!(accounts[0].bytes,Err(ProgramError::AccountBorrowFailed));
+ } else {
+  let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut money:u64=kani::any();let before=money;
+  let mut bytes:[u8;2]=kani::any();let saved=bytes;
+  let account=AccountInfo::new(&key,kani::any(),kani::any(),&mut money,&mut bytes,&owner,kani::any(),kani::any());
+  let accounts=[account.clone(),account.clone(),account.clone(),account];
+  let n=if count_guard {let n:usize=kani::any();kani::assume(n<=4&&n!=3);n}else{3};
+  let result=super::stage1(&program,&accounts[..n],&instruction);
+  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
+  let guard=accounts[0].try_borrow_mut_data().unwrap();assert_eq!(guard[0],saved[0]);assert_eq!(guard[1],saved[1]);drop(guard);assert_eq!(accounts[0].lamports(),before);
+ }
+}

@@ -1,0 +1,60 @@
+def NLQ_Stage1Fold.G : S2W_D189Entry.Entry →
+  AdapterRw.Ops → Key → Slice U8 → Result Unit → Result Unit → Result Unit → Run :=
+fun e ops p d alloc0 alloc1 alloc2 =>
+  have snapshots := NLQ_SnapshotFold.G e alloc0 alloc1 alloc2;
+  have priorEvents := List.map Event.snapshot snapshots.events;
+  match snapshots.result with
+  | fail err =>
+    { result := fail err,
+      post := { snapshots := NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 []) snapshots.events },
+      events := priorEvents }
+  | div =>
+    { result := div, post := { snapshots := NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 []) snapshots.events },
+      events := priorEvents }
+  | ok (fst, post) =>
+    have tail := continuation ops p d { snapshots := post };
+    { result := tail.result, post := tail.post, events := priorEvents ++ tail.events }
+theorem NLQ_Stage1Fold.result : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (G e ops p d (ok ()) (ok ()) (ok ())).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error) :=
+fun e ops p d =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg Run.result
+            (congrArg
+              (fun x =>
+                match x with
+                | fail err =>
+                  { result := fail err,
+                    post :=
+                      {
+                        snapshots :=
+                          NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                            (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                    events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+                | div =>
+                  { result := div,
+                    post :=
+                      {
+                        snapshots :=
+                          NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                            (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                    events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+                | ok (fst, post) =>
+                  have tail := continuation ops p d { snapshots := post };
+                  { result := tail.result, post := tail.post,
+                    events :=
+                      List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ tail.events })
+              (NLQ_SnapshotFold.returned e))))
+        do
+        let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+        match child with
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+          | core.result.Result.Err error => ok (core.result.Result.Err error)))
+    (NLQ_Stage1Result.result e ops p d)
+'NLQ_Stage1Fold.result' depends on axioms: [propext, Classical.choice, Quot.sound]

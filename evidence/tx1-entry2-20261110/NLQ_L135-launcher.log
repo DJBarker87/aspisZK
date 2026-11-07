@@ -1,0 +1,54 @@
+{"attempt": "NLQ_L135", "exit_status": 0, "wall_seconds": 18.393923114985228, "peak_rss_kib": "6023596", "swaps": "0", "print_axioms": ["'NLQ_Stage1ChildDiv.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1ChildDiv.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (NLD_Stage1Source.stage1Owned ops p e.first d).2 = div →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      { result := div, post := s,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            [Event.owned s s p e.first d div (NLD_Stage1Source.stage1Owned ops p e.first d).1] } :=
+fun e ops p d branch =>
+  let s := NLQ_Stage1Ready.initial e;
+  have child :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => (NLD_Stage1Source.stage1Owned ops p _a.first d).2 = div)
+          (have
+...
+wned s s p e.first d div (NLD_Stage1Source.stage1Owned ops p e.first d).1] })
+        (NLQ_Stage1Tail.source e ops p d)))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              { result := _a.result, post := _a.post,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ _a.events } =
+                { result := div, post := NLQ_Stage1Ready.initial e,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                      [Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d div
+                          (NLD_Stage1Source.stage1Owned ops p e.first d).1] })
+            step))
+        (Eq.refl
+          {
+            result :=
+              { result := div, post := s,
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d div
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.result,
+            post :=
+              { result := div, post := s,
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d div
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.post,
+            events :=
+              List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                { result := div, post := s,
+                    events :=
+                      [Event.owned s s p s.snapshots.input.first d div
+                          (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.events })))
+'NLQ_Stage1ChildDiv.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r301ff668c1ba4cccbbb630b7d3439dd4.scope; invocation ID: 9de5684aa9234a8781494d424cc06a00

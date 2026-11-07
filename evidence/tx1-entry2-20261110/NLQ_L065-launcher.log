@@ -1,0 +1,28 @@
+{"attempt": "NLQ_L065", "exit_status": 1, "wall_seconds": 17.237242426956072, "peak_rss_kib": "5933108", "swaps": "0", "print_axioms": ["'NLQ_ClosedSnapshotStep.at_site' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLQ_ClosedSnapshotStep.related_after' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:15:74: error: unexpected identifier; expected ')', ',' or ':'
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:18:8: warning: declaration uses `sorry`
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:25:8: warning: declaration uses `sorry`
+def NLQ_ClosedSnapshotStep.Step : {W : Type} → Entry → Library W (ℕ → Record) → W → W → ℕ → Usize → Usize → Prop :=
+fun {W} e L before after a l1 l2 =>
+  ∃ token owner w1 w2,
+    L.run before (Op.shared a token owner) = (w1, Reply.guard token) ∧
+      L.run w1 (Op.deref token) = (w2, Reply.payload (e.heap.payload (e.heap.accounts a).1)) ∧
+        L.run w2 (Op.drop token) = (after, Reply.unit) ∧
+          L.related after e.heap ∧
+...
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:15:74: error: unexpected identifier; expected ')', ',' or ':'
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:18:8: warning: declaration uses `sorry`
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:25:8: warning: declaration uses `sorry`
+def NLQ_ClosedSnapshotStep.Step : {W : Type} → Entry → Library W (ℕ → Record) → W → W → ℕ → Usize → Usize → Prop :=
+fun {W} e L before after a l1 l2 =>
+  ∃ token owner w1 w2,
+    L.run before (Op.shared a token owner) = (w1, Reply.guard token) ∧
+      L.run w1 (Op.deref token) = (w2, Reply.payload (e.heap.payload (e.heap.accounts a).1)) ∧
+        L.run w2 (Op.drop token) = (after, Reply.unit) ∧
+          L.related after e.heap ∧
+            have old := (e.records (e.handles a).1).owned;
+            sorry
+'NLQ_ClosedSnapshotStep.at_site' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLQ_ClosedSnapshotStep.related_after' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6e75110d68b24c24b27a1c2512e09a3b.scope; invocation ID: 96d4d5c1588e483b91946788a1d19f80

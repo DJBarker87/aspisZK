@@ -1,0 +1,8 @@
+second_abort : ∀ (e : Entry) (err : Error) (a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_SnapshotFold.G e (ok ()) (fail err) a2 =
+      { result := fail err,
+        events :=
+          (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 (fail err) }
+'NLQ_SnapshotLaterPrefixes.second_abort' depends on axioms: [propext, Classical.choice, Quot.sound]

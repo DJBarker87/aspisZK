@@ -1,0 +1,55 @@
+{"attempt": "NLQ_L054", "exit_status": 0, "wall_seconds": 16.98651298508048, "peak_rss_kib": "6014884", "swaps": "0", "print_axioms": []}
+structure NLQ_Stage1State.State : Type
+number of parameters: 0
+fields:
+  NLQ_Stage1State.State.snapshots : NLM_Snapshot.State
+  NLQ_Stage1State.State.checkpoint : Option Bytes :=
+    none
+constructor:
+  NLQ_Stage1State.State.mk (snapshots : NLM_Snapshot.State) (checkpoint : Option Bytes) : State
+inductive NLQ_Stage1State.Event : Type
+number of parameters: 0
+constructors:
+NLQ_Stage1State.Event.snapshot : NLM_Snapshot.Event → Event
+NLQ_Stage1State.Event.owned : State →
+  State → Key → Slice Owned → Slice U8 → Result (core.result.Result Bytes PE) → List ℕ → Event
+NLQ_Stage1State.Event.copy : NLQ_CopyTrace.Event → Event
+NLQ_Stage1State.Event.cleanup : State → State → Event
+def NLQ_Stage1State.co
+...
+structure NLQ_Stage1State.State : Type
+number of parameters: 0
+fields:
+  NLQ_Stage1State.State.snapshots : NLM_Snapshot.State
+  NLQ_Stage1State.State.checkpoint : Option Bytes :=
+    none
+constructor:
+  NLQ_Stage1State.State.mk (snapshots : NLM_Snapshot.State) (checkpoint : Option Bytes) : State
+inductive NLQ_Stage1State.Event : Type
+number of parameters: 0
+constructors:
+NLQ_Stage1State.Event.snapshot : NLM_Snapshot.Event → Event
+NLQ_Stage1State.Event.owned : State →
+  State → Key → Slice Owned → Slice U8 → Result (core.result.Result Bytes PE) → List ℕ → Event
+NLQ_Stage1State.Event.copy : NLQ_CopyTrace.Event → Event
+NLQ_Stage1State.Event.cleanup : State → State → Event
+def NLQ_Stage1State.continuation : AdapterRw.Ops → Key → Slice U8 → State → Run :=
+fun ops p d s =>
+  have child := NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d;
+  have event := Event.owned s s p s.snapshots.input.first d child.2 child.1;
+  match child.2 with
+  | fail e => { result := fail e, post := s, events := [event] }
+  | div => { result := div, post := s, events := [event] }
+  | ok (core.result.Result.Err error) =>
+    have after :=
+      {
+        snapshots :=
+          have __src := s.snapshots;
+          { input := __src.input, sdk := __src.sdk, next := __src.next },
+        checkpoint := s.checkpoint };
+    { result := ok (core.result.Result.Err error), post := after, events := [event, Event.cleanup s after] }
+  | ok (core.result.Result.Ok saved) =>
+    have copied := copyResult s saved;
+    { result := copied.result, post := copied.post, events := event :: copied.events }
+
+Running as unit: run-rd7c4b01fc9d245d4af17ae611f84d5ab.scope; invocation ID: 550f67db5fac45e3a5269daf4bf5a158

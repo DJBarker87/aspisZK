@@ -1,0 +1,17 @@
+{"attempt": "NLQ_L060", "exit_status": 0, "wall_seconds": 22.9564099709969, "peak_rss_kib": "6007664", "swaps": "0", "print_axioms": ["'NLQ_CheckpointDomain.same_length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+same_length : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey) (d : Slice U8)
+  (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    (S2W_ReturnedCheckpoint.nativeBytes saved).length =
+      (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length
+'NLQ_CheckpointDomain.same_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+same_length : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey) (d : Slice U8)
+  (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    (S2W_ReturnedCheckpoint.nativeBytes saved).length =
+      (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length
+'NLQ_CheckpointDomain.same_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra63285dccac2497eaf76ab83eecec6bf.scope; invocation ID: f019906b357d4d6aadae31d36cfdbd16

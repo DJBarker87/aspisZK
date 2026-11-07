@@ -1,0 +1,21 @@
+{"attempt": "NLQ_L053", "exit_status": 0, "wall_seconds": 14.01270055794157, "peak_rss_kib": "5952516", "swaps": "0", "print_axioms": ["'NLQ_SourceDispatch.process' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_SourceDispatch.entry' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@process : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NLQ_Route.Tx1 d → NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d = children.first p a d
+@entry : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NIV_RawBoundary.entry (NIV_RawBoundary.profile children) p a d = do
+    let admitted ← (NIV_RawBoundary.profile children).admitted d
+    if admitted = true then NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+'NLQ_SourceDispatc
+...
+@process : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NLQ_Route.Tx1 d → NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d = children.first p a d
+@entry : ∀ {A : Type} (children : Hiq_DispatchSource.Ops A) (p : Hiq_DispatchSource.Key) (a : Slice A) (d : Slice U8),
+  NIV_RawBoundary.entry (NIV_RawBoundary.profile children) p a d = do
+    let admitted ← (NIV_RawBoundary.profile children).admitted d
+    if admitted = true then NIV_RawBoundary.process (NIV_RawBoundary.profile children) p a d
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+'NLQ_SourceDispatch.process' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_SourceDispatch.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r40f1b8578e024700957130ed1c629fc1.scope; invocation ID: 15dab14b957e44d2865d69796c9aaf5f

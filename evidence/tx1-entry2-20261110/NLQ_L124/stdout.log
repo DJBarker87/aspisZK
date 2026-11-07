@@ -1,0 +1,184 @@
+NLQ_generated/NLQ_Stage1SecondDiv.lean:25:28: warning: This simp argument is unused:
+  List.cons_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵]̵[̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLQ_Stage1SecondDiv.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_Stage1Fold.G e ops p d (ok ()) div a2 =
+      have s := ready e 1 [e.snapshot 0 58295 58295];
+      { result := div,
+        post := { snapshots := { input := s.input, sdk := acquired s 1, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map Event.snapshot ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++ allocationPrefix s 1 div) } :=
+fun e ops p d a2 extent =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (have snapshots := _a;
+              have priorEvents := List.map Event.snapshot snapshots.events;
+              match snapshots.result with
+              | fail err =>
+                { result := fail err,
+                  post := { snapshots := NLQ_SnapshotReplay.replay (ready e 0 []) snapshots.events },
+                  events := priorEvents }
+              | div =>
+                { result := div, post := { snapshots := NLQ_SnapshotReplay.replay (ready e 0 []) snapshots.events },
+                  events := priorEvents }
+              | ok (fst, post) =>
+                have tail := continuation ops p d { snapshots := post };
+                { result := tail.result, post := tail.post, events := priorEvents ++ tail.events }) =
+              let s := ready e 1 [e.snapshot 0 58295 58295];
+              { result := div,
+                post :=
+                  { snapshots := { input := s.input, sdk := acquired s 1, next := s.next + 1, owned := s.owned } },
+                events :=
+                  List.map Event.snapshot
+                    ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++ allocationPrefix s 1 div) })
+          (NLQ_SnapshotSecondDiv.second_div e a2 extent)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { result := div, post := { snapshots := _a },
+                    events :=
+                      List.map Event.snapshot
+                        ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                          allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) } =
+                  { result := div,
+                    post :=
+                      {
+                        snapshots :=
+                          { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                            sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                            next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                            owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                    events :=
+                      List.map Event.snapshot
+                        ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                          allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) })
+              (NLQ_SnapshotReplay.append (ready e 0 []) (G (ready e 0 []) 0 58295 58295 (ok ())).events
+                (allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  { result := div,
+                      post :=
+                        {
+                          snapshots :=
+                            NLQ_SnapshotReplay.replay _a
+                              (allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) },
+                      events :=
+                        List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) } =
+                    { result := div,
+                      post :=
+                        {
+                          snapshots :=
+                            { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                              sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                              next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                              owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                      events :=
+                        List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) })
+                (NLQ_ReplayNormal.normal e 0 0 58295 58295 [])))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    { result := div,
+                        post :=
+                          {
+                            snapshots :=
+                              NLQ_SnapshotReplay.replay _a
+                                (allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) },
+                        events :=
+                          List.map Event.snapshot
+                            ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                              allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) } =
+                      { result := div,
+                        post :=
+                          {
+                            snapshots :=
+                              { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                                sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                                next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                                owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                        events :=
+                          List.map Event.snapshot
+                            ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                              allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) })
+                  (NLQ_SnapshotEvents.returned_ready e 0 0 58295 58295 [])))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrFun'
+                        (congrArg (Run.mk div)
+                          (congrFun'
+                            (congrArg NLQ_Stage1State.State.mk
+                              (congrFun'
+                                (congrArg NLQ_SnapshotReplay.replay
+                                  (congrFun' (congrArg (ready e) (Nat.zero_add 1)) [e.snapshot 0 58295 58295]))
+                                (allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div)))
+                            none))
+                        (List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div))))
+                    { result := div,
+                      post :=
+                        {
+                          snapshots :=
+                            { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                              sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                              next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                              owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                      events :=
+                        List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) }))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        { result := div, post := { snapshots := _a },
+                            events :=
+                              List.map Event.snapshot
+                                ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                                  allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) } =
+                          { result := div,
+                            post :=
+                              {
+                                snapshots :=
+                                  { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                                    sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                                    next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                                    owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                            events :=
+                              List.map Event.snapshot
+                                ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                                  allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) })
+                      (NLQ_ReplayAbort.allocation (ready e 1 [e.snapshot 0 58295 58295]) 1 div)))
+                  (Eq.refl
+                    { result := div,
+                      post :=
+                        {
+                          snapshots :=
+                            { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                              sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                              next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                              owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                      events :=
+                        List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div) }))))))))
+'NLQ_Stage1SecondDiv.source' depends on axioms: [propext, Classical.choice, Quot.sound]

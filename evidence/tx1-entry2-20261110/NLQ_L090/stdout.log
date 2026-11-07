@@ -1,0 +1,4 @@
+at_site : ∀ (e : Entry) (ops : AdapterRw.Ops) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) = ok (core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles 0).1 ∧ (↑bytes).length = 58295
+'NLQ_ProofRead.at_site' depends on axioms: [propext, Classical.choice, Quot.sound]

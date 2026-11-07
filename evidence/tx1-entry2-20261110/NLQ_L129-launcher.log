@@ -1,0 +1,44 @@
+{"attempt": "NLQ_L129", "exit_status": 1, "wall_seconds": 33.38150424906053, "peak_rss_kib": "5987024", "swaps": "0", "print_axioms": ["'NLQ_Stage1CopyPost.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_Stage1CopyPost.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d).2
+in the target expression
+  {
+      result :=
+        (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+          have event :=
+            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+              (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+          match child.2 with
+          | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | di
+...
+t };
+              { result := ok (core.result.Result.Err error), post := after,
+                events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+            | ok (core.result.Result.Ok saved) =>
+              have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+              { result := copied.result, post := copied.post, events := event :: copied.events }).events } =
+    { result := (copyResult (NLQ_Stage1Ready.initial e) saved).result,
+      post := (copyResult (NLQ_Stage1Ready.initial e) saved).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d
+              (ok (core.result.Result.Ok saved)) (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+            (copyResult (NLQ_Stage1Ready.initial e) saved).events }
+theorem NLQ_Stage1CopyPost.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have out := copyResult s saved;
+      { result := out.result, post := out.post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            Event.owned s s p e.first d (ok (core.result.Result.Ok saved))
+                (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+              out.events } :=
+fun e ops p d saved branch =>
+  have child := Eq.trans (NLD_Stage1Source.erasure ops p e.first d) branch;
+  sorry child
+'NLQ_Stage1CopyPost.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1da3a1c2a56246a5bf62b6db1c43f53a.scope; invocation ID: f1aeee6040d74d15964755d8208ed3f0

@@ -1,0 +1,8 @@
+result : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (continuation ops p d (NLQ_Stage1Ready.initial e)).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+'NLQ_Stage1Result.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Result.result' depends on axioms: [propext, Classical.choice, Quot.sound]

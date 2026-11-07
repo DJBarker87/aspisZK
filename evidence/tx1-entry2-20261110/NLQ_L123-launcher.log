@@ -1,0 +1,44 @@
+{"attempt": "NLQ_L123", "exit_status": 0, "wall_seconds": 19.601234160829335, "peak_rss_kib": "6026140", "swaps": "0", "print_axioms": ["'NLQ_Stage1SecondAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_Stage1SecondAbort.lean:25:28: warning: This simp argument is unused:
+  List.cons_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵]̵[̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLQ_Stage1SecondAbort.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (err : Error)
+  (a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (fail err) a2 =
+      have s := ready e 1 
+...
+rr)) } =
+                          { result := fail err,
+                            post :=
+                              {
+                                snapshots :=
+                                  { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                                    sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                                    next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                                    owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                            events :=
+                              List.map Event.snapshot
+                                ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                                  allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 (fail err)) })
+                      (NLQ_ReplayAbort.allocation (ready e 1 [e.snapshot 0 58295 58295]) 1 (fail err))))
+                  (Eq.refl
+                    { result := fail err,
+                      post :=
+                        {
+                          snapshots :=
+                            { input := (ready e 1 [e.snapshot 0 58295 58295]).input,
+                              sdk := acquired (ready e 1 [e.snapshot 0 58295 58295]) 1,
+                              next := (ready e 1 [e.snapshot 0 58295 58295]).next + 1,
+                              owned := (ready e 1 [e.snapshot 0 58295 58295]).owned } },
+                      events :=
+                        List.map Event.snapshot
+                          ((G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+                            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 (fail err)) }))))))))
+'NLQ_Stage1SecondAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra80617aa2c8a444caf90293f0fcdd41a.scope; invocation ID: 341e377e9dc344289756ddec323fde46

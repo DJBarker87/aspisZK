@@ -1,0 +1,49 @@
+{"attempt": "NLQ_L136", "exit_status": 0, "wall_seconds": 17.290375239914283, "peak_rss_kib": "6025260", "swaps": "0", "print_axioms": ["'NLQ_Stage1ChildError.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1ChildError.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (err : PE),
+  (NLD_Stage1Source.stage1Owned ops p e.first d).2 = ok (core.result.Result.Err err) →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have post :=
+        {
+          snapshots :=
+            have __src := s.snapshots;
+            { input := __src.input, sdk := __src.sdk, next := __src.next },
+          checkpoint := s.checkpoint };
+      { result := ok (core.result.Result.Err err), post := post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            [Event.ow
+...
+_src := s.snapshots;
+                        { input := __src.input, sdk := __src.sdk, next := __src.next },
+                      checkpoint := s.checkpoint },
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d (ok (core.result.Result.Err err))
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+                      Event.cleanup s
+                        {
+                          snapshots :=
+                            have __src := s.snapshots;
+                            { input := __src.input, sdk := __src.sdk, next := __src.next },
+                          checkpoint := s.checkpoint }] }.post,
+            events :=
+              List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                { result := ok (core.result.Result.Err err),
+                    post :=
+                      {
+                        snapshots :=
+                          have __src := s.snapshots;
+                          { input := __src.input, sdk := __src.sdk, next := __src.next },
+                        checkpoint := s.checkpoint },
+                    events :=
+                      [Event.owned s s p s.snapshots.input.first d (ok (core.result.Result.Err err))
+                          (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+                        Event.cleanup s
+                          {
+                            snapshots :=
+                              have __src := s.snapshots;
+                              { input := __src.input, sdk := __src.sdk, next := __src.next },
+                            checkpoint := s.checkpoint }] }.events })))
+'NLQ_Stage1ChildError.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb969d7756cf14018b1f7ed5018f42569.scope; invocation ID: 7df9ae063fa646fa83725abb6eec1961

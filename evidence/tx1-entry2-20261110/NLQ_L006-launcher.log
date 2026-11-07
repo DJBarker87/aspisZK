@@ -1,0 +1,49 @@
+{"attempt": "NLQ_L006", "exit_status": 0, "wall_seconds": 26.454158602049574, "peak_rss_kib": "6029896", "swaps": "0", "print_axioms": []}
+def NLM_Snapshot.G : State → ℕ → ℕ → ℕ → Result Unit → Run (Owned × State) :=
+fun s account lo hi allocation =>
+  have acquisition := try_borrow_data s.sdk account s.next;
+  do
+  let guardReply ← NJU_Log.record (Event.acquire s account s.next acquisition.1) (ok acquisition.2)
+  match guardReply with
+    | Except.error a =>
+      have value :=
+        have __src := s.input.snapshot account lo hi;
+        { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+          executable := __src.executable,
+          length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+          bytes := core.result.Result
+...
+ta s.sdk account s.next;
+  do
+  let guardReply ← NJU_Log.record (Event.acquire s account s.next acquisition.1) (ok acquisition.2)
+  match guardReply with
+    | Except.error a =>
+      have value :=
+        have __src := s.input.snapshot account lo hi;
+        { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+          executable := __src.executable,
+          length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+          bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+      do
+      let _ ← NJU_Log.record (Event.returned s account lo hi) (ok value)
+      pure (value, { input := s.input, sdk := s.sdk, next := s.next + 1, owned := s.owned ++ [value] })
+    | Except.ok g =>
+      have live := { input := s.input, sdk := acquisition.1, next := s.next + 1, owned := s.owned };
+      do
+      let payload ← NJU_Log.record (Event.deref live g) (ok (deref acquisition.1 g))
+      let allowed : Prop := payload.bytes.length = lo ∨ payload.bytes.length = hi
+      have __do_jp : Unit → Run (Owned × State) := fun __r => do
+        let dropped ← NJU_Log.record (Event.release live g) (ok (release acquisition.1 g))
+        match dropped with
+          | Except.error a => liftM (fail Error.panic)
+          | Except.ok restored =>
+            have value := s.input.snapshot account lo hi;
+            do
+            let _ ← NJU_Log.record (Event.returned live account lo hi) (ok value)
+            pure (value, { input := s.input, sdk := restored, next := s.next + 1, owned := s.owned ++ [value] })
+      if allowed then do
+          NJU_Log.record (Event.allocate live g payload.bytes.length) allocation
+          __do_jp ()
+        else __do_jp ()
+
+Running as unit: run-r9877264df0c1455a8ed2ce1c297adb28.scope; invocation ID: a87b97fff5f747cba6099923def7a2ab

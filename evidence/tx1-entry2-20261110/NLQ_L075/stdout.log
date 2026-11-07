@@ -1,0 +1,24 @@
+NLQ_generated/NLQ_DispatchState.lean:32:3: error: unexpected token 'prefix'; expected identifier
+NLQ_generated/NLQ_DispatchState.lean:39:11: error: unexpected token 'prefix'; expected term
+NLQ_generated/NLQ_DispatchState.lean:39:18: error: unexpected token '['; expected ':'
+def NLQ_DispatchState.process : {A F C : Type} →
+  Children A F C → Hiq_DispatchSource.Key → Slice A → Slice U8 → F → Run A F C :=
+fun {A F C} children p a d world =>
+  step world (Event.head world d) (Hiq_DispatchSource.firstByte d) fun head =>
+    step world (Event.copied world head) (Hiq_DispatchSource.copied head) fun copied =>
+      match copied with
+      | none => fallback children p a d world
+      | some i =>
+        match i with
+        | 4#8#uscalar => invoke children.init p a d world
+        | 5#8#uscalar => invoke children.write p a d world
+        | 6#8#uscalar => invoke children.finalize p a d world
+        | x => fallback children p a d world
+def NLQ_DispatchState.entry : {A F C : Type} →
+  Children A F C → Hiq_DispatchSource.Key → Slice A → Slice U8 → F → Run A F C :=
+fun {A F C} children p a d world =>
+  step world (Event.admitted world d) (Hiq_DispatchSource.pool_route.admitted d) fun admitted =>
+    if admitted = true then process children p a d world
+    else
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := world, events := [] }

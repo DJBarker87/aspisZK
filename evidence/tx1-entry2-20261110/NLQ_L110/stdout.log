@@ -1,0 +1,7 @@
+theorem NLQ_ZeroSite.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 2 1768 1768) = ok (core.result.Result.Ok bytes) →
+    AdapterRw.r1_pool_adapter.owned.require_zero bytes = do
+      let result ← NFQ_ScanReference.zero_ref bytes
+      ok (NFQ_ZeroSource.result result) :=
+fun e ops bytes read => NFU_ZeroPort.source bytes (NLQ_CheckpointRead.at_site e ops bytes read).right.right
+'NLQ_ZeroSite.source' depends on axioms: [propext, Classical.choice, Quot.sound]

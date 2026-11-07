@@ -1,0 +1,128 @@
+theorem NLQ_Stage1ChildError.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (err : PE),
+  (NLD_Stage1Source.stage1Owned ops p e.first d).2 = ok (core.result.Result.Err err) →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have post :=
+        {
+          snapshots :=
+            have __src := s.snapshots;
+            { input := __src.input, sdk := __src.sdk, next := __src.next },
+          checkpoint := s.checkpoint };
+      { result := ok (core.result.Result.Err err), post := post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            [Event.owned s s p e.first d (ok (core.result.Result.Err err))
+                (NLD_Stage1Source.stage1Owned ops p e.first d).1,
+              Event.cleanup s post] } :=
+fun e ops p d err branch =>
+  let s := NLQ_Stage1Ready.initial e;
+  have child :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => (NLD_Stage1Source.stage1Owned ops p _a.first d).2 = ok (core.result.Result.Err err))
+          (have this := rfl;
+          this)))
+      branch;
+  have step := NLQ_Stage1Cases.child_error ops p d s err child;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            let s := NLQ_Stage1Ready.initial e;
+            let post :=
+              {
+                snapshots :=
+                  let __src := s.snapshots;
+                  { input := __src.input, sdk := __src.sdk, next := __src.next },
+                checkpoint := s.checkpoint };
+            { result := ok (core.result.Result.Err err), post := post,
+              events :=
+                List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                  [Event.owned s s p e.first d (ok (core.result.Result.Err err))
+                      (NLD_Stage1Source.stage1Owned ops p e.first d).1,
+                    Event.cleanup s post] })
+        (NLQ_Stage1Tail.source e ops p d)))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              { result := _a.result, post := _a.post,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ _a.events } =
+                { result := ok (core.result.Result.Err err),
+                  post :=
+                    {
+                      snapshots :=
+                        { input := (NLQ_Stage1Ready.initial e).snapshots.input,
+                          sdk := (NLQ_Stage1Ready.initial e).snapshots.sdk,
+                          next := (NLQ_Stage1Ready.initial e).snapshots.next },
+                      checkpoint := (NLQ_Stage1Ready.initial e).checkpoint },
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                      [Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d
+                          (ok (core.result.Result.Err err)) (NLD_Stage1Source.stage1Owned ops p e.first d).1,
+                        Event.cleanup (NLQ_Stage1Ready.initial e)
+                          {
+                            snapshots :=
+                              { input := (NLQ_Stage1Ready.initial e).snapshots.input,
+                                sdk := (NLQ_Stage1Ready.initial e).snapshots.sdk,
+                                next := (NLQ_Stage1Ready.initial e).snapshots.next },
+                            checkpoint := (NLQ_Stage1Ready.initial e).checkpoint }] })
+            step))
+        (Eq.refl
+          {
+            result :=
+              { result := ok (core.result.Result.Err err),
+                  post :=
+                    {
+                      snapshots :=
+                        have __src := s.snapshots;
+                        { input := __src.input, sdk := __src.sdk, next := __src.next },
+                      checkpoint := s.checkpoint },
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d (ok (core.result.Result.Err err))
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+                      Event.cleanup s
+                        {
+                          snapshots :=
+                            have __src := s.snapshots;
+                            { input := __src.input, sdk := __src.sdk, next := __src.next },
+                          checkpoint := s.checkpoint }] }.result,
+            post :=
+              { result := ok (core.result.Result.Err err),
+                  post :=
+                    {
+                      snapshots :=
+                        have __src := s.snapshots;
+                        { input := __src.input, sdk := __src.sdk, next := __src.next },
+                      checkpoint := s.checkpoint },
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d (ok (core.result.Result.Err err))
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+                      Event.cleanup s
+                        {
+                          snapshots :=
+                            have __src := s.snapshots;
+                            { input := __src.input, sdk := __src.sdk, next := __src.next },
+                          checkpoint := s.checkpoint }] }.post,
+            events :=
+              List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                { result := ok (core.result.Result.Err err),
+                    post :=
+                      {
+                        snapshots :=
+                          have __src := s.snapshots;
+                          { input := __src.input, sdk := __src.sdk, next := __src.next },
+                        checkpoint := s.checkpoint },
+                    events :=
+                      [Event.owned s s p s.snapshots.input.first d (ok (core.result.Result.Err err))
+                          (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+                        Event.cleanup s
+                          {
+                            snapshots :=
+                              have __src := s.snapshots;
+                              { input := __src.input, sdk := __src.sdk, next := __src.next },
+                            checkpoint := s.checkpoint }] }.events })))
+'NLQ_Stage1ChildError.source' depends on axioms: [propext, Classical.choice, Quot.sound]

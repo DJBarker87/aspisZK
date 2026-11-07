@@ -1,0 +1,68 @@
+structure AspisR1.NIV_RawBoundary.Boundaries (Account : Type) : Type
+number of parameters: 1
+parents:
+  AspisR1.NIV_RawBoundary.Boundaries.toOps : AspisR1.Hiq_DispatchSource.Ops Account
+fields:
+  AspisR1.Hiq_DispatchSource.Ops.first : AspisR1.Hiq_DispatchSource.Key →
+      Aeneas.Std.Slice Account →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1.Hiq_DispatchSource.PE)
+  AspisR1.Hiq_DispatchSource.Ops.second : AspisR1.Hiq_DispatchSource.Key →
+      Aeneas.Std.Slice Account →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1.Hiq_DispatchSource.PE)
+  AspisR1.Hiq_DispatchSource.Ops.init : AspisR1.Hiq_DispatchSource.Key →
+      Aeneas.Std.Slice Account →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1.Hiq_DispatchSource.PE)
+  AspisR1.Hiq_DispatchSource.Ops.write : AspisR1.Hiq_DispatchSource.Key →
+      Aeneas.Std.Slice Account →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1.Hiq_DispatchSource.PE)
+  AspisR1.Hiq_DispatchSource.Ops.finalize : AspisR1.Hiq_DispatchSource.Key →
+      Aeneas.Std.Slice Account →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1.Hiq_DispatchSource.PE)
+  AspisR1.NIV_RawBoundary.Boundaries.head : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option Aeneas.Std.U8)
+  AspisR1.NIV_RawBoundary.Boundaries.copy : Option Aeneas.Std.U8 → Aeneas.Std.Result (Option Aeneas.Std.U8)
+  AspisR1.NIV_RawBoundary.Boundaries.eq : {N : Aeneas.Std.Usize} →
+      Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Array Aeneas.Std.U8 N → Aeneas.Std.Result Bool
+  AspisR1.NIV_RawBoundary.Boundaries.admitted : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result Bool
+constructor:
+  AspisR1.NIV_RawBoundary.Boundaries.mk {Account : Type} (toOps : AspisR1.Hiq_DispatchSource.Ops Account)
+    (head : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option Aeneas.Std.U8))
+    (copy : Option Aeneas.Std.U8 → Aeneas.Std.Result (Option Aeneas.Std.U8))
+    (eq :
+      {N : Aeneas.Std.Usize} →
+        Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Array Aeneas.Std.U8 N → Aeneas.Std.Result Bool)
+    (admitted : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result Bool) : AspisR1.NIV_RawBoundary.Boundaries Account
+field notation resolution order:
+  AspisR1.NIV_RawBoundary.Boundaries, AspisR1.Hiq_DispatchSource.Ops
+@[defeq] theorem AspisR1.NIV_RawBoundary.process_profile : ∀ {Account : Type}
+  (ops : AspisR1.Hiq_DispatchSource.Ops Account) (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice Account)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile ops) p a d =
+    AspisR1.NIV_ExtractedForward.process ops p a d :=
+fun {Account} ops p a d => rfl
+NLF_SdkBorrowLaw.admitted_events {F : Type} (h : AspisR1.S2Trust.Heap F) (records : ℕ → NLF_SdkModel.Account)
+  (money : ℕ → ℕ) (n : ℕ) (runtime : AspisR1.AdapterRw.RuntimeEntrypointAdmission h (fun a => (records a).key) n)
+  (commands : List NLF_ProgramFold.Command) :
+  NLF_ParentModel.Invariant (NLF_ProgramFold.run (NLF_RuntimeInterpretation.install h records money) commands) ∧
+    (∀ (i : ℕ), NLF_RefCell.flag ((NLF_RuntimeInterpretation.install h records money).state.cells i) = h.counter i) ∧
+      ∀ a < n, h.ownerLive a = true
+def AdapterRw.first_decoded : AdapterRw.Ops →
+  AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+              AdapterRw.solana_program_error.ProgramError) :=
+fun ops public1 public_bytes proof k => do
+  let o ← AdapterRw.observer ops
+  let r ← ops.op10 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) public1 public_bytes proof k () o
+  AdapterRw.core.result.Result.map_err
+      (Aeneas.Std.BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error
+        AdapterRw.solana_program_error.ProgramError)
+      r ops.op44
+NLQ_generated/NLQ_Inspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `AdapterRw.r1_pool_adapter.owned.stage1`

@@ -1,0 +1,820 @@
+NLQ_generated/NLQ_MetadataFlags.lean:18:31: warning: This simp argument is unused:
+  flags
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵f̵l̵a̵g̵s̵,̵r̵e̵p̵l̵y̵,̵N̵L̵F̵_̵S̵d̵k̵M̵o̵d̵e̵l̵.̵p̵u̵t̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲N̲L̲F̲_̲S̲d̲k̲M̲o̲d̲e̲l̲.̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLQ_generated/NLQ_MetadataFlags.lean:18:37: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵f̵l̵a̵g̵s̵,̵r̵e̵p̵l̵y̵,̵N̵L̵F̵_̵S̵d̵k̵M̵o̵d̵e̵l̵.̵p̵u̵t̵]̵[̲f̲l̲a̲g̲s̲,̲ ̲N̲L̲F̲_̲S̲d̲k̲M̲o̲d̲e̲l̲.̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLQ_generated/NLQ_MetadataFlags.lean:27:11: error: simp_all made no progress
+NLQ_generated/NLQ_MetadataFlags.lean:24:60: error: unsolved goals
+case h_2
+s : State
+f : ℕ → Bool
+g : Guard
+x✝ : Except Error (Cell Payload)
+c✝ : Cell Payload
+heq✝ :
+  (match g.kind with
+    | Kind.shared => dropShared (s.cells g.cell) g.token
+    | Kind.exclusive => dropExclusive (s.cells g.cell) g.token) =
+    Except.ok c✝
+⊢ Except.ok
+      {
+        accounts := fun a =>
+          { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+            lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+            executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+        cells := fun j => if j = g.cell then c✝ else s.cells j } =
+    Except.map
+      (fun post =>
+        {
+          accounts := fun a =>
+            { key := (post.accounts a).key, owner := (post.accounts a).owner, data := (post.accounts a).data,
+              lamports := (post.accounts a).lamports, signer := (post.accounts a).signer, writable := f a,
+              executable := (post.accounts a).executable, rentEpoch := (post.accounts a).rentEpoch },
+          cells := post.cells })
+      (Except.ok { accounts := s.accounts, cells := fun j => if j = g.cell then c✝ else s.cells j })
+NLQ_generated/NLQ_MetadataFlags.lean:27:21: warning: This simp argument is unused:
+  flags
+
+Hint: Omit it from the simp argument list.
+  simp_all [f̵l̵a̵g̵s̵,̵NLF_SdkModel.put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLQ_MetadataFlags.wrap : ∀ (s : State) (f : ℕ → Bool) (i t : ℕ) (k : Kind),
+  NLF_SdkModel.wrap (flags s f) i t k = reply f (NLF_SdkModel.wrap s i t k) :=
+fun s f i t k =>
+  Kind.casesOn (motive := fun t_1 =>
+    k = t_1 → NLF_SdkModel.wrap (flags s f) i t k = reply f (NLF_SdkModel.wrap s i t k)) k
+    (fun h =>
+      Eq.symm h ▸
+        id
+          (id
+            (wrap.match_2.splitter
+              (fun x =>
+                shared (s.cells i) t = x →
+                  (match shared (s.cells i) t with
+                    | Except.error a =>
+                      ({
+                          accounts := fun a =>
+                            { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                              lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                              executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                          cells := s.cells },
+                        Except.error ProgramError.accountBorrowFailed)
+                    | Except.ok c =>
+                      (NLF_SdkModel.put
+                          {
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells }
+                          i c,
+                        Except.ok { cell := i, token := t, kind := Kind.shared })) =
+                    ({
+                        accounts := fun a =>
+                          {
+                            key :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).key,
+                            owner :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).owner,
+                            data :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).data,
+                            lamports :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).lamports,
+                            signer :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).signer,
+                            writable := f a,
+                            executable :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).executable,
+                            rentEpoch :=
+                              ((match shared (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                  a).rentEpoch },
+                        cells :=
+                          (match shared (s.cells i) t with
+                              | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                              | Except.ok c =>
+                                (NLF_SdkModel.put s i c,
+                                  Except.ok { cell := i, token := t, kind := Kind.shared })).1.cells },
+                      (match shared (s.cells i) t with
+                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                        | Except.ok c =>
+                          (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.shared })).2))
+              (shared (s.cells i) t)
+              (fun a h =>
+                Eq.ndrec (motive := fun x =>
+                  shared (s.cells i) t = x →
+                    (match x with
+                      | Except.error a =>
+                        ({
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells },
+                          Except.error ProgramError.accountBorrowFailed)
+                      | Except.ok c =>
+                        (NLF_SdkModel.put
+                            {
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells }
+                            i c,
+                          Except.ok { cell := i, token := t, kind := Kind.shared })) =
+                      ({
+                          accounts := fun a =>
+                            {
+                              key :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).key,
+                              owner :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).owner,
+                              data :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).data,
+                              lamports :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).lamports,
+                              signer :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).signer,
+                              writable := f a,
+                              executable :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).executable,
+                              rentEpoch :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).rentEpoch },
+                          cells :=
+                            (match x with
+                                | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                | Except.ok c =>
+                                  (NLF_SdkModel.put s i c,
+                                    Except.ok { cell := i, token := t, kind := Kind.shared })).1.cells },
+                        (match x with
+                          | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                          | Except.ok c =>
+                            (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.shared })).2))
+                  (fun heq =>
+                    id
+                      (of_eq_true
+                        (eq_self
+                          ({
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells },
+                            Except.error ProgramError.accountBorrowFailed))))
+                  (Eq.symm h) (Eq.refl (shared (s.cells i) t)))
+              (fun c h =>
+                Eq.ndrec (motive := fun x =>
+                  shared (s.cells i) t = x →
+                    (match x with
+                      | Except.error a =>
+                        ({
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells },
+                          Except.error ProgramError.accountBorrowFailed)
+                      | Except.ok c =>
+                        (NLF_SdkModel.put
+                            {
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells }
+                            i c,
+                          Except.ok { cell := i, token := t, kind := Kind.shared })) =
+                      ({
+                          accounts := fun a =>
+                            {
+                              key :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).key,
+                              owner :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).owner,
+                              data :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).data,
+                              lamports :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).lamports,
+                              signer :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).signer,
+                              writable := f a,
+                              executable :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).executable,
+                              rentEpoch :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.shared })).1.accounts
+                                    a).rentEpoch },
+                          cells :=
+                            (match x with
+                                | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                | Except.ok c =>
+                                  (NLF_SdkModel.put s i c,
+                                    Except.ok { cell := i, token := t, kind := Kind.shared })).1.cells },
+                        (match x with
+                          | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                          | Except.ok c =>
+                            (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.shared })).2))
+                  (fun heq =>
+                    id
+                      (of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrFun'
+                                (congrArg Prod.mk
+                                  (congrArg
+                                    (State.mk fun a =>
+                                      { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                        data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                        signer := (s.accounts a).signer, writable := f a,
+                                        executable := (s.accounts a).executable,
+                                        rentEpoch := (s.accounts a).rentEpoch })
+                                    (funext fun j =>
+                                      ite_congr (Eq.refl (j = i)) (fun a => Eq.refl c) fun a => Eq.refl (s.cells j))))
+                                (Except.ok { cell := i, token := t, kind := Kind.shared })))
+                            ({
+                                accounts := fun a =>
+                                  { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                    data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                    signer := (s.accounts a).signer, writable := f a,
+                                    executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                                cells := fun j => if j = i then c else s.cells j },
+                              Except.ok { cell := i, token := t, kind := Kind.shared }))
+                          (eq_self
+                            ({
+                                accounts := fun a =>
+                                  { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                    data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                    signer := (s.accounts a).signer, writable := f a,
+                                    executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                                cells := fun j => if j = i then c else s.cells j },
+                              Except.ok { cell := i, token := t, kind := Kind.shared })))))
+                  (Eq.symm h) (Eq.refl (shared (s.cells i) t)))
+              (Eq.refl (shared (s.cells i) t)))))
+    (fun h =>
+      Eq.symm h ▸
+        id
+          (id
+            (wrap.match_2.splitter
+              (fun x =>
+                exclusive (s.cells i) t = x →
+                  (match exclusive (s.cells i) t with
+                    | Except.error a =>
+                      ({
+                          accounts := fun a =>
+                            { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                              lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                              executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                          cells := s.cells },
+                        Except.error ProgramError.accountBorrowFailed)
+                    | Except.ok c =>
+                      (NLF_SdkModel.put
+                          {
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells }
+                          i c,
+                        Except.ok { cell := i, token := t, kind := Kind.exclusive })) =
+                    ({
+                        accounts := fun a =>
+                          {
+                            key :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).key,
+                            owner :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).owner,
+                            data :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).data,
+                            lamports :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).lamports,
+                            signer :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).signer,
+                            writable := f a,
+                            executable :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).executable,
+                            rentEpoch :=
+                              ((match exclusive (s.cells i) t with
+                                      | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                      | Except.ok c =>
+                                        (NLF_SdkModel.put s i c,
+                                          Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                  a).rentEpoch },
+                        cells :=
+                          (match exclusive (s.cells i) t with
+                              | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                              | Except.ok c =>
+                                (NLF_SdkModel.put s i c,
+                                  Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.cells },
+                      (match exclusive (s.cells i) t with
+                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                        | Except.ok c =>
+                          (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.exclusive })).2))
+              (exclusive (s.cells i) t)
+              (fun a h =>
+                Eq.ndrec (motive := fun x =>
+                  exclusive (s.cells i) t = x →
+                    (match x with
+                      | Except.error a =>
+                        ({
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells },
+                          Except.error ProgramError.accountBorrowFailed)
+                      | Except.ok c =>
+                        (NLF_SdkModel.put
+                            {
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells }
+                            i c,
+                          Except.ok { cell := i, token := t, kind := Kind.exclusive })) =
+                      ({
+                          accounts := fun a =>
+                            {
+                              key :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).key,
+                              owner :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).owner,
+                              data :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).data,
+                              lamports :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).lamports,
+                              signer :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).signer,
+                              writable := f a,
+                              executable :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).executable,
+                              rentEpoch :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).rentEpoch },
+                          cells :=
+                            (match x with
+                                | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                | Except.ok c =>
+                                  (NLF_SdkModel.put s i c,
+                                    Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.cells },
+                        (match x with
+                          | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                          | Except.ok c =>
+                            (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.exclusive })).2))
+                  (fun heq =>
+                    id
+                      (of_eq_true
+                        (eq_self
+                          ({
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells },
+                            Except.error ProgramError.accountBorrowFailed))))
+                  (Eq.symm h) (Eq.refl (exclusive (s.cells i) t)))
+              (fun c h =>
+                Eq.ndrec (motive := fun x =>
+                  exclusive (s.cells i) t = x →
+                    (match x with
+                      | Except.error a =>
+                        ({
+                            accounts := fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                            cells := s.cells },
+                          Except.error ProgramError.accountBorrowFailed)
+                      | Except.ok c =>
+                        (NLF_SdkModel.put
+                            {
+                              accounts := fun a =>
+                                { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                  lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                  executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                              cells := s.cells }
+                            i c,
+                          Except.ok { cell := i, token := t, kind := Kind.exclusive })) =
+                      ({
+                          accounts := fun a =>
+                            {
+                              key :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).key,
+                              owner :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).owner,
+                              data :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).data,
+                              lamports :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).lamports,
+                              signer :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).signer,
+                              writable := f a,
+                              executable :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).executable,
+                              rentEpoch :=
+                                ((match x with
+                                        | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                        | Except.ok c =>
+                                          (NLF_SdkModel.put s i c,
+                                            Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.accounts
+                                    a).rentEpoch },
+                          cells :=
+                            (match x with
+                                | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                                | Except.ok c =>
+                                  (NLF_SdkModel.put s i c,
+                                    Except.ok { cell := i, token := t, kind := Kind.exclusive })).1.cells },
+                        (match x with
+                          | Except.error a => (s, Except.error ProgramError.accountBorrowFailed)
+                          | Except.ok c =>
+                            (NLF_SdkModel.put s i c, Except.ok { cell := i, token := t, kind := Kind.exclusive })).2))
+                  (fun heq =>
+                    id
+                      (of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrFun'
+                                (congrArg Prod.mk
+                                  (congrArg
+                                    (State.mk fun a =>
+                                      { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                        data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                        signer := (s.accounts a).signer, writable := f a,
+                                        executable := (s.accounts a).executable,
+                                        rentEpoch := (s.accounts a).rentEpoch })
+                                    (funext fun j =>
+                                      ite_congr (Eq.refl (j = i)) (fun a => Eq.refl c) fun a => Eq.refl (s.cells j))))
+                                (Except.ok { cell := i, token := t, kind := Kind.exclusive })))
+                            ({
+                                accounts := fun a =>
+                                  { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                    data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                    signer := (s.accounts a).signer, writable := f a,
+                                    executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                                cells := fun j => if j = i then c else s.cells j },
+                              Except.ok { cell := i, token := t, kind := Kind.exclusive }))
+                          (eq_self
+                            ({
+                                accounts := fun a =>
+                                  { key := (s.accounts a).key, owner := (s.accounts a).owner,
+                                    data := (s.accounts a).data, lamports := (s.accounts a).lamports,
+                                    signer := (s.accounts a).signer, writable := f a,
+                                    executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                                cells := fun j => if j = i then c else s.cells j },
+                              Except.ok { cell := i, token := t, kind := Kind.exclusive })))))
+                  (Eq.symm h) (Eq.refl (exclusive (s.cells i) t)))
+              (Eq.refl (exclusive (s.cells i) t)))))
+    (Eq.refl k)
+theorem NLQ_MetadataFlags.release : ∀ (s : State) (f : ℕ → Bool) (g : Guard),
+  NLF_SdkModel.release (flags s f) g = Except.map (fun post => flags post f) (NLF_SdkModel.release s g) :=
+fun s f g =>
+  id
+    (id
+      (wrap.match_2.splitter
+        (fun x =>
+          (match g.kind with
+              | Kind.shared => dropShared (s.cells g.cell) g.token
+              | Kind.exclusive => dropExclusive (s.cells g.cell) g.token) =
+              x →
+            (match
+                match g.kind with
+                | Kind.shared => dropShared (s.cells g.cell) g.token
+                | Kind.exclusive => dropExclusive (s.cells g.cell) g.token with
+              | Except.error e => Except.error e
+              | Except.ok c =>
+                Except.ok
+                  (NLF_SdkModel.put
+                    {
+                      accounts := fun a =>
+                        { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                          lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                          executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                      cells := s.cells }
+                    g.cell c)) =
+              Except.map
+                (fun post =>
+                  {
+                    accounts := fun a =>
+                      { key := (post.accounts a).key, owner := (post.accounts a).owner, data := (post.accounts a).data,
+                        lamports := (post.accounts a).lamports, signer := (post.accounts a).signer, writable := f a,
+                        executable := (post.accounts a).executable, rentEpoch := (post.accounts a).rentEpoch },
+                    cells := post.cells })
+                (match
+                  match g.kind with
+                  | Kind.shared => dropShared (s.cells g.cell) g.token
+                  | Kind.exclusive => dropExclusive (s.cells g.cell) g.token with
+                | Except.error e => Except.error e
+                | Except.ok c => Except.ok (NLF_SdkModel.put s g.cell c)))
+        (match g.kind with
+        | Kind.shared => dropShared (s.cells g.cell) g.token
+        | Kind.exclusive => dropExclusive (s.cells g.cell) g.token)
+        (fun a h =>
+          Eq.ndrec (motive := fun x =>
+            (match g.kind with
+                | Kind.shared => dropShared (s.cells g.cell) g.token
+                | Kind.exclusive => dropExclusive (s.cells g.cell) g.token) =
+                x →
+              (match x with
+                | Except.error e => Except.error e
+                | Except.ok c =>
+                  Except.ok
+                    (NLF_SdkModel.put
+                      {
+                        accounts := fun a =>
+                          { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                            lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                            executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                        cells := s.cells }
+                      g.cell c)) =
+                Except.map
+                  (fun post =>
+                    {
+                      accounts := fun a =>
+                        { key := (post.accounts a).key, owner := (post.accounts a).owner,
+                          data := (post.accounts a).data, lamports := (post.accounts a).lamports,
+                          signer := (post.accounts a).signer, writable := f a,
+                          executable := (post.accounts a).executable, rentEpoch := (post.accounts a).rentEpoch },
+                      cells := post.cells })
+                  (match x with
+                  | Except.error e => Except.error e
+                  | Except.ok c => Except.ok (NLF_SdkModel.put s g.cell c)))
+            (fun heq => id sorry) (Eq.symm h)
+            (Eq.refl
+              (match g.kind with
+              | Kind.shared => dropShared (s.cells g.cell) g.token
+              | Kind.exclusive => dropExclusive (s.cells g.cell) g.token)))
+        (fun c h =>
+          Eq.ndrec (motive := fun x =>
+            (match g.kind with
+                | Kind.shared => dropShared (s.cells g.cell) g.token
+                | Kind.exclusive => dropExclusive (s.cells g.cell) g.token) =
+                x →
+              (match x with
+                | Except.error e => Except.error e
+                | Except.ok c =>
+                  Except.ok
+                    (NLF_SdkModel.put
+                      {
+                        accounts := fun a =>
+                          { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                            lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                            executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch },
+                        cells := s.cells }
+                      g.cell c)) =
+                Except.map
+                  (fun post =>
+                    {
+                      accounts := fun a =>
+                        { key := (post.accounts a).key, owner := (post.accounts a).owner,
+                          data := (post.accounts a).data, lamports := (post.accounts a).lamports,
+                          signer := (post.accounts a).signer, writable := f a,
+                          executable := (post.accounts a).executable, rentEpoch := (post.accounts a).rentEpoch },
+                      cells := post.cells })
+                  (match x with
+                  | Except.error e => Except.error e
+                  | Except.ok c => Except.ok (NLF_SdkModel.put s g.cell c)))
+            (fun heq =>
+              id
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Except.ok
+                          (congrArg
+                            (State.mk fun a =>
+                              { key := (s.accounts a).key, owner := (s.accounts a).owner, data := (s.accounts a).data,
+                                lamports := (s.accounts a).lamports, signer := (s.accounts a).signer, writable := f a,
+                                executable := (s.accounts a).executable, rentEpoch := (s.accounts a).rentEpoch })
+                            (funext fun j =>
+                              ite_congr (Eq.refl (j = g.cell)) (fun a => Eq.refl c) fun a => Eq.refl (s.cells j)))))
+                      (Except.map
+                        (fun post =>
+                          {
+                            accounts := fun a =>
+                              { key := (post.accounts a).key, owner := (post.accounts a).owner,
+                                data := (post.accounts a).data, lamports := (post.accounts a).lamports,
+                                signer := (post.accounts a).signer, writable := f a,
+                                executable := (post.accounts a).executable, rentEpoch := (post.accounts a).rentEpoch },
+                            cells := post.cells })
+                        (Except.ok { accounts := s.accounts, cells := fun j => if j = g.cell then c else s.cells j }))))
+                  sorry))
+            (Eq.symm h)
+            (Eq.refl
+              (match g.kind with
+              | Kind.shared => dropShared (s.cells g.cell) g.token
+              | Kind.exclusive => dropExclusive (s.cells g.cell) g.token)))
+        (Eq.refl
+          (match g.kind with
+          | Kind.shared => dropShared (s.cells g.cell) g.token
+          | Kind.exclusive => dropExclusive (s.cells g.cell) g.token))))
+'NLQ_MetadataFlags.put' does not depend on any axioms
+'NLQ_MetadataFlags.wrap' depends on axioms: [propext, Quot.sound]
+'NLQ_MetadataFlags.deref' does not depend on any axioms
+'NLQ_MetadataFlags.release' depends on axioms: [propext, sorryAx, Quot.sound]

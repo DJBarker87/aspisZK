@@ -1,0 +1,56 @@
+{"attempt": "NLQ_L061", "exit_status": 1, "wall_seconds": 20.61530416808091, "peak_rss_kib": "5995200", "swaps": "0", "print_axioms": ["'NLQ_Stage1Result.copied' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Result.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_Stage1Result.lean:29:14: error: unsolved goals
+case fail
+e : S2W_D189Entry.Entry
+ops : AdapterRw.Ops
+p : Key
+d : Slice U8
+source : (NLD_Stage1Source.stage1Owned ops p e.first d).2 = AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+error : Error
+h : (NLD_Stage1Source.stage1Owned ops p e.first d).2 = fail error
+⊢ (match (NLD_Stage1Source.stage1Owned ops p (NLQ_SnapshotFold.final e).input.first d).2 with
+      | fail e_1 =>
+        { result := fail e_1, post := { snapshots := NLQ_SnapshotFold.final e },
+          events :=
+            [Event.owned { snapshots := NLQ_SnapshotFold.final e } { snapshots := NLQ_SnapshotFold.final e } p
+                (NLQ_SnapshotFold
+...
+d, pattern
+  (copyResult (NLQ_Stage1Ready.initial e) saved).result = ?m.149
+is not definitionally equal to target
+  (continuation ops p d (NLQ_Stage1Ready.initial e)).result = do
+    let child ← ok (core.result.Result.Ok saved)
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+NLQ_generated/NLQ_Stage1Result.lean:31:51: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continuation, ̲NLQ_Stage1Ready.initial,h̵,̵ ̲bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLQ_generated/NLQ_Stage1Result.lean:34:51: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continuation, ̲NLQ_Stage1Ready.initial,h̵,̵ ̲bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLQ_generated/NLQ_Stage1Result.lean:39:53: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continuation, ̲NLQ_Stage1Ready.initial,h̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+result : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (continuation ops p d (NLQ_Stage1Ready.initial e)).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+'NLQ_Stage1Result.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Result.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7eb47f8c4d2468a969699d603c37bd2.scope; invocation ID: 34be2a0974db43488416e3634a7bc38f

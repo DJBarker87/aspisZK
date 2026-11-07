@@ -1,0 +1,48 @@
+{"attempt": "NLQ_L104", "exit_status": 0, "wall_seconds": 19.44694316200912, "peak_rss_kib": "5962860", "swaps": "0", "print_axioms": ["'NLQ_DispatchSource.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_DispatchSource.process' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_DispatchSource.entry' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_DispatchSource.lean:30:13: warning: 'subst_vars' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NLQ_DispatchSource.process : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
+  (a : Slice A) (d : Slice U8) (world : F),
+  (NLQ_DispatchState.process children p a d world).result =
+    NIV_RawBoundary.process (NIV_RawBoundary.profile (asOps children world)) p a d :=
+fun {A F C} children p a d world =>
+  id
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (step_result world (Event.head world d) (Hiq_DispatchS
+...
+                (fun a_1 => Eq.refl (NLQ_DispatchState.process children p a d world)) fun a =>
+                                  Eq.refl
+                                    {
+                                      result :=
+                                        ok
+                                          (core.result.Result.Err
+                                            AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                                      post := world, events := [] }))
+                              (process children p a d world)))
+                          (ite_congr (eq_self true)
+                            (fun a_1 =>
+                              Eq.refl
+                                (NIV_RawBoundary.process
+                                  { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                                    copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                                    admitted := Hiq_DispatchSource.pool_route.admitted }
+                                  p a d))
+                            fun a =>
+                            Eq.refl
+                              (ok
+                                (core.result.Result.Err
+                                  AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+                      (Eq.refl (NIV_RawBoundary.process (NIV_RawBoundary.profile (asOps children world)) p a d)))
+                (Eq.refl admitted))))))
+'NLQ_DispatchSource.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.process' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-red3fdb28d8cd4cbbb46ac3a577b17c08.scope; invocation ID: acd8a55707f74ebca2ced87a093918b1

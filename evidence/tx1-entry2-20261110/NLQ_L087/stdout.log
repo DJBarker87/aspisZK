@@ -1,0 +1,366 @@
+theorem NLQ_Stage1Body.ten : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (a0 a1 a2 : Result Unit),
+  G e ops p NJD_Prefixes.ten 3 a0 a1 a2 =
+    have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.ten a0 a1 a2;
+    { result := body.result, post := body.post,
+      events :=
+        [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 true, Event.count (initial e) 3] ++
+          List.map Event.body body.events } :=
+fun e ops p a0 a1 a2 =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (ite_cond_eq_true
+              (prepend
+                [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 (decide (↑NJD_Prefixes.ten = [3#u8, 10#u8]))]
+                (count e ops p NJD_Prefixes.ten 3 a0 a1 a2))
+              (have eleven := decide (↑NJD_Prefixes.ten = [3#u8, 11#u8]);
+              if eleven = true then
+                prepend
+                  [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 (decide (↑NJD_Prefixes.ten = [3#u8, 10#u8])),
+                    Event.instruction (initial e) NJD_Prefixes.ten 11#u8 eleven]
+                  (count e ops p NJD_Prefixes.ten 3 a0 a1 a2)
+              else
+                {
+                  result :=
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                  post := initial e,
+                  events :=
+                    [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 (decide (↑NJD_Prefixes.ten = [3#u8, 10#u8])),
+                      Event.instruction (initial e) NJD_Prefixes.ten 11#u8 eleven] })
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Decidable.decide.congr_simp (↑NJD_Prefixes.ten = [3#u8, 10#u8]) True (eq_self [3#u8, 10#u8]))
+                      (decide_true instDecidableTrue)))
+                  true)
+                (eq_self true)))
+            (congr
+              (congr
+                (congrArg NLQ_Stage1Parent.Run.mk
+                  (congrArg NLQ_Stage1Parent.Run.result
+                    (ite_cond_eq_true
+                      (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.ten a0 a1 a2;
+                      { result := body.result, post := body.post,
+                        events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := initial e, events := [Event.count (initial e) 3] }
+                      (eq_self 3))))
+                (congrArg NLQ_Stage1Parent.Run.post
+                  (ite_cond_eq_true
+                    (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.ten a0 a1 a2;
+                    { result := body.result, post := body.post,
+                      events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                    {
+                      result :=
+                        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                      post := initial e, events := [Event.count (initial e) 3] }
+                    (eq_self 3))))
+              (congr
+                (congrArg HAppend.hAppend
+                  (congrFun'
+                    (congrArg List.cons
+                      (congrArg (Event.instruction (initial e) ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ 10#u8)
+                        (Eq.trans
+                          (Decidable.decide.congr_simp (↑NJD_Prefixes.ten = [3#u8, 10#u8]) True (eq_self [3#u8, 10#u8]))
+                          (decide_true instDecidableTrue))))
+                    []))
+                (congrArg NLQ_Stage1Parent.Run.events
+                  (ite_cond_eq_true
+                    (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.ten a0 a1 a2;
+                    { result := body.result, post := body.post,
+                      events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                    {
+                      result :=
+                        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                      post := initial e, events := [Event.count (initial e) 3] }
+                    (eq_self 3)))))))
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ 10#u8 true ::
+              Event.count (initial e) 3 ::
+                List.map Event.body
+                  (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).events })
+      (eq_self
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ 10#u8 true ::
+              Event.count (initial e) 3 ::
+                List.map Event.body
+                  (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 10#u8], NJD_Prefixes.ten._proof_1⟩ a0 a1 a2).events }))
+theorem NLQ_Stage1Body.eleven : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (a0 a1 a2 : Result Unit),
+  G e ops p NJD_Prefixes.eleven 3 a0 a1 a2 =
+    have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.eleven a0 a1 a2;
+    { result := body.result, post := body.post,
+      events :=
+        [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8 false,
+            Event.instruction (initial e) NJD_Prefixes.eleven 11#u8 true, Event.count (initial e) 3] ++
+          List.map Event.body body.events } :=
+fun e ops p a0 a1 a2 =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (ite_cond_eq_false
+              (prepend
+                [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8
+                    (decide (↑NJD_Prefixes.eleven = [3#u8, 10#u8]))]
+                (count e ops p NJD_Prefixes.eleven 3 a0 a1 a2))
+              (have eleven := decide (↑NJD_Prefixes.eleven = [3#u8, 11#u8]);
+              if eleven = true then
+                prepend
+                  [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8
+                      (decide (↑NJD_Prefixes.eleven = [3#u8, 10#u8])),
+                    Event.instruction (initial e) NJD_Prefixes.eleven 11#u8 eleven]
+                  (count e ops p NJD_Prefixes.eleven 3 a0 a1 a2)
+              else
+                {
+                  result :=
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                  post := initial e,
+                  events :=
+                    [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8
+                        (decide (↑NJD_Prefixes.eleven = [3#u8, 10#u8])),
+                      Event.instruction (initial e) NJD_Prefixes.eleven 11#u8 eleven] })
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Decidable.decide.congr_simp (↑NJD_Prefixes.eleven = [3#u8, 10#u8]) False
+                        (Eq.trans (List.cons.injEq 3#u8 [11#u8] 3#u8 [10#u8])
+                          (Eq.trans
+                            (congr (congrArg And (eq_self 3#u8))
+                              (Eq.trans (List.cons.injEq 11#u8 [] 10#u8 [])
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (UScalar.val_not_eq_imp_not_eq._simp_1 11#u8 10#u8
+                                        (of_eq_true
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg Or
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Ne
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.U8 11
+                                                          NJD_Prefixes.eleven._proof_2)))
+                                                    (UScalar.ofNatCore_val_eq
+                                                      (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                  (Eq.trans (congrArg Not (Nat.succ_ne_self._simp_1 10))
+                                                    not_false_eq_true)))
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg Or
+                                                    (Eq.trans
+                                                      (congr
+                                                        (congrArg Ne
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                        (UScalar.ofNatCore_val_eq
+                                                          (UScalar.bound_suffices UScalarTy.U8 11
+                                                            NJD_Prefixes.eleven._proof_2)))
+                                                      (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                                        not_false_eq_true)))
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg Or
+                                                        (Eq.trans
+                                                          (congr
+                                                            (congrArg LT.lt
+                                                              (UScalar.ofNatCore_val_eq
+                                                                (UScalar.bound_suffices UScalarTy.U8 11
+                                                                  NJD_Prefixes.eleven._proof_2)))
+                                                            (UScalar.ofNatCore_val_eq
+                                                              (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                          (eq_false_of_decide (Eq.refl false))))
+                                                      (Eq.trans
+                                                        (congr
+                                                          (congrArg LT.lt
+                                                            (UScalar.ofNatCore_val_eq
+                                                              (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.U8 11
+                                                              NJD_Prefixes.eleven._proof_2)))
+                                                        (Nat.lt_add_one._simp_1 10)))
+                                                    (or_true False)))
+                                                (or_self True)))
+                                            (or_self True)))))
+                                    (eq_self []))
+                                  (and_true False))))
+                            (and_false True))))
+                      (decide_false instDecidableFalse)))
+                  true)
+                Bool.false_eq_true))
+            (Eq.trans
+              (ite_cond_eq_true
+                (prepend
+                  [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8
+                      (decide (↑NJD_Prefixes.eleven = [3#u8, 10#u8])),
+                    Event.instruction (initial e) NJD_Prefixes.eleven 11#u8
+                      (decide (↑NJD_Prefixes.eleven = [3#u8, 11#u8]))]
+                  (count e ops p NJD_Prefixes.eleven 3 a0 a1 a2))
+                {
+                  result :=
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                  post := initial e,
+                  events :=
+                    [Event.instruction (initial e) NJD_Prefixes.eleven 10#u8
+                        (decide (↑NJD_Prefixes.eleven = [3#u8, 10#u8])),
+                      Event.instruction (initial e) NJD_Prefixes.eleven 11#u8
+                        (decide (↑NJD_Prefixes.eleven = [3#u8, 11#u8]))] }
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Decidable.decide.congr_simp (↑NJD_Prefixes.eleven = [3#u8, 11#u8]) True
+                          (eq_self [3#u8, 11#u8]))
+                        (decide_true instDecidableTrue)))
+                    true)
+                  (eq_self true)))
+              (congr
+                (congr
+                  (congrArg NLQ_Stage1Parent.Run.mk
+                    (congrArg NLQ_Stage1Parent.Run.result
+                      (ite_cond_eq_true
+                        (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.eleven a0 a1 a2;
+                        { result := body.result, post := body.post,
+                          events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                        {
+                          result :=
+                            ok
+                              (core.result.Result.Err
+                                AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                          post := initial e, events := [Event.count (initial e) 3] }
+                        (eq_self 3))))
+                  (congrArg NLQ_Stage1Parent.Run.post
+                    (ite_cond_eq_true
+                      (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.eleven a0 a1 a2;
+                      { result := body.result, post := body.post,
+                        events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := initial e, events := [Event.count (initial e) 3] }
+                      (eq_self 3))))
+                (congr
+                  (congrArg HAppend.hAppend
+                    (congr
+                      (congrArg List.cons
+                        (congrArg (Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 10#u8)
+                          (Eq.trans
+                            (Decidable.decide.congr_simp (↑NJD_Prefixes.eleven = [3#u8, 10#u8]) False
+                              (Eq.trans (List.cons.injEq 3#u8 [11#u8] 3#u8 [10#u8])
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self 3#u8))
+                                    (Eq.trans (List.cons.injEq 11#u8 [] 10#u8 [])
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg And
+                                            (UScalar.val_not_eq_imp_not_eq._simp_1 11#u8 10#u8
+                                              (of_eq_true
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Or
+                                                      (Eq.trans
+                                                        (congr
+                                                          (congrArg Ne
+                                                            (UScalar.ofNatCore_val_eq
+                                                              (UScalar.bound_suffices UScalarTy.U8 11
+                                                                NJD_Prefixes.eleven._proof_2)))
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                        (Eq.trans (congrArg Not (Nat.succ_ne_self._simp_1 10))
+                                                          not_false_eq_true)))
+                                                    (Eq.trans
+                                                      (congr
+                                                        (congrArg Or
+                                                          (Eq.trans
+                                                            (congr
+                                                              (congrArg Ne
+                                                                (UScalar.ofNatCore_val_eq
+                                                                  (UScalar.bound_suffices UScalarTy.U8 10 G._proof_2)))
+                                                              (UScalar.ofNatCore_val_eq
+                                                                (UScalar.bound_suffices UScalarTy.U8 11
+                                                                  NJD_Prefixes.eleven._proof_2)))
+                                                            (Eq.trans
+                                                              (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                                              not_false_eq_true)))
+                                                        (Eq.trans
+                                                          (congr
+                                                            (congrArg Or
+                                                              (Eq.trans
+                                                                (congr
+                                                                  (congrArg LT.lt
+                                                                    (UScalar.ofNatCore_val_eq
+                                                                      (UScalar.bound_suffices UScalarTy.U8 11
+                                                                        NJD_Prefixes.eleven._proof_2)))
+                                                                  (UScalar.ofNatCore_val_eq
+                                                                    (UScalar.bound_suffices UScalarTy.U8 10
+                                                                      G._proof_2)))
+                                                                (eq_false_of_decide (Eq.refl false))))
+                                                            (Eq.trans
+                                                              (congr
+                                                                (congrArg LT.lt
+                                                                  (UScalar.ofNatCore_val_eq
+                                                                    (UScalar.bound_suffices UScalarTy.U8 10
+                                                                      G._proof_2)))
+                                                                (UScalar.ofNatCore_val_eq
+                                                                  (UScalar.bound_suffices UScalarTy.U8 11
+                                                                    NJD_Prefixes.eleven._proof_2)))
+                                                              (Nat.lt_add_one._simp_1 10)))
+                                                          (or_true False)))
+                                                      (or_self True)))
+                                                  (or_self True)))))
+                                          (eq_self []))
+                                        (and_true False))))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (congrFun'
+                        (congrArg List.cons
+                          (congrArg (Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 11#u8)
+                            (Eq.trans
+                              (Decidable.decide.congr_simp (↑NJD_Prefixes.eleven = [3#u8, 11#u8]) True
+                                (eq_self [3#u8, 11#u8]))
+                              (decide_true instDecidableTrue))))
+                        [])))
+                  (congrArg NLQ_Stage1Parent.Run.events
+                    (ite_cond_eq_true
+                      (have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.eleven a0 a1 a2;
+                      { result := body.result, post := body.post,
+                        events := Event.count (initial e) 3 :: List.map Event.body body.events })
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := initial e, events := [Event.count (initial e) 3] }
+                      (eq_self 3))))))))
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 10#u8 false ::
+              Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 11#u8 true ::
+                Event.count (initial e) 3 ::
+                  List.map Event.body
+                    (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).events })
+      (eq_self
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 10#u8 false ::
+              Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 11#u8 true ::
+                Event.count (initial e) 3 ::
+                  List.map Event.body
+                    (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).events }))
+'NLQ_Stage1Body.ten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Body.eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Body.result' depends on axioms: [propext, Classical.choice, Quot.sound]

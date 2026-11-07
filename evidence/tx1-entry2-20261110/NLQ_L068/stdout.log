@@ -1,0 +1,387 @@
+NLQ_generated/NLQ_SnapshotSkip.lean:13:54: error: unsolved goals
+e : Entry
+t a lo hi : ℕ
+owned : List NLM_Snapshot.Owned
+allocation : Result Unit
+bad :
+  ¬((S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+      (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi)
+disallowed :
+  ¬(((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).payload.bytes.length = lo ∨
+      ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).payload.bytes.length = hi)
+⊢ (if
+            (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = lo ∨
+              (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = hi then
+          match allocation with
+          | fail err =>
+            { result := fail err,
+              events :=
+                [Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation] }
+          | div =>
+            { result := div,
+              events :=
+                [Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation] }
+          | ok a_1 =>
+            {
+              result :=
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+              events :=
+                Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation ::
+                  Event.release
+                      { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                      (NLM_Snapshot.guard (ready e t owned) a)
+                      (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                    (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                      | Except.error a => liftM (fail Error.panic)
+                      | Except.ok restored =>
+                        {
+                          result :=
+                            ok
+                              ((ready e t owned).input.snapshot a lo hi,
+                                { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                  owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                          events :=
+                            [Event.returned
+                                { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }
+        else
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.release
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }).result =
+      (if
+            (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = lo ∨
+              (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = hi then
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.allocate
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                  (ok ()) ::
+                Event.release
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                  (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                    | Except.error a => liftM (fail Error.panic)
+                    | Except.ok restored =>
+                      {
+                        result :=
+                          ok
+                            ((ready e t owned).input.snapshot a lo hi,
+                              { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                        events :=
+                          [Event.returned
+                              { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                                next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                              a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }
+        else
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.release
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }).result ∧
+    (if
+            (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = lo ∨
+              (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = hi then
+          match allocation with
+          | fail err =>
+            { result := fail err,
+              events :=
+                [Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation] }
+          | div =>
+            { result := div,
+              events :=
+                [Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation] }
+          | ok a_1 =>
+            {
+              result :=
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+              events :=
+                Event.allocate
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                    allocation ::
+                  Event.release
+                      { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                      (NLM_Snapshot.guard (ready e t owned) a)
+                      (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                    (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                      | Except.error a => liftM (fail Error.panic)
+                      | Except.ok restored =>
+                        {
+                          result :=
+                            ok
+                              ((ready e t owned).input.snapshot a lo hi,
+                                { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                  owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                          events :=
+                            [Event.returned
+                                { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }
+        else
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.release
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }).events =
+      (if
+            (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = lo ∨
+              (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length = hi then
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.allocate
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length
+                  (ok ()) ::
+                Event.release
+                    { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                      next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                    (NLM_Snapshot.guard (ready e t owned) a)
+                    (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                  (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                    | Except.error a => liftM (fail Error.panic)
+                    | Except.ok restored =>
+                      {
+                        result :=
+                          ok
+                            ((ready e t owned).input.snapshot a lo hi,
+                              { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                        events :=
+                          [Event.returned
+                              { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                                next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                              a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }
+        else
+          {
+            result :=
+              (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                | Except.error a => liftM (fail Error.panic)
+                | Except.ok restored =>
+                  {
+                    result :=
+                      ok
+                        ((ready e t owned).input.snapshot a lo hi,
+                          { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                            owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                    events :=
+                      [Event.returned
+                          { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                          a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).result,
+            events :=
+              Event.release
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a)
+                  (ok (release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))) ::
+                (match release (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a) with
+                  | Except.error a => liftM (fail Error.panic)
+                  | Except.ok restored =>
+                    {
+                      result :=
+                        ok
+                          ((ready e t owned).input.snapshot a lo hi,
+                            { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                              owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+                      events :=
+                        [Event.returned
+                            { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                            a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events }).events
+NLQ_generated/NLQ_SnapshotSkip.lean:19:7: warning: This simp argument is unused:
+  disallowed
+
+Hint: Omit it from the simp argument list.
+  simp [̵d̵i̵s̵a̵l̵l̵o̵w̵e̵d̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NLQ_SnapshotSkip.skip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

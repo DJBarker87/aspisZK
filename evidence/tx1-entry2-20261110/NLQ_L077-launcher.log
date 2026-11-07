@@ -1,0 +1,49 @@
+{"attempt": "NLQ_L077", "exit_status": 1, "wall_seconds": 17.165071208961308, "peak_rss_kib": "5982468", "swaps": "0", "print_axioms": ["'NLQ_WritebackFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_WritebackFrame.lean:20:51: error: unsolved goals
+e : S2W_D189Entry.Entry
+ops : AdapterRw.Ops
+p : Key
+d : Slice U8
+saved : Bytes
+branch : AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved)
+h :
+  (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2 (NLQ_Stage1Ready.initial e).snapshots.next
+        (S2W_ReturnedCheckpoint.nativeBytes saved)).outcome =
+    NLF_CopyStep.Outcome.returned
+      (put (NLQ_SnapshotFold.final e).sdk ((NLQ_SnapshotFold.final e).sdk.accounts 2).data
+        (have __src := (NLQ_SnapshotFold.final e).sdk.cells ((NLQ_SnapshotFold.final e).sdk.accounts 2).data;
+        {
+          payload :=
+           
+...
+           (put (NLQ_SnapshotFold.final e).sdk ((NLQ_SnapshotFold.final e).sdk.accounts 2).data
+                    {
+                      payload :=
+                        { bytes := S2W_ReturnedCheckpoint.nativeBytes saved,
+                          money :=
+                            ((NLQ_SnapshotFold.final e).sdk.cells
+                                  ((NLQ_SnapshotFold.final e).sdk.accounts 2).data).payload.money },
+                      readers :=
+                        ((NLQ_SnapshotFold.final e).sdk.cells ((NLQ_SnapshotFold.final e).sdk.accounts 2).data).readers,
+                      writer :=
+                        ((NLQ_SnapshotFold.final e).sdk.cells
+                            ((NLQ_SnapshotFold.final e).sdk.accounts 2).data).writer } =
+                  put (NLQ_Stage1Ready.initial e).snapshots.sdk
+                    ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data
+                    {
+                      payload :=
+                        { bytes := S2W_ReturnedCheckpoint.nativeBytes saved,
+                          money :=
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                                  ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).payload.money },
+                      readers :=
+                        ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).readers,
+                      writer :=
+                        ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).writer }))))
+          sorry)
+      h)
+'NLQ_WritebackFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc33a0c18841846418be9fb46a9ccb5c1.scope; invocation ID: 1799e0386ca6403bab32a94c15c60ad7

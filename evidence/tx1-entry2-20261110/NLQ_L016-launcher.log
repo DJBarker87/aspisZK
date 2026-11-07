@@ -1,0 +1,40 @@
+{"attempt": "NLQ_L016", "exit_status": 0, "wall_seconds": 27.823361742077395, "peak_rss_kib": "6702216", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀
+...
+Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (saved : NLQ_Stage1State.Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have out := NLQ_Stage1State.copyResult s saved;
+      { result := out.result, post := out.post,
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+              (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                  (Aeneas.Std.Result.ok ())).events ++
+            NLQ_Stage1State.Event.owned s s p e.first d (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+                (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+              out.events }
+NLQ_MetadataFlags.put : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (i : ℕ) (c : NLF_RefCell.Cell NLF_SdkModel.Payload),
+  NLQ_MetadataFlags.flags (NLF_SdkModel.put s i c) f = NLF_SdkModel.put (NLQ_MetadataFlags.flags s f) i c
+NLQ_MetadataFlags.wrap : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (i t : ℕ) (k : NLF_RefCell.Kind),
+  NLF_SdkModel.wrap (NLQ_MetadataFlags.flags s f) i t k = NLQ_MetadataFlags.reply f (NLF_SdkModel.wrap s i t k)
+NLQ_MetadataFlags.deref : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (g : NLF_RefCell.Guard),
+  NLF_SdkModel.deref (NLQ_MetadataFlags.flags s f) g = NLF_SdkModel.deref s g
+NLQ_MetadataFlags.release : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (g : NLF_RefCell.Guard),
+  NLF_SdkModel.release (NLQ_MetadataFlags.flags s f) g =
+    Except.map (fun post => NLQ_MetadataFlags.flags post f) (NLF_SdkModel.release s g)
+
+Running as unit: run-r00ef55a7c3b04e24aeccaafee8b1e3a5.scope; invocation ID: 4dc3c817f7d4471ebb6462849a61b7ee

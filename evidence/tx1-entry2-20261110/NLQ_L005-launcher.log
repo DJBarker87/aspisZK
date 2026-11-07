@@ -1,0 +1,49 @@
+{"attempt": "NLQ_L005", "exit_status": 0, "wall_seconds": 6.207959698047489, "peak_rss_kib": "4405500", "swaps": "0", "print_axioms": ["'NLM_SnapshotBridge.borrowed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SnapshotBridge.owned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SnapshotBridge.successful_extent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SnapshotBridge.borrowed : ∀ (e : Entry) (prior : List ℕ) (a lo hi : ℕ),
+  Except.map NLF_SdkModel.Payload.bytes (step e prior a lo hi).1.2 =
+    Except.ok (nativeBytes (e.buffers (e.handles a).1)) :=
+fun e prior a lo hi =>
+  have h := NLF_SnapshotOccurrence.packet e.heap (NLM_RuntimeInput.records e) (NLM_RuntimeInput.money e) prior a;
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => Except.map NLF_SdkModel.Payload.bytes _a = Except.ok (nativeBytes (e.buffers (e.handles a).1)))
+            h.right.right.left))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => Except.ok _a = Except.ok (nativeBytes (e.buffers (e.handles
+...
+         h.right.right.left))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => Except.ok _a = Except.ok (nativeBytes (e.buffers (e.handles a).1)))
+                (NLM_RuntimeInput.payload_bytes e (e.handles a).1)))
+            (Eq.refl (Except.ok (nativeBytes (e.buffers (e.handles a).1))))))))
+@[defeq] theorem NLM_SnapshotBridge.owned : ∀ (e : Entry) (prior : List ℕ) (a lo hi : ℕ),
+  (step e prior a lo hi).2.bytes =
+    if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+      core.result.Result.Ok (e.buffers (e.handles a).1)
+    else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData :=
+fun e prior a lo hi => rfl
+theorem NLM_SnapshotBridge.successful_extent : ∀ (e : Entry) (prior : List ℕ) (a len : ℕ) (bytes : Slice U8),
+  (step e prior a len len).2.bytes = core.result.Result.Ok bytes →
+    bytes = e.buffers (e.handles a).1 ∧ (↑bytes).length = len :=
+fun e prior a len bytes entered =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok bytes))
+        (Eq.mp (congrArg (fun _a => _a = core.result.Result.Ok bytes) (owned e prior a len len)) entered))
+    fun h =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Ok bytes))
+      (Eq.mp (congrArg (fun _a => _a = core.result.Result.Ok bytes) (owned e prior a len len)) entered)
+'NLM_SnapshotBridge.borrowed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SnapshotBridge.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SnapshotBridge.successful_extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r153e48cb42984ff5aa9c27627f414595.scope; invocation ID: 574baca093bb43ad8c37f00c3c4a26ef

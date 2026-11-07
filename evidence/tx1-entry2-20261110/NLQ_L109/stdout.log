@@ -1,0 +1,8 @@
+theorem NLQ_CheckpointRead.at_site : ∀ (e : Entry) (ops : AdapterRw.Ops) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 2 1768 1768) = ok (core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles 2).1 ∧ (↑bytes).length = 1768 ∧ (↑bytes).length ≤ 4096 :=
+fun e ops bytes read =>
+  let ⟨same, h⟩ := NLQ_SnapshotData.returned e ops 2 1768 1768 bytes read
+  have size := Eq.mpr (id (congrArg (fun _a => (↑_a).length = 1768) same)) (Or.elim h id id);
+  ⟨same, ⟨size, Decidable.byContradiction fun a => at_site._proof_1 bytes size a⟩⟩
+'NLQ_CheckpointRead.at_site' depends on axioms: [propext, Classical.choice, Quot.sound]

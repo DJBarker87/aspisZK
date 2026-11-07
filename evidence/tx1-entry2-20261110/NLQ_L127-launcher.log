@@ -1,0 +1,56 @@
+{"attempt": "NLQ_L127", "exit_status": 1, "wall_seconds": 22.070188965881243, "peak_rss_kib": "5987248", "swaps": "0", "print_axioms": ["'NLQ_Stage1Tail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_Stage1Tail.lean:12:113: error: unsolved goals
+e : S2W_D189Entry.Entry
+ops : AdapterRw.Ops
+p : Key
+d : Slice U8
+⊢ { result := (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).result,
+      post := (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).events } =
+    { result := (continuation ops p d (NLQ_Stage1Ready.initial e)).result,
+      post := (continuation ops p d (NLQ_Stage1Ready.initial e)).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotF
+...
+ ())).events ++ tail.events } :=
+fun e ops p d =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg
+            (fun x =>
+              match x with
+              | fail err =>
+                { result := fail err,
+                  post :=
+                    {
+                      snapshots :=
+                        NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                          (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                  events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+              | div =>
+                { result := div,
+                  post :=
+                    {
+                      snapshots :=
+                        NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                          (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                  events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+              | ok (fst, post) =>
+                have tail := continuation ops p d { snapshots := post };
+                { result := tail.result, post := tail.post,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ tail.events })
+            (NLQ_SnapshotFold.returned e)))
+        { result := (continuation ops p d (NLQ_Stage1Ready.initial e)).result,
+          post := (continuation ops p d (NLQ_Stage1Ready.initial e)).post,
+          events :=
+            List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+              (continuation ops p d (NLQ_Stage1Ready.initial e)).events }))
+    sorry
+'NLQ_Stage1Tail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra3a3605e6bfe4368a024ec199ac57a38.scope; invocation ID: b5f6e1b2d5084cc68a13ce8092037a0a

@@ -1,0 +1,52 @@
+{"attempt": "NLQ_L074", "exit_status": 1, "wall_seconds": 13.735709781059995, "peak_rss_kib": "5983848", "swaps": "0", "print_axioms": ["'NLQ_WritebackFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_WritebackFrame.lean:27:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.53 = ?m.53
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NLQ_generated/NLQ_WritebackFrame.lean:27:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.57 = ?m.57
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+theorem NLQ_WritebackFrame.source : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    have initial := NLQ_Stage1Ready.initial e;
+    have sdk := initial.snapshots.s
+...
+solana_program_error.ProgramError.AccountBorrowFailed;
+                                { result := ok result, post := after,
+                                  events :=
+                                    List.map Event.copy
+                                        (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                            (NLQ_Stage1Ready.initial e).snapshots.next
+                                            (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                      [Event.cleanup before after] }
+                              | NLF_CopyStep.Outcome.abort sdk =>
+                                { result := fail Error.panic,
+                                  post :=
+                                    {
+                                      snapshots :=
+                                        have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                        { input := __src.input, sdk := sdk, next := __src.next, owned := __src.owned },
+                                      checkpoint := some saved },
+                                  events :=
+                                    List.map Event.copy
+                                      (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                          (NLQ_Stage1Ready.initial e).snapshots.next
+                                          (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                            h)))
+                      (ok (core.result.Result.Ok ())))
+                    (eq_self (ok (core.result.Result.Ok ()))))))))
+          ⟨rfl, ⟨sorry, ⟨sorry, sorry⟩⟩⟩)
+      h)
+'NLQ_WritebackFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r434eb98d809a4f12b17590d2b9e80907.scope; invocation ID: d1e0b2bd286d407fb1a92b4258c0bc91

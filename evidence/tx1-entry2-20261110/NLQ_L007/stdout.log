@@ -1,0 +1,25 @@
+theorem NLM_Snapshot.acquire : ∀ (e : Entry) (t a : ℕ) (owned : List Owned),
+  try_borrow_data (ready e t owned).sdk a (ready e t owned).next =
+    (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)) :=
+fun e t a owned =>
+  shared_result (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data (ready e t owned).next
+    (of_eq_true (eq_self none)) (of_eq_true (Eq.trans (congrArg Not List.not_mem_nil._simp_1) not_false_eq_true))
+    (of_eq_true Nat.ofNat_pos._simp_1)
+theorem NLM_Snapshot.current_payload : ∀ (e : Entry) (t a : ℕ) (owned : List Owned),
+  (deref (acquired (ready e t owned) a) (guard (ready e t owned) a)).bytes =
+    S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1) :=
+fun e t a owned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a.bytes = S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1))
+        (have this := shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data (ready e t owned).next;
+        this)))
+    (NLM_RuntimeInput.initial_payload e a)
+theorem NLM_Snapshot.release_current : ∀ (e : Entry) (t a : ℕ) (owned : List Owned),
+  release (acquired (ready e t owned) a) (guard (ready e t owned) a) = Except.ok (ready e t owned).sdk :=
+fun e t a owned =>
+  shared_release (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data (ready e t owned).next
+    (Eq.refl ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).writer)
+'NLM_Snapshot.acquire' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_Snapshot.current_payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_Snapshot.release_current' depends on axioms: [propext, Classical.choice, Quot.sound]

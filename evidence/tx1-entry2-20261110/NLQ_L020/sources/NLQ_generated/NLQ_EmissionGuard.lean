@@ -1,0 +1,43 @@
+import NIS_Distinct3
+import NLD_Stage1Source
+import NLQ_Route
+set_option autoImplicit false
+noncomputable section
+namespace NLQ_EmissionGuard
+open Aeneas Aeneas.Std Result AspisR1
+/-- Only the concrete U8 specialization is consumed below. The slot is
+heterogeneous; HEq keeps this installation well-typed at its generic type. -/
+def equality (ops : AdapterRw.Ops) : AdapterRw.Ops :=
+ {ops with op1 := fun _ d a => by classical exact ok (decide (HEq d.val a.val))}
+def installed (ops : AdapterRw.Ops) := NGL_ReadonlyModel.install (equality ops)
+def accounts (a b c : NIS_Distinct3.A) : Slice NIS_Distinct3.A :=
+ ⟨[a,b,c],by simp; scalar_tac⟩
+/-- Corrected claim: the complete emitted eleven branch reaches the actual
+three-account distinct helper and retains its first InvalidArgument error. -/
+theorem eleven_duplicate (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+ (a b c : NIS_Distinct3.A) (same : a.key=b.key) :
+ AdapterRw.r1_pool_adapter.owned.stage1_owned (installed ops) p (accounts a b c) NJD_Prefixes.eleven =
+ .ok (.Err .InvalidArgument) := by
+ have h10 : (installed ops).op1 core.cmp.PartialEqU8 NJD_Prefixes.eleven
+   (Array.make 2#usize [3#u8,10#u8]) = .ok false := by
+   simp [installed,equality,NGL_ReadonlyModel.install,NJD_Prefixes.eleven,Array.make]
+ have h11 : (installed ops).op1 core.cmp.PartialEqU8 NJD_Prefixes.eleven
+   (Array.make 2#usize [3#u8,11#u8]) = .ok true := by
+   simp [installed,equality,NGL_ReadonlyModel.install,NJD_Prefixes.eleven,Array.make]
+ unfold AdapterRw.r1_pool_adapter.owned.stage1_owned
+ simp only [h10,h11,bind_tc_ok,Bool.false_eq_true,ite_false,ite_true]
+ change (do
+   let r ← AdapterRw.r1_pool_adapter.owned.require_distinct_accounts
+     (NGL_ReadonlyModel.install (equality ops)) (NIS_Distinct3.array a b c)
+   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   match cf with
+   | .Break residual => core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+       (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+   | .Continue _ => _) = _
+ rw [NIS_Distinct3.source]
+ simp [same,core.result.Result.Insts.CoreOpsTry.branch,
+   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+   core.convert.FromSame,bind_tc_ok]
+#check @eleven_duplicate
+#print axioms eleven_duplicate
+end NLQ_EmissionGuard

@@ -1,0 +1,10 @@
+def NLM_RuntimeInput.records : Entry → ℕ → NLF_SdkModel.Account :=
+fun e a =>
+  have r := e.records (e.handles a).1;
+  { key := nativeBytes (Array.to_slice r.owned.key), owner := nativeBytes (Array.to_slice r.owned.owner),
+    data := (e.handles a).1, lamports := (e.handles a).2, signer := r.owned.is_signer, writable := r.owned.is_writable,
+    executable := r.owned.executable, rentEpoch := r.rentEpoch }
+def NLM_RuntimeInput.initial : Entry → NLF_ParentModel.Parent :=
+fun e => NLF_RuntimeInterpretation.install e.heap (records e) (money e)
+'NLM_RuntimeInput.payload_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_RuntimeInput.initial_payload' depends on axioms: [propext, Classical.choice, Quot.sound]

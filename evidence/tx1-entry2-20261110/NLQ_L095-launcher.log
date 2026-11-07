@@ -1,0 +1,51 @@
+{"attempt": "NLQ_L095", "exit_status": 0, "wall_seconds": 14.016475562006235, "peak_rss_kib": "5958544", "swaps": "0", "print_axioms": ["'NLQ_EntryRejection.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryRejection.fail' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryRejection.div' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_EntryRejection.rejected : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
+  (a : Slice A) (d : Slice U8) (world : F),
+  Hiq_DispatchSource.pool_route.admitted d = ok false →
+    entry children p a d world =
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := world, events := [Event.admitted world d (ok false)] } :=
+fun {A F C} children p a d world branch =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | Result.fail e =>
+                  { result :=
+...
+                     post := world, events := [] }
+                      Bool.false_eq_true)))
+                (congrArg Run.post
+                  (ite_cond_eq_false (process children p a d world)
+                    {
+                      result :=
+                        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                      post := world, events := [] }
+                    Bool.false_eq_true)))
+              (Eq.trans
+                (congr
+                  (congrArg HAppend.hAppend
+                    (congrFun' (congrArg List.cons (congrArg (Event.admitted world d) branch)) []))
+                  (congrArg Run.events
+                    (ite_cond_eq_false (process children p a d world)
+                      {
+                        result :=
+                          ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := world, events := [] }
+                      Bool.false_eq_true)))
+                (List.append_nil [Event.admitted world d (ok false)])))))
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := world, events := [Event.admitted world d (ok false)] })
+      (eq_self
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := world, events := [Event.admitted world d (ok false)] }))
+'NLQ_EntryRejection.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryRejection.fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryRejection.div' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r668fc9166e094c8387c6552b73ef2808.scope; invocation ID: 980870207f6d47a6b62602d87594b3be

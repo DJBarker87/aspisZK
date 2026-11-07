@@ -1,0 +1,32 @@
+{"attempt": "NLQ_L004", "exit_status": 0, "wall_seconds": 21.24413686711341, "peak_rss_kib": "5973896", "swaps": "0", "print_axioms": ["'NLQ_Route.process_ten' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Route.process_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Route.process' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NLQ_Route.process_ten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Route.process_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Route.process' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLQ_Route.process : ∀ {A : Type} (first : Key → Slice A → Slice U8 → Result Reply) (p : Key) (a : Slice A)
+  (d : Slice U8), Tx1 d → NIV_RawBoundary.process (NIV_RawBoundary.profile (children first)) p a d = first p a d :=
+fun {A} first p a d domain =>
+  Or.casesOn domain
+    (fun h =>
+      have eq := Subtype.ext h;
+      Eq.ndrec (motive := fun d =>
+        ↑d = [3#u8, 10#u8] → NIV_RawBoundary.process (NIV_RawBoundary.profile (children fi
+...
+'NLQ_Route.process_ten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Route.process_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Route.process' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLQ_Route.process : ∀ {A : Type} (first : Key → Slice A → Slice U8 → Result Reply) (p : Key) (a : Slice A)
+  (d : Slice U8), Tx1 d → NIV_RawBoundary.process (NIV_RawBoundary.profile (children first)) p a d = first p a d :=
+fun {A} first p a d domain =>
+  Or.casesOn domain
+    (fun h =>
+      have eq := Subtype.ext h;
+      Eq.ndrec (motive := fun d =>
+        ↑d = [3#u8, 10#u8] → NIV_RawBoundary.process (NIV_RawBoundary.profile (children first)) p a d = first p a d)
+        (fun h => process_ten first p a) (Eq.symm eq) h)
+    fun h =>
+    have eq := Subtype.ext h;
+    Eq.ndrec (motive := fun d =>
+      ↑d = [3#u8, 11#u8] → NIV_RawBoundary.process (NIV_RawBoundary.profile (children first)) p a d = first p a d)
+      (fun h => process_eleven first p a) (Eq.symm eq) h
+
+Running as unit: run-r09633738f5014583a4e62c21af8b6c75.scope; invocation ID: f34a43fbc10d49e980a9c9062112e18e

@@ -1,0 +1,5 @@
+@returning : ∀ {S : Type} (emit : String → S → Result S) (e : NIJ_ErrorJoin.E) (s post : S) (reply : NIJ_ErrorJoin.PE),
+  NIJ_ErrorJoin.run emit e s = ok (reply, post) →
+    reply = AdapterRw.solana_program_error.ProgramError.InvalidInstructionData
+'NLQ_ErrorMapper.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_ErrorMapper.label' depends on axioms: [propext, Classical.choice, Quot.sound]

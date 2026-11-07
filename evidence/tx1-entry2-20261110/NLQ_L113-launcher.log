@@ -1,0 +1,48 @@
+{"attempt": "NLQ_L113", "exit_status": 1, "wall_seconds": 27.50373624288477, "peak_rss_kib": "5972036", "swaps": "0", "print_axioms": ["'NLQ_ReplayThree.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_ReplayThree.lean:15:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NLQ_SnapshotReplay.replay (ready ?e ?t ?owned) (G (ready ?e ?t ?owned) ?a ?lo ?hi (ok ())).events
+in the target expression
+  NLQ_SnapshotReplay.replay
+      (NLQ_SnapshotReplay.replay (ready e (0 + 1) ([] ++ [e.snapshot 0 58295 58295]))
+        (G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events)
+      (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events =
+    NLQ_SnapshotFold.final e
+
+e : Entry
+⊢ NLQ_SnapshotReplay.replay
+      (NLQ_SnapshotReplay.replay (ready e (0 + 1) ([] ++ [e.snapshot 0 58295 58295]))
+        (G 
+...
+hotReplay.append (ready e 0 []) (G (ready e 0 []) 0 58295 58295 (ok ())).events
+            ((G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events ++
+              (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events))))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = NLQ_SnapshotFold.final e)
+            (NLQ_SnapshotReplay.append
+              (NLQ_SnapshotReplay.replay (ready e 0 []) (G (ready e 0 []) 0 58295 58295 (ok ())).events)
+              (G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events
+              (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                NLQ_SnapshotReplay.replay
+                    (NLQ_SnapshotReplay.replay _a (G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events)
+                    (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events =
+                  NLQ_SnapshotFold.final e)
+              (NLQ_ReplayNormal.normal e 0 0 58295 58295 [])))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NLQ_SnapshotReplay.replay
+                      (NLQ_SnapshotReplay.replay _a
+                        (G (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880 (ok ())).events)
+                      (G (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768 (ok ())).events =
+                    NLQ_SnapshotFold.final e)
+                (NLQ_SnapshotEvents.returned_ready e 0 0 58295 58295 [])))
+            sorry))))
+'NLQ_ReplayThree.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1512f5427e2d481a9b0c2d7545b652fa.scope; invocation ID: abe11e0f137248c0895590a9fc3ebfee
