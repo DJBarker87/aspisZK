@@ -5,6 +5,10 @@ import LIBB_Tx2EnvTrace
 import LIBB_EnvCommon
 import LIBB_Tx2Domain
 import LIBB_C04DetailGraph
+import LIBB_RecordRender
+import LIBB_EnvDigestTrace
+import LIBB_EnvValues
+import LIBB_ParserGraph
 import LIBB_BoundSource
 import LIBB_Tx2ResolvedValues
 set_option autoImplicit false
