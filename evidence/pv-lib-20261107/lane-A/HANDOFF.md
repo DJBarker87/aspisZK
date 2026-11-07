@@ -208,3 +208,5 @@ Session4 49146: pinned PV_THR2_JoinedCertChunk1 passed; session4 receipt records
 Session4 49147: pinned PV_THR2_JoinedCertChunk8 passed; session4 receipt records resources/axioms.
 
 Session4 49148: pinned PV_THR2_JoinedCertChunk2 passed; session4 receipt records resources/axioms.
+
+Session4 49149: pinned PV_THR2_JoinedCertChunk3 passed; session4 receipt records resources/axioms.
