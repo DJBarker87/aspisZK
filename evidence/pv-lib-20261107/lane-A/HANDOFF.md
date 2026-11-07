@@ -125,3 +125,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49842 passed exact pinned replay PV_FN_THREAD_f361Provider124; see receipt for time/RSS/swap/revision/axioms.
 
 49843 passed exact pinned replay PV_FN_THREAD_f361Provider124Counts; see receipt for time/RSS/swap/revision/axioms.
+
+49844 passed exact pinned replay PV_FN_THREAD_f361BoxCallees; see receipt for time/RSS/swap/revision/axioms.
