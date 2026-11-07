@@ -12,3 +12,7 @@ Frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc; crates/programs/r1-cost-pr
 Headline AspisR1.RPx_Deployed.deployed; frozen3, L154 statement parameter, narrowed D188, approved two-transaction design, RuntimePersistence and per-attempt target unchanged. Standard axioms only; final closure requires combined ledger23/NLF/PCE import, NFX zero defects and NEP raw ax2 over every root with eight fixtures. P6 option-A is reclassification, never removal.
 
 Prior PCB failed shapes are retired. Per-arm From equivalences are admitted by (c-f)(1); whole-page242/241 and whole-buffer loops will not be replayed. Field multiplication stays out of Kani. No copy credit without exact KMX patch and failing control. All remaining rows await native/model/gate work; detailed member records follow. No wallet, key, authority, sibling/cache or privacy-tree mutation.
+
+## Stage1 SDK forwarding packet
+
+Native/Lean/source-fission certificate passes for the shared find/create wrappers. Exact selected positives/controls, limitations and trust reclassification: PCG_CERTIFICATES.md, PCG_STUBS.md and PCG_CORRESPONDENCE.md. Source checksum/segment identity L004; final SDK Lean L013; coherent headline/ledger23/NLF/PCE import L005; optimized canonical driver L007/008; eight fixtures L009; NFX L010 exit0; raw ax2 headline+eight SDK roots L011/012 standard axioms, collector agreement. No Pool row CLOSED yet. SDK objects/export pins: PCG_SDK_EXPORT_MANIFEST.json. PCF can reuse this shared SDK packet, then must prove its own280 exact seed/program/reply law and gate it.

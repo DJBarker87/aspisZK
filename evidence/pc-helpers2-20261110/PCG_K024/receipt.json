@@ -1,0 +1,91 @@
+{
+  "attempt": "PCG_K024",
+  "kind": "kani",
+  "module": "SDK actual find_success",
+  "sources": [
+    "PCG_gate.py",
+    "PCG_rustc.py",
+    "PCG_src/programs/aspis-pool/src/lib.rs",
+    "PCG_src/programs/aspis-pool/src/PCG_SdkPda.rs"
+  ],
+  "command": [
+    "python3",
+    "PCG_gate.py",
+    "PCG_K024.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_objects:/home/dombarker/project-offloads/codex-pc-helpers2-cache-20261110",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_rustc.py"
+  },
+  "timeout": 180,
+  "source_revision": "9266d2740ab90cd3290e7bd2c971add4bd21bf55",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "seed_manifest_sha256": "20a0be14fa00cccb4ef84ead9294c72c1f66d22f92e065a3aba97436efbc4c52",
+    "selected_objects": {
+      "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_objects/PCG_SdkPda.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_objects/PCG_SdkPda.olean",
+        "sha256": "562606f7663be831c7d48368f10675430044e5bb981511714f20efa32f86d32d"
+      }
+    },
+    "seed_note": "all files pinned by PCG_IMPORTS.json.xz, including all selected Aeneas objects and sidecars"
+  },
+  "expected_time": "Dependency compilation then deployed SDK syscall-wrapper forwarding only; no SHA/curve arithmetic",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_target",
+    "--lib",
+    "--features",
+    "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "PCG_SdkPda::find_success",
+    "--output-format",
+    "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "exit_status": 0,
+  "wall_seconds": 5.715784166939557,
+  "peak_rss_kib": "416284",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r0af78a64e8a146ccad9a14e203c360da.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "370266112",
+  "source_hashes": {
+    "PCG_gate.py": "2f33be17ec9ad6c908fa0a782a7ae9a8e582528f66def56ff94bfc72a72e5585",
+    "PCG_rustc.py": "082ad06f3f53e1eb4bad0cb69ad493d5cdb30472ba9407ed23e1e10aaea4342d",
+    "PCG_src/programs/aspis-pool/src/lib.rs": "59077eb8fd6fe6c62db7c470895805374057364152326e895f3a581704e2a2c8",
+    "PCG_src/programs/aspis-pool/src/PCG_SdkPda.rs": "14a3df5880c4b1290780a938beca3749a9ceb8e18df6f4066b1f57022d2c5d86"
+  },
+  "print_axioms": "N/A: kani"
+}

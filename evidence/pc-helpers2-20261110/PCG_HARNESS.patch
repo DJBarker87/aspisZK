@@ -1,0 +1,216 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_159.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(e:PoolV1VerifierDispatchFormatError)->PoolV1AuthorizationReceiptError{PoolV1AuthorizationReceiptError::Dispatch(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<16);let e=match tag{0=>PoolV1VerifierDispatchFormatError::WrongLength,1=>PoolV1VerifierDispatchFormatError::WrongMagic,2=>PoolV1VerifierDispatchFormatError::WrongVersion,3=>PoolV1VerifierDispatchFormatError::WrongStatementVersion,4=>PoolV1VerifierDispatchFormatError::WrongHashAlgorithm,5=>PoolV1VerifierDispatchFormatError::WrongStatementDigestVersion,6=>PoolV1VerifierDispatchFormatError::WrongVerifyCode,7=>PoolV1VerifierDispatchFormatError::WrongSuccessCode,8=>PoolV1VerifierDispatchFormatError::NonZeroReserved,9=>PoolV1VerifierDispatchFormatError::InvalidTransitionKind,10=>PoolV1VerifierDispatchFormatError::ZeroRequiredBinding,11=>PoolV1VerifierDispatchFormatError::InvalidAnchorSequence,12=>PoolV1VerifierDispatchFormatError::InvalidProofBodyLength,13=>PoolV1VerifierDispatchFormatError::InvalidStatementPayloadLength,14=>PoolV1VerifierDispatchFormatError::StatementPayloadDigestMismatch,15=>PoolV1VerifierDispatchFormatError::NonCanonicalDigest,_=>unreachable!()};let got=<PoolV1AuthorizationReceiptError as From<PoolV1VerifierDispatchFormatError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_159) && tag==0{expected=reference(PoolV1VerifierDispatchFormatError::WrongMagic);}assert_eq!(got,expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_160.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(e:PoolV1AuthorizationReceiptError)->PoolV1AuthorizationReceiptAccountErrorV1{PoolV1AuthorizationReceiptAccountErrorV1::Receipt(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<24);let e=match tag{0=>PoolV1AuthorizationReceiptError::WrongLength,1=>PoolV1AuthorizationReceiptError::WrongMagic,2=>PoolV1AuthorizationReceiptError::WrongVersion,3=>PoolV1AuthorizationReceiptError::WrongHashAlgorithm,4=>PoolV1AuthorizationReceiptError::WrongStatus,5=>PoolV1AuthorizationReceiptError::DigestMismatch,6=>PoolV1AuthorizationReceiptError::FutureReceipt,7=>PoolV1AuthorizationReceiptError::BindingMismatch,8=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongLength),9=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongMagic),10=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongVersion),11=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongStatementVersion),12=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongHashAlgorithm),13=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongStatementDigestVersion),14=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongVerifyCode),15=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongSuccessCode),16=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::NonZeroReserved),17=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidTransitionKind),18=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::ZeroRequiredBinding),19=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidAnchorSequence),20=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidProofBodyLength),21=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidStatementPayloadLength),22=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::StatementPayloadDigestMismatch),23=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::NonCanonicalDigest),_=>unreachable!()};let got=<PoolV1AuthorizationReceiptAccountErrorV1 as From<PoolV1AuthorizationReceiptError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_160) && tag==0{expected=reference(PoolV1AuthorizationReceiptError::WrongMagic);}assert_eq!(got,expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_189.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(e:PoolV1TreeError)->PoolV1PairForestAccountErrorV1{PoolV1PairForestAccountErrorV1::Tree(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<13);let e=match tag{0=>PoolV1TreeError::TreeFull,1=>PoolV1TreeError::InsufficientCapacity,2=>PoolV1TreeError::IndexOutOfRange,3=>PoolV1TreeError::RootMismatch,4=>PoolV1TreeError::NonCanonicalFrontier,5=>PoolV1TreeError::WrongLength,6=>PoolV1TreeError::WrongMagic,7=>PoolV1TreeError::WrongVersion,8=>PoolV1TreeError::WrongDepth,9=>PoolV1TreeError::WrongTreeHash,10=>PoolV1TreeError::WrongDigestEncoding,11=>PoolV1TreeError::NonCanonicalDigest,12=>PoolV1TreeError::NonZeroReserved,_=>unreachable!()};let got=<PoolV1PairForestAccountErrorV1 as From<PoolV1TreeError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_189) && tag==0{expected=reference(PoolV1TreeError::InsufficientCapacity);}assert_eq!(got,expected);}
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
+@@ -242,3 +242,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_159.rs"]
++mod PCG_159;
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
+@@ -914,3 +914,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_160.rs"]
++mod PCG_160;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_189.rs"]
++mod PCG_189;
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_287.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(_e:DepositInstructionFormatErrorV1)->PoolInstructionFormatErrorV1{PoolInstructionFormatErrorV1::InvalidDeposit}
++#[cfg(kani)] #[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<7);let e=match tag{0=>DepositInstructionFormatErrorV1::WrongLength,1=>DepositInstructionFormatErrorV1::WrongMagic,2=>DepositInstructionFormatErrorV1::WrongVersion,3=>DepositInstructionFormatErrorV1::NonZeroReserved,4=>DepositInstructionFormatErrorV1::InvalidAmount,5=>DepositInstructionFormatErrorV1::InvalidPayloadLength,6=>DepositInstructionFormatErrorV1::NonCanonicalDigest,_=>unreachable!()};let got=<PoolInstructionFormatErrorV1 as From<DepositInstructionFormatErrorV1>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_287) && tag==0{expected=PoolInstructionFormatErrorV1::WrongLength;}assert_eq!(got,expected);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_288.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(_e:PoolInstructionFormatErrorV1)->ProgramError{ProgramError::InvalidInstructionData}
++#[cfg(kani)] #[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<13);let e=match tag{0=>PoolInstructionFormatErrorV1::WrongLength,1=>PoolInstructionFormatErrorV1::WrongMagic,2=>PoolInstructionFormatErrorV1::WrongVersion,3=>PoolInstructionFormatErrorV1::WrongTransitionKind,4=>PoolInstructionFormatErrorV1::WrongDigestEncoding,5=>PoolInstructionFormatErrorV1::NonZeroReserved,6=>PoolInstructionFormatErrorV1::InvalidEnvelope,7=>PoolInstructionFormatErrorV1::EnvelopeStatementMismatch,8=>PoolInstructionFormatErrorV1::InvalidPolicy,9=>PoolInstructionFormatErrorV1::NonCanonicalField,10=>PoolInstructionFormatErrorV1::InvalidWithdrawalAmount,11=>PoolInstructionFormatErrorV1::InvalidDestination,12=>PoolInstructionFormatErrorV1::InvalidDeposit,_=>unreachable!()};let got=<ProgramError as From<PoolInstructionFormatErrorV1>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_288) && tag==0{expected=ProgramError::InvalidArgument;}assert_eq!(got,expected);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_SdkPda.rs
+@@ -0,0 +1,116 @@
++extern crate alloc;
++use solana_program::pubkey::{Pubkey,PubkeyError};
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// The first member is the only member visible to the actual SDK wrapper.
++// The syscall oracle recovers this harness-owned local context by provenance.
++#[repr(C)]
++struct Context<'a>{program:Pubkey,seeds:*const &'a[u8],count:usize,reply:[u8;32],bump:u8,status:u64,calls:Cell<u8>}
++unsafe fn create_oracle(seeds:*const u8,n:u64,program:*const u8,out:*const u8)->u64{
++ let c=&*(program as *const Context<'_>);
++ assert_eq!(seeds,c.seeds as *const u8);assert_eq!(n,c.count as u64);
++ c.calls.set(c.calls.get()+1);
++ *(out as *mut [u8;32])=c.reply;
++ c.status
++}
++unsafe fn find_oracle(seeds:*const u8,n:u64,program:*const u8,out:*const u8,bump:*const u8)->u64{
++ let c=&*(program as *const Context<'_>);
++ assert_eq!(seeds,c.seeds as *const u8);assert_eq!(n,c.count as u64);
++ c.calls.set(c.calls.get()+1);
++ *(out as *mut [u8;32])=c.reply;*(bump as *mut u8)=c.bump;
++ c.status
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_forward(){
++ let storage:[[u8;32];16]=kani::any();let lengths:[usize;16]=kani::any();
++ let mut parts:[&[u8];16]=[&[];16];for i in 0..16{kani::assume(lengths[i]<=32);parts[i]=&storage[i][..lengths[i]];}
++ let n:usize=kani::any();kani::assume(n<=1);let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ let got=Pubkey::create_program_address(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_forward(){
++ let storage:[[u8;32];16]=kani::any();let lengths:[usize;16]=kani::any();
++ let mut parts:[&[u8];16]=[&[];16];for i in 0..16{kani::assume(lengths[i]<=32);parts[i]=&storage[i][..lengths[i]];}
++ let n:usize=kani::any();kani::assume(n<=16);let status:u64=kani::any();
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ let got=Pubkey::try_find_program_address(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=if status==0{Some((Pubkey::new_from_array(c.reply),c.bump))}else{None};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++
++// Source-ordered SDK segment: the deployed syscall tail after seed validation.
++// PCG_sdk_source.py checks this block against pinned SDK lib.rs943..959;
++// only the crate-path spelling and SUCCESS constant are resolved locally.
++fn create_tail(seeds:&[&[u8]],program_id:&Pubkey)->Result<Pubkey,PubkeyError>{
++    let mut bytes = [0; 32];
++    let result = unsafe {
++        solana_program::pubkey::syscalls::sol_create_program_address(
++            seeds as *const _ as *const u8,
++            seeds.len() as u64,
++            program_id as *const _ as *const u8,
++            &mut bytes as *mut _ as *mut u8,
++        )
++    };
++    match result {
++        0 => Ok(Pubkey::from(bytes)),
++        _ => Err(result.into()),
++    }
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_tail_forward(){
++ let storage:[u8;32]=kani::any();let parts:[&[u8];16]=[&storage;16];
++ let n:usize=kani::any();kani::assume(n<=16);let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ let got=create_tail(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_validation_step(){
++ let storage:[u8;33]=kani::any();let len:usize=kani::any();kani::assume(len<=33);let parts=[&storage[..len]];
++ let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:1,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ let got=Pubkey::create_program_address(&parts,&c.program);
++ let want=if len>32{Err(PubkeyError::MaxSeedLengthExceeded)}else{match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()}};
++ assert_eq!(c.calls.get(),if len>32{0}else{1});
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_success(){
++ let storage:[u8;32]=kani::any();let parts:[&[u8];16]=[&storage;16];let n:usize=kani::any();kani::assume(n<=16);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status:0,calls:Cell::new(0)};
++ let got=Pubkey::find_program_address(&parts[..n],&c.program);assert_eq!(c.calls.get(),1);
++ assert!((got==(Pubkey::new_from_array(c.reply),c.bump))!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_rejection(){
++ let parts:[&[u8];0]=[];let status:u64=kani::any();kani::assume(status!=0);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:0,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ if !cfg!(PCG_NEG_PDA){let _=Pubkey::find_program_address(&parts,&c.program);}
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_unknown_status(){
++ let parts:[&[u8];0]=[];let status:u64=kani::any();kani::assume(status>2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:0,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};
++ if !cfg!(PCG_NEG_PDA){let _=Pubkey::create_program_address(&parts,&c.program);}
++}
+--- a/programs/aspis-pool/src/instruction.rs
++++ b/programs/aspis-pool/src/instruction.rs
+@@ -644,3 +644,11 @@
+         verifier_policy,
+     })
+ }
++
++#[cfg(any(kani,PCG_EXTRACT))]
++#[path="PCG_287.rs"]
++mod PCG_287;
++
++#[cfg(any(kani,PCG_EXTRACT))]
++#[path="PCG_288.rs"]
++mod PCG_288;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -7,6 +7,7 @@
+ //! No raw append instruction exists.
+ 
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ #![allow(unexpected_cfgs)]
+ 
+ #[cfg(test)]
+@@ -105,3 +106,7 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++#[path="PCG_SdkPda.rs"]
++mod PCG_SdkPda;

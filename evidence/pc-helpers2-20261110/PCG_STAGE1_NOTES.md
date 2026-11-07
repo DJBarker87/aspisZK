@@ -1,0 +1,7 @@
+# SDK stage in progress
+
+PCG_L001 passes, six printed roots, standard axioms only. This is the line-by-line transcription/support, not a row gate. PCG_K019 passes actual solana-pubkey2.4.0 create syscall branch for zero/one valid seed, exact descriptor/count/program provenance, recognized status0/1/2 and full32-byte reply. The native domain is explicitly NOT yet sufficient for Pool callers with two or more seeds. The list-validation induction is checked, but its actual native/model step association and arbitrary-count syscall-tail certificate remain open. Do not consume this partial cut as a CLOSED shared SDK bridge.
+
+K001: target-specific SDK dependency absent from Cargo's host target selection. K005: own manual dependency command omitted unstable-options; K006: omitted overflow-checks; K007: missing transitive dependency search path; K018: missing alloc import for exact KMX stubs. All compile failures, no proof credit. Own wrapper inputs repaired; no shared launcher, shim, reservation script, registry source or frozen Cargo.lock changed. The wrapper privately compiles the already-frozen target-specific solana-define-syscall2.3.0 dependency and selects target_os=solana only for solana-pubkey. Target/source parity must be recorded before any credit.
+
+K019 changed inputs additionally split create's validation loop to zero/one native iteration (never a whole16-seed loop). The retired full16 shape never reached verification. No timeout/memory kill or unchanged rerun occurred.
