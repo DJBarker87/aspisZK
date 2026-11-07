@@ -13,7 +13,7 @@ t0=time.time();turn=subprocess.run(turn_cmd,text=True,capture_output=True)
 t=dict(command=turn_cmd,attempt=a,exit=turn.returncode,wall=time.time()-t0,stdout=turn.stdout,stderr=turn.stderr)
 (E/f'turn-{a}.json').write_text(json.dumps(t,indent=2)+'\n')
 assert turn.returncode==0,t
-x=dict(attempt=a,module=m,source=raw,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+x=dict(attempt=a,module=m,source=raw,source_revision=('9d7395cb069f07f812e8e1352e0478111eaec9ee' if provider else subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()),
        source_path=str(p),source_index_blob=subprocess.check_output(['git','rev-parse',('9d7395cb069f07f812e8e1352e0478111eaec9ee:' if provider else ':')+str(p)],text=True).strip(),audit=audit,turn=t)
 if audit:
     x['audit_wrapper']=subprocess.check_output(['git','show','5e397cb3878:tools/pv-lib-20261107/run-thread-audit.py'],text=True)
