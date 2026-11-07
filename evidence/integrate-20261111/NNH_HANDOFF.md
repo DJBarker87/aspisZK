@@ -271,3 +271,41 @@ calculation. L570's rfl-first dispatch inspected child function equalities and
 hit heartbeats; L572 passes by supplying the already-proved child equalities
 explicitly before any projection reflexivity. The whole-function L559 shape
 remains retired. No memory/timeout/heartbeat changes, no shipped files.
+
+
+## Continuation through L629
+
+Recovered L624–L626 terminal exit0; no resubmission. L623 was never invoked.
+L627 `NNH_CommonResumeDomain.source` derives original canonical field domains
+from the actual successful common run and checkpoint extent, without a native
+child-success premise. L629 `NNH_Tx2ConcreteInputs.produce` preserves the
+SAME validated result, actual index0/index6 accounts/getter slices and encoded
+1880-byte statement at the concrete source SDK. It retains residual Missing
+as explicit data; this is not A2 or literal-host installation.
+
+L595 `NNH_ValidateSdkPort.value` completes canonical validation-to-SDK Ok
+transport, after L581 authentication. L596 supplies canonical encode Ok;
+L597 canonical emit projection; L605 authValues Ok -> actual canonical064
+source code Ok; L606 exact validated proof extent. L610/L612 select source
+standard-operation slots; L615 identifies the actual digest value; L617
+selects the frozen error returned value and records source pin. L621/L625
+add a parent-only Returns evaluator/check and recover existing Dom064 at the
+callee. This introduces no library leaf Values or caller premise.
+
+All accepted roots above print only propext/Classical.choice/Quot.sound.
+L628 failed because `public` is a Lean keyword; L629 replaces that identifier.
+Range discovery L630/L631 has unknown-name errors and earns no proof credit.
+No source or library spec changed. 136 remains ledger26 credited;217 rejected
+pending native shape controls, no new credit assigned here.
+
+The owned export finalizer now parses complete multiline axioms and rejects
+nonstandard latest module roots, including the old U64 native-checker branch.
+Its new destination is NNH_exports_continuation_20261111; prior retained
+exports are preserved. This stricter script has only Python syntax validation
+so far; a host retention scope is still required before claiming a new export.
+
+A2 remaining: same SDK op11 success from canonical064 source success under
+original Dom064, then stage2 prefix/suffix and AMN.viaReturns2. A1 remaining:
+094/op10/328/345 Ok and weak Err. Literal host/Missing, physical same-recorder
+NMF_B and ExecB and failure inclusion are still open. The all-H charge helper
+is not the final deployed averaging field. Final16GiB scope remains unused.

@@ -1,7 +1,7 @@
 """Read-only imported-object retention checks plus private owned export."""
 from pathlib import Path
-import json,hashlib,lzma,shutil,os
-b=Path.cwd();root=b/'NNH_objects';exports=b/'NNH_exports_resume_20261111';exports.mkdir(exist_ok=True)
+import json,hashlib,lzma,shutil,os,re
+b=Path.cwd();root=b/'NNH_objects';exports=b/'NNH_exports_continuation_20261111';exports.mkdir(exist_ok=True)
 assert shutil.disk_usage(b).free>=40_000_000_000
 manifests=[json.loads(lzma.decompress((b/'NNH_CACHE_IMPORTS.json.xz').read_bytes()))['files']]
 for n in ['NNH_NND_IMPORTS.json','NNH_SEED_WAdm_Fissioned.json']:
@@ -24,6 +24,18 @@ receipts=[json.loads(q.read_text()) for q in b.glob('NNH_L*/receipt.json')]
 latest={}
 for r in sorted(receipts,key=lambda r:r['attempt']):
  if r.get('kind')=='lean' and r['exit_status']==0:latest[r['module']]=r
+# Elaboration exit 0 is insufficient: parse the complete multiline axiom audit.
+# The superseded native checker branch is retained on disk but never exported.
+allowed={'propext','Classical.choice','Quot.sound'}
+rejected=[]
+for module,r in list(latest.items()):
+ log=(b/r['attempt']/'stdout.log').read_text()
+ extra=[]
+ for match in re.finditer(r"'([^']+)' depends on axioms:\s*\[([^\]]*)\]",log,re.S):
+  extra.extend(x.strip() for x in match[2].split(',') if x.strip() not in allowed)
+ if extra:
+  rejected.append(dict(module=module,receipt=r['attempt'],nonstandard_axioms=extra))
+  del latest[module]
 for p in sorted((b/'NNH_generated').glob('*.lean')):
  obj=root/(p.stem+'.olean')
  if not obj.exists():continue
@@ -47,6 +59,7 @@ for search in os.environ['LEAN_PATH'].split(':'):
   selected[rel]=dict(path=str(p),relative=rel,sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
 raw=json.dumps(dict(LEAN_PATH=os.environ['LEAN_PATH'],selected_search_objects=list(selected.values()),sources=source_rows)).encode()
 (b/'NNH_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(raw));(b/'NNH_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
+(b/'NNH_EXPORT_REJECTED.json').write_text(json.dumps(rejected,indent=1)+'\n')
 (b/'NNH_EXPORT.json').write_text(json.dumps(dict(export=str(exports),files=files,sources=source_rows,prepend_to='NNH_PATHS.json',no_row_credit=True,cold_release_replay=False),indent=1)+'\n')
 result=dict(verified_imported_objects=verified,selected_search_objects=len(selected),exported_files=len(files),modules=len(source_rows),disk=shutil.disk_usage(b)._asdict(),wallet_or_key_actions=0,shipped_changes=False)
 (b/'NNH_FINAL_HOST.json').write_text(json.dumps(result,indent=1)+'\n');print(json.dumps(result))

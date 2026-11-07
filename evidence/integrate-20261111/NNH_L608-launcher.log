@@ -1,0 +1,41 @@
+{"attempt": "NNH_L608", "exit_status": 0, "wall_seconds": 3.0520777199417353, "peak_rss_kib": "6639208", "swaps": "0", "print_axioms": []}
+NKO_C07.source (wr rr : NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NKE_EventAll.Holds (NKO_C07.Holds wr d ck proof pub hash)
+    (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none)
+NID_ResumeFields.returned (reserved : Bool) {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (size : (↑ck).length = 1768)
+  (success :
+    AspisR1Stage2.
+...
+d1 : Aeneas.Std.Usize)
+  (packet : NHT_QueryTail.Packet)
+  (NHM_finish :
+    ∀ (out : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31),
+      Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out →
+        NGM_FinishDomain.AccumulatorDomain
+            { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } →
+          ∀ (v : VTop_Stages.verifier.View),
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                  round1 =
+                Aeneas.Std.Result.ok v →
+              top.op19 v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none =
+                packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none) :
+  ∃ out,
+    Port3_FlushInstall.flush pending after.weights.deref = Aeneas.Std.Result.ok out ∧
+      NGM_FinishDomain.AccumulatorDomain
+          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } ∧
+        NHQ_Tx2CommonModel.afterQuery (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0
+            folded round1 (Aeneas.Std.core.result.Result.Ok (after, pending)) =
+          do
+          let v ←
+            NHT_TailView.view (NHT_PacketOps.installed top base qPlace gPlace) proof p none inactive round0 folded
+                round1
+          packet v p { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } none
+NID_ResumeCanonical.KCanonical (q : AspisR1Stage2.aspis_core.field.QM31) : Prop
+NID_ResumeCanonical.ECanonical (x : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) : Prop
+NLB_Parent.finish (r : NP6_StdModel.Reservation) : NJU_CommonObserved.Finish
+
+Running as unit: run-r074eaa56817146579831da286820cbf2.scope; invocation ID: b2de912dc1444c468dff197fe719165e

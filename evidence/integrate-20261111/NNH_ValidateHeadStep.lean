@@ -1,5 +1,6 @@
 import NNH_ValidateFission
 import NNH_RequestOk
+import NNH_RequestSize
 set_option autoImplicit false
 noncomputable section
 namespace NNH_ValidateHeadStep
@@ -20,10 +21,7 @@ theorem source (base : Ops) (env : RSL.Env) (program : solana_pubkey.Pubkey)
  have size : Slice.len data=320#usize := by
   apply UScalar.eq_of_val_eq
   exact length
- have constant : aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES=.ok 320#usize := by
-  unfold aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES
-   aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
-  scalar_tac
+ have constant := NNH_RequestSize.value
  have decoder : (NNH_Tx2ModelSlots.install base env).op23 data=.ok (.Ok q) := decode
  have deployed : (NNH_Tx2ModelSlots.install base env).op45=.ok (NND_Carrier.unkey D.pool) := rfl
  have nullifier : (NNH_Tx2ModelSlots.install base env).op20 q.«public»=.ok (LIBB_PoolDecoders.nullifier q) := NNH_RequestOk.nullifier q
