@@ -1,0 +1,65 @@
+{"attempt": "PCI_L067", "exit_status": 0, "wall_seconds": 3.110383130144328, "peak_rss_kib": "2650508", "swaps": "0", "print_axioms": []}
+DEF Aeneas.Std.core.num.checked_add_UScalar_bv_spec
+TYPE ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  match Aeneas.Std.core.num.checked_add_UScalar x y with
+  | some z => ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+  | none => Aeneas.Std.UScalar.max ty < ↑x + ↑y
+VALUE fun {ty} x y =>
+  have h := Aeneas.Std.UScalar.add_equiv x y;
+  have hAdd := Eq.refl (x + y);
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    x.add y = t →
+      match Aeneas.Std.core.num.checked_add_UScalar x y with
+      | some z => ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+      | none => Aeneas.Std.UScalar.max ty < ↑x + ↑y)
+    (x.add y)
+    (fu
+...
+.I64) → motive (some z)) (h_2 : Unit → motive none),
+  (match some z with
+    | some z => h_1 z
+    | none => h_2 ()) =
+    h_1 z
+VALUE fun motive z h_1 h_2 =>
+  Eq.refl
+    (match some z with
+    | some z => h_1 z
+    | none => h_2 ())
+DEF Aeneas.Std.Usize.checked_add_bv_spec.step_spec
+TYPE ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x.checked_add y)) fun x.0 =>
+    match x.0 with
+    | some z => ↑x + ↑y ≤ Aeneas.Std.Usize.max ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+    | none => Aeneas.Std.Usize.max < ↑x + ↑y
+VALUE Eq.mpr
+  (id (forall_congr fun x => forall_congr fun y => Aeneas.Std.U8.checked_add_bv_spec._simp_1 (x.checked_add y)))
+  Aeneas.Std.Usize.checked_add_bv_spec
+DEF _private.Aeneas.Std.Scalar.CheckedOps.Add.0.Aeneas.Std.core.num.checked_add_UScalar_bv_spec.match_1.eq_1
+TYPE ∀ {ty : Aeneas.Std.UScalarTy} (motive : Option (Aeneas.Std.UScalar ty) → Sort u_1) (z : Aeneas.Std.UScalar ty)
+  (h_1 : (z : Aeneas.Std.UScalar ty) → motive (some z)) (h_2 : Unit → motive none),
+  (match some z with
+    | some z => h_1 z
+    | none => h_2 ()) =
+    h_1 z
+VALUE fun {ty} motive z h_1 h_2 =>
+  Eq.refl
+    (match some z with
+    | some z => h_1 z
+    | none => h_2 ())
+DEF _private.Aeneas.Std.Scalar.CheckedOps.Add.0.Aeneas.Std.U32.checked_add_bv_spec.match_1.eq_1
+TYPE ∀ (motive : Option Aeneas.Std.U32 → Sort u_1) (z : Aeneas.Std.U32) (h_1 : (z : Aeneas.Std.U32) → motive (some z))
+  (h_2 : Unit → motive none),
+  (match some z with
+    | some z => h_1 z
+    | none => h_2 ()) =
+    h_1 z
+VALUE fun motive z h_1 h_2 =>
+  Eq.refl
+    (match some z with
+    | some z => h_1 z
+    | none => h_2 ())
+DEF Aeneas.Std.U64.checked_add.eq_1
+TYPE ∀ (x y : Aeneas.Std.U64), x.checked_add y = Aeneas.Std.core.num.checked_add_UScalar x y
+VALUE fun x y => Eq.refl (x.checked_add y)
+
+Running as unit: run-r5af3550ff95d4d09aad37963eaf261ce.scope; invocation ID: 104de433a4a54ce88813d2e9924ef3c4

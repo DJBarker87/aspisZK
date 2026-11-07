@@ -1,0 +1,55 @@
+{"attempt": "NMT_L123", "exit_status": 1, "wall_seconds": 11.730327730998397, "peak_rss_kib": "5940384", "swaps": "0", "print_axioms": ["'NMT_345.checkpointCore_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMT_345.checkpoint_size_bool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMT_345.key_ne' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMT_345.checkpoint_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_345CheckpointCanonical.lean:26:26: error: Tactic `rfl` failed: The left-hand side
+  mapOuter (mapCore id fromPE)
+    (ok
+      (if (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true then
+        core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+      else
+        match mapCore id toPE a.length with
+        | core.result.Result.Err e => core.result.Result.Err e
+        | core.result.Result.Ok n =>
+          if (n != 1768#usize) = true then
+            core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+          else core.result.Result.Ok ()))
+is not definition
+...
+tData
+    else core.result.Result.Ok ())
+
+case neg.Ok.true
+a : Account
+program : Key
+writable : Bool
+hm : ¬(!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true
+n : Usize
+hn : (n != 1768#usize) = true
+⊢ mapOuter (mapCore id fromPE)
+      (ok
+        (if (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true then
+          core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+        else
+          if true = true then core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+          else core.result.Result.Ok ())) =
+    ok
+      (if true = true then core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData
+      else core.result.Result.Ok ())
+NMT_generated/NMT_345CheckpointCanonical.lean:29:42: warning: This simp argument is unused:
+  from_toPE
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵C̵o̵r̵e̵,̵m̵a̵p̵O̵u̵t̵e̵r̵,̵f̵r̵o̵m̵_̵t̵o̵P̵E̵]̵[̲m̲a̲p̲C̲o̲r̲e̲,̲ ̲m̲a̲p̲O̲u̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMT_generated/NMT_345CheckpointCanonical.lean:36:1: error: Tactic `rfl` failed: The left-hand side
+  ↑n != RSL.CHECKPOINT_BYTES
+is not definitionally equal to the right-hand side
+  n != 1768#usize
+
+n : Usize
+⊢ (↑n != RSL.CHECKPOINT_BYTES) = (n != 1768#usize)
+'NMT_345.checkpointCore_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMT_345.checkpoint_size_bool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMT_345.key_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMT_345.checkpoint_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6318d09f315a46988ee68b473d93ebbb.scope; invocation ID: 3fa5b7ae69d84ee5802e0efc2ef0de5a

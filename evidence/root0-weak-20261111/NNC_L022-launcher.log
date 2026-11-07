@@ -1,0 +1,61 @@
+{"attempt": "NNC_L022", "exit_status": 1, "wall_seconds": 17.297997201094404, "peak_rss_kib": "6015180", "swaps": "0", "print_axioms": ["'NNC_WriterCells.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NNC_WriterCells.proofHash' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NNC_WriterCells.publicHash' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNC_generated/NNC_WriterCells.lean:12:82: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  0 ≤ e ≤ 1704
+  e + f - g ≥ 1
+where
+ e := ↑offset
+ f := ↑↑i
+ g := ↑(UScalar.cMax UScalarTy.Usize)
+NNC_generated/NNC_WriterCells.lean:13:26: error: Tactic `assumption` failed
+
+p : CheckpointBytes5Writer.Prepared
+a : CheckpointBytes5Writer.Accumulator
+hp hu out : Std.Array U8 32#usize
+offset : ℕ
+room : offset + 32 ≤ 1736
+i : Usize
+⊢ ↑i < ↑32#usize
+NNC_generated/NNC_WriterCells.lean:18:3: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  32 ≤ f ≤ 1736
+  e ≥ 0
+  e ≥ 33
+where
+ e := ↑↑32#usize
+ f := ↑(17
+...
+type
+  @LT.lt ℕ instLTNat i 32
+but is expected to have type
+  @LT.lt ℕ instLTNat i ↑32#usize
+NNC_generated/NNC_WriterCells.lean:29:115: error: unsolved goals
+p : CheckpointBytes5Writer.Prepared
+a : CheckpointBytes5Writer.Accumulator
+hp hu out : Std.Array U8 32#usize
+offset : ℕ
+room : offset + 32 ≤ 1736
+dispatch : ∀ (i : Usize), ↑i < 32 → OraclePortCkptAbi2Extracted.body_byte p a hp hu (offset + ↑i)#usize = ok (↑out)[↑i]
+i : ℕ
+hi : i < List.length (OraclePortCompactDraft.slice (sourceBody p a hp hu) offset 32)
+hj : i < List.length (bytesOf ↑out)
+bound : i < 32
+cell : some (OraclePortCompactDraft.slice (sourceBody p a hp hu) offset 32)[i] = some (decodeByte (↑out)[i])
+left : some (OraclePortCompactDraft.slice (sourceBody p a hp hu) offset 32)[i] = (sourceBody p a hp hu)[offset + i]?
+⊢ Option.map decodeByte (↑out)[i]? = some (decodeByte (↑out)[i])
+NNC_generated/NNC_WriterCells.lean:30:136: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵[̲b̲y̲t̲e̲s̲O̲f̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲(show i̵<̵o̵u̵t̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵i̲ ̲<̲ ̲o̲u̲t̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ from by simpa only [out.property] using b̵o̵u̵n̵d̵)̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵b̲o̲u̲n̲d̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNC_WriterCells.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NNC_WriterCells.proofHash' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NNC_WriterCells.publicHash' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcc086fbe56104e3fa0245a7c03e1ac15.scope; invocation ID: e69a6bd1cb0c47dc8d4f15abe4ba64e7

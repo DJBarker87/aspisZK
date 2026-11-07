@@ -1,0 +1,133 @@
+{
+ "ruling": "bj/bf(2)/c-h; full exact values, no child-success assumption",
+ "cuts": [
+  {
+   "parent": "POOL:223",
+   "child": "POOL:224",
+   "signature": "digest_is_canonical(&Digest) -> bool",
+   "same_arguments": [
+    "w.first_commitment",
+    "w.second_commitment"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "all raw8-word digests",
+     "caller_discharge": "PCI_SharedScanner.result (PCI_DigestRoundtrip.encode SAME digest), roundtrip identity",
+     "cut_assertion": "canonical_spec exact eight <P checks; K023 flips the spec"
+    }
+   ],
+   "frame": "empty; immutable owned digest",
+   "root": "PCI_ValidatePacket.full"
+  },
+  {
+   "parent": "POOL:223",
+   "child": "emitted M31::mul",
+   "same_arguments": [
+    "occupied, fieldSub occupied 1",
+    "sentinel, inverse",
+    "fieldSub 1 occupied, inverse",
+    "fieldSub 1 occupied, current second limb"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "both operands <2147483647",
+     "caller_discharge": "PCI_ValidateDomains.reached_domains; canonical_member/index; sub_canonical",
+     "cut_assertion": "native operand segments K024/K028, with canonical prestate at the internal cut; all own input gates handled K021"
+    }
+   ],
+   "frame": "pure field value; native post-product comparisons K026/K028",
+   "root": "PCI_ValidateField.same_call; PCI_ValidatePacket.full",
+   "multiplication_stub": "NONE in accepted native windows"
+  },
+  {
+   "parent": "POOL:222",
+   "child": "POOL:223",
+   "signature": "validate(&PoolV1PairLeafWitnessV1) -> Result<(),PoolV1PairLeafErrorV1>",
+   "same_arguments": [
+    "the actual just-constructed witness with first_commitment SAME commitment, all other fields zero"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "True (every raw witness; reached field domains derived internally from this SAME witness)",
+     "caller_discharge": "no restriction; zero fields asserted at cut; PCI_SingleValidation.validation derives exact specialized spec",
+     "cut_assertion": "validate_spec asserts three zero-shape clauses before Bool havoc constrained to canonical(first)"
+    }
+   ],
+   "frame": "modifies empty",
+   "controls": [
+    "PCI_K050",
+    "PCI_K051",
+    "PCI_K052"
+   ],
+   "root": "PCI_SinglePacket.full"
+  },
+  {
+   "parent": "POOL:280",
+   "child": "PCG_SdkPda forwarding",
+   "same_arguments": [
+    "program_id",
+    "b\"aspis-pool-root-page-v1\"",
+    "pool.as_ref()",
+    "page_number.to_le_bytes()"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "PCG_SdkPda.Domain request",
+     "caller_discharge": "PCI_RootAddress.descriptor_domain/complete; count3; lengths23/32/8 <=32; exact program",
+     "cut_assertion": "native SDK stub checks every exact byte/length/program then returns address/bump unchanged"
+    }
+   ],
+   "root": "PCI_RootAddress.complete"
+  },
+  {
+   "parent": "POOL:272/165",
+   "child": "POOL:273",
+   "signature": "generic H: FnMut(M31,&[M31])->Digest",
+   "same_arguments": [
+    "owner_key",
+    "value",
+    "asset_id",
+    "salt"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "value<P",
+     "caller_discharge": "own argument assume at root and assertion at generic child cut; not a child-result premise",
+     "cut_assertion": "note_cut preserves generic signature; exact18 words checked at callback"
+    }
+   ],
+   "status": "FORWARDING_ONLY: concrete265 OPEN"
+  },
+  {
+   "parent": "POOL:277",
+   "child": "shared canonical151",
+   "same_arguments": [
+    "owner_key_bytes=bytes[8..40]",
+    "salt_bytes=bytes[48..80]"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "all32-byte arrays",
+     "caller_discharge": "PCI_DepositExtents.owner/salt, PCI_DepositDigestLaw.value; no extra canonical-input restriction",
+     "cut_assertion": "each of8 owned words havoc constrained to the SAME LE input bytes; canonical Bool exact"
+    }
+   ],
+   "status": "NATIVE_SUPPORT_ONLY: full277 model link OPEN"
+  },
+  {
+   "parent": "POOL:279",
+   "child": "CLOSED encode_digest_canonical",
+   "same_arguments": [
+    "current root at this arbitrary source iteration"
+   ],
+   "clauses": [
+    {
+     "callee_clause": "all raw8-word digests",
+     "caller_discharge": "PCF_DigestShape.encoder",
+     "cut_assertion": "encode_spec exact32 bytes; K059 spec and K060 argument controls fail"
+    }
+   ],
+   "status": "ONE_WINDOW_ONLY: iterator/full count-frame association OPEN"
+  }
+ ]
+}

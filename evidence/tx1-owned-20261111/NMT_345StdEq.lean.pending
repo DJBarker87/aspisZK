@@ -1,0 +1,48 @@
+import Aeneas
+set_option autoImplicit false
+noncomputable section
+namespace NMT_345Std
+open Aeneas Aeneas.Std Result
+/-- Exact short-circuit library comparison on a generic element comparison.
+A stopped comparison propagates before any later element is inspected. -/
+def listEq {A B : Type} (same : A → B → Result Bool) : List A → List B → Result Bool
+ | [],[] => .ok true
+ | [],_::_ => .ok false
+ | _::_,[] => .ok false
+ | x::xs,y::ys => do
+   let b ← same x y
+   if b then listEq same xs ys else .ok false
+
+def eqByte (x y : U8) : Result Bool := .ok (decide (x = y))
+
+theorem bytes_eq (xs ys : List U8) :
+ listEq eqByte xs ys = .ok (decide (xs = ys)) := by
+ induction xs generalizing ys with
+ | nil => cases ys <;> rfl
+ | cons x xs ih =>
+  cases ys with
+  | nil => rfl
+  | cons y ys =>
+   unfold listEq eqByte
+   simp only [bind_tc_ok]
+   by_cases h : x = y
+   · subst y
+     simp only [decide_true,if_true,List.cons.injEq,true_and]
+     simpa only [eqByte] using ih ys
+   · simp [h]
+
+/-- Library length guard is checked before any element comparison. -/
+def sliceArrayEq {A B : Type} {N : Usize} (same : A → B → Result Bool)
+ (xs : Slice A) (ys : Array B N) : Result Bool :=
+ if xs.val.length != ys.val.length then .ok false else listEq same xs.val ys.val
+
+theorem bytes_slice_eq {N : Usize} (xs : Slice U8) (ys : Array U8 N) :
+ sliceArrayEq eqByte xs ys = .ok (decide (xs.val = ys.val)) := by
+ unfold sliceArrayEq
+ by_cases h : xs.val.length = ys.val.length
+ · simp only [h,bne_self_eq_false,Bool.false_eq_true,if_false,bytes_eq]
+ · have neq : xs.val ≠ ys.val := fun e => h (congrArg List.length e)
+   simp [h,neq,bytes_eq]
+#print axioms bytes_eq
+#print axioms bytes_slice_eq
+end NMT_345Std

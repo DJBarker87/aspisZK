@@ -1,0 +1,203 @@
+import NMT_tx1.Funs
+import NMT_CallTree
+set_option autoImplicit false
+noncomputable section
+namespace NMT_tx1
+open Aeneas Aeneas.Std Result
+open AspisR1.NMT_CallTree
+def NMT_094_NMT_call_0 (NMT_call_0 : Result aspis_core.field.wide_exact.WideExact)  : Code aspis_core.field.wide_exact.WideExact :=
+ invoke "aspis_core.field.wide_exact.WideExact.ZERO" () (NMT_call_0)
+def NMT_094_NMT_call_1 (NMT_call_1 : (Slice Std.U8) → Result (core.result.Result transport.Variant
+    verifier.Error))  (a0 : (Slice Std.U8)) : Code (core.result.Result transport.Variant verifier.Error) :=
+ invoke "verifier.candidate.parse_shape" a0 (NMT_call_1 a0)
+def NMT_094_NMT_call_2 (NMT_call_2 : (Slice Std.U8) → Result (core.result.Result Unit verifier.Error))  (a0 : (Slice Std.U8)) : Code (core.result.Result Unit verifier.Error) :=
+ invoke "verifier.candidate.canonical_scan" a0 (NMT_call_2 a0)
+def NMT_094_NMT_call_3 (NMT_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), (Slice Std.U8) → verifier.Prepared → (Array Std.U8 32#usize) →
+    Std.Usize → H → Result (core.result.Result Unit verifier.Error)) {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : (Slice Std.U8)) (a1 : verifier.Prepared) (a2 : (Array Std.U8 32#usize)) (a3 : Std.Usize) (a4 : H) : Code (core.result.Result Unit verifier.Error) :=
+ invoke "verifier.candidate.batch_merkle" (aspis_coredigestDigest32Inst,a0,a1,a2,a3,a4) (NMT_call_3 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4)
+def NMT_094_NMT_call_4 (NMT_call_4 : (Slice Std.U8) → verifier.Prepared → verifier.Accumulator → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → (Option (verifier.Phase
+    → Result Unit)) → verifier.QueryGeometry → verifier.BatchedWeights
+    → Std.Usize → Result (core.result.Result (verifier.Accumulator ×
+    verifier.BatchedWeights) verifier.Error))  (a0 : (Slice Std.U8)) (a1 : verifier.Prepared) (a2 : verifier.Accumulator) (a3 : (Array aspis_core.field.wide_exact.WideExact 29#usize)) (a4 : (Option (verifier.Phase → Result Unit))) (a5 : verifier.QueryGeometry) (a6 : verifier.BatchedWeights) (a7 : Std.Usize) : Code (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error) :=
+ invoke "verifier.candidate.query_loop" (a0,a1,a2,a3,a4,a5,a6,a7) (NMT_call_4 a0 a1 a2 a3 a4 a5 a6 a7)
+def NMT_094_NMT_call_5 (NMT_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → H → (Option (verifier.Phase → Result Unit)) → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → Result
+    ((core.result.Result verifier.Prepared verifier.Error) × (Array
+    aspis_core.field.wide_exact.WideExact 29#usize))) {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (a1 : (Slice Std.U8)) (a2 : H) (a3 : (Option (verifier.Phase → Result Unit))) (a4 : (Array aspis_core.field.wide_exact.WideExact 29#usize)) : Code ((core.result.Result verifier.Prepared verifier.Error) × (Array aspis_core.field.wide_exact.WideExact 29#usize)) :=
+ invoke "verifier.candidate.prepare" (aspis_coredigestDigest32Inst,a0,a1,a2,a3,a4) (NMT_call_5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4)
+def NMT_094_NMT_call_6 (NMT_call_6 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), verifier.Prepared → verifier.Accumulator → (Slice Std.U8) → (Slice
+    Std.U8) → H → Result (alloc.vec.Vec Std.U8)) {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : verifier.Prepared) (a1 : verifier.Accumulator) (a2 : (Slice Std.U8)) (a3 : (Slice Std.U8)) (a4 : H) : Code (alloc.vec.Vec Std.U8) :=
+ invoke "verifier.checkpoint" (aspis_coredigestDigest32Inst,a0,a1,a2,a3,a4) (NMT_call_6 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4)
+def NMT_094_NMT_call_7 (NMT_call_7 : verifier.BatchedWeights → (Slice aspis_core.field.QM31) → Result (Slice
+    aspis_core.field.QM31))  (a0 : verifier.BatchedWeights) (a1 : (Slice aspis_core.field.QM31)) : Code (Slice aspis_core.field.QM31) :=
+ invoke "verifier.BatchedWeights.finish" (a0,a1) (NMT_call_7 a0 a1)
+def NMT_094_NMT_call_8 (NMT_call_8 : (Slice aspis_core.field.QM31) → Result (core.result.Result
+    verifier.BatchedWeights verifier.Error))  (a0 : (Slice aspis_core.field.QM31)) : Code (core.result.Result verifier.BatchedWeights verifier.Error) :=
+ invoke "verifier.BatchedWeights.new" a0 (NMT_call_8 a0)
+def NMT_094_NMT_call_9 (NMT_call_9 : (Array Std.U32 22#usize) → Std.Usize → Std.Usize → Result
+    (core.result.Result verifier.QueryGeometry verifier.Error))  (a0 : (Array Std.U32 22#usize)) (a1 : Std.Usize) (a2 : Std.Usize) : Code (core.result.Result verifier.QueryGeometry verifier.Error) :=
+ invoke "verifier.QueryGeometry.for_range" (a0,a1,a2) (NMT_call_9 a0 a1 a2)
+def NMT_094_NMT_call_10 (NMT_call_10 : transport.Variant → Result (core.result.Result verifier.Accumulator
+    verifier.Error))  (a0 : transport.Variant) : Code (core.result.Result verifier.Accumulator verifier.Error) :=
+ invoke "verifier.Accumulator.new" a0 (NMT_call_10 a0)
+def NMT_094_NMT_call_11 (NMT_call_11 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit)  (a0 : (Option (verifier.Phase → Result Unit))) (a1 : verifier.Phase) : Code Unit :=
+ invoke "verifier.mark" (a0,a1) (NMT_call_11 a0 a1)
+def NMT_094_tree (NMT_call_0 : Result aspis_core.field.wide_exact.WideExact) (NMT_call_1 : (Slice Std.U8) → Result (core.result.Result transport.Variant
+    verifier.Error)) (NMT_call_2 : (Slice Std.U8) → Result (core.result.Result Unit verifier.Error)) (NMT_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+(Slice Std.U8) → verifier.Prepared → (Array Std.U8 32#usize) →
+    Std.Usize → H → Result (core.result.Result Unit verifier.Error)) (NMT_call_4 : (Slice Std.U8) → verifier.Prepared → verifier.Accumulator → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → (Option (verifier.Phase
+    → Result Unit)) → verifier.QueryGeometry → verifier.BatchedWeights
+    → Std.Usize → Result (core.result.Result (verifier.Accumulator ×
+    verifier.BatchedWeights) verifier.Error)) (NMT_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → H → (Option (verifier.Phase → Result Unit)) → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → Result
+    ((core.result.Result verifier.Prepared verifier.Error) × (Array
+    aspis_core.field.wide_exact.WideExact 29#usize))) (NMT_call_6 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+verifier.Prepared → verifier.Accumulator → (Slice Std.U8) → (Slice
+    Std.U8) → H → Result (alloc.vec.Vec Std.U8)) (NMT_call_7 : verifier.BatchedWeights → (Slice aspis_core.field.QM31) → Result (Slice
+    aspis_core.field.QM31)) (NMT_call_8 : (Slice aspis_core.field.QM31) → Result (core.result.Result
+    verifier.BatchedWeights verifier.Error)) (NMT_call_9 : (Array Std.U32 22#usize) → Std.Usize → Std.Usize → Result
+    (core.result.Result verifier.QueryGeometry verifier.Error)) (NMT_call_10 : transport.Variant → Result (core.result.Result verifier.Accumulator
+    verifier.Error)) (NMT_call_11 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit) 
+  {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes : Slice Std.U8) (proof : Slice Std.U8) (k : Std.Usize)
+  (hash : H) (obs : Option (verifier.Phase → Result Unit)) :
+  Code (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error)
+  := do
+  if k != compact.SPLIT
+  then pure (core.result.Result.Err verifier.Error.Parse)
+  else
+    let r ← (NMT_094_NMT_call_1 NMT_call_1) proof
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue _ =>
+      let r1 ← (NMT_094_NMT_call_2 NMT_call_2) proof
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue _ =>
+        (NMT_094_NMT_call_11 NMT_call_11) obs verifier.Phase.Parsed
+        let we ← (NMT_094_NMT_call_0 NMT_call_0)
+        let g := Array.repeat 29#usize we
+        let (r2, g1) ←
+          (NMT_094_NMT_call_5 NMT_call_5) aspis_coredigestDigest32Inst public1 proof
+            hash obs g
+        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let r3 ← (NMT_094_NMT_call_10 NMT_call_10) transport.Variant.S2
+          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val1 =>
+            (NMT_094_NMT_call_11 NMT_call_11) obs verifier.Phase.Prepare
+            let i ← compact.OFF_FOLDED_ROOT
+            let i1 ← compact.OFF_ROUND1
+            let s ←
+              core.slice.index.Slice.index
+                (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) proof
+                { start := i, «end» := i1 }
+            let r4 ←
+              core.array.TryFromArrayCopySlice.try_from 32#usize
+                core.marker.CopyU8 s
+            let folded_root ←
+              core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+            let r5 ←
+              (NMT_094_NMT_call_3 NMT_call_3) aspis_coredigestDigest32Inst
+                proof val folded_root 0#usize hash
+            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+            match cf4 with
+            | core.ops.control_flow.ControlFlow.Continue _ =>
+              (NMT_094_NMT_call_11 NMT_call_11) obs (verifier.Phase.Merkle 0#usize)
+              let r6 ← (NMT_094_NMT_call_9 NMT_call_9) val.queries 0#usize k
+              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+              match cf5 with
+              | core.ops.control_flow.ControlFlow.Continue val2 =>
+                let s1 := alloc.vec.Vec.deref val1.weights
+                let r7 ← (NMT_094_NMT_call_8 NMT_call_8) s1
+                let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                match cf6 with
+                | core.ops.control_flow.ControlFlow.Continue val3 =>
+                  let r8 ←
+                    (NMT_094_NMT_call_4 NMT_call_4) proof val val1 g1 obs val2
+                      val3 k
+                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                  match cf7 with
+                  | core.ops.control_flow.ControlFlow.Continue val4 =>
+                    let (a, pending) := val4
+                    let (s2, deref_mut_back) ←
+                      lift (alloc.vec.Vec.deref_mut a.weights)
+                    let s3 ← (NMT_094_NMT_call_7 NMT_call_7) pending s2
+                    let v := deref_mut_back s3
+                    let bytes ←
+                      (NMT_094_NMT_call_6 NMT_call_6) aspis_coredigestDigest32Inst val
+                        { a with weights := v } proof public_bytes hash
+                    (NMT_094_NMT_call_11 NMT_call_11) obs verifier.Phase.CheckpointWrite
+                    pure (core.result.Result.Ok bytes)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec Std.U8) (core.convert.FromSame
+                      verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec Std.U8) (core.convert.FromSame
+                    verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+                  residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+                residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+              residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+            residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+          residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual
+
+theorem NMT_094_erase (NMT_call_0 : Result aspis_core.field.wide_exact.WideExact) (NMT_call_1 : (Slice Std.U8) → Result (core.result.Result transport.Variant
+    verifier.Error)) (NMT_call_2 : (Slice Std.U8) → Result (core.result.Result Unit verifier.Error)) (NMT_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+(Slice Std.U8) → verifier.Prepared → (Array Std.U8 32#usize) →
+    Std.Usize → H → Result (core.result.Result Unit verifier.Error)) (NMT_call_4 : (Slice Std.U8) → verifier.Prepared → verifier.Accumulator → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → (Option (verifier.Phase
+    → Result Unit)) → verifier.QueryGeometry → verifier.BatchedWeights
+    → Std.Usize → Result (core.result.Result (verifier.Accumulator ×
+    verifier.BatchedWeights) verifier.Error)) (NMT_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → H → (Option (verifier.Phase → Result Unit)) → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → Result
+    ((core.result.Result verifier.Prepared verifier.Error) × (Array
+    aspis_core.field.wide_exact.WideExact 29#usize))) (NMT_call_6 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+verifier.Prepared → verifier.Accumulator → (Slice Std.U8) → (Slice
+    Std.U8) → H → Result (alloc.vec.Vec Std.U8)) (NMT_call_7 : verifier.BatchedWeights → (Slice aspis_core.field.QM31) → Result (Slice
+    aspis_core.field.QM31)) (NMT_call_8 : (Slice aspis_core.field.QM31) → Result (core.result.Result
+    verifier.BatchedWeights verifier.Error)) (NMT_call_9 : (Array Std.U32 22#usize) → Std.Usize → Std.Usize → Result
+    (core.result.Result verifier.QueryGeometry verifier.Error)) (NMT_call_10 : transport.Variant → Result (core.result.Result verifier.Accumulator
+    verifier.Error)) (NMT_call_11 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit) 
+  {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes : Slice Std.U8) (proof : Slice Std.U8) (k : Std.Usize)
+  (hash : H) (obs : Option (verifier.Phase → Result Unit)) :
+ erase (NMT_094_tree NMT_call_0 NMT_call_1 NMT_call_2 NMT_call_3 NMT_call_4 NMT_call_5 NMT_call_6 NMT_call_7 NMT_call_8 NMT_call_9 NMT_call_10 NMT_call_11 aspis_coredigestDigest32Inst public1 public_bytes proof k hash obs) = verifier.candidate.tx1 NMT_call_0 NMT_call_1 NMT_call_2 NMT_call_3 NMT_call_4 NMT_call_5 NMT_call_6 NMT_call_7 NMT_call_8 NMT_call_9 NMT_call_10 NMT_call_11 aspis_coredigestDigest32Inst public1 public_bytes proof k hash obs := by
+ unfold NMT_094_tree verifier.candidate.tx1
+ simp only [Bind.bind, Pure.pure, MonadLift.monadLift, AspisR1.NMT_CallTree.bind,erase,invoke, erase_bind,erase_lift,erase_pure,erase_invoke,result_right,result_assoc,NMT_094_NMT_call_0,NMT_094_NMT_call_1,NMT_094_NMT_call_2,NMT_094_NMT_call_3,NMT_094_NMT_call_4,NMT_094_NMT_call_5,NMT_094_NMT_call_6,NMT_094_NMT_call_7,NMT_094_NMT_call_8,NMT_094_NMT_call_9,NMT_094_NMT_call_10,NMT_094_NMT_call_11]
+ repeat' first
+ | rfl
+ | (split <;> simp only [Bind.bind, Pure.pure, MonadLift.monadLift, AspisR1.NMT_CallTree.bind,erase,invoke, erase_bind,erase_lift,erase_pure,erase_invoke,result_right,result_assoc,NMT_094_NMT_call_0,NMT_094_NMT_call_1,NMT_094_NMT_call_2,NMT_094_NMT_call_3,NMT_094_NMT_call_4,NMT_094_NMT_call_5,NMT_094_NMT_call_6,NMT_094_NMT_call_7,NMT_094_NMT_call_8,NMT_094_NMT_call_9,NMT_094_NMT_call_10,NMT_094_NMT_call_11])
+ | (apply result_congr; intro x; simp only [Bind.bind, Pure.pure, MonadLift.monadLift, AspisR1.NMT_CallTree.bind,erase,invoke, erase_bind,erase_lift,erase_pure,erase_invoke,result_right,result_assoc,NMT_094_NMT_call_0,NMT_094_NMT_call_1,NMT_094_NMT_call_2,NMT_094_NMT_call_3,NMT_094_NMT_call_4,NMT_094_NMT_call_5,NMT_094_NMT_call_6,NMT_094_NMT_call_7,NMT_094_NMT_call_8,NMT_094_NMT_call_9,NMT_094_NMT_call_10,NMT_094_NMT_call_11])
+#print axioms NMT_094_erase
+end NMT_tx1

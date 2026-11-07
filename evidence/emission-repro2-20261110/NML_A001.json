@@ -1,0 +1,64 @@
+{
+  "attempt": "NML_A001",
+  "kind": "extract",
+  "module": "NML_G015_Aeneas_resume",
+  "sources": [
+    "NML_extract.py",
+    "NML_NHR_stage.py",
+    "NML_STAGER_PIN.json",
+    "NML_STAGING_MANIFEST.json",
+    "NML_FROZEN_PAYLOAD.json.sha256",
+    "NML_A001_spec.json",
+    "NML_inputs/NML_E009/lib.rs",
+    "NML_inputs/NML_E009/Cargo.toml",
+    "NML_inputs/NML_E009/Cargo.lock",
+    "NML_inputs/NML_E009/field.rs",
+    "NML_inputs/NML_E009/field/wide_exact.rs",
+    "NML_inputs/NML_E009/source-pins.json",
+    "NML_E009_emitted/charon_receipt.json",
+    "NML_E009_emitted/repro.llbc.sha256"
+  ],
+  "upload": [
+    "NML_extract.py",
+    "NML_NHR_stage.py",
+    "NML_STAGER_PIN.json",
+    "NML_STAGING_MANIFEST.json",
+    "NML_FROZEN_PAYLOAD.json.sha256",
+    "NML_A001_spec.json",
+    "NML_inputs/NML_E009/lib.rs",
+    "NML_inputs/NML_E009/Cargo.toml",
+    "NML_inputs/NML_E009/Cargo.lock",
+    "NML_inputs/NML_E009/field.rs",
+    "NML_inputs/NML_E009/field/wide_exact.rs",
+    "NML_inputs/NML_E009/source-pins.json",
+    "NML_E009_emitted/charon_receipt.json",
+    "NML_E009_emitted/repro.llbc.sha256",
+    "NML_FROZEN_PAYLOAD.json.xz"
+  ],
+  "command": [
+    "python3",
+    "NML_extract.py",
+    "NML_A001"
+  ],
+  "collect": [
+    "NML_A001_emitted",
+    "NML_TOOL_ATTEMPTS.jsonl"
+  ],
+  "timeout": 180,
+  "source_revision": "dd7a51eadb6e5bca666610eb9cb68a30240cd2bd",
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": {
+    "reused_charon": {
+      "receipt": "NML_E009_emitted/charon_receipt.json",
+      "llbc": "NML_E009_emitted/repro.llbc",
+      "llbc_sha256": "a51f34b8e0d4a0e13b485b32c518daf8ac4a6e97006a8be0ee11ecf04cdba0ff",
+      "scope_receipt": "NML_B001/receipt.json",
+      "source_input_unchanged": true,
+      "reason": "Original pinned Charon succeeded; NHR metadata opacity-prefix validation failed before Aeneas. Resume only the previously unrun Aeneas stage after strict actual-crate selector repair."
+    }
+  },
+  "expected_time": "Frozen preflight, reuse exact successful E009 LLBC (zero new Charon invocation), then first Aeneas invocation for that configuration; no Rust compilation"
+}

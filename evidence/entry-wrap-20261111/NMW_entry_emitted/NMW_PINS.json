@@ -1,0 +1,517 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+    "-diagnose-translation",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NMW_entry",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_entry_emitted/raw",
+    "-subdir",
+    "NMW_entry",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_entry_emitted/entry.llbc"
+  ],
+  "aeneas_exit": 0,
+  "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::process_r1_cost_probe_instruction",
+    "--opaque",
+    "crate::pool_route::admitted",
+    "--opaque",
+    "crate::r1_pool_adapter::owned::stage1",
+    "--opaque",
+    "crate::r1_pool_adapter::owned::stage2",
+    "--opaque",
+    "crate::r1_pool_adapter::lifecycle_init",
+    "--opaque",
+    "crate::r1_pool_adapter::lifecycle_write",
+    "--opaque",
+    "crate::r1_pool_adapter::lifecycle_finalize",
+    "--opaque",
+    "solana_account_info::AccountInfo",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_entry_emitted/entry.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_src/programs/r1-cost-probe/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "charon_exit": 0,
+  "exit": 0,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "llbc_sha256": "79a6da1ecc2093dbf81f405de4d4332b213ccee4e593446096104f605dc1b534",
+  "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "manifest_sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+  "opacity": [
+    {
+      "path": "crate::pool_route::admitted",
+      "why": "CLOSED route packet; retain exact caller argument"
+    },
+    {
+      "path": "crate::r1_pool_adapter::owned::stage1",
+      "why": "full first wrapper child boundary"
+    },
+    {
+      "path": "crate::r1_pool_adapter::owned::stage2",
+      "why": "full second wrapper child boundary"
+    },
+    {
+      "path": "crate::r1_pool_adapter::lifecycle_init",
+      "why": "unreachable under admitted release route"
+    },
+    {
+      "path": "crate::r1_pool_adapter::lifecycle_write",
+      "why": "unreachable under admitted release route"
+    },
+    {
+      "path": "crate::r1_pool_adapter::lifecycle_finalize",
+      "why": "unreachable under admitted release route"
+    }
+  ],
+  "outputs": {
+    "raw/NMW_entry/Funs.lean": "5b54ed0c779e07faf17ebd3ccc6af792dc1009caabc63d09cf7a40495c31a323",
+    "raw/NMW_entry/FunsExternal_Template.lean": "308f2c026fec4b19da6495e57b4ca6627ff29159669617395314c8be76f52dd8",
+    "raw/NMW_entry/Types.lean": "af566ecbdbcdf3e5f36e2f5ab0696b079f048661b050086baca40e7f5436c261",
+    "raw/NMW_entry/TypesExternal_Template.lean": "fbd49a3cf841564f1d9446532d0070a8ea67c206893b3f515513b896b1376127"
+  },
+  "root": "crate::process_r1_cost_probe_instruction",
+  "root_features": "pool-adapter,private-leaf-salts",
+  "root_owner": "aspis_r1_cost_probe_program",
+  "root_package": "programs/r1-cost-probe",
+  "tools": {
+    "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  },
+  "validated_account_info_opacity": [
+    {
+      "def_id": 1,
+      "generics": {
+        "const_generics": [],
+        "regions": [
+          {
+            "index": 0,
+            "mutability": "Mutable",
+            "name": "'a"
+          }
+        ],
+        "regions_outlive": [],
+        "trait_clauses": [],
+        "trait_type_constraints": [],
+        "types": [],
+        "types_outlive": []
+      },
+      "item_meta": {
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " Account information"
+            }
+          ],
+          "inline": null,
+          "public": true,
+          "rename": null
+        },
+        "is_local": false,
+        "lang_item": null,
+        "name": [
+          {
+            "Ident": [
+              "solana_account_info",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "AccountInfo",
+              0
+            ]
+          }
+        ],
+        "opacity": "Opaque",
+        "source_text": null,
+        "span": {
+          "data": {
+            "beg": {
+              "col": 0,
+              "line": 22
+            },
+            "end": {
+              "col": 26,
+              "line": 22
+            },
+            "file_id": 2
+          },
+          "generated_from_span": null
+        }
+      },
+      "kind": "Opaque",
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "repr": {
+              "align_modif": null,
+              "explicit_discr_type": false,
+              "repr_algo": "C",
+              "transparent": false
+            },
+            "size": 48,
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  0,
+                  8,
+                  16,
+                  24,
+                  32,
+                  40,
+                  41,
+                  42
+                ],
+                "tagger": [],
+                "uninhabited": false
+              }
+            ]
+          }
+        }
+      ],
+      "ptr_metadata": "None",
+      "src": "TopLevel"
+    }
+  ],
+  "validated_opacity": [
+    {
+      "boundary": {
+        "path": "crate::pool_route::admitted",
+        "why": "CLOSED route packet; retain exact caller argument"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 1,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "pool_route",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "admitted",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "34df080429466c363d887a81ce37ccad973a8eedd04a56c7ecdb41320c4190ca",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 3
+              },
+              "end": {
+                "col": 1,
+                "line": 5
+              },
+              "file_id": 6
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_pool_adapter::owned::stage1",
+        "why": "full first wrapper child boundary"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 9,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_pool_adapter",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "owned",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "stage1",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "c996b7c091e4ed23a293247b95d71ea773c4f37423c851c9356b2405dcab2e4a",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 447
+              },
+              "end": {
+                "col": 1,
+                "line": 461
+              },
+              "file_id": 16
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_pool_adapter::owned::stage2",
+        "why": "full second wrapper child boundary"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 10,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_pool_adapter",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "owned",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "stage2",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "771a247b6fca0201c57a11c365e6f6cabee6e7b875adb128755cd1e18fcf6159",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 463
+              },
+              "end": {
+                "col": 1,
+                "line": 481
+              },
+              "file_id": 16
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_pool_adapter::lifecycle_init",
+        "why": "unreachable under admitted release route"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 6,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_pool_adapter",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "lifecycle_init",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "6ab681fd505f97712ad325166bac01a104f467d82955a0987c4f95d8ac7c59c0",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 343
+              },
+              "end": {
+                "col": 1,
+                "line": 365
+              },
+              "file_id": 7
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_pool_adapter::lifecycle_write",
+        "why": "unreachable under admitted release route"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 7,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_pool_adapter",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "lifecycle_write",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "d5916eb636afe493b4037537cb28f305bc8c6788c68dc927fe5c3f582d22169f",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 368
+              },
+              "end": {
+                "col": 1,
+                "line": 402
+              },
+              "file_id": 7
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_pool_adapter::lifecycle_finalize",
+        "why": "unreachable under admitted release route"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 8,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe_program",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_pool_adapter",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "lifecycle_finalize",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "23ab9263d3abff69f9099755dc352336ae9849acec60812b474457a2aeb8bf3b",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 405
+              },
+              "end": {
+                "col": 1,
+                "line": 426
+              },
+              "file_id": 7
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    }
+  ]
+}

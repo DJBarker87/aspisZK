@@ -1,0 +1,39 @@
+PCI_generated/PCI_ValidatePrefix.lean:30:72: error: unsolved goals
+first second : Bool
+occupied inverse sentinel : U32
+products : Std.Array U32 3#usize
+scan : Bool
+⊢ (if first = true then
+      if second = true then
+        if occupied ≥ 2147483647#u32 then ok 2#u8
+        else
+          if inverse ≥ 2147483647#u32 then ok 3#u8
+          else
+            if ((↑products)[↑0#usize]! != 0#u32) = true then ok 4#u8
+            else
+              if ((↑products)[↑1#usize]! != occupied) = true then ok 5#u8
+              else
+                if ((↑products)[↑2#usize]! != 0#u32) = true then ok 6#u8
+                else
+                  if scan = true then ok 7#u8
+                  else if occupied = 1#u32 then if sentinel = 0#u32 then ok 8#u8 else ok 0#u8 else ok 0#u8
+      else ok 1#u8
+    else ok 1#u8) =
+    if first = true then
+      if second = true then
+        if occupied ≥ 2147483647#u32 then ok 2#u8
+        else
+          if inverse ≥ 2147483647#u32 then ok 3#u8
+          else
+            if ((↑products)[0]! != 0#u32) = true then ok 4#u8
+            else
+              if ((↑products)[1]! != occupied) = true then ok 5#u8
+              else
+                if ((↑products)[2]! != 0#u32) = true then ok 6#u8
+                else
+                  if scan = true then ok 7#u8
+                  else if occupied = 1#u32 then if sentinel = 0#u32 then ok 8#u8 else ok 0#u8 else ok 0#u8
+      else ok 1#u8
+    else ok 1#u8
+'PCI_ValidatePrefix.ok_ite' depends on axioms: [propext]
+'PCI_ValidatePrefix.extracted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

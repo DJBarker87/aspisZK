@@ -1,0 +1,60 @@
+import NMT_345Checkpoint
+set_option autoImplicit false
+noncomputable section
+namespace NMT_345
+open Aeneas Aeneas.Std Result
+attribute [local instance] Classical.propDecidable
+
+def checkpointCore (a : Account) (program : Key) (writable : Bool) : Result (core.result.Result Unit PE) :=
+ mapOuter (mapCore id fromPE)
+  (AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint
+   (NGL_CheckpointModel.install baseOps) (toAccount a) program writable)
+def checkpointValue (a : Account) (program : Key) (writable : Bool) : core.result.Result Unit PE :=
+ if (!(decide (a.owner = program))) || a.is_signer || a.executable || (a.is_writable != writable)
+ then .Err .InvalidAccountData
+ else match a.length with
+ | .Err e => .Err e
+ | .Ok n => if n != 1768#usize then .Err .InvalidAccountData else .Ok ()
+
+theorem checkpointCore_value (a : Account) (program : Key) (writable : Bool) :
+ checkpointCore a program writable = .ok (checkpointValue a program writable) := by
+ unfold checkpointCore
+ rw [NGL_CheckpointModel.result]
+ unfold NGL_CheckpointModel.reply checkpointValue
+ simp only [toAccount]
+ by_cases hm : (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true
+ · simp only [if_pos hm]; rfl
+ · simp only [if_neg hm]
+   cases a.length with
+   | Err e => simp only [mapCore,mapOuter,from_toPE]
+   | Ok n =>
+     simp only [mapCore,id_eq]
+     cases hn : (n != 1768#usize) <;> rfl
+
+theorem checkpoint_size_bool (n : Usize) :
+ (n.val != RSL.CHECKPOINT_BYTES) = (n != 1768#usize) := by
+ rfl
+
+theorem key_ne (x y : Key) :
+ decide (key x ≠ key y) = !(decide (x = y)) := by
+ by_cases h : x = y
+ · subst y; simp
+ · have neq : key x ≠ key y := fun e => h (key_injective e)
+   simp [h,neq]
+
+theorem checkpoint_canonical (a : Account) (program : Key) (writable : Bool) :
+ mapOuter (rustResult id) (checkpointCore a program writable) =
+ .ok (RSL.verifierCheckpoint (account a) (key program) writable) := by
+ rw [checkpointCore_value]
+ unfold checkpointValue RSL.verifierCheckpoint RSL.OwnedAccount.data_len account
+ simp only [key_ne]
+ split
+ · rfl
+ · cases a.length with
+   | Err e => rfl
+   | Ok n => simp only [rustResult,checkpoint_size_bool]; split <;> rfl
+#print axioms checkpointCore_value
+#print axioms checkpoint_size_bool
+#print axioms key_ne
+#print axioms checkpoint_canonical
+end NMT_345

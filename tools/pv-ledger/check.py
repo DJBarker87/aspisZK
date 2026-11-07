@@ -14,9 +14,9 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT = ROOT / 'design/PRIVACY-FN-LEDGER-20261108.json'
 STANDARD_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 FACT_PREFIX = {
-    'documented_semantics': ('PV_THR2_IntrinsicSemantics_', 'PV_STX2_IntrinsicSemantics_'),
+    'documented_semantics': ('PV_THR2_IntrinsicSemantics_', 'PV_STX2_IntrinsicSemantics_', 'PV_THR2_LibrarySemantics_'),
     'operator_semantics': ('PV_THR2_OperatorSemantics_',),
-    'typed_representation': ('PV_THR2_TypedRepresentation_',),
+    'typed_representation': ('PV_THR2_TypedRepresentation_', 'PV_STX2_TypedRepresentation_'),
 }
 FACT_EXACT = {'FreshAllocationValidity': "FreshAllocationValidity'",
               'ClientLayout': 'PV_OWN2_ClientLayout', 'PinnedConfig': 'PV_STX2_PinnedConfig'}
@@ -158,10 +158,16 @@ def check_statement(closure, row, rows):
             fact = item.get('fact', '')
             require(any(fact.startswith(p) for p in FACT_PREFIX[category]), 'fact outside B-y category')
             require(typ.startswith(fact) and (len(typ)==len(fact) or typ[len(fact)] in ' .('), 'hypothesis not the named fact')
-            require(item.get('ruling') in {'thread-4','thread-6','thread-7','thread-13','thread-15','slice-6'}, 'fact ruling absent')
+            require(item.get('ruling') in {'thread-4','thread-6','thread-7','thread-13','thread-15','slice-6','thread-16','thread-19','thread-21','thread-24'}, 'fact ruling absent')
         elif category in FACT_EXACT:
             require(item.get('fact') == FACT_EXACT[category], 'fact outside inventory')
             require(typ.startswith(item['fact']), 'hypothesis not the allowed fact')
+        elif category == 'machine_spec':
+            # D953 / thread-22: the row's OWN machine specification (carrier, control, program-table
+            # disposition of its callees, handler agreement with named leaf semantics). Lead-reviewed per row.
+            ns = row['contract']['lean_pre'].rsplit('.', 1)[0] if row['kind']=='BODY' else row.get('leaf',{}).get('lean_pre','').rsplit('.',1)[0]
+            require(bool(ns) and any(typ.startswith(ns + suffix) for suffix in ('.MachineSpec ', '.LiteralMachineSpec ')),
+                    'machine_spec is not the row own MachineSpec')
         elif category == 'leaf_returned_case':
             child = rows.get(item.get('leaf'))
             require(child is not None and child['kind']=='LEAF', 'returned-case hypothesis is not LEAF')

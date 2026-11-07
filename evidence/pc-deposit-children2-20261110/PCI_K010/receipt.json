@@ -1,0 +1,96 @@
+{
+  "attempt": "PCI_K010",
+  "kind": "kani",
+  "module": "POOL:332 mechanically diffed usize fission; full ProgramResult/all lengths",
+  "sources": [
+    "PCI_gate.py",
+    "PCI_src/programs/aspis-pool/src/pair_forest.rs",
+    "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs"
+  ],
+  "command": [
+    "python3",
+    "PCI_gate.py",
+    "PCI_K010.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects:/home/dombarker/project-offloads/codex-pc-deposit-children2-cache-20261110",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_COUNT_LONG"
+  },
+  "timeout": 180,
+  "source_revision": "c61864363ae5a6eec9190e1f59c2b6182171c31f",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "seed_manifest_sha256": "98a9181ded68006eb0a44565def0c82c25851c6ce842c60f7a07fa9b69ee079b",
+    "selected_objects": {
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Note.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Note.olean",
+        "sha256": "21aac47bf9590f7dbaa4b05e20ccd98297d1617429d61fc563df3e8632acec75"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Types.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Types.olean",
+        "sha256": "e4d7a7a107bdc8c120dcb93d867dc54f884b86eb037b7186f93703a5de3def61"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Funs.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Funs.olean",
+        "sha256": "dee1664ff05dd8b030134f829dbab97c235cd6e397c797bbd26f59e0ba1336e6"
+      }
+    },
+    "seed_note": "selected input files pinned by PCI_IMPORTS.json.xz, including all selected Aeneas objects and sidecars"
+  },
+  "expected_time": "Optimized compile then one exhaustive full-usize branch; exact constructor match avoids retired all-ProgramError equality",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+    "--lib",
+    "--features",
+    "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pair_forest::PCI_CountNative::count_all_words",
+    "--output-format",
+    "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "exit_status": 0,
+  "wall_seconds": 42.025860466994345,
+  "peak_rss_kib": "539344",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r0c81c93d9f4e40f1ac7ecb6554a44d12.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "733376512",
+  "source_hashes": {
+    "PCI_gate.py": "92a057fdc4c69204bc4cab7c1f0c783d01b3fa1c808dfcd6829cac101290ba3d",
+    "PCI_src/programs/aspis-pool/src/pair_forest.rs": "2984c7ed8b7e5a057e7621b558da39b49b8ce8085d599a1ebad2c0c3a07e0091",
+    "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "2d9e9514e9fabecc7b9ddb2faa92262644a1e416e16df2c9f38dc30686a4a86f"
+  },
+  "print_axioms": "N/A: kani"
+}

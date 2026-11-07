@@ -1,0 +1,84 @@
+[
+ {
+  "row": "POOL:332",
+  "frozen_full_function_sha256": "af5f5cf96fc18f2a3bbab324eb2bc44dd7f18d0f87bb87fb43fc373b6a655aa4",
+  "frozen_body_sha256": "428250fc1e12cb65af0c52774b08f6b4787decf034d375143e8d6efc79d6fa99",
+  "fission_sha256": "37d5da9eccf53036107a6c0210d16b0c6dda4e4028a1bab679deaa2cc966d9d5",
+  "transforms": [
+   [
+    "len",
+    "accounts.len()"
+   ]
+  ],
+  "body_exact_after_whitespace": true,
+  "mutation_controls": [
+   "comparison corruption rejected",
+   "error arm corruption rejected"
+  ],
+  "classification": "ReviewedTranscription option A; no trust removed"
+ },
+ {
+  "row": "POOL:223",
+  "frozen_body_sha256": "02846237a869b5f00ad10dbb1eb8cf569117021dba7c5215e03defb95968dc49",
+  "fission_sha256": "3229f4b54e4ce8a143b8b8f98f22d65e8c706376b1495e24b5ba17115758a9ad",
+  "transforms": [
+   [
+    "w.second_occupied.mul(w.second_occupied.sub(M31::ONE))",
+    "mul_window(w.second_occupied, w.second_occupied.sub(M31::ONE), log)"
+   ],
+   [
+    "w.second_sentinel().mul(w.second_occupancy_inverse)",
+    "mul_window(w.second_sentinel(), w.second_occupancy_inverse, log)"
+   ],
+   [
+    "one_minus_occupied.mul(w.second_occupancy_inverse)",
+    "mul_window(one_minus_occupied, w.second_occupancy_inverse, log)"
+   ]
+  ],
+  "loop_cut": "w\n            .second_commitment\n            .iter()\n            .any(|limb| one_minus_occupied.mul(*limb) != M31::ZERO)",
+  "loop_predicate": "one_minus_occupied.mul(*limb) != M31::ZERO",
+  "exact_after_named_erasure": true,
+  "windows_sha256": "2db45544f14ac791d34c1a264901a3445d0cc29781da18e1d6777bec40d36b22",
+  "field_calls": "CLOSED PCI_Mul.value composed in Lean at SAME operands; no accepted native product stub",
+  "mutations_rejected": [
+   "error constructor",
+   "product operand"
+  ],
+  "classification": "ReviewedTranscription of prefix and one iteration; Lean fold and CLOSED callee substitution still required"
+ },
+ {
+  "row": "POOL:277",
+  "frozen_function_sha256": "31eb438e02975619c098161092379498fb8316fbb95e3e69f97096c6c82f3e66",
+  "fission_sha256": "043a3d1b99a747202d0e38229547c53bd8663c58fff5b9211e846cf9b374702a",
+  "body_exact_after_whitespace": true,
+  "transforms": [
+   "slice metadata length to usize word",
+   "valid592-byte storage projection",
+   "payload suffix truncated at logical slice end"
+  ],
+  "negative_only_branch": "PCI_DEPOSIT_ARG_MUTANT erased only for positive-body diff",
+  "controls": [
+   "wrong Err arm rejected",
+   "wrong owned argument rejected"
+  ],
+  "classification": "ReviewedTranscription option A, plus borrow-minimal reference extraction under av; not trust removal"
+ },
+ {
+  "row": "POOL:279",
+  "scope": "one loop body only; no whole-row credit",
+  "frozen_function_sha256": "3b9010350279b7ab569d910026f7c2fc3faa57aa284760551bfbddb90403ac44",
+  "fission_sha256": "50adbb32a019018057967c0ea4b7d3fade39358f9dd0e81ff8431c7d023d9a9c",
+  "body_exact_after_whitespace": true,
+  "transforms": [
+   "header.filled projected to filled",
+   "mutable32-byte range projected to valid32-byte owned window",
+   "start returned as auxiliary observation"
+  ],
+  "classification": "ReviewedTranscription option A",
+  "controls": [
+   "wrong stride rejected",
+   "wrong encoder argument rejected"
+  ],
+  "missing": "native arbitrary iterator association and complete count/frame composition"
+ }
+]

@@ -1,0 +1,47 @@
+{
+ "exit": 0,
+ "reservation": {
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1794036660.3695369,
+  "populated_scopes": [
+   {
+    "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r13dd9ad8c5b045e88b17cc64a1c5f22b.scope",
+    "memory_max": 8589934592,
+    "processes": [
+     "/usr/bin/python3 S2W_run_host.py NMP_K052.json",
+     "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_K052/time.log timeout 180 python3 NMP_gate.py NMP_K052.json",
+     "timeout 180 python3 NMP_gate.py NMP_K052.json",
+     "python3 NMP_gate.py NMP_K052.json",
+     "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target --features private-leaf-salts,optimized-terminal,program-build --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness r1_semantic::NMP_native::returning_3_withdrawal_reply --output-format terse -Z function-contracts",
+     "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target --features private-leaf-salts,optimized-terminal,program-build --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness r1_semantic::NMP_native::returning_3_withdrawal_reply --output-format terse -Z function-contracts",
+     "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 40 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe-a2a5da2cb265aa8a__RNvNtNtCsfWDlomp3Mzz_19aspis_r1_cost_probe11r1_semantic10NMP_native28returning_3_withdrawal_reply.out --verbosity 9 --json-ui"
+    ],
+    "memory_high": "6442450944",
+    "memory_swap_max": "0",
+    "memory_current": 479748096
+   },
+   {
+    "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r7ad5557c876949d39b380665976d86cf.scope",
+    "memory_max": 8589934592,
+    "processes": [
+     "/usr/bin/python3 S2W_run_host.py NMW_E002.json",
+     "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_E002/time.log timeout 180 python3 NMW_extract_host.py",
+     "timeout 180 python3 NMW_extract_host.py",
+     "python3 NMW_extract_host.py",
+     "python3 /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_stage.py --extract --function process --workspace /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_src --out /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_process_emitted --opacity /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_OPACITY.json",
+     "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon cargo --preset aeneas --mir built --sysroot default --include core::option::Option --include core::result::Result --include core::option::_::ok_or --start-from crate::r1_pool_adapter::process --opaque crate::r1_pool_adapter::owned::stage1 --opaque crate::r1_pool_adapter::owned::stage2 --opaque crate::r1_pool_adapter::lifecycle_init --opaque crate::r1_pool_adapter::lifecycle_write --opaque crate::r1_pool_adapter::lifecycle_finalize --opaque solana_account_info::AccountInfo --dest-file /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_process_emitted/process.llbc -- --manifest-path /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_src/programs/r1-cost-probe/Cargo.toml --locked --offline --release --lib --jobs 1 --features pool-adapter,private-leaf-salts",
+     "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/cargo build --target x86_64-unknown-linux-gnu --manifest-path /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_src/programs/r1-cost-probe/Cargo.toml --locked --offline --release --lib --jobs 1 --features pool-adapter,private-leaf-salts",
+     "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon-driver charon-dont-cache-this-3325653-1794036635109758151 /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc --crate-name aspis_core --edition=2021 crates/aspis-core/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature=\"r0\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"formal-verification\", \"insecure-test-framing\", \"insecure-test-ordering\", \"r0\", \"r0-e4-reference\", \"r0-hoist-reference\", \"r0-op-count\", \"r0-r91-audit\", \"v7-fixed-canonical-audit\", \"v7-fixed-canonical-exact-once-audit\", \"v7-gamma-four-slot-block-audit\")) -C metadata=cde02d0b35d7ca38 -C extra-filename=-61faf66b0ce3dae3 --out-dir /home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_NMW_target/x86_64-unknown-linux-gnu/release/deps --target x86_64-unknown-linux-gnu -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_NMW_target/x86_64-unknown-linux-gnu/release/deps -L dependency=/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111/NMW_NMW_target/release/deps -Zthreads=1 -C link-arg=-Wl,--threads=1"
+    ],
+    "memory_high": "6442450944",
+    "memory_swap_max": "0",
+    "memory_current": 641822720
+   }
+  ],
+  "bounded_reserved_bytes": 17179869184,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+ }
+}

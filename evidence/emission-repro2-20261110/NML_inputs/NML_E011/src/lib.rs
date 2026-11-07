@@ -1,0 +1,5 @@
+pub enum ProgramError{Custom(u32),InvalidArgument,InvalidInstructionData,InvalidAccountData,AccountDataTooSmall,InsufficientFunds,IncorrectProgramId,MissingRequiredSignature,AccountAlreadyInitialized,UninitializedAccount,NotEnoughAccountKeys,AccountBorrowFailed,MaxSeedLengthExceeded,InvalidSeeds,BorshIoError(String),AccountNotRentExempt,UnsupportedSysvar,IllegalOwner,MaxAccountsDataAllocationsExceeded,InvalidRealloc,MaxInstructionTraceLengthExceeded,BuiltinProgramsMustConsumeComputeUnits,InvalidAccountOwner,ArithmeticOverflow,Immutable,IncorrectAuthority}
+pub enum VerifierError{Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation}
+pub fn route_ref(data:&[u8])->u8{if data==[3,10]||data==[3,11]{1}else if data.starts_with(b"ASQ8"){2}else{0}}
+pub fn readonly_ref(owner:&[u8;32],expected:&[u8;32],s:bool,w:bool,e:bool)->Result<(),ProgramError>{if owner!=expected||s||w||e{Err(ProgramError::InvalidAccountData)}else{Ok(())}}
+pub fn map_ref(result:Result<Vec<u8>,VerifierError>)->Result<Vec<u8>,ProgramError>{match result{Ok(v)=>Ok(v),Err(_)=>Err(ProgramError::InvalidInstructionData)}}
