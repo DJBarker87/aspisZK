@@ -114,3 +114,5 @@ under session4 include exact target/revision/exit/wall/RSS/swap/axioms.
 Only the own focused wrapper's accepted IDs are extended for491xx; old IDs
 49458–49479 already used and are not reused. No shared launcher changed.
 No actual Values/caller adequacy or endpoint closure is claimed.
+
+Session4 49102: pinned PV_THR2_OwnInitAllocationBridgedRetry passed; session4 receipt records resources/axioms.
