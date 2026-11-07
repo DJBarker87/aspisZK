@@ -39,6 +39,24 @@ for folder,prefix,sub,receipt in [('tx1-observed3-20261110','NMP','NMP_emitted/p
   assert bc['raw_sha256']==p['outputs']['raw/NMX_registry/Funs.lean']
   assert p['opaque_exclusion_witness']['parent_current_body']=='Opaque'and p['opaque_exclusion_witness']['child_absent']
  emissions.append(dict(folder=folder,receipt=receipt,root=p['root'],pins_sha256=H(raw(d/sub/(prefix+'_PINS.json'))),LLBC_sha256=p['llbc_sha256'],outputs=p['outputs'],bc=bc,source_revision=rc['source_revision'],wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],opacity=p.get('opacity'),note=p.get('validation_resume')))
+# Independently reproduce only syntax parameterization of opaque names (not extraction).
+from types import SimpleNamespace
+nmp=E.parent/'tx1-observed3-20261110';program=raw(nmp/'NMP_parameterize.py').decode()
+class VFile:
+ def __init__(self,p):self.p=p
+ def read_text(self):return raw(self.p).decode()
+class VRoot:
+ def __truediv__(self,n):return VFile(nmp/'NMP_emitted/prepare/raw/NMP_prepare'/n)
+ns=dict(raw=VRoot(),a=SimpleNamespace(function='prepare'),re=re)
+exec(compile(program[program.index('extern='):program.index("(dest/'Funs.lean').write_text")],'NNK syntax replay','exec'),ns)
+compiled=raw(nmp/'NMP_generated/NMP_prepare/Funs.lean')
+assert (ns['funs']+'\n#print axioms NMP_prepare.r1_semantic.verify_observed\n').encode()==compiled,'NMP parameterization differs beyond the recorded additional axioms-print command'
+audit=J(Q/'NMX_REGISTRY_SOURCE_AUDIT.json');f=raw(Q/'NMX_registry_r6_emitted/raw/NMX_registry/Funs.lean').decode()
+body=f[f.index('def r1_pool_adapter.owned.authenticate_invariant_release_registry\n'):f.rindex('end NMX_registry')]
+for before,after in audit['substitutions']:body=body.replace(before,after)
+t=raw(Q/'NMX_R3_RegistryEmitted.lean').decode();t=t[t.index('def body '):t.index('\nend NMX_R3_RegistryEmitted')]
+assert re.sub(r'\s+','',body)==re.sub(r'\s+','',t),'NMX body token drift'
+put('SYNTAX_ASSOCIATION',dict(status='PASS',NMP=dict(generator_sha256=H(program.encode()),reproduced_Funs_sha256=H(compiled),opaque_slots=ns['mapping'],extra_recording_command='#print axioms NMP_prepare.r1_semantic.verify_observed (only difference from exact generator output)',route='exact syntactic parameterization; every callee parameter installed by CLOSED graphs, full source erasure checked in Lean'),NMX=dict(normalized_body_sha256=H(re.sub(r'\s+','',t).encode()),substitutions=audit['substitutions'],route='full token equality of actual emission root after enumerated names only; source.factor/erase_root and EmittedLink.source compiled')))
 put('EMISSION_REVIEW',dict(status='PASS',new_extractions=0,emissions=emissions))
 old217=copy.deepcopy(J(E.parent/'ledger26-20261111/NNI_CANDIDATE_REVIEW.json')['candidates'][1]);old217['NNK_superseded_review']=copy.deepcopy(old217['ruling_t_decision']);old217.update(status='STATIC_REVIEW_PASS_GATE_PENDING',gate_admitted=False,exact_blocker=None,remaining_parameters=[],trust_status='ReviewedTranscription-TX2:217 used if gate admits; (ah), option A, addition/reclassification only',ruling_t_decision=dict(sufficient=True,ruling='(br)',decoder=['NNJ_K001 intended caller FAIL','NNJ_K002 real PASS','NNJ_K003 contract PASS','NNJ_K004 modifies FAIL','NNJ_K005 inverted FAIL'],assignment=['NNJ_K006 contract PASS','NNJ_K007 inverted FAIL','NNJ_K010 modifies FAIL'],assignment_stub_verified_use=False,composition='proof_for_contract plus Lean only; actual frozen assignment K015/K016',uncredited=['NNJ_K009','NNJ_K012','NNJ_K015'],notes='NNJ_CONTROLS K005 shape label says assignment but its harness and failed postcondition are the actual decoder shape; corrected reporting here. Decoder constructor bound <=1 BorshIoError payload is a calibration bound only, never a row domain. No native arbitrary full-String result havoc relied on.'))
 old217['additional_shape_obligations']=[dict(status='NOT_REQUIRED_BY_BR',prior=old217['additional_shape_obligations'],reason='assignment never substituted via stub_verified; positive, inverted ensures and modifies controls verified')]
@@ -57,7 +75,7 @@ put('CANDIDATE_REVIEW',dict(candidates=reviews,gate='PENDING',security_target_es
 clauses=[]
 for c in reviews:
  for kind in ['caller_domain_obligations','inventory_domain_obligations']:
-  for z in by[c['row']]['obligation'][kind]:clauses.append(dict(row=c['row'],kind=kind,original=z,status='REVIEWED_GATE_PENDING',discharged_by=c['candidate'],note='Exact original clauses retained. SAME reached argument/provenance derived by full root; own input clauses remain in canonical RowSpec domain and upstream caller.'))
+  for z in by[c['row']]['obligation'][kind]:clauses.append(dict(row=c['row'],kind=kind,original=z,status='REVIEWED_GATE_PENDING',discharged_by=c['candidate'],note=('Retained downstream081 provenance-support boundary, not a direct087 call edge: SAME emitted Prepared/Verified/View/g and full effect graph transport via NNG_PreparedOccurrence087.input_exact/occurrence and NNG_FinishReady136.returned. Actual081 caller remains094; no new081 call/domain premise is introduced here.' if z['id'].startswith('NLO-bf:TX1:087:081:') else 'Exact original clauses retained. SAME reached argument/provenance derived by full root; own input clauses remain in canonical RowSpec domain and upstream caller.')))
 put('CLAUSE_REVIEW',dict(original_clauses=clauses,own_input_clauses={c['row']:c['own_input_clauses']for c in reviews},notes='136 finishInputDom supplied internally in137 by same successful parse/public/begin; 179 Semantic and canonical Verified at same successful137 return proved internally in087. rev3 R4 remains087 own caller clause.'))
 assert not subprocess.check_output(['git','diff',F,'HEAD','--','crates','programs/r1-cost-probe','Cargo.lock'])
 assert not subprocess.check_output(['git','diff','b936275465600469312d1f058cdc91ea2a11f3dc','HEAD','--','programs/aspis-pool'])
