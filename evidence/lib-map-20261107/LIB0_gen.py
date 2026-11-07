@@ -12,7 +12,7 @@ for x in F:
     assert all(s['status'] == 'CLOSED' for s in x['supplying']), x
     if x['cls'] == 'DEF': x['status'] = 'definitional'
     elif x['cls'] == 'TRUST': x['status'] = 'trust-row'
-    elif x['flag'] and any(t in x['flag'] for t in ('F1','F2','F3','F4','F6')): x['status'] = 'unsupplied-or-partial'
+    elif x['flag'] and any(t in [u.strip() for u in x['flag'].split(',')] for t in ('F1','F2','F3','F4','F6')): x['status'] = 'unsupplied-or-partial'
     elif x['adapter_exists']: x['status'] = 'root+adapter-exists'
     else: x['status'] = 'root+adapter-new'
 TR = [
@@ -105,12 +105,22 @@ ORDER = [
  ('LIB_S1', 'C* (retarget NMT_R2_ReachLibrary to RSL.TX1_345.S1Lib; F4)', ['LIB_VCarriers']),
  ('LIB_Instances', 'final bundle; rfl checks against TAS_Interfaces and the principal fold statements; axioms', ['LIB_PoolLib','LIB_V2Lib','LIB_VLib','LIB_Prepared','LIB_S1','LIB_Transcribed']),
 ]
+# RSL rev3 (ruling (bq)): F1 and F2 resolved in the specs.
+FLAGS['F1']['status'] = 'RESOLVED by RSL rev3 (ruling (bq))'
+FLAGS['F1']['resolution'] = ('RSL.Env.reservation : Bool (try_reserve reply; true = Ok) and Spec.tryReserve; '
+  'Spec.Functional / Child.Functional required at the gate for filled, accNew, weightsNew, claims (on dom) and tx2auth (on Dom064); '
+  'TAS Sig.EnvRep binds env.reservation = true <-> headline reservation = .Ok (). See evidence/rowspec-lead-20261107/RSL_REVISION3.md. '
+  'The five fields are no longer blocked by a spec error; they remain to be instantiated (adapter new).')
+FLAGS['F2']['status'] = 'RESOLVED by RSL rev3 (ruling (bq))'
+FLAGS['F2']['resolution'] = ('RowSpec_087 Domain gains (R4) V.checkValuesDom (slice proof OFF_Y1 OFF_INACTIVE) (new VLib field checkValuesDom := 179 compact_check premise verbatim); '
+  'recorded as caller clause RSL3-caller:TX1:094:TX1:087:R4 and discharged in 094 by canonical_scan via TX1_094.R4Discharge / r4_of_scan. '
+  'PreparedNew stays blocked by F3 (missing TX1:179 child lemmas, LIB_).')
 cnt = collections.Counter(x['status'] for x in F)
 bystruct = collections.Counter(x['struct'] for x in F)
 out = dict(
-  title='LIB0 field map: RSL rev2 library structures -> CLOSED ledger roots',
+  title='LIB0 field map: RSL rev2 library structures -> CLOSED ledger roots (F1/F2 resolved by RSL rev3)',
   target_established=False,
-  rsl_revision='be66076856e (RSL rev2, frozen by ruling (bp)(4))',
+  rsl_revision='be66076856e (RSL rev2, frozen by ruling (bp)(4)); F1/F2 resolved by RSL rev3 (ruling (bq), branch codex/cx-rsl-rev3-20261107)',
   ledger='evidence/ledger25-20261111/NMQ_LEDGER.json.xz (sha256 in NMQ_LEDGER.json.sha256), 582 CLOSED / 17 OPEN',
   frozen_source='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',
   research_base='3493d38575c',

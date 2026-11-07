@@ -16,7 +16,14 @@ Own-input domain ((bf)(2)), caller clauses of TX1:094:
   (R1) proof.len() = 57607 (the slices at 16..7031, 7031..7495 and the wide
        fields are then in range; NLO-bf:TX1:087:081:len);
   (R2) obs = None;
-  (R3) V.publicDom public (carried from TX1:137).
+  (R3) V.publicDom public (carried from TX1:137);
+  (R4) Revision 3 (ruling (bq), LIB0_ F2): V.checkValuesDom proof[7031..7495],
+       i.e. compact::check_values on the y1 slice returns Ok(()).  This is the
+       TX1:179 root's compact_check premise (P.dom is copied verbatim from
+       179), which frozen prepare cannot discharge because it never checks y1
+       canonicality.  Recorded as a caller clause of TX1:094 (id
+       RSL3-caller:TX1:094:TX1:087:R4) and discharged there by canonical_scan
+       at SAME proof (`TX1_094.R4Discharge`, `TX1_094.r4_of_scan`).
 `g` is a &mut argument: its final value is part of the result on every
 returning arm (unchanged on the arms before Prepared::new).  The `logical`
 Vec and the Verified value are dropped at return; the drops write no account
@@ -57,7 +64,8 @@ def Ref (V : VLib) (P : PreparedNew V) (a : Args V) : Spec (Except V.VErr V.Prep
   | .ok (sem, v) => P.run (sem, v, a.g)
 
 def Domain (V : VLib) (a : Args V) (obs : Observer) : Prop :=
-  a.proof.length = VPROOF_BYTES ∧ obs = none ∧ V.publicDom a.public_
+  a.proof.length = VPROOF_BYTES ∧ obs = none ∧ V.publicDom a.public_ ∧
+  V.checkValuesDom (slice a.proof OFF_Y1 OFF_INACTIVE)
 
 def RowSpec_087 (V : VLib) (P : PreparedNew V)
     (prepare : Args V → Observer → Env → Obs (Except V.VErr V.Prepared × V.E29)) : Prop :=
@@ -93,5 +101,11 @@ theorem rejects_wrong_g (V : VLib) (P : PreparedNew V) (a : Args V) (g' : V.E29)
   rw [Spec.bind_det _ _ env0 _ (front_alloc_err V a env0 hfd hfill)] at h1
   simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq, Prod.mk.injEq] at h1
   exact hg h1.1.2
+
+/-- Revision 3 teeth: (R4) is a genuine narrowing; an input whose y1 slice fails
+check_values is outside the domain (the RowSpec says nothing there). -/
+theorem domain_needs_R4 (V : VLib) (a : Args V) (obs : Observer)
+    (h : ¬ V.checkValuesDom (slice a.proof OFF_Y1 OFF_INACTIVE)) : ¬ Domain V a obs :=
+  fun hd => h hd.2.2.2
 
 end RSL.TX1_087

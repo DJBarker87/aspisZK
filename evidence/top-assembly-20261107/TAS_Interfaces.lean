@@ -117,7 +117,11 @@ structure Sig where
   Out1 : Ctx → Obs (Except ProgramError Unit × SdkState) → Prop
   /-- As `Out1` for TX2: `post2`, `final2`. -/
   Out2 : Ctx → Obs (Except ProgramError Unit × SdkState) → Prop
-  /-- `env` agrees with the ctx runtime oracles (sha256 via `syscall`, PDA, clock = slot). -/
+  /-- `env` agrees with the ctx runtime oracles (sha256 via `syscall`, PDA, clock = slot).
+  RSL Revision 3 (ruling (bq), LIB0_ F1): it also binds the reservation reply to the
+  headline binder, `env.reservation = true ↔ reservation = .Ok ()` (the single
+  `NP6_StdModel.Reservation` that `FIp_Install.configuration … reservation` installs
+  at every try_reserve call). -/
   EnvRep : Ctx → Env → Prop
   env1_rep : ∀ c, EnvRep c (env1 c)
   env2_rep : ∀ c, EnvRep c (env2 c)

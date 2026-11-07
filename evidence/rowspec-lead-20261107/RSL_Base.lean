@@ -24,13 +24,23 @@ frozen body in which
     ONLY the event prefix up to that point (ruling (bl)(3)); no post-abort
     state is stated or invented;
   * the only nondeterminism is the allocation-failure branch at each named
-    allocation site (ruling (bl)(3): allocator internals are outside every
-    obligation, a failure aborts).  There is no generic "may abort anywhere"
-    clause, so a constant-abort or constant-Err implementation is rejected
-    (each row module carries the rejection examples).
-Oracle replies (sha256, create_program_address, Clock) come from `Env`, which
-the RowSpec quantifies universally; binding them to the runtime is the job of
-the accepted runtime rows (ruling (at): the PDA reply is the quantified slot).
+    INFALLIBLE allocation site (Box::new, Vec growth, to_vec, format!: ruling
+    (bl)(3): allocator internals are outside every obligation, a failure
+    aborts).  There is no generic "may abort anywhere" clause, so a
+    constant-abort or constant-Err implementation is rejected (each row
+    module carries the rejection examples);
+  * Revision 3 (ruling (bq), LIB0_ F1): a FALLIBLE reservation
+    (`Vec::try_reserve_exact` in heap::filled / heap::uninit, r0/heap.rs:5-14)
+    is not an abort site.  Its outcome is the oracle reply `Env.reservation`
+    (`Spec.tryReserve`), and its failure is the returned
+    `Err(Error::Allocation)`.  A law that reaches only such sites and oracle
+    replies is therefore a function of (arguments, Env) (`Spec.Functional`).
+Oracle replies (sha256, create_program_address, Clock, and since Revision 3
+the reservation reply) come from `Env`, which the RowSpec quantifies
+universally; binding them to the runtime is the job of the accepted runtime
+rows (ruling (at): the PDA reply is the quantified slot) and of
+`TAS.Sig.EnvRep` (the reservation reply is bound there to the headline
+`reservation` binder).
 -/
 set_option autoImplicit false
 
@@ -138,6 +148,17 @@ structure Env where
   sha256 : List Bytes → B32
   pda : List Bytes → B32 → Option B32
   clock : Except ProgramError UInt64
+  /-- Revision 3 (ruling (bq), LIB0_ F1).  Reply of the fallible reservation
+  `Vec::try_reserve_exact` reached by heap::filled / heap::uninit
+  (r0/heap.rs:5-14 at 4bb3b3f): `true` = `Ok(())`, `false` = `Err(_)`.  Every
+  frozen caller discards the TryReserveError payload (`map_err(|_|
+  Error::Allocation)`), so a Bool carries all of the reply that is observable.
+  It is ONE reply for every try_reserve occurrence, the same shape as the
+  headline binder `reservation : NP6_StdModel.Reservation`, which
+  `NP6_StdModel.calls` returns at every `reserve` call; `TAS.Sig.EnvRep`
+  binds `env.reservation = true ↔ reservation = .Ok ()`.  No event: the
+  reservation is not a syscall. -/
+  reservation : Bool
 
 inductive Exit (α : Type) where
   | ret (a : α)
@@ -167,9 +188,10 @@ instance : Monad Spec where
 /-- One observable effect. -/
 def emit (e : Event) : Spec Unit := fun _ o => o = ⟨.ret (), [e]⟩
 
-/-- An allocation site (Box::new, Vec, to_vec, heap::filled ...).  Ruling
-(bl)(3): either the fresh object exists, or the transaction aborts here with
-the prefix so far. -/
+/-- An infallible allocation site (Box::new, Vec growth, to_vec, format! ...).
+Ruling (bl)(3): either the fresh object exists, or the transaction aborts here
+with the prefix so far.  Revision 3: heap::filled / heap::uninit are NOT such
+sites; their `try_reserve_exact` is `Spec.tryReserve`. -/
 def alloc : Spec Unit := fun _ o => o = ⟨.ret (), []⟩ ∨ o = ⟨.abort, []⟩
 
 /-- An allocation site that is reached only when `b` holds (no effect otherwise). -/
@@ -180,6 +202,19 @@ def panic {α : Type} : Spec α := fun _ o => o = ⟨.abort, []⟩
 
 /-- Read a value from the oracle environment, no event. -/
 def env {α : Type} (f : Env → α) : Spec α := fun e o => o = ⟨.ret (f e), []⟩
+
+/-- Revision 3 (ruling (bq), LIB0_ F1).  A fallible reservation
+`try_reserve_exact` (r0/heap.rs:7, 13): returns the oracle reply
+`Env.reservation` (`true` = Ok), no event, no abort. -/
+def tryReserve : Spec Bool := env Env.reservation
+
+/-- Revision 3.  `m` is a function of the oracle environment: at every `env`
+it admits exactly one observation.  The gate requires this of the laws of
+`VLib.filled`, `VLib.accNew`, `VLib.weightsNew`, `VLib.claims` (on their
+domains) and `V2Lib.tx2auth` (on `Dom064`) whenever they reach no infallible
+allocation site; an infallible site keeps its (bl)(3) abort arm. -/
+def Functional {α : Type} (m : Spec α) : Prop :=
+  ∀ env, ∃ o, ∀ o', m env o' ↔ o' = o
 
 /-- Call a child whose law is `law`, after its (bf)(2) own-argument domain
 `dom` holds at the SAME argument.  If `dom` fails the reference admits no
@@ -447,8 +482,10 @@ def constErr {A α : Type} (e : ProgramError) : A → Env → Obs (Except Progra
 def constAbort {A α : Type} : A → Env → Obs α := fun _ _ => ⟨.abort, []⟩
 
 /-- A default oracle environment for examples (any Env works for the
-pre-oracle checks the examples use). -/
-def env0 : Env := ⟨fun _ => zero32, fun _ _ => none, .error .unsupportedSysvar⟩
+pre-oracle checks the examples use).  Revision 3: its reservation reply is the
+failure `false`, so the heap::filled-Err hypotheses of the TX1:087/094
+rejection examples are met by a law that reads `Env.reservation`. -/
+def env0 : Env := ⟨fun _ => zero32, fun _ _ => none, .error .unsupportedSysvar, false⟩
 
 /-! ## Owned account snapshot (r1_pool_adapter_owned.rs:9-25) -/
 
@@ -629,5 +666,37 @@ theorem acquire_nonempty (a : AccountInfo) (k : Kind) (s : SdkState) (env : Env)
 theorem snapshot_nonempty (a : AccountInfo) (l1 l2 : Nat) (s : SdkState) (env : Env)
     (o : Obs (OwnedAccount × SdkState)) (h : snapshot a l1 l2 s env o) : o.events ≠ [] :=
   Spec.bind_nonempty _ _ _ _ (fun o' h' => acquire_nonempty a .shared s env o' h') h
+
+/-! ## Revision 3 teeth (ruling (bq), LIB0_ F1) -/
+
+theorem Spec.tryReserve_functional : Spec.Functional Spec.tryReserve :=
+  fun env => ⟨⟨.ret env.reservation, []⟩, fun _ => Iff.rfl⟩
+
+/-- The reply is read, not chosen: at a fixed Env exactly one arm is admitted. -/
+theorem Spec.tryReserve_iff (env : Env) (o : Obs Bool) :
+    Spec.tryReserve env o ↔ o = ⟨.ret env.reservation, []⟩ := Iff.rfl
+
+/-- A law of the heap::filled shape that reads the reply
+(`Ok(vec![v; n])` on Ok, `Err(())` otherwise; `resize` after a successful
+reservation does not allocate) is a function of Env. -/
+theorem Spec.functional_of_reserve {α : Type} (okv : α) (errv : α) :
+    Spec.Functional (Spec.bind Spec.tryReserve
+      (fun b => if b then Spec.pure okv else Spec.pure errv)) := by
+  intro env
+  refine ⟨⟨.ret (if env.reservation then okv else errv), []⟩, fun o => ?_⟩
+  rw [Spec.bind_det _ _ env env.reservation (Spec.tryReserve_iff env)]
+  cases env.reservation <;> rfl
+
+/-- Rejection: the Revision 2 relational shape (both arms admitted at the same
+Env, the only option while Env had no reservation channel) is not Functional. -/
+theorem Spec.not_functional_both {α : Type} (okv errv : α) (hne : okv ≠ errv) :
+    ¬ Spec.Functional (fun (_ : Env) (o : Obs α) => o = ⟨.ret okv, []⟩ ∨ o = ⟨.ret errv, []⟩) := by
+  intro h
+  obtain ⟨o, ho⟩ := h env0
+  have h1 := (ho ⟨.ret okv, []⟩).mp (Or.inl rfl)
+  have h2 := (ho ⟨.ret errv, []⟩).mp (Or.inr rfl)
+  rw [← h2] at h1
+  simp only [Obs.mk.injEq, Exit.ret.injEq] at h1
+  exact hne h1.1
 
 end RSL
