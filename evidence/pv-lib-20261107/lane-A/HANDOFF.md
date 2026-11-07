@@ -290,3 +290,6 @@ premise. Runtime Values and continuous caller history remain explicit gaps.
 Session4 49197 passed PV_LIB_A_WriterRegistry.installed: at all five writer
 polls, the actual existing backend lift preserves next/places/receivers on
 every native answer. No separate catch or registry frame is assumed.
+
+Session4 49198 passed exact pinned PV_FN_THREAD_f6Entry replay. f6 transport
+cone remains partial; next unreplayed target is PV_FN_THREAD_f6Reply121.
