@@ -161,3 +161,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49860 passed exact pinned replay PV_THR2_OwnInitSourceCodecBridged; see receipt for time/RSS/swap/revision/axioms.
 
 49861 passed exact pinned replay PV_THR2_ClosureBoxRegistry; see receipt for time/RSS/swap/revision/axioms.
+
+49862 passed exact pinned replay PV_THR2_OwnInitAllocationSelection; see receipt for time/RSS/swap/revision/axioms.
