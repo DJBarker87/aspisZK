@@ -30,3 +30,15 @@ post-state obligations; final observations abstract nextActivation.
 State; changed explicitly before49739. Failed sources/receipts retained.
 49739 passed; 2.39s, peak4741560KiB, swap0, standard summary axioms only.
 No row proof, no source adequacy, no strict audit yet. Next row270.
+
+## thread:f270
+
+49741 passed the full MachineSpec/Pre/Post/Contract and explicit
+PackageStatement/Comparison. The old package statement is literally
+f270SummaryRun.from_entry's formula (emission-only summary prefix); the new
+Post reaches the whole body's own boundary. The comparison is a conjunction
+of the two obligations, not a proved strengthening. Source/typed-library
+adequacy remains open. 49740 used the wrong Address field name; source changed
+to localIndex before49741. Receipt49740's literal revision label HEAD resolves
+to34e6cadb4f1, the local submission head; exact failed source hash retained.
+49741:2.75s,peak4704440KiB,swap0,standard summary axioms only. Next166.
