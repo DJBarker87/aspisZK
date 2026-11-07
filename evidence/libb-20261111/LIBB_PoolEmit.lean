@@ -38,7 +38,6 @@ theorem returns (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) :
  subst o
  unfold evaluator
  rw [hr]
- rfl
 
 theorem returned_event (st : State) (b : List U8) :
  (AspisR1.S2I.ReturnData.set st b).events.map event =
