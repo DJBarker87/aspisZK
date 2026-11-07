@@ -1,0 +1,42 @@
+NNG_generated/NNG_SourcePublic137.lean:28:2: error: Type mismatch
+  bind_sound head k NNG_PublicProjection137.decode (NNG_Output137.decode a env) (NNG_Events137.events env) env
+    (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p))
+    (fun reply =>
+      match reply with
+      | Except.ok t0 =>
+        RSL.RE.bind (LIB_VLib.library.begin.run (p, t0)) fun r =>
+          RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+            { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 }
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    headLaw ?m.126
+has type
+  (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p)).bind
+    (fun reply =>
+      match reply with
+      | Except.ok t0 =>
+        RSL.RE.bind (LIB_VLib.library.begin.run (p, t0)) fun r =>
+          RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+            { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 }
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env (observation (NNG_Output137.decode a env) (NNG_Events137.events env) (NMT_CallTree.bind head k))
+but is expected to have type
+  (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p)).bind
+    (fun r =>
+      match r with
+      | Except.ok a_1 =>
+        (fun t0 =>
+            (LIB_VLib.library.begin.run (p, t0)).bind fun r =>
+              match r with
+              | Except.ok a_2 =>
+                (fun r =>
+                    RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+                      { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 })
+                  a_2
+              | Except.error e => RSL.Spec.pure (Except.error e))
+          a_1
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env
+    (observation (NNG_Output137.decode a env) (NNG_Events137.events env)
+      (NMT_CallTree.bind (NNG_Splits137.publicHead (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)))
+        (NNG_Splits137.publicTail (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)))))
+'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

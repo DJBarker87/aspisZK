@@ -25,6 +25,7 @@ theorem observation (a : NNG_Data137.Args) (env : RSL.Env) (p : LIB_VCarriers.Pr
   simp only [NNG_Context137.calls,NNG_Context137.input,NNG_FinishAdapter137.call,
     NMP_Finish136Transport.adapt,NNG_FinishAdapter137.oldFinish,fromT9_inverse,fromT13_inverse,
     fromT10_inverse,fromT3_inverse,NNG_Events137.finish,NNG_FinishInput137.input]
+  dsimp only [NNG_Representation136.calls]
   apply congrArg₂ RSL.Obs.mk
   · generalize NNG_Emitted.emitted (NNG_ConcreteCalls136.calls env)
       (NNG_Representation136.input ⟨a.public_,p,t,c⟩ obs env) = r
@@ -34,7 +35,9 @@ theorem observation (a : NNG_Data137.Args) (env : RSL.Env) (p : LIB_VCarriers.Pr
     | ok r=>
       change RSL.Exit.ret _ = RSL.Exit.ret _
       apply congrArg RSL.Exit.ret
-      exact NNG_Output137.child_decode a env ⟨a.public_,p,t,c⟩ fallback r
+      cases r with
+      | Ok v=>exact NNG_Output137.child_decode a env ⟨a.public_,p,t,c⟩ fallback (.Ok v)
+      | Err e=>exact NNG_Output137.child_decode a env ⟨a.public_,p,t,c⟩ fallback (.Err e)
   · rfl
 #print axioms observation
 

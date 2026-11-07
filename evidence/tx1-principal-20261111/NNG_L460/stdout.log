@@ -1,0 +1,47 @@
+NNG_generated/NNG_SourceBegin137.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_VBegin.begin_.run (p, toT10 t0) env
+in the target expression
+  LIB_VLib.library.begin.run (p, toT10 t0) env
+    (observation (NNG_BeginProjection137.decode (NNG_Data137.fallback a env)) (NNG_Events137.events env) head)
+
+a : NNG_Data137.Args
+obs : RSL.Observer
+env : RSL.Env
+domain : RSL.TX1_137.Domain NNG_Data137.VL a
+p : LIB_VCarriers.Prefix
+t0 : r1_wire.SemanticTranscript Unit
+parsed : LIB_VParsePrefix.eval a.bytes = Except.ok p
+transcripted : LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env = Except.ok (toT10 t0)
+head : Code
+  (core.result.Result aspis_core.state_only_prefix.r0.Challenges r1_wire.Error × r1_wire.SemanticTranscript Unit) :=
+  invoke "TX1:150/begin" (fromT13 (LIB_VCarriers.prefixRaw p), t0)
+    (NMP_Install150.begin_ (NNG_PublicSource137.digest env) (fromT13 (LIB_VCarriers.prefixRaw p)) t0)
+k : core.result.Result aspis_core.state_only_prefix.r0.Challenges r1_wire.Error × r1_wire.SemanticTranscript Unit →
+  Code (Output Unit) :=
+  fun pair =>
+    match pair.1 with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok c =>
+      NNG_Tree137.mark1 (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) pair.2 c
+borrow : (↑p.source).length ≤ 57607
+law :
+  RSL.Spec.map (NNG_BeginProjection137.decode (NNG_Data137.fallback a env))
+      (NNG_Interpret136.call NNG_Events137.events "TX1:150/begin" (fromT13 (LIB_VCarriers.prefixRaw p), t0)
+        (NMP_Install150.begin_ (NNG_PublicSource137.digest env) (fromT13 (LIB_VCarriers.prefixRaw p)) t0))
+      env =
+    LIB_VBegin.begin_.run (p, toT10 t0) env
+⊢ LIB_VLib.library.begin.run (p, toT10 t0) env
+    (observation (NNG_BeginProjection137.decode (NNG_Data137.fallback a env)) (NNG_Events137.events env) head)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    p
+  has type
+    LIB_VCarriers.Prefix
+  but is expected to have type
+    LIB_VLib.library.Prefix
+  in the application
+    Prod.mk p
+NNG_generated/NNG_SourceBegin137.lean:51:30: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+'AspisR1.NNG_SourceBegin137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

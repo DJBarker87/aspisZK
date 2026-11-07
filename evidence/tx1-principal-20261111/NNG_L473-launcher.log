@@ -1,0 +1,50 @@
+{"attempt": "NNG_L473", "exit_status": 1, "wall_seconds": 20.972947257803753, "peak_rss_kib": "6777300", "swaps": "0", "print_axioms": ["'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_SourcePublic137.lean:35:2: error: Type mismatch
+  bind_sound head k NNG_PublicProjection137.decode (NNG_Output137.decode a env) (NNG_Events137.events env) env
+    (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p))
+    (fun reply =>
+      match reply with
+      | Except.error e => RSL.Spec.pure (Except.error e)
+      | Except.ok t0 =>
+        RSL.RE.bind (LIB_VLib.library.begin.run (p, t0)) fun r =>
+          RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+            { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 })
+    headLaw ?m.164
+has type
+  (LIB_VLib.library.publicTranscript.run
+...
+=>
+          RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+            { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 })
+    env (observation (NNG_Output137.decode a env) (NNG_Events137.events env) (NMT_CallTree.bind head k))
+but is expected to have type
+  (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p)).bind
+    (fun r =>
+      match r with
+      | Except.ok a_1 =>
+        (fun t0 =>
+            (LIB_VLib.library.begin.run (p, t0)).bind fun r =>
+              match r with
+              | Except.ok a_2 =>
+                (fun r =>
+                    RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+                      { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 })
+                  a_2
+              | Except.error e => RSL.Spec.pure (Except.error e))
+          a_1
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env
+    (observation (NNG_Output137.decode a env) (NNG_Events137.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:131/public_transcript"
+          ((input a obs env).publicValue, (input a obs env).hash, (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)
+          ((calls env).publicTranscript (input a obs env).digest (input a obs env).publicValue (input a obs env).hash
+            (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root))
+        fun reply =>
+        match reply with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok t =>
+          NNG_Tree137.begin_ (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) t))
+'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r792309b96c694e6587859f2e8bd9daea.scope; invocation ID: 4df1313b51f146db85a6977a38fe502e

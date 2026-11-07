@@ -18,8 +18,7 @@ theorem mark {A B Args : Type} (decode : A → B) (env : RSL.Env) (site : String
       (NMT_CallTree.bind (invoke site args (.ok ())) (fun _=>next)) =
       observation decode (NNG_Events137.events env) next := by
   rw [NNG_ObservationAlgebra.observation_bind]
-  change NNG_ObservationAlgebra.append ⟨.ret (),NNG_Events137.events env (.call site args (.ok ()))⟩
-    (fun _=>observation decode (NNG_Events137.events env) next)=_
+  simp only [observation,invoke,run,List.flatMap_cons,List.flatMap_nil,List.append_nil,exit,id_eq]
   rw [silent]
   simp only [NNG_ObservationAlgebra.append,List.nil_append]
 #print axioms mark

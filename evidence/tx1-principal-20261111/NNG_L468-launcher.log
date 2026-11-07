@@ -1,0 +1,43 @@
+{"attempt": "NNG_L468", "exit_status": 1, "wall_seconds": 18.803265442838892, "peak_rss_kib": "6775952", "swaps": "0", "print_axioms": ["'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_SourcePublic137.lean:24:145: error: Tactic `rfl` failed: The left-hand side
+  NNG_Tree137.publicTranscript (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p))
+is not definitionally equal to the right-hand side
+  NMT_CallTree.bind head k
+
+a : NNG_Data137.Args
+obs : RSL.Observer
+env : RSL.Env
+domain : RSL.TX1_137.Domain NNG_Data137.VL a
+p : LIB_VCarriers.Prefix
+parsed : LIB_VParsePrefix.eval a.bytes = Except.ok p
+root : Std.Array U8 32#usize := (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root
+head : Code (core.result.Result (r1_wire.SemanticTranscript Unit) r1_wire.Error) :=
+  invoke "TX1:131/public_transcript" (fromT9 a.public_, (), root)
+    (NMP_Install131.pub
+...
+NNG_generated/NNG_SourcePublic137.lean:24:145: error: Tactic `rfl` failed: The left-hand side
+  NNG_Tree137.publicTranscript (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p))
+is not definitionally equal to the right-hand side
+  NMT_CallTree.bind head k
+
+a : NNG_Data137.Args
+obs : RSL.Observer
+env : RSL.Env
+domain : RSL.TX1_137.Domain NNG_Data137.VL a
+p : LIB_VCarriers.Prefix
+parsed : LIB_VParsePrefix.eval a.bytes = Except.ok p
+root : Std.Array U8 32#usize := (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root
+head : Code (core.result.Result (r1_wire.SemanticTranscript Unit) r1_wire.Error) :=
+  invoke "TX1:131/public_transcript" (fromT9 a.public_, (), root)
+    (NMP_Install131.publicTranscript (NNG_PublicSource137.digest env) (fromT9 a.public_) () root)
+k : core.result.Result (r1_wire.SemanticTranscript Unit) r1_wire.Error → Code (Output Unit) :=
+  fun reply =>
+    match reply with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok t =>
+      NNG_Tree137.begin_ (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) t
+⊢ NNG_Tree137.publicTranscript (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) =
+    NMT_CallTree.bind head k
+'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r494d0e8304ea4ad494b5f2884916da12.scope; invocation ID: be26e6eeb2d54971afbfd680267fb386

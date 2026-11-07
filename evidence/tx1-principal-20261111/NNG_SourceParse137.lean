@@ -15,9 +15,11 @@ theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
     match reply with
     | .Err e=>pure (.Err e)
     | .Ok p=>NNG_Tree137.mark0 (calls env) (input a obs env) p
-  change _ env (observation _ _ (NMT_CallTree.bind head k))
+  have split : NNG_Tree137.tree (calls env) (input a obs env) = NMT_CallTree.bind head k := by rfl
+  rw [split]
   have headLaw : (LIB_VLib.library.parsePrefix.run a.bytes) env
       (observation (NNG_Parse137.decode a) (NNG_Events137.events env) head) := by
+    change LIB_VParsePrefix.parsePrefix.run a.bytes env _
     rw [←NNG_Occurrences137.parse a env domain]
     exact call_actual _ NNG_Events137.events _ _ _ env
   unfold RSL.TX1_137.Ref RSL.RE.bind
@@ -34,7 +36,7 @@ theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
     subst raw
     simp only [NNG_Parse137.decode,parsed]
     unfold NNG_Tree137.mark0
-    change _ env (observation _ _ (NMT_CallTree.bind (invoke "TX1:130/mark0" ((input a obs env).observer,0#u8) (.ok ())) (fun _=>_)))
+    change (_ : RSL.Spec (Except LIB_VLib.library.WErr (RSL.Verified LIB_VLib.library))) env (observation _ _ (NMT_CallTree.bind (invoke "TX1:130/mark0" ((input a obs env).observer,0#u8) (.ok ())) (fun _=>_)))
     rw [NNG_Head137.mark _ env _ _ _ (NNG_Events137.silent env _ _ _ (by decide) (by decide) (by decide))]
     exact NNG_SourcePublic137.source a obs env domain p parsed
 #print axioms source

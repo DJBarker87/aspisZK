@@ -32,7 +32,15 @@ theorem publicTranscript (env : RSL.Env) (pub : LIB_VCarriers.Public) (p : LIB_V
     (LIB_VCode.obs env LIB_VRecords.host (AspisR1PublicPreparation.PreparedHashCode.run
       (AspisR1PublicPreparation.S1SemanticCode.publicTranscript (LIB_VCode.digest env) pub ()
         (LIB_Env.nativeKey (LIB_VCarriers.c1Root p)))))
-  · rw [NNG_Events137.public_call,fromT9_inverse,NNG_PublicProjection137.root]
+  · have event : NNG_Events137.events env (.call "TX1:131/public_transcript"
+        (fromT9 pub,(),(fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)
+        (NMP_Install131.publicTranscript (NNG_PublicSource137.digest env) (fromT9 pub) ()
+          (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)) =
+        LIB_VCode.events env (AspisR1PublicPreparation.PreparedHashCode.run
+          (AspisR1PublicPreparation.S1SemanticCode.publicTranscript (LIB_VCode.digest env) pub ()
+            (LIB_Env.nativeKey (LIB_VCarriers.c1Root p)))).1 := by
+      rw [NNG_Events137.public_call,fromT9_inverse,NNG_PublicProjection137.root]
+    rw [event]
     have value := NNG_ConcreteGraph136.resultObs NNG_PublicProjection137.decode _ _
       (LIB_VCode.events env (AspisR1PublicPreparation.PreparedHashCode.run
         (AspisR1PublicPreparation.S1SemanticCode.publicTranscript (LIB_VCode.digest env) pub ()

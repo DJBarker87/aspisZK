@@ -16,6 +16,7 @@ theorem tree (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env) :
     producer a obs env = observation (NNG_Output137.decode a env) (NNG_Events137.events env)
       (NNG_Tree137.tree (calls env) (input a obs env)) := by
   unfold producer observation
+  dsimp only
   rw [run_result,NNG_Erasure137.source]
 #print axioms tree
 end AspisR1.NNG_Producer137
