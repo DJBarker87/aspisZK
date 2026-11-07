@@ -70,7 +70,7 @@ if {kind!r}=='audit':
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
    if q.is_file():names.append(q)
 if {kind!r}=='inspect':
- names += [b/n for n in ['NMK_TOOL_PINS.json','NMK_RETENTION.json','NMK_EXPORT.json','NMK_CLOSURE_PINS.json.xz','NMK_CLOSURE_PINS.json.sha256'] if (b/n).is_file()]
+ names += [b/n for n in ['NMK_TOOL_PINS.json','NMK_RETENTION.json','NMK_EXPORT.json','NMK_CLOSURE_PINS.json.xz','NMK_CLOSURE_PINS.json.sha256','NMK_UNUSED_POOL_FINDING.json'] if (b/n).is_file()]
 out={{}}
 for p in names:
  n=str(p.relative_to(b))

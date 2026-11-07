@@ -2,6 +2,9 @@
 from NMK_formal import *
 def audit(a,kind,target):
  env=json.loads((E/'NMK_ENV.json').read_text());T=env['LEAN_SYSROOT'];extra={}
+ pins=json.loads((E/'NMK_WALKER_PIN.json').read_text())
+ check=ssh('python3',f"from pathlib import Path;import hashlib;roots={env['LEAN_PATH'].split(':')!r};p=next(Path(x)/'NFA_WALKER.olean' for x in roots if (Path(x)/'NFA_WALKER.olean').is_file());print(hashlib.sha256(p.read_bytes()).hexdigest())")
+ assert check.returncode==0 and check.stdout.strip()==pins['selected_object_sha256'],'Selected walker object differs from retained canonical pin'
  if kind=='link':
   r=ssh('python3',f"from pathlib import Path;print(Path({(B+'/NMK_native/')!r}+{target!r}+'.c').read_text(),end='')");assert r.returncode==0,r.stderr
   extra['NMK_native/'+target+'.c']=r.stdout
