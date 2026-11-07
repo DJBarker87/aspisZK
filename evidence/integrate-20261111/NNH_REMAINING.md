@@ -76,3 +76,8 @@ Final authoritative remaining list (through L399):
 All these owned items are Lean construction/transport; none needs new Kani.
 The new conditional theorem is a composition scaffold over unfinished host
 DATA, not the brief's final literal-host conditional theorem or final G0.
+
+Final accounting:400/400 actual authorized scopes completed;164 after restart.
+L400 retention and L401 export-first focused import both pass. Every remaining
+item above is still mathematically open here; none is excused by a library
+wait or relabelled as delivered. No Kani/extraction or new trust is needed.

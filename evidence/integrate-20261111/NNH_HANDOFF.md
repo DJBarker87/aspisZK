@@ -133,3 +133,29 @@ Final continuation work (through L399, gates still being retained):
   successful-source hash check, and verifies added imports. It writes a NEW
   retained export rather than overwriting the earlier one. Host launchers,
   reservations, shared workspaces, caps and timeouts are untouched.
+
+Final retention and handoff (L400–L401):
+- Source stages committed as34460051273 and326296cf1fe; no push. Subsequent
+  commit contains retention/check receipts and this final accounting.
+- Exactly400 actual completed Lean/link/audit scopes (L001–L401 except L048,
+  which never launched);164 since restart. Zero unresolved submissions,
+  zero extractions, zero Kani. NNH_FINAL_VALIDATION.json records all159 current
+  NNH Lean sources with matching successful source-hash receipts. This does not
+  mean every support root was separately raw-audited: only consumer roots were.
+- L400 retained272 module objects at
+  /home/dombarker/project-offloads/codex-cx-integrate-20261111/NNH_exports_resume_20261111.
+  It verified50816 imported objects and51679 selected search objects; exit0,
+  wall72.27s, peakRSS308132KiB, swaps0. Earlier export/cache retained intact.
+- L401 imports the final combined and statement modules with that NEW export
+  first in LEAN_PATH; exit0, wall4.405989621s, peakRSS6687188KiB, swaps0. Exact
+  source revision, dirty-source hashes, selected dependency/Aeneas pins and
+  cgroup limits are in each receipt. No cold/full unchanged release replay.
+- L398 consumer raw audit matches collect_axioms exactly for all four roots:
+  propext/Classical.choice/Quot.sound only. L397 focused combined import passes.
+  NNH_SCOPE_SUMMARIES.tsv provides one-line transcript summaries; raw receipts
+  carry section6 fields. No shipped source changed; no ELF rebuild triggered;
+  no key actions. Disk-exhaustion incident remains recorded; no cache deleted.
+- Target NOT established, top NOT assembled. Remaining items are exactly the
+  owned Lean constructions and external candidate gates in NNH_REMAINING.md
+  and per-field NNH_G0_MISSING.json. No LIB wait, row credit, stronger trust,
+  invented native observation, final soundness claim or hidden assumption.
