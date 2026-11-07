@@ -85,7 +85,9 @@ for n,t in files.items():
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['RSL_Base','RSL_Pool','RSL_Verifier']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind'] in ['audit','link']:modules += ['LIBB_ProofDriver','NFA_WALKER','NFA_MemoryLimit']
+elif x['kind'] in ['audit','link']:
+ modules += ['LIBB_ProofDriver','NFA_WALKER','NFA_MemoryLimit']
+ if x['kind']=='audit':modules += json.loads((b/'LIBB_AUDIT_MODULES.json').read_text())[int(x['module'].removeprefix('proof'))]
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
