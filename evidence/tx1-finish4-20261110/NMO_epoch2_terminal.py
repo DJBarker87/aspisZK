@@ -1,6 +1,6 @@
 """Fresh bounded-view windows; stop on any unexpected verdict, never resubmit."""
 from pathlib import Path
-import subprocess,sys,json,lzma,hashlib
+import subprocess,sys,json,lzma,hashlib,re
 E=Path(__file__).resolve().parent
 plan=json.loads((E/'NMO_EPOCH2_PLAN.json').read_text())
 windows=json.loads((E/'NMO_TERMINAL_WINDOWS.json').read_text())
@@ -11,7 +11,7 @@ for family in plan['terminal_order']:
  for role,suffix,bad in [(0,'',False),(1,'_reply_control',True),(2,'_argument_control',True),(3,'_footprint_control',True)]:
   if (E/'NMO_STOP_AFTER_SCOPE').exists():sys.exit(0)
   done=[json.loads(s)for s in (E/'NMO_EPOCH2_TERMINAL_VERDICTS.jsonl').read_text().splitlines()]if(E/'NMO_EPOCH2_TERMINAL_VERDICTS.jsonl').exists()else[]
-  old=[x for x in done if x['family']==family and x['role']==role and x['source_sha256']==source_hash]
+  old=[x for x in done if x['family']==family and x['role']==role and x['source_sha256']==source_hash and x.get('classification')!='PRE_VERIFICATION_HARNESS_SELECTION_ERROR']
   if old:
    assert len(old)==1 and old[0]['expected_verdict'],'Recover/split the failed shape; do not resubmit'
    continue
@@ -20,7 +20,10 @@ for family in plan['terminal_order']:
   ids=[i for i in plan['next_ids']if i not in occupied and i not in allocated]
   if not ids:
    print(json.dumps(dict(status='KANI_ID_BUDGET_EXHAUSTED',next_family=family,next_role=role,row_root=None)),flush=True);sys.exit(0)
-  i=ids[0];a=f'NMO_K{i:03}';w=windows[family];h='r1_semantic::NMO_terminal::'+w['harness']+suffix
+  i=ids[0];a=f'NMO_K{i:03}';w=windows[family]
+  short=('NMO_terminal' if family==0 and role else w['harness'])+suffix
+  assert re.search(r'fn '+re.escape(short)+r'\s*\(',source.decode()),'Preflight exact harness exists'
+  h='r1_semantic::NMO_terminal::'+short
   with(E/'NMO_EPOCH2_ALLOCATIONS.jsonl').open('a')as f:f.write(json.dumps(dict(id=i,attempt=a,family=family,role=role,source_sha256=source_hash))+'\n')
   subprocess.run([sys.executable,str(E/'NMO_kconfig.py'),a,h],check=True)
   subprocess.run([sys.executable,str(E/'NMO_run.py'),a])
