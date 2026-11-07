@@ -19,7 +19,7 @@ Planned native relation: actual parent returns parser Err unchanged, otherwise c
 - Observer is deployed literal None. No function-pointer comparison, arbitrary callback, writable static or Option<fn>-dependent success claim is admitted. Marker phase is checked without inspecting an Option value.
 - 57607 follows from SAME successful parse. Public<=1880 and Root0 concern 064's own inputs and are recorded as 241 caller clauses. NMF supplies the accepted headline occurrence outside the existing charged collision event, never an unrestricted failed-prefix fact.
 
-All entries remain planned until native controls and Lean gates pass.
+The064 entries passed native controls and worker gates L015–L021; ledger promotion is pending.241 entries below remain diagnostics.
 
 ## Native domain completeness classification
 
@@ -44,3 +44,6 @@ Allocator isolation after K028: the Box::new header back-step failed provenance.
 K029 direct allocation PASS; K030 omitted header-owner write and K031 corrupted scalar payload FAIL their semantic checks. K032 repeats the Box::new provenance failure on u64, isolating the mismatch from statement size. K033 direct typed allocation + Box::from_raw + retained nonobservable deallocation PASS; K034 omitted owner FAIL. This validates that limited constructor/channel, not Box::new or241. The next parent experiment replaces only the oracle's safe initialized Box construction with that validated path and keeps the original NMN_241_box_constructor name. Its full statement constructor is arbitrary over both enum variants/all scalar fields; its account-buffer/slot class remains diagnostic, not a full241 packet. Allocation failure still stops before any reply. No account/return-data effect is erased.
 
 K038 non-String union PASS on actual241; K039 reply, K040 argument, K041 required local write controls FAIL as intended. This covers all25 non-String ProgramError variants (Custom u32 arbitrary) in the explicitly restricted input class. Box constructor stretch now cuts the two diagnostic empty getters and all unexpected suffix calls; no whole-input-buffer, full242 packet or241 credit is inferred. These cuts isolate constructor/checked_add propagation from callee expansion and prevent cryptographic unwinding.
+
+## Further241 allocation isolation
+K058: CBMC139 on raw full-buffer parent. K059: arbitrary Box proof-buffer isolated constructor reached outer180s guard without verdict. K060: zero-initialized fixed-window proof-buffer constructor also CBMC139. Each is retired, earns no native credit, and is retained with its original source snapshot. The replacement does not claim full arbitrary buffers: only one initialized fixed byte is arbitrary and the remaining bytes are zero. The spare-capacity owner cell is a fresh LOCAL UnsafeCell outside every logical shared slice; no account/return-data write is erased. A smaller checkpoint constructor is an independent size isolation, not an unchanged proof-buffer rerun.

@@ -11,7 +11,7 @@ for job in manifest['jobs']:
  def metric(name):
   m=re.search(re.escape(name)+r':\s*(.*)',timing);return m[1] if m else None
  checks=raw.split('Failed Checks:',1)[1].split('VERIFICATION:-',1)[0].strip() if 'Failed Checks:' in raw else None
- receipt=dict(attempt=a,kind='kani',module=job['target'],command=['python3','NMN_gate.py',str(cfg)],native_command=job['config']['native_command'],exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms='N/A: Kani',timeout='CBMC timed out' in raw,failed_checks=checks,scope=manifest['scope'],actual_kani_invocation=(B/(a+'-kani-submitted.json')).exists())
+ receipt=dict(attempt=a,kind='kani',module=job['target'],command=['python3','NMN_gate.py',str(cfg)],native_command=job['config']['native_command'],exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms='N/A: Kani',timeout=r.returncode in [124,137] or 'CBMC timed out' in raw,failed_checks=checks,scope=manifest['scope'],actual_kani_invocation=(B/(a+'-kani-submitted.json')).exists())
  (dest/(a+'.receipt.json')).write_text(json.dumps(receipt,indent=1)+'\n')
  print(json.dumps({k:receipt[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','timeout']}),flush=True)
  # Retire a timeout and continue independent variant partitions; never retry it.

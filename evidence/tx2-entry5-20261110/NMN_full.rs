@@ -13,15 +13,16 @@ unsafe fn NMN_full_context(ptr:*const u8)->*const NMN_FullKey{unsafe{NMN_owner(p
 #[repr(C)]
 struct NMN_Tail {owner:UnsafeCell<*mut ()>,marker:u8}
 fn NMN_buffer<const N:usize>(owner:*mut ())->Vec<u8>{
- // Safe Box allocation, then exact Vec layout/capacity; the LOCAL log lives
- // only in spare capacity, outside every shared logical byte slice.
- if N==58295{
-  let bytes:[u8;58312]=kani::any();let marker=bytes[16];let b=Box::new(bytes);let p=Box::into_raw(b).cast::<u8>();
-  unsafe{p.add(58296).cast::<NMN_Tail>().write(NMN_Tail{owner:UnsafeCell::new(owner),marker});Vec::from_raw_parts(p,N,58312)}
- }else{
-  assert_eq!(N,1768);let bytes:[u8;1784]=kani::any();let marker=bytes[16];let b=Box::new(bytes);let p=Box::into_raw(b).cast::<u8>();
-  unsafe{p.add(1768).cast::<NMN_Tail>().write(NMN_Tail{owner:UnsafeCell::new(owner),marker});Vec::from_raw_parts(p,N,1784)}
- }
+ // Isolated initialized fixed window; all other logical bytes zero.
+ // This diagnostic does NOT quantify arbitrary full buffer contents.
+ let cap=if N==58295{58312}else{assert_eq!(N,1768);1784};
+ let layout=Layout::from_size_align(cap,16).unwrap();
+ let p=unsafe{NMN_ALLOCATOR.alloc_zeroed(layout)};
+ if p.is_null(){std::alloc::handle_alloc_error(layout);}
+ let marker:u8=kani::any();
+ unsafe{p.add(16).write(marker);let offset=if N==58295{58296}else{1768};
+  p.add(offset).cast::<NMN_Tail>().write(NMN_Tail{owner:UnsafeCell::new(owner),marker});
+  Vec::from_raw_parts(p,N,cap)}
 }
 unsafe fn NMN_tail(p:*const u8,n:usize)->*const NMN_Tail{
  let offset=if n==58295{58296}else{assert_eq!(n,1768);1768};unsafe{p.add(offset).cast()}

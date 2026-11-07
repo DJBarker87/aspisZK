@@ -15,3 +15,6 @@ K001/K027/K035/K036 timed-out shapes are retired; K002 unwind and K028/K032 Box:
 Own host workspace /home/dombarker/project-offloads/codex-cx-tx2-entry5-20261110; own target/TMP/cache retained. P6/D188 option-A transport and all ledger24 std/allocator/ABI/runtime/source-to-ELF obligations remain. RuntimeCpiReadonlyEntry7 stays PENDING/UNUSED. No shipped file, sibling/session-A worktree, key/wallet/account/fund/authority or release artifact changed; no push.
 
 Budget usage in NMN_ATTEMPTS.jsonl; work continues within80 Kani/60 Lean/0 extraction. Source/command/status/wall/RSS/swap/axioms and exact inputs are retained per attempt.
+
+## Worker gate update
+TX2:064 candidate NMN_064.root passed combined ledger24/headline import L015, raw standard-axioms own/headline audits L019/L020, fixtures L018 and NFX L021 (17366 modules; zero mismatches). No ledger credit claimed. TX2:241 remains diagnostic only; its source prefix/continuation/value fold is parameterized by full242 reply, never by a successful242 law. Further suffix and original-buffer experiments continue under remaining budgets.

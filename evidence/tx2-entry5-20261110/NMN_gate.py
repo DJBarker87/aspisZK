@@ -65,6 +65,6 @@ out['all_crate_features']=[dict(name=p['name'],version=p['version'],source=p.get
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 (B/(a+'-kani-submitted.json')).write_text(json.dumps({'command':x['native_command'],'offline':os.environ['CARGO_NET_OFFLINE']})+'\n')
-status=subprocess.run(x['native_command'],cwd=B).returncode
+status=subprocess.run(['/usr/bin/timeout','--signal=TERM','--kill-after=5s','90s',*x['native_command']],cwd=B).returncode
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)

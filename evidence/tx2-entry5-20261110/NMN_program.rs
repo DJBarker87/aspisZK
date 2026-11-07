@@ -652,3 +652,117 @@ fn NMN_241_slot_argument(){NMN_241_sloterror::<true,false,false>();}
 fn NMN_241_slot_write(){NMN_241_sloterror::<false,true,false>();}
 
 include!("NMN_full.rs");
+
+// Unicode scalar payload partition, not an unbounded String certificate.
+fn NMN_validate_unicode(program:&Pubkey,accounts:&[OwnedAccount],data:&[u8],slot:Result<u64,PE>)->Result<ValidatedAsqa,PE>{
+ let p=program as *const Pubkey as *const NMN_Key;
+ let u:u32=kani::any();kani::assume(u<=0x10ffff && !(0xd800..=0xdfff).contains(&u));
+ let c=char::from_u32(u).unwrap();let mut bytes=[0u8;4];let n=c.encode_utf8(&mut bytes).len();
+ let text=unsafe{String::from_utf8_unchecked(bytes[..n].to_vec())};
+ let error=PE::BorshIoError(text);let sig=NMN_sig(&error);
+ let mut log=unsafe{*(*p).log.get()};
+ if !log.omit{
+  log.entered=true;log.program=program;log.accounts=accounts.as_ptr();log.count=accounts.len();log.data=data.as_ptr();log.len=data.len();log.slot=slot.unwrap();log.reply=sig;
+  if n>0{let i:usize=kani::any();kani::assume(i<n);log.focus=true;log.focus_i=i;log.focus_byte=bytes[i];}
+  unsafe{*(*p).log.get()=log;}
+ }
+ Err(error)
+}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_unicode)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_window(){NMN_241_error::<false,false,false>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_unicode)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_reply(){NMN_241_error::<false,false,true>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_unicode)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_argument(){NMN_241_error::<true,false,false>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_unicode)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_write(){NMN_241_error::<false,true,false>();}
+
+
+fn NMN_241_unicodeslot<const ARG:bool,const OMIT:bool,const IGNORE:bool>(){
+ let zero=NMN_ErrorSig{tag:0,custom:0,ptr:core::ptr::null(),len:0,cap:0};
+ let seed=NMN_Log241{entered:false,program:core::ptr::null(),accounts:core::ptr::null(),count:0,data:core::ptr::null(),len:0,slot:0,reply:zero,omit:OMIT,statement:core::ptr::null(),focus_i:0,focus_byte:0,focus:false,slot_error:NMN_ErrorSig{tag:0,custom:0,ptr:core::ptr::null(),len:0,cap:0},slot_is_error:false};
+ let key=NMN_Key{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(seed)};
+ let other=NMN_Key{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(seed)};
+ // Account buffers are unread on this branch. Empty payloads are an explicit
+ // diagnostic restriction, not a full241 domain or native packet.
+ let accounts:[OwnedAccount;7]=core::array::from_fn(|_|OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(kani::any()),bytes:Ok(Vec::new())});
+ let mut data:[u8;320]=kani::any();data[0]=b'A';data[1]=b'S';data[2]=b'Q';data[3]=b'8';
+ let u:u32=kani::any();kani::assume(u<=0x10ffff && !(0xd800..=0xdfff).contains(&u));let c=char::from_u32(u).unwrap();let mut bytes=[0u8;4];let text=c.encode_utf8(&mut bytes);let input=PE::BorshIoError(text.to_owned());let before_slot=NMN_sig(&input);
+ let result=stage2_owned(if ARG{&other.key}else{&key.key},&accounts,&data,Err(input));
+ let log=unsafe{*key.log.get()};assert!(log.entered,"242 call record write");
+ assert_eq!(log.program,&key.key as *const Pubkey);assert_eq!(log.accounts,accounts.as_ptr());assert_eq!(log.count,7);
+ assert_eq!(log.data,data.as_ptr());assert_eq!(log.len,data.len());assert!(log.slot_is_error);NMN_same(log.slot_error,before_slot);
+ let error=result.expect_err("242 rejection propagates");
+ NMN_same(NMN_sig(&error),if IGNORE{zero}else{log.reply});
+ if log.focus{match &error{PE::BorshIoError(text)=>assert_eq!(text.as_bytes()[log.focus_i],log.focus_byte,"returned String byte window"),_=>panic!("String variant lost")}}
+}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_error_nostring)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_slot_error(){NMN_241_unicodeslot::<false,false,false>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_error_nostring)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_slot_reply(){NMN_241_unicodeslot::<false,false,true>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_error_nostring)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_slot_argument(){NMN_241_unicodeslot::<true,false,false>();}
+#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1,NMN_unexpected_encoder)]
+#[kani::stub(aspis_r1_cost_probe::verifier::tx2_authenticated::<crate::SolanaDigest>,NMN_unexpected_auth)]
+#[kani::stub(emit_result,NMN_unexpected_emit)]#[kani::stub(crate::error,NMN_unexpected_error)]
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_error_nostring)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_241_unicode_slot_write(){NMN_241_unicodeslot::<false,true,false>();}
+
+fn NMN_prefix_stop(_: &Pubkey,_:&[OwnedAccount],_:&[u8],_:Result<u64,PE>)->Result<ValidatedAsqa,PE>{panic!("242 must not be entered before guard");}
+fn NMN_guard<const MODE:u8,const BAD:bool>(){
+ let key=Pubkey::new_from_array(kani::any());
+ let accounts:[OwnedAccount;9]=core::array::from_fn(|_|OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(kani::any()),bytes:Ok(Vec::new())});
+ let mut data:[u8;320]=kani::any();let n:usize=kani::any();let count:usize;let length:usize;
+ if MODE==0{kani::assume(n<=9 && n!=7);count=n;length=320;}
+ else if MODE==1{kani::assume(n<4);count=7;length=n;}
+ else{kani::assume(n<4);count=7;length=320;data[0]=b'A';data[1]=b'S';data[2]=b'Q';data[3]=b'8';let x:u8=kani::any();kani::assume(x!=data[n]);data[n]=x;}
+ let result=stage2_owned(&key,&accounts[..count],&data[..length],Ok(kani::any()));
+ assert_eq!(result,Err(if BAD{PE::InvalidAccountData}else{PE::InvalidInstructionData}),"native prefix guard result");
+}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_count_pass(){NMN_guard::<0,false>();}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_count_control(){NMN_guard::<0,true>();}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_short_pass(){NMN_guard::<1,false>();}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_short_control(){NMN_guard::<1,true>();}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_magic_pass(){NMN_guard::<2,false>();}
+#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_guard_magic_control(){NMN_guard::<2,true>();}
