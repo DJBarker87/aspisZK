@@ -87,3 +87,20 @@ L292 exposed the known split-tactic discriminant issue; L297 uses explicit Bool
 constructors and passes. No cap, timeout, heartbeat or frozen source changed.
 These are canonical source folds, not yet native candidate roots: fixed CLOSED
 child interpretation and native carrier linkage remain required.
+
+Revision2 native-support replay L308-L337 uses new names NMS_R2N_* and
+imports no historical RSL-dependent NMS objects. L325 proves the exact
+std-clone interpretation = canonical RS.ofCloned; L341 composes the full
+E003 getter observation with that equality at the original account.
+L340 proves the format-allocation abort/prefix law before any log event.
+L332 transports the complete interpreted typed getter observations to the
+parametric Dom064 triple using D1/D2, without a global Root0 premise.
+L342 compiles the typed cross-carrier242 suffix with explicit CLOSED-site
+link obligations. L343 fixes those source models as carrier images and
+proves ScannerExtent from the SAME interpreted source observation plus
+CLOSED scanner width; this remains source-site interpretation support,
+not a new native child certificate. L345 proves the finite after-auth source
+factor by rfl. L344's own indentation matcher was corrected to an anchored
+line match; no shared infrastructure changed. L347/L349 whole suffix
+definitional normalization failed and that shape is retired; exact lift
+inspection and head-by-head composition are the replacement.
