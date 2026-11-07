@@ -1,0 +1,25 @@
+{"attempt": "NMM_L015", "exit_status": 0, "wall_seconds": 21.94403662486002, "peak_rss_kib": "6353596", "swaps": "0", "print_axioms": ["'NMM_OutcomeCases.complete' does not depend on any axioms"]}
+theorem NMM_OutcomeCases.complete : ∀ {A E : Type} (actual model : core.result.Result A E),
+  (∀ (e : E), actual = core.result.Result.Err e → model = core.result.Result.Err e) →
+    (∀ (a : A), actual = core.result.Result.Ok a → model = core.result.Result.Ok a) → actual = model :=
+fun {A E} actual model errors values =>
+  core.result.Result.casesOn (motive := fun t => actual = t → actual = model) actual
+    (fun a h =>
+      Eq.ndrec (motive := fun x => actual = x → x = model) (fun h => Eq.symm (values a h)) (Eq.symm h) (Eq.refl actual))
+    (fun e h =>
+      Eq.ndrec (motive := fun x => actual = x → x = model) (fun h => Eq.symm (errors e h)) (Eq.symm h) (Eq.refl actual))
+    (Eq.refl actual
+...
+theorem NMM_OutcomeCases.complete : ∀ {A E : Type} (actual model : core.result.Result A E),
+  (∀ (e : E), actual = core.result.Result.Err e → model = core.result.Result.Err e) →
+    (∀ (a : A), actual = core.result.Result.Ok a → model = core.result.Result.Ok a) → actual = model :=
+fun {A E} actual model errors values =>
+  core.result.Result.casesOn (motive := fun t => actual = t → actual = model) actual
+    (fun a h =>
+      Eq.ndrec (motive := fun x => actual = x → x = model) (fun h => Eq.symm (values a h)) (Eq.symm h) (Eq.refl actual))
+    (fun e h =>
+      Eq.ndrec (motive := fun x => actual = x → x = model) (fun h => Eq.symm (errors e h)) (Eq.symm h) (Eq.refl actual))
+    (Eq.refl actual)
+'NMM_OutcomeCases.complete' does not depend on any axioms
+
+Running as unit: run-re2292dff58fd4999928ba5d8262a6cd6.scope; invocation ID: f22101f09ca04303b4bfb72ecf98038e

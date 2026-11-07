@@ -1,0 +1,29 @@
+{"attempt": "NMM_L031", "exit_status": 0, "wall_seconds": 21.31536562484689, "peak_rss_kib": "6369800", "swaps": "0", "print_axioms": ["'NMM_TraceState.initial_valid' does not depend on any axioms", "'NMM_TraceState.push_valid' depends on axioms: [propext]", "'NMM_TraceState.stopped_prefix' does not depend on any axioms"]}
+@[defeq] theorem NMM_TraceState.initial_valid : ∀ (E : Type), Valid (initial E) :=
+⋯
+'NMM_TraceState.initial_valid' does not depend on any axioms
+theorem NMM_TraceState.push_valid : ∀ {E : Type} (s : State E) (ordinal : ℕ) (event : E),
+  Valid s → ordinal = s.count → Valid (push s ordinal event) :=
+⋯
+'NMM_TraceState.push_valid' depends on axioms: [propext]
+theorem NMM_TraceState.stopped_prefix : ∀ {A E : Type} (s : State E),
+  Valid s →
+    s.count ≤ 21 → ∃ events, stop s = Outcome.stopped events ∧ ∃ n ≤ 21, List.map Prod.fst events = List.range n :=
+⋯
+'NMM_TraceState.stopped_prefix' does not depend on any axioms
+
+...
+@[defeq] theorem NMM_TraceState.initial_valid : ∀ (E : Type), Valid (initial E) :=
+⋯
+'NMM_TraceState.initial_valid' does not depend on any axioms
+theorem NMM_TraceState.push_valid : ∀ {E : Type} (s : State E) (ordinal : ℕ) (event : E),
+  Valid s → ordinal = s.count → Valid (push s ordinal event) :=
+⋯
+'NMM_TraceState.push_valid' depends on axioms: [propext]
+theorem NMM_TraceState.stopped_prefix : ∀ {A E : Type} (s : State E),
+  Valid s →
+    s.count ≤ 21 → ∃ events, stop s = Outcome.stopped events ∧ ∃ n ≤ 21, List.map Prod.fst events = List.range n :=
+⋯
+'NMM_TraceState.stopped_prefix' does not depend on any axioms
+
+Running as unit: run-r5a74c712e9d3470f8c29893f5dac4c7d.scope; invocation ID: 31d6742f63a6483d842aefd3683ba0e2

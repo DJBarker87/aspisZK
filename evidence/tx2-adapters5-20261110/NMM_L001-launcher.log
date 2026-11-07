@@ -1,0 +1,56 @@
+{"attempt": "NMM_L001", "exit_status": 1, "wall_seconds": 25.603168981149793, "peak_rss_kib": "6324708", "swaps": "0", "print_axioms": ["'NMM_LaneTranscription.adopted_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneTranscription.adopted_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneTranscription.complete_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: njq: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+NMM_generated/NMM_LaneTranscription.lean:14:70: error: unsupported `do` element (kind: Lean.Parser.Term.doIf)
+  if h : bytes.val.length = 768 then 
+    let p : NLK_LaneInput.Sized := ⟨bytes, h⟩
+    match NLK_LaneHeader.sourcePrefix p with
+    | .Err error =>
+      ok (.Err error)
+    | .Ok fields =>
+      let decoded ← NLK_LaneDigest.source (NLK_LaneInput.root p)
+      match decoded with
+      | .Err _ =>
+        ok (.Err .InvalidAccountData)
+      | .Ok root =>
+        let frontier ← NLK_LaneLoopSource.run p fields.next NLK_LaneLoop.levels NLK_LaneLoop.zero
+        ok
+     
+...
+pletion.finish fields.bump fields.master fields.lane fields.next root NLK_LaneTable.final
+                frontier).1
+  else
+    ok (.Err .InvalidAccountData)
+NMM_generated/NMM_LaneTranscription.lean:31:53: error: Tactic `rfl` failed: The left-hand side
+  value bytes
+is not definitionally equal to the right-hand side
+  NLK_LaneProgram.reference bytes
+
+bytes : Slice U8
+⊢ value bytes = NLK_LaneProgram.reference bytes
+NMM_generated/NMM_LaneTranscription.lean:44:70: error: Tactic `rfl` failed: The left-hand side
+  owned allocator before reservation owner bytes
+is not definitionally equal to the right-hand side
+  NLK_LaneProgram.owned allocator before reservation owner bytes
+
+S : Type
+allocator : S2W_D189Wrappers.Allocator S
+before : S
+reservation : NP6_StdModel.Reservation
+owner : ℕ
+bytes : Slice U8
+⊢ owned allocator before reservation owner bytes = NLK_LaneProgram.owned allocator before reservation owner bytes
+theorem NMM_LaneTranscription.adopted_value : ∀ (bytes : Slice U8), value bytes = NLK_LaneProgram.reference bytes :=
+⋯
+'NMM_LaneTranscription.adopted_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneTranscription.adopted_owned : ∀ {S : Type} (allocator : S2W_D189Wrappers.Allocator S) (before : S)
+  (reservation : NP6_StdModel.Reservation) (owner : ℕ) (bytes : Slice U8),
+  owned allocator before reservation owner bytes = NLK_LaneProgram.owned allocator before reservation owner bytes :=
+⋯
+'NMM_LaneTranscription.adopted_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneTranscription.complete_value : ∀ (bytes : Slice U8),
+  value bytes = ok (NLK_LaneProgram.referenceValue bytes) :=
+⋯
+'NMM_LaneTranscription.complete_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf39f6b04c0c84090a15339af7e8af086.scope; invocation ID: 4f3c842440a742bba7581d6bb1fa6b86
