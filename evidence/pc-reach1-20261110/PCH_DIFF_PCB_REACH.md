@@ -1,5 +1,75 @@
-# PCB comparison blocked
+# PCB comparison
 
-PCB_REACH assesses 71 rows in a conservative graph; it is not compiler authority.
-PCH has no admitted graph and therefore no comparable verdicts or claimed differences.
-All 71 PCB assessments are retained without adoption. No row was reclassified from that assessment.
+PCB_REACH is a conservative source-graph assessment of 71 class-A rows. It does not supply a compiled-instance exclusion. PCH has 278 UNRESOLVED verdicts after adding the corrected handler roots and retaining unknown edges under (c-g)(5). Consequently none of PCB's alternative-only assessments is promoted to exclusion. Every assessed PCB row remains UNRESOLVED in PCH; its earlier shortest source-name path is not an exact instance witness.
+
+| POOL:002 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:003 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:004 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:006 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:008 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:009 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:010 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:011 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:012 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:013 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:014 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:015 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:019 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:022 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:032 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:033 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:041 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:042 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:047 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:056 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:058 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:073 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:074 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:075 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:076 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:078 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:082 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:083 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:087 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:088 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:089 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:097 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:102 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:107 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:109 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:110 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:112 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:113 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:115 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:116 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:117 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:118 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:120 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:121 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:122 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:123 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:124 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:125 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:128 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:132 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:139 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:140 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:141 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:142 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:143 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:145 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:147 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:149 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:150 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:154 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:155 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:156 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:158 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:265 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:266 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:271 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:272 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:273 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:274 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:275 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| POOL:276 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |

@@ -30,3 +30,12 @@ records both separately. Metadata is not evidence that those cfg arms were emitt
 Shared bodies (Stream A): no per-body findings or status changes. The compiler
 identity correction also applies when citing these retained core/statement artifacts.
 No shared-body reachability assessment was attempted or duplicated.
+
+
+## Round 2
+
+PCH-F1 is RESOLVED by the lead compiler correction and the fresh B003 exact-ELF replay. PCH-F2: a resolved generic-template-to-instance association and full handler closure are not established by the three project MIR/IR modules. The compiler supergraph retains all such edges universally, so every row stays UNRESOLVED and no exclusion is proposed. Shared/verifier observations are routed in PCH_SHARED_FOR_STREAM_A.json (119 rows), never as exclusions.
+
+PCH-F3 resource procedure: B004 was mistakenly launched while A006 was active; the own B004 scope was stopped immediately, receives no credit and consumes a build slot. The client now has an exclusive own-job guard. A006 was separately stopped at about 6.1 GiB process RSS to split serialization; A007 uses artifact locations/text hashes and streaming compressed JSON, rather than duplicating raw compiler text. No memory limit was raised and no memory-killed or timed-out shape was rerun.
+
+Own-input errors retained: B001/A002 wrong ELF filename, A004 build.rs source mapping, A005 unqualified process_instruction MIR header. Repairs preserve or strengthen validation. The aborted local exploratory repeated-regex query was replaced by the artifact census and is not evidence.

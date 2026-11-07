@@ -1,7 +1,8 @@
 """Serial PCH scope client; never resubmits a submitted transport failure."""
-import pathlib,subprocess,json,sys,time,shlex,hashlib
+import pathlib,subprocess,json,sys,time,shlex,hashlib,os,atexit
 E=pathlib.Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-pc-reach1-cache-20261110';H='dombarker@100.108.41.90'
 a,kind,script=sys.argv[1:]; assert kind in ['build','audit']
+guard=E/'PCH_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,a.encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def remote(code,submitted=False):
  for i in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,'python3'],input=code,text=True,capture_output=True)
@@ -15,7 +16,8 @@ for i in range(7):
  disk=int(r.stdout)
  if disk>=40_000_000_000:break
  if i==6:raise RuntimeError('disk under 40 GB')
- time.sleep(600)
+ 
+ for _ in range(10):time.sleep(60)
 for i in range(11):
  r=remote(f'''import subprocess,pathlib,sys
 b=pathlib.Path({B!r});p=b/{(a+'-barrier-'+str(i)+'.log')!r}
@@ -28,10 +30,13 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
   if i==0:time.sleep(30);continue
   raise RuntimeError('infrastructure: missing reservation JSON')
  if r.returncode==0 and ad.get('allowed') is True:break
- if (r.returncode==78 or ad.get('allowed') is False) and i<10:print(a+' reservation wait',flush=True);time.sleep(180);continue
+ if (r.returncode==78 or ad.get('allowed') is False) and i<10:
+  print(a+' reservation wait',flush=True)
+  for _ in range(3):time.sleep(60)
+  continue
  raise RuntimeError('infrastructure admission failure')
 files={script:(E/script).read_text()}
-for n in ['PCH_BUILD_INPUT.json','PCH_FROZEN.json.xz']:
+for n in ['PCH_BUILD_INPUT.json','PCH_FROZEN.json.xz','PCH_GRAPH_INPUT.json.xz']:
  p=E/n
  if p.exists():files[n]=p.read_bytes().hex()
 r=remote(f'''import pathlib,json
