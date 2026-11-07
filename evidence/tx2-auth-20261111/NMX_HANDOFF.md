@@ -1,0 +1,10 @@
+# NMX TX2:233 handoff
+
+Target not yet established. Stage0 in progress: fresh frozen authenticate_asq8_accounts extraction under(bm); OPEN217/234 remain full-strength parameters pending NMM candidates. Four returned Box owners must remain. Budget2 extraction/40 Lean-link-audit/10 Kani only for(bc) exits. Frozen crates/program-r1/lock4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Poolb936275465. Own workspace codex-cx-tx2-auth-20261111; seed NLX export and coherent SInt2 closure read-only. No shipped edits/trust changes/push.
+
+## Stage0/1
+E001 Charon succeeded but own validation rejected an absent, unreachable AccountInfo declaration (exit1,130.414s,539576KiB,swap0); no extraction credit. E002 changed opacity to isolate CLOSED helper loops and repaired the own assertion. E002 Charon/Aeneas exit0,78.654s,627792KiB,swap0. Actual233, key/data getters, error closures and seeds are loop-free: no(bc) exit needs Kani. Exact amended Pool payload, deployed features, lock graph, source/tool/output pins retained. External axiom templates are provenance only, never compiled.
+
+FIRST-stage child interface NMX_RowSpec_233.RowSpec_233 reuses NMS_ committed full-strength spec, namespace/import renames only, with hashes in NMX_ROWSPEC_PROVENANCE.json. Four complete Box payloads/owners, freshness, fixed deployed Ops, full ProgramError, returned external frame and ordered source trace OR stopped prefix survive. NMX_OwnedPackets L003 and RowSpec L004 compile; standard axioms only. L001 failed on an omitted transitive cache path; L002 was preflight only/unsubmitted; coherent NMN fallback selection repaired and pinned, no shared infrastructure change. This interface is NOT a root. NMS may copy it now; its previous NMS version is definitionally the same modulo namespace.
+
+Pending stage2: fresh-emission/coherent-owner equality, source-order child parameter fold, concrete full carrier interpretation and closed-child installation; stage3 awaits actual NMM217/234 candidates (absent at reviewed snapshot). No closure requested.
