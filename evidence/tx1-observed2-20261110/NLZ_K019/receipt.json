@@ -1,0 +1,86 @@
+{
+  "attempt": "NLZ_K019",
+  "kind": "kani",
+  "module": "r1_semantic::NLZ_native::segment_begin_state_cut",
+  "sources": [
+    "NLZ_gate.py",
+    "NLZ_SOURCE_PINS.json",
+    "NLZ_FROZEN_FILE_PINS.json",
+    "NLZ_BASE_EXPECTED.json"
+  ],
+  "command": [
+    "python3",
+    "NLZ_gate.py",
+    "NLZ_K019.json"
+  ],
+  "env": {
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed2-20261110/NLZ_tmp",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed2-20261110/NLZ_target",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "timeout": 180,
+  "expected_time": "Optimized compile then exact rejection prefix; no field multiplication or SHA",
+  "root_package": "aspis-r1-cost-probe",
+  "metadata_features": "aspis-r1-cost-probe/private-leaf-salts,aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-tx1-observed2-20261110/NLZ_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-tx1-observed2-20261110/NLZ_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_semantic::NLZ_native::segment_begin_state_cut",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NLZ_K019-graph-check.json",
+    "NLZ_K019-graph.stderr",
+    "NLZ_K019-graph.json",
+    "NLZ_K019-source-check.json",
+    "NLZ_K019-lock-check.json",
+    "NLZ_K019-baseline-check.json"
+  ],
+  "source_revision": "8efa7e1653253f6a9c21e81c7dd5c403c7b9725c",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 55.98336350079626,
+  "peak_rss_kib": "1564096",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r60a273b7e4fa469b88800dcf473983de.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1754935296",
+  "source_hashes": {
+    "NLZ_gate.py": "a39d47b0afecbdbe23caa02e2e6aa85587720501cc6be57599d0fd6c0bfec4d8",
+    "NLZ_SOURCE_PINS.json": "738dc89fe0ff4243bb406f6c1083ba463889309567501752bac2bea2a2b1ceb9",
+    "NLZ_FROZEN_FILE_PINS.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "NLZ_BASE_EXPECTED.json": "28c7f2f49b9d6eeee34597e62500905d4d111821358cfb15ec514c6f7e4e327f"
+  },
+  "print_axioms": "N/A: kani"
+}

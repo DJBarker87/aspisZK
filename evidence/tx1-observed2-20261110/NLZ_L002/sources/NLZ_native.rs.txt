@@ -1,0 +1,21 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)] struct Hash;
+impl Digest32 for Hash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("unentered digest")}}
+fn parse_error<'a>(_:&'a[u8])->Result<Prefix<'a>,Error>{Err(Error::Terminal)}
+fn check(bad:bool){
+ let bytes:[u8;13831]=kani::any();
+ let transition=super::NKQ_rejections::transition();let transfer=super::NKQ_rejections::transfer();
+ let public=Public::Transfer(&transfer,&transition);
+ let out=super::verify_observed(public,&bytes,Hash,None);
+ let good=matches!(out,Err(Error::Terminal));
+ if bad{assert!(!good)}else{assert!(good)}
+}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_cut(){check(false)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_control(){check(true)}

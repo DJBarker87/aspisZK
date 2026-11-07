@@ -1,0 +1,203 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)] struct Hash;
+impl Digest32 for Hash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("unentered digest")}}
+use aspis_core::field::{M31,CM31};
+fn digest()->[M31;8]{let r:[u32;8]=kani::any();[M31(r[0]),M31(r[1]),M31(r[2]),M31(r[3]),M31(r[4]),M31(r[5]),M31(r[6]),M31(r[7])]}
+pub(crate) fn transition()->aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1{
+ use aspis_statement::pool_v1::{pair_tree_profile::*,PoolV1PairVerifiedAfterstateV1};
+ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:core::array::from_fn(|_|digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:core::array::from_fn(|_|digest())}}
+}
+pub(crate) fn transfer()->aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{
+ aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
+}
+
+fn parse_error<'a:'a>(_:&'a[u8])->Result<Prefix<'a>,Error>{Err(Error::Terminal)}
+fn unreachable_public<H:Digest32>(_:Public<'_>,_:H,_:&[u8;32])->Result<SemanticTranscript<H>,Error>{panic!("suffix public")}
+fn unreachable_begin<H:Digest32>(_:&Prefix<'_>,_:&mut SemanticTranscript<H>)->Result<Challenges,Error>{panic!("suffix begin")}
+fn unreachable_finish<H:Digest32>(_:Public<'_>,_:Prefix<'_>,_:SemanticTranscript<H>,_:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{panic!("suffix finish")}
+fn check(bad:bool){
+ let bytes:[u8;13831]=kani::any();
+ let transition=transition();let transfer=transfer();
+ let public=Public::Transfer(&transfer,&transition);
+ let out=super::verify_observed(public,&bytes,Hash,None);
+ let good=matches!(out,Err(Error::Terminal));
+ if bad{assert!(!good)}else{assert!(good)}
+}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_cut(){check(false)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_control(){check(true)}
+
+// ACTUAL verify_observed, child calls replaced by local-record oracles.
+// Hash is instantiated ONLY by LoggedHash; generic oracle casts access that
+// concrete local record. No writable static, callback value assertion or SHA.
+#[repr(transparent)] #[derive(Clone,Copy)] struct LoggedHash(*mut ());
+impl Digest32 for LoggedHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("no SHA in parent cuts")}}
+struct ParentLog<'a>{
+ public:Public<'a>, bytes:&'a[u8], stop:u8, bad:bool, mode:u8,
+ phase:u8, error:Error, initial:([u8;32],u8),after:([u8;32],u8),
+ challenges:Challenges, row:usize,offset:usize,
+}
+unsafe fn local<'a,H:Digest32>(hash:H)->&'a mut ParentLog<'a>{
+ assert_eq!(core::mem::size_of::<H>(),core::mem::size_of::<LoggedHash>());
+ let ptr=unsafe{(*(&hash as *const H as *const LoggedHash)).0};
+ unsafe{&mut *(ptr as *mut ParentLog<'a>)}
+}
+fn same_public_value(a:Public<'_>,b:Public<'_>)->bool{match(a,b){
+ (Public::Transfer(p,t),Public::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),
+ (Public::Withdrawal(p,t),Public::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),_=>false}}
+fn assert_segment(good:bool,log:&ParentLog<'_>,mode:u8){if log.mode==mode&&log.bad{assert!(!good)}else{assert!(good)}}
+fn parsed<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
+ assert_eq!(bytes.len(),13831);
+ let root:&[u8;32]=bytes[..32].try_into().unwrap();
+ let mut off=32usize;
+ let mut rows:[&[u8];27]=[&bytes[..0];27];
+ for row in 0..27{let len=5+crate::r1_wire::row_shape(row as u8).unwrap().1;rows[row]=&bytes[off..off+len];off+=len;}
+ assert_eq!(off,13831);
+ Ok(crate::r1_wire::NLZ_factory::prefix(root,rows))
+}
+fn prefix_frame(prefix:&Prefix<'_>,log:&ParentLog<'_>)->bool{
+ let mut off=32usize;let mut expected_off=0;let mut expected_len=0;
+ for row in 0..27{let len=5+crate::r1_wire::row_shape(row as u8).unwrap().1;if row==log.row{expected_off=off;expected_len=len;}off+=len;}
+ let rec=crate::r1_wire::NLZ_factory::record(prefix,log.row);
+ let expected=&log.bytes[expected_off..expected_off+expected_len];
+ rec.len()==expected.len()&&core::ptr::eq(rec.as_ptr(),expected.as_ptr())&&rec[log.offset]==expected[log.offset]&&core::ptr::eq(prefix.c1_root.as_ptr(),log.bytes.as_ptr())&&prefix.c1_root[log.offset%32]==log.bytes[log.offset%32]
+}
+fn public_cut<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<SemanticTranscript<H>,Error>{
+ let log=unsafe{local(hash)};
+ assert_segment(log.phase==0&&same_public_value(public,log.public)&&core::ptr::eq(root.as_ptr(),log.bytes.as_ptr())&&root[log.offset%32]==log.bytes[log.offset%32],log,0);
+ log.phase=1;
+ if log.stop==1{return Err(log.error)}
+ Ok(crate::r1_wire::NLZ_factory::make(hash,log.initial.0,log.initial.1))
+}
+fn begin_cut<H:Digest32>(prefix:&Prefix<'_>,t:&mut SemanticTranscript<H>)->Result<Challenges,Error>{
+ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(t);let log=unsafe{local(hash)};
+ assert_segment(log.phase==1&&state==log.initial.0&&row==log.initial.1&&prefix_frame(prefix,log),log,1);
+ log.phase=2;
+ *t=crate::r1_wire::NLZ_factory::make(hash,log.after.0,log.after.1);
+ if log.stop==2{Err(log.error)}else{Ok(log.challenges)}
+}
+fn finish_cut<H:Digest32>(public:Public<'_>,prefix:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
+ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(&t);let log=unsafe{local(hash)};
+ assert_segment(log.phase==2&&same_public_value(public,log.public)&&state==log.after.0&&row==log.after.1&&c==log.challenges&&prefix_frame(&prefix,log),log,2);
+ log.phase=3;Err(log.error)
+}
+fn arbitrary_q()->QM31{let w:[u32;4]=kani::any();QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn arbitrary_challenges()->Challenges{Challenges{lambda:arbitrary_q(),chi:arbitrary_q(),theta:arbitrary_q(),zc:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],mu:arbitrary_q(),eta:arbitrary_q()}}
+fn arbitrary_error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+fn parent_check(stop:u8,mode:u8,bad:bool){
+ let bytes:[u8;13831]=kani::any();let transition=transition();let transfer=transfer();let public=Public::Transfer(&transfer,&transition);
+ let row:usize=kani::any();kani::assume(row<27);let offset:usize=kani::any();kani::assume(offset<5+crate::r1_wire::row_shape(row as u8).unwrap().1);
+ let before=bytes[offset];
+ let mut log=ParentLog{public,bytes:&bytes,stop,bad,mode,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),row,offset};
+ let hash=LoggedHash(&mut log as *mut _ as *mut ());
+ let result=super::verify_observed(public,&bytes,hash,None);
+ assert_segment(matches!(result,Err(e) if e==log.error)&&log.phase==stop&&bytes[offset]==before,&log,3);
+}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_public_cut(){parent_check(1,0,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_public_control(){parent_check(1,0,true)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_begin_cut(){parent_check(2,1,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_begin_control(){parent_check(2,1,true)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_finish_cut(){parent_check(3,2,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_finish_control(){parent_check(3,2,true)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_public_return_cut(){parent_check(1,3,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_public_return_control(){parent_check(1,3,true)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_begin_return_cut(){parent_check(2,3,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_begin_return_control(){parent_check(2,3,true)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_finish_return_cut(){parent_check(3,3,false)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn segment_finish_return_control(){parent_check(3,3,true)}
