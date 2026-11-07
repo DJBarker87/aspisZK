@@ -1,0 +1,43 @@
+{"attempt": "NMB_L028", "exit_status": 0, "wall_seconds": 25.335239553824067, "peak_rss_kib": "5995984", "swaps": "0", "print_axioms": ["'NMB_CheckpointExtent.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_CheckpointExtent.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (↑(x.buffers (x.handles 2).1)).length = 1768 :=
+fun x ops p d saved accepted =>
+  let ⟨ca, h✝⟩ := AdapterRw.Cuts.stage1_checkpoint_length ops p (NMB_ThreeSnapshots.first x) d saved accepted
+  let ⟨bytes, h✝¹⟩ := h✝
+  let ⟨ic, right✝⟩ := h✝¹
+  let ⟨read, right✝¹⟩ := right✝
+  have eqc := ok.inj (Eq.trans (Eq.symm ic) (NMB_FirstIndex.source x).right.right);
+  Eq.ndrec (motive := fun ca =>
+    (NMB_ThreeSnapsh
+...
+theorem NMB_CheckpointExtent.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (↑(x.buffers (x.handles 2).1)).length = 1768 :=
+fun x ops p d saved accepted =>
+  let ⟨ca, h✝⟩ := AdapterRw.Cuts.stage1_checkpoint_length ops p (NMB_ThreeSnapshots.first x) d saved accepted
+  let ⟨bytes, h✝¹⟩ := h✝
+  let ⟨ic, right✝⟩ := h✝¹
+  let ⟨read, right✝¹⟩ := right✝
+  have eqc := ok.inj (Eq.trans (Eq.symm ic) (NMB_FirstIndex.source x).right.right);
+  Eq.ndrec (motive := fun ca =>
+    (NMB_ThreeSnapshots.first x).index_usize 2#usize = ok ca →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ca = ok (core.result.Result.Ok bytes) →
+        (↑(x.buffers (x.handles 2).1)).length = 1768)
+    (fun ic read =>
+      let ⟨copied, h✝²⟩ := S2W.SnapshotJoin.data_success ops (x.snapshot 2 1768 1768) bytes read
+      let ⟨stored, right✝²⟩ := h✝²
+      id
+        (fun stored =>
+          Decidable.casesOn instDecidableOr
+            (fun h =>
+              let ⟨⟩ := core.result.Result.Ok copied
+              Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok copied)) stored)
+            fun h => Or.elim h id id)
+        stored)
+    (Eq.symm eqc) ic read
+'NMB_CheckpointExtent.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-recce8ea44bba41518fc0ee671b622588.scope; invocation ID: 1974aae21356407e8252a644bfd4b2f4

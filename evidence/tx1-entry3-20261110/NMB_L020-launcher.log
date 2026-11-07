@@ -1,0 +1,53 @@
+{"attempt": "NMB_L020", "exit_status": 0, "wall_seconds": 20.05557062290609, "peak_rss_kib": "6014600", "swaps": "0", "print_axioms": ["'NMB_ThreeSnapshots.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_ThreeSnapshots.entry_first' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_ThreeSnapshots.result : ∀ (x : NMB_Input.Input),
+  (G x (ok ()) (ok ()) (ok ())).result = ok (first x, final x) :=
+fun x =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (NJU_Log.erase_bind (NMB_Snapshot.G (ready x 0 []) 0 58295 58295 (ok ())) fun __x => do
+                let __x_1 ← NMB_Snapshot.G __x.2 1 1880 1880 (ok ())
+                let __x_2 ← NMB_Snapshot.G __x_1.2 2 1768 1768 (ok ())
+                pure (NLQ_SnapshotFold.owned3 __x.1 __x_1.1 __x_2.1, __x_2.2))
+              (congrArg (Bind.bind (NMB_Snapshot.G (ready x 0 []) 0 58295 58295 (ok ())).result)
+                (funext fun a =>
+                  Eq.t
+...
+       (congrFun'
+                    (congrArg Eq
+                      (bind_tc_ok (x.snapshot 1 1880 1880, returned (ready x 1 [x.snapshot 0 58295 58295]) 1 1880 1880)
+                        fun y => do
+                        let __x ← (NMB_Snapshot.G y.2 2 1768 1768 (ok ())).result
+                        ok (NLQ_SnapshotFold.owned3 (x.snapshot 0 58295 58295) y.1 __x.1, __x.2)))
+                    (ok (first x, final x))))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let __x ← _a
+                              match __x with
+                                | (cp, s3) =>
+                                  ok
+                                    (NLQ_SnapshotFold.owned3 (x.snapshot 0 58295 58295) (x.snapshot 1 1880 1880) cp,
+                                      s3)) =
+                            ok (first x, final x))
+                        (NMB_SnapshotReturn.result x 2 2 1768 1768 [x.snapshot 0 58295 58295, x.snapshot 1 1880 1880])))
+                    (Eq.refl do
+                      let __x ←
+                        ok
+                            (x.snapshot 2 1768 1768,
+                              returned (ready x 2 [x.snapshot 0 58295 58295, x.snapshot 1 1880 1880]) 2 1768 1768)
+                      match __x with
+                        | (cp, s3) =>
+                          ok
+                            (NLQ_SnapshotFold.owned3 (x.snapshot 0 58295 58295) (x.snapshot 1 1880 1880) cp,
+                              s3))))))))))
+'NMB_ThreeSnapshots.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_ThreeSnapshots.entry_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra6f070b1310c46ddab224115ec22721c.scope; invocation ID: 40ab230c993e4ef5a0ced119937dddf6

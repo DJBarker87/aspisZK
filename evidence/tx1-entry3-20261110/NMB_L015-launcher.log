@@ -1,0 +1,47 @@
+{"attempt": "NMB_L015", "exit_status": 0, "wall_seconds": 4.531099813990295, "peak_rss_kib": "3419624", "swaps": "0", "print_axioms": ["'NMB_MetadataCopy.write' does not depend on any axioms", "'NMB_MetadataCopy.copy' depends on axioms: [propext, Quot.sound]"]}
+theorem NMB_MetadataCopy.copy : ∀ (s : State) (r : ℕ → Account) (a t : ℕ) (src : List UInt8),
+  NLF_CopyStep.run (install s r) a t src = outcome r (NLF_CopyStep.run s a t src) :=
+fun s r a t src =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (match _a with
+              | (s', Except.error e) => NLF_CopyStep.Outcome.returned s' (Except.error e)
+              | (s', Except.ok g) =>
+                have p := NLF_SdkModel.deref s' g;
+                if src.length = p.bytes.length then
+                  have v := { bytes := NLF_CopyValue.copy src p.bytes 0 src.length, money := p.money };
+                  match NLF_SdkModel.release (NLF_ViewLaws.write s' g v) g 
+...
+r) (Except.ok a) with
+                                            | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+                                            | Except.error a => NLF_CopyStep.Outcome.abort (install post r)))
+                                        (Eq.symm h)
+                                        (Eq.refl
+                                          (NLF_SdkModel.release
+                                            (NLF_ViewLaws.write post g
+                                              (let __src := NLF_SdkModel.deref post g;
+                                              {
+                                                bytes :=
+                                                  NLF_CopyValue.copy src (NLF_SdkModel.deref post g).bytes 0 src.length,
+                                                money := __src.money }))
+                                            g)))
+                                    (Eq.refl
+                                      (NLF_SdkModel.release
+                                        (NLF_ViewLaws.write post g
+                                          (let __src := NLF_SdkModel.deref post g;
+                                          {
+                                            bytes :=
+                                              NLF_CopyValue.copy src (NLF_SdkModel.deref post g).bytes 0 src.length,
+                                            money := __src.money }))
+                                        g))))))))
+                    (Eq.symm h_1) h)
+                (Eq.refl v))
+            (Eq.symm h) (Eq.refl (try_borrow_mut_data s a t)))
+        (Eq.refl (try_borrow_mut_data s a t))))
+'NMB_MetadataCopy.write' does not depend on any axioms
+'NMB_MetadataCopy.copy' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-ra6757f94c54f42789966bf8c29939ecb.scope; invocation ID: 5557762c7f304681a704772745eb701e

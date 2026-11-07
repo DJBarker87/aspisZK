@@ -1,0 +1,51 @@
+{"attempt": "NMB_L008", "exit_status": 1, "wall_seconds": 34.35075841285288, "peak_rss_kib": "5985964", "swaps": "0", "print_axioms": ["'NMB_SnapshotAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMB_SnapshotAcquire.payload' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_SnapshotAcquire.release' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_SnapshotAcquire.lean:11:37: error(lean.unknownIdentifier): Unknown identifier `NMB_Input.sdk`
+NMB_generated/NMB_SnapshotAcquire.lean:11:37: error(lean.unknownIdentifier): Unknown identifier `NMB_Input.sdk`
+NMB_generated/NMB_SnapshotAcquire.lean:11:37: error(lean.unknownIdentifier): Unknown identifier `NMB_Input.sdk`
+NMB_generated/NMB_SnapshotAcquire.lean:10:67: error: unsolved goals
+case free
+x : NMB_Input.Input
+t a : ℕ
+owned : List Owned
+⊢ (x.sdk.cells (x.sdk.accounts a).data).writer = none
+
+case fresh
+x : NMB_Input.Input
+t a : ℕ
+owned : List Owned
+⊢ t ∉ (x.sdk.cells (x.sdk.accounts a).data).readers
+
+case bound
+x : NMB_Input.Input
+t a : ℕ
+owned : List Owned
+⊢ (x.sdk.cells 
+...
+ a).data).readers.length < 9223372036854775807
+theorem NMB_SnapshotAcquire.acquire : ∀ (x : NMB_Input.Input) (t a : ℕ) (owned : List Owned),
+  try_borrow_data (ready x t owned).sdk a (ready x t owned).next =
+    (acquired (ready x t owned) a, Except.ok (NMB_Snapshot.guard (ready x t owned) a)) :=
+fun x t a owned =>
+  shared_result (ready x t owned).sdk ((ready x t owned).sdk.accounts a).data (ready x t owned).next (id sorry)
+    (id sorry) (id sorry)
+theorem NMB_SnapshotAcquire.payload : ∀ (x : NMB_Input.Input) (t a : ℕ) (owned : List Owned),
+  (deref (acquired (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)).bytes =
+    S2W_ReturnedCheckpoint.nativeBytes (x.buffers (x.handles a).1) :=
+fun x t a owned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a.bytes = S2W_ReturnedCheckpoint.nativeBytes (x.buffers (x.handles a).1))
+        (have this := shared_deref (ready x t owned).sdk ((ready x t owned).sdk.accounts a).data (ready x t owned).next;
+        this)))
+    (Eq.refl ((ready x t owned).sdk.cells ((ready x t owned).sdk.accounts a).data).payload.bytes)
+theorem NMB_SnapshotAcquire.release : ∀ (x : NMB_Input.Input) (t a : ℕ) (owned : List Owned),
+  NLF_SdkModel.release (acquired (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a) =
+    Except.ok (ready x t owned).sdk :=
+fun x t a owned =>
+  shared_release (ready x t owned).sdk ((ready x t owned).sdk.accounts a).data (ready x t owned).next
+    (Eq.refl ((ready x t owned).sdk.cells ((ready x t owned).sdk.accounts a).data).writer)
+'NMB_SnapshotAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMB_SnapshotAcquire.payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_SnapshotAcquire.release' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r60b53ded9f7248ab9eada62917039c34.scope; invocation ID: 4e7040f7f9e9427792cc0fa32bf843c3

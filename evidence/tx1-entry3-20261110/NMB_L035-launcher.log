@@ -1,0 +1,39 @@
+{"attempt": "NMB_L035", "exit_status": 0, "wall_seconds": 21.438263191841543, "peak_rss_kib": "5995576", "swaps": "0", "print_axioms": ["'NMB_SnapshotConflict.conflict' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_SnapshotConflict.conflict : ∀ (s : NMB_Snapshot.State) (a lo hi : ℕ) (allocation : Result Unit),
+  try_borrow_data s.sdk a s.next = (s.sdk, Except.error ProgramError.accountBorrowFailed) →
+    have value :=
+      have __src := s.input.descriptors a;
+      { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+        executable := __src.executable,
+        length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+        bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+    G s a lo hi allocation =
+      { result := ok (value, { input := s.in
+...
+                    bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed },
+                  { input := s.input, sdk := s.sdk, next := s.next + 1,
+                    owned :=
+                      s.owned ++
+                        [{ key := (s.input.descriptors a).key, owner := (s.input.descriptors a).owner,
+                            is_signer := (s.input.descriptors a).is_signer,
+                            is_writable := (s.input.descriptors a).is_writable,
+                            executable := (s.input.descriptors a).executable,
+                            length :=
+                              core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+                            bytes :=
+                              core.result.Result.Err
+                                AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed }] }),
+            events :=
+              [Event.acquire s a s.next s.sdk (ok (Except.error ProgramError.accountBorrowFailed)),
+                Event.returned s a lo hi
+                  (ok
+                    { key := (s.input.descriptors a).key, owner := (s.input.descriptors a).owner,
+                      is_signer := (s.input.descriptors a).is_signer,
+                      is_writable := (s.input.descriptors a).is_writable,
+                      executable := (s.input.descriptors a).executable,
+                      length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+                      bytes :=
+                        core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed })] })))
+'NMB_SnapshotConflict.conflict' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd6edced8269a4a558a31cbb6a547b876.scope; invocation ID: fce8c20990e34095aec03f5c4741836d

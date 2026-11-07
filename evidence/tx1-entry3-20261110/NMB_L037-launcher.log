@@ -1,0 +1,59 @@
+{"attempt": "NMB_L037", "exit_status": 0, "wall_seconds": 20.530719752889127, "peak_rss_kib": "6004980", "swaps": "0", "print_axioms": ["'NMB_Guard.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Guard.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Guard.source : ∀ (data : List U8) (count : ℕ), reject data count = reference data count :=
+fun data count =>
+  List.casesOn (motive := fun t => data = t → reject data count = reference data count) data
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congr
+                    (congrArg or
+                      (Eq.trans
+                        (congrArg not
+                          (Eq.trans
+                            (congr
+                              (congrArg or
+                                (Eq.trans
+                                  (Decidable.decide.con
+...
+
+            (congr
+              (congrArg Iff
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (congr
+                          (congrArg or
+                            (Eq.trans
+                              (congrArg not
+                                (Eq.trans
+                                  (congr
+                                    (congrArg or
+                                      (Eq.trans
+                                        (Decidable.decide.congr_simp (data = [3#u8, 10#u8]) False (eq_false ten))
+                                        (decide_false instDecidableFalse)))
+                                    (Eq.trans
+                                      (Decidable.decide.congr_simp (data = [3#u8, 11#u8]) False (eq_false eleven))
+                                      (decide_false instDecidableFalse)))
+                                  (Bool.or_self false)))
+                              Bool.not_false))
+                          (Eq.trans
+                            (Decidable.decide.congr_simp (count ≠ 3) True
+                              (Eq.trans (congrArg Not (eq_false n)) not_false_eq_true))
+                            (decide_true instDecidableTrue)))
+                        (Bool.or_self true)))
+                    false)
+                  Bool.true_eq_false))
+              (Eq.trans
+                (congr (congrArg And (Eq.trans (congr (congrArg Or (eq_false ten)) (eq_false eleven)) (or_self False)))
+                  (eq_false n))
+                (and_self False)))
+            (iff_self False))
+'NMB_Guard.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Guard.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7f8699a9ca248b0bde2d4c5bc531ef1.scope; invocation ID: 893c8640e7f64535bf1b1e2b8f63979b

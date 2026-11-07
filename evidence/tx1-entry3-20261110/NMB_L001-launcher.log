@@ -1,0 +1,55 @@
+{"attempt": "NMB_L001", "exit_status": 0, "wall_seconds": 5.5686765420250595, "peak_rss_kib": "3397016", "swaps": "0", "print_axioms": ["'NMB_Metadata.put' does not depend on any axioms", "'NMB_Metadata.wrap' depends on axioms: [propext, Quot.sound]", "'NMB_Metadata.deref' does not depend on any axioms", "'NMB_Metadata.release' depends on axioms: [propext, Quot.sound]"]}
+NMB_generated/NMB_Metadata.lean:18:31: warning: This simp argument is unused:
+  install
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵i̵n̵s̵t̵a̵l̵l̵,̵r̵e̵p̵l̵y̵,̵N̵L̵F̵_̵S̵d̵k̵M̵o̵d̵e̵l̵.̵p̵u̵t̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲N̲L̲F̲_̲S̲d̲k̲M̲o̲d̲e̲l̲.̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMB_generated/NMB_Metadata.lean:18:39: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp_all [install,r̵e̵p̵l̵y̵,̵ ̲NLF_SdkModel.put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NMB_Metadata.wrap : ∀ (s : State) (r : ℕ → Account) (i t : ℕ) (k : Kind),
+  NLF_SdkModel.w
+...
+post =>
+                    {
+                      accounts := fun a =>
+                        { key := (r a).key, owner := (r a).owner, data := (post.accounts a).data,
+                          lamports := (post.accounts a).lamports, signer := (r a).signer, writable := (r a).writable,
+                          executable := (r a).executable, rentEpoch := (r a).rentEpoch },
+                      cells := post.cells })
+                  (match x with
+                  | Except.error e => Except.error e
+                  | Except.ok c => Except.ok (NLF_SdkModel.put s g.cell c)))
+            (fun heq =>
+              id
+                (Eq.refl
+                  (Except.ok
+                    (NLF_SdkModel.put
+                      {
+                        accounts := fun a =>
+                          { key := (r a).key, owner := (r a).owner, data := (s.accounts a).data,
+                            lamports := (s.accounts a).lamports, signer := (r a).signer, writable := (r a).writable,
+                            executable := (r a).executable, rentEpoch := (r a).rentEpoch },
+                        cells := s.cells }
+                      g.cell c))))
+            (Eq.symm h)
+            (Eq.refl
+              (match g.kind with
+              | Kind.shared => dropShared (s.cells g.cell) g.token
+              | Kind.exclusive => dropExclusive (s.cells g.cell) g.token)))
+        (Eq.refl
+          (match g.kind with
+          | Kind.shared => dropShared (s.cells g.cell) g.token
+          | Kind.exclusive => dropExclusive (s.cells g.cell) g.token))))
+'NMB_Metadata.put' does not depend on any axioms
+'NMB_Metadata.wrap' depends on axioms: [propext, Quot.sound]
+'NMB_Metadata.deref' does not depend on any axioms
+'NMB_Metadata.release' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r3f6f9d640c0145a1bc9e8a81cd6abf5b.scope; invocation ID: c04d9fc4278340e7af68b778a3f9fdb7
