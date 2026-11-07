@@ -27,3 +27,5 @@ Attempt 49606: PV_W5_F32Count, passed pinned focused replay.
 Attempt 49607: PV_W5_F32AlignEntry, passed pinned focused replay.
 
 Attempt 49608: PV_W5_F32Call, passed pinned focused replay.
+
+Attempt 49609: PV_W5_F32PanicLeaf, passed pinned focused replay.
