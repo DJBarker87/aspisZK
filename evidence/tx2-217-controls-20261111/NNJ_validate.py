@@ -48,6 +48,10 @@ assert not subprocess.check_output(['git','diff','4bb3b3f51e16b4525f1d10336e2b0b
 assert not subprocess.check_output(['git','diff','b936275465600469312d1f058cdc91ea2a11f3dc','HEAD','--','programs/aspis-pool'])
 assert not subprocess.check_output(['git','diff','--','crates','programs','Cargo.lock'])
 assert all(p.stat().st_size<=20_000_000 for p in E.rglob('*') if p.is_file())
+for group in [['NNJ_K001','NNJ_K002','NNJ_K003','NNJ_K004'],['NNJ_K013','NNJ_K014','NNJ_K015']]:
+ fingerprints=[json.loads((E/a/'receipt.json').read_text())['source_hashes']['NNJ_HARNESSES.patch'] for a in group]
+ assert len(set(fingerprints))==1,('contract/real/stub body configuration drift',group)
+assert sha((E/'NNJ_S2W_run_host.py').read_bytes())==json.loads((E/'NNJ_SEED.json').read_text())['imported_inputs']['S2W_run_host.py']
 output=dict(results=results,source_assignment_exact=True,shipped_frozen=True,new_Lean_roots=[],print_axioms='N/A: no new Lean declarations; no Lean scopes authorized beyond recording',rows_credited=[],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 (E/'NNJ_VALIDATION.json').write_text(json.dumps(output,indent=1)+'\n')
 print(json.dumps(dict(validated=sum(x['status']=='validated' for x in results),uncredited=sum(x['status']!='validated' for x in results))))
