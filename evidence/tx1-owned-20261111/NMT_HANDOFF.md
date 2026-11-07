@@ -2,6 +2,14 @@
 
 Continuation authorized 2026-11-07: zero new extraction; 250 new Lean/link/audit scopes (L061–L310); restricted Kani20 unchanged. Reuse E001–E003. Binding order345 then328 then094; each complete parameterized fold before next. Whole-tree erasure/normalization L049/L051 retired. New work splits call occurrences into small modules carrying parent state. Canonical RSL RowSpec087/094/328/345 are the targets; prior proposed NMT specs are support only. No new candidate yet.
 
+Resumed stage1 (L061–L119): canonical spec chain, full error/account and
+byte/key carriers, source-route factoring, first distinct/readonly/checkpoint/
+getter steps, symbolic zero increment/induction, and30 invertible structural
+transports compile. These are SUPPORT; no completed345 observable fold or
+candidate. Native domains are explicit; generic emitted/std supplements are
+not expanded Kani passes. Remaining steps are active. No328/094 row proof
+started before345 completion. See NMT_RSL_ADOPTION.md and per-scope receipts.
+
 Prior run record follows unchanged:
 
 # NMT final handoff
