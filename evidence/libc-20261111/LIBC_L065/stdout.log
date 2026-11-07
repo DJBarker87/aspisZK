@@ -1,0 +1,101 @@
+LIBC_generated/LIBC_Checkpoint.lean:13:3: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Aeneas.Std.core.clone.Clone.mk` has 2 explicit field, but only 1 was provided
+LIBC_generated/LIBC_Checkpoint.lean:14:40: error: Ambiguous term
+  Digest
+Possible interpretations:
+  CheckpointBytes5Effect.Digest : Type
+  
+  RSL.Digest : Type
+LIBC_generated/LIBC_Checkpoint.lean:17:4: warning: declaration uses `sorry`
+LIBC_generated/LIBC_Checkpoint.lean:20:4: warning: declaration uses `sorry`
+LIBC_generated/LIBC_Checkpoint.lean:23:4: warning: declaration uses `sorry`
+LIBC_generated/LIBC_Checkpoint.lean:46:69: error(lean.unknownIdentifier): Unknown identifier `call`
+LIBC_generated/LIBC_Checkpoint.lean:47:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (a, next) ←
+      do
+        let b ← (digest env).digest () (AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.1))
+        ok (b, [(AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.1), b)])
+    let (a, next) ←
+      do
+        let b ← (digest env).digest () (AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.2))
+        ok (b, next ++ [(AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.2), b)])
+    let (a, next) ←
+      do
+        let b ←
+          (digest env).digest ()
+              (AspisR1Stage2.WireTx2.checksumParts (CheckpointBytes5Writer.bodySlice (prepared a) (accumulator a) a a))
+        ok
+            (b,
+              next ++
+                [(AspisR1Stage2.WireTx2.checksumParts
+                      (CheckpointBytes5Writer.bodySlice (prepared a) (accumulator a) a a),
+                    b)])
+    ok (CheckpointBytes5Writer.finish (prepared a) (accumulator a) a a a, next)
+is not definitionally equal to the right-hand side
+  ok (output a env, calls a env)
+
+a : Args
+env : Env
+⊢ (do
+      let (a, next) ←
+        do
+          let b ← (digest env).digest () (AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.1))
+          ok (b, [(AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.1), b)])
+      let (a, next) ←
+        do
+          let b ← (digest env).digest () (AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.2))
+          ok (b, next ++ [(AspisR1Stage2.WireTx2.singletonParts (LIBC_Bytes.raw a.2.2.2), b)])
+      let (a, next) ←
+        do
+          let b ←
+            (digest env).digest ()
+                (AspisR1Stage2.WireTx2.checksumParts
+                  (CheckpointBytes5Writer.bodySlice (prepared a) (accumulator a) a a))
+          ok
+              (b,
+                next ++
+                  [(AspisR1Stage2.WireTx2.checksumParts
+                        (CheckpointBytes5Writer.bodySlice (prepared a) (accumulator a) a a),
+                      b)])
+      ok (CheckpointBytes5Writer.finish (prepared a) (accumulator a) a a a, next)) =
+    ok (output a env, calls a env)
+LIBC_generated/LIBC_Checkpoint.lean:46:74: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Writer.writer, ̲run_bind, ̲run_read, ̲run_pure, ̲call,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Aeneas.Std.uncurry,
+  ̲ ̲ ̲ ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Checkpoint.lean:46:85: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵W̵r̵i̵t̵e̵r̵.̵w̵r̵i̵t̵e̵r̵,̵r̵u̵n̵_̵b̵i̵n̵d̵,̵r̵u̵n̵_̵r̵e̵a̵d̵,̵r̵u̵n̵_̵p̵u̵r̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲W̲r̲i̲t̲e̲r̲.̲w̲r̲i̲t̲e̲r̲,̲ ̲r̲u̲n̲_̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲_̲r̲e̲a̲d̲,̲ ̲r̲u̲n̲_̲p̲u̲r̲e̲,̲ ̲c̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Checkpoint.lean:56:56: error: Ambiguous term
+  Digest
+Possible interpretations:
+  CheckpointBytes5Effect.Digest : Type
+  
+  RSL.Digest : Type
+LIBC_generated/LIBC_Checkpoint.lean:56:56: error: Ambiguous term
+  Digest
+Possible interpretations:
+  CheckpointBytes5Effect.Digest : Type
+  
+  RSL.Digest : Type
+LIBC_generated/LIBC_Checkpoint.lean:56:56: error: Ambiguous term
+  Digest
+Possible interpretations:
+  CheckpointBytes5Effect.Digest : Type
+  
+  RSL.Digest : Type
+'LIBC_Checkpoint.returns' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+LIBC_generated/LIBC_Checkpoint.lean:65:14: error(lean.unknownIdentifier): Unknown constant `call`
+'LIBC_Checkpoint.run_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBC_Checkpoint.source_program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBC_Checkpoint.no_growth' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBC_Checkpoint.graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
