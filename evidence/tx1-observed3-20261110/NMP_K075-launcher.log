@@ -1,0 +1,46 @@
+{"attempt": "NMP_K075", "exit_status": 1, "wall_seconds": 2.2273715648334473, "peak_rss_kib": "224076", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ve a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 0.98s
+Checking harness r1_semantic::NMP_havoc::modifies_violation...
+
+VERIFICATION RESULT:
+ ** 1 of 94 failed (1 unreachable)
+Failed Checks: Check that *var_11 is assignable
+ File: "crates/aspis-r1-cost-probe/src/NMP_havoc.rs", line 19, in r1_semantic::NMP_havoc::bad_modifies::<13831>::{closure#2}::{closure#1}
+
+VERIFICATION:- FAILED
+Verification Time: 0.07022146s
+
+Manual Harness Summary:
+Verification failed for - r1_semantic::NMP_havoc::modifies_violation
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1f640e269cdb4c9999137cfd537737ca.scope; invocation ID: d7b9c5ea1a604973b8a71dd7993b47ae

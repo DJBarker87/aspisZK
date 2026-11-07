@@ -1,0 +1,13 @@
+import NMP_ObservedState
+import NLJ_ObservedInitial
+set_option autoImplicit false
+#print AspisR1PublicPreparation.aspis_core.Digest32
+#print AspisR1PublicPreparation.r1_wire.Challenges
+#print AspisR1PublicPreparation.r1_wire.Prefix
+#print AspisR1PublicPreparation.r1_wire.SemanticTranscript
+#print AspisR1PublicPreparation.r1_semantic.Verified
+#print AspisR1PublicPreparation.r1_wire.Error
+#print AspisR1PublicPreparation.aspis_core.field.CM31
+#print AspisR1PublicPreparation.aspis_core.field.QM31
+#print AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+#print AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public

@@ -1,0 +1,89 @@
+{
+  "attempt": "NMP_K049",
+  "kind": "kani",
+  "module": "r1_semantic::NMP_native::returning_3_transfer_argument",
+  "sources": [
+    "NMP_gate.py",
+    "NMP_SOURCE_PINS.json",
+    "NMP_FROZEN_FILE_PINS.json",
+    "NMP_BASE_EXPECTED.json"
+  ],
+  "command": [
+    "python3",
+    "NMP_gate.py",
+    "NMP_K049.json"
+  ],
+  "env": {
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_tmp",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "timeout": 180,
+  "expected_time": "Optimized compilation then CBMC actual parent with arbitrary child cut replies; no SHA or products",
+  "root_package": "aspis-r1-cost-probe",
+  "metadata_features": "aspis-r1-cost-probe/private-leaf-salts,aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_semantic::NMP_native::returning_3_transfer_argument",
+    "--output-format",
+    "terse",
+    "-Z",
+    "function-contracts"
+  ],
+  "collect": [
+    "NMP_K049-graph-check.json",
+    "NMP_K049-graph.stderr",
+    "NMP_K049-graph.json",
+    "NMP_K049-source-check.json",
+    "NMP_K049-lock-check.json",
+    "NMP_K049-baseline-check.json",
+    "NMP_K049-all-features.json"
+  ],
+  "source_revision": "422f1b5ccb0b4e6c05caad03d9e241b25a2f06f4",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 20.53581475117244,
+  "peak_rss_kib": "665644",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2f26b7729027430e821d5c85423da757.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1039761408",
+  "source_hashes": {
+    "NMP_gate.py": "132b41da99d2e5aa9dc33ad1b2f38caaa08476f260e2e799cb0c9d6546df467e",
+    "NMP_SOURCE_PINS.json": "b02fe8ac97cc897e91f7009188d76e09204fa1c60bed4a02201ce24d72c84755",
+    "NMP_FROZEN_FILE_PINS.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "NMP_BASE_EXPECTED.json": "a9ce91a61b31fef6aa185d7469dc3e04c43fdee376b8d0702279b43eb30f49cc"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,19 @@
+from pathlib import Path
+import json,shutil,hashlib,difflib
+B=Path(__file__).resolve().parent;S=B/'NMP_src'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+patch='';expected={}
+for parent,module in [('r1_semantic.rs','NMP_native'),('r1_wire.rs','NMP_factory')]:
+ n='crates/aspis-r1-cost-probe/src/'+parent;p=S/n
+ suffix='\n#[cfg(kani)]\n#[path = "'+module+'.rs"]\npub(crate) mod '+module+';\n'
+ before=p.read_text()
+ if before.endswith(suffix):before=before[:-len(suffix)]
+ expected[n]=hashlib.sha256(before.encode()).hexdigest();p.write_text(before+suffix)
+ patch+=''.join(difflib.unified_diff(before.splitlines(True),p.read_text().splitlines(True),fromfile='a/'+n,tofile='b/'+n))
+ for mod in ([module,'NMP_helpers'] if module=='NMP_native' else [module]):
+  q=p.with_name(mod+'.rs');q.write_text((B/(mod+'.rs.txt')).read_text())
+  patch+=''.join(difflib.unified_diff([],q.read_text().splitlines(True),fromfile='/dev/null',tofile='b/'+str(q.relative_to(S))))
+(B/'NMP_HARNESSES.patch').write_text(patch);(B/'NMP_HARNESSES.patch.sha256').write_text(sha(B/'NMP_HARNESSES.patch')+'\n')
+allpins={str(p.relative_to(S)):sha(p) for root in [S/'crates',S/'programs'] for p in root.rglob('*') if p.is_file()}
+(B/'NMP_SOURCE_PINS.json').write_text(json.dumps(allpins,indent=1));(B/'NMP_FROZEN_FILE_PINS.json').write_text('{}');(B/'NMP_BASE_EXPECTED.json').write_text(json.dumps(expected,indent=1))
+print('Installed NMP cfg-only harnesses; hashes and patch recorded')

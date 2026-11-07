@@ -1,0 +1,25 @@
+{"attempt": "NMP_L011", "exit_status": 0, "wall_seconds": 4.135809007100761, "peak_rss_kib": "4723844", "swaps": "0", "print_axioms": ["'AspisR1.NMP_BlockCalls179.construct' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_BlockCalls179.construct' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_BlockCalls179.construct : ∀ {H : Type} (D : aspis_core.Digest32 H)
+  (before : transcript.Transcript H) (row tag : U8) (payload : Slice U8) (absorbed value final : Std.Array U8 32#usize),
+  160#u8 + row = ok tag →
+    D.digest before.hash (NGT_NBA_Transcript.absorbParts before.state tag payload) = ok absorbed →
+      D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 1#u8) = ok value →
+        D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 2#u8) = ok final →
+          Nonempty (NGT_NBL_BlockTrace.Block D before row payload) :=
+fun {H} D before row tag pay
+...
+'AspisR1.NMP_BlockCalls179.construct' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_BlockCalls179.construct : ∀ {H : Type} (D : aspis_core.Digest32 H)
+  (before : transcript.Transcript H) (row tag : U8) (payload : Slice U8) (absorbed value final : Std.Array U8 32#usize),
+  160#u8 + row = ok tag →
+    D.digest before.hash (NGT_NBA_Transcript.absorbParts before.state tag payload) = ok absorbed →
+      D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 1#u8) = ok value →
+        D.digest before.hash (NGT_NBA_Transcript.readParts absorbed 2#u8) = ok final →
+          Nonempty (NGT_NBL_BlockTrace.Block D before row payload) :=
+fun {H} D before row tag payload absorbed value final tagCall absorbCall readCall advanceCall =>
+  Nonempty.intro
+    { tag := tag, tagCall := tagCall, absorbed := absorbed, value := value, final := final, absorbCall := absorbCall,
+      readCall := readCall, advanceCall := advanceCall }
+
+Running as unit: run-r63c9c243823b4e78b7cb988ac8822f0d.scope; invocation ID: 34e4cc58721f47acb5df78674c5d64a3

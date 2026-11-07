@@ -1,0 +1,122 @@
+structure AspisR1PublicPreparation.aspis_core.Digest32 (Self : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.aspis_core.Digest32.coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self
+  AspisR1PublicPreparation.aspis_core.Digest32.digest : Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+constructor:
+  AspisR1PublicPreparation.aspis_core.Digest32.mk {Self : Type} (coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self)
+    (digest :
+      Self →
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+          Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :
+    AspisR1PublicPreparation.aspis_core.Digest32 Self
+structure AspisR1PublicPreparation.r1_wire.Challenges : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.r1_wire.Challenges.lambda : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.r1_wire.Challenges.chi : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.r1_wire.Challenges.theta : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.r1_wire.Challenges.zc : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+      10#usize
+  AspisR1PublicPreparation.r1_wire.Challenges.mu : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.r1_wire.Challenges.eta : AspisR1PublicPreparation.aspis_core.field.QM31
+constructor:
+  AspisR1PublicPreparation.r1_wire.Challenges.mk (lambda chi theta : AspisR1PublicPreparation.aspis_core.field.QM31)
+    (zc : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize)
+    (mu eta : AspisR1PublicPreparation.aspis_core.field.QM31) : AspisR1PublicPreparation.r1_wire.Challenges
+structure AspisR1PublicPreparation.r1_wire.Prefix : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.r1_wire.Prefix.c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+  AspisR1PublicPreparation.r1_wire.Prefix.records : Aeneas.Std.Array (Aeneas.Std.Slice Aeneas.Std.U8) 27#usize
+constructor:
+  AspisR1PublicPreparation.r1_wire.Prefix.mk (c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (records : Aeneas.Std.Array (Aeneas.Std.Slice Aeneas.Std.U8) 27#usize) : AspisR1PublicPreparation.r1_wire.Prefix
+structure AspisR1PublicPreparation.r1_wire.SemanticTranscript (H : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.state : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.hash : H
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.next_row : Aeneas.Std.U8
+constructor:
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.mk {H : Type} (state : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (hash : H) (next_row : Aeneas.Std.U8) : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+structure AspisR1PublicPreparation.r1_semantic.Verified (H : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.r1_semantic.Verified.roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+      2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.challenges : AspisR1PublicPreparation.r1_wire.Challenges
+  AspisR1PublicPreparation.r1_semantic.Verified.alpha : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+      10#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.claims : Aeneas.Std.Array
+      (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.extra : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+      29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.before_z1 : Aeneas.Std.Array
+      AspisR1PublicPreparation.aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.state_before_z0 : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.z : Aeneas.Std.Array
+      AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+constructor:
+  AspisR1PublicPreparation.r1_semantic.Verified.mk {H : Type}
+    (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize)
+    (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+    (alpha : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize)
+    (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+    (extra before_z1 : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize)
+    (state_before_z0 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (z : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint 2#usize)
+    (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H) :
+    AspisR1PublicPreparation.r1_semantic.Verified H
+inductive AspisR1PublicPreparation.r1_wire.Error : Type
+number of parameters: 0
+constructors:
+AspisR1PublicPreparation.r1_wire.Error.Allocation : AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.RowOrder : Aeneas.Std.U8 → Aeneas.Std.U8 → AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.InvalidRow : AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.Tag : Aeneas.Std.U8 → AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.Length : Aeneas.Std.U8 → AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.NonCanonical : Aeneas.Std.U8 →
+  Aeneas.Std.Usize → AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.Boundary : Aeneas.Std.Usize → AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.Terminal : AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints : AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.TrailingBytes : AspisR1PublicPreparation.r1_wire.Error
+AspisR1PublicPreparation.r1_wire.Error.Public : AspisR1PublicPreparation.r1_wire.Error
+structure AspisR1PublicPreparation.aspis_core.field.CM31 : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.aspis_core.field.CM31.a : AspisR1PublicPreparation.aspis_core.field.M31
+  AspisR1PublicPreparation.aspis_core.field.CM31.b : AspisR1PublicPreparation.aspis_core.field.M31
+constructor:
+  AspisR1PublicPreparation.aspis_core.field.CM31.mk (a b : AspisR1PublicPreparation.aspis_core.field.M31) :
+    AspisR1PublicPreparation.aspis_core.field.CM31
+structure AspisR1PublicPreparation.aspis_core.field.QM31 : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.aspis_core.field.QM31.c0 : AspisR1PublicPreparation.aspis_core.field.CM31
+  AspisR1PublicPreparation.aspis_core.field.QM31.c1 : AspisR1PublicPreparation.aspis_core.field.CM31
+constructor:
+  AspisR1PublicPreparation.aspis_core.field.QM31.mk (c0 c1 : AspisR1PublicPreparation.aspis_core.field.CM31) :
+    AspisR1PublicPreparation.aspis_core.field.QM31
+structure AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint.x : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint.y : AspisR1PublicPreparation.aspis_core.field.QM31
+constructor:
+  AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint.mk
+    (x y : AspisR1PublicPreparation.aspis_core.field.QM31) :
+    AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+inductive AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public : Type
+number of parameters: 0
+constructors:
+AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
+  AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public
+AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+  AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public

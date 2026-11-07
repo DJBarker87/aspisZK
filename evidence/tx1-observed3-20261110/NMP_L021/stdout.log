@@ -1,0 +1,68 @@
+'AspisR1.NMP_CallerCanonical.from_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_CallerCanonical.from_scan : ∀ (proof : Std.Array U8 57607#usize) (events : List NKL_Checks.Check)
+  (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice) (core.result.Result.Ok ()) events (↑proof) after →
+    NMP_Canonical179.Canonical (NMP_Expansion179.compactInput proof.to_slice) :=
+fun proof events after native =>
+  have reply :=
+    Eq.trans (NKL_ScanSequence.exact native).left (NKL_ScanSequence.result (NKL_Checks.checks proof.to_slice));
+  have good :=
+    Bool.casesOn (motive := fun t =>
+      (NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard = t →
+        (NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard = true)
+      ((NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard)
+      (fun h =>
+        Eq.ndrec (motive := fun x => (NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard = x → x = true)
+          (fun h =>
+            let ⟨⟩ := NKB_CanonicalOpening.reply false
+            Eq.mp (congrArg (fun _a => core.result.Result.Ok () = NKB_CanonicalOpening.reply _a) h) reply)
+          (Eq.symm h) (Eq.refl ((NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard)))
+      (fun h =>
+        Eq.ndrec (motive := fun x => (NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard = x → x = true)
+          (fun h => Eq.refl true) (Eq.symm h)
+          (Eq.refl ((NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard)))
+      (Eq.refl ((NKL_Checks.checks proof.to_slice).all NKL_NativeGuard.nativeGuard));
+  have all :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = true)
+          (Eq.symm
+            (NKL_ScanRoot.all_source (NKL_Checks.checks proof.to_slice)
+              (NKL_ScanDomains.source proof.to_slice proof.property)))))
+      good;
+  have member :=
+    of_eq_true
+      (Eq.trans from_scan._simp_1
+        (Eq.trans
+          (congrFun'
+            (congrArg Or
+              (Eq.trans from_scan._simp_2
+                (Eq.trans
+                  (congr (congrArg Or (eq_self (NKL_Checks.Check.cv proof.to_slice)))
+                    (Eq.trans from_scan._simp_2
+                      (congrArg
+                        (Or
+                          (NKL_Checks.Check.cv proof.to_slice =
+                            NKL_Checks.Check.ec (NKL_Checks.EC.inactive proof.to_slice)))
+                        (Eq.trans from_scan._simp_2
+                          (congrArg
+                            (Or
+                              (NKL_Checks.Check.cv proof.to_slice =
+                                NKL_Checks.Check.ec (NKL_Checks.EC.round0 proof.to_slice)))
+                            from_scan._simp_2)))))
+                  (true_or
+                    (NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.inactive proof.to_slice) ∨
+                      NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.round0 proof.to_slice) ∨
+                        NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.round1 proof.to_slice) ∨
+                          NKL_Checks.Check.cv proof.to_slice ∈ [])))))
+            (NKL_Checks.Check.cv proof.to_slice ∈ List.flatMap (NKL_Checks.row proof.to_slice) (List.range 22)))
+          (true_or
+            (NKL_Checks.Check.cv proof.to_slice ∈ List.flatMap (NKL_Checks.row proof.to_slice) (List.range 22)))));
+  have cv := List.all_eq_true.mp all (NKL_Checks.Check.cv proof.to_slice) member;
+  id
+    (fun cv =>
+      have same := Subtype.ext (Eq.refl ↑(NKB_CanonicalPrefix.values proof.to_slice));
+      fun i hi =>
+      List.all_eq_true.mp (Eq.mp (congrArg (fun _a => NKL_CanonicalChildren.compactGood _a = true) same) cv) i
+        (List.mem_range.mpr hi))
+    cv

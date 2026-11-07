@@ -1,0 +1,70 @@
+{
+ "attempt": "NMP_K097",
+ "kind": "kani",
+ "module": "verifier::candidate::NMP_prepare::footprint_control",
+ "sources": [
+  "NMP_gate.py",
+  "NMP_SOURCE_PINS.json",
+  "NMP_FROZEN_FILE_PINS.json",
+  "NMP_BASE_EXPECTED.json"
+ ],
+ "command": [
+  "python3",
+  "NMP_gate.py",
+  "NMP_K097.json"
+ ],
+ "env": {
+  "CARGO_NET_OFFLINE": "true",
+  "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+  "TMPDIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_tmp",
+  "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target",
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+  "CARGO_PROFILE_DEV_DEBUG": "0"
+ },
+ "timeout": 180,
+ "expected_time": "Optimized compilation then CBMC actual parent with arbitrary child cut replies; no SHA or products",
+ "root_package": "aspis-r1-cost-probe",
+ "metadata_features": "aspis-r1-cost-probe/private-leaf-salts,aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build",
+ "native_command": [
+  "/home/dombarker/.cargo/bin/cargo-kani",
+  "kani",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_src/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--target-dir",
+  "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_target",
+  "--features",
+  "private-leaf-salts,optimized-terminal,program-build",
+  "--lib",
+  "-j",
+  "1",
+  "-Z",
+  "unstable-options",
+  "-Z",
+  "stubbing",
+  "--harness-timeout",
+  "90s",
+  "--exact",
+  "--harness",
+  "verifier::candidate::NMP_prepare::footprint_control",
+  "--output-format",
+  "terse",
+  "-Z",
+  "function-contracts"
+ ],
+ "collect": [
+  "NMP_K097-graph-check.json",
+  "NMP_K097-graph.stderr",
+  "NMP_K097-graph.json",
+  "NMP_K097-source-check.json",
+  "NMP_K097-lock-check.json",
+  "NMP_K097-baseline-check.json",
+  "NMP_K097-all-features.json"
+ ],
+ "source_revision": "1a205187cfc5012b71a36ea61c0f99f84ebbb5a3",
+ "source_tree_dirty": true,
+ "deps_fingerprint": {
+  "selected_objects": {}
+ }
+}

@@ -1,0 +1,112 @@
+[
+ {
+  "path": "/home/dombarker/.kani/kani-0.67.0/library/kani/src/shadow.rs",
+  "sha256": "a3e9fe9fa8b844ae05ab51d03a391c178016e7fa3d33b8d4a458647eae97fe65",
+  "hits": [
+   [
+    6,
+    "//! locations, e.g. whether a memory location is initialized."
+   ],
+   [
+    21,
+    "//!     // assert the memory location is not initialized"
+   ],
+   [
+    25,
+    "//!     // update the shadow memory to indicate that this location is now initialized"
+   ],
+   [
+    46,
+    "    /// Create a new shadow memory instance initialized with the given value"
+   ]
+  ]
+ },
+ {
+  "path": "/home/dombarker/.kani/kani-0.67.0/library/kani/src/contracts.rs",
+  "sha256": "05b329fa34923824ffe0f6e488a61bf06ff6bf99d2a0be990f951d50a1dc38ac",
+  "hits": [
+   [
+    137,
+    "//!   let v = kani::vec::any_vec::<char, 5>();"
+   ],
+   [
+    188,
+    "//! be called with and initialized any `static mut` globals that are reachable."
+   ],
+   [
+    189,
+    "//! All of these should be initialized to as general value as possible, usually"
+   ]
+  ]
+ },
+ {
+  "path": "/home/dombarker/.kani/kani-0.67.0/library/kani/src/vec.rs",
+  "sha256": "ecd0454090ea8f9861c821a7f216d827a269bac7215c4b555493774f4e6df467",
+  "hits": [
+   [
+    6,
+    "pub fn any_vec<T, const MAX_LENGTH: usize>() -> Vec<T>"
+   ],
+   [
+    15,
+    "            let mut any_vec = exact_vec::<T, MAX_LENGTH>();"
+   ],
+   [
+    16,
+    "            any_vec.truncate(real_length);"
+   ],
+   [
+    17,
+    "            any_vec.shrink_to_fit();"
+   ],
+   [
+    18,
+    "            assert!(any_vec.capacity() == any_vec.len());"
+   ],
+   [
+    19,
+    "            any_vec"
+   ]
+  ]
+ },
+ {
+  "path": "/home/dombarker/.kani/kani-0.67.0/library/kani/src/bounded_arbitrary.rs",
+  "sha256": "24f765ee294984ab3c99ff56ddeca2bae654a45a5f46e38bea01b8ff2b3b79fb",
+  "hits": [
+   [
+    24,
+    "// This implementation overlaps with `kani::any_vec` in `kani/library/kani/src/vec.rs`."
+   ],
+   [
+    26,
+    "// `kani::any_vec` in favor of this implementation."
+   ]
+  ]
+ },
+ {
+  "path": "/home/dombarker/.kani/kani-0.67.0/library/kani/src/concrete_playback.rs",
+  "sha256": "26d6332001525cb728509a2d2804edba5841800a469dafe1b1fc7bccd088b9da",
+  "hits": [
+   [
+    43,
+    "/// Iterate over `any_raw_internal` since CBMC produces assignment per element."
+   ],
+   [
+    44,
+    "pub(crate) unsafe fn any_raw_array<T: Copy, const N: usize>() -> [T; N] {"
+   ],
+   [
+    45,
+    "    unsafe { [(); N].map(|_| crate::any_raw_internal::<T>()) }"
+   ],
+   [
+    49,
+    "/// kani::any_raw_internal. Because CBMC does not bother putting in"
+   ],
+   [
+    55,
+    "pub(crate) unsafe fn any_raw_internal<T: Copy>() -> T {"
+   ]
+  ]
+ }
+]
