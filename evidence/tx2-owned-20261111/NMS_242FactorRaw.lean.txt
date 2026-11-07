@@ -1,0 +1,16 @@
+import NMS_242FactorOwned
+set_option autoImplicit false
+noncomputable section
+namespace NMS_242Prefix
+open Aeneas Aeneas.Std AdapterRw NMS_OwnedPackets NMS_RowSpec242
+variable {Ambient : Type}
+
+theorem factor_raw (ops : Ops) (program : solana_pubkey.Pubkey)
+ (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (data : Slice U8)
+ (slot : core.result.Result U64 PE) :
+ NLM_Validate242.G ops program accounts data slot = raw ops program accounts data slot := by
+ unfold NLM_Validate242.G raw NMS_242Auth.raw NMS_242First.raw NMS_242Data.raw NMS_242Scan.raw NMS_242Tail.raw NMS_TryFold.step
+ rfl
+
+#print axioms factor_raw
+end NMS_242Prefix

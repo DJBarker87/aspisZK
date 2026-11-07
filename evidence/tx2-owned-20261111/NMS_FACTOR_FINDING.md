@@ -1,0 +1,3 @@
+# Retired whole-factor equality shape
+
+L034 and the explicitly unfolded owned split L037 both exhausted the DEFAULT200000 heartbeat limit on whole factor equalities. No setting/cap/timeout was raised. No nonstandard axiom from error recovery is credited. Whole-factor definal equality is retired; the next diagnostic isolates the reconstruction tail in a small module. The raw whole-factor proposal and unlaunched prefix-map proposal are retained as .lean.txt, not compiled modules or roots. Source-prefix definitions compiled L036, but this does not prove their equality to the complete source bodies.

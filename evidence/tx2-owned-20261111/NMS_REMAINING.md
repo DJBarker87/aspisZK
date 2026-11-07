@@ -1,0 +1,11 @@
+# NMS remaining obligations
+
+Target not yet established. No row credit or candidate root is claimed.
+
+- TX2:242: complete observable fold over the fresh E003 body. The full boxed carriers and named RowSpec interfaces compile; emitted value/control fold compiles. Rich scanner/reconstruction/authentication cuts retain exact arguments and owners. Remaining: finish prefix/suffix erasure and ownership/frame composition; connect the opaque canonical child slots to ledger24 CLOSED roots. Child233 is still OPEN on NMM branch248cb653b07; no child endpoint/success premise may replace it.
+- RowSpec stop compatibility: the compiled drafts describe emitted fail/div with exact prefixes and no post-world. Before calling them canonical full-strength packets, reconcile independent runtime/allocator stops under(bl)/(aw), including any case where an ideal source suffix still exists. No totality or allocation-success premise is authorized. The current erasure lemmas concern the drafts' represented arms only and earn no native credit.
+- TX2:241: fresh E003 body emitted. Compile its canonical replay and source equality; install the full242 packet at SAME original arguments. Fresh emitted getters are interpreted in Lean, avoiding the retired full-buffer Kani shapes. Compose checked_add, actual range and encoder1880; NMS_241Domain.from_entered supplies numeric064 clauses as a local cut lemma. Prove scanner57607 guarantee and install it via242 rather than assume a validated reply. Preserve full boxed statements, error mapping/log effects and emit return-data effects.
+- TX2:064 installation: candidate NMN_064.root needs exact public/proof/checkpoint/digest/hash arguments and all own-input clauses. Numeric scope is not a native association. Preserve its independent common-stopped arm intact, with no invented returned reply or suffix. Root0/checkpoint extent are241 own-input clauses under NMQ's ruling and remain caller240 obligations.
+- Audit: focused combined import with NLX_COMBINED_IMPORT and raw ax2 walk of own successful new theorems only; no all-roots audit. Compile/audit/export receipts and retained hashes must be finalized before handoff.
+
+No remaining obligation above is asserted closed merely by a source-support theorem or a conditional draft RowSpec. No shipped source, trust row, source-to-ELF claim, or security metric is changed.
