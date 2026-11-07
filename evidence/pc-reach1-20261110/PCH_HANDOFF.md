@@ -37,3 +37,12 @@ no row, including live PCD_/PCF_ rows. PCH_COUNT.md preserves 39 inherited CLOSE
 No assumptions discharged, retained trust unchanged, none added or reclassified.
 No new theorem and #print axioms N/A. No transaction shapes or exploit inputs.
 No shipped files, siblings, host infrastructure or keys modified; no push.
+
+Round 2 resumes under the corrected (c-g) compiler authority: Solana rustc
+1.89.0-dev d95c95b6..., target sbpf-solana-solana. The round-1 contradiction
+is superseded by the lead correction, not silently reinterpreted. Budget:
+6 build / 19 script-audit scopes remaining, zero Kani and zero Lean.
+Own cache only. Frozen payload is reconstructed from pinned git objects;
+retained dependency objects are copied, never linked or modified in place.
+
+Round 2 stage 1 ADMITTED. B003 reproduces the exact deployed ELF using B002 freshly re-emitted core/statement dependencies. B001 plus A003 independently reproduces it using copied retained dependencies. B001/A002 script filename errors are recorded, corrected, and never claimed as passes. No timeout/memory kill. Both Pool LLVM definition symbol sets are identical. New authoritative artifacts are PCH_B002_* and PCH_B003_*; NKZ conservative graph remains an assessment input only. Stage 1 uses 3 build / 2 audit scopes; no Kani/Lean or keys.
