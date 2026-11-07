@@ -35,15 +35,15 @@ fn filled<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{
 fn filled_fail<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);Err(aspis_core::r0::Error::Allocation)}
 fn expand_semantic(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
  let log=unsafe{from_source(src,compact::OFF_SEMANTIC)};assert_eq!(log.phase,0);log.phase=1;log.sem_src=meta(src);log.sem_dst=meta(dst);
- assert_eq!(dst.len(),13831);log.sem_byte=kani::any();
- crate::r1_semantic::NMP_havoc::point(unsafe{&mut *(dst.as_mut_ptr() as *mut [u8;13831])},log.probe_sem,log.sem_byte,&mut log.side);
+ assert_eq!(dst.len(),13831);let bytes:[u8;13831]=kani::any();log.sem_byte=bytes[log.probe_sem];
+ unsafe{*(dst.as_mut_ptr() as *mut [u8;13831])=bytes;}
  if log.stop==1||log.stop==2{return Err(codec_error())}
  Ok(())
 }
 fn expand_values(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
  let log=unsafe{from_source(src,compact::OFF_Y1)};assert_eq!(log.phase,1);log.phase=2;log.y_src=meta(src);log.y_dst=meta(dst);
- assert_eq!(dst.len(),928);log.y_byte=kani::any();
- if log.control!=3{crate::r1_semantic::NMP_havoc::point(unsafe{&mut *(dst.as_mut_ptr() as *mut [u8;928])},log.probe_y,log.y_byte,&mut log.side);}
+ assert_eq!(dst.len(),928);let bytes:[u8;928]=kani::any();log.y_byte=bytes[log.probe_y];
+ if log.control!=3{unsafe{*(dst.as_mut_ptr() as *mut [u8;928])=bytes;}}
  if log.stop==3{return Err(codec_error())}
  Ok(())
 }
@@ -105,7 +105,6 @@ fn check(stop:u8,control:u8){
  let out=out.unwrap();assert!(core::ptr::eq(&*out,log.prepared_ptr));assert!(Some(prepared_probe(&out,gi,ci,ri,qi))==log.expected_prepared);
 }
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -114,7 +113,6 @@ fn check(stop:u8,control:u8){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_2(){check(2,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -123,7 +121,6 @@ fn branch_2(){check(2,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_3(){check(3,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -132,7 +129,6 @@ fn branch_3(){check(3,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_5(){check(5,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -141,7 +137,6 @@ fn branch_5(){check(5,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_6(){check(6,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -150,7 +145,6 @@ fn branch_6(){check(6,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_7(){check(7,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled_fail)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -159,7 +153,6 @@ fn branch_7(){check(7,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn allocation_error_result(){check(1,0)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -168,7 +161,6 @@ fn allocation_error_result(){check(1,0)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn reply_control(){check(7,1)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -177,7 +169,6 @@ fn reply_control(){check(7,1)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn argument_control(){check(7,2)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -186,7 +177,6 @@ fn argument_control(){check(7,2)}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn footprint_control(){check(7,3)}
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -196,7 +186,6 @@ fn footprint_control(){check(7,3)}
 fn branch_7_stability(){check(7,0)}
 
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -206,7 +195,6 @@ fn branch_7_stability(){check(7,0)}
 fn branch6_reply(){check(6,1)}
 
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -216,7 +204,6 @@ fn branch6_reply(){check(6,1)}
 fn branch6_argument(){check(6,2)}
 
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -226,7 +213,6 @@ fn branch6_argument(){check(6,2)}
 fn branch6_footprint(){check(6,3)}
 
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]
@@ -236,7 +222,6 @@ fn branch6_footprint(){check(6,3)}
 fn branch5_reply(){check(5,1)}
 
 #[kani::proof] #[kani::unwind(40)]
-#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 #[kani::stub(crate::compact::expand_values,expand_values)]

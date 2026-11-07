@@ -12,7 +12,7 @@ if mode=='native':
   a=p.parent.name;rc=json.loads(p.read_text());log=(p.parent/'stdout.log').read_text();graph=json.loads((B/(a+'-graph-check.json')).read_text());lock=json.loads((B/(a+'-lock-check.json')).read_text());assert graph['graph_matches_frozen']and lock['unchanged'],a
   baseline=B/(a+'-baseline-check.json');base=json.loads(baseline.read_text())if baseline.exists()else None
   if base:assert not base['errors'],a
-  verdict='PASS'if rc['exit_status']==0 and'VERIFICATION:- SUCCESSFUL'in log else'TIMEOUT'if'CBMC timed out'in log or rc['exit_status']==124 else'COMPILE_FAILURE'if'could not compile'in log else'NEGATIVE_OR_FAILED_CHECK'
+  verdict='PASS'if rc['exit_status']==0 and'VERIFICATION:- SUCCESSFUL'in log else'TIMEOUT'if'CBMC timed out'in log or rc['exit_status']==124 else'COMPILE_FAILURE'if'could not compile'in log else'INPUT_FAILURE'if'Failed to match the following harness'in log else'BACKEND_CRASH'if'CBMC failed with status 139'in log else'NEGATIVE_OR_FAILED_CHECK'
   rows.append(dict(attempt=a,module=rc['module'],exit=rc['exit_status'],verdict=verdict,wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],source_manifest_sha256=H(p.parent/'sources/NMP_SOURCE_PINS.json'),baseline=base))
  assert len(rows)==100,len(rows)
  scan=[]
@@ -58,7 +58,7 @@ elif mode=='audit':
  write('NMP_AUDIT.json',out)
 elif mode=='final':
  import subprocess
- for part in ['native','audit']:
+ for part in ['native','retention','audit']:
   r=subprocess.run([sys.executable,str(Path(__file__).resolve()),part]);assert r.returncode==0,part
  out=dict(status='PASS_FINAL',target_established=False)
  write('NMP_FINAL.json',out)

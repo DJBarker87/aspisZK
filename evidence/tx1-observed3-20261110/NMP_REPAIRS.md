@@ -23,3 +23,7 @@ Stopped and restarted only the own local final-gate waiting client before K099 e
 Final waiting client restarted before any final scope: plan is now loaded at runtime. Three focused rho-certificate modules occupy L038-L040; combined/audit moves to L041-L076 with29 distinct-root groups. This replaces three audit segments with independent caller-domain proof work and preserves80 unique support labels. No running native scope was touched.
 
 Corrected future raw-audit collection globs to the actual per-scope proof index before launch; no evidence input or verification condition was weakened.
+
+K089 selected nonexistent candidate::NMP_prepare instead of verifier::candidate::NMP_prepare. Compilation succeeded; no harness matched and no verification ran. Corrected only unsubmitted selectors; original function/module names unchanged. K099 replaces the extra constructor-error control with the missing branch_2 positive, preserving100 scope labels and recording the consumed input-error scope. No timeout rerun.
+
+L079 now installs changed owned prepare harness after K090 crash; final retention check is consolidated into L080 with native/audit checks. The runtime final plan skips already-consumed L079. Eight native labels remain, all with the correct unchanged original function names.

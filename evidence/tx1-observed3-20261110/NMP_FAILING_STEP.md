@@ -31,3 +31,7 @@ Kani 0.67 compiler ICE in reachability resolving IntoIterator for &mut [[u8]], g
 
 ## K011 combined returning value and retained halo
 90-second CBMC timeout, 94.29-second scope. Newly added928-byte arbitrary-offset retained-region check combined with all return/call-log obligations is retired. Split into original return projections without halo assertion, and independent halo-only native window. Both still call the actual frozen parent at13831 bytes backed by14759 bytes. A deliberate outside-footprint write supplies halo negative control. No timeout/cap increase or unchanged replay.
+
+K089: own harness-selector input error (missing verifier:: prefix), no verification. Kept as spent scope; corrected remaining configurations and moved branch_2 to K099.
+
+K090: actual prepare branch_3 selected correctly, CBMC status139 before any verification check. Fixed-array contract calibration on standalone stack arrays does NOT admit this heap-subwindow/nested-stub context. Exact cause unisolated. Parent use is withdrawn; new prepare shape assigns a full arbitrary typed byte array at both Ok/Err mutation cuts with exact KMX stubs, not a custom copy stub. No cap/time increase or unchanged replay.
