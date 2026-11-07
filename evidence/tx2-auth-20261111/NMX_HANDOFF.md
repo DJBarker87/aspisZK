@@ -86,3 +86,33 @@ shift chain. Inspect that actual shape before further arithmetic proofs.
 No candidate233 root, DomainTrue preserved, no security claim, no extraction or
 Kani used in this renewal. Native getter-error cloning, allocator divergence/
 std observation interpretation, and full217/234 native roots remain explicit.
+
+## Renewal R9–R13: stronger independent suffix and symbolic loop
+
+`NMX_TailIndependent.e051` removes all unused217/234 hypotheses from the final
+five occurrences. `NMX_SemanticF04.e041` folds occurrences41–55 using only the
+full raw217 observation packet, exactly at the original lane bytes. No234
+packet is needed after its source position. `NMX_SemanticF03b.e036` extends
+backward through the checkpoint-PDA/rejection/lane-data occurrences36–40.
+`NMX_SyntaxFactor.factor` connects all55 dictionary-free source cuts to the
+literal interpreted source body, without unfolding a child.
+
+Replacement distinctness proof `NMX_DistinctPredicate` passes by symbolic inner
+and outer induction, all replies/stops constrained by the existing CLOSED
+reference. This is a native success criterion; the final Nodup carrier
+association remains separate. Do not return to finite descriptor simp.
+
+The pinned std byte function is `map UScalar.mk x.bv.toLEBytes`. Its helper is
+irreducible. `NMX_LEFirst.step` keeps the recursive tail folded, and
+`NMX_U64Layout.value` uses eight explicit positive-width steps plus the zero
+terminal, on a bare list projection to avoid dependent Array proof motives.
+Byte positions0/1 passed; remaining positions are independent small symbolic
+Nat/BitVec laws. No large numeral normalization, cap or recursion limit change.
+
+`NMX_NecessaryConditions.getter_stop_excluded` proves that any full native getter
+observation transport must exclude a failing error clone. This formalizes the
+interpretation obligation; it is not a runtime counterexample or new row input
+clause. DomainTrue has not been weakened.
+
+Read-only NMM branch check: `0f45c91bcd8984228de304773cb8faaa3864723c` still has
+`NMM_CLOSED.json` rows=[] / NO_ROW_PROMOTION, no217 or234 candidate to instantiate.

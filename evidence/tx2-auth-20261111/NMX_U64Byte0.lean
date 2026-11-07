@@ -1,4 +1,4 @@
-import NMX_BvByte
+import NMX_U64Layout
 set_option autoImplicit false
 namespace NMX_U64Byte0
 open Aeneas Aeneas.Std NMX_Carrier
@@ -6,6 +6,7 @@ open Aeneas Aeneas.Std NMX_Carrier
 theorem value (x : U64) :
  (byte ((core.num.U64.to_le_bytes x).val.getD 0 0#u8)).toNat =
  x.val / 1 % 256 := by
+ rw [NMX_U64Layout.value]
  change (byte (⟨(x.bv).setWidth 8⟩ : U8)).toNat = x.bv.toNat / 1 % 256
  rw [NMX_BvByte.low,Nat.div_one]
 #print axioms value

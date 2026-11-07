@@ -1,4 +1,4 @@
-import NMX_BvByte
+import NMX_U64Layout
 set_option autoImplicit false
 namespace NMX_U64Byte2
 open Aeneas Aeneas.Std NMX_Carrier
@@ -6,6 +6,7 @@ open Aeneas Aeneas.Std NMX_Carrier
 theorem value (x : U64) :
  (byte ((core.num.U64.to_le_bytes x).val.getD 2 0#u8)).toNat =
  x.val / 65536 % 256 := by
+ rw [NMX_U64Layout.value]
  change (byte (⟨(((((x.bv >>> 8).setWidth 56) >>> 8).setWidth 48)).setWidth 8⟩ : U8)).toNat = x.bv.toNat / 65536 % 256
  rw [NMX_BvByte.low]
  have bound : x.bv.toNat < 18446744073709551616 := x.bv.isLt
