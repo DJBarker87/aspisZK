@@ -15,3 +15,5 @@ Module12 / V2Lib.tx2auth remains WAITING. VErr/debug/Root0 are fixed; the canoni
 Module13 / V2Lib bundle remains WAITING solely on module12. No parameterized or relational stand-in is delivered as complete.
 
 These remaining obligations are Lean/model/runtime-representation work. Zero Kani/extraction authorization is not their stopping reason. No historical determinism-obstruction investigation is reopened. Read LIBB_FINDINGS.md for repaired elaboration shapes and LIBB_CLOSED.json for hypothesis classifications. Budget/accounting and raw audit completion are recorded in LIBB_VALIDATION.json.
+
+Final budget:300/300 scopes used,0 remaining;208/208 own-root raw audits standard-only; combined import/interfaces pass. No additional Lean/link/audit launch is authorized under this job. The module12/module13 obligations above remain open and require follow-on work; no row credit is claimed.
