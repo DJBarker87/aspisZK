@@ -32,6 +32,7 @@ theorem encoder_map_std {W : Type} (c : Calls) (s : EncoderReply W) :
  match s.reply with
  | .Ok candidate => raw09 (installMapErr c) ⟨s.toDecoded,candidate⟩
  | .Err _ => .ok (.Err .InvalidAccountData) := by
+ unfold mapEncoder installMapErr NMT_first.NMT_std_map_err
  cases h : s.reply <;> rfl
 #print axioms common_encoder_calls
 #print axioms encoder_map_std

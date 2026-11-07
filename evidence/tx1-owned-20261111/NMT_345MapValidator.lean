@@ -32,6 +32,7 @@ theorem validator_map_std {W : Type} (c : Calls) (s : ValidationReply W) :
  match s.reply with
  | .Ok _ => raw08 (installMapErr c) s.toDecoded
  | .Err _ => .ok (.Err .InvalidAccountData) := by
+ unfold mapValidator installMapErr NMT_first.NMT_std_map_err
  cases h : s.reply <;> rfl
 #print axioms validator_call
 #print axioms validator_map_std
