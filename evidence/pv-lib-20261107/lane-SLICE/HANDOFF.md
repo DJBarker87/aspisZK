@@ -1,8 +1,8 @@
 # Session 4 checkpoint
 
-Compiled whole statements: f21, f13, f6, f5.
-Contract instances: 0 (statements only). Latest f5/49929; comparison
-SESSION4_f5_COMPARISON.md. Exact receipts retain caps, turns, revisions,
+Compiled whole statements: f21, f13, f6, f5, f8.
+Contract instances: 0 (statements only). Latest f8/49930; comparison
+SESSION4_f8_COMPARISON.md. Exact receipts retain caps, turns, revisions,
 RSS, wall, swap and axioms. Next work follows SESSION4_CONTRACT_INDEX.json.
 No raw audit yet this session; next raw49693, new roots once at end.
 
