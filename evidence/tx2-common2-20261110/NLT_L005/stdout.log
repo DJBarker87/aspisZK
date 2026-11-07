@@ -1,0 +1,11 @@
+theorem NLT_Interpreted.step : ∀ (f : Uninstalled)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀
+      e ∈
+        (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (finish f.finish) d pub proof ck hash
+            none).events,
+      ∀ (input : Input e), window f H d hash e input = e :=
+⋯
+'NLT_Interpreted.step' depends on axioms: [propext, Classical.choice, Quot.sound]

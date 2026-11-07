@@ -1,0 +1,53 @@
+[
+  {
+    "path": "evidence/tx2-native10-20261108/NKO_HARNESS.patch",
+    "sha256": "8f40996e6825e4af597a3759a277a035ea1360a548b6c46cee5a788f53c3e5ac",
+    "bytes": 38041,
+    "assertion_quotes": [
+      "if PART==1{assert_eq!(a.weights.as_ptr(),self.wp);assert_eq!(a.weights.capacity(),self.wc);assert_eq!(a.weights.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;let w=a.weights[i];let out=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];assert_eq!(out[j],kw(self.words[i])[j]^(if cfg!(NKO_invert){1}else{0}));}",
+      "if PART==2{assert_eq!(pending.raw.as_ptr(),self.rp);assert_eq!(pending.raw.capacity(),self.rc);assert_eq!(pending.raw.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;assert_eq!(pending.raw[i][j],self.rows[i][j]^(if cfg!(NKO_invert){1}else{0}));}",
+      "if PART==0||PART==4{assert_eq!(a.weights.as_ptr(),self.wp);assert_eq!(a.weights.capacity(),self.wc);assert_eq!(a.weights.len(),64);let i=(kani::any::<u8>()&63)as usize;let j=(kani::any::<u8>()&3)as usize;let w=a.weights[i];let out=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];assert_eq!(out[j],self.words[i][j]^(if cfg!(NKO_invert){1}else{0}));}",
+      "let mut log=FinishFrame::<PART>{prepared:&p,words:&words,wp:weights.as_ptr(),wc:weights.capacity(),rhs,power,next,reply,calls:0,freed:false,freed_ptr:core::ptr::null(),freed_cap:0,freed_len:0};let a=Accumulator{weights,rhs,power,next};let out=finish_frame_stage(&proof,&p,a,inactive,&mut log);assert_eq!(out,reply);assert_eq!(log.calls,1);",
+      "#[kani::ensures(|_| log.ptr==proof.as_ptr() as usize && log.len==(proof.len()^(if cfg!(NKO_invert){1}else{0})) && log.calls==1)]",
+      "#[kani::ensures(|_| log.ptr==proof.as_ptr() as usize && log.len==proof.len() && log.calls==1)]",
+      "#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==(proof.len()^(if cfg!(NKO_invert){1}else{0})) && log.calls==1)]",
+      "#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==proof.len() && log.calls==1)]",
+      "#[kani::ensures(|_| log.ptr==proof.as_ptr()as usize && log.len==proof.len() && log.calls==1)]"
+    ]
+  },
+  {
+    "path": "evidence/tx2-native7-20261108/NJR_Cuts.lean",
+    "sha256": "c51267bd95af416b36f7b0495bb63881e68dbbcfae79ccc83d065fda216b9744",
+    "bytes": 6573,
+    "assertion_quotes": [
+      "Assertion transcription: `assert_eq!(observed,ptr.wrapping_add(i) as *mut [u64;4]);",
+      "if C==2{let mut expected=rhs.to_limbs();if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(out_rhs.to_limbs(),expected);assert_eq!(out_power,power);assert_eq!(out_next,next);assert_eq!(pending.terms,terms);}`"
+    ]
+  },
+  {
+    "path": "evidence/tx2-native6-20261108/NJJ_Constructors.lean",
+    "sha256": "beb5a2e5daf532fbde6ad8efab5e6d4e2d10bbf8f5eaac54250f78de1fab8e60",
+    "bytes": 3185,
+    "assertion_quotes": []
+  },
+  {
+    "path": "evidence/tx2-native-20261106/NHV_native.rs.txt",
+    "sha256": "01644cdc29352595fb6850bb50103ce858a854d87a367ccd52a033679aed7483",
+    "bytes": 43666,
+    "assertion_quotes": [
+      "fn root_cut(proof:&[u8],p:&Prepared,ops:&mut RootLog)->Result<(),Error>{let folded_root:[u8;32]=proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();ops.merkle(proof,p,&folded_root,1,Hash)?;mark(None,Phase::Merkle(SPLIT));Ok(())}"
+    ]
+  },
+  {
+    "path": "evidence/tx2-native11-20261109/NLB_QueryWindow.lean",
+    "sha256": "d953dea95884f8b7e28db9c5c1c7ed650992126a4ec3b0953adf06c18ec4cd8b",
+    "bytes": 2214,
+    "assertion_quotes": []
+  },
+  {
+    "path": "evidence/tx2-common-20261110/NLP_ResumeInstall.lean",
+    "sha256": "87368a211d66c00f00d2676592c82cad3bedab13f4c7b513ca3dd3f6cd30ef47",
+    "bytes": 1485,
+    "assertion_quotes": []
+  }
+]

@@ -1,0 +1,16 @@
+theorem NLT_C04StopChronology.installed : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+        NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+          have f := NLT_FrameFromCuts.frame records;
+          NLL_Prefix.At
+            (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+              (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof
+                  ck hash none).events)
+            (cut.inside ++ cut.pending.answered) cut.pending.parts :=
+⋯
+'NLT_C04StopChronology.not_merkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopChronology.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopChronology.installed' depends on axioms: [propext, Classical.choice, Quot.sound]

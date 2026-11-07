@@ -1,0 +1,9 @@
+theorem NLT_FrameFromCuts.compatible : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  (records : List (Occurrence H d hash)),
+  List.Pairwise (fun a b => rank (actual a) < rank (actual b)) records →
+    ∀ r ∈ records, NLT_NativeWindows.Compatible (frame records) r.entered r.input :=
+⋯
+'NLT_FrameFromCuts.resume_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.pending_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.finish_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.compatible' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,15 @@
+NLT_generated/NLT_AllocationInstalled.lean:47:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLT_AllocationInstalled.resume : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X) (hash : X)
+  (r : Occurrence H d hash), ResumeLaw d hash r.entered r.input :=
+⋯
+theorem NLT_AllocationInstalled.pending : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records, PendingLaw r.entered r.input :=
+⋯
+'NLT_AllocationInstalled.resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_AllocationInstalled.pending' depends on axioms: [propext, Classical.choice, Quot.sound]

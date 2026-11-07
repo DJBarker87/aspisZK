@@ -1,0 +1,270 @@
+# Aspis build and formal-proof operating rules
+
+These rules apply to every agent and human-driven automation in this
+repository.  They exist because several large Lean replays consumed tens of
+gigabytes while trying to normalize concrete recurrence terms that reduced to
+small symbolic facts.
+
+## Formal proof workflow
+
+1. Compile the smallest changed `.lean` file first with `lake env lean`.
+   Do not start a package-wide or manifest replay to discover a local theorem
+   error.
+2. Before evaluating a large generated numeral or recurrence cell, inspect its
+   mathematical shape.  Prove and use sparsity, zero, monotonicity, symmetry,
+   or closed-form lemmas first.  Kernel reduction of a huge term is a last
+   resort, not the default proof method.
+3. Generators must identify exceptional/sparse cells explicitly and emit a
+   named symbolic theorem application for them.  Do not emit `rfl`, broad
+   `simp`, `norm_num`, or an unfolded recurrence for a cell whose reduction
+   graph is large.
+4. Test a new generic lemma directly, then one affected generated chunk, then
+   the bridge theorem.  Run the complete frozen manifest only once after those
+   focused targets are green.
+5. Do not repeat an unchanged full regression.  A rerun needs a source change,
+   toolchain/environment change, missing evidence artifact, or a specifically
+   identified nondeterminism question.
+6. Every formal release result must record the exact target, exit status, wall
+   time, peak RSS, swap, source revision, and `#print axioms` result.
+
+## Resource policy
+
+1. Use an ordinary development machine for source inspection, editing, and
+   focused jobs expected to remain below 8 GiB. Send generated-certificate
+   aggregation, Aeneas replay, SBF rebuilds, and other RAM-intensive work to a
+   dedicated Linux build host.
+   A cold Lean dependency build is not a focused local job: monitor aggregate
+   child-process RSS and stop or move it to the build host as soon as it approaches
+   8 GiB rather than waiting for the parent process to report completion.
+2. Every large build must run in its own systemd/cgroup scope with
+   `MemorySwapMax=0`.  Set explicit `MemoryHigh` and `MemoryMax`; never run an
+   uncapped Lean, Aeneas, Rust, or linker job.
+3. Keep the sum of simultaneous `MemoryMax` values below the host's safe
+   working limit. Reserve enough memory for the OS and remote control path.
+4. Crossing 24 GiB RSS, or spending ten minutes without a new compiled target,
+   is a mandatory review point.  Stop or pause before raising the cap unless a
+   focused predecessor already proved that the remaining work is legitimate
+   final aggregation rather than pathological reduction.
+5. A job killed by memory pressure must not be rerun unchanged with a larger
+   cap.  First isolate the declaration/cell, inspect its reduction shape, and
+   change the proof or generator.  Record the old failure and the replacement.
+6. Reuse a pinned build workspace and compiled cache between focused dependent
+   targets.  Do not rebuild thousands of unchanged modules merely to test the
+   next bridge.
+7. Execute dense finite-field elimination, rank probes, large proof generation,
+   and other arithmetic release gates with an optimized Rust binary
+   (`cargo test --release` or an explicitly optimized profile). A debug build
+   may be used for type-checking or a tiny preflight only; it must not become
+   the long-running build-host job.
+8. Before launching a heavy Rust gate, record whether time is expected in
+   compilation, proof generation, or one named aggregation/elimination step.
+   If an unoptimized process is discovered doing the heavy step, stop it and
+   replace it with the optimized, identically scoped command instead of waiting
+   for sunk time to justify more sunk time.
+
+## Generated-certificate preflight
+
+Before starting a full certificate build:
+
+- run the generator's `--check` or equivalent manifest validation;
+- compile every changed generic recurrence lemma;
+- compile each exceptional generated chunk independently;
+- search changed chunks for broad unfolding or large `norm_num`/`decide`
+  proofs;
+- confirm the cgroup cap and current aggregate build-host reservation;
+- identify the exact next theorem that consumes the certificate.
+
+If a concrete cell becomes fast only after a symbolic lemma, add that cell
+shape to the generator so the optimization is permanent.
+
+## Verification cadence
+
+The normal cadence is: focused proof, dependent bridge, one axioms audit, one
+final manifest replay.  Adversarial/runtime/reproducible-build suites are run
+when their covered source or artifact changes, not after every unrelated Lean
+edit.
+
+# Security and proof discipline — lessons from V8 and R1
+
+The objective is a defensible security result for the actual implementation,
+not a favourable headline, a large collection of Lean theorems, or a fast
+verifier whose security argument remains conditional on unproved protocol
+properties.
+
+Correct unsupported claims immediately. Never quietly lower the release
+target to match the proof currently available.
+
+## 1. Fix the security contract before claiming success
+
+The release target is at least 100 bits of classical attack-work security
+for the actual frozen R1 spend path, without proof-of-work/grinding credits
+being used to lift a weaker underlying guarantee.
+
+Maintain one authoritative security contract specifying:
+- The security game, attacker's capabilities, and exact failure event.
+- The work metric, success-probability criterion, and numerical constants.
+- Treatment of preprocessing, adaptive queries, repeated forgery attempts,
+  multiple targets, and work performed through verifier interactions.
+- The exact probability-versus-work bound and its valid parameter range.
+- The implementation, parameters, and assumptions to which it applies.
+
+Keep soundness, knowledge extraction, privacy, double-spend prevention,
+custody, and availability distinct. Proving one does not establish the others.
+
+“100-bit” is a conclusion to justify under this contract, not a label to
+attach to whichever quantity happens to exceed 100.
+
+## 2. No silent changes of metric or adversary
+
+Per-attempt error, per-query bounds, statistical distance, estimated attack
+complexity, and work-normalised figures are not interchangeable.
+
+For every claimed security number, show its derivation from the exact bound.
+Expose all query losses, constants, collision terms, abort probabilities,
+conditioning, and low-budget error floors.
+
+A bound such as ε(Q) ≤ (Q+1)/2^100 is useful evidence. It does not by itself
+settle the security of an unlimited campaign of separately submitted proofs.
+Account for repeated attempts and verifier interactions explicitly. Do not
+infer campaign attack cost merely by setting a single-experiment bound to 1.
+
+Do not invent an expensive “attempt” unit, restrict the attacker, or add
+grinding credits to reach the target. Do not present unlike operation counts
+as an exact comparison with another protocol.
+
+When a previously advertised bound was unsupported:
+1. Correct the claim and mark the old claim as superseded.
+2. Explain whether the change concerns the protocol, the proof, or reporting.
+3. Retain the original release target unless the owner explicitly changes it.
+
+Accuracy does not require permission. Lowering the target does.
+
+## 3. Audit theorem statements, not names or proof counts
+
+A theorem compiling is not evidence that its hypotheses hold for R1.
+
+For every claimed closure, inspect the complete statement, including
+definitions hidden inside structures, typeclasses, callbacks, and imported
+contracts. Identify what was proved and what remains assumed.
+
+Distinguish:
+- A mathematical/model theorem.
+- A local source-helper theorem.
+- A complete source-to-model refinement.
+- A composed security theorem.
+- A theorem connected to the frozen release artifacts.
+
+Do not promote a local result to a whole component, or an honest-run result
+to an arbitrary-adversary result.
+
+Replacing ten assumptions with one structure containing those assumptions
+is organisation, not discharge. A generic execution-join theorem is not a
+proof of its concrete implementation instance.
+
+For premise-removal claims, provide the before/after statements and explain
+any changes to quantifiers, carriers, failure events, or conclusions. Check
+that the remaining premises are satisfiable and do not hide the desired
+conclusion. Distinguish genuine weakening from a different theorem.
+
+A missing source-refinement proof is not a cryptographic assumption.
+
+## 4. Make the model describe the actual execution
+
+Target the actual parser, arithmetic, transcript, commitment authentication,
+checkpoint, and settlement path.
+
+Include relevant rejection paths, canonicality checks, overflow behaviour,
+mutable state, randomness consumption, and oracle-query behaviour.
+
+Equal outputs, equal Merkle roots, or equal acceptance decisions do not
+automatically justify transferring an adaptive-oracle security proof.
+Reordering queries, omitting rejected suffixes, or changing duplicate handling
+requires a proved transport argument for the security experiment and extractor.
+
+Use the weakest refinement that is genuinely sufficient. Accepted-run
+refinement may suffice, but prove why it transports the required event and
+probability law. Do not assume that either full execution equality or mere
+acceptance equivalence is automatically the correct interface.
+
+Do not modify the model merely to make existing lemmas apply while leaving
+its correspondence to the implementation unproved.
+
+## 5. Prove the complete security experiment
+
+For soundness, connect acceptance to the actual spend relation and the stated
+extraction guarantee. Establish the extractor's required effectiveness and
+cost; polynomial-time terminology alone does not establish a concrete
+security level.
+
+For privacy, cover the complete observable transcript: commitments, semantic
+messages, openings, shared-oracle history, retries, aborts, and visible errors.
+
+Fixed-query rank, individual-message hiding, marginal uniformity, and
+successful fixtures do not establish joint adaptive transcript privacy.
+
+Track the distinction between an ideal distribution, the implemented sampler,
+and the real execution. Do not silently assume freshness, independence,
+uniformity, or witness-independent retry behaviour.
+
+## 6. Freeze the target and control optimisation
+
+Pin the protocol parameters, source revision, features, wire format,
+toolchain, and compiled artifacts used by the release argument.
+
+A source change requires an explicit assessment of which proofs, bounds,
+tests, and artifact pins it invalidates. Never attribute a historical proof
+to a different implementation merely because the function name is unchanged.
+
+Keep experimental candidates separate from the frozen release target.
+Adoption requires the relevant security, equivalence, and integration gates.
+
+Prefer a feasible, proof-friendly architecture over aggressive compression
+or compute targets that repeatedly require new cryptographic repairs.
+Performance improvements do not compensate for missing security arguments.
+
+Label fixture measurements, exhaustive finite checks, analytical worst-case
+arguments, and formal cost proofs separately. Never promote one into another.
+
+## 7. Challenge assumptions early and compose continuously
+
+Before a large proof campaign, test the proposed interfaces against malformed
+inputs, adaptive adversaries, repeated queries, cached answers, early exits,
+and adversarial schedules.
+
+Retain counterexamples and failed approaches. A counterexample invalidates
+the affected claim; it must not be hidden by renaming the claim or adding an
+unannounced restriction.
+
+When several workers hit the same missing interface, investigate that shared
+obstruction instead of commissioning more wrappers around it.
+
+Compose useful end-to-end paths early. Do not accumulate hundreds of local
+results before discovering that their assumptions or source versions cannot
+coexist.
+
+Respect resource limits. Reuse valid unchanged evidence, but do not confuse
+focused compilation against cached objects with a coherent release rebuild.
+A failed proof attempt is not itself evidence that the theorem is false.
+
+## 8. Report progress in terms of obligations actually closed
+
+Every substantive handoff must state:
+- The exact claim established and its theorem/source/artifact references.
+- Which assumptions were discharged, retained, added, or changed.
+- What validation actually ran and what was reused.
+- The remaining blocker and the next concrete deliverable.
+
+Do not use commit counts, theorem counts, passing imports, or fewer top-level
+premises as substitutes for security progress.
+
+Before a release claim, require a coherent replay of the final dependency
+closure, an audit of the accepted axioms and trust boundaries, and evidence
+connecting the theorem's implementation to the release artifacts.
+
+Routine proof work and honest corrections should proceed without repeatedly
+asking the owner to adjudicate mathematical truth. Escalate genuine changes
+to the security contract, protocol, release scope, or frozen implementation
+with a recommendation and explicit consequences.
+
+If the contract has not been met, report “target not yet established” and
+name the missing obligations. Do not redefine success.

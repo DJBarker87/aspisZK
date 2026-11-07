@@ -1,0 +1,36 @@
+{"attempt": "NLT_L008", "exit_status": 0, "wall_seconds": 25.04058539494872, "peak_rss_kib": "6407608", "swaps": "0", "print_axioms": ["'NLT_C04Installed.at_event' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_C04Installed.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_C04Installed.at_event : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish)
+  {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ e ∈ (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events,
+        ∀ (detail : NLT_Subcuts.Detail H e), Law H detail :=
+⋯
+theorem NLT_C04Installed.installed : ∀ (f : NLT_Interpreted.Uninstalled) (H : Bytes → State) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (result : R Unit) 
+...
+theorem NLT_C04Installed.at_event : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish)
+  {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ e ∈ (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events,
+        ∀ (detail : NLT_Subcuts.Detail H e), Law H detail :=
+⋯
+theorem NLT_C04Installed.installed : ∀ (f : NLT_Interpreted.Uninstalled) (H : Bytes → State) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (result : R Unit) (records : List (NLT_Subcuts.Occurrence f H d hash)),
+        NLT_Subcuts.Invocation f H d hash
+            (NKE_CommonProgram.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H)
+              (NLB_Parent.finish f.finish) d pub proof ck hash none)
+            result records →
+          ∀ record ∈ records, Law H record.detail :=
+⋯
+'NLT_C04Installed.at_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04Installed.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r60bdddb9337a4b57852d25e3908802ff.scope; invocation ID: 812b0e2cc0b64769b0f36b9ac1de13cd

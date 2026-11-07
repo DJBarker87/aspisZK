@@ -1,0 +1,38 @@
+{"attempt": "NLT_L030", "exit_status": 0, "wall_seconds": 21.625185118056834, "peak_rss_kib": "6422332", "swaps": "0", "print_axioms": ["'NLT_NativeFacts.member' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_NativeFacts.resume_scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_NativeFacts.member : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records,
+          have f := NLT_FrameFromCuts.frame records;
+          actual r ∈
+            (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events :=
+⋯
+theorem NLT_NativeFacts.resume_scope : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub pro
+...
+theorem NLT_NativeFacts.member : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records,
+          have f := NLT_FrameFromCuts.frame records;
+          actual r ∈
+            (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events :=
+⋯
+theorem NLT_NativeFacts.resume_scope : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+        Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+          ∀ r ∈ records, ResumeScope r.entered r.input :=
+⋯
+'NLT_NativeFacts.member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_NativeFacts.resume_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb319326e7f1f412795d0b4672210f20c.scope; invocation ID: f199c38e86794ed48abac52f61a1b88a

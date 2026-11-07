@@ -1,0 +1,9 @@
+theorem NLT_RecordFrames.parent : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records, NLT_NativeWindows.question (actual r) = NLT_NativeWindows.question r.entered :=
+⋯
+'NLT_RecordFrames.questions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_RecordFrames.parent' depends on axioms: [propext, Classical.choice, Quot.sound]

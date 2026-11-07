@@ -1,0 +1,139 @@
+NLT_generated/NLT_FrameFromCuts.lean:34:22: error: unsolved goals
+case powers
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+gamma✝ : E
+reply✝ : Result (Std.Array E 29#usize)
+input : NLT_NativeWindows.Input (Event.powers gamma✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.powers gamma✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.powers gamma✝ reply✝, input := input, detail := detail }) = 0
+
+case inactive
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+bytes✝ : Slice U8
+reply✝ : Result (Option E)
+input : NLT_NativeWindows.Input (Event.inactive bytes✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.inactive bytes✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.inactive bytes✝ reply✝, input := input, detail := detail }) = 0
+
+case merkle
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+proof✝ : Slice U8
+p✝ : verifier.Prepared
+root✝ : Std.Array U8 32#usize
+reply✝ : R Unit
+input : NLT_NativeWindows.Input (Event.merkle proof✝ p✝ root✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.merkle proof✝ p✝ root✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.merkle proof✝ p✝ root✝ reply✝, input := input, detail := detail }) = 0
+
+case geometry
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+queries✝ : Std.Array U32 22#usize
+next✝ : Usize
+reply✝ : R verifier.QueryGeometry
+input : NLT_NativeWindows.Input (Event.geometry queries✝ next✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.geometry queries✝ next✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.geometry queries✝ next✝ reply✝, input := input, detail := detail }) = 0
+
+case pending
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+weights✝ : Slice K
+reply✝ : R verifier.BatchedWeights
+input : NLT_NativeWindows.Input (Event.pending weights✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.pending weights✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.pending weights✝ reply✝, input := input, detail := detail }) = 0
+
+case query
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+proof✝ : Slice U8
+p✝ : verifier.Prepared
+a✝ : verifier.Accumulator
+g✝ : Std.Array E 29#usize
+geometry✝ : verifier.QueryGeometry
+pending✝ : verifier.BatchedWeights
+reply✝ : R (verifier.Accumulator × verifier.BatchedWeights)
+input : NLT_NativeWindows.Input (Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ reply✝, input := input, detail := detail }) =
+    0
+
+case flush
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+pending✝ : verifier.BatchedWeights
+weights✝ : Slice K
+reply✝ : Result (Slice K)
+input : NLT_NativeWindows.Input (Event.flush pending✝ weights✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.flush pending✝ weights✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.flush pending✝ weights✝ reply✝, input := input, detail := detail }) = 0
+
+case finish
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+x : NP6_StdModel.Reservation
+v✝ : verifier.View
+p✝ : verifier.Prepared
+a✝ : verifier.Accumulator
+reply✝ : R Unit
+input : NLT_NativeWindows.Input (Event.finish v✝ p✝ a✝ reply✝)
+detail : Detail H (NLT_NativeWindows.window H d hash (Event.finish v✝ p✝ a✝ reply✝) input)
+h : none = some x
+⊢ rank (actual { entered := Event.finish v✝ p✝ a✝ reply✝, input := input, detail := detail }) = 0
+NLT_generated/NLT_FrameFromCuts.lean:44:1: error: Type mismatch
+  NLT_NativeWindows.rank_window H d hash (Event.resume ck✝ proof✝ pub✝ reply✝) input
+has type
+  rank (NLT_NativeWindows.window H d hash (Event.resume ck✝ proof✝ pub✝ reply✝) input) =
+    rank (Event.resume ck✝ proof✝ pub✝ reply✝)
+but is expected to have type
+  rank (actual { entered := Event.resume ck✝ proof✝ pub✝ reply✝, input := input, detail := detail }) = 5
+NLT_generated/NLT_FrameFromCuts.lean:51:1: error: Type mismatch
+  NLT_NativeWindows.rank_window H d hash (Event.resume ck✝ proof✝ pub✝ reply✝) input
+has type
+  rank (NLT_NativeWindows.window H d hash (Event.resume ck✝ proof✝ pub✝ reply✝) input) =
+    rank (Event.resume ck✝ proof✝ pub✝ reply✝)
+but is expected to have type
+  rank (actual { entered := Event.resume ck✝ proof✝ pub✝ reply✝, input := input, detail := detail }) = 8
+theorem NLT_FrameFromCuts.compatible : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  (records : List (Occurrence H d hash)),
+  List.Pairwise (fun a b => rank (actual a) < rank (actual b)) records →
+    ∀ r ∈ records, NLT_NativeWindows.Compatible (frame records) r.entered r.input :=
+⋯
+'NLT_FrameFromCuts.resume_rank' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.pending_rank' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.finish_rank' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLT_FrameFromCuts.compatible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,168 @@
+theorem NLT_Root.root : ∀ (H : Bytes → State) (pub proof ck : Slice U8),
+  (↑proof).length = 57607 → (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → RowSpec H pub proof ck :=
+⋯
+def NLT_Root.RowSpec : (Bytes → State) → Slice U8 → Slice U8 → Slice U8 → Prop :=
+fun H pub proof ck =>
+  (∀ (result : R Unit) (records : List (Occurrence H (NLT_RuntimeDigest.digest H) ())),
+      Invocation H (NLT_RuntimeDigest.digest H) ()
+          (NLT_NativeSource.skeleton H (NLT_RuntimeDigest.digest H) pub proof ck ()) result records →
+        have f := NLT_FrameFromCuts.frame records;
+        result =
+            NJJ_Common.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish)
+              (NLT_RuntimeDigest.digest H) pub proof ck () none ∧
+          List.map actual records =
+              (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish)
+                  (NLT_RuntimeDigest.digest H) pub proof ck () none).events ∧
+            (∀ r ∈ records, NLT_NativeWindows.question (actual r) = NLT_NativeWindows.question r.entered) ∧
+              (∀ r ∈ records, CallLaw H r) ∧
+                ∀ (inside : NLL.History),
+                  NLT_Chronology.completed records = some inside →
+                    NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H) (List.map actual records) = inside) ∧
+    ∀ (records : List (Occurrence H (NLT_RuntimeDigest.digest H) ())),
+      ¬Invalid H (NLT_RuntimeDigest.digest H) ()
+          (NLT_NativeSource.skeleton H (NLT_RuntimeDigest.digest H) pub proof ck ()) records
+def NLT_Root.CallLaw : (H : Bytes → State) → Occurrence H (NLT_RuntimeDigest.digest H) () → Prop :=
+fun H r =>
+  NLT_AllocationInstalled.ResumeLaw (NLT_RuntimeDigest.digest H) () r.entered r.input ∧
+    NLT_NativeFacts.ResumeScope r.entered r.input ∧
+      NLT_AllocationInstalled.PendingLaw r.entered r.input ∧
+        NLT_QueryInstalled.Law r.entered r.input ∧
+          NLT_FinishInstalled.Law r.entered r.input ∧
+            NLT_C04Installed.Law H r.detail ∧ NLT_ReplyInstalled.Law H r.detail
+inductive NLT_NativeInvocation.Invocation : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      (hash : X) → {A : Type} → NKE_Free.Program Event A → Result A → List (Occurrence H d hash) → Prop
+number of parameters: 5
+constructors:
+NLT_NativeInvocation.Invocation.ret : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (value : A), Invocation H d hash (NKE_Free.Program.ret value) (ok value) []
+NLT_NativeInvocation.Invocation.prim_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (value : B) (next : B → NKE_Free.Program Event A) (result : Result A)
+  (records : List (Occurrence H d hash)),
+  Invocation H d hash (next value) result records →
+    Invocation H d hash (NKE_Free.Program.prim (ok value) next) result records
+NLT_NativeInvocation.Invocation.prim_fail : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X}
+  {hash : X} {A B : Type} (error : Error) (next : B → NKE_Free.Program Event A),
+  Invocation H d hash (NKE_Free.Program.prim (fail error) next) (fail error) []
+NLT_NativeInvocation.Invocation.prim_div : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X}
+  {hash : X} {A B : Type} (next : B → NKE_Free.Program Event A),
+  Invocation H d hash (NKE_Free.Program.prim div next) div []
+NLT_NativeInvocation.Invocation.call_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (value : B),
+      codec.decode (actual record) = some (ok value) →
+        ∀ (result : Result A) (records : List (Occurrence H d hash)),
+          Invocation H d hash (next value) result records →
+            Invocation H d hash (NKE_Free.Program.call codec seed next) result (record :: records)
+NLT_NativeInvocation.Invocation.call_fail : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X}
+  {hash : X} {A B : Type} (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (error : Error),
+      codec.decode (actual record) = some (fail error) →
+        Invocation H d hash (NKE_Free.Program.call codec seed next) (fail error) [record]
+NLT_NativeInvocation.Invocation.call_div : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X}
+  {hash : X} {A B : Type} (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    codec.decode (actual record) = some div → Invocation H d hash (NKE_Free.Program.call codec seed next) div [record]
+inductive NLT_NativeInvocation.Invalid : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      (hash : X) → {A : Type} → NKE_Free.Program Event A → List (Occurrence H d hash) → Prop
+number of parameters: 5
+constructors:
+NLT_NativeInvocation.Invalid.prim_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (value : B) (next : B → NKE_Free.Program Event A) (records : List (Occurrence H d hash)),
+  Invalid H d hash (next value) records → Invalid H d hash (NKE_Free.Program.prim (ok value) next) records
+NLT_NativeInvocation.Invalid.call_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (value : B),
+      codec.decode (actual record) = some (ok value) →
+        ∀ (records : List (Occurrence H d hash)),
+          Invalid H d hash (next value) records →
+            Invalid H d hash (NKE_Free.Program.call codec seed next) (record :: records)
+NLT_NativeInvocation.Invalid.mismatch : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    codec.decode (actual record) = none → Invalid H d hash (NKE_Free.Program.call codec seed next) [record]
+structure NLT_NativeInvocation.Occurrence (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X) (hash : X) :
+  Type
+number of parameters: 4
+fields:
+  NLT_NativeInvocation.Occurrence.entered : Event
+  NLT_NativeInvocation.Occurrence.input : NLT_NativeWindows.Input self.entered
+  NLT_NativeInvocation.Occurrence.detail : Detail H (NLT_NativeWindows.window H d hash self.entered self.input)
+constructor:
+  NLT_NativeInvocation.Occurrence.mk {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+    (entered : Event) (input : NLT_NativeWindows.Input entered)
+    (detail : Detail H (NLT_NativeWindows.window H d hash entered input)) : Occurrence H d hash
+inductive NLT_Subcuts.Detail : (Bytes → State) → Event → Type
+number of parameters: 1
+constructors:
+NLT_Subcuts.Detail.ordinary : {H : Bytes → State} →
+  (e : Event) →
+    (∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        e ≠ Event.merkle pr p folded reply) →
+      NLT_Subcuts.Detail H e
+NLT_Subcuts.Detail.returning : {H : Bytes → State} →
+  (pr : Slice U8) →
+    (p : verifier.Prepared) →
+      (folded : Std.Array U8 32#usize) →
+        (reply : R Unit) →
+          (inside : NLL.History) →
+            (out : NLL.Reply) →
+              NLL_BatchSource.Invocation H pr p folded 1#usize inside out →
+                NLT_Subcuts.Detail H (Event.merkle pr p folded reply)
+NLT_Subcuts.Detail.aborting : {H : Bytes → State} →
+  (pr : Slice U8) →
+    (p : verifier.Prepared) →
+      (folded : Std.Array U8 32#usize) →
+        (error : Error) →
+          (inside : NLL.History) →
+            (pending : NLL.Pending) →
+              NLL_BatchAbort.Invocation H pr p folded 1#usize inside pending →
+                NLT_Subcuts.Detail H (Event.merkle pr p folded (fail error))
+def NLT_NativeWindows.Input : NLT_NativeWindows.Event → Type :=
+fun x =>
+  match x with
+  | Event.resume ck proof pub reply => NP6_StdModel.Reservation
+  | Event.pending weights reply => NP6_StdModel.Reservation
+  | Event.finish v p a reply => NP6_StdModel.Reservation × NIW_AlignFinishComposed.Locations
+  | Event.query pr p a g geo pending reply =>
+    NLT_ParentCuts.Query
+      { proof := pr, prepared := p, accumulator := a, powers := g, geometry := geo, pending := pending }
+  | x => PUnit.{1}
+structure NLT_ParentCuts.Query (before : NKE_QueryInput.Args) : Type
+number of parameters: 1
+fields:
+  NLT_ParentCuts.Query.observation : NLB_Parent.QueryObservation
+  NLT_ParentCuts.Query.frame : NLB_Parent.QueryCut before self.observation
+constructor:
+  NLT_ParentCuts.Query.mk {before : NKE_QueryInput.Args} (observation : NLB_Parent.QueryObservation)
+    (frame : NLB_Parent.QueryCut before observation) : NLT_ParentCuts.Query before
+def NLB_Parent.QueryCut : NKE_QueryInput.Args → NLB_Parent.QueryObservation → Prop :=
+fun before o =>
+  ↑before.proof = NKO_ReadonlyFrame.view o.heap o.proofBase (↑before.proof).length ∧
+    (o.proofBase + (↑before.proof).length ≤ o.logBase ∨ o.logBase + o.logSize ≤ o.proofBase) ∧
+      NJJ_Constructors.PreparedCut before.prepared o.args.prepared ∧
+        NJJ_Constructors.AccumulatorCut before.accumulator o.args.accumulator ∧
+          (∀ (i : Fin 29), (↑o.args.powers)[↑i]? = (↑before.powers)[↑i]?) ∧
+            NKE_GeometryCuts.Cut before.geometry o.args.geometry ∧
+              (↑o.args.pending.raw).length = 64 ∧
+                (∀ i < 64, (↑o.args.pending.raw)[i]? = (↑before.pending.raw)[i]?) ∧
+                  o.args.pending.terms = before.pending.terms
+def NLP_InputDomain.Root0 : Slice U8 → Slice U8 → Prop :=
+fun ck proof =>
+  List.take 32 (List.drop 112 ↑ck) =
+    ↑(AspisV8R19.SqueezeOracleBridge.encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+'NLT_Root.root' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,9 @@
+theorem NLT_C04NativeInstalled.installed : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+        Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+          ∀ record ∈ records, NLT_C04Installed.Law H record.detail :=
+⋯
+'NLT_C04NativeInstalled.installed' depends on axioms: [propext, Classical.choice, Quot.sound]

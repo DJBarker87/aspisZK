@@ -1,0 +1,11 @@
+theorem NLT_NativeInvocation.erase : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (result : Result A) (records : List (Occurrence H d hash)),
+  Invocation H d hash p result records →
+    NLT_Continuation.Invocation
+      (fun e actual =>
+        ∃ recorded input,
+          NLT_NativeWindows.question recorded = NLT_NativeWindows.question e ∧
+            actual = NLT_NativeWindows.window H d hash recorded input)
+      p result (List.map actual records) :=
+⋯
+'NLT_NativeInvocation.erase' depends on axioms: [propext, Classical.choice, Quot.sound]

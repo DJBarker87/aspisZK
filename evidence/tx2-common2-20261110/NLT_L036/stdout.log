@@ -1,0 +1,7 @@
+theorem NLT_NoInvalid.source : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (records : List (Occurrence H d hash)),
+      Invalid H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records → False :=
+⋯
+'NLT_NoInvalid.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,10 @@
+theorem NLT_C04StopOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records ∧
+            n ≤ 3 ∧ ∀ record ∈ records, rank (actual record) < 3 :=
+⋯
+'NLT_C04StopOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]

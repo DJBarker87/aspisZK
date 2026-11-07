@@ -1,0 +1,82 @@
+theorem NLT_CompleteRoot.root : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 → (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → RowSpec H d pub proof ck hash :=
+⋯
+def NLT_CompleteRoot.RowSpec : (Bytes → State) →
+  {X : Type} → aspis_core.digest.Digest32 X → Slice U8 → Slice U8 → Slice U8 → X → Prop :=
+fun H {X} d pub proof ck hash =>
+  (∀ (outcome : End H d hash), Native H d pub proof ck hash outcome → Law H d pub proof ck hash outcome) ∧
+    ∀ (records : List (Occurrence H d hash)),
+      ¬Invalid H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records
+def NLT_CompleteRoot.Native : (H : Bytes → State) →
+  {X : Type} → (d : aspis_core.digest.Digest32 X) → Slice U8 → Slice U8 → Slice U8 → (hash : X) → End H d hash → Prop :=
+fun H {X} d pub proof ck hash x =>
+  match x with
+  | End.resolved result records => Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records
+  | End.c04Stopped records cut => NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut
+def NLT_CompleteRoot.Law : (H : Bytes → State) →
+  {X : Type} → (d : aspis_core.digest.Digest32 X) → Slice U8 → Slice U8 → Slice U8 → (hash : X) → End H d hash → Prop :=
+fun H {X} d pub proof ck hash x =>
+  match x with
+  | End.resolved result records => ResolvedLaw H d pub proof ck hash result records
+  | End.c04Stopped records cut => StoppedLaw H d pub proof ck hash records cut
+def NLT_CompleteRoot.StoppedLaw : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      Slice U8 → Slice U8 → Slice U8 → (hash : X) → List (Occurrence H d hash) → NLT_C04Stop.Cut H → Prop :=
+fun H {X} d pub proof ck hash records cut =>
+  have f := NLT_FrameFromCuts.frame records;
+  (∃ reply suffix,
+      (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck hash
+            none).events =
+        List.map actual records ++ Event.merkle cut.proof cut.prepared cut.folded reply :: suffix) ∧
+    (∀ r ∈ records,
+        NLT_NativeFacts.ResumeScope r.entered r.input ∧ NLT_AllocationInstalled.ResumeLaw d hash r.entered r.input) ∧
+      NLL_Prefix.At
+          (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+            (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events)
+          (cut.inside ++ cut.pending.answered) cut.pending.parts ∧
+        NLL_Prefix.At
+          (NLL_ObservedCalls.calls H cut.proof (NLP_RootCodec.parsed cut.proof (Port3_BatchStage.root1 cut.prepared))
+              cut.prepared.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded))
+              NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+          (cut.inside ++ cut.pending.answered) cut.pending.parts
+structure NLT_C04Stop.Cut (H : Bytes → State) : Type
+number of parameters: 1
+fields:
+  NLT_C04Stop.Cut.proof : Slice U8
+  NLT_C04Stop.Cut.prepared : verifier.Prepared
+  NLT_C04Stop.Cut.folded : Std.Array U8 32#usize
+  NLT_C04Stop.Cut.inside : NLL.History
+  NLT_C04Stop.Cut.pending : NLL.Pending
+  NLT_C04Stop.Cut.child : NLL_BatchAbort.Invocation H self.proof self.prepared self.folded 1#usize self.inside
+      self.pending
+constructor:
+  NLT_C04Stop.Cut.mk {H : Bytes → State} (proof : Slice U8) (prepared : verifier.Prepared)
+    (folded : Std.Array U8 32#usize) (inside : NLL.History) (pending : NLL.Pending)
+    (child : NLL_BatchAbort.Invocation H proof prepared folded 1#usize inside pending) : NLT_C04Stop.Cut H
+inductive NLT_C04Stop.At : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      (hash : X) → {A : Type} → NKE_Free.Program Event A → List (Occurrence H d hash) → NLT_C04Stop.Cut H → Prop
+number of parameters: 5
+constructors:
+NLT_C04Stop.At.prim_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (value : B) (next : B → NKE_Free.Program Event A) (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash (next value) records cut →
+    NLT_C04Stop.At H d hash (NKE_Free.Program.prim (ok value) next) records cut
+NLT_C04Stop.At.call_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A)
+  (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (value : B),
+      codec.decode (actual record) = some (ok value) →
+        ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+          NLT_C04Stop.At H d hash (next value) records cut →
+            NLT_C04Stop.At H d hash (NKE_Free.Program.call codec seed next) (record :: records) cut
+NLT_C04Stop.At.stopped : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (codec : NKE_Free.Codec Event B) (seed : Result B) (next : B → NKE_Free.Program Event A) (cut : NLT_C04Stop.Cut H),
+  NLT_NativeWindows.question (codec.encode seed) = NLT_C04Stop.question cut →
+    NLT_C04Stop.At H d hash (NKE_Free.Program.call codec seed next) [] cut
+'NLT_CompleteRoot.root' depends on axioms: [propext, Classical.choice, Quot.sound]

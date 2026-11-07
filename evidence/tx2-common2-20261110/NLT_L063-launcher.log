@@ -1,0 +1,32 @@
+{"attempt": "NLT_L063", "exit_status": 0, "wall_seconds": 26.242192370817065, "peak_rss_kib": "6405004", "swaps": "0", "print_axioms": ["'NLT_C04StopChronology.not_merkle' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_C04StopChronology.empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_C04StopChronology.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_C04StopChronology.installed : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+        NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+          have f := NLT_FrameFromCuts.frame records;
+          NLL_Prefix.At
+            (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+              (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof
+                  ck hash none).events)
+            
+...
+theorem NLT_C04StopChronology.installed : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+        NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+          have f := NLT_FrameFromCuts.frame records;
+          NLL_Prefix.At
+            (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+              (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof
+                  ck hash none).events)
+            (cut.inside ++ cut.pending.answered) cut.pending.parts :=
+⋯
+'NLT_C04StopChronology.not_merkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopChronology.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopChronology.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-reea5f8a256144305b53e868d3c4c6dae.scope; invocation ID: 56ad687b661a445882cad323de2534c2

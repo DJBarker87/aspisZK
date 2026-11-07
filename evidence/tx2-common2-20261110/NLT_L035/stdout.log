@@ -1,0 +1,22 @@
+theorem NLT_InvalidTransport.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (records : List (Occurrence H d hash)),
+  Invalid H d hash p records →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records :=
+⋯
+theorem NLT_InvalidTransport.reseed : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (left right : Program Event A),
+  NLT_Reseed.Same left right →
+    ∀ (records : List (Occurrence H d hash)), Invalid H d hash left records → Invalid H d hash right records :=
+⋯
+theorem NLT_InvalidTransport.erase : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (f : NLT_Interpreted.Uninstalled) (p : Program Event A) (records : List (Occurrence H d hash)),
+  Invalid H d hash p records →
+    (∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) →
+      NLT_Continuation.Invalid (NLT_EraseCompatible.Local f H d hash) p (List.map actual records) :=
+⋯
+'NLT_InvalidTransport.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_InvalidTransport.reseed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_InvalidTransport.erase' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,33 @@
+structure NLT_C04Stop.Cut (H : Bytes → State) : Type
+number of parameters: 1
+fields:
+  NLT_C04Stop.Cut.proof : Slice U8
+  NLT_C04Stop.Cut.prepared : verifier.Prepared
+  NLT_C04Stop.Cut.folded : Std.Array U8 32#usize
+  NLT_C04Stop.Cut.inside : NLL.History
+  NLT_C04Stop.Cut.pending : NLL.Pending
+  NLT_C04Stop.Cut.child : NLL_BatchAbort.Invocation H self.proof self.prepared self.folded 1#usize self.inside
+      self.pending
+constructor:
+  NLT_C04Stop.Cut.mk {H : Bytes → State} (proof : Slice U8) (prepared : verifier.Prepared)
+    (folded : Std.Array U8 32#usize) (inside : NLL.History) (pending : NLL.Pending)
+    (child : NLL_BatchAbort.Invocation H proof prepared folded 1#usize inside pending) : Cut H
+inductive NLT_C04Stop.At : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      (hash : X) → {A : Type} → Program Event A → List (Occurrence H d hash) → Cut H → Prop
+number of parameters: 5
+constructors:
+NLT_C04Stop.At.prim_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (value : B) (next : B → Program Event A) (records : List (Occurrence H d hash)) (cut : Cut H),
+  At H d hash (next value) records cut → At H d hash (Program.prim (ok value) next) records cut
+NLT_C04Stop.At.call_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (codec : Codec Event B) (seed : Result B) (next : B → Program Event A) (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (value : B),
+      codec.decode (actual record) = some (ok value) →
+        ∀ (records : List (Occurrence H d hash)) (cut : Cut H),
+          At H d hash (next value) records cut → At H d hash (Program.call codec seed next) (record :: records) cut
+NLT_C04Stop.At.stopped : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X} {A B : Type}
+  (codec : Codec Event B) (seed : Result B) (next : B → Program Event A) (cut : Cut H),
+  NLT_NativeWindows.question (codec.encode seed) = question cut → At H d hash (Program.call codec seed next) [] cut
