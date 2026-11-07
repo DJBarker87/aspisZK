@@ -142,3 +142,5 @@ PV_LIB_SPEC_F17PackageComparison compiled49766, cohortw4: exit0, wall0:02.07, pe
 PV_LIB_SPEC_F5Full compiled49767, cohortw3: exit0, wall0:02.02, peak4727948KiB, swap0; standard summary axioms only. Statement only.
 
 PV_LIB_SPEC_F5PackageComparison compiled49768, cohortw4: exit0, wall0:02.13, peak4626768KiB, swap0; standard summary axioms only. Statement only.
+
+PV_LIB_SPEC_F2Full compiled49769, cohortw3: exit0, wall0:02.08, peak4727944KiB, swap0; standard summary axioms only. Statement only.
