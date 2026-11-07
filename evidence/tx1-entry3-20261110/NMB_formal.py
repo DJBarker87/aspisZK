@@ -44,7 +44,10 @@ for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
   if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
-x['deps_fingerprint']['selected_objects']=pins;(b/{(a+'.json')!r}).write_text(json.dumps(x,indent=1)+'\\n')
+x['deps_fingerprint']['selected_objects']=pins
+if {kind!r}=='audit':
+ x['deps_fingerprint']['executables']={{str(p):{{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}}for p in [b/'NMB_native/NMB_ProofDriver',b/'NMB_native/NMB_ScanDriver'] if p.is_file()}}
+(b/{(a+'.json')!r}).write_text(json.dumps(x,indent=1)+'\\n')
 (b/'NMB_objects'/{target.replace('.','/')!r}).parent.mkdir(parents=True,exist_ok=True)
 (b/'NMB_native').mkdir(exist_ok=True)
 ''');assert r.returncode==0,r.stderr

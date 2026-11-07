@@ -24,3 +24,5 @@ Native stage completed: all40 slots used. Fragment guard/snapshot-argument/array
 The full per-occurrence source344 fold, handle separation derived from successful child extents, readonly frame, successful post-state and semantic cleanup order compile. Full116-occurrence typed345 source refinement is under focused verification. No parent row or ReviewedTranscription is admitted. Original094 schema expansion is VALUE/FRAME only and never used as a full resource packet. Read-only research recheck of NLV and NLW confirms no available094 root; sibling source-only evidence supplies no native credit.
 
 Final combined import/raw ax2/NFX gate is still pending. All new roots remain source support; target NOT ESTABLISHED. Own host workspace,target,tmp and copied seed objects are retained; no shipped source/ELF/key/shared infrastructure/sibling worktree edits, push or new trust row.
+
+Raw stage COMPLETE: all11518 roots present, standard axioms only. The two inherited NKR transition/NHC decoder collector discrepancies retain exit1. Final closure/export/retention/tool/integrity stages are pending; no native parent root or ledger promotion.
