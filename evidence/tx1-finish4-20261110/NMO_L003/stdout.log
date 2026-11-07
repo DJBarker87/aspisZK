@@ -1,0 +1,13 @@
+'AspisR1.NMO_Transcription.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMO_Transcription.full_outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMO_Transcription.source : ∀ {H : Type} (input : NLC_Finish.Input H),
+  NLC_Goals.FinishSourceEquality input :=
+⋯
+theorem AspisR1.NMO_Transcription.full_outcome : ∀ {H : Type} (input : NLU.Input H),
+  (NLU.digestLog (NLU_Frontier.run (NLC_Finish.fuel (NLC_Finish.initial input)) (NLU.initial input)).summary.events,
+      NLU.eraseReply
+        (NLU_Frontier.run (NLC_Finish.fuel (NLC_Finish.initial input)) (NLU.initial input)).summary.reply) =
+    PreparedHashCode.run
+      (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest input.publicValue
+        input.prefix1 input.transcript input.challenges none) :=
+⋯

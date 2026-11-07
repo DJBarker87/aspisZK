@@ -9,3 +9,5 @@ Budget: 100 Kani, 80 Lean, zero extraction. One capped host scope at a time; adm
 First deliverables: copy and hash NMC, NLU, NLX exports in that order; inspect full-source existing channels; prepare 35-occurrence cut map and parent harness. All support remains non-credit until native relation, full Lean composition, combined import, NFX scan and raw ax2 gates pass.
 
 No keys, accounts, sibling worktrees or session A worktrees touched. No push.
+
+Stage 1: NMO_K001 actual-parent rounds-Err branch PASS (50.550 s, 1877300 KiB RSS, swap0); K002 reply, K003 argument, K004 footprint and K005 KMX negative controls FAIL as intended. Frozen graph/lock validated on every native run, deployed library features and exact KMX component pins. No Option<fn> or writable-static verdict used. This is prefix support only; no row root. NMO_L001/L002 seeded objects and scratch corpus. NMO_L003 model transcription compile is pending at this commit.
