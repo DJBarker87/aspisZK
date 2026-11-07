@@ -49,6 +49,9 @@ print(json.dumps({'stream_a_scopes':active,'count':len(active),'owned_scopes':ow
         with (E/'NMX_DISK.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,retry=disk_retry,**disk))+'\n')
         if disk['free_bytes']>=40_000_000_000:break
         if disk_retry==6:raise RuntimeError('STOP host disk below 40 GB after six waits')
+        with (E/'NMX_ATTEMPTS.jsonl').open('a') as f:
+            f.write(json.dumps(dict(kind='wait',attempt=a,phase='host_disk',retry=disk_retry,utc=time.time(),free_bytes=disk['free_bytes'],required_free_bytes=40_000_000_000,wait_seconds=600,scope_submitted=False))+'\n')
+        print(json.dumps(dict(attempt=a,status='wait',reason='host disk below 40 GB',retry=disk_retry,**disk)),flush=True)
         for _ in range(10):time.sleep(60)
 
     for retry in range(11):

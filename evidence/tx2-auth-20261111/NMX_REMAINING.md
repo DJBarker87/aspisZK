@@ -1,3 +1,7 @@
+# Current revision2 status
+
+See [NMX_REV2_REMAINING.md](NMX_REV2_REMAINING.md) for the current target, proved steps and exact remaining obligations. The historical revision1/renewal status below is retained for provenance; its clone-target mismatch has been superseded by the revision2 native getter/guard packets. No CANDIDATE is claimed.
+
 # NMX remaining: TX2:233 is OPEN
 
 No candidate root or ledger credit. Canonical target is exactly

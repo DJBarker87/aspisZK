@@ -8,7 +8,7 @@ open NMX_R2_DistinctRange
 theorem range {N : Usize} (a : Array Account N) (n : Nat) (index : Usize)
  (small : index.val+n≤7) :
  unique a n index ↔
- ∀ i, index.val≤i → i<index.val+n → ∀ j, j<i → nthKey a j ≠ nthKey a i := by
+ ∀ i, index.val ≤ i → i < index.val + n → ∀ j, j < i → nthKey a j ≠ nthKey a i := by
  induction n generalizing index with
  | zero =>
    simp only [unique]

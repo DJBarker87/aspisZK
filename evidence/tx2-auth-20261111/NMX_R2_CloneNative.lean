@@ -29,9 +29,12 @@ theorem data_shape (base : Ops) (aborts : Bool) (failure : Error)
  | Ok v => simp only [r1_pool_adapter.owned.OwnedAccount.data,h]
  | Err e =>
    rw [NMX_ErrorCloneCut.data_error _ _ e h]
-   change (do let copied ← clone aborts failure e; ok (.Err copied)) = _
+   change ((do let copied ← clone aborts failure e; ok (.Err copied)) :
+    Result (core.result.Result (Slice U8) solana_program_error.ProgramError)) =
+    (if aborts && (error e).cloneAllocates then .fail failure else ok (.Err e))
    unfold clone
-   split <;> rfl
+   cases flag : (aborts && (error e).cloneAllocates) <;>
+    simp only [flag,Bool.false_eq_true,↓reduceIte,bind_tc_fail,bind_tc_ok]
 
 /-- The actual emitted getter, including its allocating error-clone arm,
 satisfies the revision2 getter for every OwnedAccount, without SnapshotErrs. -/

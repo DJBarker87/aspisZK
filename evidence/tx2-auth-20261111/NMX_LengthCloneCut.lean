@@ -9,7 +9,7 @@ theorem shape (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount) :
  r1_pool_adapter.owned.OwnedAccount.data_len ops a =
  match a.length with
  | .Ok n => ok (.Ok n)
- | .Err e => do let cloned ← ops.op35 e; ok (.Err cloned) := by
+ | .Err e => (do let cloned ← ops.op35 e; ok (.Err cloned)) := by
  cases h : a.length <;>
   simp only [r1_pool_adapter.owned.OwnedAccount.data_len,
    core.result.Result.Insts.CoreCloneClone.clone,h,

@@ -10,8 +10,10 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
         assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<437,'Revision2 formal budget exhausted (287 previous + 150 minimum remaining)' 
         combined=E/'NMX_COMBINED_IMPORT.lean'
         combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
-        pending_final_slots=1 if combined_green else 2
-        if target not in ['NMX_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention']:
+        # Revision2 has two new-root audits, its own combined import and retention.
+        # Keep these slots even though the historical revision1 import is green.
+        pending_final_slots=4
+        if target not in ['NMX_COMBINED_IMPORT','NMX_R2_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention','retention_rev2','proof6','proof7']:
             assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<437-pending_final_slots,'Reserve every outstanding final import/retention slot'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
@@ -78,7 +80,7 @@ if {kind!r}=='audit':
 if {kind!r}=='extract':
  names += [p for p in (b/{target!r}).rglob('*') if p.is_file() and p.suffix not in ['.olean','.ir']]
 if {kind!r}=='inspect':
- names += [b/n for n in ['NMX_TOOL_PINS.json','NMX_RETENTION.json','NMX_EXPORT.json','NMX_CLOSURE_PINS.json.xz','NMX_CLOSURE_PINS.json.sha256','NMX_UNUSED_POOL_FINDING.json'] if (b/n).is_file()]
+ names += [b/n for n in ['NMX_TOOL_PINS.json','NMX_RETENTION.json','NMX_EXPORT.json','NMX_CLOSURE_PINS.json.xz','NMX_CLOSURE_PINS.json.sha256','NMX_UNUSED_POOL_FINDING.json','NMX_REV2_EXPORT.json','NMX_REV2_RETENTION.json','NMX_REV2_CLOSURE_PINS.json.xz','NMX_REV2_CLOSURE_PINS.json.sha256'] if (b/n).is_file()]
 out={{}}
 for p in names:
  n=str(p.relative_to(b))
@@ -107,7 +109,8 @@ print(json.dumps(out))
         if not p.exists():p.write_bytes(lzma.compress(raw))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NMX_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
-    summary={k:v for k,v in rc.items() if k!='deps_fingerprint'}
+    summary={k:v for k,v in rc.items() if k not in ['deps_fingerprint','env']}
+    summary['environment_retained_in_full_receipt']=a+'/receipt.json'
     summary.update(full_receipt=a+'/receipt.json',full_receipt_sha256=sha((E/a/'receipt.json').read_bytes()))
     with (E/'NMX_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)

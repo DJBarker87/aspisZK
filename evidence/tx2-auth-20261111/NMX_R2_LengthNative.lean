@@ -15,9 +15,12 @@ theorem shape (base : Ops) (aborts : Bool) (failure : Error)
  cases h : a.length with
  | Ok n => rfl
  | Err e =>
-   change (do let copied ← clone aborts failure e; ok (.Err copied)) = _
+   change ((do let copied ← clone aborts failure e; ok (.Err copied)) :
+    Result (core.result.Result (Usize) solana_program_error.ProgramError)) =
+    (if aborts && (error e).cloneAllocates then .fail failure else ok (.Err e))
    unfold clone
-   split <;> rfl
+   cases flag : (aborts && (error e).cloneAllocates) <;>
+    simp only [flag,Bool.false_eq_true,↓reduceIte,bind_tc_fail,bind_tc_ok]
 
 theorem length (base : Ops) (aborts : Bool) (failure : Error)
  (a : r1_pool_adapter.owned.OwnedAccount) (env : RSL.Env) :
