@@ -1,3 +1,17 @@
+# Current LIB handoff: F9 and complete final bundle
+
+Target not yet established; no ledger row credit. This continuation supersedes the historical parseShape domain and module25 TX2 WAITING statements below. Current pickup: import `LIB_F9_IMPORT`.
+
+- `LIB_ParseShapeTotal.frozen_wrong_length` proves the ACTUAL fresh frozen parse_shape emission returns Err(Parse) whenever native proof length differs from57607. `rejected` gives the exact returned error and empty event prefix. No native fact/Kani/extraction was needed; the first guard has no child calls.
+- `LIB_VTx1A.parseShape` and `LIB_VLib.library.parseShape` now use domain True and the full SAME deterministic model graph on ALL Bytes. `source` preserves the original typed slice; `closed086` retains the exact former graph on its length domain; `returns`/`functional` discharge the returned-value gate (and the stronger strict graph gate). Nonrepresentable host lists use the existing raw-slice fallback; every actual typed slice roundtrips.
+- `LIB_Prepared.child` and `LIB_S1.library` were rebuilt at SAME repaired VL. All six `LIB_Instances.tas136/137/087/094/328/345` rfl checks passed. R4 was rebuilt.
+- `LIB_ParseShape094.empty_reference` admits Err(Parse)/[] at proof[]/k10 for every pub/env. `width_not_required` explicitly refutes the old required_width premise at this instance. The historical NNG_Nonempty094.no_candidate proof cannot be transported to it. No complete actual094 RowSpec theorem is claimed: NNG_ still owns the emitted094 observation/Ref composition and all SAME reached-child domain proofs; exact boundary in LIB_F9_HANDOFF.md.
+- Module25 is now complete as `LIB_FullInstances.library`: L/D/V0/VL/P/C, with nine TX2 TAS type identities and the existing six TX1 identities. L-star and V0-star are actual LIBB_PoolLib.library/LIBB_V2Star.library; gate, Values and unchanged SAME-V0 weak registration are imported, not duplicated. No TX2 library field waits on LIBB_. Actual I.f064/EnvRep installation remains integration-owned.
+
+F9-only details: LIB_F9_HANDOFF.md, LIB_F9_STATUS.json, LIB_F9_PROVENANCE.json. Validation, own-root audit and retained export are being finalized. No shipped source, trust item, frozen spec, key, sibling worktree or release artifact changed; no push. Original runtime/std/tool/extraction/source-to-ELF obligations remain retained.
+
+## Historical bundle continuation (prior to F9)
+
 # LIB bundle handoff
 
 Target not yet established; no ledger row credited. Branch codex/cx-lib-20261107. All authorized TX1 bundle work is concrete. Earlier modules14–18 handoff is preserved in LIB_LANE_A_HANDOFF.md.
