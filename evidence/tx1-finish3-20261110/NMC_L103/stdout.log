@@ -1,0 +1,811 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯
+'AspisR1.NMC_Claims.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Claims.abort : ∀ {A : Type} (heap : AspisR1.NMC_Parent.Heap) (identity : ℕ) (error : Aeneas.Std.Error),
+  AspisR1.NMC_Claims.attach heap identity (Aeneas.Std.Result.fail error) = Aeneas.Std.Result.fail error
+'AspisR1.NMC_Claims.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Claims.frame : ∀ {A : Type} (heap : AspisR1.NMC_Parent.Heap) (identity address : ℕ)
+  (child : Aeneas.Std.Result (AspisR1.NMC_Claims.Status × A)) (after : AspisR1.NMC_Claims.Returned A),
+  AspisR1.NMC_Claims.attach heap identity child = Aeneas.Std.Result.ok after →
+    address ≠ identity → after.heap address = heap address
+'AspisR1.NMC_Claims.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Claims.installed : ∀ {A H : Type} (input : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain input →
+    ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A) (rows : AspisR1.NKA_HeapCarrier.RowNative),
+      AspisR1.NKA_HeapCarrier.RowCut rows →
+        ∀ (box : AspisR1.NKA_HeapCarrier.BoxNative),
+          AspisR1.NKA_HeapCarrier.BoxCut box →
+            ∀ (identity : ℕ) (before : AspisR1.NKA_InitializedPrefix.Memory) (heap : AspisR1.NMC_Parent.Heap),
+              ∃ value,
+                AspisR1.NKA_ClaimsOwnership.AtAllocation (AspisR1.NKA_ClaimsEffects.allocate allocator state)
+                    input.reservation rows box identity before value ∧
+                  AspisR1.NMC_Claims.attach heap identity
+                        (AspisR1.NKA_ClaimsEffects.native allocator state input.reservation rows box identity before
+                          value) =
+                      AspisR1.NMC_Claims.attach heap identity
+                        (AspisR1.NKA_ClaimsEffects.cohort allocator state input.reservation input.prefix1) ∧
+                    AspisR1.NMC_Claims.attach heap identity
+                        (AspisR1.NKA_ClaimsEffects.native allocator state input.reservation rows box identity before
+                          value) =
+                      AspisR1.NMC_Claims.attach heap identity
+                        (AspisR1.NKA_ClaimsEffects.reference allocator state input.reservation input.prefix1)
+'AspisR1.NMC_Code.erase_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Code.erase_bind : ∀ {A B : Type} (code : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (next : A → AspisR1PublicPreparation.PreparedHashCode.Code B),
+  AspisR1PublicPreparation.PreparedHashCode.erase (AspisR1PublicPreparation.PreparedHashCode.bind code next) = do
+    let value ← AspisR1PublicPreparation.PreparedHashCode.erase code
+    AspisR1PublicPreparation.PreparedHashCode.erase (next value)
+'AspisR1.NMC_Compare.emitted_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Compare.emitted_eq : ∀ (a b : AspisR1.NMC_Models.Q),
+  AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq a b =
+    Aeneas.Std.Result.ok (AspisR1.NMC_Models.qeq a b)
+'AspisR1.NMC_Compare.peq_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Compare.peq_true : ∀ (a b : AspisR1.NLC_Finish.Point), AspisR1.NMC_Models.peq a b = true ↔ a = b
+'AspisR1.NMC_Compare.qeq_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Compare.qeq_true : ∀ (a b : AspisR1.NMC_Models.Q), AspisR1.NMC_Models.qeq a b = true ↔ a = b
+'AspisR1.NMC_Cut_blind.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_blind.forward : ∀ {A : Type}
+  (native : AspisR1.NMC_Window.Context A → Unit → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_blind.Contract native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Unit), native before args = AspisR1.NMC_Models.blind before args
+'AspisR1.NMC_Cut_circleGuard.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_circleGuard.forward : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (native : AspisR1.NMC_Window.Context A → Unit → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_circleGuard.Contract allocator native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Unit),
+      native before args = AspisR1.NMC_Models.circleGuard allocator before args
+'AspisR1.NMC_Cut_decode25.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_decode25.forward : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (native :
+    AspisR1.NMC_Window.Context A →
+      AspisR1.NMC_Models.DecodeReply → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_decode25.Contract allocator native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : AspisR1.NMC_Models.DecodeReply),
+      native before args = AspisR1.NMC_Models.decode25 allocator before args
+'AspisR1.NMC_Cut_decode26.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_decode26.forward : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (native :
+    AspisR1.NMC_Window.Context A →
+      AspisR1.NMC_Models.DecodeReply → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_decode26.Contract allocator native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : AspisR1.NMC_Models.DecodeReply),
+      native before args = AspisR1.NMC_Models.decode26 allocator before args
+'AspisR1.NMC_Cut_extra28.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_extra28.forward : ∀ {A : Type}
+  (native : AspisR1.NMC_Window.Context A → Unit → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_extra28.Contract native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Unit), native before args = AspisR1.NMC_Models.extra28 before args
+'AspisR1.NMC_Cut_high.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_high.forward : ∀ {A : Type}
+  (native : AspisR1.NMC_Window.Context A → Fin 10 → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_high.Contract native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Fin 10), native before args = AspisR1.NMC_Models.high before args
+'AspisR1.NMC_Cut_low.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_low.forward : ∀ {A : Type}
+  (native : AspisR1.NMC_Window.Context A → Fin 16 → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_low.Contract native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Fin 16), native before args = AspisR1.NMC_Models.low before args
+'AspisR1.NMC_Cut_mapPublic.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_mapPublic.forward : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (native :
+    AspisR1.NMC_Window.Context A →
+      AspisR1.NMC_Models.PublicReply → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_mapPublic.Contract allocator native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : AspisR1.NMC_Models.PublicReply),
+      native before args = AspisR1.NMC_Models.mapPublic allocator before args
+'AspisR1.NMC_Cut_stateBefore.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_stateBefore.forward : ∀ {A : Type}
+  (native : AspisR1.NMC_Window.Context A → Unit → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_stateBefore.Contract native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : Unit),
+      native before args = AspisR1.NMC_Models.stateBefore before args
+'AspisR1.NMC_Cut_terminalGuard.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Cut_terminalGuard.forward : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (native :
+    AspisR1.NMC_Window.Context A → AspisR1.NLC_Finish.Q → AspisR1.NMC_Window.Observation A AspisR1.NMC_Models.Reply),
+  AspisR1.NMC_Cut_terminalGuard.Contract allocator native →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : AspisR1.NLC_Finish.Q),
+      native before args = AspisR1.NMC_Models.terminalGuard allocator before args
+'AspisR1.NMC_Exit.cleanup_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Exit.cleanup_abort : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : AspisR1.NMC_Parent.Heap) (identity : ℕ) (error : Aeneas.Std.Error),
+  allocator.cleanup state = Aeneas.Std.Result.fail error →
+    AspisR1.NMC_Exit.cleanup allocator state heap identity = Aeneas.Std.Result.fail error
+'AspisR1.NMC_Exit.cleanup_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Exit.cleanup_frame : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : AspisR1.NMC_Parent.Heap) (identity address : ℕ),
+  address ≠ identity →
+    (do
+        let after ← AspisR1.NMC_Exit.cleanup allocator state heap identity
+        Aeneas.Std.Result.ok (after.1, after.2 address)) =
+      do
+      let after ← allocator.cleanup state
+      Aeneas.Std.Result.ok (after, heap address)
+'AspisR1.NMC_Exit.public_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Exit.public_abort : ∀ {A E T : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : AspisR1.NMC_Parent.Heap) (identity : ℕ) (error : Aeneas.Std.Error),
+  AspisR1.NMC_Exit.publicResult allocator state heap identity (Aeneas.Std.Result.fail error) =
+    Aeneas.Std.Result.fail error
+'AspisR1.NMC_Frame.alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.alpha : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.alpha = b.alpha
+'AspisR1.NMC_Frame.before' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.before : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.before = b.before
+'AspisR1.NMC_Frame.challenge_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenge_ext : ∀ (a b : AspisR1PublicPreparation.r1_wire.Challenges),
+  a.lambda = b.lambda → a.chi = b.chi → a.theta = b.theta → a.zc = b.zc → a.mu = b.mu → a.eta = b.eta → a = b
+'AspisR1.NMC_Frame.challenges_chi' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_chi : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.chi = b.challenges.chi
+'AspisR1.NMC_Frame.challenges_eta' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_eta : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.eta = b.challenges.eta
+'AspisR1.NMC_Frame.challenges_lambda' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_lambda : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.lambda = b.challenges.lambda
+'AspisR1.NMC_Frame.challenges_mu' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_mu : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.mu = b.challenges.mu
+'AspisR1.NMC_Frame.challenges_theta' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_theta : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.theta = b.challenges.theta
+'AspisR1.NMC_Frame.challenges_zc' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.challenges_zc : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.challenges.zc = b.challenges.zc
+'AspisR1.NMC_Frame.claims_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.claims_identity : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.claims.identity = b.claims.identity
+'AspisR1.NMC_Frame.claims_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.claims_value : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.claims.value = b.claims.value
+'AspisR1.NMC_Frame.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.complete : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a = b
+'AspisR1.NMC_Frame.extra' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.extra : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.extra = b.extra
+'AspisR1.NMC_Frame.mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.mask : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.mask = b.mask
+'AspisR1.NMC_Frame.owned_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.owned_ext : ∀ (a b : AspisR1.NMC_Parent.OwnedClaims),
+  a.identity = b.identity → a.value = b.value → a = b
+'AspisR1.NMC_Frame.point_ext' does not depend on any axioms
+AspisR1.NMC_Frame.point_ext : ∀ (a b : AspisR1.NLC_Finish.Point), a.x = b.x → a.y = b.y → a = b
+'AspisR1.NMC_Frame.reservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.reservation : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.reservation = b.reservation
+'AspisR1.NMC_Frame.rest' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.rest : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.rest = b.rest
+'AspisR1.NMC_Frame.running' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.running : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.running = b.running
+'AspisR1.NMC_Frame.state' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.state : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.state = b.state
+'AspisR1.NMC_Frame.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.terminal : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.terminal = b.terminal
+'AspisR1.NMC_Frame.transcript_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.transcript_ext : ∀ (a b : AspisR1PublicPreparation.r1_wire.SemanticTranscript Unit),
+  a.state = b.state → a.next_row = b.next_row → a = b
+'AspisR1.NMC_Frame.transcript_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.transcript_next : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.transcript.next_row = b.transcript.next_row
+'AspisR1.NMC_Frame.transcript_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.transcript_state : ∀ (a b : AspisR1.NMC_Frame.Value),
+  AspisR1.NMC_Frame.Same a b → a.transcript.state = b.transcript.state
+'AspisR1.NMC_Frame.value_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.value_ext : ∀ (a b : AspisR1.NMC_Frame.Value),
+  a.running = b.running →
+    a.alpha = b.alpha →
+      a.transcript = b.transcript →
+        a.challenges = b.challenges →
+          a.claims = b.claims →
+            a.terminal = b.terminal →
+              a.mask = b.mask →
+                a.extra = b.extra →
+                  a.before = b.before →
+                    a.state = b.state →
+                      a.z0 = b.z0 → a.z1 = b.z1 → a.rest = b.rest → a.reservation = b.reservation → a = b
+'AspisR1.NMC_Frame.z0_x' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.z0_x : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.z0.x = b.z0.x
+'AspisR1.NMC_Frame.z0_y' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.z0_y : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.z0.y = b.z0.y
+'AspisR1.NMC_Frame.z1_x' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.z1_x : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.z1.x = b.z1.x
+'AspisR1.NMC_Frame.z1_y' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Frame.z1_y : ∀ (a b : AspisR1.NMC_Frame.Value), AspisR1.NMC_Frame.Same a b → a.z1.y = b.z1.y
+'AspisR1.NMC_Origins.alpha_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.alpha_preserved : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    AspisR1.NMC_Origins.AlphaOrigin s →
+      s.next ≠ AspisR1.NLC_Finish.Event.rounds →
+        (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+            Aeneas.Std.Result.ok (Sum.inr after) →
+          AspisR1.NMC_Origins.AlphaOrigin after
+'AspisR1.NMC_Origins.alpha_written' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.alpha_written : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Origins.AlphaOrigin after
+'AspisR1.NMC_Origins.claims_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.claims_preserved : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    AspisR1.NMC_Origins.ClaimsOrigin s →
+      s.next ≠ AspisR1.NLC_Finish.Event.claims →
+        (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+            Aeneas.Std.Result.ok (Sum.inr after) →
+          AspisR1.NMC_Origins.ClaimsOrigin after
+'AspisR1.NMC_Origins.claims_written' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.claims_written : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Origins.ClaimsOrigin after
+'AspisR1.NMC_Origins.initial_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.initial_alpha : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  AspisR1.NMC_Origins.AlphaOrigin (AspisR1.NLC_Finish.initial input)
+'AspisR1.NMC_Origins.initial_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.initial_claims : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  AspisR1.NMC_Origins.ClaimsOrigin (AspisR1.NLC_Finish.initial input)
+'AspisR1.NMC_Origins.reachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Origins.reachable : ∀ {H : Type} (input : AspisR1.NLU.Input H) (s : AspisR1.NLU.State H),
+  AspisR1.NLU.Reachable input s → AspisR1.NMC_Origins.ClaimsOrigin s.machine ∧ AspisR1.NMC_Origins.AlphaOrigin s.machine
+'AspisR1.NMC_Parent.claims_layout' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.claims_layout : ∀ (heap : AspisR1.NMC_Parent.Heap) (owner : ℕ) (value : AspisR1.NMC_Parent.Claims),
+  AspisR1.NMC_Parent.write heap owner (some value) owner = some (AspisR1.NMC_Parent.Region.claims value) ∧
+    AspisR1.NMC_Parent.extent (AspisR1.NMC_Parent.Region.claims value) = 1392 ∧
+      AspisR1.NMC_Parent.alignment (AspisR1.NMC_Parent.Region.claims value) = 4 ∧
+        AspisR1.NMC_Parent.base owner (AspisR1.NMC_Parent.Region.claims value) = owner
+'AspisR1.NMC_Parent.owned_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.owned_value : ∀ (left right : AspisR1.NMC_Parent.OwnedClaims),
+  left = right → left.identity = right.identity ∧ left.value = right.value
+'AspisR1.NMC_Parent.raw_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.raw_frame : ∀ (heap : AspisR1.NMC_Parent.Heap) (owner address rawBase size align : ℕ)
+  (bytes : ℕ → Option Aeneas.Std.U8) (value : Option AspisR1.NMC_Parent.Claims),
+  heap address = some (AspisR1.NMC_Parent.Region.raw rawBase size align bytes) →
+    address ≠ owner →
+      AspisR1.NMC_Parent.write heap owner value address = some (AspisR1.NMC_Parent.Region.raw rawBase size align bytes)
+'AspisR1.NMC_Parent.release_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.release_frame : ∀ (heap : AspisR1.NMC_Parent.Heap) (owner address : ℕ)
+  (value : AspisR1.NMC_Parent.Claims),
+  address ≠ owner →
+    AspisR1.NMC_Parent.write (AspisR1.NMC_Parent.write heap owner (some value)) owner none address = heap address
+'AspisR1.NMC_Parent.write_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.write_frame : ∀ (heap : AspisR1.NMC_Parent.Heap) (owner address : ℕ)
+  (value : Option AspisR1.NMC_Parent.Claims),
+  address ≠ owner → AspisR1.NMC_Parent.write heap owner value address = heap address
+'AspisR1.NMC_Parent.write_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Parent.write_owner : ∀ (heap : AspisR1.NMC_Parent.Heap) (owner : ℕ)
+  (value : Option AspisR1.NMC_Parent.Claims),
+  AspisR1.NMC_Parent.write heap owner value owner = Option.map AspisR1.NMC_Parent.Region.claims value
+'AspisR1.NMC_Partial.advance' depends on axioms: [propext, Quot.sound]
+@AspisR1.NMC_Partial.advance : ∀ {n : ℕ} (before : AspisR1.NMC_Window.Partial n) (i : Fin n)
+  (value : AspisR1.NLC_Finish.Q),
+  AspisR1.NMC_Partial.Prefix before ↑i →
+    AspisR1.NMC_Partial.Prefix (AspisR1.NMC_Models.writePartial before i value) (↑i + 1)
+'AspisR1.NMC_Partial.write_cell' depends on axioms: [propext]
+@AspisR1.NMC_Partial.write_cell : ∀ {n : ℕ} (before : AspisR1.NMC_Window.Partial n) (i : Fin n)
+  (value : AspisR1.NLC_Finish.Q), (AspisR1.NMC_Models.writePartial before i value).cells i = some value
+'AspisR1.NMC_Partial.write_frame' depends on axioms: [propext]
+@AspisR1.NMC_Partial.write_frame : ∀ {n : ℕ} (before : AspisR1.NMC_Window.Partial n) (i j : Fin n)
+  (value : AspisR1.NLC_Finish.Q), j ≠ i → (AspisR1.NMC_Models.writePartial before i value).cells j = before.cells j
+'AspisR1.NMC_Partial.write_identity' does not depend on any axioms
+@AspisR1.NMC_Partial.write_identity : ∀ {n : ℕ} (before : AspisR1.NMC_Window.Partial n) (i : Fin n)
+  (value : AspisR1.NLC_Finish.Q), (AspisR1.NMC_Models.writePartial before i value).identity = before.identity
+'AspisR1.NMC_Records.circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.circle0 : ∀ {Pointer H : Type} (input : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain input →
+    ∀ (s : AspisR1.NLU.State H),
+      AspisR1.NLU.Reachable input s →
+        s.machine.next = AspisR1.NLC_Finish.Event.circle0 →
+          ∀ (template : AspisR1.NIX_DispatchCut.Pre Pointer),
+            ∃ record transcript,
+              s.machine.locals.record25 = some record ∧
+                s.machine.locals.transcript = some transcript ∧
+                  AspisR1.NJM_InvocationRoots.Circle input.digest template transcript record
+'AspisR1.NMC_Records.circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.circle1 : ∀ {Pointer H : Type} (input : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain input →
+    ∀ (s : AspisR1.NLU.State H),
+      AspisR1.NLU.Reachable input s →
+        s.machine.next = AspisR1.NLC_Finish.Event.circle1 →
+          ∀ (template : AspisR1.NIX_DispatchCut.Pre Pointer),
+            ∃ record transcript,
+              s.machine.locals.record26 = some record ∧
+                s.machine.locals.transcript = some transcript ∧
+                  AspisR1.NJM_InvocationRoots.Circle input.digest template transcript record
+'AspisR1.NMC_Records.decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.decode25 : ∀ {H : Type} (input : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain input →
+    ∀ (s : AspisR1.NLU.State H),
+      AspisR1.NLU.Reachable input s →
+        s.machine.next = AspisR1.NLC_Finish.Event.decode25 →
+          ∃ record, s.machine.locals.record25 = some record ∧ AspisR1.NKQ_RecordDomains.Ready record 29#usize 87#usize
+'AspisR1.NMC_Records.decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.decode26 : ∀ {H : Type} (input : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain input →
+    ∀ (s : AspisR1.NLU.State H),
+      AspisR1.NLU.Reachable input s →
+        s.machine.next = AspisR1.NLC_Finish.Event.decode26 →
+          ∃ record, s.machine.locals.record26 = some record ∧ AspisR1.NKQ_RecordDomains.Ready record 29#usize 0#usize
+'AspisR1.NMC_Records.preserve25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.preserve25 : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    AspisR1.NMC_Records.Origin s 25#u8 s.locals.record25 →
+      s.next ≠ AspisR1.NLC_Finish.Event.record25a →
+        s.next ≠ AspisR1.NLC_Finish.Event.record25b →
+          (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+              Aeneas.Std.Result.ok (Sum.inr after) →
+            AspisR1.NMC_Records.Origin after 25#u8 after.locals.record25
+'AspisR1.NMC_Records.preserve26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.preserve26 : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    AspisR1.NMC_Records.Origin s 26#u8 s.locals.record26 →
+      s.next ≠ AspisR1.NLC_Finish.Event.record26a →
+        s.next ≠ AspisR1.NLC_Finish.Event.record26b →
+          (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+              Aeneas.Std.Result.ok (Sum.inr after) →
+            AspisR1.NMC_Records.Origin after 26#u8 after.locals.record26
+'AspisR1.NMC_Records.reachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.reachable : ∀ {H : Type} (input : AspisR1.NLU.Input H) (s : AspisR1.NLU.State H),
+  AspisR1.NLU.Reachable input s →
+    AspisR1.NMC_Records.Origin s.machine 25#u8 s.machine.locals.record25 ∧
+      AspisR1.NMC_Records.Origin s.machine 26#u8 s.machine.locals.record26
+'AspisR1.NMC_Records.record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.record25a : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Records.Origin after 25#u8 after.locals.record25
+'AspisR1.NMC_Records.record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.record25b : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Records.Origin after 25#u8 after.locals.record25
+'AspisR1.NMC_Records.record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.record26a : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Records.Origin after 26#u8 after.locals.record26
+'AspisR1.NMC_Records.record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.record26b : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Records.Origin after 26#u8 after.locals.record26
+'AspisR1.NMC_Records.some_slot' does not depend on any axioms
+@AspisR1.NMC_Records.some_slot : ∀ {T : Type} (slot : Option T), slot.isSome = true → ∃ value, slot = some value
+'AspisR1.NMC_Records.unique' does not depend on any axioms
+@AspisR1.NMC_Records.unique : ∀ {T E : Type} (reply : Aeneas.Std.Result (Aeneas.Std.core.result.Result T E)) (a b : T),
+  reply = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) →
+    reply = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok b) → a = b
+'AspisR1.NMC_Records.written' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Records.written : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H) (row : Aeneas.Std.U8)
+  (event : AspisR1.NLC_Finish.Event)
+  (store : AspisR1PublicPreparation.r1_wire.ValidatedRecord → AspisR1.NLC_Finish.Locals H)
+  (select : AspisR1.NLC_Finish.Locals H → Option AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+  (∀ (record : AspisR1PublicPreparation.r1_wire.ValidatedRecord), select (store record) = some record) →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NMC_Records.step s row event store)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Records.Origin after row (select after.locals)
+'AspisR1.NMC_Root.exact_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Root.exact_length : ∀ (payload : Aeneas.Std.Slice Aeneas.Std.U8),
+  payload.length = 32 → ∃ root, AspisR1.NMC_Root.copy payload = Aeneas.Std.Result.ok root ∧ ↑root = ↑payload
+'AspisR1.NMC_Root.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NMC_Root.wrong_length : ∀ (payload : Aeneas.Std.Slice Aeneas.Std.U8),
+  payload.length ≠ 32 → AspisR1.NMC_Root.copy payload = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'AspisR1.NMC_RootStages.abort_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_RootStages.abort_frontier : ∀ {A : Type} (entered : AspisR1.NMC_RootStages.Tried A)
+  (error : Aeneas.Std.Error),
+  AspisR1PublicPreparation.S1SemanticRootCopy.unwrapRoot entered.attempted = Aeneas.Std.Result.fail error →
+    AspisR1.NMC_RootStages.unwrapStage entered = AspisR1.NMC_RootStages.UnwrapOutcome.aborted error entered
+'AspisR1.NMC_RootStages.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_RootStages.wrong_length : ∀ {A : Type} (before : AspisR1.NMC_Window.Context A)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8),
+  payload.length ≠ 32 →
+    ∃ entered,
+      AspisR1.NMC_RootStages.tryStage before payload = Aeneas.Std.Result.ok entered ∧
+        AspisR1.NMC_RootStages.unwrapStage entered =
+            AspisR1.NMC_RootStages.UnwrapOutcome.aborted Aeneas.Std.Error.panic entered ∧
+          entered.before = before ∧ entered.payload = payload ∧ entered.attempted = Aeneas.Std.core.result.Result.Err ()
+'AspisR1.NMC_Slots.all_frames' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.all_frames : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s → AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_addExtra : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addExtra →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_addMask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addMask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_alpha : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_blind : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.blind →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_circle0 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle0 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_circle1 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle1 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_circleGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circleGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_claims : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_decode25 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode25 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_decode26 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode26 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_extra28 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.extra28 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_highArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.highArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_lowArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.lowArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mapPublic : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mapPublic →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mark2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mark3 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mark4 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mark5 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark5 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_mask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_multiply : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.multiply →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_original : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_payload2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.payload2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_record25a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_record25b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_record26a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_record26b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_rootCopy : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_rounds : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_stateBefore : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.stateBefore →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_terminal : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminal →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_terminalGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminalGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.frame_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.frame_verified : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NMC_Slots.PostFrame s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NMC_Slots.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.next : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (event : AspisR1.NLC_Finish.Event),
+  AspisR1.NMC_Slots.PostFrame s (Sum.inr (AspisR1.NLC_Finish.setNext s event))
+'AspisR1.NMC_Slots.put' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.put : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (event : AspisR1.NLC_Finish.Event)
+  (l : AspisR1.NLC_Finish.Locals H),
+  AspisR1.NMC_Slots.LocalFrame s l → AspisR1.NMC_Slots.PostFrame s (Sum.inr (AspisR1.NLC_Finish.put s event l))
+'AspisR1.NMC_Slots.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.returned : ∀ {T H : Type} (s : AspisR1.NLC_Finish.State H) (event : AspisR1.NLC_Finish.Event)
+  (reply : Aeneas.Std.core.result.Result T AspisR1PublicPreparation.r1_wire.Error)
+  (store : T → AspisR1.NLC_Finish.Locals H),
+  (∀ (value : T), AspisR1.NMC_Slots.LocalFrame s (store value)) →
+    AspisR1.NMC_Slots.PostFrame s (AspisR1.NLC_Finish.returned s event reply store)
+'AspisR1.NMC_Slots.source_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Slots.source_frame : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NMC_Slots.LocalFrame s after.locals
+'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Terminal.actual_arguments : ∀ {H : Type} (native : AspisR1.NJM_RoundsCut.Observations),
+  AspisR1.NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (input : AspisR1.NLU.Input H),
+      AspisR1.NLU.InputDomain input →
+        ∀ (s : AspisR1.NLU.State H),
+          AspisR1.NLU.Reachable input s →
+            s.machine.next = AspisR1.NLC_Finish.Event.terminal →
+              ∃ claims alpha,
+                s.machine.locals.claims = some claims ∧
+                  s.machine.locals.alpha = some alpha ∧
+                    (∀
+                        row ∈
+                          ↑(AspisR1.FIq_Carriers.mapArray (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ)
+                              claims),
+                        AspisR1.FIw_ArrayValue.canonical row) ∧
+                      AspisR1.FIw_ArrayValue.canonical (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ alpha) ∧
+                        AspisR1.NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+                          (AspisR1.IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha
+                            input.challenges
+'AspisR1.NMC_Terminal.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Terminal.installed : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : AspisR1.NMC_Parent.Heap) (identity : ℕ) (pub : AspisR1.FIq_Carriers.Public)
+  (claims : AspisR1.NLC_Finish.Claims) (alpha : AspisR1.NLC_Finish.Alpha)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  AspisR1.NLU_Terminal.InputDomain pub challenges →
+    (∀ row ∈ ↑(AspisR1.FIq_Carriers.mapArray (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ) claims),
+        AspisR1.FIw_ArrayValue.canonical row) →
+      AspisR1.FIw_ArrayValue.canonical (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ alpha) →
+        AspisR1.NMC_Exit.publicResult allocator state heap identity
+            (AspisR1.NLU_Terminal.nativeTerminal pub claims alpha challenges) =
+          AspisR1.NMC_Exit.publicResult allocator state heap identity
+            (AspisR1.FIq_Terminal.terminal pub claims alpha challenges)
+'AspisR1.NMC_Transcription.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Transcription.source : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  AspisR1.NLC_Goals.FinishSourceEquality input
+'AspisR1.NMC_Window.context_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Window.context_ext : ∀ {A : Type} (a b : AspisR1.NMC_Window.Context A),
+  a.input = b.input →
+    a.frame = b.frame → a.allocator = b.allocator → a.heap = b.heap → a.low = b.low → a.high = b.high → a = b
+'AspisR1.NMC_Window.from_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Window.from_windows : ∀ {A P R : Type}
+  (native expected : AspisR1.NMC_Window.Context A → P → AspisR1.NMC_Window.Observation A R),
+  AspisR1.NMC_Window.Cut native expected →
+    ∀ (before : AspisR1.NMC_Window.Context A) (args : P), native before args = expected before args
+'AspisR1.NMC_Window.observation_ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NMC_Window.observation_ext : ∀ {A R : Type} (a b : AspisR1.NMC_Window.Observation A R),
+  a.reply = b.reply → a.context = b.context → a.events = b.events → a = b

@@ -25,6 +25,6 @@ pairs=[(3,4)]+[(n,n+1)for n in range(5,21,2)]+[(n,n+1)for n in range(22,38,2)]
 for a,b in pairs:
  assert rows[a-1]['status']=='PASS_WINDOW'and rows[b-1]['status']=='MATCHED_ASSERTION_FAIL'
  assert rows[a-1]['source_pins_sha256']==rows[b-1]['source_pins_sha256']
-out=dict(status='PASS_PARTIAL_WINDOW_REVIEW_ONLY',kani_used=40,paired_windows=len(pairs),timeouts=[r['attempt']for r in rows if r['status']=='TIMEOUT_NO_CREDIT'],unpaired_positive=['NMC_K038'],full_segments_closed=[],row136='OPEN',rows=rows)
+out=dict(status='PASS_PARTIAL_WINDOW_REVIEW_ONLY',kani_used=40,paired_windows=len(pairs),timeouts=[r['attempt']for r in rows if r['status']=='TIMEOUT_NO_CREDIT'],unpaired_positive=['NMC_K038'],full_segments_closed=[],row136='OPEN',process_findings=['K040 inverted the assertion on K039 same full-entry footprint after timeout; this did not isolate the shape and earns no replacement/control credit'],rows=rows)
 (E/'NMC_NATIVE_REVIEW.json').write_text(json.dumps(out,indent=2)+'\n')
 print(json.dumps({k:v for k,v in out.items()if k!='rows'}))

@@ -6,7 +6,7 @@ bases=[('NLS',E.parent/'ledger23-20261110'),('NLU',E.parent/'tx1-finish2-2026111
 latest={}
 for p in sorted(E.glob('NMC_L*/receipt.json'),key=lambda p:int(p.parent.name[-3:])):
  x=json.loads(p.read_text());m=x.get('module','');src=E/'NMC_generated'/(m+'.lean');snap=p.parent/'sources/NMC_generated'/(m+'.lean')
- if x.get('kind')=='lean'and x['exit_status']==0 and src.exists()and snap.exists()and src.read_bytes()==snap.read_bytes()and not m.startswith('NMC_Inspect'):
+ if x.get('kind')=='lean'and x['exit_status']==0 and src.exists()and snap.exists()and src.read_bytes()==snap.read_bytes()and not m.startswith('NMC_Inspect')and m not in ['NMC_COMBINED_IMPORT','NMC_Driver','NMC_ProofDriver']:
   latest[m]=(x,p)
 assert 'NMC_Transcription'in latest
 roots=[]
