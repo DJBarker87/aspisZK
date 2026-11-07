@@ -1,4 +1,5 @@
 import LIBB_C04RichTrace
+import NNC_C04StopEvents
 set_option autoImplicit false
 noncomputable section
 namespace LIBB_C04StoppedTrace
