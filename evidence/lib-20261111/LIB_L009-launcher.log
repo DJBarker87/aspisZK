@@ -1,0 +1,43 @@
+{"attempt": "LIB_L009", "exit_status": 0, "wall_seconds": 18.965753441909328, "peak_rss_kib": "6410076", "swaps": "0", "print_axioms": []}
+AspisR1PublicPreparation.VerifyPrefix.mark (obs : Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit))
+  (i : Aeneas.Std.U8) : Aeneas.Std.Result Unit
+def AspisR1PublicPreparation.VerifyPrefix.mark : Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit) →
+  Aeneas.Std.U8 → Aeneas.Std.Result Unit :=
+fun obs i => Aeneas.Std.Result.ok ()
+def NJQ_Canonical.registry : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.CR NJI_V1Carrier.CF) :=
+fun b => NJQ_Canonical.mapOuter NJQ_Canonical.registryResult (NJQ_Registry.model b)
+def NJQ_Canonical.entry : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.CE 
+...
+≠ List.replicate 16 0#u8 then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonZeroReserved)
+      else
+        if NJQ_Checkpoint.masterBytes b len = Aeneas.Std.Array.repeat 32#usize 0#u8 then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+        else
+          if NJQ_Checkpoint.domainBytes b len = Aeneas.Std.Array.repeat 32#usize 0#u8 then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+          else
+            match NJQ_DigestPort.decoded (NJQ_Checkpoint.digestArg b len) with
+            | Aeneas.Std.core.result.Result.Err a =>
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                  NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonCanonicalDigest)
+            | Aeneas.Std.core.result.Result.Ok root =>
+              match NJQ_ArrayAll.loop (NJQ_Checkpoint.sequences b len) with
+              | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+              | Aeneas.Std.core.result.Result.Ok lanes =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (NJQ_Checkpoint.record b len root lanes))
+  else
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLength)
+
+Running as unit: run-rd59f05dd42e84767a7285d5096340bb5.scope; invocation ID: 2b336f97e6f74c73ade90e7b638c395a

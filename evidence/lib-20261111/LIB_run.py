@@ -75,7 +75,7 @@ for n,t in files.items():
 (b/'LIB_native').mkdir(exist_ok=True);(b/'LIB_objects').mkdir(exist_ok=True);(b/'LIB_tmp').mkdir(exist_ok=True)
 (b/'LIB_objects'/{target.replace('.', '/')!r}).parent.mkdir(parents=True,exist_ok=True)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=[]
+modules=['RSL_Base','RSL_Pool','RSL_Verifier']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules += ['LIB_COMBINED_IMPORT']
 rels=set()
