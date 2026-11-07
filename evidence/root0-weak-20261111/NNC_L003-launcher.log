@@ -1,0 +1,44 @@
+{"attempt": "NNC_L003", "exit_status": 0, "wall_seconds": 32.39660966396332, "peak_rss_kib": "6427984", "swaps": "0", "print_axioms": ["'NNC_064Weak.invocation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_064Weak.root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_064Weak.accepted_header' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure NNC_064Weak.Domain {X : Type} (a : Args X) : Prop
+number of parameters: 2
+fields:
+  NNC_064Weak.Domain.proofExtent : (↑a.proof).length = 57607
+  NNC_064Weak.Domain.checkpointExtent : (↑a.checkpoint).length = 1768
+  NNC_064Weak.Domain.publicBound : (↑a.publicBytes).length ≤ 1880
+constructor:
+  NNC_064Weak.Domain.mk {X : Type} {a : Args X} (proofExtent : (↑a.proof).length = 57607)
+    (checkpointExtent : (↑a.checkpoint).length = 1768) (publicBound : (↑a.publicBytes).length ≤ 1880) : Domain a
+def NNC_064Weak.RowSpec : {Ambient X : Type} → (Bytes → State) → Frame Ambient X → Prop :=
+fun {Ambient X} H s =>
+  (∀ (outcome : End H s.args) (events : List (Event Ambient X)),
+      NMN_064.Na
+...
+h
+          domain.proofExtent domain.publicBound).right
+      records⟩
+theorem NNC_064Weak.accepted_header : ∀ {Ambient X : Type} (H : Bytes → State) (s : Frame Ambient X),
+  Domain s.args →
+    CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest s.args.digest) s.args.hash H →
+      ∀ (records : List (NLT_NativeInvocation.Occurrence H s.args.digest s.args.hash))
+        (events : List (Event Ambient X)),
+        NMN_064.Native H s (End.common (NLT_CompleteRoot.End.resolved (ok (core.result.Result.Ok ())) records)) events →
+          NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑s.args.checkpoint) =
+            some
+              (H (MultiproofConeCanonical.bytesOf ↑s.args.proof),
+                H (MultiproofConeCanonical.bytesOf ↑s.args.publicBytes)) :=
+fun {Ambient X} H s domain oracle records events native =>
+  have law :=
+    (root H s domain).left (End.common (NLT_CompleteRoot.End.resolved (ok (core.result.Result.Ok ())) records)) events
+      native;
+  let ⟨p, h✝⟩ :=
+    NNC_ResumeHeader.resume_of_ok (NLT_FrameFromCuts.frame records).resume (NLT_FrameFromCuts.frame records).pending
+      (@NLP_NativeMerkle.action H) (NLB_Parent.finish (NLT_FrameFromCuts.frame records).finish) s.args.digest
+      s.args.publicBytes s.args.proof s.args.checkpoint s.args.hash (Eq.symm law.left.left)
+  let ⟨a, resumed⟩ := h✝
+  NNC_ResumeHeader.header_of_resume (NLT_FrameFromCuts.frame records).resume s.args.digest s.args.hash H oracle
+    s.args.publicBytes s.args.proof s.args.checkpoint domain.checkpointExtent p a resumed
+'NNC_064Weak.invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_064Weak.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_064Weak.accepted_header' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rffc6010c17314ea2849663f78d8d5825.scope; invocation ID: 608ba52ddbd946b6a081bdcc3ae07fdb
