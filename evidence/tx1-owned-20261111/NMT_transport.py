@@ -52,7 +52,11 @@ for line in units:
  u=line.split()[0];g=subprocess.check_output(['systemctl','--user','show',u,'--property=ControlGroup','--value'],text=True).strip();p=pathlib.Path('/sys/fs/cgroup'+g)
  matched=[]
  for f in p.rglob('cgroup.procs'):
-  for pid in f.read_text().split():
+  try:pids=f.read_text().split()
+  except OSError as error:
+   if error.errno!=95:raise
+   pids=f.with_name('cgroup.threads').read_text().split()
+  for pid in pids:
    try:
     cwd=str(pathlib.Path('/proc',pid,'cwd').resolve(strict=True))
     if cwd.startswith('/home/dombarker/project-offloads/codex-'):matched.append({'pid':pid,'cwd':cwd})

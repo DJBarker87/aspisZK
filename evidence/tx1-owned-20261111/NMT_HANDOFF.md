@@ -34,3 +34,22 @@ L005 failed elaboration (no accepted axiom result). Repaired the own syntax
 parameterizer to pass generalized callee parameters through local trait records
 and helper calls explicitly. The raw emissions are retained unchanged; diffs
 record every interface edit. No unchanged failing shape is being replayed.
+
+Stage1 checked targets: NMT_RowSpec_087.complete (L015) and
+NMT_RowSpec_094.complete/domain_bindRuntime (L046), standard axioms only.
+These eliminate proposed full-output target packets; they do NOT install a
+native producer or certify schema equivalence to the complete ledger obligation.
+NMT_CALLER_CLAUSES.json records own-input and runtime interpretation clauses.
+No returning frame is invented for a stopped child. NMT_Outcome.empty_not_total
+rejects the empty-relation shape. Stage1 also proves structural transport and
+inverse laws for17 fresh094 value types against CurrentCompactCallerTypesV1.
+The explicit digest/hashv projection clause corrected an unsatisfiable arbitrary
+backend pairing before any candidate claim. Private allocator internals are
+excluded under(bl)(3), with complete returned scratch retained in087.Out.
+
+Stage2 starts with typed call-tree reification; wrappers record full exact
+callee argument tuples and every returned/error/stopped reply in source order.
+L048 proves328 tree erasure to the fresh actual emission. This is a parent
+call-association support theorem, not a full observable child composition.
+The generic erasure reduction was replaced by named laws over literal Std.bind;
+L045 records why the notation-level law did not rewrite that emitted primitive.

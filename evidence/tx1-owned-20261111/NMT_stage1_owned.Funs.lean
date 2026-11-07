@@ -80,7 +80,11 @@ variable (NMT_call_16 : (Slice Std.U8) → Result (core.result.Result Unit
     Source: '/rustc/library/core/src/array/equality.rs', lines 43:0-45:28
     Name pattern: [core::cmp::PartialEq<[@T], [@U; @N]>] -/
 @[reducible, rust_trait_impl "core::cmp::PartialEq<[@T], [@U; @N]>"]
-def Slice.Insts.CoreCmpPartialEqArray {T : Type} {U : Type} (N : Std.Usize)
+def Slice.Insts.CoreCmpPartialEqArray (NMT_call_0 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool) (NMT_call_1 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool)  {T : Type} {U : Type} (N : Std.Usize)
   (cmpPartialEqInst : core.cmp.PartialEq T U) : core.cmp.PartialEq (Slice T)
   (Array U N) := {
   eq := NMT_call_1 cmpPartialEqInst
@@ -92,7 +96,7 @@ def Slice.Insts.CoreCmpPartialEqArray {T : Type} {U : Type} (N : Std.Usize)
     Name pattern: [core::option::{core::option::Option<@T>}::ok_or]
     Visibility: public -/
 @[rust_fun "core::option::{core::option::Option<@T>}::ok_or"]
-def core.option.Option.ok_or
+def core.option.Option.ok_or 
   {T : Type} {E : Type} (self : Option T) (err : E) :
   Result (core.result.Result T E)
   := do
@@ -102,7 +106,8 @@ def core.option.Option.ok_or
 
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::{aspis_r1_cost_probe_program::r1_pool_adapter::owned::OwnedAccount}::data]:
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 21:4-23:5 -/
-def r1_pool_adapter.owned.OwnedAccount.data
+def r1_pool_adapter.owned.OwnedAccount.data (NMT_call_10 : solana_program_error.ProgramError → Result
+    solana_program_error.ProgramError) 
   (self : r1_pool_adapter.owned.OwnedAccount) :
   Result (core.result.Result (Slice Std.U8) solana_program_error.ProgramError)
   := do
@@ -118,7 +123,7 @@ def r1_pool_adapter.owned.OwnedAccount.data
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1,), solana_program_error::ProgramError> for aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned::closure#1}::call_once]:
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 396:13-396:49 -/
 def
-  r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once
+  r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once 
   (c : r1_pool_adapter.owned.stage1_owned.closure_1)
   (tupled_args :
   aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :
@@ -130,7 +135,7 @@ def
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 396:13-396:49 -/
 @[reducible]
 def
-  r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+  r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError 
   : core.ops.function.FnOnce r1_pool_adapter.owned.stage1_owned.closure_1
   aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
   solana_program_error.ProgramError := {
@@ -141,7 +146,7 @@ def
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned::closure}::call_once]:
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 392:17-392:53 -/
 def
-  r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once
+  r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once 
   (c : r1_pool_adapter.owned.stage1_owned.closure)
   (tupled_args :
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
@@ -154,7 +159,7 @@ def
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 392:17-392:53 -/
 @[reducible]
 def
-  r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+  r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError 
   : core.ops.function.FnOnce r1_pool_adapter.owned.stage1_owned.closure
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
   solana_program_error.ProgramError := {
@@ -164,7 +169,30 @@ def
 
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned]:
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 376:0-414:1 -/
-def r1_pool_adapter.owned.stage1_owned
+def r1_pool_adapter.owned.stage1_owned (NMT_call_0 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool) (NMT_call_1 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool) (NMT_call_2 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F)) (NMT_call_3 : aspis_r1_cost_probe.transport.Variant → Result Std.U8) (NMT_call_4 : Result Std.Usize) (NMT_call_5 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (NMT_call_6 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) (NMT_call_7 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result (core.result.Result Unit
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)) (NMT_call_8 : Result Std.Usize) (NMT_call_9 : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+    Result (core.result.Result (Array Std.U8 688#usize)
+    aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)) (NMT_call_10 : solana_program_error.ProgramError → Result
+    solana_program_error.ProgramError) (NMT_call_11 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → (Slice Std.U8) → Std.Usize → Result (core.result.Result
+    (alloc.vec.Vec Std.U8) solana_program_error.ProgramError)) (NMT_call_12 : (Slice Std.U8) → Result (core.result.Result
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    solana_program_error.ProgramError)) (NMT_call_13 : r1_pool_adapter.owned.OwnedAccount → Result (core.result.Result Unit
+    solana_program_error.ProgramError)) (NMT_call_14 : r1_pool_adapter.owned.OwnedAccount → solana_pubkey.Pubkey → Bool →
+    Result (core.result.Result Unit solana_program_error.ProgramError)) (NMT_call_15 : ∀ {N : Std.Usize},
+(Array r1_pool_adapter.owned.OwnedAccount N) → Result (core.result.Result
+    Unit solana_program_error.ProgramError)) (NMT_call_16 : (Slice Std.U8) → Result (core.result.Result Unit
+    solana_program_error.ProgramError)) 
   (program_id : solana_pubkey.Pubkey)
   (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (data : Slice Std.U8) :
   Result (core.result.Result (alloc.vec.Vec Std.U8)

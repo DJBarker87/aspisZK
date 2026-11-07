@@ -64,19 +64,19 @@ variable (NMT_call_11 : (Option (verifier.Phase → Result Unit)) → verifier.P
 /-- [aspis_r1_cost_probe::compact::HEADER]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 26:0-26:29
     Visibility: public -/
-@[global_simps, irreducible] def compact.HEADER : Std.Usize := 16#usize
+@[global_simps, irreducible] def compact.HEADER  : Std.Usize := 16#usize
 
 /-- [aspis_r1_cost_probe::compact::OFF_SEMANTIC]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 38:0-38:39
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_SEMANTIC : Std.Usize := compact.HEADER
+def compact.OFF_SEMANTIC  : Std.Usize := compact.HEADER
 
 /-- [aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 33:0-33:72
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.SEMANTIC_COMPACT_VALUES : Result Std.Usize := do
+def compact.SEMANTIC_COMPACT_VALUES  : Result Std.Usize := do
   let i ← 10#usize * 28#usize
   let i1 ← 1#usize + i
   let i2 ← 87#usize + 29#usize
@@ -87,7 +87,7 @@ def compact.SEMANTIC_COMPACT_VALUES : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 8:0-8:43
     Visibility: public -/
 @[global_simps, irreducible]
-def verifier.SEMANTIC_BYTES : Result Std.Usize := do
+def verifier.SEMANTIC_BYTES  : Result Std.Usize := do
   let i ← 29#usize * 32#usize
   12903#usize + i
 
@@ -95,13 +95,13 @@ def verifier.SEMANTIC_BYTES : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 31:0-31:68
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.LOGICAL_SEMANTIC : Result Std.Usize := verifier.SEMANTIC_BYTES
+def compact.LOGICAL_SEMANTIC  : Result Std.Usize := verifier.SEMANTIC_BYTES
 
 /-- [aspis_r1_cost_probe::compact::COMPACT_SEMANTIC]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 34:0-34:84
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.COMPACT_SEMANTIC : Result Std.Usize := do
+def compact.COMPACT_SEMANTIC  : Result Std.Usize := do
   let i ← compact.SEMANTIC_COMPACT_VALUES
   let i1 ← 16#usize * i
   let i2 ← compact.LOGICAL_SEMANTIC
@@ -111,7 +111,7 @@ def compact.COMPACT_SEMANTIC : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 39:0-39:58
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_Y1 : Result Std.Usize := do
+def compact.OFF_Y1  : Result Std.Usize := do
   let i ← compact.COMPACT_SEMANTIC
   compact.OFF_SEMANTIC + i
 
@@ -119,13 +119,13 @@ def compact.OFF_Y1 : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 35:0-35:38
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.COMPACT_Y1 : Result Std.Usize := 29#usize * 16#usize
+def compact.COMPACT_Y1  : Result Std.Usize := 29#usize * 16#usize
 
 /-- [aspis_r1_cost_probe::compact::OFF_INACTIVE]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 40:0-40:52
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_INACTIVE : Result Std.Usize := do
+def compact.OFF_INACTIVE  : Result Std.Usize := do
   let i ← compact.OFF_Y1
   let i1 ← compact.COMPACT_Y1
   i + i1
@@ -134,7 +134,7 @@ def compact.OFF_INACTIVE : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 41:0-41:48
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_ROUND0 : Result Std.Usize := do
+def compact.OFF_ROUND0  : Result Std.Usize := do
   let i ← compact.OFF_INACTIVE
   i + 32#usize
 
@@ -142,7 +142,7 @@ def compact.OFF_ROUND0 : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 42:0-42:52
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_FOLDED_ROOT : Result Std.Usize := do
+def compact.OFF_FOLDED_ROOT  : Result Std.Usize := do
   let i ← compact.OFF_ROUND0
   i + 224#usize
 
@@ -150,19 +150,37 @@ def compact.OFF_FOLDED_ROOT : Result Std.Usize := do
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 43:0-43:51
     Visibility: public -/
 @[global_simps, irreducible]
-def compact.OFF_ROUND1 : Result Std.Usize := do
+def compact.OFF_ROUND1  : Result Std.Usize := do
   let i ← compact.OFF_FOLDED_ROOT
   i + 32#usize
 
 /-- [aspis_r1_cost_probe::compact::SPLIT]
     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 27:0-27:28
     Visibility: public -/
-@[global_simps, irreducible] def compact.SPLIT : Std.Usize := 10#usize
+@[global_simps, irreducible] def compact.SPLIT  : Std.Usize := 10#usize
 
 /-- [aspis_r1_cost_probe::verifier::candidate::tx1]:
     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 270:0-291:1
     Visibility: public -/
-def verifier.candidate.tx1
+def verifier.candidate.tx1 (NMT_call_0 : Result aspis_core.field.wide_exact.WideExact) (NMT_call_1 : (Slice Std.U8) → Result (core.result.Result transport.Variant
+    verifier.Error)) (NMT_call_2 : (Slice Std.U8) → Result (core.result.Result Unit verifier.Error)) (NMT_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+(Slice Std.U8) → verifier.Prepared → (Array Std.U8 32#usize) →
+    Std.Usize → H → Result (core.result.Result Unit verifier.Error)) (NMT_call_4 : (Slice Std.U8) → verifier.Prepared → verifier.Accumulator → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → (Option (verifier.Phase
+    → Result Unit)) → verifier.QueryGeometry → verifier.BatchedWeights
+    → Std.Usize → Result (core.result.Result (verifier.Accumulator ×
+    verifier.BatchedWeights) verifier.Error)) (NMT_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → H → (Option (verifier.Phase → Result Unit)) → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → Result
+    ((core.result.Result verifier.Prepared verifier.Error) × (Array
+    aspis_core.field.wide_exact.WideExact 29#usize))) (NMT_call_6 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+verifier.Prepared → verifier.Accumulator → (Slice Std.U8) → (Slice
+    Std.U8) → H → Result (alloc.vec.Vec Std.U8)) (NMT_call_7 : verifier.BatchedWeights → (Slice aspis_core.field.QM31) → Result (Slice
+    aspis_core.field.QM31)) (NMT_call_8 : (Slice aspis_core.field.QM31) → Result (core.result.Result
+    verifier.BatchedWeights verifier.Error)) (NMT_call_9 : (Array Std.U32 22#usize) → Std.Usize → Std.Usize → Result
+    (core.result.Result verifier.QueryGeometry verifier.Error)) (NMT_call_10 : transport.Variant → Result (core.result.Result verifier.Accumulator
+    verifier.Error)) (NMT_call_11 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit) 
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
   (public_bytes : Slice Std.U8) (proof : Slice Std.U8) (k : Std.Usize)

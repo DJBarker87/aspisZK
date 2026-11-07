@@ -32,20 +32,23 @@ needle='namespace NMT_'+a.function+'\n';assert needle in funs
 funs=funs.replace(needle,needle+'\n-- Opaque callees are explicit parameters, never axioms.\n'+'\n\n'.join(variables)+'\n',1)
 for m in sorted(mapping,key=lambda x:-len(x['generated_name'])):
  funs=re.sub(r'(?<![A-Za-z0-9_.])'+re.escape(m['generated_name'])+r'(?![A-Za-z0-9_.])',m['parameter'],funs)
-# Make generalized local dependencies explicit at every subsequent definition.
-# Lean does not infer section parameters from a bare trait-method constant.
+# Explicit binder interface: no Lean section-variable generalization is used.
+# The earlier automatic-generalization shape is retired after L005/L006.
 params=[m['parameter'] for m in mapping]
-pattern=r'\bdef\s+(\S+)'
-starts=list(re.finditer(pattern,funs)); rebuilt=funs[:starts[0].start()];known=[]
+binders={m['parameter']:v[len('variable '):] for m,v in zip(mapping,variables)}
+starts=list(re.finditer(r'\bdef\s+(\S+)',funs));rebuilt=funs[:starts[0].start()];known=[]
 for j,d in enumerate(starts):
  end=starts[j+1].start() if j+1<len(starts) else len(funs)
- chunk=funs[d.start():end];name=d[1];offset=len(d[0])
- head,body=chunk[:offset],chunk[offset:]
+ chunk=funs[d.start():end];name=d[1];offset=len(d[0]);head,body=chunk[:offset],chunk[offset:]
+ context=name.rsplit('.',1)[0]+'.' if '.' in name else ''
  for earlier,uses in sorted(known,key=lambda z:-len(z[0])):
   if not uses:continue
-  body=re.sub(r'(?<![A-Za-z0-9_.])'+re.escape(earlier)+r'(?![A-Za-z0-9_.])',lambda _: '('+earlier+' '+' '.join(uses)+')',body)
+  names=[earlier]
+  if context and earlier.startswith(context):names.append(earlier[len(context):])
+  for spelling in names:
+   body=re.sub(r'(?<![A-Za-z0-9_.])'+re.escape(spelling)+r'(?![A-Za-z0-9_.])',lambda _: '('+earlier+' '+' '.join(uses)+')',body)
  uses=[v for v in params if re.search(r'(?<![A-Za-z0-9_])'+v+r'(?![A-Za-z0-9_])',body)]
- known.append((name,uses));rebuilt+=head+body
+ known.append((name,uses));rebuilt+=head+' '+''.join(binders[v]+' ' for v in uses)+body
 funs=rebuilt
 root={'tx1':'verifier.candidate.tx1','first':'first_decoded','stage1_owned':'r1_pool_adapter.owned.stage1_owned'}[a.function]
 funs+='\n#print axioms NMT_'+a.function+'.'+root+'\n'

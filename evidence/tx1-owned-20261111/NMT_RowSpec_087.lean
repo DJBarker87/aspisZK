@@ -1,4 +1,5 @@
 import NMT_Outcome
+import NLV_Deployed
 import NLV_PreparePacket
 set_option autoImplicit false
 noncomputable section
@@ -23,7 +24,7 @@ def RowSpec_087 {C : Type} (missing : IDa_Deployed.Uninstalled C) (indexError : 
  let cfg:=NLV_PreparePacket.configuration (NLV_Deployed.configuration missing indexError reservation)
  let expected:=PreparedHashCode.run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std
   i.digest i.publicValue i.proof i.hash i.scratch)
- matches before (expected.2,expected.1) (native i before)
+ Matches before (expected.2,expected.1) (native i before)
 /-- Every instantiated packet supplies the COMPLETE Result and ordered log,
 not merely its accepted branch. This is specification elimination, not a root. -/
 theorem complete {C : Type} (missing : IDa_Deployed.Uninstalled C) (indexError : C)

@@ -47,28 +47,28 @@ variable (NMT_call_6 : aspis_r1_cost_probe.verifier.Error → Result
 /-- [aspis_r1_cost_probe_program::{impl core::clone::Clone for aspis_r1_cost_probe_program::SolanaDigest}::clone]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 9:9-9:14
     Visibility: public -/
-def SolanaDigest.Insts.CoreCloneClone.clone
+def SolanaDigest.Insts.CoreCloneClone.clone 
   (self : SolanaDigest) : Result SolanaDigest := do
   ok self
 
 /-- Trait implementation: [aspis_r1_cost_probe_program::{impl core::clone::Clone for aspis_r1_cost_probe_program::SolanaDigest}]
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 9:9-9:14 -/
 @[reducible]
-def SolanaDigest.Insts.CoreCloneClone : core.clone.Clone SolanaDigest := {
+def SolanaDigest.Insts.CoreCloneClone  : core.clone.Clone SolanaDigest := {
   clone := SolanaDigest.Insts.CoreCloneClone.clone
 }
 
 /-- Trait implementation: [aspis_r1_cost_probe_program::{impl core::marker::Copy for aspis_r1_cost_probe_program::SolanaDigest}]
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 9:16-9:20 -/
 @[reducible]
-def SolanaDigest.Insts.CoreMarkerCopy : core.marker.Copy SolanaDigest := {
+def SolanaDigest.Insts.CoreMarkerCopy  : core.marker.Copy SolanaDigest := {
   cloneInst := SolanaDigest.Insts.CoreCloneClone
 }
 
 /-- [aspis_r1_cost_probe_program::{impl aspis_core::digest::Digest32 for aspis_r1_cost_probe_program::SolanaDigest}::digest]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 13:4-15:5
     Visibility: public -/
-def SolanaDigest.Insts.Aspis_coreDigestDigest32.digest
+def SolanaDigest.Insts.Aspis_coreDigestDigest32.digest (NMT_call_4 : solana_hash.Hash → Result (Array Std.U8 32#usize)) (NMT_call_5 : (Slice (Slice Std.U8)) → Result solana_hash.Hash) 
   (self : SolanaDigest) (parts : Slice (Slice Std.U8)) :
   Result (Array Std.U8 32#usize)
   := do
@@ -78,7 +78,7 @@ def SolanaDigest.Insts.Aspis_coreDigestDigest32.digest
 /-- Trait implementation: [aspis_r1_cost_probe_program::{impl aspis_core::digest::Digest32 for aspis_r1_cost_probe_program::SolanaDigest}]
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 11:0-16:1 -/
 @[reducible]
-def SolanaDigest.Insts.Aspis_coreDigestDigest32 : aspis_core.digest.Digest32
+def SolanaDigest.Insts.Aspis_coreDigestDigest32 (NMT_call_4 : solana_hash.Hash → Result (Array Std.U8 32#usize)) (NMT_call_5 : (Slice (Slice Std.U8)) → Result solana_hash.Hash)  : aspis_core.digest.Digest32
   SolanaDigest := {
   coremarkerCopyInst := SolanaDigest.Insts.CoreMarkerCopy
   digest := (SolanaDigest.Insts.Aspis_coreDigestDigest32.digest NMT_call_4 NMT_call_5)
@@ -86,13 +86,21 @@ def SolanaDigest.Insts.Aspis_coreDigestDigest32 : aspis_core.digest.Digest32
 
 /-- [aspis_r1_cost_probe_program::observer]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 36:0-39:1 -/
-def observer
+def observer 
   : Result (Option (aspis_r1_cost_probe.verifier.Phase → Result Unit)) := do
   ok none
 
 /-- [aspis_r1_cost_probe_program::first_decoded]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 49:0-51:1 -/
-def first_decoded
+def first_decoded (NMT_call_0 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F)) (NMT_call_1 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → (Slice Std.U8) → Std.Usize → H → (Option
+    (aspis_r1_cost_probe.verifier.Phase → Result Unit)) → Result
+    (core.result.Result (alloc.vec.Vec Std.U8)
+    aspis_r1_cost_probe.verifier.Error)) (NMT_call_4 : solana_hash.Hash → Result (Array Std.U8 32#usize)) (NMT_call_5 : (Slice (Slice Std.U8)) → Result solana_hash.Hash) (NMT_call_6 : aspis_r1_cost_probe.verifier.Error → Result
+    solana_program_error.ProgramError) 
   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
   (public_bytes : Slice Std.U8) (proof : Slice Std.U8) (k : Std.Usize) :
   Result (core.result.Result (alloc.vec.Vec Std.U8)
@@ -109,7 +117,7 @@ def first_decoded
 /-- [aspis_r1_cost_probe_program::first::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_r1_cost_probe_program::first::closure}::call_once]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 43:89-43:124 -/
 def
-  first.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once
+  first.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once 
   (c : first.closure)
   (tupled_args :
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
@@ -122,7 +130,7 @@ def
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 43:89-43:124 -/
 @[reducible]
 def
-  first.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+  first.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError 
   : core.ops.function.FnOnce first.closure
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
   solana_program_error.ProgramError := {
@@ -132,7 +140,18 @@ def
 
 /-- [aspis_r1_cost_probe_program::first]:
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 42:0-45:1 -/
-def first
+def first (NMT_call_0 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F)) (NMT_call_1 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → (Slice Std.U8) → Std.Usize → H → (Option
+    (aspis_r1_cost_probe.verifier.Phase → Result Unit)) → Result
+    (core.result.Result (alloc.vec.Vec Std.U8)
+    aspis_r1_cost_probe.verifier.Error)) (NMT_call_2 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (NMT_call_3 : (Slice Std.U8) → Result (core.result.Result
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)) (NMT_call_4 : solana_hash.Hash → Result (Array Std.U8 32#usize)) (NMT_call_5 : (Slice (Slice Std.U8)) → Result solana_hash.Hash) (NMT_call_6 : aspis_r1_cost_probe.verifier.Error → Result
+    solana_program_error.ProgramError) 
   (public_bytes : Slice Std.U8) (proof : Slice Std.U8) (k : Std.Usize) :
   Result (core.result.Result (alloc.vec.Vec Std.U8)
     solana_program_error.ProgramError)

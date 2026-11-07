@@ -24,7 +24,7 @@ def frame {A World : Type} (before : World) : Exit A World → Prop
  | .returned _ after => after=before
  | .failed _ => True
  | .diverged => True
-def matches {A World : Type} {Event : Type u} (before : World)
+def Matches {A World : Type} {Event : Type u} (before : World)
  (expected : Result A × List Event) (actual : Observation A World Event) : Prop :=
  result actual.exit=expected.1 ∧ actual.attempted=expected.2 ∧ frame before actual.exit
 /-- Existence is required in addition to a relation's universal implication. -/
