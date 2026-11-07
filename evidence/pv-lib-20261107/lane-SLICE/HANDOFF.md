@@ -21,3 +21,5 @@ Attempt 49603: PV_W5_LocalCompletion, passed pinned focused replay.
 Attempt 49604: PV_W5_UbCheckOperators, passed pinned focused replay.
 
 Attempt 49605: PV_W5_F32Prelude, passed pinned focused replay.
+
+Attempt 49606: PV_W5_F32Count, passed pinned focused replay.
