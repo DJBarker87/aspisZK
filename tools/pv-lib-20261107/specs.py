@@ -105,7 +105,7 @@ This is a normative counterimplementation example, not a new compiled counterexa
  lines.append(f"| `{rid}` | [PSPEC_{slug}.md](PSPEC_{slug}.md) | `{r['source_name']}` |")
 (E/'PSPEC_INDEX.md').write_text('\n'.join(lines)+'\n')
 (E/'SPEC_CORRECTIONS.md').write_text('# Frozen specification corrections\n\nNo post-freeze corrections. Initial known package defects are documented in TOP_COMPOSITION.md and the row comparisons.\n')
-files=sorted(E.glob('PSPEC*.md'))
+files=sorted(E.glob('PSPEC*.md'))+[E/'INPUT_MANIFEST.json',E/'INPUT_REVISIONS.json']
 (E/'FREEZE.json').write_text(json.dumps(dict(version=1,source_inputs='INPUT_MANIFEST.json',
  files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
  policy='Demonstrated error against frozen source; exact before/after and witness in SPEC_CORRECTIONS.md'),indent=2)+'\n')

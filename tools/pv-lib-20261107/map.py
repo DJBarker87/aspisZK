@@ -14,7 +14,7 @@ for parent in dep['order']:
   sites=[s['site'] for s in r['call_sites'] if s['row']==child]
   if p:
    namespace=p['theorem'].rsplit('.',1)[0]
-   definitions=[namespace+'.'+n for n in p['definitions']]
+   definitions=p.get('definitions_qualified',[namespace+'.'+n for n in p['definitions']])
   else:definitions=[]
   status='INSTANTIATED' if inst and inst.get('compiled') else 'MISSING-CHILD-LEMMA'
   reason=('No CLOSED provider: '+c['status']) if c['status']!='CLOSED' else (

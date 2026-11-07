@@ -48,6 +48,21 @@ for rid in open_ids:
     src=rows[rid]['source']; path=src['syntax']
     if path: save('syntax-'+rid.replace(':','-'),src['revision'],path)
 providers={}
+def qualified_definitions(text):
+    scopes=[]; result=[]
+    for line in text.splitlines():
+        m=re.match(r'^namespace (\S+)',line)
+        if m: scopes.append(('namespace',m[1]));continue
+        if re.match(r'^(?:noncomputable )?section\b',line):
+            scopes.append(('section',''));continue
+        m=re.match(r'^end(?:\s+(\S+))?\s*$',line)
+        if m:
+            if scopes: scopes.pop()
+            continue
+        m=re.match(r'^(?:noncomputable )?(?:def|abbrev|structure|inductive) ([A-Za-z0-9_\'.]+)',line)
+        if m:
+            result.append('.'.join([n for k,n in scopes if k=='namespace']+[m[1]]))
+    return result
 for rid,r in rows.items():
     c=r.get('closure')
     if not c: continue
@@ -55,6 +70,7 @@ for rid,r in rows.items():
     providers[rid]=dict(theorem=c['theorem'],branch=c['branch'],revision=s['revision'],
         source=s['path'],sha256=sha(raw),definitions=re.findall(
         r'^(?:noncomputable )?(?:def|abbrev|structure|inductive) ([A-Za-z0-9_\'.]+)',raw.decode(),re.M),
+        definitions_qualified=qualified_definitions(raw.decode()),
         raw_audit=c.get('raw_audit'),combined_cohort=c.get('combined_cohort'))
 order=[];active=[];seen=set();cycles=[]
 def dfs(rid):
