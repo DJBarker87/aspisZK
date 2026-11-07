@@ -24,13 +24,13 @@ theorem args_input (a : NNG_Input094.Args) : args (input a)=NNG_Lower094.lower a
 def call1 (env : RSL.Env) {H : Type} (_ : aspis_core.digest.Digest32 H)
  (pub : Public) (publicBytes proof : Slice U8) (k : Usize) (_ : H)
  (_ : Option (aspis_r1_cost_probe.verifier.Phase → Result Unit)) :
- Result (core.result.Result (alloc.vec.Vec U8) Error) :=
+ Result (core.result.Result (alloc.vec.Vec U8) NNG_Carriers328.Error) :=
  NMP_ResultTransport.outer childReply (NNG_Context094.body (NNG_InstalledCalls094.calls env)
   (NNG_Input094.input (args ⟨pub,publicBytes,proof,k⟩) none env))
 
 def call4 (key : solana_hash.Hash) : Result (Array U8 32#usize) := ok key
 def call5 (env : RSL.Env) (parts : Slice (Slice U8)) : Result solana_hash.Hash := LIB_Env.hashv env parts
-def call6 (_ : Error) : Result solana_program_error.ProgramError := ok .InvalidInstructionData
+def call6 (_ : NNG_Carriers328.Error) : Result solana_program_error.ProgramError := ok .InvalidInstructionData
 
 theorem observer : NMT_first.observer=ok none := rfl
 #print axioms observer
@@ -41,8 +41,8 @@ theorem digest_value (env : RSL.Env) (parts : Slice (Slice U8)) :
  (NNG_PrepareTransport094.digest env).digest () parts := by
  unfold SolanaDigest.Insts.Aspis_coreDigestDigest32 SolanaDigest.Insts.Aspis_coreDigestDigest32.digest call4 call5
   NNG_PrepareTransport094.digest NNG_PublicSource137.digest LIB_VCode.digest
- rw [LIB_Env.hashv_value,bind_tc_ok]
- rfl
+ change (do let key ← LIB_Env.hashv env parts;ok key)=LIB_Env.hashv env parts
+ exact NMT_CallTree.result_right _
 #print axioms digest_value
 
 def body (a : Args) (env : RSL.Env) :=

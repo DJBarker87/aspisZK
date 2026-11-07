@@ -1,0 +1,36 @@
+NNG_generated/NNG_Child328.lean:12:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNG_Observed136.observation ?decode (NNG_Events094.events ?env) (invoke ?site ?args ?r)
+in the target expression
+  NNG_Observed136.observation childPort (NNG_Tree328.events env)
+      (invoke "TX1:094/tx1" (NNG_Tree328.childArgs a env)
+        (NNG_Native328.call1 env
+          (NMT_first.SolanaDigest.Insts.Aspis_coreDigestDigest32 NNG_Native328.call4 (NNG_Native328.call5 env))
+          a.public_ a.publicBytes a.proof a.k () none)) =
+    NNG_ProducerFull094.producer (NNG_Native328.args a) none env
+
+a : NNG_Native328.Args
+env : RSL.Env
+⊢ NNG_Observed136.observation childPort (NNG_Tree328.events env)
+      (invoke "TX1:094/tx1" (NNG_Tree328.childArgs a env)
+        (NNG_Native328.call1 env
+          (NMT_first.SolanaDigest.Insts.Aspis_coreDigestDigest32 NNG_Native328.call4 (NNG_Native328.call5 env))
+          a.public_ a.publicBytes a.proof a.k () none)) =
+    NNG_ProducerFull094.producer (NNG_Native328.args a) none env
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    NNG_ProducerFull094.producer (NNG_Native328.args a) none env
+  has type
+    RSL.Obs (Except LIB_Instances.VL.VErr RSL.Bytes)
+  but is expected to have type
+    RSL.Obs (Except LIB_VCarriers.VErr RSL.Bytes)
+  in the application
+    NNG_Observed136.observation childPort (NNG_Tree328.events env)
+        (invoke "TX1:094/tx1" (NNG_Tree328.childArgs a env)
+          (NNG_Native328.call1 env
+            (NMT_first.SolanaDigest.Insts.Aspis_coreDigestDigest32 NNG_Native328.call4 (NNG_Native328.call5 env))
+            a.public_ a.publicBytes a.proof a.k () none)) =
+      NNG_ProducerFull094.producer (NNG_Native328.args a) none env
+'AspisR1.NNG_Child328.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Child328.original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
