@@ -71,3 +71,11 @@ swap0).42 explicit own definitions/theorems, unchanged private importAll
 collector suffix. This compile is not a raw audit. Next49712 stages the48-root
 STX partition; one serial capped raw attempt49790 will audit both in separate
 processes, with no combined cohort assertion. No row/root composition proved.
+
+Focused49712 compiled the48-root STX audit driver (1.02s,1586232KiB,swap0).
+CONTRACT_INDEX.json explicitly records0/29 FULL frozen-contract elaborations;
+the ToVec component is not miscounted as the completed frozen specification.
+ADEQUACY_OBLIGATIONS.md records the remaining source/machine/resource targets;
+these are not yet complete Lean obligations or proofs. MAP_DELTA.json attaches
+component evidence to four slots, preserving every shared status. Next49713;
+strict raw49790 is the next operation, not an unchanged baseline replay.
