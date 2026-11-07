@@ -39,3 +39,8 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
   RSL carries no post-abort state. It is parametric in the full weak packet;
   neither an actual native packet nor arbitrary-dictionary event-write exclusion
   is claimed. NMV_REVIEWED_TRANSCRIPTIONS.json records the exact scope.
+
+- NMV-I4: L079 own retention omitted its NMV_ENV.json input. It failed after
+  hashing/export, before tool-pin/retention completion. L080 supplies that
+  archived file and passes the same validation; no proof replay, timeout/cap
+  change, shared infrastructure fix or final credit from L079.

@@ -14,7 +14,7 @@ native wrapper instances are not installed.
 | TX1:344 snapshots/child345 | `NMV_RslFold.fold344` is a full canonical transcription fold at exact three snapshots/program/data, full Result<Vec>, copy panic/borrow error/write/release. | Universal actual-wrapper producer of `NMV_RslFold.stage1`, and NMT345 canonical full packet. Whole-parent/local-record/direct-return families K020/K021/K023/K024/K025 are retired. No further near-duplicate is eligible. |
 | TX1:344 copy | Canonical copyStep retains full original SDK cells and exact designated cell footprint. Independent exclusive SDK/copy laws are inherited; errors and stops retained. | Actual child-returned checkpoint ownership and original exclusive cell/copy argument association in one execution. No small success checkpoint is a proof about arbitrary owned Vec/error Strings. |
 | full state / A3,A4 | `NMV_FullState.World/Observation/Packet240/Packet344` retain arbitrary FULL allocator carrier and full SDK state. RSL projection and G2 are exact; allocator internals remain outside(bl)(3). | Physical SdkState↔S2W heap/allocator and wrappers↔D189 first/second adapters are the separate owner's work, not hypotheses silently installed here. |
-| gate | All74 own raw ax2 audits, printed axioms,8 tool fixtures and final focused combined import passed. | Final retention/export review; the gate validates support but cannot create an actual native producer. |
+| gate | All74 own raw ax2 audits, printed axioms,8 tool fixtures and final focused combined import passed. | Retention/export PASS L080; the gate validates support but cannot create an actual native producer. |
 
 All independently meaningful snapshot, guard, domain, parametric fold, full-state
 and frame work is attempted. Remaining native members require either a NEW
@@ -26,3 +26,5 @@ producer/endpoint/child-success premises would violate(aq)/(bf). Budget availabi
 does not make those moves valid. Final allowance accounting follows the receipts.
 
 Final full carrier: NMV_PhysicalCarrier retains generic COMPLETE FullSdk and Allocator objects with explicit RSL view. Physical-field frame/representation remains with A3/A4/A5; it is not silently projected away or asserted.
+
+Final budget76/250 formal,34/60 Kani,1 actual extraction. All unspent-budget reasons above remain; neither exhaustion nor lack of compiler slots is claimed as the blocker.
