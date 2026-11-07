@@ -18,6 +18,11 @@ historical=[json.loads(p.read_text()) for p in A.glob('receipt-*.json')]
 failed={r['source_sha256'] for r in rs+historical if not r['accepted']}
 assert not failed.intersection(r['source_sha256'] for r in rs if r['accepted'])
 accepted={r['target']:r for r in rs if r['accepted'] and not r['runtime_audit']}
+for plan in [A/'NAME_REPLAY_PLAN.json',S/'F6_REPLAY_PLAN.json']:
+ for x in json.loads(plan.read_text()):
+  raw=subprocess.check_output(['git','show',x['revision']+':lean/'+x['module']+'.lean'])
+  assert sha(raw)==x['source_sha256'] and Path(x['source_path']).read_bytes()==raw
+
 manifest=json.loads((S/'AUDIT_ROOTS.json').read_text());roots=[]
 for m in manifest['modules']:
  p=Path('lean',m+'.lean');raw=p.read_bytes();assert sha(raw)==accepted[m]['source_sha256']

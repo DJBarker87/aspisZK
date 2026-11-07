@@ -293,3 +293,7 @@ every native answer. No separate catch or registry frame is assumed.
 
 Session4 49198 passed exact pinned PV_FN_THREAD_f6Entry replay. f6 transport
 cone remains partial; next unreplayed target is PV_FN_THREAD_f6Reply121.
+
+Session4 49199 passed the unchanged strict raw walker with31 new input roots.
+All100 fresh focused IDs49100–49199 are now spent; none of the historical
+49458–49479 IDs was reused. One raw runtime audit49890 is next.
