@@ -43,7 +43,16 @@ for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  p=E.parent/'tx1-finish2-20261110/NLU_native'/name;shutil.copyfile(p,E/'NMC_native'/name);cpins[name]=hashlib.sha256(p.read_bytes()).hexdigest()
 (E/'NMC_AUDIT_INPUT_PINS.json').write_text(json.dumps(cpins,indent=2)+'\n')
 (E/'NMC_PATHS.json').write_text(json.dumps(json.loads((E/'NMC_ENV.json').read_text())['LEAN_PATH'].split(':')))
-priors={tag:json.loads(lzma.decompress((base/(tag+'_CLOSURE_PINS.json.xz')).read_bytes()))for tag,base in bases}
+priors={tag:json.loads(lzma.decompress((base/(tag+'_CLOSURE_PINS.json.xz')).read_bytes()))for tag,base in bases if(base/(tag+'_CLOSURE_PINS.json.xz')).exists()}
+assert {'NLS','NLU','NLI'}<=set(priors)
+# NLH publishes exports, not a standalone closure manifest. Check every NLH
+# object selected by the coherent predecessor closure against that export.
+nlh=json.loads((E.parent/'terminal6-20261110/NLH_EXPORT.json').read_text())
+exported={r['name'][:-6].replace('/','.') : r['sha256']for r in nlh['files']if r['name'].endswith('.olean')}
+selected={r['module']:r['sha256']for prior in priors.values()for r in prior['selected_objects']if r['module'].startswith('NLH_')and r['path'].endswith('.olean')}
+missing=[m for m,h in selected.items()if exported.get(m)!=h]
+assert not missing,missing
+(E/'NMC_NLH_CLOSURE_COVERAGE.json').write_text(json.dumps(dict(status='PASS_NLH_SELECTED_EXPORTS',selected_modules=len(selected),mismatches=[],basis='NLS/NLU/NLI coherent closures plus NLH_EXPORT; NLH has no standalone CLOSURE_PINS',unused_export_modules=sorted(set(exported)-set(selected))),indent=2)+'\n')
 blob=json.dumps(priors).encode();(E/'NMC_PREDECESSORS.json.xz').write_bytes(lzma.compress(blob));(E/'NMC_PREDECESSORS.json.sha256').write_text(hashlib.sha256(blob).hexdigest()+'\n')
 (E/'NMC_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,row_roots=[],status='SUPPORT_ONLY',groups=30),indent=2)+'\n')
 print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(allroots),groups=30,expected_import_conflicts=0)))
