@@ -1,0 +1,31 @@
+--- NMK_ScanDriver.lean
++++ NMN_ScanDriver.lean
+@@ -99,23 +99,23 @@
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+-    else if mode == "scan" then pure (#[`NMK_COMBINED_IMPORT], #[])
++    else if mode == "scan" then pure (#[`NMN_COMBINED_IMPORT], #[])
+     else if mode.startsWith "proof" then do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMK_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMN_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      pure (#[`NMK_COMBINED_IMPORT], names.map String.toName)
++      pure (#[`NMN_COMBINED_IMPORT], names.map String.toName)
+     else throw (IO.userError "unknown audit mode")
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NMK_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NMN_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NMK_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NMN_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {

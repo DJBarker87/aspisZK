@@ -17,7 +17,7 @@
 +mod NMN_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMN_native.rs
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,130 @@
 +use super::*;
 +use core::cell::{RefCell,UnsafeCell};
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -28,7 +28,7 @@
 +#[repr(C)]
 +struct NMN_Frame { log:UnsafeCell<NMN_ParseLog>,proof:NMN_Proof }
 +#[derive(Clone,Copy)]
-+struct NMN_CommonLog { entered:bool,ptr:[*const u8;3],len:[usize;3],tag:u8,omit:bool }
++struct NMN_CommonLog { entered:bool,ptr:[*const u8;3],len:[usize;3],tag:u8,omit:bool,stop:bool }
 +#[derive(Clone,Copy)]
 +struct NMN_Hash<'a>(&'a RefCell<NMN_CommonLog>);
 +fn NMN_error(t:u8)->Error {match t {0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,
@@ -37,11 +37,11 @@
 +impl aspis_core::Digest32 for NMN_Hash<'_> {
 + fn digest(&self,parts:&[&[u8]])->[u8;32] {
 +  assert_eq!(parts.len(),3);let tag:u8=kani::any();kani::assume(tag<9);
-+  let omit=self.0.borrow().omit;
++  let omit=self.0.borrow().omit;let stop=self.0.borrow().stop;
 +  if !omit {*self.0.borrow_mut()=NMN_CommonLog{entered:true,
 +   ptr:[parts[0].as_ptr(),parts[1].as_ptr(),parts[2].as_ptr()],
-+   len:[parts[0].len(),parts[1].len(),parts[2].len()],tag,omit};}
-+  let mut result=[0;32];result[0]=tag;result
++   len:[parts[0].len(),parts[1].len(),parts[2].len()],tag,omit,stop};}
++  let mut result=[0;32];result[0]=tag;result[1]=u8::from(stop);result
 + }
 +}
 +fn NMN_parse_cut(p:&[u8])->Result<Variant,Error>{
@@ -53,12 +53,14 @@
 +}
 +fn NMN_marker_cut(_obs:Observer,p:Phase){assert!(matches!(p,Phase::Parsed));}
 +fn NMN_common_cut<H:aspis_core::Digest32>(public:&[u8],proof:&[u8],ck:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
-+ NMN_reply(hash.digest(&[public,proof,ck])[0])
++ let reply=hash.digest(&[public,proof,ck]);
++ if reply[1]!=0{panic!("stopped common: ordered prefix only");}
++ NMN_reply(reply[0])
 +}
 +fn NMN_common_wrong<H:aspis_core::Digest32>(public:&[u8],proof:&[u8],ck:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
 + let tag=hash.digest(&[public,proof,ck])[0];NMN_reply((tag+1)%9)
 +}
-+fn NMN_parent<const SUCCESS:bool,const MUTANT:bool,const OMIT:bool,const IGNORE:bool>(){
++fn NMN_parent<const SUCCESS:bool,const MUTANT:bool,const OMIT:bool,const IGNORE:bool,const STOP:bool>(){
 + let public:[u8;1880]=kani::any();let checkpoint:[u8;1768]=kani::any();
 + let seed=NMN_ParseLog{entered:false,ptr:core::ptr::null(),len:0,tag:0};
 + let frame=NMN_Frame{log:UnsafeCell::new(seed),proof:NMN_Proof{header:kani::any(),root:kani::any(),suffix:kani::any()}};
@@ -66,7 +68,7 @@
 + let proof=unsafe{core::slice::from_raw_parts((&frame.proof as *const NMN_Proof).cast::<u8>(),57607)};
 + let other=unsafe{core::slice::from_raw_parts((&alternate.proof as *const NMN_Proof).cast::<u8>(),57607)};
 + let n:usize=kani::any();kani::assume(n<=1880);let pub_=&public[..n];
-+ let log=RefCell::new(NMN_CommonLog{entered:false,ptr:[core::ptr::null();3],len:[0;3],tag:0,omit:OMIT});
++ let log=RefCell::new(NMN_CommonLog{entered:false,ptr:[core::ptr::null();3],len:[0;3],tag:0,omit:OMIT,stop:STOP});
 + let result=tx2_authenticated(pub_,if MUTANT{other}else{proof},&checkpoint,NMN_Hash(&log),None);
 + let parsed=unsafe{*frame.log.get()};let common=*log.borrow();
 + let actual_parsed=if MUTANT{unsafe{*alternate.log.get()}}else{parsed};
@@ -74,8 +76,8 @@
 + assert!(parsed.entered,"parse write coverage");assert_eq!(parsed.ptr,proof.as_ptr(),"parse argument");assert_eq!(parsed.len,proof.len());
 + if SUCCESS {
 +  assert!(common.entered,"common log write coverage");
-+  assert_eq!(common.ptr,[pub_.as_ptr(),proof.as_ptr(),checkpoint.as_ptr()]);
-+  assert_eq!(common.len,[pub_.len(),proof.len(),checkpoint.len()]);
++  assert_eq!(common.ptr[0],pub_.as_ptr());assert_eq!(common.ptr[1],proof.as_ptr());assert_eq!(common.ptr[2],checkpoint.as_ptr());
++  assert_eq!(common.len[0],pub_.len());assert_eq!(common.len[1],proof.len());assert_eq!(common.len[2],checkpoint.len());
 +  assert_eq!(result,if IGNORE{Ok(())}else{NMN_reply(common.tag)},"complete returned Result");
 + }else{
 +  assert!(!common.entered);assert_eq!(result,if IGNORE{Err(Error::Parse)}else{Err(NMN_error(parsed.tag-3))},"parser error propagation");
@@ -86,35 +88,63 @@
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_auth_return(){NMN_parent::<true,false,false,false>();}
++fn NMN_auth_return(){NMN_parent::<true,false,false,false,false>();}
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_auth_reject(){NMN_parent::<false,false,false,false>();}
++fn NMN_auth_reject(){NMN_parent::<false,false,false,false,false>();}
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_auth_reply_control(){NMN_parent::<true,false,false,true>();}
++fn NMN_auth_reply_control(){NMN_parent::<true,false,false,true,false>();}
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_auth_argument_control(){NMN_parent::<true,true,false,false>();}
++fn NMN_auth_argument_control(){NMN_parent::<true,true,false,false,false>();}
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_auth_write_control(){NMN_parent::<true,false,true,false>();}
++fn NMN_auth_write_control(){NMN_parent::<true,false,true,false,false>();}
 +
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_reject_reply_control(){NMN_parent::<false,false,false,true>();}
++fn NMN_reject_reply_control(){NMN_parent::<false,false,false,true,false>();}
 +#[kani::proof]#[kani::unwind(17)]
 +#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
 +#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_reject_argument_control(){NMN_parent::<false,true,false,false>();}
++fn NMN_reject_argument_control(){NMN_parent::<false,true,false,false,false>();}
++fn NMN_parse_omit(p:&[u8])->Result<Variant,Error>{
++ let reply=NMN_parse_cut(p);
++ let context=unsafe{p.as_ptr().sub(core::mem::offset_of!(NMN_Frame,proof)).cast::<NMN_Frame>()};
++ unsafe{(*(*context).log.get()).entered=false;}
++ reply
++}
++#[kani::proof]#[kani::unwind(17)]
++#[kani::stub(parse_shape,NMN_parse_omit)]#[kani::stub(mark,NMN_marker_cut)]
++#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_reject_write_control(){NMN_parent::<false,false,false,false,false>();}
++
++#[kani::proof]#[kani::unwind(17)]
++#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
++#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_common_stop_control(){NMN_parent::<true,false,false,false,true>();}
++// Rule(al) stability calibration; original names and verdicts are retained.
++#[kani::proof]#[kani::unwind(17)]
++#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
++#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_auth_return_stability(){NMN_parent::<true,false,false,false,false>();}
++#[kani::proof]#[kani::unwind(17)]
++#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
++#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_auth_reply_stability(){NMN_parent::<true,false,false,true,false>();}
