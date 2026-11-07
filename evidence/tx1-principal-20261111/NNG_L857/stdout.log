@@ -1,0 +1,33 @@
+NNG_generated/NNG_QueryReturned094.lean:22:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIBC_Usize.raw ↑10#usize
+in the target expression
+  LIBC_QueryLoop.model a env =
+    Port3_QueryInstall.result
+      (Port3_NativeQueryBody.verifier.candidate.query_loop LIBC_QueryOps.ops (LIBC_Bytes.raw a.1)
+        (LIBC_QueryLoop.nativeP a) (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.nativeG a) none (LIBC_QueryLoop.geo a)
+        (LIBC_QueryLoop.pending a) (LIBC_Usize.raw 10))
+
+a : LIBC_QueryLoop.Args
+env : RSL.Env
+out : LIB_VCarriers.Acc
+pending : LIB_VCarriers.Weights
+ev : List RSL.Event
+domain : LIBC_QueryLoop.Domain a
+returned : LIBC_QueryLoop.child.run a env { exit := RSL.Exit.ret (Except.ok (out, pending)), events := ev }
+observation :
+  { exit := RSL.Exit.ret (Except.ok (out, pending)), events := ev } =
+    LIB_Carriers.resultObs LIBC_QueryLoop.port [] (LIBC_QueryLoop.model a env)
+source :
+  LIBC_QueryLoop.model a env =
+    Port3_QueryInstall.result
+      (Port3_NativeQueryBody.verifier.candidate.query_loop LIBC_QueryOps.ops (LIBC_Bytes.raw a.1)
+        (LIBC_QueryLoop.nativeP a) (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.nativeG a) none (LIBC_QueryLoop.geo a)
+        (LIBC_QueryLoop.pending a) (LIBC_Usize.raw 10))
+⊢ ∃ after,
+    Port3_NativeQueryBody.verifier.candidate.query_loop LIBC_QueryOps.ops (LIBC_Bytes.raw a.1)
+          (LIBC_QueryLoop.nativeP a) (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.nativeG a) none (LIBC_QueryLoop.geo a)
+          (LIBC_QueryLoop.pending a) 10#usize =
+        ok (core.result.Result.Ok (after, pending)) ∧
+      out = LIBC_VStateCarriers.fromAcc after
+'AspisR1.NNG_QueryReturned094.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_QueryReturned094.post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

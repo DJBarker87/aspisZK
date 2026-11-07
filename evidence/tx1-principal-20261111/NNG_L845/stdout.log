@@ -1,0 +1,95 @@
+NNG_generated/NNG_ObservedRoots094.lean:28:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (NNG_Transport.toT11 (NNG_Output137.verified out)).roots = Array.make 2#usize [_a.c1_root, root] ⋯
+Error: Application type mismatch: The argument
+  congrArg NNG_Transport.toT12
+    (congrArg NNG_Emitted.Parent.prefixValue
+      (congrFun'
+        (congrFun'
+          (congrFun'
+            (congrArg (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue))
+              (fromT13_inverse (LIB_VCarriers.prefixRaw parsedPrefix)))
+            (toT10 after))
+          (toT3 ch))
+        s.observer))
+has type
+  NNG_Transport.toT12
+      (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue)
+          (toT13 (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix))) (toT10 after) (toT3 ch) s.observer).prefixValue =
+    NNG_Transport.toT12
+      (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue) (LIB_VCarriers.prefixRaw parsedPrefix)
+          (toT10 after) (toT3 ch) s.observer).prefixValue
+but is expected to have type
+  NNG_Transport.toT12
+      (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue)
+          (toT13 (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix))) (toT10 after) (toT3 ch) s.observer).prefixValue =
+    _a
+in the application
+  congrArg AspisR1PublicPreparation.r1_wire.Prefix.c1_root
+    (congrArg NNG_Transport.toT12
+      (congrArg NNG_Emitted.Parent.prefixValue
+        (congrFun'
+          (congrFun'
+            (congrFun'
+              (congrArg (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue))
+                (fromT13_inverse (LIB_VCarriers.prefixRaw parsedPrefix)))
+              (toT10 after))
+            (toT3 ch))
+          s.observer)))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+env : RSL.Env
+s : NNG_Context137.Parent Unit
+out : r1_semantic.Verified Unit
+native : NNG_Context137.emitted (NNG_Context137.calls env) s = ok (core.result.Result.Ok out)
+t : r1_wire.SemanticTranscript Unit
+ch : aspis_core.state_only_prefix.r0.Challenges
+after : r1_wire.SemanticTranscript Unit
+parsedPrefix : LIB_VCarriers.Prefix
+source : LIB_VParsePrefix.model (LIB_Carriers.bytes s.bytes) = ok (Except.ok parsedPrefix)
+parsed : NMP_Install138.parse s.bytes = ok (core.result.Result.Ok (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix)))
+left✝¹ :
+  NMP_Install131.publicTranscript s.digest s.publicValue s.hash
+      (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix)).c1_root =
+    ok (core.result.Result.Ok t)
+left✝ :
+  NMP_Install150.begin_ s.digest (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix)) t =
+    ok (core.result.Result.Ok ch, after)
+finish :
+  NNG_FinishAdapter137.call env s.digest s.publicValue (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix)) after ch
+      s.observer =
+    ok (core.result.Result.Ok out)
+actual :
+  NNG_Emitted.emitted (NNG_ConcreteCalls136.calls env)
+      (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue)
+        (toT13 (fromT13 (LIB_VCarriers.prefixRaw parsedPrefix))) (toT10 after) (toT3 ch) s.observer) =
+    ok (core.result.Result.Ok (NNG_Output137.verified out))
+root : Std.Array U8 32#usize
+prefixEq :
+  NNG_Transport.toT12
+      (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue) (LIB_VCarriers.prefixRaw parsedPrefix)
+          (toT10 after) (toT3 ch) s.observer).prefixValue =
+    LIB_VCarriers.prefixRaw parsedPrefix
+roots :
+  (NNG_Transport.toT11 (NNG_Output137.verified out)).roots =
+    Array.make 2#usize
+      [(NNG_Transport.toT12
+            (NNG_FinishAdapter137.childInput s.digest (toT9 s.publicValue) (LIB_VCarriers.prefixRaw parsedPrefix)
+                (toT10 after) (toT3 ch) s.observer).prefixValue).c1_root,
+        root]
+      ⋯
+⊢ ∃ root0 root1, (toT11 out).roots = Array.make 2#usize [root0, root1] ⋯ ∧ ↑root0 = List.take 32 ↑s.bytes
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNG_ObservedRoots094.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -22,6 +22,7 @@ plan=[dict(module=n,path=str(files[n]),sha256=hashlib.sha256(files[n].read_bytes
 env=json.loads((E/'NNG_ENV.json').read_text())
 env['LEAN_PATH']=B+'/NNG_R4_objects:'+B+'/NNG_F9_objects:'+env['LEAN_PATH']
 (E/'NNG_REV4_ENV.json').write_text(json.dumps(env,indent=1)+'\n')
+if '--run' in sys.argv and (E/'NNG_REV4_REUSE_AUDIT.json').exists():raise SystemExit('Import-only refresh tail retired; see NNG_REV4_REUSE_AUDIT.json')
 if '--run' not in sys.argv:print('Private rev4 dependency refresh:',len(plan),'modules');sys.exit()
 for i,row in enumerate(plan,693):
  a=f'NNG_L{i:03}';n=row['module']

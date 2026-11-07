@@ -9,3 +9,5 @@ Target not yet established. Start of continuation:556 actual Lean/link/audit sco
 - TX1:344/333/330: follow345 through the existing NMV_/NNF_ folds, with no new caller clause.
 
 NNG_REV4_REBUILD_PLAN.json records108 affected private dependencies with exact source hashes, refreshed by existing capped admission/launcher one module at a time. NNG_R4_objects takes precedence over retained F9 and historical objects. NNG_REV4_ORCHESTRATION.jsonl records pausing only the local sequential refresh driver while its current child finishes, to check new small lemmas; never two job scopes. No shared infrastructure/cache or source/spec/trust/shipped file change.
+
+Revision4 current work:094 source fold is partial. Passing QueryTail094 and WeightsTail094 are internal support, not RowSpec094. Remaining fold occurrences: geometry, batch0, checked folded-root copy, initializer, prepare and parsed marker/zero, scan, parse, guard, then exact Ref conversion. Original public Domain+P1880 is retained. New own roots still require raw audit.328 and345 follow child-first only after094 candidate;345 can use proved NNG_P1880Discharge.decoder. No independent new row is claimed closed.
