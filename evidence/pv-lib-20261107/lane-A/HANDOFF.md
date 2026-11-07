@@ -286,3 +286,7 @@ Session4 49195 passed PV_LIB_A_PrefixTransport; exact receipt/axioms in session4
 Session4 49196 passed PV_LIB_A_WriterOrdinary: catch exclusion is derived
 from the actual writer token; corrected-machine graph has no ordinary/catch
 premise. Runtime Values and continuous caller history remain explicit gaps.
+
+Session4 49197 passed PV_LIB_A_WriterRegistry.installed: at all five writer
+polls, the actual existing backend lift preserves next/places/receivers on
+every native answer. No separate catch or registry frame is assumed.
