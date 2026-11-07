@@ -1,0 +1,11 @@
+{
+ "shared_infrastructure_changed": false,
+ "owned_client_repairs": [
+  {"stage":"seed before scopes","cause":"Predecessor closure manifests have three serialized shapes: selected_objects dictionary, NMN list, NMF path map","change":"Normalize all three without dropping any entry; verify every source hash","launches":0,"logs":["NMQ_setup-client.log","NMQ_setup-client2.log","NMQ_setup-client3.log"]},
+  {"stage":"first client prelaunch","cause":"Initial seed had stopped, so cache import manifest was absent","change":"Client assertion stopped before systemd launch; finish stricter seed validation, then launch L001 once","launches_before_repair":0},
+  {"stage":"schedule","cause":"Owned initial queue omitted the separate NFX scan","change":"Stop at scope boundary with owned HOLD marker; combine groups20/21 sequentially in L027 (ledger24's already successful adjacent pair), shift later batch scopes, reserve L039 scan and L040 pin/retention","completed_scopes_replayed":0,"timeout_increased":false,"source_or_root_shape_weakened":false},
+  {"stage":"audit executable reuse","cause":"Exact optimized ledger24 binary embeds legacy manifest filenames","change":"Copy executable unchanged, hash against ledger24; provide private NLX-named input aliases to authoritative NMQ manifests; all delivered outputs NMQ-prefixed","new_link_of_raw_binary":false},
+  {"stage":"wait evidence","change":"Owned runner explicitly appends reservation wait events to ATTEMPTS in addition to admission/transport logs; same or stricter admission"}
+ ],
+ "bootstrap_note":"NMQ_prepare.py and NMQ_patch_client.py preserve historical source preparation. Final committed NMQ_run/setup/batch/queue/pin/scope40 scripts and per-scope source snapshots are authoritative; do not rerun bootstrap over an active job."
+}
