@@ -1,19 +1,36 @@
-# Remaining LIBB obligations
+# Remaining LIBB obligations after module12/13 resume
 
-Target not yet established. No row is credited by LIBB; only the ledger gate may do so.
+Target not yet established. No ledger credit is claimed.
 
-Modules6–11 are concrete: LIBB_PoolLib.library has all20 fields, LIBB_PoolLib.deployed fixes deployed IDs, LIBB_PoolLib.values instantiates all four NND returned evaluators, scanner_extent and LIBB_PoolNoWrite.laws compile. Pool fields require no new domain, Ops dictionary, success premise or trust row. The separate original supplier-cut association lemmas retain their original SAME-argument domains.
+The earlier modules6–11 remain complete and unchanged. This resume has completed the canonical source/native observation fold, including all independently stopped C04 prefixes: LIBB_ObservationFold.tx2 and LIBB_Tx2Auth.native compile from NMN_064.root / NLT_CompleteRoot.root at the original SAME inputs and four own-input clauses. The pure source model contains no native execution image. Reuses LIBB_RecordRender, LIBB_EnvValues and merged LIB_Bytes.
 
-Module12 / V2Lib.tx2auth remains WAITING. VErr/debug/Root0 are fixed; the canonical auth field is not installed. Current support:
+Module12's byte law is LIBB_Tx2Auth.law. Full-law Returns and WriteFree compile. Reservations read the original Env.reservation, with no fixed-success choice. The runtime binding at the SAME reached calls is classified as representation; I.f064 remains integration-owned. No host association is claimed here.
 
-- LIBB_PartitionEnv uses the exact original Env.sha256 part lists for resume and reconstructs C04 node/leaf partitions (including truncated views) without assuming partition invariance for arbitrary Env.
-- LIBB_EnvCommon.resolved proves SAME Result and all outer events from one native continuation, with reservation tags bound ONLY at reached calls. LIBB_EnvCommon.stopped/stopped_query preserve the independently stopped C04 prefix and pending request; no source failure or returned native reply is invented.
-- LIBB_RecordRender proves exact ordered decomposition of the SAME native rich trace using closed detail laws. The intermediate child laws must be obtained from NMN_064.root/NLT_CompleteRoot.root, and runtime tag binding must come from the actual host representation. Neither becomes an own-input clause.
-- LIBB_EnvValues supplies Functional/Returns for the resolved-only source graph. This is not the complete tx2auth law. Complete the source/native observation fold including all permitted independently stopped prefixes, prove the canonical full-field gate on Dom064, then register the unchanged NNC_ObservedLaw.w as the weak law for that SAME V0. Bind I.f064 in the integration job, not by choosing a native witness or empty renderer.
-- LIBB_Tx2Domain.native preserves exactly proof57607/checkpoint1768/public≤1880/Root0 at SAME inputs; no parser/child-success or global Root0 premise was added.
+Module13's explicit source bundle LIBB_V2Lib.library and NND_Tx2Values.Values compile. LIBB_V2Lib.weak registers the UNCHANGED NNC_ObservedLaw.w via TAS.lib on that SAME V0. Exact carrier/domain/weak identity checks compile. No native witness or renderer is chosen.
 
-Module13 / V2Lib bundle remains WAITING solely on module12. No parameterized or relational stand-in is delivered as complete.
+The remaining gate is exactly:
 
-These remaining obligations are Lean/model/runtime-representation work. Zero Kani/extraction authorization is not their stopping reason. No historical determinism-obstruction investigation is reopened. Read LIBB_FINDINGS.md for repaired elaboration shapes and LIBB_CLOSED.json for hypothesis classifications. Budget/accounting and raw audit completion are recorded in LIBB_VALIDATION.json.
+```
+∀ x, RSL.TX2_241.Dom064 LIBB_V2Lib.library x →
+  RSL.Spec.Functional (LIBB_V2Lib.library.tx2auth x.1 x.2.1 x.2.2)
+```
 
-Final budget:300/300 scopes used,0 remaining;208/208 own-root raw audits standard-only; combined import/interfaces pass. No additional Lean/link/audit launch is authorized under this job. The module12/module13 obligations above remain open and require follow-on work; no row credit is claimed.
+This has NOT been proved. LIBB_V2Lib.returned_gate proves full-law Returns AND Functional of LIBB_Tx2Auth.resolved, not Functional of the full prefix law. Those propositions are explicitly distinct. The frozen RSL_Base Functional comment exempts infallible allocation abort arms; this job also explicitly asks to retain independently stopped C04 prefixes. The exact interpretation question was sent to the lead; no answer has been assumed. No historical determinism investigation is reopened, no spec is edited, and no domain is strengthened to suppress prefixes. Modules12/13 remain WAITING for final admission, despite their concrete source definitions and fold compiling.
+
+After the gate is settled, integration binds I.f064 to the SAME native observation and reservation representation and supplies TAS Refines064. This is integration-owned, not an unfilled LIBB source/native fold. Standard runtime/std/tool trust and inherited source-to-ELF obligations remain unchanged. Zero Kani/extraction is not the reason any Lean work is unfinished. Scope accounting and audits are in LIBB_RESUME_VALIDATION.json.
+
+## Below80% disposition, member by member
+
+24/200 scopes used;176 remain. No stop is attributed to budget, Kani or extraction. All remaining independent work was attempted:
+
+| Member | Disposition |
+|---|---|
+|12 source/native observation fold|DONE as supporting source work: parser errors/divergence, resolved common outcomes, independently stopped C04 prefixes, exact ordered rich-record render, original Domain.|
+|12 rev3 reservation/returned gate|DONE: reads Env.reservation; full-law Returns/WriteFree and resolved-graph Functional.|
+|12 requested full-field whole-Obs Functional|WAITING: the required formula is displayed above. The full law's independent abort arms are retained; suppressing them, strengthening Dom064, choosing a native witness, or replacing the renderer would violate the task. The lead's interpretation question is pending. No unchanged theorem replay can settle a different gate proposition.|
+|12 unchanged weak law|DONE as source registration: LIBB_V2Lib.weak/weak_exact/weak_identity, SAME V0, unchanged NNC_ObservedLaw.w.|
+|12 actual I.f064|Integration-owned by explicit user instruction; not attempted or smuggled into the source field.|
+|13 concrete bundle/Values/coherence|DONE as concrete source definitions and type identities; final DONE admission waits solely on the12 gate. No other field remains independent.|
+|Own audits/import/retention|DONE:40/40 standard-only raw ax2 roots; merged TX1/ledger25 combined import L323 and actual interfaces L324;646 selected input/export hashes rechecked; all78 own objects retained.|
+
+The worker does not promote source support or Returned determinism to the unproved whole-Obs gate, and does not spend the remaining scopes on duplicate wrappers or unchanged checks. The precise unresolved interpretation is reported instead of weakening the target.

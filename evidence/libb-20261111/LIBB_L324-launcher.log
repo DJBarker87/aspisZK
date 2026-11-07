@@ -1,0 +1,45 @@
+{"attempt": "LIBB_L324", "exit_status": 0, "wall_seconds": 19.767706794897094, "peak_rss_kib": "6781376", "swaps": "0", "print_axioms": []}
+def RSL.Spec.Functional : {α : Type} → RSL.Spec α → Prop :=
+fun {α} m => ∀ (env : RSL.Env), ∃ o, ∀ (o' : RSL.Obs α), m env o' ↔ o' = o
+def LIBB_Tx2Auth.law : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBB_V2Carriers.VErr Unit) :=
+fun pub proof ck =>
+  if h : LIBB_Tx2Auth.Fits pub proof ck then
+    LIBB_ObservationModel.law (LIB_Bytes.fromBytes pub ⋯) (LIB_Bytes.fromBytes proof ⋯) (LIB_Bytes.fromBytes ck ⋯)
+  else RSL.Spec.panic
+def LIBB_Tx2Auth.resolved : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBB_V2Carriers.VErr Unit) :=
+fun pub proof ck =>
+  if h : LIBB_Tx2Auth.Fits pub proof ck then
+    LIBB_EnvValues.graph (LIB_Bytes.fromBytes pub ⋯) (LIB_Bytes.fromBytes proof ⋯
+...
+oot0,
+  tx2auth := LIBB_Tx2Auth.law }
+def LIBB_V2Lib.values : NND_Tx2Values.Values LIBB_V2Lib.library :=
+{ auth := LIBB_Tx2Auth.value, auth_ret := ⋯ }
+theorem LIBB_V2Lib.returned_gate : ∀ (pub proof ck : RSL.Bytes) (env : RSL.Env),
+  RSL.TX2_241.Dom064 LIBB_V2Lib.library (pub, proof, ck) →
+    NND_Returned.Returns (LIBB_V2Lib.library.tx2auth pub proof ck) env (LIBB_V2Lib.values.auth pub proof ck env) ∧
+      (LIBB_Tx2Auth.resolved pub proof ck).Functional :=
+⋯
+theorem LIBB_V2Lib.domain_exact : ∀ (pub proof ck : RSL.Bytes),
+  RSL.TX2_241.Dom064 LIBB_V2Lib.library (pub, proof, ck) ↔ LIBB_Tx2Domain.domain pub proof ck :=
+⋯
+def LIBB_V2Lib.weak : {Ambient X : Type} →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    VTop_Stages.aspis_core.digest.Digest32 X → X → NLM_PacketTypes.World Ambient → RSL.TX2_241.V2Lib :=
+fun {Ambient X} H d hash world => RSL.TAS.lib LIBB_V2Lib.library (fun x x_1 => True) (NNC_ObservedLaw.w H d hash world)
+@[defeq] theorem LIBB_V2Lib.weak_exact : ∀ {Ambient X : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (d : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (world : NLM_PacketTypes.World Ambient),
+  (LIBB_V2Lib.weak H d hash world).tx2auth = NNC_ObservedLaw.w H d hash world :=
+⋯
+@[defeq] theorem LIBB_V2Lib.canonical_identity : RSL.TAS.lib LIBB_V2Lib.library LIBB_V2Lib.library.Root0
+    LIBB_V2Lib.library.tx2auth =
+  LIBB_V2Lib.library :=
+⋯
+@[defeq] theorem LIBB_V2Lib.weak_identity : ∀ {Ambient X : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (d : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (world : NLM_PacketTypes.World Ambient),
+  LIBB_V2Lib.weak H d hash world = RSL.TCK.weaken LIBB_V2Lib.library (NNC_ObservedLaw.w H d hash world) :=
+⋯
+
+Running as unit: run-r99fc4a2ca4f14346a950d051ceaa8efa.scope; invocation ID: f12e289f19b9488fa69693f7b035b474
