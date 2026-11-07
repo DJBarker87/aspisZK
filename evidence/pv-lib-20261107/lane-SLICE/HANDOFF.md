@@ -59,3 +59,5 @@ Attempt 49622: PV_W5_F32FormatPayload, passed pinned focused replay.
 Attempt 49623: PV_W5_F32FormatLength, passed pinned focused replay.
 
 Attempt 49624: PV_W5_F32FormatJoin, passed pinned focused replay.
+
+Attempt 49625: PV_W5_F32PanicCall, passed pinned focused replay.
