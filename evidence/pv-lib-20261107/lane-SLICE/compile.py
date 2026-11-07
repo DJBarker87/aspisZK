@@ -23,7 +23,7 @@ code=(E/'focused-host.py').read_text()
 q=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(code)],input=json.dumps(x),text=True,capture_output=True)
 (E/f'transport-{a}.json').write_text(json.dumps(dict(exit=q.returncode,stdout=q.stdout,stderr=q.stderr),indent=2)+'\n')
 print(q.stdout);print(q.stderr,file=sys.stderr)
-for kind,suffix in [('id-audit','json'),('submission','json'),('admission','json'),('receipt','json'),('refusal','json'),('resolution','json'),('out','log'),('time','log')]:
+for kind,suffix in [('id-audit','json'),('submission','json'),('admission','json'),('admission','log'),('receipt','json'),('refusal','json'),('resolution','json'),('out','log'),('time','log')]:
     r=subprocess.run(['ssh',host,f'cat {H}/evidence/{kind}-{a}.{suffix}'],text=True,capture_output=True)
     if r.returncode==0:
         out=E/f'{kind}-{a}.{suffix}'
