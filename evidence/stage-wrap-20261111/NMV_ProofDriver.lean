@@ -2,11 +2,12 @@ import Lean
 import NFA_WALKER
 import NFA_MemoryLimit
 open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
 unsafe def main (args : List String) : IO UInt32 := do
   NFA_MemoryLimit.set
   initSearchPath (← findSysroot)
   enableInitializersExecution
-  let mode := args.headD "own"
+  let mode := args.headD "small"
   let (modules, roots) ←
     if mode == "fixtures" then
       pure (#[`NEP_Planted, `NEP_Mutations],
@@ -15,8 +16,13 @@ unsafe def main (args : List String) : IO UInt32 := do
          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
     else do
       let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMV_AUDIT_ROOTS.json"))
-      let roots ← IO.ofExcept (manifest.getObjValAs? (Array String) "roots")
-      pure (#[`NMV_COMBINED_IMPORT], roots.map String.toName)
+      let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+      let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+      let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMV_AUDIT_MODULES.json"))
+      let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
+      let some modules := selected[idx]? | throw (IO.userError "module group out of range")
+      pure (modules.map String.toName, names.map String.toName)
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
   let ctx : Command.Context := {
