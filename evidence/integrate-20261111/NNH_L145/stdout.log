@@ -1,0 +1,38 @@
+NNH_generated/NNC_SnapshotRep.lean:57:41: warning: 'change s.finish.val ≤ s.raw.val.length' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NNC_SnapshotRep.from_snapshots : ∀ (s : SecondCut) (accounts : List RSL.AccountInfo) (entry post : RSL.SdkState)
+  (owned : List RSL.OwnedAccount) (env : RSL.Env) (events : List RSL.Event),
+  RSL.TX2_240.snapAll accounts RSL.TX2_240.snapLens entry env { exit := RSL.Exit.ret (owned, post), events := events } →
+    ∀ (a0 a6 : RSL.AccountInfo) (x0 x6 : RSL.OwnedAccount),
+      accounts[0]? = some a0 →
+        accounts[6]? = some a6 →
+          owned[0]? = some x0 →
+            owned[6]? = some x6 →
+              x0.bytes = Except.ok (NNC_ByteCarriers.host ↑s.raw) →
+                x6.bytes = Except.ok (NNC_ByteCarriers.host ↑s.checkpoint) →
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.raw
+                        { start := 688#usize, «end» := s.finish } =
+                      Result.ok s.proof →
+                    ↑s.finish = 58295 →
+                      (↑s.raw).length = 58295 →
+                        bytesOf ↑s.checkpoint = NNC_ByteCarriers.protocol (RSL.payload a6 entry) ∧
+                          bytesOf ↑s.proof = NNC_ByteCarriers.protocol (RSL.slice (RSL.payload a0 entry) 688 58295) ∧
+                            (NNC_ByteCarriers.Root0 (RSL.payload a6 entry)
+                                (RSL.slice (RSL.payload a0 entry) 688 58295) ↔
+                              NLP_InputDomain.Root0 s.checkpoint s.proof) :=
+fun s accounts entry post owned env events snapshots a0 a6 x0 x6 at0 at6 owned0 owned6 read0 read6 range finish
+    length =>
+  have cp :=
+    images_origin accounts entry post owned env events snapshots 6 a6 x6 at6 owned6
+      (NNC_ByteCarriers.host ↑s.checkpoint) read6;
+  have pr :=
+    images_origin accounts entry post owned env events snapshots 0 a0 x0 at0 owned0 (NNC_ByteCarriers.host ↑s.raw)
+      read0;
+  at_entry s entry a0 a6 (NNC_ByteCarriers.host ↑s.raw) (NNC_ByteCarriers.host ↑s.checkpoint) rfl rfl cp pr
+    (selected_range s range finish length)
+'NNC_SnapshotRep.from_snapshots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_SnapshotRep.snapshot_origin' depends on axioms: [propext, Quot.sound]
+'NNC_SnapshotRep.images_origin' depends on axioms: [propext, Quot.sound]
+'NNC_SnapshotRep.at_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_SnapshotRep.selected_range' depends on axioms: [propext, Classical.choice, Quot.sound]
