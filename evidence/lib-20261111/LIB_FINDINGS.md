@@ -33,3 +33,12 @@ LIB-F05 correction during the same stage: the hd/asset independence theorem is v
 L146 process-control mistake: a read-only auditor source lookup used the wrong NMQ path (the reused driver source is NLX_ProofDriver), and the following shell line started L146 before the intended L145 source edit executed. Receipt source hashes show L145/L146 identical. Both failures are excluded; no timeout/memory failure occurred. No unchanged retry receives credit. The nested singleton-simp shape is retired; replacement uses explicit singleton membership. Further launch calls are isolated from fallible preparation commands; preparation must exit successfully before a separate launch call. The missing auditor source was this client’s wrong input path, not a shared-infrastructure fault.
 
 Final read addendum: L176 failed because native Usize index value was not reduced to 28 in an otherwise exact array-map proof. Added only an explicit tiny index equality; L177 passes. Failed snapshot excluded. Raw audit L158 exits 1 solely for Acc: raw [propext], collector []; standard-only disposition under C3-BIN (ab’)(3), diagnostic retained.
+
+
+## Bundle continuation, 2026-11-07
+
+No field-type mismatch, new trust item or frozen-source change found. The map's original66-field VLib becomes67 at rev3 because checkValuesDom is added. Actual P/C identities specialize by rfl; S1 publicDom remains the digest-only predicate supplied by lane A. Terminal asset canonicality remains separately derived on the SAME Public serialization path.
+
+Module25's remaining TX2 registration depends on LIBB_'s actual canonical V0-star. L-star is already ready externally; do not misreport its leaves as open. No dummy V0, arbitrary Ops or successful child premise is introduced to finish the record.
+
+Own-client changes: tightened continuation allowance to162 admitted scopes; added bundle-only pin/export mode using unchanged S2W launcher/reservation/shim. Copy-only LIB_seed_c.py imported157 retained Lean files and records all hashes. Old exports and caches remain intact. A sparse-checkout add temporarily held this worktree's index.lock; the attempted stage commit was retried only after that git process completed, without touching the lock. No prover rerun resulted.

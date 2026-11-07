@@ -67,7 +67,10 @@ if kind=='lean':
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LIB_generated','-o','LIB_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['LIB_Driver','LIB_ProofDriver','LIB_PoolProofDriver','LIB_PoolDriver']:command+=['-c','LIB_native/'+target+'.c']
 elif kind=='audit':
- if target=='pins':
+ if target=='bundle-pins':
+  sources=['LIB_bundle_pin.py','LIB_BUNDLE_SELECTED_MODULES.json','LIB_BUNDLE_SOURCE_PINS.json']
+  command=['python3','LIB_bundle_pin.py']
+ elif target=='pins':
   sources=['LIB_pin.py','LIB_SELECTED_MODULES.json','LIB_FINAL_SOURCE_PINS.json','LIB_AUDITOR_PIN.json','LIB_FINAL_AUDIT_SUMMARY.json']
   command=['python3','LIB_pin.py']
  else:
@@ -110,6 +113,10 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'LIB_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'LIB_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['LIB_LOADED_scan.jsonl','LIB_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {target!r}=='bundle-pins':
+ for n in ['LIB_BUNDLE_EXPORT.json','LIB_BUNDLE_HOST.json','LIB_BUNDLE_CLOSURE_PINS.json.sha256']:
+  out[n]=(b/n).read_text()
+ out['LIB_BUNDLE_CLOSURE_PINS.json.xz.hex']=(b/'LIB_BUNDLE_CLOSURE_PINS.json.xz').read_bytes().hex()
 if {target!r}=='pins':
  for n in ['LIB_EXPORT.json','LIB_FINAL_HOST.json','LIB_CLOSURE_PINS.json.sha256']:
   out[n]=(b/n).read_text()
