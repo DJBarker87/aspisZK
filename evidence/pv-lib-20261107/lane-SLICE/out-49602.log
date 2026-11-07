@@ -1,0 +1,47 @@
+structure PV_FN_SLICE_f32.Pre (s : Store Data) (a : ℕ) (source destination : Data) (size alignment count : ℕ)
+  (w : OWNER) : Prop
+number of parameters: 8
+fields:
+  PV_FN_SLICE_f32.Pre.wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation
+  PV_FN_SLICE_f32.Pre.live : a < s.nextActivation
+  PV_FN_SLICE_f32.Pre.sizeWord : size < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f32.Pre.alignmentWord : alignment < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f32.Pre.countWord : count < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f32.Pre.sourceArg : s.cells { activation := a, localIndex := 1 } = some source
+  PV_FN_SLICE_f32.Pre.destinationArg : s.cells { activation := a, localIndex := 2 } = some destination
+  PV_FN_SLICE_f32.Pre.sizeArg : s.cells { activation := a, localIndex := 3 } = some (Data.number size)
+  PV_FN_SLICE_f32.Pre.alignmentArg : s.cells { activation := a, localIndex := 4 } = some (Data.number alignment)
+  PV_FN_SLICE_f32.Pre.countArg : s.cells { activation := a, localIndex := 5 } = some (Data.number count)
+constructor:
+  PV_FN_SLICE_f32.Pre.mk {s : Store Data} {a : ℕ} {source destination : Data} {size alignment count : ℕ} {w : OWNER}
+    (wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation) (live : a < s.nextActivation)
+    (sizeWord : size < PV_STX2_Source7CapacityScalars.modulus)
+    (alignmentWord : alignment < PV_STX2_Source7CapacityScalars.modulus)
+    (countWord : count < PV_STX2_Source7CapacityScalars.modulus)
+    (sourceArg : s.cells { activation := a, localIndex := 1 } = some source)
+    (destinationArg : s.cells { activation := a, localIndex := 2 } = some destination)
+    (sizeArg : s.cells { activation := a, localIndex := 3 } = some (Data.number size))
+    (alignmentArg : s.cells { activation := a, localIndex := 4 } = some (Data.number alignment))
+    (countArg : s.cells { activation := a, localIndex := 5 } = some (Data.number count)) :
+    Pre s a source destination size alignment count w
+def PV_FN_SLICE_f32.Post : Carrier OWNER Data →
+  Control →
+    (Data → Option PV_STX2_SliceSyntax.Program) →
+      PV_W5_UbCheckPrimitives.Handler →
+        Store Data → Frame → List Frame → ℕ → OWNER → List PV_RJ4IDB.NativeEvent → Prop :=
+fun D K programs H s parent parents a w prior =>
+  ∃ fuel out,
+    fuel ≤ 128 ∧
+      PV_STX2_SliceMachine.advance D K programs H fuel (start s parent parents a w prior) = out ∧
+        Boundary D K programs H s parent parents a w prior fuel out ∧
+          PV_W5_F59Frame.Post s a w out ∧ ∃ suffix, out.events = prior ++ suffix
+def PV_FN_SLICE_f32.Contract : Prop :=
+∀ (D : Carrier OWNER Data) (K : Control) (programs : Data → Option PV_STX2_SliceSyntax.Program)
+  (H : PV_W5_UbCheckPrimitives.Handler) (base : Carrier OWNER Data) (ctrl : Control) (word : Data → ℕ)
+  (staticAddress : Address) (backend : PV_W5_NativeFrame.Backend) (s : Store Data) (parent : Frame)
+  (parents : List Frame) (a : ℕ) (source destination : Data) (size alignment count : ℕ) (w : OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent),
+  Pre s a source destination size alignment count w →
+    MachineSpec D K programs H base ctrl word staticAddress backend → Post D K programs H s parent parents a w prior
+'PV_FN_SLICE_f32.Pre' depends on axioms: [propext]
+'PV_FN_SLICE_f32.Post' depends on axioms: [propext, Quot.sound]
