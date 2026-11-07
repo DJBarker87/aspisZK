@@ -1,0 +1,39 @@
+{"attempt": "NNH_L441", "exit_status": 0, "wall_seconds": 3.3407933230046183, "peak_rss_kib": "6665264", "swaps": "0", "print_axioms": []}
+def AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+      AdapterRw.solana_pubkey.Pubkey →
+        Aeneas.Std.U8 →
+          Aeneas.Std.U64 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts
+                AdapterRw.solana_program_error.ProgramError) :=
+fun ops verifier_program accounts pool_program output_lane current_slot =>
+  have i := accounts.len;
+  if i = 7#usize then do
+    let proof_account ← accounts.index_usize 0#usize
+    let master_account ← accounts.index_usize 1#usize
+  
+...
+AdapterRw.r1_pool_adapter.ValidatedAsqa
+                                        (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    AdapterRw.r1_pool_adapter.ValidatedAsqa
+                                    (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                    residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                AdapterRw.r1_pool_adapter.ValidatedAsqa
+                                (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AdapterRw.r1_pool_adapter.ValidatedAsqa
+                            (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            AdapterRw.r1_pool_adapter.ValidatedAsqa
+            (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+
+Running as unit: run-r75147b5f991a4173a843e6f55af242f3.scope; invocation ID: 92e4d804ebba420c82b78564246802d9

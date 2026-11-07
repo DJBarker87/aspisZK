@@ -1,0 +1,59 @@
+NNH_generated/NNH_ReaderHeaderEnv.lean:47:44: error(lean.unknownIdentifier): Unknown identifier `slice`
+NNH_generated/NNH_ReaderHeaderEnv.lean:51:44: error(lean.unknownIdentifier): Unknown identifier `slice`
+NNH_generated/NNH_ReaderHeaderEnv.lean:56:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let proof ← SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑ck) 16 32)
+    let pub ← SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑ck) 48 32)
+    pure (proof, pub)
+is not definitionally equal to the right-hand side
+  some (LIBB_HashModel.H env (bytesOf ↑proof), LIBB_HashModel.H env (bytesOf ↑pub))
+
+env : RSL.Env
+ck proof pub : Slice U8
+c : AspisR1Stage2.Tx2ResumeDigests.Calls (NJC_ResumeCalls.digest (LIBB_PartitionEnv.digest env)) () ck proof pub
+length : (↑ck).length = 1768
+pf :
+  ↑c.storedProof = List.take (↑48#usize - ↑16#usize) (List.drop ↑16#usize ↑ck) ∧
+    (↑c.storedProof).length = ↑48#usize - ↑16#usize
+pu :
+  ↑c.storedPublic = List.take (↑80#usize - ↑48#usize) (List.drop ↑48#usize ↑ck) ∧
+    (↑c.storedPublic).length = ↑80#usize - ↑48#usize
+v16 : ↑16#usize = 16
+v48 : ↑48#usize = 48
+v80 : ↑80#usize = 80
+pfBytes : ↑c.storedProof = List.take 32 (List.drop 16 ↑ck)
+puBytes : ↑c.storedPublic = List.take 32 (List.drop 48 ↑ck)
+pp : c.proofParts = singletonParts proof
+up : c.publicParts = singletonParts pub
+proofCall : (NJC_ResumeCalls.digest (LIBB_PartitionEnv.digest env)).digest () (singletonParts proof) = ok c.proofDigest
+publicCall : (NJC_ResumeCalls.digest (LIBB_PartitionEnv.digest env)).digest () (singletonParts pub) = ok c.publicDigest
+hp : SemanticRecordCodec.decodeState sorry = some (LIBB_HashModel.H env (bytesOf ↑proof))
+hu : SemanticRecordCodec.decodeState sorry = some (LIBB_HashModel.H env (bytesOf ↑pub))
+⊢ (do
+      let proof ← SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑ck) 16 32)
+      let pub ← SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑ck) 48 32)
+      pure (proof, pub)) =
+    some (LIBB_HashModel.H env (bytesOf ↑proof), LIBB_HashModel.H env (bytesOf ↑pub))
+NNH_generated/NNH_ReaderHeaderEnv.lean:55:36: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [NLW_ReaderHeader.decode, ̲hp̵,̵h̵u, ̲Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_ReaderHeaderEnv.lean:55:39: warning: This simp argument is unused:
+  hu
+
+Hint: Omit it from the simp argument list.
+  simp only [NLW_ReaderHeader.decode, ̲hp,h̵u̵,̵ ̲Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_ReaderHeaderEnv.lean:55:42: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵L̵W̵_̵R̵e̵a̵d̵e̵r̵H̵e̵a̵d̵e̵r̵.̵d̵e̵c̵o̵d̵e̵,̵h̵p̵,̵h̵u̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲N̲L̲W̲_̲R̲e̲a̲d̲e̲r̲H̲e̲a̲d̲e̲r̲.̲d̲e̲c̲o̲d̲e̲,̲ ̲h̲p̲,̲ ̲h̲u̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNH_ReaderHeaderEnv.singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_ReaderHeaderEnv.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

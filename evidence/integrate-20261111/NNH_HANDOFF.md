@@ -201,3 +201,45 @@ transitively covers the new native execution chain. The top remains a
 conditional scaffold over unfinished physical host/row/A1/A2/NMF fields.
 439 completed actual scopes throughL440;39 new of300,261 remain. No unresolved
 submission, extraction or Kani. No 16GiB scope used. Continuing item2.
+
+Item2 checkpoint: checkpoint cloned-error value transport L446, selected
+source scanner/reconstruction/lane/nullifier slots L448, scanner Ok port L450,
+actual selected checkpoint L451, reconstruction Ok port L452 pass. No A1/A2
+field yet. L454's dictionary-wide currentBase erasure probe failed and is
+retired (NNH_MissingErasure.lean.txt); minimal pointwise transports remain the
+authorized route, and no erasure fact is assumed. L455 did NOT launch: owned
+selected-import pin preflight found missing NCK_Distinct.olean. Its sources
+are being restated under NNH with the coherent canonical owner import for a
+model-only distinct-success port, not replayed or claimed as native credit.
+
+Source/header refinement: L463 proves the two exact singleton digest calls
+transport to LIBB_HashModel.H without arbitrary Env repartition invariance.
+L464's dependent rewrite is retired in favor of specializing the native frame
+to the actual Env digest (L466 passes, standard axioms). L465 was a prelaunch
+missing-object diagnostic and NEVER launched; no failed dependency is credited.
+Likewise L455/456 are prelaunch missing-object checks, not formal scopes.
+The old NCK replay helper's semireducible step* shape (L457) and concrete
+seven-account broad simplification (L462 fixed-heartbeat failure) are retired.
+Symbolic inner/outer distinct-success inductions are the replacement; no
+heartbeat/cap raise, unchanged replay or native credit is used.
+
+Concrete G1a delivered: NNH_G1aEnv.field (L467) supplies weak/refinement,
+writeFree and okHeader with no Oracle/header argument. Its Sig.readerHeader
+is the actual singleton Env hash, proved from the two SAME actual digest
+calls (L463/L466), without partition invariance. NNH_G0WithG1a's conditional
+consumer removes BOTH nmn and g1a arguments (L469). Raw consumer audit L470
+matches collect_axioms: standard-only,1,860,121 edges/58,168 reachable constants,
+6.319s,6,993,680KiB,swap0. It is still not a literal-host top; NMF_B and all
+other listed host/row/model fields remain visible. No unchanged audit rerun.
+
+G1a stage checkpoint: actual-entry producer NNH_EnvEntryNative.produce L478
+and same-record physical-frame transport NNH_064World.transport L485 /
+NNH_EnvEntryWorld.native L486 pass, standard axioms. This does NOT establish
+same-headline recorder association, a physical Missing or NMF_B. L482 indexed
+elimination shape failed; L485 generalizes the whole Frame first, preserving
+all indices. A2 support: ValueOk L479, AuthOkPrefix L481 (L480 corrected let
+layout), AuthNativeGuards L484 (L483 corrected fixed-array proof and explicit
+library binder) pass. The latter derives six actual native guard successes
+from returned evaluator success, no assumed native child success.
+482 actual completed scopes through L486 (never launched L048/455/456/465),
+82 of this fresh300 used,218 remain. No extraction/Kani/16GiB scope.

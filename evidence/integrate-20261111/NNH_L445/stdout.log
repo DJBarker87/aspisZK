@@ -1,0 +1,15 @@
+NNH_generated/NNH_ModelCheckpoint.lean:36:10: error: unsolved goals
+case isFalse.Ok.true
+ops : Ops
+a : r1_pool_adapter.owned.OwnedAccount
+program : solana_pubkey.Pubkey
+writable : Bool
+hk : decide (key a.owner = key program) = decide (a.owner = program)
+h✝ : ¬(!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true
+n : Usize
+h : a.length = core.result.Result.Ok n
+bad : (↑n != RSL.CHECKPOINT_BYTES) = true
+⊢ Result.ok (Except.error (error solana_program_error.ProgramError.InvalidAccountData)) =
+    Result.ok (Except.error RSL.ProgramError.invalidAccountData)
+'NNH_ModelCheckpoint.length_compare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNH_ModelCheckpoint.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

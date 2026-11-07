@@ -1,0 +1,57 @@
+NNH_generated/NNH_AuthOkPrefix.lean:36:400: error: unexpected token 'structure'; expected term
+NNH_generated/NNH_AuthOkPrefix.lean:59:87: error: Application type mismatch: The argument
+  success
+has type
+  (ebind (id m.bytes) fun mdata =>
+      ebind (option (L.decodeMaster mdata) ProgramError.invalidAccountData) fun master =>
+        eseq
+          (if (decide (master.identity.pool ≠ m.key) || master.initialized_lane_mask != ALL_LANES_MASK) = true then
+            Except.error ProgramError.invalidAccountData
+          else
+            ebind
+              (NNH_RegistryEval.pdaValue env [SEED_MASTER, master.identity.asset_mint.bytes, [master.bump]]
+                a.pool_program)
+              fun k => echeck (decide (k ≠ m.key)) ProgramError.invalidAccountData)
+          (eseq
+            (NNH_RegistryEval.value L D
+              { verifier_program := a.verifier_program, pool_program := a.pool_program, master_account := m,
+                master := master, registry_account := r, entry_account := e, current_slot := a.current_slot }
+              env)
+            (ebind (id c.bytes) fun cdata =>
+              ebind (option (L.decodeCheckpoint cdata) ProgramError.invalidAccountData) fun ck =>
+                eseq
+                  (if
+                      (decide (ck.master ≠ m.key) ||
+                          decide (ck.deployment_domain ≠ master.identity.deployment_domain)) =
+                        true then
+                    Except.error ProgramError.invalidAccountData
+                  else
+                    ebind
+                      (NNH_RegistryEval.pdaValue env
+                        [SEED_CHECKPOINT, m.key.bytes, u64le ck.checkpoint_sequence, [ck.bump]] a.pool_program)
+                      fun k => echeck (decide (k ≠ c.key)) ProgramError.invalidAccountData)
+                  (ebind (id l.bytes) fun ldata =>
+                    ebind (NND_LaneReturned.value ldata) fun lane =>
+                      eseq
+                        (if (decide (lane.master ≠ m.key) || lane.lane_id != a.output_lane) = true then
+                          Except.error ProgramError.invalidAccountData
+                        else
+                          ebind
+                            (NNH_RegistryEval.pdaValue env [SEED_LANE, m.key.bytes, [a.output_lane], [lane.bump]]
+                              a.pool_program)
+                            fun k => echeck (decide (k ≠ l.key)) ProgramError.invalidAccountData)
+                        (eseq (Except.ok ())
+                          (Except.ok
+                            { master_account := m.key, checkpoint_account := c.key, selected_lane_account := l.key,
+                              master := master, checkpoint := ck, selected_lane := lane,
+                              live_snapshot :=
+                                { pool := m.key, deployment_domain := master.identity.deployment_domain,
+                                  sequence := lane.tree.next_leaf_index, next_pair_index := lane.tree.next_leaf_index,
+                                  current_root := lane.tree.root, frontier := lane.tree.frontier } })))))) =
+    Except.ok out
+but is expected to have type
+  tailValue L D a p m c l r e v env = Except.ok out
+in the application
+  { proofGuard := proofGuard, checkpointGuard := checkpointGuard, masterGuard := masterGuard,
+    checkpointOwner := checkpointOwner, laneGuard := laneGuard, distinctGuard := distinctGuard, tail := success }
+'NNH_AuthOkPrefix.produce' depends on axioms: [propext, sorryAx, Quot.sound]

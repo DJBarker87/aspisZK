@@ -1,0 +1,30 @@
+NNH_generated/NNH_DistinctPort.lean:22:7: error: unexpected token 'at'; expected identifier
+NNH_generated/NNH_DistinctPort.lean:47:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  r1_pool_adapter.owned.require_distinct_accounts (NGL_ReadonlyModel.install ?ops) ?a
+in the target expression
+  r1_pool_adapter.owned.require_distinct_accounts (NNH_Tx2ModelSlots.install base env)
+      (Array.make 7#usize [a, b, c, d, e, f, g] ⋯) =
+    Result.ok (core.result.Result.Ok ())
+
+base : Ops
+env : RSL.Env
+a b c d e f g : r1_pool_adapter.owned.OwnedAccount
+distinct : RSL.distinctKeys (List.map account [a, b, c, d, e, f, g]) = true
+⊢ r1_pool_adapter.owned.require_distinct_accounts (NNH_Tx2ModelSlots.install base env)
+      (Array.make 7#usize [a, b, c, d, e, f, g] ⋯) =
+    Result.ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NNH_DistinctPort.pairs' depends on axioms: [propext, Quot.sound]
+NNH_generated/NNH_DistinctPort.lean:56:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NNH_generated/NNH_DistinctPort.lean:56:14: error: unexpected token 'at'; expected command
+'NNH_DistinctPort.seven' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

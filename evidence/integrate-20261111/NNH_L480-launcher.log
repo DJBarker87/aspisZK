@@ -1,0 +1,44 @@
+{"attempt": "NNH_L480", "exit_status": 1, "wall_seconds": 4.05993557581678, "peak_rss_kib": "6592828", "swaps": "0", "print_axioms": ["'NNH_AuthOkPrefix.produce' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NNH_generated/NNH_AuthOkPrefix.lean:36:400: error: unexpected token 'structure'; expected term
+NNH_generated/NNH_AuthOkPrefix.lean:59:87: error: Application type mismatch: The argument
+  success
+has type
+  (ebind (id m.bytes) fun mdata =>
+      ebind (option (L.decodeMaster mdata) ProgramError.invalidAccountData) fun master =>
+        eseq
+          (if (decide (master.identity.pool ≠ m.key) || master.initialized_lane_mask != ALL_LANES_MASK) = true then
+            Except.error ProgramError.invalidAccountData
+          else
+            ebind
+              (NNH_RegistryEval.pdaValue env [SEED_MASTER, master.identity.asset_mint.bytes, [master.bump]]
+                a.pool_program)
+            
+...
+                   fun k => echeck (decide (k ≠ c.key)) ProgramError.invalidAccountData)
+                  (ebind (id l.bytes) fun ldata =>
+                    ebind (NND_LaneReturned.value ldata) fun lane =>
+                      eseq
+                        (if (decide (lane.master ≠ m.key) || lane.lane_id != a.output_lane) = true then
+                          Except.error ProgramError.invalidAccountData
+                        else
+                          ebind
+                            (NNH_RegistryEval.pdaValue env [SEED_LANE, m.key.bytes, [a.output_lane], [lane.bump]]
+                              a.pool_program)
+                            fun k => echeck (decide (k ≠ l.key)) ProgramError.invalidAccountData)
+                        (eseq (Except.ok ())
+                          (Except.ok
+                            { master_account := m.key, checkpoint_account := c.key, selected_lane_account := l.key,
+                              master := master, checkpoint := ck, selected_lane := lane,
+                              live_snapshot :=
+                                { pool := m.key, deployment_domain := master.identity.deployment_domain,
+                                  sequence := lane.tree.next_leaf_index, next_pair_index := lane.tree.next_leaf_index,
+                                  current_root := lane.tree.root, frontier := lane.tree.frontier } })))))) =
+    Except.ok out
+but is expected to have type
+  tailValue L D a p m c l r e v env = Except.ok out
+in the application
+  { proofGuard := proofGuard, checkpointGuard := checkpointGuard, masterGuard := masterGuard,
+    checkpointOwner := checkpointOwner, laneGuard := laneGuard, distinctGuard := distinctGuard, tail := success }
+'NNH_AuthOkPrefix.produce' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r1db98b0658444dd2977f88a88edecb07.scope; invocation ID: 59aeb41b69ed44909f048ac975bee25d

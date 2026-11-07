@@ -1,0 +1,30 @@
+NNH_generated/NNH_AuthNativeGuards.lean:17:42: error: Expected type must not contain free variables
+  [p, m, c, l, r, e, v].length = ↑7#usize
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+NNH_generated/NNH_AuthNativeGuards.lean:22:35: error(lean.unknownIdentifier): Unknown identifier `LIB_PoolLib.L`
+NNH_generated/NNH_AuthNativeGuards.lean:25:75: error: unsolved goals
+base : Ops
+env : RSL.Env
+program pool : solana_pubkey.Pubkey
+p m c l r e v : r1_pool_adapter.owned.OwnedAccount
+lane : UInt8
+slot : UInt64
+out : RSL.Authenticated
+success :
+  NNH_AuthEval.bodyValue sorry LIB_Deployed.deployed
+      { verifier_program := key program,
+        accounts := [account p, account m, account c, account l, account r, account e, account v],
+        pool_program := key pool, output_lane := lane, current_slot := slot }
+      (account p) (account m) (account c) (account l) (account r) (account e) (account v) env =
+    Except.ok out
+cut :
+  NNH_AuthOkPrefix.Packet sorry LIB_Deployed.deployed
+    { verifier_program := key program,
+      accounts := [account p, account m, account c, account l, account r, account e, account v],
+      pool_program := key pool, output_lane := lane, current_slot := slot }
+    (account p) (account m) (account c) (account l) (account r) (account e) (account v) env out
+proofGuard :
+  outer (reply id) (r1_pool_adapter.owned.require_readonly_buffer p) = Result.ok (RSL.readonlyBuffer (account p))
+⊢ Packet (NNH_Tx2ModelSlots.install base env) program pool p m c l r e v
+'NNH_AuthNativeGuards.produce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

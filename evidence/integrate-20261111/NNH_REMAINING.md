@@ -1,3 +1,32 @@
+# Active continuation status (supersedes historical lists below)
+
+Item1 canonical total064 is DELIVERED: `AspisR1.NNH_064Install.root` at the
+computed `f064`; `NNH_G0With064.deployed_splitB_conditional` consumes it without
+an nmn argument. L435/L439 pass; L440 raw=collector, standard axioms only.
+`NNH_064WeakField.weak/writeFree` also pass. No Native/library observation is
+chosen; source records and exact chronological trace are constructed.
+
+G1a is also now concrete: `NNH_G1aEnv.field` (L467) at the actual singleton
+Env hash header. `NNH_G0WithG1a` consumes both fields (L469; raw L470).
+The literal host must still associate the interpreter with SAME runtime
+slots43/44/reservation and connect these SAME weak cuts to the headline
+recorder. G1a does not finish NMF_B or literal G0.
+Item2 minimal A1/A2 remains owned pointwise model-transport work; checkpoint,
+scanner-Ok and reconstruction-Ok ports now pass. Both complete Returns roots
+are reused unchanged. The broad currentBase dictionary-erasure probe is
+retired; it is not the requested minimal transport.
+
+Latest gate: NNI_ ledger26 CREDITED136;217 REJECTED pending ruling(t) Kani
+shape controls. Audited234 candidate exists on NMX's immutable branch but
+has not been credited in ledger26. No integration credit is assigned.
+
+Items3/4 still require literal Ctx/Missing/I0/physical World, actual source-cut
+association and NMF_B, RZ-STATE ExecB, and failure inclusion at the SAME
+recorder. `NNH_RecordedCharge.bound` supplies the actual a-top recorder's
+full-space single accountLoss charge; no Realizes conditioning is used.
+
+---
+
 # NNH remaining after canonical-library resume
 
 Target not yet established. Top not assembled. This supersedes the earlier
