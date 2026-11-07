@@ -23,7 +23,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     env['CARGO_NET_OFFLINE']='true'
     env.update(env_extra or {})
     files=dict(extra or {})
-    if kind=='lean':
+    if kind=='lean' and command is None:
         text=(E/(target+'.lean')).read_text()
         for dep in re.findall(r'^import (NNE_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
