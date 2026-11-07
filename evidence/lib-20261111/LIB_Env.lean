@@ -40,6 +40,15 @@ theorem pda_returns (seeds : List RSL.Bytes) (program : RSL.B32) (env : RSL.Env)
     (NND_Returned.pure env _)
 theorem clock_returns (env : RSL.Env) :
     NND_Returned.Returns clock env env.clock := LIB_Carriers.graph_returns _ _ env
+/-- Fallible heap reservation reads the headline-bound runtime reply. -/
+def reservation : RSL.Spec Bool := RSL.Spec.tryReserve
+theorem reservation_returns (env : RSL.Env) :
+    NND_Returned.Returns reservation env env.reservation :=
+  NND_Returned.environment env RSL.Env.reservation
+theorem reservation_functional : RSL.Spec.Functional reservation :=
+  RSL.Spec.tryReserve_functional
+#print axioms reservation_returns
+#print axioms reservation_functional
 #print axioms key_roundtrip
 #print axioms hashv_value
 #print axioms digest_event

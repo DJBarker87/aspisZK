@@ -38,6 +38,19 @@ theorem ofFn_returns {A B : Type} (dom : A → Prop) (value : A → RSL.Env → 
     (events : A → RSL.Env → List RSL.Event) (a : A) (env : RSL.Env) :
     NND_Returned.Returns ((ofFn dom value events).law a) env (value a env) :=
   graph_returns (value a) (events a) env
+/-- Rev3 gate: a graph selects exactly one observation at a fixed Env. -/
+theorem graph_functional {A : Type} (value : RSL.Env → A)
+    (events : RSL.Env → List RSL.Event) :
+    RSL.Spec.Functional (graph value events) := by
+  intro env
+  exact ⟨⟨.ret (value env), events env⟩, fun _ => Iff.rfl⟩
+theorem ofFn_functional {A B : Type} (dom : A → Prop) (value : A → RSL.Env → B)
+    (events : A → RSL.Env → List RSL.Event) :
+    RSL.Child.Functional (ofFn dom value events) := by
+  intro a _
+  exact graph_functional (value a) (events a)
+#print axioms graph_functional
+#print axioms ofFn_functional
 theorem bytes_exact (s : Slice U8) : bytes s = NNC_ByteCarriers.host s.val := rfl
 theorem bytes_roundtrip (s : Slice U8) : rawBytes (bytes s) = s.val :=
   NNC_ByteCarriers.native_host s.val
