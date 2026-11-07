@@ -1,3 +1,18 @@
+# SPEC session4 checkpoint — first row blocked by checked local mismatch
+
+Resumed a84dc05c68e; D983 scope is18 THREAD-PATH rows only. Slice/source7 now
+belongs to lane B. Full thread contracts0/18; OwnInit full joint witness0/1.
+No row is proved, no endpoint premise removed. f361 remains the first row;
+no later row is started. SPEC-C3 in FINDINGS.md records the new exact12950
+Arc strong-count mismatch in the D981 machine, checked by49735. It is NOT a
+full OwnInit contradiction or original-entry reachability result. No frozen
+spec, package branch, ledger or common rulings changed. Strict audit pending.
+Next Lean49736; next raw49794. Failed49732/33/34 are retained and not credited;
+each retry changed source.49735 exit0,wall0:02.41,peak4734728KiB,swap0;
+standard summary axioms only. No active own scope. Details follow historically.
+
+---
+
 # SPEC session 3 current handoff — requested task remains incomplete
 
 Branch codex/pv-lib-spec-20261107; resumed9ea4f7cc336. D981 correction and the

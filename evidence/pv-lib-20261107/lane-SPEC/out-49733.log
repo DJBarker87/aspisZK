@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:38:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let wait ←
+      some
+          {
+            request :=
+              PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+                [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null],
+            action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 23), unwind := [] }
+    match wait.request with
+      | PV_STX2_Native.Request.child fn activation args =>
+        match m.programs fn with
+        | some val => none
+        | none => do
+          let f ← PV_THR2_SourceStoreNative.function fn
+          pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+      | x => none
+is not definitionally equal to the right-hand side
+  none
+
+m : Machine
+s : Store Data
+a : ℕ
+parents : List Frame
+w : OWNER
+es : List Event
+stack : List Config
+leaf : m.programs PV_THR2_Source361PacketChildren.fn63 = none
+⊢ (do
+      let wait ←
+        some
+            {
+              request :=
+                PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+                  [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null],
+              action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 23), unwind := [] }
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match m.programs fn with
+          | some val => none
+          | none => do
+            let f ← PV_THR2_SourceStoreNative.function fn
+            pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+        | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:43:2: error: 'change' tactic failed, pattern
+  PV_THR2_IntrinsicState.advance m.carrier m.control m.programs m.handler 1 (before s a parents w es stack) = ?m.95
+is not definitionally equal to target
+  PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources) (fun {A} => m.encode)
+      m.handler (before s a parents w es stack) =
+    PV_THR2_IntrinsicFrameFull.received m.carrier s a parents [] (List.drop 64 PV_THR2_F361.live.body)
+      PV_THR2_Source361PacketChildren.fn63
+      [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23
+      (m.handler
+        (PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+          [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null])
+        w)
+      es stack
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:37:31: warning: This simp argument is unused:
+  leaf
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_THR2_SourceStoreNative.select, ̲PV_THR2_IntrinsicFrameEnter.pending,
+        PV_THR2_StaticReply.wait,̵l̵e̵a̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:85:2: error: `simp` made no progress
+'PV_LIB_SPEC_F361ArcMachineGap.before' depends on axioms: [propext]
+'PV_LIB_SPEC_F361ArcMachineGap.native_poll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_F361ArcMachineGap.count_unchanged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_F361ArcMachineGap.increment_impossible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

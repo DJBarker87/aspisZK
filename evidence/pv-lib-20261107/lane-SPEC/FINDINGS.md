@@ -102,3 +102,39 @@ unchanged walker: exit0,27/27. New-root49793 separately passes46/46; no rerun.
 OwnInitEntry.entry_nonempty establishes only the concrete original-capture
 ENTRY conjunction, not all composed premises. No new circular premise or
 contradiction of either FULL frozen composition has been established.
+
+## SPEC-C3 (session4): D981 native Arc clone loses the strong-count write
+
+CHECKED LOCAL MACHINE/SOURCE MISMATCH; not a full OwnInit-premise contradiction.
+At actual f36112950, the emitted callee is
+PV_THR2_Source361PacketChildren.fn63 (f360), operand &local17 after move24,
+return local23, continuation F361.live.body.drop64. The pinned package's
+f361MetadataEffects.entry360/delivered applies ArgumentEffects.afterEffects
+BEFORE native return administration. ArcClone.Returned.increment requires
+ArcInner.strong.AtomicUsize.v.UnsafeCell.value to become count+1. The exact
+path is the named countAddress; this is frozen Rust1.94.1 sync.rs2360–2411,
+SHA ce15d00d92133cf1f55cd1905d7fe6b4e23e62090dabff6c68fae2d7fe78fe8f,
+as documented by PV_THR2_LibrarySemantics_ArcClone at W3 pin41e76d01fdea.
+
+PV_LIB_SPEC_F361ArcMachineGap.native_poll proves that the D981 thread machine
+instead delivers the native reply on the unchanged issued store. Its five
+source-writer dispatch cases do not include360; its operator layer handles
+Thread clone214, not Arc clone360. count_unchanged proves preservation of any
+older count cell on a successful clone reply. increment_impossible proves
+that the source increment is then impossible for any initialized count.
+All facts quantify the same actual store/world/arguments/reply, not different
+candidate representations. Focused49735 exit0; standard axioms only.
+
+Limits: native CHILD resolution is explicit; original-entry reachability,
+full MachineSpec nonemptiness and full OwnInit joint contradiction are NOT
+proved. Rejecting all successful clone replies would hide the missing action;
+installing arbitrary x.changes would violate COMMON's no-Store-transformer
+rule. Neither workaround has been applied. No frozen spec is changed here.
+
+Required correction work: a concrete source-selected Arc clone action on the
+OWNER-aware machine, preserving registration, all five existing writer meanings,
+all reply arms and the actual strong-count footprint, plus same-history
+transport. Determine the full native source-memory inventory (not just the
+five direct reference writers) before claiming f361's MachineSpec complete.
+The existing f361 contract component is not a full contract. Session4 does not
+start another row or add specification components beyond this diagnostic.

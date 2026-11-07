@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:32:2: error: 'change' tactic failed, pattern
+  PV_THR2_IntrinsicState.advance m.carrier m.control m.programs m.handler 1 (before s a parents w es stack) = ?m.30
+is not definitionally equal to target
+  PV_LIB_SPEC_ThreadMachine.step m (before s a parents w es stack) =
+    PV_THR2_IntrinsicFrameFull.received m.carrier s a parents [] (List.drop 64 PV_THR2_F361.live.body)
+      PV_THR2_Source361PacketChildren.fn63
+      [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23
+      (m.handler
+        (PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+          [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null])
+        w)
+      es stack
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_F361ArcMachineGap.lean:68:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_IntrinsicFrameFull.received ?C ?s ?a ?parents ?loops ?rest ?fn ?vs ?dest
+    { answer := Answer.returned (Aeneas.Std.Result.ok ?v), world := ?w, events := ?suffix } ?es ?stack
+in the target expression
+  readAddress m.carrier
+      (PV_W1_LeafBoundary.statusStore
+        (have p :=
+              PV_THR2_ChildBoundary.delivered m.carrier
+                (PV_THR2_IntrinsicFrameEnter.pending s a parents [] (List.drop 64 PV_THR2_F361.live.body)
+                  PV_THR2_Source361PacketChildren.fn63
+                  [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23)
+                (PV_THR2_StaticReply.wait s PV_THR2_Source361PacketChildren.fn63
+                  [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23)
+                { answer := Answer.returned (Aeneas.Std.Result.ok result), world := r.world, events := r.events };
+            { current := { status := p.status, world := p.world, events := es ++ p.events },
+              suspended := stack }).current.status)
+      (PV_THR2_LibrarySemantics_ArcClone.countAddress inner) =
+    readAddress m.carrier s (PV_THR2_LibrarySemantics_ArcClone.countAddress inner)
+
+m : Machine
+s : Store Data
+a : ℕ
+parents : List Frame
+w : OWNER
+es : List Event
+stack : List Config
+leaf : m.programs PV_THR2_Source361PacketChildren.fn63 = none
+result : Data
+returned :
+  (m.handler
+        (PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+          [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null])
+        w).answer =
+    Answer.returned (Aeneas.Std.Result.ok result)
+inner : Address
+older : inner.activation < a
+issued : a < s.nextActivation
+r : Reply OWNER PV_LIB_SPEC_ThreadMachine.Event Data :=
+  m.handler
+    (PV_STX2_Native.Request.child PV_THR2_Source361PacketChildren.fn63 s.nextActivation
+      [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null])
+    w
+replyEq : r = { answer := Answer.returned (Aeneas.Std.Result.ok result), world := r.world, events := r.events }
+⊢ readAddress m.carrier
+      (PV_W1_LeafBoundary.statusStore
+        (have p :=
+              PV_THR2_ChildBoundary.delivered m.carrier
+                (PV_THR2_IntrinsicFrameEnter.pending s a parents [] (List.drop 64 PV_THR2_F361.live.body)
+                  PV_THR2_Source361PacketChildren.fn63
+                  [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23)
+                (PV_THR2_StaticReply.wait s PV_THR2_Source361PacketChildren.fn63
+                  [PV_STX2_TypedReferences.reference { activation := a, localIndex := 17 } Data.null] 23)
+                { answer := Answer.returned (Aeneas.Std.Result.ok result), world := r.world, events := r.events };
+            { current := { status := p.status, world := p.world, events := es ++ p.events },
+              suspended := stack }).current.status)
+      (PV_THR2_LibrarySemantics_ArcClone.countAddress inner) =
+    readAddress m.carrier s (PV_THR2_LibrarySemantics_ArcClone.countAddress inner)
+'PV_LIB_SPEC_F361ArcMachineGap.before' depends on axioms: [propext]
+'PV_LIB_SPEC_F361ArcMachineGap.native_poll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_F361ArcMachineGap.count_unchanged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_F361ArcMachineGap.increment_impossible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
