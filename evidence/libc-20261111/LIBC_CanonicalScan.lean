@@ -56,7 +56,7 @@ theorem r4_value (proof : Bytes) (env : Env) (ev : List Event)
  have pass : good proof = true := by
   cases hg : good proof with
   | false =>
-    have impossible : (Except.error (VErr.Parse) : Except VErr Unit) = .ok () := by
+    have impossible : (Except.error (.Parse : VErr) : Except VErr Unit) = .ok () := by
      simpa only [value,hg,Bool.false_eq_true,if_false] using equality
     cases impossible
   | true => rfl
