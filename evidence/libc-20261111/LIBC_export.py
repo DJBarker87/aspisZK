@@ -8,7 +8,7 @@ for p in sorted(E.glob('LIBC_L[0-9][0-9][0-9]/receipt.json')):
 modules=sorted(set(modules))
 code='''from pathlib import Path
 import hashlib,shutil,json
-b=Path('/home/dombarker/project-offloads/codex-cx-libc-20261111');out=b/'LIBC_exports_20261111';pins=[]
+b=Path('/home/dombarker/project-offloads/codex-cx-libc-20261111');out=b/'LIBC_exports_final_20261111';pins=[]
 for n in MODULES:
  p=b/'LIBC_objects'/(n.replace('.','/')+'.olean')
  assert p.exists(),n
