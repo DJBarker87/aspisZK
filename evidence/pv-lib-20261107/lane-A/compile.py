@@ -6,7 +6,7 @@ a=int(sys.argv[1]);m=sys.argv[2];audit=sys.argv[3:]==['--audit']
 assert ((49482<=a<=49499 or 49890<=a<=49899)) if audit else (49458<=a<=49479 or 49800<=a<=49889)
 for q in E.glob('refusal-*.json'):
     assert time.time()-json.loads(q.read_text())['epoch']>=180
-p=pathlib.Path('lean',m+'.lean');raw=p.read_text()
+p=pathlib.Path(sys.argv[3]) if len(sys.argv)>3 and not audit else pathlib.Path('lean',m+'.lean');raw=p.read_text()
 assert subprocess.check_output(['git','show',':'+str(p)],text=True)==raw,'stage exact input first'
 turn_cmd=['ssh',host,'STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh']
 t0=time.time();turn=subprocess.run(turn_cmd,text=True,capture_output=True)
