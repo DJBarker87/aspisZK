@@ -1,0 +1,1042 @@
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+NLM_RuntimeInput.payload_bytes : ∀ (e : AspisR1.S2W_D189Entry.Entry) (i : ℕ),
+  NLF_RuntimeInterpretation.byteList e.heap i = AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers i)
+NLM_RuntimeInput.initial_payload : ∀ (e : AspisR1.S2W_D189Entry.Entry) (a : ℕ),
+  ((NLM_RuntimeInput.initial e).state.cells ((NLM_RuntimeInput.initial e).state.accounts a).data).payload.bytes =
+    AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)
+@NLQ_Route.process_ten : ∀ {A : Type}
+  (first : NLQ_Route.Key → Aeneas.Std.Slice A → Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result NLQ_Route.Reply)
+  (p : NLQ_Route.Key) (a : Aeneas.Std.Slice A),
+  AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile (NLQ_Route.children first)) p a
+      AspisR1.NJD_Prefixes.ten =
+    first p a AspisR1.NJD_Prefixes.ten
+@NLQ_Route.process_eleven : ∀ {A : Type}
+  (first : NLQ_Route.Key → Aeneas.Std.Slice A → Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result NLQ_Route.Reply)
+  (p : NLQ_Route.Key) (a : Aeneas.Std.Slice A),
+  AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile (NLQ_Route.children first)) p a
+      AspisR1.NJD_Prefixes.eleven =
+    first p a AspisR1.NJD_Prefixes.eleven
+@NLQ_Route.process : ∀ {A : Type}
+  (first : NLQ_Route.Key → Aeneas.Std.Slice A → Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result NLQ_Route.Reply)
+  (p : NLQ_Route.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  NLQ_Route.Tx1 d →
+    AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile (NLQ_Route.children first)) p a d = first p a d
+NLM_SnapshotBridge.borrowed : ∀ (e : AspisR1.S2W_D189Entry.Entry) (prior : List ℕ) (a lo hi : ℕ),
+  Except.map NLF_SdkModel.Payload.bytes (NLM_SnapshotBridge.step e prior a lo hi).1.2 =
+    Except.ok (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1))
+NLM_SnapshotBridge.owned : ∀ (e : AspisR1.S2W_D189Entry.Entry) (prior : List ℕ) (a lo hi : ℕ),
+  (NLM_SnapshotBridge.step e prior a lo hi).2.bytes =
+    if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+      Aeneas.Std.core.result.Result.Ok (e.buffers (e.handles a).1)
+    else Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+NLM_SnapshotBridge.successful_extent : ∀ (e : AspisR1.S2W_D189Entry.Entry) (prior : List ℕ) (a len : ℕ)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NLM_SnapshotBridge.step e prior a len len).2.bytes = Aeneas.Std.core.result.Result.Ok bytes →
+    bytes = e.buffers (e.handles a).1 ∧ (↑bytes).length = len
+NLM_Snapshot.acquire : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List NLM_Snapshot.Owned),
+  NLF_SdkModel.try_borrow_data (NLM_Snapshot.ready e t owned).sdk a (NLM_Snapshot.ready e t owned).next =
+    (NLM_Snapshot.acquired (NLM_Snapshot.ready e t owned) a,
+      Except.ok (NLM_Snapshot.guard (NLM_Snapshot.ready e t owned) a))
+NLM_Snapshot.current_payload : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List NLM_Snapshot.Owned),
+  (NLF_SdkModel.deref (NLM_Snapshot.acquired (NLM_Snapshot.ready e t owned) a)
+        (NLM_Snapshot.guard (NLM_Snapshot.ready e t owned) a)).bytes =
+    AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)
+NLM_Snapshot.release_current : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List NLM_Snapshot.Owned),
+  NLF_SdkModel.release (NLM_Snapshot.acquired (NLM_Snapshot.ready e t owned) a)
+      (NLM_Snapshot.guard (NLM_Snapshot.ready e t owned) a) =
+    Except.ok (NLM_Snapshot.ready e t owned).sdk
+NLM_Snapshot.allocation_abort : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (err : Aeneas.Std.Error),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+      (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi →
+    NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.fail err) =
+      { result := Aeneas.Std.Result.fail err,
+        events := NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e t owned) a (Aeneas.Std.Result.fail err) }
+NLM_Snapshot.allocation_diverge : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+      (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi →
+    NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi Aeneas.Std.Result.div =
+      { result := Aeneas.Std.Result.div,
+        events := NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e t owned) a Aeneas.Std.Result.div }
+NLM_Snapshot.normal_result : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned),
+  (NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.ok ())).result =
+    Aeneas.Std.Result.ok (e.snapshot a lo hi, NLM_Snapshot.returned (NLM_Snapshot.ready e t owned) a lo hi)
+NLQ_SnapshotFold.returned : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).result =
+    Aeneas.Std.Result.ok (e.first, NLQ_SnapshotFold.final e)
+@NLQ_TraceOfPacket.total : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A), ∃ out log, AspisR1.NGQ_Cuts.Trace hashv code out log
+@NLQ_TraceOfPacket.child : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (observed : AspisR1.NGP_L181.Observation A),
+  AspisR1.NGP_L181.NativeAssociation hashv code observed →
+    AspisR1.NHZ_DRIVER.Cuts hashv code observed.result observed.attempted
+NLQ_EmissionGuard.eleven_duplicate : ∀ (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (a b c : NIS_Distinct3.A),
+  a.key = b.key →
+    AdapterRw.r1_pool_adapter.owned.stage1_owned (NLQ_EmissionGuard.installed ops) p (NLQ_EmissionGuard.accounts a b c)
+        AspisR1.NJD_Prefixes.eleven =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)
+NLQ_SnapshotFrame.source_frame : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  (do
+      let pair ←
+        (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).result
+      Aeneas.Std.Result.ok (pair.1, pair.2.sdk, pair.2.next, pair.2.owned)) =
+    Aeneas.Std.Result.ok
+      (e.first, (NLM_RuntimeInput.initial e).state, 3,
+        [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880, e.snapshot 2 1768 1768])
+NLQ_SnapshotFrame.current_payload : ∀ (e : AspisR1.S2W_D189Entry.Entry) (account : ℕ),
+  ((NLQ_SnapshotFold.final e).sdk.cells ((NLQ_SnapshotFold.final e).sdk.accounts account).data).payload.bytes =
+    AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles account).1)
+NLQ_SnapshotFrame.admitted : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 3 →
+    (∀ a < 3, e.heap.ownerLive a = true) ∧
+      ∀ (i : ℕ), NLF_RefCell.flag ((NLQ_SnapshotFold.final e).sdk.cells i) = e.heap.counter i
+NLQ_SnapshotPrefixes.first_abort : ∀ (e : AspisR1.S2W_D189Entry.Entry) (err : Aeneas.Std.Error)
+  (a1 a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e (Aeneas.Std.Result.fail err) a1 a2 =
+      { result := Aeneas.Std.Result.fail err,
+        events := NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 0 []) 0 (Aeneas.Std.Result.fail err) }
+NLQ_SnapshotPrefixes.first_diverge : ∀ (e : AspisR1.S2W_D189Entry.Entry) (a1 a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_SnapshotFold.G e Aeneas.Std.Result.div a1 a2 =
+      { result := Aeneas.Std.Result.div,
+        events := NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 0 []) 0 Aeneas.Std.Result.div }
+@NLQ_FirstMap.mapper_cut : ∀ {A E P : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (handler : E → Aeneas.Std.Result P)
+  (r : Aeneas.Std.core.result.Result A E),
+  AspisR1.NHZ_DRIVER.Cuts hashv (NLQ_FirstMap.continuation handler r) (NLQ_FirstMap.mapped handler r) []
+@NLQ_FirstMap.fold : ∀ {A E P : Type} (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (childCode : AspisR1.CheckpointBytes5Effect.Code (Aeneas.Std.core.result.Result A E))
+  (handler : E → Aeneas.Std.Result P) (child : AspisR1.NGP_L181.Observation (Aeneas.Std.core.result.Result A E)),
+  AspisR1.NGP_L181.NativeAssociation hashv childCode child →
+    AspisR1.NGP_L181.NativeAssociation hashv
+      (AspisR1.CheckpointBytes5Effect.bind childCode (NLQ_FirstMap.continuation handler))
+      (NLQ_FirstMap.observed handler child)
+NLQ_CopyTrace.erasure : ∀ (s : NLF_SdkModel.State) (a t : ℕ) (src : List UInt8),
+  (NLQ_CopyTrace.G s a t src).outcome = NLF_CopyStep.run s a t src
+NLQ_Stage1Copy.copy : ∀ (e : AspisR1.S2W_D189Entry.Entry) (src : List UInt8),
+  src.length = (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.returned
+        (NLF_SdkModel.put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          {
+            payload :=
+              have __src := (s.cells (s.accounts 2).data).payload;
+              { bytes := src, money := __src.money },
+            readers := __src.readers, writer := __src.writer }))
+        (Except.ok ())
+NLQ_Stage1Copy.wrong_length : ∀ (e : AspisR1.S2W_D189Entry.Entry) (src : List UInt8),
+  src.length ≠ (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    (NLQ_CopyTrace.G s 2 3 src).outcome =
+      NLF_CopyStep.Outcome.abort
+        (NLF_SdkModel.put s (s.accounts 2).data
+          (have __src := s.cells (s.accounts 2).data;
+          { payload := __src.payload, readers := __src.readers, writer := some 3 }))
+NLQ_FirstPacket.fold : ∀ (native : AspisR1.NLJ_Packets.Native094),
+  AspisR1.NLJ_Packets.RowSpec_094 native →
+    ∀ (base : AspisR1CurrentCaller.Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+      (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+      (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+      (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit)
+      (statement : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize) (pre post : AspisR1.NLJ_Packets.Frame094)
+      (child :
+        AspisR1.NGP_L181.Observation
+          (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) AspisR1CurrentCaller.verifier.Error))
+      (handler : AspisR1CurrentCaller.verifier.Error → Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError),
+      pre.proof = proof →
+        pre.publicBytes = pub →
+          native base B std hashv D statement pub proof k pre post child →
+            AspisR1.NGP_L181.NativeAssociation hashv
+                (AspisR1.CheckpointBytes5Effect.bind
+                  (AspisR1.NGQ_Normalize.normalize
+                    (AspisR1.GExp_FirstCode.code base B std hashv D statement pub proof k))
+                  (NLQ_FirstMap.continuation handler))
+                (NLQ_FirstMap.observed handler child) ∧
+              post = pre
+NLQ_CopyCases.conflict : ∀ (s : NLF_SdkModel.State) (a t : ℕ) (src : List UInt8),
+  ¬((s.cells (s.accounts a).data).writer = none ∧ (s.cells (s.accounts a).data).readers = []) →
+    NLQ_CopyTrace.G s a t src =
+      { outcome := NLF_CopyStep.Outcome.returned s (Except.error NLF_SdkModel.ProgramError.accountBorrowFailed),
+        events := [NLQ_CopyTrace.Event.acquire s s a t (Except.error NLF_SdkModel.ProgramError.accountBorrowFailed)] }
+NLQ_CopyCases.wrong_length : ∀ (s : NLF_SdkModel.State) (a t : ℕ) (src : List UInt8),
+  (s.cells (s.accounts a).data).writer = none →
+    (s.cells (s.accounts a).data).readers = [] →
+      src.length ≠ (s.cells (s.accounts a).data).payload.bytes.length →
+        have held :=
+          NLF_SdkModel.put s (s.accounts a).data
+            (have __src := s.cells (s.accounts a).data;
+            { payload := __src.payload, readers := __src.readers, writer := some t });
+        have g := { cell := (s.accounts a).data, token := t, kind := NLF_RefCell.Kind.exclusive };
+        NLQ_CopyTrace.G s a t src =
+          { outcome := NLF_CopyStep.Outcome.abort held,
+            events :=
+              [NLQ_CopyTrace.Event.acquire s held a t (Except.ok g),
+                NLQ_CopyTrace.Event.deref held g (NLF_SdkModel.deref held g), NLQ_CopyTrace.Event.abort held] }
+@NLQ_ErrorMapper.returning : ∀ {S : Type} (emit : String → S → Aeneas.Std.Result S) (e : NIJ_ErrorJoin.E) (s post : S)
+  (reply : NIJ_ErrorJoin.PE),
+  NIJ_ErrorJoin.run emit e s = Aeneas.Std.Result.ok (reply, post) →
+    reply = AdapterRw.solana_program_error.ProgramError.InvalidInstructionData
+NLQ_ErrorMapper.label : ∀ (e : NIJ_ErrorJoin.E), NIJ_ErrorJoin.formatted e = NGL_ErrorModel.message e
+NLQ_SnapshotLaterPrefixes.second_abort : ∀ (e : AspisR1.S2W_D189Entry.Entry) (err : Aeneas.Std.Error)
+  (a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.fail err) a2 =
+      { result := Aeneas.Std.Result.fail err,
+        events :=
+          (NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+            NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1
+              (Aeneas.Std.Result.fail err) }
+@NLQ_LogPrefix.next : ∀ {E A B : Type} (h : NJU_Log.Run E A) (a : A),
+  h.result = Aeneas.Std.Result.ok a →
+    ∀ (k : A → NJU_Log.Run E B), NJU_Log.bind h k = { result := (k a).result, events := h.events ++ (k a).events }
+@NLQ_LogPrefix.fail : ∀ {E A B : Type} (h : NJU_Log.Run E A) (e : Aeneas.Std.Error),
+  h.result = Aeneas.Std.Result.fail e →
+    ∀ (k : A → NJU_Log.Run E B), NJU_Log.bind h k = { result := Aeneas.Std.Result.fail e, events := h.events }
+@NLQ_LogPrefix.div : ∀ {E A B : Type} (h : NJU_Log.Run E A),
+  h.result = Aeneas.Std.Result.div →
+    ∀ (k : A → NJU_Log.Run E B), NJU_Log.bind h k = { result := Aeneas.Std.Result.div, events := h.events }
+@NLQ_SourceDispatch.process : ∀ {A : Type} (children : AspisR1.Hiq_DispatchSource.Ops A)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  NLQ_Route.Tx1 d →
+    AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile children) p a d = children.first p a d
+@NLQ_SourceDispatch.entry : ∀ {A : Type} (children : AspisR1.Hiq_DispatchSource.Ops A)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.NIV_RawBoundary.entry (AspisR1.NIV_RawBoundary.profile children) p a d = do
+    let admitted ← (AspisR1.NIV_RawBoundary.profile children).admitted d
+    if admitted = true then AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile children) p a d
+      else
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+NLQ_SnapshotThirdPrefix.abort : ∀ (e : AspisR1.S2W_D189Entry.Entry) (err : Aeneas.Std.Error),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.fail err) =
+      { result := Aeneas.Std.Result.fail err,
+        events :=
+          (NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880
+                  (Aeneas.Std.Result.ok ())).events ++
+              NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880])
+                2 (Aeneas.Std.Result.fail err)) }
+NLQ_CopyFrame.copied_cell : ∀ (s : NLF_SdkModel.State) (a t : ℕ) (src : List UInt8),
+  (s.cells (s.accounts a).data).writer = none →
+    (s.cells (s.accounts a).data).readers = [] →
+      src.length = (s.cells (s.accounts a).data).payload.bytes.length →
+        (NLQ_CopyTrace.G s a t src).outcome =
+          NLF_CopyStep.Outcome.returned
+            (NLF_SdkModel.put s (s.accounts a).data
+              (have __src := s.cells (s.accounts a).data;
+              {
+                payload :=
+                  have __src := (s.cells (s.accounts a).data).payload;
+                  { bytes := src, money := __src.money },
+                readers := __src.readers, writer := __src.writer }))
+            (Except.ok ())
+NLQ_CopyFrame.outside : ∀ (s : NLF_SdkModel.State) (a c : ℕ) (src : List UInt8),
+  c ≠ (s.accounts a).data →
+    (NLF_SdkModel.put s (s.accounts a).data
+            (have __src := s.cells (s.accounts a).data;
+            {
+              payload :=
+                have __src := (s.cells (s.accounts a).data).payload;
+                { bytes := src, money := __src.money },
+              readers := __src.readers, writer := __src.writer })).cells
+        c =
+      s.cells c
+NLQ_CheckpointDomain.same_length : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (p : AdapterRw.solana_pubkey.Pubkey) (d : Aeneas.Std.Slice Aeneas.Std.U8)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    (AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved).length =
+      (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length
+NLQ_Stage1Ready.token : ∀ (e : AspisR1.S2W_D189Entry.Entry), (NLQ_Stage1Ready.initial e).snapshots.next = 3
+NLQ_Stage1Ready.accounts : ∀ (e : AspisR1.S2W_D189Entry.Entry), (NLQ_Stage1Ready.initial e).snapshots.owned = ↑e.first
+NLQ_Stage1Ready.sdk : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  (NLQ_Stage1Ready.initial e).snapshots.sdk = (NLM_RuntimeInput.initial e).state
+NLQ_Stage1Cases.child_abort : ∀ (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key) (d : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : NLQ_Stage1State.State) (e : Aeneas.Std.Error),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).2 = Aeneas.Std.Result.fail e →
+    NLQ_Stage1State.continuation ops p d s =
+      { result := Aeneas.Std.Result.fail e, post := s,
+        events :=
+          [NLQ_Stage1State.Event.owned s s p s.snapshots.input.first d (Aeneas.Std.Result.fail e)
+              (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }
+NLQ_Stage1Cases.child_diverge : ∀ (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key) (d : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : NLQ_Stage1State.State),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).2 = Aeneas.Std.Result.div →
+    NLQ_Stage1State.continuation ops p d s =
+      { result := Aeneas.Std.Result.div, post := s,
+        events :=
+          [NLQ_Stage1State.Event.owned s s p s.snapshots.input.first d Aeneas.Std.Result.div
+              (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }
+NLQ_Stage1Cases.child_error : ∀ (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key) (d : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : NLQ_Stage1State.State) (e : NLQ_Stage1State.PE),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e) →
+    have after :=
+      {
+        snapshots :=
+          have __src := s.snapshots;
+          { input := __src.input, sdk := __src.sdk, next := __src.next },
+        checkpoint := s.checkpoint };
+    NLQ_Stage1State.continuation ops p d s =
+      { result := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e), post := after,
+        events :=
+          [NLQ_Stage1State.Event.owned s s p s.snapshots.input.first d
+              (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e))
+              (AspisR1.NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1,
+            NLQ_Stage1State.Event.cleanup s after] }
+NLQ_Stage1Result.copied : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (saved : NLQ_Stage1State.Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    (NLQ_Stage1State.copyResult (NLQ_Stage1Ready.initial e) saved).result =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+NLQ_Stage1Result.result : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NLQ_Stage1State.continuation ops p d (NLQ_Stage1Ready.initial e)).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+    match child with
+      | Aeneas.Std.core.result.Result.Ok a => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+      | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+@NLQ_ClosedSnapshotStep.at_site : ∀ {W : Type} (e : AspisR1.S2W_D189Entry.Entry)
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀ (before : W),
+      L.related before e.heap →
+        AspisR1.S2Trust.Valid e.heap →
+          ∀ (a : ℕ) (l1 l2 : Aeneas.Std.Usize), ∃ after, NLQ_ClosedSnapshotStep.Step e L before after a l1 l2
+@NLQ_ClosedSnapshotStep.related_after : ∀ {W : Type} (e : AspisR1.S2W_D189Entry.Entry)
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (before after : W) (a : ℕ)
+  (l1 l2 : Aeneas.Std.Usize), NLQ_ClosedSnapshotStep.Step e L before after a l1 l2 → L.related after e.heap
+@NLQ_ClosedThreeSnapshots.fold : ∀ {W : Type} (e : AspisR1.S2W_D189Entry.Entry)
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀ (before : W),
+      L.related before e.heap →
+        AspisR1.S2Trust.Valid e.heap →
+          ∃ first second third,
+            NLQ_ClosedSnapshotStep.Step e L before first 0 58295#usize 58295#usize ∧
+              NLQ_ClosedSnapshotStep.Step e L first second 1 1880#usize 1880#usize ∧
+                NLQ_ClosedSnapshotStep.Step e L second third 2 1768#usize 1768#usize ∧ L.related third e.heap
+NLQ_SnapshotEvents.returned_ready : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ)
+  (owned : List NLM_Snapshot.Owned),
+  NLM_Snapshot.returned (NLM_Snapshot.ready e t owned) a lo hi =
+    NLM_Snapshot.ready e (t + 1) (owned ++ [e.snapshot a lo hi])
+NLQ_SnapshotEvents.chronology : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).events =
+    (NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+      ((NLM_Snapshot.G (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880
+            (Aeneas.Std.Result.ok ())).events ++
+        (NLM_Snapshot.G (NLM_Snapshot.ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2 1768 1768
+            (Aeneas.Std.Result.ok ())).events)
+NLQ_SnapshotData.returned : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (a lo hi : ℕ)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot a lo hi) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles a).1 ∧
+      ((↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi)
+@NLQ_DispatchAlgebra.step_result : ∀ {A F C X : Type} (world : F)
+  (event : Aeneas.Std.Result X → NLQ_DispatchState.Event A F C) (reply : Aeneas.Std.Result X)
+  (next : X → NLQ_DispatchState.Run A F C),
+  (NLQ_DispatchState.step world event reply next).result = do
+    let x ← reply
+    (next x).result
+@NLQ_DispatchAlgebra.if_result : ∀ {A F C : Type} (p : Prop) [inst : Decidable p]
+  (yes no : NLQ_DispatchState.Run A F C), (if p then yes else no).result = if p then yes.result else no.result
+@NLQ_DispatchAlgebra.step_fail : ∀ {A F C X : Type} (world : F)
+  (event : Aeneas.Std.Result X → NLQ_DispatchState.Event A F C) (e : Aeneas.Std.Error)
+  (next : X → NLQ_DispatchState.Run A F C),
+  NLQ_DispatchState.step world event (Aeneas.Std.Result.fail e) next =
+    { result := Aeneas.Std.Result.fail e, post := world, events := [event (Aeneas.Std.Result.fail e)] }
+@NLQ_DispatchAlgebra.step_div : ∀ {A F C X : Type} (world : F)
+  (event : Aeneas.Std.Result X → NLQ_DispatchState.Event A F C) (next : X → NLQ_DispatchState.Run A F C),
+  NLQ_DispatchState.step world event Aeneas.Std.Result.div next =
+    { result := Aeneas.Std.Result.div, post := world, events := [event Aeneas.Std.Result.div] }
+NLQ_SnapshotReplay.append : ∀ (initial : NLM_Snapshot.State) (head tail : List NLM_Snapshot.Event),
+  NLQ_SnapshotReplay.replay initial (head ++ tail) =
+    NLQ_SnapshotReplay.replay (NLQ_SnapshotReplay.replay initial head) tail
+@NLQ_ByteDispatch.three : ∀ {T : Type} (four five six other : T),
+  (match 3#u8 with
+    | 4#8#uscalar => four
+    | 5#8#uscalar => five
+    | 6#8#uscalar => six
+    | x => other) =
+    other
+@NLQ_DispatchTx1.ten : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (world : F),
+  NLQ_DispatchState.process children p a AspisR1.NJD_Prefixes.ten world =
+    NLQ_DispatchState.prepend
+      [NLQ_DispatchState.Event.head world AspisR1.NJD_Prefixes.ten (Aeneas.Std.Result.ok (some 3#u8)),
+        NLQ_DispatchState.Event.copied world (some 3#u8) (Aeneas.Std.Result.ok (some 3#u8)),
+        NLQ_DispatchState.Event.eq world AspisR1.NJD_Prefixes.ten (Aeneas.Std.Array.make 2#usize [3#u8, 10#u8] ⋯)
+          (Aeneas.Std.Result.ok true)]
+      (NLQ_DispatchState.invoke children.first p a AspisR1.NJD_Prefixes.ten world)
+@NLQ_DispatchTx1.eleven : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (world : F),
+  NLQ_DispatchState.process children p a AspisR1.NJD_Prefixes.eleven world =
+    NLQ_DispatchState.prepend
+      [NLQ_DispatchState.Event.head world AspisR1.NJD_Prefixes.eleven (Aeneas.Std.Result.ok (some 3#u8)),
+        NLQ_DispatchState.Event.copied world (some 3#u8) (Aeneas.Std.Result.ok (some 3#u8)),
+        NLQ_DispatchState.Event.eq world AspisR1.NJD_Prefixes.eleven (Aeneas.Std.Array.make 2#usize [3#u8, 10#u8] ⋯)
+          (Aeneas.Std.Result.ok false),
+        NLQ_DispatchState.Event.eq world AspisR1.NJD_Prefixes.eleven (Aeneas.Std.Array.make 2#usize [3#u8, 11#u8] ⋯)
+          (Aeneas.Std.Result.ok true)]
+      (NLQ_DispatchState.invoke children.first p a AspisR1.NJD_Prefixes.eleven world)
+@NLQ_DispatchTx1.complete : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  NLQ_Route.Tx1 d →
+    ((NLQ_DispatchState.process children p a d world).result, (NLQ_DispatchState.process children p a d world).post) =
+      ((children.first p a d world).result, (children.first p a d world).post)
+NLQ_EntryTx1.admitted_ten : AspisR1.Hiq_DispatchSource.pool_route.admitted AspisR1.NJD_Prefixes.ten =
+  Aeneas.Std.Result.ok true
+NLQ_EntryTx1.admitted_eleven : AspisR1.Hiq_DispatchSource.pool_route.admitted AspisR1.NJD_Prefixes.eleven =
+  Aeneas.Std.Result.ok true
+NLQ_EntryTx1.admitted : ∀ (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  NLQ_Route.Tx1 d → AspisR1.Hiq_DispatchSource.pool_route.admitted d = Aeneas.Std.Result.ok true
+@NLQ_EntryTx1.fold : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C) (p : AspisR1.Hiq_DispatchSource.Key)
+  (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  NLQ_Route.Tx1 d →
+    NLQ_DispatchState.entry children p a d world =
+      NLQ_DispatchState.prepend [NLQ_DispatchState.Event.admitted world d (Aeneas.Std.Result.ok true)]
+        (NLQ_DispatchState.process children p a d world)
+@NLQ_EntryTx1.complete : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  NLQ_Route.Tx1 d →
+    ((NLQ_DispatchState.entry children p a d world).result, (NLQ_DispatchState.entry children p a d world).post) =
+      ((children.first p a d world).result, (children.first p a d world).post)
+@NLQ_DispatchSource.fallback : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  (NLQ_DispatchState.fallback children p a d world).result = do
+    let ten ← AspisR1.Hiq_DispatchSource.eqU8 d (Aeneas.Std.Array.make 2#usize [3#u8, 10#u8] ⋯)
+    if ten = true then (children.first p a d world).result
+      else do
+        let eleven ← AspisR1.Hiq_DispatchSource.eqU8 d (Aeneas.Std.Array.make 2#usize [3#u8, 11#u8] ⋯)
+        if eleven = true then (children.first p a d world).result else (children.second p a d world).result
+@NLQ_DispatchSource.process : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  (NLQ_DispatchState.process children p a d world).result =
+    AspisR1.NIV_RawBoundary.process (AspisR1.NIV_RawBoundary.profile (NLQ_DispatchState.asOps children world)) p a d
+@NLQ_DispatchSource.entry : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  (NLQ_DispatchState.entry children p a d world).result =
+    AspisR1.NIV_RawBoundary.entry (AspisR1.NIV_RawBoundary.profile (NLQ_DispatchState.asOps children world)) p a d
+NLQ_ReplayNormal.normal : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned),
+  NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e t owned)
+      (NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.ok ())).events =
+    NLM_Snapshot.returned (NLM_Snapshot.ready e t owned) a lo hi
+NLQ_Stage1Fold.result : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d
+    match child with
+      | Aeneas.Std.core.result.Result.Ok a => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+      | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+NLQ_Stage1Body.ten : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (a0 a1 a2 : Aeneas.Std.Result Unit),
+  NLQ_Stage1Parent.G e ops p AspisR1.NJD_Prefixes.ten 3 a0 a1 a2 =
+    have body := NLQ_Stage1Fold.G e ops p AspisR1.NJD_Prefixes.ten a0 a1 a2;
+    { result := body.result, post := body.post,
+      events :=
+        [NLQ_Stage1Parent.Event.instruction (NLQ_Stage1Parent.initial e) AspisR1.NJD_Prefixes.ten 10#u8 true,
+            NLQ_Stage1Parent.Event.count (NLQ_Stage1Parent.initial e) 3] ++
+          List.map NLQ_Stage1Parent.Event.body body.events }
+NLQ_Stage1Body.eleven : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (a0 a1 a2 : Aeneas.Std.Result Unit),
+  NLQ_Stage1Parent.G e ops p AspisR1.NJD_Prefixes.eleven 3 a0 a1 a2 =
+    have body := NLQ_Stage1Fold.G e ops p AspisR1.NJD_Prefixes.eleven a0 a1 a2;
+    { result := body.result, post := body.post,
+      events :=
+        [NLQ_Stage1Parent.Event.instruction (NLQ_Stage1Parent.initial e) AspisR1.NJD_Prefixes.eleven 10#u8 false,
+            NLQ_Stage1Parent.Event.instruction (NLQ_Stage1Parent.initial e) AspisR1.NJD_Prefixes.eleven 11#u8 true,
+            NLQ_Stage1Parent.Event.count (NLQ_Stage1Parent.initial e) 3] ++
+          List.map NLQ_Stage1Parent.Event.body body.events }
+NLQ_Stage1Body.result : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (a0 a1 a2 : Aeneas.Std.Result Unit),
+  NLQ_Route.Tx1 d → (NLQ_Stage1Parent.G e ops p d 3 a0 a1 a2).result = (NLQ_Stage1Fold.G e ops p d a0 a1 a2).result
+NLQ_Stage1Guard.rejected : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (n : ℕ) (a0 a1 a2 : Aeneas.Std.Result Unit),
+  ¬NLQ_Route.Tx1 d →
+    NLQ_Stage1Parent.G e ops p d n a0 a1 a2 =
+      {
+        result :=
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := NLQ_Stage1Parent.initial e,
+        events :=
+          [NLQ_Stage1Parent.Event.instruction (NLQ_Stage1Parent.initial e) d 10#u8 false,
+            NLQ_Stage1Parent.Event.instruction (NLQ_Stage1Parent.initial e) d 11#u8 false] }
+NLQ_Stage1Guard.wrong_count : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (n : ℕ) (a0 a1 a2 : Aeneas.Std.Result Unit),
+  n ≠ 3 →
+    (NLQ_Stage1Parent.G e ops p d n a0 a1 a2).result =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData) ∧
+      (NLQ_Stage1Parent.G e ops p d n a0 a1 a2).post = NLQ_Stage1Parent.initial e
+NLQ_WritebackFrame.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (saved : NLQ_Stage1State.Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    have initial := NLQ_Stage1Ready.initial e;
+    have sdk := initial.snapshots.sdk;
+    have post :=
+      NLF_SdkModel.put sdk (sdk.accounts 2).data
+        (have __src := sdk.cells (sdk.accounts 2).data;
+        {
+          payload :=
+            have __src := (sdk.cells (sdk.accounts 2).data).payload;
+            { bytes := AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved, money := __src.money },
+          readers := __src.readers, writer := __src.writer });
+    (NLQ_Stage1State.copyResult initial saved).post.snapshots.sdk = post ∧
+      (NLQ_Stage1State.copyResult initial saved).post.snapshots.owned = [] ∧
+        (NLQ_Stage1State.copyResult initial saved).post.checkpoint = none ∧
+          (NLQ_Stage1State.copyResult initial saved).result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+NLQ_PublicRead.at_site : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 1 1880 1880) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles 1).1 ∧ (↑bytes).length = 1880
+NLQ_ProofRead.at_site : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles 0).1 ∧ (↑bytes).length = 58295
+@NLQ_MetadataAdmission.admission : ∀ {F : Type} (h : AspisR1.S2Trust.Heap F) (records : ℕ → NLF_SdkModel.Account)
+  (n : ℕ),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission h (fun a => (records a).key) n →
+    ∀ (flags : ℕ → Bool),
+      AspisR1.AdapterRw.RuntimeEntrypointAdmission h (fun a => (NLQ_MetadataAdmission.withFlags records flags a).key) n
+@NLQ_MetadataAdmission.different_flags : ∀ {F : Type} (h : AspisR1.S2Trust.Heap F) (records : ℕ → NLF_SdkModel.Account)
+  (money : ℕ → ℕ) (n a b : ℕ),
+  a ≠ b →
+    AspisR1.AdapterRw.RuntimeEntrypointAdmission h (fun i => (records i).key) n →
+      (h.accounts a).1 = (h.accounts b).1 →
+        have changed := NLQ_MetadataAdmission.withFlags records fun i => decide (i = b);
+        have state := (NLF_RuntimeInterpretation.install h changed money).state;
+        AspisR1.AdapterRw.RuntimeEntrypointAdmission h (fun i => (changed i).key) n ∧
+          (state.accounts a).data = (state.accounts b).data ∧
+            (state.accounts a).writable = false ∧ (state.accounts b).writable = true
+@NLQ_EntryRejection.rejected : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  AspisR1.Hiq_DispatchSource.pool_route.admitted d = Aeneas.Std.Result.ok false →
+    NLQ_DispatchState.entry children p a d world =
+      {
+        result :=
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := world, events := [NLQ_DispatchState.Event.admitted world d (Aeneas.Std.Result.ok false)] }
+@NLQ_EntryRejection.fail : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F)
+  (e : Aeneas.Std.Error),
+  AspisR1.Hiq_DispatchSource.pool_route.admitted d = Aeneas.Std.Result.fail e →
+    NLQ_DispatchState.entry children p a d world =
+      { result := Aeneas.Std.Result.fail e, post := world,
+        events := [NLQ_DispatchState.Event.admitted world d (Aeneas.Std.Result.fail e)] }
+@NLQ_EntryRejection.div : ∀ {A F C : Type} (children : NLQ_DispatchState.Children A F C)
+  (p : AspisR1.Hiq_DispatchSource.Key) (a : Aeneas.Std.Slice A) (d : Aeneas.Std.Slice Aeneas.Std.U8) (world : F),
+  AspisR1.Hiq_DispatchSource.pool_route.admitted d = Aeneas.Std.Result.div →
+    NLQ_DispatchState.entry children p a d world =
+      { result := Aeneas.Std.Result.div, post := world,
+        events := [NLQ_DispatchState.Event.admitted world d Aeneas.Std.Result.div] }
+NLQ_ReplayAbort.allocation : ∀ (s : NLM_Snapshot.State) (a : ℕ) (reply : Aeneas.Std.Result Unit),
+  NLQ_SnapshotReplay.replay s (NLM_Snapshot.allocationPrefix s a reply) =
+    { input := s.input, sdk := NLM_Snapshot.acquired s a, next := s.next + 1, owned := s.owned }
+NLQ_Stage1Abort.first_fail : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (err : Aeneas.Std.Error) (a1 a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.fail err) a1 a2 =
+      have s := NLM_Snapshot.ready e 0 [];
+      { result := Aeneas.Std.Result.fail err,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 0, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot (NLM_Snapshot.allocationPrefix s 0 (Aeneas.Std.Result.fail err)) }
+NLQ_Stage1Abort.first_div : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (a1 a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_Stage1Fold.G e ops p d Aeneas.Std.Result.div a1 a2 =
+      have s := NLM_Snapshot.ready e 0 [];
+      { result := Aeneas.Std.Result.div,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 0, next := s.next + 1, owned := s.owned } },
+        events := List.map NLQ_Stage1State.Event.snapshot (NLM_Snapshot.allocationPrefix s 0 Aeneas.Std.Result.div) }
+NLQ_WrongSplit.code : ∀ (base : AspisR1CurrentCaller.Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize),
+  k ≠ AspisR1CurrentCaller.compact.SPLIT →
+    AspisR1.GExp_FirstCode.code base B std hashv D semantic pub proof k =
+      AspisR1.CheckpointBytes5Effect.Code.done
+        (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse)
+NLQ_WrongSplit.child : ∀ (base : AspisR1CurrentCaller.Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize),
+  k ≠ AspisR1CurrentCaller.compact.SPLIT →
+    AspisR1.NGP_L181.NativeAssociation hashv
+      (AspisR1.NGQ_Normalize.normalize (AspisR1.GExp_FirstCode.code base B std hashv D semantic pub proof k))
+      { result := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse),
+        attempted := [] }
+NLQ_FirstWrongSplit.fold : ∀ (base : AspisR1CurrentCaller.Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize),
+  k ≠ AspisR1CurrentCaller.compact.SPLIT →
+    ∀ (handler : AspisR1CurrentCaller.verifier.Error → Aeneas.Std.Result AdapterRw.solana_program_error.ProgramError),
+      AspisR1.NGP_L181.NativeAssociation hashv
+        (AspisR1.CheckpointBytes5Effect.bind
+          (AspisR1.NGQ_Normalize.normalize (AspisR1.GExp_FirstCode.code base B std hashv D semantic pub proof k))
+          (NLQ_FirstMap.continuation handler))
+        (NLQ_FirstMap.observed handler
+          {
+            result :=
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse),
+            attempted := [] })
+NLQ_RuntimeCells.aliases : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 3 →
+    ∀ (a b : ℕ),
+      a < 3 →
+        b < 3 →
+          (((NLQ_SnapshotFold.final e).sdk.accounts a).data = ((NLQ_SnapshotFold.final e).sdk.accounts b).data ↔
+            (NLM_RuntimeInput.records e a).key = (NLM_RuntimeInput.records e b).key)
+NLQ_RuntimeCells.counters : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 3 →
+    ∀ (c : ℕ), NLF_RefCell.flag ((NLQ_SnapshotFold.final e).sdk.cells c) = e.heap.counter c
+NLQ_CopyMetadata.accounts : ∀ (s : NLF_SdkModel.State) (a : ℕ) (src : List UInt8),
+  (NLQ_CopyMetadata.post s a src).accounts = s.accounts
+NLQ_CopyMetadata.cell : ∀ (s : NLF_SdkModel.State) (a c : ℕ) (src : List UInt8),
+  ((NLQ_CopyMetadata.post s a src).cells c).payload.money = (s.cells c).payload.money ∧
+    ((NLQ_CopyMetadata.post s a src).cells c).readers = (s.cells c).readers ∧
+      ((NLQ_CopyMetadata.post s a src).cells c).writer = (s.cells c).writer
+NLQ_ProofPublicFrame.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (p : AdapterRw.solana_pubkey.Pubkey) (d : Aeneas.Std.Slice Aeneas.Std.U8)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    have after := NLQ_CopyMetadata.post s 2 (AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved);
+    after.cells (s.accounts 0).data = s.cells (s.accounts 0).data ∧
+      after.cells (s.accounts 1).data = s.cells (s.accounts 1).data
+NLQ_CheckpointRead.at_site : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 2 1768 1768) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles 2).1 ∧ (↑bytes).length = 1768 ∧ (↑bytes).length ≤ 4096
+NLQ_ZeroSite.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 2 1768 1768) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    AdapterRw.r1_pool_adapter.owned.require_zero bytes = do
+      let result ← NFQ_ScanReference.zero_ref bytes
+      Aeneas.Std.Result.ok (NFQ_ZeroSource.result result)
+NLQ_SnapshotSecondDiv.second_div : ∀ (e : AspisR1.S2W_D189Entry.Entry) (a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) Aeneas.Std.Result.div a2 =
+      { result := Aeneas.Std.Result.div,
+        events :=
+          (NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+            NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 Aeneas.Std.Result.div }
+NLQ_SnapshotThirdDiv.diverge : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) Aeneas.Std.Result.div =
+      { result := Aeneas.Std.Result.div,
+        events :=
+          (NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880
+                  (Aeneas.Std.Result.ok ())).events ++
+              NLM_Snapshot.allocationPrefix (NLM_Snapshot.ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880])
+                2 Aeneas.Std.Result.div) }
+NLQ_ReplayThree.complete : ∀ (e : AspisR1.S2W_D189Entry.Entry),
+  NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+      (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).events =
+    NLQ_SnapshotFold.final e
+NLM_Snapshot.normal : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned),
+  NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.ok ()) =
+    { result := Aeneas.Std.Result.ok (e.snapshot a lo hi, NLM_Snapshot.returned (NLM_Snapshot.ready e t owned) a lo hi),
+      events := NLM_Snapshot.normalEvents (NLM_Snapshot.ready e t owned) a lo hi }
+NLM_Snapshot.skip_allocation : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (allocation : Aeneas.Std.Result Unit),
+  ¬((AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+        (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi) →
+    NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi allocation =
+      NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.ok ())
+NLQ_SnapshotSkip.skip : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (allocation : Aeneas.Std.Result Unit),
+  ¬((AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+        (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi) →
+    NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi allocation =
+      NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a lo hi (Aeneas.Std.Result.ok ())
+@NLQ_InstalledStage1.owned : ∀ {CoreError : Type} (missing : AspisR1.IDa_Deployed.Uninstalled CoreError)
+  (indexError : CoreError) (reservation : AspisR1.NP6_StdModel.Reservation) (p : AdapterRw.solana_pubkey.Pubkey)
+  (a : Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisR1.NLD_Stage1Source.stage1Owned (NLM_DeployedOps.ops missing indexError reservation) p a d).2 =
+    AdapterRw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p a d
+@NLQ_InstalledStage1.stage1 : ∀ {CoreError : Type} (missing : AspisR1.IDa_Deployed.Uninstalled CoreError)
+  (indexError : CoreError) (reservation : AspisR1.NP6_StdModel.Reservation) (e : AspisR1.S2W_D189Entry.Entry)
+  (p : AdapterRw.solana_pubkey.Pubkey) (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  NLQ_Route.Tx1 d →
+    (NLQ_Stage1Parent.G e (NLM_DeployedOps.ops missing indexError reservation) p d 3 (Aeneas.Std.Result.ok ())
+          (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())).result =
+      do
+      let child ←
+        AdapterRw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p e.first d
+      match child with
+        | Aeneas.Std.core.result.Result.Ok a => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+        | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+NLQ_OwnedGuard.ten_wrong_count : ∀ (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount),
+  accounts.len ≠ 3#usize →
+    AspisR1.NLD_Stage1Source.stage1Owned (NLQ_EmissionGuard.installed ops) p accounts AspisR1.NJD_Prefixes.ten =
+      ([2863],
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+NLQ_Stage1SecondAbort.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (err : Aeneas.Std.Error) (a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.fail err) a2 =
+      have s := NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295];
+      { result := Aeneas.Std.Result.fail err,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 1, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+              NLM_Snapshot.allocationPrefix s 1 (Aeneas.Std.Result.fail err)) }
+NLQ_Stage1SecondDiv.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (a2 : Aeneas.Std.Result Unit),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) Aeneas.Std.Result.div a2 =
+      have s := NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295];
+      { result := Aeneas.Std.Result.div,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 1, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+              NLM_Snapshot.allocationPrefix s 1 Aeneas.Std.Result.div) }
+NLQ_Stage1ThirdAbort.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (err : Aeneas.Std.Error),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.fail err) =
+      have s := NLM_Snapshot.ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880];
+      { result := Aeneas.Std.Result.fail err,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 2, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+              ((NLM_Snapshot.G (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880
+                    (Aeneas.Std.Result.ok ())).events ++
+                NLM_Snapshot.allocationPrefix s 2 (Aeneas.Std.Result.fail err))) }
+NLQ_Stage1ThirdDiv.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisR1.S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 2).1)).length = 1768 →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) Aeneas.Std.Result.div =
+      have s := NLM_Snapshot.ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880];
+      { result := Aeneas.Std.Result.div,
+        post :=
+          { snapshots := { input := s.input, sdk := NLM_Snapshot.acquired s 2, next := s.next + 1, owned := s.owned } },
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+            ((NLM_Snapshot.G (NLM_Snapshot.ready e 0 []) 0 58295 58295 (Aeneas.Std.Result.ok ())).events ++
+              ((NLM_Snapshot.G (NLM_Snapshot.ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880
+                    (Aeneas.Std.Result.ok ())).events ++
+                NLM_Snapshot.allocationPrefix s 2 Aeneas.Std.Result.div)) }
+NLQ_Stage1Tail.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+    have tail := NLQ_Stage1State.continuation ops p d (NLQ_Stage1Ready.initial e);
+    { result := tail.result, post := tail.post,
+      events :=
+        List.map NLQ_Stage1State.Event.snapshot
+            (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                (Aeneas.Std.Result.ok ())).events ++
+          tail.events }
+NLQ_Stage1ChildFail.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (err : Aeneas.Std.Error),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).2 = Aeneas.Std.Result.fail err →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      { result := Aeneas.Std.Result.fail err, post := s,
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+              (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                  (Aeneas.Std.Result.ok ())).events ++
+            [NLQ_Stage1State.Event.owned s s p e.first d (Aeneas.Std.Result.fail err)
+                (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).1] }
+NLQ_Stage1ChildDiv.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).2 = Aeneas.Std.Result.div →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      { result := Aeneas.Std.Result.div, post := s,
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+              (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                  (Aeneas.Std.Result.ok ())).events ++
+            [NLQ_Stage1State.Event.owned s s p e.first d Aeneas.Std.Result.div
+                (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).1] }
+NLQ_Stage1ChildError.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (err : NLQ_Stage1State.PE),
+  (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err) →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have post :=
+        {
+          snapshots :=
+            have __src := s.snapshots;
+            { input := __src.input, sdk := __src.sdk, next := __src.next },
+          checkpoint := s.checkpoint };
+      { result := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err), post := post,
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+              (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                  (Aeneas.Std.Result.ok ())).events ++
+            [NLQ_Stage1State.Event.owned s s p e.first d (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err))
+                (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).1,
+              NLQ_Stage1State.Event.cleanup s post] }
+NLQ_Stage1CopyPost.source : ∀ (e : AspisR1.S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : NLQ_Stage1State.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (saved : NLQ_Stage1State.Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    NLQ_Stage1Fold.G e ops p d (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have out := NLQ_Stage1State.copyResult s saved;
+      { result := out.result, post := out.post,
+        events :=
+          List.map NLQ_Stage1State.Event.snapshot
+              (NLQ_SnapshotFold.G e (Aeneas.Std.Result.ok ()) (Aeneas.Std.Result.ok ())
+                  (Aeneas.Std.Result.ok ())).events ++
+            NLQ_Stage1State.Event.owned s s p e.first d (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+                (AspisR1.NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+              out.events }
+NLQ_MetadataFlags.put : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (i : ℕ) (c : NLF_RefCell.Cell NLF_SdkModel.Payload),
+  NLQ_MetadataFlags.flags (NLF_SdkModel.put s i c) f = NLF_SdkModel.put (NLQ_MetadataFlags.flags s f) i c
+NLQ_MetadataFlags.wrap : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (i t : ℕ) (k : NLF_RefCell.Kind),
+  NLF_SdkModel.wrap (NLQ_MetadataFlags.flags s f) i t k = NLQ_MetadataFlags.reply f (NLF_SdkModel.wrap s i t k)
+NLQ_MetadataFlags.deref : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (g : NLF_RefCell.Guard),
+  NLF_SdkModel.deref (NLQ_MetadataFlags.flags s f) g = NLF_SdkModel.deref s g
+NLQ_MetadataFlags.release : ∀ (s : NLF_SdkModel.State) (f : ℕ → Bool) (g : NLF_RefCell.Guard),
+  NLF_SdkModel.release (NLQ_MetadataFlags.flags s f) g =
+    Except.map (fun post => NLQ_MetadataFlags.flags post f) (NLF_SdkModel.release s g)

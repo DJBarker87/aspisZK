@@ -3,6 +3,10 @@ from pathlib import Path
 import json,hashlib,shutil,os
 B=Path.cwd();dest=B/'NLQ_exports_20261110';dest.mkdir(exist_ok=True)
 valid=set(json.loads((B/'NLQ_AUDIT_PLAN.json').read_text())['modules']);rows=[]
+combined=json.loads((B/'NLQ_L016/receipt.json').read_text())
+source=B/'NLQ_generated/NLQ_COMBINED_IMPORT.lean'
+assert combined['exit_status']==0 and hashlib.sha256(source.read_bytes()).hexdigest() in combined['source_hashes'].values()
+valid.add('NLQ_COMBINED_IMPORT')
 for p in sorted((B/'NLQ_objects').rglob('*')):
  if not p.is_file() or not any(str(p.relative_to(B/'NLQ_objects')).startswith(m.replace('.','/')+'.') for m in valid):continue
  rel=p.relative_to(B/'NLQ_objects');q=dest/rel;q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
