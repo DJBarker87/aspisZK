@@ -16,11 +16,15 @@ for m,(r,s) in valid.items():
  log=(E/r['attempt']/'stdout.log').read_text()
  for n in re.findall(r"^'([^']+)' (?:depends on axioms|does not depend on any axioms)",log,re.M):
   if n not in roots:new.append(n);roots.append(n)
-groups=base['groups']+[new[i:i+350]for i in range(0,len(new),350)]
+inherited_count=len(base['roots'])
+roots=list(dict.fromkeys(new+['AspisR1.RPx_Deployed.deployed','AspisR1.NKR_ScheduleExt.transition','NHC_DecodeModel.decoder_error']))
+groups=[roots[i:i+40]for i in range(0,len(roots),40)]
+with (E/'NLQ_COMBINED_IMPORT.lean').open('a') as out:
+ for root in new:out.write('#check @'+root+'\n')
 (E/'NLQ_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots,groups=groups),indent=1)+'\n')
 (E/'NLQ_AUDIT_MODULES.json').write_text(json.dumps([['NLQ_COMBINED_IMPORT']for _ in groups])+'\n')
 expected={}
-for f in [E.parent/'ledger22-20261110/NLO_EXPECTED_IMPORTS.jsonl',E.parent/'tx1-entry-20261109/NLD_EXPECTED_IMPORTS.jsonl']:
+for f in [E.parent/'ledger22-20261110/NLO_EXPECTED_IMPORTS.jsonl',E.parent/'tx1-entry-20261109/NLD_EXPECTED_IMPORTS.jsonl',E.parent/'sdk-borrow-20261109/NLF_EXPECTED_IMPORTS.jsonl']:
  if f.exists():
   for line in f.read_text().splitlines():
    r=json.loads(line);m=r['module']
@@ -31,5 +35,5 @@ for m,(r,s) in valid.items():
  expected[m]=dict(module=m,imports=list(dict.fromkeys(ins)))
 expected['NLQ_COMBINED_IMPORT']=dict(module='NLQ_COMBINED_IMPORT',imports=['Init']+imports)
 (E/'NLQ_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(expected[m])+'\n'for m in sorted(expected)))
-(E/'NLQ_AUDIT_PLAN.json').write_text(json.dumps(dict(modules=modules,new_roots=new,root_count=len(roots),group_count=len(groups),excluded_failed_or_stale=sorted(set(r.get('module','') for r in receipts if r.get('kind')=='lean')-set(modules))),indent=1)+'\n')
+(E/'NLQ_AUDIT_PLAN.json').write_text(json.dumps(dict(modules=modules,new_roots=new,root_count=len(roots),group_count=len(groups),inherited_root_count=inherited_count,inherited_audit='evidence/ledger22-20261110/NLO_AUDIT.json',raw_replay_coverage='Added roots, headline and known collector differences freshly replayed; unchanged ledger22 raw results retained by reference',excluded_failed_or_stale=sorted(set(r.get('module','') for r in receipts if r.get('kind')=='lean')-set(modules))),indent=1)+'\n')
 print(json.dumps(dict(valid_modules=len(modules),new_roots=len(new),roots=len(roots),groups=len(groups))))

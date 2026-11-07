@@ -194,7 +194,7 @@
 +mod NLQ_owned;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NLQ_owned.rs
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,108 @@
 +use super::*;
 +fn metadata_reply(_: &Pubkey,accounts:&[OwnedAccount],_:&[u8])->Result<Vec<u8>,ProgramError>{
 + let value=(accounts[0].is_writable as u32)|((accounts[2].is_writable as u32)<<1);
@@ -232,8 +232,10 @@
 +  let before=(accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable);
 +  let result=super::stage1_owned(&program,accounts,&instruction);
 +  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++  if count_guard {
 +  assert_eq!((accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable),before);
 +  assert_eq!(accounts[0].length,Err(ProgramError::InvalidAccountData));assert_eq!(accounts[0].bytes,Err(ProgramError::AccountBorrowFailed));
++  }
 + } else {
 +  let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut money:u64=kani::any();let before=money;
 +  let mut bytes:[u8;2]=kani::any();let saved=bytes;
@@ -259,15 +261,19 @@
 +fn guard_count_control(){guard_check(false,true,true)}
 +#[kani::proof] #[kani::unwind(40)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
 +fn guard_owned_instruction(){guard_check(true,false,false)}
 +#[kani::proof] #[kani::unwind(40)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
 +fn guard_owned_instruction_control(){guard_check(true,false,true)}
 +#[kani::proof] #[kani::unwind(40)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
 +fn guard_owned_count(){guard_check(true,true,false)}
 +#[kani::proof] #[kani::unwind(40)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::require_distinct_accounts,guard_unreachable)]
 +fn guard_owned_count_control(){guard_check(true,true,true)}
 +// ProgramResult interface calibration for future process/entry contracts.
 +// No frozen function contract is claimed or installed by these controls.
@@ -295,3 +301,5 @@
 +fn contract_program_result_caller(){let x:u8=kani::any();assert_eq!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
 +#[kani::proof] #[kani::stub_verified(program_result_record)]
 +fn contract_program_result_caller_control(){let x:u8=kani::any();assert_ne!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
++
++fn guard_unreachable<const N:usize>(_: &[&OwnedAccount;N])->ProgramResult {assert!(false,"guard reached distinct child");Err(ProgramError::InvalidArgument)}

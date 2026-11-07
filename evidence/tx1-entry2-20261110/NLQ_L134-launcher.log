@@ -1,0 +1,53 @@
+{"attempt": "NLQ_L134", "exit_status": 0, "wall_seconds": 29.40655078110285, "peak_rss_kib": "6018340", "swaps": "0", "print_axioms": ["'NLQ_Stage1ChildFail.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1ChildFail.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (err : Error),
+  (NLD_Stage1Source.stage1Owned ops p e.first d).2 = fail err →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      { result := fail err, post := s,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            [Event.owned s s p e.first d (fail err) (NLD_Stage1Source.stage1Owned ops p e.first d).1] } :=
+fun e ops p d err branch =>
+  let s := NLQ_Stage1Ready.initial e;
+  have child :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => (NLD_Stage1Source.stage1Owned ops p 
+...
+Owned ops p e.first d).1] })
+        (NLQ_Stage1Tail.source e ops p d)))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              { result := _a.result, post := _a.post,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ _a.events } =
+                { result := fail err, post := NLQ_Stage1Ready.initial e,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                      [Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d (fail err)
+                          (NLD_Stage1Source.stage1Owned ops p e.first d).1] })
+            step))
+        (Eq.refl
+          {
+            result :=
+              { result := fail err, post := s,
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d (fail err)
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.result,
+            post :=
+              { result := fail err, post := s,
+                  events :=
+                    [Event.owned s s p s.snapshots.input.first d (fail err)
+                        (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.post,
+            events :=
+              List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+                { result := fail err, post := s,
+                    events :=
+                      [Event.owned s s p s.snapshots.input.first d (fail err)
+                          (NLD_Stage1Source.stage1Owned ops p s.snapshots.input.first d).1] }.events })))
+'NLQ_Stage1ChildFail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r78b491bb92184dcc990bf240bb2510dd.scope; invocation ID: 51f6ee8c48f846f6b3f12a6c86800ea3

@@ -1,0 +1,167 @@
+NLQ_generated/NLQ_Stage1CopyPost.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d).2
+in the target expression
+  {
+      result :=
+        (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+          have event :=
+            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+              (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+          match child.2 with
+          | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | ok (core.result.Result.Err error) =>
+            have after :=
+              {
+                snapshots :=
+                  have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                  { input := __src.input, sdk := __src.sdk, next := __src.next },
+                checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+            { result := ok (core.result.Result.Err error), post := after,
+              events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+          | ok (core.result.Result.Ok saved) =>
+            have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+            { result := copied.result, post := copied.post, events := event :: copied.events }).result,
+      post :=
+        (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+          have event :=
+            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+              (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+          match child.2 with
+          | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | ok (core.result.Result.Err error) =>
+            have after :=
+              {
+                snapshots :=
+                  have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                  { input := __src.input, sdk := __src.sdk, next := __src.next },
+                checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+            { result := ok (core.result.Result.Err error), post := after,
+              events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+          | ok (core.result.Result.Ok saved) =>
+            have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+            { result := copied.result, post := copied.post, events := event :: copied.events }).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+            have event :=
+              Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+                (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+            match child.2 with
+            | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+            | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+            | ok (core.result.Result.Err error) =>
+              have after :=
+                {
+                  snapshots :=
+                    have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                    { input := __src.input, sdk := __src.sdk, next := __src.next },
+                  checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+              { result := ok (core.result.Result.Err error), post := after,
+                events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+            | ok (core.result.Result.Ok saved) =>
+              have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+              { result := copied.result, post := copied.post, events := event :: copied.events }).events } =
+    { result := (copyResult (NLQ_Stage1Ready.initial e) saved).result,
+      post := (copyResult (NLQ_Stage1Ready.initial e) saved).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d
+              (ok (core.result.Result.Ok saved)) (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+            (copyResult (NLQ_Stage1Ready.initial e) saved).events }
+
+e : Entry
+ops : AdapterRw.Ops
+p : Key
+d : Slice U8
+saved : Bytes
+branch : AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved)
+child : (NLD_Stage1Source.stage1Owned ops p e.first d).2 = ok (core.result.Result.Ok saved)
+site :
+  (NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d).2 =
+    ok (core.result.Result.Ok saved)
+⊢ {
+      result :=
+        (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+          have event :=
+            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+              (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+          match child.2 with
+          | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | ok (core.result.Result.Err error) =>
+            have after :=
+              {
+                snapshots :=
+                  have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                  { input := __src.input, sdk := __src.sdk, next := __src.next },
+                checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+            { result := ok (core.result.Result.Err error), post := after,
+              events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+          | ok (core.result.Result.Ok saved) =>
+            have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+            { result := copied.result, post := copied.post, events := event :: copied.events }).result,
+      post :=
+        (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+          have event :=
+            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+              (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+          match child.2 with
+          | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+          | ok (core.result.Result.Err error) =>
+            have after :=
+              {
+                snapshots :=
+                  have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                  { input := __src.input, sdk := __src.sdk, next := __src.next },
+                checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+            { result := ok (core.result.Result.Err error), post := after,
+              events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+          | ok (core.result.Result.Ok saved) =>
+            have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+            { result := copied.result, post := copied.post, events := event :: copied.events }).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          (have child := NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first d;
+            have event :=
+              Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+                (NLQ_Stage1Ready.initial e).snapshots.input.first d child.2 child.1;
+            match child.2 with
+            | fail e_1 => { result := fail e_1, post := NLQ_Stage1Ready.initial e, events := [event] }
+            | div => { result := div, post := NLQ_Stage1Ready.initial e, events := [event] }
+            | ok (core.result.Result.Err error) =>
+              have after :=
+                {
+                  snapshots :=
+                    have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                    { input := __src.input, sdk := __src.sdk, next := __src.next },
+                  checkpoint := (NLQ_Stage1Ready.initial e).checkpoint };
+              { result := ok (core.result.Result.Err error), post := after,
+                events := [event, Event.cleanup (NLQ_Stage1Ready.initial e) after] }
+            | ok (core.result.Result.Ok saved) =>
+              have copied := copyResult (NLQ_Stage1Ready.initial e) saved;
+              { result := copied.result, post := copied.post, events := event :: copied.events }).events } =
+    { result := (copyResult (NLQ_Stage1Ready.initial e) saved).result,
+      post := (copyResult (NLQ_Stage1Ready.initial e) saved).post,
+      events :=
+        List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+          Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p e.first d
+              (ok (core.result.Result.Ok saved)) (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+            (copyResult (NLQ_Stage1Ready.initial e) saved).events }
+theorem NLQ_Stage1CopyPost.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have out := copyResult s saved;
+      { result := out.result, post := out.post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            Event.owned s s p e.first d (ok (core.result.Result.Ok saved))
+                (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+              out.events } :=
+fun e ops p d saved branch =>
+  have child := Eq.trans (NLD_Stage1Source.erasure ops p e.first d) branch;
+  sorry child
+'NLQ_Stage1CopyPost.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

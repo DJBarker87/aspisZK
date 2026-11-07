@@ -1,0 +1,39 @@
+{"attempt": "NLQ_L130", "exit_status": 0, "wall_seconds": 18.03976858709939, "peak_rss_kib": "6007252", "swaps": "0", "print_axioms": ["'NLQ_Stage1CopyPost.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1CopyPost.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+      have s := NLQ_Stage1Ready.initial e;
+      have out := copyResult s saved;
+      { result := out.result, post := out.post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            Event.owned s s p e.first d (ok (core.result.Result.Ok saved))
+                (NLD_Stage1Source.stage1Owned ops p e.first d).1 ::
+              out.events } :=
+fun e ops p d save
+...
+al e).checkpoint },
+                          events :=
+                            [Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+                                (NLQ_Stage1Ready.initial e).snapshots.input.first d (ok (core.result.Result.Ok saved))
+                                (NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first
+                                    d).1,
+                              Event.cleanup (NLQ_Stage1Ready.initial e)
+                                {
+                                  snapshots :=
+                                    { input := (NLQ_Stage1Ready.initial e).snapshots.input,
+                                      sdk := (NLQ_Stage1Ready.initial e).snapshots.sdk,
+                                      next := (NLQ_Stage1Ready.initial e).snapshots.next },
+                                  checkpoint := (NLQ_Stage1Ready.initial e).checkpoint }] }
+                      | ok (core.result.Result.Ok saved_1) =>
+                        { result := (copyResult (NLQ_Stage1Ready.initial e) saved_1).result,
+                          post := (copyResult (NLQ_Stage1Ready.initial e) saved_1).post,
+                          events :=
+                            Event.owned (NLQ_Stage1Ready.initial e) (NLQ_Stage1Ready.initial e) p
+                                (NLQ_Stage1Ready.initial e).snapshots.input.first d (ok (core.result.Result.Ok saved))
+                                (NLD_Stage1Source.stage1Owned ops p (NLQ_Stage1Ready.initial e).snapshots.input.first
+                                    d).1 ::
+                              (copyResult (NLQ_Stage1Ready.initial e) saved_1).events }).events })))))
+'NLQ_Stage1CopyPost.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re6c0063515a642f59f1d309f02e85514.scope; invocation ID: 57bdf437743f45f2aa9935c45a6b6f90

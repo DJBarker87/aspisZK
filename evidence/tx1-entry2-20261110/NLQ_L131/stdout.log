@@ -1,0 +1,47 @@
+theorem NLQ_Stage1Tail.source : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  NLQ_Stage1Fold.G e ops p d (ok ()) (ok ()) (ok ()) =
+    have tail := continuation ops p d (NLQ_Stage1Ready.initial e);
+    { result := tail.result, post := tail.post,
+      events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ tail.events } :=
+fun e ops p d =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg
+            (fun x =>
+              match x with
+              | fail err =>
+                { result := fail err,
+                  post :=
+                    {
+                      snapshots :=
+                        NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                          (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                  events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+              | div =>
+                { result := div,
+                  post :=
+                    {
+                      snapshots :=
+                        NLQ_SnapshotReplay.replay (NLM_Snapshot.ready e 0 [])
+                          (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events },
+                  events := List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events }
+              | ok (fst, post) =>
+                have tail := continuation ops p d { snapshots := post };
+                { result := tail.result, post := tail.post,
+                  events :=
+                    List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++ tail.events })
+            (NLQ_SnapshotFold.returned e)))
+        { result := (continuation ops p d (NLQ_Stage1Ready.initial e)).result,
+          post := (continuation ops p d (NLQ_Stage1Ready.initial e)).post,
+          events :=
+            List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+              (continuation ops p d (NLQ_Stage1Ready.initial e)).events }))
+    (Eq.refl
+      { result := (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).result,
+        post := (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).post,
+        events :=
+          List.map Event.snapshot (NLQ_SnapshotFold.G e (ok ()) (ok ()) (ok ())).events ++
+            (continuation ops p d { snapshots := NLQ_SnapshotFold.final e }).events })
+'NLQ_Stage1Tail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
