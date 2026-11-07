@@ -1,3 +1,10 @@
+# Session 4 source7 witness checked
+
+All11 statement modules compiled in order; every comparison recorded.
+Source7Joint.joint compiled49941: nonempty complete f0 Pre AND MachineSpec
+with its explicit environment. No Contract instance or clone run claimed.
+One new-root strict raw audit remains; next Lean49942/raw49693.
+
 # Session 4 checkpoint
 
 Compiled whole statements: f21, f13, f6, f5, f8, f7, f9, f4, f2, f1, f0.
