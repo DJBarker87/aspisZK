@@ -13,21 +13,21 @@ def Bound (r : NP6_StdModel.Reservation) : (e : Event) → NLT_NativeWindows.Inp
  | _,_ => True
 
 def frame (r : NP6_StdModel.Reservation) : (e : Event) → NLT_NativeWindows.Input e → NLT_Interpreted.Uninstalled
- | .resume ..,input => ⟨input,r,r,(NLT_FrameFromCuts.frame []).locations⟩
- | .pending ..,input => ⟨r,input,r,(NLT_FrameFromCuts.frame []).locations⟩
+ | .resume ..,input => ⟨input,r,r,NLT_FrameFromCuts.unusedLocations⟩
+ | .pending ..,input => ⟨r,input,r,NLT_FrameFromCuts.unusedLocations⟩
  | .finish ..,input => ⟨r,r,input.1,input.2⟩
- | _,_ => ⟨r,r,r,(NLT_FrameFromCuts.frame []).locations⟩
+ | _,_ => ⟨r,r,r,NLT_FrameFromCuts.unusedLocations⟩
 
 theorem compatible (r : NP6_StdModel.Reservation) (e : Event) (input : NLT_NativeWindows.Input e) :
  NLT_NativeWindows.Compatible (frame r e input) e input := by
- cases e <;> simp only [frame,NLT_NativeWindows.Compatible] <;> first | trivial | exact ⟨rfl,rfl⟩
+ cases e <;> first | exact True.intro | rfl | exact ⟨rfl,rfl⟩
 
 theorem tags (r : NP6_StdModel.Reservation) (e : Event) (input : NLT_NativeWindows.Input e)
  (bound : Bound r e input) :
  NJC_FilledClause.reserved (frame r e input).resume=NJC_FilledClause.reserved r ∧
  NJC_FilledClause.reserved (frame r e input).pending=NJC_FilledClause.reserved r ∧
  NJC_FilledClause.reserved (frame r e input).finish=NJC_FilledClause.reserved r := by
- cases e <;> simp only [frame,Bound] at * <;> first
+ cases e <;> first
  | exact ⟨rfl,rfl,rfl⟩
  | exact ⟨bound,rfl,rfl⟩
  | exact ⟨rfl,bound,rfl⟩
