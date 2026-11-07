@@ -1,0 +1,115 @@
+//! Actual frozen verify_finish, partition R: first child returns Err.
+//! This is a strict prefix certificate, never a complete TX1:136 root.
+use super::*;
+use crate::r1_wire::NMO_wire as W;
+use core::cell::RefCell;
+use aspis_core::field::{M31,CM31};
+use aspis_statement::pool_v1::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct NMO_Log { calls:usize, pointers:[usize;28], lengths:[usize;28], state:[u8;32], next:u8,
+ reply:[u8;32], frame:[u64;4], after:[u64;4], omit:bool }
+#[derive(Clone,Copy)]
+struct NMO_Hash<'a>(&'a RefCell<NMO_Log>);
+impl Digest32 for NMO_Hash<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32]{
+  assert_eq!(parts.len(),30);
+  let mut l=self.0.borrow_mut();l.calls+=1;
+  for i in 0..28 {l.pointers[i]=parts[i].as_ptr() as usize;l.lengths[i]=parts[i].len();}
+  for i in 0..32 {l.state[i]=parts[28][i];}
+  l.next=parts[29][0];
+  let after=l.after;
+  l.frame[0]=after[0];l.frame[1]=after[1];l.frame[2]=after[2];
+  if !l.omit {l.frame[3]=after[3];}
+  l.reply
+ }
+}
+fn NMO_error(b:[u8;32])->Error {
+ let v=usize::from_le_bytes([b[4],b[5],b[6],b[7],b[8],b[9],b[10],b[11]]);
+ match b[0] {0=>Error::Allocation,1=>Error::RowOrder{expected:b[1],actual:b[2]},2=>Error::InvalidRow,
+ 3=>Error::Tag{row:b[1]},4=>Error::Length{row:b[1]},5=>Error::NonCanonical{row:b[1],value:v},
+ 6=>Error::Boundary{round:v},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}
+}
+fn NMO_rounds_err<H:Digest32>(p:&Prefix<'_>,t:SemanticTranscript<H>)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{
+ let state=t.state();let next=[t.next_row()];
+ let parts:[&[u8];30]=[
+p.c1_root,
+W::record(p,0),
+W::record(p,1),
+W::record(p,2),
+W::record(p,3),
+W::record(p,4),
+W::record(p,5),
+W::record(p,6),
+W::record(p,7),
+W::record(p,8),
+W::record(p,9),
+W::record(p,10),
+W::record(p,11),
+W::record(p,12),
+W::record(p,13),
+W::record(p,14),
+W::record(p,15),
+W::record(p,16),
+W::record(p,17),
+W::record(p,18),
+W::record(p,19),
+W::record(p,20),
+W::record(p,21),
+W::record(p,22),
+W::record(p,23),
+W::record(p,24),
+W::record(p,25),
+W::record(p,26),
+&state,&next];
+Err(NMO_error(W::hash(&t).digest(&parts)))
+}
+fn NMO_q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
+fn NMO_digest()->[M31;8]{core::array::from_fn(|_|M31(kani::any()))}
+#[repr(C)]
+struct NMO_Proof { root:[u8;32], suffix:[u8;57575] }
+fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool>(){
+ let proof=NMO_Proof{root:kani::any(),suffix:kani::any()};
+ let lengths:[usize;27]=kani::any();let starts:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(starts[i]<=57575);kani::assume(lengths[i]<=57575-starts[i]);&proof.suffix[starts[i]..starts[i]+lengths[i]]});
+ let prefix=W::prefix(&proof.root,records);
+ let alternate:[u8;32]=kani::any();
+ let mutant=if ARG{W::prefix(&alternate,records)}else{W::prefix(&proof.root,records)};
+ let state:[u8;32]=kani::any();let next:u8=kani::any();
+ let reply:[u8;32]=kani::any();kani::assume(reply[0]<11);
+ let seed=NMO_Log{calls:0,pointers:[0;28],lengths:[0;28],state:[0;32],next:0,reply,frame:kani::any(),after:kani::any(),omit:OMIT};
+ let log=RefCell::new(seed);let transcript=W::make(NMO_Hash(&log),state,next);
+ let transfer=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NMO_digest(),nullifier:NMO_digest(),asset_id:M31(kani::any()),recipient_commitment:NMO_digest(),change_commitment:NMO_digest()};
+ let withdrawal=PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NMO_digest(),nullifier:NMO_digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:NMO_digest()};
+ let transition=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:NMO_digest(),frontier:core::array::from_fn(|_|NMO_digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:NMO_digest(),next_frontier:core::array::from_fn(|_|NMO_digest())}};
+ let public=if kani::any(){Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
+ let challenges=Challenges{lambda:NMO_q(),chi:NMO_q(),theta:NMO_q(),zc:core::array::from_fn(|_|NMO_q()),mu:NMO_q(),eta:NMO_q()};
+ let result=verify_finish(public,mutant,transcript,challenges,None);
+ let post=*log.borrow();
+ assert_eq!(post.calls,1);
+ assert_eq!(post.pointers[0],prefix.c1_root.as_ptr() as usize);
+ assert_eq!(post.lengths[0],32);
+ for i in 0..27 {assert_eq!(post.pointers[i+1],W::record(&prefix,i).as_ptr() as usize);assert_eq!(post.lengths[i+1],W::record(&prefix,i).len());}
+ assert_eq!(post.state,state);assert_eq!(post.next,next);
+ let expected=if IGNORE{Error::Public}else{NMO_error(post.reply)};
+ match result {Err(e)=>assert_eq!(e,expected),Ok(_)=>assert!(false,"first Err must propagate")}
+ assert_eq!(post.frame,seed.after,"all hash-carrier reachable semantic cells havocked");
+}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub(semantic_rounds,NMO_rounds_err)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMO_rounds_error(){NMO_parent::<false,false,false>();}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub(semantic_rounds,NMO_rounds_err)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMO_rounds_reply_control(){NMO_parent::<true,false,false>();}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub(semantic_rounds,NMO_rounds_err)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMO_rounds_argument_control(){NMO_parent::<false,true,false>();}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub(semantic_rounds,NMO_rounds_err)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMO_rounds_footprint_control(){NMO_parent::<false,false,true>();}
+#[kani::proof]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMO_copy_control(){let a:[u8;4]=kani::any();let mut b=[0;4];b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<4);assert_ne!(a[i],b[i]);}
