@@ -28,8 +28,8 @@ def verified {V : VLib} (t : Types V) (s : Verified V) :
   extra := LIB_VCarriers.k29Raw (t.k29 ▸ s.extra)
   before_z1 := LIB_VCarriers.k29Raw (t.k29 ▸ s.before_z1)
   state_before_z0 := LIB_Env.nativeKey s.state_before_z0
-  z := Array.make 2#usize [t.point ▸ s.z.1,t.point ▸ s.z.2]
-  transcript := t.transcript ▸ s.transcript}
+  z := Array.make 2#usize [Eq.mp t.point s.z.1,Eq.mp t.point s.z.2]
+  transcript := Eq.mp t.transcript s.transcript}
 def input {V : VLib} (t : Types V) (a : Verified V × V.View × V.E29) :
  AspisR1PublicPreparation.r1_semantic.Verified Unit × LIB_VCarriers.View × LIB_VCarriers.E29 :=
  (verified t a.1,t.view ▸ a.2.1,t.e29 ▸ a.2.2)
