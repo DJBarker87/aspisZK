@@ -1,30 +1,71 @@
 # NLV TX1 top handoff
 
-Status: in progress; target not yet established. TX1:094 has no root or ledger credit.
+Target NOT ESTABLISHED. TX1:094 remains OPEN; no row root or promotion.
+The authoritative baseline stays ledger23 NLO580 CLOSED/0 QUALIFIED/19 OPEN.
 
-Scope: new NLV_ modules and this evidence directory only; branch codex/cx-tx1-top-20261107. No pushes, shipped-source edits, key actions, sibling-worktree access, or source adoption.
+## Checked support
 
-Stage 1: read the full ledger obligation and NLJ_RowSpec094; review full Result, effects, frames and abort prefixes. Build one parent state/event fold before spending native windows. Install 081/084/179 only at SAME arguments with caller domains proved. 087 remains an exact typed child packet until a CLOSED/gated root is available.
+L090 proves the complete20-occurrence SAME-argument source fold and parameterized
+physical-cut fold, with full nominal source Result, every Err/fail/div prefix,
+ordered attempted digest events and input/external frame chain. All20 source
+step equations,38 frame/rank clauses, exact GExp structural identity and NHZ
+induction pass. L099 proves SAME input/extents at every event and conditionally
+applies CLOSED081 at those exact arguments. NLV_QueryCanonical derives all22
+canonical queries from the SAME successful adopted prepare output.
 
-Budget ceiling: 40 Kani, 140 Lean, zero extraction. No attempts yet. One capped scope at a time; MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; Lean -M7000; optimized Rust; fresh reservation exit0 AND allowed:true and >=40 GB before each scope. No unchanged timeout/memory-kill reruns.
+NLV_Deployed fixes headline installation/digest slot43. Typed→SDK log lowering,
+source trace existence and exact child source application pass. These are SOURCE
+support, not a physical native invocation. NLV_State/Event and the stronger
+resource087/094 schemas are proposed observations/targets, not certified heap/ABI
+interpretations or complete resource packets. Completeness of nested ownership,
+borrows and179 caller domains is still OPEN. Do not import them as full closure.
 
-Own host workspace: /home/dombarker/project-offloads/codex-cx-tx1-top-20261110; CARGO_TARGET_DIR inside it. Seed NLJ retained export FIRST, then NLC and ledger23; record hashes and sizes. Retain own cache. No source-to-ELF rebuild is triggered unless authorized shipped files change.
+## Native and remaining obligations
 
-Retained assumptions: approved runtime and P6/D188 trust inventory; no new trust item. Frozen verifier source and Cargo.lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465, ELF e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc. Headline AspisR1.RPx_Deployed.deployed. Contract remains 100-bit per-attempt soundness, privacy, two transactions.
+40/40 Kani slots:19 local positives,18 matched assertion-failing negatives,
+one compile failure,two retired90s timeouts. Exact KMX, offline frozen graph,
+unchanged post-lock and deployed features validated before/after every run.
+No multiplication/SHA/contract/static/Option<fn>-dependent credit. Transcribed
+Log/reference windows are NOT a proof of the frozen tx1 body; native row credit0.
 
-Exact validation and remaining obligations will be updated after each stage. Next deliverable: reviewed RowSpec and parent fold, without treating a parameterized fold as row closure.
+No full087 resource root/candidate was available at read-only research recheck.
+The sibling source/value087 schema is explicitly weaker than the ledger; it is
+not consumed as a full packet. Actual physical Cut production, complete lifetime/
+cleanup, SAME081 Parsed/root/query provenance, CLOSED084 native installation,
+full179 caller domains and post-query/flush checkpoint domains remain OPEN.
+Read NLV_FAILING_STEP.md, NLV_REMAINING.md, NLV_ROWSPEC_REVIEW.md and
+NLV_CALLER_CLAUSES.json. No success-only child premise or independent checkpoint
+is hidden at a row root; no094 root exists. Full resource-schema completeness
+itself needs review before use. Target remains100-bit PER-ATTEMPT,privacy,two tx.
 
-Stage 1: all20 per-occurrence source continuation equations pass (L008-L028, excluding failed L022 replaced by L023). These are support only. Source/frame/native assembly and child domains remain OPEN; no row credit. Own prelaunch path correction L002 and client serialization refusal before L006 are retained. New native/reference/spec candidates are not yet validated.
+## Audit and retained host
 
-Stage 2: parent source cut fold L067 and exact GExp structural source identity
-L072 pass, standard axioms only. Physical Cut producer and child caller domains
-are NOT discharged. Native K001 compile-only and K002 timeout are excluded;
-K002 full-fixture shape is retired. Prefix splits are prepared, not yet validated.
-RowSpec correction draft explicitly retains raw Rust Result alongside its model
-rejection transport; see NLV_ROWSPEC_REVIEW.md (NLV-F1). No row root or credit.
+One combined import L100 passes with65 NLV modules,headline and126 NLV theorem
+roots. L105 eight walker fixtures pass. NFX L106 exits0 over17249
+modules:0 dangling/conflicting owners/import mismatches,2420 compatible replicas.
+All30 raw groups cover11725 roots; all raw axioms standard,
+including every own theorem. The inherited raw/collector disagreements are
+retained verbatim in NLV_AUDIT.json; their nonzero scope exits are not hidden.
+L121 completed391 raw verdicts in178.275s but packaging hit180s (exit124).
+L138 completed only missing packaging, never rerunning the walker; exit124 retained.
+Peak RSS through retention8044232KiB,swap0. Exact target/command/revision/source/
+dependency hash/status/wall/RSS/swap/axioms are in receipts and attempts manifest.
+Budget140 Lean/support slots (includes2 prelaunch refusals),40 Kani,0 extraction.
+Final aggregation's own receipt is NLV_L140/receipt.json; no unchanged regression.
 
-Stage3: L081 ordered typed→SDK digest trace, L082 source trace existence, L083 initial physical carrier construction, L086 all38 frame/rank clauses, L088 source step/frame/progress assembly, L089 exact continuation induction, L090 complete initial SAME-argument source identity and parameterized physical fold, L091 selector coverage pass. Standard axioms only. Physical Cut producer and full child-resource installation remain OPEN. K003/K005 pass parse/scan first-error windows with K004/K006 matched failing controls; K007 timeout is retired without credit.
+Host workspace `/home/dombarker/project-offloads/codex-cx-tx1-top-20261110`,
+CARGO_TARGET_DIR=NLV_target,TMPDIR=NLV_tmp retained; own bytes3323854379
+(<30GB). Export NLV_exports_20261110; exact object hashes in NLV_EXPORT.json and
+NLV_CLOSURE_PINS.json.xz. Seeded NLJ FIRST,NLC SECOND,ledger23 THIRD,then two
+committed NLR interface objects read-only. All predecessor comparisons pass;
+actual selected Aeneas objects are pinned. Never delete this cache/target/tmp.
 
-Stage4: stronger NLV_RowSpec087/094 targets typecheck at L095/L096, source-only child application and full-packet projection at L097. They are UNPROVED resource targets, never native row roots. Sibling latest8c9d4e93d33 still reports087 OPEN. K008/K009 split error/order and K010/K011 independent public window positive/control verdicts pass. Stronger actual native producer/heap association, child domains and complete owned cleanup remain OPEN.
+Every scope admitted only at reservation exit0 AND allowed:true,free disk>=40GB,
+MemoryHigh6G/Max8G/Swap0/Tasks64; Lean-M7000,optimized Rust,no raised limit.
+No shipped files,keys,wallets,session-A/sibling worktrees,shared cache or pc/pv
+worktree changed. Scratch-only cfg(kani) patch; no ELF rebuild trigger or new
+ELF assertion. Frozen verifier/lock4bb3b3f5,Pool b936275465 and e0e49c34 owner pin;
+section6 fields in NLV_FROZEN.json. No deployment/push,new trust row or pending
+RuntimeCpiReadonlyEntry7 use. P6/D188 semantic transport is retained/reclassified.
 
-Stage5:40/40 Kani slots finished:19 local positives,18 matched expected negative failures,one compile failure,two retired90s timeouts; no native row credit. L099 SAME-event input/extent frame and conditional CLOSED081 installation pass. L100 combined import passes22.74s,6716952KiB RSS,standard axioms for127 statements. L105 eight walker controls pass. L106 NFX exits0 in61.28s,8044232KiB RSS,swap0:17249 modules,0 dangling/conflicting owners/import mismatches,2420 compatible replicas. Raw30-group audit is running; no final raw verdict yet. L103 refused prelaunch and was replaced by L104 stricter dependency inputs. No shipped file changed.
+Final aggregation L140 exits0;178 actual capped scopes plus2 charged prelaunch refusals account for all140 Lean/support and40 Kani slots. Local final integrity checks pass. Repeated large input snapshots use lossless *.ref.json references to NLV_pinned_inputs; NLV_read_input.py verifies/restores them. Host originals,export,target,tmp remain retained. No native094 root or ledger promotion.

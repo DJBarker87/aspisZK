@@ -39,3 +39,7 @@ RuntimeCpiReadonlyEntry7, grinding credit or work-normalized soundness is used.
 Budget/attempt accounting and exact audit status will be finalized from receipts.
 Any unattempted native tail window will be explained here member by member;
 unused numerical budget alone is not evidence that an admissible proof exists.
+
+Guard-domain limit: small_window0 uses16-bit k, so it does not establish a generic all-usize native guard law. Actual entry328 supplies literal10; the generic source step is proved for every typed Usize. No native root is credited from this narrower candidate. Other u16 observation indices have explicit coverage proofs (all57607 proof cells and independent field/coordinate selectors).
+
+Final budgets:140/140 Lean-support slots and40/40 Kani,0 extraction. No early stop. Two Lean slots were charged prelaunch refusals; their exact causes/replacements are retained. Kani tail candidates small_window12 (one-write finish frame) and13 (checkpoint Vec output) were not submitted because40 native slots were exhausted; no claim is made from their source. Full post-flush/checkpoint domains still need Lean proofs as well as physical native association. Raw audit/retention use the remaining support slots; no root or row promotion is claimed.

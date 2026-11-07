@@ -19,3 +19,5 @@ No failure earns row credit. No timeout/cap was raised.
   and focused structural source normalization. No recurrence normalization.
 
 L103 prelaunch refused subprocess.olean: link config put own Python script first and the strict Lean import parser treated its import as a Lean module. No scope launched. L104 repair explicitly lists actual Lean drivers first, retaining all C/Python source inputs and stronger actual dependency coverage. No validation, cap or timeout weakened.
+
+L121/proof14: all391 raw verdicts complete in178.27547175297514s, expected inherited NKR collector/raw mismatch, inner exit1; outer packaging reached180s and actual scope exit124. No cap/timeout increase or walker rerun. L138 is a separate packaging-only completion plus retention/integrity check; original exit124 remains a finding.

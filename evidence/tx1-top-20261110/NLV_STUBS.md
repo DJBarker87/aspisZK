@@ -19,3 +19,5 @@ transcribed parent candidate, not Kani-verified contracts of frozen callees.
 Their calls and local windows have NO row credit or actual native association.
 Each future substitution must cite its CLOSED callee packet at the SAME
 arguments with full domain/Result/log/frame and physical observations proved.
+
+K016 is an extra rename-calibration PASS, not a separately matched pair. The original K005 prefix1 positive/control used an earlier local input-fixture source hash (same frozen graph/features/KMX). No cross-version K-2 equivalence or native credit is claimed. A future actual-producer/fidelity gate must re-establish its exact required configuration and all eligible controls.
