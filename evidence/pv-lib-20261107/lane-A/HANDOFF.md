@@ -256,3 +256,5 @@ Session4 49170: pinned PV_FN_THREAD_f361OwnEntryProgress passed; session4 receip
 Session4 49171: pinned PV_FN_THREAD_f361SelectedNative passed; session4 receipt records resources/axioms.
 
 Session4 49172: pinned PV_FN_THREAD_f213Frame passed; session4 receipt records resources/axioms.
+
+Session4 49173: pinned PV_FN_THREAD_f361NameEntryValidity passed; session4 receipt records resources/axioms.
