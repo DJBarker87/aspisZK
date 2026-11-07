@@ -1,0 +1,37 @@
+{"attempt": "LIB_L071", "exit_status": 0, "wall_seconds": 21.295404652832076, "peak_rss_kib": "6425292", "swaps": "0", "print_axioms": []}
+BitVec.fromLEBytes_getElem! : ∀ (v : List Byte) (j : ℕ), (BitVec.fromLEBytes v)[j]! = v[j / 8]!.testBit (j % 8)
+BitVec.getLsbD_concat_zero : ∀ {w : ℕ} {x : BitVec w} {b : Bool}, (x.concat b).getLsbD 0 = b
+BitVec.setWidth_ofNat_one_eq_ofNat_one_of_lt : ∀ {v w : ℕ}, 0 < v → BitVec.setWidth w 1#v = 1#w
+BitVec.getLsbD_one : ∀ {w i : ℕ}, (1#w).getLsbD i = (decide (0 < w) && decide (i = 0))
+BitVec.getLsbD_false_of_lt_ctz : ∀ {w i : ℕ} {x : BitVec w}, i < x.ctz.toNat → x.getLsbD i = false
+BitVec.setWidth_append_append_eq_shiftLeft_setWidth_or : ∀ {w w' w'' w''' : ℕ} {b : BitVec w} {b' : BitVec w'}
+  {b'' : BitVec w''},
+  BitVec.setWidth w''' (b ++ b' ++ b'') =
+    BitVec.setWidth w''' b <<< (w' + w
+...
+licate n x).getLsbD i = (decide (i < w * n) && x.getLsbD (i % w))
+BitVec.getLsbD_rev : ∀ {w : ℕ} (x : BitVec w) (i : Fin w), x.getLsbD ↑i.rev = x.getMsbD ↑i
+BitVec.getLsbD_zero : ∀ {w i : ℕ}, (0#w).getLsbD i = false
+BitVec.setWidth_ushiftRight : ∀ {w i : ℕ} {x : BitVec w} {y : ℕ},
+  w ≤ i → BitVec.setWidth i (x >>> y) = BitVec.setWidth i x >>> y
+BitVec.getLsbD_not : ∀ {v i : ℕ} {x : BitVec v}, (~~~x).getLsbD i = (decide (i < v) && !x.getLsbD i)
+BitVec.setWidth_succ : ∀ {w i : ℕ} (x : BitVec w),
+  BitVec.setWidth (i + 1) x = BitVec.cons (x.getLsbD i) (BitVec.setWidth i x)
+BitVec.getLsbD_true_of_eq_clzAuxRec_of_ne_zero : ∀ {w n : ℕ} {x : BitVec w},
+  ¬x = 0#w → (∀ (i : ℕ), n < i → x.getLsbD i = false) → x.getLsbD (w - 1 - (x.clzAuxRec n).toNat) = true
+BitVec.getLsbD_setWidth' : ∀ {m n : ℕ} (ge : m ≥ n) (x : BitVec n) (i : ℕ),
+  (BitVec.setWidth' ge x).getLsbD i = x.getLsbD i
+BitVec.fromLEBytes_getElem!._simp_1_10 : ∀ {n : ℕ}, (n < 1) = (n = 0)
+BitVec.setWidth_shiftLeft_of_le : ∀ {w i : ℕ} {x : BitVec w} {y : ℕ},
+  i ≤ w → BitVec.setWidth i (x <<< y) = BitVec.setWidth i x <<< y
+BitVec.setWidth_setWidth_succ_eq_setWidth_setWidth_of_getLsbD_false : ∀ {w : ℕ} {x : BitVec w} {i : ℕ},
+  x.getLsbD i = false → BitVec.setWidth w (BitVec.setWidth (i + 1) x) = BitVec.setWidth w (BitVec.setWidth i x)
+BitVec.fromLEBytes_getElem!._simp_1_4 : ∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClass α] {a : α},
+  (0 ≤ a) = True
+BitVec.setWidth_zero : ∀ (m n : ℕ), BitVec.setWidth m 0#n = 0#m
+BitVec.getLsbD_shiftLeftZeroExtend : ∀ {m i : ℕ} (x : BitVec m) (n : ℕ),
+  (x.shiftLeftZeroExtend n).getLsbD i = (!decide (i < n) && x.getLsbD (i - n))
+BitVec.setWidth_setWidth_eq_self : ∀ {w : ℕ} {a : BitVec w} {w' : ℕ},
+  a < BitVec.twoPow w w' → BitVec.setWidth w (BitVec.setWidth w' a) = a
+
+Running as unit: run-rda381abb22e34ad1be56b7c5a123f5bf.scope; invocation ID: 4c96957d233d439484004a48347758b2

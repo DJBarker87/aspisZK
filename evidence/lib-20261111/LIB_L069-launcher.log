@@ -1,0 +1,45 @@
+{"attempt": "LIB_L069", "exit_status": 1, "wall_seconds": 21.02126898802817, "peak_rss_kib": "6358992", "swaps": "0", "print_axioms": ["'LIB_DigestWord.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+LIB_generated/LIB_DigestWord.lean:27:5: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [BitVec.setWidth 32 d,
+ d ++ 0#8,
+ 0#16 ++ b,
+ 0#24 ++ a,
+ BitVec.setWidth 32 c,
+ BitVec.setWidth 32 b,
+ BitVec.setWidth 32 a,
+ 0#8 ++ c]
+Consider the following assignment:
+0#24 ++ a = 4294967295#32
+0#16 ++ b = 16777215#24
+0#8 ++ c = 65535#16
+d ++ 0#8 = 65535#16
+BitVec.setWidth 32 a = 2147483647#32
+BitVec.setWidth 32 b = 4286578687#32
+BitVec.setWidth 32 c = 4294934527#32
+BitVec.setWidth 32 d = 4294967167#3
+...
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+LIB_generated/LIB_DigestWord.lean:27:5: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [BitVec.setWidth 32 d,
+ d ++ 0#8,
+ 0#16 ++ b,
+ 0#24 ++ a,
+ BitVec.setWidth 32 c,
+ BitVec.setWidth 32 b,
+ BitVec.setWidth 32 a,
+ 0#8 ++ c]
+Consider the following assignment:
+0#24 ++ a = 4294967295#32
+0#16 ++ b = 16777215#24
+0#8 ++ c = 65535#16
+d ++ 0#8 = 65535#16
+BitVec.setWidth 32 a = 2147483647#32
+BitVec.setWidth 32 b = 4286578687#32
+BitVec.setWidth 32 c = 4294934527#32
+BitVec.setWidth 32 d = 4294967167#32
+'LIB_DigestWord.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r47f5bf7f60064ef2802d001e7d1be92c.scope; invocation ID: c5711bb474cd44bd81d6a25ec898c1a0

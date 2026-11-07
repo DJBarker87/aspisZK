@@ -1,0 +1,7 @@
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+LIB_generated/LIB_DigestWord.lean:29:5: error: 'change' tactic failed, pattern
+  (BitVec.fromLEBytes [a, b, c, d]).getLsbD i = ?m.169
+is not definitionally equal to target
+  (BitVec.fromLEBytes [a, b, c, d])[i]! = [a, b, c, d][i / 8]!.testBit (i % 8)
+'LIB_DigestWord.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

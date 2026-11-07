@@ -1,0 +1,25 @@
+Target not yet established. No new finding. The LIB0 F1–F8 inventory is retained.
+
+LIB-F01: cache precedence. Initial LIB_L001–L009 selected pre-rev2 RSL_Base/Pool/241 through NND_objects (same older objects in NNC seeds). These successful compilations are supporting historical checks, not frozen-rev2 validation. No field credit or principal consumption occurred. LIB_SPEC_PINS.json checks canonical rev2 sources against NMS_L282–288 source hashes, and copies their closure-pinned objects into private LIB_specs first. Replay affected own modules under this changed environment before use. NND_CheckpointLaw and similar pre-rev2 getter theorems must not be imported as unrestricted rev2 laws.
+
+LIB-F02: LIB_L016 fails at import NND_AccountCarrier: duplicate old lazy equation RSL.OwnedAccount.data.eq_1 with canonical rev2. NND getter/CheckpointLaw statements use the old pure-Except type, so importing them is not a rev2 bridge. Replacement LIB_Transcribed isolates the already-rev2 NMS getter and passes L017. LIB_ResultTotal and decoder-total/value support are retained NND proof bodies with prefix/import substitutions; original paths/hashes are in LIB_REUSE.json. No existing proved module is edited.
+
+L051 input-statement correction: require_zero returns AccountAlreadyInitialized, as the frozen source and RSL.requireZero specify. The first LIB_Zero statement mistakenly said InvalidAccountData; excluded failure, corrected exact error constructor before retry. No spec/source modification.
+
+L052: corrected zero-error statement was proved by rw; the leftover rfl produced No goals to be solved. Retire rewrite-then-rfl script shape after these two failures. Replacement uses the existing zero_source equation directly with only the byte-map equality, no unfolding or loop replay.
+
+L068 symbolic digest-word proof: bv_decide abstracted the unreduced U32 projection as an independent value and reported a potentially spurious counterexample. This is not a digest/source counterexample. Replacement exposes four BitVec byte variables and normalizes literal list lengths before the reflected proof.
+
+L069 retired reflected digest-word shape after second unsupported-operation abstraction (setWidth/append treated independently). Replacement uses fromLEBytes_getElem! and bit extensionality over exactly32 bit positions; no solver, concrete buffer enumeration or large numeral reduction. L070 inspection syntax was unsupported; L071 inspected names via the actual environment successfully.
+
+L072/74 retire the indexed 32-position enumeration script: first needed the indexed-bit conversion, then interval_cases did not recognize the dependent-width bound. L075 replaces enumeration with four symbolic disjoint byte ranges, fromLEBytes_getElem!, and omega only on index arithmetic.
+
+L077 exposed an over-generalized auxiliary statement: native List getElem! outside bounds must not be identified with a zero-defaulting host getD. The actual digest root uses exactly i=0..7. Replacement LIB_DigestBytes.word states i<8, derives all four byte bounds from the native array length32, and proves a separate bounded index lemma. Every actual caller supplies the bound by literal reduction; no RSL domain is strengthened.
+
+L079/80 retire whole-decoder split_ifs/ordered-contradiction shape: all value equalities were discharged, but host UInt32 comparison normalization left eight contradictory-order branches. Replacement factors the decoder through a generic Boolean-list guard induction (LIB_DigestGuards), so the final association uses only syntactic guard/value transport and no ordered-field solver.
+
+L082 generic apply_ite simplification exceeded the default simp step budget on the decoder. No cap/timeout/step limit increase. Replace generic application distribution by a named option_ite law restricted to this exact decoder Result carrier. Boolean-list induction remains the replacement shape; source/value guards unchanged.
+
+LIB-F03 / L084: the newly copied NMT cache preceded accepted NND zero-support variants and selected an old NMT_345 chain importing NMT_RSL_Base, duplicating RSL.Obs.ctorIdx. No import/field credit. Move the private NMT fallback after the coherent existing paths so accepted zero-helper owners stay selected. Do not import NMT_RSL_* owners; final V-carrier choices must use canonical native-only support or prefix-owned replayed imports.
+
+LIB-F04 / L086: direct import of the old NEB field certificate with the coherent semantic closure duplicates AspisR1.FIo_ReduceBounds.fold (FIo_ReduceBounds vs canonical RPt_FIo_ReduceBounds). No field installed/credited. Separate carriers from certificate imports; module15 needs a prefix-owned import-only replay of the old certificate on canonical owners, never an edit of the CLOSED sources or a second field proof.

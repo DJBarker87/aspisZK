@@ -1,0 +1,21 @@
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+LIB_generated/LIB_DigestWord.lean:27:5: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [BitVec.setWidth 32 d,
+ d ++ 0#8,
+ 0#16 ++ b,
+ 0#24 ++ a,
+ BitVec.setWidth 32 c,
+ BitVec.setWidth 32 b,
+ BitVec.setWidth 32 a,
+ 0#8 ++ c]
+Consider the following assignment:
+0#24 ++ a = 4294967295#32
+0#16 ++ b = 16777215#24
+0#8 ++ c = 65535#16
+d ++ 0#8 = 65535#16
+BitVec.setWidth 32 a = 2147483647#32
+BitVec.setWidth 32 b = 4286578687#32
+BitVec.setWidth 32 c = 4294934527#32
+BitVec.setWidth 32 d = 4294967167#32
+'LIB_DigestWord.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

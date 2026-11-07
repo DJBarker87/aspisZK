@@ -1,0 +1,110 @@
+AspisR1PublicPreparation.VerifyPrefix.mark (obs : Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit))
+  (i : Aeneas.Std.U8) : Aeneas.Std.Result Unit
+def AspisR1PublicPreparation.VerifyPrefix.mark : Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit) →
+  Aeneas.Std.U8 → Aeneas.Std.Result Unit :=
+fun obs i => Aeneas.Std.Result.ok ()
+def NJQ_Canonical.registry : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.CR NJI_V1Carrier.CF) :=
+fun b => NJQ_Canonical.mapOuter NJQ_Canonical.registryResult (NJQ_Registry.model b)
+def NJQ_Canonical.entry : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.CE NJI_V1Carrier.CF) :=
+fun b => NJQ_Canonical.mapOuter NJQ_Canonical.entryResult (NJQ_Entry.model b)
+@[reducible] def NJY_Registry.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.R NJI_V1Carrier.F) :=
+NJQ_Registry.model
+@[reducible] def NJY_Entry.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJI_V1Carrier.E NJI_V1Carrier.F) :=
+NJQ_Entry.model
+@[reducible] def NJY_Master.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJQ_Master.M NJQ_Master.F) :=
+NJQ_Master.model
+@[reducible] def NJY_Checkpoint.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F) :=
+NJQ_Checkpoint.model
+def NJQ_Master.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJQ_Master.M NJQ_Master.F) :=
+fun b =>
+  if len : (↑b).length = 384 then
+    match NJQ_Header.model b 384#usize NJQ_Master.magic with
+    | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+    | Aeneas.Std.core.result.Result.Ok a =>
+      if ↑(NJQ_Master.reserved b len) ≠ List.replicate 14 0#u8 then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonZeroReserved)
+      else
+        if ↑(NJQ_Master.tail b len) ≠ List.replicate 8 0#u8 then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonZeroReserved)
+        else
+          if NJQ_Master.bindingArg b len ≠ NJQ_MasterBinding.binding then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongFormatBinding)
+          else
+            match NJQ_Master.parseBool (NHY_ZeroStep.byte b 49) with
+            | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+            | Aeneas.Std.core.result.Result.Ok has => do
+              let identity ← NJQ_Identity.model (NJQ_Master.identityArg b)
+              match identity with
+                | Aeneas.Std.core.result.Result.Err a =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err
+                      NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Identity)
+                | Aeneas.Std.core.result.Result.Ok id => do
+                  let policy ← NJI_PolicyParser.body (NJQ_Master.policyArg b)
+                  match policy with
+                    | Aeneas.Std.core.result.Result.Err a =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err
+                          NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Policy)
+                    | Aeneas.Std.core.result.Result.Ok policy =>
+                      have master := NJQ_Master.record b len id policy has (NJQ_Master.sequences b len);
+                      do
+                      let checked ← NJI_MasterModel.model master
+                      match checked with
+                        | Aeneas.Std.core.result.Result.Err e =>
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+                        | Aeneas.Std.core.result.Result.Ok a =>
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok master)
+  else
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLength)
+def NJQ_Checkpoint.model : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F) :=
+fun b =>
+  if len : (↑b).length = 192 then
+    match NJQ_Header.model b 192#usize NJQ_Checkpoint.magic with
+    | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+    | Aeneas.Std.core.result.Result.Ok a =>
+      if ↑(NJQ_Checkpoint.trailing b len) ≠ List.replicate 16 0#u8 then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonZeroReserved)
+      else
+        if NJQ_Checkpoint.masterBytes b len = Aeneas.Std.Array.repeat 32#usize 0#u8 then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+        else
+          if NJQ_Checkpoint.domainBytes b len = Aeneas.Std.Array.repeat 32#usize 0#u8 then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+          else
+            match NJQ_DigestPort.decoded (NJQ_Checkpoint.digestArg b len) with
+            | Aeneas.Std.core.result.Result.Err a =>
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                  NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonCanonicalDigest)
+            | Aeneas.Std.core.result.Result.Ok root =>
+              match NJQ_ArrayAll.loop (NJQ_Checkpoint.sequences b len) with
+              | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+              | Aeneas.Std.core.result.Result.Ok lanes =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (NJQ_Checkpoint.record b len root lanes))
+  else
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLength)

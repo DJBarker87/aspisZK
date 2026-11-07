@@ -1,0 +1,39 @@
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+LIB_generated/LIB_DigestWord.lean:17:1: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [a.bv,
+ U32.bv
+   (BitVec.cast ⋯
+       (~~~(~~~BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length) a.bv &&&
+           ~~~(BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length)
+                 (~~~(~~~BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length) b.bv &&&
+                     ~~~(BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length)
+                           (~~~(~~~BitVec.setWidth (8 * [c.bv, d.bv].length) c.bv &&&
+                               ~~~(BitVec.setWidth (8 * [c.bv, d.bv].length)
+                                     (~~~(~~~BitVec.setWidth (8 * [d.bv].length) d.bv &&&
+                                         ~~~(BitVec.setWidth (8 * [d.bv].length) 0#(8 * [].length) <<< 8))) <<<
+                                   8))) <<<
+                         8))) <<<
+               8)))#uscalar),
+ d.bv,
+ c.bv,
+ b.bv]
+Consider the following assignment:
+U32.bv
+  (BitVec.cast ⋯
+      (~~~(~~~BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length) a.bv &&&
+          ~~~(BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length)
+                (~~~(~~~BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length) b.bv &&&
+                    ~~~(BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length)
+                          (~~~(~~~BitVec.setWidth (8 * [c.bv, d.bv].length) c.bv &&&
+                              ~~~(BitVec.setWidth (8 * [c.bv, d.bv].length)
+                                    (~~~(~~~BitVec.setWidth (8 * [d.bv].length) d.bv &&&
+                                        ~~~(BitVec.setWidth (8 * [d.bv].length) 0#(8 * [].length) <<< 8))) <<<
+                                  8))) <<<
+                        8))) <<<
+              8)))#uscalar) = 4294967295#32
+a.bv = 255#8
+b.bv = 255#8
+c.bv = 255#8
+d.bv = 127#8
+'LIB_DigestWord.four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
