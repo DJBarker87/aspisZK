@@ -21,6 +21,8 @@ import NMX_CB03
 import NMX_CB04
 import NMX_CB05
 import NMX_CallArguments
+import NMX_CanonicalBodyFactor
+import NMX_CanonicalCountFactor
 import NMX_CanonicalCuts
 import NMX_CanonicalDistinct
 import NMX_CanonicalErrorPrefix
@@ -69,6 +71,7 @@ import NMX_InverseSlice
 import NMX_KeyCarrier
 import NMX_LEFirst
 import NMX_LeafInstall
+import NMX_LengthGuard
 import NMX_MasterChild
 import NMX_MasterValue
 import NMX_Match00
@@ -95,6 +98,7 @@ import NMX_Question
 import NMX_QuestionValue
 import NMX_RSL233Fold
 import NMX_RSL233Replay
+import NMX_RSNormalize
 import NMX_RawChildren
 import NMX_ReadonlyCarrier
 import NMX_RegistryTransport
@@ -167,11 +171,16 @@ import NMX_ScalarBne
 import NMX_ScalarCarrier
 import NMX_SeedConstants
 import NMX_SeedFrames
+import NMX_SemanticF00
+import NMX_SemanticF01
+import NMX_SemanticF02
+import NMX_SemanticF03a
 import NMX_SemanticF03b
 import NMX_SemanticF04
 import NMX_SemanticF05
 import NMX_SemanticTail05
 import NMX_Semantics
+import NMX_SevenSourceFold
 import NMX_Skeleton
 import NMX_SmallIndices
 import NMX_SourceModel
@@ -182,7 +191,15 @@ import NMX_SyntaxFactor
 import NMX_TailIndependent
 import NMX_U64Byte0
 import NMX_U64Byte1
+import NMX_U64Byte2
+import NMX_U64Byte3
+import NMX_U64Byte4
+import NMX_U64Byte5
+import NMX_U64Byte6
+import NMX_U64Byte7
+import NMX_U64Carrier
 import NMX_U64Layout
+import NMX_U64Model
 import NMX_UnusedWitnesses
 import NMX_ValueLink
 import NMX_WholeFrame
@@ -190,3 +207,4 @@ import NMX_WholeFrame
 #print axioms NMX_RSL233Fold.fold
 #print axioms NMX_SemanticF04.e041
 #print axioms NMX_NecessaryConditions.getter_stop_excluded
+#print axioms NMX_SevenSourceFold.fold

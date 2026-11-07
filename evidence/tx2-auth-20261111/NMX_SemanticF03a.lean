@@ -31,7 +31,7 @@ theorem e035 (owners : Owners) (ln : NMX_RawChildren.LaneNative) (rn : NMX_RawCh
    let checkpointBump := Array.to_slice (Array.make 1#usize [checkpoint.payload.bump])
    let checkpointSeeds := Array.to_slice (Array.make 4#usize [
      r1_pool_adapter.PAIR_FOREST_CHECKPOINT_SEED,checkpointMasterSeed,sequenceSeed,checkpointBump])
-   simpa only [checkpointSeeds,checkpointMasterSeed,sequenceSeed,checkpointBump,NMX_SeedFrames.checkpoint,NMX_SeedFrames.single,NMX_U64Carrier.value,NMX_Carrier.checkpoint] using (NMX_SemanticF03b.e036 owners ln rn L D lanePacket pool outputLane checkpointAccount laneAccount master masterKey checkpoint checkpointSeeds)
+   simpa only [checkpointSeeds,sequenceSeed,checkpointBump,NMX_SeedFrames.checkpoint,NMX_SeedFrames.single,NMX_U64Carrier.value,NMX_Carrier.checkpoint] using (NMX_SemanticF03b.e036 owners ln rn L D lanePacket pool outputLane checkpointAccount laneAccount master masterKey checkpoint checkpointSeeds)
 #print axioms e035
 
 theorem e034 (owners : Owners) (ln : NMX_RawChildren.LaneNative) (rn : NMX_RawChildren.RegistryNative)

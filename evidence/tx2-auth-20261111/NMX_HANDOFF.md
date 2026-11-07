@@ -116,3 +116,24 @@ clause. DomainTrue has not been weakened.
 
 Read-only NMM branch check: `0f45c91bcd8984228de304773cb8faaa3864723c` still has
 `NMM_CLOSED.json` rows=[] / NO_ROW_PROMOTION, no217 or234 candidate to instantiate.
+
+## Renewal R14–R20: all55 interpreted occurrences and canonical seven branch
+
+All eight symbolic byte positions, `NMX_U64Model.value`, and
+`NMX_U64Carrier.value` pass. `NMX_SemanticF03a`, F02, F01, F00 now fold every
+occurrence back to index0. Canonical reference algebra
+`NMX_CanonicalBodyFactor.factor` / `NMX_CanonicalCountFactor.seven` passes.
+`NMX_SevenSourceFold.fold` joins the seven-account observation interpreter to
+the exact RSL reference, with the full raw217/234 variants at SAME inputs.
+This interpretation definition still needs its native/std association;
+REMAINING lists every precise gap. No candidate, no own-input restriction,
+no trust change, no security claim.
+
+Final evidence selection contains204 own current accepted source modules and
+410 newly printed theorem roots. The original31 raw-audited roots are kept;
+only the410 new roots are partitioned into disjoint raw ax2 audit batches.
+The coherent combined import is checked before the raw audits, then retention
+rehashes the selected closure. Own runner reservation now reserves only the
+outstanding final obligations: two slots until the current combined-import
+hash is accepted, then one retention slot. The total290 (old40 + renewed250),
+all launch caps and timeout/admission policies are unchanged.
