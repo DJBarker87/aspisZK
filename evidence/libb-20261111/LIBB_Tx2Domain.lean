@@ -15,14 +15,14 @@ theorem native (env : RSL.Env) (publicBytes proof checkpoint : Slice U8) :
  NMN_064.Domain (⟨LIBB_PartitionEnv.digest env,publicBytes,proof,checkpoint,()⟩ : NLW_Full064.Args Unit) := by
  constructor
  · rintro ⟨hp,hc,hu,hr⟩
-   exact ⟨by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using hp,
-    by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using hc,
-    by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using hu,
+   exact ⟨by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using hp,
+    by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using hc,
+    by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using hu,
     (LIB_Root0.exact checkpoint proof).mp hr⟩
  · intro h
-   exact ⟨by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using h.proofExtent,
-    by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using h.checkpointExtent,
-    by simpa only [LIB_Carriers.bytes,NNC_ByteCarriers.host,List.length_map] using h.publicBound,
+   exact ⟨by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using h.proofExtent,
+    by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using h.checkpointExtent,
+    by simpa only [LIB_Carriers.bytes,NMS_R2N_RSLScalars.bytes,List.length_map] using h.publicBound,
     (LIB_Root0.exact checkpoint proof).mpr h.root0⟩
 #print axioms native
 end LIBB_Tx2Domain
