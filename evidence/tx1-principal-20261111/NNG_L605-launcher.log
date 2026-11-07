@@ -1,0 +1,64 @@
+{"attempt": "NNG_L605", "exit_status": 1, "wall_seconds": 20.75328434817493, "peak_rss_kib": "6747592", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ReadyView087.observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNG_ReadyView087.view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_ReadyView087.lean:36:3: error: Tactic `subst` failed: did not find equation for eliminating 'out'
+
+case Ok
+a : Args
+obs : RSL.Observer
+env : RSL.Env
+v : verifier.View
+domain : RSL.TX1_087.Domain LIB_Instances.VL a obs
+size : (↑v.semantic).length ≤ 57607
+out : r1_semantic.Verified Unit
+outv : verifier.View
+returned :
+  (do
+      let r ←
+        r1_semantic.verify_observed (fun {H} => (NNG_PrepareEmission087.calls env).c5)
+            (NNG_PrepareEmission087.calls env).c6 (fun {H} => (NNG_PrepareEmission087.calls env).c7)
+            (NNG_PrepareEmission087.calls env).c8 (fun {H} => (NNG_PrepareEmission087.calls env).c9)
+            (NNG_PrepareInput087.input a obs env).diges
+...
+id not find equation for eliminating 'outv'
+
+case Ok
+a : Args
+obs : RSL.Observer
+env : RSL.Env
+semantic y1 compact before : Slice U8
+domain : RSL.TX1_087.Domain LIB_Instances.VL a obs
+semSize : (↑semantic).length = 13831
+srcSize : (↑compact).length = 464
+dstSize : (↑before).length = 928
+checked : NFU_Retarget.compact.check_values compact = ok (core.result.Result.Ok ())
+sameY1 : y1 = LIBC_ExpandValuesModel.output compact before
+out : r1_semantic.Verified Unit
+outv : verifier.View
+returned :
+  (do
+      let r ← (NNG_PrepareEmission087.calls env).c2 (NNG_PrepareInput087.input a obs env).bytes semantic y1
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok v =>
+          NNG_FrontValue087.observed (NNG_PrepareEmission087.calls env) (NNG_PrepareInput087.input a obs env) v) =
+    ok (core.result.Result.Ok (out, outv))
+v : verifier.View
+called :
+  (NNG_PrepareEmission087.calls env).c2 (NNG_PrepareInput087.input a obs env).bytes semantic y1 =
+    ok (core.result.Result.Ok v)
+tail :
+  (match core.result.Result.Ok v with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok v =>
+      NNG_FrontValue087.observed (NNG_PrepareEmission087.calls env) (NNG_PrepareInput087.input a obs env) v) =
+    ok (core.result.Result.Ok (out, outv))
+proofSize : (↑(NNG_PrepareInput087.input a obs env).bytes).length = 57607
+bound : 10055 ≤ (↑(NNG_PrepareInput087.input a obs env).bytes).length
+borrowed : v.semantic = semantic ∧ v.y1 = y1
+ready :
+  v = outv ∧
+    NNG_VerifiedDomain136.Canonical (NNG_Output137.verified out) ∧
+      LIBC_PreparedDomain.Semantic (NMP_Transport.toT11 out)
+⊢ Ready out outv
+'AspisR1.NNG_ReadyView087.view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2ff26852620f442bba2335e801062adf.scope; invocation ID: 7f2f3976e4964929a33c5ced140aa9ba

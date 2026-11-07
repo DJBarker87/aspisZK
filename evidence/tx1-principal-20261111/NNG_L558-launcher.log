@@ -1,0 +1,46 @@
+{"attempt": "NNG_L558", "exit_status": 1, "wall_seconds": 22.49302567797713, "peak_rss_kib": "6787732", "swaps": "0", "print_axioms": ["'AspisR1.NNG_SourceSplit087.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_SourceSplit087.lean:26:122: error: unsolved goals
+a : Args
+obs : RSL.Observer
+env : RSL.Env
+logical : alloc.vec.Vec U8
+domain : RSL.TX1_087.Domain LIB_Instances.VL a obs
+size : (↑logical).length = 14759
+left right : Slice U8
+back : Slice U8 × Slice U8 → Slice U8
+split : core.slice.Slice.split_at_mut logical.deref 13831#usize = ok ((left, right), back)
+leftVal : ↑left = List.take ↑13831#usize ↑logical.deref
+rightVal : ↑right = List.drop ↑13831#usize ↑logical.deref
+update : ∀ (a b : Slice U8), (↑a).length = (↑left).length → (↑b).length = (↑right).length → ↑(back (a, b)) = ↑a ++ ↑b
+leftSize : (↑left).length = 13831
+rightSize : (↑right).length = 928
+⊢ List.take (↑13831#usize) (
+...
+ght), back)
+leftVal : ↑left = List.take ↑13831#usize ↑logical.deref
+rightVal : ↑right = List.drop ↑13831#usize ↑logical.deref
+update : ∀ (a b : Slice U8), (↑a).length = (↑left).length → (↑b).length = (↑right).length → ↑(back (a, b)) = ↑a ++ ↑b
+leftSize : (↑left).length = 13831
+rightSize : (↑right).length = 928
+leftBytes : LIB_Carriers.bytes left = List.take RSL.LOGICAL_SEMANTIC (LIB_Carriers.bytes logical.deref)
+rightBytes : LIB_Carriers.bytes right = List.drop RSL.LOGICAL_SEMANTIC (LIB_Carriers.bytes logical.deref)
+reconstruct :
+  ∀ (sem after : Slice U8),
+    (↑sem).length = 13831 → (↑after).length = 928 → ↑(logical.deref_mut.2 (back (sem, after))) = ↑sem ++ ↑after
+⊢ NNG_Canonical087.semantic LIB_Instances.VL a (LIB_Carriers.bytes left) (LIB_Carriers.bytes right) env
+    (observation (NNG_FrontProjection087.port a env) (NNG_Events087.events env)
+      (match logical.deref_mut with
+      | (bytes, vecBack) => do
+        let __x ← invoke "std/split_at_mut" (bytes, 13831#usize) (core.slice.Slice.split_at_mut bytes 13831#usize)
+        match __x with
+          | ((semantic, y1), back) =>
+            NNG_Front087.semantic (NNG_PrepareEmission087.calls env) (NNG_PrepareInput087.input a obs env) semantic y1
+              back vecBack))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    NNG_Canonical087.semantic LIB_Instances.VL a (LIB_Carriers.bytes left) (LIB_Carriers.bytes right) env
+'AspisR1.NNG_SourceSplit087.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfe5102c70af345eebf5e2ab15389ce91.scope; invocation ID: 6a612ab8520642f68984b7a6af4f88f8

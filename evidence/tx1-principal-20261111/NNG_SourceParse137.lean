@@ -35,6 +35,7 @@ theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
     obtain ⟨p,parsed,same⟩ := NNG_Reached137.parse_eval a domain raw native
     subst raw
     simp only [NNG_Parse137.decode,parsed]
+    dsimp only [k]
     unfold NNG_Tree137.mark0
     change (_ : RSL.Spec (Except LIB_VLib.library.WErr (RSL.Verified LIB_VLib.library))) env (observation _ _ (NMT_CallTree.bind (invoke "TX1:130/mark0" ((input a obs env).observer,0#u8) (.ok ())) (fun _=>_)))
     rw [NNG_Head137.mark _ env _ _ _ (NNG_Events137.silent env _ _ _ (by decide) (by decide) (by decide))]
