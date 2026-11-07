@@ -8,6 +8,10 @@ nmn_path=B.parent/'codex-cx-tx2-entry5-20261110/NMN_CLOSURE_PINS.json.xz'
 nmn=json.loads(lzma.decompress(nmn_path.read_bytes()))
 predecessors=[dict(path=str(B/'NMX_PREDECESSOR_PINS.json.xz'),sha256=sha(B/'NMX_PREDECESSOR_PINS.json.xz')),dict(path=str(nmn_path),sha256=sha(nmn_path))]
 old['selected_objects'] += (nmn if isinstance(nmn,list) else nmn['selected_objects'])
+canonical=B/'NMX_NMS_CANONICAL_SEED.json'
+if canonical.is_file():
+ for row in json.loads(canonical.read_text()):
+  old['selected_objects'].append(dict(module=Path(row['copy']).name.split('.')[0],path=row['copy'],sha256=row['sha256'],bytes=row['bytes']))
 unique={}
 for row in old['selected_objects']:
  key=(row['module'],''.join(Path(row['path']).suffixes))
