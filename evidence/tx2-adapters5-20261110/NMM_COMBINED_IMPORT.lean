@@ -4,6 +4,11 @@ import NMM_LaneReplies
 import NMM_RegistryTranscription
 import NMM_Ownership233
 import NMM_AccountsTranscription
+import NMM_PdaProjection
+import NMM_OutcomeCases
+import NMM_LaneScalarLoop
+import NMM_LaneScalarSource
+import NMM_LaneAcceptance
 
 #print NMM_LaneTranscription.adopted_value
 #print axioms NMM_LaneTranscription.adopted_value
@@ -35,5 +40,33 @@ import NMM_AccountsTranscription
 #print axioms NMM_Ownership233.cleanup_after_snapshot
 #print NMM_AccountsTranscription.adopted
 #print axioms NMM_AccountsTranscription.adopted
+#print NMM_PdaProjection.bounded_ext
+#print axioms NMM_PdaProjection.bounded_ext
+#print NMM_PdaProjection.complete
+#print axioms NMM_PdaProjection.complete
+#print NMM_OutcomeCases.complete
+#print axioms NMM_OutcomeCases.complete
+#print NMM_LaneScalarLoop.one_projection
+#print axioms NMM_LaneScalarLoop.one_projection
+#print NMM_LaneScalarLoop.loop_projection
+#print axioms NMM_LaneScalarLoop.loop_projection
+#print NMM_LaneScalarSource.make_projection
+#print axioms NMM_LaneScalarSource.make_projection
+#print NMM_LaneScalarSource.completion_projection
+#print axioms NMM_LaneScalarSource.completion_projection
+#print NMM_LaneScalarSource.body_projection
+#print axioms NMM_LaneScalarSource.body_projection
+#print NMM_LaneScalarSource.canonical
+#print axioms NMM_LaneScalarSource.canonical
+#print NMM_LaneScalarSource.windows_complete
+#print axioms NMM_LaneScalarSource.windows_complete
+#print NMM_LaneScalarSource.results_complete
+#print axioms NMM_LaneScalarSource.results_complete
+#print NMM_LaneAcceptance.accepted
+#print axioms NMM_LaneAcceptance.accepted
+#print NMM_LaneAcceptance.writeAll_frame
+#print axioms NMM_LaneAcceptance.writeAll_frame
+#print NMM_LaneAcceptance.writeAll_selected
+#print axioms NMM_LaneAcceptance.writeAll_selected
 #print AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed

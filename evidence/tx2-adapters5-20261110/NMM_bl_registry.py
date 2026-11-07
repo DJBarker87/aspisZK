@@ -28,7 +28,7 @@ ANN='''#[kani::proof] #[kani::unwind(35)]
 #[kani::stub(super::OwnedAccount::data,NMM_data_cut)]
 '''
 def attempt(a,version,mode):
- version=int(version);R,T=(128,192) if version==1 else (256,320)
+ borrowed=str(version).endswith("borrow");version=int(str(version).removesuffix("borrow"));R,T=(128,192) if version==1 else (256,320)
  ref=(E/'NMM_FROZEN_234.rs').read_text().replace('fn authenticate_invariant_release_registry(','fn NMM_reference(',1)
  for account in ['registry_account','entry_account']:ref=ref.replace(account+'.data()', 'NMM_replay_data('+account+')')
  text=common()+HELP+ref+ANN+'''fn stage(){
@@ -43,6 +43,15 @@ def attempt(a,version,mode):
  unsafe {assert!((*reg.record.get()).is_none()&&(*ent.record.get()).is_none(),"no unmatched data call");}
 }
 '''.replace('RS',str(R)).replace('ES',str(T)).replace('V2','true' if version==2 else 'false')
+ if borrowed:
+  text=text.replace('Option<(*const OwnedAccount,u32)>','Option<(*const OwnedAccount,ProgramError)>')
+  text=text.replace('let word:u32=kani::any();let log=NMM_cell(a);','let word=if kani::any(){ProgramError::AccountBorrowFailed}else{ProgramError::Custom(kani::any())};let log=NMM_cell(a);')
+  text=text.replace('a as *const OwnedAccount,word)))','a as *const OwnedAccount,word.clone())))')
+  text=text.replace('Err(ProgramError::Custom(word))','Err(word)')
+  text=text.replace('bytes:Ok(bytes)},record','bytes:Err(ProgramError::AccountBorrowFailed)},record')
+  text=text.replace('let before=reg.account.bytes.as_ref().unwrap()[observer];','let before=reg.account.bytes.clone();')
+  text=text.replace('reg.account.bytes.as_ref().unwrap()[observer]==before','reg.account.bytes==before')
+  if mode=='reply':text=text.replace('Err(word)},None','Err(ProgramError::InvalidArgument)},None')
  if mode=='reply':text=text.replace('Err(ProgramError::Custom(word))},None','Err(ProgramError::Custom(word^1))},None')
  if mode=='argument':text=text.replace('&master,&reg.account,&ent.account,slot);','&master,&ent.account,&reg.account,slot);',1)
  if mode=='footprint':text=text.replace('log.get().write(Some((a as *const OwnedAccount,word)));','log.get().write(None);')

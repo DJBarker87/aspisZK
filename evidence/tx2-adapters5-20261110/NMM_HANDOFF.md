@@ -4,13 +4,13 @@ Target not yet established. No candidate or CLOSED row is claimed.
 
 Branch: codex/cx-tx2-adapters5-20261107. Scope: TX2:217 and TX2:234, then TX2:233 using gated candidate laws. Baseline ledger24: 581 CLOSED / 0 QUALIFIED / 18 OPEN.
 
-Budgets: 80 Kani, 60 Lean, 0 extraction. No invocation yet. Only NMM-prefixed modules and this evidence directory may change. No shipped source change, ELF rebuild, key action, or push is authorized by this handoff.
+Budgets: 80 Kani, 60 Lean, 0 extraction. Current attempts and admission waits are in NMM_ATTEMPTS.jsonl. Only NMM-prefixed modules and this evidence directory may change. No shipped source change, ELF rebuild, key action, or push is authorized by this handoff.
 
-Method: ruling (bj), full native parent outcomes and exact-signature CLOSED spec cuts with three controls, complete owned Box and cleanup state; ReviewedTranscription and model composition. NLM 233/242 drafts are weaker and cannot serve as complete packets.
+Method: ruling (bl) supersedes (bj)(2)(c): arbitrary typed callee replies and full mutable footprints, arguments and replies recorded via existing arguments into local records, native outcome versus transcription, CLOSED callee laws composed only in Lean. Allocator internals and pure cleanup are outside obligations; stopped outcomes retain only ordered event prefixes. NLM 233/242 drafts are weaker and cannot serve as complete packets.
 
 Host workspace: /home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110. Seed order: ledger24 NLX exports, NLK export, NMD export, by copying with hashes. One capped scope at a time; admission requires exit 0 and allowed true, disk >=40 GB and fewer than two Stream A scopes. Caps: 6G/8G/swap0/tasks64; Lean -M7000.
 
-Next: inspect exact baseline clauses, source and predecessor interfaces; validate host availability and seed provenance before any compile.
+Current state: no candidate roots. See NMM_REMAINING.md for member-level obligations and NMM_FOLD.md for gated support. K001 was recovered read-only without a receipt, charged, and never resubmitted. All timeout shapes are retired.
 
 ## Seed and admission stage
 

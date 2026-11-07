@@ -47,6 +47,8 @@ ANN='''#[kani::proof] #[kani::unwind(35)]
 #[kani::stub(aspis_statement::atomic_statement::decode_digest_canonical,NMM_digest_cut)]
 '''
 def attempt(a,branch,mode,solver=None):
+ witness=mode.endswith("_witness")
+ if witness:mode=mode.removesuffix("_witness")
  direct=branch.startswith("direct_");branch=branch.removeprefix("direct_")
  outcome="all"
  for label in ["err","ok"]:
@@ -68,7 +70,7 @@ def attempt(a,branch,mode,solver=None):
 }
 '''
  domains={'whole':'true','header':'input.bytes[..4]!=POOL_V1_PAIR_FOREST_LANE_MAGIC','body':'input.bytes[..4]==POOL_V1_PAIR_FOREST_LANE_MAGIC'}
- if branch=='success':
+ if branch in ['success','success_meta','success_root','success_frontier']:
   domains[branch]='true'
   head=(E/'NMM_FROZEN_217.rs').read_text().split('    let root =',1)[0]
   head=head[head.index('{')+1:]
@@ -96,6 +98,19 @@ def attempt(a,branch,mode,solver=None):
 }
 """
   text=text.replace('#[kani::proof] #[kani::unwind(35)]',prefix+'#[kani::proof] #[kani::unwind(35)]')
+ if branch in ['success_meta','success_root','success_frontier']:
+  lines=text.splitlines(True);keep=[]
+  for line in lines:
+   if branch!='success_meta' and 'success metadata fields equal transcription' in line:continue
+   if branch=='success_meta' and any(x in line for x in ['let root=unsafe','success uses Ok replies','let rootptr=','success exact digest argument','complete payload word','success establishes source frontier guard','success establishes source terminal root guard']):continue
+   if branch=='success_root':
+    line=line.replace('&&value.tree.frontier[level][word].0==frontier','')
+    if 'success establishes source frontier guard' in line:continue
+   if branch=='success_frontier':
+    line=line.replace('value.tree.root[word].0==root&&','')
+    if 'success establishes source terminal root guard' in line:continue
+   keep.append(line)
+  text=''.join(keep)
  if branch=='coverage':
   domains[branch]='true'
   text=text[:text.rfind('fn stage(){')]+"""fn stage(){
@@ -186,8 +201,11 @@ fn NMM_reference(log:&NMM_Input,selected:usize,word:usize,byte:usize,bytes:&[u8]
   text=text.replace('(*args).get().write(*bytes);','(*args).get().cast::<*const u8>().write(bytes.as_ptr());')
   text=text.replace('for j in 0..32 {assert!((*log.args.get())[k+j]==bytes[j],"exact recorded callee argument");}','let ptr=log.args.get().cast::<u8>().add(k).cast::<*const u8>().read();assert!(ptr==bytes.as_ptr(),"exact recorded callee argument pointer");')
 
- if branch=='success':
-  if mode=='reply':text=text.replace('let root=unsafe{(*input.replies.get())[24+word]};','let root=unsafe{(*input.replies.get())[24+word]}^1;')
+ if branch in ['success','success_meta','success_root','success_frontier']:
+  if mode=='reply':
+   if branch=='success_meta':text=text.replace('value.bump==h.bump','value.bump==(h.bump^1)')
+   elif branch=='success_frontier':text=text.replace('let frontier=unsafe{(*input.replies.get())[offset/4+word]};','let frontier=unsafe{(*input.replies.get())[offset/4+word]}^1;')
+   else:text=text.replace('let root=unsafe{(*input.replies.get())[24+word]};','let root=unsafe{(*input.replies.get())[24+word]}^1;')
   if mode=='argument':text=text.replace('let native=decode_lane_from_pool_release(&input.bytes);','let other=NMM_Input{bytes:input.bytes,args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};let native=decode_lane_from_pool_release(&other.bytes);')
   if mode=='footprint':text=text.replace('(*reply).get().write(raw);','for j in 0..7 {(*(*reply).get())[j]=raw[j];}')
   if mode=='copy':text=text.replace('let native=decode_lane_from_pool_release(&input.bytes);','let native=decode_lane_from_pool_release(&input.bytes);let src:[u32;8]=kani::any();let mut dst=[0u32;8];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),8)};assert!(dst!=src,"copy negative");')
@@ -197,27 +215,43 @@ fn NMM_reference(log:&NMM_Input,selected:usize,word:usize,byte:usize,bytes:&[u8]
    text=text.replace('let native=decode_lane_from_pool_release(&input.bytes);','let other=NMM_Input{bytes:input.bytes,args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};let native=decode_lane_from_pool_release(&other.bytes);')
   if mode=='footprint':text=text.replace('(*flag).get().write(tag+1);','(*flag).get().write(0);')
   if mode=='copy':text=text.replace('let native=decode_lane_from_pool_release(&input.bytes);','let native=decode_lane_from_pool_release(&input.bytes);let src:[u32;8]=kani::any();let mut dst=[0u32;8];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),8)};assert!(dst!=src,"copy negative");')
+ if branch=='success_meta' and mode in ['argument','footprint']:
+  text=text.replace('let input=NMM_Input','let mut input=NMM_Input')
+  if mode=='argument':
+   # Override the context-swap mutant: metadata is value-only and deliberately
+   # independent of the callee log. Mutate the actually observed bump instead.
+   start='let other=NMM_Input{bytes:input.bytes,args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};let native=decode_lane_from_pool_release(&other.bytes);'
+   text=text.replace(start,'input.bytes[72]^=1;let native=decode_lane_from_pool_release(&input.bytes);input.bytes[72]^=1;')
+  else:text=text.replace('assert!(input.bytes[observer]==before,','input.bytes[observer]^=1;assert!(input.bytes[observer]==before,')
  if mode=='reply' and (branch=='allok' or outcome=='ok' or child_ok):
   text=text.replace('raw[j]=(*log.replies.get())[k/4+j]','raw[j]=if j==0 {0}else{(*log.replies.get())[k/4+j]}')
- if mode=='reply' and branch not in ['success','allok'] and outcome!='ok' and not child_ok:
+ if mode=='reply' and branch not in ['success','success_meta','success_root','success_frontier','allok'] and outcome!='ok' and not child_ok:
   value='PoolV1PairForestLaneStateV1{bump:0,master:[0;32],lane_id:0,tree:IncrementalMerkleTreeV1{next_leaf_index:0,root:[M31::ZERO;8],frontier:[[M31::ZERO;8];20]}}'
   if branch!='observed':value='Box::new('+value+')'
   text=text.replace('let reference=NMM_reference(&input,&input.bytes);','let ignored_error=unsafe{(*input.flags.get())[96]>1 && (*input.flags.get())[96]<16};let reference=NMM_reference(&input,&input.bytes);let reference=if ignored_error {Ok('+value+')}else{reference};')
- if mode=='argument' and branch not in ['coverage','success']:
+ if mode=='argument' and branch not in ['coverage','success','success_meta','success_root','success_frontier']:
   if outcome=='ok':
    text=text.replace('let input=NMM_Input','let mut input=NMM_Input')
    text=text.replace('let native=decode_lane_from_pool_release(&input.bytes);','input.bytes[72]^=1;let native=decode_lane_from_pool_release(&input.bytes);input.bytes[72]^=1;')
   else:text=text.replace('decode_lane_from_pool_release(&input.bytes)','decode_lane_from_pool_release(&input.bytes[1..])')
- if mode=='footprint' and branch not in ['coverage','success']:
+ if mode=='footprint' and branch not in ['coverage','success','success_meta','success_root','success_frontier']:
   if pointer:
    if outcome=='err':text=text.replace('(*args).get().cast::<*const u8>().write(bytes.as_ptr());','(*args).get().cast::<*const u8>().write(core::ptr::null());')
    else:text=text.replace('(*reply).get().write(raw);','for j in 0..7 {(*(*reply).get())[j]=raw[j];}')
   else:text=text.replace('(*args).get().write(*bytes);','for j in 0..31 {(*(*args).get())[j]=bytes[j];}')
  if mode=='result':text=text.replace('fn NMM_same(a:', 'fn NMM_same(a:').replace('(Err(x),Err(y))=>x==y','(Err(x),Err(y))=>x!=y')
- if mode=='copy' and branch not in ['coverage','success']:
+ if mode=='copy' and branch not in ['coverage','success','success_meta','success_root','success_frontier']:
   old='assert!(NMM_same(&native,&reference'+(',level,word,observer%32' if scalar else ',level' if branch=='observed' else '')+'),'
   assert old in text
   text=text.replace(old,'let src:[u32;8]=kani::any();let mut dst=[0u32;8];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),8)};assert!(dst!=src,')
+ if witness:
+  # A reply-branch split in the cut itself permits CBMC to remove the suffix;
+  # a post-call assume did not, and K046 is permanently retired.
+  words='['+','.join('M31(raw['+str(i)+'])' for i in range(8))+']'
+  text=text.replace('kani::assume(tag<8);','kani::assume(tag>0&&tag<8);')
+  text=text.replace('if tag==0 {Ok('+words+')}else{Err(NMM_error(tag))}','Err(NMM_error(tag))')
+  text=text.replace('if tag==1 {Ok('+words+')}else{Err(NMM_error(tag-1))}','Err(NMM_error(tag-1))')
+  text=text.replace('let reference=NMM_reference(&input,&input.bytes);','kani::assume(unsafe{(*input.flags.get())[96]>1&&(*input.flags.get())[96]<9});let reference=NMM_reference(&input,&input.bytes);')
  (E/(a+'.patch')).write_text('--- /dev/null\n+++ b/NMM_bl_lane.rs\n@@ -0,0 +1,'+str(len(text.splitlines()))+' @@\n'+''.join('+'+l for l in text.splitlines(True)))
  return submit(a,'r1_pool_adapter::NMM_bl_lane::stage',P,'NMM_bl_lane',text,mode,solver=solver)
 if __name__=='__main__':

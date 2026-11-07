@@ -1,0 +1,29 @@
+{"attempt": "NMM_L020", "exit_status": 0, "wall_seconds": 22.24594087502919, "peak_rss_kib": "6346264", "swaps": "0", "print_axioms": ["'NMM_LaneAcceptance.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneAcceptance.writeAll_frame' depends on axioms: [propext]", "'NMM_LaneAcceptance.writeAll_selected' depends on axioms: [propext]"]}
+theorem NMM_LaneAcceptance.accepted : ∀ {F : Type} (empty : Fin 20 → Node) (occupied : Fin 20 → Bool)
+  (raw : Fin 20 → core.result.Result Node F) (nodes : Fin 20 → Node) (levels : List (Fin 20)) (before : Frontier),
+  (∀ level ∈ levels, raw level = core.result.Result.Ok (nodes level)) →
+    (∀ level ∈ levels, occupied level = true ∨ nodes level = empty level) →
+      NKF_LaneTrace.run empty occupied raw levels before =
+        (core.result.Result.Ok (), writeAll nodes levels before, levels) :=
+⋯
+'NMM_LaneAcceptance.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneAcceptance.writeAll_frame : ∀ (nodes : Fin 20 → Node) (levels : List (Fin 20)) (before : Fron
+...
+theorem NMM_LaneAcceptance.accepted : ∀ {F : Type} (empty : Fin 20 → Node) (occupied : Fin 20 → Bool)
+  (raw : Fin 20 → core.result.Result Node F) (nodes : Fin 20 → Node) (levels : List (Fin 20)) (before : Frontier),
+  (∀ level ∈ levels, raw level = core.result.Result.Ok (nodes level)) →
+    (∀ level ∈ levels, occupied level = true ∨ nodes level = empty level) →
+      NKF_LaneTrace.run empty occupied raw levels before =
+        (core.result.Result.Ok (), writeAll nodes levels before, levels) :=
+⋯
+'NMM_LaneAcceptance.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneAcceptance.writeAll_frame : ∀ (nodes : Fin 20 → Node) (levels : List (Fin 20)) (before : Frontier),
+  ∀ selected ∉ levels, writeAll nodes levels before selected = before selected :=
+⋯
+'NMM_LaneAcceptance.writeAll_frame' depends on axioms: [propext]
+theorem NMM_LaneAcceptance.writeAll_selected : ∀ (nodes : Fin 20 → Node) (levels : List (Fin 20)) (before : Frontier)
+  (selected : Fin 20), levels.Nodup → selected ∈ levels → writeAll nodes levels before selected = nodes selected :=
+⋯
+'NMM_LaneAcceptance.writeAll_selected' depends on axioms: [propext]
+
+Running as unit: run-r8f036d44423c4849af3312864dd94a41.scope; invocation ID: 9e48b6c52dc54f9b883aaca57ac8829c
