@@ -1,0 +1,43 @@
+{"attempt": "NMP_L029", "exit_status": 0, "wall_seconds": 23.33137097908184, "peak_rss_kib": "6345368", "swaps": "0", "print_axioms": ["'AspisR1.NMP_Reached137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMP_Reached137.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_Reached137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Reached137.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Reached137.fold : ∀ {H : Type} (a b : Cuts H), Agreement a b → run (code a) = run (code b) :=
+fun {H} a b h =>
+  id
+    (id
+      (id
+        (NMP_ReachedAlgebra.bind a.parse b.parse
+          (fun p =>
+            match p with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok p => do
+              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript, begin := a.begin,
+                    mark1 := Code.done 
+...
+parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark0
+                        let t ←
+                          { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                  begin := a.begin, mark1 := Code.done (), finish := a.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                        begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                          begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                      p after ch)))
+                (Eq.symm h) hp)
+            (Eq.refl p))))
+
+Running as unit: run-r3b5ed953b0af4c8d9f66c7afcf4aadc8.scope; invocation ID: 3009d2c5235e44a9911d875e7c80b7c6

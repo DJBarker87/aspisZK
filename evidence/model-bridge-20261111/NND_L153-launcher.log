@@ -1,0 +1,56 @@
+{"attempt": "NND_L153", "exit_status": 1, "wall_seconds": 3.1326401089318097, "peak_rss_kib": "6575876", "swaps": "0", "print_axioms": ["'NND_FormatControl.source' depends on axioms: [sorryAx]", "'NND_FormatControl.transport' does not depend on any axioms"]}
+NND_generated/NND_FormatControl.lean:35:5: error: Tactic `rfl` failed: The left-hand side
+  do
+    let mapped ← AspisR1.Port4C_GeometryStd.mapError inst (core.result.Result.Err e) op
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch mapped
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => k a
+      | core.ops.control_flow.ControlFlow.Break e =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual B
+          (core.convert.FromSame solana_program_error.ProgramError) e
+is not definitionally equal to the right-hand side
+  thenCall (ok (core.result.Result.Err e)) k
+
+case ok.Err
+A B E O : Type
+inst : core.ops.function.FnOnce O E 
+...
+NND_generated/NND_FormatControl.lean:35:5: error: Tactic `rfl` failed: The left-hand side
+  do
+    let mapped ← AspisR1.Port4C_GeometryStd.mapError inst (core.result.Result.Err e) op
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch mapped
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => k a
+      | core.ops.control_flow.ControlFlow.Break e =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual B
+          (core.convert.FromSame solana_program_error.ProgramError) e
+is not definitionally equal to the right-hand side
+  thenCall (ok (core.result.Result.Err e)) k
+
+case ok.Err
+A B E O : Type
+inst : core.ops.function.FnOnce O E solana_program_error.ProgramError
+op : O
+hc : ∀ (e : E), inst.call_once op e = ok solana_program_error.ProgramError.InvalidAccountData
+k : A → NND_ProgramControl.P B
+e : E
+⊢ (do
+      let mapped ← AspisR1.Port4C_GeometryStd.mapError inst (core.result.Result.Err e) op
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch mapped
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => k a
+        | core.ops.control_flow.ControlFlow.Break e =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual B
+            (core.convert.FromSame solana_program_error.ProgramError) e) =
+    thenCall (ok (core.result.Result.Err e)) k
+NND_generated/NND_FormatControl.lean:34:43: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.map_err,h̵c̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NND_FormatControl.source' depends on axioms: [sorryAx]
+'NND_FormatControl.transport' does not depend on any axioms
+
+Running as unit: run-rf27ac8f1032149d6934376654e558c99.scope; invocation ID: bb7290851f0d4b67b65298422fcfdfe8

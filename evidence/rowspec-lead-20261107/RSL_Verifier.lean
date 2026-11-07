@@ -60,6 +60,13 @@ structure Child (A B : Type) where
 
 def Child.run {A B : Type} (c : Child A B) (a : A) : Spec B := Spec.call c.dom c.law a
 
+/-- Revision 3 (ruling (bq), LIB0_ F1): on its domain the law is a function of
+(argument, Env).  Required at the gate for `filled`, `accNew`, `weightsNew` and
+`claims`, whose only nondeterminism in Revision 2 was the try_reserve outcome,
+now read from `Env.reservation` (`Spec.tryReserve`). -/
+def Child.Functional {A B : Type} (c : Child A B) : Prop :=
+  ∀ a, c.dom a → Spec.Functional (c.law a)
+
 
 theorem Child.run_det {A B : Type} (c : Child A B) (a : A) (env : Env) (x : B)
     (hd : c.dom a) (hl : ∀ o, c.law a env o ↔ o = ⟨.ret x, []⟩) (o : Obs B) :
@@ -152,9 +159,17 @@ structure VLib where
   -- TX1:138 Prefix::parse own clause on its byte argument, if its root has one
   -- (TX1:087 discharges it from the expand_semantic law)
   semanticBytesDom : Bytes → Prop
+  -- Revision 3 (ruling (bq), LIB0_ F2): `compact::check_values(b) = Ok(())` on the
+  -- 464-byte y1 slice, the TX1:179 root's `compact_check` premise (ledger domain
+  -- "LPt compact464 checked"), verbatim.  Frozen prepare never checks it
+  -- (expand_values does no canonicality check, compact.rs:127-136), so it is the
+  -- own-input clause (R4) of TX1:087, recorded as a caller clause of TX1:094 and
+  -- discharged there by canonical_scan (candidate.rs:55, its first statement):
+  -- `TX1_094.R4Discharge`.
+  checkValuesDom : Bytes → Prop
   -- r1_semantic children (TX1:136)
   semanticRounds : Child (Prefix × Transcript) (Except WErr (QM31 × Alpha × Transcript))  -- TX1:134 NJM_InvocationRoots
-  claims : Child Prefix (Except WErr Claims)                                               -- TX1:129 NKA_ClaimsRoot
+  claims : Child Prefix (Except WErr Claims)                                               -- TX1:129 NKA_ClaimsRoot (rev3: heap::uninit reads Env.reservation; Child.Functional)
   origChallenges : Challenges → OrigChallenges        -- struct literal, lines 239-246
   terminalQm31 : Child (Public × Claims × Alpha × OrigChallenges) (Except Unit QM31)     -- TX1:256 NLH_WrapperRoot
   maskValue : Claims → Alpha → QM31                   -- TX1:076 NHU_Mask at claims[0][0..16], [16..27], [27]
@@ -173,7 +188,7 @@ structure VLib where
   publicTranscript : Child (Public × B32) (Except WErr Transcript)                        -- TX1:131 NHG_Lengths
   begin : Child (Prefix × Transcript) (Except WErr (Challenges × Transcript))             -- TX1:150 NGX_BeginDomains
   -- prepare children (TX1:087)
-  filled : Child Nat (Except Unit Bytes)              -- TX1:064 heap::filled (Err = allocation failure value)
+  filled : Child Nat (Except Unit Bytes)              -- TX1:064 heap::filled (Err = allocation failure value; rev3: = Env.reservation reply, Child.Functional)
   expandSemantic : Child (Bytes × Bytes) (Except CodecErr Bytes)   -- TX1:098: (src, dst) -> written dst
   expandValues : Child (Bytes × Bytes) (Except CodecErr Bytes)     -- TX1:099
   wideView : Child (Bytes × Bytes × Bytes) (Except VErr View)      -- TX1:095 NHF_ViewDecoder (proof, semantic, y1)
@@ -182,10 +197,10 @@ structure VLib where
   parseShape : Child Bytes (Except VErr Unit)         -- TX1:086 NJS_Parse
   canonicalScan : Child Bytes (Except VErr Unit)      -- TX1:084 NKL_ScanRoot
   zeroE29 : E29                                        -- [E::ZERO; 29]
-  accNew : Child Unit (Except VErr Acc)               -- TX1:174 Accumulator::new(Variant::S2)
+  accNew : Child Unit (Except VErr Acc)               -- TX1:174 Accumulator::new(Variant::S2) (rev3: heap::filled reads Env.reservation; Child.Functional)
   batchMerkle : Child (Bytes × Prepared × B32 × Nat) (Except VErr Unit)  -- TX1:081 NLN_TX1_081
   geometry : Child (Prepared × Nat × Nat) (Except VErr Geo)            -- TX1:181 for_range(&p.queries, lo, hi)
-  weightsNew : Child Acc (Except VErr Weights)                         -- TX1:176 BatchedWeights::new(&a.weights)
+  weightsNew : Child Acc (Except VErr Weights)                         -- TX1:176 BatchedWeights::new(&a.weights) (rev3: heap::filled reads Env.reservation; Child.Functional)
   queryLoop : Child (Bytes × Prepared × Acc × E29 × Geo × Weights × Nat) (Except VErr (Acc × Weights))  -- TX1:088
   finish : Child (Weights × Acc) Acc                  -- TX1:175 pending.finish(&mut a.weights)
   checkpoint : Child (Prepared × Acc × Bytes × Bytes) Bytes  -- TX1:186 NHS_CheckpointPacket (Vec, abort arm inside)

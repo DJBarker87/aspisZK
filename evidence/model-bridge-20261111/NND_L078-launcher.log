@@ -1,0 +1,45 @@
+{"attempt": "NND_L078", "exit_status": 0, "wall_seconds": 3.284206659067422, "peak_rss_kib": "6268492", "swaps": "0", "print_axioms": "N/A: support"}
+theorem NNC_CommonWeak.root : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 → (↑pub).length ≤ 1880 → RowSpec H d pub proof ck hash :=
+fun H {X} d pub proof ck hash proofLength publicLength =>
+  ⟨fun outcome native =>
+    NLT_CompleteRoot.End.casesOn (motive := fun t => outcome = t → Law H d pub proof ck hash outcome) outcome
+      (fun result records h =>
+        Eq.ndrec (motive := fun outcome =>
+          NLT_CompleteRoot.Native H d pub proof ck hash outcome → Law H d pub proof ck hash outcome)
+          (fun native =>
+            have source := NLT_NativeSource.source H d pub proof ck hash proofLength 
+...
+e.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 → (↑pub).length ≤ 1880 → RowSpec H d pub proof ck hash :=
+fun H {X} d pub proof ck hash proofLength publicLength =>
+  ⟨fun outcome native =>
+    NLT_CompleteRoot.End.casesOn (motive := fun t => outcome = t → Law H d pub proof ck hash outcome) outcome
+      (fun result records h =>
+        Eq.ndrec (motive := fun outcome =>
+          NLT_CompleteRoot.Native H d pub proof ck hash outcome → Law H d pub proof ck hash outcome)
+          (fun native =>
+            have source := NLT_NativeSource.source H d pub proof ck hash proofLength result records native;
+            ⟨source.left,
+              ⟨source.right,
+                ⟨NLT_RecordFrames.parent H d pub proof ck hash proofLength result records native, fun r member =>
+                  ⟨NLT_AllocationInstalled.resume H d hash r,
+                    NLT_NativeFacts.resume_scope H d pub proof ck hash proofLength publicLength result records native r
+                      member⟩⟩⟩⟩)
+          (Eq.symm h) native)
+      (fun records cut h =>
+        Eq.ndrec (motive := fun outcome =>
+          NLT_CompleteRoot.Native H d pub proof ck hash outcome → Law H d pub proof ck hash outcome)
+          (fun native =>
+            ⟨NLT_C04StopParent.source_prefix H d pub proof ck hash proofLength records cut native, fun r member =>
+              ⟨NLT_AllocationInstalled.resume H d hash r,
+                NLT_C04StopFacts.resume_scope H d pub proof ck hash proofLength publicLength records cut native r
+                  member⟩⟩)
+          (Eq.symm h) native)
+      (Eq.refl outcome),
+    fun records bad => NLT_NoInvalid.source H d pub proof ck hash proofLength records bad⟩
+'NNC_CommonWeak.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4fea4b01ccb84d2fbd69db28db970ee8.scope; invocation ID: eda2df733b76412f9b217fea3cf5c5e2

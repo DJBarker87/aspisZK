@@ -1,0 +1,55 @@
+{"attempt": "NND_L206", "exit_status": 1, "wall_seconds": 3.792634226148948, "peak_rss_kib": "6574880", "swaps": "0", "print_axioms": ["'NND_Entry1ReadonlyValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_Entry1ReadonlyValue.lean:21:49: error: unsolved goals
+base : Ops
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+v p : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+r e : r1_pool_adapter.owned.OwnedAccount
+t : U64
+⊢ (if
+        (!decide (e.owner = unkey D.registry) ||
+                { key := key e.key, owner := key e.owner, is_signer := e.is_signer, is_writable := e.is_writable,
+                    executable := e.executable, length := reply (fun n => ↑n) e.length,
+                    bytes := reply bytes e.bytes }.is_signer ||
+              { key := key e.key, owner := key e.owner, i
+...
+e.lean:21:49: error: unsolved goals
+base : Ops
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+v p : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+r e : r1_pool_adapter.owned.OwnedAccount
+t : U64
+⊢ (if
+        (!decide (e.owner = unkey D.registry) ||
+                { key := key e.key, owner := key e.owner, is_signer := e.is_signer, is_writable := e.is_writable,
+                    executable := e.executable, length := reply (fun n => ↑n) e.length,
+                    bytes := reply bytes e.bytes }.is_signer ||
+              { key := key e.key, owner := key e.owner, is_signer := e.is_signer, is_writable := e.is_writable,
+                  executable := e.executable, length := reply (fun n => ↑n) e.length,
+                  bytes := reply bytes e.bytes }.is_writable ||
+            { key := key e.key, owner := key e.owner, is_signer := e.is_signer, is_writable := e.is_writable,
+                executable := e.executable, length := reply (fun n => ↑n) e.length,
+                bytes := reply bytes e.bytes }.executable) =
+          true then
+      Except.error RSL.ProgramError.invalidAccountData
+    else Except.ok ()) =
+    if (!decide (e.owner = unkey (key (unkey D.registry))) || e.is_signer || e.is_writable || e.executable) = true then
+      Except.error RSL.ProgramError.invalidAccountData
+    else Except.ok ()
+NND_generated/NND_Entry1ReadonlyValue.lean:26:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵if_false, ̲Bool.false_eq_true, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NND_Entry1ReadonlyValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f6090f090624db591df8a7157995e48.scope; invocation ID: ef413a1442ac49259c44f0b995cd0021

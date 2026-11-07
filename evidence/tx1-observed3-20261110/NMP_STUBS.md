@@ -1,0 +1,30 @@
+# NMP stub inventory
+
+No field multiplication stub is used. No field product or SHA body is proved in
+Kani. All field values in free child replies are constructed as typed arbitrary
+limbs; WideExact's cfg-only constructor covers all bits of its Rust fields.
+The actual wide_view executes only fixed slicing and 32-byte field decoding.
+
+| Stub | Role and state |
+|---|---|
+| Prefix::parse | free Err or typed Prefix; source-backed-view constructor limitation in CUTMAP; CLOSED parser law composed later |
+| public_transcript | full runtime state32/row8 and any Error; LoggedHash pointer is the local instrumentation channel |
+| begin | any Challenges or Error and every runtime transcript field overwritten; omission control at subsequent finish |
+| verify_finish | arbitrary full owned Verified or Error, with real claims Box; no child law assumed in Rust |
+| heap::filled | fixed14759 fresh Vec and primitive zero initialization; allocator internals reclassified under existing std/allocator by(bl)(3) |
+| expand_semantic / expand_values | independent arbitrary byte for every returning mutable output cell; no canonicality or child relation assumed |
+| verify_observed at prepare | arbitrary full owned Verified or Error; per(bl) independent of137 closure |
+| Prepared::new | arbitrary full Prepared or Error and every g cell overwritten;179's law remains a Lean composition obligation |
+| copy_nonoverlapping | ONLY exact KMX_copy_stubs.patch; pinned SHA in NMP_NATIVE_SEED and source gate; K007 positive/K008 matched failing control |
+
+No stub_verified, proof_for_contract or new function contract is used, so no
+unvalidated contract return shape is admitted. No writable static or
+Option<fn>-dependent assertion is present. Deployed None observer and family
+rename-stability calibration are tracked separately; no rename repairs a verdict.
+Full Rust signature/domain and callee-root inventory is in NMP_CHILDREN.json.
+Kani passes here remain local cut/projection support until all remaining native
+frames, full-type cases and SAME-child laws have been composed and gated.
+
+Auxiliary generator point<const N> (N=13831 or928) is admitted after K070-K085 controls. Returns unit, modifies only complete fixed array, chosen byte tied to recorded arbitrary word. Kani covers the actual point contract, inverse fails, real weak body passes, weak stub does not imply assertion (fails), modifies violation detected, point caller passes with failing corrupt-word control. Lean NMP_ByteHavocLaw.covers proves every equal-length byte post-state is admitted. This is not an encoded child law. Dynamic-slice form K068 hit compiler ICE and is not used. No field multiplication stub is used.
+
+K090: actual prepare branch_3 selected correctly, CBMC status139 before any verification check. Fixed-array contract calibration on standalone stack arrays does NOT admit this heap-subwindow/nested-stub context. Exact cause unisolated. Parent use is withdrawn; new prepare shape assigns a full arbitrary typed byte array at both Ok/Err mutation cuts with exact KMX stubs, not a custom copy stub. No cap/time increase or unchanged replay.

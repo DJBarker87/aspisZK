@@ -1,0 +1,43 @@
+{"attempt": "NMT_L392", "exit_status": 0, "wall_seconds": 13.515279446030036, "peak_rss_kib": "5989948", "swaps": "0", "print_axioms": []}
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U8 Aeneas.Std.U8 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.ne }
+def Aeneas.Std.WP.theta.{u_1} : {α : Type u_1} → Aeneas.Std.Result α → Aeneas.Std.WP.Wp α :=
+fun {α} m =>
+  match m with
+  | Aeneas.Std.Result.ok x => Aeneas.Std.WP.wp_return x
+  | Aeneas.Std.Result.fail e => fun x => False
+  | Aeneas.Std.Result.div => fun x => False
+NGL_DistinctInduction.outer.eq_def: ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array NGL_DistinctInduction.Account N)
+  (x : ℕ) (x_1 : Aeneas.Std.Usize),
+  NGL_DistinctInduction.out
+...
+size) (x : ℕ) (x_1 : Aeneas.Std.Usize),
+  NGL_DistinctInduction.inner a index x x_1 =
+    match x, x_1 with
+    | 0, x => Aeneas.Std.Result.ok none
+    | n.succ, previous =>
+      if NGL_DistinctInduction.keyAt a previous = NGL_DistinctInduction.keyAt a index then
+        Aeneas.Std.Result.ok
+          (some (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument))
+      else NGL_DistinctInduction.inner a index n (previous.wrapping_add 1#usize)
+NGL_DistinctInduction.outer.eq_1: ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array NGL_DistinctInduction.Account N)
+  (x : Aeneas.Std.Usize), NGL_DistinctInduction.outer a 0 x = Aeneas.Std.Result.ok none
+NGL_DistinctInduction.outer.eq_2: ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array NGL_DistinctInduction.Account N)
+  (x : Aeneas.Std.Usize) (n : ℕ),
+  NGL_DistinctInduction.outer a n.succ x = do
+    let pending ← NGL_DistinctInduction.inner a x (↑x) 0#usize
+    match pending with
+      | none => NGL_DistinctInduction.outer a n (x.wrapping_add 1#usize)
+      | some r => Aeneas.Std.Result.ok (some r)
+NGL_DistinctInduction.inner.eq_2: ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array NGL_DistinctInduction.Account N)
+  (index x : Aeneas.Std.Usize) (n : ℕ),
+  NGL_DistinctInduction.inner a index n.succ x =
+    if NGL_DistinctInduction.keyAt a x = NGL_DistinctInduction.keyAt a index then
+      Aeneas.Std.Result.ok
+        (some (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument))
+    else NGL_DistinctInduction.inner a index n (x.wrapping_add 1#usize)
+NGL_DistinctInduction.inner.eq_1: ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array NGL_DistinctInduction.Account N)
+  (index x : Aeneas.Std.Usize), NGL_DistinctInduction.inner a index 0 x = Aeneas.Std.Result.ok none
+
+Running as unit: run-r6dd04c4ef14b481a985cdc29dc152639.scope; invocation ID: dabe621072c941c59ba0974aa10dc7b3

@@ -45,7 +45,7 @@ assert sorted(r['root'] for r in results)==sorted(roots)
 for r in results:assert set(r['walked_axioms'])<=standard,r
 large=[str(p) for p in P.rglob('*') if p.is_file() and p.stat().st_size>20_000_000]
 assert not large,large
-changed=subprocess.check_output(['git','diff','--name-only','3b9e514daec','--'],text=True).splitlines()
+changed=subprocess.check_output(['git','diff','--name-only','cfa73190568','--'],text=True).splitlines()
 assert all(x.startswith('evidence/root0-weak-20261111/') for x in changed),changed
 report=dict(status='PASS',security_target='NOT_ESTABLISHED',scope_count=len(scopes),budget=250,kani=0,extraction=0,
  scope_wall_seconds=sum(r['wall_seconds'] for r in scopes),peak_rss_kib=max(int(r['peak_rss_kib']) for r in scopes),swaps=sum(int(r['swaps']) for r in scopes),
@@ -53,5 +53,5 @@ report=dict(status='PASS',security_target='NOT_ESTABLISHED',scope_count=len(scop
  current_modules=modules,raw_audited_roots=len(results),raw_axioms=sorted(set(a for r in results for a in r['walked_axioms'])),collector_disagreements=[r for r in results if not r['equal']],
  files_over20MB=large,shipped_changes=[],trust_changes=[],actual_tas_instance='OPEN',print_axioms=axioms)
 (P/'NNC_VALIDATION.json').write_text(json.dumps(report,indent=1)+'\n')
-(P/'NNC_AUDIT.json').write_text(json.dumps(dict(status='PASS',scope='56 own roots only',roots=results,collector_disagreements=report['collector_disagreements']),indent=1)+'\n')
+(P/'NNC_AUDIT.json').write_text(json.dumps(dict(status='PASS',scope=str(len(results))+' own roots only',roots=results,collector_disagreements=report['collector_disagreements']),indent=1)+'\n')
 print(json.dumps({k:report[k] for k in ['status','scope_count','raw_audited_roots','peak_rss_kib','swaps','archive_sha_pairs','collector_disagreements']}))

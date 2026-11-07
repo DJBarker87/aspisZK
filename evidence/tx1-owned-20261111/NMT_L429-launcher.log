@@ -1,0 +1,48 @@
+{"attempt": "NMT_L429", "exit_status": 1, "wall_seconds": 14.724261369090527, "peak_rss_kib": "5936384", "swaps": "0", "print_axioms": ["'NMT_R2_CaptureTry.source' depends on axioms: [sorryAx]"]}
+NMT_generated/NMT_R2_CaptureTry.lean:24:30: error: Tactic `rfl` failed: The left-hand side
+  observe g (NMT_R2_ResultTry.bind (Result.ok (core.result.Result.Ok a)) next)
+is not definitionally equal to the right-hand side
+  { exit := { exit := exit✝, events := events✝ }.exit, events := [] ++ { exit := exit✝, events := events✝ }.events }
+
+case mk
+A B C D : Type
+f : A → C
+g : B → D
+next : A → NMT_R2_ResultTry.R B
+m : RS C
+suffix : C → RS D
+env : Env
+a : A
+first : m env (observe f (Result.ok (core.result.Result.Ok a)))
+later :
+  ∀ (a_1 : A),
+    Result.ok (core.result.Result.Ok a) = Result.ok (core.result.Result.Ok a_1) →
+      suffix (f a_1) env (observe g (next a_1))
+exit✝ : Exit (Except Progr
+...
+NMT_generated/NMT_R2_CaptureTry.lean:24:30: error: Tactic `rfl` failed: The left-hand side
+  observe g (NMT_R2_ResultTry.bind (Result.ok (core.result.Result.Ok a)) next)
+is not definitionally equal to the right-hand side
+  { exit := { exit := exit✝, events := events✝ }.exit, events := [] ++ { exit := exit✝, events := events✝ }.events }
+
+case mk
+A B C D : Type
+f : A → C
+g : B → D
+next : A → NMT_R2_ResultTry.R B
+m : RS C
+suffix : C → RS D
+env : Env
+a : A
+first : m env (observe f (Result.ok (core.result.Result.Ok a)))
+later :
+  ∀ (a_1 : A),
+    Result.ok (core.result.Result.Ok a) = Result.ok (core.result.Result.Ok a_1) →
+      suffix (f a_1) env (observe g (next a_1))
+exit✝ : Exit (Except ProgramError D)
+events✝ : List Event
+⊢ observe g (NMT_R2_ResultTry.bind (Result.ok (core.result.Result.Ok a)) next) =
+    { exit := { exit := exit✝, events := events✝ }.exit, events := [] ++ { exit := exit✝, events := events✝ }.events }
+'NMT_R2_CaptureTry.source' depends on axioms: [sorryAx]
+
+Running as unit: run-r979b685592204c02a439381b70c83a64.scope; invocation ID: 96b713b9225844ca98aef94f6ffa44d8

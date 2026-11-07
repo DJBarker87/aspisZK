@@ -1,0 +1,254 @@
+'AspisR1.NMP_Composition137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Composition137.fold : ∀ {H : Type} (a b : Cuts H),
+  ValueAgreement a b → run (code a) = run (code b) :=
+fun {H} a b h =>
+  id
+    (NMP_CutAlgebra.congr_run a.parse b.parse
+      (fun p =>
+        match p with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok p => do
+          a.mark0
+          let t ← a.publicTranscript p
+          match t with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← a.begin p t
+              match __x with
+                | (r, after) =>
+                  match r with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok ch => do
+                    a.mark1
+                    a.finish p after ch)
+      (fun p =>
+        match p with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok p => do
+          b.mark0
+          let t ← b.publicTranscript p
+          match t with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← b.begin p t
+              match __x with
+                | (r, after) =>
+                  match r with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok ch => do
+                    b.mark1
+                    b.finish p after ch)
+      h.parse fun p =>
+      core.result.Result.casesOn (motive := fun t =>
+        p = t →
+          run
+              (match p with
+              | core.result.Result.Err e => pure (core.result.Result.Err e)
+              | core.result.Result.Ok p => do
+                a.mark0
+                let t ← a.publicTranscript p
+                match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← a.begin p t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          a.mark1
+                          a.finish p after ch) =
+            run
+              (match p with
+              | core.result.Result.Err e => pure (core.result.Result.Err e)
+              | core.result.Result.Ok p => do
+                b.mark0
+                let t ← b.publicTranscript p
+                match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← b.begin p t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          b.mark1
+                          b.finish p after ch))
+        p
+        (fun p_1 h_1 =>
+          Eq.symm h_1 ▸
+            NMP_CutAlgebra.congr_run a.mark0 b.mark0
+              (fun __r => do
+                let t ← a.publicTranscript p_1
+                match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← a.begin p_1 t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          a.mark1
+                          a.finish p_1 after ch)
+              (fun __r => do
+                let t ← b.publicTranscript p_1
+                match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← b.begin p_1 t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          b.mark1
+                          b.finish p_1 after ch)
+              h.mark0 fun a_1 =>
+              NMP_CutAlgebra.congr_run (a.publicTranscript p_1) (b.publicTranscript p_1)
+                (fun t =>
+                  match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← a.begin p_1 t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          a.mark1
+                          a.finish p_1 after ch)
+                (fun t =>
+                  match t with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok t => do
+                    let __x ← b.begin p_1 t
+                    match __x with
+                      | (r, after) =>
+                        match r with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok ch => do
+                          b.mark1
+                          b.finish p_1 after ch)
+                (h.publicTranscript p_1) fun t =>
+                core.result.Result.casesOn (motive := fun t_1 =>
+                  t = t_1 →
+                    run
+                        (match t with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok t => do
+                          let __x ← a.begin p_1 t
+                          match __x with
+                            | (r, after) =>
+                              match r with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok ch => do
+                                a.mark1
+                                a.finish p_1 after ch) =
+                      run
+                        (match t with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok t => do
+                          let __x ← b.begin p_1 t
+                          match __x with
+                            | (r, after) =>
+                              match r with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok ch => do
+                                b.mark1
+                                b.finish p_1 after ch))
+                  t
+                  (fun t_1 h_2 =>
+                    Eq.symm h_2 ▸
+                      NMP_CutAlgebra.congr_run (a.begin p_1 t_1) (b.begin p_1 t_1)
+                        (fun __x =>
+                          match __x with
+                          | (r, after) =>
+                            match r with
+                            | core.result.Result.Err e => pure (core.result.Result.Err e)
+                            | core.result.Result.Ok ch => do
+                              a.mark1
+                              a.finish p_1 after ch)
+                        (fun __x =>
+                          match __x with
+                          | (r, after) =>
+                            match r with
+                            | core.result.Result.Err e => pure (core.result.Result.Err e)
+                            | core.result.Result.Ok ch => do
+                              b.mark1
+                              b.finish p_1 after ch)
+                        (h.begin p_1 t_1) fun pair =>
+                        let ⟨r, after⟩ := pair
+                        core.result.Result.casesOn (motive := fun t =>
+                          r = t →
+                            run
+                                (match (r, after) with
+                                | (r, after) =>
+                                  match r with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok ch => do
+                                    a.mark1
+                                    a.finish p_1 after ch) =
+                              run
+                                (match (r, after) with
+                                | (r, after) =>
+                                  match r with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok ch => do
+                                    b.mark1
+                                    b.finish p_1 after ch))
+                          r
+                          (fun c h_3 =>
+                            Eq.symm h_3 ▸
+                              NMP_CutAlgebra.congr_run a.mark1 b.mark1 (fun __r => a.finish p_1 after c)
+                                (fun __r => b.finish p_1 after c) h.mark1 fun a_2 => h.finish p_1 after c)
+                          (fun e h =>
+                            Eq.symm h ▸
+                              Eq.refl
+                                (run
+                                  (match (core.result.Result.Err e, after) with
+                                  | (r, after) =>
+                                    match r with
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                    | core.result.Result.Ok ch => do
+                                      a.mark1
+                                      a.finish p_1 after ch)))
+                          (Eq.refl r))
+                  (fun e h =>
+                    Eq.symm h ▸
+                      Eq.refl
+                        (run
+                          (match core.result.Result.Err e with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ← a.begin p_1 t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  a.mark1
+                                  a.finish p_1 after ch)))
+                  (Eq.refl t))
+        (fun e h =>
+          Eq.symm h ▸
+            Eq.refl
+              (run
+                (match core.result.Result.Err e with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok p => do
+                  a.mark0
+                  let t ← a.publicTranscript p
+                  match t with
+                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                    | core.result.Result.Ok t => do
+                      let __x ← a.begin p t
+                      match __x with
+                        | (r, after) =>
+                          match r with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok ch => do
+                            a.mark1
+                            a.finish p after ch)))
+        (Eq.refl p))

@@ -1,0 +1,36 @@
+{"attempt": "NMM_K029", "exit_status": 1, "wall_seconds": 1.2178689858410507, "peak_rss_kib": "192804", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ed value: `out`
+  --> programs/r1-cost-probe/src/NMM_legacy.rs:94:137
+   |
+91 | ...;let out=match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOw...
+   |         --- move occurs because `out` has type `Result<__Pubkey, PubkeyError>`, which does not implement the `Copy` trait
+92 | ...0;5],seeds:[[0;32];5],program:program.to_bytes(),reply:out};
+   |                                                           --- value moved here
+93 | ...en()<=32,"runtime seed extent domain");r.lens[i]=seeds[i].len();for j in 0..seeds[i].len(){r.seeds[i][j]=seeds[i][j];}}
+94 | ...c.nw.get();assert!(n<2,"legacy PDA prefix bound");(*c.pda.get())[n]=Some(r);*c.nw.get()=n+1;}out
+   |                                                                                                 ^^^ value used here after move
+   |
+   = note: the full name for the type has been written to '/home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110/NMM_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe_program.long-type-3657725109260696819.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+help: consider cloning the value if the performance cost is acceptable
+   |
+92 |  let mut r=NMM_Pda{count:seeds.len(),lens:[0;5],seeds:[[0;32];5],program:program.to_bytes(),reply:out.clone()};
+   |                                                                                                      ++++++++
+
+Some errors have detailed explanations: E0204, E0382.
+For more information about an error, try `rustc --explain E0204`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 2 previous errors; 8 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-rfd32b558fd0e46bab7194f750cd1dfa7.scope; invocation ID: 1d57d54245704e87bb8745c8cd93f094

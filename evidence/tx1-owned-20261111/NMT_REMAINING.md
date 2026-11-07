@@ -1,3 +1,7 @@
+# Revision 2 current remaining
+
+NMT_R2_STAGE2.md supersedes the revision-1 specification blockers below. Canonical rev2 is adopted without an added snapshot/success domain. Complete source observation fold: NMT_R2_ConcreteS1.source_fold. Remaining345: actual parent association, decoder first-Box prefix, total full decoder/encoder transports, and remaining scalar/slice/carrier links.328/094 deferred by345-first order. No actual row candidate yet.
+
 # NMT remaining obligations
 
 Target not established. No CANDIDATE root, complete canonical parameterized

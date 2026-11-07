@@ -1,0 +1,45 @@
+{"attempt": "NMP_L021", "exit_status": 0, "wall_seconds": 14.169374655000865, "peak_rss_kib": "6023620", "swaps": "0", "print_axioms": ["'AspisR1.NMP_CallerCanonical.from_scan' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_CallerCanonical.from_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_CallerCanonical.from_scan : ∀ (proof : Std.Array U8 57607#usize) (events : List NKL_Checks.Check)
+  (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice) (core.result.Result.Ok ()) events (↑proof) after →
+    NMP_Canonical179.Canonical (NMP_Expansion179.compactInput proof.to_slice) :=
+fun proof events after native =>
+  have reply :=
+    Eq.trans (NKL_ScanSequence.exact native).left (NKL_ScanSequence.result (NKL_Checks.checks proof.to_slice));
+  have good :=
+    Bool.casesOn (motive := fun t =>
+      (NKL_Checks.checks proof.to_slice).
+...
+   (Eq.trans from_scan._simp_2
+                (Eq.trans
+                  (congr (congrArg Or (eq_self (NKL_Checks.Check.cv proof.to_slice)))
+                    (Eq.trans from_scan._simp_2
+                      (congrArg
+                        (Or
+                          (NKL_Checks.Check.cv proof.to_slice =
+                            NKL_Checks.Check.ec (NKL_Checks.EC.inactive proof.to_slice)))
+                        (Eq.trans from_scan._simp_2
+                          (congrArg
+                            (Or
+                              (NKL_Checks.Check.cv proof.to_slice =
+                                NKL_Checks.Check.ec (NKL_Checks.EC.round0 proof.to_slice)))
+                            from_scan._simp_2)))))
+                  (true_or
+                    (NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.inactive proof.to_slice) ∨
+                      NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.round0 proof.to_slice) ∨
+                        NKL_Checks.Check.cv proof.to_slice = NKL_Checks.Check.ec (NKL_Checks.EC.round1 proof.to_slice) ∨
+                          NKL_Checks.Check.cv proof.to_slice ∈ [])))))
+            (NKL_Checks.Check.cv proof.to_slice ∈ List.flatMap (NKL_Checks.row proof.to_slice) (List.range 22)))
+          (true_or
+            (NKL_Checks.Check.cv proof.to_slice ∈ List.flatMap (NKL_Checks.row proof.to_slice) (List.range 22)))));
+  have cv := List.all_eq_true.mp all (NKL_Checks.Check.cv proof.to_slice) member;
+  id
+    (fun cv =>
+      have same := Subtype.ext (Eq.refl ↑(NKB_CanonicalPrefix.values proof.to_slice));
+      fun i hi =>
+      List.all_eq_true.mp (Eq.mp (congrArg (fun _a => NKL_CanonicalChildren.compactGood _a = true) same) cv) i
+        (List.mem_range.mpr hi))
+    cv
+
+Running as unit: run-r3b40c4e34c074e21bfe9e281dc99cc2a.scope; invocation ID: 10df6aa62b8a4954bc913a2bd3fb853f

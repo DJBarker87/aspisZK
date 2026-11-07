@@ -1,0 +1,59 @@
+{"attempt": "NMM_L010", "exit_status": 1, "wall_seconds": 12.396092682145536, "peak_rss_kib": "5954340", "swaps": "0", "print_axioms": ["'NMM_PdaProjection.bounded_ext' depends on axioms: [propext, Quot.sound]", "'NMM_PdaProjection.complete' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NMM_generated/NMM_PdaProjection.lean:20:39: error(lean.invalidField): Invalid field notation: Type of
+  s
+is not known; cannot resolve field `length`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `Composition.length`
+  • `CompositionAsSet.length`
+  • `Computation.length`
+  • `Cycle.length`
+  • `FreeAddMonoid.length`
+  • `FreeMonoid.length`
+  • `List.length`
+  • `Module.length`
+  • `NBF_Frame.length`
+  • `NFU_ZeroPort.length`
+  • `NFY_NBN_EncoderBytes.length`
+  • `NHY_SliceRead.length`
+  • `OrderedFinpartition.length`
+  • `RelSeries.length`
+  • `String.length`
+  • `AspisR1.ARX_Cap.length`
+  • `AspisR1.F3J_QueryLog.length`
+  • `AspisR1.F3J_QueryRow.len
+...
+                                 (congrFun'
+                                    (congr (congrArg Window.mk (congrArg (Option.map List.length) ha))
+                                      (Option.bind_congr' ha fun a a_1 => Eq.refl a[j]?))
+                                    a.program[j]?)))
+                              (congrArg Window.seedByte
+                                (congrFun'
+                                  (congr (congrArg Window.mk (congrArg (Option.map List.length) hb))
+                                    (Option.bind_congr' hb fun a a_1 => Eq.refl a[j]?))
+                                  b.program[j]?)))
+                            h))
+                    (Eq.symm h) (Eq.refl b.seeds[i]?))
+                (Eq.refl b.seeds[i]?))
+            (Eq.symm h) (Eq.refl a.seeds[i]?))
+        (Eq.refl a.seeds[i]?);
+  have hp :=
+    bounded_ext a.program b.program 32 sorry sorry fun j hj =>
+      congrArg Window.programByte (windows 0 (Decidable.byContradiction fun a => complete._proof_2 j a) j hj);
+  let ⟨seeds✝, program✝, h✝⟩ := a
+  Eq.ndrec (motive := fun a =>
+    (∀ i < 5, ∀ j < 32, window a i j = window b i j) → a.seeds = b.seeds → a.program = b.program → a = b)
+    (fun windows hs hp =>
+      let ⟨seeds✝¹, program✝¹, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b =>
+        (∀ i < 5, ∀ j < 32, window { seeds := seeds✝, program := program✝ } i j = window b i j) →
+          { seeds := seeds✝, program := program✝ }.seeds = b.seeds →
+            { seeds := seeds✝, program := program✝ }.program = b.program → { seeds := seeds✝, program := program✝ } = b)
+        (fun windows hs hp =>
+          let ⟨⟩ := seeds✝¹
+          hs)
+        (Eq.symm h✝¹) windows hs hp)
+    (Eq.symm h✝) windows hs hp
+'NMM_PdaProjection.complete' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r45bf3d2fd90f475daeb48dafc8d77d17.scope; invocation ID: 3e9e6947f0e34e1391af8fd35255940c

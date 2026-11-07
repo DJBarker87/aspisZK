@@ -1,0 +1,54 @@
+{"attempt": "NND_L021", "exit_status": 1, "wall_seconds": 1.6422539940103889, "peak_rss_kib": "2607224", "swaps": "0", "print_axioms": ["'NND_Carrier.byte_back' does not depend on any axioms", "'NND_Carrier.byte_forth' does not depend on any axioms", "'NND_Carrier.word_back' does not depend on any axioms", "'NND_Carrier.word_forth' does not depend on any axioms", "'NND_Carrier.slot_back' does not depend on any axioms", "'NND_Carrier.slot_forth' does not depend on any axioms", "'NND_Carrier.bytes_length' depends on axioms: [propext, sorryAx]", "'NND_Carrier.key_back' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NND_Carrier.key_forth' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NND_Carrier.error_back' depends on axioms: [propext]", "'NND_Carrier.error_forth' depends on axioms: [propext]", "'NND_Carrier.reply_back' depends on axioms: [propext]"]}
+NND_generated/NND_Carrier.lean:22:21: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NND_generated/NND_Carrier.lean:25:81: error: Type mismatch
+  List.length_map
+has type
+  ∀ (f : ?m.6 → ?m.7), (List.map f ?m.8).length = List.length ?m.8
+but is expected to have type
+  List.length (bytes x) = (↑x).length
+NND_generated/NND_Carrier.lean:29:1: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckI
+...
+_Carrier.lean:22:21: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NND_generated/NND_Carrier.lean:25:81: error: Type mismatch
+  List.length_map
+has type
+  ∀ (f : ?m.6 → ?m.7), (List.map f ?m.8).length = List.length ?m.8
+but is expected to have type
+  List.length (bytes x) = (↑x).length
+NND_generated/NND_Carrier.lean:29:1: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    x
+  has type
+    Std.Array U8 32#usize
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑x
+NND_generated/NND_Carrier.lean:32:10: error: unsolved goals
+case mk
+b : List UInt8
+h : b.length = 32
+⊢ List.map (byte ∘ unbyte) b = b
+'NND_Carrier.byte_back' does not depend on any axioms
+'NND_Carrier.byte_forth' does not depend on any axioms
+'NND_Carrier.word_back' does not depend on any axioms
+'NND_Carrier.word_forth' does not depend on any axioms
+'NND_Carrier.slot_back' does not depend on any axioms
+'NND_Carrier.slot_forth' does not depend on any axioms
+'NND_Carrier.bytes_length' depends on axioms: [propext, sorryAx]
+'NND_Carrier.key_back' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NND_Carrier.key_forth' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NND_Carrier.error_back' depends on axioms: [propext]
+'NND_Carrier.error_forth' depends on axioms: [propext]
+'NND_Carrier.reply_back' depends on axioms: [propext]
+
+Running as unit: run-r46e624eef13542a086c1c47b4dbdcac4.scope; invocation ID: b0939d479c144242a16c6cebb0d8927a

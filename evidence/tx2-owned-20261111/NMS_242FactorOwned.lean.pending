@@ -1,0 +1,23 @@
+import NMS_242Prefix
+import NMS_242TailFactor
+set_option autoImplicit false
+noncomputable section
+namespace NMS_242Prefix
+open Aeneas Aeneas.Std AdapterRw NMS_OwnedPackets NMS_RowSpec242
+variable {Ambient : Type}
+
+theorem factor_owned (ops : Ops) (child : NMS_RowSpec233.Native Ambient)
+ (before : World Ambient) (inputs : List Nat) (program : solana_pubkey.Pubkey)
+ (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (data : Slice U8)
+ (slot : core.result.Result U64 PE) :
+ NMS_Owned242.G ops child before inputs program accounts data slot =
+ owned ops child before inputs program accounts data slot := by
+ unfold owned NMS_242Auth.owned NMS_242First.owned NMS_242Data.owned NMS_242Scan.owned
+ simp only [NMS_242TailFactor.factor]
+ unfold NMS_TryFold.step
+ simp only [NMS_242TailFactor.factor]
+ unfold NMS_242TailFactor.literal NMS_Owned242.G
+ rfl
+
+#print axioms factor_owned
+end NMS_242Prefix

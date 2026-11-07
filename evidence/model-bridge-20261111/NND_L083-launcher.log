@@ -1,0 +1,58 @@
+{"attempt": "NND_L083", "exit_status": 1, "wall_seconds": 2.6440676329657435, "peak_rss_kib": "5792744", "swaps": "0", "print_axioms": ["'NND_Carrier.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NND_Carrier.readonly' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NND_Carrier.readonly_buffer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_AccountLaws.lean:15:20: error: Tactic `rfl` failed: The left-hand side
+  outer (reply fun n => ↑n) (ok (core.result.Result.Ok a✝))
+is not definitionally equal to the right-hand side
+  ok (account a).data_len
+
+case Ok
+ops : Ops
+a : r1_pool_adapter.owned.OwnedAccount
+a✝ : Usize
+⊢ outer (reply fun n => ↑n) (ok (core.result.Result.Ok a✝)) = ok (account a).data_len
+NND_generated/NND_AccountLaws.lean:15:20: error: Tactic `rfl` failed: The left-hand side
+  outer (reply fun n => ↑n) (ok (core.result.Result.Err a✝))
+is not definitionally equal to the right-hand side
+  ok (account a).data_len
+
+case Err
+ops : Ops
+a : r1_pool_adapter.owned.OwnedAccount
+a✝ : solana_program_error.Program
+...
+cept.error RSL.ProgramError.invalidAccountData
+    else Except.ok ())
+
+case isTrue
+a : r1_pool_adapter.owned.OwnedAccount
+h✝ : a.is_signer = true
+⊢ outer (reply id) (ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+    ok
+      (if (a.is_signer || a.is_writable || a.executable) = true then Except.error RSL.ProgramError.invalidAccountData
+      else Except.ok ())
+NND_generated/NND_AccountLaws.lean:30:11: error: Tactic `rfl` failed: The left-hand side
+  outer (reply id)
+    (if a.is_writable = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if a.executable = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+      else ok (core.result.Result.Ok ()))
+is not definitionally equal to the right-hand side
+  ok
+    (if (a.is_signer || a.is_writable || a.executable) = true then Except.error RSL.ProgramError.invalidAccountData
+    else Except.ok ())
+
+case isFalse
+a : r1_pool_adapter.owned.OwnedAccount
+h✝ : ¬a.is_signer = true
+⊢ outer (reply id)
+      (if a.is_writable = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if a.executable = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+        else ok (core.result.Result.Ok ())) =
+    ok
+      (if (a.is_signer || a.is_writable || a.executable) = true then Except.error RSL.ProgramError.invalidAccountData
+      else Except.ok ())
+'NND_Carrier.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NND_Carrier.readonly' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NND_Carrier.readonly_buffer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rce4729af9c8446e1b9da3c91f92912ce.scope; invocation ID: 9a5a90b8e85c4bf9952e413fe10a320d

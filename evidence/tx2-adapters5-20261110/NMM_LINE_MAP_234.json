@@ -1,0 +1,1031 @@
+[
+ {
+  "rust_line": 1,
+  "rust": "fn authenticate_invariant_release_registry(",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 2,
+  "rust": "    verifier_program: &Pubkey,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 3,
+  "rust": "    pool_program: &Pubkey,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 4,
+  "rust": "    master_account: &OwnedAccount,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 5,
+  "rust": "    master: &PoolV1PairForestMasterV1,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 6,
+  "rust": "    registry_account: &OwnedAccount,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 7,
+  "rust": "    entry_account: &OwnedAccount,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 8,
+  "rust": "    current_slot: u64,",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 9,
+  "rust": ") -> ProgramResult {",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 10,
+  "rust": "    // Versioned, owner-authenticated registry images carry the canonical bumps",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 11,
+  "rust": "    // saved by their initializers. Address checks below perform one derivation;",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 12,
+  "rust": "    // they neither search for a bump nor establish canonicality independently.",
+  "phase": "Signature and canonical-bump scope comment",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 13,
+  "rust": "    if pool_program.to_bytes() != pool_program_id()",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 14,
+  "rust": "        || master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY == 0",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 15,
+  "rust": "        || master.verifier_policy.registry_program != registry_program_id()",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 16,
+  "rust": "        || master.verifier_policy.registry_authority != [0u8; 32]",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 17,
+  "rust": "        || master.verifier_policy.policy_binding != AUDIT_POLICY_BINDING",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 18,
+  "rust": "    {",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 19,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 20,
+  "rust": "    }",
+  "phase": "Common pool/policy header guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op39/op45/op13/op46"
+ },
+ {
+  "rust_line": 21,
+  "rust": "    validate_verifier_policy_v1(&master.verifier_policy)",
+  "phase": "Policy law and registry readonly check",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op15/OwnedAccount readonly"
+ },
+ {
+  "rust_line": 22,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "Policy law and registry readonly check",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op15/OwnedAccount readonly"
+ },
+ {
+  "rust_line": 23,
+  "rust": "    let registry_program = Pubkey::new_from_array(registry_program_id());",
+  "phase": "Policy law and registry readonly check",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op15/OwnedAccount readonly"
+ },
+ {
+  "rust_line": 24,
+  "rust": "    require_readonly_account(registry_account, &registry_program)?;",
+  "phase": "Policy law and registry readonly check",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op15/OwnedAccount readonly"
+ },
+ {
+  "rust_line": 25,
+  "rust": "    let immutable_deployment =",
+  "phase": "Exhaustive immutable-deployment branch",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op14/op41"
+ },
+ {
+  "rust_line": 26,
+  "rust": "        master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;",
+  "phase": "Exhaustive immutable-deployment branch",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op14/op41"
+ },
+ {
+  "rust_line": 27,
+  "rust": "    if immutable_deployment {",
+  "phase": "Exhaustive immutable-deployment branch",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op14/op41"
+ },
+ {
+  "rust_line": 28,
+  "rust": "        let loader = bpf_loader_upgradeable::id();",
+  "phase": "Exhaustive immutable-deployment branch",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op14/op41"
+ },
+ {
+  "rust_line": 29,
+  "rust": "        let registry = decode_verifier_registry_v2(registry_account.data()?)",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 30,
+  "rust": "            .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 31,
+  "rust": "        let expected_registry = Pubkey::create_program_address(",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 32,
+  "rust": "            &[",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 33,
+  "rust": "                VERIFIER_REGISTRY_V2_SEED,",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 34,
+  "rust": "                master_account.key().as_ref(),",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 35,
+  "rust": "                &[registry.bump],",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 36,
+  "rust": "            ],",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 37,
+  "rust": "            &registry_program,",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 38,
+  "rust": "        )",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 39,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 40,
+  "rust": "        if registry_account.key() != &expected_registry {",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 41,
+  "rust": "            return Err(ProgramError::InvalidAccountData);",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 42,
+  "rust": "        }",
+  "phase": "V2 registry data/decode, first PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op33/op38"
+ },
+ {
+  "rust_line": 43,
+  "rust": "        let registry_programdata = Pubkey::create_program_address(",
+  "phase": "V2 registry ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second op38"
+ },
+ {
+  "rust_line": 44,
+  "rust": "            &[registry_program.as_ref(), &[registry.programdata_bump]],",
+  "phase": "V2 registry ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second op38"
+ },
+ {
+  "rust_line": 45,
+  "rust": "            &loader,",
+  "phase": "V2 registry ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second op38"
+ },
+ {
+  "rust_line": 46,
+  "rust": "        )",
+  "phase": "V2 registry ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second op38"
+ },
+ {
+  "rust_line": 47,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 registry ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second op38"
+ },
+ {
+  "rust_line": 48,
+  "rust": "        if registry.pool != master_account.key().to_bytes()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 49,
+  "rust": "            || registry.authority != master.verifier_policy.registry_authority",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 50,
+  "rust": "            || registry.policy_binding != master.verifier_policy.policy_binding",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 51,
+  "rust": "            || registry.registry_program != registry_program.to_bytes()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 52,
+  "rust": "            || registry.loader_program != loader.to_bytes()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 53,
+  "rust": "            || registry.programdata_address != registry_programdata.to_bytes()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 54,
+  "rust": "            || !registry.is_immutable()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 55,
+  "rust": "            || registry.is_paused()",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 56,
+  "rust": "        {",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 57,
+  "rust": "            return Err(ProgramError::InvalidAccountData);",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 58,
+  "rust": "        }",
+  "phase": "V2 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op28/op27"
+ },
+ {
+  "rust_line": 59,
+  "rust": "        require_readonly_account(entry_account, &registry_program)?;",
+  "phase": "V2 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op34"
+ },
+ {
+  "rust_line": 60,
+  "rust": "        let entry = decode_verifier_registry_entry_v2(entry_account.data()?)",
+  "phase": "V2 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op34"
+ },
+ {
+  "rust_line": 61,
+  "rust": "            .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op34"
+ },
+ {
+  "rust_line": 62,
+  "rust": "        let expected_entry = Pubkey::create_program_address(",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 63,
+  "rust": "            &[",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 64,
+  "rust": "                VERIFIER_ENTRY_V2_SEED,",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 65,
+  "rust": "                master_account.key().as_ref(),",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 66,
+  "rust": "                &PROFILE_BINDING,",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 67,
+  "rust": "                &RELEASE_BINDING,",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 68,
+  "rust": "                &[entry.bump],",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 69,
+  "rust": "            ],",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 70,
+  "rust": "            &registry_program,",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 71,
+  "rust": "        )",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 72,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 73,
+  "rust": "        if entry_account.key() != &expected_entry {",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 74,
+  "rust": "            return Err(ProgramError::InvalidAccountData);",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 75,
+  "rust": "        }",
+  "phase": "V2 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: third op38"
+ },
+ {
+  "rust_line": 76,
+  "rust": "        let verifier_programdata = Pubkey::create_program_address(",
+  "phase": "V2 verifier ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: fourth op38"
+ },
+ {
+  "rust_line": 77,
+  "rust": "            &[verifier_program.as_ref(), &[entry.programdata_bump]],",
+  "phase": "V2 verifier ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: fourth op38"
+ },
+ {
+  "rust_line": 78,
+  "rust": "            &loader,",
+  "phase": "V2 verifier ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: fourth op38"
+ },
+ {
+  "rust_line": 79,
+  "rust": "        )",
+  "phase": "V2 verifier ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: fourth op38"
+ },
+ {
+  "rust_line": 80,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V2 verifier ProgramData PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: fourth op38"
+ },
+ {
+  "rust_line": 81,
+  "rust": "        if entry.pool != master_account.key().to_bytes()",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 82,
+  "rust": "            || entry.policy_binding != AUDIT_POLICY_BINDING",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 83,
+  "rust": "            || entry.verifier_program != verifier_program.to_bytes()",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 84,
+  "rust": "            || entry.profile_binding != PROFILE_BINDING",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 85,
+  "rust": "            || entry.release_binding != RELEASE_BINDING",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 86,
+  "rust": "            || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 87,
+  "rust": "            || entry.loader_program != loader.to_bytes()",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 88,
+  "rust": "            || entry.programdata_address != verifier_programdata.to_bytes()",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 89,
+  "rust": "            || entry.expected_upgrade_authority != [0u8; 32]",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 90,
+  "rust": "            || !entry.is_active_at(current_slot)",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 91,
+  "rust": "        {",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 92,
+  "rust": "            return Err(ProgramError::InvalidAccountData);",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 93,
+  "rust": "        }",
+  "phase": "V2 complete entry fields and current-slot status",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op29"
+ },
+ {
+  "rust_line": 94,
+  "rust": "        return Ok(());",
+  "phase": "V2 return and branch close",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: V2 Ok"
+ },
+ {
+  "rust_line": 95,
+  "rust": "    }",
+  "phase": "V2 return and branch close",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: V2 Ok"
+ },
+ {
+  "rust_line": 96,
+  "rust": "",
+  "phase": "V2 return and branch close",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: V2 Ok"
+ },
+ {
+  "rust_line": 97,
+  "rust": "    let registry = decode_verifier_registry_v1(registry_account.data()?)",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 98,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 99,
+  "rust": "    let expected_registry = Pubkey::create_program_address(",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 100,
+  "rust": "        &[",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 101,
+  "rust": "            VERIFIER_REGISTRY_SEED,",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 102,
+  "rust": "            master_account.key().as_ref(),",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 103,
+  "rust": "            &[registry.bump],",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 104,
+  "rust": "        ],",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 105,
+  "rust": "        &registry_program,",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 106,
+  "rust": "    )",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 107,
+  "rust": "    .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 108,
+  "rust": "    if registry_account.key() != &expected_registry {",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 109,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 110,
+  "rust": "    }",
+  "phase": "V1 registry data/decode and PDA",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op31/op38"
+ },
+ {
+  "rust_line": 111,
+  "rust": "    if registry.pool != master_account.key().to_bytes()",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 112,
+  "rust": "        || registry.authority != master.verifier_policy.registry_authority",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 113,
+  "rust": "        || registry.policy_binding != master.verifier_policy.policy_binding",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 114,
+  "rust": "        || !registry.is_immutable()",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 115,
+  "rust": "        || registry.is_paused()",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 116,
+  "rust": "    {",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 117,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 118,
+  "rust": "    }",
+  "phase": "V1 registry field/immutable/paused guards",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op26/op25"
+ },
+ {
+  "rust_line": 119,
+  "rust": "    require_readonly_account(entry_account, &registry_program)?;",
+  "phase": "V1 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op32"
+ },
+ {
+  "rust_line": 120,
+  "rust": "    let entry = decode_verifier_registry_entry_v1(entry_account.data()?)",
+  "phase": "V1 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op32"
+ },
+ {
+  "rust_line": 121,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V1 entry readonly/data/decode",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op32"
+ },
+ {
+  "rust_line": 122,
+  "rust": "    let expected_entry = Pubkey::create_program_address(",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 123,
+  "rust": "        &[",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 124,
+  "rust": "            VERIFIER_ENTRY_SEED,",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 125,
+  "rust": "            master_account.key().as_ref(),",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 126,
+  "rust": "            &PROFILE_BINDING,",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 127,
+  "rust": "            &RELEASE_BINDING,",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 128,
+  "rust": "            &[entry.bump],",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 129,
+  "rust": "        ],",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 130,
+  "rust": "        &registry_program,",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 131,
+  "rust": "    )",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 132,
+  "rust": "    .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 133,
+  "rust": "    if entry_account.key() != &expected_entry {",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 134,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 135,
+  "rust": "    }",
+  "phase": "V1 expected entry PDA and address guard",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: second V1 op38"
+ },
+ {
+  "rust_line": 136,
+  "rust": "    if entry.pool != master_account.key().to_bytes()",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 137,
+  "rust": "        || entry.policy_binding != AUDIT_POLICY_BINDING",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 138,
+  "rust": "        || entry.verifier_program != verifier_program.to_bytes()",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 139,
+  "rust": "        || entry.profile_binding != PROFILE_BINDING",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 140,
+  "rust": "        || entry.release_binding != RELEASE_BINDING",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 141,
+  "rust": "        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 142,
+  "rust": "        || !entry.is_active_at(current_slot)",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 143,
+  "rust": "    {",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 144,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 145,
+  "rust": "    }",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 146,
+  "rust": "    Ok(())",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ },
+ {
+  "rust_line": 147,
+  "rust": "}",
+  "phase": "V1 entry fields, slot guard and complete Result",
+  "lean_symbol": "NMM_RegistryTranscription.transcription",
+  "lean_region": "transcription: op30 and final Ok"
+ }
+]

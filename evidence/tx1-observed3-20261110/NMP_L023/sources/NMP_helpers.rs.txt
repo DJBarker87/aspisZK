@@ -1,0 +1,16 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+use aspis_core::field::{M31,CM31};
+fn digest()->[M31;8]{let r:[u32;8]=kani::any();[M31(r[0]),M31(r[1]),M31(r[2]),M31(r[3]),M31(r[4]),M31(r[5]),M31(r[6]),M31(r[7])]}
+pub(crate) fn transition()->aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1{
+ use aspis_statement::pool_v1::{pair_tree_profile::*,PoolV1PairVerifiedAfterstateV1};
+ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}
+}
+pub(crate) fn transfer()->aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{
+ aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
+}
+
+pub(crate) fn arbitrary_q()->QM31{let w:[u32;4]=kani::any();QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+pub(crate) fn arbitrary_challenges()->Challenges{Challenges{lambda:arbitrary_q(),chi:arbitrary_q(),theta:arbitrary_q(),zc:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],mu:arbitrary_q(),eta:arbitrary_q()}}
+pub(crate) fn arbitrary_error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+pub(crate) fn withdraw()->aspis_statement::pool_v1::PoolV1WithdrawalPublicV1{use aspis_statement::pool_v1::PoolV1WithdrawalPublicV1;fn d()->[M31;8]{let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:d(),nullifier:d(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:d()}}

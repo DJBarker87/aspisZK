@@ -1,0 +1,66 @@
+{"attempt": "NMM_L011", "exit_status": 1, "wall_seconds": 12.291728581069037, "peak_rss_kib": "5955308", "swaps": "0", "print_axioms": ["'NMM_PdaProjection.bounded_ext' depends on axioms: [propext, Quot.sound]", "'NMM_PdaProjection.complete' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NMM_generated/NMM_PdaProjection.lean:44:13: error: unsolved goals
+case none.some
+A : Type
+a b : Args A
+da : Domain a
+db : Domain b
+windows : ∀ i < 5, ∀ j < 32, window a i j = window b i j
+i : ℕ
+hi : i < 5
+ha : a.seeds[i]? = none
+ys : List A
+hb : b.seeds[i]? = some ys
+hl : none = some ys.length
+⊢ none = some ys
+NMM_generated/NMM_PdaProjection.lean:47:10: error: unsolved goals
+case some.none
+A : Type
+a b : Args A
+da : Domain a
+db : Domain b
+windows : ∀ i < 5, ∀ j < 32, window a i j = window b i j
+i : ℕ
+hi : i < 5
+xs : List A
+ha : a.seeds[i]? = some xs
+hb : b.seeds[i]? = none
+hl : some xs.length = none
+⊢ some xs = none
+theorem NMM_PdaProjection.bounded_ext : ∀ {A : Type} (xs ys : List A) (cap :
+...
+      (congr (congrArg Window.mk (congrArg (Option.map List.length) ha))
+                                      (Option.bind_congr' ha fun a a_1 => Eq.refl a[j]?))
+                                    a.program[j]?)))
+                              (congrArg Window.seedByte
+                                (congrFun'
+                                  (congr (congrArg Window.mk (congrArg (Option.map List.length) hb))
+                                    (Option.bind_congr' hb fun a a_1 => Eq.refl a[j]?))
+                                  b.program[j]?)))
+                            h))
+                    (Eq.symm h) (Eq.refl b.seeds[i]?))
+                (Eq.refl b.seeds[i]?))
+            (Eq.symm h) (Eq.refl a.seeds[i]?))
+        (Eq.refl a.seeds[i]?);
+  have hp :=
+    bounded_ext a.program b.program 32 da.program db.program fun j hj =>
+      congrArg Window.programByte (windows 0 (Decidable.byContradiction fun a => complete._proof_2 j a) j hj);
+  let ⟨seeds✝, program✝, h✝⟩ := a
+  Eq.ndrec (motive := fun a =>
+    Domain a → (∀ i < 5, ∀ j < 32, window a i j = window b i j) → a.seeds = b.seeds → a.program = b.program → a = b)
+    (fun da windows hs hp =>
+      let ⟨seeds✝¹, program✝¹, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b =>
+        Domain b →
+          (∀ i < 5, ∀ j < 32, window { seeds := seeds✝, program := program✝ } i j = window b i j) →
+            { seeds := seeds✝, program := program✝ }.seeds = b.seeds →
+              { seeds := seeds✝, program := program✝ }.program = b.program →
+                { seeds := seeds✝, program := program✝ } = b)
+        (fun db windows hs hp =>
+          let ⟨⟩ := seeds✝¹
+          hs)
+        (Eq.symm h✝¹) db windows hs hp)
+    (Eq.symm h✝) da windows hs hp
+'NMM_PdaProjection.complete' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r420b4bee8e634a00a6b1ab2aa5ae7bc0.scope; invocation ID: 1958a50f7e2e4881a4639beb567d00a6

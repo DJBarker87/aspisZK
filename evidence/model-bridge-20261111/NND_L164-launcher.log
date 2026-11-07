@@ -1,0 +1,54 @@
+{"attempt": "NND_L164", "exit_status": 1, "wall_seconds": 3.492462654132396, "peak_rss_kib": "6573752", "swaps": "0", "print_axioms": ["'NND_RegistryV1HeadTransport.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_RegistryV1HeadTransport.lean:25:3: error: Tactic `rfl` failed: The left-hand side
+  outer (reply id)
+    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame solana_program_error.ProgramError) (core.result.Result.Err err))
+is not definitionally equal to the right-hand side
+  ok
+    (ebind (account r).data fun b =>
+      ebind (option ((NND_RegistryLibrary.install L).decodeRegistryV1 b) RSL.ProgramError.invalidAccountData) F)
+
+case Err
+base : Ops
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+v p : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+s : aspis_statement.pool_v1.pair_forest_accounts.Po
+...
+.op31 buf.deref
+      let r5 ←
+        AdapterRw.core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_7.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+            r4 ()
+      let cf3 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          NND_RegistryV1Head.decoded (NND_RegistryOps.install base D env) v p m s r e t rp val1
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    ok
+      (ebind (account r).data fun b =>
+        ebind (option ((NND_RegistryLibrary.install L).decodeRegistryV1 b) RSL.ProgramError.invalidAccountData) F)
+NND_generated/NND_RegistryV1HeadTransport.lean:24:14: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b,̵b̵ind_tc_ok, ̲Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NND_generated/NND_RegistryV1HeadTransport.lean:27:14: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b,̵b̵ind_tc_ok, ̲Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NND_RegistryV1HeadTransport.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r788bc3e7a44a40a48bd80003f7e4b738.scope; invocation ID: 91dbe039c9cf46bc8be968e24f2f3e2b

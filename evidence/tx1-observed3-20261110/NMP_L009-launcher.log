@@ -1,0 +1,31 @@
+{"attempt": "NMP_L009", "exit_status": 0, "wall_seconds": 21.911255939863622, "peak_rss_kib": "6356956", "swaps": "0", "print_axioms": ["'AspisR1.NMP_Resource137.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMP_Resource137.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_Resource137.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Resource137.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Resource137.source : ∀ {H : Type} (i : NLJ_Observed.Input H) (objectId : ℕ)
+  (before : NLZ_Resources.Heap) (out : Terminal (NLJ_Observed.Out H)) (log : PreparedHashCode.Log),
+  Chain NLJ_Observed.step objectId 6 (NLJ_Observed.initial i) before out log →
+    run
+          (S1SemanticCode.verify
+            (fun {H_1} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+            i.publicValue i.bytes i.hash none) =
+        (log, result out) ∧
+      ∀ 
+...
+'AspisR1.NMP_Resource137.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Resource137.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Resource137.source : ∀ {H : Type} (i : NLJ_Observed.Input H) (objectId : ℕ)
+  (before : NLZ_Resources.Heap) (out : Terminal (NLJ_Observed.Out H)) (log : PreparedHashCode.Log),
+  Chain NLJ_Observed.step objectId 6 (NLJ_Observed.initial i) before out log →
+    run
+          (S1SemanticCode.verify
+            (fun {H_1} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+            i.publicValue i.bytes i.hash none) =
+        (log, result out) ∧
+      ∀ (after : NLZ_Resources.Heap), finalHeap out = some after → after.objects objectId = before.objects objectId :=
+fun {H} i objectId before out log chain =>
+  have v := value chain;
+  ⟨Eq.mp (congrArg (fun _a => _a = (log, result out)) (NLJ_Observed.initial_source i))
+      (Eq.mp (congrArg (fun _a => run _a = (log, result out)) (fold_eq 6 (NLJ_Observed.initial i))) v),
+    protected_return chain⟩
+
+Running as unit: run-r72bee59ba43e4a15a7eee05b6bc3c06f.scope; invocation ID: 5bdd8d3f73d647a2a100c0a626a9ee4a

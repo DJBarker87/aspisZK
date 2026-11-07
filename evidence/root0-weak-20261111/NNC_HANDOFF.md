@@ -1,3 +1,89 @@
+# NNC option B final handoff
+
+Target not yet established. Branch codex/cx-root0-weak-20261107; no push, row
+promotion, shipped-source or trust change. All inherited attempts count:
+115/250 total formal scopes =53 original +4 interrupted option-B
++58 current continuation. Option-B budget used62/197;
+135 scopes remain, with the member-by-member reason in NNC_REMAINING.md.
+0Kani/0extraction. No new security metric, constant adversary or Realizes filter.
+
+Established on real host types: arbitrary-adversary recorder selection;
+NMF-B native core at that selector; full Outcome internal E_rec retargeting;
+actual eval-selected entry instantiations (Realizes by rfl); native064 rich
+event observer for all partial/stopped outcomes with concrete write-free w;
+weak-native-parent cut inversion, all three064 numeric clauses from SAME entry
+snapshots/range, concrete NNE entry-image R0 representation; unconditional
+full-oracle numerical max envelope <=total(Q0+Q1), charging E_rec ONCE.
+Exact names, statements and limitations: NNC_OPTIONB_STATUS.md.
+
+NOT established: the complete actual weak-entry -> native weak-parent/observer
+installation, the exact concrete EVB.NNC_NMFPrimeB field, or FINAL actual-native
+coverage by the envelope. NMS native241/242 and NND A1/A2 are still OPEN at the
+fresh pinned sibling review. The numerical envelope has NO inclusion premise;
+the earlier inclusion-parameterized numeric fold is explicitly RETIRED. No
+missing source interpretation is promoted to a trust row, successful-child
+premise, own-input clause or final security claim.
+
+Validation PASS: original56 raw audits reused;71 new active roots audited once,
+127 total, only [propext,Classical.choice,Quot.sound], zero disagreements.
+Focused ledger24+current modules import L100 PASS; exact source-to-successful-
+receipt identity validated. Total scope wall2367.372s;
+peakRSS7241800KiB;swap0. The30 failed scopes remain retained/excluded.
+Per-attempt receipts record target/exit/time/RSS/swap/source revision/hash,
+selected dependency and Aeneas pins, cgroup and #print axioms. All caps
+6G/8G/swap0/tasks64; no cap/timeout increase or unchanged failed-shape replay.
+379 compressed SHA pairs and117 input archives validate;
+no file over20MB. Not a cold/frozen-release replay or reproduced ELF claim.
+
+Export: /home/dombarker/project-offloads/codex-cx-root0-weak-20261111/NNC_exports_20261111, 54 modules,
+355 selected dependencies rehashed, own cache retained,
+zero deletions. NNC_EXPORT.json/NNC_RETENTION.json give hashes/sizes/free disk.
+Inherited frozen release/ELF pins below remain unchanged; no rebuild trigger.
+
+Stage commits:9efd5697b48,a6f479666e8,b130ee2909f,01fe1db3411,
+189326a6e21, plus this final audit/receipts commit. Plain commits, no push.
+
+---
+Historical progress notes below are retained; this header and
+NNC_OPTIONB_FINAL.json supersede earlier budgets/status counts.
+
+## Native observation / weak-parent stage
+
+L080/L082-L088 PASS: concrete native query/event observation including BOTH
+returning and stopped C04, exact original partitions, partial replies and
+separately pending request; all native064 outcomes admitted. New law
+NNC_ObservedLaw.w has writeFree and accepted_header without caller renderer.
+This is a Root0-free source-record observer, NOT an assertion about an
+arbitrary TAS I.f064. Exact per-runtime/Env installation remains to be wired.
+
+L091 NNC_WeakOps PASS: changing ONLY op11 leaves data, validator and all of its
+registry/authentication/loop callees unchanged. L089 whole validator rfl hit
+recursion; it is retired, replaced by modular callee equalities (no options
+raised). L090 redundant post-simp rfl removed at L091. L092
+NNC_WeakReader.from_parent/join PASS: accepted weak PARENT derives SAME native
+read/index/range/validator/encoder and native064-success cuts in ORIGINAL ops,
+then joins TX1-only writer facts into NNC_SourceCuts.Cuts without second.
+No child-success input and no canonical model2 acceptance manufacture a cut.
+Actual entry -> that weak native parent remains the exact full-row installation
+obligation; NMS/NND still do not supply it at the pinned branch reviews.
+Scope count92/250. No Kani, extraction, trust or shipped-source change.
+
+## Option B stage 3: actual choices and numerical fold
+
+L071 NNC_RecAccepted.accepted PASS: full accepted-pair host theorem with internal E_rec, retaining every native/admission/game/trust/query binder and adding actual Realizes; no CLOSED module edited. L072/L073 NNC_RecRoot.root0_or_rec_collision and NNC_NMFB.root0_or_rec PASS: native weak064 fold plus actual adversary selector, exact capped-account E_rec, Root0 or event at SAME supplied cuts. L076 NNC_ActualAccepted.actual and L077 NNC_ActualRoot.actual PASS: e1/data1/state1 and e2/data2/slot/state2 are literally eval-selected projections, realizes supplied by rfl, no Realizes binder or constant adversary. These still retain the native cut-production/model-acceptance premises of their respective arms; neither is falsely promoted to the final actual-entry theorem.
+
+L075 NNC_ProbabilityFold.averaging_step PASS: extends failureModel averaging to the actual adaptive observer and its unrestricted attack indicator, averages every H, retains attacks even where inherited ARX runtimeMass is zero, and proves <=total(Q0+Q1) with ONE accountLoss. IMPORTANT: nativeInclusion is explicitly OPEN in this INTERMEDIATE fold. The final probability theorem is NOT delivered by assuming it. L074 implicit Tx elaboration repaired by explicit Tx at L075. All successful printed axioms standard only. Scope count77/250; native actual064 event transport/selected native packet remain open, not new trust. Removed an accidentally committed transient active-client guard and ignored only that transient guard/cache.
+
+## Option B stage 2
+
+L064 NNC_NoSecondCharge.no_second_charge/average PASS: same-event pointwise max bound and all-H lazyMean averaging, one accountLoss. This is explicitly a generic probability fold; its split input is NOT a proved actual native inclusion. L068 NNC_RecRelease.remove PASS: actual FJv_DResult.Outcome internal bad is E_rec using the selected adversary-output pair, CLOSED source modules unchanged. L069 NNC_ActualChoices.{realizes,issued,selected} PASS: actual eval-selected input projections, realizes by rfl for every H, complete first-rejection observer and EXACT original adaptive issued query list. L070 NNC_RuntimePointwise.each PASS: the existing FJp_Mass per-world bound exposed unchanged, including its outside-support case; no native attack is erased by the new max fold. All use only standard printed axioms. Scope count70/250.
+
+Import diagnosis L060/L063/L065 reads cached module public/private/IR headers, no proof credit. L061 owned inspector crashed by skipping the server segment; fixed in L063. L067 avoided importing the old release module itself, importing only its actual DR6/DBoundCaller dependencies plus NNC binding; this resolves the original L055 missing-module failure without altering any cached/shared object. L067's redundant dsimp was removed at L068. L062/L066 tactic failures are retained, fixed at L064/L069. No cap or timeout changed.
+
+## Option B resumption / binding probability amendment
+
+Scopes used:59/250,191 remaining; includes inherited L054-L057 and current L058-L059. No reset, Kani or extraction. L054 NNC_RecBinding.from_headers passed (selector-generalized native header core). L059 NNC_RecSelect.selects passed at the actual installed FIp configuration, using ARQ_Installation.dictionary, TX1 extraction/acceptance and the unchanged universally quantified adaptive adversary/query bound. No accepted2, Root0 or constant adversary. L057 heartbeat failure is not rerun unchanged: L058/L059 replace the unsupported arbitrary-configuration conversion with the existing installed dictionary theorem. L058 exposed an accidental default parameter rather than a let; L059 removes it. L055 missing PAln_AlignedRead in the cached Outcome dependency closure remains unresolved. All receipts retained. No full actual native TAS instance or final probability theorem claimed yet. The amendment requires a proof over all H with actual eval-selected entries and rfl Realizes, never conditional probability or an indicator filtering Realizes.
+
 # NNC final handoff — Root0-free support and open TAS installation
 
 Target not yet established. No row is promoted. Branch codex/cx-root0-weak-20261107; resumed own14 scopes without resetting the budget. Final53/250 Lean/link/audit/inspection scopes,0Kani,0extraction. All current24 proof modules and ledger24 combined import PASS; raw ax2 of56 own roots PASS, standard axioms only, zero collector disagreements. Total scope wall1205.810s;peakRSS6848160KiB;swap0. Exact targets/exit/time/RSS/swap/revision/source hashes/dependency/Aeneas pins/print-axioms are retained per attempt and in NNC_VALIDATION.json. The14 failed scopes are retained and excluded; no cap/timeout increase or unchanged timed-out shape replay.
@@ -52,3 +138,29 @@ L039 NNC_RuntimeOracle.writer derives the nested writer oracle directly from ext
 All current24 NNC proof modules are individually checked;41/250 actual scopes total through L041(0Kani/0extraction), including all inherited failures and support compiles. One L038 prelaunch share-inspection failure launched no scope; stricter same-cgroup cgroup.threads fallback is documented in NNC_REPAIRS.md. No shared infrastructure changed. Concrete TAS NativeRep/selected carrier installations remain OPEN as detailed member-by-member in NNC_REMAINING.md and NNC_CLOSED.json; they are never reclassified as new runtime trust or own-input clauses. Next: one focused combined import with ledger24, then raw ax2 of only56 own roots.
 
 Pre-final sibling refresh (read-only, NNC_BRANCH_REVIEW.json pins sources): NMS3278354f9fe now has fresh241 equality/scanner and weak relational specialization, but still explicitly no native-ready241/242 root and a conditional getter-stop/pure-RSL mismatch. NND94e822d2630 has additional native decoder selections and returned-value transports but no concrete217/op50/full missing substitution or A1/A2 instance. NNE2f5a682783d now supplies physical args/state/accepted/output definitions and exact A3/A4 for its concrete abort allocator; the older allocator blocker is superseded for that instance. Its physical Sig still takes an abstract S and leaves readerHeader/Root0Native and actual064 observation interpretation to final host assembly. This adds useful partial entry representation; it does not discharge NNC NativeRep or SAME selected occurrence association. The TAS targets of this brief remain binding; no unrequested switch to TFM or new contract/trust decision is made here.
+
+## Native observation progress after option B
+L078 actual output/attack-mass monotonicity PASS. L080 resume attempted-query
+and exact returning-event adapter PASS. L082 returning C04 rich-parts adapter,
+L083 stopped C04 adapter (pending request distinct, no invented reply/suffix),
+L084 digest trace no-write/projection, L085 C04 full native detail trace,
+L086 per-record/whole native common trace, L087 native064 observation transport,
+and L088 concrete weak RSL law/writeFree/accepted_header ALL PASS with standard
+axioms. These replace the arbitrary renderer for the NEW weak law
+NNC_ObservedLaw.w. No canonical Root0/C04 source equality is assumed in the
+trace decoration. The actual `I.f064`/per-Env interpretation at final host
+assembly is still explicit. NNC_EVENT_TRANSPORT.md gives the SAME-site map.
+No actual native cut or trace was obtained from model TX2 acceptance.
+
+L094 unconditional recorded numerical envelope PASS (no NativeInclusion or
+Realizes assumption); L095 exact actual pair at that recorder output PASS.
+L097 all064 extents from SAME native weak-parent snapshots/range PASS; no
+scanner success endpoint retained. L099 concrete NNE Entry-state Root0/byte
+representation PASS, with a proved symbolic UInt8 carrier conversion (L098's
+rfl mismatch retained). NNE_Entry/SdkState/SdkCells copied read-only with
+current committed-source/object hashes in NNC_NNE_SEED.json. L100 focused
+ledger24+all current option-B/native-observer modules combined import PASS.
+NNC_ProbabilityFold is superseded/retired, never exported as an assumption-based
+final theorem. NNC_OPTIONB_STATUS.md states exactly which native installations
+still prevent final coverage. Scope count100/250; own raw audit follows only
+for the71 new active roots (previous56 audits reused unchanged).

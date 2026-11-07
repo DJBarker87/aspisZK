@@ -1,0 +1,69 @@
+{
+ "status": "CANONICAL_REVISION2_CLAUSES_ONLY_NO_ROW_CREDIT",
+ "rows": [
+  {
+   "row": "TX2:242",
+   "canonical_own_domain": "RSL.TX2_242.Domain a := True",
+   "open_child": "TX2:233",
+   "child_parameter": "RSL.TX2_233.RowSpec_233",
+   "source_fold": "NMS_R2Fold242.fold",
+   "own_input_clauses": [],
+   "typed_parameterized_fold": "NMS_R2Parameterized242.fold"
+  },
+  {
+   "row": "TX2:241",
+   "caller": "TX2:240",
+   "canonical_own_domain": "RSL.TX2_241.Domain V a",
+   "own_input_clauses": [
+    {
+     "verbatim": "\u2200 x \u2208 a.accounts, RSL.TX2_241.Consistent x",
+     "classification": "D1; caller snapshot consistency, no independent child endpoint"
+    },
+    {
+     "verbatim": "\u2200 acc0 acc6 ck pr, a.accounts.length = 7 \u2192 a.accounts[0]? = some acc0 \u2192 a.accounts[6]? = some acc6 \u2192 acc6.bytes = .ok ck \u2192 acc0.bytes = .ok pr \u2192 pr.length = RSL.PROOF_ACCOUNT_BYTES \u2192 V.Root0 ck (RSL.slice pr RSL.AFTERSTATE_BYTES RSL.PROOF_ACCOUNT_BYTES)",
+     "classification": "D2; original own input only; no unconditional/global Root0"
+    }
+   ],
+   "child064_clauses": [
+    {
+     "clause": "proof length57607",
+     "from": "NMS_R2N_InterpretedNativeDomain.entered / NMS_R2Domains.entered; scanner extent NMS_R2PoolSites.scanner_extent, all at SAME input cuts"
+    },
+    {
+     "clause": "checkpoint1768",
+     "from": "Successful canonical233 verifierCheckpoint via NMS_R2AuthFacts.checkpoint plus canonical D1; clone aborts supply no returning suffix"
+    },
+    {
+     "clause": "public\u22641880",
+     "from": "Fixed1880 encoder carrier via NMS_R2N_RSLRanges.public_extent; canonical public guard in NMS_R2Public241.fold"
+    },
+    {
+     "clause": "V.Root0 checkpoint proof",
+     "from": "canonical D2 at admitted original proof image; remains inside Domain V a"
+    }
+   ],
+   "canonical_source_fold": "NMS_R2Fold241.fold",
+   "weak_source_fold": "NMS_R2SiteWeak241.fold"
+  }
+ ],
+ "retired_clauses": [
+  "NMS_241OwnClauses.CheckpointBytes accounts",
+  "NMS_241OwnClauses.Root0Bytes accounts"
+ ],
+ "forbidden_premises_added": false,
+ "trust_changes": false,
+ "native_row_root_claimed": false,
+ "spec_revision": 2,
+ "proposed_difference_superseded": {
+  "verbatim": "NMS_SafePackets.Safe a.accounts",
+  "definition": "For every original account, both bytes Err and length Err are AccountBorrowFailed or InvalidAccountData.",
+  "classification": "Additional own-input caller clause proposed under bf(2), not silently included in canonical RSL True/domain or any credited root. Needed for existing CLOSED NHJ native clone domains; all returning snapshot records establish it via NMS_SnapshotBoth.both (pending compile at this update).",
+  "propagation": "233\u2192242\u2192241\u2192240; actual240 snapshots discharge internally, so no new headline clause.",
+  "source_folds": [
+   "NMS_Safe242Fold.fold",
+   "NMS_Safe241Fold.fold"
+  ],
+  "alternative": "Adopted revision2 RS.ofCloned, linked by NMS_R2GetterLink.full.",
+  "status": "RETIRED by owner-approved RSL revision2; NOT a current clause. Clone allocation arms are proved unrestricted; snapshot restrictions are unnecessary for canonical domains."
+ }
+}

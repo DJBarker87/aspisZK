@@ -1,0 +1,37 @@
+{"attempt": "NMM_L028", "exit_status": 0, "wall_seconds": 17.29614632204175, "peak_rss_kib": "6366660", "swaps": "0", "print_axioms": ["'NMM_LaneSuccess.levels_unique' depends on axioms: [propext, Quot.sound]", "'NMM_LaneSuccess.loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSuccess.body' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMM_LaneSuccess.levels_unique : ∀ (n : ℕ), (List.finRange n).Nodup :=
+⋯
+'NMM_LaneSuccess.levels_unique' depends on axioms: [propext, Quot.sound]
+theorem NMM_LaneSuccess.loop : ∀ (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
+  (nodes : Frontier),
+  (∀ (level : Fin 20), NMM_LaneSymbolic.raw oracle p level = core.result.Result.Ok (nodes level)) →
+    (∀ (level : Fin 20), NLK_LaneLoop.occupied next level = true ∨ nodes level = NLK_LaneTable.empty level) →
+      NKF_LaneTrace.run NLK_LaneTable.empty (NLK_LaneLoop.occupied next) (NMM_LaneSymbolic.raw oracle p)
+          NLK_LaneLoop.levels NLK_LaneLoop.zero =
+        (core.result.Result.Ok (), nodes, NLK_Lan
+...
+theorem NMM_LaneSuccess.levels_unique : ∀ (n : ℕ), (List.finRange n).Nodup :=
+⋯
+'NMM_LaneSuccess.levels_unique' depends on axioms: [propext, Quot.sound]
+theorem NMM_LaneSuccess.loop : ∀ (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
+  (nodes : Frontier),
+  (∀ (level : Fin 20), NMM_LaneSymbolic.raw oracle p level = core.result.Result.Ok (nodes level)) →
+    (∀ (level : Fin 20), NLK_LaneLoop.occupied next level = true ∨ nodes level = NLK_LaneTable.empty level) →
+      NKF_LaneTrace.run NLK_LaneTable.empty (NLK_LaneLoop.occupied next) (NMM_LaneSymbolic.raw oracle p)
+          NLK_LaneLoop.levels NLK_LaneLoop.zero =
+        (core.result.Result.Ok (), nodes, NLK_LaneLoop.levels) :=
+⋯
+'NMM_LaneSuccess.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSuccess.body : ∀ (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized)
+  (f : NLK_LaneHeader.Fields) (root : Node) (nodes : Frontier),
+  NLK_LaneHeader.sourcePrefix p = core.result.Result.Ok f →
+    oracle 0 (NLK_LaneInput.root p) = core.result.Result.Ok root →
+      (∀ (level : Fin 20), NMM_LaneSymbolic.raw oracle p level = core.result.Result.Ok (nodes level)) →
+        (∀ (level : Fin 20), NLK_LaneLoop.occupied f.next level = true ∨ nodes level = NLK_LaneTable.empty level) →
+          (↑f.next = 0 → root = NLK_LaneTable.final) →
+            NMM_LaneSymbolic.body oracle p =
+              core.result.Result.Ok (NKP_LaneCarrier.make f.bump f.master f.lane f.next root nodes) :=
+⋯
+'NMM_LaneSuccess.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re856fa172d8b42608fc9ebd7880e1cb1.scope; invocation ID: 7362c8fe2d714d398c90f008a20f33f3

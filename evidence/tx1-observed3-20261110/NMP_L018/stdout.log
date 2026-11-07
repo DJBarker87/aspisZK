@@ -1,0 +1,29 @@
+'AspisR1.NMP_Expansion179.compact_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.NMP_Expansion179.same_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Expansion179.same_call : ∀ (compact before y1 : Slice U8),
+  (↑compact).length = 464 →
+    (↑before).length = 928 →
+      NFU_Retarget.compact.expand_values compact before = ok (core.result.Result.Ok (), y1) →
+        LPn.Expand.NativeTrace (↑compact) (↑before) 29 ↑y1 :=
+fun compact before y1 compact_length before_length call =>
+  let ⟨out, trace⟩ := LPn.Expand.total (↑compact) (↑before) 29
+  have inherited := LPn.Expand.to_inherited (↑compact) (↑before) out 29 trace;
+  have size := LPl.Expand.length (↑compact) (↑before) out 29 inherited;
+  let output := ⟨out, Eq.mpr (id (congrArg (fun _a => _a ≤ Usize.max) size)) before.property⟩;
+  have trace' :=
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg (LPn.Expand.NativeTrace ↑compact ↑before) (congrFun' (congrArg HDiv.hDiv compact_length) 16))
+          ↑output))
+      trace;
+  have returned :=
+    NFU_CompactLeaves.expand_result compact before output
+      (Decidable.byContradiction fun a => same_call._proof_1 compact before compact_length out a)
+      (Eq.mpr (id (congrArg (fun _a => _a % 16 = 0) compact_length)) (Eq.refl (464 % 16)))
+      (Eq.mpr (id (congrArg (fun _a => (↑before).length = 2 * _a) compact_length))
+        (Eq.mpr (id (congrArg (fun _a => _a = 2 * 464) before_length)) (Eq.refl 928)))
+      trace';
+  have pair := ok.inj (Eq.trans (Eq.symm returned) call);
+  have same := congrArg Prod.snd pair;
+  Eq.mpr (id (congrArg (LPn.Expand.NativeTrace (↑compact) (↑before) 29) (congrArg Subtype.val (Eq.symm same)))) trace

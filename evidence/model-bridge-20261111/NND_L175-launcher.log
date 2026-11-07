@@ -1,0 +1,49 @@
+{"attempt": "NND_L175", "exit_status": 1, "wall_seconds": 3.133318156003952, "peak_rss_kib": "6572204", "swaps": "0", "print_axioms": ["'NND_RegistryEntry1Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_RegistryEntry1Value.lean:21:1: error: Type mismatch
+  Eq.trans (NND_BoolReject.eight ?m.17 ?m.18 ?m.19 ?m.20 ?m.21 ?m.22 ?m.23 ?m.24 ?m.30 ?m.30)
+    (?m.34 (instDecidableEqBool (!?m.17 || (!?m.18 || !?m.19 || !?m.20 || !?m.21 || !?m.22 || ?m.23 || !?m.24)) true))
+has type
+  (if ?m.17 = true then
+      if ?m.18 = true then
+        if ?m.19 = true then
+          if ?m.20 = true then
+            if ?m.21 = true then
+              if ?m.22 = true then if ?m.23 = true then ?m.30 else if ?m.24 = true then ?m.30 else ?m.30 else ?m.30
+            else ?m.30
+          else ?m.30
+        else ?m.30
+      else ?m.30
+    else ?m.30) =
+    ?m.30
+but is expected to have type
+  (if (!dec
+...
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if (!decide (entry.profile_binding = r1_pool_adapter.PROFILE_BINDING)) = true then
+              ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else
+              if (!decide (entry.release_binding = r1_pool_adapter.RELEASE_BINDING)) = true then
+                ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+              else
+                if (entry.statement_version != 1#u8) = true then
+                  ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                else
+                  if NIJ_ActiveSlots.active entry.status entry.activation_slot entry.retirement_slot t = true then
+                    ok (core.result.Result.Ok ())
+                  else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+    ok
+      (if
+          (!decide (e.key = expected) ||
+              (!decide (entry.pool = m.key) || !decide (entry.policy_binding = r1_pool_adapter.AUDIT_POLICY_BINDING) ||
+                        !decide (entry.verifier_program = v) ||
+                      !decide (entry.profile_binding = r1_pool_adapter.PROFILE_BINDING) ||
+                    !decide (entry.release_binding = r1_pool_adapter.RELEASE_BINDING) ||
+                  entry.statement_version != 1#u8 ||
+                !NIJ_ActiveSlots.active entry.status entry.activation_slot entry.retirement_slot t)) =
+            true then
+        core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData
+      else core.result.Result.Ok ())
+'NND_RegistryEntry1Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r50018c0bb90e4ca8ae89b5fc5b503d0c.scope; invocation ID: 73cfd5d99dab4418bee73c400b88f5f5

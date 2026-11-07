@@ -1,0 +1,23 @@
+{"attempt": "NMT_L321", "exit_status": 1, "wall_seconds": 13.223077218048275, "peak_rss_kib": "5914304", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.cmp.impls.PartialEqShared.ne : {A B : Type} →
+  Aeneas.Std.core.cmp.PartialEq A B → A → B → Aeneas.Std.Result Bool :=
+fun {A B} PartialEqInst x y => PartialEqInst.ne x y
+@[reducible] def AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey : AdapterRw.Ops →
+  Aeneas.Std.core.cmp.PartialEq AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.Pubkey :=
+fun ops => { eq := ops.op36, ne := fun self other => Aeneas.Std.core.cmp.PartialEq.ne.default ops.op36 self other }
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.owner : AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+  Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey :=
+fun self => Aeneas.Std.Result.ok self.o
+...
+def Aeneas.Std.core.cmp.impls.PartialEqShared.ne : {A B : Type} →
+  Aeneas.Std.core.cmp.PartialEq A B → A → B → Aeneas.Std.Result Bool :=
+fun {A B} PartialEqInst x y => PartialEqInst.ne x y
+@[reducible] def AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey : AdapterRw.Ops →
+  Aeneas.Std.core.cmp.PartialEq AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.Pubkey :=
+fun ops => { eq := ops.op36, ne := fun self other => Aeneas.Std.core.cmp.PartialEq.ne.default ops.op36 self other }
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.owner : AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+  Aeneas.Std.Result AdapterRw.solana_pubkey.Pubkey :=
+fun self => Aeneas.Std.Result.ok self.owner
+NMT_generated/NMT_R2_OwnerInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.ne`
+
+Running as unit: run-r6a123405cefb4e498810364b123f2756.scope; invocation ID: 4cabba7f36544976b4a030bc07d41701

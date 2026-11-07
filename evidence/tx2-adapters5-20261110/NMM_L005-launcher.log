@@ -1,0 +1,45 @@
+{"attempt": "NMM_L005", "exit_status": 1, "wall_seconds": 16.737582290079445, "peak_rss_kib": "6332236", "swaps": "0", "print_axioms": ["'NMM_LaneReplies.run_closed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneReplies.closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneReplies.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMM_generated/NMM_LaneReplies.lean:65:5: error: Tactic `rfl` failed: The left-hand side
+  ok (core.result.Result.Err e✝)
+is not definitionally equal to the right-hand side
+  match NLK_LaneHeader.sourcePrefix { bytes := bytes, length := h✝ } with
+  | core.result.Result.Err error => ok (core.result.Result.Err error)
+  | core.result.Result.Ok fields => do
+    let decoded ← NLK_LaneDigest.source (NLK_LaneInput.root { bytes := bytes, length := h✝ })
+    match decoded with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      | core.result.Result.Ok root => do
+        let frontier ←
+          NLK_LaneLoopSource.
+...
+      let loop ←
+            run NLK_LaneDigest.source { bytes := bytes, length := h✝ } f✝.next NLK_LaneLoop.levels NLK_LaneLoop.zero
+          ok (NKP_LaneCompletion.finish f✝.bump f✝.master f✝.lane f✝.next root NLK_LaneTable.final loop).1) =
+    match NLK_LaneHeader.sourcePrefix { bytes := bytes, length := h✝ } with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok fields => do
+      let decoded ← NLK_LaneDigest.source (NLK_LaneInput.root { bytes := bytes, length := h✝ })
+      match decoded with
+        | core.result.Result.Err a =>
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        | core.result.Result.Ok root => do
+          let frontier ←
+            NLK_LaneLoopSource.run { bytes := bytes, length := h✝ } fields.next NLK_LaneLoop.levels NLK_LaneLoop.zero
+          ok
+              (NKP_LaneCompletion.finish fields.bump fields.master fields.lane fields.next root NLK_LaneTable.final
+                  frontier).1
+theorem NMM_LaneReplies.run_closed : ∀ (p : NLK_LaneInput.Sized) (next : U64) (levels : List (Fin 20))
+  (before : Frontier), run NLK_LaneDigest.source p next levels before = NLK_LaneLoopSource.run p next levels before :=
+⋯
+'NMM_LaneReplies.run_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneReplies.closed : ∀ (bytes : Slice U8),
+  value NLK_LaneDigest.source bytes = NMM_LaneTranscription.value bytes :=
+⋯
+'NMM_LaneReplies.closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneReplies.adopted : ∀ (bytes : Slice U8),
+  value NLK_LaneDigest.source bytes = NLK_LaneProgram.reference bytes :=
+⋯
+'NMM_LaneReplies.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbd9432098a6b437eb09b2f1722e3f055.scope; invocation ID: 94a5ac698a16485499634afe16aaf93c

@@ -3,7 +3,7 @@ from NMT_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMT_E') and 1<=int(a[-3:])<=3) or (a.startswith('NMT_L') and 1<=int(a[-3:])<=310) or (a.startswith('NMT_K') and 1<=int(a[-3:])<=20)) and not (E/a).exists()
+    assert ((a.startswith('NMT_E') and 1<=int(a[-3:])<=3) or (a.startswith('NMT_L') and 1<=int(a[-3:])<=486) or (a.startswith('NMT_K') and 1<=int(a[-3:])<=20)) and not (E/a).exists()
     env=json.loads((E/'NMT_ENV.json').read_text())['env']
     env['LEAN_PATH']=':'.join([B+'/NMT_objects']+json.loads((E/'NMT_PATHS.json').read_text()))
     env['TMPDIR']=B+'/NMT_tmp'

@@ -1,0 +1,66 @@
+{"attempt": "NMT_L341", "exit_status": 1, "wall_seconds": 16.10520683717914, "peak_rss_kib": "5926128", "swaps": "0", "print_axioms": ["'NMT_R2_GetterEquality.data_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMT_R2_GetterEquality.length_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_GetterEquality.lean:12:11: error: Tactic `rfl` failed: The left-hand side
+  observe (fun b => List.map byte ↑b)
+    (match core.result.Result.Ok b with
+    | core.result.Result.Ok bytes =>
+      have s := bytes.deref;
+      Result.ok (core.result.Result.Ok s)
+    | core.result.Result.Err error => do
+      let pe ← clone keep error
+      Result.ok (core.result.Result.Err pe))
+is not definitionally equal to the right-hand side
+  cloned keep (account a).bytes
+
+case Ok
+keep : Bool
+a : Account
+b : alloc.vec.Vec U8
+h : a.bytes = core.result.Result.Ok b
+⊢ observe (fun b => List.map byte ↑b)
+      (match core.result.Result.Ok b with
+      | core.result.Result.Ok bytes =>
+       
+...
+ean:14:2: error: 'change' tactic failed, pattern
+  (observe (fun b => List.map byte ↑b) do
+      let pe ← clone keep e
+      Result.ok (core.result.Result.Err pe)) =
+    cloned keep (Except.error (pe e))
+is not definitionally equal to target
+  observe (fun b => List.map byte ↑b)
+      (match core.result.Result.Err e with
+      | core.result.Result.Ok bytes =>
+        have s := bytes.deref;
+        Result.ok (core.result.Result.Ok s)
+      | core.result.Result.Err error => do
+        let pe ← clone keep error
+        Result.ok (core.result.Result.Err pe)) =
+    cloned keep (account a).bytes
+NMT_generated/NMT_R2_GetterEquality.lean:25:59: error: Tactic `rfl` failed: The left-hand side
+  observe (fun n => ↑n) (mapOuter (mapCore id fromPE) (Result.ok (core.result.Result.Ok n)))
+is not definitionally equal to the right-hand side
+  cloned keep (account a).length
+
+case Ok
+keep : Bool
+a : Account
+n : Usize
+h : a.length = core.result.Result.Ok n
+⊢ observe (fun n => ↑n) (mapOuter (mapCore id fromPE) (Result.ok (core.result.Result.Ok n))) =
+    cloned keep (account a).length
+NMT_generated/NMT_R2_GetterEquality.lean:28:2: error: 'change' tactic failed, pattern
+  observe (fun n => ↑n)
+      (mapOuter (mapCore id fromPE) do
+        let out ← mapOuter toPE (clone keep e)
+        Result.ok (core.result.Result.Err out)) =
+    cloned keep (Except.error (pe e))
+is not definitionally equal to target
+  observe (fun n => ↑n)
+      (mapOuter (mapCore id fromPE) do
+        let out ← mapOuter toPE (clone keep e)
+        Result.ok (core.result.Result.Err out)) =
+    cloned keep (account a).length
+'NMT_R2_GetterEquality.data_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMT_R2_GetterEquality.length_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdf73d2e8b3644059a7043fe6a11a06fb.scope; invocation ID: 320f66c208f74d23bd2231c3f026f47a

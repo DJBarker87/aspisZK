@@ -1,0 +1,272 @@
+--- /dev/null
++++ b/NMM_legacy.rs
+@@ -0,0 +1,269 @@
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PairForestAccountErrorV1 as F,PoolIdentityV1,VerifierPolicyV1};
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_field()->M31{M31(kani::any())}
++fn any_digest()->[M31;8]{[any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field()]}
++fn any_error()->F{
++ let i:u8=kani::any();kani::assume(i<=20);
++ match i{0=>F::WrongLength,1=>F::WrongMagic,2=>F::WrongVersion,3=>F::WrongLaneCount,4=>F::WrongDigestEncoding,5=>F::WrongDepth,6=>F::WrongFormatBinding,7=>F::NonZeroReserved,8=>F::ZeroRequiredBinding,9=>F::InvalidBoolean,10=>F::InvalidMasterState,11=>F::InvalidLane,12=>F::LaneMasterMismatch,13=>F::LaneOrderMismatch,14=>F::LaneSequenceDecreased,15=>F::DuplicateCheckpoint,16=>F::CheckpointSequenceOverflow,17=>F::NonCanonicalDigest,18=>F::Identity,19=>F::Policy,_=>{
++ use aspis_statement::pool_v1::PoolV1TreeError as T;let j:u8=kani::any();kani::assume(j<13);
++ F::Tree(match j{0=>T::TreeFull,1=>T::InsufficientCapacity,2=>T::IndexOutOfRange,3=>T::RootMismatch,4=>T::NonCanonicalFrontier,5=>T::WrongLength,6=>T::WrongMagic,7=>T::WrongVersion,8=>T::WrongDepth,9=>T::WrongTreeHash,10=>T::WrongDigestEncoding,11=>T::NonCanonicalDigest,_=>T::NonZeroReserved})}}
++}
++fn any_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:any_field(),deployment_domain:kani::any()},verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++fn any_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:any_digest(),lane_sequences:kani::any()}}
++
++use aspis_statement::pool_v1::*;
++fn NMM_policy_reference(policy: &VerifierPolicyV1) -> Result<(), PoolV1FormatError> {
++    if policy.flags & !POOL_V1_VERIFIER_POLICY_FLAGS_MASK != 0 {
++        return Err(PoolV1FormatError::UnsupportedFlags);
++    }
++    if policy.registry_program == [0u8; 32] || policy.policy_binding == [0u8; 32] {
++        return Err(PoolV1FormatError::ZeroRequiredBinding);
++    }
++    let immutable = policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY != 0;
++    let immutable_deployment =
++        policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
++    if immutable_deployment && !immutable {
++        return Err(PoolV1FormatError::InvalidAuthorityMode);
++    }
++    if immutable != (policy.registry_authority == [0u8; 32]) {
++        return Err(PoolV1FormatError::InvalidAuthorityMode);
++    }
++    Ok(())
++}
++fn NMM_pool_program_id_reference() -> [u8; 32] {
++    *core::hint::black_box(&AUDIT_POOL_PROGRAM)
++}
++fn NMM_registry_program_id_reference() -> [u8; 32] {
++    *core::hint::black_box(&AUDIT_REGISTRY_PROGRAM)
++}fn NMM_any_VerifierRegistryV1()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
++fn NMM_any_VerifierRegistryEntryV1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:NMM_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn NMM_format_error()->PoolV1VerifierRegistryFormatError{let tag:u8=kani::any();kani::assume(tag<12);match tag{0=>PoolV1VerifierRegistryFormatError::WrongLength,1=>PoolV1VerifierRegistryFormatError::WrongMagic,2=>PoolV1VerifierRegistryFormatError::WrongVersion,3=>PoolV1VerifierRegistryFormatError::NonZeroReserved,4=>PoolV1VerifierRegistryFormatError::UnsupportedFlags,5=>PoolV1VerifierRegistryFormatError::InvalidStatus,6=>PoolV1VerifierRegistryFormatError::InvalidAuthorityMode,7=>PoolV1VerifierRegistryFormatError::ZeroRequiredBinding,8=>PoolV1VerifierRegistryFormatError::InvalidActivationDelay,9=>PoolV1VerifierRegistryFormatError::InvalidStatementVersion,10=>PoolV1VerifierRegistryFormatError::InvalidRetirementSlot,_=>PoolV1VerifierRegistryFormatError::InvalidDeploymentMode}}
++fn NMM_status()->VerifierEntryStatusV1{let t:u8=kani::any();kani::assume(t<4);match t{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
++
++use core::cell::UnsafeCell;
++type Reg=Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>;
++type Ent=Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError>;
++#[derive(Clone)]
++struct NMM_Pda {count:usize,len:Option<usize>,byte:Option<u8>,program:u8,reply:Result<Pubkey,solana_program::pubkey::PubkeyError>}
++#[repr(C)]
++struct NMM_Ctx {
++ account:OwnedAccount,image:[u8;320],extent:usize,probe_seed:usize,probe_byte:usize,
++ data:UnsafeCell<Option<*const OwnedAccount>>,
++ reg:UnsafeCell<Option<(*const u8,usize,Reg)>>,
++ ent:UnsafeCell<Option<(*const u8,usize,Ent)>>,
++ pda:UnsafeCell<[Option<NMM_Pda>;2]>,nw:UnsafeCell<usize>,nr:UnsafeCell<usize>
++}
++fn NMM_ctx(a:&OwnedAccount)->&NMM_Ctx {unsafe{&*(a as *const OwnedAccount as *const NMM_Ctx)}}
++fn NMM_from_bytes(bytes:&[u8])->&NMM_Ctx{unsafe{&*(bytes.as_ptr().sub(core::mem::offset_of!(NMM_Ctx,image)) as *const NMM_Ctx)}}
++fn NMM_from_seeds<'a>(seeds:&'a[&'a[u8]])->&'a NMM_Ctx{
++ assert!(seeds.len()==3||seeds.len()==5,"actual legacy seed arity");
++ assert!(seeds[1].len()==32,"master key seed extent");
++ unsafe{&*(seeds[1].as_ptr().sub(core::mem::offset_of!(OwnedAccount,key)) as *const NMM_Ctx)}
++}
++fn NMM_data_cut(a:&OwnedAccount)->Result<&[u8],ProgramError>{
++ let c=NMM_ctx(a);unsafe{assert!((*c.data.get()).is_none(),"data occurrence unique");c.data.get().write(Some(a as *const _));}
++ Ok(&c.image[..c.extent])
++}
++fn NMM_data_replay(a:&OwnedAccount)->Result<&[u8],ProgramError>{
++ let c=NMM_ctx(a);let arg=unsafe{(*c.data.get()).take()};assert!(arg==Some(a as *const _),"exact data argument");Ok(&c.image[..c.extent])
++}
++fn NMM_reg_cut(bytes:&[u8])->Reg{
++ let out=if kani::any(){Ok(NMM_any_VerifierRegistryV1())}else{Err(NMM_format_error())};let c=NMM_from_bytes(bytes);
++ unsafe{assert!((*c.reg.get()).is_none(),"registry occurrence unique");c.reg.get().write(Some((bytes.as_ptr(),bytes.len(),out)));}out
++}
++fn NMM_reg_replay(bytes:&[u8])->Reg{
++ let c=NMM_from_bytes(bytes);let record=unsafe{(*c.reg.get()).take()};assert!(record.is_some(),"registry reply present");
++ match record{Some((p,n,r))=>{assert!(p==bytes.as_ptr()&&n==bytes.len(),"exact registry arguments");r},None=>Err(PoolV1VerifierRegistryFormatError::WrongLength)}
++}
++fn NMM_ent_cut(bytes:&[u8])->Ent{
++ let out=if kani::any(){Ok(NMM_any_VerifierRegistryEntryV1())}else{Err(NMM_format_error())};let c=NMM_from_bytes(bytes);
++ unsafe{assert!((*c.ent.get()).is_none(),"entry occurrence unique");c.ent.get().write(Some((bytes.as_ptr(),bytes.len(),out)));}out
++}
++fn NMM_ent_replay(bytes:&[u8])->Ent{
++ let c=NMM_from_bytes(bytes);let record=unsafe{(*c.ent.get()).take()};assert!(record.is_some(),"entry reply present");
++ match record{Some((p,n,r))=>{assert!(p==bytes.as_ptr()&&n==bytes.len(),"exact entry arguments");r},None=>Err(PoolV1VerifierRegistryFormatError::WrongLength)}
++}
++fn NMM_pda_cut(seeds:&[&[u8]],program:&Pubkey)->Result<Pubkey,solana_program::pubkey::PubkeyError>{
++ use solana_program::pubkey::PubkeyError::*;
++ let tag:u8=kani::any();kani::assume(tag<4);let out=match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};
++ let c=NMM_from_seeds(seeds);let i=c.probe_seed;let j=c.probe_byte;assert!(i<5&&j<32,"probe bounds");
++ for seed in seeds {assert!(seed.len()<=32,"runtime seed extent domain");}
++ let len=if i<seeds.len(){Some(seeds[i].len())}else{None};
++ let byte=if i<seeds.len()&&j<seeds[i].len(){Some(seeds[i][j])}else{None};
++ let r=NMM_Pda{count:seeds.len(),len,byte,program:program.to_bytes()[j],reply:out.clone()};unsafe{let n=*c.nw.get();assert!(n<2,"legacy PDA prefix bound");(*c.pda.get())[n]=Some(r);*c.nw.get()=n+1;}out
++}
++fn NMM_pda_replay(seeds:&[&[u8]],program:&Pubkey)->Result<Pubkey,solana_program::pubkey::PubkeyError>{
++ let c=NMM_from_seeds(seeds);let record=unsafe{let n=*c.nr.get();assert!(n<2,"replayed PDA prefix bound");*c.nr.get()=n+1;(*c.pda.get())[n].take()};
++ assert!(record.is_some(),"same PDA reply present");match record{Some(r)=>{let i=c.probe_seed;let j=c.probe_byte;let len=if i<seeds.len(){Some(seeds[i].len())}else{None};let byte=if i<seeds.len()&&j<seeds[i].len(){Some(seeds[i][j])}else{None};assert!(r.count==seeds.len()&&r.program==program.to_bytes()[j],"exact PDA program window and arity");assert!(r.len==len&&r.byte==byte,"exact PDA seed length and byte window");r.reply},None=>Err(solana_program::pubkey::PubkeyError::InvalidSeeds)}
++}
++fn NMM_account<const N:usize>()->NMM_Ctx{
++ let original:[u8;N]=kani::any();let bytes:Box<[u8]>=Box::new(original);let bytes=bytes.into_vec();
++ NMM_Ctx{account:OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(N),bytes:Ok(bytes)},image:kani::any(),extent:N,probe_seed:0,probe_byte:0,data:UnsafeCell::new(None),reg:UnsafeCell::new(None),ent:UnsafeCell::new(None),pda:UnsafeCell::new([None,None]),nw:UnsafeCell::new(0),nr:UnsafeCell::new(0)}
++}
++fn NMM_reference(
++    verifier_program: &Pubkey,
++    pool_program: &Pubkey,
++    master_account: &OwnedAccount,
++    master: &PoolV1PairForestMasterV1,
++    registry_account: &OwnedAccount,
++    entry_account: &OwnedAccount,
++    current_slot: u64,
++) -> ProgramResult {
++    // Versioned, owner-authenticated registry images carry the canonical bumps
++    // saved by their initializers. Address checks below perform one derivation;
++    // they neither search for a bump nor establish canonicality independently.
++    if pool_program.to_bytes() != pool_program_id()
++        || master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY == 0
++        || master.verifier_policy.registry_program != registry_program_id()
++        || master.verifier_policy.registry_authority != [0u8; 32]
++        || master.verifier_policy.policy_binding != AUDIT_POLICY_BINDING
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    validate_verifier_policy_v1(&master.verifier_policy)
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    let registry_program = Pubkey::new_from_array(registry_program_id());
++    require_readonly_account(registry_account, &registry_program)?;
++    let immutable_deployment =
++        master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
++    if immutable_deployment {
++        let loader = bpf_loader_upgradeable::id();
++        let registry = decode_verifier_registry_v2(NMM_data_replay(registry_account)?)
++            .map_err(|_| ProgramError::InvalidAccountData)?;
++        let expected_registry = NMM_pda_replay(
++            &[
++                VERIFIER_REGISTRY_V2_SEED,
++                master_account.key().as_ref(),
++                &[registry.bump],
++            ],
++            &registry_program,
++        )
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++        if registry_account.key() != &expected_registry {
++            return Err(ProgramError::InvalidAccountData);
++        }
++        let registry_programdata = NMM_pda_replay(
++            &[registry_program.as_ref(), &[registry.programdata_bump]],
++            &loader,
++        )
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++        if registry.pool != master_account.key().to_bytes()
++            || registry.authority != master.verifier_policy.registry_authority
++            || registry.policy_binding != master.verifier_policy.policy_binding
++            || registry.registry_program != registry_program.to_bytes()
++            || registry.loader_program != loader.to_bytes()
++            || registry.programdata_address != registry_programdata.to_bytes()
++            || !registry.is_immutable()
++            || registry.is_paused()
++        {
++            return Err(ProgramError::InvalidAccountData);
++        }
++        require_readonly_account(entry_account, &registry_program)?;
++        let entry = decode_verifier_registry_entry_v2(NMM_data_replay(entry_account)?)
++            .map_err(|_| ProgramError::InvalidAccountData)?;
++        let expected_entry = NMM_pda_replay(
++            &[
++                VERIFIER_ENTRY_V2_SEED,
++                master_account.key().as_ref(),
++                &PROFILE_BINDING,
++                &RELEASE_BINDING,
++                &[entry.bump],
++            ],
++            &registry_program,
++        )
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++        if entry_account.key() != &expected_entry {
++            return Err(ProgramError::InvalidAccountData);
++        }
++        let verifier_programdata = NMM_pda_replay(
++            &[verifier_program.as_ref(), &[entry.programdata_bump]],
++            &loader,
++        )
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++        if entry.pool != master_account.key().to_bytes()
++            || entry.policy_binding != AUDIT_POLICY_BINDING
++            || entry.verifier_program != verifier_program.to_bytes()
++            || entry.profile_binding != PROFILE_BINDING
++            || entry.release_binding != RELEASE_BINDING
++            || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION
++            || entry.loader_program != loader.to_bytes()
++            || entry.programdata_address != verifier_programdata.to_bytes()
++            || entry.expected_upgrade_authority != [0u8; 32]
++            || !entry.is_active_at(current_slot)
++        {
++            return Err(ProgramError::InvalidAccountData);
++        }
++        return Ok(());
++    }
++
++    let registry = NMM_reg_replay(NMM_data_replay(registry_account)?)
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    let expected_registry = NMM_pda_replay(
++        &[
++            VERIFIER_REGISTRY_SEED,
++            master_account.key().as_ref(),
++            &[registry.bump],
++        ],
++        &registry_program,
++    )
++    .map_err(|_| ProgramError::InvalidAccountData)?;
++    if registry_account.key() != &expected_registry {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    if registry.pool != master_account.key().to_bytes()
++        || registry.authority != master.verifier_policy.registry_authority
++        || registry.policy_binding != master.verifier_policy.policy_binding
++        || !registry.is_immutable()
++        || registry.is_paused()
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    require_readonly_account(entry_account, &registry_program)?;
++    let entry = NMM_ent_replay(NMM_data_replay(entry_account)?)
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    let expected_entry = NMM_pda_replay(
++        &[
++            VERIFIER_ENTRY_SEED,
++            master_account.key().as_ref(),
++            &PROFILE_BINDING,
++            &RELEASE_BINDING,
++            &[entry.bump],
++        ],
++        &registry_program,
++    )
++    .map_err(|_| ProgramError::InvalidAccountData)?;
++    if entry_account.key() != &expected_entry {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    if entry.pool != master_account.key().to_bytes()
++        || entry.policy_binding != AUDIT_POLICY_BINDING
++        || entry.verifier_program != verifier_program.to_bytes()
++        || entry.profile_binding != PROFILE_BINDING
++        || entry.release_binding != RELEASE_BINDING
++        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION
++        || !entry.is_active_at(current_slot)
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    Ok(())
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::OwnedAccount::data,NMM_data_cut)]
++#[kani::stub(aspis_statement::pool_v1::decode_verifier_registry_v1,NMM_reg_cut)]
++#[kani::stub(aspis_statement::pool_v1::decode_verifier_registry_entry_v1,NMM_ent_cut)]
++#[kani::stub(solana_program::pubkey::Pubkey::create_program_address,NMM_pda_cut)]
++fn stage(){
++ let mut master=any_master();master.verifier_policy.flags &= !POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT;
++ let mut ma=NMM_account::<1>();ma.probe_seed=kani::any();ma.probe_byte=kani::any();kani::assume(ma.probe_seed<5&&ma.probe_byte<32);let reg=NMM_account::<128>();let ent=NMM_account::<192>();
++ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(kani::any());let slot:u64=kani::any();
++ let obs:usize=kani::any();kani::assume(obs<128);let before=reg.account.bytes.as_ref().unwrap()[obs];
++ let native=authenticate_invariant_release_registry(&verifier,&pool,&ma.account,&master,&reg.account,&ent.account,slot);
++ let reference=NMM_reference(&verifier,&pool,&ma.account,&master,&reg.account,&ent.account,slot);
++ assert!(native==reference,"complete legacy outcome with same typed replies");
++ assert!(reg.account.bytes.as_ref().unwrap()[obs]==before,"original immutable byte frame");
++ unsafe{assert!((*reg.data.get()).is_none()&&(*ent.data.get()).is_none()&&(*reg.reg.get()).is_none()&&(*ent.ent.get()).is_none(),"no unmatched data or decoder call");assert!(*ma.nw.get()==*ma.nr.get(),"exact PDA prefix length");}
++}

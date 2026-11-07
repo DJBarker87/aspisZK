@@ -1,0 +1,61 @@
+{"attempt": "NMP_L007", "exit_status": 0, "wall_seconds": 15.47942728199996, "peak_rss_kib": "6347612", "swaps": "0", "print_axioms": ["'AspisR1.NMP_Composition137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_Composition137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Composition137.fold : ∀ {H : Type} (a b : Cuts H),
+  ValueAgreement a b → run (code a) = run (code b) :=
+fun {H} a b h =>
+  id
+    (NMP_CutAlgebra.congr_run a.parse b.parse
+      (fun p =>
+        match p with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok p => do
+          a.mark0
+          let t ← a.publicTranscript p
+          match t with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← a.begin p t
+              match __x with
+    
+...
+                a.finish p_1 after ch)))
+                          (Eq.refl r))
+                  (fun e h =>
+                    Eq.symm h ▸
+                      Eq.refl
+                        (run
+                          (match core.result.Result.Err e with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ← a.begin p_1 t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  a.mark1
+                                  a.finish p_1 after ch)))
+                  (Eq.refl t))
+        (fun e h =>
+          Eq.symm h ▸
+            Eq.refl
+              (run
+                (match core.result.Result.Err e with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok p => do
+                  a.mark0
+                  let t ← a.publicTranscript p
+                  match t with
+                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                    | core.result.Result.Ok t => do
+                      let __x ← a.begin p t
+                      match __x with
+                        | (r, after) =>
+                          match r with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok ch => do
+                            a.mark1
+                            a.finish p after ch)))
+        (Eq.refl p))
+
+Running as unit: run-rbb5c625e96504565a5c8c4613233b6a0.scope; invocation ID: 419ca7761e884cda8d450aebe97a669f

@@ -1,0 +1,40 @@
+{"attempt": "NND_L125", "exit_status": 1, "wall_seconds": 6.5095438251737505, "peak_rss_kib": "2614888", "swaps": "0", "print_axioms": ["'NND_V2ValidatorTotal.zero_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NND_V2ValidatorTotal.registry' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NND_V2ValidatorTotal.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_V2ValidatorTotal.lean:27:64: error: unsolved goals
+r : NCX_Reference.VerifierRegistryEntryV2
+⊢ NND_ResultTotal.Total
+    (if r.statement_version = 0#u8 then
+      ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatementVersion)
+    else do
+      let b ← NCX_Reference.required_binding_is_zero r.pool
+      if b = true then ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+        else do
+          let b1 ← NCX_Reference.required_binding_is_zero r.verifier_program
+          if b1 = true then
+              ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.ZeroRequiredBindin
+...
+fierRegistryFormatError.ZeroRequiredBinding)
+                                else do
+                                  let b7 ← NCX_Reference.required_binding_is_zero r.policy_binding
+                                  if b7 = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          NCX_Reference.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+                                    else do
+                                      let b8 ← NCX_Reference.required_binding_is_zero r.expected_upgrade_authority
+                                      if b8 = true then
+                                          if r.retirement_slot = core.num.U64.MAX then ok (core.result.Result.Ok ())
+                                          else
+                                            if r.retirement_slot ≤ r.activation_slot then
+                                              ok
+                                                (core.result.Result.Err
+                                                  NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidRetirementSlot)
+                                            else ok (core.result.Result.Ok ())
+                                        else
+                                          ok
+                                            (core.result.Result.Err
+                                              NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidAuthorityMode))
+'NND_V2ValidatorTotal.zero_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NND_V2ValidatorTotal.registry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NND_V2ValidatorTotal.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc440eff8124947b7857c1719fe6dfe40.scope; invocation ID: 8b01dd96c2e541d294234591c47acee0

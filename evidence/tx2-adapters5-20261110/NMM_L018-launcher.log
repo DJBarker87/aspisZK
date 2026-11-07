@@ -1,0 +1,47 @@
+{"attempt": "NMM_L018", "exit_status": 1, "wall_seconds": 15.86933499504812, "peak_rss_kib": "6333188", "swaps": "0", "print_axioms": ["'NMM_LaneScalarSource.windows_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneScalarSource.results_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneScalarSource.make_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneScalarSource.completion_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneScalarSource.body_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneScalarSource.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NMM_generated/NMM_LaneScalarSource.lean:29:28: warning: Variable name `level` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NMM_generated/NMM_LaneScalarSource.lean:113:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  0 ≤ g ≤ 31
+  f ≥ 0
+  e ≥ 20
+  e - f ≤ -1
+  e - k ≤ -1
+where
+ e := ↑i
+ f := ↑(↑b.tree.frontier).length
+ g := ↑j
+ k := ↑↑20#usize
+theorem NMM_LaneScalarSource.windows_complete : ∀ (a b : Lane),
+  (∀ (byte : Fin 32) (level : Fin 20) (word : Fin 8), project byte level word a = project by
+...
+calarSource.results_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneScalarSource.make_projection : ∀ (byte : Fin 32) (level : Fin 20) (word : Fin 8) (bump : U8)
+  (master : Std.Array U8 32#usize) (lane : U8) (next : U64) (root : Node) (state : Frontier),
+  project byte level word (NKP_LaneCarrier.make bump master lane next root state) =
+    { bump := bump, master := (↑master)[↑byte]?, lane := lane, next := next, root := some (root word),
+      frontier := some (state level word) } :=
+⋯
+'NMM_LaneScalarSource.make_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneScalarSource.completion_projection : ∀ (byte : Fin 32) (level : Fin 20) (word : Fin 8) (bump : U8)
+  (master : Std.Array U8 32#usize) (lane : U8) (next : U64) (root emptyRoot : Node)
+  (loop : Reply × Frontier × List (Fin 20)),
+  mapOut byte level word (NKP_LaneCompletion.finish bump master lane next root emptyRoot loop).1 =
+    finish byte level word bump master lane next root emptyRoot (NMM_LaneScalarLoop.observe level word loop) :=
+⋯
+'NMM_LaneScalarSource.completion_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneScalarSource.body_projection : ∀ (p : NLK_LaneInput.Sized) (byte : Fin 32) (level : Fin 20)
+  (word : Fin 8), mapOut byte level word (NLK_LaneProgram.body p) = body p byte level word :=
+⋯
+'NMM_LaneScalarSource.body_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneScalarSource.canonical : ∀ (bytes : Slice U8) (byte : Fin 32) (level : Fin 20) (word : Fin 8),
+  value bytes byte level word = mapOut byte level word (NLK_LaneProgram.referenceValue bytes) :=
+⋯
+'NMM_LaneScalarSource.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd372d3ff73044b48acf0d9bca35c250f.scope; invocation ID: e7b7e41e5fc34849bbfd299f9fbeb76c

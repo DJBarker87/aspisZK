@@ -1,0 +1,44 @@
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+// Weak frame contract: full slice havoc, with one recorded arbitrary cell.
+// It is a nondeterministic-generator utility, NEVER a callee's functional law.
+#[kani::requires(!dst.is_empty() && dst.len()<=13831 && probe<dst.len())]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| dst[probe]==word)]
+pub(crate) fn point(dst:&mut[u8],probe:usize,word:u8,_side:&mut u8){dst[probe]=word;}
+#[kani::requires(!dst.is_empty() && dst.len()<=13831 && probe<dst.len())]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| dst[probe]!=word)]
+fn inverse(dst:&mut[u8],probe:usize,word:u8,_side:&mut u8){dst[probe]=word;}
+#[kani::requires(!dst.is_empty() && dst.len()<=13831 && probe<dst.len())]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| true)]
+fn weak(dst:&mut[u8],probe:usize,_word:u8,_side:&mut u8){dst[probe]=0;}
+#[kani::requires(!dst.is_empty() && dst.len()<=13831 && probe<dst.len())]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| true)]
+fn bad_modifies(dst:&mut[u8],probe:usize,word:u8,side:&mut u8){dst[probe]=word;*side=side.wrapping_add(1);}
+fn args()->([u8;13831],usize,usize,u8,u8){let n:usize=kani::any();kani::assume(n>0&&n<=13831);let i:usize=kani::any();kani::assume(i<n);(kani::any(),n,i,kani::any(),kani::any())}
+#[kani::proof_for_contract(point)]#[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn positive(){let(mut b,n,i,w,mut s)=args();point(&mut b[..n],i,w,&mut s);}
+#[kani::proof_for_contract(inverse)]#[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn inverted_ensures(){let(mut b,n,i,w,mut s)=args();inverse(&mut b[..n],i,w,&mut s);}
+#[kani::proof_for_contract(weak)]#[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn weak_positive(){let(mut b,n,i,w,mut s)=args();weak(&mut b[..n],i,w,&mut s);}
+#[kani::proof]#[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn real_body(){let(mut b,n,i,w,mut s)=args();weak(&mut b[..n],i,w,&mut s);assert!(b[i]==0);}
+#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(weak)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn unimplied_assertion(){let(mut b,n,i,w,mut s)=args();weak(&mut b[..n],i,w,&mut s);assert!(b[i]==0);}
+#[kani::proof_for_contract(bad_modifies)]#[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn modifies_violation(){let(mut b,n,i,w,mut s)=args();bad_modifies(&mut b[..n],i,w,&mut s);}
+#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn caller(){let(mut b,n,i,w,mut s)=args();let before=s;point(&mut b[..n],i,w,&mut s);assert!(b[i]==w&&s==before);}
+#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn caller_control(){let(mut b,n,i,w,mut s)=args();point(&mut b[..n],i,w,&mut s);assert!(b[i]==(w^1));}

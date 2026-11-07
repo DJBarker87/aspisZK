@@ -1,0 +1,75 @@
+# NND model bridge handoff
+
+Stage 0: inventory committed before proof work. A1/A2 OPEN; no candidate/root or security closure claimed.
+
+Only NND_ modules and this evidence directory will change. Frozen source, trust, ELF pins, wallets/keys and sibling worktrees unchanged. Budget 2 extraction / 300 Lean-link-audit / 0 Kani. Host workspace /home/dombarker/project-offloads/codex-cx-model-bridge-20261111; own cache retained.
+
+Next: TX2 fresh/adopted definition transport, then RSL carriers and op11/decoder installation; TX1 afterward. NMS/NMX value equalities are reusable support, not owner/event packet closure. Full hypotheses and remaining gaps stay explicit.
+
+## Stage 1: TX2 provenance and canonical replay
+NND_E001 registry extraction PASS (167.979s,1152272KiB,swap0). NND_Registry.adopted passes L004 (2.239s,2629556KiB,swap0), no axioms. It is the entire fresh234 control/value body on canonical carriers; slot instances and RSL effects are NOT discharged. L003 failed due column68 indentation clipping, repaired only after punctuation/identifier token equality; failed proof receives no credit. NND_REGISTRY_REPLAY.json records substitutions.
+
+NND_E002 require_zero: Charon succeeds, Aeneas exits2 Not_found in InterpLoops symbolic loop-context join (113.091s,539636KiB,swap0). No emitted root and no native credit. Both extraction slots charged; no rerun, timeout/cap increase, or Kani. This is the only historical owned-source change (NND_PROVENANCE.md); frozen and historical TX2 bodies otherwise identical. Existing CLOSED native zero leaf plus a symbolic adopted-loop law is the remaining possible route.
+
+L001 private closure seed PASS. L002 inspection contains two unknown identifier diagnostics, no accepted theorem. Reused RSL and NMS/NMX modules now being replayed privately with original ownership/provenance. No candidate row.
+
+## Resume with TAS amendment
+See NND_AMENDMENT.md. The WIP carriers through L030 have successful receipts; AccountCarrier and Stage2Link are not yet checked. No A1/A2 field is inhabited. No old failed attempt is reset.
+
+## Returned-arm support stage
+L032 checks NND_Stage2Link.source against fresh NMS emission; L033 checks NND_AccountCarrier getter with full ProgramError. L035–L036 establish returned-arm composition for RSL bind, allocation, panic, errors, environment/PDA and master/checkpoint Box sites. Allocation aborts remain admitted; no returning/post-abort heap is invented. L039 NND_RegistryEval.returned establishes the full RSL234 returned value (both registry branches, both Ok/Err, SAME env.pda replies) as its explicit executable value. This does NOT yet identify that value with the AdapterRw/sdk body; no A2/row credit. All successful printed axioms are standard only (or none). Exact target, status, wall/RSS/swap, revision/hashes and import/Aeneas pins are in per-attempt receipts. Prior compile count corrected: 27 actual scopes through identifier L030, not 30 actual; identifiers L017–L019 were unused and are not reclaimed.
+
+L043 scalar bit/equality transport and L044 registry predicate transport PASS: all four native CLOSED flag helpers and both active_at helpers equal RSL predicates at the mapped records and slot, without hypotheses. L040–L042 elaboration repairs are excluded; only L043/L044 certify the current sources. No native decoder instance or A1/A2 root yet.
+
+## Native decoder slot selection and higher TX2 values
+L045/L049: lane Ref and full233 Ref returned values, including all count errors, all decoder/readonly errors, both registry branches, SAME PDA seeds/replies, and successful Authenticated payload. Lane pure model is kept symbolic (no concrete frontier reduction). L046 hit a malformed generated record and heartbeat; replacement L047 isolates the proof by call order, L048 repairs layout, L049 checks the final count split. No failure is credited.
+
+L052 concrete CLOSED native decoder selection uses NFY request, NJQ V1 registry/entry, NCX V2 registry/entry, NKF master/checkpoint Box references, NHY flags, NIS active. L060 proves the selected op23/op25–34/op48/49 survive into DrvC_Installation.sdk at the actual FIp/deployed configuration. This is a PARTIAL missing substitution, not TAS.Exhibited: native217/op50 and remaining helpers/runtime oracles are not installed. L051 corrected polymorphic equality notation. L058 was an own-input preflight failure, not a scope: original IDa_Deployed object is not in the flattened canonical closure; its namespace is already imported from NGJ. No shared module was rebuilt. L059's unrelated lane-preservation projection hit heartbeat; L060 splits that unneeded projection out rather than repeating it.
+
+L053 validates full242 returned fold parameterized only by explicitly named CLOSED Pool leaf value transports (NND_PoolValues.Values). These remain pending concrete instantiation, not root hypotheses or claimed child credit. L055 recovers Dom064 from the SAME Spec.call observation. L056 keeps the verifier Err→InvalidInstructionData value map and its log event in the Ref, without changing the Ref. L057's compound elaboration hit recursion depth; the next shape isolates064 call transport in a small module, no option/cap increase.
+
+## Fresh TX1 source and symbolic zero reuse
+L087/L088 check fresh frozen328/345 token-identical canonical-owner replay; L115 checks fresh frozen094 canonical-owner parent replay against AspisR1CurrentCaller.verifier.candidate.tx1. NND_TX1_REPLAY.json and NND_TX1_SOURCE_REPLAY.json retain immutable NMT extraction/source hashes and every slot substitution. This is source support: original nominal-carrier maps, RSL child installation and op10 call association are still separate. No child law is inferred from the parent replay.
+
+The sibling symbolic zero proof was copied from immutable NMT commit with provenance and replayed privately (L091–L114). Canonical RSL imports replace NMT_RSL import names only to avoid duplicate owners. Unchanged Base/Pool were reused rather than recompiled. NND_ZERO_REUSE.json records original/replay hashes and source order; no proof was duplicated. L117 proves the historical index-loop zero model equals RSL.requireZero symbolically for arbitrary slices; its bounded CLOSED NFU native reference matches on <=4096, hence covers the1768 checkpoint when that caller length is established. Failed E002 still provides NO fresh emission, and the source suffix/index branch difference remains reported.
+
+L089 full require_verifier_checkpoint and L086 length/readonly/getter laws preserve complete ProgramError values and branch short-circuiting. L075 and L084 check all parser exits of064 against sdk(c).op11, plus the BOTH-Ok/Err inversion excluding independent stopped C04 from returned arms. The common resolved continuation remains OPEN.
+
+L082 NND_ReservationFinding.pending_error_differs proves the exact C06 selector mismatch: native reservation Err vs installed model reserved=true. This is a representation alignment obligation, not a counterexample to an admitted actual run. L090 NND_RuntimePartial proves the existing runtime returning-value item does not imply digest totality; partial backends/stopped prefixes must be kept by the064 law, and no totality assumption is added.
+
+L119–L124 establish value-totality of the selected V1 registry/entry pure decoders and exact Option projections ONLY at call sites where frozen source maps every format Err to InvalidAccountData. Unrepresentable unbounded RSL byte lists reject; native slices have their bound proved internally. No hash/runtime totality is inferred.
+
+## Concrete registry child/library installation
+L129–L137: selected V2 registry/entry validators and decoders are value-total on all native slices; their exact Option projections match the RSL fields at the source's InvalidAccountData mapper. The fixed32-byte zero helper's <=768 child bound is proved from the actual array length. No runtime or allocation totality follows. Native policy maps and concrete local registry Ops/PoolLib now share those CLOSED owners. L139/L140 prove key/flag comparison and source policy-guard transport; L144 and L150 prove the complete emitted policy prefix to its RSL value prefix, BOTH Ok/Err and arbitrary continuation result.
+
+L142/L145 factor the actual fresh234 control/value body at its real policy and immutable/V1 boundaries, by equality. L147/L151/L152 preserve full getter/error/readonly values. L154 checks generic constant-format-error Try control; all callback equations must be discharged at source sites. Registry run factoring through the generic higher-order rewrite shape failed at L155–L159 and is retired. Replacement is direct source factorization, keeping the emitted Try protocol intact; normalized control transport is isolated later. No timeout/cap/resource option was raised. Failure outputs with recovery axioms remain excluded.
+
+## Registry branch source factors and terminal checks (L145–L183)
+
+The complete policy prefix transport is green (L150), preserving native Err payloads. The V1 registry decoder prefix is green (L166), with its continuation at the same decoded record; this is a local continuation lemma, not an additional root hypothesis. Concrete registry and entry record predicates agree with the canonical RSL predicates (L165,L167,L168). The V1 terminal entry check is green (L176), including success and InvalidAccountData. L177/L179 are rfl source factors exposing the V1/V2 terminal checks in the actual fresh replay; they do not replace native children by assumptions. V2 terminal value transport and PDA composition are in progress. Exact TAS A1/A2 remain OPEN.
+
+The terminal V2 value projection is green at L185. V1 source PDA factoring and SAME-oracle transport are green at L191–L193: the five seed slices, program id, returned key, key rejection and record rejection are retained exactly. No SHA/PDA implementation is unfolded or trusted as total. L188 separately maps the complete native V1 terminal Result to the two RSL checks. The local registry Ops dictionary is still not the final sdk instance.
+
+## Complete local registry bridge (L199–L263)
+
+`NND_RegistryReturned.returned` is checked at L263. It consumes the canonical full RSL234 Ref observation and its returned exit, and concludes the complete AdapterRw234 native Result for BOTH Ok and Err. Native decoders are installed explicitly; each PDA uses the SAME RSL Env, exact seeds, program and unchanged reply. No callback/child result/endpoint premise survives in this theorem. Its Ops dictionary is `NND_RegistryOps.install base D env`, **not yet the deployed DrvC sdk**. Thus it is a complete local234 bridge, not TAS.NND_A2.stage2 or a credited row. It is based on the fresh frozen E001 body through `NND_Registry.adopted`, not the old source revision alone.
+
+`NND_Stage1RefEval.returned` (L220) covers the complete RSL345 returned evaluator, including Err and allocation stops. Its `NND_Tx1ReturnedValues.Values` field is an intermediate obligation, not a caller clause or an admitted A1 hypothesis. No concrete094 End/Result transport is claimed.
+
+The formal verification stage audits only current successful own roots (314 initially selected), in groups of at most ten to bound raw-walk work and isolate failures; this is not an all-ledger roots audit. A single focused combined import will include ledger24 NLX_COMBINED_IMPORT and these current successful modules. Failed source snapshots and diagnostic recovery axioms are excluded.
+
+## Final verification and budget disposition
+
+Exact TAS A1/A2 remain OPEN; no candidate or row credit. The complete local234 bridge is the concrete progress: `NND_RegistryReturned.returned`, including BOTH Ok and Err at the SAME oracle Env. Its dictionary is explicitly local, not an assumed deployed compatibility packet.
+
+Used the full original budget, including prior interrupted work: **2/2 extraction, 300/300 actual formal/link/audit/support scopes, 0/0 Kani**. Identifiers L017–L019 were previously unused and are now raw-audit groups; L058's old pre-launch input failure launched no scope and that identifier is now the final retention gate. Each identifier has exactly one actual scope receipt. There were 238 exit-zero and62 exit-one formal scopes; all failed elaborations, including their recovery sorryAx output, are excluded from current successful-root selection. No timeout, cap, heartbeat or recursion limit was raised. No unchanged killed job was repeated.
+
+Current-source selection:149 own modules,314 own printed top roots. Raw ax2 traversal in32 bounded groups finds only `propext`, `Classical.choice`, `Quot.sound`, with **zero** disagreements against printed axioms. Planted private/proof/matcher/aux controls detect their axioms; corresponding mutations remove them.322 compressed reachable graphs (314 roots +8 controls), raw and archive hashes, are retained in `NND_audit/` and `NND_RAW_ARCHIVES.json`.
+
+Focused combined import: `NND_COMBINED_IMPORT` = ledger24 `NLX_COMBINED_IMPORT` plus all149 current successful own modules. L267 exit0,3.178s,6,592,704KiB RSS,0 swaps. The first combined attempt L265 found a checkpoint helper name collision, repaired at L266 before the changed-source L267 replay. This is not a package/frozen-manifest or cold release replay.
+
+Final own-object retention: L058 exit0,7.239s,43,536KiB RSS,0 swaps. It verifies34,139 selected object files from the private combined environment, current source hashes, all314 raw roots and graph archives. Pins are in L019/NND_CLOSURE_PINS.json. Host workspace and all objects are retained at `/home/dombarker/project-offloads/codex-cx-model-bridge-20261111`; LEAN_PATH order remains NND_objects, NND_NLX_seed, NND_seed. Aeneas objects resolved by that path are included in the pins. Maximum RSS among all300 formal scopes:6,621,460KiB; every scope recorded0 swaps. Exact commands, wall time, exit, source revision/dirty flag and content-addressed input archives are in the per-scope receipts.
+
+`NND_VALIDATION.json` records local artifact validation PASS. The original AdapterRw revision difference and frozen require_zero branch remain findings, not erased obligations. Frozen source tree checks match every prescribed revision. No shipped files, trust rows, keys, live sibling worktrees, or ELF artifacts were changed; no ELF rebuild/reproduction or push is claimed.
+
+Remaining by member is authoritative in NND_REMAINING.md:234 deployed dictionary association;217 native decoder association;233/242 concrete payload/library compositions;064 SAME occurrence End/chronology/native Result including reservation alignment;241 final sdk/EnvRep composition;345 frozen zero-emission gap and Statement/Public/encoder/caller-domain transports;328/094 concrete verifier returned-value and debug/oracle associations. All still-available algebraic folds are listed in the module evidence, but none is falsely labelled a complete exact TAS fold ready for one-line instantiation. The remaining Lean work was not abandoned because Kani ran out; the entire formal budget was used.
