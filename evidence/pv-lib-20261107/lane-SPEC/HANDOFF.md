@@ -90,3 +90,5 @@ Next Lean49714; strict new-root audit not yet run.
 49714 replayed pinned unchanged SourceStoreLibrary in the same isolated W3
 cohort: exit0;wall0:01.42;peak2685908KiB;swap0;parent8a0e250e030;
 standard summary axioms. No new root/row contract claimed. Next Lean49715.
+
+49715 pinned unchanged PV_THR2_SourceStoreInterpreter replay: exit0;wall0:01.67;peak2678584KiB;swap0;source parent7c6951c0dba. Next Lean49716.
