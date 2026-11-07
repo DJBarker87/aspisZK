@@ -25,3 +25,8 @@ import NNH_Tx2CallReturned
 import NNH_Tx2Values
 import NNH_ValidateEval
 import TAS_TopB_NNE
+import NNH_HostEnv
+import NNH_G0Partial
+import LIB_Deployed
+import LIB_ErrorDebug
+import LIB_Root0
