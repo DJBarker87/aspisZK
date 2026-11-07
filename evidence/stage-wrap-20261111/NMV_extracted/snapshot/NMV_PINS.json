@@ -1,0 +1,249 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+    "-diagnose-translation",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NMV_snapshot",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-cx-stage-wrap-20261111/NMV_extracted/snapshot/raw",
+    "-subdir",
+    "NMV_snapshot",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-cx-stage-wrap-20261111/NMV_extracted/snapshot/snapshot.llbc"
+  ],
+  "aeneas_exit": 2,
+  "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::r1_pool_adapter::owned::snapshot",
+    "--opaque",
+    "solana_account_info::_::try_borrow_data",
+    "--opaque",
+    "solana_account_info::AccountInfo",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-cx-stage-wrap-20261111/NMV_extracted/snapshot/snapshot.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-stage-wrap-20261111/NMV_src/programs/r1-cost-probe/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "charon_exit": 0,
+  "exit": 2,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "llbc_sha256": "b6de3cfed3b0d9bc6383e93419252de87081521b1fcc7bb5e0c0f0df819d9492",
+  "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "manifest_sha256": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+  "opacity": [
+    {
+      "path": "solana_account_info::_::try_borrow_data",
+      "why": "SDK borrow law NLF under (be)(2); guard type retained"
+    }
+  ],
+  "outputs": {},
+  "root": "crate::r1_pool_adapter::owned::snapshot",
+  "root_features": "pool-adapter,private-leaf-salts",
+  "root_owner": "aspis_r1_cost_probe_program",
+  "root_package": "programs/r1-cost-probe",
+  "tools": {
+    "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  },
+  "validated_account_info_opacity": [
+    {
+      "def_id": 0,
+      "generics": {
+        "const_generics": [],
+        "regions": [
+          {
+            "index": 0,
+            "mutability": "Mutable",
+            "name": "'a"
+          }
+        ],
+        "regions_outlive": [],
+        "trait_clauses": [],
+        "trait_type_constraints": [],
+        "types": [],
+        "types_outlive": []
+      },
+      "item_meta": {
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " Account information"
+            }
+          ],
+          "inline": null,
+          "public": true,
+          "rename": null
+        },
+        "is_local": false,
+        "lang_item": null,
+        "name": [
+          {
+            "Ident": [
+              "solana_account_info",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "AccountInfo",
+              0
+            ]
+          }
+        ],
+        "opacity": "Opaque",
+        "source_text": null,
+        "span": {
+          "data": {
+            "beg": {
+              "col": 0,
+              "line": 22
+            },
+            "end": {
+              "col": 26,
+              "line": 22
+            },
+            "file_id": 3
+          },
+          "generated_from_span": null
+        }
+      },
+      "kind": "Opaque",
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "repr": {
+              "align_modif": null,
+              "explicit_discr_type": false,
+              "repr_algo": "C",
+              "transparent": false
+            },
+            "size": 48,
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  0,
+                  8,
+                  16,
+                  24,
+                  32,
+                  40,
+                  41,
+                  42
+                ],
+                "tagger": [],
+                "uninhabited": false
+              }
+            ]
+          }
+        }
+      ],
+      "ptr_metadata": "None",
+      "src": "TopLevel"
+    }
+  ],
+  "validated_opacity": [
+    {
+      "boundary": {
+        "path": "solana_account_info::_::try_borrow_data",
+        "why": "SDK borrow law NLF under (be)(2); guard type retained"
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 1,
+          "name": [
+            {
+              "Ident": [
+                "solana_account_info",
+                0
+              ]
+            },
+            {
+              "Impl": {
+                "Ty": {
+                  "kind": "InherentImplBlock",
+                  "params": {
+                    "const_generics": [],
+                    "regions": [
+                      {
+                        "index": 0,
+                        "mutability": "Unknown",
+                        "name": "'a"
+                      }
+                    ],
+                    "regions_outlive": [],
+                    "trait_clauses": [],
+                    "trait_type_constraints": [],
+                    "types": [],
+                    "types_outlive": []
+                  },
+                  "skip_binder": {
+                    "Deduplicated": 828
+                  }
+                }
+              }
+            },
+            {
+              "Ident": [
+                "try_borrow_data",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 4,
+                "line": 121
+              },
+              "end": {
+                "col": 73,
+                "line": 121
+              },
+              "file_id": 3
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+ "root0_unconditional": false,
+ "rows": [
+  {
+   "row": "TX2:240",
+   "caller": [
+    "TX2:221",
+    "TX1:333"
+   ],
+   "clause": "RSL.TX2_240.Domain V a s",
+   "verbatim_definition": "\u2200 a0 a6, a.accounts.length = 7 \u2192 a.accounts[0]? = some a0 \u2192 a.accounts[6]? = some a6 \u2192 (payload a6 s).length = CHECKPOINT_BYTES \u2192 (payload a0 s).length = PROOF_ACCOUNT_BYTES \u2192 V.Root0 (payload a6 s) (slice (payload a0 s) AFTERSTATE_BYTES PROOF_ACCOUNT_BYTES)",
+   "classification": "bf(2) original input relation; canonical conditional, weak instance unconditional by TCK.domain240_weaken",
+   "discharged_at_child": "NMV_RslDomain.domain241",
+   "actual_native_installation": "OPEN"
+  },
+  {
+   "row": "TX1:344",
+   "clause": "True",
+   "classification": "No own input clause"
+  },
+  {
+   "row": "TX2:241",
+   "clause": "RSL.TX2_241.Domain V \u27e8a.program_id, snapshots, a.data, clock_reply\u27e9",
+   "classification": "Full canonical child domain, not a new parent hypothesis",
+   "discharged_by": "NMV_RslDomain.domain241",
+   "status": "PROVED_IN_TRANSCRIPTION_FOLD"
+  }
+ ],
+ "forbidden_premises_added": [],
+ "phantom_edge": "TX2:240 to FibreIndex::get is retained as a name-collision finding; actual site is Clock::get, per TCK section5. No row/edge deleted here."
+}
