@@ -137,3 +137,7 @@ rehashes the selected closure. Own runner reservation now reserves only the
 outstanding final obligations: two slots until the current combined-import
 hash is accepted, then one retention slot. The total290 (old40 + renewed250),
 all launch caps and timeout/admission policies are unchanged.
+
+## Revision 2 resumption: R0
+
+Prior receipts count287 formal scopes,2 extraction,0 Kani. Latest allowance supplies at least150 further formal scopes (total437); no extraction. L481 repaired retention PASS:41.108s,366716KiB,swap0. Full revision1 support export retained; no row root inferred. Revision2 getter clone abort arms replace the former target mismatch without narrowing DomainTrue. Original revision1 proofs remain historical support and must not be loaded as revision2 evidence. NMM still has no217/234 candidates.

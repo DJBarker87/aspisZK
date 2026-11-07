@@ -7,12 +7,12 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<290,'Renewed Lean/link/audit budget exhausted (250 additional scopes)' 
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<437,'Revision2 formal budget exhausted (287 previous + 150 minimum remaining)' 
         combined=E/'NMX_COMBINED_IMPORT.lean'
         combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
         pending_final_slots=1 if combined_green else 2
         if target not in ['NMX_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention']:
-            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<290-pending_final_slots,'Reserve every outstanding final import/retention slot'
+            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<437-pending_final_slots,'Reserve every outstanding final import/retention slot'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
