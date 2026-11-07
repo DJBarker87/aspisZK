@@ -1,0 +1,41 @@
+{"attempt": "NNI_L011", "exit_status": 0, "wall_seconds": 20.56170471291989, "peak_rss_kib": "6831032", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Candidate136.candidate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMX_R3_DecoderFold.root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NNG_Candidate136.candidate : RSL.TX1_136.RowSpec_136 LIB_VLib.library NNG_Producer136.producer :=
+⋯
+def AspisR1.NNG_Producer136.producer : NNG_Representation136.Args →
+  RSL.Observer → RSL.Env → RSL.Obs (Except NNG_Representation136.VL.WErr (RSL.Verified NNG_Representation136.VL)) :=
+NNG_DEnvObserved136.producer NNG_Representation136.VL NNG_Representation136.project NNG_Representation136.calls
+  NNG_Representation136.input NNG_Producer136.events
+@[reducible] def LIB_VSemantic.finishInputDom : LIB_VCarriers.Public →
+  LIB_VCarriers.Prefix → LIB_VCarriers.Transcript → LIB_VCarriers.Challenges → Prop :=
+LIB_VDomains.finishInputDom
+def RSL.TX1_136.RowSpec_136 : (V : RSL.VLib) →
+ 
+...
+roducer : NNG_Representation136.Args →
+  RSL.Observer → RSL.Env → RSL.Obs (Except NNG_Representation136.VL.WErr (RSL.Verified NNG_Representation136.VL)) :=
+NNG_DEnvObserved136.producer NNG_Representation136.VL NNG_Representation136.project NNG_Representation136.calls
+  NNG_Representation136.input NNG_Producer136.events
+@[reducible] def LIB_VSemantic.finishInputDom : LIB_VCarriers.Public →
+  LIB_VCarriers.Prefix → LIB_VCarriers.Transcript → LIB_VCarriers.Challenges → Prop :=
+LIB_VDomains.finishInputDom
+def RSL.TX1_136.RowSpec_136 : (V : RSL.VLib) →
+  (RSL.TX1_136.Args V → RSL.Observer → RSL.Env → RSL.Obs (Except V.WErr (RSL.Verified V))) → Prop :=
+fun V verify_finish =>
+  ∀ (a : RSL.TX1_136.Args V) (obs : RSL.Observer) (env : RSL.Env),
+    RSL.TX1_136.Domain V a → RSL.TX1_136.Ref V a env (verify_finish a obs env)
+def RSL.TX2_217.RowSpec_217 : (RSL.Bytes → RSL.Env → RSL.Obs (Except RSL.ProgramError RSL.LaneState)) → Prop :=
+fun decode_lane_from_pool_release =>
+  ∀ (bytes : RSL.Bytes) (env : RSL.Env),
+    RSL.TX2_217.Domain bytes → RSL.TX2_217.Ref bytes env (decode_lane_from_pool_release bytes env)
+theorem NMX_R3_DecoderFold.root : ∀ (allocationSucceeded : RSL.Bytes → RSL.Env → Bool),
+  RSL.TX2_217.RowSpec_217 (NMX_R3_DecoderFold.decode allocationSucceeded) :=
+⋯
+theorem NMX_R3_LaneAllocation.complete : ∀ (b : RSL.Bytes) (env : RSL.Env)
+  (o : RSL.Obs (Except RSL.ProgramError RSL.LaneState)),
+  RSL.TX2_217.Ref b env o ↔ ∃ allocationSucceeded, o = NMX_R3_LaneAllocation.realize allocationSucceeded b env :=
+⋯
+'AspisR1.NNG_Candidate136.candidate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMX_R3_DecoderFold.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3ccccd90a2f34a0abd9f65042d3a3c2b.scope; invocation ID: de127dc2c5e04af687c23ef990b73509
