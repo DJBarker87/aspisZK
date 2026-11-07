@@ -15,9 +15,10 @@ r=dict(research_revision=subprocess.check_output(['git','rev-parse','research'],
 if q.returncode==0:r['candidate']=json.loads(q.stdout)
 (E/'NMP_CHILD136_GATE_CHECK.json').write_text(json.dumps(r,indent=1))
 assert not r['present'],'Merged NMO candidate found: inspect/import read-only before gate; do not ignore it'
-for i in [78]+list(range(38,78))+[79,80]:
+plan=json.loads((E/'NMP_FINAL_PLAN.json').read_text())
+for i in plan['sequence']:
  a=f'NMP_L{i:03}';assert not(E/a/'receipt.json').exists(),('Never resubmit',a)
  rc=subprocess.run([sys.executable,str(E/'NMP_run.py'),a])
  if rc.returncode:sys.exit(rc.returncode)
- if i==78:
+ if i==plan['regenerate_after']:
   assert subprocess.call([sys.executable,str(E/'NMP_prepare_audit.py')])==0

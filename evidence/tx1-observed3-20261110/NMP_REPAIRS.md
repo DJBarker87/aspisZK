@@ -19,3 +19,7 @@ L034 diagnostic is a wrong namespace in own source; corrected AspisR1CurrentCall
 K012 matches the intended corrupt-root assertion (1/995), rendered as a placeholder by Kani assert_eq. Owned validator now accepts exactly-one assert_failed_inner placeholder only for explicitly enumerated negative-control targets in committed plans. Unexpected checks, multiple failures, compile errors and timeouts still stop. No proof rerun for diagnostic interpretation.
 
 Stopped and restarted only the own local final-gate waiting client before K099 exists; it had submitted no scope. New queue compiles rejection-classifier support first (L078), refreshes audit inputs, then runs the final gate. Host scopes and native queue were not touched. Native inventory and audit-summary checks share final L080; all80 Lean/support labels remain unique.
+
+Final waiting client restarted before any final scope: plan is now loaded at runtime. Three focused rho-certificate modules occupy L038-L040; combined/audit moves to L041-L076 with29 distinct-root groups. This replaces three audit segments with independent caller-domain proof work and preserves80 unique support labels. No running native scope was touched.
+
+Corrected future raw-audit collection globs to the actual per-scope proof index before launch; no evidence input or verification condition was weakened.

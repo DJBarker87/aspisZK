@@ -29,3 +29,5 @@ Remaining native slots and Lean/support slots are still available. Counts come
 from actual receipts, excluding reservation/share waits and unsubmitted configs.
 
 K011 combined return/call-log/retained928 projection also timed out at90s. It is retired; separate return and retained-halo windows are now planned under the same frozen body. Calibrated mutable frame contracts for13831 and928 are usable; the dynamic-slice stub_verified form K068 is retired after a compiler ICE. Native new shapes remain required. No RowSpec is claimed from conditional algebra.
+
+Additional exact boundaries: 087 allocation is a fresh fixed-size primitive interpretation, not full arbitrary Vec/old-owner/r0-Error reply coverage; SAME CLOSED064/physical primitive installation remains unproved. 137 returning immutable-input frame, typed padding/H-channel erasure, and all borrowed Prefix allocations/extents remain open even if all scalar/array return windows pass. Raw pointer equality is never substituted for an initialized same-owner Heap View.
