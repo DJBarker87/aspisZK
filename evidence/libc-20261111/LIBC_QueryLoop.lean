@@ -38,7 +38,7 @@ theorem source (a : Args) (env : Env) (domain : Domain a) :
    (LIBC_Bytes.raw a.1) (nativeP a) (nativeA a) (nativeG a) none (geo a) (pending a)
    (LIBC_Usize.raw (finish a))) := by
  rw [domain.1]
- have ten : LIBC_Usize.raw 10 = 10#usize := LIBC_Usize.from_native 10#usize
+ have ten : LIBC_Usize.raw 10 = 10#usize := LIBC_Usize.from_native 10#usize (by scalar_tac)
  rw [ten]
  unfold model
  rw [NFS_QueryLoopRoot.tx1 _ _ _ _ _ _ _ 0 0 domain.2.2.gCanonical domain.2.2.invariant domain.2.1]
