@@ -21,7 +21,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x['kind']=='lean' for x in done)<323,'Actual Lean compiler budget exhausted (revision 2 total 323)' 
-        if target not in ['NMS_COMBINED_IMPORT','NMS_ProofDriver','NMS_ScanDriver']:
+        if target not in ['NMS_COMBINED_IMPORT','NMS_R2_COMBINED_IMPORT','NMS_ProofDriver','NMS_ScanDriver','NMS_R2Driver']:
             assert sum(x['kind']=='lean' for x in done)<321,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()]
@@ -40,7 +40,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
             assert any(x.get('module')==dep and x['exit_status']==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NMS_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NMS_generated','-o','NMS_objects/'+target.replace('.','/')+'.olean',src]
-        if target in ['NMS_ProofDriver','NMS_ScanDriver']:command+=['-c','NMS_native/'+target+'.c']
+        if target in ['NMS_ProofDriver','NMS_ScanDriver','NMS_R2Driver']:command+=['-c','NMS_native/'+target+'.c']
     assert command
     cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time=('focused Lean elaboration' if kind=='lean' else 'optimized Rust compilation then CBMC verification of '+target if kind in ['kani','batch'] else 'optimized audit link' if kind=='link' else 'named raw axiom/module scan' if kind=='audit' else 'bounded source, metadata, export or hashing inspection'))
     files[a+'.json']=json.dumps(cfg)
@@ -82,6 +82,8 @@ if {kind!r}=='audit':
   for row in json.loads(p.read_text()).get('results',[]):
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
    if q.is_file():names.append(q)
+if {kind!r}=='support' and {target!r} in ['NMS_R2_export','NMS_R2_verify']:
+ names += [b/n for n in ['NMS_R2_EXPORT.json','NMS_R2_CLOSURE_PINS.json.xz','NMS_R2_CLOSURE_PINS.json.sha256','NMS_R2_RETENTION_export.json','NMS_R2_RETENTION_verify.json'] if (b/n).is_file()]
 if {kind!r}=='inspect':
  names += [b/n for n in ['NMS_TOOL_PINS.json','NMS_RETENTION.json','NMS_EXPORT.json','NMS_CLOSURE_PINS.json.xz','NMS_CLOSURE_PINS.json.sha256','NMS_UNUSED_POOL_FINDING.json'] if (b/n).is_file()]
 out={{}}

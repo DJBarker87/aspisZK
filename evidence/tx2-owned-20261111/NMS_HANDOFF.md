@@ -104,3 +104,45 @@ factor by rfl. L344's own indentation matcher was corrected to an anchored
 line match; no shared infrastructure changed. L347/L349 whole suffix
 definitional normalization failed and that shape is retired; exact lift
 inspection and head-by-head composition are the replacement.
+
+## Revision2 native tail and error callback stage
+L351/L352 compile head-by-head exact emitted242 suffix factor/transport;
+no whole-buffer normalization or successful endpoint premise is used.
+The fixed CLOSED source images discharge the scanner width property at
+L343, and L353 composes the canonical241 fold with that property internally.
+L371 retargets the full typed OPEN233 packet to canonical revision2;
+L372 substitutes the complete242 packet in the literal241 source body.
+L369 uses coherent std slice equality to prove native key inequality without
+32-byte unrolling. L381/L382 prove symbolic std anyM termination and the
+exact slice-array comparison needed by the decoder; L383 establishes all
+payment-header outcomes. L390 proves full typed241 error-callback transport,
+including format allocation BEFORE logging; L393 proves byte-map injectivity
+and the exact original-input scanner image. All passing printed axioms are
+standard-only. None of these source/support results is a native row root.
+
+R20 request decoder totality preflight is still in progress: focused wrapper,
+reference, header, std, field-word and map-error cuts replace the previous
+whole-parser assumptions. Failed proof receipts are excluded. Native codec
+word adaptation reuses the coherent S6 totality at identical bit patterns;
+no new field arithmetic, trust assumption, Kani or extraction run is added.
+NMX child233 inspected read-only at10e6ca7bc2f; no committed candidate root,
+so the complete revision2 RowSpec_233 remains a parameter.
+
+## Revision2 frozen selection before final audit
+L406/L407/L411/L412/L415/L416 establish the arbitrary-input R20 word/digest,
+validator, actual map-error, common and payment decoder totality chain.
+L417's whole request-reference proof hit the DEFAULT heartbeat limit and is
+retired to NMS_R2RequestRefTotal.lean.pending. The source was split, not given
+a larger limit: L424 exact branch source identity, L425/L426 independent
+payload arms, L427 header composition, L428 arbitrary-slice decoder totality,
+and L429 full Option-slot observation transport all PASS. No honest fixture,
+accepted-only restriction or inferred allocator-success premise is used.
+L423 installs the CLOSED output-lane value law, including noncanonical Err;
+L431 transports all native profile/release/pool key comparisons; L433/L434
+transport the literal three-check source prefix to the canonical Boolean guard.
+L435 preserves every nullifier word through the request/payment carrier.
+L430 is the fixed-source weak241 fold (G1b, D1 only; no scanner-width premise).
+These are source/cross-carrier support. Native/canonical parent assembly is
+still OPEN; candidate_root remains null for BOTH rows.
+Final focused selection: NMS_R2_COMBINED_IMPORT with NLX_COMBINED_IMPORT;
+all current own R2 theorem roots only, no all-ledger-root audit.

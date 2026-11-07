@@ -1,3 +1,11 @@
+Revision2 update: the pure-getter/clone-stop mismatch and proposed snapshot
+restriction below are HISTORICAL REVISION1 findings. The approved RSL revision2
+adds exactly those clone arms. NMS_R2CloneLaw.get and NMS_R2GetterLink.full
+prove their canonical correspondence without restricting original inputs.
+NMS_R2ErrorSource.full includes the new format! allocation; D1/D2 and the
+parametric V2Lib quantifier are unchanged. Native parent association remains
+open as stated in NMS_REMAINING.md.
+
 # Canonical target reconciliation
 
 RSL_TX2_233 / RSL_TX2_242 / RSL_TX2_241 are the binding targets. Existing NMS draft packets are support and are not asserted equivalent to RSL.

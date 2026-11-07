@@ -1,4 +1,4 @@
-import NMS_R2Code242Factor
+import NMS_R2AfterAuthEq242
 import NMS_R2PoolSites
 set_option autoImplicit false
 noncomputable section
@@ -14,10 +14,8 @@ theorem factor (devnet : Bool) (q : Request) (auth : Auth)
  NMS_R2N_RawTry.literal
   (NMS_R2N_Interpreted.liftResult
    (core.option.Option.ok_or first solana_program_error.ProgramError.NotEnoughAccountKeys))
-  (NMS_R2Tail242.raw q auth) := by
- unfold NMS_R2Code242Factor.afterAuth NMS_R2Tail242.raw NMS_R2N_RawTry.literal
- unfold NMS_R2N_Native242Children.children
- rfl
+  (NMS_R2Tail242.raw q auth) :=
+ NMS_R2AfterAuthEq242.factor devnet q auth accounts
 
 /-- Canonical continuation after the complete233 call, using the fixed source
 scanner/reconstruction images. There are no endpoint or child-success inputs. -/
@@ -53,10 +51,17 @@ theorem transport (devnet : Bool) (L : RSL.PoolLib) (request : Request → L.Req
    rw [NMS_R2N_RawTry.normalize]
    change Simulates _ (RSL.Spec.bind (RSL.Spec.pure (core.result.Result.Ok account)) _) _
    rw [RSL.Spec.bind_pure]
-   exact NMS_R2Tail242.transport (NMS_R2PoolSites.install L request candidate statement)
-     request candidate statement
-     (NMS_R2PoolSites.scan_link L candidate)
-     (NMS_R2PoolSites.reconstruct_link L request candidate statement) q auth account
+   unfold NMS_R2Tail242.raw
+   apply NMS_R2N_RawTry.simulates NMS_R2N_RSLScalars.bytes (validatedValue L statement)
+   · exact NMS_R2GetterLink.full account
+   · intro data
+     apply NMS_R2N_RawTry.simulates (scanValue L candidate) (validatedValue L statement)
+     · exact NMS_R2PoolSites.scan_link L candidate data
+     · intro scanned
+       apply NMS_R2N_RawTry.simulates statement (validatedValue L statement)
+       · exact NMS_R2PoolSites.reconstruct_link L request candidate statement q auth scanned.candidate_afterstate
+       · intro st
+         exact NMS_R2N_Interpreted.pure _ _
 
 #print axioms factor
 #print axioms transport
