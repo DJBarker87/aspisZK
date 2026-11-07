@@ -1,6 +1,6 @@
 """Owned support-gate inputs; imports are modules, never private source names."""
 from pathlib import Path
-import json,re,lzma,hashlib,shutil
+import json,re,lzma,hashlib,shutil,difflib
 E=Path(__file__).resolve().parent
 bases=[('NLS',E.parent/'ledger23-20261110'),('NLU',E.parent/'tx1-finish2-20261110'),('NLI',E.parent/'tx1-finish-20261110'),('NLH',E.parent/'terminal6-20261110')]
 latest={}
@@ -23,16 +23,20 @@ for tag,base in bases:
   if old and set(old['imports'])!=set(row['imports']):conflicts.append(dict(module=row['module'],before=old,after=row))
   expected[row['module']]=row
 assert not conflicts,conflicts
-allroots=list(dict.fromkeys(allroots+roots));groups=[allroots[i::31]for i in range(31)]
+allroots=list(dict.fromkeys(allroots+roots));groups=[allroots[i::30]for i in range(30)]
 (E/'NMC_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=allroots,groups=groups)))
 (E/'NMC_AUDIT_MODULES.json').write_text(json.dumps([['NMC_COMBINED_IMPORT']for _ in groups]))
 for m in mods+['NMC_COMBINED_IMPORT']:
  source=(E/'NMC_generated'/(m+'.lean')).read_text();imports=['Init']+re.findall(r'^import (?:all )?([\w.]+)',source,re.M)
  expected[m]=dict(module=m,imports=list(dict.fromkeys(imports)))
 (E/'NMC_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(r)+'\n'for r in expected.values()))
+driver_diff=''
 for name in ['Driver','ProofDriver']:
- source=(E.parent/'tx1-finish2-20261110/NLU_generated'/('NLU_'+name+'.lean')).read_text().replace('NLU','NMC')
+ original=(E.parent/'tx1-finish2-20261110/NLU_generated'/('NLU_'+name+'.lean')).read_text()
+ source=original.replace('NLU','NMC')
  (E/'NMC_generated'/('NMC_'+name+'.lean')).write_text(source)
+ driver_diff+=''.join(difflib.unified_diff(original.splitlines(True),source.splitlines(True),fromfile='NLU_'+name+'.lean',tofile='NMC_'+name+'.lean'))
+(E/'NMC_DRIVER.diff').write_text(driver_diff)
 (E/'NMC_native').mkdir(exist_ok=True)
 cpins={}
 for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
@@ -41,5 +45,5 @@ for name in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 (E/'NMC_PATHS.json').write_text(json.dumps(json.loads((E/'NMC_ENV.json').read_text())['LEAN_PATH'].split(':')))
 priors={tag:json.loads(lzma.decompress((base/(tag+'_CLOSURE_PINS.json.xz')).read_bytes()))for tag,base in bases}
 blob=json.dumps(priors).encode();(E/'NMC_PREDECESSORS.json.xz').write_bytes(lzma.compress(blob));(E/'NMC_PREDECESSORS.json.sha256').write_text(hashlib.sha256(blob).hexdigest()+'\n')
-(E/'NMC_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,row_roots=[],status='SUPPORT_ONLY',groups=31),indent=2)+'\n')
-print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(allroots),groups=31,expected_import_conflicts=0)))
+(E/'NMC_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,row_roots=[],status='SUPPORT_ONLY',groups=30),indent=2)+'\n')
+print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(allroots),groups=30,expected_import_conflicts=0)))

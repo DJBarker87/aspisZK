@@ -1,3 +1,4 @@
+import NLC_ReadsReady
 import NMC_ReachableOrigins
 import NMC_TerminalSegment
 import NLU_SameTerminal
@@ -35,6 +36,7 @@ theorem actual_arguments {H : Type} (native : NJM_RoundsCut.Observations)
  have claimsReturned:=origins.1 claims claimsStored
  obtain ⟨running,transcript,roundsReturned⟩:=origins.2 alpha alphaStored
  rw [invariant.2] at claimsReturned roundsReturned
+ change ClaimsUnrolledFinish.claims (NP6_StdModel.calls input.reservation) input.prefix1=ok (.Ok claims) at claimsReturned
  have hc:=NLU_Terminal.claims_domain input.reservation bytes pre parsed
  rw [←prefixEq,claimsReturned] at hc
  have ha:=NKQ_AlphaDomain.source native cut token frame input.digest bytes input.transcript

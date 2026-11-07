@@ -1,0 +1,34 @@
+{"attempt": "NMC_L097", "exit_status": 0, "wall_seconds": 37.21402051998302, "peak_rss_kib": "6551720", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.actual_arguments : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (input : NLU.Input H),
+      NLU.InputDomain input →
+        ∀ (s : NLU.State H),
+          NLU.Reachable input s →
+            s.machine.next = NLC_Finish.Event.terminal →
+              ∃ claims alpha,
+                s.machine.locals.claims = some claims ∧
+                  s.machine.locals.alpha = some alpha ∧
+                    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) ∧
+                      FIw_ArrayValue.
+...
+'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.actual_arguments : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (input : NLU.Input H),
+      NLU.InputDomain input →
+        ∀ (s : NLU.State H),
+          NLU.Reachable input s →
+            s.machine.next = NLC_Finish.Event.terminal →
+              ∃ claims alpha,
+                s.machine.locals.claims = some claims ∧
+                  s.machine.locals.alpha = some alpha ∧
+                    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) ∧
+                      FIw_ArrayValue.canonical (mapArray toQ alpha) ∧
+                        NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+                          (IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha
+                            input.challenges :=
+⋯
+
+Running as unit: run-rf6f9f16ad6bd4e36a607836c7d316cc8.scope; invocation ID: 6acfb1f074e64b74812e418dd4835039

@@ -1,0 +1,12 @@
+@[reducible] def AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 : Aeneas.Std.core.cmp.PartialEq
+  AspisR1PublicPreparation.aspis_core.field.QM31 AspisR1PublicPreparation.aspis_core.field.QM31 :=
+{ eq := AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+  ne := fun self other =>
+    Aeneas.Std.core.cmp.PartialEq.ne.default
+      AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq self other }
+def AspisR1PublicPreparation.FinishModel.pointEq : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint →
+  AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint → Aeneas.Std.Result Bool :=
+fun self other => do
+  let b ← AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq self.x other.x
+  if b = true then AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq self.y other.y
+    else Aeneas.Std.Result.ok false

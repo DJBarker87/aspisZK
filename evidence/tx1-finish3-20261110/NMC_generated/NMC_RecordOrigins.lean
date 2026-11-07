@@ -6,7 +6,7 @@ namespace AspisR1.NMC_Records
 open Aeneas Aeneas.Std Result AspisR1PublicPreparation NLC_Finish
 def Origin {H : Type} (s : NLC_Finish.State H) (row : U8)
  (slot : Option r1_wire.ValidatedRecord) : Prop :=
- ∀ record,slot=some record→r1_wire.Prefix.validated_record s.input.prefix1 row=ok (.Ok record)
+ ∀ record, slot = some record → r1_wire.Prefix.validated_record s.input.prefix1 row = ok (.Ok record)
 def step {H : Type} (s : NLC_Finish.State H) (row : U8) (event : NLC_Finish.Event)
  (store : r1_wire.ValidatedRecord→Locals H) : PreparedHashCode.Code (NLC_Finish.Post H) := do
  let result ← r1_wire.Prefix.validated_record s.input.prefix1 row
@@ -30,6 +30,7 @@ theorem written {H : Type} (s after : NLC_Finish.State H) (row : U8) (event : NL
      have chosen:=Sum.inr.inj (Result.ok.inj actual)
      cases chosen
      intro record stored
+     change select (store value)=some record at stored
      rw [selected] at stored
      cases Option.some.inj stored
      exact child

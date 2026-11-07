@@ -1,0 +1,22 @@
+NMC_generated/NMC_RecordOrigins.lean:33:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  select (store ?record)
+in the target expression
+  select (put s event (store value)).locals = some record
+
+case ok.Ok.refl
+H : Type
+s : State H
+row : U8
+event : Event
+store : r1_wire.ValidatedRecord → Locals H
+select : Locals H → Option r1_wire.ValidatedRecord
+selected : ∀ (record : r1_wire.ValidatedRecord), select (store record) = some record
+value : r1_wire.ValidatedRecord
+child : s.input.prefix1.validated_record row = ok (core.result.Result.Ok value)
+head : (PreparedHashCode.run (step s row event store)).2 = ok (Sum.inr (put s event (store value)))
+actual : ok (Sum.inr (put s event (store value))) = ok (Sum.inr (put s event (store value)))
+record : r1_wire.ValidatedRecord
+stored : select (put s event (store value)).locals = some record
+⊢ (put s event (store value)).input.prefix1.validated_record row = ok (core.result.Result.Ok record)
+'AspisR1.NMC_Records.written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.some_slot' does not depend on any axioms

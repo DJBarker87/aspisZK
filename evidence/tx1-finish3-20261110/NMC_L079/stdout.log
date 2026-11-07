@@ -1,0 +1,6 @@
+'AspisR1.NMC_Cut_high.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.NMC_Cut_high.Contract : {A : Type} → (Context A → Fin 10 → Observation A NMC_Models.Reply) → Prop :=
+fun {A} native => Cut native NMC_Models.high
+theorem AspisR1.NMC_Cut_high.forward : ∀ {A : Type} (native : Context A → Fin 10 → Observation A NMC_Models.Reply),
+  Contract native → ∀ (before : Context A) (args : Fin 10), native before args = NMC_Models.high before args :=
+⋯

@@ -1,0 +1,36 @@
+NMC_generated/NMC_TerminalAtState.lean:21:19: error(lean.unknownIdentifier): Unknown identifier `NLC_Finish.ready_reads`
+NMC_generated/NMC_TerminalAtState.lean:19:105: error: unsolved goals
+H : Type
+native : NJM_RoundsCut.Observations
+cut : NJM_RoundsCut.Cut native
+token frame : ℕ
+input : NLU.Input H
+domain : NLU.InputDomain input
+s : NLU.State H
+reached : NLU.Reachable input s
+atSite : s.machine.next = NLC_Finish.Event.terminal
+invariant : NLU.Invariant s ∧ s.machine.input = input
+⊢ ∃ claims alpha,
+    s.machine.locals.claims = some claims ∧
+      s.machine.locals.alpha = some alpha ∧
+        (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) ∧
+          FIw_ArrayValue.canonical (mapArray toQ alpha) ∧
+            NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+              (IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha input.challenges
+'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.actual_arguments : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (input : NLU.Input H),
+      NLU.InputDomain input →
+        ∀ (s : NLU.State H),
+          NLU.Reachable input s →
+            s.machine.next = NLC_Finish.Event.terminal →
+              ∃ claims alpha,
+                s.machine.locals.claims = some claims ∧
+                  s.machine.locals.alpha = some alpha ∧
+                    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) ∧
+                      FIw_ArrayValue.canonical (mapArray toQ alpha) ∧
+                        NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+                          (IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha
+                            input.challenges :=
+⋯
