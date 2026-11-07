@@ -9,3 +9,9 @@ Required replacement: a distinct native stopped-at-C04 relation. Its last cut co
 The fixed total digest specialization also must not be used to claim runtime totality. The replacement parent certificate keeps the original generic Digest32/hash argument for source/native partial outcomes; H remains the existing runtime returning-value realization for the C04 packet. This introduces no new runtime trust or totality premise.
 
 All compiled model-window support and failed attempts remain retained. No authoritative ledger was modified, no native pass was rerun, and no release/security claim was made. The second combined gate is reserved for the corrected relation after focused checks.
+
+## Focused correction
+
+NLT_L055–NLT_L065 build the separate stopped relation, its source-question/reseeding/order association, same-call child pending-prefix installation and whole-parent C04 chronology. NLT_CompleteRoot.root combines this with resolved outcomes while preserving the original partial Digest32/hash argument. NLT_L066 is the second and final combined import and passes with the deployed headline. The old NLT_Root closure proposal is permanently withdrawn; it remains a true theorem about its restricted model-window relation. Final raw/coherence/export gates and next-ledger credit remain pending at this recording.
+
+Final local gate status: combined L066, all73 raw roots, NFX L080 and retention/independent verification L081/L082 PASS. The corrected candidate awaits the next ledger gate; baseline counts remain unchanged.
