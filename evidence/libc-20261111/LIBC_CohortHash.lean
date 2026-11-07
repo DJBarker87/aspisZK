@@ -15,7 +15,10 @@ theorem scalar (b : U8) : UInt8.ofNat (decodeByte b).val = NNC_ByteCarriers.host
  exact Nat.mod_eq_of_lt b.hmax
 theorem flat (parts : Slice (Slice U8)) : host (flatten parts) = (NNC_ResumeEvents.parts parts).flatten := by
  simp only [host,flatten,NNC_ResumeEvents.parts,NNC_ByteCarriers.host,List.map_map,
-  List.map_flatMap,List.flatten_map,Function.comp_def,scalar]
+  List.map_flatMap,Function.comp_def,scalar]
+ induction parts.val with
+ | nil => rfl
+ | cons p ps ih => simp only [List.flatMap_cons,List.map_cons,List.flatten_cons,ih]
 theorem output (env : RSL.Env) (parts : Slice (Slice U8))
  (shape : LIBC_HashPartitions.Shape (NNC_ResumeEvents.parts parts)) :
  encodeState (H env (flatten parts)) = LIB_Env.nativeKey (env.sha256 (NNC_ResumeEvents.parts parts)) := by
@@ -24,7 +27,7 @@ theorem output (env : RSL.Env) (parts : Slice (Slice U8))
 theorem backend (env : RSL.Env) (parts : Slice (Slice U8))
  (shape : LIBC_HashPartitions.Shape (NNC_ResumeEvents.parts parts)) :
  (NJS_RuntimeDigest.backend (H env)).digest () parts = LIB_Env.hashv env parts := by
- change .ok (encodeState (H env (flatten parts))) = _
+ change Result.ok (encodeState (H env (flatten parts))) = LIB_Env.hashv env parts
  rw [output env parts shape]
  rfl
 #print axioms scalar

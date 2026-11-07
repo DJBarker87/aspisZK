@@ -36,7 +36,7 @@ def render (h : NLL.History) : List RSL.Event :=
  h.map (fun e => .digest (LIBC_HashPartitions.split (LIBC_CohortHash.host e.1))
  (LIB_Carriers.b32 (AspisV8R19.SqueezeOracleBridge.encodeState e.2)))
 def port : NLL.Reply → Output
- | .Ok _ => .ok () | .Err e => .error (Port3_QueryInstall.error e)
+ | .Ok _ => .ok () | .Err e => .error (Port3_CheckpointInstall.error e)
 def child : RSL.Child Args Output := ⟨Domain,fun a => LIB_Carriers.resultGraph port (model a) (fun env => render (history a env))⟩
 def value (a : Args) (env : RSL.Env) : Output := LIBC_ResultGraph.value port (.error .Merkle) (model a env)
 theorem returns (a : Args) (env : RSL.Env) : NND_Returned.Returns (child.law a) env (value a env) :=
