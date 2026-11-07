@@ -13,3 +13,5 @@ Validation pending: frozen Pool file hashes before first scope, coherent import 
 Trust retained: native semantic transport is P6/D188 reclassification; RuntimePersistence approved; RuntimeCpiAccountView and RuntimeReturnData/Clear remain named hypotheses. RuntimeCpiReadonlyEntry7 PENDING and unavailable. CPI passed cells unconstrained. L154 remains a statement parameter.
 
 No assumptions discharged or rows closed. All stage deliverables and checks remain pending.
+
+Checkpoint: source-control-flow drafts and focused checks are in progress; PCM_SPEC_INDEX.md and PCM_SPEC_DIFFS.md describe their limits. No stage is reported complete or frozen. 47 forbidden-origin context objects are quarantined in PCM_BLOCKED_CONTEXT.json; the non-quarantined bundle context has been copied with per-object hashes, never hardlinked. No Kani, extraction, native row proof or shipped source change.
