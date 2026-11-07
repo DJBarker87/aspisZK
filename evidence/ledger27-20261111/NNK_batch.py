@@ -9,6 +9,7 @@ E=B/'NNK_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='close':
  exec(compile((B/'NNK_pin.py').read_text(),'NNK_pin.py','exec'));exec(compile((B/'NNK_scope40.py').read_text(),'NNK_scope40.py','exec'));sys.exit(0)
 if mode=='acc-close':jobs=[('combined',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNK_generated','-o','NNK_objects/NNK_COMBINED_IMPORT.olean','NNK_generated/NNK_COMBINED_IMPORT.lean']),('scan',['NNK_native/NNK_Driver','scan'])]
+elif mode=='verify':jobs=[('verify',['python3','NNK_gate_check.py'])]
 elif mode=='retention':jobs=[('retention',['python3','NNK_scope40.py'])]
 elif mode in ['review-close','review-retention']:jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNK_generated','-o','NNK_objects/NNK_HypothesisReview.olean','NNK_generated/NNK_HypothesisReview.lean'])]
 elif mode.startswith('inventory-'):jobs=[(mode,['NNK_native/NNK_InventoryDriver',mode.split('-')[1]])]

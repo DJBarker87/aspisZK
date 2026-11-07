@@ -424,7 +424,7 @@
    ],
    "all_slice_lengths": true,
    "allocation": "pointwise universally quantified; successful final Box and silent abort; earlier errors introduce no allocation",
-   "basis_obligation_statement_hash": "0d0a499c03d57fc9fb875f6cf1932c7fee4b9c1fb318814721dd5ee56086fd0a",
+   "basis_obligation_statement_hash": "f85d581296e59b5cfeedad50e48c1949f0b315dda203f6df63e2f175f0423d80",
    "candidate": "NMX_R3_DecoderFold.root",
    "copy_controls": "All used listed component pairs fail their intended property under exact KMX patch; no separate new Kani run by ledger",
    "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
@@ -1025,7 +1025,7 @@
     ],
     "unchanged_copy_in_harness": true
    },
-   "reference_replay": "PASS; no native credit because fidelity gate incomplete",
+   "reference_replay": "PASS; full all-length reference/effects candidate; gate pending",
    "reference_roots": [
     "NMX_R3_LaneTotal.value",
     "NMX_R3_LanePort.pure_eq",
@@ -1071,7 +1071,32 @@
     "reason": "Ruling (t) requires three per-shape fidelity controls before relying on a contract for a non-Bool/non-record interface. The actual decoder length certificate K005 uses Result<Box<Lane>,ProgramError>. K006 supplies inverted ensures failure; K011 detects modifies violation; K009 passes on real body. K010 cannot generate the stub_verified caller because Result<Box<Lane>,ProgramError> lacks kani::Arbitrary and does not reach the intended assertion failure. Excluding pilot substitution does not supply this required per-shape evidence.",
     "sufficient": false
    },
-   "remaining_parameters": []
+   "remaining_parameters": [],
+   "owner": "NMX_R3_DecoderFold",
+   "canonical_children": [
+    {
+     "row": "TX2:146",
+     "status": "CLOSED",
+     "roots": [
+      {
+       "obligation_statement_sha256": "087b318513f2cd0ace21e6a286fa3354dda0794ef6849cca40dae2d275671c8c",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d361a1f471b5e13fc949faba5fdbcfb344dc5b960ba9bea9807861179d31dcb1",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_word_domain"
+      },
+      {
+       "obligation_statement_sha256": "bbb535445242e13e5636543a7ed5e15afae5c28aa8943803aa5ab69b4c52fddf",
+       "owner_module": "NGE_NEQ_ParserCanonical",
+       "root": "NGE_NEQ_ParserCanonical.some_canonical"
+      }
+     ],
+     "function": "crates/aspis-statement/src/atomic_statement.rs::decode_digest_canonical"
+    }
+   ]
   },
   {
    "row": "TX2:234",
