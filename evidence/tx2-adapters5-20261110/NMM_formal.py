@@ -58,6 +58,7 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
         else:p.write_text(t)
     rc=json.loads(out[a+'/receipt.json'])
     # Evidence inputs are committed at their original content hashes once.
+    (E/'NMM_INPUTS').mkdir(exist_ok=True)
     idx=json.loads((E/'NMM_INPUTS.json').read_text())
     for n,t in files.items():
         if n==a+'.json':continue

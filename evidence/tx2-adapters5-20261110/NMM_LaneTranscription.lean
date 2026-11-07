@@ -11,9 +11,7 @@ abbrev PE := NKF_BoxModel.PE
 20 frontier iterations with first-error return, terminal empty-root check,
 then the sole owned Box allocation. Child definitions are already CLOSED.
 Native-to-transcription correspondence is a separate, still open obligation. -/
-def value (bytes : Slice U8) : Result (core.result.Result Lane PE) := do
- if h : bytes.val.length = 768 then
-  let p : NLK_LaneInput.Sized := ⟨bytes, h⟩
+def sized (p : NLK_LaneInput.Sized) : Result (core.result.Result Lane PE) := do
   match NLK_LaneHeader.sourcePrefix p with
   | .Err error => ok (.Err error)
   | .Ok fields =>
@@ -25,6 +23,9 @@ def value (bytes : Slice U8) : Result (core.result.Result Lane PE) := do
       NLK_LaneLoop.levels NLK_LaneLoop.zero
     ok (NKP_LaneCompletion.finish fields.bump fields.master fields.lane
       fields.next root NLK_LaneTable.final frontier).1
+
+def value (bytes : Slice U8) : Result (core.result.Result Lane PE) :=
+ if h : bytes.val.length = 768 then sized ⟨bytes, h⟩
  else ok (.Err .InvalidAccountData)
 
 theorem adopted_value (bytes : Slice U8) :

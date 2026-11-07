@@ -14,6 +14,7 @@ fn NMM_digest_reference(bytes: &[u8;32]) -> Result<[M31;8],aspis_statement::Atom
 fn NMM_digest_cut(bytes: &[u8;32]) -> Result<[M31;8],aspis_statement::AtomicStatementError> {
  // TX2:146: every32-byte array; no canonical-input precondition. All returned
  // words are havocked, then constrained to the CLOSED complete decoder law.
+ assert!(bytes.len()==32,"TX2:146 own argument domain");
  let expected=NMM_digest_reference(bytes);
  match expected {
   Err(e)=>Err(e),

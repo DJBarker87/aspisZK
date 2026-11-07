@@ -54,6 +54,7 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
  for k in ['historical_gate_command','original_attempt','original_config_file','original_config_sha256','old_target']:x.pop(k,None)
  x['sources']=list(files);x['deps_fingerprint']={'selected_objects':{}}
  files[a+'.json']=json.dumps(x,indent=1)+'\n';(E/(a+'.json')).write_text(files[a+'.json'])
+ (E/'NMM_INPUTS').mkdir(exist_ok=True)
  idx=json.loads((E/'NMM_INPUTS.json').read_text());idx['attempts'][a]={}
  for n,t in files.items():
   raw=t.encode();h=sha(raw);p=E/'NMM_INPUTS'/(h+'.xz')
