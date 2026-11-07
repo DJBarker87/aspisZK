@@ -1,3 +1,4 @@
+"""Retired pre-(bl) runner; retained provenance only. CLI is disabled. Constructor helpers may be imported."""
 from NMM_native import *
 import ast
 P='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs'
@@ -86,5 +87,6 @@ def attempt(a,version,mode):
  (E/(a+'_CUT.json')).write_text(json.dumps(dict(row='TX2:234',version=version,mode=mode,branch='deferred registry data error',actual_parent=True,original_extents=[sizeR,sizeE],assumptions='Both owned byte Results are Err; registry AccountBorrowFailed, entry InvalidAccountData; all descriptor/master fields unrestricted; selected version flag',limits='This is only an error-path branch; no complete234 certificate, no PDA execution or value assumption; constructor provenance not inherited as credit'),indent=2)+'\n')
  return submit(a,'r1_pool_adapter::owned::'+module+'::stage',P,module,text,mode)
 if __name__=='__main__':
+ raise SystemExit('Retired pre-(bl) cut laws: do not submit this runner')
  import sys
  rc=attempt(*sys.argv[1:]);sys.exit(rc['exit_status'])

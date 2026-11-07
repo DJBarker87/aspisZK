@@ -1,3 +1,4 @@
+"""Retired pre-(bl) runner; retained provenance only. CLI is disabled. Constructor helpers may be imported."""
 from NMM_native import *
 P='programs/r1-cost-probe/src/r1_pool_adapter.rs'
 COMMON='''use super::*;
@@ -63,5 +64,6 @@ def attempt(a,branch,mode):
  (E/(a+'_CUT.json')).write_text(json.dumps(dict(row='TX2:217',branch=branch,mode=mode,complete_native_function=True,original_length=768,arbitrary_contents=True,stub='NMM_digest_cut',callee='TX2:146',domain='Every &[u8;32]',footprint='Full returned eight-word digest or exact NonCanonicalDigest error; immutable input; no owned child allocation',native_limits='Does not yet observe full allocator state/abort and cleanup; no candidate root from value-only result'),indent=2)+'\n')
  return submit(a,'r1_pool_adapter::'+module+'::stage',P,module,text,mode)
 if __name__=='__main__':
+ raise SystemExit('Retired pre-(bl) cut laws: do not submit this runner')
  import sys
  rc=attempt(*sys.argv[1:]);sys.exit(rc['exit_status'])

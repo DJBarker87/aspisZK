@@ -3,10 +3,10 @@ from NMM_registry_native import common
 import re
 P='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs'
 F='PoolV1VerifierRegistryFormatError'
-def constructors():
+def constructors(version=1):
  raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:crates/aspis-statement/src/pool_v1/verifier_registry.rs'],text=True)
  out=''
- for name in ['VerifierRegistryV1','VerifierRegistryEntryV1']:
+ for name in ['VerifierRegistryV'+str(version),'VerifierRegistryEntryV'+str(version)]:
   body=raw.split('pub struct '+name+' {',1)[1].split('}',1)[0]
   fields=re.findall(r'^\s*pub (\w+): (.*),$',body,re.M)
   values=[]
@@ -90,11 +90,12 @@ ANN='''#[kani::proof] #[kani::unwind(35)]
 #[kani::stub(aspis_statement::pool_v1::decode_verifier_registry_entry_v1,NMM_ent_cut)]
 #[kani::stub(solana_program::pubkey::Pubkey::create_program_address,NMM_pda_cut)]
 '''
-def attempt(a,mode,branch="all"):
+def attempt(a,mode,branch="all",version="1"):
+ version=int(version)
  ref=(E/'NMM_FROZEN_234.rs').read_text().replace('fn authenticate_invariant_release_registry(','fn NMM_reference(',1)
  for x in ['registry_account','entry_account']:ref=ref.replace(x+'.data()','NMM_data_replay('+x+')')
- ref=ref.replace('decode_verifier_registry_v1(','NMM_reg_replay(').replace('decode_verifier_registry_entry_v1(','NMM_ent_replay(').replace('Pubkey::create_program_address(','NMM_pda_replay(')
- text=common()+constructors()+HELP+ref+ANN+'''fn stage(){
+ ref=ref.replace('decode_verifier_registry_v'+str(version)+'(','NMM_reg_replay(').replace('decode_verifier_registry_entry_v'+str(version)+'(','NMM_ent_replay(').replace('Pubkey::create_program_address(','NMM_pda_replay(')
+ text=common()+constructors(version)+HELP+ref+ANN+'''fn stage(){
  let mut master=any_master();master.verifier_policy.flags &= !POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT;
  let mut ma=NMM_account::<1>();ma.probe_seed=kani::any();ma.probe_byte=kani::any();kani::assume(ma.probe_seed<5&&ma.probe_byte<32);let reg=NMM_account::<128>();let ent=NMM_account::<192>();
  let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(kani::any());let slot:u64=kani::any();
@@ -106,6 +107,11 @@ def attempt(a,mode,branch="all"):
  unsafe{assert!((*reg.data.get()).is_none()&&(*ent.data.get()).is_none()&&(*reg.reg.get()).is_none()&&(*ent.ent.get()).is_none(),"no unmatched data or decoder call");assert!(*ma.nw.get()==*ma.nr.get(),"exact PDA prefix length");}
 }
 '''
+ if version==2:
+  text=text.replace('VerifierRegistryV1','VerifierRegistryV2').replace('VerifierRegistryEntryV1','VerifierRegistryEntryV2')
+  text=text.replace('decode_verifier_registry_v1,NMM_reg_cut','decode_verifier_registry_v2,NMM_reg_cut').replace('decode_verifier_registry_entry_v1,NMM_ent_cut','decode_verifier_registry_entry_v2,NMM_ent_cut')
+  text=text.replace('master.verifier_policy.flags &= !POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT;','master.verifier_policy.flags |= POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT;')
+  text=text.replace('let reg=NMM_account::<128>();let ent=NMM_account::<192>();','let reg=NMM_account::<256>();let ent=NMM_account::<320>();').replace('kani::assume(obs<128);','kani::assume(obs<256);')
  if branch=='first_error':
   old='let tag:u8=kani::any();kani::assume(tag<4);let out=match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};'
   new='let tag:u8=kani::any();kani::assume(tag<3);let out=match tag{0=>Err(MaxSeedLengthExceeded),1=>Err(InvalidSeeds),_=>Err(IllegalOwner)};'

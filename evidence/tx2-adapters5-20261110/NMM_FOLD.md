@@ -26,3 +26,5 @@ Whole returning217 shapes, its first frontier isolation, and whole legacy234 sha
 Allocator internals, pure heap cleanup and post-abort ownership are outside the obligations. Returned payloads remain complete typed values. Stopped arms retain their ordered observable prefix, without an invented heap suffix. The pure digest cut has no such event. PDA calls retain exact source-order argument/reply records; no PDA value law is assumed.
 
 Only after217 and234 have complete gated native packets may233 consume their candidate laws. Its native fold has not been launched. The next ledger gate, not this report, decides credit.
+
+Stage update: K032 establishes the returning Err case at original length with arbitrary contents and typed recorded replies; its controls remain pending. K034 plus K038–K041 establish the success call-coverage relation with four failing controls. Neither is a full row root. K033, K035, K036 and K042 retired after 90-second solver timeouts. K037 establishes only the V1 first-PDA-error registry branch; controls remain pending. No 217/234 candidate or 233 fold is issued.

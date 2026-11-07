@@ -1,6 +1,7 @@
 import NMM_LaneReplies
 set_option autoImplicit false
 namespace NMM_OutcomeCases
+open Aeneas Aeneas.Std Result AspisR1 NKP_LaneCuts
 
 /-- Internal partition of all returning outcomes. Neither branch condition is
 an admissible premise of a row root: both native branch certificates are
