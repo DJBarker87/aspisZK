@@ -146,3 +146,5 @@ Session4 49115: pinned PV_FN_THREAD_f361SuffixLists passed; session4 receipt rec
 Session4 49116: pinned PV_FN_THREAD_f361PostInitChains passed; session4 receipt records resources/axioms.
 
 Session4 49117: pinned PV_FN_THREAD_f361PostInitCalls passed; session4 receipt records resources/axioms.
+
+Session4 49118: pinned PV_FN_THREAD_f361ReturnMatches passed; session4 receipt records resources/axioms.
