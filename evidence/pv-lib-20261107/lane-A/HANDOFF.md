@@ -29,3 +29,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49469 passed exact pinned replay PV_FN_W4_StoreCounter; see receipt for time/RSS/swap/revision/axioms.
 
 49470 passed exact pinned replay PV_FN_W4_NativeContract; see receipt for time/RSS/swap/revision/axioms.
+
+49471 passed exact pinned replay PV_FN_THREAD_f170_NativeCalls; see receipt for time/RSS/swap/revision/axioms.
