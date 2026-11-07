@@ -30,7 +30,8 @@ fn codec_error()->CodecError{let t:u8=kani::any();match t%3{0=>CodecError::Lengt
 fn filled<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{
  // Allocation and primitive initialization are (bl)(3) transcription steps.
  assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);
- let mut v=Vec::<T>::with_capacity(n);unsafe{core::ptr::write_bytes(v.as_mut_ptr(),0,n);v.set_len(n);}Ok(v)
+ let allocation=Box::new([0u8;14759]);let ptr=Box::into_raw(allocation) as *mut T;
+ Ok(unsafe{Vec::from_raw_parts(ptr,n,n)})
 }
 fn filled_fail<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);Err(aspis_core::r0::Error::Allocation)}
 fn expand_semantic(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{

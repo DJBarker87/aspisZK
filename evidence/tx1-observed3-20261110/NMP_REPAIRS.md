@@ -27,3 +27,7 @@ Corrected future raw-audit collection globs to the actual per-scope proof index 
 K089 selected nonexistent candidate::NMP_prepare instead of verifier::candidate::NMP_prepare. Compilation succeeded; no harness matched and no verification ran. Corrected only unsubmitted selectors; original function/module names unchanged. K099 replaces the extra constructor-error control with the missing branch_2 positive, preserving100 scope labels and recording the consumed input-error scope. No timeout rerun.
 
 L079 now installs changed owned prepare harness after K090 crash; final retention check is consolidated into L080 with native/audit checks. The runtime final plan skips already-consumed L079. Eight native labels remain, all with the correct unchanged original function names.
+
+L076 now installs allocation-representation isolation; raw groups shrink29→28 (L048-L075) with all roots retained. Final client waits for all100 native receipts as well as K099, allowing branch_2 to run first among remaining cases. Restarted only its unsubmitted local waiting process; no host scope interrupted.
+
+Final waiting client now waits only for all100 receipts and no active guard, rather than requiring K099 success. A failed native probe is retained as OPEN and must not block independent Lean work. No final scope had launched; only the local waiting client was restarted.

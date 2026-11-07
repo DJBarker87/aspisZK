@@ -35,3 +35,7 @@ Kani 0.67 compiler ICE in reachability resolving IntoIterator for &mut [[u8]], g
 K089: own harness-selector input error (missing verifier:: prefix), no verification. Kept as spent scope; corrected remaining configurations and moved branch_2 to K099.
 
 K090: actual prepare branch_3 selected correctly, CBMC status139 before any verification check. Fixed-array contract calibration on standalone stack arrays does NOT admit this heap-subwindow/nested-stub context. Exact cause unisolated. Parent use is withdrawn; new prepare shape assigns a full arbitrary typed byte array at both Ok/Err mutation cuts with exact KMX stubs, not a custom copy stub. No cap/time increase or unchanged replay.
+
+K091: CBMC status139 also occurs after removing point contracts; therefore K090 does NOT isolate contracts as the cause. Both contexts remain unadmitted. Next changed shape isolates the allocation/memset path: fresh initialized Box<[u8;14759]> converted to the identical Vec<u8> length/capacity under existing std/allocator trust; explicit full typed-array cut mutations remain. No backend/launcher change or cap/timeout increase.
+
+K099: CBMC139 persists at branch_2 with fixed initialized allocation and no frame contracts. It does not isolate allocator representation as the cause. Next independent probe is allocation-error propagation, then a smaller prefix-only native stretch; no successful whole-parent credit.
