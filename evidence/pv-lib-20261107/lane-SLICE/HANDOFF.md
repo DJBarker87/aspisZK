@@ -1,3 +1,38 @@
+# SLICE D983 session3 checkpoint — incomplete
+
+Resumed e440502a81e on codex/pv-lib-slice-20261107, same worktree.
+Full frozen contracts0/11; full source7 joint witnesses/contradictions0/1.
+Whole-contract-first order retained: only f21 candidate has been worked on.
+PV_LIB_SLICE_Spec_f21 compiled49921; its Contract is a Prop, NOT proved.
+SESSION3_f21_COMPARISON.md records exact package comparisons and the remaining
+full-statement gaps; do not count a named candidate module as a full contract.
+
+New checked package defect: package_success_forces_zero shows the package's
+Success.vector uses construction-time length0 and cannot describe the actual
+post-set_len value with positive length. The candidate Success uses the final
+provider encoding linked to the same fresh header and n. Frozen prose already
+requires n and was not edited. This is NOT a source7 joint contradiction.
+
+Candidate also binds an explicit full malloc environment channel (actual
+f59/s1683), separates reservation, carries suspended numbering/frame, corrects
+pending, observes event-only abort and infinite prefixes, and adds source-byte
+frames on every non-abort outcome. Source/runtime primitive inventory, exact
+D877 summary transport and complete heap/continuation frame remain open.
+No later row or source7 composition has been started while f21 is incomplete.
+
+49920 failed only a duplicate doc-comment parse error, archived exact input;
+49921 changed source and passed:exit0,wall0:02.69,RSS4756072KiB,swaps0,standard
+axioms only. One standalone STREAMB_SLOTS=3 SSH turn per ID, admitted true,
+6G/8G/swap0/Tasks64/-M7000. Reused SPEC's pinned STX authority READ-ONLY in an
+isolated own objects-stx/J-stx cohort; no cold replay or mixed D937 imports.
+Next Lean49922; next strict raw49692 (new roots only; not yet run).
+No frozen prose/shared map/ledger/checker/pv-common/package branch/key action,
+row consumption, endpoint premise, trust field or metric changed. No push/merge.
+
+Historical session2 handoff follows.
+
+---
+
 # SLICE lane — D978 session2 handoff
 
 Branch codex/pv-lib-slice-20261107; session2 starts at821f00b325e.
