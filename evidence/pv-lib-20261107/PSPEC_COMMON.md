@@ -1,4 +1,4 @@
-# PLIB specification semantics, revision 1
+# PLIB specification semantics, revision 2 (D981)
 
 These are normative specifications, not row proofs. Privacy target not yet
 established. The files PSPEC_*.md and this file form one specification. The
@@ -17,9 +17,16 @@ a handler or change a resolver inside an existing run. Existing specialized
 CLOSED providers need `PV_THR2_RunAgreement.prefix_identity`, with program
 and handler agreement proved at the actual reached sites.
 
-On the thread path, `step` is literally
-`PV_THR2_SourceStoreInterpreter.step`, from W4 at the input pin, with its
-`PV_THR2_SourceStoreLibrary.interpret`. Its `Values` is bound to the named
+On the thread path, `step` extends the pinned OWNER-aware
+`PV_THR2_OwnInitInterpreterBridged.step`, retaining its registration, operator
+and bridged-allocation layers. At ordinary native writer polls selected by
+`PV_THR2_SourceStoreNative.select`, it uses the five documented source-store
+meanings through `PV_THR2_SourceStoreLibrary.interpret` and
+`PV_THR2_SourceStoreInterpreter.step`, preserving intrinsic catch priority.
+Away from those eight sites it is the OWNER-aware step. The compiled
+composition is `PV_LIB_SPEC_ThreadMachine.step`; `away` states agreement
+against the OWNER-aware interpreter, and `writer` states the selected-site
+comparison. Its `Values` is bound to the named
 runtime value interpretations, not an arbitrary choice satisfying a desired
 write. No Store-transformer or successful write premise occurs in MachineSpec.
 The five source-store meanings are CellReplace289, RangeNext93,
