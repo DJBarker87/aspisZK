@@ -6,7 +6,7 @@ def audit(a,kind,target):
   r=ssh('python3',f"from pathlib import Path;print(Path({(B+'/NMF_native/')!r}+{target!r}+'.c').read_text(),end='')");assert r.returncode==0,r.stderr
   extra['NMF_native/'+target+'.c']=r.stdout
   for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
-   extra['NMF_native/'+n]=(E/'NMF_native'/n).read_text()
+   extra['NMF_native/'+n]=lzma.decompress((E/'NMF_native'/(n+'.xz')).read_bytes()).decode()
   cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NMF_native/'+target,
    'NMF_native/'+target+'.c','NMF_native/NFA_WALKER.c','NMF_native/NFA_MemoryLimit.c']
  elif kind=='audit':

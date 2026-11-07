@@ -1,6 +1,6 @@
 # Root0 on the headline game occurrence
 
-`NMF_GameRoot.root0_or_existing_collision` (L010) compiles. Its complete statement and proof are printed in `NMF_L010/stdout.log.xz`; the unchanged binder block is also in `NMF_HYPOTHESIS_STATEMENT.txt`. Standard axioms: propext, Classical.choice, Quot.sound. The combined/raw/coherence gates are pending.
+`NMF_GameRoot.root0_or_existing_collision` (L010) compiles. Its complete statement and proof are printed in `NMF_L010/stdout.log.xz`; the unchanged binder block is also in `NMF_HYPOTHESIS_STATEMENT.txt`. Standard axioms: propext, Classical.choice, Quot.sound. Combined import L011, raw ax2 L016, planted/mutation fixtures L014, and NFX coherence scan L017 all pass.
 
 The theorem applies `AspisR1.RPx_Deployed.deployed` with **exactly the same binder block**, including its original native accepted1/accepted2, game, RuntimePersistence and query-bound parameters. It selects f, s and run from that very result, rather than taking a new run, root provenance, persistence equality, child success, or invocation ID as an input. `NMF_BINDER_IDENTITY.json` records the exact textual check. The same `CPH_Game.DeployedPairExecution p t u ... saved ...` supplies consecutive entries, the same checkpoint key, accepted TX1 parent and physical recorded actions (owner amendment 2026-10-26, fields a-d). The headline's copy fact and its RuntimePersistence-derived history give `bytesOf s.checkpoint.val = bytesOf saved.val` for that writer.
 

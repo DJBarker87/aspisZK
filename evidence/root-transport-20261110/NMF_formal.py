@@ -13,6 +13,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMF_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x['kind']=='kani' for x in done)<40,'Actual cargo-kani budget exhausted'
+    assert len((E/'NMF_ATTEMPTS.jsonl').read_text().splitlines())<80,'80 total scope budget exhausted'
     env=json.loads((E/'NMF_ENV.json').read_text())
     env['TMPDIR']=B+'/NMF_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMF_target'
