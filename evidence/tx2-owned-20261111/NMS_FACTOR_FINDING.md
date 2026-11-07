@@ -1,0 +1,5 @@
+# Retired whole-factor equality shape
+
+L034 and the explicitly unfolded owned split L037 both exhausted the DEFAULT200000 heartbeat limit on whole factor equalities. No setting/cap/timeout was raised. No nonstandard axiom from error recovery is credited. Whole-factor definal equality is retired; the next diagnostic isolates the reconstruction tail in a small module. The raw whole-factor proposal and unlaunched prefix-map proposal are retained as .lean.txt, not compiled modules or roots. Source-prefix definitions compiled L036, but this does not prove their equality to the complete source bodies.
+
+Resume: L039 fixes the isolated tail factor by case analysis on its run/result, exit0. L040 exposed an unexpanded higher-order continuation (not a source defect). L041 expands it but whole-owned definitional normalization again reaches the default heartbeat limit, exit1, no credit. Whole242 definitional normalization is retired: future proofs use separately named prefix/suffix congruence and RSL relational composition, never a larger heartbeat/cap/timeout.
