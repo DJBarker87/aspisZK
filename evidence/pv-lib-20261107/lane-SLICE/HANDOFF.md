@@ -139,3 +139,5 @@ Attempt 49662: PV_W5_F33ActualPanic, passed pinned focused replay.
 Attempt 49663: PV_W5_F33Contract, passed pinned focused replay.
 
 Attempt 49664: PV_LIB_SLICE_BoundedRun, exit0.
+
+Attempt 49665: PV_LIB_SLICE_F32, exit0.
