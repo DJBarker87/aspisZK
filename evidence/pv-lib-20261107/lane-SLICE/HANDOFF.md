@@ -53,3 +53,5 @@ Attempt 49619: PV_W5_F32FormatLengthValue, passed pinned focused replay.
 Attempt 49620: PV_W5_F32FormatEncoding, passed pinned focused replay.
 
 Attempt 49621: PV_W5_F32FormatPack, passed pinned focused replay.
+
+Attempt 49622: PV_W5_F32FormatPayload, passed pinned focused replay.
