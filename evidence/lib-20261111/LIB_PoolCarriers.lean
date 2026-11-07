@@ -7,6 +7,10 @@ namespace LIB_PoolCarriers
 abbrev Request := NMS_R2Tail242.Request
 abbrev Statement := NMS_R2Tail242.Statement
 abbrev Afterstate := NMS_R2Tail242.Candidate
+/-- Shared emitted-copy identities: every consumer uses this exact carrier. -/
+def request (x : Request) : Request := x
+def statement (x : Statement) : Statement := x
+def afterstate (x : Afterstate) : Afterstate := x
 abbrev master := NND_Carrier.master
 abbrev checkpoint := NND_Carrier.checkpoint
 abbrev policy := NND_Carrier.policy
@@ -20,6 +24,12 @@ theorem checkpoint_exact (x : AdapterRw.aspis_statement.pool_v1.pair_forest_acco
     checkpoint x = NMS_R2N_RSLPoolCarriers.checkpoint x := rfl
 theorem policy_exact (x : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1) :
     policy x = NMS_R2N_RSLPoolCarriers.policy x := rfl
+theorem request_exact (x : Request) : request x = x := rfl
+theorem statement_exact (x : Statement) : statement x = x := rfl
+theorem afterstate_exact (x : Afterstate) : afterstate x = x := rfl
+#print axioms request_exact
+#print axioms statement_exact
+#print axioms afterstate_exact
 #print axioms master_exact
 #print axioms checkpoint_exact
 #print axioms policy_exact
