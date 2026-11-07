@@ -1,0 +1,75 @@
+{"attempt": "NNG_L479", "exit_status": 1, "wall_seconds": 1.8147450098767877, "peak_rss_kib": "2626364", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ResultBind137.sound' depends on axioms: [propext, sorryAx]"]}
+NNG_generated/NNG_ResultBind137.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun reply =>
+    match reply with
+    | Except.ok c => tail c
+    | Except.error e => RSL.Spec.pure (Except.error e)
+in the target expression
+  RSL.Spec.bind head
+    (fun reply =>
+      match reply with
+      | Except.ok c => tail c
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env (observation outDecode events (NMT_CallTree.bind code k))
+
+A B C D E : Type
+code : Code A
+k : A → Code B
+headDecode : A → Except E C
+outDecode : B → Except E D
+events : Event → List RSL.Event
+env : RSL.Env
+head : RSL.RE E C
+tail : C → RSL.RE E D
+headLaw : head env (observation hea
+...
+NNG_generated/NNG_ResultBind137.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun reply =>
+    match reply with
+    | Except.ok c => tail c
+    | Except.error e => RSL.Spec.pure (Except.error e)
+in the target expression
+  RSL.Spec.bind head
+    (fun reply =>
+      match reply with
+      | Except.ok c => tail c
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env (observation outDecode events (NMT_CallTree.bind code k))
+
+A B C D E : Type
+code : Code A
+k : A → Code B
+headDecode : A → Except E C
+outDecode : B → Except E D
+events : Event → List RSL.Event
+env : RSL.Env
+head : RSL.RE E C
+tail : C → RSL.RE E D
+headLaw : head env (observation headDecode events code)
+tailLaw :
+  ∀ (a : A),
+    (observation id events code).exit = RSL.Exit.ret a →
+      (match headDecode a with
+        | Except.ok c => tail c
+        | Except.error e => RSL.Spec.pure (Except.error e))
+        env (observation outDecode events (k a))
+law :
+  RSL.Spec.bind head
+    (fun reply =>
+      match reply with
+      | Except.ok c => tail c
+      | Except.error e => RSL.Spec.pure (Except.error e))
+    env (observation outDecode events (NMT_CallTree.bind code k))
+continuation :
+  (fun reply =>
+      match reply with
+      | Except.ok c => tail c
+      | Except.error e => RSL.Spec.pure (Except.error e)) =
+    fun reply =>
+    match reply with
+    | Except.ok c => tail c
+    | Except.error e => RSL.Spec.pure (Except.error e)
+⊢ head.bind tail env (observation outDecode events (NMT_CallTree.bind code k))
+'AspisR1.NNG_ResultBind137.sound' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r0c5cc94fc0d34bc3a46ba55e32d66726.scope; invocation ID: 64e2b7602fbd43bb94f2696abb4506a3

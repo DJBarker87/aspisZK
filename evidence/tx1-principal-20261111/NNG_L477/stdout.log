@@ -1,0 +1,69 @@
+NNG_generated/NNG_InspectBind137.lean:3:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.RSL.RE.bind`
+NNG_generated/NNG_InspectBind137.lean:4:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.RSL.Spec.bind`
+theorem AspisR1.NNG_SourceStep136.bind_sound : ∀ {A B C D : Type} (code : AspisR1.NMT_CallTree.Code A)
+  (k : A → AspisR1.NMT_CallTree.Code B) (headDecode : A → C) (outDecode : B → D)
+  (events : AspisR1.NMT_CallTree.Event → List RSL.Event) (env : RSL.Env) (head : RSL.Spec C) (tail : C → RSL.Spec D),
+  head env (AspisR1.NNG_Observed136.observation headDecode events code) →
+    (∀ (a : A),
+        (AspisR1.NNG_Observed136.observation id events code).exit = RSL.Exit.ret a →
+          tail (headDecode a) env (AspisR1.NNG_Observed136.observation outDecode events (k a))) →
+      head.bind tail env (AspisR1.NNG_Observed136.observation outDecode events (AspisR1.NMT_CallTree.bind code k)) :=
+fun {A B C D} code k headDecode outDecode events env head tail headLaw tailLaw =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => head.bind tail env _a)
+        (AspisR1.NNG_ObservationAlgebra.observation_bind outDecode events code k)))
+    (let ⟨x, ev, he, headLaw⟩ := AspisR1.NNG_Observed136.observation id events code
+    RSL.Exit.casesOn (motive := fun t =>
+      x = t →
+        head.bind tail env
+          (AspisR1.NNG_ObservationAlgebra.append { exit := x, events := ev } fun a =>
+            AspisR1.NNG_Observed136.observation outDecode events (k a)))
+      x
+      (fun a h =>
+        Eq.ndrec (motive := fun x =>
+          AspisR1.NNG_Observed136.observation id events code = { exit := x, events := ev } →
+            head env (AspisR1.NNG_InterpretProjection.mapObs headDecode { exit := x, events := ev }) →
+              head.bind tail env
+                (AspisR1.NNG_ObservationAlgebra.append { exit := x, events := ev } fun a =>
+                  AspisR1.NNG_Observed136.observation outDecode events (k a)))
+          (fun he headLaw =>
+            have hr :=
+              Eq.mpr (id (congrArg (fun _a => _a.exit = RSL.Exit.ret a) he))
+                (Eq.refl { exit := RSL.Exit.ret a, events := ev }.exit);
+            Or.inl
+              (Exists.intro (headDecode a)
+                (Exists.intro ev
+                  (Exists.intro (AspisR1.NNG_Observed136.observation outDecode events (k a))
+                    ⟨headLaw, ⟨tailLaw a hr, rfl⟩⟩))))
+          (Eq.symm h) he headLaw)
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          AspisR1.NNG_Observed136.observation id events code = { exit := x, events := ev } →
+            head env (AspisR1.NNG_InterpretProjection.mapObs headDecode { exit := x, events := ev }) →
+              head.bind tail env
+                (AspisR1.NNG_ObservationAlgebra.append { exit := x, events := ev } fun a =>
+                  AspisR1.NNG_Observed136.observation outDecode events (k a)))
+          (fun he headLaw => Or.inr (Or.inl (Exists.intro ev ⟨headLaw, rfl⟩))) (Eq.symm h) he headLaw)
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          AspisR1.NNG_Observed136.observation id events code = { exit := x, events := ev } →
+            head env (AspisR1.NNG_InterpretProjection.mapObs headDecode { exit := x, events := ev }) →
+              head.bind tail env
+                (AspisR1.NNG_ObservationAlgebra.append { exit := x, events := ev } fun a =>
+                  AspisR1.NNG_Observed136.observation outDecode events (k a)))
+          (fun he headLaw => Or.inr (Or.inr (Exists.intro ev ⟨headLaw, rfl⟩))) (Eq.symm h) he headLaw)
+      (Eq.refl x))
+def RSL.RE.bind : {ε α β : Type} → RSL.RE ε α → (α → RSL.RE ε β) → RSL.RE ε β :=
+fun {ε α β} m k =>
+  RSL.Spec.bind m fun r =>
+    match r with
+    | Except.ok a => k a
+    | Except.error e => RSL.Spec.pure (Except.error e)
+def RSL.Spec.bind : {α β : Type} → RSL.Spec α → (α → RSL.Spec β) → RSL.Spec β :=
+fun {α β} m k env o =>
+  (∃ a e1 o2,
+      m env { exit := RSL.Exit.ret a, events := e1 } ∧
+        k a env o2 ∧ o = { exit := o2.exit, events := e1 ++ o2.events }) ∨
+    (∃ e1, m env { exit := RSL.Exit.abort, events := e1 } ∧ o = { exit := RSL.Exit.abort, events := e1 }) ∨
+      ∃ e1, m env { exit := RSL.Exit.diverge, events := e1 } ∧ o = { exit := RSL.Exit.diverge, events := e1 }
