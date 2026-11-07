@@ -32,12 +32,12 @@ assert J(E/'NNK_OWNER_COMPARISON.json')['identical']==12600
 assert set(J(E/'NNK_PROVENANCE.json')['current_conservative_affected_CLOSED_rows'])<={n for n,r in by.items()if r['status']=='CLOSED'}
 assert J(E/'NNK_PROVENANCE.json')['historical_verbatim']==J(E.parent/'ledger26-20261111/NNI_PROVENANCE.json')['historical_verbatim']
 assert J(E/'NNK_K086.json')==J(E.parent/'ledger26-20261111/NNI_K086.json')
-assert J(E/'NNK_RESOURCES.json')['timeout_or_memory_kill']==['NNK_L046']
+assert J(E/'NNK_RESOURCES.json')['timeout_or_memory_kill']==['NNK_L046','NNK_L048']
 assert not any(p.stat().st_size>20_000_000 for p in E.rglob('*')if p.is_file())
 assert not subprocess.check_output(['git','diff','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--','crates','programs/r1-cost-probe','Cargo.lock'])
 assert not subprocess.check_output(['git','diff','b936275465600469312d1f058cdc91ea2a11f3dc','HEAD','--','programs/aspis-pool'])
 assert not subprocess.check_output(['git','diff','--','crates','programs','Cargo.lock'])
-for a,n in [(54,'137'),(55,'087'),(56,'234')]:
+for a,n in [(58,'137/087/217/234')]:
  r=J(E/f'NNK_L{a:03}/receipt.json');assert r['exit_status']==0
  assert r['print_axioms']and all('sorryAx'not in l for l in r['print_axioms'])
 out=dict(status='PASS',compressed_sha_pairs=pairs,source_snapshots=snapshots,receipts=60,rows=599,counts=ledger['counts'],gate='PASS',source_and_trust_statements_unchanged=True,shipped_source_unchanged=True,new_kani=0,new_extraction=0,no_push=True,no_key_actions=True)

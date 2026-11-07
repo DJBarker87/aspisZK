@@ -5,6 +5,7 @@ import LIB_VLib
 import LIBB_V2Star
 import LIBC_COMBINED_IMPORT
 import RPx_Deployed
+import NMX_R3_RegistrySuppliers
 #print axioms AspisR1.NNG_Candidate137.candidate
 #print axioms AspisR1.NNG_Candidate087.candidate
 #print axioms NMX_R3_DecoderFold.root

@@ -1,0 +1,19 @@
+{"attempt": "NNK_L058", "exit_status": 0, "wall_seconds": 88.76477221492678, "peak_rss_kib": "6931484", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Candidate137.candidate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_FinishOccurrence137.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_Candidate136.candidate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'RSL.TX1_137.rejects_constErr' depends on axioms: [propext]", "'AspisR1.NNG_Candidate087.candidate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_Producer087.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_PreparedOccurrence087.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'RSL.TX1_087.domain_needs_R4' does not depend on any axioms", "'RSL.TX1_087.rejects_wrong_g' depends on axioms: [propext]", "'NMX_R3_RegistryRoot.root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMX_R3_DecoderFold.root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'RSL.TX2_234.rejects_constAbort' depends on axioms: [propext, Quot.sound]"]}
+theorem AspisR1.NNG_Candidate137.candidate : RSL.TX1_137.RowSpec_137 LIB_VLib.library NNG_Producer137.producer :=
+fun a obs env domain =>
+  Eq.mpr (id (congrArg (fun _a => RSL.TX1_137.Ref LIB_VLib.library a env _a) (NNG_Producer137.tree a obs env)))
+    (NNG_SourceParse137.source a obs env domain)
+def AspisR1.NNG_Producer137.producer : NNG_Data137.Args →
+  RSL.Observer → RSL.Env → RSL.Obs (Except LIB_VLib.library.WErr (RSL.Verified LIB_VLib.library)) :=
+fun a obs env =>
+  {
+    exit :=
+      NNG_Observed136.exit (NNG_Output137.decode a env)
+        (NNG_Context137.emitted (NNG_Context137.calls env) (NNG_Context137.input a obs env)),
+    events :=
+      List.flatMap (NNG_Events137.events env)
+...
+1) (c : NHC_NGG_Ref.Account)\n  (h_1 : (_ : Unit) → motive (@Option.none.{0} NHC_NGG_Ref.Account))\n  (h_2 : (c : NHC_NGG_Ref.Account) → motive (@Option.some.{0} NHC_NGG_Ref.Account c)),\n  @Eq.{u_1} (motive (@Option.some.{0} NHC_NGG_Ref.Account c))\n    (NHC_NGG_Transport.value.match_1.{u_1} motive (@Option.some.{0} NHC_NGG_Ref.Account c) h_1 h_2) (h_2 c)","owner_module":"NHC_NGG_Transport","root":"_private.NHC_NGG_Transport.0.NHC_NGG_Transport.value.match_1.eq_2"}
+NNK_OWNER {"obligation_statement":"∀ (x y : R0P.CopyRowExtension AspisR1.FIv_NativeValue.K)\n  (a :\n    @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) → AspisR1.FIv_NativeValue.K)\n      (@R0P.CopyRowExtension.producerValues AspisR1.FIv_NativeValue.K x)\n      (@R0P.CopyRowExtension.producerValues AspisR1.FIv_NativeValue.K y))\n  (b :\n    @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) → AspisR1.FIv_NativeValue.K)\n      (@R0P.CopyRowExtension.producerWeights AspisR1.FIv_NativeValue.K x)\n      (@R0P.CopyRowExtension.producerWeights AspisR1.FIv_NativeValue.K y))\n  (c :\n    @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) → AspisR1.FIv_NativeValue.K)\n      (@R0P.CopyRowExtension.consumerValues AspisR1.FIv_NativeValue.K x)\n      (@R0P.CopyRowExtension.consumerValues AspisR1.FIv_NativeValue.K y))\n  (d :\n    @Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) → AspisR1.FIv_NativeValue.K)\n      (@R0P.CopyRowExtension.consumerWeights AspisR1.FIv_NativeValue.K x)\n      (@R0P.CopyRowExtension.consumerWeights AspisR1.FIv_NativeValue.K y)),\n  @Eq.{1} (R0P.CopyRowExtension AspisR1.FIv_NativeValue.K) x y","owner_module":"NKR_SumCopyFull","root":"_private.NKR_SumCopyFull.0.AspisR1.NKR_SumCopyRoot.rows_ext"}
+
+Running as unit: run-r16b270c0061e433d87fa4731ea7dcd0f.scope; invocation ID: a16b0ac2e3f941d8a7bcb2e0986a6328
