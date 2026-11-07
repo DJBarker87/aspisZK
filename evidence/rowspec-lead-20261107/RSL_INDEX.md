@@ -158,6 +158,7 @@ Own-input clauses:
 - **(R1)** proof.len() = 57607.
 - **(R2)** obs = None (ruling (al)).
 - **(R3)** `V.publicDom public`.
+- **(R4)** Revision 3 (ruling (bq), LIB0_ F2): `V.checkValuesDom (slice proof OFF_Y1 OFF_INACTIVE)`, the TX1:179 `compact_check` premise. Caller clause RSL3-caller:TX1:094:TX1:087:R4, discharged in 094 by canonical_scan (`TX1_094.R4Discharge`, `r4_of_scan`).
 
 ### TX1:094 tx1
 | Field | Value |

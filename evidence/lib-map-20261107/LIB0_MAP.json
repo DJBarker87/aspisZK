@@ -1,27 +1,27 @@
 {
- "title": "LIB0 field map: RSL rev2 library structures -> CLOSED ledger roots",
+ "title": "LIB0 field map: RSL rev2 library structures -> CLOSED ledger roots (F1/F2 resolved by RSL rev3)",
  "target_established": false,
- "rsl_revision": "be66076856e (RSL rev2, frozen by ruling (bp)(4))",
+ "rsl_revision": "be66076856e (RSL rev2, frozen by ruling (bp)(4)); F1/F2 resolved by RSL rev3 (ruling (bq), branch codex/cx-rsl-rev3-20261107)",
  "ledger": "evidence/ledger25-20261111/NMQ_LEDGER.json.xz (sha256 in NMQ_LEDGER.json.sha256), 582 CLOSED / 17 OPEN",
  "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
  "research_base": "3493d38575c",
  "counts": {
-  "total": 104,
+  "total": 106,
   "by_status": {
    "definitional": 44,
    "root+adapter-exists": 20,
-   "root+adapter-new": 27,
-   "unsupplied-or-partial": 8,
-   "trust-row": 5
+   "root+adapter-new": 33,
+   "unsupplied-or-partial": 3,
+   "trust-row": 6
   },
   "by_struct": {
    "PoolLib": 20,
    "DeployedIds": 2,
    "V2Lib": 4,
    "S1Lib": 6,
-   "VLib": 66,
+   "VLib": 67,
    "PreparedNew": 1,
-   "Env/EnvRep": 5
+   "Env/EnvRep": 6
   }
  },
  "fields": [
@@ -611,8 +611,8 @@
    "cls": "ROOT",
    "adapter": "NMN_064.RowSpec Law + chronology over NLW_Full064.Frame/End -> Bytes^3 -> Spec (Except VErr Unit), abort = prefix",
    "adapter_exists": null,
-   "flag": "F1",
-   "note": "canonical rendering (TAS name NMN_064.rslRefines) not built; NNC_ObservedLaw.w + contains_native cover only the weak (Root0-free) library. Resume fills (verifier.rs:428) make the returned law reservation-dependent (F1)",
+   "flag": "F1(resolved rev3)",
+   "note": "canonical rendering (TAS name NMN_064.rslRefines) not built; NNC_ObservedLaw.w + contains_native cover only the weak (Root0-free) library. Resume fills (verifier.rs:428) read Env.reservation (rev3); the law must be Spec.Functional on Dom064",
    "supplying": [
     {
      "row": "TX2:064",
@@ -624,7 +624,7 @@
      ]
     }
    ],
-   "status": "unsupplied-or-partial"
+   "status": "root+adapter-new"
   },
   {
    "struct": "S1Lib",
@@ -1254,6 +1254,30 @@
   },
   {
    "struct": "VLib",
+   "field": "checkValuesDom",
+   "rows": [
+    "TX1:179"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHS_PreparedPacket.source premise compact_check (check_values compact = ok (Ok ())) on the 464-byte y1 slice, verbatim",
+   "adapter_exists": null,
+   "flag": "F2(resolved rev3)",
+   "note": "RSL rev3 field: own-input clause (R4) of TX1:087; discharged at 094 by TX1:084 canonical_scan (TX1_094.R4Discharge, to be proved from NKL_ScanRoot)",
+   "supplying": [
+    {
+     "row": "TX1:179",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
+     "owner_module": "NHS_PreparedPacket",
+     "roots": [
+      "AspisR1.NHS_PreparedPacket.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
    "field": "semanticRounds",
    "rows": [
     "TX1:134"
@@ -1285,8 +1309,8 @@
    "cls": "ROOT",
    "adapter": "graph of NKA claims reference incl. Box carrier; dom = NKN-caller 129",
    "adapter_exists": null,
-   "flag": "F1",
-   "note": "root quantifies allocator/reservation; heap::uninit at r1_semantic.rs:45 returns Err(Allocation): returned law not a function of Env",
+   "flag": "F1(resolved rev3)",
+   "note": "root quantifies allocator/reservation; heap::uninit at r1_semantic.rs:45 returns Err(Allocation); rev3: instantiate the reservation with Env.reservation (Spec.tryReserve), law Child.Functional",
    "supplying": [
     {
      "row": "TX1:129",
@@ -1298,7 +1322,7 @@
      ]
     }
    ],
-   "status": "unsupplied-or-partial"
+   "status": "root+adapter-new"
   },
   {
    "struct": "VLib",
@@ -1674,8 +1698,8 @@
    "cls": "ROOT",
    "adapter": "heap::filled law (NGC_ReferenceValues.heap; same function as TX2:045 NIG_FilledCoverage.source)",
    "adapter_exists": null,
-   "flag": "F1",
-   "note": "fallible try_reserve_exact (r0/heap.rs:5-10): returned Err depends on the allocator reservation, which Env does not carry",
+   "flag": "F1(resolved rev3)",
+   "note": "fallible try_reserve_exact (r0/heap.rs:5-10); rev3: Err iff Env.reservation = false (Spec.tryReserve), law Child.Functional",
    "supplying": [
     {
      "row": "TX1:064",
@@ -1691,7 +1715,7 @@
      ]
     }
    ],
-   "status": "unsupplied-or-partial"
+   "status": "root+adapter-new"
   },
   {
    "struct": "VLib",
@@ -1870,8 +1894,8 @@
    "cls": "ROOT",
    "adapter": "Accumulator::new(S2) law (NGC cohort roots)",
    "adapter_exists": null,
-   "flag": "F1",
-   "note": "calls heap::filled (verifier.rs:93): Err(Allocation) reservation-dependent",
+   "flag": "F1(resolved rev3)",
+   "note": "calls heap::filled (verifier.rs:93): Err(Allocation) iff Env.reservation = false (rev3), law Child.Functional",
    "supplying": [
     {
      "row": "TX1:174",
@@ -1887,7 +1911,7 @@
      ]
     }
    ],
-   "status": "unsupplied-or-partial"
+   "status": "root+adapter-new"
   },
   {
    "struct": "VLib",
@@ -1947,8 +1971,8 @@
    "cls": "ROOT",
    "adapter": "NJZ_Weights.new_source (AdapterRw/VTop copy)",
    "adapter_exists": null,
-   "flag": "F1",
-   "note": "calls heap::filled (verifier.rs:207); ledger caller clause NKH asks for both reservation arms",
+   "flag": "F1(resolved rev3)",
+   "note": "calls heap::filled (verifier.rs:207); ledger caller clause NKH asks for both reservation arms: both arms now selected by Env.reservation (rev3), law Child.Functional",
    "supplying": [
     {
      "row": "TX1:176",
@@ -1960,7 +1984,7 @@
      ]
     }
    ],
-   "status": "unsupplied-or-partial"
+   "status": "root+adapter-new"
   },
   {
    "struct": "VLib",
@@ -2057,7 +2081,7 @@
    "adapter": "NHS_PreparedPacket.source + error/abort companions at SAME (Verified, View, g)",
    "adapter_exists": "NMP_ fresh source call and g result (partial)",
    "flag": "F2,F3",
-   "note": "root is Ok-arm only (premises semantic_finish, compact_check, returned = ok); 179 domain needs compact464 checked, which 087 cannot discharge",
+   "note": "root is Ok-arm only (premises semantic_finish, compact_check, returned = ok); 179 domain needs compact464 checked: rev3 (R4) on 087 now supplies it; F3 (Ok-arm-only law) remains",
    "supplying": [
     {
      "row": "TX1:179",
@@ -2109,13 +2133,25 @@
   },
   {
    "struct": "Env/EnvRep",
+   "field": "Env.reservation",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "RSL rev3: try_reserve reply (true = Ok), bound in EnvRep to the headline binder reservation : NP6_StdModel.Reservation (env.reservation = true <-> reservation = .Ok ())",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "single reply for every try_reserve occurrence, same shape as NP6_StdModel.calls",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
    "field": "EnvRep (+env1_rep, env2_rep)",
    "rows": [],
    "cls": "TRUST",
    "adapter": "agreement of env with the ctx runtime oracles",
    "adapter_exists": "NNE_ (host definitions, NNE_RecordSig)",
-   "flag": null,
-   "note": "if the F1 fix is adopted, EnvRep also binds the reservation channel to the headline reservation binder",
+   "flag": "F1(resolved rev3)",
+   "note": "RSL rev3: EnvRep also binds Env.reservation to the headline reservation binder (TAS_Interfaces EnvRep docstring); the host definition must include that conjunct",
    "supplying": [],
    "status": "trust-row"
   },
@@ -2575,7 +2611,9 @@
    "classification": "demonstrable error in RSL rev2 (Env/nondeterminism)",
    "evidence": "crates/aspis-core/src/r0/heap.rs:5-10 (filled: try_reserve_exact -> Err(Allocation)), :11-14 (uninit); callers candidate.rs:256 (prepare), verifier.rs:93 (Accumulator::new), verifier.rs:207 (BatchedWeights::new), verifier.rs:428 (resume, TX2:064), r1_semantic.rs:45 (claims). The CLOSED roots quantify the reservation (NKA_ClaimsRoot.claims: allocator/state/reservation; NGC/NIG filled roots: reservation; NKH caller clause: both arms).",
    "consequence": "RSL.Env carries sha256/pda/clock only, so a fallible reservation outcome is not an oracle reply. A faithful Child law for these fields must admit both Ok and Err(Allocation) at the same arguments and Env, and impl : Args -> Env -> Obs cannot be the actual function. The RowSpec proofs are unaffected (a relational law admits the impl), but the TX1 returned path 345->328->094->087->filled/accNew/weightsNew and 136->claims becomes nondeterministic at fixed Env, so AMN.a1_forces_det makes A1 (NND_A1/A1min Err arm) and NND_Tx1ReturnedValues.returned unprovable; TX2 tx2auth gives the same for NND_Tx2Values.auth_ret. The rev2 header claim that the only nondeterminism is the aborting allocation site is false for try_reserve sites.",
-   "recommendation": "lead applies a rev2 patch: add a quantified reservation reply to RSL.Env (ruling (at) shape, one reply per fallible site occurrence), make the four VLib children and the 064 law read it, and bind it in Sig.EnvRep to the headline reservation binder. Alternative (worse): an owner ruling that try_reserve failure is outside the obligation, which would be a trust addition. LIB builds every other field now and leaves these five behind a parameter until the lead rules."
+   "recommendation": "lead applies a rev2 patch: add a quantified reservation reply to RSL.Env (ruling (at) shape, one reply per fallible site occurrence), make the four VLib children and the 064 law read it, and bind it in Sig.EnvRep to the headline reservation binder. Alternative (worse): an owner ruling that try_reserve failure is outside the obligation, which would be a trust addition. LIB builds every other field now and leaves these five behind a parameter until the lead rules.",
+   "status": "RESOLVED by RSL rev3 (ruling (bq))",
+   "resolution": "RSL.Env.reservation : Bool (try_reserve reply; true = Ok) and Spec.tryReserve; Spec.Functional / Child.Functional required at the gate for filled, accNew, weightsNew, claims (on dom) and tx2auth (on Dom064); TAS Sig.EnvRep binds env.reservation = true <-> headline reservation = .Ok (). See evidence/rowspec-lead-20261107/RSL_REVISION3.md. The five fields are no longer blocked by a spec error; they remain to be instantiated (adapter new)."
   },
   "F2": {
    "fields": [
@@ -2584,7 +2622,9 @@
    "classification": "demonstrable error in RSL rev2 (TX1:087 Domain incomplete), unless the lead prefers a new TX1:179 law",
    "evidence": "TX1:179 root NHS_PreparedPacket.source has premise compact_check : check_values compact = ok (Ok ()) on the 464-byte y1 slice; ledger 179 inventory domain says \"LPt compact464 checked\". Frozen prepare (candidate.rs:255-264) runs expand_values (compact.rs:127-136, no canonicality check) and never calls check_values; only tx1 calls canonical_scan (candidate.rs:275) before prepare. RowSpec_087 Domain is R1-R3 only. NMP_REMAINING records the same gap (\"179 canonicality\").",
    "consequence": "With P.dom verbatim from 179 (the RSL rule), RowSpec_087 is unprovable: the parent cannot discharge the child domain at the call.",
-   "recommendation": "add own-input clause (R4) \"proof[7031..7495] passes check_values\" to RowSpec_087, discharged in RowSpec_094 from the TX1:084 canonical_scan law at SAME proof. This narrows 087 only and does not propagate past 094."
+   "recommendation": "add own-input clause (R4) \"proof[7031..7495] passes check_values\" to RowSpec_087, discharged in RowSpec_094 from the TX1:084 canonical_scan law at SAME proof. This narrows 087 only and does not propagate past 094.",
+   "status": "RESOLVED by RSL rev3 (ruling (bq))",
+   "resolution": "RowSpec_087 Domain gains (R4) V.checkValuesDom (slice proof OFF_Y1 OFF_INACTIVE) (new VLib field checkValuesDom := 179 compact_check premise verbatim); recorded as caller clause RSL3-caller:TX1:094:TX1:087:R4 and discharged in 094 by canonical_scan via TX1_094.R4Discharge / r4_of_scan. PreparedNew stays blocked by F3 (missing TX1:179 child lemmas, LIB_)."
   },
   "F3": {
    "fields": [
