@@ -43,3 +43,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49476 passed exact pinned replay PV_THR2_LibrarySemantics_TLSSourceValuesFacts; see receipt for time/RSS/swap/revision/axioms.
 
 49477 passed exact pinned replay PV_THR2_LibrarySemantics_TLSPureWorldFacts; see receipt for time/RSS/swap/revision/axioms.
+
+49478 passed exact pinned replay PV_THR2_SourceStoreInterpreter; see receipt for time/RSS/swap/revision/axioms.
