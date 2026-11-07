@@ -1,0 +1,34 @@
+import NLX_COMBINED_IMPORT
+set_option pp.proofs false
+#print NLT_CompleteRoot.root
+#print NLT_CompleteRoot.RowSpec
+#print NLT_CompleteRoot.Native
+#print NLT_CompleteRoot.Law
+#print NLT_CompleteRoot.ResolvedLaw
+#print NLT_CompleteRoot.StoppedLaw
+#print NLT_CompleteRoot.CallLaw
+#print NLT_C04Stop.Cut
+#print NLT_C04Stop.At
+#print NLT_NativeInvocation.Occurrence
+#print NLT_NativeInvocation.Invocation
+#print NLT_NativeWindows.Input
+#print NLT_NativeInvocation.Detail
+#print axioms NLT_CompleteRoot.root
+#print NLT_NativeSource.skeleton
+#print NLT_NativeWindows.window
+#print NLT_Subcuts.Detail
+#print NLB_Parent.QueryObservation
+#print NLB_Parent.QueryCut
+#print NLP_InputDomain.Root0
+#print NLT_AllocationInstalled.ResumeLaw
+#print NLT_AllocationInstalled.PendingLaw
+#print NLT_QueryInstalled.Law
+#print NLT_FinishInstalled.Law
+#print NLT_C04Installed.Law
+#print NLT_ReplyInstalled.Law
+#print NLT_CompleteRoot.End
+#print NJJ_Constructors.PreparedCut
+#print NJJ_Constructors.AccumulatorCut
+#print NKE_GeometryCuts.Cut
+#print NP6_StdModel.Reservation
+#print NIW_AlignFinishComposed.Locations

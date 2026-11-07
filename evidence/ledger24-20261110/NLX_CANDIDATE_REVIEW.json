@@ -1,0 +1,82 @@
+{
+ "basis_obligation_statement_hash": "de2662fa8fe4dc2e6186849da4b766f40b2123e5e2ee813964d989bdacde225d",
+ "cross_transaction_provenance": {
+  "caller": "TX2:064",
+  "established_here": false,
+  "literal_root_clause": "NLP_InputDomain.Root0 ck proof",
+  "required": "Discharge the checkpoint root0/root1 provenance from the approved two-transaction persistence law AND resume proof-digest check; persistence of data alone is insufficient.",
+  "scope_note": "The literal predicate fixes root0 bytes; root1 in the local Parsed interpretation is the SAME resumed root1 witness (NLP_RootCodec), not a claimed successful parse or caller provenance proof."
+ },
+ "gate_admitted": true,
+ "hypothesis_inventory": {
+  "cuts": "per-occurrence reservation/locations and NLB C07 native frame family under aq2/ai5/y3 option-A",
+  "native": "subject of conclusion, not an extra endpoint/success premise",
+  "no_child_endpoint_hypothesis": true,
+  "no_free_Ops_Run": true,
+  "original_generics": "H existing returning-value realization, X/Digest32/hash original trait parameters; partial replies retained",
+  "own_inputs": "three bf2 clauses on original args"
+ },
+ "kernel_statement": {
+  "obligation_statement": "\u2200 (H : AspisV8R19.DuplexFrames.Bytes \u2192 AspisV8R19.SourceDuplexStep.State) {X : Type}\n  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : X)\n  (proofLength :\n    @Eq.{1} Nat\n      (@List.length.{0} Aeneas.Std.U8\n        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)\n          (fun (l : List.{0} Aeneas.Std.U8) =>\n            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)\n          proof))\n      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))\n  (publicLength :\n    @LE.le.{0} Nat instLENat\n      (@List.length.{0} Aeneas.Std.U8\n        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)\n          (fun (l : List.{0} Aeneas.Std.U8) =>\n            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)\n          pub))\n      (@OfNat.ofNat.{0} Nat (nat_lit 1880) (instOfNatNat (nat_lit 1880))))\n  (root0 : NLP_InputDomain.Root0 ck proof), @NLT_CompleteRoot.RowSpec H X d pub proof ck hash",
+  "owner_module": "NLT_CompleteRoot",
+  "root": "NLT_CompleteRoot.root"
+ },
+ "own_argument_clauses": [
+  {
+   "classification": "bf(2) own proof extent",
+   "consumer": "NKU native scope; NLN C04 extent",
+   "name": "proofLength",
+   "producer": "NLE_AuthScope.common_domain",
+   "producer_status": "source support; native caller association OPEN",
+   "verbatim": "proof.val.length=57607"
+  },
+  {
+   "classification": "bf(2) own public extent",
+   "consumer": "NKU native scope at SAME C01",
+   "name": "publicLength",
+   "producer": "NLE_AuthScope.common_domain / owned encoder Array1880",
+   "producer_status": "source support; native caller association OPEN",
+   "verbatim": "pub.val.length\u22641880"
+  },
+  {
+   "classification": "bf(2) additional original-input root provenance; NOT silently admitted",
+   "consumer": "NLN_TX2_053 first-root binding at C04",
+   "expanded": "(ck.val.drop 112).take 32=(encodeState ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf proof.val) 16 32)).getD (fun _=>0))).val",
+   "name": "root0Input",
+   "producer": null,
+   "producer_status": "OPEN; checkpoint writer/proof binding must be supplied; sizes alone insufficient",
+   "verbatim": "NLP_InputDomain.Root0 ck proof"
+  }
+ ],
+ "owner_module": "NLT_CompleteRoot",
+ "primary_root": "NLT_CompleteRoot.root",
+ "recursive_clauses_reviewed": 312,
+ "row": "TX2:065",
+ "same_argument_checks": [
+  {
+   "name": "C01",
+   "proof": "NLT_AllocationInstalled.resume; NLT_NativeFacts.resume_scope",
+   "same": "original ck/proof/pub/hash, site Reservation"
+  },
+  {
+   "name": "C04 resolved",
+   "proof": "NLT_C04NativeInstalled.installed; NLT_ReplyInstalled.installed; NLT_Chronology.installed",
+   "same": "actual proof/Prepared/folded at unique parent occurrence"
+  },
+  {
+   "name": "C04 independently stopped",
+   "proof": "NLT_C04StopParent.source_prefix/installed; NLT_C04StopChronology.installed",
+   "same": "same parent question; child pending history; no returned reply or suffix"
+  },
+  {
+   "name": "C07",
+   "proof": "NLT_QueryInstalled.installed; NLT_RecordFrames.parent",
+   "same": "same queryArgs, observation/ownership/frame, complete unchanged native family"
+  }
+ ],
+ "source_statement": "theorem root (H : Bytes \u2192 State) {X : Type} (d : aspis_core.digest.Digest32 X)\n (pub proof ck : Slice U8) (hash : X)\n (proofLength : proof.val.length=57607) (publicLength : pub.val.length\u22641880)\n (root0 : NLP_InputDomain.Root0 ck proof) : RowSpec H d pub proof ck hash",
+ "status": "PASS_COMPLETE_ROOT_GATE_ADMITTED",
+ "trust": "existing P6/D188 option-A native semantic transport RETAINED as reclassification; no new native pass",
+ "withdrawn_root": "NLT_Root.root",
+ "withdrawn_root_credit": false
+}
