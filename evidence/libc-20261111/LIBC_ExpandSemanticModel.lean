@@ -7,8 +7,8 @@ open Aeneas Aeneas.Std Result
 def Row (j : Fin 13831) (late : ¬ j.val < 32) :
  {r : Nat // r < 27 ∧ NGD_SemanticSchedule.dst r ≤ j.val ∧
    j.val < NGD_SemanticSchedule.dst r + 5 + NFU_PacketDomains.payloadSize r} :=
- ⟨Classical.choose ((NGV_SemanticPacket.coverage j.val j.property).resolve_left late),
-  Classical.choose_spec ((NGV_SemanticPacket.coverage j.val j.property).resolve_left late)⟩
+ ⟨Classical.choose ((NGV_SemanticPacket.coverage j.val j.isLt).resolve_left late),
+  Classical.choose_spec ((NGV_SemanticPacket.coverage j.val j.isLt).resolve_left late)⟩
 def byte (input : Slice U8) (j : Fin 13831) : U8 :=
  if early : j.val < 32 then input.val[j.val]?.getD 0#u8
  else
@@ -38,8 +38,8 @@ theorem source (input before : Slice U8) (inputSize : input.val.length=7015)
      · rw [dif_neg early]
        let row := Row index early
        have live := row.property.1
-       have lo := row.property.2.1
-       have hi := row.property.2.2
+       have lo : NGD_SemanticSchedule.dst row.val ≤ j := row.property.2.1
+       have hi : j < NGD_SemanticSchedule.dst row.val + 5 + NFU_PacketDomains.payloadSize row.val := row.property.2.2
        by_cases header : j < NGD_SemanticSchedule.dst row.val + 5
        · rw [if_pos header]
          have offset : j-NGD_SemanticSchedule.dst row.val < 5 := by omega
