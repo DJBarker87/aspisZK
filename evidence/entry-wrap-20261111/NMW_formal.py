@@ -5,11 +5,11 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 def _run(a,kind,target,command=None,extra=None,env_extra=None):
     assert ((a.startswith('NMW_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMW_E') and 1<=int(a[-3:])<=2) or (a.startswith('NMW_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect','extract','kani']
-    if kind=='lean':
+    if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMW_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x['kind']=='lean' for x in done)<50,'Actual Lean compiler budget exhausted (50)' 
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<50,'Actual Lean compiler budget exhausted (50)' 
         if target not in ['NMW_COMBINED_IMPORT','NMW_ProofDriver','NMW_ScanDriver']:
-            assert sum(x['kind']=='lean' for x in done)<48,'Reserve two final import/audit compiler slots'
+            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<48,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMW_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()

@@ -1,0 +1,31 @@
+# Entry occurrence and the headline
+
+Target not yet established. This document is an integration map, not an instantiated headline theorem or a premise-removal claim.
+
+## The exact frozen entry path
+
+TX1:330 and TX2:213 are the SAME deployed `process_r1_cost_probe_instruction` body (pool-adapter/private-leaf-salts, lib.rs56–70). It computes `pool_route::admitted(data)` before any account operation; false returns `InvalidInstructionData`; true calls `r1_pool_adapter::process(program_id,accounts,data)` at identical arguments. TX1:333 and TX2:221 are that same process body (r1_pool_adapter.rs950–962). On `[3,10]` OR `[3,11]` it tail-calls stage1 (344); on an admitted ASQ8 prefix it tail-calls stage2 (240). The three lifecycle arms are unreachable on either release route; entry rejects them before process. There is no wrapper account read, borrow, write, runtime call or post-child continuation. The non-pool-adapter lib.rs arm with three RefCell guards is cfg-disabled in EVERY fresh extraction here.
+
+`NMW_Emitted` is the freshly receipted body after explicit primitive/opaque/carrier interpretation; `NMW_Symbolic.process_specialize/entry_specialize` identify the scalar specialization. `NMW_Commands.first_plan/second_plan/entry_plan` retain the exact program, full account slice and instruction slice at the selected call. `NMW_Commands.process_forward/entry_forward` interpret the reified source call forward into the entire selected child outcome. `NMW_Projection.process_result/entry_result` recover exactly the fresh emitted Result. This interpretation is under the retained std and extraction items, reported as reliance/reclassification, not removal.
+
+## One ledger step when the actual child packets exist
+
+For 333/221 instantiate `NMW_Fold.process_fold` with NMV's complete344/240 packets, at the original arguments and pre-world, and prove each packet's own-input caller clauses. For330/213 instantiate `NMW_EntryFold.from_process` with that exact process packet. `NMW_EntryFold.combined` supplies this same composition in ONE theorem. If the NMV carriers differ, first prove the concrete representation law required by `NMW_Transport.ChildSpec` and use the transported fold; `NMW_Carrier.outcome_injective` forbids erased resources. These are intermediate folds, not gated roots: no actual NMV packet is currently installed. Native/model child functions and their laws MUST disappear from any final row root's free hypotheses under(aq). The generic equality interface is stronger than a returned-only relation, but is not itself proof of any particular stage implementation.
+
+## What this does and does not discharge in RPx_Deployed.deployed
+
+The headline's exact top binders are `L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 missing indexError reservation native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D a Q0 Q1 queries` (unmodified in `evidence/replay-deployed2-20261027/RPx_Deployed.lean`).
+
+`native1`/`native2` are the OWNED stage1_owned/stage2_owned functions, not these dispatchers. `S2W_DigestExtraction.AeneasExtraction.stage1` and `.stage2` equate those owned functions with the installed AdapterRw source; `.digestSource` interprets op43. The dispatcher theorems alone discharge NONE of those three fields, nor any of the headline's runtime, acceptance, query-bound, persistence or cryptographic binders. In particular, do not substitute the unit-returning real entry for `native1`, whose result carries the saved checkpoint.
+
+`accepted1` and `accepted2` refer to `S2W_D189Wrappers.first` and `.second`. Once NMV's stage wrappers are installed with their complete SDK/token/account/return-data semantics, these entry folds supply the actual frozen *outer dispatcher* part of the physical-to-wrapper occurrence association, with the same original `data1`/`data2`, `CPH_Program.verifier`, and admitted account descriptors. The concrete child-to-`e1.first` / `e2.second secondSizes` / full world adapter must be checked at that point. This job does not invent it. `RuntimeEntrypointAdmission L e1 w1 3` and `... e2 w2 7` remain the existing runtime facts (keys/cells/zero counters/liveness); their account projection is not inferred from pointer equality. No account view, public/proof/checkpoint contents, token or runtime return-data producer is supplied by a dispatcher equality.
+
+## Root0 placement
+
+`NMF_GameRoot.root0_or_existing_collision` uses the SAME headline binder block and accepted occurrence. It selects the same `f,s : SourceCuts`, proves `Root0 saved.deref f.proof`, carries saved checkpoint bytes to `s.checkpoint` by the approved DATA persistence law, and uses writer/reader proof-digest binding. It concludes `NLP_InputDomain.Root0 s.checkpoint s.proof` OR the EXISTING charged `BinRawByteCollisionTargets.event` with exactly `Q0+Q1+2965`, `H`, recorded-joint program, projection and selector. `NMN_Headline.accepted_occurrence` installs candidate `NMN_064.root` on those SAME `s.pub/s.proof/s.checkpoint/digest/hash`, retaining the three size antecedents. Ledger25's `NMQ_HYPOTHESES.md` (snapshot in NMW_SIBLING_SNAPSHOTS.json) records this disposition.
+
+Thus NMF closes the literal Root0 alternative AT THAT ACCEPTED OCCURRENCE, outside the existing charged collision branch. It does not prove global Root0 or hash injectivity, give every rejected/aborted241 prefix Root0, install241's concrete getters/buffer/encoder associations, or close the caller's three extents. None belongs in NMW dispatcher own-input hypotheses. No new collision charge or trust row is added.
+
+## Integration status
+
+The four dispatch rows have fresh bodies and checked full-outcome parameterized folds. Concrete344/240 packets and their representation/domain bindings are OPEN on NMV's branch. Hence no actual root pair currently plugs into the headline and no ledger promotion is requested. The one-step instantiation map above is ready; claiming the entire headline extraction premise discharged would be false. Source-to-ELF, extraction provenance for inherited emissions, L187/L188 and the complete security contract remain independently open.
