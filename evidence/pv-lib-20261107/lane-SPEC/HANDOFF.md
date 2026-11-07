@@ -65,3 +65,9 @@ Use Delivery.Boundary/First; Boundary.Terminal/Boundary/First/Diverges are
 SUPERSEDED support definitions and are not full row specifications. Existing
 uniqueness/abort/body-push theorems remain mathematically valid. No row uses
 these modules. Next Lean49711. Frozen PSPECs remain unchanged.
+
+Focused49711 compiled the base-partition audit driver (0.78s,1583968KiB,
+swap0).42 explicit own definitions/theorems, unchanged private importAll
+collector suffix. This compile is not a raw audit. Next49712 stages the48-root
+STX partition; one serial capped raw attempt49790 will audit both in separate
+processes, with no combined cohort assertion. No row/root composition proved.
