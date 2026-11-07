@@ -1,0 +1,72 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -316,3 +316,7 @@
+     mark(obs, 1);
+     verify_finish(public, prefix, transcript, challenges, obs)
+ }
++
++#[cfg(kani)]
++#[path = "NLZ_native.rs"]
++pub(crate) mod NLZ_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLZ_native.rs
+@@ -0,0 +1,40 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)] struct Hash;
++impl Digest32 for Hash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("unentered digest")}}
++use aspis_core::field::{M31,CM31};
++fn digest()->[M31;8]{let r:[u32;8]=kani::any();[M31(r[0]),M31(r[1]),M31(r[2]),M31(r[3]),M31(r[4]),M31(r[5]),M31(r[6]),M31(r[7])]}
++pub(crate) fn transition()->aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1{
++ use aspis_statement::pool_v1::{pair_tree_profile::*,PoolV1PairVerifiedAfterstateV1};
++ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:core::array::from_fn(|_|digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:core::array::from_fn(|_|digest())}}
++}
++pub(crate) fn transfer()->aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{
++ aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
++}
++
++fn parse_error<'a>(_:&'a[u8])->Result<Prefix<'a>,Error>{Err(Error::Terminal)}
++fn unreachable_public<H:Digest32>(_:Public<'_>,_:H,_:&[u8;32])->Result<SemanticTranscript<H>,Error>{panic!("suffix public")}
++fn unreachable_begin<H:Digest32>(_:&Prefix<'_>,_:&mut SemanticTranscript<H>)->Result<Challenges,Error>{panic!("suffix begin")}
++fn unreachable_finish<H:Digest32>(_:Public<'_>,_:Prefix<'_>,_:SemanticTranscript<H>,_:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{panic!("suffix finish")}
++fn check(bad:bool){
++ let bytes:[u8;13831]=kani::any();
++ let transition=transition();let transfer=transfer();
++ let public=Public::Transfer(&transfer,&transition);
++ let out=super::verify_observed(public,&bytes,Hash,None);
++ let good=matches!(out,Err(Error::Terminal));
++ if bad{assert!(!good)}else{assert!(good)}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_error_cut(){check(false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_error_control(){check(true)}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path = "NLZ_factory.rs"]
++pub(crate) mod NLZ_factory;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLZ_factory.rs
+@@ -0,0 +1,6 @@
++use super::*;
++pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
++pub(crate) fn records<'a>(prefix:&Prefix<'a>)->[&'a[u8];27]{prefix.records}
++pub(crate) fn make<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
++pub(crate) fn snapshot<H:Digest32+Copy>(t:&SemanticTranscript<H>)->([u8;32],H,u8){(t.state,t.hash,t.next_row)}
++pub(crate) fn record<'a>(prefix:&Prefix<'a>,row:usize)->&'a[u8]{prefix.records[row]}

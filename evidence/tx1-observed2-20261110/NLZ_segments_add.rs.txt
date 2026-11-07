@@ -1,0 +1,66 @@
+// ACTUAL verify_observed, child calls replaced by local-record oracles.
+// Hash is instantiated ONLY by LoggedHash; generic oracle casts access that
+// concrete local record. No writable static, callback value assertion or SHA.
+#[repr(transparent)] #[derive(Clone,Copy)] struct LoggedHash(*mut ());
+impl Digest32 for LoggedHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("no SHA in parent cuts")}}
+struct ParentLog<'a>{
+ public:Public<'a>, bytes:&'a[u8], stop:u8, bad:bool, mode:u8,
+ phase:u8, error:Error, initial:([u8;32],u8),after:([u8;32],u8),
+ challenges:Challenges, row:usize,offset:usize,
+}
+unsafe fn local<'a,H:Digest32>(hash:H)->&'a mut ParentLog<'a>{
+ assert_eq!(core::mem::size_of::<H>(),core::mem::size_of::<LoggedHash>());
+ let ptr=unsafe{(*(&hash as *const H as *const LoggedHash)).0};
+ unsafe{&mut *(ptr as *mut ParentLog<'a>)}
+}
+fn same_public_value(a:Public<'_>,b:Public<'_>)->bool{match(a,b){
+ (Public::Transfer(p,t),Public::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),
+ (Public::Withdrawal(p,t),Public::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),_=>false}}
+fn assert_segment(good:bool,log:&ParentLog<'_>,mode:u8){if log.mode==mode&&log.bad{assert!(!good)}else{assert!(good)}}
+fn parsed<'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
+ assert_eq!(bytes.len(),13831);
+ let root:&[u8;32]=bytes[..32].try_into().unwrap();
+ let mut off=32usize;
+ let mut rows:[&[u8];27]=[&bytes[..0];27];
+ for row in 0..27{let len=5+crate::r1_wire::row_shape(row as u8).unwrap().1;rows[row]=&bytes[off..off+len];off+=len;}
+ assert_eq!(off,13831);
+ Ok(crate::r1_wire::NLZ_factory::prefix(root,rows))
+}
+fn prefix_frame(prefix:&Prefix<'_>,log:&ParentLog<'_>)->bool{
+ let mut off=32usize;let mut expected_off=0;let mut expected_len=0;
+ for row in 0..27{let len=5+crate::r1_wire::row_shape(row as u8).unwrap().1;if row==log.row{expected_off=off;expected_len=len;}off+=len;}
+ let rec=crate::r1_wire::NLZ_factory::record(prefix,log.row);
+ let expected=&log.bytes[expected_off..expected_off+expected_len];
+ rec.len()==expected.len()&&core::ptr::eq(rec.as_ptr(),expected.as_ptr())&&rec[log.offset]==expected[log.offset]&&core::ptr::eq(prefix.c1_root.as_ptr(),log.bytes.as_ptr())&&prefix.c1_root[log.offset%32]==log.bytes[log.offset%32]
+}
+fn public_cut<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<SemanticTranscript<H>,Error>{
+ let log=unsafe{local(hash)};
+ assert_segment(log.phase==0&&same_public_value(public,log.public)&&core::ptr::eq(root.as_ptr(),log.bytes.as_ptr())&&root[log.offset%32]==log.bytes[log.offset%32],log,0);
+ log.phase=1;
+ if log.stop==1{return Err(log.error)}
+ Ok(crate::r1_wire::NLZ_factory::make(hash,log.initial.0,log.initial.1))
+}
+fn begin_cut<H:Digest32>(prefix:&Prefix<'_>,t:&mut SemanticTranscript<H>)->Result<Challenges,Error>{
+ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(t);let log=unsafe{local(hash)};
+ assert_segment(log.phase==1&&state==log.initial.0&&row==log.initial.1&&prefix_frame(prefix,log),log,1);
+ log.phase=2;
+ *t=crate::r1_wire::NLZ_factory::make(hash,log.after.0,log.after.1);
+ if log.stop==2{Err(log.error)}else{Ok(log.challenges)}
+}
+fn finish_cut<H:Digest32>(public:Public<'_>,prefix:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
+ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(&t);let log=unsafe{local(hash)};
+ assert_segment(log.phase==2&&same_public_value(public,log.public)&&state==log.after.0&&row==log.after.1&&c==log.challenges&&prefix_frame(&prefix,log),log,2);
+ log.phase=3;Err(log.error)
+}
+fn arbitrary_q()->QM31{let w:[u32;4]=kani::any();QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn arbitrary_challenges()->Challenges{Challenges{lambda:arbitrary_q(),chi:arbitrary_q(),theta:arbitrary_q(),zc:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],mu:arbitrary_q(),eta:arbitrary_q()}}
+fn arbitrary_error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+fn parent_check(stop:u8,mode:u8,bad:bool){
+ let bytes:[u8;13831]=kani::any();let transition=transition();let transfer=transfer();let public=Public::Transfer(&transfer,&transition);
+ let row:usize=kani::any();kani::assume(row<27);let offset:usize=kani::any();kani::assume(offset<5+crate::r1_wire::row_shape(row as u8).unwrap().1);
+ let before=bytes[offset];
+ let mut log=ParentLog{public,bytes:&bytes,stop,bad,mode,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),row,offset};
+ let hash=LoggedHash(&mut log as *mut _ as *mut ());
+ let result=super::verify_observed(public,&bytes,hash,None);
+ assert_segment(matches!(result,Err(e) if e==log.error)&&log.phase==stop&&bytes[offset]==before,&log,3);
+}

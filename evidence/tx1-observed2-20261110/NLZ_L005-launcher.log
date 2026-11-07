@@ -1,0 +1,29 @@
+{"attempt": "NLZ_L005", "exit_status": 0, "wall_seconds": 21.47661546501331, "peak_rss_kib": "6360332", "swaps": "0", "print_axioms": []}
+def AspisR1.NLZ_Interface.RowSpec_087 : NLJ_Prepare.Configuration →
+  (NLJ_Prepare.Input Unit → Heap → Observation087) → Prop :=
+fun cfg native =>
+  ∀ (i : NLJ_Prepare.Input Unit) (h : Heap),
+    have o := native i h;
+    o.initialHeap = h ∧
+      View h o.proofWindow ↑i.proof ∧
+        NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) o.reply o.log o.events ∧
+          PreparedHashCode.run
+              (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+                i.scratch) =
+            (o.log, o.reply)
+
+...
+def AspisR1.NLZ_Interface.RowSpec_087 : NLJ_Prepare.Configuration →
+  (NLJ_Prepare.Input Unit → Heap → Observation087) → Prop :=
+fun cfg native =>
+  ∀ (i : NLJ_Prepare.Input Unit) (h : Heap),
+    have o := native i h;
+    o.initialHeap = h ∧
+      View h o.proofWindow ↑i.proof ∧
+        NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) o.reply o.log o.events ∧
+          PreparedHashCode.run
+              (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+                i.scratch) =
+            (o.log, o.reply)
+
+Running as unit: run-rb3c747b8cd4d4aa88db8e4c180bfb0ba.scope; invocation ID: 5780fbcd067f473fb31483546c0f0aa4
