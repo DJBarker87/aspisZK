@@ -17,6 +17,9 @@ is_active_at (TX2:194/196); create_program_address is the PDA syscall slot
 (ruling (at)), an `Event.pda` with its quantified reply.
 Own-input domain ((bf)(2)): none.
 Effects: the ordered PDA syscall events only; no account or return-data write.
+Revision 2 (RSL_REVISION2.md): the `data()?` clones of the registry and entry
+accounts are allocation sites for a heap-carrying deferred error
+(`RS.ofCloned`, NMT-S1 shape).  Domain unchanged.
 -/
 import RSL_Pool
 set_option autoImplicit false
@@ -77,14 +80,14 @@ def entryV1Bad (a : Args) (e : EntryV1) : Bool :=
 def immutableBranch (L : PoolLib) (D : DeployedIds) (a : Args) : RS Unit :=
   let reg := D.registry
   let mk := a.master_account.key.bytes
-  RS.bind (RS.ofExcept a.registry_account.data) fun rdata =>
+  RS.bind a.registry_account.data fun rdata =>
   RS.bind (RS.ofOption (L.decodeRegistryV2 rdata) .invalidAccountData) fun r =>
   RS.bind (pdaOrErr [SEED_REGISTRY_V2, mk, mk1 r.bump] reg) fun expected =>
   RS.seq (RS.check (decide (a.registry_account.key ≠ expected)) .invalidAccountData) <|
   RS.bind (pdaOrErr [reg.bytes, mk1 r.programdata_bump] LOADER_ID) fun rpd =>
   RS.seq (RS.check (registryV2Bad D a r rpd) .invalidAccountData) <|
   RS.seq (RS.ofExcept (readonlyAccount a.entry_account reg)) <|
-  RS.bind (RS.ofExcept a.entry_account.data) fun edata =>
+  RS.bind a.entry_account.data fun edata =>
   RS.bind (RS.ofOption (L.decodeEntryV2 edata) .invalidAccountData) fun e =>
   RS.bind (pdaOrErr [SEED_ENTRY_V2, mk, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes, mk1 e.bump]
       reg) fun expectedE =>
@@ -97,13 +100,13 @@ def immutableBranch (L : PoolLib) (D : DeployedIds) (a : Args) : RS Unit :=
 def v1Branch (L : PoolLib) (D : DeployedIds) (a : Args) : RS Unit :=
   let reg := D.registry
   let mk := a.master_account.key.bytes
-  RS.bind (RS.ofExcept a.registry_account.data) fun rdata =>
+  RS.bind a.registry_account.data fun rdata =>
   RS.bind (RS.ofOption (L.decodeRegistryV1 rdata) .invalidAccountData) fun r =>
   RS.bind (pdaOrErr [SEED_REGISTRY, mk, mk1 r.bump] reg) fun expected =>
   RS.seq (RS.check (decide (a.registry_account.key ≠ expected)) .invalidAccountData) <|
   RS.seq (RS.check (registryV1Bad a r) .invalidAccountData) <|
   RS.seq (RS.ofExcept (readonlyAccount a.entry_account reg)) <|
-  RS.bind (RS.ofExcept a.entry_account.data) fun edata =>
+  RS.bind a.entry_account.data fun edata =>
   RS.bind (RS.ofOption (L.decodeEntryV1 edata) .invalidAccountData) fun e =>
   RS.bind (pdaOrErr [SEED_ENTRY, mk, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes, mk1 e.bump]
       reg) fun expectedE =>
@@ -180,7 +183,7 @@ theorem rejects_constErr (L : PoolLib) (D : DeployedIds)
   simp only [Bool.false_eq_true, if_false] at h2
   unfold v1Branch at h2
   simp only [input, acct, OwnedAccount.data] at h2
-  rw [RS.ofExcept_error, RS.bind_throw] at h2
+  rw [RS.ofCloned_error _ rfl, RS.bind_throw] at h2
   simp [RS.throw, Spec.pure, constErr] at h1 h2
   rw [h1] at h2
   cases h2

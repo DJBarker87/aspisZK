@@ -1,0 +1,77 @@
+'RSL.TX2_217.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_217.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_234.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_234.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_233.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_233.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_242.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_242.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_241.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_241.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_240.rejects_silentErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_240.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_221.rejects_silentErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_213.rejects_silentErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX2_213.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_136.rejects_constErr' depends on axioms: [propext]
+'RSL.TX1_137.rejects_constErr' depends on axioms: [propext]
+'RSL.TX1_087.rejects_wrong_g' depends on axioms: [propext]
+'RSL.TX1_094.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_328.rejects_silentRet' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_328.ref_admits_abort' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_345.rejects_constErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_345.rejects_constAbort' depends on axioms: [propext]
+'RSL.TX1_344.rejects_silentErr' depends on axioms: [propext]
+'RSL.TX1_344.rejects_constAbort' depends on axioms: [propext]
+'RSL.TX1_333.rejects_silentErr' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_330.rejects_constAbort' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_330.rejects_silentErr' depends on axioms: [propext, Quot.sound]
+'RSL.RS.ofCloned_error' depends on axioms: [propext]
+'RSL.RS.ofCloned_eq_ofExcept' depends on axioms: [propext]
+'RSL.RS.ofCloned_heap_abort' depends on axioms: [propext]
+'RSL.RS.ofCloned_plain_no_abort' depends on axioms: [propext]
+'RSL.OwnedAccount.data_of_snapshotErrs' depends on axioms: [propext]
+'RSL.OwnedAccount.data_len_of_snapshotErrs' depends on axioms: [propext]
+'RSL.Spec.bind_two' depends on axioms: [propext]
+'RSL.RS.alloc_seq_iff' depends on axioms: [propext]
+'RSL.Spec.bind_ret_inv' depends on axioms: [propext]
+'RSL.TX1_344.snapshot_errs' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_344.snapAll_errs' depends on axioms: [propext, Quot.sound]
+'RSL.TX1_344.snapAll_getters_plain' depends on axioms: [propext, Quot.sound]
+TX2_217.RowSpec_217 : (Bytes → Env → Obs (Except ProgramError LaneState)) → Prop
+TX2_234.RowSpec_234 : PoolLib → DeployedIds → (TX2_234.Args → Env → Obs (Except ProgramError Unit)) → Prop
+TX2_233.RowSpec_233 : PoolLib → DeployedIds → (TX2_233.Args → Env → Obs (Except ProgramError Authenticated)) → Prop
+TX2_242.RowSpec_242 : (L : PoolLib) →
+  DeployedIds → (TX2_242.Args → Env → Obs (Except ProgramError (TX2_242.Validated L))) → Prop
+TX2_241.RowSpec_241 : PoolLib →
+  DeployedIds → TX2_241.V2Lib → (TX2_241.Args → Env → Obs (Except ProgramError Unit)) → Prop
+TX2_240.RowSpec_240 : PoolLib →
+  DeployedIds → TX2_241.V2Lib → (TX2_240.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop
+TX2_221.RowSpec_221 : PoolLib →
+  DeployedIds →
+    TX2_241.V2Lib → TX2_221.Stage1 → (TX2_221.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop
+TX2_213.RowSpec_213 : PoolLib →
+  DeployedIds →
+    TX2_241.V2Lib → TX2_221.Stage1 → (TX2_213.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop
+TX1_136.RowSpec_136 : (V : VLib) → (TX1_136.Args V → Observer → Env → Obs (Except V.WErr (Verified V))) → Prop
+TX1_137.RowSpec_137 : (V : VLib) → (TX1_137.Args V → Observer → Env → Obs (Except V.WErr (Verified V))) → Prop
+TX1_087.RowSpec_087 : (V : VLib) →
+  PreparedNew V → (TX1_087.Args V → Observer → Env → Obs (Except V.VErr V.Prepared × V.E29)) → Prop
+TX1_094.RowSpec_094 : (V : VLib) → PreparedNew V → (TX1_094.Args V → Observer → Env → Obs (Except V.VErr Bytes)) → Prop
+TX1_328.RowSpec_328 : (V : VLib) → PreparedNew V → (TX1_328.Args V → Env → Obs (Except ProgramError Bytes)) → Prop
+TX1_345.RowSpec_345 : (V : VLib) →
+  PreparedNew V → TX1_345.S1Lib V → (TX1_345.Args → Env → Obs (Except ProgramError Bytes)) → Prop
+TX1_344.RowSpec_344 : (V : VLib) →
+  PreparedNew V → TX1_345.S1Lib V → (TX1_344.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop
+TX1_333.RowSpec_333 : PoolLib →
+  DeployedIds →
+    TX2_241.V2Lib →
+      (V : VLib) →
+        PreparedNew V →
+          TX1_345.S1Lib V → (TX2_221.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop
+TX1_330.RowSpec_330 : PoolLib →
+  DeployedIds →
+    TX2_241.V2Lib →
+      (V : VLib) →
+        PreparedNew V →
+          TX1_345.S1Lib V → (TX2_213.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)) → Prop

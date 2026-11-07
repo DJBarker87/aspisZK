@@ -18,6 +18,9 @@ Effects: ordered PDA syscall events (this body's three and TX2:234's); three
 Box allocations inside decode_master_box / decode_checkpoint_box /
 decode_lane_from_pool_release and one for live_snapshot, each with its abort
 arm at its source position.  No account or return-data write.
+Revision 2 (RSL_REVISION2.md): the three `data()?` clones and the `data_len()?`
+clone inside require_verifier_checkpoint are allocation sites for a
+heap-carrying deferred error (`RS.ofCloned`, NMT-S1 shape).  Domain unchanged.
 -/
 import RSL_TX2_217
 import RSL_TX2_234
@@ -37,13 +40,13 @@ def body (L : PoolLib) (D : DeployedIds) (a : Args)
     (p m c l r e v : OwnedAccount) : RS Authenticated :=
   let pool := a.pool_program
   RS.seq (RS.ofExcept (readonlyBuffer p)) <|
-  RS.seq (RS.ofExcept (verifierCheckpoint v a.verifier_program false)) <|
+  RS.seq (verifierCheckpoint v a.verifier_program false) <|
   RS.seq (RS.ofExcept (readonlyAccount m pool)) <|
   RS.seq (RS.ofExcept (readonlyAccount c pool)) <|
   RS.seq (RS.ofExcept (readonlyAccount l pool)) <|
   RS.seq (RS.ofExcept (requireDistinct [p, m, c, l, r, e, v])) <|
   -- master (lines 261-275); `||` short-circuits the PDA syscall
-  RS.bind (RS.ofExcept m.data) fun mdata =>
+  RS.bind m.data fun mdata =>
   RS.bind (decodeMasterBox L mdata) fun master =>
   RS.seq (if decide (master.identity.pool ≠ m.key) || master.initialized_lane_mask != ALL_LANES_MASK
           then RS.throw .invalidAccountData
@@ -53,7 +56,7 @@ def body (L : PoolLib) (D : DeployedIds) (a : Args)
   RS.seq (Spec.call TX2_234.Domain (TX2_234.Ref L D)
             ⟨a.verifier_program, pool, m, master, r, e, a.current_slot⟩) <|
   -- checkpoint (lines 286-301)
-  RS.bind (RS.ofExcept c.data) fun cdata =>
+  RS.bind c.data fun cdata =>
   RS.bind (decodeCheckpointBox L cdata) fun ck =>
   RS.seq (if decide (ck.master ≠ m.key)
              || decide (ck.deployment_domain ≠ master.identity.deployment_domain)
@@ -62,7 +65,7 @@ def body (L : PoolLib) (D : DeployedIds) (a : Args)
                                   [ck.bump]] pool)
                  fun k => RS.check (decide (k ≠ c.key)) .invalidAccountData) <|
   -- selected lane (lines 302-317): OPEN child TX2:217 at SAME argument
-  RS.bind (RS.ofExcept l.data) fun ldata =>
+  RS.bind l.data fun ldata =>
   RS.bind (Spec.call TX2_217.Domain TX2_217.Ref ldata) fun lane =>
   RS.seq (if decide (lane.master ≠ m.key) || lane.lane_id != a.output_lane
           then RS.throw .invalidAccountData

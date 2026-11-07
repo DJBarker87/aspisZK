@@ -16,6 +16,11 @@ returned), then one `write` of the checkpoint bytes, then the guard release
 at the end of the statement.  Frame: no other cell's payload changes; on every
 Err arm no payload changes.
 Own-input domain ((bf)(2)): none.
+Revision 2 (RSL_REVISION2.md): the statement is unchanged; it inherits the
+TX1:345 revision through `TX1_345.Ref`.  `snapAll_errs` proves that every
+snapshot this caller passes to TX1:345 satisfies `OwnedAccount.SnapshotErrs`
+(AccountBorrowFailed / InvalidAccountData only), so the clone allocation arms
+are unreachable at this occurrence (`snapAll_getters_plain`).
 -/
 import RSL_TX1_345
 import RSL_TX2_221
@@ -95,5 +100,99 @@ theorem rejects_constAbort (V : VLib) (P : PreparedNew V) (C : S1Lib V) :
   have hb : badRoute ⟨zero32, [], []⟩ = true := by decide
   rw [hb] at h1
   simp [Spec.pure, constAbort] at h1
+
+/-! ## Revision 2: the caller occurrence establishes the snapshot error set
+
+`stage1` builds the three OwnedAccount values only by `snapshot`.  Every
+returning observation of `snapshot` stores AccountBorrowFailed in `length`, and
+AccountBorrowFailed or InvalidAccountData in `bytes` (r1_pool_adapter_owned.rs
+lines 35 and 38; the SDK borrow error is AccountBorrowFailed, NLF_ law).  None of
+these carries a heap payload, so at this caller the Revision 2 clone allocation
+arms of TX1:345 (`OwnedAccount.data`, `data_len`, `verifierCheckpoint`) are the
+plain Result.  The same lemmas serve TX2:240 -> TX2:241, which uses the same
+`snapAll`. -/
+
+theorem _root_.RSL.Spec.bind_ret_inv {α β : Type} (m : Spec α) (k : α → Spec β) (env : Env)
+    (x : β) (ev : List Event) (h : Spec.bind m k env ⟨.ret x, ev⟩) :
+    ∃ a e1 e2, m env ⟨.ret a, e1⟩ ∧ k a env ⟨.ret x, e2⟩ := by
+  rcases h with ⟨a, e1, o2, h1, h2, ho⟩ | ⟨e1, _, ho⟩ | ⟨e1, _, ho⟩
+  · cases o2 with
+    | mk ex evs =>
+      simp only [Obs.mk.injEq] at ho
+      rcases ho with ⟨rfl, _⟩
+      exact ⟨a, e1, evs, h1, h2⟩
+  · simp at ho
+  · simp at ho
+
+theorem acquire_ret (a : AccountInfo) (k : Kind) (s : SdkState) (env : Env)
+    (r : Except ProgramError Nat × SdkState) (ev : List Event)
+    (h : acquire a k s env ⟨.ret r, ev⟩) :
+    (∃ t, r.1 = .ok t) ∨ r.1 = .error .accountBorrowFailed := by
+  unfold acquire at h
+  cases k <;> simp only at h <;> split at h <;>
+  · obtain ⟨_, _, _, _, h2⟩ := Spec.bind_ret_inv _ _ _ _ _ h
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at h2
+    rcases h2 with ⟨rfl, _⟩
+    simp
+
+theorem snapshot_errs (a : AccountInfo) (l1 l2 : Nat) (s : SdkState) (env : Env)
+    (x : OwnedAccount × SdkState) (ev : List Event)
+    (h : snapshot a l1 l2 s env ⟨.ret x, ev⟩) : x.1.SnapshotErrs := by
+  unfold snapshot at h
+  obtain ⟨r, e1, e2, hr, hk⟩ := Spec.bind_ret_inv _ _ _ _ _ h
+  rcases r with ⟨r1, s1⟩
+  rcases acquire_ret a .shared s env _ _ hr with ⟨t, ht⟩ | ht
+  · simp only at ht
+    subst ht
+    simp only at hk
+    obtain ⟨u, _, _, _, hk2⟩ := Spec.bind_ret_inv _ _ _ _ _ hk
+    obtain ⟨s2, _, _, _, hk3⟩ := Spec.bind_ret_inv _ _ _ _ _ hk2
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at hk3
+    rcases hk3 with ⟨rfl, _⟩
+    refine ⟨fun e he => ?_, fun e he => ?_⟩
+    · simp at he
+    · revert he
+      split <;> intro he <;> simp at he
+      exact Or.inr he.symm
+  · simp only at ht
+    subst ht
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at hk
+    rcases hk with ⟨rfl, _⟩
+    exact ⟨fun e he => by simp at he; exact he.symm,
+           fun e he => by simp at he; exact Or.inl he.symm⟩
+
+theorem snapAll_errs : ∀ (as : List AccountInfo) (ls : List (Nat × Nat)) (s : SdkState)
+    (env : Env) (x : List OwnedAccount × SdkState) (ev : List Event),
+    TX2_240.snapAll as ls s env ⟨.ret x, ev⟩ → ∀ y ∈ x.1, y.SnapshotErrs
+  | [], ls, s, env, x, ev, h => by
+    unfold TX2_240.snapAll at h
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at h
+    rcases h with ⟨rfl, _⟩
+    intro y hy; simp at hy
+  | _ :: _, [], s, env, x, ev, h => by
+    unfold TX2_240.snapAll at h
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at h
+    rcases h with ⟨rfl, _⟩
+    intro y hy; simp at hy
+  | a :: as, (l1, l2) :: ls, s, env, x, ev, h => by
+    unfold TX2_240.snapAll at h
+    obtain ⟨r, _, _, hr, hk⟩ := Spec.bind_ret_inv _ _ _ _ _ h
+    obtain ⟨r2, _, _, hr2, hk2⟩ := Spec.bind_ret_inv _ _ _ _ _ hk
+    simp only [Spec.pure, Obs.mk.injEq, Exit.ret.injEq] at hk2
+    rcases hk2 with ⟨rfl, _⟩
+    intro y hy
+    rcases List.mem_cons.mp hy with rfl | hy
+    · exact snapshot_errs _ _ _ _ _ _ _ hr
+    · exact snapAll_errs as ls _ env r2 _ hr2 y hy
+
+/-- At the stage1 (and stage2) caller occurrence the owned getters are the plain
+Results: the clone allocation arms are unreachable. -/
+theorem snapAll_getters_plain (as : List AccountInfo) (ls : List (Nat × Nat)) (s : SdkState)
+    (env : Env) (x : List OwnedAccount × SdkState) (ev : List Event)
+    (h : TX2_240.snapAll as ls s env ⟨.ret x, ev⟩) :
+    ∀ y ∈ x.1, y.data = RS.ofExcept y.bytes ∧ y.data_len = RS.ofExcept y.length := by
+  intro y hy
+  have he := snapAll_errs as ls s env x ev h y hy
+  exact ⟨y.data_of_snapshotErrs he, y.data_len_of_snapshotErrs he⟩
 
 end RSL.TX1_344

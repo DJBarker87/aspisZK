@@ -277,7 +277,10 @@ structure PoolLib where
   /-- `reconstruct_asq8_statement` (CLOSED TX2:224, NFY_Part057). -/
   reconstruct : Request → Authenticated → Afterstate → RS Statement
   /-- `encode_pool_v1_pair_forest_terminal_statement_v1(..).map_err(|_| ..)`
-  (CLOSED TX2:165, NFY_Part053): `none` = encoder Err; Vec allocation inside. -/
+  (CLOSED TX2:165, NFY_Part053): `none` = encoder Err.  The frozen encoder
+  returns `[u8; 1880]` by value (pair_forest_terminal.rs:292-329) and has no heap
+  allocation site; an abort arm here may come only from that CLOSED law
+  (Revision 2 correction of this comment; the type is unchanged). -/
   encodeStatement : Statement → Spec (Option Bytes)
   /-- `emit_result` (CLOSED TX2:219, NFY_Part058): complete Result and its
   `returnData` event. -/
