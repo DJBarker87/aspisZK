@@ -1,6 +1,6 @@
 # Pool helper packet index
 
-All24 packets are candidates until the final combined gate. Each negative receipt must fail the intended assertion (or SDK missing-panic property), not compilation or unwind. Frozen graph, all-crate feature lists, KMX hashes, lock-before/after and exact source hashes are per attempt. No field multiplication or runtime SHA evaluation in Kani.
+All24 packets passed the final combined gate and are CLOSED. Each negative receipt must fail the intended assertion (or SDK missing-panic property), not compilation or unwind. Frozen graph, all-crate feature lists, KMX hashes, lock-before/after and exact source hashes are per attempt. No field multiplication or runtime SHA evaluation in Kani.
 
 | Pool row | Root | Native positives | Failing controls |
 |---|---|---|---|
@@ -15,7 +15,7 @@ All24 packets are candidates until the final combined gate. Each negative receip
 |POOL:287|PCG_ConversionLaws.row_287|K014|K015|
 |POOL:288|PCG_ConversionLaws.row_288|K016|K017|
 |POOL:293|PCG_PackComposition.row_293|K076 K078 K080|K077 K079 K081|
-|POOL:296|PCG_MarkerSeed.row_296|K101 K095|K094 K096|
+|POOL:296|PCG_MarkerSeed.row_296|K095|K096|
 |POOL:318|PCG_MasterAddress.row_318|K086|K087|
 |POOL:323|PCG_CheckpointAddress.row_323|K084|K085|
 |POOL:324|PCG_GlobalLaw.row_324|K072|K073|
@@ -36,3 +36,9 @@ Native324 uses one exact seven-call local log and arbitrary canonical replies, c
 Packing293 uses K076/077 word step, K078/079 one write/frame, K080/081 group association; PCG_PackLaw.read_suffix and PCG_PackComposition.chunk_induction compose the loops. PCG_LOOP_ASSOCIATION.json pins the frozen loop skeleton. No whole-digest Kani loop or concrete large Lean normalization.
 
 The all-root raw walk is authoritative under(ab')(3); collector disagreements, if any, stay recorded. Existing eight fixtures use the same unchanged binary. Full scope metrics and source revisions are in PCG_ATTEMPTS.jsonl and each receipt.
+
+Final gate: L080 combined import; L081 NFX exit0 over17129 modules, zero defects; L082..L087 raw89 roots standard axioms with zero collector disagreements. Eight fixtures L009 use the same unchanged binary. Export L088. Exact metrics/revisions/#print axioms are per receipt and PCG_AUDIT.json.
+
+Final gate: L080 combined import; L081 NFX exit0 over17129 modules, zero defects; L082..L087 raw89 roots standard axioms with zero collector disagreements. Eight fixtures L009 use the same unchanged binary. Export L088. Exact metrics/revisions/#print axioms are per receipt and PCG_AUDIT.json.
+
+Final gate: L080 combined import; L081 NFX exit0 over17129 modules, zero defects; L082..L087 raw89 roots standard axioms with zero collector disagreements. Eight fixtures L009 use the same unchanged binary. Export L088. Exact metrics/revisions/#print axioms are per receipt and PCG_AUDIT.json.

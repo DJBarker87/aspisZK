@@ -1,27 +1,35 @@
-> PCG-F1 repair: original invalid-context native receipts are excluded. Whole-context exposure plus with_exposed_provenance passed Miri L057, SDK K092/K083, address K084/K085, master K086/K087 and digest K088/K089 (matched controls). Final combined gate is pending for the Pool rows.
+# PCG helpers batch2 handoff
 
-# PCG helpers batch 2
+Completed: all24 assigned Pool rows CLOSED under the Stream C gate. The overall security target is not established by this batch. Branch codex/pc-helpers2-20261110; committed stages, no push.
 
-Stage 0: preparation; no Pool row CLOSED; target not yet established.
-Branch codex/pc-helpers2-20261110; commit only, no push.
+CLOSED: POOL:159,160,181,184,186,189,241,242,287,288,293,296,318,323,324,345,368,374,375,376,377,379,390,391. PCG_CLOSED.json contains exact statements, frozen body hashes, roots, native pairs, own-argument clauses and every conservative caller occurrence. PCG_LEDGER_DELTA.json changes only these24 rows. No member remains conditional or unattempted; PCG_REMAINING.md records that. PCF165/279/280, PCD313 and all other rows stay with their owners.
 
-Own rows: 159, 160, 181, 184, 186, 189, 241, 242, 287, 288, 293, 296, 318, 323, 324, 345, 368, 374, 375, 376, 377, 379, 390, 391. First deliverable: one shared SDK program-address forwarding certificate under (c-f)(2), then exact-seed helper packets. PCF branch read with git show at c27a9b1c718: no committed PDA bridge; no sibling worktree accessed.
+## Gate and receipts
 
-Budget: 110 Kani, 90 Lean/link/audit scopes, 12 extraction. Used 0/0/0. One capped host scope at a time, admission exit 0 AND allowed:true, disk >=40GB before every scope; caps 6G/8G/swap0/tasks64, Lean -M7000, optimized Rust.
+L080 combined import includes AspisR1.RPx_Deployed.deployed, ledger23 NLS_COMBINED_IMPORT (the NLO receipt), NLF_SdkBorrowLaw, PCE_COMBINED_IMPORT and all PCG modules. Exit0,10.3536s,6367344KiB peak RSS, swap0. L081 NFX exits0 over17129 modules: zero dangling references, duplicate/incompatible owners or import mismatches;55.6798s,7895796KiB peak RSS, swap0.
 
-Frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc; crates/programs/r1-cost-probe/Cargo.lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. No shipped source changed. Inherited ELF pins default f8c0ec72..., devnet63ad3e9c..., Pool e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc; no rebuild trigger.
+L082..L087 raw ax2 accepts all89 roots, including every new printed top theorem and the headline; standard axioms only and zero collector disagreements. Eight NEP fixtures L009 use the same unchanged optimized binary728c8fe68a7254ef77ea163aa8ac8f82b5f876abd1b8b79e1fb5077d762722f0. PCG_AUDIT.json and PCG_RELEASE_RESULTS.json record exact target, shared-scope exit/wall/RSS/swap/source revision and actual #print axioms text for every root. Raw walk is authoritative under(ab')(3). All source snapshots and per-scope receipts remain retained.
 
-Headline AspisR1.RPx_Deployed.deployed; frozen3, L154 statement parameter, narrowed D188, approved two-transaction design, RuntimePersistence and per-attempt target unchanged. Standard axioms only; final closure requires combined ledger23/NLF/PCE import, NFX zero defects and NEP raw ax2 over every root with eight fixtures. P6 option-A is reclassification, never removal.
+Budget used100/110 Kani,88/90 Lean/link/audit,9/12 extraction. Every launched scope had admission exit0 AND allowed:true,≥40GB free, MemoryHigh6G/Max8G/Swap0/Tasks64, Lean-M7000 and explicitly optimized Rust. No cap or timeout was raised. Every assigned row is complete; unused budget is retained.
 
-Prior PCB failed shapes are retired. Per-arm From equivalences are admitted by (c-f)(1); whole-page242/241 and whole-buffer loops will not be replayed. Field multiplication stays out of Kani. No copy credit without exact KMX patch and failing control. All remaining rows await native/model/gate work; detailed member records follow. No wallet, key, authority, sibling/cache or privacy-tree mutation.
+## Finding and replacements
 
-## Stage1 SDK forwarding packet
+PCG-F1 found invalid shared-reference provenance in the original local ghost-context recovery. Miri L055 rejects the old shape. Those original native passes remain excluded. Whole-allocation exposure before the subfield borrow plus with_exposed_provenance passes Miri L057. Repaired SDK K092/K083 cover all8 original harness names with8 passes/8 intended failures; address K084/K085 likewise8/8; master K086/K087 and digest K088/K089 replace their context evidence. Stored379 additionally uses independent16-buffer/length K097/K098. No function-pointer oracle, writable static or renamed verdict is used. The shared SDK export's PCG_NATIVE_STATUS.json records the repair.
 
-Native/Lean/source-fission certificate passes for the shared find/create wrappers. Exact selected positives/controls, limitations and trust reclassification: PCG_CERTIFICATES.md, PCG_STUBS.md and PCG_CORRESPONDENCE.md. Source checksum/segment identity L004; final SDK Lean L013; coherent headline/ledger23/NLF/PCE import L005; optimized canonical driver L007/008; eight fixtures L009; NFX L010 exit0; raw ax2 headline+eight SDK roots L011/012 standard axioms, collector agreement. No Pool row CLOSED yet. SDK objects/export pins: PCG_SDK_EXPORT_MANIFEST.json. PCF can reuse this shared SDK packet, then must prove its own280 exact seed/program/reply law and gate it.
+E001 full-Pool extraction timed out and was replaced by isolated reference extraction E005. K074 whole-global diagnostic timed out and is excluded, never retried. Global Lean's broad rewrite hit heartbeats; explicit generic congruence passed L071 without unfolding permutation arithmetic. K101/K094 are supplementary argument diagnostics only, not pack-value credit. See PCG_FINDINGS.md, PCG_REPAIRS.md, PCG_ATTEMPTS.jsonl.
 
-## Stage2 current checkpoint
-SDK provenance repair accepted; native pairs are listed above. Independent reference/extraction work covers all 24 rows. No new Pool row is CLOSED until the combined gate completes. Native results for conversions, owned tree, canonicality, page scalar/place access, codec, return-data window, global-root call log and packing iterations are retained. PCG_L049 was an elaboration failure, never a theorem result; its successor repairs an obsolete List lemma name. Packing full-loop/native association remains an explicit obligation. No shipped files changed; no ELF rebuild trigger.
+## Consumption and trust
 
-## Stage3 proof checkpoint
+PCG_CERTIFICATES.md, PCG_STUBS.md and PCG_CORRESPONDENCE.md give each native/model/domain association.184 consumes CLOSED NGE_NEM_DigestInstance at SAME raw nullifier;324 consumes CLOSED NJZ_TreeParent.source seven times with internally derived intermediate canonicality;368 reuses CLOSED NGC_DigestBridge.forwarding at SAME descriptors. Shared599-row ownership remains Stream A's. Exact source-fission erasure for324/345/296 is PCG_ASSOCIATIONS.json.293 uses native word/write/group windows, extracted arithmetic laws, symbolic read induction and disjoint chunk/write induction; its complete output quantification is inside the root conclusion.296 consumes293 at the SAME returned digest.
 
-All24 helper roots and their extracted/generic lemmas compile. Packing root now quantifies the entire Fin32 output inside its conclusion; no ghost index bound is a caller hypothesis. All selected native positive/control pairs pass/fail as expected. The final combined import L080 exits0 at peak RSS6367344KiB, swap0. NFX/raw89-root gate is running; Pool credit remains empty until it finishes. No budget increase or unchanged timed-out rerun occurred.
+P6/D188 native semantic transport and reviewed source transcription are explicit owner-option-A trust RECLASSIFICATIONS, never removals. RuntimeSha256Value and RuntimeReturnData concern values only. No field multiplication or SHA evaluation in Kani, new PDA value trust, XRn_Join, transaction shape or exploit input. Frozen3, L154 parameter, narrowed D188, RuntimePersistence, privacy, two-transaction design and100-bit per-attempt target remain unchanged.
+
+## Pins and reuse
+
+Frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc; crates/r1-cost-probe/lock4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Repository shipped files are untouched; harness changes are outside-repository scratch patches only. Frozen lock5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef is checked before/after every native run, with offline exact graph validation, all-crate feature lists and selected cargo-tree evidence. KMX patchbcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 is exact, with matched controls. Canonical ProgramError and transition-enum aliases avoid duplicate owners. Coherent digest/error slots are op43/op44.
+
+Checked export: /home/dombarker/project-offloads/codex-pc-helpers2-cache-20261110/PCG_exports_20261110;35 modules/70 source+object files. LEAN_PATH: that export, then /home/dombarker/project-offloads/codex-pc-helpers2-cache-20261110. PCG_EXPORT_MANIFEST.json pins every exported hash; L088 copies, L089 corrects zero-padded receipt metadata and verifies unchanged copied hashes. PCG_IMPORTS.json.xz pins all copied base/Aeneas objects. Never write to source exports or sibling caches. Own SDK export remains separately retained.
+
+ELF pins inherited, not rebuilt: default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc. No shipped change triggered a rebuild. No keys, accounts, authorities, sibling/session-A worktrees or foreign host trees were modified or deleted.
+
+Stage commits:9266d2740ab preparation;8a0b1b925c2 initial SDK;0fba5209ca0 provenance suspension;87c4ba641c7 repair/helper evidence;a9b8ba27601 composed roots. The final evidence/ledger commit contains this handoff.
