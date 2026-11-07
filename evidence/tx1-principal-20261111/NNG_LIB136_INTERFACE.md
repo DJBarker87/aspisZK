@@ -1,3 +1,5 @@
+CURRENT TARGET UPDATE: use NNG_DEnvObserved136.Target. See NNG_F1_ENV_CALLS.md and NNG_F2_CARRIER_DOMAIN.md. The fixed-Calls and globally injective raw-Q prototypes below are superseded. Source call graphs are pointwise at Env (NNG_EnvOccurrences136), and canonicality is derived from reached CLOSED results. The original semantic a.prefix_ is retained throughout. No NNG VLib field instance is authorized or constructed.
+
 # NNG / LIB 136 interface
 
 Target not yet established. No candidate or VLib instance is supplied by NNG.

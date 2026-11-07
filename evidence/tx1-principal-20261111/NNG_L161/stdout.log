@@ -1,0 +1,229 @@
+NNG_generated/NNG_Canonical136.lean:96:66: error: Tactic `rfl` failed: The left-hand side
+  RE.bind (V.semanticRounds.run (a.prefix_, a.transcript)) fun r =>
+    RE.bind (V.claims.run a.prefix_) fun value =>
+      (RE.mapErr (fun x => V.wPublic)
+            (V.terminalQm31.run (a.public_, value, r.snd.fst, V.origChallenges a.challenges))).bind
+        fun value_1 =>
+        (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind
+          (extra V a r.fst (V.maskValue value r.snd.fst) value_1 r.snd.fst value r.snd.snd)
+is not definitionally equal to the right-hand side
+  RE.bind (V.semanticRounds.run (a.prefix_, a.transcript)) fun r =>
+    RE.bind (V.claims.run a.prefix_) fun claims =>
+      (RE.mapErr (fun x => V.wPublic)
+            (V.terminalQm31.run (a.public_, claims, r.snd.fst, V.origChallenges a.challenges))).bind
+        fun terminal =>
+        (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25 =>
+          (RE.ofExcept (V.decodeK29 rec25 87)).bind fun extra =>
+            (RE.check
+                  (decide
+                    (r.fst ≠
+                      V.qadd (V.qadd (V.maskValue claims r.snd.fst) (V.qmul (V.eta a.challenges) terminal))
+                        (V.at28 extra)))
+                  V.wTerminal).seq
+              ((RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25' =>
+                RE.bind (V.circle.run (r.snd.snd, rec25')) fun c0 =>
+                  (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26 =>
+                    (RE.ofExcept (V.decodeK29 rec26 0)).bind fun beforeZ1 =>
+                      (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26' =>
+                        RE.bind (V.circle.run (c0.snd, rec26')) fun c1 =>
+                          (RE.check (decide (c0.fst = c1.fst)) V.wEqualCirclePoints).seq
+                            ((RE.ofExcept (V.payload a.prefix_ 2)).bind fun p2 =>
+                              match TX1_136.toB32 p2 with
+                              | none => RE.lift Spec.panic
+                              | some root1 =>
+                                RE.pure
+                                  { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                    alpha := r.snd.fst, claims := claims, extra := extra, before_z1 := beforeZ1,
+                                    state_before_z0 := V.state r.snd.snd, z := (c0.fst, c1.fst),
+                                    transcript := c1.snd }))
+
+V : VLib
+a : TX1_136.Args V
+⊢ (RE.bind (V.semanticRounds.run (a.prefix_, a.transcript)) fun r =>
+      RE.bind (V.claims.run a.prefix_) fun value =>
+        (RE.mapErr (fun x => V.wPublic)
+              (V.terminalQm31.run (a.public_, value, r.snd.fst, V.origChallenges a.challenges))).bind
+          fun value_1 =>
+          (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind
+            (extra V a r.fst (V.maskValue value r.snd.fst) value_1 r.snd.fst value r.snd.snd)) =
+    RE.bind (V.semanticRounds.run (a.prefix_, a.transcript)) fun r =>
+      RE.bind (V.claims.run a.prefix_) fun claims =>
+        (RE.mapErr (fun x => V.wPublic)
+              (V.terminalQm31.run (a.public_, claims, r.snd.fst, V.origChallenges a.challenges))).bind
+          fun terminal =>
+          (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25 =>
+            (RE.ofExcept (V.decodeK29 rec25 87)).bind fun extra =>
+              (RE.check
+                    (decide
+                      (r.fst ≠
+                        V.qadd (V.qadd (V.maskValue claims r.snd.fst) (V.qmul (V.eta a.challenges) terminal))
+                          (V.at28 extra)))
+                    V.wTerminal).seq
+                ((RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25' =>
+                  RE.bind (V.circle.run (r.snd.snd, rec25')) fun c0 =>
+                    (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26 =>
+                      (RE.ofExcept (V.decodeK29 rec26 0)).bind fun beforeZ1 =>
+                        (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26' =>
+                          RE.bind (V.circle.run (c0.snd, rec26')) fun c1 =>
+                            (RE.check (decide (c0.fst = c1.fst)) V.wEqualCirclePoints).seq
+                              ((RE.ofExcept (V.payload a.prefix_ 2)).bind fun p2 =>
+                                match TX1_136.toB32 p2 with
+                                | none => RE.lift Spec.panic
+                                | some root1 =>
+                                  RE.pure
+                                    { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                      alpha := r.snd.fst, claims := claims, extra := extra, before_z1 := beforeZ1,
+                                      state_before_z0 := V.state r.snd.snd, z := (c0.fst, c1.fst),
+                                      transcript := c1.snd }))
+NNG_generated/NNG_Canonical136.lean:94:49: warning: This simp argument is unused:
+  extra
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a,e̵x̵t̵r̵a̵,̵ ̲multiply, ̲addMask, ̲addExtra,
+  ̵  ̵ ̵ ̵terminalGuard,
+  ̲ ̲ ̲ ̲ ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard, ̲payload2,
+  ̲ ̲ ̲ ̲ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:94:55: warning: This simp argument is unused:
+  multiply
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra,m̵u̵l̵t̵i̵p̵l̵y̵,̵ ̲addMask, ̲addExtra,
+  ̵  ̵ ̵ ̵terminalGuard,
+  ̲ ̲ ̲ ̲ ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard, ̲payload2,
+  ̲ ̲ ̲ ̲ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:94:64: warning: This simp argument is unused:
+  addMask
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addM̵a̵s̵k̵,̵a̵d̵d̵Extra,
+  ̵  ̵ ̵ ̵terminalGuard,
+  ̲ ̲ ̲ ̲ ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard, ̲payload2,
+  ̲ ̲ ̲ ̲ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:94:72: warning: This simp argument is unused:
+  addExtra
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask,a̵d̵d̵E̵x̵t̵r̵a̵,̵
+  ̵  ̵ ̵ ̵terminalGuard,
+  ̲ ̲ ̲ ̲ ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard, ̲payload2,
+  ̲ ̲ ̲ ̲ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:4: warning: This simp argument is unused:
+  terminalGuard
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      t̵e̵r̵m̵i̵n̵a̵l̵G̵u̵a̵r̵d̵,̵stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard, ̲payload2,
+  ̲ ̲ ̲ ̲ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:18: warning: This simp argument is unused:
+  stateBefore
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard,s̵t̵a̵t̵e̵B̵e̵f̵o̵ ̲re,̵r̵e̵cord25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:30: warning: This simp argument is unused:
+  record25b
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore,r̵e̵ ̲co̵r̵d̵2̵5̵b̵,̵c̵ircle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:40: warning: This simp argument is unused:
+  circle0
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b,c̵i̵ ̲rc̵l̵e0̵,̵r̵e̵cord26a, ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:48: warning: This simp argument is unused:
+  record26a
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0,r̵e̵c̵o̵r̵d̵2̵6̵a̵,̵ ̲beforeZ1, ̲record26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:58: warning: This simp argument is unused:
+  beforeZ1
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a,b̵e̵f̵o̵ ̲reZ̵1̵,̵r̵e̵cord26b, ̲circle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:67: warning: This simp argument is unused:
+  record26b
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1,r̵e̵ ̲co̵r̵d̵2̵6̵b̵,̵c̵ircle1,
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:95:77: warning: This simp argument is unused:
+  circle1
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b,c̵i̵r̵c̵l̵e̵1̵,̵
+  ̵  ̵ ̵ ̵circleGuard,
+  ̲ ̲ ̲ ̲ ̲payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:96:4: warning: This simp argument is unused:
+  circleGuard
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+      c̵i̵r̵c̵l̵e̵G̵u̵a̵r̵d̵,̵payload2, ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:96:16: warning: This simp argument is unused:
+  payload2
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+      circleGuard,p̵a̵y̵l̵o̵a̵d̵2̵,̵ ̲root32, ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Canonical136.lean:96:25: warning: This simp argument is unused:
+  root32
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲claims, ̲terminal, ̲mask, ̲record25a, ̲extra, ̲multiply, ̲addMask, ̲addExtra,
+      terminalGuard, ̲stateBefore, ̲record25b, ̲circle0, ̲record26a, ̲beforeZ1, ̲record26b, ̲circle1,
+      circleGuard, ̲payload2,r̵o̵o̵t̵3̵2̵,̵ ̲RSL.TX1_136.Ref, ̲RE.bind_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_Canonical136.body_ref' depends on axioms: [propext, sorryAx, Quot.sound]
