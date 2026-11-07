@@ -1,36 +1,28 @@
 {
-  "row_caller_clauses_added": [],
-  "candidate_roots": [],
-  "unsupported_facts_not_added": [
-    "A3 reserve/cleanup success",
-    "A4 reserve/cleanup success",
-    "A5 stage1 allocator-aware commit association"
-  ],
-  "support_only_conditions": [
-    {
-      "lemma": "NNE_SdkAcquire.sdk_wrap",
-      "condition": "NNE_SdkState.Fresh s",
-      "classification": "SDK model representation invariant; established at admitted entry by NNE_Entry.fresh"
-    },
-    {
-      "lemma": "NNE_EntryArgs.first_route",
-      "condition": "Hiq_ReleaseRoute.stage1 data",
-      "classification": "selected route support only, not TAS route1 discharge"
-    },
-    {
-      "lemma": "NNE_EntryArgs.second_route",
-      "condition": "Hiq_ReleaseRoute.asq8 data",
-      "classification": "selected route support only, not TAS route2 discharge"
-    },
-    {
-      "lemma": "NNE_Frame.image",
-      "condition": "the literal two TAS.Frame conjuncts and same post returned observation",
-      "classification": "G2 full frame packet, no native2/model2 law"
-    },
-    {
-      "lemma": "NNE_Trace.executes",
-      "condition": "CPG_RuntimeTrace.Executes n1 n2 copy allocator id before inputs after events",
-      "classification": "parameter transport on already observed trace, not physical association"
-    }
-  ]
+ "row_caller_clauses_added": [],
+ "candidate_interfaces": [
+  "NNE_RecordSig.a3",
+  "NNE_RecordSig.a4",
+  "NNE_RecordSig.a5",
+  "NNE_SelectedContext.packet"
+ ],
+ "allocator": {
+  "type": "Bool",
+  "term": "NNE_AbortIndicator.allocator",
+  "selected_states_and_finals": true,
+  "classification": "data binder instantiation, no Prop hypothesis"
+ },
+ "retained_context": [
+  "original actual ok1/ok2",
+  "original runtime frame/TraceRep",
+  "EnvRep and existing Clock/slot row",
+  "original row own-input domains"
+ ],
+ "entry_reindexing": {
+  "term": "NNE_SelectedContext.packet",
+  "covers": "NNE_SelectedContext.covers",
+  "extra_route_or_acceptance_hypotheses": false
+ },
+ "native2_model2_required": false,
+ "new_trust_rows": []
 }
