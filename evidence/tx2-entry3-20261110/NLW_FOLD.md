@@ -13,3 +13,5 @@ Native probes: 40/40 actual Kani invocations used. Actual frozen064 probes are r
 221/213: source local selected-child folds repair the predecessor universal/all-frames packet premise. Actual empty instruction and one-byte admission rejection calibrations passed with controls. K039 arbitrary nonlifecycle fallback timed out and is retired; no unchanged rerun.
 
 Root provenance: both committed roots are required. Root0 is checkpoint112/proof16; root1 is checkpoint144/original proof63. Structural writer serialization and data-only RuntimePersistence lemmas do not by themselves install the actual OLD writer root provenance or actual native reader/frame correspondence. Hash realization does not imply digest injectivity. Collision alternatives remain explicit.
+
+Final extension: NLW_064CandidateFold.child/fold discharges ChildBridge from corrected merged NLT_CompleteRoot.root. Its full physical parent Invocation producer and own caller provenance remain OPEN; this is not a row root. Final gate:43 modules,59 raw standard-axiom roots,17292-module zero-defect NFX scan;one preserved collector-disagreement exit under(ab')(3)/(ax2).

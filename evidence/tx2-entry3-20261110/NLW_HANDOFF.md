@@ -1,59 +1,27 @@
-# NLW TX2 entry spine part 3 — initial handoff
+# NLW TX2 entry spine part3 handoff
 
-Target not yet established. Baseline NLO_LEDGER ledger23:580 CLOSED/0 QUALIFIED/19 OPEN. No promotion claimed.
+Target not yet established. No NLW row root, complete native parent fold, admitted ReviewedTranscription or promotion. Ledger23 NLO_LEDGER remains580 CLOSED /0 QUALIFIED /19 OPEN. Branch codex/cx-tx2-entry3-20261107; commits are local only; no push.
 
-Order:064,241,240,221,213. Binding(bg):line-by-line Lean transcription,actual compiled code call-boundary segment contracts,matched failing controls,full frame/effects and Lean fold; OPEN children via complete own-argument RowSpecs. NLM source/model schedules are support only. NLM RowSpec065 lacks the requested Root0 input relation and must not license closure unchanged. No XRn_ kit,free Ops dictionary,child success/endpoint root premise or pending runtime row.
+## Validated support
 
-Budget40 Kani/140 Lean/0 extraction. One capped scope at a time (stricter than two permitted),6G high/8G max/swap0/tasks64,Lean-M7000;admission exit0 AND allowed:true;disk>=40GB;own writes<30GB. Optimized offline native,frozen lock graph checked before every Kani run and unchanged hash after. No unchanged timeout/memory-kill replay,no cap increase. No shipped source changes;harness patches only in owned scratch. Existing ELF pins inherited,not remeasured;Pool lateste0e49c34 atb936275465 supersedes121f3e29.
+43 NLW modules compile individually. The combined gate imports the canonical ledger23 NLS_COMBINED_IMPORT (the required receipt filename is NLO_COMBINED_IMPORT.lean; see NLO_HANDOFF/NLS_MODULE_MAP), NLE/NLF, and current NLW modules with AspisR1.RPx_Deployed.deployed. 59 raw roots report onlypropext/Classical.choice/Quot.sound; final NFX exits0 over17292 modules with zero dangling declarations,duplicate owners or import mismatches. Eight planted/mutation fixtures pass. L075 preserves exit1 for the marker_frame collector discrepancy; raw standard axioms are authoritative under(ab')(3)/(ax2). The walker source is byte-identical to canonical NEP_WALKER and its selected object matches ledger23. Full driver diff and binary pin are retained.
 
-Host /home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110;CARGO_TARGET_DIR NLW_target there;TMPDIR NLW_tmp retained. Seed NLM export FIRST,then NLF,then ledger23 NLS export;hashes and size recorded. Coherent SInt2 dependency objects reused;actually resolved Aeneas objects pinned per receipt.
+064: NLW_Full064State/Law/Fold retain independent C04 abort prefixes. NLW_064CandidateFold discharges the child parameter from corrected merged NLT_CompleteRoot.root at immutablefc8f4700f49. Old NLT_Root/NLW_064* projection support remains restricted after NLT-F1; it is not full abort coverage. NLT credit waits for the next ledger gate. The own parser derives proof57607 inside the reached branch. Physical native parent-to-Frame binding and caller1880/Root0 provenance remain OPEN.
 
-Every result records exact target,command,source revision/hash,dependency hashes,exit,wall,RSS,swap,axioms. New top theorems print statements and axioms. Full combined audit at most twice. Stage commits,no push. Only NLW_ files in this evidence directory modified;no sibling/sessionA worktree/shared cache/infrastructure/key action.100-bit per-attempt/privacy/two-transaction requirements unchanged.
+241: NLW_StartScope replaces NLM's unadmitted8+680 proof with a symbolic scalar proof. NLW_GetterSuccess generalizes successful getter bytes to actual Ops; NLW_ActualLength/ActualScope derive57607 and encoder1880 from the SAME entered source operations,without the old successful clone-install restriction. NLW_ProcessLocalFold/EntryLocalFold narrow the predecessor universal/all-frames packet to the actual selected child at the SAME frame. These do not install native parents.
 
-## Stage 1 — checked numerical clauses and native support
+Both-root support: checkpoint roots112/144 bind original proof roots16/63. WriterPair/WriterHeader prove structural serialization; ReaderHeader/ResumeHeader derive actual reached comparisons while preserving partial digest execution; PersistedRoots uses accepted data-only RuntimePersistence. AuthenticatedRoots keeps existing P2Prime explicit in conditional support; RootCollision keeps a concrete collision alternative without adding hash injectivity. OLD writer semantic roots and the actual game occurrence/collision transport remain uninstalled. Root provenance is not assumed from addresses,a local Parsed witness,or a successful root premise.
 
-NLW_StartScope.proof_start/actual_length/actual_scope compile, replacing NLM's
-unadmitted8+680 proof by UScalar.add_spec and WP.spec_imp_exists. The successful
-getter projection now holds for the ACTUAL Ops,without a local clone-install:
-NLW_GetterSuccess.stored/returned and NLW_ActualGetterScope extent clauses.
-NLW_ActualLength derives57607 from that same getter,actual start call,checked_add
-and guard;its final proof uses explicit natural addition cancellation. These
-remain entered source/std clauses,not a whole native entry certificate.
+## Native scope and unfinished work
 
-40/40 actual Kani invocations consumed;compile rejectionK001 counts. K039's
-arbitrary-tag process fallback timed out at90s and is retired;its inverse was
-not launched. K040 re-established the owned-count positive on the final source
-set to matchK028. No timeout/cap increase or unchanged timed-out replay. Six
-other program rejection probes cover restricted constructors;they do not prove
-universal caller state. Three metadata/control segment contracts and their
-return-shape fidelity controls pass. All are SUPPORT,not row credit.
+40/40 actual cargo-kani invocations;71/140 actual Lean compiler invocations;0 extraction. Current proofs are green;14 earlier elaboration failures are retained. Native probes/calibration controls are SUPPORT ONLY: actual064 uses zero-content carriers; copied metadata fragments do not establish the actual compiled parent's arbitrary-buffer full-state contract. Restricted owned/SDK rejection probes do not establish universal parent behavior. K039 arbitrary fallback timed out90s and is retired; no unchanged rerun,cap or timeout increase. NLW_DOMAIN_FINDINGS.json and NLW_INTERFACE_FINDINGS.md record the domains and physical packet gaps. Full233/242 resource/allocator/cleanup packets remain unfinished; weaker NLM drafts are not promoted. NLW_REMAINING.md gives each member's exact remaining native/child/caller obligations and discloses the below80% Lean stop; the whole-budget completion request is not fully satisfied.
 
-NLW_AuthPacketFold is a SOURCE projection only;SourceSpec_065 is explicitly
-insufficient for full internal allocator/ownership/effects. The newer committed
-NLT_RowSpec (branch revisionb2cc16dbe3f6352954d85a7e9a47088ff193401b) has been
-found and imported read-only by source/object hashes;its ungated root is NOT
-used for child credit. NLW_RowSpec_065 is the full typed interface for the next
-parameterized064 fold. Original-input Root0 is retained explicitly. Existing
-RuntimePersistence and SHA/H realization are not hash injectivity;the generic
-roots-or-collision support preserves the existing collision branch.
+All native runs use the frozen lock graph,offline mode,deployed features and exact KMX patchbcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; post-lock hashes are unchanged. No new field multiplication proof/stub,new runtime trust,pending CPI-readonly row or XRn kit. Existing P6/D188/std/allocator/ABI/source-to-ELF trust is retained,not removed. 100-bit per-attempt soundness,privacy and the two-transaction design are unchanged.
 
-No CLOSED row or ledger delta. Remaining functions241/240/221/213 still require
-the full(bg) parent binding. Formal work continues with remaining Lean budget;
-Kani exhaustion is not a stop. All failed elaborations and exact scoped metrics
-are retained. No shipped source/ELF/key change or push.
+## Retained workspace and receipts
 
-## Corrected child and source scope stage
+Host:/home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110. Own CARGO_TARGET_DIR:/home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110/NLW_target;TMPDIR:/home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110/NLW_tmp. Both retained;deletions0. NLM export seeded FIRST,then NLF,NLS; imported hashes/sizes and corrected NLT seed are recorded. Source/lock frozen4bb3b3f51e16b4525f1d10336e2b0bcbbd775387;Pool sourceb936275465. No shipped source or ELF rebuild/remeasurement. Inherited pins:defaultf8c0ec72…,devnet63ad3e9c…,Pool e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc.
 
-40/40 Kani invocations are complete; no further native invocation is authorized by this budget. K039 timed out and was retired. K040 matches K028 on the final program harness source. Native pairs are calibration/support only, with exact KMX configuration and frozen dependency graph receipts; no new CLOSED row. The corrected NLT complete-outcome interface replaces the withdrawn abort-incomplete projection; physical parent Frame binding remains OPEN. Writer/root/data persistence source support has been compiled through L048; subsequent focused receipts are authoritative for current sources.
+Export:/home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110/NLW_exports_20261110_5a16d2f3c74d (3474856 bytes). Prepend it to NLW_ENV.json's LEAN_PATH; retain the listed own seeds/dependencies. NLW_EXPORT.json has source/object hashes; NLW_CLOSURE_PINS.json.xz pins the actual final imported closure. Retention checked550 source snapshots and239 stable Aeneas objects. Workspace1978253046 bytes;hostfree201887494144 bytes. Every scope used6G high/8G max/swap0/tasks64,Lean-M7000;admission exit0 AND allowed:true and disk>=40GB. Maximum reported RSS8058184KiB;swap0. No shared cache,infrastructure,sibling/session-A worktree or key/account/fund/authority mutation.
 
-## Provenance and combined-gate stage
-
-Current source support:42 NLW modules and56 top theorems; full audit manifest adds the deployed headline as root57. L061ReaderHeader,L062ResumeHeader,L063WriterHeader,L065AuthenticatedRoots,L066PersistedRoots,L067RootCollision compile with standard axioms. Both-root serialization uses checkpoint112/144 and original proof16/63. RuntimePersistence is data-only. The concrete resume comparison records preserve partial digest execution. The conditional P2Prime theorem is support only; the collision alternative adds no injectivity hypothesis. OLD writer semantic root provenance and actual native game occurrence installation remain OPEN.
-
-Combined import L068 passes49.492s,peak6686900KiB,swap0; L069ScanDriver and L070optimized audit link pass. It imports the ledger23 receipt via its canonical NLS_COMBINED_IMPORT module map,plus NLE/NLF and current NLW modules. Corrected NLT expected-import inventory is pinned from immutablefc8f4700f49. FixturesL071 pass; final NFX/raw audit and retention status are recorded in NLW_AUDIT.json. No second unchanged combined audit is planned.
-
-Remaining member-specific native/resource/child/Root0 obligations and unused Lean allowance are disclosed in NLW_REMAINING.md. Support proofs are not reclassified as row closure.
-
-## Merged child candidate reuse
-
-L081 NLW_064CandidateFold.child/fold compile and discharge the ChildBridge parameter using the corrected merged NLT_CompleteRoot.root. This does not supply the actual native parent Frame producer or caller root provenance and is not a row root. First raw audit covers57 roots with standard axioms only; L075 preserves exit1 for the marker_frame collector disagreement, classified under(ab')(3)/(ax2). The unchanged walker canonical source and selected object match ledger23 (NLW_WALKER_PIN.json); full driver diff is committed. The final focused extension adds2 roots,an extended combined import and a second NFX scan,without repeating the57 unchanged raw roots.
+One full combined raw audit plus a focused extension for two new roots;57 unchanged raw roots were not replayed. Exact per-target commands,status,wall,RSS,swap,source revisions/hashes and axioms are in NLW_ATTEMPTS.jsonl and each scoped receipt. NLW_AUDIT.json summarizes them. NLW_CLOSED.json/NLW_LEDGER_DELTA.json claim no credit;NLW_FOLD.md/NLW_CORRESPONDENCE.md/NLW_HYPOTHESES.json describe the proposed folds;NLW_FAILING_STEP.md and NLW_REMAINING.md describe failures and unfinished work. No file exceeds20MB;compressed inputs are retained once by content hash.
