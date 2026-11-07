@@ -59,7 +59,13 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
             if retry==0:time.sleep(30);continue
             raise RuntimeError('Infrastructure STOP: missing admission')
         (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad),indent=1)+'\n')
-        if r.returncode==0 and ad.get('allowed') is True:return
+        if r.returncode==0 and ad.get('allowed') is True:
+            own=[scope for scope in ad.get('populated_scopes',[]) if any(B in proc for proc in scope.get('processes',[]))]
+            if own:
+                with (E/'NMV_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(kind='wait',attempt=a,reason='own scope still active; no submission',scopes=own))+'\n')
+                time.sleep(30)
+                continue
+            return
         if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
             for _ in range(3):time.sleep(60)
             continue
