@@ -33,8 +33,9 @@ replay cone exceeded the20 remaining Lean IDs. The smaller16-module body/selecto
 cone is replayed instead. No object was loaded just because a pathname existed.
 The full runtime facet remains missing, as does f7's f6 source/frame dependency.
 
-The entry-reference provider was reviewed by name. Its accepted-cohort preflight
-requires111 missing modules for ToVecCallReferenceEntry, and the actual Foundation
+The entry-reference provider was reviewed by name. Its object-availability preflight
+identifies at least111 missing modules for ToVecCallReferenceEntry (not an
+accepted-cohort import check), and the actual Foundation
 construction discharge remains unproved. No entry-validity proof is claimed.
 
 No new native/operator/representation fact, T field, endpoint premise,
