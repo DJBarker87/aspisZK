@@ -86,3 +86,7 @@ swap0; source parent4fcc1573c698; standard summary axioms only. Source hash
 9688d25201d49d0639a4f68fe4127c798636acd50aa6fb987d1827db151f2bde
 matches W4 pin ce2f78097fa7. Host writes remain in the SPEC directory.
 Next Lean49714; strict new-root audit not yet run.
+
+49714 replayed pinned unchanged SourceStoreLibrary in the same isolated W3
+cohort: exit0;wall0:01.42;peak2685908KiB;swap0;parent8a0e250e030;
+standard summary axioms. No new root/row contract claimed. Next Lean49715.
