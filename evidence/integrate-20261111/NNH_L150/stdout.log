@@ -1,0 +1,23 @@
+def NNC_G1a.assemble : {Ambient X : Type} →
+  (S : Sig) →
+    (L : RSL.PoolLib) →
+      (VL : RSL.VLib) →
+        (debug : verifier.Error → String) →
+          (root0 : RSL.Bytes → RSL.Bytes → Prop) →
+            (auth : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except verifier.Error Unit)) →
+              (I : Impl L (base debug root0 auth) VL) →
+                (H : Bytes → State) →
+                  (d : aspis_core.digest.Digest32 X) →
+                    (hash : X) →
+                      (world : NLM_PacketTypes.World Ambient) →
+                        (r : NNC_WriteFree.Renderer Ambient X H) →
+                          NativeRep H d hash world r I.f064 →
+                            CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest d) hash H →
+                              (∀ (env : RSL.Env) (pub proof ck : RSL.Bytes),
+                                  NLW_ReaderHeader.decode (NNC_ByteCarriers.protocol ck) =
+                                      some (H (NNC_ByteCarriers.protocol proof), H (NNC_ByteCarriers.protocol pub)) ↔
+                                    S.readerHeader env pub proof ck) →
+                                NNC_G1a S L (base debug root0 auth) VL I :=
+fun {Ambient X} S L VL debug root0 auth I H d hash world r nativeRep oracle headerRep =>
+  { w := NNC_WriteFree.law H d hash world r, weak := ⋯, writeFree := ⋯, okHeader := ⋯ }
+'NNC_G1a.assemble' depends on axioms: [propext, Classical.choice, Quot.sound]

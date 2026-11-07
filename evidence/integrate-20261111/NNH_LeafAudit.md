@@ -1,28 +1,11 @@
-# Minimal A1/A2 leaf-law audit
+# Minimal A1/A2 leaf audit at RSL revision 3
 
-Static inventory, not a closure claim. Target not yet established.
+Target not yet established. This is a statement and supplier audit, not a concrete library closure claim.
 
-`NNH_LEAF_AUDIT.json` lists every Spec-valued Pool field, V0.tx2auth,
-VLib Child field and PreparedNew with the frozen owner named by RSL rev2.
-Ledger25 marks TX2:226/224/165/219/064 CLOSED. That fact alone does not
-instantiate any RSL field: each CLOSED law has to be transported at SAME
-arguments and carriers. In particular `Child.law : A → Spec B` and Pool's
-Spec-valued fields are relational types; their types alone imply neither
-returned functionality nor nonfunctionality. No counterexample to a concrete
-installed CLOSED law is asserted.
+NNH_LEAF_AUDIT.json retains the ledger25 CLOSED root inventory for scanProof, reconstruct, encodeStatement, emitResult, V0.tx2auth, every VLib Child and PreparedNew. LIB0_MAP.md now exists. LIB_ supplies the canonical graph-of-model laws and Returns evaluators; integration consumes them. Concrete PoolLib/V2Lib/VLib Values and tx2auth are not integration work.
 
-The required concrete Values packets are NND_PoolValues.Values,
-NND_Tx2Values.Values and NND_Tx1ReturnedValues.Values. They remain intermediate
-obligations until the canonical LIB field definitions and their concrete
-Returns transports are delivered. A generic choice of a functional law would
-silently change the frozen specification and is not an installation.
+The five fallible reservation laws (filled, accNew, weightsNew, claims, tx2auth) must read Env.reservation and satisfy Child.Functional on their domains (Spec.Functional on Dom064 for tx2auth). At a fixed Env the reply is fixed. Thus the revision-two a1_forces_det obstruction is superseded; no relational replacement is requested or proved. Aborting allocation prefixes remain allowed and do not return a conflicting value. Neither functionality nor nonfunctionality is inferred merely from a Spec type.
 
-At the inspected research revision there is no LIB0_MAP.md. TX1 principal's
-committed remaining file has no136 candidate and blocks137/087/094/328/345
-child-first. TX2 principal's existing233 fold is parameterized by217/234
-native/representation packets. These facts do not authorize new library,
-Ops-compatibility, model-acceptance or Root0 premises.
+The new checkValuesDom is the TX1:179 compact_check premise. Row087 gains R4; row094 discharges the SAME compact slice via canonicalScan and R4Discharge. That is a LIB_/principal installation, not a new A1 assumption. The host EnvRep must include env.reservation = true iff the headline reservation is Ok ().
 
-A2 consumes only the selected241 Ok arm. A1 consumes345 Ok with exact saved
-bytes and a weak Err class. We do not ask for A2 errors, error payload equality,
-or fresh extraction for the model bridge (AMN_REPORT/AMN_NND_BRIEF).
+A2 consumes only the selected241 Ok direction; A1 consumes345 Ok with exact saved bytes and weak Err. Existing NNH returned evaluators are being recompiled against rev3. Their Values arguments remain intermediate obligations until LIB exports concrete terms. No fresh extraction, A2 Err direction, error payload equality or relational variant is pursued. No row or inhabited A1/A2 field is claimed.

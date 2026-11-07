@@ -1,0 +1,52 @@
+{"attempt": "NNH_L143", "exit_status": 0, "wall_seconds": 4.258993003983051, "peak_rss_kib": "6591072", "swaps": "0", "print_axioms": ["'NNC_WeakSpec.contains_native' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_WeakSpec.exit_ok' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_WeakSpec.accepted_header' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NNH_generated/NNC_WeakSpec.lean:64:12: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+def NNC_WeakSpec.w : {Ambient X : Type} →
+  (H : Bytes → State) →
+    aspis_core.digest.Digest32 X →
+      X →
+        NLM_PacketTypes.World Ambient →
+          Render Ambient X H → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except verifier.Error Unit) :=
+fun {Ambient X} H d hash world render pub proof ck env observed =>
+  ∃ pu pr cp,
+    NNC_ByteCarriers.host ↑pu = pub ∧
+      NNC_ByteCarriers.host ↑pr = proof ∧
+        NNC_By
+...
+NNH_generated/NNC_WeakSpec.lean:64:12: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+def NNC_WeakSpec.w : {Ambient X : Type} →
+  (H : Bytes → State) →
+    aspis_core.digest.Digest32 X →
+      X →
+        NLM_PacketTypes.World Ambient →
+          Render Ambient X H → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except verifier.Error Unit) :=
+fun {Ambient X} H d hash world render pub proof ck env observed =>
+  ∃ pu pr cp,
+    NNC_ByteCarriers.host ↑pu = pub ∧
+      NNC_ByteCarriers.host ↑pr = proof ∧
+        NNC_ByteCarriers.host ↑cp = ck ∧
+          ∃ outcome events,
+            NMN_064.Native H
+                { args := { digest := d, publicBytes := pu, proof := pr, checkpoint := cp, hash := hash },
+                  world := world }
+                outcome events ∧
+              observed =
+                {
+                  exit :=
+                    exit H
+                      { args := { digest := d, publicBytes := pu, proof := pr, checkpoint := cp, hash := hash },
+                          world := world }.args
+                      outcome,
+                  events :=
+                    render
+                      { args := { digest := d, publicBytes := pu, proof := pr, checkpoint := cp, hash := hash },
+                        world := world }
+                      outcome events env }
+'NNC_WeakSpec.contains_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_WeakSpec.exit_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_WeakSpec.accepted_header' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r627d340dd094465a95f50705ae0ef856.scope; invocation ID: 0432dc2c23f54cdab4df92f0172c1a01
