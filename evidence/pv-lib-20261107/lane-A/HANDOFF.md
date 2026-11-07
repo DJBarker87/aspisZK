@@ -71,3 +71,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49812 passed exact pinned replay PV_FN_SLICE_f4_Prefix; see receipt for time/RSS/swap/revision/axioms.
 
 49813 passed exact pinned replay PV_FN_SLICE_f4_Repeat; see receipt for time/RSS/swap/revision/axioms.
+
+49814 passed exact pinned replay PV_FN_SLICE_f4_ArrayBuiltins; see receipt for time/RSS/swap/revision/axioms.
