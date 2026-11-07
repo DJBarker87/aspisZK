@@ -13,7 +13,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
-        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<40,'Actual cargo-kani budget exhausted'
+        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<10,'Actual cargo-kani budget exhausted'
     if kind=='extract':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x.get('kind')=='extract' for x in done)<2
