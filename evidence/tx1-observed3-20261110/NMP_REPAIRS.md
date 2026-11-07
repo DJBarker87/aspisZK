@@ -1,0 +1,1 @@
+K001: own scratch crate omitted cfg(kani) allocator_api gate required by exact KMX include. Compilation failed E0658 before proof. L004 adds only cfg_attr(kani,feature(allocator_api)), validates its erasure and re-pins the scratch sources. K002 keeps the original branch_1 harness name. No timed-out shape is retried.
