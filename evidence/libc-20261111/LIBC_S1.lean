@@ -22,7 +22,7 @@ def valid (s : NMT_345.Statement) : Bool :=
 def encode (st : NMT_345.Statement) : Option Bytes :=
  match NMT_345.encodeCall (NMT_345.commonValue st).lane_transition.candidate_afterstate with
  | .ok (.Ok candidate) => some (candidate.val.map NMT_345.byte) | _ => none
-theorem reaches_native (bytes : Slice U8) (bound : bytes.val.length ≤ 1880) : reaches (bytes.val.map NMT_345.byte) = NMT_R2_Reach.reaches bytes := by
+theorem reaches_native (bytes : Slice U8) : reaches (bytes.val.map NMT_345.byte) = NMT_R2_Reach.reaches bytes := by
  have raw : LIBC_Bytes.raw (bytes.val.map NMT_345.byte) = bytes := by
   have eq : bytes.val.map NMT_345.byte = LIB_Carriers.bytes bytes := by
    apply List.map_congr_left
@@ -52,9 +52,9 @@ def library (V : VLib) (tyPublic : V.Public = LIB_VCarriers.Public) : TX1_345.S1
  semanticPublic := fun s => Eq.mp tyPublic.symm (NMT_345Prep.toT5 (NMT_345.semanticValue s))
 theorem decoder (V : VLib) (tyPublic : V.Public = LIB_VCarriers.Public) (b : Bytes) :
  (library V tyPublic).decodeStatement b = decode b := rfl
-theorem marker (V : VLib) (tyPublic : V.Public = LIB_VCarriers.Public) (b : Slice U8) (bound : b.val.length ≤ 1880) :
+theorem marker (V : VLib) (tyPublic : V.Public = LIB_VCarriers.Public) (b : Slice U8) :
  (library V tyPublic).decodeReachesAlloc (b.val.map NMT_345.byte) = NMT_R2_Reach.reaches b :=
- reaches_native b bound
+ reaches_native b
 theorem validate (V : VLib) (tyPublic : V.Public = LIB_VCarriers.Public) (s : NMT_345.Statement) :
  (library V tyPublic).validateStatement s = true ↔ NMT_345.validateCall s = .ok (.Ok ()) :=
  valid_iff s

@@ -32,10 +32,10 @@ theorem encode (s : NMT_345.Statement) : LIBC_S1.encode s =
  rw [NMT_345.encode_closed]
 /-- F4: the field is the parent's source-fission probe immediately before
 the first snapshot Box, not the parent's eventual success bit. -/
-theorem allocation (b : Slice U8) (bound : b.val.length ≤ 1880) :
+theorem allocation (b : Slice U8) :
  LIBC_S1.reaches (b.val.map NMT_345.byte)=true ↔
  NMT_R2_Reach.full LIBC_FirstBox.beforeBox b=.div := by
- rw [LIBC_S1.reaches_native b bound]
+ rw [LIBC_S1.reaches_native b]
  exact LIBC_FirstBox.reached b
 #print axioms decode
 #print axioms validate

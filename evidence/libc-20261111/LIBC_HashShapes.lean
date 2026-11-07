@@ -9,9 +9,11 @@ theorem node (left right : Array U8 32#usize) :
  LIBC_HashPartitions.Shape (NNC_ResumeEvents.parts (MultiproofConePhysicalDigest.parts left right)) := by
  refine ⟨NNC_ByteCarriers.host [18#u8],NNC_ByteCarriers.host left.val,
   NNC_ByteCarriers.host right.val,rfl,?_,Or.inl ⟨?_,?_⟩⟩
- · simpa only [NNC_ByteCarriers.host,List.length_map] using right.property
+ · have h : right.val.length=32 := right.property
+   simpa only [NNC_ByteCarriers.host,List.length_map] using h
  · rfl
- · simpa only [NNC_ByteCarriers.host,List.length_map] using left.property
+ · have h : left.val.length=32 := left.property
+   simpa only [NNC_ByteCarriers.host,List.length_map] using h
 theorem leaf_parts (tag : U8) (value salt : Slice U8) (vs : value.val.length=128 ∨ value.val.length=480)
  (ss : salt.val.length=32) :
  LIBC_HashPartitions.Shape (NNC_ResumeEvents.parts (Port4B_LeafCode.parts tag value salt)) := by
