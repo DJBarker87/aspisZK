@@ -67,3 +67,11 @@ L088 proves selected stage1/ASQ8 routes from the already-required actual Ok obse
 For an assembly that insists on the literal TAS.EntryRep structure, L093 NNE_SelectedContext.packet inhabits it exactly after reindexing Ctx by the SAME actual ok1/ok2 antecedents. NNE_SelectedContext.covers proves that every actual input already admitted by TAS/TFM has that reindexed context; no model acceptance, route, allocator or new trust is added. The direct NNE physical split theorem makes this packaging unnecessary. This is the recorded TAS/brief difference; no existing TAS/TFM file was edited.
 
 L094 NNE_Clock preserves both Clock reply arms at the SAME stage2 child argument; the existing RuntimeClockSlotBinding is used only conditionally on a successful reply, never as a Clock-success assumption. The deployed consumer remains r1_pool_adapter_owned.rs:479. The host's EnvRep must identify the native Slot image with env.clock, as TAS/NND already require. No new row is introduced.
+
+## Focused audit gate (resume)
+
+L095 proves explicit abort-bit stamping leaves actual args and SDK input unchanged, covers error/abort representations, exhibits the empty physical trace and saved-write output selection, and extracts the exit-derived state equivalence for every verifier Step. This is physical carrier instantiation, not a native allocator-success assumption.
+
+L096 imports the historical NLX/NNE combined import plus all new physical/top/selected/Clock/instantiation modules: exit 0, wall 19.900 s, peak RSS 6,731,968 KiB, swaps 0. L097 raw ax2 audits ONLY the 59 new NNE roots: exit 0, wall 9.537 s, peak RSS 5,388,272 KiB, swaps 0. Every raw walk agrees with collectAxioms; union is propext/Classical.choice/Quot.sound. The unchanged prior raw-audit driver/link is reused; the new root manifest and full audit outputs are archived in NNE_RESUME_AUDIT.json and NNE_audit/proof1. No unchanged old root set/full regression was rerun.
+
+The existing status/caller/remaining files now supersede the historical allocator-stop status explicitly. NNE_CLOSED requests no row credit. The final host still instantiates the other base Sig fields and sibling packet parameters; it does not need a new allocator trust row, native2=model2 off Root0, or a selected-route hypothesis. Source/trust/artifact and wallet-key retention constraints remain unchanged.

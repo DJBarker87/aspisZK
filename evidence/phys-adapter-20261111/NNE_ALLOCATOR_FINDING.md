@@ -1,3 +1,5 @@
+> Superseded for the top instance by C3-BIN ruling (bo). The arbitrary-allocator obstruction below remains valid. NNE_AbortIndicator proves the ACTUAL D189 reserve/cleanup laws for Bool; NNE_RecordSig.a3/a4/a5 install that instance without an allocator hypothesis or new trust row. See NNE_HANDOFF.md, resume under (bo).
+
 # NNE allocator finding (resume amendment)
 
 Target not established. A3/A4 STOPPED, no new trust. Exact interface fields: `RSL.TAS.NNE_A3.accepted1`, `RSL.TAS.NNE_A4.accepted2` in TAS_Interfaces. The headline binder is `allocator : S2W_D189Wrappers.Allocator A`; its two fields are `allocate : A → Nat → Result A` and `cleanup : A → Result A`. It contains no proposition. State1/state2/final1/final2 are arbitrary headline binders, not projected from the RSL observation.
