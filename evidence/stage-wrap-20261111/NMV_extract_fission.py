@@ -12,7 +12,7 @@ S=B/'NMV_fission_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 # Dependency-free fission copy, no release crate is rebuilt or altered.
 (S/'Cargo.lock').write_text('version = 4\n\n[[package]]\nname = "nmv_fission"\nversion = "0.1.0"\n')
 llbc=B/'NMV_fission.llbc';dest=B/'NMV_fission_extracted'
-cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--start-from','crate::stage1','--start-from','crate::stage2','--dest-file',str(llbc),'--','--manifest-path',str(S/'Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1']
+cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--start-from','crate::stage2','--dest-file',str(llbc),'--','--manifest-path',str(S/'Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1']
 env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B/'NMV_fission_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
 pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),rust_source_sha256=sha(S/'src/lib.rs'),manifest_sha256=sha(S/'Cargo.toml'),lock_before=sha(S/'Cargo.lock'),charon_command=cmd,toolchain='nightly-2026-09-17',features=[],ruling='bn',dependency_free=True)
 (B/'NMV_FISSION_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2))

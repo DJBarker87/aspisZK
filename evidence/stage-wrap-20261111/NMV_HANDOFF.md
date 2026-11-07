@@ -87,3 +87,8 @@ No Lean body emitted and no native credit. Wall1.722s/RSS143616KiB/swap0.
 Next extraction isolates stage2 from the stage1 mutable handle/copy path;
 this is not an unchanged timeout or memory retry. Kani remains deferred until
 this isolation determines which individual bodies fail emission.
+
+E004/L082 isolated stage2 also fails Aeneas's internal context joining.
+Both resumed extractions are spent. No body emitted, hence no (bc) body audit
+is claimed. Fallback eligibility under (bn) is established for these copies;
+next stage is small symbolic descriptor/local-window Kani and three controls.

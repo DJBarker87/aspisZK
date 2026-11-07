@@ -44,3 +44,11 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
   hashing/export, before tool-pin/retention completion. L080 supplies that
   archived file and passes the same validation; no proof replay, timeout/cap
   change, shared infrastructure fix or final credit from L079.
+
+- NMV-E2 (bn resume): E003/L081 Charon translated both generic, guard-free
+  fission wrappers, Aeneas failed with internal `Not_found` in context-collapse
+  joining (not guard Drop). E004/L082 isolates only stage2 and reproduces the
+  internal context-join failure (0.781s/141504KiB/swap0). Neither emitted a body;
+  the two-extraction allowance is spent. This generic-log extraction family is
+  retired. Proceed to (bn)'s explicit-window Kani fallback, retaining the exact
+  mechanically checked copies. No body or post-loop-return audit pass is claimed.
