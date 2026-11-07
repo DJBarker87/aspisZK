@@ -1,41 +1,13 @@
-# NMM unresolved native steps
+# NMM failing steps and retained findings
 
-Target not yet established. No protocol counterexample or row closure is claimed.
+Target not established. Baseline ledger24 remains unchanged; no row is promoted.
 
-## TX2:217
+- **TX2:217:** complete native coverage for slice lengths other than768 is absent. Actual233 does not prove that length before calling217. Original-size value/argument/frame/order checks pass with controls, but that work scope cannot become a stronger caller premise. The Lean length branch is checked model support, not an actual native producer.
+- **TX2:234:** the V2 registry ProgramData PDA invocation (saved Rust234 lines43–47) receives only local copies. A legal local record cannot be reached from those arguments by the approved channel pattern. The method does not authorize a writable static, function pointer, guessed stack layout or a new runtime trust row. V1 all-PDA-success K078 also timed out90s; it is not rerun or credited. Other successful late registry branches lack complete control families.
+- **TX2:233:** native fold is not authorized before both candidate gates;217 and234 remain open. Four returned owner/payload values are retained in the transcription, not erased through the rejected NLM drafts.
 
-K032 proves the complete returning-Err branch at original768 arbitrary bytes,
-with havoced typed replies, exact argument records and immutable input frame.
-K033's returning-Ok payload window timed out90s. Earlier whole-result,
-all-Ok, byte/pointer-log, row/word-window and changed-solver shapes are retained
-and retired (K002/K003/K006/K011–K014/K027/K028). No cap or timeout was raised.
-The next changed shape is success-to-21-Ok-replies coverage plus a typed all-Ok
-reply branch. Both must be gated; an accepted-only relation is never a row root.
+K001 has no recovered host configuration/receipt; it remains charged and uncredited, never resubmitted. Every other receipt and exact source input is retained. NMM_RETIRED_SHAPES.json lists all21 timeouts with source hashes. No memory-killed job was retried with a higher cap. K015/K029 are compiler rejections with explicit input repairs; failed Lean syntax/type builds remain in the journal and contribute no current-object credit.
 
-Pinned Kani's loop_invariant macro accepts while loops only; the frozen loop
-is a for loop. Exact source/hash/excerpt: NMM_TOOL_BOUNDARIES.json. No compiler
-or macro patch, for-to-while source rewrite, or copied-fragment producer is
-substituted for the actual frozen parent.
+Replacement examples: the complete value check was split into separately quantified metadata/root/frontier observations and Lean reconstruction; K057's seven-copy omission loop was replaced by a typed-record omission on an all-Ok reply branch (K063 FAIL); broad error controls were replaced by an explicit root-error reply branch (K069–K071 FAIL); slot membership was supplemented by a separately controlled local ordered counter (K064–K068). These changed graphs do not reclassify the old timeouts.
 
-## TX2:234
-
-K017–K026 validate finite data-error plumbing in V1/V2, not whole234. The
-selected Custom reply with an Ok input byte vector is excluded by the CLOSED
-data law on composition; it must not be reported as an actual data-error run.
-K030 whole legacy and K031 legacy argument-window shapes timed out90s. Both
-are retired. A changed first-PDA-error branch is prepared.
-
-Legacy PDA calls carry master_account.key() and admit a harness-local record
-through that retained pointer. V2's second call instead receives only local
-registry-program bytes, a copied bump and local loader program; no retained
-harness context reaches that signature. The missing deliverable is an exact
-argument/reply record for this call, without writable statics, provenance
-forgery, writes through shared key bytes, a frozen-source change or new trust.
-No deterministic PDA surrogate or Rust callee-law assumption is used.
-
-## TX2:233
-
-The full value transcription and four-payload carrier compile. Native233
-waits for gated217/234 candidate laws, as the job requires. Pure allocator and
-cleanup bookkeeping is outside the obligations under(bl); it is not a blocker.
-No post-abort heap or cleanup state is invented.
+Pure cleanup/allocator internals are excluded under(bl). Stopped outcomes carry ordered prefixes only. No post-abort heap or allocator-success premise is introduced as a row hypothesis. No RuntimeCpiReadonlyEntry7 assumption is used.

@@ -12,5 +12,5 @@ for seed in json.loads((B/'NMM_SEED_RECHECK.json').read_text())['seeds']:
   p=Path(seed['destination'])/x['relative']
   if not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=x['sha256']:bad.append(str(p))
 assert not bad,bad[:3]
-(B/'NMM_CLOSURE_PINS.json').write_text(json.dumps(dict(LEAN_PATH=roots,selected_objects=selected,modules=len(set(x['module'] for x in selected)),seed_mismatches=bad)),indent=1)+'\n')
+(B/'NMM_CLOSURE_PINS.json').write_text(json.dumps(dict(LEAN_PATH=roots,selected_objects=selected,modules=len(set(x['module'] for x in selected)),seed_mismatches=bad),indent=1)+'\n')
 print(json.dumps(dict(modules=len(set(x['module'] for x in selected)),files=len(selected))))

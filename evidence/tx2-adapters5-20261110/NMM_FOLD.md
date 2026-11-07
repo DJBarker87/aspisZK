@@ -1,38 +1,27 @@
-# NMM fold status
+# NMM adapter fold result
 
-Target not yet established. No candidate or CLOSED row is claimed.
+Target not established. No candidate roots or ledger promotions. Native allowance80/80 charged; extraction0. Final audit is in progress.
 
-The authoritative baseline is ledger24 (581 CLOSED / 0 QUALIFIED / 18 OPEN).
-Only TX2:217, TX2:234 and the dependent TX2:233 fold are in this job.
+| Native property | Positive | Failing controls | Scope |
+|---|---|---|---|
+| Lane returning Err | K032 | K044, K069–K071 | Original768; later controls select a structural root-error witness |
+| Lane success call coverage | K034 | K038–K041 | Exact21 occurrence slots and argument pointers |
+| Lane metadata | K048 | K051–K054 | All bytes/fields, conditional on internal successful result |
+| Lane root | K049 | K055, K056, K058, K063 | Arbitrary word; K063 replaces timed-out omission graph K057 |
+| Lane frontier | K050 | K059–K062 | Arbitrary level/word at original extent |
+| Lane ordered prefix | K064 | K065–K068 | Existing argument channel, local counter, complete prefix membership |
+| Registry V1 first-PDA error | K037 | K072–K075 | Original128/192 images, typed replies and argument windows |
 
-## Model support checked so far
+K076 (V2 first-PDA error), K077 (V1 second-PDA error), and K079/K080 (borrow-error profiles) pass without complete control families and are not gated packets. Earlier data-Custom-error plumbing on Ok(Vec) inputs is excluded by the CLOSED data law. K078 (V1 all-PDA-success) timed out90s and has no credit. All21 timeout shapes remain retired with exact snapshots; no higher cap/timeout is used.
 
-- `NMM_LaneTranscription`: literal source order and canonical 768-byte reference; value equality and the historical allocation wrapper. The allocator wrapper is support only under (bl), not a row obligation.
-- `NMM_LaneReplies`: independent occurrence-indexed child replies; symbolic loop induction; instantiation of every digest call by the CLOSED decoder through `NLK_LaneDigest.source`.
-- `NMM_RegistryTranscription`: full explicit-Result source transcription equals the adopted AdapterRw owned registry body. Its Ops parameter marks model support, not a row root.
-- `NMM_AccountsTranscription`: full value transcription of233 equals its adopted owned body. It retains master, checkpoint, selected lane and live snapshot payloads.
-- `NMM_Ownership233`: four distinct typed payload carriers and optional normal-return cleanup algebra. It asserts no native allocation identity or post-abort cleanup.
+15 current Lean support modules provide literal model transcriptions, CLOSED decoder substitution, arbitrary recorded-reply projection, full scalar/Box payload reconstruction, symbolic loop/write/frame induction, exhaustive returning-result cases, bounded PDA argument reconstruction, four-owner order, and counter/prefix induction. `NMM_TraceState.Outcome.stopped` contains only its event prefix. No post-abort heap is asserted. Free Ops/success hypotheses remain model support, never a row root.
 
-The pending PDA-window theorem recovers full argument equality from arbitrary bounded windows. The pending returning-outcome partition is a support composition only: both native cases must be checked; no row takes a success or endpoint hypothesis.
+The native cuts contain no callee packet-law assumptions. Exact argument/reply records use real local carriers and existing arguments. Canonical decoder laws compose only in Lean; cheap already-CLOSED constant/scalar/key/policy/readonly functions execute their actual frozen bodies in registry prototypes. These prototypes are not represented as a fully audited all-cut234 packet.
 
-## Native support and missing association
+Every saved Rust line is covered by NMM_LINE_MAP_217/234/233.json and the ReviewedTranscription records. Full returned owner/payload values are retained; rejected NLM drafts are not used as packets. Allocator internals and pure cleanup are excluded under(bl).
 
-K005 with K007–K010 validates the217 root-decoder error branch and its complete local argument/reply record. K017–K021 and K022–K026 validate234's selected finite ProgramError::Custom data-error branch in both versions. These are branch plumbing relations over havoced replies, not CLOSED child laws encoded in Rust and not whole row certificates.
+217's invalid-length native association,234's V2 second-PDA channel/full coverage and mandatory233 candidate gates remain open. NMM_REMAINING.md and NMM_FAILING_STEP.md identify them member by member. Restating model equalities, assuming an endpoint or importing a free operation record cannot fill a missing native producer. Ledger24 remains581 CLOSED /0 QUALIFIED /18 OPEN; next ledger gate remains required.
 
-Whole returning217 shapes, its first frontier isolation, and whole legacy234 shapes have retired90s timeouts. All attempts and exact source snapshots are retained. No unchanged timeout is rerun and no cap is raised. Full native parent-to-transcription association remains OPEN.
+Receipts record exact commands, exits, wall time, RSS, swap, caps, revision, source hashes, selected object pins and axioms. Frozen offline dependency graphs and unchanged lock hashes accompany every known native run. K001 is charged/uncredited and never resubmitted. The canonical replay patch includes79 known snapshots; K001 has no recoverable snapshot.
 
-## Binding classification under (bl)
-
-Allocator internals, pure heap cleanup and post-abort ownership are outside the obligations. Returned payloads remain complete typed values. Stopped arms retain their ordered observable prefix, without an invented heap suffix. The pure digest cut has no such event. PDA calls retain exact source-order argument/reply records; no PDA value law is assumed.
-
-Only after217 and234 have complete gated native packets may233 consume their candidate laws. Its native fold has not been launched. The next ledger gate, not this report, decides credit.
-
-Stage update: K032 establishes the returning Err case at original length with arbitrary contents and typed recorded replies; its controls remain pending. K034 plus K038–K041 establish the success call-coverage relation with four failing controls. Neither is a full row root. K033, K035, K036 and K042 retired after 90-second solver timeouts. K037 establishes only the V1 first-PDA-error registry branch; controls remain pending. No 217/234 candidate or 233 fold is issued.
-
-Stage update: L019 validates complete scalar payload reconstruction; L020 validates successful-loop write/frame composition. K048 metadata and K049 root observations pass; controls and frontier observation remain pending. K043/K045/K046/K047 timed out and are retired. The reply-witness design now selects its error branch inside the cut; post-call conditioning was not sufficient to prune the suffix. NMM_PayloadComponents and NMM_LaneSymbolic are prepared, not yet compiled.
-
-Stage update: K050 frontier observation passes. K048/K049/K050 cover the successful payload components, but native controls, arbitrary-reply formal join and invalid-length native association remain open. L021/L022 are rejected local parser/projection-name builds; L023 is the corrected focused compile pending host admission. New NMM_LaneSymbolic/NMM_LaneSuccess modules are uncompiled preparation. No candidate root is issued.
-
-Stage update:15 support modules compile at current hashes with standard axioms. Payload components K048/K049/K050 have matching controls; root omitted-word replacement K063 fails. Ordered-prefix K064 passes, K065–K068 fail as intended; its local counter uses existing arguments and no static. Returning-Err K032 now has argument K044, copy K069, reply K070 and omitted-record K071 failing controls (the latter three use a structural root-error witness branch). All original timeout receipts remain retired. Invalid-length native association and full packet/domain/stopped-prefix composition remain open; no217 candidate is issued.
-
-Native budget exhausted:80/80 charged, including unresolved K001. V1 first-PDA-error K037 now has K072–K075 failing controls. V2 first-PDA-error K076, V1 second-PDA-error K077 and borrow-error K079/K080 pass without complete control families, so no gate credit is claimed. V1 all-PDA-success K078 timed out90s and is retired. No217/234 candidates or233 native fold are emitted. Final combined import, raw axioms and NFX scan remain pending.
+Final audit: combined L032, eight exact-binary fixtures L033,47 raw roots L034, scanner compile/link L035/L036 and NFX scan L037 pass. All collectors agree; only standard axioms. NFX17269 modules, zero defects. Pinning script L038 has a retained syntax rejection; repaired L039 pins the closure and verifies copied seeds/Aeneas unchanged. No row is promoted.

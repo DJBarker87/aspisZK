@@ -10,7 +10,7 @@ print(json.dumps({{p.name:base64.b64encode(p.read_bytes()).decode() for p in nam
 fetched=[]
 for n,t in json.loads(r.stdout).items():
  raw=base64.b64decode(t);p=E/n
- if n.endswith('.txt'):
+ if n.endswith('.txt') or len(raw)>10_000_000:
   p.with_name(n+'.xz').write_bytes(lzma.compress(raw));p.with_name(n+'.sha256').write_text(sha(raw)+'\n')
  else:p.write_bytes(raw)
  fetched.append(dict(file=n,sha256=sha(raw),bytes=len(raw)))
