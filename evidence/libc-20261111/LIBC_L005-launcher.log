@@ -1,0 +1,33 @@
+{"attempt": "LIBC_L005", "exit_status": 0, "wall_seconds": 23.099179529817775, "peak_rss_kib": "6398308", "swaps": "0", "print_axioms": []}
+structure RSL.Env : Type
+number of parameters: 0
+fields:
+  RSL.Env.sha256 : List RSL.Bytes → RSL.B32
+  RSL.Env.pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+  RSL.Env.clock : Except RSL.ProgramError UInt64
+constructor:
+  RSL.Env.mk (sha256 : List RSL.Bytes → RSL.B32) (pda : List RSL.Bytes → RSL.B32 → Option RSL.B32)
+    (clock : Except RSL.ProgramError UInt64) : RSL.Env
+theorem LIB_Carriers.graph_functional : {A : Type} →
+  (value : RSL.Env → A) →
+    (events : RSL.Env → List RSL.Event) → RSL.Spec.Functional A (LIB_Carriers.graph value events) :=
+fun {A} value events env => Exists.intro { exit := RSL.Exit.ret (value env), events := events env } fun x => Iff.rfl
+@[reducible] def RSL.Bytes :
+...
+structure RSL.Env : Type
+number of parameters: 0
+fields:
+  RSL.Env.sha256 : List RSL.Bytes → RSL.B32
+  RSL.Env.pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+  RSL.Env.clock : Except RSL.ProgramError UInt64
+constructor:
+  RSL.Env.mk (sha256 : List RSL.Bytes → RSL.B32) (pda : List RSL.Bytes → RSL.B32 → Option RSL.B32)
+    (clock : Except RSL.ProgramError UInt64) : RSL.Env
+theorem LIB_Carriers.graph_functional : {A : Type} →
+  (value : RSL.Env → A) →
+    (events : RSL.Env → List RSL.Event) → RSL.Spec.Functional A (LIB_Carriers.graph value events) :=
+fun {A} value events env => Exists.intro { exit := RSL.Exit.ret (value env), events := events env } fun x => Iff.rfl
+@[reducible] def RSL.Bytes : Type :=
+List UInt8
+
+Running as unit: run-rb058353172514528a03680c6ad207f48.scope; invocation ID: 57fc6b0cad5844eba8cacba16aeff351

@@ -1,0 +1,52 @@
+{"attempt": "LIBC_L003", "exit_status": 0, "wall_seconds": 20.36138864699751, "peak_rss_kib": "6418616", "swaps": "0", "print_axioms": []}
+theorem AspisR1.NGC_ReferenceValues.resize_empty : ∀ {T : Type} (clone : Aeneas.Std.core.clone.Clone T)
+  (n : Aeneas.Std.Usize) (value : T),
+  clone.clone value = Aeneas.Std.Result.ok value →
+    ∃ out,
+      Aeneas.Std.alloc.vec.Vec.resize clone (Aeneas.Std.alloc.vec.Vec.new T) n value = Aeneas.Std.Result.ok out ∧
+        ↑out = List.replicate (↑n) value :=
+fun {T} clone n value pureClone =>
+  let ⟨out, h✝⟩ :=
+    Aeneas.Std.WP.spec_imp_exists
+      (Aeneas.Std.alloc.vec.Vec.resize_spec clone (Aeneas.Std.alloc.vec.Vec.new T) n value pureClone)
+  let ⟨run, cells⟩ := h✝
+  Exists.intro out
+    ⟨run,
+      Eq.mp
+        (congrArg (Eq ↑out)
+          (Eq.trans
+            (ite_cond_eq_true
+    
+...
+theorem AspisR1.NGC_ReferenceValues.resize_empty : ∀ {T : Type} (clone : Aeneas.Std.core.clone.Clone T)
+  (n : Aeneas.Std.Usize) (value : T),
+  clone.clone value = Aeneas.Std.Result.ok value →
+    ∃ out,
+      Aeneas.Std.alloc.vec.Vec.resize clone (Aeneas.Std.alloc.vec.Vec.new T) n value = Aeneas.Std.Result.ok out ∧
+        ↑out = List.replicate (↑n) value :=
+fun {T} clone n value pureClone =>
+  let ⟨out, h✝⟩ :=
+    Aeneas.Std.WP.spec_imp_exists
+      (Aeneas.Std.alloc.vec.Vec.resize_spec clone (Aeneas.Std.alloc.vec.Vec.new T) n value pureClone)
+  let ⟨run, cells⟩ := h✝
+  Exists.intro out
+    ⟨run,
+      Eq.mp
+        (congrArg (Eq ↑out)
+          (Eq.trans
+            (ite_cond_eq_true
+              (List.take ↑n ↑(Aeneas.Std.alloc.vec.Vec.new T) ++
+                List.replicate (↑n - (↑(Aeneas.Std.alloc.vec.Vec.new T)).length) value)
+              [] (Eq.trans ge_iff_le._simp_1 zero_le._simp_1))
+            (congr (congrArg HAppend.hAppend List.take_nil)
+              (congrFun' (congrArg List.replicate (tsub_zero ↑n)) value))))
+        cells⟩
+def AspisR1.OraclePortStdAllocation.filledSpec : {T : Type} →
+  Aeneas.Std.Usize →
+    T →
+      Bool → Aeneas.Std.Result (Except AspisR1.OraclePortStdAllocation.AllocationError (Aeneas.Std.alloc.vec.Vec T)) :=
+fun {T} n value reserved =>
+  if reserved = true then Aeneas.Std.Result.ok (Except.ok ⟨List.replicate (↑n) value, ⋯⟩)
+  else Aeneas.Std.Result.ok (Except.error AspisR1.OraclePortStdAllocation.AllocationError.allocation)
+
+Running as unit: run-r8504ab5837184e93bbd56132b78b55b0.scope; invocation ID: 3b39fa62502c4b26a5d9a463e2f771a5
