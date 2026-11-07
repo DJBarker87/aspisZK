@@ -1,0 +1,148 @@
+LIB_generated/LIB_FieldTransport.lean:64:52: error: unsolved goals
+x y : U32
+⊢ (do
+      let s ← lift (x.wrapping_add y)
+      if s ≥ 2147483647#u32 then do
+          let s1 ← lift (s.wrapping_sub 2147483647#u32)
+          ok s1
+        else ok s) =
+    do
+    let s ← x + y
+    if s ≥ 2147483647#u32 then do
+        let s1 ← s - 2147483647#u32
+        ok s1
+      else ok s
+LIB_generated/LIB_FieldTransport.lean:72:52: error: unsolved goals
+x y : U32
+⊢ (do
+      let i ← lift (x.wrapping_add 2147483647#u32)
+      let s ← lift (i.wrapping_sub y)
+      if s ≥ 2147483647#u32 then do
+          let s1 ← lift (s.wrapping_sub 2147483647#u32)
+          ok s1
+        else ok s) =
+    do
+    let i ← x + 2147483647#u32
+    let s ← i - y
+    if s ≥ 2147483647#u32 then do
+        let s1 ← s - 2147483647#u32
+        ok s1
+      else ok s
+LIB_generated/LIB_FieldTransport.lean:80:53: error: unsolved goals
+x : U64
+⊢ (do
+      let i ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+      let i1 ← lift (x &&& i)
+      let i2 ← lift (x.wrapping_shr 31#u32)
+      let x1 ← lift (U64.wrapping_add i1 i2)
+      let i3 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+      let i4 ← lift (x1 &&& i3)
+      let i5 ← lift (x1.wrapping_shr 31#u32)
+      let x2 ← lift (U64.wrapping_add i4 i5)
+      let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+      if x3 ≥ 2147483647#u32 then ok (U32.wrapping_sub x3 2147483647#u32) else ok x3) =
+    do
+    let i ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+    let i1 ← lift (x &&& i)
+    let i2 ← x >>> 31#u32
+    let x1 ← i1 + i2
+    let i3 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+    let i4 ← lift (x1 &&& i3)
+    let i5 ← x1 >>> 31#u32
+    let x2 ← i4 + i5
+    let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+    if x3 ≥ 2147483647#u32 then x3 - 2147483647#u32 else ok x3
+LIB_generated/LIB_FieldTransport.lean:88:52: error: unsolved goals
+x y : U32
+⊢ (do
+      let i ← lift (UScalar.cast UScalarTy.U64 x)
+      let i1 ← lift (UScalar.cast UScalarTy.U64 y)
+      let i2 ← lift (U64.wrapping_mul i i1)
+      let i3 ← AspisR1SelectedMaskProbe.field.reduce_u64 i2
+      ok i3) =
+    do
+    let i ← lift (UScalar.cast UScalarTy.U64 x)
+    let i1 ← lift (UScalar.cast UScalarTy.U64 y)
+    let i2 ← i * i1
+    let i3 ← AspisR1SelectedMaskProbe.field.reduce_u64 i2
+    ok i3
+LIB_generated/LIB_FieldTransport.lean:91:4: warning: This simp argument is unused:
+  FIo_Native.aspis_core.field.M31.reduce_u64
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.M31.mul, AspisR1SelectedMaskProbe.field.M31.mul,
+      F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵r̵e̵d̵u̵c̵e̵_̵u̵6̵4̵,̵AspisR1SelectedMaskProbe.field.M31.reduce_u64, generated_reduce_u64_eq_probe]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIB_generated/LIB_FieldTransport.lean:92:4: warning: This simp argument is unused:
+  AspisR1SelectedMaskProbe.field.M31.reduce_u64
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.M31.mul, AspisR1SelectedMaskProbe.field.M31.mul,
+      FIo_Native.aspis_core.field.M31.reduce_u64, A̵s̵p̵i̵s̵R̵1̵S̵e̵l̵e̵c̵t̵e̵d̵M̵a̵s̵k̵P̵r̵o̵b̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵r̵e̵d̵u̵c̵e̵_̵u̵6̵4̵,̵generated_reduce_u64_eq_probe]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIB_generated/LIB_FieldTransport.lean:159:81: error: unsolved goals
+x y : GenC
+⊢ (do
+      let a ← AspisR1SelectedMaskProbe.field.M31.mul x.a y.a
+      let a_1 ← AspisR1SelectedMaskProbe.field.M31.mul x.b y.b
+      let a_2 ← lift (core.convert.num.FromU64U32.from x.a)
+      let a_3 ← lift (core.convert.num.FromU64U32.from x.b)
+      let a_4 ← lift (a_2.wrapping_add a_3)
+      let a_5 ← lift (core.convert.num.FromU64U32.from y.a)
+      let a_6 ← lift (core.convert.num.FromU64U32.from y.b)
+      let a_7 ← lift (a_5.wrapping_add a_6)
+      let a_8 ← lift (a_4.wrapping_mul a_7)
+      let a_9 ← AspisR1SelectedMaskProbe.field.M31.reduce_u64 a_8
+      let a_10 ← AspisR1SelectedMaskProbe.field.M31.sub a a_1
+      let a ← AspisR1SelectedMaskProbe.field.M31.sub a_9 a
+      let a ← AspisR1SelectedMaskProbe.field.M31.sub a a_1
+      ok { a := a_10, b := a }) =
+    do
+    let m0 ← AspisR1SelectedMaskProbe.field.M31.mul x.a y.a
+    let m1 ← AspisR1SelectedMaskProbe.field.M31.mul x.b y.b
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← i1 + i3
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← i6 + i8
+    let i10 ← i4 * i9
+    let m2 ← AspisR1SelectedMaskProbe.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+LIB_generated/LIB_FieldTransport.lean:164:4: warning: This simp argument is unused:
+  generated_m31_add_eq_probe
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.CM31.mul,
+  ̵  ̵ ̵ ̵AspisR1SelectedMaskProbe.field.CM31.mul,
+      resultMap_bind, generated_m31_mul_eq_probe,
+  ̵  ̵ ̵ ̵generated_m31_reduce_u64_eq_probe, ̵g̵e̵n̵e̵r̵a̵t̵e̵d̵_̵m̵3̵1̵_̵s̵u̵b̵_̵e̵q̵_̵p̵r̵o̵b̵e̵,̵
+      generated_m31_a̵d̵d̵s̲u̲b̲_eq_probe, resultMap_cm_ok, genCToProbe]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'LIB_FieldTransport.resultMap_cm_ok' does not depend on any axioms
+'LIB_FieldTransport.resultMap_qm_ok' does not depend on any axioms
+'LIB_FieldTransport.resultMap_bind' does not depend on any axioms
+'LIB_FieldTransport.resultMap_bind_transport' depends on axioms: [propext]
+'LIB_FieldTransport.probeCToGen_genCToProbe' does not depend on any axioms
+'LIB_FieldTransport.resultMap_genC_bind' depends on axioms: [propext]
+'LIB_FieldTransport.generated_m31_add_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_m31_sub_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_reduce_u64_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_m31_mul_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_m31_reduce_u64_eq_probe' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'LIB_FieldTransport.generated_m31_double_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_cm_add_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_cm_sub_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_cm_mul_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_mul_by_r_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_qm_add_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_FieldTransport.generated_qm_mul_eq_probe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
