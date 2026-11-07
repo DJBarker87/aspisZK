@@ -407,3 +407,48 @@ WIP COMMIT FAILED: git add could not write the worktree index.lock (ENOSPC).
 Last successful commit028c552dbcd contains217 candidate; all234 Stage F work
 and these restart notes remain UNCOMMITTED in this worktree. Do not claim a
 Stage F commit or push. Resolve disk space and commit preserved files first.
+
+## Disk-restored resumption (2026-11-07)
+
+Lead merged preserved WIP and complete LIBB library. Local disk49GiB free; resume authorized. Prior626 formal/6 extraction/25 Kani. Own runner allows200 further formal scopes (at least150 authorized), through826 actual formal launches, and identifiers beyond999; unchanged admission/caps. Next L932 repairs failed part erasure with bounded definitional closure after simplification. No candidate234 yet;233 frozen until234 candidate.
+
+### Restored stage G checkpoint
+L939 isolated erasure cut, L945 tail erasure, L948 remaining parts and L947 effect interpreter/associativity PASS. All18 bounded continuation erasures are now accepted; old failed whole module remains historical only. L944 copies published LIB_/LIBB_ objects with verified hashes into NMX_LIBB_seed (NMX_LIBB_SEED.json). No instance fields are redefined. Failed syntactic variants are retained; constructor congruence replaced broad recursive congruence. Effects explicitly include clone allocation iff heap-carrying error; final canonical234/native observation fold remains OPEN. Scope L932 missing NND environment corrected in own runner. No cap increase, extraction, Kani or shipped changes.
+
+### Restored stage H checkpoint
+
+L951 run.sound covers every allocation stream; L957 exact native000/source factor and source script erasure PASS. L955 effect laws, L960 scalar Result-to-observation laws, L962/L972 pure leaf projections, L983/L992 complete canonical leaf checks PASS. L984 generic full-event PDA fold, L980 cloned-error data fold and L986 total decoder fold PASS. L990/L991 entry1 PDA source/canonical folds, L993–996 four decoder-occurrence sources, L997 entry1 decoder canonical fold, L999/L1000 entry data sources, L1001–1003 three more PDA sources and L1004 entry1 cloned-data canonical fold PASS. Native source order/arguments retained, no caller extent or success premise.
+
+L961 imports supplied LIBB module8 and checks its module7 field identities without constructing any PoolLib/DeployedIds fields. Attempted reuse of OLD NND_RegistryLibrary is retired: it imports obsolete NND_AccountCarrier/getter and collides on generated data.eq_1 with the rebuilt canonical234. L958 diagnostic confirms the actual supplying LIBB RSL owners ARE clone-aware revision3 and do NOT import that obsolete getter (only its final #check intentionally-missing getter exited1). The library is complete; this was an obsolete helper import in NMX, not a library defect. New helpers copy only pure scalar/guard laws with provenance and recompile against current owners; no old getter/Returned-only evaluator is used.
+
+Active: readonly occurrence composition (local simplifier repairs at L1005/1006; source/model already print standard axioms, no module accepted yet), registry1 guard/prefix, registry2 branch, final all-Args source port. No234 candidate yet.233 stays frozen. Run still active with generous remaining scopes; no extraction/Kani/shipped-source/trust-row changes. Own runner now reapplies own TMPDIR/CARGO_TARGET_DIR AFTER imported dependency environment overrides. L958 diagnostic inherited the supplier TMPDIR; no deletion or deliberate mutation of supplier scratch occurred.
+
+### Stage I: TX2:234 candidate committed immediately
+
+L1044 PASS proposes NMX_R3_RegistryRoot.root against EXACT canonical revision3 RowSpec_234 at LIBB_PoolLib.library / LIBB_PoolLib.deployed, DomainTrue, no own-input clauses or free Ops. Allocation choices are universally pointwise in Args/Env/source call index. NativeFold.native (L1036) covers all original native inputs; Top.fold (L1033) is the complete observed-source/canonical equality. Both branches include cloned-error allocation aborts and every ordered PDA prefix. Source.factor/erase_root (L957) retain132 calls from E006.
+
+L1037 establishes all four supplied decoders reject nil and impossible oversized canonical bytes symbolically. L1039/1040 give typed representatives, L1042 proves equality of the ENTIRE reference relations under the projection, including stop prefixes; bounds do NOT enter Domain. The representative preserves all actual representable byte payloads. Only fields which234 never observes (snapshot lengths and non-policy master payload) are normalized, with full Ref equality proved. No standalone inference from mere output equality is used.
+
+Raw own-root ax2, final combined import and export retention remain pending; no ledger credit yet. Explicit per-data-site/std and opaque-ID binding packets are being finalized against the existing supplier roots.233 now may be instantiated after those234 evidence gates, using its frozen two targets and supplied module8. No new233 scope yet.
+
+### Stage J:234 evidence gates complete
+
+L1046 PDA atom, L1047 opaque deployment-ID bindings and L1049 full actual-data-clone source binding PASS. All168 own current new theorem declarations pass raw ax2 (L1050–1060); collectAxioms and printed axioms agree, only propext/Classical.choice/Quot.sound. L1063 focused combined NLX + LIB_BUNDLE_IMPORT + LIBB_V2Star + existing217 + new234 PASS17.8467s/6810348KiB/swap0. L1062 was a missing retained NDB dependency path; fixed by reusing exact L893 NMX_NDB/NCV read-only roots, no proof/source alteration. L1061 separately pins/copies current accepted module12/13 Gate objects because the historical78-object LIBB export predates those modules. L1064 retains NMX_exports_registry_20261111 and every loaded object hash; every RSL owner resolves to the private revision3 rebuild.
+
+NMX_234_VALIDATION.json, NMX_234_CUTMAP.json (132 original lexical call occurrences), NMX_234_EXPORT.json and compressed closure pins are the complete234 packet. No all-roots audit or unchanged full regression. Candidate remains subject to the ledger, no CLOSED credit claimed.
+
+The first authorized233 instantiation scopes are now in progress after both child candidates exist and234 gates pass. No new233 reification/bounds/association was attempted while its child gate was open.
+
+### Stage K: frozen233 targets instantiated
+
+L1065 LaneInstance PASS14.4888s/6018192KiB/swap0, L1067 RegistryArguments PASS15.0316s/6025056KiB/swap0 (L1066 exposed only an unfolded bytes-map rewrite; repaired with supplied pointwise byte equality), L1068 Instantiated233 PASS19.2117s/6765944KiB/swap0. NMX_R3_Instantiated233.native and .represented instantiate EXACTLY the frozen NMX_R2_NativeCanonical.fold / NMX_R2_RepresentedFold.fold with complete217 and234 packets and LIBB module8. .library is definitional equality to the supplied instance; no PoolLib/DeployedIds fields constructed. Lane transport includes every input length/Result; registry original tuple carrier equality is NMX_R3_RegistryArguments.same. No child-law/success/extent premise survives.
+
+This discharges NMX_REV2_REMAINING items4 and5 (library equality and child instantiation). Items1–3 remain: physical Box native cuts at actual233 sites, full emitted effects association, and all-Args canonical implementation port. The represented theorem retains explicit bounds as support and never changes Domain=True. These are operational instantiated folds, NOT a RowSpec233 candidate. Own new-root audits/import/export and exact242/241 readiness follow; no unchanged234 audit is repeated.
+
+### Stage L: requested delivery complete; exact readiness retained
+
+L1069 proof311 raw ax2 PASS: all12 new theorem roots, exact collectAxioms equality and standard-only closure. L1070 focused NLX/LIB bundle/LIBB V0-star/217/234/instantiated233 combined import PASS19.4161s/6776756KiB/swap0. L1071 retention PASS23.3248s/149648KiB/swap0 into NMX_exports_instantiated233_20261111; NMX_233_EXPORT.json and compressed closure pins identify every actually loaded object. All RSL owners resolve to private revision3 rebuild; no old RSL objects or failed module artifacts are exported as evidence. Original234 retained export stays immutable.
+
+NMX_233_VALIDATION.json and NMX_RESUMPTION_COUNTS.json record exact accepted scopes, source revisions/hashes, resources and printed axioms. Current766 formal scopes (140 this resumption),6 total extraction/25 total Kani (zero new in this resumption),60 further formal scopes remain in the own runner. No budget stop: the latest requested234 candidate + frozen233 instantiation + readiness handoff are delivered. Remaining233 obligations are explicitly NOT claimed discharged by operational model membership.
+
+NMX_242_241_READINESS.md is the lead handoff:217 and234 proposed candidates; frozen233 native/represented instantiations with full child schemas and supplied module8; no unrestricted native233 candidate, hence no unconditional native242/241 readiness. It identifies exact downstream NMS full-schema consumers and retained Box/source/all-Args obligations. No source/trust/security-target promotion, no push. The ledger alone decides row credit. Local disk remains above49GB free; no cleanup or key changes performed.
