@@ -1,3 +1,5 @@
+> SUSPENDED NATIVE CONTEXT SUPPORT: PCG-F1 / PCG_FINDINGS.md. Do not consume the SDK/address/digest packets until repaired receipts replace their support. Logical Lean results are unaffected.
+
 # PCG stub and domain register
 
 No field multiplication stub, writable-static oracle, function-pointer oracle or borrowed stub_verified is used. No PDA value law or new runtime row is added. SDK op38 reply values remain quantified; coherent digest/error slots are op43/op44.

@@ -1,0 +1,7 @@
+from pathlib import Path
+import json,subprocess,os,hashlib
+B=Path.cwd();candidates=list(Path('/home/dombarker/.rustup/toolchains').glob('*/bin/cargo-miri'))
+if not candidates:
+ (B/'PCG_ALIAS_AUDIT.json').write_text(json.dumps(dict(status='TOOL_UNAVAILABLE',note='No Miri installation; no tool installation or new trust adoption attempted'))+'\n');print('Miri provenance probe unavailable; no installation attempted');raise SystemExit(0)
+tool=next((p for p in candidates if 'nightly-2026-09-17' in str(p)),candidates[0]);chain=tool.parent.parent.name;S=B/'PCG_alias_probe';(S/'src').mkdir(parents=True,exist_ok=True);(S/'Cargo.toml').write_text('[package]\nname="pcg_alias_probe"\nversion="0.0.0"\nedition="2021"\n[workspace]\n');(S/'src/main.rs').write_bytes((B/'PCG_alias_probe.rs').read_bytes());env=dict(os.environ,CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(B/'PCG_alias_target'))
+cmd=['/home/dombarker/.cargo/bin/cargo','+'+chain,'miri','run','--offline','--release'];r=subprocess.run(cmd,cwd=S,env=env,capture_output=True,text=True);(B/'PCG_ALIAS_AUDIT.log').write_text(r.stdout+r.stderr);(B/'PCG_ALIAS_AUDIT.json').write_text(json.dumps(dict(status='PASS' if r.returncode==0 else 'FINDING_OR_TOOL_FAILURE',exit=r.returncode,command=cmd,tool=str(tool),tool_sha256=hashlib.sha256(tool.read_bytes()).hexdigest()),indent=1)+'\n');print('Miri provenance probe exit'+str(r.returncode));raise SystemExit(r.returncode)

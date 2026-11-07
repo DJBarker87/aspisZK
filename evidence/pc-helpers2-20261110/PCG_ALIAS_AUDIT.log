@@ -1,0 +1,30 @@
+   Compiling pcg_alias_probe v0.0.0 (/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_alias_probe)
+    Finished `release` profile [optimized] target(s) in 0.07s
+     Running `/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/cargo-miri runner /home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_alias_target/miri/x86_64-unknown-linux-gnu/release/pcg_alias_probe`
+warning: Miri does not support optimizations: the opt-level is ignored. The only effect of selecting a Cargo profile that enables optimizations (such as --release) is to apply its remaining settings, such as whether debug assertions and overflow checks are enabled.
+
+error: Undefined Behavior: trying to retag from <328> for SharedReadOnly permission at alloc159[0x20], but that tag does not exist in the borrow stack for this location
+ --> src/main.rs:3:69
+  |
+3 | #[inline(never)] unsafe fn oracle(program:*const u8)->[u8;32]{let c=&*(program as *const Context);c.calls.set(c.calls.get()+1);c.reply}
+  |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this error occurs as part of retag at alloc159[0x0..0x41]
+  |
+  = help: this indicates a potential bug in the program: it performed an invalid operation, but the Stacked Borrows rules it violated are still experimental
+  = help: see https://github.com/rust-lang/unsafe-code-guidelines/blob/master/wip/stacked-borrows.md for further information
+help: <328> was created by a SharedReadOnly retag at offsets [0x0..0x20]
+ --> src/main.rs:4:70
+  |
+4 | #[inline(never)] fn wrapper(program:&[u8;32])->[u8;32]{unsafe{oracle(program as *const _ as *const u8)}}
+  |                                                                      ^^^^^^^
+  = note: stack backtrace:
+          0: oracle
+              at src/main.rs:3:69: 3:98
+          1: wrapper
+              at src/main.rs:4:63: 4:103
+          2: main
+              at src/main.rs:5:86: 5:105
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error; 1 warning emitted
+

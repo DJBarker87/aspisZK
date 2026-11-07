@@ -1,3 +1,5 @@
+> SUSPENDED NATIVE CONTEXT SUPPORT: PCG-F1 / PCG_FINDINGS.md. Do not consume the SDK/address/digest packets until repaired receipts replace their support. Logical Lean results are unaffected.
+
 # PCG certificate index
 
 ## Stage 1: shared SDK program-address forwarding
