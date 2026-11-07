@@ -87,3 +87,10 @@ No row proof or comparison implication claimed. Wall0:02.46;
 peak4707620KiB;swap0;standard summary axioms only.
 
 PV_LIB_SPEC_F270Full compiled49752, cohortw3: exit0, wall0:02.32, peak4707912KiB, swap0; standard summary axioms only. Statement only.
+
+## thread:f166
+
+PV_LIB_SPEC_F166Full: whole Pre/MachineSpec/Post/Contract compiled49753;
+exact literal package prefix proposition plus comparison compiled in same module.
+No row proof or comparison implication claimed. Wall0:02.29;
+peak4707196KiB;swap0;standard summary axioms only.
