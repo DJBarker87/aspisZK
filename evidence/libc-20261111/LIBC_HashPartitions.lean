@@ -16,17 +16,19 @@ theorem split_append (h v s : Bytes) (hs : s.length=32)
  split (h++v++s)=[h,v,s] := by
  have total : (h++v++s).length=h.length+v.length+32 := by simp only [List.length_append,hs]
  have header : (if (h++v++s).length=65 then 1 else 2)=h.length := by
-  rcases width with ⟨hh,hv⟩ | ⟨hh,hv | hv⟩ <;> simp [total,hh,hv]
+  rcases width with ⟨hh,hv⟩ | ⟨hh,hv | hv⟩ <;> simp [hh,hv,hs]
  have body : (h++v++s).length-h.length-32=v.length := by omega
  have tail : (h++v++s).length-32=h.length+v.length := by omega
  unfold split
- rw [header,body,tail]
+ rw [header]
+ dsimp only
+ rw [body,tail]
  simp only [List.append_assoc,List.take_left,List.drop_left,List.take_append,List.take_length,
   Nat.sub_self,List.take_zero,List.append_nil,List.drop_append,List.drop_length,List.nil_append]
  simp
- theorem exact (parts : List Bytes) (shape : Shape parts) : split parts.flatten=parts := by
+theorem exact (parts : List Bytes) (shape : Shape parts) : split parts.flatten=parts := by
  obtain ⟨h,v,s,rfl,hs,hv⟩ := shape
- simpa only [List.flatten_cons,List.flatten_nil,List.append_nil] using split_append h v s hs hv
+ simpa only [List.flatten_cons,List.flatten_nil,List.append_nil,List.append_assoc] using split_append h v s hs hv
 #print axioms split_append
 #print axioms exact
 end LIBC_HashPartitions

@@ -1,0 +1,57 @@
+LIBC_generated/LIBC_HashPartitions.lean:18:66: error: unsolved goals
+case inl
+h v s : Bytes
+hs : List.length s = 32
+total : List.length (h ++ v ++ s) = List.length h + List.length v + 32
+hh : List.length h = 1
+hv : List.length v = 32
+⊢ 1 + (32 + List.length s) = 65
+
+case inr.inl
+h v s : Bytes
+hs : List.length s = 32
+total : List.length (h ++ v ++ s) = List.length h + List.length v + 32
+hh : List.length h = 2
+hv : List.length v = 128
+⊢ ¬2 + (128 + List.length s) = 65
+
+case inr.inr
+h v s : Bytes
+hs : List.length s = 32
+total : List.length (h ++ v ++ s) = List.length h + List.length v + 32
+hh : List.length h = 2
+hv : List.length v = 480
+⊢ ¬2 + (480 + List.length s) = 65
+LIBC_generated/LIBC_HashPartitions.lean:23:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.length (h ++ v ++ s) - List.length h - 32
+in the target expression
+  (have n := List.length h;
+    [List.take n (h ++ v ++ s), List.take (List.length (h ++ v ++ s) - n - 32) (List.drop n (h ++ v ++ s)),
+      List.drop (List.length (h ++ v ++ s) - 32) (h ++ v ++ s)]) =
+    [h, v, s]
+
+h v s : Bytes
+hs : List.length s = 32
+width : List.length h = 1 ∧ List.length v = 32 ∨ List.length h = 2 ∧ (List.length v = 128 ∨ List.length v = 480)
+total : List.length (h ++ v ++ s) = List.length h + List.length v + 32
+header : (if List.length (h ++ v ++ s) = 65 then 1 else 2) = List.length h
+body : List.length (h ++ v ++ s) - List.length h - 32 = List.length v
+tail : List.length (h ++ v ++ s) - 32 = List.length h + List.length v
+⊢ (have n := List.length h;
+    [List.take n (h ++ v ++ s), List.take (List.length (h ++ v ++ s) - n - 32) (List.drop n (h ++ v ++ s)),
+      List.drop (List.length (h ++ v ++ s) - 32) (h ++ v ++ s)]) =
+    [h, v, s]
+LIBC_generated/LIBC_HashPartitions.lean:19:53: warning: This simp argument is unused:
+  total
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵o̵t̵a̵l̵,̵h̵h̵,̵h̵v̵]̵[̲h̲h̲,̲ ̲h̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_HashPartitions.lean:27:89: error: unsolved goals
+parts : List Bytes
+shape : Shape parts
+⊢ split parts.flatten = parts
+LIBC_generated/LIBC_HashPartitions.lean:28:1: error: unexpected identifier; expected command
+'LIBC_HashPartitions.split_append' depends on axioms: [propext, sorryAx]
+'LIBC_HashPartitions.exact' depends on axioms: [sorryAx]
