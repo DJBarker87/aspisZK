@@ -139,3 +139,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49849 passed exact pinned replay PV_THR2_TypedRepresentation_PacketRef; see receipt for time/RSS/swap/revision/axioms.
 
 49850 passed exact pinned replay PV_THR2_Spawn361PacketField82Reached; see receipt for time/RSS/swap/revision/axioms.
+
+49851 passed exact pinned replay PV_THR2_PacketField82Store; see receipt for time/RSS/swap/revision/axioms.
