@@ -19,10 +19,14 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
         assert sum(x['kind'] in ['lean','support','link','audit','inspect','extract'] for x in done)<250,'Formal scope allowance exhausted (250)' 
         if target not in ['NMV_COMBINED_IMPORT','NMV_ProofDriver','NMV_ScanDriver']:
             assert sum(x['kind']=='lean' for x in done)<246,'Reserve final import/audit compiler slots'
+    if kind=='extract':
+        raise RuntimeError('Resume allowance: zero extraction')
     if kind=='kani':
+        if int(a[-3:])>=61:
+            assert target in ['NMV_fission_stage1_parent_argument_control','NMV_fission_stage2_parent_argument_control'], 'Resume Kani is controls only'
         done=[json.loads(l) for l in (E/'NMV_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
-        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<60,'Actual cargo-kani budget exhausted'
+        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<72,'Actual cargo-kani budget exhausted (60 prior + 12 controls-only resume)'
     env=json.loads((E/'NMV_ENV.json').read_text())
     env['TMPDIR']=B+'/NMV_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMV_target'

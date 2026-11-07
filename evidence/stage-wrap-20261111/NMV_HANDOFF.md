@@ -186,3 +186,21 @@ crates/programs/lock changes, hence no ELF rebuild trigger. Inherited ELF pins
 f8c0ec72…/63ad3e9c…/e0e49c34… are inventory, not new reproduction. Frozen3,
 RuntimePersistence, L154 parameter, narrowedD188,100-bit PER-ATTEMPT/privacy/two
 transactions unchanged. No push; no sibling/session-A live worktree touched.
+
+## Controls-only resume (2026-11-07)
+
+Allowance: zero extraction, 136 formal scopes, 12 Kani controls only.
+Prepared parent mutations are unmodified. Runner allowance is updated to count
+60 prior plus at most12 new Kani, with an explicit controls-only target allowlist;
+extraction is refused. Frozen graph/offline/post-lock/caps/admission unchanged.
+K061/K062 will use the same fission source, deployed features, Log<0> and exact
+KMX patch as passing receipts; only the explicit child call-site argument differs.
+Old receiver-log controls stay excluded. No unchanged pass is rerun.
+
+K061(stage2) and K062(stage1) FAIL exactly at child count7/3 assertions,
+exit1,3.093s/370344KiB and3.517s/377812KiB,swap0. No unwinding or
+unsupported-path verdict. NMV_CONTROL_RESUME.json mechanically compares
+frozen/fission/receiver sources, exact environment and every crate feature
+with reused K035/K041 passes. Parent copies differ only by the two explicit
+&owned[1..] substitutions (module import aside). Graph/offline/post-lock and
+KMX identical. Two of12 authorized controls spent; no passing rerun.
