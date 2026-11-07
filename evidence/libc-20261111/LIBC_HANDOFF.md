@@ -9,3 +9,7 @@ L011: filled field compiled. LIBC_Filled.child reads Env.reservation, has domain
 L017: LIBC_ExpandValues.child installs the complete deterministic compact expansion model at the original input/output bytes. native_result preserves the mutable output on Length errors and fixes every returned byte on Ok. model_port/Returns install the RSL field; native_arguments is a separate exact carrier roundtrip. Standard axioms only, no additional premise/trust.
 
 L020: wideView field compiled from NHF_ViewResult.model/result at SAME proof/semantic/y1. Canonical and noncanonical inactive words retained. emitted_copy reuses retained_selected_view; semantic_bytes and native_arguments are separate transport facts. No child-success premise. Standard axioms only. Module19: semantic expansion remains.
+
+L027/L030: semantic expansion model and field compile. Mathematical interval selection reconstructs each output byte from CLOSED NGV header/payload laws, never from a native Cut image. Model dimensions and mutable output are complete at7015/13831. output_length uses a symbolic finite-list lemma to avoid reducing13831 cells. Standard axioms only. All four module19 fields are ready for LIB_ bundling; LIBC_VPrepare grouping is next.
+
+L029: F3 error support compiles. Fixed actual installation, both query/claim returned Err arms, fail/div, and full model equality. This is not yet a complete PreparedNew field: allocation/digest prefixes and own-input/caller clauses remain.
