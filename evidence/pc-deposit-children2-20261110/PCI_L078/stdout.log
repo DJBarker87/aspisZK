@@ -1,0 +1,35 @@
+DEF NFY_NED_ScannerCohorts.profile_body
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (i : Aeneas.Std.Usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical_loop.body d i =
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical_loop.body d i
+DEF NFY_NED_ScannerCohorts.account_loop
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (i : Aeneas.Std.Usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop d i =
+    AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical_loop d i
+DEF NBD_DigestInduction.Canonical
+TYPE Aeneas.Std.Array Aeneas.Std.U32 8#usize → Prop
+VALUE fun d => ∀ (j : Fin 8), ↑(↑d)[↑j] < 2147483647
+DEF NFY_NED_ScannerCohorts.profile
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical d =
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical d
+DEF NFY_NED_ScannerCohorts.account_body
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (i : Aeneas.Std.Usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d i =
+    AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d i
+DEF NFY_NED_ScannerCohorts.account_result
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical d =
+    Aeneas.Std.Result.ok (decide (NBD_DigestInduction.Canonical d))
+DEF NFY_NED_ScannerCohorts.profile_loop
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize) (i : Aeneas.Std.Usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical_loop d i =
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical_loop d i
+DEF NFY_NED_ScannerCohorts.account
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical d =
+    AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical d
+DEF NFY_NED_ScannerCohorts.profile_result
+TYPE ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical d =
+    Aeneas.Std.Result.ok (decide (NBD_DigestInduction.Canonical d))

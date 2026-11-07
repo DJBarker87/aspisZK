@@ -26,6 +26,9 @@ fn note_caller(){
  unsafe{EXPECTED=reference::note_input(owner,value,asset,salt);REPLY=reply;CALLS=0;}
  let mut input=owner.map(M31);
  #[cfg(PCI_NOTE_CALLER_MUTANT)]{input[0].0^=1;}
+ #[cfg(not(PCI_NOTE_POOL_WRAPPER))]
  let got=note_commitment(&input,value,M31(asset),&salt.map(M31));
+ #[cfg(PCI_NOTE_POOL_WRAPPER)]
+ let got=crate::pool_v1::pool_v1_note_commitment(&input,value,M31(asset),&salt.map(M31));
  assert!((got.map(|x|x.0)==reply && unsafe{CALLS}==1)!=cfg!(PCI_NEG_NOTE_CALLER));
 }

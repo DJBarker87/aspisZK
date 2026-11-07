@@ -3,6 +3,7 @@ import PCF_ArrayIndex
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace PCI_Note
+universe u v
 abbrev Digest := Array U32 8#usize
 /-- Frozen spend.rs155-166 input order; raw words retained without a canonicality restriction. -/
 def input (owner : Digest) (value asset : U32) (salt : Digest) : Array U32 18#usize :=
@@ -16,11 +17,11 @@ theorem extracted_input (owner : Digest) (value asset : U32) (salt : Digest) :
 
 /-- The generic hash sees exactly one request; its full reply, state and ordered
     effects remain those of that same invocation, including an abort prefix. -/
-def applyHash {State Outcome : Type} (hash : U32 → Array U32 18#usize → State → Outcome)
+def applyHash {State : Type u} {Outcome : Type v} (hash : U32 → Array U32 18#usize → State → Outcome)
     (owner : Digest) (value asset : U32) (salt : Digest) (state : State) : Outcome :=
   hash 1095958531#u32 (input owner value asset salt) state
 
-theorem forwarding {State Outcome : Type} (hash : U32 → Array U32 18#usize → State → Outcome)
+theorem forwarding {State : Type u} {Outcome : Type v} (hash : U32 → Array U32 18#usize → State → Outcome)
     (owner : Digest) (value asset : U32) (salt : Digest) (state : State) :
     applyHash hash owner value asset salt state =
       hash 1095958531#u32 (input owner value asset salt) state := rfl

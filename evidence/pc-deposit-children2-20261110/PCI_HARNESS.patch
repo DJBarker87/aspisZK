@@ -47,13 +47,16 @@
 +#[path="PCI_CountNative.rs"] mod PCI_CountNative;
 --- a/programs/aspis-pool/src/history.rs
 +++ b/programs/aspis-pool/src/history.rs
-@@ -344,3 +344,6 @@
+@@ -344,3 +344,9 @@
          assert!(validate_root_page_bytes_from_program_invariant(&data, &pool, 0).is_err());
      }
  }
 +
 +#[cfg(kani)]
 +#[path="PCI_RootNative.rs"] mod PCI_RootNative;
++
++#[cfg(kani)]
++#[path="PCI_AppendWindow.rs"] mod PCI_AppendWindow;
 --- a/programs/aspis-pool/src/deposit_transport.rs
 +++ b/programs/aspis-pool/src/deposit_transport.rs
 @@ -160,3 +160,6 @@
@@ -93,7 +96,7 @@
 +}
 --- /dev/null
 +++ b/crates/aspis-statement/src/PCI_NoteCallers.rs
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,34 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +#[path="PCI_NoteReference.rs"] mod reference;
@@ -122,7 +125,10 @@
 + unsafe{EXPECTED=reference::note_input(owner,value,asset,salt);REPLY=reply;CALLS=0;}
 + let mut input=owner.map(M31);
 + #[cfg(PCI_NOTE_CALLER_MUTANT)]{input[0].0^=1;}
++ #[cfg(not(PCI_NOTE_POOL_WRAPPER))]
 + let got=note_commitment(&input,value,M31(asset),&salt.map(M31));
++ #[cfg(PCI_NOTE_POOL_WRAPPER)]
++ let got=crate::pool_v1::pool_v1_note_commitment(&input,value,M31(asset),&salt.map(M31));
 + assert!((got.map(|x|x.0)==reply && unsafe{CALLS}==1)!=cfg!(PCI_NEG_NOTE_CALLER));
 +}
 --- /dev/null
@@ -284,9 +290,10 @@
 +    }
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/PCI_SingleNative.rs
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,27 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCI_SingleReference.rs"] mod reference;
 +fn canonical(d:[u32;8])->bool{d[0]<P && d[1]<P && d[2]<P && d[3]<P && d[4]<P && d[5]<P && d[6]<P && d[7]<P}
 +// Assertions establish the call-site specialization from the ACTUAL parent's constructor.
 +// PCI_SingleValidation.validation proves this is the exact CLOSED223 law on this shape.
@@ -304,11 +311,20 @@
 + let d:[u32;8]=kani::any();let mut input=d.map(M31);
 + #[cfg(PCI_SINGLE_ARG_MUTANT)]{input[0].0^=1;}
 + let got=PoolV1PairLeafWitnessV1::single_output(input);
++ let expected=reference::single_reference(d);
 + let same=match got{
-+  Ok(w)=>canonical(d)&&w.first_commitment.map(|x|x.0)==d&&w.second_occupied==M31::ZERO&&w.second_occupancy_inverse==M31::ZERO&&w.second_commitment==[M31::ZERO;8],
-+  Err(e)=>!canonical(d)&&e==PoolV1PairLeafErrorV1::NonCanonicalCommitment
++  Ok(w)=>expected.tag==0&&w.first_commitment.map(|x|x.0)==expected.first&&w.second_occupied.0==expected.occupied&&w.second_occupancy_inverse.0==expected.inverse&&w.second_commitment.map(|x|x.0)==expected.second,
++  Err(e)=>expected.tag==1&&e==PoolV1PairLeafErrorV1::NonCanonicalCommitment
 + };
 + assert!(same!=cfg!(PCI_NEG_SINGLE));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_SingleReference.rs
+@@ -0,0 +1,5 @@
++pub struct Single{pub tag:u8,pub first:[u32;8],pub occupied:u32,pub second:[u32;8],pub inverse:u32}
++pub fn single_reference(d:[u32;8])->Single{
++ if d[0]<2147483647&&d[1]<2147483647&&d[2]<2147483647&&d[3]<2147483647&&d[4]<2147483647&&d[5]<2147483647&&d[6]<2147483647&&d[7]<2147483647{Single{tag:0,first:d,occupied:0,second:[0;8],inverse:0}}
++ else{Single{tag:1,first:[0;8],occupied:0,second:[0;8],inverse:0}}
 +}
 --- /dev/null
 +++ b/programs/aspis-pool/src/PCI_CountNative.rs
@@ -494,4 +510,36 @@
 +        salt,
 +        encrypted_note_payload: &bytes[INSTRUCTION_PAYLOAD_OFFSET..logical_len],
 +    })
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_AppendWindow.rs
+@@ -0,0 +1,29 @@
++extern crate alloc;
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn encode_spec(root:&Digest)->[u8;32]{
++ let mut out=[((root[0].0>>0) as u8),((root[0].0>>8) as u8),((root[0].0>>16) as u8),((root[0].0>>24) as u8),((root[1].0>>0) as u8),((root[1].0>>8) as u8),((root[1].0>>16) as u8),((root[1].0>>24) as u8),((root[2].0>>0) as u8),((root[2].0>>8) as u8),((root[2].0>>16) as u8),((root[2].0>>24) as u8),((root[3].0>>0) as u8),((root[3].0>>8) as u8),((root[3].0>>16) as u8),((root[3].0>>24) as u8),((root[4].0>>0) as u8),((root[4].0>>8) as u8),((root[4].0>>16) as u8),((root[4].0>>24) as u8),((root[5].0>>0) as u8),((root[5].0>>8) as u8),((root[5].0>>16) as u8),((root[5].0>>24) as u8),((root[6].0>>0) as u8),((root[6].0>>8) as u8),((root[6].0>>16) as u8),((root[6].0>>24) as u8),((root[7].0>>0) as u8),((root[7].0>>8) as u8),((root[7].0>>16) as u8),((root[7].0>>24) as u8)];
++ #[cfg(PCI_APPEND_SPEC_MUTANT)]{out[0]^=1;}
++ out
++}
++// (ah) exact loop body, with its mutable range projected to the valid owned window.
++fn append_window(data:&mut [u8;32],filled:u16,offset:usize,root:&Digest)->usize{
++ let slot=usize::from(filled)+offset;
++ let start=PAGE_ROOTS_OFFSET+slot*32;
++ data[0..32].copy_from_slice(&encode_digest_canonical(root));
++ start
++}
++#[kani::proof] #[kani::unwind(100)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(aspis_statement::encode_digest_canonical,encode_spec)]
++fn append_window_step(){
++ let filled:u16=kani::any();let offset:usize=kani::any();
++ kani::assume(filled<=256);kani::assume(offset<256-usize::from(filled));
++ let raw:[u32;8]=kani::any();let mut root=raw.map(aspis_core::field::M31);
++ #[cfg(PCI_APPEND_ARG_MUTANT)]{root[0].0^=1;}let before:[u8;32]=kani::any();let mut data=before;
++ let start=append_window(&mut data,filled,offset,&root);
++ let byte:usize=kani::any();kani::assume(byte<32);
++ let expected=(raw[byte/4]>>(8*(byte%4))) as u8;
++ assert!((data[byte]==expected)!=cfg!(PCI_NEG_APPEND_WINDOW));
++ assert_eq!(start,64+32*(usize::from(filled)+offset));
 +}

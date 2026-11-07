@@ -7,10 +7,8 @@ def window {T : Type} (bytes : Slice T) (start last : Usize)
     (ordered : start≤last) (bounded : last.val≤bytes.length) : Slice T :=
   ⟨List.slice start.val last.val bytes.val, by
     have h := bytes.property
-    have : (List.slice start.val last.val bytes.val).length≤bytes.val.length := by
-      simp only [List.slice]
-      exact le_trans (List.length_take_le _ _) (List.length_drop_le _ _)
-    scalar_tac⟩
+    simp only [List.slice,List.length_take,List.length_drop]
+    omega⟩
 
 theorem index {T : Type} (bytes : Slice T) (start last : Usize)
     (ordered : start≤last) (bounded : last.val≤bytes.length) :
@@ -22,8 +20,11 @@ theorem index {T : Type} (bytes : Slice T) (start last : Usize)
 theorem length {T : Type} (bytes : Slice T) (start last : Usize)
     (ordered : start≤last) (bounded : last.val≤bytes.length) :
     (window bytes start last ordered bounded).length=last.val-start.val := by
-  simp only [window,Slice.length,List.length_slice]
-  scalar_tac
+  change (List.slice start.val last.val bytes.val).length=last.val-start.val
+  have hs : start.val≤last.val := by scalar_tac
+  have he : last.val≤bytes.val.length := bounded
+  simp only [List.slice,List.length_take,List.length_drop]
+  omega
 
 #print axioms index
 #print axioms length

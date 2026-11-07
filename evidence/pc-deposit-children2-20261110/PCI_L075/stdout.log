@@ -1,0 +1,59 @@
+DEF NFY_NBG_WideBytes.word._proof_2
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (i : ℕ),
+  [(↑bytes)[4 * i]!, (↑bytes)[4 * i + 1]!, (↑bytes)[4 * i + 2]!, (↑bytes)[4 * i + 3]!].length = ↑4#usize
+DEF NFY_NBP_DecodeWord.P._proof_1
+TYPE 2147483647 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U32
+DEF NFY_NBG_WideBytes.limbs._proof_1
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  [NFY_NBG_WideBytes.word bytes 0, NFY_NBG_WideBytes.word bytes 1, NFY_NBG_WideBytes.word bytes 2,
+        NFY_NBG_WideBytes.word bytes 3, NFY_NBG_WideBytes.word bytes 4, NFY_NBG_WideBytes.word bytes 5,
+        NFY_NBG_WideBytes.word bytes 6, NFY_NBG_WideBytes.word bytes 7].length =
+    ↑8#usize
+DEF NFY_NBP_DecodeWord.reject0
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  NFY_NBP_DecodeWord.word bytes 0 ≥ NFY_NBP_DecodeWord.P →
+    AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical bytes =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisR1TerminalDecoder.atomic_statement.AtomicStatementError.NonCanonicalDigest)
+DEF NFY_NBG_WideBytes.limbs
+TYPE Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Array Aeneas.Std.U32 8#usize
+VALUE fun bytes =>
+  Aeneas.Std.Array.make 8#usize
+    [NFY_NBG_WideBytes.word bytes 0, NFY_NBG_WideBytes.word bytes 1, NFY_NBG_WideBytes.word bytes 2,
+      NFY_NBG_WideBytes.word bytes 3, NFY_NBG_WideBytes.word bytes 4, NFY_NBG_WideBytes.word bytes 5,
+      NFY_NBG_WideBytes.word bytes 6, NFY_NBG_WideBytes.word bytes 7]
+    ⋯
+DEF NFY_NBG_WideBytes.NE
+TYPE Type
+DEF NFY_NBG_WideBytes.word
+TYPE Aeneas.Std.Array Aeneas.Std.U8 32#usize → ℕ → Aeneas.Std.U32
+VALUE fun bytes i =>
+  Aeneas.Std.core.num.U32.from_le_bytes
+    (Aeneas.Std.Array.make 4#usize [(↑bytes)[4 * i]!, (↑bytes)[4 * i + 1]!, (↑bytes)[4 * i + 2]!, (↑bytes)[4 * i + 3]!]
+      ⋯)
+DEF NFY_NBG_WideBytes.word._proof_1
+TYPE 32 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+DEF NFY_NBP_DecodeWord.P
+TYPE Aeneas.Std.U32
+DEF NFY_NBG_WideBytes.limbs.eq_1
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  NFY_NBG_WideBytes.limbs bytes =
+    Aeneas.Std.Array.make 8#usize
+      [NFY_NBG_WideBytes.word bytes 0, NFY_NBG_WideBytes.word bytes 1, NFY_NBG_WideBytes.word bytes 2,
+        NFY_NBG_WideBytes.word bytes 3, NFY_NBG_WideBytes.word bytes 4, NFY_NBG_WideBytes.word bytes 5,
+        NFY_NBG_WideBytes.word bytes 6, NFY_NBG_WideBytes.word bytes 7]
+      ⋯
+DEF NFY_NBG_WideBytes.bytes_result
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes bytes.to_slice =
+    FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs (NFY_NBG_WideBytes.limbs bytes)
+DEF NFY_NBP_DecodeWord.word
+TYPE Aeneas.Std.Array Aeneas.Std.U8 32#usize → ℕ → Aeneas.Std.U32
+VALUE NFY_NBG_WideBytes.word
+DEF NFY_NBG_WideBytes.word.eq_1
+TYPE ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (i : ℕ),
+  NFY_NBG_WideBytes.word bytes i =
+    Aeneas.Std.core.num.U32.from_le_bytes
+      (Aeneas.Std.Array.make 4#usize
+        [(↑bytes)[4 * i]!, (↑bytes)[4 * i + 1]!, (↑bytes)[4 * i + 2]!, (↑bytes)[4 * i + 3]!] ⋯)
