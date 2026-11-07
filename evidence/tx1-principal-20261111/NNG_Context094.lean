@@ -39,4 +39,18 @@ def emitted (c : Calls) {H : Type} (D : aspis_core.digest.Digest32 H)
  (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
  (publicBytes proof : Slice U8) (k : Usize) (h : H) (obs : Option (verifier.Phase → Result Unit)) :=
  verifier.candidate.tx1 c.c0 c.c1 c.c2 c.c3 c.c4 c.c5 c.c6 c.c7 c.c8 c.c9 c.c10 c.c11 D pub publicBytes proof k h obs
+structure Parent (H : Type) where
+ digest : aspis_core.digest.Digest32 H
+ publicValue : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+ publicBytes : Slice U8
+ proof : Slice U8
+ k : Usize
+ hash : H
+ observer : Option (verifier.Phase → Result Unit)
+
+abbrev Output:=core.result.Result (alloc.vec.Vec U8) verifier.Error
+
+def body {H : Type} (c : Calls) (s : Parent H) :=
+ emitted c s.digest s.publicValue s.publicBytes s.proof s.k s.hash s.observer
+
 end AspisR1.NNG_Context094

@@ -5,7 +5,6 @@ noncomputable section
 namespace AspisR1.NNG_PrepareAdapter094
 open Aeneas Aeneas.Std Result NMT_tx1
 open NNG_Carriers094
-open NMT_Transport (arr)
 
 def digest {H : Type} (D : aspis_core.digest.Digest32 H) : NMP_prepare.aspis_core.digest.Digest32 H:=
  ⟨D.coremarkerCopyInst,D.digest⟩

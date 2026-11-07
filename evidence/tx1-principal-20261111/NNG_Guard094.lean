@@ -16,6 +16,8 @@ theorem source {H : Type} (c : NNG_Context094.Calls) (D : aspis_core.digest.Dige
 theorem reference (a : RSL.TX1_094.Args LIB_Instances.VL) (bad : (a.k != RSL.SPLIT)=true) :
  RSL.TX1_094.Ref LIB_Instances.VL LIB_Instances.P a=RSL.Spec.pure (.error LIB_Instances.VL.vParse) := by
  unfold RSL.TX1_094.Ref
- simp only [RSL.RE.check,bad,if_true,RSL.RE.seq,RSL.RE.bind_throw,RSL.RE.throw]
+ rw [bad]
+ change RSL.Spec.bind (RSL.Spec.pure (.error LIB_Instances.VL.vParse : Except LIB_Instances.VL.VErr Unit)) _ = _
+ rw [RSL.Spec.bind_pure]
 #print axioms reference
 end AspisR1.NNG_Guard094

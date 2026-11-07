@@ -85,86 +85,86 @@ end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT4 (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 :=
+def toT4 (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 :=
  ⟨x.pool,x.deployment_domain,x.anchor_sequence,x.anchor_root,x.nullifier,x.asset_id,x.amount,x.destination_token_account,x.change_commitment⟩
-def fromT4 (x : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 :=
+def fromT4 (x : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 :=
  ⟨x.pool,x.deployment_domain,x.anchor_sequence,x.anchor_root,x.nullifier,x.asset_id,x.amount,x.destination_token_account,x.change_commitment⟩
 @[simp] theorem toT4_inverse (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : fromT4 (toT4 x)=x := by
  cases x <;> simp [toT4,fromT4]
 #print axioms toT4_inverse
-@[simp] theorem fromT4_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : toT4 (fromT4 x)=x := by
+@[simp] theorem fromT4_inverse (x : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) : toT4 (fromT4 x)=x := by
  cases x <;> simp [fromT4,toT4]
 #print axioms fromT4_inverse
 end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT5 (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 :=
+def toT5 (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 :=
  ⟨x.pool,x.deployment_domain,x.anchor_sequence,x.anchor_root,x.nullifier,x.asset_id,x.recipient_commitment,x.change_commitment⟩
-def fromT5 (x : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 :=
+def fromT5 (x : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 :=
  ⟨x.pool,x.deployment_domain,x.anchor_sequence,x.anchor_root,x.nullifier,x.asset_id,x.recipient_commitment,x.change_commitment⟩
 @[simp] theorem toT5_inverse (x : NMT_tx1.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : fromT5 (toT5 x)=x := by
  cases x <;> simp [toT5,fromT5]
 #print axioms toT5_inverse
-@[simp] theorem fromT5_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : toT5 (fromT5 x)=x := by
+@[simp] theorem fromT5_inverse (x : AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) : toT5 (fromT5 x)=x := by
  cases x <;> simp [fromT5,toT5]
 #print axioms fromT5_inverse
 end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT6 (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 :=
+def toT6 (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 :=
  ⟨x.pool,x.deployment_domain,x.sequence,x.next_pair_index,x.current_root,x.frontier⟩
-def fromT6 (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 :=
+def fromT6 (x : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 :=
  ⟨x.pool,x.deployment_domain,x.sequence,x.next_pair_index,x.current_root,x.frontier⟩
 @[simp] theorem toT6_inverse (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : fromT6 (toT6 x)=x := by
  cases x <;> simp [toT6,fromT6]
 #print axioms toT6_inverse
-@[simp] theorem fromT6_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : toT6 (fromT6 x)=x := by
+@[simp] theorem fromT6_inverse (x : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : toT6 (fromT6 x)=x := by
  cases x <;> simp [fromT6,toT6]
 #print axioms fromT6_inverse
 end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT7 (x : NMT_tx1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
+def toT7 (x : NMT_tx1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : AspisR1PublicPreparation.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
  ⟨x.next_pair_index,x.next_root,x.next_frontier⟩
-def fromT7 (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : NMT_tx1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
+def fromT7 (x : AspisR1PublicPreparation.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : NMT_tx1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
  ⟨x.next_pair_index,x.next_root,x.next_frontier⟩
 @[simp] theorem toT7_inverse (x : NMT_tx1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : fromT7 (toT7 x)=x := by
  cases x <;> simp [toT7,fromT7]
 #print axioms toT7_inverse
-@[simp] theorem fromT7_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : toT7 (fromT7 x)=x := by
+@[simp] theorem fromT7_inverse (x : AspisR1PublicPreparation.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : toT7 (fromT7 x)=x := by
  cases x <;> simp [fromT7,toT7]
 #print axioms fromT7_inverse
 end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT8 (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 :=
+def toT8 (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 :=
  ⟨toT6 (x.live_snapshot),toT7 (x.candidate_afterstate)⟩
-def fromT8 (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 :=
+def fromT8 (x : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 :=
  ⟨fromT6 (x.live_snapshot),fromT7 (x.candidate_afterstate)⟩
 @[simp] theorem toT8_inverse (x : NMT_tx1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : fromT8 (toT8 x)=x := by
  cases x <;> simp [toT8,fromT8]
 #print axioms toT8_inverse
-@[simp] theorem fromT8_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : toT8 (fromT8 x)=x := by
+@[simp] theorem fromT8_inverse (x : AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1) : toT8 (fromT8 x)=x := by
  cases x <;> simp [fromT8,toT8]
 #print axioms fromT8_inverse
 end AspisR1.NNG_Carriers094
 
 namespace AspisR1.NNG_Carriers094
 open Aeneas Aeneas.Std
-def toT9 : NMT_tx1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → AspisR1PublicPreparation.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+def toT9 : NMT_tx1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public
  | .Transfer x0 x1 => .Transfer (toT5 (x0)) (toT8 (x1))
  | .Withdrawal x0 x1 => .Withdrawal (toT4 (x0)) (toT8 (x1))
-def fromT9 : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → NMT_tx1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+def fromT9 : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public → NMT_tx1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
  | .Transfer x0 x1 => .Transfer (fromT5 (x0)) (fromT8 (x1))
  | .Withdrawal x0 x1 => .Withdrawal (fromT4 (x0)) (fromT8 (x1))
 @[simp] theorem toT9_inverse (x : NMT_tx1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) : fromT9 (toT9 x)=x := by
  cases x <;> simp [toT9,fromT9]
 #print axioms toT9_inverse
-@[simp] theorem fromT9_inverse (x : AspisR1PublicPreparation.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) : toT9 (fromT9 x)=x := by
+@[simp] theorem fromT9_inverse (x : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public) : toT9 (fromT9 x)=x := by
  cases x <;> simp [fromT9,toT9]
 #print axioms fromT9_inverse
 end AspisR1.NNG_Carriers094

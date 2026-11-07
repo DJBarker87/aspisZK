@@ -1,0 +1,37 @@
+'AspisR1.NNG_Guard094.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_Guard094.lean:17:102: error: unsolved goals
+a : RSL.TX1_094.Args LIB_Instances.VL
+bad : (a.k != RSL.SPLIT) = true
+⊢ (RSL.RE.bind (RSL.Spec.pure (Except.error LIB_Instances.VL.vParse)) fun x =>
+      RSL.RE.bind (LIB_Instances.VL.parseShape.run a.proof) fun x =>
+        RSL.RE.bind (LIB_Instances.VL.canonicalScan.run a.proof) fun x =>
+          RSL.RE.bind
+            ((RSL.Spec.call (fun x => RSL.TX1_087.Domain LIB_Instances.VL x none)
+                  (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+                  { public_ := a.public_, proof := a.proof, g := LIB_Instances.VL.zeroE29 }).bind
+              fun r =>
+              match r.1 with
+              | Except.ok p => RSL.Spec.pure (Except.ok (p, r.2))
+              | Except.error e => RSL.Spec.pure (Except.error e))
+            fun pg =>
+            RSL.RE.bind (LIB_Instances.VL.accNew.run ()) fun acc =>
+              match RSL.TX1_136.toB32 (RSL.slice a.proof RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1) with
+              | none => RSL.RE.lift RSL.Spec.panic
+              | some folded =>
+                RSL.RE.bind (LIB_Instances.VL.batchMerkle.run (a.proof, pg.1, folded, 0)) fun x =>
+                  RSL.RE.bind (LIB_Instances.VL.geometry.run (pg.1, 0, a.k)) fun geo =>
+                    RSL.RE.bind (LIB_Instances.VL.weightsNew.run acc) fun pending =>
+                      RSL.RE.bind (LIB_Instances.VL.queryLoop.run (a.proof, pg.1, acc, pg.2, geo, pending, a.k))
+                        fun r =>
+                        (RSL.RE.lift (LIB_Instances.VL.finish.run (r.2, r.1))).bind fun acc2 =>
+                          (RSL.RE.lift (LIB_Instances.VL.checkpoint.run (pg.1, acc2, a.proof, a.public_bytes))).bind
+                            fun bytes => RSL.RE.pure bytes) =
+    RSL.Spec.pure (Except.error LIB_Instances.VL.vParse)
+NNG_generated/NNG_Guard094.lean:19:48: warning: This simp argument is unused:
+  RSL.RE.bind_throw
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵S̵L̵.̵R̵E̵.̵c̵h̵e̵c̵k̵,̵b̵a̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵R̵S̵L̵.̵R̵E̵.̵s̵e̵q̵,̵R̵S̵L̵.̵R̵E̵.̵b̵i̵n̵d̵_̵t̵h̵r̵o̵w̵,̵R̵S̵L̵.̵R̵E̵.̵t̵h̵r̵o̵w̵]̵[̲R̲S̲L̲.̲R̲E̲.̲c̲h̲e̲c̲k̲,̲ ̲b̲a̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲R̲S̲L̲.̲R̲E̲.̲s̲e̲q̲,̲ ̲R̲S̲L̲.̲R̲E̲.̲t̲h̲r̲o̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_Guard094.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
