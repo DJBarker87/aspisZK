@@ -242,3 +242,5 @@ Session4 49163: pinned PV_THR2_PacketJoinedRetained121 passed; session4 receipt 
 Session4 49164: pinned PV_THR2_HandlerExecutionAgreement passed; session4 receipt records resources/axioms.
 
 Session4 49165: pinned PV_THR2_InterpreterAgreement passed; session4 receipt records resources/axioms.
+
+Session4 49166: pinned PV_THR2_PacketJoinedPrefixAgreement passed; session4 receipt records resources/axioms.
