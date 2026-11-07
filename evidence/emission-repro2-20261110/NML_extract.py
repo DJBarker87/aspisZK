@@ -26,7 +26,7 @@ original_run=subprocess.run
 def measured(cmd,*a,**kw):
  tool=next((k for k in ['charon','aeneas'] if cmd[0]==spec[k+'_command'][0]),None)
  if not tool:return original_run(cmd,*a,**kw)
- entry=dict(attempt=run,tool=tool,command=cmd,started_unix=time.time(),source_revision=m.REV,tool_sha256=hashlib.sha256(Path(cmd[0]).read_bytes()).hexdigest(),archive_source_sha256=spec['reference_sha256'],archive_manifest_sha256=spec['manifest_sha256'])
+ entry=dict(attempt=run,tool=tool,command=cmd,started_unix=time.time(),source_revision=json.loads((E/(run+'.json')).read_text())['source_revision'],frozen_validation_revision=m.REV,archive_source_git_blob=spec['configuration']['source']['git_blob'],tool_sha256=hashlib.sha256(Path(cmd[0]).read_bytes()).hexdigest(),archive_source_sha256=spec['reference_sha256'],archive_manifest_sha256=spec['manifest_sha256'])
  with (E/'NML_TOOL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n');f.flush();os.fsync(f.fileno())
  r=original_run(['/usr/bin/time','-v','-o',str(out/(tool+'.time'))]+cmd,*a,**kw)
  entry.update(exit=r.returncode,wall_seconds=time.time()-entry['started_unix'],time_receipt=str(out/(tool+'.time')))
@@ -42,6 +42,7 @@ assert hashlib.sha256(manifest.read_bytes()).hexdigest()==spec['manifest_sha256'
 try:
  status=m.extract(args,E/'NML_workspace',out)
 finally:
+ for extra in spec.get('package_extras',[]):assert hashlib.sha256((ref/extra['relative_path']).read_bytes()).hexdigest()==extra['sha256'],'STOP archived package input drift'
  assert hashlib.sha256(source.read_bytes()).hexdigest()==spec['reference_sha256'],'STOP archive input drift'
  assert hashlib.sha256(manifest.read_bytes()).hexdigest()==spec['manifest_sha256'],'STOP archive manifest drift'
  lock=ref/'Cargo.lock'
