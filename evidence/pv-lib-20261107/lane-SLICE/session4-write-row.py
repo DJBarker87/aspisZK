@@ -40,7 +40,11 @@ if row=='f0':
   foundation : PV_STX2_Source7EntryOwned.Foundation'''
  eparent='e.toArrayEntry.toEntry';earray='e.toArrayEntry'
  pre='''ArrayPre m (start e) e.toArrayEntry ∧
-  PV_STX2_Source7EntryReferenceValid.Source7EntryOwned e.owner e.foundation ∧
+  ∃ entry : PV_STX2_Source7EntryReferenceValid.Source7EntryOwned e.owner e.foundation,
+  (∀ i : Fin 16, let j : Fin e.foundation.c1.val.length := ⟨i.val, by simpa using i.isLt⟩
+    (e.columns i).identity = PV_STX2_Source7EntrySelection.identity entry.previous.previous.owned j ∧
+    (e.columns i).header = PV_STX2_Source7EntrySelection.header entry.previous.previous.owned j ∧
+    (e.columns i).region.place = PV_STX2_Source7EntrySelection.place entry.previous.previous.owned j) ∧
   e.arrayAddress = {e.foundationAddress with fields := e.foundationAddress.fields ++ [0]} ∧
   readAddress m.carrier (start e).store e.foundationAddress =
     some (PV_STX2_Aggregates.pack PV_STX2_AggregateKinds.source7Kind
