@@ -1,0 +1,40 @@
+PCM_sources/PCM_Spec_POOL_339.lean:36:4: error: Tactic `apply` failed: could not unify the conclusion of `@bind_avoid`
+  Avoid ?bad (Computation.bind ?m ?k)
+with the goal
+  Avoid ProgramError.invalidArgument
+    (have __do_jp := fun statement =>
+      mapError (fun x => ProgramError.custom 1095966765) (C.validate.call (statement, result));
+    match request.pub with
+    | Payment.transfer p => do
+      let statement ← PCM_POOL_338.Ref (common, p)
+      __do_jp statement
+    | Payment.withdrawal p => do
+      let statement ← PCM_POOL_342.Ref (common, p)
+      __do_jp statement)
+
+Note: The full type of `@bind_avoid` is
+  ∀ {A B : Type} (bad : ProgramError) (m : Computation A) (k : A → Computation B),
+    Avoid bad m → (∀ (a : A), Avoid bad (k a)) → Avoid bad (m.bind k)
+
+case hk
+C : Children
+ma ca la : B32
+master : Master
+checkpoint : Checkpoint
+lane : LaneState
+output : UInt8
+request : Request
+result : TerminalResult
+common : Common
+⊢ Avoid ProgramError.invalidArgument
+    (have __do_jp := fun statement =>
+      mapError (fun x => ProgramError.custom 1095966765) (C.validate.call (statement, result));
+    match request.pub with
+    | Payment.transfer p => do
+      let statement ← PCM_POOL_338.Ref (common, p)
+      __do_jp statement
+    | Payment.withdrawal p => do
+      let statement ← PCM_POOL_342.Ref (common, p)
+      __do_jp statement)
+'PCM_POOL_339.avoids_wrong_error' depends on axioms: [propext, sorryAx]
+'PCM_POOL_339.rejects_wrong_error' depends on axioms: [propext, sorryAx]

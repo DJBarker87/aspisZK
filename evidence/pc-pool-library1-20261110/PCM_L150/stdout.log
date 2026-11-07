@@ -1,0 +1,44 @@
+PCD_Row320.result_state_effects {State : Type} (lane : PCD_LaneRef.Lane) (result : PCD_Row320.TerminalResult)
+  (state : State) :
+  (PCD_Row320.nativeSegments lane result, state, []) =
+    (Aeneas.Std.Result.ok (PCD_Row320.RowSpec_POOL_320 lane result), state, [])
+PCD_Row320.RowSpec_POOL_320 (lane : PCD_LaneRef.Lane) (result : PCD_Row320.TerminalResult) : PCD.Exit PCD_LaneRef.Lane
+PCD_RequestRoot.result_state_effects {State : Type} (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (allocation : PCD_Request.Allocation) (state : State) :
+  (PCD_BoxFold.source bytes allocation, state) = (PCD_RequestRoot.RowSpec_POOL_314 bytes allocation, state)
+PCD_RequestRoot.emitted_reply (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (allocation : PCD_Request.Allocation) :
+  PCD_RequestRoot.attachAllocation allocation
+      (PCD_RequestRoot.observe (PCD_FrozenRequest.pair_forest.decode_terminal_request_box_v1 bytes)) =
+    (PCD_BoxFold.source bytes allocation).reply
+PCF_Payer.result_state_effects (args : ℕ × ℕ) (s : PCA.PCA_State) :
+  ∃ out,
+    PCF_AccountRef.payer_reference (s.loans.state.accounts args.1).signer (s.loans.state.accounts args.1).writable
+          (s.loans.state.accounts args.1).executable ((s.loans.state.accounts args.1).owner == PCA.system_program)
+          ((s.loans.state.accounts args.2).key == PCA.system_program)
+          ((s.loans.state.accounts args.2).owner == PCA.native_loader) (s.loans.state.accounts args.2).executable
+          (s.loans.state.accounts args.2).signer (s.loans.state.accounts args.2).writable =
+        Aeneas.Std.Result.ok out ∧
+      PCA.payerSystemReference args s =
+        { state := s, events := [],
+          reply := if ↑out = 0 then PCA.Outcome.ok () else PCA.Outcome.error (PCA.Failure.program (UInt64.ofNat ↑out)) }
+PCF_Token.result_state_effects (account : ℕ) (s : PCA.PCA_State) :
+  ∃ out,
+    PCF_AccountRef.token_reference ((s.loans.state.accounts account).key == PCA.token_program)
+          (s.loans.state.accounts account).executable (s.loans.state.accounts account).signer
+          (s.loans.state.accounts account).writable ((s.loans.state.accounts account).owner == PCA.bpf_loader)
+          ((s.loans.state.accounts account).owner == PCA.bpf_loader_upgradeable)
+          ((s.loans.state.accounts account).owner == PCA.loader_v4) =
+        Aeneas.Std.Result.ok out ∧
+      PCA.tokenProgramReference account s =
+        { state := s, events := [],
+          reply := if ↑out = 0 then PCA.Outcome.ok () else PCA.Outcome.error (PCA.Failure.program (UInt64.ofNat ↑out)) }
+PCI_Note.forwarding.{u, v} {State : Type u} {Outcome : Type v}
+  (hash : Aeneas.Std.U32 → Aeneas.Std.Array Aeneas.Std.U32 18#usize → State → Outcome) (owner : PCI_Note.Digest)
+  (value asset : Aeneas.Std.U32) (salt : PCI_Note.Digest) (state : State) :
+  PCI_Note.applyHash hash owner value asset salt state =
+    hash 1095958531#u32 (PCI_Note.input owner value asset salt) state
+'PCD_Row320.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCD_RequestRoot.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCF_Payer.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCF_Token.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCI_Note.forwarding' depends on axioms: [propext, Classical.choice, Quot.sound]

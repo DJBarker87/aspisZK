@@ -1,0 +1,41 @@
+{"attempt": "PCM_L142", "exit_status": 1, "wall_seconds": 0.2739624490495771, "peak_rss_kib": "479628", "swaps": "0", "print_axioms": ["'PCM.Page.get_avoid' does not depend on any axioms", "'PCM.Page.write_avoid' does not depend on any axioms", "'PCM.Page.patch_avoid' depends on axioms: [sorryAx]", "'PCM.Page.roots_avoid' depends on axioms: [propext, sorryAx]"]}
+PCM_sources/PCM_PageLaws.lean:23:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case hk
+bad : ProgramError
+account : AccountInfo
+offset : Nat
+bytes : Bytes
+s : State
+⊢ Avoid bad
+    (have old := s.bytes account;
+    if offset + List.length bytes ≤ List.length old then
+      write account (List.take offset old ++ bytes ++ List.drop (offset + List.length bytes) old)
+    else fun x x_1 o => o = { exit := Exit.abort, events := [] })
+'PCM.Page.get_avoid' does not depend on any axioms
+'PCM.Page.write_avoid' does not depend on any axioms
+'PCM.Page.patch_avoid' d
+...
+PCM_sources/PCM_PageLaws.lean:23:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case hk
+bad : ProgramError
+account : AccountInfo
+offset : Nat
+bytes : Bytes
+s : State
+⊢ Avoid bad
+    (have old := s.bytes account;
+    if offset + List.length bytes ≤ List.length old then
+      write account (List.take offset old ++ bytes ++ List.drop (offset + List.length bytes) old)
+    else fun x x_1 o => o = { exit := Exit.abort, events := [] })
+'PCM.Page.get_avoid' does not depend on any axioms
+'PCM.Page.write_avoid' does not depend on any axioms
+'PCM.Page.patch_avoid' depends on axioms: [sorryAx]
+'PCM.Page.roots_avoid' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r1bb851fec79b4ba0a4405bcfdb69128f.scope; invocation ID: c107032ee62546dc9b737ef3cbad7f17

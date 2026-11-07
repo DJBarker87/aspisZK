@@ -1,0 +1,50 @@
+{"attempt": "PCM_L106", "exit_status": 1, "wall_seconds": 0.5090004301164299, "peak_rss_kib": "471500", "swaps": "0", "print_axioms": ["'PCM_POOL_326.rejects_wrong_error' depends on axioms: [propext, sorryAx]"]}
+PCM_sources/PCM_Spec_POOL_326.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  C.append.call ((lane, laneId, leaf).fst.tree, (lane, laneId, leaf).snd.snd, EMPTY_ROOTS)
+in the target expression
+  (match (lane, laneId, leaf) with
+    | (lane, laneId, leaf) => do
+      let __x ← mapError (fun x => ProgramError.custom 1095966723) (C.append.call (lane.tree, leaf, EMPTY_ROOTS))
+      match __x with
+        | (tree, append) => do
+          alloc
+          have nextLane : LaneState := { bump := lane.bump, master := lane.master, lane_id := laneId, tree := tree }
+          let image ← mapError (fun x => ProgramError.custom 1095966723) (C.encode.call (nextLane, EMP
+...
+PCM_sources/PCM_Spec_POOL_326.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  C.append.call ((lane, laneId, leaf).fst.tree, (lane, laneId, leaf).snd.snd, EMPTY_ROOTS)
+in the target expression
+  (match (lane, laneId, leaf) with
+    | (lane, laneId, leaf) => do
+      let __x ← mapError (fun x => ProgramError.custom 1095966723) (C.append.call (lane.tree, leaf, EMPTY_ROOTS))
+      match __x with
+        | (tree, append) => do
+          alloc
+          have nextLane : LaneState := { bump := lane.bump, master := lane.master, lane_id := laneId, tree := tree }
+          let image ← mapError (fun x => ProgramError.custom 1095966723) (C.encode.call (nextLane, EMPTY_ROOTS))
+          alloc
+          Computation.pure (append, image)) =
+    Computation.throw (ProgramError.custom 1095966723)
+
+case early
+C : Children
+lane : LaneState
+laneId : UInt8
+leaf : Digest
+early :
+  C.append.call ((lane, laneId, leaf).fst.tree, (lane, laneId, leaf).snd.snd, EMPTY_ROOTS) =
+    Computation.throw (ProgramError.custom 1095966723)
+⊢ (match (lane, laneId, leaf) with
+    | (lane, laneId, leaf) => do
+      let __x ← mapError (fun x => ProgramError.custom 1095966723) (C.append.call (lane.tree, leaf, EMPTY_ROOTS))
+      match __x with
+        | (tree, append) => do
+          alloc
+          have nextLane : LaneState := { bump := lane.bump, master := lane.master, lane_id := laneId, tree := tree }
+          let image ← mapError (fun x => ProgramError.custom 1095966723) (C.encode.call (nextLane, EMPTY_ROOTS))
+          alloc
+          Computation.pure (append, image)) =
+    Computation.throw (ProgramError.custom 1095966723)
+'PCM_POOL_326.rejects_wrong_error' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-rca8ab87ee621487980871687bd3153bd.scope; invocation ID: 3ed190a2fc774bbf824c3b14dd4717a8

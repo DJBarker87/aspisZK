@@ -1,0 +1,3 @@
+# PCM proof helper reuse
+
+The first private unchanged LIB_ResultTotal check (L151) reached the quarantined NLW_COMBINED_IMPORT through LIB_Carriers. No blocked object was copied or compiled. To continue independent fields, PCM_ResultTotal and the PCM V1/V2/policy helper modules preserve the existing mathematical definitions/proofs under the owned prefix, with only imports/namespace references narrowed to the actual pure dependencies. This is proof work and dependency isolation, not a repair to shared launchers or a redemption of a native verdict. Native supplier roots and all frozen specifications remain unchanged. The exact source files are committed, and each helper is compiled in its own admitted scope.

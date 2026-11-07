@@ -1,0 +1,38 @@
+import PCI_Note
+import PCM_Inst_GraphCompositions
+set_option autoImplicit false
+namespace PCM_Inst_NoteSource
+open Aeneas Aeneas.Std
+abbrev Args := PCI_Note.Digest × U32 × U32 × PCI_Note.Digest
+/-- This is the actual generic callee argument, not a substitute hash law.
+Its caller must supply the SAME closed hash occurrence and the carrier adapter. -/
+abbrev Hash := U32 → Array U32 18#usize → PCM.State → RSL.Env → PCM.Observation RSL.Digest
+
+def model (hash : Hash) (a : Args) (s : PCM.State) (env : RSL.Env) :=
+ hash 1095958531#u32 (PCI_Note.input a.1 a.2.1 a.2.2.1 a.2.2.2) s env
+
+def child (hash : Hash) : PCM.Child Args RSL.Digest :=
+ PCM_Inst_GraphCompositions.install (fun _ => True) (model hash)
+
+theorem source_graph (hash : Hash) (a : Args) (s : PCM.State) (env : RSL.Env)
+    (o : PCM.Observation RSL.Digest) :
+    (child hash).call a s env o ↔ True ∧ o = model hash a s env :=
+ PCM_Inst_GraphCompositions.call_exact _ _ _ _ _ _
+
+/-- Full observation, not only the returned digest: no suffix or state is
+invented if this exact invocation aborts. -/
+theorem forwarding (hash : Hash) (a : Args) (s : PCM.State) (env : RSL.Env) :
+ (child hash).call a s env
+  (PCI_Note.applyHash (fun tag words state => hash tag words state env)
+    a.1 a.2.1 a.2.2.1 a.2.2.2 s) := by
+ apply (source_graph _ _ _ _ _).mpr
+ exact ⟨trivial,PCI_Note.forwarding _ _ _ _ _ _⟩
+
+theorem input_order (a : Args) :
+ PCI_NoteRef.note_input a.1 a.2.1 a.2.2.1 a.2.2.2 =
+  Result.ok (PCI_Note.input a.1 a.2.1 a.2.2.1 a.2.2.2) :=
+ PCI_Note.extracted_input _ _ _ _
+#print axioms source_graph
+#print axioms forwarding
+#print axioms input_order
+end PCM_Inst_NoteSource
