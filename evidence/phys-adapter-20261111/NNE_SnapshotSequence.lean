@@ -39,7 +39,7 @@ theorem returned (e : Entry) (indices : List Nat) (lenses : List (Nat × Nat))
      rfl
    · rw [hpost]
      congr 1
-     simp only [List.length_cons,Nat.min_add_add_right]
+     simp only [List.length_cons]
      omega
 
 theorem first (err : NNE_Snapshot.PE → ProgramError)
