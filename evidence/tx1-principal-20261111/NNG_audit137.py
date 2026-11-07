@@ -22,7 +22,7 @@ execute('NNG_L360','NNG_L487')
 execute('NNG_L361','NNG_L488')
 groups=json.loads((E/'NNG_C137_AUDIT_ROOTS.json').read_text())['groups']
 for i in range(len(groups)):
- execute('NNG_L362',f'NNG_L{489+i}',extra={'module':f'137 raw ax2 proof{i}', 'command':['python3','NNG_C137_audit_batch.py',f'proof{i}']})
+ execute('NNG_L362',f'NNG_L{489+i}',extra={'module':f'137 raw ax2 proof{i}', 'command':['python3','NNG_C137_audit_batch.py',f'proof{i}'],'collect_globs':[f'NNG_C137_audit/proof{i}/*']})
 results=[]
 for i in range(len(groups)):
  r=json.loads((E/f'NNG_C137_audit/proof{i}/proof{i}.json').read_text());assert r['exit_status']==0
