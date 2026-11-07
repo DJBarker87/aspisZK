@@ -71,3 +71,5 @@ Attempt 49628: PV_W5_LocalReplyFrame, passed pinned focused replay.
 Attempt 49629: PV_W5_F32Abort, passed pinned focused replay.
 
 Attempt 49630: PV_W5_F32PanicFrame, passed pinned focused replay.
+
+Attempt 49631: PV_W5_F32AbortCompletion, passed pinned focused replay.
