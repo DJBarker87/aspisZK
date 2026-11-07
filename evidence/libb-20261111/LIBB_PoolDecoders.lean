@@ -27,11 +27,13 @@ def outputLane (b : RSL.B32) : Option UInt8 :=
 theorem decode_root (b : Slice U8) :
  LIBB_ResultTotal.mapOuter (asOption id) (AspisR1.NFY_JHd_RequestNative.decode b) =
  .ok (decodeRequest (LIB_Carriers.bytes b)) := by
- rw [NMS_R2DecoderImage.same_input]
  obtain ⟨decoded, run⟩ := NMS_R2RequestTotal.total b
- unfold NMS_R2DecoderImage.option
- rw [run]
- cases decoded <;> rfl
+ have same := NMS_R2DecoderImage.same_input b
+ unfold NMS_R2DecoderImage.option at same
+ rw [run] at same
+ apply Eq.trans _ (congrArg Result.ok same.symm)
+ have h := congrArg (LIBB_ResultTotal.mapOuter (asOption (id : Request → Request))) run
+ exact h.trans (by cases decoded <;> rfl)
 
 theorem nullifier_source (q : Request) :
  LIBB_ResultTotal.mapOuter LIBB_NullifierBytes.key (NMS_RequestModels.nullifier q.«public») =
@@ -43,8 +45,7 @@ theorem outputLane_source (d : LIBB_NullifierBytes.Digest) :
  LIBB_ResultTotal.mapOuter (asOption NND_Carrier.byte) (NMS_RequestModels.outputLane d) =
  .ok (outputLane (LIBB_NullifierBytes.key d)) := by
  rw [NMS_R2LaneModel.source]
- unfold outputLane
- rw [LIBB_NullifierBytes.roundtrip]
+ simp only [outputLane,LIBB_NullifierBytes.roundtrip]
  unfold NMS_R2LaneModel.result
  cases NFY_NBN_OutputLane.result d <;> rfl
 
