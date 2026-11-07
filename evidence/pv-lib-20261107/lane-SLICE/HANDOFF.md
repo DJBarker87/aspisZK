@@ -79,3 +79,5 @@ Attempt 49632: PV_W5_F32PanicCompletion, passed pinned focused replay.
 Attempt 49633: PV_W5_LocalCompletionEvents, passed pinned focused replay.
 
 Attempt 49634: PV_W5_F32UnitReturn, passed pinned focused replay.
+
+Attempt 49635: PV_W5_F32UnitCompletion, passed pinned focused replay.
