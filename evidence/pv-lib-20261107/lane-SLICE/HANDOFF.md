@@ -96,3 +96,5 @@ D978 attempt 49916: PV_STX2_Source7EntryOwnedAligned: passing pinned replay.
 D978 attempt 49917: PV_STX2_Source7EntryReferenceValid: passing pinned replay.
 
 D978 49918: exact Foundation caller-obligation assembly, converse, compatibility and column projection compiled (exit0, wall0:01.91, peak4568680KiB, swaps0). Actual builder provenance remains explicit; no new endpoint premise. New-root raw audit pending.
+
+D978 49919: new-root-only raw-audit driver compiled. Collector/walker unchanged; only module/root arrays differ.
