@@ -1,0 +1,109 @@
+from NMM_native import *
+P='programs/r1-cost-probe/src/r1_pool_adapter.rs'
+COMMON='''use super::*;
+use core::cell::UnsafeCell;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+// One real local allocation. Every log region is disjoint from shared bytes.
+#[repr(C,align(4))]
+struct NMM_Input { bytes:[u8;768], args:UnsafeCell<[u8;768]>, replies:UnsafeCell<[u32;192]>, flags:UnsafeCell<[u8;768]> }
+fn NMM_error(tag:u8)->aspis_statement::AtomicStatementError {
+ use aspis_statement::AtomicStatementError::*;
+ match tag {1=>NonCanonicalDigest,2=>NonCanonicalAssetId,3=>FeeOutOfRange,4=>PathDepthMismatch,5=>InsertionIndexOutOfRange,6=>CurrentAnchorMismatch,_=>OutputAnchorMismatch}
+}
+fn NMM_digest_cut(bytes:&[u8;32])->Result<[M31;8],aspis_statement::AtomicStatementError>{
+ let raw:[u32;8]=kani::any();let tag:u8=kani::any();kani::assume(tag<8);
+ unsafe {
+  let p=bytes.as_ptr();
+  let args=p.add(768) as *const UnsafeCell<[u8;32]>;
+  let reply=p.add(1536) as *const UnsafeCell<[u32;8]>;
+  let flag=p.add(2304) as *const UnsafeCell<u8>;
+  (*args).get().write(*bytes);
+  (*reply).get().write(raw);
+  assert!(*(*flag).get()==0,"child input window called once");
+  (*flag).get().write(tag+1);
+ }
+ if tag==0 {Ok(raw.map(M31))}else{Err(NMM_error(tag))}
+}
+fn NMM_replay(log:&NMM_Input,bytes:&[u8;32])->Result<[M31;8],aspis_statement::AtomicStatementError>{
+ let offset=unsafe{bytes.as_ptr().offset_from(log.bytes.as_ptr())};
+ assert!(offset>=0 && offset<=736 && offset%32==0,"transcription call window");
+ let k=offset as usize;
+ unsafe {
+  let tag=(*log.flags.get())[k];
+  assert!(tag>0 && tag<=8,"recorded call present");
+  kani::assume(tag>0 && tag<=8);
+  (*log.flags.get())[k]=0;
+  for j in 0..32 {assert!((*log.args.get())[k+j]==bytes[j],"exact recorded callee argument");}
+  let mut raw=[0u32;8];for j in 0..8 {raw[j]=(*log.replies.get())[k/4+j];}
+  if tag==1 {Ok(raw.map(M31))}else{Err(NMM_error(tag-1))}
+ }
+}
+fn NMM_same(a:&Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>,b:&Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>)->bool{
+ match(a,b){(Err(x),Err(y))=>x==y,(Ok(x),Ok(y))=>x.bump==y.bump&&x.master==y.master&&x.lane_id==y.lane_id&&x.tree.next_leaf_index==y.tree.next_leaf_index&&x.tree.root==y.tree.root&&x.tree.frontier==y.tree.frontier,_=>false}
+}
+'''
+ANN='''#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(aspis_statement::atomic_statement::decode_digest_canonical,NMM_digest_cut)]
+'''
+def attempt(a,branch,mode):
+ ref=(E/'NMM_FROZEN_217.rs').read_text().replace('fn decode_lane_from_pool_release(', 'fn NMM_reference(log:&NMM_Input,',1).replace('decode_digest_canonical(', 'NMM_replay(log,')
+ text=COMMON+ref+ANN+'''fn stage(){
+ let input=NMM_Input{bytes:kani::any(),args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};
+ let observer:usize=kani::any();kani::assume(observer<768);
+ let before=input.bytes[observer];
+ kani::assume(DOMAIN);
+ let native=decode_lane_from_pool_release(&input.bytes);
+ let reference=NMM_reference(&input,&input.bytes);
+ assert!(NMM_same(&native,&reference),"complete outcome from recorded replies");
+ assert!(input.bytes[observer]==before,"immutable input frame");
+ let remaining=unsafe{(*input.flags.get())[observer]};
+ assert!(remaining==0 || remaining>=16,"no unmatched child argument record");
+}
+'''
+ domains={'whole':'true','header':'input.bytes[..4]!=POOL_V1_PAIR_FOREST_LANE_MAGIC','body':'input.bytes[..4]==POOL_V1_PAIR_FOREST_LANE_MAGIC'}
+ if branch=='observed':
+  domains[branch]='true'
+  text=text.replace('fn NMM_reference(log:&NMM_Input,\n    bytes: &[u8],\n) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError>', 'fn NMM_reference(log:&NMM_Input,\n    bytes: &[u8],\n) -> Result<PoolV1PairForestLaneStateV1, ProgramError>')
+  text=text.replace('Ok(Box::new(PoolV1PairForestLaneStateV1 {','Ok(PoolV1PairForestLaneStateV1 {')
+  text=text.replace('        },\n    }))','        },\n    })')
+  text=text.replace('b:&Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>)->bool','b:&Result<PoolV1PairForestLaneStateV1,ProgramError>,level:usize)->bool')
+  text=text.replace('x.tree.frontier==y.tree.frontier','x.tree.frontier[level]==y.tree.frontier[level]')
+  text=text.replace('let before=input.bytes[observer];','let before=input.bytes[observer];let level:usize=kani::any();kani::assume(level<20);')
+  text=text.replace('NMM_same(&native,&reference)','NMM_same(&native,&reference,level)')
+ if branch=='rooterr':
+  domains[branch]='true'
+  text=text.replace('kani::assume(tag<8);','kani::assume(tag>0 && tag<8);')
+  text=text.replace('if tag==0 {Ok(raw.map(M31))}else{Err(NMM_error(tag))}','Err(NMM_error(tag))')
+  text=text.replace('if tag==1 {Ok(raw.map(M31))}else{Err(NMM_error(tag-1))}','Err(NMM_error(tag-1))')
+ if branch=='headercut':
+  domains[branch]=domains['header']
+  start=text.index('fn NMM_digest_cut(');end=text.index('fn NMM_replay(',start)
+  text=text[:start]+"fn NMM_digest_cut(_: &[u8;32])->Result<[M31;8],aspis_statement::AtomicStatementError>{panic!(\"unreachable child on header branch\")}\n"+text[end:]
+  start=text.index('fn NMM_reference(');end=text.index('#[kani::proof]',start)
+  text=text[:start]+"fn NMM_reference(_: &NMM_Input,_: &[u8])->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{Err(ProgramError::InvalidAccountData)}\n"+text[end:]
+ if branch.startswith('stop'):
+
+  k=int(branch[4:]);assert 0<=k<=20
+  domains[branch]='true'
+  text=text.replace('flags:UnsafeCell::new([0;768])','flags:UnsafeCell::new({let mut flags=[16;768];flags['+str(96+32*k)+']=17;flags})')
+  text=text.replace('kani::assume(tag<8);','kani::assume(tag<8);let command=unsafe{*((bytes.as_ptr().add(2304) as *const UnsafeCell<u8>).as_ref().unwrap().get())};let tag=if command==17 {tag%7+1}else{tag};')
+  text=text.replace('assert!(*(*flag).get()==0,','assert!(*(*flag).get()>=16,')
+  text=text.replace('if tag==0 {Ok(raw.map(M31))}else{Err(NMM_error(tag))}','if command==17 {Err(NMM_error(tag))}else if tag==0 {Ok(raw.map(M31))}else{Err(NMM_error(tag))}')
+ text=text.replace('DOMAIN',domains[branch]);edits=None
+ if mode=='reply':
+  value='PoolV1PairForestLaneStateV1{bump:0,master:[0;32],lane_id:0,tree:IncrementalMerkleTreeV1{next_leaf_index:0,root:[M31::ZERO;8],frontier:[[M31::ZERO;8];20]}}'
+  if branch!='observed':value='Box::new('+value+')'
+  text=text.replace('let reference=NMM_reference(&input,&input.bytes);','let ignored_error=unsafe{(*input.flags.get())[96]>1 && (*input.flags.get())[96]<16};let reference=NMM_reference(&input,&input.bytes);let reference=if ignored_error {Ok('+value+')}else{reference};')
+ if mode=='argument':text=text.replace('decode_lane_from_pool_release(&input.bytes)','decode_lane_from_pool_release(&input.bytes[1..])')
+ if mode=='footprint':text=text.replace('(*args).get().write(*bytes);','for j in 0..31 {(*(*args).get())[j]=bytes[j];}')
+ if mode=='result':text=text.replace('fn NMM_same(a:', 'fn NMM_same(a:').replace('(Err(x),Err(y))=>x==y','(Err(x),Err(y))=>x!=y')
+ if mode=='copy':
+  old='assert!(NMM_same(&native,&reference'+(',level' if branch=='observed' else '')+'),'
+  assert old in text
+  text=text.replace(old,'let src:[u32;8]=kani::any();let mut dst=[0u32;8];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),8)};assert!(dst!=src,')
+ (E/(a+'.patch')).write_text('--- /dev/null\n+++ b/NMM_bl_lane.rs\n@@ -0,0 +1,'+str(len(text.splitlines()))+' @@\n'+''.join('+'+l for l in text.splitlines(True)))
+ return submit(a,'r1_pool_adapter::NMM_bl_lane::stage',P,'NMM_bl_lane',text,mode)
+if __name__=='__main__':
+ import sys
+ r=attempt(*sys.argv[1:]);sys.exit(r['exit_status'])

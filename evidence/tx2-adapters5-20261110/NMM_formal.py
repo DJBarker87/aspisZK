@@ -10,7 +10,7 @@ def run(a,kind,target,command=None,extra=None):
         text=(E/(target+'.lean')).read_text()
         for dep in re.findall(r'^(?:public )?import(?: all)? (NMM_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
-            assert any(x['module']==dep and x['exit_status']==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMM_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
+            assert any(x.get('kind')=='lean' and x.get('module')==dep and x.get('exit_status')==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMM_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NMM_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NMM_generated','-o','NMM_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NMM_ProofDriver','NMM_ScanDriver']:command+=['-c','NMM_native/'+target+'.c']

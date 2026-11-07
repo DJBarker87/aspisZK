@@ -4,7 +4,7 @@ set_option autoImplicit false
 set_option pp.proofs false
 noncomputable section
 namespace NMM_AccountsTranscription
-open Aeneas Aeneas.Std AdapterRw
+open Aeneas Aeneas.Std Result AdapterRw
 -- Complete value transcription only; ownership carrier is retained separately.
 def transcription (ops : Ops)
   (verifier_program : solana_pubkey.Pubkey)

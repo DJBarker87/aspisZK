@@ -3,7 +3,7 @@ set_option autoImplicit false
 set_option pp.proofs false
 noncomputable section
 namespace NMM_RegistryTranscription
-open Aeneas Aeneas.Std AdapterRw
+open Aeneas Aeneas.Std Result AdapterRw
 -- Reviewed transcription candidate only: full frozen owned234 Result body.
 -- Operations remain parameters at this support layer; no row root is claimed.
 def transcription (ops : Ops)
