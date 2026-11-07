@@ -1,0 +1,38 @@
+{"attempt": "NND_L016", "exit_status": 1, "wall_seconds": 2.5157915770541877, "peak_rss_kib": "2596280", "swaps": "0", "print_axioms": "N/A: support"}
+NND_replay/NMS_241EmittedLink.lean:14:100: error: unsolved goals
+ops : Ops
+program : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+slot : core.result.Result U64 solana_program_error.ProgramError
+⊢ (if (accounts.len != 7#usize) = true then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+    else do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize }
+      let a ← pure aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice (core.ops.ran
+...
+                                                (funext fun val1 =>
+                                                            congrArg (Bind.bind (accounts.index_usize 6#usize))
+                                                              (funext fun oa1 =>
+                                                                congrArg
+                                                                  (Bind.bind
+                                                                    (r1_pool_adapter.owned.OwnedAccount.data ops oa1))
+                                                                  (funext fun r2 =>
+                                                                    congrArg
+                                                                      (Bind.bind
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r2))
+                                                                      (funext fun cf2 => ⋯)))))
+                                                        fun residual =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          Unit (core.convert.FromSame solana_program_error.ProgramError)
+                                                          residual)))))
+                                      fun residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame solana_program_error.ProgramError) residual))))))))
+        sorry))
+'NMS_241EmittedLink.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r92e0ac7c1bfe40fcb11aed88eb6fecdb.scope; invocation ID: b541e5d3feb3425d901d79498b7941a7

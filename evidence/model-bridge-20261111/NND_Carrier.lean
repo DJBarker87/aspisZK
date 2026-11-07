@@ -22,16 +22,13 @@ def key (x : Array U8 32#usize) : RSL.B32 :=
  ⟨x.val.map byte, by simpa using x.property⟩
 def unkey (x : RSL.B32) : Array U8 32#usize :=
  ⟨x.bytes.map unbyte, by simpa using x.len⟩
-@[simp] theorem bytes_length (x : Slice U8) : (bytes x).length = x.val.length := List.length_map
+@[simp] theorem bytes_length (x : Slice U8) : (bytes x).length = x.val.length := by simp [bytes]
 @[simp] theorem key_back (x : Array U8 32#usize) : unkey (key x) = x := by
- apply Subtype.ext
- simp only [unkey,key,List.map_map]
- simp
+ cases x
+ simp [unkey,key,List.map_map,Function.comp_def]
 @[simp] theorem key_forth (x : RSL.B32) : key (unkey x) = x := by
- cases x with
- | mk b h =>
-  simp only [key,unkey,List.map_map]
-  simp
+ cases x
+ simp [key,unkey,List.map_map,Function.comp_def]
 
 def error : solana_program_error.ProgramError → RSL.ProgramError
  | .Custom c => .custom (word c)
