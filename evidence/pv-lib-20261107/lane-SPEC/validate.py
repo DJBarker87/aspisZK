@@ -21,7 +21,7 @@ for f in m['files']:
 accepted=[];failed=[]
 for f in sorted(E.glob('receipt-497*.json')):
  r=json.loads(f.read_text())
- if r['attempt']>=49790:continue
+ if r['attempt']>=49713:continue
  if r['accepted']:
   path=Path('lean')/(r['target']+'.lean');assert sha(path.read_bytes())==r['source_sha256']
   assert 'sorryAx' not in '\n'.join(r['axioms_summary_based'])

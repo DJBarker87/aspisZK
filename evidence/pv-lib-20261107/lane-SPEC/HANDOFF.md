@@ -126,3 +126,13 @@ Next Lean49723.
 walker suffix as49790; ONLY root/module arrays changed. Exit0;wall0:00.89;
 peak1587932KiB;swap0;parent7072ff5add2. Strict raw49791 is next, not yet run.
 Next Lean49724. No full frozen contracts or compositions claimed.
+
+ONE strict raw49791 ran27 roots: process exit1 from six constructor-summary
+disagreements, raw axioms standard and zero unresolved. Do NOT call that exit0.
+wall0:26.45;peak6755496KiB;swap0;source1f914f12e97.
+49724 focused diagnostic printer compiled (no new declarations): Pre.mk has
+exactly propext/Classical.choice/Quot.sound, Input.mk and CallEntryOwner.mk have
+none. The retained raw graph includes Pre.mk at all six disagreements.
+No raw rerun. Offline retained-graph reconciliation pending.
+Printer exit0;wall0:01.99;peak4698792KiB;swap0;parent1f914f12e97.
+Next Lean49725; next raw49792 only for genuinely new/changed work.
