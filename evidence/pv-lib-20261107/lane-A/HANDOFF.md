@@ -132,3 +132,5 @@ Session4 49108: pinned PV_THR2_OwnInitBridgedPinned passed; session4 receipt rec
 Session4 49109: pinned PV_THR2_OwnInitBridgedAdequacy passed; session4 receipt records resources/axioms.
 
 Session4 49110: pinned PV_THR2_OwnInitActualAllocationOwnedBridged passed; session4 receipt records resources/axioms.
+
+Session4 49111: pinned PV_THR2_OwnInitBridgeTypedRepresentation passed; session4 receipt records resources/axioms.
