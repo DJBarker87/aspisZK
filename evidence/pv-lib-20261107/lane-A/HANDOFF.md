@@ -282,3 +282,7 @@ Session4 49192 passed PV_LIB_A_Caller124; exact receipt/axioms in session4.
 Session4 49194 passed PV_LIB_A_NameValidity; exact receipt/axioms in session4.
 
 Session4 49195 passed PV_LIB_A_PrefixTransport; exact receipt/axioms in session4.
+
+Session4 49196 passed PV_LIB_A_WriterOrdinary: catch exclusion is derived
+from the actual writer token; corrected-machine graph has no ordinary/catch
+premise. Runtime Values and continuous caller history remain explicit gaps.

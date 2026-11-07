@@ -28,9 +28,11 @@ range93=support('PV_LIB_A_RangeWriter',['range93'])
 caller=support('PV_LIB_A_Caller124',['provider_pre','installed','counts'])
 name=support('PV_LIB_A_NameValidity',['none_entry','some_entry'])
 prefix=support('PV_LIB_A_PrefixTransport',['prefix_identity'])
+ordinary=support('PV_LIB_A_WriterOrdinary',['noncatch','installed'])
+registry=support('PV_LIB_A_WriterRegistry',['installed'])
 for s in m['slots']:
  if s['parent'].startswith('thread') and s['child'] in ['thread:f9','thread:f10','thread:f93','thread:f167']:
-  s['lane_A_session4_support']=dict(writer=writer,machine=owner,correction='D981: OWNER-aware OwnInitInterpreterBridged plus source-store meanings')
+  s['lane_A_session4_support']=dict(writer=writer,machine=owner,ordinary=ordinary,registry=registry,correction='D981: OWNER-aware OwnInitInterpreterBridged plus source-store meanings')
   s['reason']='Exact emitted token/operand inventory and issued-poll graph now bind W4 named meanings to the corrected OWNER-aware step. Continuous caller history, source reference provenance/age and native returned-value semantics remain missing; IntoIter/Vec runtime pointer/layout/reservation Values also remain unbound. No write-definedness premise or identity action is installed.'
   if s['child']=='thread:f93':
    s['lane_A_session4_support']['source_range']=range93
@@ -40,7 +42,7 @@ facets={'thread:f361 :: atomicCounts':dict(caller124=caller),
  'thread:f6 :: machineTransport':dict(finite_prefix=prefix),
  'thread:OwnInit :: numbering':dict(local_source_writes=numbering),
  'thread:OwnInit :: resourceEnv':dict(same_resource_environment=actions),
- 'thread:OwnInit :: registryFrame':dict(native_registry_frame=transport,retained_OWNER_actions=actions),
+ 'thread:OwnInit :: registryFrame':dict(native_registry_frame=transport,writer_registry_frame=registry,retained_OWNER_actions=actions),
  'thread:f170 :: storeAction289':dict(corrected_machine=owner,inventory=writer),
  'thread:f15 :: storeAction93':dict(corrected_machine=owner,source_range=range93)}
 for n,sup in facets.items():slots[n]['lane_A_session4_support']=sup

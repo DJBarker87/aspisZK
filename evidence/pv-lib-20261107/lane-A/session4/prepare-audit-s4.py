@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,re
 E=Path('evidence/pv-lib-20261107/lane-A/session4')
-modules=['PV_LIB_A_OwnerStore','PV_LIB_A_OwnerStoreTransport','PV_LIB_A_WriterSites','PV_LIB_A_OwnerStoreActions','PV_LIB_A_RangeWriter','PV_LIB_A_WriterNumbering','PV_LIB_A_Caller124','PV_LIB_A_NameValidity','PV_LIB_A_PrefixTransport']
+modules=['PV_LIB_A_OwnerStore','PV_LIB_A_OwnerStoreTransport','PV_LIB_A_WriterSites','PV_LIB_A_OwnerStoreActions','PV_LIB_A_RangeWriter','PV_LIB_A_WriterNumbering','PV_LIB_A_Caller124','PV_LIB_A_NameValidity','PV_LIB_A_PrefixTransport','PV_LIB_A_WriterOrdinary','PV_LIB_A_WriterRegistry']
 roots=[]
 for m in modules:
  s=Path('lean',m+'.lean').read_text()
