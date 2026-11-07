@@ -17,3 +17,5 @@ Attempt 49601: PV_W5_FrameComposition, passed pinned focused replay.
 Attempt 49602: PV_W5_F32Specification, passed pinned focused replay.
 
 Attempt 49603: PV_W5_LocalCompletion, passed pinned focused replay.
+
+Attempt 49604: PV_W5_UbCheckOperators, passed pinned focused replay.
