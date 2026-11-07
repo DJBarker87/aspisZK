@@ -5,7 +5,7 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNG_BeginProjection137
 open Aeneas Aeneas.Std Result NMP_prepare NMP_Transport
-open NMP_ResultTransport (outer inner)
+open NMP_ResultTransport (outer)
 
 def decode (fallback : LIB_VCarriers.QM31)
     (reply : core.result.Result aspis_core.state_only_prefix.r0.Challenges r1_wire.Error × r1_wire.SemanticTranscript Unit) :
@@ -24,13 +24,13 @@ theorem projected (fallback : LIB_VCarriers.QM31) (env : RSL.Env) (p : LIB_VCarr
   · rename_i c after h
     dsimp only at h
     conv_lhs=>rw [h]
-    simp only [outer,NMP_Install150.fromReply,inner,NNG_EmittedCallGraph.resultMap,decode,fromT3_inverse,fromT10_inverse]
+    simp only [outer,NMP_Install150.fromReply,NMP_ResultTransport.inner,NNG_EmittedCallGraph.resultMap,decode,fromT3_inverse,fromT10_inverse]
     have canonical := LIB_VChallenges.begin_canonical (LIB_VCode.digest env) p t after c h
     rw [NNG_ChallengeProjection137.lifted fallback c canonical]
   · rename_i e after h
     dsimp only at h
     conv_lhs=>rw [h]
-    simp only [outer,NMP_Install150.fromReply,inner,NNG_EmittedCallGraph.resultMap,decode,fromT12_inverse]
+    simp only [outer,NMP_Install150.fromReply,NMP_ResultTransport.inner,NNG_EmittedCallGraph.resultMap,decode,fromT12_inverse]
   · rename_i e h
     dsimp only at h
     conv_lhs=>rw [h]

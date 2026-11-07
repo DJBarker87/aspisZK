@@ -6,6 +6,7 @@ open Aeneas Aeneas.Std Result NMP_prepare NNG_Context137 NMT_CallTree
 
 theorem source {H : Type} (c : Calls) (s : Parent H) : erase (NNG_Tree137.tree c s)=emitted c s := by
   unfold NNG_Tree137.tree NNG_Context137.emitted NMP_prepare.r1_semantic.verify_observed
+  change erase (NMT_CallTree.bind _ _) = _
   rw [erase_bind,erase_invoke]
   apply NMT_CallTree.result_congr
   intro reply
@@ -13,10 +14,12 @@ theorem source {H : Type} (c : Calls) (s : Parent H) : erase (NNG_Tree137.tree c
   | Err e=>rfl
   | Ok p=>
     unfold NNG_Tree137.mark0
+    change erase (NMT_CallTree.bind _ _) = _
     rw [erase_bind,erase_invoke]
     apply NMT_CallTree.result_congr
     intro u
     unfold NNG_Tree137.publicTranscript
+    change erase (NMT_CallTree.bind _ _) = _
     rw [erase_bind,erase_invoke]
     apply NMT_CallTree.result_congr
     intro reply
@@ -24,6 +27,7 @@ theorem source {H : Type} (c : Calls) (s : Parent H) : erase (NNG_Tree137.tree c
     | Err e=>rfl
     | Ok t=>
       unfold NNG_Tree137.begin_
+      change erase (NMT_CallTree.bind _ _) = _
       rw [erase_bind,erase_invoke]
       apply NMT_CallTree.result_congr
       intro pair
@@ -32,6 +36,7 @@ theorem source {H : Type} (c : Calls) (s : Parent H) : erase (NNG_Tree137.tree c
       | Err e=>rfl
       | Ok ch=>
         unfold NNG_Tree137.mark1
+        change erase (NMT_CallTree.bind _ _) = _
         rw [erase_bind,erase_invoke]
         apply NMT_CallTree.result_congr
         intro u

@@ -21,7 +21,7 @@ theorem finish_domain (a : Args) (env : RSL.Env) (domain : RSL.TX1_137.Domain VL
     (transcripted : LIB_VPublicTranscript.eval (a.public_,LIB_VCarriers.c1Root p) env=.ok t0)
     (begun : LIB_VBegin.eval (p,t0) env=.ok (c,t1)) : RSL.TX1_136.Domain VL ⟨a.public_,p,t1,c⟩ := by
   have caller := LIB_VDomains.finish_of_eval a.public_ a.bytes env domain.1 domain.2
-  rw [parsed,transcripted,begun] at caller
+  simp only [parsed,transcripted,begun] at caller
   exact caller
 #print axioms finish_domain
 end AspisR1.NNG_Caller136From137
