@@ -8,7 +8,7 @@ open NFW_PreparedControl
 abbrev Effects := PreparedHashCode.preparationEffects NHL_PreparedScalars.actual AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashQueries
 abbrev Prelude := aspis_core.field.WideExact × aspis_core.field.WideExact × aspis_core.field.WideExact × transcript.Transcript Unit × Usize
 /-- Exact source prefix before the fold Vec, with full ordered digest calls. -/
-def prefix (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit) (v : verifier.View) :
+def preludeCode (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit) (v : verifier.View) :
  PreparedHashCode.Code Prelude := do
  let state ← r1_wire.SemanticTranscript.impl.state D sem.transcript
  let t ← Effects.newTranscript D () state v.variant
@@ -125,8 +125,8 @@ def tail (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit) (v : v
 theorem factor (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit) (v : verifier.View)
  (g : Scratch) :
  LIBC_PreparedLog.code D sem v () g =
- (prefix D sem v >>= tail D sem v g) := by
- unfold LIBC_PreparedLog.code PreparedSourceEffects.prepare prefix tail
+ (preludeCode D sem v >>= tail D sem v g) := by
+ unfold LIBC_PreparedLog.code PreparedSourceEffects.prepare preludeCode tail
  simp only [LIBC_CodeMonad.bind_assoc]
  rfl
 #print axioms factor
