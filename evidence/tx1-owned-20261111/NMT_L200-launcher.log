@@ -1,0 +1,43 @@
+{"attempt": "NMT_L200", "exit_status": 1, "wall_seconds": 0.3321518790908158, "peak_rss_kib": "473012", "swaps": "0", "print_axioms": ["'NMT_345CloneWitness.forced_return' depends on axioms: [propext, sorryAx]", "'NMT_345CloneWitness.no_clone_abort' depends on axioms: [propext, sorryAx]"]}
+NMT_generated/NMT_345CloneWitness.lean:20:95: error: failed to synthesize
+  Decidable (requireDistinct [proofAccount, publicAccount, checkpointAccount] = Except.ok ())
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NMT_generated/NMT_345CloneWitness.lean:23:95: error: failed to synthesize
+  Decidable (verifierCheckpoint checkpointAccount zero32 true = Except.error (ProgramError.borshIoError "x"))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NMT_generated/NMT_345CloneWitness.lean:28:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  requireDistin
+...
+          (RS.bind
+                                  (Spec.call (TX1_328.Domain V) (TX1_328.Ref V P)
+                                    { public_ := C.semanticPublic st, public_bytes := publicData,
+                                      proof := slice proofData AFTERSTATE_BYTES PROOF_ACCOUNT_BYTES,
+                                      k :=
+                                        (List.getD
+                                            { program_id := zero32,
+                                                accounts := [proofAccount, publicAccount, checkpointAccount],
+                                                data := [3, 10] }.data
+                                            1 0).toNat })
+                                  fun checkpoint =>
+                                  (RS.check (List.length checkpoint != List.length checkpointData)
+                                        ProgramError.invalidAccountData).seq
+                                    (RS.pure checkpoint)))))))))
+    | x => RS.lift Spec.panic) =
+    RS.throw (ProgramError.borshIoError "x")
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    TX1_328.Ref V P
+  has type
+    TX1_328.Args V → RS Bytes
+  but is expected to have type
+    TX1_328.Args V → Spec (Except ProgramError Bytes)
+  in the application
+    Spec.call (TX1_328.Domain V) (TX1_328.Ref V P)
+'NMT_345CloneWitness.forced_return' depends on axioms: [propext, sorryAx]
+'NMT_345CloneWitness.no_clone_abort' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r9ce945a31e9b4153a0db1c08cead27bd.scope; invocation ID: e4ad7d4b723c4ac2b952540a19e54e56

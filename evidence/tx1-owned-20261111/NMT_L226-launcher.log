@@ -1,0 +1,52 @@
+{"attempt": "NMT_L226", "exit_status": 1, "wall_seconds": 0.20934370998293161, "peak_rss_kib": "473324", "swaps": "0", "print_axioms": ["'NMT_345CloneSemantics.snapshot_clone' depends on axioms: [propext]", "'NMT_345CloneSemantics.empty_string_clone' depends on axioms: [propext]", "'NMT_345CloneSemantics.string_clone_abort' depends on axioms: [propext, sorryAx]"]}
+NMT_generated/NMT_345CloneSemantics.lean:27:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  msg.isEmpty
+in the target expression
+  (match ProgramError.borshIoError msg with
+    | ProgramError.borshIoError msg_1 =>
+      if msg_1.isEmpty = true then RS.pure (ProgramError.borshIoError msg)
+      else (RS.lift Spec.alloc).seq (RS.pure (ProgramError.borshIoError msg))
+    | x => RS.pure (ProgramError.borshIoError msg))
+    env { exit := Exit.abort, events := [] }
+
+msg : String
+nonempty : msg.isEmpty = false
+env : Env
+⊢ (match ProgramError.borshIoError msg with
+    | ProgramError.borshIoError msg_1 =>
+      if msg_1.isEmpty = true then RS.pure (ProgramError.borshIoE
+...
+NMT_generated/NMT_345CloneSemantics.lean:27:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  msg.isEmpty
+in the target expression
+  (match ProgramError.borshIoError msg with
+    | ProgramError.borshIoError msg_1 =>
+      if msg_1.isEmpty = true then RS.pure (ProgramError.borshIoError msg)
+      else (RS.lift Spec.alloc).seq (RS.pure (ProgramError.borshIoError msg))
+    | x => RS.pure (ProgramError.borshIoError msg))
+    env { exit := Exit.abort, events := [] }
+
+msg : String
+nonempty : msg.isEmpty = false
+env : Env
+⊢ (match ProgramError.borshIoError msg with
+    | ProgramError.borshIoError msg_1 =>
+      if msg_1.isEmpty = true then RS.pure (ProgramError.borshIoError msg)
+      else (RS.lift Spec.alloc).seq (RS.pure (ProgramError.borshIoError msg))
+    | x => RS.pure (ProgramError.borshIoError msg))
+    env { exit := Exit.abort, events := [] }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    (match ProgramError.borshIoError msg with
+      | ProgramError.borshIoError msg_1 =>
+        if msg_1.isEmpty = true then RS.pure (ProgramError.borshIoError msg)
+        else (RS.lift Spec.alloc).seq (RS.pure (ProgramError.borshIoError msg))
+      | x => RS.pure (ProgramError.borshIoError msg))
+      env
+'NMT_345CloneSemantics.snapshot_clone' depends on axioms: [propext]
+'NMT_345CloneSemantics.empty_string_clone' depends on axioms: [propext]
+'NMT_345CloneSemantics.string_clone_abort' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r2b4f3a67e45448c7884958fdacf6a00f.scope; invocation ID: 301db6b7f78242e6a3ed6c257363a0fa

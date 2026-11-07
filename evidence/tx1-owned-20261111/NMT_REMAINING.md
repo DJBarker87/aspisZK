@@ -1,28 +1,33 @@
 # NMT remaining obligations
 
-Target not yet established. No CANDIDATE root, no completed RowSpec087-parameterized
-fold ready for one-line instantiation, and no ledger credit. The next ledger
-still decides; baseline ledger24 is581 CLOSED/0 QUALIFIED/18 OPEN.
+Target not established. No CANDIDATE root, complete canonical parameterized
+row fold, promotion, or ledger credit. Binding order remains345→328→094.
+Canonical087/094/328 and original345 targets are preserved exactly in
+NMT_RSL_*; proposed corrections below are NOT silently adopted.
 
-| Member | Checked support | Exact remaining obligation |
+| Member | Checked support | Exact remaining obligation / why not advanced |
 |---|---|---|
-|094 tx1|Fresh actual extraction E001, bc audit; explicit callee interface;17 typed structural transports with inverses; proposed complete-output RowSpec094|Prove the actual emitted parent's full SAME-call effectful fold into GExp/source/cohort; install CLOSED parse/scan/constructor/batch/geometry/query/flush/checkpoint roots on every reached own-argument domain. Whole-call-tree erasure L049/L051 is unproved at the first nested parse/control-flow continuation; the whole normalization shape is retired. This is a Lean proof gap, not a counterexample.|
-|094 prepare087|Total-producer RowSpec087 target retains every returned Rust Result plus scratch, ordered attempts and returning frame; stopped arm has no post-world|Sibling NMP has no committed candidate/root at final read-only check. Even with such a root, NMT has not yet completed the emitted087 representation transport and full094 fold; it is NOT ready for one-line instantiation.|
-|328 first_decoded|Fresh actual extraction E002 (also first); NMT_328_erase links full typed call tree to emission; NMT_emitted_fold interprets complete std map_err with deployed None and original Public/public/proof/k|Install the full094 packet at EXACT recorded arguments, prove raw-first/canonical carrier transport and digest-backend interpretation, expand child digest events and CLOSED error callback's complete RuntimeLog/stopped prefix, and discharge094 own extents at the caller occurrence. Current value/call-tree laws do not establish the observable row.|
-|345 stage1_owned|Fresh actual extraction E003; bc audit and full explicit interface|Install all seven CLOSED child roots in NMT_CHILD_ROWS at SAME original owned-account/public/statement/afterstate/proof arguments. Link opaque external statement projections and SDK/std equality/clone/constants to their canonical owners. Prove full typed source-ordered parent fold over ALL Results and stopped prefixes, including exact proof688..58295 selection and328 clauses. L052 wrong-count lemma failed elaboration and earns no guard credit. Full tree draft is unproved and was not submitted; do not import *.pending.|
-|RowSpec strength review|Total producer rather than arbitrary relation; complete Result/ordered attempts/returning frame, exact scratch; explicit runtime projection clause with domain witness|Next gate must review these proposed specs against complete ledger obligations and(bl)(3). No native/physical producer is installed, and no canonical-strength/equivalence certificate is claimed.|
-|Final gate|Focused ledger24 combined import and own-root raw ax2 audit are reported in NMT_AUDIT|These checks validate support only. No global/all-roots audit, cold release replay, SBF rebuild or source-to-ELF closure is claimed.|
+|TX1:345 source|NMT_345.source_fold, using exact source-ordered small prefix/middle/bounds/tail boundaries with one original parent; independent account-read and common/encoder steps|Value/control support is complete. Calls remain explicit; this is not an installed concrete physical observation packet and not a RowSpec root.|
+|345 CLOSED children|339,340,342 source-position installations; full-Result332/276/267/278/268 transports; exact carrier inverses|Complete physical SAME-argument observations and domain/representation links at every call. In particular335/341 CLOSED packets restrict deferred error variants; do not replace arbitrary actual clone by pure identity.|
+|345 own public clause|NMT_345.validated_public_domain derives NKR_DigestChildren.Domain on the SAME semantic public from the validator's returning Ok arm|Concrete NKR clause is proved. Canonical V/S1Lib realization and the full parent observation binding remain open. No345 publicDom hypothesis was added.|
+|345 specification NMT-S1|Forced String-error return/no-abort witness; pinned String/Vec source inspection; allocation-aware getter semantic distinction|Canonical Domain=True permits deferred BorshIoError(String), while getter/checkpoint references are pure Except. Either caller-established snapshot343 own-input invariant or exact clone observations are needed. This is a precise proposed target difference, not accepted closure or a native counterexample.|
+|345 specification NMT-S2|Frozen decoder allocation ordering documented; NMT_345DecodeAbortDistinction.reject_models_differ|Canonical Option decoder plus post-success alloc cannot express reached internal alloc abort before later decoder Err. Need full CLOSED332 decoder Result/abort-prefix packet, at actual reached sites; snapshot restriction alone does not fix this. No decode-success assumption is allowed.|
+|345 child328 suffix|NMT_345PostObservation.suffix_packet uses canonical RowSpec_328 and retains ALL child events even on post-child length rejection; abort/diverge prefixes unchanged|Connect actual full parent to this suffix. It does not establish a complete345 parameterized fold.|
+|TX1:328|E002 and prior source/std support retained; canonical RowSpec_094 adopted|New row fold cannot start under binding order until345 complete. Then install full094 packet at original Public/public/proof/k/None with all RuntimeLog/error effects. There is no ready one-line instantiation.|
+|TX1:094|E001 and prior structural transports retained; canonical RowSpec_087 adopted|New row fold follows complete328. Build one actual-call step at a time with internal CLOSED-child domains; never reuse retired L049/L051 whole-tree shape.|
+|087 parameter|NMT_RESUME_SIBLING_CHECK.json pins inspected NMP branch and its NO_CANDIDATE status|No matching root was available to instantiate. This does not obstruct an otherwise valid parameterized fold; it is not offered as the reason345 is open.|
+|Verification|Focused ledger24 combined import; new own-root raw ax2 groups; unchanged walker controls reused|See NMT_RESUME_AUDIT/VALIDATION and exact per-scope resource/source/axiom receipts. These validate support only.|
 
-All seven345 child names requested by the job have CLOSED ledger24 records;
-none is reported as a missing inventory row. Their use remains uninstalled.
-The fresh emission also exposes SDK/std or external projection boundaries;
-those are recorded as interpretation/representation obligations, not silently
-trusted by an external inventory label.
+No new restricted Kani target is eligible: all three actual bodies already
+emit, and reused bc audit flags no post-loop exit. No extraction is authorized
+or needed. No shipped source/ELF changed, so no Rust/Kani/reproducible-build
+replay is triggered. No resource-cap or timeout increase can repair NMT-S1/S2.
 
-The remaining094/328/345 associations above are **Lean-only obligations**, not
-items requiring Kani. This job uses the full60 Lean/link/audit allowance; it
-must not claim that native exhaustion caused the stop. All3 extraction slots
-are used. Kani0/20: every owned body emits and its bc audit found no flagged
-exit, so the job's restricted Kani allowance has no eligible native target.
-Using it on unrelated probes would violate the route/cost rules. No timeout,
-memory kill, cap increase or unchanged timeout rerun occurred.
+The unspent scope allowance is not an independent row to prove. Under the
+binding completion order,328 and094 cannot be started merely to consume it;
+345's current full canonical observation target needs the exact corrections
+above or a source-backed ruling that supplies the missing physical laws.
+Continuing the pure getter/Option interpretation would repeat a known
+unsound closure shape. Both target differences are recorded for lead review;
+no child-output premise, trust-row change, or stronger success assumption was
+used to bypass them.

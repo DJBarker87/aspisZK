@@ -3,7 +3,7 @@ from NMT_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMT_E') and 1<=int(a[-3:])<=3) or (a.startswith('NMT_L') and 1<=int(a[-3:])<=60) or (a.startswith('NMT_K') and 1<=int(a[-3:])<=20)) and not (E/a).exists()
+    assert ((a.startswith('NMT_E') and 1<=int(a[-3:])<=3) or (a.startswith('NMT_L') and 1<=int(a[-3:])<=310) or (a.startswith('NMT_K') and 1<=int(a[-3:])<=20)) and not (E/a).exists()
     env=json.loads((E/'NMT_ENV.json').read_text())['env']
     env['LEAN_PATH']=':'.join([B+'/NMT_objects']+json.loads((E/'NMT_PATHS.json').read_text()))
     env['TMPDIR']=B+'/NMT_tmp'
@@ -39,7 +39,11 @@ for n,t in files.items():
   for line in t.splitlines():
    if line.startswith('import '):rels.update(d.replace('.','/')+'.olean' for d in line[7:].split() if d!='all')
 if {kind!r} in ['audit','link','inspect']:rels.update(n+'.olean' for n in ['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
-if {kind!r}=='audit':rels.add('NMT_COMBINED_IMPORT.olean')
+if {kind!r}=='audit':
+ rels.add('NMT_COMBINED_IMPORT.olean')
+ if {target!r}.startswith('proof'):
+  audit_modules=json.loads((b/'NMT_AUDIT_MODULES.json').read_text())[int({target!r}[5:])]
+  rels.update(n.replace('.','/')+'.olean' for n in audit_modules)
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:

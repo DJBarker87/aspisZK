@@ -1,0 +1,77 @@
+{"attempt": "NMT_L249", "exit_status": 1, "wall_seconds": 0.2906468459405005, "peak_rss_kib": "484212", "swaps": "0", "print_axioms": ["'NMT_345PostObservation.finish_abort' does not depend on any axioms", "'NMT_345PostObservation.finish_diverge' does not depend on any axioms", "'NMT_345PostObservation.finish_error' depends on axioms: [propext]", "'NMT_345PostObservation.finish_events' depends on axioms: [propext, Quot.sound]", "'NMT_345PostObservation.suffix_packet' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NMT_generated/NMT_345PostObservation.lean:38:48: error: unsolved goals
+case false
+V : VLib
+P : PreparedNew V
+impl : TX1_328.Args V → Env → Obs (Except ProgramError Bytes)
+child : TX1_328.RowSpec_328 V P impl
+a : TX1_328.Args V
+env : Env
+domain : TX1_328.Domain V a
+checkpointLength : Nat
+bytes : Bytes
+h : (List.length bytes != checkpointLength) = false
+⊢ ∃ a e1,
+    (a = Except.ok () ∧ e1 = []) ∧
+      ∃ x,
+        (match a with
+            | Except.ok a => Spec.pure (Except.ok bytes)
+            | Except.error e => Spec.pure (Except.error e))
+            env x ∧
+          Exit.ret (Except.ok bytes) = x.exit ∧ e1 = [] ∧ x.events = []
+
+case true
+V : VLib
+P : PreparedNew V
+impl : TX1_328.Args V
+...
+pt ProgramError Bytes)
+child : TX1_328.RowSpec_328 V P impl
+a : TX1_328.Args V
+env : Env
+domain : TX1_328.Domain V a
+checkpointLength : Nat
+bytes : Bytes
+h : (List.length bytes != checkpointLength) = false
+⊢ ∃ a e1,
+    (a = Except.ok () ∧ e1 = []) ∧
+      ∃ x,
+        (match a with
+            | Except.ok a => Spec.pure (Except.ok bytes)
+            | Except.error e => Spec.pure (Except.error e))
+            env x ∧
+          Exit.ret (Except.ok bytes) = x.exit ∧ e1 = [] ∧ x.events = []
+
+case true
+V : VLib
+P : PreparedNew V
+impl : TX1_328.Args V → Env → Obs (Except ProgramError Bytes)
+child : TX1_328.RowSpec_328 V P impl
+a : TX1_328.Args V
+env : Env
+domain : TX1_328.Domain V a
+checkpointLength : Nat
+bytes : Bytes
+h : (List.length bytes != checkpointLength) = true
+⊢ ∃ a e1,
+    (a = Except.error ProgramError.invalidAccountData ∧ e1 = []) ∧
+      ∃ x,
+        (match a with
+            | Except.ok a => Spec.pure (Except.ok bytes)
+            | Except.error e => Spec.pure (Except.error e))
+            env x ∧
+          Exit.ret (Except.error ProgramError.invalidAccountData) = x.exit ∧ e1 = [] ∧ x.events = []
+NMT_generated/NMT_345PostObservation.lean:42:69: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [RS.check, ̲RS.seq, ̲RS.bind, ̲RS.pure, ̲RS.throw, ̲Spec.bind, ̲Spec.pure,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NMT_345PostObservation.finish_abort' does not depend on any axioms
+'NMT_345PostObservation.finish_diverge' does not depend on any axioms
+'NMT_345PostObservation.finish_error' depends on axioms: [propext]
+'NMT_345PostObservation.finish_events' depends on axioms: [propext, Quot.sound]
+'NMT_345PostObservation.suffix_packet' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r327c7a1d18b14b1b94f28b74759c7ab3.scope; invocation ID: f510f8aece92468a8a5dba7c617fc530

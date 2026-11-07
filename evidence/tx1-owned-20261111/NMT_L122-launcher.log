@@ -1,0 +1,59 @@
+{"attempt": "NMT_L122", "exit_status": 1, "wall_seconds": 13.125443842029199, "peak_rss_kib": "5919028", "swaps": "0", "print_axioms": ["'NMT_345.checkpointCore_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMT_345.checkpoint_size_bool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMT_345.key_ne' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMT_345.checkpoint_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_345CheckpointCanonical.lean:26:3: error: Tactic `rfl` failed: The left-hand side
+  mapOuter (mapCore id fromPE)
+    (ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+is not definitionally equal to the right-hand side
+  ok
+    (if (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true then
+      core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData
+    else
+      match a.length with
+      | core.result.Result.Err e => core.result.Result.Err e
+      | core.result.Result.Ok n =>
+        if (n != 1768#usize) = true then
+          core.result.Result.Err NMT
+...
+AccountData
+      else core.result.Result.Ok ())
+
+case isFalse.Ok.isFalse
+a : Account
+program : Key
+writable : Bool
+h✝¹ : ¬(!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true
+n : Usize
+h✝ : ¬(id n != 1768#usize) = true
+⊢ mapOuter (mapCore id fromPE) (ok (core.result.Result.Ok ())) =
+    ok
+      (if (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true then
+        core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData
+      else
+        if (n != 1768#usize) = true then
+          core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData
+        else core.result.Result.Ok ())
+NMT_generated/NMT_345CheckpointCanonical.lean:35:1: error: unsolved goals
+case neg
+n : Usize
+h : ¬n = 1768#usize
+hn : ↑n ≠ 1768
+⊢ (↑n != 1768) = (n != 1768#usize)
+NMT_generated/NMT_345CheckpointCanonical.lean:38:9: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h,̵h̵n, ̲RSL.CHECKPOINT_BYTES]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMT_generated/NMT_345CheckpointCanonical.lean:38:11: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp [h,h̵n̵,̵ ̲RSL.CHECKPOINT_BYTES]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NMT_345.checkpointCore_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMT_345.checkpoint_size_bool' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMT_345.key_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMT_345.checkpoint_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc59be36d661d42899ec6a228b21f2d0d.scope; invocation ID: 226d1535bb1b46a3a5ce352cf04629d3
