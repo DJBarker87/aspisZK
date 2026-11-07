@@ -7,7 +7,7 @@
  extern crate alloc;
 --- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
 +++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
-@@ -316,3 +316,7 @@
+@@ -316,3 +316,11 @@
      mark(obs, 1);
      verify_finish(public, prefix, transcript, challenges, obs)
  }
@@ -15,6 +15,10 @@
 +#[cfg(kani)]
 +#[path = "NMP_native.rs"]
 +pub(crate) mod NMP_native;
++
++#[cfg(kani)]
++#[path = "NMP_havoc.rs"]
++pub(crate) mod NMP_havoc;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_native.rs
 @@ -0,0 +1,547 @@
@@ -566,6 +570,79 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn returning_0_transfer_stability(){check_variant(5,0,0,1)}
 --- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NMP_havoc.rs
+@@ -0,0 +1,70 @@
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// Weak frame contract: full slice havoc, with one recorded arbitrary cell.
++// It is a nondeterministic-generator utility, NEVER a callee's functional law.
++#[kani::requires(N>0 && N<=13831 && probe<N)]
++#[kani::modifies(dst)]
++#[kani::ensures(|_| dst[probe]==word)]
++pub(crate) fn point<const N:usize>(dst:&mut[u8;N],probe:usize,word:u8,_side:&mut u8){dst[probe]=word;}
++#[kani::requires(N>0 && N<=13831 && probe<N)]
++#[kani::modifies(dst)]
++#[kani::ensures(|_| dst[probe]!=word)]
++fn inverse<const N:usize>(dst:&mut[u8;N],probe:usize,word:u8,_side:&mut u8){dst[probe]=word;}
++#[kani::requires(N>0 && N<=13831 && probe<N)]
++#[kani::modifies(dst)]
++#[kani::ensures(|_| true)]
++fn weak<const N:usize>(dst:&mut[u8;N],probe:usize,_word:u8,_side:&mut u8){dst[probe]=0;}
++#[kani::requires(N>0 && N<=13831 && probe<N)]
++#[kani::modifies(dst)]
++#[kani::ensures(|_| true)]
++fn bad_modifies<const N:usize>(dst:&mut[u8;N],probe:usize,word:u8,side:&mut u8){dst[probe]=word;*side=side.wrapping_add(1);}
++fn args<const N:usize>()->([u8;N],usize,u8,u8){let i:usize=kani::any();kani::assume(i<N);(kani::any(),i,kani::any(),kani::any())}
++#[kani::proof_for_contract(point)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn positive(){let(mut b,i,w,mut s)=args::<13831>();point(&mut b,i,w,&mut s);}
++#[kani::proof_for_contract(inverse)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn inverted_ensures(){let(mut b,i,w,mut s)=args::<13831>();inverse(&mut b,i,w,&mut s);}
++#[kani::proof_for_contract(weak)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn weak_positive(){let(mut b,i,w,mut s)=args::<13831>();weak(&mut b,i,w,&mut s);}
++#[kani::proof]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn real_body(){let(mut b,i,w,mut s)=args::<13831>();b[i]=0;weak(&mut b,i,w,&mut s);assert!(b[i]==0);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn unimplied_assertion(){let(mut b,i,w,mut s)=args::<13831>();b[i]=0;weak(&mut b,i,w,&mut s);assert!(b[i]==0);}
++#[kani::proof_for_contract(bad_modifies)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn modifies_violation(){let(mut b,i,w,mut s)=args::<13831>();bad_modifies(&mut b,i,w,&mut s);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn caller(){let(mut b,i,w,mut s)=args::<13831>();let before=s;point(&mut b,i,w,&mut s);assert!(b[i]==w&&s==before);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn caller_control(){let(mut b,i,w,mut s)=args::<13831>();point(&mut b,i,w,&mut s);assert!(b[i]==(w^1));}
++
++// Distinct fixed-array extent; independent interface calibration.
++#[kani::proof_for_contract(point)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn positive_928(){let(mut b,i,w,mut s)=args::<928>();point(&mut b,i,w,&mut s);}
++#[kani::proof_for_contract(inverse)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn inverted_ensures_928(){let(mut b,i,w,mut s)=args::<928>();inverse(&mut b,i,w,&mut s);}
++#[kani::proof_for_contract(weak)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn weak_positive_928(){let(mut b,i,w,mut s)=args::<928>();weak(&mut b,i,w,&mut s);}
++#[kani::proof]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn real_body_928(){let(mut b,i,w,mut s)=args::<928>();b[i]=0;weak(&mut b,i,w,&mut s);assert!(b[i]==0);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn unimplied_assertion_928(){let(mut b,i,w,mut s)=args::<928>();b[i]=0;weak(&mut b,i,w,&mut s);assert!(b[i]==0);}
++#[kani::proof_for_contract(bad_modifies)]#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn modifies_violation_928(){let(mut b,i,w,mut s)=args::<928>();bad_modifies(&mut b,i,w,&mut s);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn caller_928(){let(mut b,i,w,mut s)=args::<928>();let before=s;point(&mut b,i,w,&mut s);assert!(b[i]==w&&s==before);}
++#[kani::proof]#[kani::unwind(40)]#[kani::stub_verified(point)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn caller_control_928(){let(mut b,i,w,mut s)=args::<928>();point(&mut b,i,w,&mut s);assert!(b[i]==(w^1));}
+--- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_helpers.rs
 @@ -0,0 +1,16 @@
 +use super::*;
@@ -615,7 +692,7 @@
 +pub(crate) mod NMP_prepare;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_prepare.rs
-@@ -0,0 +1,188 @@
+@@ -0,0 +1,196 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +use crate::r1_semantic::NMP_native::{transition,transfer,withdraw,arbitrary_verified,LoggedHash};
@@ -624,7 +701,7 @@
 +fn same(a:Meta,b:Meta)->bool{a.ptr==b.ptr&&a.len==b.len}
 +#[repr(C)]struct Frame<'a>{proof:[u8;57607],log:Log<'a>}
 +struct Log<'a>{
-+ public:Public<'a>,stop:u8,control:u8,phase:u8,probe_sem:usize,probe_y:usize,gi:usize,ci:usize,ri:usize,qi:usize,
++ public:Public<'a>,stop:u8,control:u8,phase:u8,side:u8,probe_sem:usize,probe_y:usize,gi:usize,ci:usize,ri:usize,qi:usize,
 + sem_src:Meta,sem_dst:Meta,y_src:Meta,y_dst:Meta,sem_byte:u8,y_byte:u8,observed_sem_byte:u8,constructor_y_byte:u8,
 + observed_public:Option<Public<'a>>,observed_bytes:Meta,
 + sem_probe:Option<SemProbe>,constructor_probe:Option<SemProbe>,
@@ -653,18 +730,16 @@
 +fn filled_fail<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);Err(aspis_core::r0::Error::Allocation)}
 +fn expand_semantic(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
 + let log=unsafe{from_source(src,compact::OFF_SEMANTIC)};assert_eq!(log.phase,0);log.phase=1;log.sem_src=meta(src);log.sem_dst=meta(dst);
++ assert_eq!(dst.len(),13831);log.sem_byte=kani::any();
++ crate::r1_semantic::NMP_havoc::point(unsafe{&mut *(dst.as_mut_ptr() as *mut [u8;13831])},log.probe_sem,log.sem_byte,&mut log.side);
 + if log.stop==1||log.stop==2{return Err(codec_error())}
-+ assert_eq!(dst.len(),13831);
-+ let values:[u8;13831]=kani::any();log.sem_byte=values[log.probe_sem];
-+ // All mutable bytes are independently arbitrary, not a one-byte child law.
-+ unsafe{*(dst.as_mut_ptr() as *mut [u8;13831])=values;}
 + Ok(())
 +}
 +fn expand_values(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
 + let log=unsafe{from_source(src,compact::OFF_Y1)};assert_eq!(log.phase,1);log.phase=2;log.y_src=meta(src);log.y_dst=meta(dst);
++ assert_eq!(dst.len(),928);log.y_byte=kani::any();
++ if log.control!=3{crate::r1_semantic::NMP_havoc::point(unsafe{&mut *(dst.as_mut_ptr() as *mut [u8;928])},log.probe_y,log.y_byte,&mut log.side);}
 + if log.stop==3{return Err(codec_error())}
-+ assert_eq!(dst.len(),928);let values:[u8;928]=kani::any();log.y_byte=values[log.probe_y];
-+ if log.control!=3{unsafe{*(dst.as_mut_ptr() as *mut [u8;928])=values;}}
 + Ok(())
 +}
 +#[derive(Clone,Copy,PartialEq,Eq)]struct SemProbe{
@@ -705,7 +780,7 @@
 + let probe_sem:usize=kani::any();let probe_y:usize=kani::any();kani::assume(probe_sem<13831&&probe_y<928);
 + let ci:usize=kani::any();let ri:usize=kani::any();let qi:usize=kani::any();kani::assume(ci<3&&ri<64&&qi<22);
 + let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
-+ let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_folded:None,view_query:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
++ let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,side:kani::any(),probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_folded:None,view_query:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
 + // Functional/call-log split after retired K018; proof-buffer frame remains separate.
 + let inactive=E::from_le_bytes(&f.proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]);
 + let hash=LoggedHash(&mut f.log as *mut _ as *mut ());let out=super::prepare(public,&f.proof,hash,None,&mut g);let log=&f.log;
@@ -725,6 +800,7 @@
 + let out=out.unwrap();assert!(core::ptr::eq(&*out,log.prepared_ptr));assert!(Some(prepared_probe(&out,gi,ci,ri,qi))==log.expected_prepared);
 +}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -733,6 +809,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_2(){check(2,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -741,6 +818,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_3(){check(3,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -749,6 +827,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_5(){check(5,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -757,6 +836,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_6(){check(6,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -765,6 +845,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_7(){check(7,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled_fail)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -773,6 +854,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn allocation_error_result(){check(1,0)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -781,6 +863,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn reply_control(){check(7,1)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -789,6 +872,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn argument_control(){check(7,2)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]
@@ -797,6 +881,7 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn footprint_control(){check(7,3)}
 +#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
 +#[kani::stub(aspis_core::r0::heap::filled,filled)]
 +#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
 +#[kani::stub(crate::compact::expand_values,expand_values)]

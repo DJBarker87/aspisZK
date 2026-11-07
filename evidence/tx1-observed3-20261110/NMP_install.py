@@ -9,14 +9,13 @@ n='crates/aspis-r1-cost-probe/src/lib.rs';p=S/n;before=p.read_text();prefix='#![
 if before.startswith(prefix):before=before[len(prefix):]
 expected[n]=hashlib.sha256(before.encode()).hexdigest();p.write_text(prefix+before)
 patch+=''.join(difflib.unified_diff(before.splitlines(True),p.read_text().splitlines(True),fromfile='a/'+n,tofile='b/'+n))
-for n,module in [('crates/aspis-r1-cost-probe/src/r1_semantic.rs','NMP_native'),('crates/aspis-r1-cost-probe/src/r1_wire.rs','NMP_factory'),('crates/aspis-r1-cost-probe/src/candidate.rs','NMP_prepare'),('crates/aspis-core/src/field/wide_exact.rs','NMP_field')]:
- p=S/n
- suffix='\n#[cfg(kani)]\n#[path = "'+module+'.rs"]\npub(crate) mod '+module+';\n'
- before=p.read_text()
- if before.endswith(suffix):before=before[:-len(suffix)]
- expected[n]=hashlib.sha256(before.encode()).hexdigest();p.write_text(before+suffix)
+for n,modules in [('crates/aspis-r1-cost-probe/src/r1_semantic.rs',['NMP_native','NMP_havoc']),('crates/aspis-r1-cost-probe/src/r1_wire.rs',['NMP_factory']),('crates/aspis-r1-cost-probe/src/candidate.rs',['NMP_prepare']),('crates/aspis-core/src/field/wide_exact.rs',['NMP_field'])]:
+ p=S/n;before=p.read_text();suffixes=['\n#[cfg(kani)]\n#[path = "'+m+'.rs"]\npub(crate) mod '+m+';\n' for m in modules]
+ while any(before.endswith(s) for s in suffixes):
+  tail=next(s for s in suffixes if before.endswith(s));before=before[:-len(tail)]
+ expected[n]=hashlib.sha256(before.encode()).hexdigest();p.write_text(before+''.join(suffixes))
  patch+=''.join(difflib.unified_diff(before.splitlines(True),p.read_text().splitlines(True),fromfile='a/'+n,tofile='b/'+n))
- for mod in ([module,'NMP_helpers'] if module=='NMP_native' else [module]):
+ for mod in modules+(['NMP_helpers'] if 'NMP_native' in modules else []):
   q=p.with_name(mod+'.rs');q.write_text((B/(mod+'.rs.txt')).read_text())
   patch+=''.join(difflib.unified_diff([],q.read_text().splitlines(True),fromfile='/dev/null',tofile='b/'+str(q.relative_to(S))))
 (B/'NMP_HARNESSES.patch').write_text(patch);(B/'NMP_HARNESSES.patch.sha256').write_text(sha(B/'NMP_HARNESSES.patch')+'\n')

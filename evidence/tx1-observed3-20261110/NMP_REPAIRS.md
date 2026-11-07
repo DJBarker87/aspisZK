@@ -7,3 +7,11 @@ L008: resource carrier used Lean reserved word protected as a binder; parser rej
 L014 also exposed reserved binder prefix; L015 changes it to headLog. Both parser failures are retained and neither provides theorem credit.
 
 Native queue stopped after K008 because assert_ne emits Kani runtime-format placeholder, not the literal assertion failed string. Reviewed sole failure in core::panicking::assert_failed_inner against the source control. No proof rerun; own validator recognizes that exact31-check/K008 shape only. Original false result remains in VERDICTS, correction in CONTROL_REVIEWS.
+
+Own client strengthened: final disk/share/reservation is now fresh immediately before systemd submission, after upload/pinning and any earlier wait. Any final wait repeats all three checks; refusal caps/quiet-window handling and exit0+allowed:true remain unchanged. Shared launchers/reservation/shim untouched.
+
+K065 inverse ensures failed exactly at dst[probe]!=word (1/117). Owned verdict parser expected ordinary assertion wording; accepted this exact contract diagnostic only, retained original verdict and added review. No scope rerun.
+
+Future config repair: function-contracts flag belongs to native_command, not the gate wrapper command; corrected only unsubmitted configs. Fixed-array control plan now replaces native harness selector and all collected receipt stems, not only displayed module. No wrong-target scopes launched. K069 exactly detected the deliberate modifies violation; parser review retained.
+
+L034 diagnostic is a wrong namespace in own source; corrected AspisR1CurrentCaller.SdkD_PrepareSource to SdkD_PrepareSource, then L036 passed. The failed elaboration diagnostic containing sorryAx is excluded from accepted roots.

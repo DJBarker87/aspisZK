@@ -20,3 +20,5 @@ supply a full native producer or an opening/query packet.
 
 No native contract semantic-transport or extraction trust item is removed.
 No new trust row, adversary, metric, privacy or two-transaction change.
+
+NMP_Reached137 and NMP_Reached087 now restrict callback/one-step agreements to SAME reached returning prefixes. Both source folds preserve complete Result and ordered attempted-log values, including outer failure/divergence. Physical ownership/frame and native production are separate OPEN clauses; neither support theorem is a candidate root. ByteHavocLaw covers arbitrary same-length post-states.

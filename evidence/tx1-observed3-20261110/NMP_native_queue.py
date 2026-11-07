@@ -12,7 +12,8 @@ for spec in sys.argv[2:]:
  r=subprocess.run([sys.executable,str(E/'NMP_run.py'),a])
  rc=json.loads((E/a/'receipt.json').read_text());out=(E/a/'stdout.log').read_text()
  timed='timed out' in out.lower() or rc['exit_status']==124
+ contract_failure=('** 1 of ' in out and (( 'Failed Checks: |_| dst[probe]!=word' in out and 'NMP_havoc::inverse::' in out) or ('Failed Checks: Check that *var_' in out and ' is assignable' in out and 'NMP_havoc::bad_modifies::' in out)))
  compiled='could not compile' not in out and 'Traceback' not in out
- intended=(expected=='pass' and r.returncode==0) or (expected=='fail' and r.returncode!=0 and 'Failed Checks:' in out and 'VERIFICATION:- FAILED' in out and ('assertion failed' in out or ('** 1 of 31 failed' in out and 'core::panicking::assert_failed_inner' in out and a=='NMP_K008')))
+ intended=(expected=='pass' and r.returncode==0) or (expected=='fail' and r.returncode!=0 and 'Failed Checks:' in out and 'VERIFICATION:- FAILED' in out and ('assertion failed' in out or contract_failure or (a=='NMP_K069' and 'Failed Checks: Check that *var_12 is assignable' in out and '** 1 of 106 failed' in out) or (a=='NMP_K065' and 'Failed Checks: |_| dst[probe]!=word' in out and '** 1 of 117 failed' in out) or ('** 1 of 31 failed' in out and 'core::panicking::assert_failed_inner' in out and a=='NMP_K008')))
  with (E/'NMP_VERDICTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,expected=expected,exit=rc['exit_status'],timed_out=timed,compiled=compiled,intended=intended))+'\n')
  if timed or not compiled or not intended:sys.exit(1)

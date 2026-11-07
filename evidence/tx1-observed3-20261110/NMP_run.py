@@ -94,6 +94,61 @@ if x['kind'] in ['lean','audit','link']:
    if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
 x['deps_fingerprint']={{'selected_objects':pins}};p.write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
+# Fresh final admission: count/disk/reservation again immediately before submission.
+final_failures=retry
+final_missing=0
+while True:
+ r=ssh('python3',"import shutil,json;print(json.dumps({'free':shutil.disk_usage('/home/dombarker/project-offloads').free}))")
+ assert r.returncode==0,r.stderr
+ final_disk=json.loads(r.stdout)
+ with (E/'NMP_FINAL_ADMISSION.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='disk',**final_disk))+'\n')
+ if final_disk['free']<40_000_000_000:
+  final_disk_waits=locals().get('final_disk_waits',0)+1
+  if final_disk_waits>6:raise RuntimeError('STOP final disk below40GB after six waits')
+  with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final disk below40GB',**final_disk))+'\n')
+  for _ in range(10):time.sleep(60)
+  continue
+ r=ssh('python3',"""import subprocess,pathlib,os,json
+ out=subprocess.check_output(['systemctl','--user','list-units','--type=scope','--state=running','--no-legend','--plain'],text=True)
+ scopes=[]
+ for line in out.splitlines():
+  unit=line.split()[0]
+  cg=subprocess.check_output(['systemctl','--user','show',unit,'-p','ControlGroup','--value'],text=True).strip()
+  if not cg:continue
+  hit=False
+  for f in pathlib.Path('/sys/fs/cgroup'+cg).rglob('cgroup.procs'):
+   for pid in f.read_text().split():
+    try: cwd=os.readlink('/proc/'+pid+'/cwd')
+    except OSError:continue
+    if cwd.startswith('/home/dombarker/project-offloads/codex-cx-'):hit=True
+  if hit:scopes.append(unit)
+ print(json.dumps({'scopes':scopes,'count':len(scopes)}))""".replace("\n ","\n"))
+ assert r.returncode==0,r.stderr
+ final_share=json.loads(r.stdout)
+ with (E/'NMP_FINAL_ADMISSION.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share',**final_share))+'\n')
+ if final_share['count']>=2:
+  with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final Stream A saturation',**final_share))+'\n')
+  print('Final Stream A wait: '+str(final_share['count'])+' scopes',flush=True)
+  for _ in range(3):time.sleep(60)
+  continue
+ r=ssh('python3',f'''from pathlib import Path
+ import subprocess,sys
+ b=Path({B!r});b.mkdir(exist_ok=True)
+ with (b/{(a+'-final-barrier-'+str(final_failures)+'.log')!r}).open('w') as f:r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py',str(b/{(a+'-reservation.json')!r})],stdout=f,stderr=subprocess.STDOUT)
+ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
+ '''.replace("\n ","\n"))
+ (E/(a+'-final-barrier-'+str(final_failures)+'.log')).write_text(r.stdout+r.stderr)
+ try:ad=json.loads(r.stdout)
+ except json.JSONDecodeError:
+  if final_missing==0:final_missing+=1;time.sleep(30);continue
+  raise RuntimeError('STOP final missing admission')
+ (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
+ if r.returncode==0 and ad.get('allowed') is True:break
+ if (r.returncode==78 or ad.get('allowed') is False) and final_failures<10:
+  final_failures+=1
+  for _ in range(3):time.sleep(60)
+  continue
+ raise RuntimeError('STOP final admission')
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path

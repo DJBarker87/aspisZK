@@ -17,9 +17,11 @@ base_errors=[]
 for n,h in expected.items():
  p=S/n;raw=p.read_bytes()
  if n=='crates/aspis-r1-cost-probe/src/lib.rs' and raw.startswith(b'#![cfg_attr(kani,feature(allocator_api))]\n'):raw=raw[len(b'#![cfg_attr(kani,feature(allocator_api))]\n'):]
- for module in ['NMP_native','NMP_factory','NMP_prepare','NMP_field']:
-  for suffix in [('\n#[cfg(kani)]\npub(crate) mod '+module+';\n').encode(),('\n#[cfg(kani)]\n#[path = \"'+module+'.rs\"]\npub(crate) mod '+module+';\n').encode()]:
-   if raw.endswith(suffix):raw=raw[:-len(suffix)]
+ suffixes=[]
+ for module in ['NMP_native','NMP_factory','NMP_prepare','NMP_field','NMP_havoc']:
+  suffixes += [ ('\n#[cfg(kani)]\npub(crate) mod '+module+';\n').encode(), ('\n#[cfg(kani)]\n#[path = "'+module+'.rs"]\npub(crate) mod '+module+';\n').encode() ]
+ while any(raw.endswith(s) for s in suffixes):
+  tail=next(s for s in suffixes if raw.endswith(s));raw=raw[:-len(tail)]
  if hashlib.sha256(raw).hexdigest()!=h:base_errors.append(n)
 (B/(a+'-baseline-check.json')).write_text(json.dumps(dict(expected_files=len(expected),errors=base_errors),indent=2))
 assert not base_errors,('STOP frozen predecessor source mismatch',base_errors)
