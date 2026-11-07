@@ -33,7 +33,11 @@ for line in units.splitlines():
  base=pathlib.Path('/sys/fs/cgroup'+cg)
  found=False
  for procs in base.rglob('cgroup.procs'):
-  for pid in procs.read_text().split():
+  try:members=procs.read_text()
+  except OSError as error:
+   if error.errno!=95:raise
+   members=(procs.parent/'cgroup.threads').read_text()
+  for pid in members.split():
    try:cwd=str(pathlib.Path('/proc',pid,'cwd').resolve(strict=True))
    except (OSError,RuntimeError):continue
    if cwd.startswith('/home/dombarker/project-offloads/codex-'):found=True

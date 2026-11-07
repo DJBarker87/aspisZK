@@ -2,12 +2,12 @@
 from pathlib import Path
 import subprocess,json,time,hashlib,re,sys
 B=Path.cwd();mode=sys.argv[1];E=B/'NNC_audit'/mode;E.mkdir(parents=True,exist_ok=True)
-if mode=='all':jobs=[('proof'+str(i),['NNC_native/NNC_ScanDriver','proof'+str(i)]) for i in range(len(json.loads((B/'NNC_AUDIT_ROOTS.json').read_text())['groups']))]
+if mode=='all':jobs=[('proof'+str(i),['NNC_native/NNC_ProofDriver','proof'+str(i)]) for i in range(len(json.loads((B/'NNC_AUDIT_ROOTS.json').read_text())['groups']))]
 elif mode.startswith('inventory-'):jobs=[(mode,['NNC_native/NNC_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NNC_native/'+('NNC_PoolDriver' if mode=='poolscan' else 'NNC_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
-elif mode in ['fixtures','scan']:jobs=[(mode,['NNC_native/'+('NNC_ScanDriver' if mode=='scan' else 'NNC_ScanDriver'),mode])]
+elif mode in ['fixtures','scan']:jobs=[(mode,['NNC_native/'+('NNC_ProofDriver' if mode=='scan' else 'NNC_ProofDriver'),mode])]
 else:
- batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NNC_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NNC_native/NNC_ScanDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
+ batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NNC_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NNC_native/NNC_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
 for name,command in jobs:
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

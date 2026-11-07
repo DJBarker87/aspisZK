@@ -57,10 +57,22 @@ theorem cut (L : PoolLib) (D : DeployedIds) (V : V2Lib) (a : Args)
    cases congrArg Obs.exit impossible
  have called := lift_return _ _ _ _ auth
  rw [replyOk] at called
- exact ⟨acc0,acc6,proofData,checkpointData,publicBytes,validated.proof_length,verifyEvents,
-  count,index_return _ _ _ _ _ index0,index_return _ _ _ _ _ index6,
-  ofExcept_return _ _ _ _ read0,ofExcept_return _ _ _ _ read6,
-  proofLength,publicLength,called.1,called.2⟩
+ refine ⟨acc0,acc6,proofData,checkpointData,publicBytes,validated.proof_length,verifyEvents,?_⟩
+ constructor
+ · exact count
+ constructor
+ · exact index_return _ _ _ _ _ index0
+ constructor
+ · exact index_return _ _ _ _ _ index6
+ constructor
+ · exact ofExcept_return _ _ _ _ read0
+ constructor
+ · exact ofExcept_return _ _ _ _ read6
+ constructor
+ · exact proofLength
+ constructor
+ · exact publicLength
+ exact called
 #print axioms lift_return
 #print axioms cut
 end NNC_RSLAccepted
