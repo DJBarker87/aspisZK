@@ -9,7 +9,6 @@ theorem value (v : BitVec 8) : (byte (⟨v⟩ : U8)).toNat = v.toNat :=
 theorem low {n : Nat} (v : BitVec n) :
  (byte (⟨v.setWidth 8⟩ : U8)).toNat = v.toNat % 256 := by
  rw [value,BitVec.toNat_setWidth]
- rfl
 #print axioms value
 #print axioms low
 end NMX_BvByte

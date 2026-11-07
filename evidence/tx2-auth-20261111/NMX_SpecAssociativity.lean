@@ -26,7 +26,7 @@ theorem bind {A B C : Type} (m : Spec A) (f : A → Spec B) (g : B → Spec C) :
          cases he
          exact Or.inl ⟨a,ea,⟨.abort,ef⟩,hm,Or.inr (Or.inl ⟨ef,hf,rfl⟩),ho⟩
      · cases he
-       exact Or.inr (Or.inl ⟨e,hm,ho⟩)
+       exact Or.inr (Or.inl ⟨_,hm,ho⟩)
      · cases he
    · rcases hmf with ⟨a,ea,of,hm,hf,he⟩ | ⟨_,_,he⟩ | ⟨e,hm,he⟩
      · cases of with
@@ -35,9 +35,9 @@ theorem bind {A B C : Type} (m : Spec A) (f : A → Spec B) (g : B → Spec C) :
          exact Or.inl ⟨a,ea,⟨.diverge,ef⟩,hm,Or.inr (Or.inr ⟨ef,hf,rfl⟩),ho⟩
      · cases he
      · cases he
-       exact Or.inr (Or.inr ⟨e,hm,ho⟩)
+       exact Or.inr (Or.inr ⟨_,hm,ho⟩)
  · intro h
-   rcases h with ⟨a,ea,tail,hm,hfg,ho⟩ | ⟨e,hm,ho⟩ | ⟨e,hm,ho⟩
+   rcases h with ⟨a,ea,tail,hm,hfg,ho⟩ | ⟨_,hm,ho⟩ | ⟨_,hm,ho⟩
    · rcases hfg with ⟨b,ef,o2,hf,hg,ht⟩ | ⟨ef,hf,ht⟩ | ⟨ef,hf,ht⟩
      · subst tail
        refine Or.inl ⟨b,ea ++ ef,o2,

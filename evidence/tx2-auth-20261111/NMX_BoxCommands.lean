@@ -1,4 +1,4 @@
-import NMX_FullInterpretation
+import NMX_Semantics
 import NMX_DecoderLibrary
 import NMX_DecoderErrors
 import NMX_HeterogeneousPrimitives
@@ -9,7 +9,7 @@ open Aeneas Aeneas.Std NMX_OwnedPackets
 
 theorem master (L : RSL.PoolLib) (owner : Nat) (b : Slice U8) :
  NMX_Heterogeneous.Refines (fun value : Box Master => NMX_Carrier.master value.payload)
-  (NMX_FullInterpretation.boxed owner (NMX_MasterValue.decoded b))
+  (NMX_Semantics.boxed owner (NMX_MasterValue.decoded b))
   (RSL.decodeMasterBox (NMX_DecoderLibrary.install L) (NMX_Carrier.bytes b)) := by
  unfold RSL.decodeMasterBox
  change NMX_Heterogeneous.Refines _ _
@@ -30,7 +30,7 @@ theorem master (L : RSL.PoolLib) (owner : Nat) (b : Slice U8) :
 
 theorem checkpoint (L : RSL.PoolLib) (owner : Nat) (b : Slice U8) :
  NMX_Heterogeneous.Refines (fun value : Box Checkpoint => NMX_Carrier.checkpoint value.payload)
-  (NMX_FullInterpretation.boxed owner (NMX_CheckpointValue.decoded b))
+  (NMX_Semantics.boxed owner (NMX_CheckpointValue.decoded b))
   (RSL.decodeCheckpointBox (NMX_DecoderLibrary.install L) (NMX_Carrier.bytes b)) := by
  unfold RSL.decodeCheckpointBox
  change NMX_Heterogeneous.Refines _ _

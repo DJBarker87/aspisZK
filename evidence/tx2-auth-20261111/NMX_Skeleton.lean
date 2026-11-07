@@ -99,7 +99,7 @@ theorem source (base : Ops) (env : RSL.Env) (verifier : solana_pubkey.Pubkey)
  unfold NMX_SourceProgram.auth auth
  simp only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
   solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey,NMX_PrimitiveInstall.install,
-  NMX_LeafInstall.install,NGL_CheckpointModel.install,Aeneas.Std.bind_tc_ok]
+  NMX_LeafInstall.install,NGL_CheckpointModel.install,Aeneas.Std.bind_tc_ok,decide_not,Bool.decide_eq_true]
 #print axioms source
 end NMX_Skeleton
 end
