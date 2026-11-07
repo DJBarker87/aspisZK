@@ -40,7 +40,7 @@ def main():
   match=next((o for o in outputs if o['sha256']==h),None);norm=None if match else next((o for o in outputs if o['normalized_sha256']==h),None)
   o=match or norm
   if o:
-   q=o['spec'];z.update(verdict='REPRODUCED_FROM_ARCHIVE',reason='BYTE_IDENTICAL' if match else 'Only admitted NHR_parameterize.py discriminant-metadata normalization',run=o['run'],reproduced_hash=o['sha256'],reproduced_path=o['path'],normalization=None if match else 'NHR_parameterize.py discriminant metadata removal',input=dict(directory=q['reference_directory'],source_sha256=q['reference_sha256'],source_git_blob=q['configuration']['source']['git_blob'],basis=q['reference_basis'],manifest_sha256=q['manifest_sha256'],manifest_basis=q['manifest_basis']))
+   q=o['spec'];z.update(verdict='REPRODUCED_FROM_ARCHIVE',reason='BYTE_IDENTICAL' if match else 'Only admitted NHR_parameterize.py discriminant-metadata normalization',run=o['run'],reproduced_hash=o['sha256'],reproduced_path=o['path'],normalization=None if match else 'NHR_parameterize.py discriminant metadata removal',normalized_hash=None if match else h,input=dict(directory=q['reference_directory'],source_sha256=q['reference_sha256'],source_git_blob=q['configuration']['source']['git_blob'],basis=q['reference_basis'],manifest_sha256=q['manifest_sha256'],manifest_basis=q['manifest_basis']))
   elif b['verdict']=='REPRODUCED':
    z.update(verdict='REPRODUCED_FROM_ARCHIVE',reason='Inherited exact NMH frozen-input reproduction; unchanged archived inputs/receipts, not rerun',input=dict(origin='Frozen Git source through NMH NHR staging',manifest='evidence/emission-repro-20261110/NMH_STAGING_MANIFEST.json',receipt=b['run']+'/receipt.json'))
   elif classified.get(h,{}).get('classification') in ['SEMANTIC','NON-SEMANTIC']:

@@ -18,7 +18,7 @@ def main():
  for f in list(E.glob('NML_[ELBA][0-9][0-9][0-9]/receipt.json')):
   rc=load(f);a=rc['attempt'];ad=load(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
   assert rc['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
-  assert rc['timeout']==180
+  assert rc['timeout']==180 and int(rc['swaps'])==0
   assert all(k in rc for k in ['command','source_revision','source_hashes','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms'])
   assert any(e.get('attempt')==a and e.get('kind')=='share_check' and e['observation']['stream_a_count']<2 and e['observation']['free_bytes']>=40_000_000_000 for e in events)
   post=load(f.parent/'NML_POSTCHECK.json');assert not post['source_drift'] and post['lock_sha256']==post['expected_lock_sha256'];assert post['owned_bytes']<30_000_000_000
@@ -41,7 +41,7 @@ def main():
    if a in last_refusal:assert obs['time']-last_refusal.pop(a)>=180,(a,'short share recheck')
  for f in E.glob('NML_E[0-9][0-9][0-9]/configuration_receipt.json'):
   rc=load(f);scope=rc['scope_attempt'];outer=load(E/scope/'receipt.json');assert rc['limits']==outer['limits'];assert rc['source_revision']==outer['source_revision'];assert outer['exit_status']==0
-  assert rc['peak_rss_kib'] is not None and rc['swaps'] is not None and rc['inherited_scope_timeout']==180
+  assert rc['peak_rss_kib'] is not None and rc['swaps'] is not None and int(rc['swaps'])==0 and rc['inherited_scope_timeout']==180
   completed.append(dict(attempt=rc['attempt'],scope_attempt=scope,exit=rc['exit_status'],wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],source_revision=rc['source_revision'],print_axioms=rc['print_axioms']))
  for b in p['blobs']:
   if b.get('run')=='NML_E001':assert b['verdict']!='REPRODUCED_FROM_ARCHIVE'
@@ -52,6 +52,8 @@ def main():
  assert not list(E.rglob('__pycache__'))
  base=subprocess.check_output(['git','rev-parse','1e13d368ea9^'],text=True).strip()
  names=subprocess.check_output(['git','diff','--name-only',base],text=True).splitlines();assert all(n.startswith('evidence/emission-repro2-20261110/') for n in names)
+ if (E/'NML_HOST_POSTCHECK.json').exists():
+  host=load(E/'NML_HOST_POSTCHECK.json');assert not host['active_owned_processes'] and not host['frozen_source_drift'];assert host['lock_sha256']==host['expected_lock_sha256'];assert host['owned_bytes_after']<30_000_000_000 and host['free_bytes']>=40_000_000_000
  result=dict(status='PASS_WITH_PROVENANCE_GAPS_AND_EXCLUDED_ADMISSION_FINDING' if (E/'NML_ADMISSION_FINDING.json').exists() else 'PASS_WITH_PROVENANCE_GAPS',target_established=False,coverage=336,counts=p['counts'],budget_used=p['budget_used'],completed=completed,remaining_CLOSED_impact=p['affected_CLOSED_count'],scope='No native/ledger/trust/security credit; archived-input provenance only',protected_paths_changed=[])
  (E/'NML_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k] for k in ['status','coverage','counts','budget_used','remaining_CLOSED_impact']}))
 if __name__=='__main__':main()

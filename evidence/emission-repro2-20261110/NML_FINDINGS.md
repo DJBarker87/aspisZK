@@ -30,4 +30,18 @@ NML_L001 passed on NML_DiffArithmetic.lean: exit0, wall3.148678s, peakRSS2602496
 
 ## NML-F6: a frozen-crate opacity metadata assumption blocks a reference crate
 
-E009's optimized pinned Charon exits0 and produces retained LLBC a51f34b8e0d4a0e13b485b32c518daf8ac4a6e97006a8be0ee11ecf04cdba0ff. NHR then refuses the archived crate-local opacity path because its default expansion names aspis_r1_cost_probe rather than eby_k_push_cut. No Aeneas ran in E009. The owned adapter supplies the actual reference-crate selector and retains all hit/opaque checks; NML_A001 is planned as a separately admitted first Aeneas attempt over the unchanged successful LLBC, with explicit zero-charge Charon reuse. Original failure and command receipts are retained.
+E009's optimized pinned Charon exits0 and produces retained LLBC a51f34b8e0d4a0e13b485b32c518daf8ac4a6e97006a8be0ee11ecf04cdba0ff. NHR then refuses the archived crate-local opacity path because its default expansion names aspis_r1_cost_probe rather than eby_k_push_cut. No Aeneas ran in E009. The owned adapter supplies the actual reference-crate selector and retains all hit/opaque checks; NML_A001 was a separately admitted first Aeneas attempt over the unchanged successful LLBC, with explicit zero-charge Charon reuse. Original failure and command receipts are retained.
+
+## Final bounded outcome
+
+All40 primary Charon configurations are terminal; one separately admitted Aeneas-only resume is terminal. Charges:40 Charon,39 Aeneas,1 Lean,0 Kani (80/100 tool slots). No timeout or memory kill and no cap/timeout increase occurred. The original E001 protocol error is excluded, never hidden. All eight real scopes and42 configuration/Lean phase receipts are indexed in NML_RUN_SUMMARY.json; totals are separated to avoid double-counting enclosing scopes.
+
+Verdicts over336 blobs:17 REPRODUCED_FROM_ARCHIVE (16 new plus NMH's inherited one),2 DIFFERS_SEMANTIC (noncanonical U32 overflow only),317 NOT_REPRODUCED. Of the195 absent-reference group,39 blobs have hash-linked input/configuration candidates and37 further blobs have only archived-package source candidates;16 now reproduce. None of the81 missing-configuration members acquired a qualifying archived configuration. Candidates are never promoted by names or proximity. The original17 differences are2 SEMANTIC,0 NON-SEMANTIC,15 UNCLASSIFIED; full individual reasons remain in NML_DIFFS_CLASSIFIED.json.
+
+Remaining non-reproduced aliases conservatively intersect561/581 CLOSED rows, down from563; NML_ROW_IMPACT_DELTA.json records the exact difference. Rootless TX1:059/TX2:040 remain unassessed. This changes no ledger status and establishes no100-bit result. The next deliverable is recovery of the remaining source/configuration/lock and canonical carrier associations, or a separately authorized fresh extraction with its bridges re-proved.
+
+Unused tool allowance: the Charon budget is exhausted; the remaining Aeneas slot lacks a new valid LLBC/configuration stage (the missing-lock input never reached LLBC, and unchanged internal-error reruns add no evidence). The15 unresolved difference interfaces require nominal carrier/opaque-parameter/declaration association; the19 remaining Lean slots are not used to assert unsupported equality, rewrite source/model carriers or prove unrelated rows. Member-by-member boundaries are retained in NML_REMAINING.md.
+
+## NML-F7: pinned Aeneas shared-loan failures remain excluded
+
+E018 fails at src/lib.rs:14:1-14:37; A001's first Aeneas invocation fails at lib.rs:114:12-117:13. Both report the pinned engine's internal error at interp/InterpBorrows.ml:2731 while visiting ASharedLoan. This is an extraction failure, not a counterexample to Rust or the security theorem. No tool patch, changed timeout, unchanged retry or partial-output credit was used. Full exact commands, sources, LLBC and diagnostics are retained in NML_TOOL_FAILURES.json and the original receipts.

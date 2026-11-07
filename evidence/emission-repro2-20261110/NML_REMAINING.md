@@ -1,8 +1,8 @@
 # NML remaining obligations
 
-Target not yet established. No ledger or trust edit. Completed extraction scopes: 32/40; remaining planned scopes: 8. Charged tools: {'Charon': 32, 'Aeneas': 30, 'Lean': 1, 'Kani': 0}; limits Charon 40 / Aeneas 40 / Lean 20 / Kani 0.
+Target not yet established. No ledger or trust edit. Completed extraction scopes: 40/40; remaining planned scopes: 0. Charged tools: {'Charon': 40, 'Aeneas': 39, 'Lean': 1, 'Kani': 0}; limits Charon 40 / Aeneas 40 / Lean 20 / Kani 0.
 
-Work is ongoing; share-gate waits are not tool attempts.
+All planned extraction scopes are terminal. Unused Lean allowance is not spent on renaming nominal carriers or fabricating missing extraction configuration: neither establishes definitional equality. The difference entries below explain each remaining Lean obligation.
 
 ## Member-by-member status
 
@@ -351,5 +351,7 @@ Every non-reproduced member remains a release provenance obligation. The exact g
 - `bd36fcb9cd5374bba5bd72c54460a347812f48048f3ccb942b5bda33a9000a01`: **UNCLASSIFIED**. The compared modules differ in imported carriers, explicit opaque-call parameters and/or selected declaration set, as recorded in declaration_evidence and the exact retained diff. A common elaborated interface and complete body-equality proof are not supplied by the archive comparison; arbitrary erasure/renaming would hide the obligation.
 
 ## Budget and boundary accounting
+
+The Charon allowance is exhausted. One Aeneas slot remains: E029 produced no LLBC because the archived lock is missing; E018 and A001 have deterministic retained Aeneas internal errors, so unchanged reruns would add no provenance; E001 is excluded and cannot supply credited cached extraction. The other 19 Lean slots are unused because the remaining 15 paired interfaces contain distinct nominal carriers, unmatched opaque parameters or missing declaration sets; proving a transported model law or rewriting these inputs would exceed a definitional-equality classification and the no-row-proof/no-trust-change scope. Each member above names its exact boundary. Overall tool charge is 80/100 available Charon+Aeneas+Lean slots.
 
 No Kani or row proof is authorized. No new trust row, trust change, source adoption or ELF rebuild. Remaining non-reproduced blobs conservatively reach 561 CLOSED rows by NMH lexical-name impact; historical aliases remain conservative, and TX1:059/TX2:040 remain unassessed. A reproduced reference input does not itself prove correspondence to the frozen native function.
