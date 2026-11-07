@@ -1,4 +1,5 @@
 import LIBB_C04StoppedTrace
+import NNC_C04Trace
 import NLT_C04Installed
 import NLT_Chronology
 set_option autoImplicit false
