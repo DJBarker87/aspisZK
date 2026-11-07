@@ -1,6 +1,6 @@
 import LIB_Env
 import LIB_VCarriers
-import NBL_CohortCode
+import RPz7_S1ClosedPreparationHashCodeV1
 import LIBC_PreparedErrors
 set_option autoImplicit false
 noncomputable section
@@ -8,15 +8,23 @@ namespace LIBC_PreparedLog
 open Aeneas Aeneas.Std Result AspisR1 AspisR1PublicPreparation
 open NFW_PreparedControl NHL_PreparedScalars
 /-- SAME fixed cohort installation used by the CLOSED179 packet. -/
-theorem installation : NBA_Installed.actual = actual := rfl
-abbrev code := @NBL_CohortCode.code
+theorem installation : AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries = actual := rfl
+def code (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit)
+ (v : verifier.View) (_ : Unit) (old : Scratch) :=
+ PreparedSourceEffects.prepare
+  (PreparedHashCode.preparationEffects actual AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashQueries)
+  D sem v () old
+theorem dictionary : PreparedHashCode.withQueries actual
+ AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashQueries = actual := by
+ rw [← installation]
+ exact AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries_queries
 /-- Ordered effects and full Result share one typed source computation.
 There is no free child dictionary and no supplied successful call. -/
 theorem full_result (D : aspis_core.Digest32 Unit) (sem : r1_semantic.Verified Unit)
  (v : verifier.View) (old : Scratch) :
  (PreparedHashCode.run (code D sem v () old)).2 =
  NGN_Emitted.prepared actual D sem v () old := by
- rw [PreparedHashCode.run_value,NBL_CohortCode.erasure,installation]
+ rw [PreparedHashCode.run_value,code,PreparedHashCode.preparation_erasure,dictionary,OriginalPreparedNative.eq_prepare]
  exact (LIBC_PreparedErrors.complete D sem v old).symm
 /-- Failed attempts have no invented returned digest. Env.sha256 is total at
 this library instance; a stop retains only the preceding successful prefix. -/
@@ -40,6 +48,7 @@ theorem source_at_env (env : RSL.Env) (sem : r1_semantic.Verified Unit)
  (PreparedHashCode.run (code (digest env) sem v () old)).2 =
  NGN_Emitted.prepared actual (digest env) sem v () old := full_result _ sem v old
 #print axioms installation
+#print axioms dictionary
 #print axioms full_result
 #print axioms digest_event
 #print axioms events_append
