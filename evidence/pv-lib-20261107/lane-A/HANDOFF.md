@@ -13,3 +13,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46307 ScopeStoreV2 passed: count projections for457/611, with real overflow decrement and AtomicBool u8 encoding. They are not yet installed and do not establish whole native wrapper adequacy.
 
 46311 ArcMemoryV2 passed: symbolic read/write of the nested ArcInner count from exact source cells, weak/packet/metadata preservation and the actual12950 token. Failed46308–46310 are retained local elaboration failures only.
+
+46313 ScopeDispatchV2 passed after46312 reserved-name parser repair: OWNER-aware candidate includes13 new meanings plus original5, generic neutral agreement and full-reply effects. Typed Drop, destructor branches and native backing adequacy remain open.

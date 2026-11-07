@@ -52,7 +52,7 @@ for i in [18,121,123,127,129,368,371,455,528,582,600,763]:
  loads.append(dict(id='thread:f'+str(i),name=nm(fs[i]),sites=calls.get(i,[]),classification='NO-SOURCE-WRITE',reason='load/get/new/get_mut/into_inner/fence: returns value/reference or ordering only; new constructs a value, source assignment is emitted separately'))
 # Boundary audit does not silently call arbitrary closures or opaque destructors pure.
 writers={e['id'] for e in entries};reads={e['id'] for e in loads}
-known_pure={3,7,8,130,134,165,217,268,269,277,278,279,280,295,312,313,319,320,344,410,453,455,456,612}
+known_pure={3,7,8,130,134,165,217,268,269,277,278,279,280,312,313,319,320,344,410,453,455,456,612}
 boundaries=[]
 for r in rows:
  if r['kind']!='LEAF':continue
@@ -68,10 +68,43 @@ for r in rows:
 # All raw native leaves retained, including opaque wrappers not classified as pure.
 raw=[dict(id='thread:f'+str(i),name=nm(f),sites=calls.get(i,[]),classification=('SOURCE-WRITER' if i in meanings else 'NO-SOURCE-WRITE' if i in {18,121,123,127,129,368,371,455,528,582,600,763} else 'NOT-CERTIFIED-PURE; see boundary/candidate classification')) for i,f in fs.items() if 'body'not in f['code']]
 drops=[dict(caller=r['id'],**s,affected_rows=ancestors([r['id']])) for r in deps for s in r.get('sites',[]) if 'Drop'in str(s.get('row',''))]
+# Typed destructor metadata is retained from the emission, never guessed from a site number.
+meta=json.loads(lzma.decompress((P/'thread-llbc.json.xz').read_bytes()))
+values={}
+def hashes(o):
+ if isinstance(o,dict):
+  if 'HashConsedValue'in o:values[o['HashConsedValue'][0]]=o['HashConsedValue'][1]
+  for v in o.values():hashes(v)
+ elif isinstance(o,list):
+  for v in o:hashes(v)
+hashes(meta)
+types={t['def_id']:'::'.join(p['Ident'][0] for p in t['item_meta']['name']if'Ident'in p)for t in meta['translated']['type_decls']if t}
+def typename(o):
+ if 'Deduplicated'in o:return typename(values[o['Deduplicated']])
+ if 'HashConsedValue'in o:return typename(o['HashConsedValue'][1])
+ if 'Adt'in o:return types.get(o['Adt']['id'].get('Adt'),'builtin:'+str(o['Adt']['id']))
+ if 'Ref'in o:return '&'+typename(o['Ref'][1])
+ return str(o)
+rawDrops=[]
+for i,f in fs.items():
+ for d in en.walk(f['code']):
+  if d.get('opcode')=='Native.Drop':
+   drop={k:v for k,v in d['native']['Drop'].items()if k!='on_unwind'}
+   rawDrops.append(dict(caller='thread:f'+str(i),site=d['identity']['statement'],source_path=d['identity']['path'],native=drop,type_name=typename(drop['place']['ty']),affected_rows=ancestors(['thread:f'+str(i)])))
+# Additional composite/type-dependent writers: no no-write claim is made for these.
+extra={168:'JoinInner.packet.result.UnsafeCell.value is taken; Arc cleanup also writes counts',241:'copy_nonoverlapping destination may be a source-store pointee',248:'drop_in_place executes the selected destructor',308:'pointer-method write',322:'Drop::drop trait dispatch may execute Packet destructor and other captured destructors',325:'pointer-method drop_in_place',364:'pointer write',454:'spawn-hook TLS Cell::take/set and Arc clone/drop; provenance determines source/OWNER backing',549:'mem::drop executes the selected destructor',654:'Box::drop executes the pointee destructor before deallocation'}
+for i,foot in extra.items():
+ if any(e['id']=='thread:f'+str(i)for e in entries):continue
+ entries.append(dict(id='thread:f'+str(i),name=nm(fs[i]),emission='BODY'if'body'in fs[i]['code']else'LEAF',installed_as_native=any(r['id']=='thread:f'+str(i)and r['kind']=='LEAF'for r in rows),sites=calls.get(i,[]),affected_rows=ancestors(['thread:f'+str(i)]),footprint=foot,named_meaning=None,status='TYPE-OR-WRAPPER-COMPOSITION-OPEN',endpoint_note='No arbitrary Store transformer is substituted. Exact destructor/type/provenance binding remains open.'))
+rawSlice=[]
+for n in [94906,94915,94917]:
+ cohort=json.loads(lzma.decompress((P/f'slice-N{n}.json.xz').read_bytes()))
+ for f in cohort['functions']:
+  if 'body'not in f['code']:rawSlice.append(dict(cohort=n,id='slice:f'+str(f['function']),name=nm(f),classification='Recorded raw leaf; see installed native-boundary and typed Drop classifications'))
 result=dict(schema=2,base='bbb785242b876aa943e9627aa46a7ffa350a860a860a'[:40],ruling='D984 thread-26 double-prime',criterion='ANY source-store cell, including BoxNew/Arc pointees; OWNER-only effects are separate',
  witness=dict(branch='codex/pv-lib-spec-20261107',revision='f2798a4fac4',module='PV_LIB_SPEC_F361ArcMachineGap',roots=['native_poll','count_unchanged','increment_impossible'],attempt=49735,site=12950),
  authority=json.load(open('evidence/pv-ledger-20261108/enumeration.json'))['source_pins'],
- source_writers=entries,read_only_counter_cell_operations=loads,native_boundaries=boundaries,all_emitted_thread_native_leaves=raw,typed_drop_sites=drops,
+ source_writers=entries,read_only_counter_cell_operations=loads,native_boundaries=boundaries,all_emitted_thread_native_leaves=raw,all_emitted_slice_native_leaves=rawSlice,typed_drop_sites=drops,raw_thread_typed_drop_sites=rawDrops,
  refcell=dict(emitted_functions=[i for i,f in fs.items() if 'RefCell'in nm(f)],finding='No RefCell function occurs in this pinned emission; boxed Cell and UnsafeCell do occur. Generic Drop and opaque callback boundaries are not thereby pure.'),
  qualifications=['Conservative syntactic inventory; not a proof every site is reached on one execution.', 'Every installed native boundary is retained. NATIVE-WRAPPER-REVIEW and type-dependent Drop remain unresolved, not no-write classifications.', 'Raw nested primitive sites are not automatically requests of the installed machine. Enclosing native wrappers and typed Drop must bind their complete effects; adding primitive tokens alone is insufficient.', 'Slice raw copy destination is OWNER-backed M31 memory in the source7 path; reference construction and checks do not write source cells. Generic destructors retain type-dependent obligations.', 'No full corrected-machine adequacy, entry reachability, row closure or endpoint-premise removal follows.'])
 result['base']='bbb785242b876aa943e9627aa46a7ffa350a860a'
