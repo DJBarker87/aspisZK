@@ -7,7 +7,13 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 #[derive(Clone,Copy)] struct Hash;
 impl Digest32 for Hash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("NLV unexpected digest")}}
 fn q()->K{let w:[u32;4]=kani::any();K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
-fn e()->E{E::new(q(),q())}
+fn e()->E{
+ assert_eq!(core::mem::size_of::<E>(),32);assert_eq!(core::mem::align_of::<E>(),4);assert_eq!(core::mem::size_of::<K>(),16);
+ let w:[u32;8]=kani::any();kani::assume(w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647&&w[4]<2147483647&&w[5]<2147483647&&w[6]<2147483647&&w[7]<2147483647);
+ // INPUT payload only: all E scalar fields admit every bit pattern; the
+ // canonical eight-word product is independent of their layout permutation.
+ unsafe{core::mem::transmute::<[u32;8],E>(w)}
+}
 fn point()->SecureCirclePoint{SecureCirclePoint{x:q(),y:q()}}
 fn prepared()->Box<Prepared>{Box::new(Prepared{variant:Variant::S2,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:q(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|q()),z:[point(),point()],claim:e(),state:kani::any()})}
 fn accumulator()->Accumulator{Accumulator{weights:Vec::from(core::array::from_fn::<K,64,_>(|_|q())),rhs:e(),power:q(),next:kani::any()}}
@@ -75,12 +81,12 @@ fn source(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:Hash,obs
 fn withdraw()->aspis_statement::pool_v1::PoolV1WithdrawalPublicV1{use aspis_statement::pool_v1::PoolV1WithdrawalPublicV1;fn d()->[M31;8]{let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:d(),nullifier:d(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:d()}}
 // K002 replacement: complete first-error cuts, isolated BEFORE unused owned
 // fixtures are constructed. No successful normal spine is claimed here.
-struct PrefixLog{stop:u8,error:Error,calls:[u8;4],count:usize,j:usize,prepared:Option<Box<Prepared>>,public:(u64,u64,usize,usize,u8)}
+struct PrefixLog{field:usize,window:u8,scratch:E,stop:u8,error:Error,calls:[u8;4],count:usize,j:usize,prepared:Option<Box<Prepared>>,public:(u64,u64,usize,usize,u8)}
 impl PrefixLog{
  fn enter(&mut self,t:u8){self.calls[self.count]=t;self.count+=1;}
  fn parse(&mut self,_:&[u8])->Result<Variant,Error>{self.enter(0);if self.stop==0{Err(self.error)}else{Ok(Variant::S2)}}
  fn scan(&mut self,_:&[u8])->Result<(),Error>{self.enter(1);if self.stop==1{Err(self.error)}else{Ok(())}}
- fn prepare(&mut self,p:Public<'_>,_:&[u8],_:Hash,_:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{self.enter(2);self.public=public_words(p,self.j,self.j);assert_eq!(g[self.j%29],E::ZERO);for x in g.iter_mut(){*x=e();}if self.stop==2{Err(self.error)}else{Ok(self.prepared.take().unwrap())}}
+ fn prepare(&mut self,p:Public<'_>,_:&[u8],_:Hash,_:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{self.enter(2);if self.window==1{self.public=public_words(p,self.field,self.j);}if self.window==2{self.scratch=g[self.j%29];}for x in g.iter_mut(){*x=e();}if self.stop==2{Err(self.error)}else{Ok(self.prepared.take().unwrap())}}
  fn accumulator(&mut self,_:Variant)->Result<Accumulator,Error>{self.enter(3);Err(self.error)}
 }
 fn prefix_source(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:Hash,obs:Observer,log:&mut PrefixLog)->Result<(),Error>{
@@ -94,13 +100,14 @@ fn prefix_source(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H
  let _=(p,a,public_bytes);
  panic!("NLV prefix crossed its first-error cut")
 }
-fn prefix_check(mode:u8,bad:bool){
- let proof:[u8;57607]=kani::any();let bytes:[u8;1880]=kani::any();let j:usize=kani::any();kani::assume(j<57607);let before=proof[j];let public_before=bytes[j%1880];
- let t=crate::r1_semantic::NKQ_rejections::transition();let transfer=crate::r1_semantic::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&t)}else{Public::Withdrawal(&withdrawal,&t)};let pub_words=if mode>=2{public_words(public,j,j)}else{(0,0,0,0,255)};
- let error=err();let prepared=if mode==3{Some(prepared())}else{None};let mut log=PrefixLog{stop:mode,error,calls:[255;4],count:0,j,prepared,public:(0,0,0,0,255)};
+fn prefix_check(mode:u8,bad:bool){prefix_window(mode,0,bad)}
+fn prefix_window(mode:u8,window:u8,bad:bool){
+ let proof:[u8;57607]=kani::any();let bytes:[u8;1880]=kani::any();let j:usize=usize::from(kani::any::<u16>());kani::assume(j<57607);let before=proof[j];let public_before=bytes[j%1880];
+ let t=crate::r1_semantic::NKQ_rejections::transition();let transfer=crate::r1_semantic::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&t)}else{Public::Withdrawal(&withdrawal,&t)};let field:usize=usize::from(kani::any::<u16>());kani::assume(field<576);let pub_words=if window==1{public_words(public,field,j)}else{(0,0,0,0,255)};
+ let error=err();let prepared=if mode==3{Some(prepared())}else{None};let mut log=PrefixLog{field,window,scratch:E::ZERO,stop:mode,error,calls:[255;4],count:0,j,prepared,public:(0,0,0,0,255)};
  let out=prefix_source(public,&bytes,&proof,10,Hash,None,&mut log);
  let ordered=log.count==mode as usize+1&&log.calls[0]==0&&(mode<1||log.calls[1]==1)&&(mode<2||log.calls[2]==2)&&(mode<3||log.calls[3]==3);
- let good=matches!(out,Err(e) if e==error)&&ordered&&proof[j]==before&&bytes[j%1880]==public_before&&(mode<2||log.public==pub_words&&public_words(public,j,j)==pub_words)&&(mode<3||log.prepared.is_none());
+ let good=matches!(out,Err(e) if e==error)&&ordered&&proof[j]==before&&bytes[j%1880]==public_before&&(window!=1||log.public==pub_words&&public_words(public,field,j)==pub_words)&&(window!=2||log.scratch==E::ZERO)&&(mode<3||log.prepared.is_none());
  if bad{assert!(!good,"NLV matched corruption")}else{assert!(good,"NLV prefix selected first error")}
 }
 
@@ -275,8 +282,24 @@ fn parent_18_control(){check(18,true)}
 
 #[kani::proof] #[kani::unwind(4097)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn parent_stability_cut(){check(2,false)}
+fn parent_stability_cut(){check(1,false)}
 
 #[kani::proof] #[kani::unwind(4097)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn parent_stability_control(){check(2,true)}
+fn parent_stability_control(){check(1,true)}
+
+#[kani::proof] #[kani::unwind(4097)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn prepare_public_cut(){prefix_window(2,1,false)}
+
+#[kani::proof] #[kani::unwind(4097)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn prepare_public_control(){prefix_window(2,1,true)}
+
+#[kani::proof] #[kani::unwind(4097)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn prepare_scratch_cut(){prefix_window(2,2,false)}
+
+#[kani::proof] #[kani::unwind(4097)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn prepare_scratch_control(){prefix_window(2,2,true)}

@@ -111,7 +111,7 @@ theorem input_frame (cfg : Configuration)
  (returned : SdkC_Source.run h (step cfg s) before=(ok (.inr after),log)) :
  after.input=s.input := leaves_run (FramePost s) h (step cfg s) (source_frame cfg s) _ before log returned
 theorem positive (s : NLJ_Tx1.State) : 0<rank s := by
- cases s with | mk i l => cases l <;> decide
+ cases s with | mk i l => cases l <;> simp only [rank] <;> decide
 #print axioms source_step
 #print axioms source_frame
 #print axioms source_progress

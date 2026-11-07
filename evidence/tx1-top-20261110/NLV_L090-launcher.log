@@ -1,0 +1,27 @@
+{"attempt": "NLV_L090", "exit_status": 0, "wall_seconds": 15.591713356086984, "peak_rss_kib": "5999944", "swaps": "0", "print_axioms": ["'AspisR1.NLV_Tree.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLV_Tree.from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLV_Tree.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_Tree.from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_Tree.from_cuts : ∀ (cfg : Configuration) (i : Input) (frame : NLJ_Packets.Frame094)
+  (observed : NGP_L181.Observation Out) (events : List NLV.Event) (last : NLV.State),
+  NLV.Invocation cfg i.hashv 20 (NLV.initial i frame) observed.result observed.attempted events last →
+    NGP_L181.NativeAssociation i.hashv
+        (NGQ_Normalize.normalize
+          (GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes i.proof
+            i.k))
+        observed ∧
+ 
+...
+'AspisR1.NLV_Tree.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_Tree.from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_Tree.from_cuts : ∀ (cfg : Configuration) (i : Input) (frame : NLJ_Packets.Frame094)
+  (observed : NGP_L181.Observation Out) (events : List NLV.Event) (last : NLV.State),
+  NLV.Invocation cfg i.hashv 20 (NLV.initial i frame) observed.result observed.attempted events last →
+    NGP_L181.NativeAssociation i.hashv
+        (NGQ_Normalize.normalize
+          (GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes i.proof
+            i.k))
+        observed ∧
+      last.external = (NLV.initial i frame).external ∧ last.core.input = i :=
+⋯
+
+Running as unit: run-rf68354efb80a4942990c6e17ec4d29a8.scope; invocation ID: b62b1300e93b4fa399367aa4f0640b74

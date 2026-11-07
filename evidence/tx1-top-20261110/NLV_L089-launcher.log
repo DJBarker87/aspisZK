@@ -1,0 +1,51 @@
+{"attempt": "NLV_L089", "exit_status": 0, "wall_seconds": 18.60790377901867, "peak_rss_kib": "5996812", "swaps": "0", "print_axioms": ["'AspisR1.NLV_Tree.exact_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLV_Tree.exact_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_Tree.exact_source : ∀ (cfg : Configuration) (h : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (n : ℕ) (s : State),
+  rank s ≤ n →
+    ∀ (before : SdkC_Source.Log), SdkC_Source.run h (fold cfg n s) before = SdkC_Source.run h (denote cfg s) before :=
+fun cfg h n s enough before =>
+  Nat.recAux (motive := fun n =>
+    ∀ (s : State),
+      rank s ≤ n →
+        ∀ (before : SdkC_Source.Log), SdkC_Source.run h (fold cfg n s) before = SdkC_Source.run h (denote cfg s) before)
+    (fun s enough before =>
+      have hp := positive s;
+      Classical.byContradiction fun a => exact_source._p
+...
+(fail e, after) => (fail e, after)
+                            | (div, after) => (div, after)))
+                        (Eq.symm h_1) edge)
+                    (fun h_1 =>
+                      Eq.ndrec (motive := fun reply =>
+                        SdkC_Source.run h (step cfg s) before = (reply, log) →
+                          (match (reply, log) with
+                            | (ok a, after) =>
+                              SdkC_Source.run h
+                                (match a with
+                                | Sum.inl out => pure out
+                                | Sum.inr after => fold cfg n after)
+                                after
+                            | (fail e, after) => (fail e, after)
+                            | (div, after) => (div, after)) =
+                            match (reply, log) with
+                            | (ok a, after) => SdkC_Source.run h (continuation cfg a) after
+                            | (fail e, after) => (fail e, after)
+                            | (div, after) => (div, after))
+                        (fun edge =>
+                          Eq.refl
+                            (match (div, log) with
+                            | (ok a, after) =>
+                              SdkC_Source.run h
+                                (match a with
+                                | Sum.inl out => pure out
+                                | Sum.inr after => fold cfg n after)
+                                after
+                            | (fail e, after) => (fail e, after)
+                            | (div, after) => (div, after)))
+                        (Eq.symm h_1) edge)
+                    (Eq.refl reply))
+                (Eq.symm h✝) (Eq.refl (SdkC_Source.run h (step cfg s) before)))))))
+    n s enough before
+
+Running as unit: run-r58b878fb82a54121b74bbf71bfb89752.scope; invocation ID: dca5bff64c7f40898358ff12cb4f65c4

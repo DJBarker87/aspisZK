@@ -96,23 +96,17 @@ theorem frame_prepare (cfg : Configuration) (i : Input) (g : Scratch) :
  AllLeaves (FramePost ⟨i,.prepare g⟩) (step cfg ⟨i,.prepare g⟩) := by
  dsimp only [step]
  simp only [Bind.bind,Pure.pure]
- repeat' first
- | (apply leaves_bind; intro reply; cases reply)
- | (split)
- | (simp only [AllLeaves,FramePost,advance,rank,nextOrError])
- | trivial
- | decide
+ apply leaves_bind
+ rintro ⟨r,after⟩
+ cases r <;> simp only [AllLeaves,FramePost,advance,rank,nextOrError]
 #print axioms frame_prepare
 theorem progress_prepare (cfg : Configuration) (i : Input) (g : Scratch) :
  AllLeaves (ProgressPost ⟨i,.prepare g⟩) (step cfg ⟨i,.prepare g⟩) := by
  dsimp only [step]
  simp only [Bind.bind,Pure.pure]
- repeat' first
- | (apply leaves_bind; intro reply; cases reply)
- | (split)
- | (simp only [AllLeaves,ProgressPost,advance,rank,nextOrError])
- | trivial
- | decide
+ apply leaves_bind
+ rintro ⟨r,after⟩
+ cases r <;> simp only [AllLeaves,ProgressPost,advance,rank,nextOrError] <;> decide
 #print axioms progress_prepare
 theorem frame_accumulator (cfg : Configuration) (i : Input) (g : Scratch) (p : verifier.Prepared) :
  AllLeaves (FramePost ⟨i,.accumulator g p⟩) (step cfg ⟨i,.accumulator g p⟩) := by

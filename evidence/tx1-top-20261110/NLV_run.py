@@ -44,6 +44,17 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(60);time.sleep(60);time.sleep(60);continue
  raise RuntimeError('STOP admission')
+# Admission may wait30minutes: re-check disk BEFORE upload and scope launch.
+# Disk recovery after waiting needs fresh admission, never an old permit.
+for post_retry in range(7):
+ r=ssh('python3',"import shutil,json;print(json.dumps(shutil.disk_usage('/home/dombarker/project-offloads')._asdict()))")
+ assert r.returncode==0,r.stderr
+ info=json.loads(r.stdout);(E/(a+'-post-admission-disk-'+str(post_retry)+'.json')).write_text(json.dumps(info))
+ if info['free']>=40_000_000_000:
+  if post_retry:raise RuntimeError('PRELAUNCH_READMIT: disk recovered; restart own client for fresh reservation; NO scope submitted')
+  break
+ if post_retry==6:raise RuntimeError('STOP disk below40GB after six post-admission waits; NO scope submitted')
+ for _ in range(10):time.sleep(60)
 x.update(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
 files={n:({'base64':__import__('base64').b64encode((E/n).read_bytes()).decode()} if n.endswith('.xz') else (E/n).read_text()) for n in x['sources'] if (E/n).is_file()}
 files[a+'.json']=json.dumps(x)

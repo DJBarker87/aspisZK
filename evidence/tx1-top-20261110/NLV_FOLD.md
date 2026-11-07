@@ -35,3 +35,5 @@ TIMED OUT at90s after a full unused-fixture construction (97.092149744s scope,
 control or unchanged rerun is admitted. Split first-error windows are candidates
 only until their fresh native scopes and matched controls finish. Frozen graph,
 lock and deployed features validated for both; lock unchanged afterward.
+
+Stage3: `NLV_Tree.initial_source` and `NLV_Tree.from_cuts` PASS at L090. The printed theorem binds the actual initial input/hashv and exact adopted GExp code. All20 source steps, rank induction, source input frames and external/attempted-event chain support are proved. `from_cuts` still takes `NLV.Invocation` as an explicit OPEN parameter; it is not a094 root. No success-only endpoint is substituted. L084/L085 frame pair-elimination failures and L087 symbolic decide failure were repaired locally and retained.

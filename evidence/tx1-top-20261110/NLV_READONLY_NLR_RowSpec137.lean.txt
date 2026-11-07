@@ -14,7 +14,7 @@ structure Observation137 where
  log : PreparedHashCode.Log
  events : List NLJ_Observed.Event
 abbrev Native137 := NLJ_Observed.Input Unit → ExternalFrame → Observation137
-/-- Draft FULL packet under (be)(1), not a native realization. The actual
+/-- Draft SOURCE/VALUE packet; not the full ledger resource obligation. The actual
 producer must be fixed by the reviewed physical cuts. Own argument domain
 is byte extent13831; every caller must establish it under (bf). All inner
 errors, outer abort/divergence and attempted effects are retained. -/

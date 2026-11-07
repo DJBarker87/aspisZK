@@ -22,3 +22,5 @@ are NOT discharged. Native K001 compile-only and K002 timeout are excluded;
 K002 full-fixture shape is retired. Prefix splits are prepared, not yet validated.
 RowSpec correction draft explicitly retains raw Rust Result alongside its model
 rejection transport; see NLV_ROWSPEC_REVIEW.md (NLV-F1). No row root or credit.
+
+Stage3: L081 ordered typed→SDK digest trace, L082 source trace existence, L083 initial physical carrier construction, L086 all38 frame/rank clauses, L088 source step/frame/progress assembly, L089 exact continuation induction, L090 complete initial SAME-argument source identity and parameterized physical fold, L091 selector coverage pass. Standard axioms only. Physical Cut producer and full child-resource installation remain OPEN. K003/K005 pass parse/scan first-error windows with K004/K006 matched failing controls; K007 timeout is retired without credit.

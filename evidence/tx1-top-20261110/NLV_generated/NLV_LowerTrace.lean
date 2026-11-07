@@ -4,9 +4,9 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NLV_LowerTrace
 open Aeneas Aeneas.Std Result
-open AspisR1PublicPreparation (PreparedHashCode)
-def event : PreparedHashCode.Event → SdkC_Source.Parts × Result SdkC_Source.Digest
- | .digest _ _ parts reply => (parts,reply)
+open AspisR1PublicPreparation
+def event : PreparedHashCode.Event → SdkC_Source.Query
+ | .digest _ _ parts reply => ⟨parts,reply⟩
 /-- Typed preparation events and SDK events are the SAME ordered attempted
 parts/replies. Fail/div retain their terminal event and have no suffix. -/
 theorem source {A : Type} (h : SdkC_Source.Parts → Result SdkC_Source.Digest)

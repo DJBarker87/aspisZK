@@ -27,7 +27,8 @@ theorem source (ops : Ops)
  rw [←outEq]
  change ∀ j,j<22 → out.queries.val[j]!.val<262144
  intro j hj
- have within : j<out.queries.val.length := by have size:=out.queries.property;omega
+ have length : out.queries.val.length=22 := out.queries.property
+ have within : j<out.queries.val.length := by omega
  have bound := shape.2.2.2.1 ⟨j,hj⟩
  simpa only [List.getElem!_eq_getElem?_getD,List.getElem?_eq_getElem within,Option.getD_some] using bound
 #print axioms source

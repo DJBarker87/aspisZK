@@ -1,0 +1,30 @@
+// K002 replacement: complete first-error cuts, isolated BEFORE unused owned
+// fixtures are constructed. No successful normal spine is claimed here.
+struct PrefixLog{stop:u8,error:Error,calls:[u8;4],count:usize,j:usize,prepared:Option<Box<Prepared>>,public:(u64,u64,usize,usize,u8)}
+impl PrefixLog{
+ fn enter(&mut self,t:u8){self.calls[self.count]=t;self.count+=1;}
+ fn parse(&mut self,_:&[u8])->Result<Variant,Error>{self.enter(0);if self.stop==0{Err(self.error)}else{Ok(Variant::S2)}}
+ fn scan(&mut self,_:&[u8])->Result<(),Error>{self.enter(1);if self.stop==1{Err(self.error)}else{Ok(())}}
+ fn prepare(&mut self,p:Public<'_>,_:&[u8],_:Hash,_:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{self.enter(2);self.public=public_words(p,self.j,self.j);assert_eq!(g[self.j%29],E::ZERO);for x in g.iter_mut(){*x=e();}if self.stop==2{Err(self.error)}else{Ok(self.prepared.take().unwrap())}}
+ fn accumulator(&mut self,_:Variant)->Result<Accumulator,Error>{self.enter(3);Err(self.error)}
+}
+fn prefix_source(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:Hash,obs:Observer,log:&mut PrefixLog)->Result<(),Error>{
+ if k!=SPLIT{return Err(Error::Parse);}
+ log.parse(proof)?;
+ log.scan(proof)?;
+ mark(obs,Phase::Parsed);
+ let mut g=[E::ZERO;29];
+ let p=log.prepare(public,proof,hash,obs,&mut g)?;
+ let a=log.accumulator(Variant::S2)?;
+ let _=(p,a,public_bytes);
+ panic!("NLV prefix crossed its first-error cut")
+}
+fn prefix_check(mode:u8,bad:bool){
+ let proof:[u8;57607]=kani::any();let bytes:[u8;1880]=kani::any();let j:usize=kani::any();kani::assume(j<57607);let before=proof[j];let public_before=bytes[j%1880];
+ let t=crate::r1_semantic::NKQ_rejections::transition();let transfer=crate::r1_semantic::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&t)}else{Public::Withdrawal(&withdrawal,&t)};let pub_words=if mode>=2{public_words(public,j,j)}else{(0,0,0,0,255)};
+ let error=err();let prepared=if mode==3{Some(prepared())}else{None};let mut log=PrefixLog{stop:mode,error,calls:[255;4],count:0,j,prepared,public:(0,0,0,0,255)};
+ let out=prefix_source(public,&bytes,&proof,10,Hash,None,&mut log);
+ let ordered=log.count==mode as usize+1&&log.calls[0]==0&&(mode<1||log.calls[1]==1)&&(mode<2||log.calls[2]==2)&&(mode<3||log.calls[3]==3);
+ let good=matches!(out,Err(e) if e==error)&&ordered&&proof[j]==before&&bytes[j%1880]==public_before&&(mode<2||log.public==pub_words&&public_words(public,j,j)==pub_words)&&(mode<3||log.prepared.is_none());
+ if bad{assert!(!good,"NLV matched corruption")}else{assert!(good,"NLV prefix selected first error")}
+}
