@@ -1,24 +1,81 @@
-# NMT resumed run — active
+# NMT resumed handoff — no candidate row
 
-Continuation authorized 2026-11-07: zero new extraction; 250 new Lean/link/audit scopes (L061–L310); restricted Kani20 unchanged. Reuse E001–E003. Binding order345 then328 then094; each complete parameterized fold before next. Whole-tree erasure/normalization L049/L051 retired. New work splits call occurrences into small modules carrying parent state. Canonical RSL RowSpec087/094/328/345 are the targets; prior proposed NMT specs are support only. No new candidate yet.
+**Target not established. TX1:345,328,094 remain OPEN; credit requested0.**
+No complete canonical parameterized row fold or one-line instantiation is
+ready. Baseline ledger24 remains581 CLOSED/0 QUALIFIED/18 OPEN. No push,
+shipped source/ELF change, trust change, key operation, or security claim.
 
-Resumed stage1 (L061–L119): canonical spec chain, full error/account and
-byte/key carriers, source-route factoring, first distinct/readonly/checkpoint/
-getter steps, symbolic zero increment/induction, and30 invertible structural
-transports compile. These are SUPPORT; no completed345 observable fold or
-candidate. Native domains are explicit; generic emitted/std supplements are
-not expanded Kani passes. Remaining steps are active. No328/094 row proof
-started before345 completion. See NMT_RSL_ADOPTION.md and per-scope receipts.
+## Review this result first
 
-Resumed stage2 checkpoint: exact emitted per-call boundaries through proof-data
-read PASS; concrete full-result decoder/validator/common/encoder/semantic-public
-transports PASS; first CLOSED source-position installations and payment-domain
-invariants PASS. Still no complete345 canonical observable fold;328/094 remain
-deferred under binding order. NMT_REMAINING is the active member table;
-NMT_RESUME_PROGRESS records counts. New-root raw audit is pending, so old58-root
-audit is NOT claimed for these additions. No timeout/OOM/cap increase.
+NMT_SPEC_FINDINGS.md records two exact canonical345 observation gaps:
+NMT-S1 pure arbitrary deferred String-error getters/checkpoints omit possible
+clone-allocation abort; NMT-S2 Option decoder plus a post-success allocation
+omits internal allocation abort prefixes before later Rust Err branches.
+Pinned frozen/std source excerpts and Lean semantic distinction witnesses are
+included. These are source/specification findings and model distinctions,
+NOT measured native counterexamples. Canonical087/094/328 are adopted exactly;
+no snapshot/decode-success or other stronger premise is silently installed.
 
-Prior run record follows unchanged:
+The proposed precise target differences are full clone observation laws OR
+the actual caller-established snapshot343 own-input invariant, AND the full
+observable CLOSED332 decoder law at its reached allocation sites. Snapshot
+restriction alone does not fix NMT-S2. Canonical345 Domain remains True here.
+
+## Checked resumed support
+
+- NMT_345.source_fold: exact E003 emitted VALUE/CONTROL fold through source-
+  ordered small call boundaries, with typed phase frames retaining one original
+  parent. Prefix, middle, checked bounds and tail fold individually; no whole-
+  call-tree erasure/normalization. Calls remain explicit here, so this is NOT a
+  free-Ops candidate row or an installed physical full-observation producer.
+- SAME native CLOSED339/340/342 installations, full-Result332/276/267/278/268
+  transports, and36 structural carrier isomorphisms. Restricted335/341 native
+  clone domains are retained; generic pure-clone supplements are source support.
+- NMT_345.validated_public_domain proves the exact concrete NKR public clause
+  from the SAME actual validator returning Ok. Canonical V/S1Lib realization
+  and full parent observation association remain open; no345 publicDom input.
+- NMT_345PostObservation.suffix_packet uses FULL canonical RowSpec_328 at the
+  original call packet, preserving child events on later length rejection and
+  unchanged stopped prefixes. This is only the complete suffix, not row345.
+
+NMT_REMAINING.md gives every member's exact obligation. Binding order345→328→
+094 prevented new328/094 row proofs before a complete345 fold. NMP's committed
+branch was checked read-only and still has no087 candidate (pinned in
+NMT_RESUME_SIBLING_CHECK.json); that is not offered as345's blocker.
+
+## Evidence and resources
+
+NMT_RESUME_COMBINED_IMPORT passes with ledger24,6698624KiB peak RSS, swap0.
+NMT_RESUME_MODULES selects178 current passing new modules and244 printed roots
+(207 new support roots plus37 copied canonical checks). All244 roots pass six
+focused raw ax2 groups with collector equality and only propext,
+Classical.choice,Quot.sound. Historical headline/fixture audits are reused;
+no all-roots or unchanged full regression is replayed. Exact targets, exits,
+wall/RSS/swap, source revision/hashes, Aeneas pins and printed axioms are in
+L061 onward receipts and NMT_INPUTS content-addressed archives.
+
+Used225/250 resumed scopes,2843.656s aggregate scope wall,6698624KiB peak
+RSS,zero swap;38 failed elaborations retained without credit. No new extraction
+or Kani. Retention rehashed658 frozen files,123 imported seed objects and239
+resolved Aeneas objects;95.67GB host disk free,zero deletions.
+
+Authoritative final counts/status: NMT_RESUME_VALIDATION.json and
+NMT_RESUME_PROGRESS.json. Export/retention hashes: NMT_RESUME_EXPORT.json,
+NMT_RESUME_AENEAS_PINS.json, NMT_RESUME_RETENTION.json. Historical first-run
+NMT_AUDIT/VALIDATION/CURRENT_MODULES remain historical, not new-root coverage.
+All scopes retain6G/8G/no-swap/64-task limits,180s timeout, Lean-M7000, one
+scope at a time, allowed:true/exit0 reservation, share<6, disk>=40GB. No new
+extraction or Kani; E001–E003 and their bc audit are reused.
+
+Local stage commits include4f3458c810f,32a1a38db02,0ee9ec4cc53,c669d971f8d;
+final evidence commit follows them. No push. Unspent scope allowance cannot
+justify repeating the known incomplete getter/Option interpretation or
+starting later rows against the binding order; remaining member-by-member
+reasons are explicit in NMT_REMAINING.md. No job was killed by timeout/memory,
+and no cap or timeout was raised. Own runner repairs are documented separately.
+
+## Historical first-run handoff (superseded where stated above)
+
 
 # NMT final handoff
 

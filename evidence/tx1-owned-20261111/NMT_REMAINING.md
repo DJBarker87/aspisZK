@@ -1,21 +1,33 @@
-# NMT remaining obligations — resumed run active
+# NMT remaining obligations
 
-Target not established. No candidate and no complete canonical parameterized
-fold yet. Only345 is active; binding order345→328→094 remains in force.
-Canonical targets/clauses are NMT_RSL_PROVENANCE and NMT_CALLER_CLAUSES.
+Target not established. No CANDIDATE root, complete canonical parameterized
+row fold, promotion, or ledger credit. Binding order remains345→328→094.
+Canonical087/094/328 and original345 targets are preserved exactly in
+NMT_RSL_*; proposed corrections below are NOT silently adopted.
 
-| Member | Current checked progress | Exact remaining obligation |
+| Member | Checked support | Exact remaining obligation / why not advanced |
 |---|---|---|
-|345 source|E003 reused; exact emitted_route10/admitted_select; raw00…12 full-state continuations; boundary_distinct and eight subsequent single-call equations PASS|Finish remaining validator/map_err/common/encoder/constant/range/tag/public/328 call occurrences in source order and fold; no whole-call-tree normalization.|
-|345 pure children|CLOSED339 literal3, both340 occurrences and342 installed at exact source positions; full-result332/276/267/278/268 source/model transports PASS; complete ProgramError and30+6 structural value isomorphisms checked|Install the remaining concrete root interpretations at their occurrences; close canonical byte/key/error/length and std primitive transports. Generic clone/zero complements are explicit emitted/std support, not expanded Kani claims.|
-|345 publicDom|Payment common/transfer/withdrawal canonicality guard lemmas PASS; exact FIq public-carrier transport PASS|Derive NKR_DigestChildren.Domain(NKR_TermPublic.value semanticPublic) from actual validator's SAME returning arm, then instantiate canonical V.publicDom; never add this as345 input premise.|
-|345 observation|Full Obs bind/try/abort/divergence-prefix algebra and full canonical328 call packet PASS|Connect source steps to the full canonical RSL.Ref, including allocation abort, returning complete Result, original account/public/proof arguments and328 effects retained on post-child rejection. No complete RowSpec328-parameterized fold is claimed.|
-|328|E002 and previous-run value/std-map_err support retained read-only|Deferred until345 fold complete. Then full094 RowSpec at SAME Public/public/proof/k/None, complete RuntimeLog/error effects and representation/domain binding.|
-|094|E001 and previous-run17 structural transports retained|Deferred until328 fold complete. Then one step per actual call occurrence, CLOSED child domains internally derived and full087 RowSpec at SAME inputs/scratch. L049/L051 whole-tree shape retired.|
-|087 parameter|Canonical full-strength RSL spec adopted; NMP branch a8c1c9a1e14 last inspected without candidate|Instantiate only a concrete matching sibling root when available; no child result/success/endpoint or backend-projection premise.|
-|Gate|Historical audit58 roots remains valid for previous support only|Own new tops need raw ax2, all printed axioms and focused ledger24 combined import, exact pins/export/retention/local validation.|
+|TX1:345 source|NMT_345.source_fold, using exact source-ordered small prefix/middle/bounds/tail boundaries with one original parent; independent account-read and common/encoder steps|Value/control support is complete. Calls remain explicit; this is not an installed concrete physical observation packet and not a RowSpec root.|
+|345 CLOSED children|339,340,342 source-position installations; full-Result332/276/267/278/268 transports; exact carrier inverses|Complete physical SAME-argument observations and domain/representation links at every call. In particular335/341 CLOSED packets restrict deferred error variants; do not replace arbitrary actual clone by pure identity.|
+|345 own public clause|NMT_345.validated_public_domain derives NKR_DigestChildren.Domain on the SAME semantic public from the validator's returning Ok arm|Concrete NKR clause is proved. Canonical V/S1Lib realization and the full parent observation binding remain open. No345 publicDom hypothesis was added.|
+|345 specification NMT-S1|Forced String-error return/no-abort witness; pinned String/Vec source inspection; allocation-aware getter semantic distinction|Canonical Domain=True permits deferred BorshIoError(String), while getter/checkpoint references are pure Except. Either caller-established snapshot343 own-input invariant or exact clone observations are needed. This is a precise proposed target difference, not accepted closure or a native counterexample.|
+|345 specification NMT-S2|Frozen decoder allocation ordering documented; NMT_345DecodeAbortDistinction.reject_models_differ|Canonical Option decoder plus post-success alloc cannot express reached internal alloc abort before later decoder Err. Need full CLOSED332 decoder Result/abort-prefix packet, at actual reached sites; snapshot restriction alone does not fix this. No decode-success assumption is allowed.|
+|345 child328 suffix|NMT_345PostObservation.suffix_packet uses canonical RowSpec_328 and retains ALL child events even on post-child length rejection; abort/diverge prefixes unchanged|Connect actual full parent to this suffix. It does not establish a complete345 parameterized fold.|
+|TX1:328|E002 and prior source/std support retained; canonical RowSpec_094 adopted|New row fold cannot start under binding order until345 complete. Then install full094 packet at original Public/public/proof/k/None with all RuntimeLog/error effects. There is no ready one-line instantiation.|
+|TX1:094|E001 and prior structural transports retained; canonical RowSpec_087 adopted|New row fold follows complete328. Build one actual-call step at a time with internal CLOSED-child domains; never reuse retired L049/L051 whole-tree shape.|
+|087 parameter|NMT_RESUME_SIBLING_CHECK.json pins inspected NMP branch and its NO_CANDIDATE status|No matching root was available to instantiate. This does not obstruct an otherwise valid parameterized fold; it is not offered as the reason345 is open.|
+|Verification|Focused ledger24 combined import; new own-root raw ax2 groups; unchanged walker controls reused|See NMT_RESUME_AUDIT/VALIDATION and exact per-scope resource/source/axiom receipts. These validate support only.|
 
-New restricted Kani has no eligible target: every owned body emits and reused
-bc audit has no flagged exit. Remaining obligations are Lean-only. This is an
-ACTIVE checkpoint, not an early stop or claim that Kani blocks Lean work.
-All launch receipts preserve caps, timeouts, disk/share and admission evidence.
+No new restricted Kani target is eligible: all three actual bodies already
+emit, and reused bc audit flags no post-loop exit. No extraction is authorized
+or needed. No shipped source/ELF changed, so no Rust/Kani/reproducible-build
+replay is triggered. No resource-cap or timeout increase can repair NMT-S1/S2.
+
+The unspent scope allowance is not an independent row to prove. Under the
+binding completion order,328 and094 cannot be started merely to consume it;
+345's current full canonical observation target needs the exact corrections
+above or a source-backed ruling that supplies the missing physical laws.
+Continuing the pure getter/Option interpretation would repeat a known
+unsound closure shape. Both target differences are recorded for lead review;
+no child-output premise, trust-row change, or stronger success assumption was
+used to bypass them.
