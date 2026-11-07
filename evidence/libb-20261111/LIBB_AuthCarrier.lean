@@ -4,6 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace LIBB_AuthCarrier
 open Aeneas Aeneas.Std
+attribute [local instance] Classical.propDecidable
 abbrev Raw := AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts
 /-- Partial inverse of a carrier only; no execution or success relation. -/
 def raw (a : RSL.Authenticated) : Option Raw :=

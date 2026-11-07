@@ -11,3 +11,5 @@ Validation pending. No new hypotheses discharged or added. Next deliverable: mod
 Module 6 imported unchanged via LIBB_PoolCarriers; L001 exit0, 19.528s, peak6460896KiB, swap0; standard axioms only. Carrier choices DONE, no new source equivalence or principal credit.
 
 Module 7: L012 passes policy and four registry/entry exact model/root laws plus Returns evaluators. Helpers L002–L011 pass except excluded L007 ambiguity failure, repaired by qualification at L008. No child-success/allocator-success premise or trust added. Definitions are model values, never native Cut images; native cuts remain explicit only in separate supplier-root association lemmas.
+
+Module 8: L020 AccountGraph and L021 PoolAccounts pass; L017 proves all scalar/record carrier associations without canonicality premises. The Err-first/Ok-first match association is explicit. L015/L018 alias-target rewrite shape retired; L019 isolated matcher type mismatch excluded. decodeMaster/decodeCheckpoint DONE; native Box-site source associations remain imported support, not new row credit.

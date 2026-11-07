@@ -5,6 +5,7 @@ set_option autoImplicit false
 noncomputable section
 namespace LIBB_NullifierBytes
 open Aeneas Aeneas.Std
+attribute [local instance] Classical.propDecidable
 abbrev Digest := Array U32 8#usize
 abbrev chunks := AspisS6SourceCodec.DigestContents.chunks
 /-- Full little-endian encoding, including noncanonical words. -/
@@ -14,7 +15,7 @@ def key (d : Digest) : RSL.B32 :=
      AspisS6SourceCodec.DigestContents.chunks,List.length_append]
    simp only [show ∀ x : U32, (core.num.U32.to_le_bytes x).val.length = 4 from
      fun x => (core.num.U32.to_le_bytes x).property]
-   rfl⟩
+   ⟩
 
 theorem injective : Function.Injective key := by
  intro a b same
