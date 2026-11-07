@@ -1,7 +1,9 @@
 import NMS_RSLScalars
 import NLM_ScalarLaws
 set_option autoImplicit false
+noncomputable section
 namespace NMS_RSLScalarEq
+attribute [local instance] Classical.propDecidable
 open Aeneas Aeneas.Std NMS_RSLScalars
 
 theorem scalar_bne {ty : UScalarTy} (a b : UScalar ty) :

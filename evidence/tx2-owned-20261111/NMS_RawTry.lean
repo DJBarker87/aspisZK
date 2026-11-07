@@ -42,7 +42,7 @@ theorem simulates {A B C D : Type} (value : A → C) (output : B → D)
  NMS_Interpreted.Simulates (NMS_RSLError.reply output)
   (literal actual next) (RSL.RS.bind model later) := by
  rw [normalize]
- apply NMS_Interpreted.bind (NMS_RSLError.reply value) (NMS_RSLError.reply output) actual model
+ apply NMS_Interpreted.bind (NMS_RSLError.reply value) (NMS_RSLError.reply output) actual model _ _ first
  intro reply
  cases reply with
  | Ok a => exact rest a

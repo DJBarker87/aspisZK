@@ -1,5 +1,5 @@
 import NMS_ScanSites
-import NMS_Regular
+import NMS_RegularControl
 set_option autoImplicit false
 noncomputable section
 namespace NMS_ScanRegular
@@ -17,32 +17,31 @@ theorem regular (bytes : Slice U8) :
  cases expected with
  | none => exact NMS_Regular.lift _
  | some size =>
-   cases guard : (Slice.len bytes != size) with
-   | true => exact NMS_Regular.lift _
-   | false =>
-     apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
+   dsimp only
+   apply NMS_RegularControl.branch
+   · exact NMS_Regular.lift _
+   · apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
      intro header
      apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
      intro decoded
      cases decoded with
      | Err error => exact NMS_Regular.lift _
      | Ok candidate =>
-       apply NMS_Regular.bind _ _ _ _ NMS_Regular.allocate
-       intro unit
-       cases unit
+       dsimp only
+       apply NMS_AllocationRegular.bind
        apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
        intro encoded
        cases encoded with
        | Err error => exact NMS_Regular.lift _
        | Ok encoded =>
-         cases guard : (encoded.val != header.val) with
-         | true => exact NMS_Regular.lift _
-         | false =>
-           apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
+         dsimp only
+         apply NMS_RegularControl.branch
+         · exact NMS_Regular.lift _
+         · apply NMS_Regular.bind _ _ _ _ (NMS_Regular.lift _)
            intro tag
-           cases guard : (tag != 2#u8) with
-           | true => exact NMS_Regular.lift _
-           | false => exact NMS_Regular.lift _
+           apply NMS_RegularControl.branch
+           · exact NMS_Regular.lift _
+           · exact NMS_Regular.lift _
 
 theorem source_return (bytes : Slice U8) (env : RSL.Env)
  (reply : core.result.Result AdapterRw.r1_pool_adapter.ScannedAsqaProof AdapterRw.solana_program_error.ProgramError)

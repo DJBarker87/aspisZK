@@ -21,3 +21,5 @@ run_cmd do
   if s.startsWith "AspisR1.JHf_Carrier" &&
      (s.endsWith "Request" || s.endsWith "AuthenticatedAsq8Accounts") then
    Lean.logInfo m!"{n}: {ci.type}"
+
+#check AspisR1.NFY_JHd_RequestNative.decode

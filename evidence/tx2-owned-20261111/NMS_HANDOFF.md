@@ -36,3 +36,25 @@ L081 establishes an exact conditional getter-stop incompatibility with canonical
 ## Domain/stop reconciliation stage
 NMS_Effect242Fold.fold passes L095 after replacing whole-body tactic normalization (L094 heartbeat) with explicit head-by-head congruence. This is a full emitted observation fold over child links, not an endpoint/free-Ops row root. Exact original successful getter/link/range proofs pass L098-L100; profile/release carrier conversion passes L103 after explicitly unfolding the generated irreducible constants. NMS_SafePackets and safe242/241 source folds pass L104-L106; these add an EXPLICIT PROPOSED original-account error-domain difference, not a silently narrowed canonical packet. NMS_RSLGetterContract applies CLOSED NHJ_DataPacket at SAME account after deriving its native domain, passing L108. NMS_SnapshotBoth.both passes L109 and proves both stored bytes/length errors lie in that domain on every returned snapshot, including failed borrow and invalid admitted length. This can discharge the proposed extra caller clause at240 without a new headline assumption. No native parent root yet.
 Source review caught a real provisional-model placement error: NMS_RSLScan.raw allocated only after final scanner Ok, but frozen Rust allocates after candidate decode and BEFORE encoder/tag. Its width statements remain true model support, but that model is RETIRED for native use. NMS_SCAN_SITE_FINDING.md records the failure and NMS_ScanSites is the replacement at the actual source site. No credit was claimed from the incorrect model.
+
+## Allocation-aware source folds (resumed stage)
+
+L153–L170 and L179–L181 compile the corrected getter/reference chain.
+`NMS_GetterMeaning.full` transports every ProgramError variant and every stopped
+clone arm to `NMS_GeneralGetters.data`, with no snapshot restriction.
+`NMS_Clone241Fold.fold` remains parametric in arbitrary `V : V2Lib`, with
+exactly canonical D1/D2; `NMS_Clone241Weak.fold` (L224) specializes Root0=True.
+The exact recursive source-reference changes are in NMS_CLONE_REFERENCE_DIFF.json.
+These are proposed clone-accurate targets, not an owner-approved change to RSL.
+
+L220–L223 compile an Ops-free typed242 source fold: NMS_242Parameterized.fold.
+Its only open child is the full observation233 packet, at original arguments.
+The fixed interpretations in NMS_Native242Children remain PROPOSED until each
+CLOSED child’s complete observation/site law and RSL carrier transport is installed.
+Neither row is CANDIDATE. NMM branch was inspected at 0f45c91bcd8; no233 candidate.
+
+Own proof/input repairs: scalar equality needed Classical decidability;
+GeneralGetters needed a stored-value case split; normal trace projections
+needed explicit event equality; obsolete NDO_RequestOperations conflicts
+with NFY_Part042 ownership, so coherent NFY closure and NMS_RequestModels
+definitions replace that import. Failed inspections are retained, not credits.
