@@ -1,3 +1,67 @@
+# SPEC session 2 current handoff — requested task remains incomplete
+
+Branch codex/pv-lib-spec-20261107, resumed4fcc1573c698. Full frozen contracts
+remain0/29. Full OwnInit/source7 joint witnesses remain0/2, and no contradiction
+of either FULL composed premise set is established. No row was proved.
+The requested elaboration/composition deliverables are not complete. IDs are
+not exhausted. Next Lean49725..49789; next raw49792..49799 for new/changed roots.
+
+## Exact new evidence
+
+* RegistrationGap.raw_next/registered_next/steps_differ: at exact emitted
+  f361 storage-live14320 (body.drop113), literal frozen SourceStoreInterpreter
+  omits the existing OWNER descriptor registration, for every environment.
+  SPEC-C2 in FINDINGS.md and SESSION2_SPEC_CORRECTIONS.md records exact
+  before/after proposal. This is LOCAL, not original-entry reachability or a
+  full composition-premise contradiction. Shared frozen files are untouched.
+* ThreadMachine.step is a correction CANDIDATE preserving intrinsic priority,
+  OWNER/operator/bridged allocation layers and selecting the pinned concrete
+  writer step at actual ordinary native writer polls. away/writer/registration
+  compiled. SourceAdequacy/ReachedAgreement are TARGETS, not discharged facts.
+* F361Entry.before_after/implies_package/name/scope compare the literal pinned
+  provider's Pre, EntryName and Scope.Shape plus the actual active/suspended
+  LiveNumbering predicate. ENTRY COMPONENT only; no full Pre/MachineSpec/Post.
+
+## Validation
+
+Nine passing focused compiles:4 byte-identical pinned dependency replays,
+3 new support/comparison modules,1 audit driver,1 constructor printer. Each
+passing compile was committed. Three changed-before-retry elaboration failures
+are archived; none accepted. Exact target/exit/wall/peak RSS/swap/revision/source
+hash/#print axioms are in each receipt and SESSION2_VALIDATION.json.
+All used6G/8G/swap0/Tasks64/Lean-M7000, one own scope at a time, standalone
+STREAMB_SLOTS=3 turn before each ID with host cap2 retained. One turn waited
+its existing180s interval. No admission refusal, OOM, cap raise or raw rerun.
+
+ONE strict raw49791 covered27 NEW roots: process EXIT1 from SIX constructor
+summary disagreements;21 direct agreements;zero unresolved;all raw axioms
+standard. Wall0:26.45;peak6755496KiB;swap0;source1f914f12e97. The retained raw
+graphs contain provider Pre.mk at all six differences. Focused49724 prints
+Pre.mk's missing standard axioms. Offline constructor-summary union reconciles
+27/27 WITHOUT changing walker, replacing raw evidence or claiming exit0.
+SESSION2_RAW_AUDIT.json preserves both original failure and reconciliation.
+New graph archive includes all27 full reachable inventories with hashes.
+Unchanged49790 evidence reused, never rerun.
+
+W3 is a third isolated cohort, not mixed with base/STX. Four missing pinned
+source dependencies were replayed privately in objects-w3. W3 source snapshot:
+315 match pinned W3,0 differ,1 failed prototype absent from pin. The last is
+not imported by these modules. W3_OBJECT_AUTHORITY.json.xz records the read-only
+3550-object resolution snapshot; this is not a coherent combined release claim.
+All33 frozen files are unchanged; write boundary PASS. No endpoint premise,
+T field, source implementation, ledger, package branch or shared map changed.
+No row consumption, Rust/SBF/Kani/extraction/full manifest, key action, push/merge.
+No active host scope remains.
+
+Recheck retained evidence, without Lean/raw replay:
+python3 evidence/pv-lib-20261107/lane-SPEC/validate.py
+python3 evidence/pv-lib-20261107/lane-SPEC/validate_session2.py
+
+REMAINING.md and CONTRACT_INDEX.json are the completion authority. Target not
+yet established. Historical session1 and serial session2 checkpoints follow.
+
+---
+
 # SPEC lane, first-session partial handoff
 
 Branch codex/pv-lib-spec-20261107; base5e397cb38787124d8a4bce7d3ea54f2d38e6c7e7.

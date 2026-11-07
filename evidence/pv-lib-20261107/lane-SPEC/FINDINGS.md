@@ -78,3 +78,12 @@ This is a demonstrated LOCAL model mismatch, not a source defect, original-entry
 reachability proof, contradiction of full joint premises, or failure of
 decodeBridged. No full composition witness/contradiction is claimed. Frozen
 files are unchanged; the exact correction proposal is in SESSION2_SPEC_CORRECTIONS.md.
+
+## Session2 audit qualification
+
+Strict49791 exit1 is retained. Six f361 entry roots have raw/summary differences
+from the provider's Pre constructor: the raw graph reaches Pre.mk; collectAxioms
+of the structure name omits its constructor's type dependencies. Focused49724
+prints Pre.mk's three standard axioms. The retained graph is reconciled offline
+by the same constructor-summary UNION policy; no walker change, raw rerun or
+exit0 claim. SESSION2_RAW_AUDIT.json records each reconciliation separately.

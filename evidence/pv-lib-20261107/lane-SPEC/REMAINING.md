@@ -1,15 +1,32 @@
+# Session 2 frontier and correction
+
+This task remains INCOMPLETE:0/29 full contracts,0/2 full joint witnesses or
+checked full-joint contradictions. Both composition requests remain outstanding.
+SPEC-C2 is a checked local machine mismatch, not a full-joint contradiction.
+Resolve its exact recorded COMMON correction while preserving old OWNER,
+operator and bridged allocation layers. ThreadMachine is a compiled candidate,
+not an adoption of a changed shared frozen specification or source adequacy.
+Continue OwnInit chain first, with complete per-row package comparison, then
+source7 contracts; only then the two concrete joint witnesses. Prove no row.
+
+One strict raw49791 ran;exit1 from six missing constructor summaries.49724
+prints the already-reached provider Pre.mk; offline constructor-summary union
+reconciles all27 retained raw walks, standard axioms only, zero unresolved.
+SESSION2_RAW_AUDIT.json preserves exit1 and explicit reconciliation. No rerun.
+Next Lean49725..49789; next raw49792..49799 for changed/new roots only.
+
 # SPEC remaining work
 
-The requested task is INCOMPLETE. IDs are not exhausted. Next Lean49713 through
-49789; next raw49791 only for genuinely changed/new roots. Never rerun49790
-unchanged. No host scope is active.
+The requested task is INCOMPLETE. IDs are not exhausted. Next Lean49725 through
+49789; next raw49792 only for genuinely changed/new roots. Never rerun49790 or49791 unchanged. No host scope is active.
 
 1. Elaborate ALL29 complete frozen contracts. CONTRACT_INDEX.json enumerates
    every row and its frozen hash. Full count is0/29: PV_LIB_SPEC_ToVec is a
    compiled statement/boundary component, not the finished frozen contract.
    Finish binding its source-associated resource environment and full machine
    facts; then complete the other28 row statements in dependency order.
-2. Compile ALL package-statement comparisons. Only the ToVec Pre identity,
+2. Compile ALL package-statement comparisons. F361Entry now gives the literal
+   provider entry-name/scope/numbering COMPONENT comparison only. The ToVec Pre identity,
    corrected-pending implication and actual prefix11 exclusion are compiled.
    The other frozen comparison paragraphs remain prose. Read the exact pinned
    provider definitions, including the currently PARTIAL statements; do not
