@@ -1,4 +1,4 @@
-import LIBB_AccountDecoderReuse
+import LIBB_AccountCarriers
 import LIBB_ResultTotal
 import LIBB_V1DecoderValues
 import NJY_Roots
@@ -25,7 +25,10 @@ theorem master_model (b : Slice U8) :
  | ok r =>
    rw [code] at h
    have hr : NKF_BoxModel.tail r = NMX_MasterValue.decoded b := Result.ok.inj h
-   rw [LIBB_AccountDecoderReuse.master_same, ←hr]
+   have hs := LIBB_AccountDecoderReuse.master_same b
+   rw [LIBB_AccountCarriers.bytes b] at hs
+   rw [hs, ←hr]
+   simp only [LIBB_AccountCarriers.master]
    cases r <;> rfl
 
 theorem checkpoint_model (b : Slice U8) :
@@ -40,7 +43,10 @@ theorem checkpoint_model (b : Slice U8) :
  | ok r =>
    rw [code] at h
    have hr : NKF_BoxModel.tail r = NMX_CheckpointValue.decoded b := Result.ok.inj h
-   rw [LIBB_AccountDecoderReuse.checkpoint_same, ←hr]
+   have hs := LIBB_AccountDecoderReuse.checkpoint_same b
+   rw [LIBB_AccountCarriers.bytes b] at hs
+   rw [hs, ←hr]
+   simp only [LIBB_AccountCarriers.checkpoint]
    cases r <;> rfl
 
 /-- Supplying root composed at the original input and full decoder Result. -/
@@ -48,8 +54,7 @@ theorem master_root (b : Slice U8)
  (out : core.result.Result NJQ_Master.M NJQ_Master.F) (cut : NJY_Master.Cut b out) :
  asOption master (NJQ_Carrier.master_result out) = decodeMaster (bytes b) := by
  have h := master_model b
- unfold NJQ_Canonical.master at h
- rw [←NJY_Roots.master b out cut] at h
+ rw [←NJQ_Canonical.master_result b out cut] at h
  exact Result.ok.inj h
 
 theorem checkpoint_root (b : Slice U8)
@@ -57,8 +62,7 @@ theorem checkpoint_root (b : Slice U8)
  (cut : NJY_Checkpoint.Cut b out) :
  asOption checkpoint (NJQ_Carrier.checkpoint_result out) = decodeCheckpoint (bytes b) := by
  have h := checkpoint_model b
- unfold NJQ_Canonical.checkpoint at h
- rw [←NJY_Roots.checkpoint b out cut] at h
+ rw [←NJQ_Canonical.checkpoint_result b out cut] at h
  exact Result.ok.inj h
 
 theorem master_returns (b : RSL.Bytes) (env : RSL.Env) :

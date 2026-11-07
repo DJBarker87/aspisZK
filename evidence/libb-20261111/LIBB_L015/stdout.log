@@ -1,0 +1,58 @@
+LIBB_generated/LIBB_PoolAccounts.lean:28:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NMX_R2_DecoderLibrary.master (NMX_R2_Carrier.bytes ?b)
+in the target expression
+  LIBB_ResultTotal.mapOuter (asOption master) (Result.ok r) = Result.ok (decodeMaster (bytes b))
+
+case ok
+b : Slice U8
+r : core.result.Result NJQ_Carrier.CM NJQ_Carrier.CF
+h : NJQ_Canonical.mapOuter NKF_BoxModel.tail (Result.ok r) = Result.ok (NMX_MasterValue.decoded b)
+code : NJQ_Canonical.master b = Result.ok r
+hr : NKF_BoxModel.tail r = NMX_MasterValue.decoded b
+⊢ LIBB_ResultTotal.mapOuter (asOption master) (Result.ok r) = Result.ok (decodeMaster (bytes b))
+LIBB_generated/LIBB_PoolAccounts.lean:43:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NMX_R2_DecoderLibrary.checkpoint (NMX_R2_Carrier.bytes ?b)
+in the target expression
+  LIBB_ResultTotal.mapOuter (asOption checkpoint) (Result.ok r) = Result.ok (decodeCheckpoint (bytes b))
+
+case ok
+b : Slice U8
+r : core.result.Result NJQ_Carrier.CC NJQ_Carrier.CF
+h : NJQ_Canonical.mapOuter NKF_BoxModel.tail (Result.ok r) = Result.ok (NMX_CheckpointValue.decoded b)
+code : NJQ_Canonical.checkpoint b = Result.ok r
+hr : NKF_BoxModel.tail r = NMX_CheckpointValue.decoded b
+⊢ LIBB_ResultTotal.mapOuter (asOption checkpoint) (Result.ok r) = Result.ok (decodeCheckpoint (bytes b))
+LIBB_generated/LIBB_PoolAccounts.lean:52:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJY_Master.model b
+in the target expression
+  LIBB_ResultTotal.mapOuter (asOption master) (NJQ_Canonical.mapOuter NJQ_Carrier.master_result (NJQ_Master.model b)) =
+    Result.ok (decodeMaster (bytes b))
+
+b : Slice U8
+out : core.result.Result NJQ_Master.M NJQ_Master.F
+cut : NJY_Master.Cut b out
+h :
+  LIBB_ResultTotal.mapOuter (asOption master) (NJQ_Canonical.mapOuter NJQ_Carrier.master_result (NJQ_Master.model b)) =
+    Result.ok (decodeMaster (bytes b))
+⊢ asOption master (NJQ_Carrier.master_result out) = decodeMaster (bytes b)
+LIBB_generated/LIBB_PoolAccounts.lean:61:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJY_Checkpoint.model b
+in the target expression
+  LIBB_ResultTotal.mapOuter (asOption checkpoint)
+      (NJQ_Canonical.mapOuter NJQ_Carrier.checkpoint_result (NJQ_Checkpoint.model b)) =
+    Result.ok (decodeCheckpoint (bytes b))
+
+b : Slice U8
+out : core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F
+cut : NJY_Checkpoint.Cut b out
+h :
+  LIBB_ResultTotal.mapOuter (asOption checkpoint)
+      (NJQ_Canonical.mapOuter NJQ_Carrier.checkpoint_result (NJQ_Checkpoint.model b)) =
+    Result.ok (decodeCheckpoint (bytes b))
+⊢ asOption checkpoint (NJQ_Carrier.checkpoint_result out) = decodeCheckpoint (bytes b)
+'LIBB_PoolAccounts.master_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PoolAccounts.checkpoint_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PoolAccounts.master_root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PoolAccounts.checkpoint_root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PoolAccounts.master_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_PoolAccounts.checkpoint_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
