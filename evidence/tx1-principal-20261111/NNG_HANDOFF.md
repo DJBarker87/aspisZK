@@ -21,3 +21,9 @@ Read mapping-only commit8c9ffd24f0d from branch codex/cx-lib-map-20261107 (that 
 Inherited recorded use: 32 Lean scopes, 1 extraction, 1 seed scope; 0 Kani. Highest reserved local id L069; L030–031/L034–067 were not launched according to the committed ATTEMPTS log. Continue with L070. Prior modules are support only. The rounds native-cut image is not an admissible field model: use CLOSED134’s model conjunct. Failed equality support is not used.
 
 Next module: NNG_Row136Fold, explicitly stating RSL.TX1_136.RowSpec_136 VL and folding source-order call occurrences against RSL.TX1_136.Ref. Each occurrence must identify its corresponding VLib field under the graph of its CLOSED deterministic model. No concrete VLib field installation belongs to this lane. Rebuild the RSL import closure privately from rev3 sources before loading it; no rev2 RSL objects are admissible.
+
+## Rev3 conditional fold stage
+
+L070/L071/L072 privately compile byte-identical rev3 RSL_Base/RSL_Verifier/RSL_TX1_136 in NNG_RSL3 before any RSL consumer. L075 compiles NNG_Row136Fold.fold: body VL calls = RSL.TX1_136.Ref VL a under FieldGraphs. Its Target explicitly names RowSpec_136 on the fresh emitted function. Standard axioms [propext, Quot.sound]. L073 had a structure-layout parse failure; L074 exposed a simplifier proof-shape failure; L075 replaces rewriting under dependent decisions by extensional equality of the call record. No timed-out or memory-killed run occurred.
+
+This is conditional support only: FieldGraphs and the actual emitted-to-interpreted body association are uninstalled. It is not a candidate. Next: actual emitted Result plus typed trace observation, and model-graph occurrence equalities (no native-cut rounds model). No VLib field instance has been defined.
