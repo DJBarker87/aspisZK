@@ -56,3 +56,12 @@ Full site/occurrence/arguments/pre-world allocation and reservation channels,
 graph uniqueness and event-only abort observation are compiled. pendingEnv
 inhabits the CHANNEL TYPE only. No actual row handler/resource schedule binding
 or joint source/machine nonemptiness follows from this. Next Lean49710.
+
+Focused49710 passed PV_LIB_SPEC_Delivery (1.26s,2685364KiB,swap0).
+SPEC-B1 correction: enclosing-row success is not the nested intrinsic callback's
+returned prefix. callback_return_not_boundary excludes it, with the actual
+run_succ identity connecting a consumed pending transition to its post-state.
+Use Delivery.Boundary/First; Boundary.Terminal/Boundary/First/Diverges are
+SUPERSEDED support definitions and are not full row specifications. Existing
+uniqueness/abort/body-push theorems remain mathematically valid. No row uses
+these modules. Next Lean49711. Frozen PSPECs remain unchanged.

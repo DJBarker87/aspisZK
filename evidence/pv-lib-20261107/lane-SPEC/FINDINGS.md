@@ -43,3 +43,14 @@ modules absent from the base authority, all cached in STX. Reuse is isolated;
 no stale object was mixed, no provider was replayed or edited. A combined
 composition claim still needs a coherent dependency closure. This is a build
 instance observation, not a mathematical contradiction or an exhaustion claim.
+
+## SPEC-B1: superseded local generic terminal recognizer
+
+PV_LIB_SPEC_Boundary.Terminal classifies every `.returned` prefix as terminal.
+That is too early for a successful intrinsic callback when suspended contains
+an additional intrinsic caller. Its generic uniqueness theorem is true, but
+the predicate cannot be used as the enclosing row's completion boundary.
+No row consumes it. PV_LIB_SPEC_Delivery supplies the correction: successful
+return additionally requires out.suspended = entry.suspended; failures and
+pending remain retained. This corrects a NEW lane support declaration, not a
+frozen PSPEC. The corrected callback exclusion theorem is the focused check.
