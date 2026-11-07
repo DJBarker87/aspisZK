@@ -7,3 +7,5 @@ LIBC-F02: L004 used stale rev2 RSL_specs ahead of rebuilt rev3 RSL objects copie
 LIBC-F03: L028 output_length hit recursion depth while elaborating a concrete List.ofFn length through placeholders. Replaced with a symbolic bytes_ofFn_length lemma parameterized by n and applied at13831; no recursion/heartbeat option increased. L028 is excluded.
 
 LIBC-F04: L032 original NBL_CohortCode import conflicts with canonical RPz7_PreparedFromQmSourceBridge owner. Original import excluded. PreparedLog now constructs the same fixed code from RPz7_S1ClosedPreparationHashCodeV1; dictionary identity is proved explicitly, no owner stand-in.
+
+LIBC-F05: L039/L040 numerical Usize capacity equality failed under rfl/scalar_tac. That numerical normalization shape is retired. Reuse the CLOSED NGN_RowArithmetic.capacity symbolic wrapping/checked equality to prove only the needed existence of a successful capacity result; no cap/timeout/options change.

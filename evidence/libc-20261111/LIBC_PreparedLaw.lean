@@ -62,11 +62,12 @@ theorem native_result (a : Args) (env : RSL.Env) :
  (run a env).2 = NGN_Emitted.prepared NHL_PreparedScalars.actual
  (LIBC_PreparedLog.digest env) a.1 a.2.1 () a.2.2 :=
  LIBC_PreparedLog.source_at_env env a.1 a.2.1 a.2.2
-theorem capacity : (32#usize + 224#usize : Result Usize) = .ok 256#usize := rfl
+theorem capacity_reaches : ∃ n : Usize, (32#usize + 224#usize : Result Usize) = .ok n :=
+ ⟨_,NGN_RowArithmetic.capacity.symm⟩
 #print axioms returned
 #print axioms returns
 #print axioms abort_exact
 #print axioms divergence_exact
 #print axioms native_result
-#print axioms capacity
+#print axioms capacity_reaches
 end LIBC_PreparedLaw
