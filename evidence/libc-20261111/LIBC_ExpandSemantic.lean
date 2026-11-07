@@ -24,20 +24,27 @@ theorem model_port (a : Bytes × Bytes) (env : Env) (h : Domain a) :
        (LIBC_Bytes.raw a.1) (LIBC_Bytes.raw a.2)
      ok (match r.1 with
        | .Ok _ => Except.ok (LIB_Carriers.bytes r.2)
-       | .Err _ => Except.error (CodecErr.Length))) = ok (value a env) := by
+       | .Err _ => Except.error (.Length : CodecErr))) = ok (value a env) := by
  rw [native_result a h,bind_tc_ok]
  rfl
 theorem returns (a : Bytes × Bytes) (env : Env) :
  NND_Returned.Returns (child.law a) env (value a env) := LIB_Carriers.ofFn_returns _ _ _ a env
 theorem exact (a : Bytes × Bytes) (env : Env) (o : Obs (Except CodecErr Bytes)) :
  child.law a env o ↔ o = ⟨.ret (value a env),[]⟩ := Iff.rfl
+/-- Symbolic length transport prevents reduction of a concrete 13,831-cell list. -/
+theorem bytes_ofFn_length {n : Nat} (f : Fin n → U8)
+ (h : (List.ofFn f).length ≤ Usize.max) :
+ (LIB_Carriers.bytes (⟨List.ofFn f,h⟩ : Slice U8)).length = n := by
+ change (List.map _ (List.ofFn f)).length = n
+ rw [List.length_map,List.length_ofFn]
 theorem output_length (src : Slice U8) :
- (LIB_Carriers.bytes (LIBC_ExpandSemanticModel.output src)).length = 13831 := by
- change (List.map _ (List.ofFn _)).length = _
- simp only [List.length_map,List.length_ofFn]
+ (LIB_Carriers.bytes (LIBC_ExpandSemanticModel.output src)).length = 13831 :=
+ bytes_ofFn_length (LIBC_ExpandSemanticModel.byte src) _
+
 #print axioms native_result
 #print axioms model_port
 #print axioms returns
 #print axioms exact
+#print axioms bytes_ofFn_length
 #print axioms output_length
 end LIBC_ExpandSemantic
