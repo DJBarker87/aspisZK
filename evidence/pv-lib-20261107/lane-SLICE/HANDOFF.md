@@ -41,3 +41,5 @@ Attempt 49613: PV_W5_F32FormatPrimitives, passed pinned focused replay.
 Attempt 49614: PV_W5_LocalBind, passed pinned focused replay.
 
 Attempt 49615: PV_W5_F32FormatMessage, passed pinned focused replay.
+
+Attempt 49616: PV_W5_F32FormatReference, passed pinned focused replay.
