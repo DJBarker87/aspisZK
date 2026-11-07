@@ -56,3 +56,5 @@ adequacy and top-level joint premise consistency remain unproved. No new
 semantics fact, endpoint hypothesis, trust field or metric change was made.
 
 D978 attempt 49688: PV_FN_SLICE_f8_Suffix: passing pinned replay.
+
+D978 attempt 49689: PV_FN_W2_BinaryReturnOutcome: passing pinned replay.
