@@ -6,10 +6,27 @@ No row is proved, no endpoint premise removed. f361 remains the first row;
 no later row is started. SPEC-C3 in FINDINGS.md records the new exact12950
 Arc strong-count mismatch in the D981 machine, checked by49735. It is NOT a
 full OwnInit contradiction or original-entry reachability result. No frozen
-spec, package branch, ledger or common rulings changed. Strict audit pending; driver49736 compiled exit0.
-Next Lean49737; next raw49794. Failed49732/33/34 are retained and not credited;
+spec, package branch, ledger or common rulings changed. Strict49794 PASSED7/7 NEW diagnostic roots;zero unresolved/disagreements;
+standard axioms only;wall0:04.88;peak6718724KiB;swap0;source2a817c8272b.
+Exactly one new-root strict walk. Driver49736 compiled exit0; its erroneous
+caller revision label55d is corrected in SESSION4_PROVENANCE.json with the
+actual parent fb201da4b3d and exact source hash; original receipt is retained.
+Next Lean49737; next raw49795. Failed49732/33/34 are retained and not credited;
 each retry changed source.49735 exit0,wall0:02.41,peak4734728KiB,swap0;
 standard summary axioms only. No active own scope. Details follow historically.
+
+Stopped at the first item's checked local source-machine mismatch, under the
+instruction to stop a false item; this is not budget exhaustion, a global
+impossibility claim or a claim of full-joint contradiction. No later row or
+OwnInit witness was attempted. The exact correction proposal is lane-local;
+COMMON revision2 remains unchanged. The complete requested deliverable remains
+unfulfilled. Resolve the native source-effect inventory and finish the ONE full
+f361 statement before another row. No endpoint premise removed/added, no
+library consumption, implementation/ledger/package/shared-map/key change,
+external/provider object write, full replay, push or merge.
+
+Retained-evidence verification (no Lean/raw rerun):
+`python3 evidence/pv-lib-20261107/lane-SPEC/validate_session4.py` — PASS.
 
 ---
 

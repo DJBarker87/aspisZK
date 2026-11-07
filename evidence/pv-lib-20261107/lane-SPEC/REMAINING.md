@@ -1,3 +1,25 @@
+# Session4 frontier — D983 thread-path only
+
+0/18 full thread contracts;0/1 OwnInit full joint witness. Slice/source7 is
+owned by lane B. f361 remains first; no other row started. SPEC-C3 is a checked
+LOCAL native Arc count mismatch at actual12950, not a full-joint contradiction
+or original-entry counterexample. See FINDINGS.md and the exact lane-local
+SESSION4_SPEC_CORRECTION_PROPOSAL.md. No frozen correction is applied.
+
+Before f361 can supply a complete faithful MachineSpec, its native source-memory
+inventory must include concrete Arc clone360 count semantics in addition to
+the five D959 writers and retained D981 OWNER layers. Then finish the full
+Pre/Post/MachineSpec/Contract and explicit package comparison in ONE row
+module; prove no row. No further contract component pieces are requested.
+Only after that whole statement compiles may f270 start; follow D983 order.
+The OwnInit composition witness follows all eighteen whole statements.
+
+Next Lean49737; next raw49795. One strict49794 PASSED7/7 new diagnostic
+roots. Evidence is in SESSION4_RAW_AUDIT.json and its graph archive/manifest.
+Historic frontier follows; its slice/source7 tasks are superseded by D983.
+
+---
+
 # Session 3 completion frontier
 
 Task remains INCOMPLETE:0/29 full frozen contracts and0/2 full joint witnesses
