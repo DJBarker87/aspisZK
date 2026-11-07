@@ -33,19 +33,22 @@ def run (env : RSL.Env) (allocations : Nat → Bool) {A : Type} : Program A → 
 theorem scalar_sound {A : Type} (r : Result A) (env : RSL.Env) :
  scalarSpec r env (scalar r) := by cases r <;> rfl
 
+theorem allocation_sound {A : Type} (a : A) (env : RSL.Env) (flag aborts : Bool) :
+ RSL.Spec.bind (RSL.Spec.allocIf flag) (fun _ => RSL.Spec.pure a) env
+  (if aborts && flag then ⟨.abort,[]⟩ else ⟨.ret a,[]⟩) := by
+ cases flag <;> cases aborts
+ · exact Or.inl ⟨(),[],⟨.ret a,[]⟩,rfl,rfl,rfl⟩
+ · exact Or.inl ⟨(),[],⟨.ret a,[]⟩,rfl,rfl,rfl⟩
+ · exact Or.inl ⟨(),[],⟨.ret a,[]⟩,Or.inl rfl,rfl,rfl⟩
+ · exact Or.inr (Or.inl ⟨[],Or.inr rfl,rfl⟩)
+
 theorem data_sound (a : r1_pool_adapter.owned.OwnedAccount) (env : RSL.Env) (aborts : Bool) :
  dataSpec a env (command env aborts (.data a)) := by
  cases h : a.bytes with
- | Ok v => rfl
+ | Ok v => simp only [dataSpec,command,h]; rfl
  | Err e =>
-  change RSL.Spec.bind (RSL.Spec.allocIf (NND_Carrier.error e).cloneAllocates)
-   (fun _ => RSL.Spec.pure (.Err e)) env
-   (if aborts && (NND_Carrier.error e).cloneAllocates then ⟨.abort,[]⟩ else ⟨.ret (.Err e),[]⟩)
-  cases flag : (NND_Carrier.error e).cloneAllocates <;> cases aborts
-  · exact Or.inl ⟨(),[],⟨.ret (.Err e),[]⟩,rfl,rfl,rfl⟩
-  · exact Or.inl ⟨(),[],⟨.ret (.Err e),[]⟩,rfl,rfl,rfl⟩
-  · exact Or.inl ⟨(),[],⟨.ret (.Err e),[]⟩,Or.inl rfl,rfl,rfl⟩
-  · exact Or.inr (Or.inl ⟨[],Or.inr rfl,rfl⟩)
+  simp only [dataSpec,command,h]
+  exact allocation_sound (core.result.Result.Err e : core.result.Result (Slice U8) solana_program_error.ProgramError) env (NND_Carrier.error e).cloneAllocates aborts
 
 theorem pda_sound (s : Slice (Slice U8)) (p : solana_pubkey.Pubkey)
  (env : RSL.Env) (aborts : Bool) :
@@ -73,6 +76,7 @@ theorem sound (env : RSL.Env) (allocations : Nat → Bool) {A : Type}
    (command_sound env (allocations n) c) (fun a => ih a (n+1))
 
 #print axioms scalar_sound
+#print axioms allocation_sound
 #print axioms data_sound
 #print axioms pda_sound
 #print axioms command_sound

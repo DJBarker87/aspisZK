@@ -30,6 +30,9 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     env['CARGO_TARGET_DIR']=B+'/NMX_target'
     env['CARGO_NET_OFFLINE']='true'
     env.update(env_extra or {})
+    # Imported dependency environments never select another job's scratch.
+    env['TMPDIR']=B+'/NMX_tmp'
+    env['CARGO_TARGET_DIR']=B+'/NMX_target'
     files=dict(extra or {})
     if kind=='lean':
         text=(E/(target+'.lean')).read_text()
