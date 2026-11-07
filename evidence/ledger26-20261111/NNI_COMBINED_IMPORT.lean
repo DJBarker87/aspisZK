@@ -386,9 +386,10 @@ import NMX_R3_LaneTotal
 import NMX_R3_NativeFrame
 import NMX_R3_NativeStep
 import NMX_R3_NativeWindow
+import NNI_CollectorAcc
 
 
 #print axioms AspisR1.NNG_Candidate136.candidate
 #print axioms NMX_R3_DecoderFold.root
 #print axioms AspisR1.RPx_Deployed.deployed
-
+#print axioms NNI_CollectorAcc.alias_identity

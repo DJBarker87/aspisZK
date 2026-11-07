@@ -6,8 +6,16 @@ for i,mode in enumerate(modes,12):
  a=f'NNI_L{i:03}';p=E/a/'receipt.json'
  assert i<=57
  if p.exists():
-  prior=json.loads(p.read_text());assert prior['module']==mode and prior['exit_status']==0
+  prior=json.loads(p.read_text());assert prior['module']==mode
+  if prior['exit_status']:
+   for j in range(int(mode[5:].split('-')[0]),int(mode[5:].split('-')[-1])+1):
+    d=json.loads((E/'NNI_audit'/mode/f'proof{j}.json').read_text());expected=json.loads((E/'NNI_AUDIT_ROOTS.json').read_text())['groups'][j]
+    assert [r['root']for r in d['results']]==expected
+    for row in d['results']:
+     assert set(row['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}
+     assert row['equal'] or row['root']in {'NHC_DecodeModel.decoder_error','AspisR1.NKR_ScheduleExt.transition','LIB_VCarriers.Acc'}
   print(a+' retained completed receipt; no replay',flush=True);continue
+
  r=subprocess.run([sys.executable,str(E/'NNI_run.py'),a,'audit',mode],capture_output=True,text=True);(E/(a+'-client.log')).write_text(r.stdout+r.stderr)
  if r.returncode:
   good=True

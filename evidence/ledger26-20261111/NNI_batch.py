@@ -8,7 +8,8 @@ for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
 E=B/'NNI_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='close':
  exec(compile((B/'NNI_pin.py').read_text(),'NNI_pin.py','exec'));exec(compile((B/'NNI_scope40.py').read_text(),'NNI_scope40.py','exec'));sys.exit(0)
-if mode=='retention':jobs=[('retention',['python3','NNI_scope40.py'])]
+if mode=='acc-close':jobs=[('combined',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNI_generated','-o','NNI_objects/NNI_COMBINED_IMPORT.olean','NNI_generated/NNI_COMBINED_IMPORT.lean']),('scan',['NNI_native/NNI_Driver','scan'])]
+elif mode=='retention':jobs=[('retention',['python3','NNI_scope40.py'])]
 elif mode in ['review-close','review-retention']:jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNI_generated','-o','NNI_objects/NNI_HypothesisReview.olean','NNI_generated/NNI_HypothesisReview.lean'])]
 elif mode.startswith('inventory-'):jobs=[(mode,['NNI_native/NNI_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NNI_native/'+('NNI_PoolDriver' if mode=='poolscan' else 'NNI_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
@@ -31,3 +32,7 @@ if mode in ['review-close','review-retention']:
 
 if mode=="review-retention":
  exec(compile((B/"NNI_scope40.py").read_text(),"NNI_scope40.py","exec"))
+
+if mode=='acc-close':
+ exec(compile((B/'NNI_pin.py').read_text(),'NNI_pin.py','exec'))
+ exec(compile((B/'NNI_scope40.py').read_text(),'NNI_scope40.py','exec'))

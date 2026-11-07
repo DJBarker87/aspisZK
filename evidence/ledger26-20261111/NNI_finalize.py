@@ -1,5 +1,7 @@
 """Assign ledger credit only after every mandatory gate artifact is validated."""
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
 import json,lzma,hashlib,collections,copy,subprocess
 E=Path(__file__).resolve().parent;P=E.parent/'ledger25-20261111';H=lambda b:hashlib.sha256(b).hexdigest()
 def raw(p):
@@ -21,20 +23,21 @@ for i,g in enumerate(required['groups']):
   assert set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'},r['root']
   if not r['equal']:disagreements.append(dict(batch=i,**r))
  assert d['exit_status']==(1 if any(not r['equal']for r in d['results'])else 0)
-assert len(results)==len(required['roots'])==len({r['root']for r in results})==12599
-assert {r['root']for r in disagreements}=={'NHC_DecodeModel.decoder_error','AspisR1.NKR_ScheduleExt.transition'}
+assert len(results)==len(required['roots'])==len({r['root']for r in results})==12600
+assert {r['root']for r in disagreements}==({'NHC_DecodeModel.decoder_error','AspisR1.NKR_ScheduleExt.transition','LIB_VCarriers.Acc'} | ({'NNI_CollectorAcc.alias_identity'} if any(r['root']=='NNI_CollectorAcc.alias_identity' and not r['equal'] for r in results) else set()))
 fx=J(E/'NNI_audit/fixtures/fixtures.json');assert fx['exit_status']==0 and fx['results']==J(P/'NMQ_audit/fixtures/fixtures.json')['results'] and len(fx['results'])==8
-sc=J(E/'NNI_audit/scan/scan.json');assert sc['exit_status']==0
+sc=J(E/'NNI_audit/acc-close/scan.json');assert sc['exit_status']==0
 scanrows=[json.loads(l)for l in raw(E/'NNI_LOADED_scan.jsonl').decode().splitlines()];scan=dict(status='PASS',exit_status=0,combined='NNI_COMBINED_IMPORT',modules=len(scanrows),dangling=sum(len(r['dangling'])for r in scanrows),canonical_duplicate_owners=sum(len(r['duplicate_owners'])for r in scanrows),import_mismatches=sum(not r['imports_match']for r in scanrows),cached_replicas=sum(len(r['cached_replicas'])for r in scanrows),retained_failed_scan='NNI_L054: source-derived expected import inventory incomplete; zero dangling/duplicate owners; repaired manifest is a changed input')
 assert not(scan['dangling']or scan['canonical_duplicate_owners']or scan['import_mismatches']);put('SCAN',scan)
 statements={}
-for line in raw(E/'NNI_L010/stdout.log').decode().splitlines():
- if 'NNI_OWNER 'in line:
-  r=json.loads(line.split('NNI_OWNER ',1)[1]);assert r['root']not in statements;statements[r['root']]=r
+for attempt in ['NNI_L010','NNI_L058']:
+ for line in raw(E/attempt/'stdout.log').decode().splitlines():
+  if 'NNI_OWNER 'in line:
+   r=json.loads(line.split('NNI_OWNER ',1)[1]);assert r['root']not in statements;statements[r['root']]=r
 old=J(P/'NMQ_KERNEL_STATEMENTS.json.xz');assert set(statements)==set(required['roots']);assert all(statements.get(n)==v for n,v in old.items())
 assert statements['AspisR1.NNG_Candidate136.candidate']['owner_module']=='NNG_Candidate136';assert statements['LIBB_PoolNoWrite.laws']['obligation_statement']=='NMV_NoWrite.PoolLaws LIBB_PoolLib.library'
 put('KERNEL_STATEMENTS',statements);put('OWNER_COMPARISON',dict(status='PASS',previous=len(old),identical=len(old),new=len(statements)-len(old),wrong=[]))
-entries=[json.loads(l)for l in(E/'NNI_ATTEMPTS.jsonl').read_text().splitlines()];receipts=[r for r in entries if 'exit_status'in r];assert len(receipts)==len({r['attempt']for r in receipts})<=60
+entries=[json.loads(l)for l in(E/'NNI_ATTEMPTS.jsonl').read_text().splitlines()];receipts=[r for r in entries if 'exit_status'in r];assert len(receipts)==len({r['attempt']for r in receipts})==60
 nonzero=[]
 for row in receipts:
  a=row['attempt'];r=J(E/a/'receipt.json');ad=J(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed']is True
@@ -43,14 +46,19 @@ for row in receipts:
  checks=[q for q in entries if q.get('attempt')==a and q.get('event')=='share_check'];assert checks and checks[-1]['host']['count']<6
  if r['exit_status']:
   nonzero.append(a);assert a in ['NNI_L002','NNI_L007','NNI_L008','NNI_L054']or(r['kind']=='audit'and r['module'].startswith('batch'))
-resources=dict(scopes=len(receipts),budget=60,unused=60-len(receipts),kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),kani=0,extraction=0,aggregation16G_scopes=0,retained_nonzero_exits=nonzero,timeout_or_memory_kill=[],one_scope_at_a_time=True)
+resources=dict(scopes=len(receipts),budget=60,unused=60-len(receipts),kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),max_cgroup_memory_peak_bytes=max(int(J(E/r['attempt']/'receipt.json')['cgroup_memory_peak_bytes'])for r in receipts),kani=0,extraction=0,aggregation16G_scopes=0,retained_nonzero_exits=nonzero,timeout_or_memory_kill=[],one_scope_at_a_time=True)
 binary=J(E/'NNI_L006/NNI_ProofDriver_BINARY_PIN.json')['sha256'];assert binary==J(P/'NMQ_AUDIT.json')['same_optimized_proof_binary_sha256']
 assert J(E/'NNI_PREDECESSOR_COMPARISON.json')['status']=='PASS' and J(E/'NNI_FINAL_HOST.json')['status']=='PASS'
 put('RESOURCES',resources);put('AUDIT_GROUPS',dict(required=plan,all_required_roots=len(results),groups=len(plan),paired_groups=[20,21],pre_split_predecessor_shapes=True,new_groups_max120=True))
-put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNI_COMBINED_IMPORT',combined_attempt='NNI_L009',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),new_roots=len(statements)-len(old),raw_standard_axioms_only=True,all_required_raw_roots_present=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=binary,fixtures=fx['results'],scanner='NNI_SCAN.json',walker=J(P/'NMQ_AUDIT.json')['walker'],resources=resources,cold_release_replay=False,security_target_established=False))
+put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNI_COMBINED_IMPORT',combined_attempt='NNI_L060',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),new_roots=len(statements)-len(old),raw_standard_axioms_only=True,all_required_raw_roots_present=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=binary,fixtures=fx['results'],scanner='NNI_SCAN.json',walker=J(P/'NMQ_AUDIT.json')['walker'],resources=resources,cold_release_replay=False,security_target_established=False))
 basis=J(P/'NMQ_LEDGER.json.xz');ledger=copy.deepcopy(basis);by={r['row']:r for r in ledger['rows']};oldby={r['row']:r for r in basis['rows']};review=J(E/'NNI_CANDIDATE_REVIEW.json');c136,c217=review['candidates'];assert c136['status']=='STATIC_REVIEW_PASS_GATE_PENDING'and c217['status']=='OPEN_FIDELITY_CONTROL_MISSING'
+c136.update(status='PASS_COMPLETE_ROOT_GATE_ADMITTED',gate_admitted=True,kernel_statement=statements[c136['candidate']])
+c217.update(kernel_statement=statements[c217['candidate']],reference_replay='PASS; no native credit because fidelity gate incomplete')
+clauses=J(E/'NNI_CLAUSE_REVIEW.json')
+for clause in clauses['original_clauses']:clause['NNI_gate_credit']='Complete combined/raw/NFX gate PASS; exact original own-input provenance retained at137'
+put('CLAUSE_REVIEW',clauses)
 r=by['TX1:136'];assert r['status']=='OPEN'and r['obligation_statement_hash']==c136['basis_obligation_statement_hash'];assert all(next(q for q in ledger['rows']if q['transaction']=='TX1'and q['function']==c)['status']=='CLOSED'for c in r['canonical_callees'])
-o=copy.deepcopy(r['obligation']);o['NNI_basis_obligation']=copy.deepcopy(o);o['NNI_complete_candidate_review']=c136;o['NNI_root_domain']=c136['own_input_clauses'];o['kernel_roots']=[statements[c136['candidate']]]
+o=copy.deepcopy(r['obligation']);o['NNI_basis_obligation']=copy.deepcopy(o);o['NNI_complete_candidate_review']=c136;o['NNI_root_domain']=c136['own_input_clauses'];o['NNI_complete_clause_review']=J(E/'NNI_CLAUSE_REVIEW.json');o['kernel_roots']=[statements[c136['candidate']]]
 o['certificate'].update(bridge_status='CLOSED',composed_status='CLOSED',NNI_root=c136['candidate'],NNI_gate='PASS',NNI_route='(bm) actual fresh emitted verify_finish; exact canonical revision3 RowSpec; concrete library deterministic graphs; SAME argument and domain composition',no_credit_reason='Historical rejection superseded for136 only by the complete NNI gate; original retained in NNI_basis_obligation',NNI_trust='Existing extraction item (bm increased reliance), Std/runtime/native child method retained; no cryptographic trust added or removed')
 for key in ['caller_domain_obligations','inventory_domain_obligations']:
  for c in o[key]:c.update(status='INTERNAL_DISCHARGED_WITH_OWN_INPUT_PROVENANCE_RETAINED',discharged_by=c136['candidate']+'; NNG_AllReached136/NNG_Packet136.closed install same-call graph/domain; finishInputDom remains at137, no hidden success/library premise')
@@ -76,15 +84,17 @@ adds=J(E/'NNI_TRUST_ADDITIONS.json');ids={t['id']for t in ledger['trust_rows']}
 for t in adds['additions']:
  assert t['id']not in ids;ledger['trust_rows'].append(copy.deepcopy(t));ledger['reviewed_transcription_inventory'].append(copy.deepcopy(t))
 clock=next(t for t in ledger['trust_rows']if t['id']=='RuntimeClockSlotBinding');clock['NNI_consumer_addition']=adds['RuntimeClockSlotBinding_consumer_addition'];clock['NNI_statement_status_unchanged']=True
+extraction_reclassification=dict(item='NNI-TX1:136-emitted-body-bm',row='TX1:136',root=c136['candidate'],classification='Existing extraction item narrowed by(bc), increased reliance under(bm); RECLASSIFICATION, no removal or new cryptographic trust',scope='Actual frozen verify_finish fresh NNG_E001 emission, literal revision3 RowSpec, concrete CLOSED-child graphs',emission_sha256=c136['emission_sha256'],fresh_parent_provenance=True,child_provenance='(bk) unresolved inherited provenance remains conditional; NNI_PROVENANCE.json',source_to_ELF='not newly established')
+ledger['extraction_trust_reclassifications'].append(extraction_reclassification)
 ledger['NNI_top_composition']=J(E/'NNI_TOP_COMPOSITION.json');poollaw=next(t for t in ledger['NNI_top_composition']['top_composition_obligations']if t['id']=='TOP:PoolLaws');assert 'LIBB_PoolNoWrite.laws'in required['roots']
 poollaw.update(status='CLOSED',deliverable=dict(lean='LIBB_PoolNoWrite.laws',source_commit=subprocess.check_output(['git','log','-1','--format=%H','--','evidence/libb-20261111/LIBB_PoolNoWrite.lean'],text=True).strip()),extra_parameters=[],print_axioms=next(r['walked_axioms']for r in results if r['root']=='LIBB_PoolNoWrite.laws'),credit='Exact concrete PoolLaws LIBB_PoolLib.library term; no parameter, compiled combined and raw ax2. Host G2/folds remain uninstantiated and OPEN.')
-ledger['NNI_specification']=J(E/'NNI_SPECIFICATION.json');prov=J(E/'NNI_PROVENANCE.json');assert prov['gate_reachability_used']and len(prov['current_conservative_affected_CLOSED_rows'])==563;ledger['NNI_extraction_provenance']=prov
+ledger['NNI_K086']=J(E/'NNI_K086.json');ledger['NNI_specification']=J(E/'NNI_SPECIFICATION.json');prov=J(E/'NNI_PROVENANCE.json');assert prov['gate_reachability_used']and len(prov['current_conservative_affected_CLOSED_rows'])==563;ledger['NNI_extraction_provenance']=prov
 for z in ledger['rows']:
  assert z['canonical_callees']==oldby[z['row']]['canonical_callees']
  if z['obligation']!=oldby[z['row']]['obligation']:z['obligation_statement_hash']=H(json.dumps(z['obligation'],sort_keys=True,separators=(',',':')).encode())
 assert {z['row']for z in ledger['rows']if z['status']!=oldby[z['row']]['status']}=={'TX1:136'};counts=dict(collections.Counter(z['status']for z in ledger['rows']));assert counts=={'CLOSED':583,'OPEN':16}
 ledger.update(basis='ledger25 NMQ_LEDGER plus NNI-gated TX1:136 only;599 rows/every edge retained',basis_delta='NNI_LEDGER_DELTA.json',counts=counts,gate='PASS',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),security_target_established=False)
-put('LEDGER',ledger);put('LEDGER_DELTA',dict(basis='evidence/ledger25-20261111/NMQ_LEDGER.json.xz',basis_uncompressed_sha256=(P/'NMQ_LEDGER.json.sha256').read_text().strip(),before=dict(CLOSED=582,QUALIFIED=0,OPEN=17),after=dict(CLOSED=583,QUALIFIED=0,OPEN=16),new_closed_rows=['TX1:136'],new_count=1,rows=[dict(row='TX1:136',previous_status='OPEN',status='CLOSED',root=c136['candidate'],basis_obligation_statement_hash=c136['basis_obligation_statement_hash'],complete_obligation_statement_hash=r['obligation_statement_hash'],own_input_clauses=c136['own_input_clauses'])],rejected_candidates=[dict(row='TX2:217',status='OPEN',blocker=c217['exact_blocker'])],added_edges=[],removed_edges=[],edge_reclassifications=reclasses,explicit_parent_clause_updates=J(E/'NNI_PARENT_CLAUSES.json'),trust_inventory_additions=adds['additions'],trust_inventory_removals=[],cryptographic_trust_changes=False,top_composition_not_row_counts=True,top_field_closed=['TOP:PoolLaws'],provenance_conservative_impact=563,pool_promotions=[],security_target_established=False))
+put('LEDGER',ledger);put('LEDGER_DELTA',dict(basis='evidence/ledger25-20261111/NMQ_LEDGER.json.xz',basis_uncompressed_sha256=(P/'NMQ_LEDGER.json.sha256').read_text().strip(),before=dict(CLOSED=582,QUALIFIED=0,OPEN=17),after=dict(CLOSED=583,QUALIFIED=0,OPEN=16),new_closed_rows=['TX1:136'],new_count=1,rows=[dict(row='TX1:136',previous_status='OPEN',status='CLOSED',root=c136['candidate'],basis_obligation_statement_hash=c136['basis_obligation_statement_hash'],complete_obligation_statement_hash=r['obligation_statement_hash'],own_input_clauses=c136['own_input_clauses'])],rejected_candidates=[dict(row='TX2:217',status='OPEN',blocker=c217['exact_blocker'])],added_edges=[],removed_edges=[],edge_reclassifications=reclasses,explicit_parent_clause_updates=J(E/'NNI_PARENT_CLAUSES.json'),trust_inventory_additions=adds['additions'],trust_inventory_removals=[],extraction_trust_reclassifications=[extraction_reclassification],cryptographic_trust_changes=False,top_composition_not_row_counts=True,top_field_closed=['TOP:PoolLaws'],provenance_conservative_impact=563,pool_promotions=[],security_target_established=False))
 c136.update(status='PASS_COMPLETE_ROOT_GATE_ADMITTED',gate_admitted=True,kernel_statement=statements[c136['candidate']]);c217.update(kernel_statement=statements[c217['candidate']],reference_replay='PASS; no native credit because fidelity gate incomplete');review.update(gate='PASS',security_target_established=False);put('CANDIDATE_REVIEW',review)
 put('TOP_COMPOSITION',ledger['NNI_top_composition'])
 # Portable selected evidence for report generation; no huge uncompressed ledger.

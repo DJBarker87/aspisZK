@@ -68,17 +68,19 @@ elif kind=='link':
  sources=['NNI_native/'+target+'.c','NNI_native/NFA_WALKER.c','NNI_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNI_native/'+target,*sources]
 elif kind=='audit':
- if target in ['close','review-close','review-retention']:
+ if target in ['close','review-close','review-retention','acc-close']:
   files['NNI_pin.py']=(E/'NNI_pin.py').read_text();files['NNI_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger25-20261111/NMQ_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target in ['review-close','review-retention']:files['NNI_generated/NNI_HypothesisReview.lean']=(E/'NNI_HypothesisReview.lean').read_text()
- if target in ['close','retention','review-retention']:files['NNI_scope40.py']=(E/'NNI_scope40.py').read_text();files['NNI_SEED_INPUTS.json']=(E/'NNI_SEED_INPUTS.json').read_text()
- sources=['NNI_generated/NNI_Driver.lean','NNI_batch.py','NNI_AUDIT_ROOTS.json','NNI_AUDIT_MODULES.json','NNI_EXPECTED_IMPORTS.jsonl']+(['NNI_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NNI_pin.py','NNI_PREDECESSOR_PINS.json']if target in ['close','review-close','review-retention']else[])+(['NNI_generated/NNI_HypothesisReview.lean']if target in ['review-close','review-retention']else[])
+ if target in ['close','retention','review-retention','acc-close']:files['NNI_scope40.py']=(E/'NNI_scope40.py').read_text();files['NNI_SEED_INPUTS.json']=(E/'NNI_SEED_INPUTS.json').read_text()
+ if target=='acc-close':files['NNI_generated/NNI_COMBINED_IMPORT.lean']=(E/'NNI_COMBINED_IMPORT.lean').read_text()
+ sources=['NNI_generated/NNI_Driver.lean','NNI_batch.py','NNI_AUDIT_ROOTS.json','NNI_AUDIT_MODULES.json','NNI_EXPECTED_IMPORTS.jsonl']+(['NNI_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NNI_pin.py','NNI_PREDECESSOR_PINS.json']if target in ['close','review-close','review-retention','acc-close']else[])+(['NNI_generated/NNI_HypothesisReview.lean']if target in ['review-close','review-retention']else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
- if target in ['close','retention','review-retention']:sources+=['NNI_scope40.py','NNI_SEED_INPUTS.json']
+ if target in ['close','retention','review-retention','acc-close']:sources+=['NNI_scope40.py','NNI_SEED_INPUTS.json']
+ if target=='acc-close':sources+=['NNI_generated/NNI_COMBINED_IMPORT.lean']
  command=['python3','NNI_batch.py',target]
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNI_tmp',CARGO_TARGET_DIR=B+'/NNI_target',LEAN_PATH=':'.join([B+'/NNI_objects']+json.loads((E/'NNI_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNI_tmp',CARGO_TARGET_DIR=B+'/NNI_target',LEAN_PATH=':'.join([B+'/NNI_objects']+json.loads((E/'NNI_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='One changed combined import, final NFX scan, selected-object pinning and retention; sequential8GiB aggregation' if target=='acc-close' else 'Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -93,7 +95,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NNI_COMBINED_IMPORT']
+elif x['kind']=='audit':modules += ['NNI_COMBINED_IMPORT']+(['NNI_CollectorAcc'] if x['module']=='batch43' else [])
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -116,11 +118,11 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NNI_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NNI_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NNI_LOADED_scan.jsonl','NNI_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
-if {target!r} in ['close','review-close','review-retention']:
+if {target!r} in ['close','review-close','review-retention','acc-close']:
  for n in ['NNI_PREDECESSOR_COMPARISON.json','NNI_EXPORT.json','NNI_TOOL_PINS.json','NNI_CLOSURE_PINS.json.sha256']:
   if (b/n).exists():out[n]=(b/n).read_text()
  if (b/'NNI_CLOSURE_PINS.json.xz').exists():out['NNI_CLOSURE_PINS.json.xz.hex']=(b/'NNI_CLOSURE_PINS.json.xz').read_bytes().hex()
-if {target!r} in ['close','retention','review-retention']:
+if {target!r} in ['close','retention','review-retention','acc-close']:
  if (b/'NNI_FINAL_HOST.json').exists():out['NNI_FINAL_HOST.json']=(b/'NNI_FINAL_HOST.json').read_text()
 for name in ['NNI_Driver','NNI_ProofDriver','NNI_PoolProofDriver','NNI_PoolDriver']:
  p=b/'NNI_native'/name
