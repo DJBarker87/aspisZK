@@ -36,6 +36,10 @@ for module,r in list(latest.items()):
  if extra:
   rejected.append(dict(module=module,receipt=r['attempt'],nonstandard_axioms=extra))
   del latest[module]
+for module in ['NNH_Stage1ZeroOk']:
+ if module in latest:
+  rejected.append(dict(module=module,receipt=latest[module]['attempt'],reason='rev2 support alias conflicts with rev3 owner; replaced by NNH_Stage1ZeroCurrent'))
+  del latest[module]
 for p in sorted((b/'NNH_generated').glob('*.lean')):
  obj=root/(p.stem+'.olean')
  if not obj.exists():continue

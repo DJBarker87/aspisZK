@@ -1,3 +1,14 @@
+# Final gate status
+
+L703 combined import failed on the old NND_AccountCarrier duplicate RSL
+owner. Replacement NNH_Stage1ZeroCurrent passes L706; the changed combined
+import after that replacement is NOT RUN. NNH_Stage1ZeroOk is quarantined.
+No new retained export. Existing consumed-field raw audits L440/L470 stand;
+new partial helpers are not promoted to G0 fields. Exact receipts and all700
+terminal scopes are in NNH_CONTINUATION_STATUS.json and scope summaries.
+
+---
+
 # Current continuation targets (supersedes historical text below)
 
 1. Total computed064 NMN field and actual-entry-to-weak-native producer are

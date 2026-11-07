@@ -360,3 +360,56 @@ At L701,696 actual scopes have completed. Only five IDs were never submitted:
 L048,L455,L456,L465,L623. Runner allowance is700 actual scopes, not ID suffixes.
 The final16GiB G0-only aggregation reservation is untouched. Ordinary focused
 combined import, retained-export validation and exact final accounting follow.
+
+
+## Final checkpoint: 700/700 actual scopes; no new export
+
+All700 actual submissions are terminal: original400 plus resumed300;
+0 extraction/0 Kani. Six IDs never launched:048,455,456,465,623,705.
+L705 is an owned dependency-fingerprint preflight failure, NOT a Lean launch:
+missing NNH_Stage1ZeroCurrent.olean after L704 failed. It is recorded as a
+preflight failure without exit_status/submitted:true and earns no credit.
+I erroneously requested the dependent import after its prerequisite failed;
+the unchanged launcher/fingerprint checks rejected it before submission.
+No shared infrastructure failed and no scope was resubmitted.
+
+Final focused combination L703 FAILED on duplicate equation ownership:
+obsolete NND_AccountCarrier and rev3 RSL_TX2_234 both export
+RSL.OwnedAccount.data.eq_1. The newly reused NND_ZeroCarrier import reaches
+the old owner; NNH_Stage1ZeroOk is therefore coherence-quarantined despite
+its individual standard-axiom elaboration. L704's carrier replacement failed
+on the unavailable byte_beq name. L706 instead proves that Bool equality
+pointwise from byte_eq_iff, avoiding the old AccountCarrier dependency;
+NNH_Stage1ZeroCurrent.projection/source PASS with standard axioms.
+NNH_ContinuationCombined now imports that replacement, but has NOT been
+compiled after this source/dependency change. Do not claim the new closure
+is coherent until that exact focused import passes. No failed combined root
+is admitted, and no new retained export was created. The prior resume export
+and all owned caches/objects remain retained. The stricter finalizer also
+excludes both old U64 native-checker and quarantined ZeroOk objects; that
+updated export path/validator has not been executed on this continuation.
+
+Exact last successful proof: L706,2.633599s,peakRSS5885652KiB,swap0,
+source revision388d2b5cc43 with dirty source hash pinned in its receipt.
+L702 compiled the exact unproved model target types tx2Op11/tx1Ok/tx1Err.
+These propositions are never hypotheses of a claimed final G0. L700 binds
+actual reservation on the successful064 path via existing EnvRep; L701
+produces original087/094 domains at the SAME accepted statement/proof.
+No new row caller clause. No field waits for an undelivered LIB_/LIBB_ leaf.
+
+The literal-host NMF_B/ExecB and all-H deployed averaging are still open:
+Ctx/Missing/physical World and SAME recorder/source-cut association, then
+failure inclusion at that recorder, remain required. RecordedCharge.bound
+is full-space and single-charge, but is not the missing deployed field.
+No Realizes conditioning, arbitrary adversary restriction, new trust row,
+shipped-file change, ELF rebuild, wallet/key action or push occurred.
+The sole16GiB scope remains reserved for an actual final G0 import and unused.
+The disk-full incident remains recorded in the historical handoff; no new
+ENOSPC occurred (local78GiB free at final check; per-scope host≥40GB).
+
+Next order: compile NNH_ContinuationCombined with the corrected carrier;
+finish NNH_ExactRemainingTypes.tx2Op11's query/Merkle/finish model suffix,
+compose A2, then A1 Ok/weakErr and literal-host/NMF_B/ExecB/averaging.
+Ledger26 refresh remains26980b13109f:136 CREDITED and plugged;
+217 REJECTED pending Kani controls,234 uncredited mathematical candidate.
+No new principal/native row is credited by this job.
