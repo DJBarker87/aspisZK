@@ -9,3 +9,5 @@ L182 passed: LIB_VLib.library is concrete, every field projection is fixed by rf
 L183 passed: LIB_Prepared.child is actual P-star at LIB_VLib.library; ten identities are rfl. Full graph/Returns/caller clauses specialize LIBC_ without an operational parameter. Original semantic/expanded provenance remains the principal caller obligation.
 
 L184 passed: LIB_S1.library is actual C-star at the identical VL-star. validated_public discharges its publicDom from the SAME statement validation; allocation specializes the source-fission before-first-Box marker including later errors. All six fields are fixed; no type identity remains waiting.
+
+L187 passed: LIB_Instances.tx1 bundles actual VL/P/C; six named rfl checks identify136/137/087/094/328/345 with TAS projection result types. These checks do not construct principal roots. Missing unchanged TCK/TAS sources were copied privately and compiled individually in L185/L186, without editing originals. Module25 TX1 side is DONE; canonical V0/tx2auth and weak registration remain with LIBB_.

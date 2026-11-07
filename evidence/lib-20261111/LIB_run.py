@@ -6,6 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-lib-20261111';C='/home/dombarker/pr
 if (E/'LIB_HOLD').exists():sys.exit(75)
 guard=E/'LIB_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('LIB_L[0-9]{3}',a) and 1<=int(a[-3:])<=999 and not (E/a).exists()
+assert int(a[-3:])<182 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=182)<162
 assert int(a[-3:])<93 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=93)<250
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
