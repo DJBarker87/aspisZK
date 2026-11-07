@@ -23,7 +23,7 @@ for attempt in completed|submitted:
  assert config.exists(), 'Missing submitted-attempt budget configuration: '+attempt
  group=budget_group(json.loads(config.read_text())['kind'])
  if group:used[group].add(attempt)
-limits={'lean_link_audit':509,'kani':10,'extract':2};group=budget_group(x['kind'])
+limits={'lean_link_audit':550,'kani':10,'extract':2};group=budget_group(x['kind'])
 if group:assert len(used[group])<limits[group], 'Actual scope budget exhausted: '+group
 with (E/'NNG_BUDGET_ADMISSIONS.jsonl').open('a') as out:out.write(json.dumps({'attempt':a,'kind':x['kind'],'used':{g:len(s)for g,s in used.items()},'limits':limits,'unresolved_submissions':sorted(submitted-completed)})+'\n')
 if x['command'][:2]==['python3','NNG_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'

@@ -1,0 +1,45 @@
+{"attempt": "NNG_L509", "exit_status": 0, "wall_seconds": 1.913171255029738, "peak_rss_kib": "2625452", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.Vec.deref_mut : {T : Type} →
+  Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} v => (⟨↑v, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+def Aeneas.Std.core.slice.Slice.split_at_mut : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result
+        ((Aeneas.Std.Slice T × Aeneas.Std.Slice T) × (Aeneas.Std.Slice T × Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} s n =>
+  if h0 : ↑n ≤ s.length then
+    let s0 := (List.splitAt ↑n ↑s).1;
+    let s1 := (List.splitAt ↑n ↑s).2;
+    have back := fun s' =>
+      let s0' := s'.1;
+      let s1' := s'.2;
+      if h1 : s0'.length = s0.length ∧ s1'.length = s1.le
+...
+Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T) :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T) :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedRangeFromUsize,
+    get := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get,
+    get_mut := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index,
+    index_mut := Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.index.Slice.index : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result Output :=
+fun {T I Output} inst slice i => inst.index i slice
+
+Running as unit: run-refd77eeabe334826af4b9a7e7f5302ae.scope; invocation ID: e31136cd88e441f9befc3df9cf24d228

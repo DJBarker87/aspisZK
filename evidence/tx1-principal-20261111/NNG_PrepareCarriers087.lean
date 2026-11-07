@@ -37,9 +37,19 @@ def preparedBack (x : AspisR1PublicPreparation.verifier.Prepared) : NMP_prepare.
  ⟨variantBack x.variant,x.roots,wideBack x.gamma,wideBack x.kappa,arr wideBack x.alpha,fromT1 x.rho,x.queries,
   arr fromT1 x.semantic_alpha,arr fromT2 x.z,wideBack x.claim,x.state⟩
 theorem prepared_inverse (x : NMP_prepare.verifier.Prepared) : preparedBack (prepared x)=x := by
- cases x <;> simp only [prepared,preparedBack,variant_inverse,wide_inverse,arr_inverse,toT1_inverse,toT2_inverse]
+ cases x
+ simp only [prepared,preparedBack,variant_inverse,wide_inverse,toT1_inverse]
+ congr 1
+ · exact arr_inverse wide wideBack wide_inverse _
+ · exact arr_inverse toT1 fromT1 toT1_inverse _
+ · exact arr_inverse toT2 fromT2 toT2_inverse _
 theorem preparedBack_inverse (x : AspisR1PublicPreparation.verifier.Prepared) : prepared (preparedBack x)=x := by
- cases x <;> simp only [prepared,preparedBack,variantBack_inverse,wideBack_inverse,arr_inverse,fromT1_inverse,fromT2_inverse]
+ cases x
+ simp only [prepared,preparedBack,variantBack_inverse,wideBack_inverse,fromT1_inverse]
+ congr 1
+ · exact arr_inverse wideBack wide wideBack_inverse _
+ · exact arr_inverse fromT1 toT1 fromT1_inverse _
+ · exact arr_inverse fromT2 toT2 fromT2_inverse _
 #print axioms wide_inverse
 #print axioms wideBack_inverse
 #print axioms variant_inverse

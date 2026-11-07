@@ -1,0 +1,261 @@
+NNG_generated/NNG_Erase087.lean:16:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let r ←
+        invoke "TX1:137/verify_observed" (s.publicValue, v.semantic, s.hash, s.observer)
+            (r1_semantic.verify_observed (fun {H} => c.c5) c.c6 (fun {H} => c.c7) c.c8 (fun {H} => c.c9) s.digest
+              s.publicValue v.semantic s.hash s.observer)
+      match r with
+        | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Semantic, s.scratch)
+        | core.result.Result.Ok sem => NNG_Tree087.mark c s v sem) =
+    do
+    let r ←
+      r1_semantic.verify_observed (fun {H} => c.c5) c.c6 (fun {H} => c.c7) c.c8 (fun {H} => c.c9) s.digest s.publicValue
+          v.semantic s.hash s.observer
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Semantic, s.scratch)
+      | core.result.Result.Ok sem => NMP_PrepareSuffix.f6 c s v sem
+
+H W : Type
+c : Calls
+s : Parent H W
+v : verifier.View
+⊢ (erase do
+      let r ←
+        invoke "TX1:137/verify_observed" (s.publicValue, v.semantic, s.hash, s.observer)
+            (r1_semantic.verify_observed (fun {H} => c.c5) c.c6 (fun {H} => c.c7) c.c8 (fun {H} => c.c9) s.digest
+              s.publicValue v.semantic s.hash s.observer)
+      match r with
+        | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Semantic, s.scratch)
+        | core.result.Result.Ok sem => NNG_Tree087.mark c s v sem) =
+    do
+    let r ←
+      r1_semantic.verify_observed (fun {H} => c.c5) c.c6 (fun {H} => c.c7) c.c8 (fun {H} => c.c9) s.digest s.publicValue
+          v.semantic s.hash s.observer
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Semantic, s.scratch)
+      | core.result.Result.Ok sem => NMP_PrepareSuffix.f6 c s v sem
+NNG_generated/NNG_Erase087.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let r ← invoke "TX1:095/wide_view" (s.bytes, semantic, y1) (c.c2 s.bytes semantic y1)
+      match r with
+        | core.result.Result.Err e => pure (core.result.Result.Err e, s.scratch)
+        | core.result.Result.Ok v => NNG_Tree087.observed c s v) =
+    do
+    let r ← c.c2 s.bytes semantic y1
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, s.scratch)
+      | core.result.Result.Ok v => NMP_PrepareSuffix.f5 c s v
+
+H W : Type
+c : Calls
+s : Parent H W
+semantic y1 : Slice U8
+⊢ (erase do
+      let r ← invoke "TX1:095/wide_view" (s.bytes, semantic, y1) (c.c2 s.bytes semantic y1)
+      match r with
+        | core.result.Result.Err e => pure (core.result.Result.Err e, s.scratch)
+        | core.result.Result.Ok v => NNG_Tree087.observed c s v) =
+    do
+    let r ← c.c2 s.bytes semantic y1
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, s.scratch)
+      | core.result.Result.Ok v => NMP_PrepareSuffix.f5 c s v
+NNG_generated/NNG_Erase087.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let src ←
+        liftM
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+              { start := 7031#usize, «end» := 7495#usize })
+      let __x ← invoke "TX1:099/expand_values" (src, y1) (c.c11 src y1)
+      match __x with
+        | (r, after) =>
+          match r with
+          | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Parse, s.scratch)
+          | core.result.Result.Ok a =>
+            have logical := vecBack (back (semantic, after));
+            do
+            let fullSemantic ←
+              liftM
+                  (alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) logical
+                    { «end» := 13831#usize })
+            let fullY1 ←
+              liftM
+                  (alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) logical
+                    { start := 13831#usize })
+            NNG_Tree087.view c s fullSemantic fullY1) =
+    do
+    let src ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+          { start := 7031#usize, «end» := 7495#usize }
+    let (r, after) ← c.c11 src y1
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse, s.scratch)
+      | core.result.Result.Ok a =>
+        have logical := vecBack (back (semantic, after));
+        do
+        let fullSemantic ←
+          alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) logical { «end» := 13831#usize }
+        let fullY1 ←
+          alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) logical { start := 13831#usize }
+        NMP_PrepareSuffix.f4 c s fullSemantic fullY1
+
+H W : Type
+c : Calls
+s : Parent H W
+semantic y1 : Slice U8
+back : SplitBack
+vecBack : VecBack
+⊢ (erase do
+      let src ←
+        liftM
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+              { start := 7031#usize, «end» := 7495#usize })
+      let __x ← invoke "TX1:099/expand_values" (src, y1) (c.c11 src y1)
+      match __x with
+        | (r, after) =>
+          match r with
+          | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Parse, s.scratch)
+          | core.result.Result.Ok a =>
+            have logical := vecBack (back (semantic, after));
+            do
+            let fullSemantic ←
+              liftM
+                  (alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) logical
+                    { «end» := 13831#usize })
+            let fullY1 ←
+              liftM
+                  (alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) logical
+                    { start := 13831#usize })
+            NNG_Tree087.view c s fullSemantic fullY1) =
+    do
+    let src ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+          { start := 7031#usize, «end» := 7495#usize }
+    let (r, after) ← c.c11 src y1
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse, s.scratch)
+      | core.result.Result.Ok a =>
+        have logical := vecBack (back (semantic, after));
+        do
+        let fullSemantic ←
+          alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) logical { «end» := 13831#usize }
+        let fullY1 ←
+          alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) logical { start := 13831#usize }
+        NMP_PrepareSuffix.f4 c s fullSemantic fullY1
+NNG_generated/NNG_Erase087.lean:54:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let src ←
+        liftM
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+              { start := 16#usize, «end» := 7031#usize })
+      let __x ← invoke "TX1:098/expand_semantic" (src, semantic) (c.c10 src semantic)
+      match __x with
+        | (r, after) =>
+          match r with
+          | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Parse, s.scratch)
+          | core.result.Result.Ok a => NNG_Tree087.values c s after y1 back vecBack) =
+    do
+    let src ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+          { start := 16#usize, «end» := 7031#usize }
+    let (r, after) ← c.c10 src semantic
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse, s.scratch)
+      | core.result.Result.Ok a => NMP_PrepareSuffix.f3 c s after y1 back vecBack
+
+H W : Type
+c : Calls
+s : Parent H W
+semantic y1 : Slice U8
+back : SplitBack
+vecBack : VecBack
+⊢ (erase do
+      let src ←
+        liftM
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+              { start := 16#usize, «end» := 7031#usize })
+      let __x ← invoke "TX1:098/expand_semantic" (src, semantic) (c.c10 src semantic)
+      match __x with
+        | (r, after) =>
+          match r with
+          | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Parse, s.scratch)
+          | core.result.Result.Ok a => NNG_Tree087.values c s after y1 back vecBack) =
+    do
+    let src ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.bytes
+          { start := 16#usize, «end» := 7031#usize }
+    let (r, after) ← c.c10 src semantic
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse, s.scratch)
+      | core.result.Result.Ok a => NMP_PrepareSuffix.f3 c s after y1 back vecBack
+NNG_generated/NNG_Erase087.lean:66:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  erase
+      (match logical.deref_mut with
+      | (bytes, vecBack) => do
+        let __x ← invoke "std/split_at_mut" (bytes, 13831#usize) (core.slice.Slice.split_at_mut bytes 13831#usize)
+        match __x with
+          | ((semantic, y1), back) => NNG_Tree087.semantic c s semantic y1 back vecBack) =
+    let (bytes, vecBack) := logical.deref_mut
+    do
+    let ((semantic, y1), back) ← core.slice.Slice.split_at_mut bytes 13831#usize
+    NMP_PrepareSuffix.f2 c s semantic y1 back vecBack
+
+H W : Type
+c : Calls
+s : Parent H W
+logical : alloc.vec.Vec U8
+⊢ erase
+      (match logical.deref_mut with
+      | (bytes, vecBack) => do
+        let __x ← invoke "std/split_at_mut" (bytes, 13831#usize) (core.slice.Slice.split_at_mut bytes 13831#usize)
+        match __x with
+          | ((semantic, y1), back) => NNG_Tree087.semantic c s semantic y1 back vecBack) =
+    let (bytes, vecBack) := logical.deref_mut
+    do
+    let ((semantic, y1), back) ← core.slice.Slice.split_at_mut bytes 13831#usize
+    NMP_PrepareSuffix.f2 c s semantic y1 back vecBack
+NNG_generated/NNG_Erase087.lean:75:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let r ← invoke "TX1:064/filled" (14759#usize, 0#u8) (c.c1 core.marker.CopyU8 14759#usize 0#u8)
+      match r with
+        | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Allocation, s.scratch)
+        | core.result.Result.Ok logical => NNG_Tree087.split c s logical) =
+    do
+    let r ← c.c1 core.marker.CopyU8 14759#usize 0#u8
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation, s.scratch)
+      | core.result.Result.Ok logical => NMP_PrepareSuffix.f1 c s logical
+
+H W : Type
+c : Calls
+s : Parent H W
+⊢ (erase do
+      let r ← invoke "TX1:064/filled" (14759#usize, 0#u8) (c.c1 core.marker.CopyU8 14759#usize 0#u8)
+      match r with
+        | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Allocation, s.scratch)
+        | core.result.Result.Ok logical => NNG_Tree087.split c s logical) =
+    do
+    let r ← c.c1 core.marker.CopyU8 14759#usize 0#u8
+    match r with
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation, s.scratch)
+      | core.result.Result.Ok logical => NMP_PrepareSuffix.f1 c s logical
+'AspisR1.NNG_Erase087.prepared' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Erase087.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

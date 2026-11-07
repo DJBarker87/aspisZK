@@ -1,0 +1,42 @@
+NNG_generated/NNG_SourceObserved087.lean:21:141: error: unsolved goals
+a : Args
+obs : RSL.Observer
+env : RSL.Env
+v : verifier.View
+domain : RSL.TX1_087.Domain LIB_Instances.VL a obs
+size : (↑v.semantic).length ≤ 57607
+head : Code (NMP_Emitted.SemanticOut Unit) :=
+  invoke "TX1:137/verify_observed"
+    ((NNG_PrepareInput087.input a obs env).publicValue, v.semantic, (), NNG_Context137.observer obs)
+    (NMP_Emitted.observed (NNG_PrepareEmission087.calls env)
+      (let __src := NNG_PrepareInput087.input a obs env;
+      { digest := __src.digest, publicValue := __src.publicValue, bytes := v.semantic, hash := __src.hash,
+        observer := __src.observer, scratch := __src.scratch, world := __src.world, sites := __src.sites }))
+k : NMP_Emitted.SemanticOut Unit → Code (NNG_Front087.FrontOut Unit) :=
+  fun r =>
+    match r with
+    | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Semantic)
+    | core.result.Result.Ok sem => pure (core.result.Result.Ok (sem, v))
+⊢ (NMT_CallTree.bind
+      (invoke "TX1:137/verify_observed" (NMP_Transport.fromT9 a.public_, v.semantic, (), NNG_Context137.observer obs)
+        (r1_semantic.verify_observed (fun {H} => (NNG_PrepareEmission087.calls env).c5)
+          (NNG_PrepareEmission087.calls env).c6 (fun {H} => (NNG_PrepareEmission087.calls env).c7)
+          (NNG_PrepareEmission087.calls env).c8 (fun {H} => (NNG_PrepareEmission087.calls env).c9)
+          (NNG_PublicSource137.digest env) (NMP_Transport.fromT9 a.public_) v.semantic ()
+          (NNG_Context137.observer obs)))
+      fun r =>
+      match r with
+      | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Semantic)
+      | core.result.Result.Ok sem => pure (core.result.Result.Ok (sem, v))) =
+    NMT_CallTree.bind
+      (invoke "TX1:137/verify_observed" (NMP_Transport.fromT9 a.public_, v.semantic, (), NNG_Context137.observer obs)
+        (r1_semantic.verify_observed (fun {H} => (NNG_PrepareEmission087.calls env).c5)
+          (NNG_PrepareEmission087.calls env).c6 (fun {H} => (NNG_PrepareEmission087.calls env).c7)
+          (NNG_PrepareEmission087.calls env).c8 (fun {H} => (NNG_PrepareEmission087.calls env).c9)
+          (NNG_PublicSource137.digest env) (NMP_Transport.fromT9 a.public_) v.semantic ()
+          (NNG_Context137.observer obs)))
+      fun r =>
+      match r with
+      | core.result.Result.Err a => pure (core.result.Result.Err verifier.Error.Semantic)
+      | core.result.Result.Ok sem => pure (core.result.Result.Ok (sem, v))
+'AspisR1.NNG_SourceObserved087.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
