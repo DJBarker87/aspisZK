@@ -77,7 +77,7 @@ b=Path({B!r});a={a!r}
 names=[p for p in (b/a).rglob('*') if p.is_file() and 'sources' not in p.relative_to(b/a).parts]+[b/(a+'.json')]+[p for pat in ['-graph*','-source*','-lock*'] for p in b.glob(a+pat)]
 if {kind!r}=='audit':
  names += [p for p in (b/'NMS_audit'/{target!r}).rglob('*') if p.is_file()]
- names += [p for p in b.glob('NMS_LOADED_scan.jsonl') if p.is_file()]
+ names += [p for pat in ['NMS_LOADED_scan.jsonl','NMS_R2_LOADED_scan.jsonl'] for p in b.glob(pat) if p.is_file()]
  for p in (b/'NMS_audit'/{target!r}).glob('*.json'):
   for row in json.loads(p.read_text()).get('results',[]):
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')

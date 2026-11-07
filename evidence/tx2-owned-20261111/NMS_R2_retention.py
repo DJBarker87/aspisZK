@@ -14,6 +14,16 @@ for i,group in enumerate(roots['groups']):
 assert len(actual)==len(set(actual)) and set(actual)==expected
 scan=[json.loads(l)for l in (B/'NMS_R2_LOADED_scan.jsonl').read_text().splitlines()]
 assert all(x['imports_match']and not x['dangling']and not x['duplicate_owners']for x in scan)
+# Compare every current accepted module's pinned direct imports/library objects,
+# as well as the selected runtime closure. Hash each immutable path once per check.
+checked={}
+for source in roots['source_acceptance']:
+ receipt=json.loads((B/source['receipt']).read_text())
+ assert receipt['exit_status']==0
+ for name,pin in receipt['deps_fingerprint']['selected_objects'].items():
+  p=Path(pin['path'])
+  if str(p)not in checked:checked[str(p)]=sha(p)
+  assert checked[str(p)]==pin['sha256'],(source['module'],str(p),'compiled dependency drift')
 export=B/'NMS_R2_exports_20261107';path=B/'NMS_R2_CLOSURE_PINS.json.xz'
 if mode=='export':
  env=json.loads((B/'NMS_R2_EXPORT_ENV.json').read_text());search=env['LEAN_PATH'].split(':');pins=[]
@@ -51,5 +61,5 @@ elif mode=='verify':
    assert sha(Path(p['path']))==p['sha256']
    if 'export_path'in p:assert sha(Path(p['export_path']))==p['sha256']
 else:raise ValueError(mode)
-result=dict(status='PASS',mode=mode,roots=len(actual),modules=len(scan),standard_axioms_only=True,no_duplicate_roots=True,no_dangling=True,no_row_credit=True)
+result=dict(status='PASS',mode=mode,roots=len(actual),modules=len(scan),compiled_dependency_objects=len(checked),standard_axioms_only=True,no_duplicate_roots=True,no_dangling=True,no_row_credit=True)
 (B/('NMS_R2_RETENTION_'+mode+'.json')).write_text(json.dumps(result,indent=1)+'\n');print(json.dumps(result))

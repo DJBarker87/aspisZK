@@ -1,5 +1,45 @@
 # NMS TX2 owned handoff
 
+## Current state — RSL revision 2
+
+Target not yet established. TX2:242 and TX2:241 remain OPEN, no candidate root
+or ledger credit. The canonical revision2 source folds and typed support have
+been retargeted; the remaining native association is listed in NMS_REMAINING.md.
+
+Final validation PASS: NMS_L436 focused NLX+R2 combined import; L439 module scan
+(17,333 modules,852,958 declarations,28,514,801 edges; zero import mismatch,
+dangling declaration or conflicting owner); L440–466 raw ax2 checks of185
+DISJOINT OWN new roots, every raw/kernel axiom set equal and standard-only;
+L467 export and L468 independent final hash verification. All swaps0. Largest
+new scope peak RSS8,032,664KiB, in the module scan, under the unchanged8GiB cap.
+The combined import took23.114s and6,679,372KiB; full raw receipts retain exact
+per-target exit/wall/RSS/swap/source revision/axiom sets and pinned inputs.
+318 compile-time dependency object paths match their current hashes.
+
+Renewed formal allowance150/150 consumed, total323 (prior173); extraction3/3
+unchanged; Kani0/20. Remaining work is Lean/native-interpretation work; it is
+NOT blocked by Kani exhaustion. No Rust/lock/ELF, trust row, security metric,
+wallet/key or external message was changed; no push. No SBF rebuild was needed.
+
+Use the SAME pinned host workspace:
+`/home/dombarker/project-offloads/codex-cx-tx2-owned-20261111`.
+Export: `NMS_R2_exports_20261107` there. Full loaded closure pins are retained
+compressed as NMS_R2_CLOSURE_PINS.json.xz plus uncompressed sha256; export and
+retention JSON identify the native auditor and all validation. New proof
+sources have prefix NMS_R2; do NOT load historical RSL-dependent NMS proofs as
+revision2 evidence. Frozen Rust remains4bb3b3f51e16..., Pool b936275465.
+
+Next deliverable: complete native/canonical242 assembly under full revision2
+RowSpec_233 (NMX still OPEN), then complete native241 assembly at SAME064
+arguments for every admissible V2Lib. D1/D2 ONLY; G1b weak instance is proved at
+SOURCE level by NMS_R2SiteWeak241.fold, with scanner width derived internally.
+No source fold or fixed source-model image is promoted to an implementation
+root. Do not repeat these unchanged audits/imports; new source/dependency
+changes require focused validation of the affected targets only.
+
+The entries below preserve the earlier staged history; old60/250 budgets and
+revision1 pure-getter mismatch descriptions are superseded by this section.
+
 Target not yet established. Rows TX2:242 validate_asq8 and TX2:241 stage2_owned are OPEN. No ledger credit claimed. Branch codex/cx-tx2-owned-20261107.
 
 Stage 0 is in progress: fresh extraction of the actual frozen owned layer before Kani; audit emitted bodies under (bc). Budgets: 3 extraction, 60 Lean/link/audit scopes, 20 Kani. One scope at a time; 6G/8G/swap0/tasks64; Lean -M7000. Admission requires allowed:true and exit0, disk at least40GB, fewer than6 whole-host codex scopes.
@@ -146,3 +186,9 @@ These are source/cross-carrier support. Native/canonical parent assembly is
 still OPEN; candidate_root remains null for BOTH rows.
 Final focused selection: NMS_R2_COMBINED_IMPORT with NLX_COMBINED_IMPORT;
 all current own R2 theorem roots only, no all-ledger-root audit.
+
+Final receipt-collection repair: the new R2 scanner filename was absent from the
+old collector glob. Its existing host output was recovered READ-ONLY after the
+serial audit queue. The scan was not rerun; the own collector now accepts both
+filenames without weakening validation. L467/L468 additionally compare every
+current accepted module's recorded dependency hashes and the selected closure.
