@@ -6,6 +6,7 @@ H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx1-finish4-20261110'
 a=sys.argv[1]; assert re.fullmatch(r'NMO_[LKE][0-9]{3}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
+x['client_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NMO_target')
 assert 1<=int(a[-3:])<=({'L':80,'K':100,'E':0}[a[4]])
 if x['command'][:2]==['python3','NMO_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
@@ -21,9 +22,9 @@ def ssh(code,data=None,submitted=False):
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
 for disk_retry in range(7):
- r=ssh('python3',"import shutil,json;print(json.dumps(shutil.disk_usage('/home/dombarker/project-offloads')._asdict()))")
+ r=ssh('python3',"import shutil,json,os\nusage=shutil.disk_usage('/home/dombarker/project-offloads')._asdict()\nsize=0\nfor root,dirs,files in os.walk('/home/dombarker/project-offloads/codex-cx-tx1-finish4-20261110',followlinks=False):\n for name in files:\n  try:size+=os.lstat(os.path.join(root,name)).st_size\n  except FileNotFoundError:pass\nusage['own_bytes']=size\nprint(json.dumps(usage))")
  assert r.returncode==0,r.stderr
- info=json.loads(r.stdout);(E/(a+'-disk-'+str(disk_retry)+'.json')).write_text(json.dumps(info))
+ info=json.loads(r.stdout);assert info['own_bytes']<30_000_000_000,'STOP own workspace reaches30GB';(E/(a+'-disk-'+str(disk_retry)+'.json')).write_text(json.dumps(info))
  if info['free']>=40_000_000_000:break
  if disk_retry==6:raise RuntimeError('STOP disk below40GB after six waits')
  for _ in range(10):time.sleep(60)
@@ -44,9 +45,10 @@ print(json.dumps(dict(stream_a=sum(r['cx']for r in rows),scopes=rows)))''')
  info=json.loads(r.stdout)
  with (E/'NMO_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share_check',**info))+'\n')
  if info['stream_a']<2:
-  fresh=ssh('python3',"import shutil,json;print(json.dumps(shutil.disk_usage('/home/dombarker/project-offloads')._asdict()))")
+  fresh=ssh('python3',"import shutil,json,os\nusage=shutil.disk_usage('/home/dombarker/project-offloads')._asdict()\nsize=0\nfor root,dirs,files in os.walk('/home/dombarker/project-offloads/codex-cx-tx1-finish4-20261110',followlinks=False):\n for name in files:\n  try:size+=os.lstat(os.path.join(root,name)).st_size\n  except FileNotFoundError:pass\nusage['own_bytes']=size\nprint(json.dumps(usage))")
   assert fresh.returncode==0,fresh.stderr
   disk=json.loads(fresh.stdout)
+  assert disk['own_bytes']<30_000_000_000,'STOP own workspace reaches30GB'
   (E/(a+'-disk-after-share.json')).write_text(json.dumps(disk))
   if disk['free']>=40_000_000_000:break
   if postshare_disk_retries>=6:raise RuntimeError('STOP disk below40GB after six post-share waits')

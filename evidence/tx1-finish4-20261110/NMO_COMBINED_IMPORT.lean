@@ -21,6 +21,7 @@ import NMO_MaskAtState
 import NMO_MaskStored
 import NMO_MaskValue
 import NMO_MulAtState
+import NMO_PrefixBounds
 import NMO_PrefixErrors
 import NMO_TerminalStored
 import NMO_TerminalWindows
@@ -99,6 +100,10 @@ import NMO_Transcription
 #check @AspisR1.NMO_MulAtState.operands
 #print axioms AspisR1.NMO_MulAtState.product
 #check @AspisR1.NMO_MulAtState.product
+#print axioms AspisR1.NMO_PrefixBounds.native_windows
+#check @AspisR1.NMO_PrefixBounds.native_windows
+#print axioms AspisR1.NMO_PrefixBounds.record_lengths
+#check @AspisR1.NMO_PrefixBounds.record_lengths
 #print axioms AspisR1.NMO_PrefixErrors.claims_error
 #check @AspisR1.NMO_PrefixErrors.claims_error
 #print axioms AspisR1.NMO_PrefixErrors.rounds_abort

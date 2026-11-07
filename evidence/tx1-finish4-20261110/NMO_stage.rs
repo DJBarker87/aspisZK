@@ -76,8 +76,8 @@ fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool>(){
  let window:usize=kani::any();kani::assume(window<28);let reply:[u8;32]=kani::any();kani::assume(reply[0]<11);
  let seed=NMO_State{window,rounds:0,claims:0,round_ptr:0,round_len:0,claim_ptr:0,claim_len:0,state:[0;32],next:0,reply,frame:kani::any(),mid:kani::any(),after:kani::any(),omit:OMIT};
  let carrier=NMO_Carrier{root:kani::any(),log:RefCell::new(seed)};
- let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();
- let records=core::array::from_fn(|i|{kani::assume(lens[i]<=57575);&proof[..lens[i]]});
+ let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();let starts:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(starts[i]<=57575);kani::assume(lens[i]<=57575-starts[i]);&proof[starts[i]..starts[i]+lens[i]]});
  let prefix=W::prefix(&carrier.root,records);
  let expected=if window==0{&prefix.c1_root[..]}else{W::record(&prefix,window-1)};
  let state:[u8;32]=kani::any();let next:u8=kani::any();

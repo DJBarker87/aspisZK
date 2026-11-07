@@ -70,8 +70,8 @@ fn NMO_digest()->[M31;8]{core::array::from_fn(|_|M31(kani::any()))}
 struct NMO_Proof { root:[u8;32], suffix:[u8;57575] }
 fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool>(){
  let proof=NMO_Proof{root:kani::any(),suffix:kani::any()};
- let lengths:[usize;27]=kani::any();
- let records=core::array::from_fn(|i|{kani::assume(lengths[i]<=57575);&proof.suffix[..lengths[i]]});
+ let lengths:[usize;27]=kani::any();let starts:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(starts[i]<=57575);kani::assume(lengths[i]<=57575-starts[i]);&proof.suffix[starts[i]..starts[i]+lengths[i]]});
  let prefix=W::prefix(&proof.root,records);
  let alternate:[u8;32]=kani::any();
  let mutant=if ARG{W::prefix(&alternate,records)}else{W::prefix(&proof.root,records)};

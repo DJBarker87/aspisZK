@@ -43,3 +43,5 @@ Scalar-channel finding NMO-F1: QM31::mul/add accept self and rhs by value, with 
 |rootTry|292|Current-length case split and complementary unwrap-abort prefix per (aw), existing NMC root laws.|OPEN full composition|
 |rootUnwrap|292|Current-length case split and complementary unwrap-abort prefix per (aw), existing NMC root laws.|OPEN full composition|
 |verified|291|Existing-source state/control step, Lean transcription; native parent association required.|OPEN full composition|
+
+Caller-view correction (NMO-F2): all epoch-1 native passes, including K001–028 and K094, retain only restricted shared-start harness status. No full caller-domain native credit is claimed for them. Epoch 2 uses independent record offsets and lengths; K029 rounds-Err and K034 claims-Err positives passed. K030–033 establish the first prefix's three controls and exact KMX negative; the claims controls are in progress. New native window families must use the epoch-2 source snapshot. The 47 model-support axioms audit is unaffected. NMO_PrefixBounds is an uncompiled draft and carries no proof credit yet.

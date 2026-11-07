@@ -455,8 +455,8 @@ fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool,const PART:u8,con
  let col:usize=kani::any();kani::assume(col<29);let ci=if PART==0{ROW*29+col}else{let i:usize=kani::any();kani::assume(i<10);i};let cj=if PART<=1{LIMB}else{let j:usize=kani::any();kani::assume(j<4);j};let channel:usize=kani::any();kani::assume(channel<15);
  let seed=NMO_State{window,rounds:0,claims:0,round_ptr:0,round_len:0,claim_ptr:0,claim_len:0,state:[0;32],next:0,reply,frame:kani::any(),mid:kani::any(),after:kani::any(),omit:OMIT,ci,cj,channel,expected_alpha:0,expected_claim:0,claim_owner:0,terminal_calls:0,seen_alpha:0,seen_claim:0,seen_ch:0,public_ptr:0,transition_ptr:0,variant:false};
  let carrier=NMO_Carrier{root:kani::any(),log:RefCell::new(seed)};
- let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();
- let records=core::array::from_fn(|i|{kani::assume(lens[i]<=57575);&proof[..lens[i]]});
+ let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();let starts:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(starts[i]<=57575);kani::assume(lens[i]<=57575-starts[i]);&proof[starts[i]..starts[i]+lens[i]]});
  let prefix=W::prefix(&carrier.root,records);
  let expected=if window==0{&prefix.c1_root[..]}else{W::record(&prefix,window-1)};
  let state:[u8;32]=kani::any();let next:u8=kani::any();let transcript=W::make(NMO_Hash(&carrier.log),state,next);
@@ -492,8 +492,8 @@ fn NMO_footprint_only<const PART:u8,const ROW:usize,const LIMB:usize>(){
  let col:usize=kani::any();kani::assume(col<29);let ci=if PART==0{ROW*29+col}else{let i:usize=kani::any();kani::assume(i<10);i};let cj=if PART<=1{LIMB}else{let j:usize=kani::any();kani::assume(j<4);j};let channel:usize=kani::any();kani::assume(channel<15);
  let seed=NMO_State{window,rounds:0,claims:0,round_ptr:0,round_len:0,claim_ptr:0,claim_len:0,state:[0;32],next:0,reply,frame:kani::any(),mid:kani::any(),after:kani::any(),omit:OMIT,ci,cj,channel,expected_alpha:0,expected_claim:0,claim_owner:0,terminal_calls:0,seen_alpha:0,seen_claim:0,seen_ch:0,public_ptr:0,transition_ptr:0,variant:false};
  let carrier=NMO_Carrier{root:kani::any(),log:RefCell::new(seed)};
- let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();
- let records=core::array::from_fn(|i|{kani::assume(lens[i]<=57575);&proof[..lens[i]]});
+ let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();let starts:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(starts[i]<=57575);kani::assume(lens[i]<=57575-starts[i]);&proof[starts[i]..starts[i]+lens[i]]});
  let prefix=W::prefix(&carrier.root,records);
  let expected=if window==0{&prefix.c1_root[..]}else{W::record(&prefix,window-1)};
  let state:[u8;32]=kani::any();let next:u8=kani::any();let transcript=W::make(NMO_Hash(&carrier.log),state,next);
