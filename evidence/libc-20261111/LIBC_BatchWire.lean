@@ -22,7 +22,7 @@ theorem build (H : Bytes → State) (p q : OraclePortCompactDraft.Parsed) (wire 
    | div => rfl
    | ok out => cases out with
      | none => rfl
-     | some t => rw [ih t]
+     | some t => simp only [ih t]
 theorem query_plan (H : Bytes → State) (p q : OraclePortCompactDraft.Parsed) (wire : p.wire=q.wire)
  (queries : Fin 22 → Fin 262144) (batch kind : Nat) (nodes : Slice U8) (root : NLL.Root) (s : reference.Scratch) :
  NKV_QueryPlan.plan H p queries batch kind nodes root s=NKV_QueryPlan.plan H q queries batch kind nodes root s := by
@@ -42,7 +42,7 @@ theorem plan (H : Bytes → State) (proof : Slice U8) (p q : OraclePortCompactDr
    | div => rfl
    | ok out => rcases out with ⟨r,i,v⟩;cases r with
      | Err e => rfl
-     | Ok u => rw [ih i v]
+     | Ok u => simp only [ih i v]
 #print axioms leaf
 #print axioms build
 #print axioms query_plan

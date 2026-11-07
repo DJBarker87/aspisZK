@@ -1,0 +1,50 @@
+{"attempt": "LIBC_L078", "exit_status": 1, "wall_seconds": 17.25166807300411, "peak_rss_kib": "6019056", "swaps": "0", "print_axioms": ["'LIBC_BatchWire.leaf' depends on axioms: [propext, Quot.sound]", "'LIBC_BatchWire.build' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIBC_BatchWire.query_plan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIBC_BatchWire.plan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LIBC_generated/LIBC_BatchWire.lean:25:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NKV_LeafBuild.build H p queries kind rest t
+in the target expression
+  (match ok (some t) with
+    | fail e => ([(OraclePortSelectedDraft.leaf q kind pos, H (OraclePortSelectedDraft.leaf q kind pos))], fail e)
+    | div => ([(OraclePortSelectedDraft.leaf q kind pos, H (OraclePortSelectedDraft.leaf q kind pos))], div)
+    | ok none =>
+      ([(OraclePortSelectedDraft.leaf q kind pos, H (OraclePortSelectedDraft.leaf q kind pos))], ok (false, s))
+    | ok (some t) =>
+      ((OraclePortSelectedDraft.leaf q kind pos, H (OraclePortSelectedDraft.leaf q kind pos)) ::
+          (NKV_L
+...
+roof q raw batch rest idx val
+idx : Indices
+val : Values
+root : Root
+kind : Usize
+i : Std.Array U32 16#usize
+v : Std.Array (Std.Array U8 32#usize) 16#usize
+u : Unit
+⊢ (NKV_QueryPlan.plan H q (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+        (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+        (NJV_EntryABI.initial idx val 0#usize) ++
+      match ok (core.result.Result.Ok u, i, v) with
+      | ok (core.result.Result.Ok a, i, v) => NLL_Parent.plan H proof p raw batch rest i v
+      | x => []) =
+    NKV_QueryPlan.plan H q (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+        (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+        (NJV_EntryABI.initial idx val 0#usize) ++
+      match ok (core.result.Result.Ok u, i, v) with
+      | ok (core.result.Result.Ok a, i, v) => NLL_Parent.plan H proof q raw batch rest i v
+      | x => []
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'LIBC_BatchWire.leaf' depends on axioms: [propext, Quot.sound]
+'LIBC_BatchWire.build' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBC_BatchWire.query_plan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBC_BatchWire.plan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r75ca93c26f754aaf92084c264b92c53b.scope; invocation ID: e68e90b5702f45e4a6b323b236b78c7a
