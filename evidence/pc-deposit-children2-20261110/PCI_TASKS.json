@@ -664,7 +664,8 @@
    "PCI_gate.py": "PCI_gate.py",
    "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
    "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
-   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs"
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs"
   },
   "command": [
    "python3",
@@ -717,7 +718,8 @@
    "PCI_gate.py": "PCI_gate.py",
    "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
    "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
-   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs"
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs"
   },
   "command": [
    "python3",
@@ -762,5 +764,1503 @@
   "env": {
    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_ROOT_ARG_MUTANT"
   }
+ },
+ "PCI_E002": {
+  "kind": "extract",
+  "target": "PCI root-page PDA exact descriptor reference extraction",
+  "files": {
+   "PCI_extract_root.py": "PCI_extract_root.py",
+   "PCI_root_crate/Cargo.toml": "PCI_ROOT_Cargo.toml",
+   "PCI_root_crate/Cargo.lock": "PCI_ROOT_Cargo.lock",
+   "PCI_root_crate/src/lib.rs": "PCI_RootReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_extract_root.py"
+  ],
+  "collect": [
+   "PCI_ROOT_EXTRACTION_PINS.json",
+   "PCI_root_extracted/PCI_RootRef/Types.lean",
+   "PCI_root_extracted/PCI_RootRef/Funs.lean"
+  ]
+ },
+ "PCI_L006": {
+  "kind": "lean",
+  "target": "PCI_Mul"
+ },
+ "PCI_K015": {
+  "kind": "kani",
+  "target": "POOL:223 validate_prefix with SAME operands, Lean-discharged product stub",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K015.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K015-graph-check.json",
+   "PCI_K015-graph.stderr",
+   "PCI_K015-lock-check.json",
+   "PCI_K015-source-check.json",
+   "PCI_K015-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile and native prefix/arbitrary-cursor step; no native field multiplication, products use canonical natural-spec assume"
+ },
+ "PCI_K016": {
+  "kind": "kani",
+  "target": "POOL:223 validate_prefix with SAME operands, Lean-discharged product stub",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K016.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K016-graph-check.json",
+   "PCI_K016-graph.stderr",
+   "PCI_K016-lock-check.json",
+   "PCI_K016-source-check.json",
+   "PCI_K016-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile and native prefix/arbitrary-cursor step; no native field multiplication, products use canonical natural-spec assume",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  },
+  "status": "RETIRED_UNSUBMITTED: multi-product prefix shape timed out in K015; split gates and native product stages"
+ },
+ "PCI_K017": {
+  "kind": "kani",
+  "target": "POOL:223 validate_prefix with SAME operands, Lean-discharged product stub",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K017.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K017-graph-check.json",
+   "PCI_K017-graph.stderr",
+   "PCI_K017-lock-check.json",
+   "PCI_K017-source-check.json",
+   "PCI_K017-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile and native prefix/arbitrary-cursor step; no native field multiplication, products use canonical natural-spec assume",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_WRONG_CANON"
+  },
+  "status": "RETIRED_UNSUBMITTED: multi-product prefix shape timed out in K015; split gates and native product stages"
+ },
+ "PCI_K018": {
+  "kind": "kani",
+  "target": "POOL:223 validate_scan_step with SAME operands, Lean-discharged product stub",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K018.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_scan_step",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K018-graph-check.json",
+   "PCI_K018-graph.stderr",
+   "PCI_K018-lock-check.json",
+   "PCI_K018-source-check.json",
+   "PCI_K018-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile and native prefix/arbitrary-cursor step; no native field multiplication, products use canonical natural-spec assume"
+ },
+ "PCI_K019": {
+  "kind": "kani",
+  "target": "POOL:223 validate_scan_step with SAME operands, Lean-discharged product stub",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K019.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_scan_step",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K019-graph-check.json",
+   "PCI_K019-graph.stderr",
+   "PCI_K019-lock-check.json",
+   "PCI_K019-source-check.json",
+   "PCI_K019-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile and native prefix/arbitrary-cursor step; no native field multiplication, products use canonical natural-spec assume",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  },
+  "status": "RETIRED_UNSUBMITTED after K018 single-product timeout"
+ },
+ "PCI_E003": {
+  "kind": "extract",
+  "target": "PCI223 NCO prefix reference extraction (opaque products; scan is composed separately)",
+  "files": {
+   "PCI_extract_validate.py": "PCI_extract_validate.py",
+   "PCI_validate_crate/Cargo.toml": "PCI_VALIDATE_Cargo.toml",
+   "PCI_validate_crate/Cargo.lock": "PCI_VALIDATE_Cargo.lock",
+   "PCI_validate_crate/src/lib.rs": "PCI_ValidateReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_extract_validate.py"
+  ],
+  "collect": [
+   "PCI_VALIDATE_EXTRACTION_PINS.json",
+   "PCI_validate_extracted/PCI_ValidateRef/Types.lean",
+   "PCI_validate_extracted/PCI_ValidateRef/Funs.lean"
+  ]
+ },
+ "PCI_L007": {
+  "kind": "lean",
+  "target": "PCI_RootRef.Types"
+ },
+ "PCI_L008": {
+  "kind": "lean",
+  "target": "PCI_RootRef.Funs"
+ },
+ "PCI_L009": {
+  "kind": "lean",
+  "target": "PCI_RootAddress"
+ },
+ "PCI_K020": {
+  "kind": "kani",
+  "target": "POOL:280 actual exact PDA request and unchanged reply (PCG SDK bridge reused)",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K020.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "history::PCI_RootNative::root_address",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K020-graph-check.json",
+   "PCI_K020-graph.stderr",
+   "PCI_K020-lock-check.json",
+   "PCI_K020-source-check.json",
+   "PCI_K020-selected-features.txt"
+  ],
+  "expected_time": "Optimized compile then fixed seed descriptor forwarding; PCG repaired whole-context exposed provenance; no PDA value law"
+ },
+ "PCI_L010": {
+  "kind": "lean",
+  "target": "PCI_ValidateRef.Types"
+ },
+ "PCI_L011": {
+  "kind": "lean",
+  "target": "PCI_ValidateRef.Funs"
+ },
+ "PCI_L012": {
+  "kind": "lean",
+  "target": "PCI_ValidatePrefix"
+ },
+ "PCI_L013": {
+  "kind": "lean",
+  "target": "PCI_ValidateScan"
+ },
+ "PCI_L014": {
+  "kind": "lean",
+  "target": "PCI_ValidateWords"
+ },
+ "PCI_L015": {
+  "kind": "lean",
+  "target": "PCI_ValidateRef.Funs"
+ },
+ "PCI_L016": {
+  "kind": "lean",
+  "target": "PCI_ValidatePrefix"
+ },
+ "PCI_K021": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_prefix segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K021.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K021-graph-check.json",
+   "PCI_K021-graph.stderr",
+   "PCI_K021-lock-check.json",
+   "PCI_K021-source-check.json",
+   "PCI_K021-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts"
+ },
+ "PCI_K022": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_prefix segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K022.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K022-graph-check.json",
+   "PCI_K022-graph.stderr",
+   "PCI_K022-lock-check.json",
+   "PCI_K022-source-check.json",
+   "PCI_K022-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  }
+ },
+ "PCI_K023": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_prefix segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K023.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_prefix",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K023-graph-check.json",
+   "PCI_K023-graph.stderr",
+   "PCI_K023-lock-check.json",
+   "PCI_K023-source-check.json",
+   "PCI_K023-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_WRONG_CANON"
+  }
+ },
+ "PCI_K024": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_operands segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K024.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_operands",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K024-graph-check.json",
+   "PCI_K024-graph.stderr",
+   "PCI_K024-lock-check.json",
+   "PCI_K024-source-check.json",
+   "PCI_K024-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts"
+ },
+ "PCI_K025": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_operands segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K025.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_operands",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K025-graph-check.json",
+   "PCI_K025-graph.stderr",
+   "PCI_K025-lock-check.json",
+   "PCI_K025-source-check.json",
+   "PCI_K025-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  }
+ },
+ "PCI_K026": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_after_products segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K026.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_after_products",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K026-graph-check.json",
+   "PCI_K026-graph.stderr",
+   "PCI_K026-lock-check.json",
+   "PCI_K026-source-check.json",
+   "PCI_K026-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts"
+ },
+ "PCI_K027": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_after_products segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K027.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_after_products",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K027-graph-check.json",
+   "PCI_K027-graph.stderr",
+   "PCI_K027-lock-check.json",
+   "PCI_K027-source-check.json",
+   "PCI_K027-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  }
+ },
+ "PCI_K028": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_scan_step segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K028.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_scan_step",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K028-graph-check.json",
+   "PCI_K028-graph.stderr",
+   "PCI_K028-lock-check.json",
+   "PCI_K028-source-check.json",
+   "PCI_K028-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts"
+ },
+ "PCI_K029": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_scan_step segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K029.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_scan_step",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K029-graph-check.json",
+   "PCI_K029-graph.stderr",
+   "PCI_K029-lock-check.json",
+   "PCI_K029-source-check.json",
+   "PCI_K029-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_VALIDATE"
+  }
+ },
+ "PCI_K030": {
+  "kind": "kani",
+  "target": "POOL:223 source-ordered validate_scan_step segment; CLOSED multiplication consumed only in Lean",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "PCI_pair_tree_profile.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs": "PCI_ValidateNative.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs": "PCI_ValidateFission.rs",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs": "PCI_ValidateReference.rs",
+   "PCI_src/crates/aspis-statement/src/lib.rs": "PCI_statement_lib.rs.txt",
+   "PCI_src/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs": "PCI_ValidateWindows.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K030.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-statement/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "pool_v1::pair_tree_profile::PCI_ValidateNative::validate_scan_step",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K030-graph-check.json",
+   "PCI_K030-graph.stderr",
+   "PCI_K030-lock-check.json",
+   "PCI_K030-source-check.json",
+   "PCI_K030-selected-features.txt"
+  ],
+  "expected_time": "Optimized native operand/control segment with no field multiplication or natural-product assume reached; source-fission/Lean callee composition after K015/K018 timeouts",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_SCAN_ARG_MUTANT"
+  }
+ },
+ "PCI_L017": {
+  "kind": "lean",
+  "target": "PCI_ValidatePrefix"
+ },
+ "PCI_L018": {
+  "kind": "lean",
+  "target": "PCI_ValidatePrefix"
+ },
+ "PCI_L019": {
+  "kind": "lean",
+  "target": "PCI_ValidateWords"
+ },
+ "PCI_L020": {
+  "kind": "lean",
+  "target": "PCC_Reference",
+  "source": "PCI_dependency_PCC_Reference.lean",
+  "expected_time": "Private compile of byte-identical existing dependency only; no shared objects or existing sources modified"
+ },
+ "PCI_L021": {
+  "kind": "lean",
+  "target": "PCC_DepositDecodeReference",
+  "source": "PCI_dependency_PCC_DepositDecodeReference.lean",
+  "expected_time": "Private compile of byte-identical existing dependency only; no shared objects or existing sources modified"
+ },
+ "PCI_L022": {
+  "kind": "lean",
+  "target": "PCC_PairValidation",
+  "source": "PCI_dependency_PCC_PairValidation.lean",
+  "expected_time": "Private compile of byte-identical existing dependency only; no shared objects or existing sources modified"
+ },
+ "PCI_L023": {
+  "kind": "lean",
+  "target": "PCC_SingleOutputReference",
+  "source": "PCI_dependency_PCC_SingleOutputReference.lean",
+  "expected_time": "Private compile of byte-identical existing dependency only; no shared objects or existing sources modified"
+ },
+ "PCI_K031": {
+  "kind": "kani",
+  "target": "POOL:277 full usize length/source-fission header parse and exact borrowed payload; CLOSED151 spec cut",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K031.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K031-graph-check.json",
+   "PCI_K031-graph.stderr",
+   "PCI_K031-lock-check.json",
+   "PCI_K031-source-check.json",
+   "PCI_K031-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication"
+ },
+ "PCI_K032": {
+  "kind": "kani",
+  "target": "POOL:277 full usize length/source-fission header parse and exact borrowed payload; CLOSED151 spec cut",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K032.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K032-graph-check.json",
+   "PCI_K032-graph.stderr",
+   "PCI_K032-lock-check.json",
+   "PCI_K032-source-check.json",
+   "PCI_K032-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_DEPOSIT"
+  }
+ },
+ "PCI_L024": {
+  "kind": "lean",
+  "target": "PCI_ValidateCarrier"
+ },
+ "PCI_E004": {
+  "kind": "extract",
+  "target": "POOL:277 actual frozen parser selection, NCO pins/deployed features",
+  "files": {
+   "PCI_extract_deposit_actual.py": "PCI_extract_deposit_actual.py"
+  },
+  "command": [
+   "python3",
+   "PCI_extract_deposit_actual.py"
+  ],
+  "collect": [
+   "PCI_DEPOSIT_ACTUAL_EXTRACTION_PINS.json",
+   "PCI_deposit_actual_extracted/PCI_DepositActual/Types.lean",
+   "PCI_deposit_actual_extracted/PCI_DepositActual/Funs.lean",
+   "PCI_deposit_actual_extracted/PCI_DepositActual/FunsExternal.lean"
+  ],
+  "expected_time": "Optimized Charon dependency/MIR compile then pinned Aeneas for exact selected borrowed-return parser; no native hash or field multiplication"
+ },
+ "PCI_E005": {
+  "kind": "extract",
+  "target": "POOL:277 borrow-minimal value reference selection",
+  "files": {
+   "PCI_extract_deposit_ref.py": "PCI_extract_deposit_ref.py",
+   "PCI_deposit_ref_crate/Cargo.toml": "PCI_DEPOSIT_REF_Cargo.toml",
+   "PCI_deposit_ref_crate/Cargo.lock": "PCI_DEPOSIT_REF_Cargo.lock",
+   "PCI_deposit_ref_crate/src/lib.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_extract_deposit_ref.py"
+  ],
+  "collect": [
+   "PCI_DEPOSIT_REF_EXTRACTION_PINS.json",
+   "PCI_deposit_ref_extracted/PCI_DepositRef/Types.lean",
+   "PCI_deposit_ref_extracted/PCI_DepositRef/Funs.lean"
+  ]
+ },
+ "PCI_K033": {
+  "kind": "kani",
+  "target": "POOL:277 complete output/borrow/frame with explicit owned-word havoc PCI_DEPOSIT_SPEC_MUTANT",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K033.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K033-graph-check.json",
+   "PCI_K033-graph.stderr",
+   "PCI_K033-lock-check.json",
+   "PCI_K033-source-check.json",
+   "PCI_K033-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_DEPOSIT_SPEC_MUTANT"
+  }
+ },
+ "PCI_K034": {
+  "kind": "kani",
+  "target": "POOL:277 complete output/borrow/frame with explicit owned-word havoc PCI_DEPOSIT_ARG_MUTANT",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K034.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K034-graph-check.json",
+   "PCI_K034-graph.stderr",
+   "PCI_K034-lock-check.json",
+   "PCI_K034-source-check.json",
+   "PCI_K034-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_DEPOSIT_ARG_MUTANT"
+  }
+ },
+ "PCI_K035": {
+  "kind": "kani",
+  "target": "POOL:277 complete output/borrow/frame with explicit owned-word havoc PCI_DEPOSIT_OMIT_OWNER",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K035.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K035-graph-check.json",
+   "PCI_K035-graph.stderr",
+   "PCI_K035-lock-check.json",
+   "PCI_K035-source-check.json",
+   "PCI_K035-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_DEPOSIT_OMIT_OWNER"
+  }
+ },
+ "PCI_K036": {
+  "kind": "kani",
+  "target": "POOL:277 complete output/borrow/frame with explicit owned-word havoc positive",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K036.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K036-graph-check.json",
+   "PCI_K036-graph.stderr",
+   "PCI_K036-lock-check.json",
+   "PCI_K036-source-check.json",
+   "PCI_K036-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication"
+ },
+ "PCI_K037": {
+  "kind": "kani",
+  "target": "POOL:277 complete output/borrow/frame with explicit owned-word havoc PCI_NEG_DEPOSIT",
+  "files": {
+   "PCI_gate.py": "PCI_gate.py",
+   "PCI_src/programs/aspis-pool/src/history.rs": "PCI_history.rs.txt",
+   "PCI_src/programs/aspis-pool/src/lib.rs": "PCI_pool_lib.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "PCI_RootNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "PCI_CountNative.rs",
+   "PCI_src/programs/aspis-pool/src/deposit_transport.rs": "PCI_deposit_transport.rs.txt",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositNative.rs": "PCI_DepositNative.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositFission.rs": "PCI_DepositFission.rs",
+   "PCI_src/programs/aspis-pool/src/PCI_DepositReference.rs": "PCI_DepositReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCI_gate.py",
+   "PCI_K037.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "deposit_transport::PCI_DepositNative::decode_all",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCI_K037-graph-check.json",
+   "PCI_K037-graph.stderr",
+   "PCI_K037-lock-check.json",
+   "PCI_K037-source-check.json",
+   "PCI_K037-selected-features.txt"
+  ],
+  "expected_time": "Optimized native parser/byte-value/borrowed-window association; full logical usize length,80-byte header and arbitrary original payload; no allocation, hash or multiplication",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_NEG_DEPOSIT"
+  }
+ },
+ "PCI_L025": {
+  "kind": "lean",
+  "target": "PCI_ValidateCarrier"
+ },
+ "PCI_L026": {
+  "kind": "lean",
+  "target": "PCI_ValidateField"
+ },
+ "PCI_L027": {
+  "kind": "lean",
+  "target": "PCI_ValidateComplete"
+ },
+ "PCI_L028": {
+  "kind": "lean",
+  "target": "PCI_DepositProbe"
+ },
+ "PCI_L029": {
+  "kind": "lean",
+  "target": "PCI_ValidateDomains"
+ },
+ "PCI_L030": {
+  "kind": "lean",
+  "target": "PCI_CountState"
+ },
+ "PCI_L031": {
+  "kind": "lean",
+  "target": "PCI_ValidateComplete"
+ },
+ "PCI_L032": {
+  "kind": "lean",
+  "target": "PCI_ValidateDomainAtoms"
+ },
+ "PCI_L033": {
+  "kind": "lean",
+  "target": "PCI_ValidateDomains"
+ },
+ "PCI_L034": {
+  "kind": "lean",
+  "target": "PCI_CountState"
+ },
+ "PCI_L035": {
+  "kind": "lean",
+  "target": "PCI_ValidateFull"
+ },
+ "PCI_L036": {
+  "kind": "lean",
+  "target": "PCI_SingleValidation"
+ },
+ "PCI_L037": {
+  "kind": "lean",
+  "target": "PCI_DepositExternalProbe"
+ },
+ "PCI_L038": {
+  "kind": "lean",
+  "target": "PCI_ValidateSub"
+ },
+ "PCI_L039": {
+  "kind": "lean",
+  "target": "PCI_DepositActual.Types"
+ },
+ "PCI_L040": {
+  "kind": "lean",
+  "target": "PCI_DepositActual.FunsExternal"
+ },
+ "PCI_L041": {
+  "kind": "lean",
+  "target": "PCI_DepositActual.Funs"
  }
 }

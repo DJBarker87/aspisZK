@@ -1,0 +1,47 @@
+PCI_generated/PCI_ValidateComplete.lean:56:32: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Outcome.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+PCI_generated/PCI_ValidateComplete.lean:55:12: error: Type mismatch
+  source w
+has type
+  Result.{0} (Except LeafError Unit)
+of sort `Type` but is expected to have type
+  Result.{1} ?m.1
+of sort `Type 1`
+PCI_generated/PCI_ValidateComplete.lean:60:60: error: unsolved goals
+w : PairWitness
+state : PCA_State
+⊢ sorry =
+    ok
+      { state := state, events := [],
+        reply :=
+          match PCC.validatePair w with
+          | Except.ok PUnit.unit => Outcome.ok ()
+          | Except.error e => Outcome.error (Failure.leaf e) }
+PCI_generated/PCI_ValidateComplete.lean:61:21: warning: This simp argument is unused:
+  complete
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵,̵c̵o̵m̵p̵l̵e̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCI_generated/PCI_ValidateComplete.lean:61:30: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵,̵c̵o̵m̵p̵l̵e̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCI_generated/PCI_ValidateComplete.lean:61:13: warning: declaration uses `sorry`
+'PCI_ValidateComplete.scan_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCI_ValidateComplete.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCI_ValidateComplete.result_state_effects' depends on axioms: [propext, sorryAx, Quot.sound]

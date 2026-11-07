@@ -49,7 +49,7 @@ if kind=='kani':
     assert str(Path(n).parent/dep) in files,'own cfg module missing upload: '+dep
 
 if kind=='lean':
- target=task['target'];n='PCI_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources.append(n)
+ target=task['target'];n='PCI_generated/'+target.replace('.','/')+'.lean';files[n]=(E/task.get('source',target+'.lean')).read_text();sources.append(n)
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCI_generated','-o','PCI_objects/'+target.replace('.','/')+'.olean',n]
  if task.get('native'):command+=['-c','PCI_native/'+target+'.c']
 else:command=task['command'];target=task['target']

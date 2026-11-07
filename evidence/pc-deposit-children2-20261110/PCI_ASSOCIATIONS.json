@@ -16,5 +16,34 @@
    "error arm corruption rejected"
   ],
   "classification": "ReviewedTranscription option A; no trust removed"
+ },
+ {
+  "row": "POOL:223",
+  "frozen_body_sha256": "02846237a869b5f00ad10dbb1eb8cf569117021dba7c5215e03defb95968dc49",
+  "fission_sha256": "3229f4b54e4ce8a143b8b8f98f22d65e8c706376b1495e24b5ba17115758a9ad",
+  "transforms": [
+   [
+    "w.second_occupied.mul(w.second_occupied.sub(M31::ONE))",
+    "mul_window(w.second_occupied, w.second_occupied.sub(M31::ONE), log)"
+   ],
+   [
+    "w.second_sentinel().mul(w.second_occupancy_inverse)",
+    "mul_window(w.second_sentinel(), w.second_occupancy_inverse, log)"
+   ],
+   [
+    "one_minus_occupied.mul(w.second_occupancy_inverse)",
+    "mul_window(one_minus_occupied, w.second_occupancy_inverse, log)"
+   ]
+  ],
+  "loop_cut": "w\n            .second_commitment\n            .iter()\n            .any(|limb| one_minus_occupied.mul(*limb) != M31::ZERO)",
+  "loop_predicate": "one_minus_occupied.mul(*limb) != M31::ZERO",
+  "exact_after_named_erasure": true,
+  "windows_sha256": "2db45544f14ac791d34c1a264901a3445d0cc29781da18e1d6777bec40d36b22",
+  "field_calls": "CLOSED PCI_Mul.value composed in Lean at SAME operands; no accepted native product stub",
+  "mutations_rejected": [
+   "error constructor",
+   "product operand"
+  ],
+  "classification": "ReviewedTranscription of prefix and one iteration; Lean fold and CLOSED callee substitution still required"
  }
 ]

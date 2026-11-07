@@ -1,0 +1,69 @@
+{"attempt": "PCI_K011", "exit_status": 1, "wall_seconds": 36.971861662110314, "peak_rss_kib": "540016", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.228
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling libc v0.2.186
+   Compiling subtle v2.6.1
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling borsh v1.5.7
+   Compiling cpufeatures v0.2.17
+   Compiling five8_core v0.1.2
+   Compiling num-traits v0.2.19
+   Compiling ahash v0.8.12
+   Compiling five8 v0.2.1
+   Compiling getrandom v0.2.17
+   Compiling bytemuck v1.25.0
+   Compiling solana-sanitize v2.2.1
+   Compiling once_cell v1.21.4
+   Compiling solana-atom
+...
+----------- methods in this implementation
+106 |     pub(crate) fn matches_policy(self, policy: &VerifierPolicyV1) -> bool {
+    |                   ^^^^^^^^^^^^^^
+...
+129 |     pub(crate) fn authenticated_at_slot(self) -> u64 {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `derive_verifier_dispatch_claim_v1` is never used
+  --> programs/aspis-pool/src/verifier_dispatch.rs:56:15
+   |
+56 | pub(crate) fn derive_verifier_dispatch_claim_v1(
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `PCI_CountNative` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5797:34
+     |
+5797 | #[path="PCI_CountNative.rs"] mod PCI_CountNative;
+     |                                  ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pci_count_native`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 35.54s
+Checking harness pair_forest::PCI_CountNative::count_all_words...
+
+VERIFICATION RESULT:
+ ** 1 of 94 failed (2 unreachable)
+Failed Checks: assertion failed: exact != cfg!(PCI_NEG_COUNT)
+ File: "programs/aspis-pool/src/PCI_CountNative.rs", line 23, in pair_forest::PCI_CountNative::count_all_words
+
+VERIFICATION:- FAILED
+Verification Time: 0.07341866s
+
+Manual Harness Summary:
+Verification failed for - pair_forest::PCI_CountNative::count_all_words
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r63d079e3cfdf47099e97845b5626ce04.scope; invocation ID: b38f7cf732a84528b0a842ff47a44f5b

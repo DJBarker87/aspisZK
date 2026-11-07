@@ -1,0 +1,429 @@
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+--- a/crates/aspis-statement/src/spend.rs
++++ b/crates/aspis-statement/src/spend.rs
+@@ -654,3 +654,6 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../tools/r1-builder-reference/nullifier.rs"]
+ mod nullifier_reference;
++
++#[cfg(kani)]
++#[path="PCI_NoteNative.rs"] mod PCI_NoteNative;
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,6 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCI_ValidateNative.rs"]mod PCI_ValidateNative;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes the pair-forest initialization, checkpoint,
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,6 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCI_CountNative.rs"] mod PCI_CountNative;
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -344,3 +344,6 @@
+         assert!(validate_root_page_bytes_from_program_invariant(&data, &pool, 0).is_err());
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCI_RootNative.rs"] mod PCI_RootNative;
+--- a/programs/aspis-pool/src/deposit_transport.rs
++++ b/programs/aspis-pool/src/deposit_transport.rs
+@@ -160,3 +160,6 @@
+         encrypted_note_payload: &bytes[INSTRUCTION_PAYLOAD_OFFSET..],
+     })
+ }
++
++#[cfg(kani)]
++#[path="PCI_DepositNative.rs"]mod PCI_DepositNative;
+--- /dev/null
++++ b/crates/aspis-statement/src/PCI_NoteNative.rs
+@@ -0,0 +1,19 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCI_NoteReference.rs"] mod reference;
++#[kani::proof]
++#[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn note_forward(){
++ let owner:[u32;8]=kani::any();let salt:[u32;8]=kani::any();
++ let value:u32=kani::any();kani::assume(value<P);let asset:u32=kani::any();
++ let owner_m=owner.map(M31);let salt_m=salt.map(M31);let reply=([0u32;8]).map(|_|M31(kani::any()));
++ let expected=reference::note_input(owner,value,asset,salt);
++ let mut calls=0usize;
++ let got=note_commitment_with(&owner_m,value,M31(asset),&salt_m,&mut |domain,input:&[M31]|{
++  calls+=1;assert_eq!(domain,DOMAIN_NOTE);assert_eq!(input.len(),18);
++  assert!((input.iter().zip(expected).all(|(x,y)|x.0==y))!=cfg!(PCI_NEG_NOTE));
++  reply
++ });
++ assert_eq!(calls,1);assert_eq!(got,reply);
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/PCI_NoteReference.rs
+@@ -0,0 +1,3 @@
++pub fn note_input(owner_key: [u32;8], value: u32, asset_id: u32, salt: [u32;8]) -> [u32;18] {
++    [ owner_key[0], owner_key[1], owner_key[2], owner_key[3], owner_key[4], owner_key[5], owner_key[6], owner_key[7], value, asset_id, salt[0], salt[1], salt[2], salt[3], salt[4], salt[5], salt[6], salt[7] ]
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs
+@@ -0,0 +1,64 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCI_ValidateReference.rs"]mod reference;
++struct Log{args:[[u32;2];3],values:[u32;3],count:usize}
++fn canonical_value(d:&Digest)->bool{d[0].0<P && d[1].0<P && d[2].0<P && d[3].0<P && d[4].0<P && d[5].0<P && d[6].0<P && d[7].0<P}
++fn canonical_spec(d:&Digest)->bool{
++ let b:bool=kani::any();kani::assume(b==(canonical_value(d)!=cfg!(PCI_WRONG_CANON)));b
++}
++fn product_spec(a:M31,b:M31)->M31{
++ assert!(a.0<P);assert!(b.0<P);
++ let z:u32=kani::any();kani::assume(z<P);
++ kani::assume(z as u64==((a.0 as u64)*(b.0 as u64))%(P as u64));M31(z)
++}
++fn mul_window(a:M31,b:M31,log:&mut Log)->M31{
++ let out=a.mul(b);assert!(log.count<3);
++ log.args[log.count]=[a.0,b.0];log.values[log.count]=out.0;log.count+=1;out
++}
++include!("PCI_ValidateFission.rs");
++fn tag(r:Result<(),PoolV1PairLeafErrorV1>)->u8{
++ use PoolV1PairLeafErrorV1::*;match r{Ok(())=>0,Err(e)=>match e{NonCanonicalCommitment=>1,NonCanonicalOccupancy=>2,NonCanonicalInverse=>3,OccupancyNotBoolean=>4,SentinelInverseMismatch=>5,EmptyInverseNonZero=>6,EmptyCommitmentNonZero=>7,OccupiedSentinelZero=>8,SelectedSlotEmpty=>9}}
++}
++include!("PCI_ValidateWindows.rs");
++fn arbitrary_witness()->PoolV1PairLeafWitnessV1{
++ PoolV1PairLeafWitnessV1{first_commitment:kani::any::<[u32;8]>().map(M31),second_occupied:M31(kani::any()),second_commitment:kani::any::<[u32;8]>().map(M31),second_occupancy_inverse:M31(kani::any())}
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(digest_is_canonical,canonical_spec)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_prefix(){
++ let w=arbitrary_witness();let got=gates_window(&w);
++ let want=if !canonical_value(&w.first_commitment)||!canonical_value(&w.second_commitment){1}else if w.second_occupied.0>=P{2}else if w.second_occupancy_inverse.0>=P{3}else{0};
++ assert!((tag(got)==want)!=cfg!(PCI_NEG_VALIDATE));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_operands(){
++ let w=arbitrary_witness();let occ=w.second_occupied.0;let inv=w.second_occupancy_inverse.0;
++ kani::assume(occ<P);kani::assume(inv<P);
++ let got=operands_window(&w).map(|x|x.0);
++ let want=[occ,if occ==0{P-1}else{occ-1},w.second_commitment[7].0,inv,if occ<=1{1-occ}else{P+1-occ},inv];
++ assert!((got==want)!=cfg!(PCI_NEG_VALIDATE));
++ assert!(got[0]<P&&got[1]<P&&got[3]<P&&got[4]<P&&got[5]<P);
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_after_products(){
++ let w=arbitrary_witness();let product=M31(kani::any());let phase:u8=kani::any();kani::assume(phase<4);let scan:bool=kani::any();
++ let got=match phase{0=>post_product0(product,w.second_occupied),1=>post_product1(product,w.second_occupied),2=>post_product2(product,w.second_occupied),_=>tail_window(&w,scan)};
++ let want=match phase{0=>if product.0!=0{4}else{0},1=>if product!=w.second_occupied{5}else{0},2=>if product.0!=0{6}else{0},_=>if scan{7}else if w.second_occupied.0==1&&w.second_commitment[7].0==0{8}else{0}};
++ assert!((tag(got)==want)!=cfg!(PCI_NEG_VALIDATE));
++}
++// Source-ordered split around the CLOSED field call; not a product stub.
++fn scan_arguments(one_minus_occupied:M31,limb:M31)->[M31;2]{[one_minus_occupied,limb]}
++fn scan_after_product(product:M31)->bool{product!=M31::ZERO}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_scan_step(){
++ let words:[u32;8]=kani::any();let i:usize=kani::any();kani::assume(i<8);let one:u32=kani::any();let product:u32=kani::any();
++ let mut got=scan_arguments(M31(one),M31(words[i])).map(|x|x.0);
++ #[cfg(PCI_SCAN_ARG_MUTANT)]{got[1]^=1;}
++ assert!((got==[one,words[i]])!=cfg!(PCI_NEG_VALIDATE));
++ assert_eq!(scan_after_product(M31(product)),product!=0);
++ assert!(i+1<=8);
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_ValidateReference.rs
+@@ -0,0 +1,3 @@
++pub fn prefix(first:bool,second:bool,occupied:u32,inverse:u32,sentinel:u32,products:[u32;3],scan:bool)->u8{
++ if !first || !second{1}else if occupied>=2147483647{2}else if inverse>=2147483647{3}else if products[0]!=0{4}else if products[1]!=occupied{5}else if products[2]!=0{6}else if scan{7}else if occupied==1&&sentinel==0{8}else{0}
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_ValidateFission.rs
+@@ -0,0 +1,32 @@
++fn validate_fission(w: &PoolV1PairLeafWitnessV1, scan_nonzero: bool, log: &mut Log) -> Result<(),PoolV1PairLeafErrorV1> {
++        if !digest_is_canonical(&w.first_commitment)
++            || !digest_is_canonical(&w.second_commitment)
++        {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalCommitment);
++        }
++        if w.second_occupied.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalOccupancy);
++        }
++        if w.second_occupancy_inverse.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalInverse);
++        }
++
++        let one_minus_occupied = M31::ONE.sub(w.second_occupied);
++        if mul_window(w.second_occupied, w.second_occupied.sub(M31::ONE), log) != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupancyNotBoolean);
++        }
++        if mul_window(w.second_sentinel(), w.second_occupancy_inverse, log) != w.second_occupied {
++            return Err(PoolV1PairLeafErrorV1::SentinelInverseMismatch);
++        }
++        if mul_window(one_minus_occupied, w.second_occupancy_inverse, log) != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::EmptyInverseNonZero);
++        }
++        if scan_nonzero
++        {
++            return Err(PoolV1PairLeafErrorV1::EmptyCommitmentNonZero);
++        }
++        if w.second_occupied == M31::ONE && w.second_sentinel() == M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupiedSentinelZero);
++        }
++        Ok(())
++    }
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_ValidateWindows.rs
+@@ -0,0 +1,46 @@
++fn gates_window(w:&PoolV1PairLeafWitnessV1)->Result<(),PoolV1PairLeafErrorV1> {
++        if !digest_is_canonical(&w.first_commitment)
++            || !digest_is_canonical(&w.second_commitment)
++        {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalCommitment);
++        }
++        if w.second_occupied.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalOccupancy);
++        }
++        if w.second_occupancy_inverse.0 >= P {
++            return Err(PoolV1PairLeafErrorV1::NonCanonicalInverse);
++        }
++
++        Ok(())
++}
++fn operands_window(w:&PoolV1PairLeafWitnessV1)->[M31;6]{
++ [w.second_occupied,w.second_occupied.sub(M31::ONE),w.second_sentinel(),w.second_occupancy_inverse,M31::ONE.sub(w.second_occupied),w.second_occupancy_inverse]
++}
++fn post_product0(product:M31,occupied:M31)->Result<(),PoolV1PairLeafErrorV1>{
++ if product != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupancyNotBoolean);
++        }
++ Ok(())
++}
++fn post_product1(product:M31,occupied:M31)->Result<(),PoolV1PairLeafErrorV1>{
++ if product != occupied {
++            return Err(PoolV1PairLeafErrorV1::SentinelInverseMismatch);
++        }
++ Ok(())
++}
++fn post_product2(product:M31,occupied:M31)->Result<(),PoolV1PairLeafErrorV1>{
++ if product != M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::EmptyInverseNonZero);
++        }
++ Ok(())
++}
++fn tail_window(w:&PoolV1PairLeafWitnessV1,scan_nonzero:bool)->Result<(),PoolV1PairLeafErrorV1> {
++    if scan_nonzero
++        {
++            return Err(PoolV1PairLeafErrorV1::EmptyCommitmentNonZero);
++        }
++        if w.second_occupied == M31::ONE && w.second_sentinel() == M31::ZERO {
++            return Err(PoolV1PairLeafErrorV1::OccupiedSentinelZero);
++        }
++        Ok(())
++    }
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_CountNative.rs
+@@ -0,0 +1,25 @@
++use super::*;
++fn require_exact_account_count_fission(len: usize, expected: usize) -> ProgramResult {
++    if len != expected {
++        return Err(if len < expected {
++            ProgramError::NotEnoughAccountKeys
++        } else {
++            ProgramError::InvalidArgument
++        });
++    }
++    Ok(())
++}
++// Retired whole-ProgramError equality K004 timed out. Split exhaustive comparison arms.
++#[cfg(any(PCI_COUNT_EQUAL,PCI_COUNT_SHORT,PCI_COUNT_LONG))]
++#[kani::proof]
++fn count_all_words(){
++ let len:usize=kani::any();let expected:usize=kani::any();
++ #[cfg(PCI_COUNT_EQUAL)] kani::assume(len==expected);
++ #[cfg(PCI_COUNT_SHORT)] kani::assume(len<expected);
++ #[cfg(PCI_COUNT_LONG)] kani::assume(len>expected);
++ let result=require_exact_account_count_fission(len,expected);
++ #[cfg(PCI_COUNT_EQUAL)] let exact=matches!(result,Ok(()));
++ #[cfg(PCI_COUNT_SHORT)] let exact=matches!(result,Err(ProgramError::NotEnoughAccountKeys));
++ #[cfg(PCI_COUNT_LONG)] let exact=matches!(result,Err(ProgramError::InvalidArgument));
++ assert!(exact!=cfg!(PCI_NEG_COUNT));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_RootNative.rs
+@@ -0,0 +1,26 @@
++extern crate alloc;
++use super::*;
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[repr(C)]
++struct Context{program:Pubkey,pool:[u8;32],page:u64,reply:Pubkey,bump:u8,calls:Cell<u8>}
++fn find_reply(seeds:&[&[u8]],program:&Pubkey)->(Pubkey,u8){
++ let c=unsafe{&*(core::ptr::with_exposed_provenance::<Context>(program as *const Pubkey as usize))};
++ assert_eq!(seeds.len(),3);
++ assert_eq!(seeds[0],b"aspis-pool-root-page-v1");
++ assert_eq!(seeds[1],&c.pool);
++ assert_eq!(seeds[2],&c.page.to_le_bytes());
++ c.calls.set(c.calls.get()+1);(c.reply,c.bump)
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn root_address(){
++ let c=Context{program:Pubkey::new_from_array(kani::any()),pool:kani::any(),page:kani::any(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),calls:Cell::new(0)};
++ let _=core::ptr::addr_of!(c).expose_provenance();
++ let mut pool=c.pool;
++ #[cfg(PCI_ROOT_ARG_MUTANT)]{pool[0]^=1;}
++ let got=pool_v1_root_page_address(&c.program,&Pubkey::new_from_array(pool),c.page);
++ assert_eq!(c.calls.get(),1);
++ assert!((got==(c.reply,c.bump))!=cfg!(PCI_NEG_ROOT));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_DepositNative.rs
+@@ -0,0 +1,41 @@
++use super::*;
++extern crate alloc;
++use aspis_core::field::M31;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCI_DepositReference.rs"]mod reference;
++include!("PCI_DepositFission.rs");
++fn decode_spec(b:&[u8;32])->Result<aspis_statement::Digest,aspis_statement::AtomicStatementError>{
++ let expected=[u32::from_le_bytes([b[0],b[1],b[2],b[3]]),u32::from_le_bytes([b[4],b[5],b[6],b[7]]),u32::from_le_bytes([b[8],b[9],b[10],b[11]]),u32::from_le_bytes([b[12],b[13],b[14],b[15]]),u32::from_le_bytes([b[16],b[17],b[18],b[19]]),u32::from_le_bytes([b[20],b[21],b[22],b[23]]),u32::from_le_bytes([b[24],b[25],b[26],b[27]]),u32::from_le_bytes([b[28],b[29],b[30],b[31]])];
++ let ok:bool=kani::any();kani::assume(ok==(reference::canonical(expected)!=cfg!(PCI_DEPOSIT_SPEC_MUTANT)));
++ if !ok{return Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)}
++ let mut raw=[0u32;8];
++ raw[0]=kani::any();kani::assume(raw[0]==expected[0]);
++ raw[1]=kani::any();kani::assume(raw[1]==expected[1]);
++ raw[2]=kani::any();kani::assume(raw[2]==expected[2]);
++ raw[3]=kani::any();kani::assume(raw[3]==expected[3]);
++ raw[4]=kani::any();kani::assume(raw[4]==expected[4]);
++ raw[5]=kani::any();kani::assume(raw[5]==expected[5]);
++ raw[6]=kani::any();kani::assume(raw[6]==expected[6]);
++ #[cfg(not(PCI_DEPOSIT_OMIT_OWNER))]
++ {raw[7]=kani::any();kani::assume(raw[7]==expected[7]);}
++ Ok([M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])])
++}
++fn error_tag(e:DepositInstructionFormatErrorV1)->u8{
++ use DepositInstructionFormatErrorV1::*;
++ match e{WrongLength=>1,WrongMagic=>2,WrongVersion=>3,NonZeroReserved=>4,InvalidAmount=>5,InvalidPayloadLength=>6,NonCanonicalDigest=>7}
++}
++#[kani::proof] #[kani::unwind(650)]
++#[kani::stub(aspis_statement::decode_digest_canonical,decode_spec)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode_all(){
++ let bytes:[u8;592]=kani::any();let logical_len:usize=kani::any();let magic:[u8;4]=kani::any();
++ let i:usize=kani::any();kani::assume(i<592);let before=bytes[i];
++ let header:&[u8;80]=(&bytes[..80]).try_into().unwrap();
++ let want=reference::decode_reference(header,logical_len,magic);
++ let got=decode_fission(&bytes,logical_len,magic);
++ let same=match got{
++  Err(e)=>want.tag==error_tag(e),
++  Ok(r)=>{want.tag==0&&r.owner_key.map(|x|x.0)==want.owner&&r.amount==want.amount&&r.salt.map(|x|x.0)==want.salt&&r.encrypted_note_payload.len()==want.payload_len&&core::ptr::eq(r.encrypted_note_payload,&bytes[80..logical_len])}
++ };
++ assert!(same!=cfg!(PCI_NEG_DEPOSIT));assert_eq!(bytes[i],before);
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_DepositReference.rs
+@@ -0,0 +1,19 @@
++#[derive(Clone,Copy)]
++pub struct Decoded{pub tag:u8,pub owner:[u32;8],pub amount:u32,pub salt:[u32;8],pub payload_len:usize}
++fn error(tag:u8)->Decoded{Decoded{tag,owner:[0;8],amount:0,salt:[0;8],payload_len:0}}
++pub fn word(h:&[u8;80],at:usize)->u32{u32::from_le_bytes([h[at],h[at+1],h[at+2],h[at+3]])}
++pub fn words(h:&[u8;80],at:usize)->[u32;8]{[word(h,at+0),word(h,at+4),word(h,at+8),word(h,at+12),word(h,at+16),word(h,at+20),word(h,at+24),word(h,at+28)]}
++pub fn canonical(d:[u32;8])->bool{d[0]<2147483647&&d[1]<2147483647&&d[2]<2147483647&&d[3]<2147483647&&d[4]<2147483647&&d[5]<2147483647&&d[6]<2147483647&&d[7]<2147483647}
++pub fn decode_reference(h:&[u8;80],len:usize,magic:[u8;4])->Decoded{
++ if len<80||len>592{return error(1)}
++ if [h[0],h[1],h[2],h[3]]!=magic{return error(2)}
++ if h[4]!=1{return error(3)}
++ if h[5]!=0||[h[44],h[45],h[46],h[47]]!=[0;4]{return error(4)}
++ let declared=u16::from_le_bytes([h[6],h[7]]) as usize;
++ if declared>512{return error(6)}
++ if len!=80+declared{return error(1)}
++ let owner=words(h,8);if !canonical(owner){return error(7)}
++ let salt=words(h,48);if !canonical(salt){return error(7)}
++ let amount=word(h,40);if amount==0||amount>=1073741824{return error(5)}
++ Decoded{tag:0,owner,amount,salt,payload_len:len-80}
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCI_DepositFission.rs
+@@ -0,0 +1,59 @@
++fn decode_fission<'a>(bytes: &'a [u8;592], logical_len: usize, expected_magic: [u8;4]) -> Result<DepositRequestV1<'a>,DepositInstructionFormatErrorV1> {
++    if logical_len < POOL_V1_DEPOSIT_INSTRUCTION_HEADER_BYTES
++        || logical_len > POOL_V1_DEPOSIT_INSTRUCTION_MAX_BYTES
++    {
++        return Err(DepositInstructionFormatErrorV1::WrongLength);
++    }
++    if bytes[..4] != expected_magic {
++        return Err(DepositInstructionFormatErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_DEPOSIT_INSTRUCTION_VERSION {
++        return Err(DepositInstructionFormatErrorV1::WrongVersion);
++    }
++    if bytes[5] != 0 || bytes[44..48] != [0u8; 4] {
++        return Err(DepositInstructionFormatErrorV1::NonZeroReserved);
++    }
++
++    let declared_payload_length = usize::from(u16::from_le_bytes(
++        bytes[6..8]
++            .try_into()
++            .map_err(|_| DepositInstructionFormatErrorV1::WrongLength)?,
++    ));
++    if declared_payload_length > POOL_V1_ENCRYPTED_NOTE_PAYLOAD_MAX_BYTES {
++        return Err(DepositInstructionFormatErrorV1::InvalidPayloadLength);
++    }
++    let expected_length = INSTRUCTION_PAYLOAD_OFFSET
++        .checked_add(declared_payload_length)
++        .ok_or(DepositInstructionFormatErrorV1::WrongLength)?;
++    if logical_len != expected_length {
++        return Err(DepositInstructionFormatErrorV1::WrongLength);
++    }
++
++    let owner_key_bytes: &[u8; 32] = bytes[INSTRUCTION_OWNER_KEY_OFFSET..INSTRUCTION_AMOUNT_OFFSET]
++        .try_into()
++        .map_err(|_| DepositInstructionFormatErrorV1::WrongLength)?;
++    let salt_bytes: &[u8; 32] = bytes[INSTRUCTION_SALT_OFFSET..INSTRUCTION_PAYLOAD_OFFSET]
++        .try_into()
++        .map_err(|_| DepositInstructionFormatErrorV1::WrongLength)?;
++    #[cfg(PCI_DEPOSIT_ARG_MUTANT)]
++    let owner_key_bytes = salt_bytes;
++    let owner_key = decode_digest_canonical(owner_key_bytes)
++        .map_err(|_| DepositInstructionFormatErrorV1::NonCanonicalDigest)?;
++    let salt = decode_digest_canonical(salt_bytes)
++        .map_err(|_| DepositInstructionFormatErrorV1::NonCanonicalDigest)?;
++    let amount = u32::from_le_bytes(
++        bytes[INSTRUCTION_AMOUNT_OFFSET..44]
++            .try_into()
++            .map_err(|_| DepositInstructionFormatErrorV1::WrongLength)?,
++    );
++    if amount == 0 || amount >= VALUE_LIMIT {
++        return Err(DepositInstructionFormatErrorV1::InvalidAmount);
++    }
++
++    Ok(DepositRequestV1 {
++        owner_key,
++        amount,
++        salt,
++        encrypted_note_payload: &bytes[INSTRUCTION_PAYLOAD_OFFSET..logical_len],
++    })
++}
