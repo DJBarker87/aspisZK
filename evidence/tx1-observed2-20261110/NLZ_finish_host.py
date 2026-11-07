@@ -11,7 +11,7 @@ if mode=='native':
  for j in range(1,41):
   a=f'NLZ_K{j:03}';rc=json.loads((B/a/'receipt.json').read_text());graph=json.loads((B/(a+'-graph-check.json')).read_text());lock=json.loads((B/(a+'-lock-check.json')).read_text());assert graph['graph_matches_frozen']and lock['unchanged']
   log=(B/a/'stdout.log').read_text();control=rc['module'].endswith('_control')
-  verdict='PASS'if rc['exit_status']==0 and'VERIFICATION:- SUCCESSFUL'in log else'CONTROL_FAIL'if control and('Failed Checks: assertion failed: !good'in log or 'Failed Checks: assertion failed: good && log.phase'in log) and'CBMC timed out'not in log else'TIMEOUT'if'CBMC timed out'in log else'INPUT_FAILURE'
+  verdict='PASS'if rc['exit_status']==0 and'VERIFICATION:- SUCCESSFUL'in log else'CONTROL_FAIL'if control and('Failed Checks: assertion failed: !good'in log or 'Failed Checks: assertion failed: good && log.phase'in log) and'CBMC timed out'not in log else'TIMEOUT'if'CBMC timed out'in log else'UNWIND_FAILURE'if'unwinding assertion'in log else'INPUT_FAILURE'
   rows.append(dict(attempt=a,verdict=verdict,module=rc['module'],exit=rc['exit_status'],source_pins_sha256=H(B/a/'sources/NLZ_SOURCE_PINS.json')))
  pairs=[(4,2),(5,6),(17,18),(19,20),(21,22),(23,24)]+[(j,j+1)for j in [9,11,13,15]+list(range(27,41,2))]
  checked=[]
