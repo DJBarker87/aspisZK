@@ -166,3 +166,5 @@ Session4 49125: pinned PV_FN_THREAD_LocalDrop passed; session4 receipt records r
 Session4 49126: pinned PV_FN_THREAD_LocalDropRun passed; session4 receipt records resources/axioms.
 
 Session4 49127: pinned PV_FN_THREAD_f361ErrorDrops passed; session4 receipt records resources/axioms.
+
+Session4 49128: pinned PV_FN_THREAD_ReturnWithTail passed; session4 receipt records resources/axioms.
