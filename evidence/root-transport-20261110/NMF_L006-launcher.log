@@ -1,0 +1,43 @@
+{"attempt": "NMF_L006", "exit_status": 0, "wall_seconds": 18.330264022108167, "peak_rss_kib": "6030876", "swaps": "0", "print_axioms": ["'NMF_InputTransport.root0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMF_InputTransport.caller_clause' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMF_InputTransport.root0 : ∀ (saved ck oldProof proof : Slice U8),
+  NLP_InputDomain.Root0 saved oldProof →
+    MultiproofConeCanonical.bytesOf ↑ck = MultiproofConeCanonical.bytesOf ↑saved →
+      MultiproofConeCanonical.bytesOf ↑proof = MultiproofConeCanonical.bytesOf ↑oldProof →
+        NLP_InputDomain.Root0 ck proof :=
+fun saved ck oldProof proof old checkpoint inputs =>
+  have hc := NLW_ByteIdentity.bytes_injective (↑ck) (↑saved) checkpoint;
+  have hp := NLW_ByteIdentity.bytes_injective (↑proof) (↑oldProof) inputs;
+  Eq.mpr
+    (id
+      (congr (congrArg Eq (congrArg (List.take 32) (congrArg (List.drop 112) hc)))
+        (congrArg Subtype.val
+          (congrArg AspisV8R19.Squeez
+...
+theorem NMF_InputTransport.root0 : ∀ (saved ck oldProof proof : Slice U8),
+  NLP_InputDomain.Root0 saved oldProof →
+    MultiproofConeCanonical.bytesOf ↑ck = MultiproofConeCanonical.bytesOf ↑saved →
+      MultiproofConeCanonical.bytesOf ↑proof = MultiproofConeCanonical.bytesOf ↑oldProof →
+        NLP_InputDomain.Root0 ck proof :=
+fun saved ck oldProof proof old checkpoint inputs =>
+  have hc := NLW_ByteIdentity.bytes_injective (↑ck) (↑saved) checkpoint;
+  have hp := NLW_ByteIdentity.bytes_injective (↑proof) (↑oldProof) inputs;
+  Eq.mpr
+    (id
+      (congr (congrArg Eq (congrArg (List.take 32) (congrArg (List.drop 112) hc)))
+        (congrArg Subtype.val
+          (congrArg AspisV8R19.SqueezeOracleBridge.encodeState
+            (congrFun'
+              (congrArg Option.getD
+                (congrArg SemanticRecordCodec.decodeState
+                  (congrFun'
+                    (congrFun' (congrArg OraclePortCompactDraft.slice (congrArg MultiproofConeCanonical.bytesOf hp)) 16)
+                    32)))
+              fun x => 0)))))
+    old
+theorem NMF_InputTransport.caller_clause : ∀ (ck proof : Slice U8),
+  NLP_InputDomain.Root0 ck proof ↔ NLW_Root0.Binds ck proof :=
+fun ck proof => Iff.rfl
+'NMF_InputTransport.root0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMF_InputTransport.caller_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r267ff3d8ebdf462fbadfebc540f17cc1.scope; invocation ID: 3da3e3641dbf4143a855215b683d29e6

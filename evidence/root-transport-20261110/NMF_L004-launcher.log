@@ -1,0 +1,57 @@
+{"attempt": "NMF_L004", "exit_status": 1, "wall_seconds": 15.739371773088351, "peak_rss_kib": "6005824", "swaps": "0", "print_axioms": ["'NMF_WriterRoots.physical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMF_WriterRoots.serialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMF_generated/NMF_WriterRoots.lean:47:5: error(lean.unknownIdentifier): Unknown identifier `NLW_WriterPair.map_slice`
+NMF_generated/NMF_WriterRoots.lean:44:44: error: unsolved goals
+X : Type
+D : VTop_Stages.aspis_core.digest.Digest32 X
+hash : X
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+proof pub : Slice U8
+saved : alloc.vec.Vec U8
+success : Port3_CheckpointInstall.writer D p a proof pub hash = ok saved
+root :
+  Port3_BatchStage.root0 p =
+    encodeState
+      ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑proof) 16 32)).getD fun x => 0)
+⊢ bytesOf (List.take 32 (List.drop 112 ↑saved)) =
+    bytesOf
+      ↑(encodeState
+          ((Sem
+...
+))
+              r0))
+          (Eq.refl [r0, r1][0]);
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                encodeState
+                  ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑proof) 16 32)).getD fun x =>
+                    0))
+            eq))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => r0 = encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0))
+              (Eq.symm bytes)))
+          (Eq.mpr (id (congrArg (fun _a => r0 = encodeState (_a.getD fun x => 0)) (SdkD_ModelRoots.decode_native r0)))
+            (Eq.mpr (id (congrArg (fun _a => r0 = encodeState _a) Option.getD_some))
+              (Eq.mpr (id (congrArg (fun _a => r0 = _a) (array_roundtrip r0))) (Eq.refl r0))))))
+    call
+theorem NMF_WriterRoots.serialized : ∀ {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator) (proof pub : Slice U8)
+  (saved : alloc.vec.Vec U8),
+  Port3_CheckpointInstall.writer D p a proof pub hash = ok saved →
+    Port3_BatchStage.root0 p =
+        encodeState
+          ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑proof) 16 32)).getD fun x => 0) →
+      NLP_InputDomain.Root0 saved.deref proof :=
+fun {X} D hash p a proof pub saved success root =>
+  NLW_ByteIdentity.bytes_injective (List.take 32 (List.drop 112 ↑saved.deref))
+    (↑(encodeState
+        ((SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice (bytesOf ↑proof) 16 32)).getD fun x => 0)))
+    (id sorry)
+'NMF_WriterRoots.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMF_WriterRoots.serialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5664557ed5ce4f9897f042683411e094.scope; invocation ID: a81c17da329a410cbd75b0db75c7b664

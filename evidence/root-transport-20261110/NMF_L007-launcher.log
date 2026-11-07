@@ -1,0 +1,30 @@
+{"attempt": "NMF_L007", "exit_status": 0, "wall_seconds": 14.35601855092682, "peak_rss_kib": "5999296", "swaps": "0", "print_axioms": ["'NMF_ReachedHeader.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMF_ReachedHeader.returned : ∀ {F C X : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : Port3_NativeQueryBody.Ops)
+  (geo : Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State),
+  CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest D) hash H →
+    ∀ (pub proof ck : Slice U8) (t : Cons_Native.Witness),
+      Cons_Native.Calls base finish reserved query geo D hash pub proof ck t →
+        NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑ck) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun {F C X} 
+...
+theorem NMF_ReachedHeader.returned : ∀ {F C X : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : Port3_NativeQueryBody.Ops)
+  (geo : Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State),
+  CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest D) hash H →
+    ∀ (pub proof ck : Slice U8) (t : Cons_Native.Witness),
+      Cons_Native.Calls base finish reserved query geo D hash pub proof ck t →
+        NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑ck) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun {F C X} base finish reserved query geo D hash H oracle pub proof ck t calls =>
+  have resumed :=
+    Tx2N_Install.reader_success base reserved query D hash ck proof pub AspisR1Stage2.transport.Variant.S2 t.p2 t.saved2
+      calls.left;
+  let ⟨compared⟩ :=
+    CheckpointBytes4Comparison.successful_calls reserved (VTop_Checkpoint.digest D) ck proof pub
+      AspisR1Stage2.transport.Variant.S2 hash t.p2 t.saved2 resumed
+  NLW_ReaderHeader.calls (VTop_Checkpoint.digest D) hash H oracle ck proof pub compared calls.right.right.left
+'NMF_ReachedHeader.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-recbb6c26514945be80797d1eb35b4872.scope; invocation ID: 9bfe9a7bfa484f1e89475ae77fd4500a
