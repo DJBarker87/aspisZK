@@ -1,3 +1,24 @@
+## Native observation / weak-parent stage
+
+L080/L082-L088 PASS: concrete native query/event observation including BOTH
+returning and stopped C04, exact original partitions, partial replies and
+separately pending request; all native064 outcomes admitted. New law
+NNC_ObservedLaw.w has writeFree and accepted_header without caller renderer.
+This is a Root0-free source-record observer, NOT an assertion about an
+arbitrary TAS I.f064. Exact per-runtime/Env installation remains to be wired.
+
+L091 NNC_WeakOps PASS: changing ONLY op11 leaves data, validator and all of its
+registry/authentication/loop callees unchanged. L089 whole validator rfl hit
+recursion; it is retired, replaced by modular callee equalities (no options
+raised). L090 redundant post-simp rfl removed at L091. L092
+NNC_WeakReader.from_parent/join PASS: accepted weak PARENT derives SAME native
+read/index/range/validator/encoder and native064-success cuts in ORIGINAL ops,
+then joins TX1-only writer facts into NNC_SourceCuts.Cuts without second.
+No child-success input and no canonical model2 acceptance manufacture a cut.
+Actual entry -> that weak native parent remains the exact full-row installation
+obligation; NMS/NND still do not supply it at the pinned branch reviews.
+Scope count92/250. No Kani, extraction, trust or shipped-source change.
+
 ## Option B stage 3: actual choices and numerical fold
 
 L071 NNC_RecAccepted.accepted PASS: full accepted-pair host theorem with internal E_rec, retaining every native/admission/game/trust/query binder and adding actual Realizes; no CLOSED module edited. L072/L073 NNC_RecRoot.root0_or_rec_collision and NNC_NMFB.root0_or_rec PASS: native weak064 fold plus actual adversary selector, exact capped-account E_rec, Root0 or event at SAME supplied cuts. L076 NNC_ActualAccepted.actual and L077 NNC_ActualRoot.actual PASS: e1/data1/state1 and e2/data2/slot/state2 are literally eval-selected projections, realizes supplied by rfl, no Realizes binder or constant adversary. These still retain the native cut-production/model-acceptance premises of their respective arms; neither is falsely promoted to the final actual-entry theorem.
@@ -68,3 +89,16 @@ L039 NNC_RuntimeOracle.writer derives the nested writer oracle directly from ext
 All current24 NNC proof modules are individually checked;41/250 actual scopes total through L041(0Kani/0extraction), including all inherited failures and support compiles. One L038 prelaunch share-inspection failure launched no scope; stricter same-cgroup cgroup.threads fallback is documented in NNC_REPAIRS.md. No shared infrastructure changed. Concrete TAS NativeRep/selected carrier installations remain OPEN as detailed member-by-member in NNC_REMAINING.md and NNC_CLOSED.json; they are never reclassified as new runtime trust or own-input clauses. Next: one focused combined import with ledger24, then raw ax2 of only56 own roots.
 
 Pre-final sibling refresh (read-only, NNC_BRANCH_REVIEW.json pins sources): NMS3278354f9fe now has fresh241 equality/scanner and weak relational specialization, but still explicitly no native-ready241/242 root and a conditional getter-stop/pure-RSL mismatch. NND94e822d2630 has additional native decoder selections and returned-value transports but no concrete217/op50/full missing substitution or A1/A2 instance. NNE2f5a682783d now supplies physical args/state/accepted/output definitions and exact A3/A4 for its concrete abort allocator; the older allocator blocker is superseded for that instance. Its physical Sig still takes an abstract S and leaves readerHeader/Root0Native and actual064 observation interpretation to final host assembly. This adds useful partial entry representation; it does not discharge NNC NativeRep or SAME selected occurrence association. The TAS targets of this brief remain binding; no unrequested switch to TFM or new contract/trust decision is made here.
+
+## Native observation progress after option B
+L078 actual output/attack-mass monotonicity PASS. L080 resume attempted-query
+and exact returning-event adapter PASS. L082 returning C04 rich-parts adapter,
+L083 stopped C04 adapter (pending request distinct, no invented reply/suffix),
+L084 digest trace no-write/projection, L085 C04 full native detail trace,
+L086 per-record/whole native common trace, L087 native064 observation transport,
+and L088 concrete weak RSL law/writeFree/accepted_header ALL PASS with standard
+axioms. These replace the arbitrary renderer for the NEW weak law
+NNC_ObservedLaw.w. No canonical Root0/C04 source equality is assumed in the
+trace decoration. The actual `I.f064`/per-Env interpretation at final host
+assembly is still explicit. NNC_EVENT_TRANSPORT.md gives the SAME-site map.
+No actual native cut or trace was obtained from model TX2 acceptance.
