@@ -1,0 +1,41 @@
+{"attempt": "NMT_L379", "exit_status": 0, "wall_seconds": 13.583414914086461, "peak_rss_kib": "5992196", "swaps": "0", "print_axioms": []}
+Aeneas.Std.Usize.checked_add: Aeneas.Std.Usize → Aeneas.Std.Usize → Option Aeneas.Std.Usize
+Aeneas.Std.UScalar.tryMkOpt: (ty : Aeneas.Std.UScalarTy) → ℕ → Option (Aeneas.Std.UScalar ty)
+Aeneas.Std.Usize.checked_add_bv_spec.match_1: (motive : Option Aeneas.Std.Usize → Sort u_1) →
+  (x : Option Aeneas.Std.Usize) → ((z : Aeneas.Std.Usize) → motive (some z)) → (Unit → motive none) → motive x
+Aeneas.Std.Usize.checked_add_bv_spec: ∀ (x y : Aeneas.Std.Usize),
+  match x.checked_add y with
+  | some z => ↑x + ↑y ≤ Aeneas.Std.Usize.max ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+  | none => Aeneas.Std.Usize.max < ↑x + ↑y
+Aeneas.Std.UScalar.saturating_add: {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty →
+...
+
+  ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty → Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+Aeneas.Std.UScalar.wrapping_add_bv_eq: ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  (x.wrapping_add y).bv = x.bv + y.bv
+Aeneas.Std.Usize.add_spec.mvcgen_spec: ∀ {x y : Aeneas.Std.Usize},
+  ↑x + ↑y ≤ Aeneas.Std.Usize.max → ⦃⌜True⌝⦄ (x + y) ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑x + ↑y⌝⦄
+Aeneas.Std.UScalar.overflowing_add_assoc: ∀ {ty : Aeneas.Std.UScalarTy} (x y z : Aeneas.Std.UScalar ty),
+  ((x.overflowing_add y).1.overflowing_add z).1 = (x.overflowing_add (y.overflowing_add z).1).1
+Aeneas.Std.Usize.checked_add_bv_spec.step_spec: ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x.checked_add y)) fun x.0 =>
+    match x.0 with
+    | some z => ↑x + ↑y ≤ Aeneas.Std.Usize.max ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+    | none => Aeneas.Std.Usize.max < ↑x + ↑y
+Aeneas.Std.UScalar.overflowing_zero_add: ∀ {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty),
+  Aeneas.Std.UScalar.zero.overflowing_add x = (x, false)
+def NGL_DistinctInduction.outer : {N : Aeneas.Std.Usize} →
+  Aeneas.Std.Array NGL_DistinctInduction.Account N →
+    ℕ → Aeneas.Std.Usize → Aeneas.Std.Result NGL_DistinctInduction.Reply :=
+fun {N} a x x_1 =>
+  Nat.brecOn (motive := fun x => Aeneas.Std.Usize → Aeneas.Std.Result NGL_DistinctInduction.Reply) x
+    (NGL_DistinctInduction.outer._f a) x_1
+def NGL_DistinctInduction.inner : {N : Aeneas.Std.Usize} →
+  Aeneas.Std.Array NGL_DistinctInduction.Account N →
+    Aeneas.Std.Usize → ℕ → Aeneas.Std.Usize → Aeneas.Std.Result NGL_DistinctInduction.Reply :=
+fun {N} a index x x_1 =>
+  Nat.brecOn (motive := fun x => Aeneas.Std.Usize → Aeneas.Std.Result NGL_DistinctInduction.Reply) x
+    (NGL_DistinctInduction.inner._f a index) x_1
+
+Running as unit: run-r205f1d56223d4294aa716b439a48223e.scope; invocation ID: b2cf028d5ac84eb0a518a6ab534a05ec

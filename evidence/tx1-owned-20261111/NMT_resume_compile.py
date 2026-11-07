@@ -16,6 +16,6 @@ for m in sys.argv[1:]:
  if blocked:
   print('SKIP unproved dependency: '+m+' '+str(blocked),flush=True);continue
  n=max(int(r['attempt'][-3:])for r in rows if r.get('attempt','').startswith('NMT_L') and 'exit_status'in r)+1
- assert 61<=n<=485
+ assert 61<=n<=486
  r=run(f'NMT_L{n:03}','lean',m)
  if r['exit_status']:print('FAILED, continue independent targets: '+m,flush=True)

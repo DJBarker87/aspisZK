@@ -1,0 +1,44 @@
+{"attempt": "NMT_L358", "exit_status": 0, "wall_seconds": 17.911255666986108, "peak_rss_kib": "5990724", "swaps": "0", "print_axioms": []}
+def NFY_NBN_EncoderSummary.after : NFY_NBN_EncoderSummary.Encode →
+  NFY_NBN_EncoderSummary.Afterstate →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :=
+fun encode a =>
+  match NFY_NBH_Validators.afterResult a with
+  | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+  | Aeneas.Std.core.result.Result.Ok a_1 => do
+    let root ← encode a.next_root
+    let out ←
+      NFY_NBN_DigestResultDependency.foldM encode (fun i b o => o.setSlice! (48 + 32 * i) ↑b) (↑a.next_frontier) 0
+          (NFY_NBN_EncoderS
+...
+ head tail => h_2 head tail x_1 x_2
+AspisR1.S2K.DigestBytes.fold._sunfold: List AspisR1.S2K.DigestTotal.Word →
+  ℕ → Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Array Aeneas.Std.U8 32#usize
+fun x x_1 x_2 =>
+  match x, x_1, x_2 with
+  | [], x, out => out
+  | word :: rest, k, out =>
+    AspisR1.S2K.DigestBytes.fold rest (k + 1) (out.setSlice! (4 * k) ↑(Aeneas.Std.core.num.U32.to_le_bytes word))
+AspisR1.S2K.DigestBytes.fold.eq_2: ∀ (x : ℕ) (x_1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (word : AspisR1.S2K.DigestTotal.Word) (rest : List AspisR1.S2K.DigestTotal.Word),
+  AspisR1.S2K.DigestBytes.fold (word :: rest) x x_1 =
+    AspisR1.S2K.DigestBytes.fold rest (x + 1) (x_1.setSlice! (4 * x) ↑(Aeneas.Std.core.num.U32.to_le_bytes word))
+AspisR1.S2K.DigestBytes.loop_exact._proof_2: ∀ (rows : AspisR1.S2K.DigestTotal.Digest) (count k : Aeneas.Std.Usize),
+  ↑k ≤ 8 → ↑k < (↑rows).length → ↑k + 1 < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+AspisR1.S2K.DigestBytes.loop_exact._proof_6: ∀ (rows : AspisR1.S2K.DigestTotal.Digest) (count k : Aeneas.Std.Usize),
+  ↑k ≤ 8 → ↑k < 8 → ¬8 - (↑k + 1) < 8 - ↑k → False
+AspisR1.S2K.DigestBytes.fold.eq_1: ∀ (x : ℕ) (x_1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  AspisR1.S2K.DigestBytes.fold [] x x_1 = x_1
+AspisR1.S2K.DigestBytes.Inv: AspisR1.S2K.DigestTotal.Digest →
+  Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+    AspisR1.S2K.DigestTotal.Iter × Aeneas.Std.Array Aeneas.Std.U8 32#usize → Prop
+fun rows target s =>
+  ∃ k,
+    ↑k ≤ 8 ∧
+      s.1 = AspisR1.S2K.DigestTotal.cursor rows k ∧ AspisR1.S2K.DigestBytes.fold (List.drop ↑k ↑rows) (↑k) s.2 = target
+AspisR1.S2K.DigestBytes.bytes: AspisR1.S2K.DigestTotal.Digest → Aeneas.Std.Array Aeneas.Std.U8 32#usize
+fun rows => AspisR1.S2K.DigestBytes.fold (↑rows) 0 (Aeneas.Std.Array.repeat 32#usize 0#u8)
+
+Running as unit: run-r45698570d0e049738f2e1f5e6074a326.scope; invocation ID: 1a3c73c6c73e43319b015f414e702661

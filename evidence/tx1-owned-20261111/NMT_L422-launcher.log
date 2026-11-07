@@ -1,0 +1,48 @@
+{"attempt": "NMT_L422", "exit_status": 1, "wall_seconds": 14.138668091967702, "peak_rss_kib": "5934492", "swaps": "0", "print_axioms": ["'NMT_R2_DistinctReference.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_DistinctReference.lean:13:45: error: unsolved goals
+case neg
+W : Type
+s : Selected W
+step0 : Usize.wrapping_add 0#usize 1#usize = 1#usize
+step1 : Usize.wrapping_add 1#usize 1#usize = 2#usize
+step2 : Usize.wrapping_add 2#usize 1#usize = 3#usize
+h01 : ¬s.proofAccount.key = s.publicAccount.key
+h02 : s.proofAccount.key = s.checkpointAccount.key
+h12 : ¬s.publicAccount.key = s.checkpointAccount.key
+⊢ ∃ x,
+    (if s.checkpointAccount.key = s.publicAccount.key then
+          Result.ok (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument))
+        else Result.ok none) =
+        Result.ok x ∧
+      ∃ x_1,
+        (match x with
+            | non
+...
+NMT_generated/NMT_R2_DistinctReference.lean:13:45: error: unsolved goals
+case neg
+W : Type
+s : Selected W
+step0 : Usize.wrapping_add 0#usize 1#usize = 1#usize
+step1 : Usize.wrapping_add 1#usize 1#usize = 2#usize
+step2 : Usize.wrapping_add 2#usize 1#usize = 3#usize
+h01 : ¬s.proofAccount.key = s.publicAccount.key
+h02 : s.proofAccount.key = s.checkpointAccount.key
+h12 : ¬s.publicAccount.key = s.checkpointAccount.key
+⊢ ∃ x,
+    (if s.checkpointAccount.key = s.publicAccount.key then
+          Result.ok (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument))
+        else Result.ok none) =
+        Result.ok x ∧
+      ∃ x_1,
+        (match x with
+            | none =>
+              Result.ok (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument))
+            | some r => Result.ok (some r)) =
+            Result.ok x_1 ∧
+          (match x_1 with
+            | none => Result.ok (core.result.Result.Ok ())
+            | some r => Result.ok r) =
+            Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)
+'NMT_R2_DistinctReference.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8dbe9cc9c191402191f839a6d38e5a76.scope; invocation ID: b9920ca2fb344d1cba92a36ca00b3815
