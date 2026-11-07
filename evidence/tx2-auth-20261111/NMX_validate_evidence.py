@@ -19,6 +19,9 @@ for x in attempts:
  for n,h in rc['source_hashes'].items():assert idx['attempts'][x['attempt']][n]==h,(x['attempt'],n)
  if rc['exit_status']==0:
   for line in rc.get('print_axioms',[]):assert 'sorryAx' not in line,line
+for row in json.loads((E/'NMX_AUDIT_C_PINS.json').read_text()):
+ p=E/'NMX_native'/('NMX_'+Path(row['destination']).name+'.xz')
+ assert sha(lzma.decompress(p.read_bytes()))==row['sha256']
 raw=[]
 for i in range(4):
  d=json.loads((E/f'NMX_audit/proof{i}/proof{i}.json').read_text());assert d['exit_status']==0
