@@ -161,3 +161,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46386 exact pinned f6 provider replay PV_FN_THREAD_f6DeliveryInterfaces passed; cache preparation only, not caller/transport closure. See receipt.
 
 46387 exact pinned f6 provider replay PV_FN_THREAD_f6Joins passed; cache preparation only, not caller/transport closure. See receipt.
+
+46389 CloneValidityV2 passed after46388 projection-inference repair: constructs ArcClone.Valid from the SAME CLOSED124 successful return store, existing atomic facts and exact destination17, preserving the root/count through the local source prologue shape. No Valid/nonzero/count/read/alias premise at12950. Operational prefix binding and original constructor cut/transport still remain.

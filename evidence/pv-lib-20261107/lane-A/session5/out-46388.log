@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CloneValidityV2.lean:93:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  readAddress B (prepare s x.parent.activation) p
+in the target expression
+  readAddress B (prepare s x.parent.activation) (PV_THR2_LibrarySemantics_ArcClone.countAddress p) =
+    some (Data.number 1)
+
+case refine_3
+x : Input PV_RJ4IDB.NativeEvent
+H : Backend PV_RJ4IDB.NativeEvent
+resources : Resources
+encode : Encode
+shape : PV_THR2_TypedRepresentation_ArcInner.Shape
+sv wv : Data
+heap : ℕ
+w : OWNER
+pre : PV_FN_THREAD_f124.Pre x
+facts : PV_FN_THREAD_f361Provider124Counts.DocumentedFacts x H
+destination : x.dest = 17
+sa : (strong x H).answer = Answer.returned (Aeneas.Std.Result.ok sv)
+wa : (weak x H).answer = Answer.returned (Aeneas.Std.Result.ok wv)
+post : PV_FN_THREAD_f124.Successful x H (fun {A} => resources) (fun {A} => encode) shape sv wv heap
+B : Carrier OWNER Data := PV_THR2_OwnInitExactReturnedCases.carrier x.C x.b
+s : Store Data := PV_FN_THREAD_f124_ReturnedPost.store x sv wv
+p : Address := PV_FN_THREAD_f124_StorePost.backing x sv wv
+parentAge : x.parent.activation < x.s.nextActivation
+notCaller : p.activation ≠ x.parent.activation
+counts :
+  have B := PV_THR2_OwnInitExactReturnedCases.carrier x.C x.b;
+  have s := PV_FN_THREAD_f124_ReturnedPost.store x sv wv;
+  have p := PV_FN_THREAD_f124_StorePost.backing x sv wv;
+  readAddress B s (PV_THR2_LibrarySemantics_ArcClone.countAddress p) = some (Data.number 1) ∧
+    readAddress B s { activation := p.activation, localIndex := p.localIndex, fields := p.fields ++ [1, 0, 0] } =
+      some (Data.number 1)
+arcCell :
+  (prepare s x.parent.activation).cells { activation := x.parent.activation, localIndex := 17 } =
+    some (PV_THR2_Packet124ReturnData.value (PV_FN_THREAD_f124_ReturnedPost.nonNull x sv wv))
+⊢ readAddress B (prepare s x.parent.activation) (PV_THR2_LibrarySemantics_ArcClone.countAddress p) =
+    some (Data.number 1)
+'PV_LIB_A_CloneValidityV2.caller17' depends on axioms: [propext, Quot.sound]
+'PV_LIB_A_CloneValidityV2.foreign' depends on axioms: [propext]
+'PV_LIB_A_CloneValidityV2.read_foreign' depends on axioms: [propext]
+'PV_LIB_A_CloneValidityV2.from124' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
