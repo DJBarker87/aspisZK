@@ -1,0 +1,81 @@
+LIBB_generated/LIBB_ObservationModel.lean:38:3: error: Type mismatch
+  LIBB_ObservationPieces.complete env ?m.134
+has type
+  LIBB_ObservationPieces.Pieces env ?m.134 (List.flatMap (LIBB_Tx2EnvTrace.event env) ?m.134)
+but is expected to have type
+  LIBB_ObservationPieces.Pieces env (LIBB_Tx2EnvCode.observed env pub proof ck).events
+    (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.common env pub proof ck) (LIBB_Tx2EnvCode.common env pub proof ck)).events
+LIBB_generated/LIBB_ObservationModel.lean:51:4: error: Type mismatch: After simplification, term
+  common_graph env pub proof ck
+ has type
+  Common env pub proof ck
+    (LIB_Carriers.resultObs
+      (fun r =>
+        match r with
+        | core.result.Result.Ok PUnit.unit => Except.ok ()
+        | core.result.Result.Err e => Except.error e)
+      (LIBB_Tx2EnvTrace.common env pub proof ck) (LIBB_Tx2EnvCode.common env pub proof ck))
+but is expected to have type
+  Common env pub proof ck
+    (LIB_Carriers.resultObs
+      (fun r =>
+        match r with
+        | core.result.Result.Ok PUnit.unit => Except.ok ()
+        | core.result.Result.Err e => Except.error e)
+      (LIBB_Tx2EnvTrace.common env pub proof ck) (LIBB_Tx2EnvCode.common env pub proof ck))
+LIBB_generated/LIBB_ObservationModel.lean:74:19: error: Dependent elimination failed: Failed to solve equation
+  RSL.Exit.ret r =
+    match LIBB_Tx2EnvCode.common env pub proof ck with
+    | Result.ok (core.result.Result.Ok PUnit.unit) => RSL.Exit.ret (Except.ok ())
+    | Result.ok (core.result.Result.Err e) => RSL.Exit.ret (Except.error e)
+    | Result.fail e => RSL.Exit.abort
+    | Result.div => RSL.Exit.diverge
+LIBB_generated/LIBB_ObservationModel.lean:75:16: error: Dependent elimination failed: Failed to solve equation
+  RSL.Exit.ret r =
+    match LIBB_Tx2EnvCode.common env pub proof ck with
+    | Result.ok (core.result.Result.Ok PUnit.unit) => RSL.Exit.ret (Except.ok ())
+    | Result.ok (core.result.Result.Err e) => RSL.Exit.ret (Except.error e)
+    | Result.fail e => RSL.Exit.abort
+    | Result.div => RSL.Exit.diverge
+LIBB_generated/LIBB_ObservationModel.lean:77:20: error: Type mismatch
+  he
+has type
+  NNC_WeakSpec.resultExit (LIBB_Tx2EnvCode.common env pub proof ck) = RSL.Exit.ret r
+but is expected to have type
+  (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.events env pub proof ck)
+        (match Result.ok (core.result.Result.Ok v) with
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div
+        | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+        | Result.ok (core.result.Result.Ok a) => Result.ok (core.result.Result.Err e))).exit =
+    RSL.Exit.ret r
+LIBB_generated/LIBB_ObservationModel.lean:78:27: error: Type mismatch
+  he
+has type
+  NNC_WeakSpec.resultExit (LIBB_Tx2EnvCode.common env pub proof ck) = RSL.Exit.ret r
+but is expected to have type
+  (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.events env pub proof ck)
+        (match Result.ok (core.result.Result.Ok v) with
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div
+        | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+        | Result.ok (core.result.Result.Ok a) => Result.ok (core.result.Result.Ok PUnit.unit))).exit =
+    RSL.Exit.ret r
+'LIBB_ObservationModel.common_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_ObservationModel.contains_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_ObservationModel.returns' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

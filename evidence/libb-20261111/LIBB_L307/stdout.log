@@ -1,0 +1,46 @@
+LIBB_generated/LIBB_ObservationFold.lean:142:4: error: Type mismatch
+  common env pub proof ck domain.proofExtent domain.publicBound domain.root0 (children variant) (child variant rfl)
+    bound trace source
+has type
+  LIBB_ObservationModel.Common env pub proof ck
+    {
+      exit :=
+        match children variant, ⋯, bound, source with
+        | NLT_CompleteRoot.End.resolved result records, native, bound, source => NNC_WeakSpec.resultExit result
+        | NLT_CompleteRoot.End.c04Stopped records cut, native, bound, source => RSL.Exit.abort,
+      events := NNC_DigestTrace.render trace }
+but is expected to have type
+  match ok (core.result.Result.Ok variant) with
+  | ok (core.result.Result.Ok a) =>
+    LIBB_ObservationModel.Common env pub proof ck
+      {
+        exit :=
+          NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+            { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () }
+            (NMN_OracleFold.run (LIBB_PartitionEnv.H env)
+                {
+                  args :=
+                    { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                      hash := () },
+                  world := world }
+                (ok (core.result.Result.Ok variant)) children).1,
+        events := NNC_DigestTrace.render trace }
+  | x =>
+    {
+        exit :=
+          NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+            { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () }
+            (NMN_OracleFold.run (LIBB_PartitionEnv.H env)
+                {
+                  args :=
+                    { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                      hash := () },
+                  world := world }
+                (ok (core.result.Result.Ok variant)) children).1,
+        events := NNC_DigestTrace.render trace } =
+      LIBB_Tx2EnvTrace.observation env pub proof ck
+'LIBB_ObservationFold.native_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.tx2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.resolved_details' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.stopped_details' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.common' depends on axioms: [propext, Classical.choice, Quot.sound]
