@@ -6,8 +6,8 @@ No row is proved, no endpoint premise removed. f361 remains the first row;
 no later row is started. SPEC-C3 in FINDINGS.md records the new exact12950
 Arc strong-count mismatch in the D981 machine, checked by49735. It is NOT a
 full OwnInit contradiction or original-entry reachability result. No frozen
-spec, package branch, ledger or common rulings changed. Strict audit pending.
-Next Lean49736; next raw49794. Failed49732/33/34 are retained and not credited;
+spec, package branch, ledger or common rulings changed. Strict audit pending; driver49736 compiled exit0.
+Next Lean49737; next raw49794. Failed49732/33/34 are retained and not credited;
 each retry changed source.49735 exit0,wall0:02.41,peak4734728KiB,swap0;
 standard summary axioms only. No active own scope. Details follow historically.
 
