@@ -33,7 +33,7 @@ expected=(B/'NNJ_frozen_graph.sha256').read_text().strip()
 actual=hashlib.sha256(json.dumps(graph,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 x=dict(features={p['id']:p['features'] for p in m['resolve']['nodes']},packages={p['id']:{'name':p['name'],'version':p['version'],'source':p.get('source')} for p in m['packages']},graph_matches_frozen=actual==expected,metadata_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),lock_before_sha256=before,offline=True,KMX_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 (B/(a+'-graph.json')).write_text(json.dumps(x,indent=2));assert actual==expected,'STOP graph drift'
-program=h.startswith('r1_pool_adapter::')
+program=h.startswith('r1_pool_adapter::') or h.startswith('NMX_KMX::')
 manifest=S/('programs/r1-cost-probe/Cargo.toml' if program else 'crates/aspis-statement/Cargo.toml')
 cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(manifest),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','-Z','function-contracts','--harness-timeout','90s','--exact','--harness',h,'--output-format','terse']
 if program:cmd+=['--features','pool-adapter,private-leaf-salts']

@@ -59,3 +59,51 @@ fn NNJ_assign_stub() {
  let before_j=node[j].0;let r=NMX_assign(&mut node,&window,j,before_j);
  assert!(r.is_ok() && node[(j+1)%8].0==0,"NNJ unimplied other digest cell");
 }
+
+// Minimal interface calibration, distinct from the retired digest-postcondition
+// family. Exact same return type, argument types, own-input domain and footprint.
+#[kani::requires(j<8 && node[j].0==before_j)]
+#[kani::modifies(node)]
+#[kani::ensures(|r:&Result<(),ProgramError>| r.is_ok())]
+fn NNJ_assign_shape(node:&mut [M31;8],_window:&[u8;32],j:usize,before_j:u32)->Result<(),ProgramError>{
+ node[0]=M31(7); Ok(())
+}
+#[kani::proof_for_contract(NNJ_assign_shape)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
+#[kani::unwind(34)]
+fn NNJ_assign_shape_contract(){
+ let mut node=[M31(0);8];let window=[0u8;32];
+ let _=NNJ_assign_shape(&mut node,&window,0,0);
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
+#[kani::unwind(34)]
+fn NNJ_assign_shape_real(){
+ let mut node=[M31(0);8];let window=[0u8;32];
+ let r=NNJ_assign_shape(&mut node,&window,0,0);
+ assert!(r.is_ok() && node[0].0==7,"NNJ unimplied other digest cell");
+}
+#[kani::proof]
+#[kani::stub_verified(NNJ_assign_shape)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
+#[kani::unwind(34)]
+fn NNJ_assign_shape_stub(){
+ let mut node=[M31(0);8];let window=[0u8;32];
+ let r=NNJ_assign_shape(&mut node,&window,0,0);
+ assert!(r.is_ok() && node[0].0==7,"NNJ unimplied other digest cell");
+}
