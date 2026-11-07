@@ -19,6 +19,11 @@ theorem factor (ops : Ops) (inputs : List Nat) (request : Request) (auth : Auth)
  NMS_242Tail.owned (Ambient := Ambient) ops inputs request auth scanned =
  literal ops inputs request auth scanned := by
  unfold NMS_242Tail.owned NMS_TryFold.step literal
- rfl
+ cases h : NMS_Owned242.reconstruct ops inputs request auth scanned.candidate with
+ | mk result events =>
+  cases result with
+  | ok reply => cases reply <;> rfl
+  | fail _ => rfl
+  | div => rfl
 #print axioms factor
 end NMS_242TailFactor

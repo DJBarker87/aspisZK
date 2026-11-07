@@ -16,8 +16,8 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind != 'kani', 'Kani requires a dedicated frozen graph gate'
     if kind == 'extract':
         assert sum(json.loads(l).get('kind')=='extract' for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()) < 3
-    if kind in ['lean','link','audit']:
-        assert sum(json.loads(l).get('kind') in ['lean','link','audit'] for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()) < 250, 'Combined Lean/link/audit budget exhausted (amended 250)'
+    if kind in ['lean','link','audit','support']:
+        assert sum(json.loads(l).get('kind') in ['lean','link','audit','support'] for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()) < 250, 'Combined Lean/link/audit budget exhausted (amended 250)'
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NMS_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x['kind']=='lean' for x in done)<250,'Actual Lean compiler budget exhausted (amended 250)' 

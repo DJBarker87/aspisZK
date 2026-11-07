@@ -1,0 +1,11 @@
+# Canonical target reconciliation
+
+RSL_TX2_233 / RSL_TX2_242 / RSL_TX2_241 are the binding targets. Existing NMS draft packets are support and are not asserted equivalent to RSL.
+
+* Draft 242: `Law` requires all emitted fail/div arms to coincide with the ideal source Result and entire raw event trace. It has no independent allocation/runtime stop when the ideal source would continue. RSL instead admits allocation aborts at their actual sites, with the event prefix only. The draft cannot be promoted by renaming its `stopped` constructor.
+* Draft 242's owner names/freshness and reconstruction linkage retain more allocation identity than RSL, but that does not compensate for the independent-stop mismatch or supply physical interpretation. RSL retains the four complete Box payloads through reconstruction and excludes private drop/allocator internals under (bl)(3).
+* Draft 241 `NMS_241OwnClauses.Domain` demands accounts[6] successful bytes always have length1768, and Root0 on every successful proof/checkpoint getter pair irrespective of proof image length. Canonical 241 requires only snapshot consistency (D1) and Root0 when the original proof image is58295 bytes (D2). These are different domains. The stronger draft is retired as a row-input domain; existing local lemmas are not a parent root.
+* `NMS_RSLDomains.entered` targets the exact canonical D1/D2 domain, quantifies over arbitrary V2Lib, obtains checkpoint extent from the actual verifierCheckpoint cut plus D1, and obtains Root0 solely at the SAME admitted original inputs through D2. Local successful cuts are proof-internal obligations of the full fold, never exported as new caller clauses.
+* `NMS_RSL242Fold.fold` is canonical relational child-call composition with full233 RowSpec at the SAME arguments. Until the actual emitted parent is interpreted in that relation with all CLOSED child/carrier links, it is source support, not a candidate or a ready-for-instantiation native row fold.
+
+G1b: all future241 parent roots quantify over V2Lib and a SAME-call064 refinement on Dom064 V. No global Root0 premise; the True/weaken instance then follows by specializing the proved parametric root. We have not claimed that specialization before the parent proof exists.
