@@ -1,0 +1,11 @@
+theorem PV_FN_THREAD_f360.contract_frame : ∀ {E : Type} (C : Carrier OWNER Data) (e : PV_W1_LeafBoundary.Entry)
+  (H : PV_W1_OwnerNativeFrame.Backend E) (w : OWNER) (events : List E)
+  (effects : PV_W1_LeafBoundary.Entry → OWNER → Address → Option Data),
+  PV_W1_ClosedLeaves.Pre e w →
+    PV_THR2_LibrarySemantics_ArcClone.Fact C e H w (effects e w) →
+      ∀ (v : Valid C e w), PostFrame C e H w events (effects e w) v :=
+fun {E} C e H w events effects pre arcClone v =>
+  ⟨PV_W1_ArgumentEffects.full_reply C e H w events (effects e w) pre, arcClone v⟩
+'PV_FN_THREAD_f360.contract_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f360.implies_generic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f360.implies_W1' depends on axioms: [propext, Classical.choice, Quot.sound]
