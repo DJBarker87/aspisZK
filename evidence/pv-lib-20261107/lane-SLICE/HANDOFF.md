@@ -131,3 +131,5 @@ Attempt 49658: PV_W5_F32Contract, passed pinned focused replay.
 Attempt 49659: PV_W5_F33Specification, passed pinned focused replay.
 
 Attempt 49660: PV_W5_F33Format, passed pinned focused replay.
+
+Attempt 49661: PV_W5_F33Panic, passed pinned focused replay.
