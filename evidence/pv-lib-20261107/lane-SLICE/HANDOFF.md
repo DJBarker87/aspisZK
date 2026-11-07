@@ -183,3 +183,5 @@ Attempt 49684: PV_FN_SLICE_f22_TypedDestructor, exit0.
 Attempt 49685: PV_FN_SLICE_f7_DestructorBinding, exit0.
 
 Attempt 49686: PV_LIB_SLICE_TypedDrop, exit0.
+
+Attempt 49687: PV_LIB_SLICE_RawAudit, exit0.
