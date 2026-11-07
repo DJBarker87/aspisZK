@@ -8,4 +8,4 @@ Budgets: 40 Charon / 40 Aeneas / 20 Lean / 0 Kani. One admitted capped scope at 
 
 No assumptions discharged, added or changed. Headline AspisR1.RPx_Deployed.deployed, L154 statement parameter, D188 narrowed. No theorem added; #print axioms not applicable yet. No wallet operation. No shipped change means no ELF rebuild trigger. Commits remain local, no push.
 
-Next: build a git-blob-linked archive input map; preserve ambiguity and missing configuration explicitly. Final receipts will record command, exact inputs/tool pins, revision, exit, wall, peak RSS, swap and axioms status.
+Archive input map and 40 distinct serial configurations are now committed, covering 30 input groups. The share gate is currently waiting; no extraction or Lean result is claimed yet. Missing configuration and source ambiguity remain explicit. Final receipts will record command, exact inputs/tool pins, revision, exit, wall, peak RSS, swap and axioms status.
