@@ -1,3 +1,18 @@
+# Mandatory local-disk stop, after234 fresh emission
+
+Rule13 of supplied local-lean.txt requires no more launches after ENOSPC.
+Current counts:626/676 formal scopes,6/6 extraction,25/30 Kani.
+Fifty formal scopes remain; budget is NOT the stop reason. See
+NMX_STOP_ENOSPC.json and Stage F of NMX_HANDOFF.md for exact restart state.
+
+217 candidate remains proposed under(ah), ledger review/credit pending.
+234 emission and typed value link pass, but full effect/abort/source fold is
+OPEN. Its 18-part erasure is WIP; L931 module is unaccepted.
+Library remains a parameter pending LIB TX2 instances.233 remains frozen.
+No further scope before the lead resolves the disk stop.
+
+Everything below is historical.
+
 # Current stage:217 candidate,234 next
 
 TX2:217 CANDIDATE under the authorized (ah) segmented route: NMX_R3_DecoderFold.root,

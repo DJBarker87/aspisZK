@@ -310,3 +310,100 @@ rule-B packet, not a single whole expected-length Kani contract. The ledger must
 review that contextual composition and assign credit; no CLOSED count here.
 K010's calibration compile failure is excluded and no stub_verified is used.
 Next234;233 remains frozen. No shipped repository source or trust-row change.
+
+### Stage F:234 emitted route and mandatory local-disk stop
+
+**STOP: local Mac ENOSPC while creating NMX_R3_RegistryEffects.lean.** The file
+was not created. Supplied local-lean.txt rule13 explicitly requires: "If a local
+write fails with ENOSPC, stop launching, commit what you have (WIP), and report".
+No further host scope was launched after that write failed. Six local raw
+metadata.json/metadata.stdout artifacts were losslessly compressed with raw
+SHA256 sidecars (15,442,515bytes recovered, NMX_LOCAL_COMPRESSION.json). Nothing
+outside this worktree was removed; no wallet/key operation. The local volume
+still has only about135MiB available. Resolve this lead-owned stop before any
+new scope; do not treat the recovered few MiB as permission to resume.
+
+Actual counts:626/676 formal/link/audit/inspect scopes,6/6 extraction scopes,
+25/30 Kani scopes. Fifty formal and five217-only Kani scopes remain. This stop
+is the explicit disk rule, NOT an exhausted compile budget or an asserted need
+for more Kani. No active own job remains; next unused scope identifier L932.
+
+234 extraction is now admission-free. E005 Charons frozen selection succeeded;
+its own validator stopped because program_id disappeared behind newly OPAQUE
+deployment_id. E006 validates BOTH explicit --opaque flags, the identical frozen
+parent source, its prior direct program_id edge, current Opaque parent and
+current absent child, then runs Aeneas on the SAME pinned LLBC (no Charon rerun).
+E006 exit0,6.8719s,1152800KiB,swap0. Raw body and all map/getter closures have NO
+loops or admissions. Templates containing axiom placeholders remain archived,
+NEVER compiled. NMX_REGISTRY_SOURCE_AUDIT.json records(bc) and all substitutions.
+
+L895–909 rebuilt every remaining original canonical RSL owner privately from
+revision3 before any new library work; NMX_REV3_CANONICAL.json records sources.
+L914 RegistryEmitted and L915 RegistryEmittedLink.source pass: the new emitted
+root, after recorded CLOSED/std/SDK call abstraction, is definitionally the
+coherent AdapterRw registry body at identical arguments. Column68 indentation
+clipping in Aeneas output caused the initial parse failures; token-identical
+canonical formatting repairs it. Initial paused/immutable slot guesses were
+wrong and corrected BEFORE accepted checks:25 pausedV1,26 immutableV1,27
+pausedV2,28 immutableV2. Full token comparison now passes. Failed L910/L912
+are excluded. Two shell queues mistakenly continued after a failed generator;
+subsequent dependent sequences use set -e and explicit exit assertions.
+
+LIB read-only snapshot3c91bd20dc0928dd5ff1fc6e955fa5511dbdd842 was inspected.
+TX1 bundles are supplied; TX2 bundle/PoolLib installation remains pending. No
+NMX PoolLib or DeployedIds fields were constructed. Published LIB_A objects and
+selected published NND/NMS/NNC objects were copied with hashes at L916:
+NMX_LIB_A_OBJECT_INPUTS.json, NMX_NND_OBJECT_INPUTS.json, NMX_REGISTRY_SEED.json.
+Only the data-free NND_Carrier is imported by new registry work so far. DO NOT
+blindly reuse NND_RegistryReturned: source inspection found the old
+NND_AccountCarrier.getter / NND_RegistryEval treat OwnedAccount.data as a plain
+Except, whereas rev3 uses RS.ofCloned. Those getter/evaluator proofs need explicit
+retargeting/revalidation; their cached old statements are not a full rev3 proof.
+No old RSL object is copied into new search-path ownership; all RSL owners now
+resolve to NMX_R3_canonical_objects first.
+
+New WIP preserves effects by syntax. RegistryProgram (L924 current) is a typed
+free call program, with scalar, data and PDA commands; generic erasure/bind/if/
+ControlFlow laws are checked with all Result.fail/div arms. Script contains132
+original monadic call occurrences, including4 data-getter and6 PDA sites. The
+whole erasure proof hit default recursion depth (L928); do NOT raise it or rerun
+that shape. Replacement:18 typed Continue subtrees factored as native CPS parts
+(L929), and corresponding effect-program parts (L930). Exact free variables,
+source intervals and calls are in NMX_REGISTRY_PARTS.json and
+NMX_REGISTRY_PART_CALLS.json. ControlFlow conversion retains BOTH constructors.
+L931 attempted all part-erasure proofs; several remain unsolved, so the entire
+RegistryPartErasure module is UNACCEPTED and must never be imported/exported.
+Even its printed standard step018 is not module-level accepted credit. The first
+remaining step017 simplifies to apparently identical native bind/ControlFlow
+expressions; try bounded rfl/explicit continuation congruence and shallow
+ControlFlow cases, with earlier generic numeric-proof transparency lessons,
+NOT the old whole-function simplification. Raw diagnostics are retained.
+
+Remaining234, in order after disk resolution:
+1. Finish bounded per-part erasure, native000 factor to the accepted emitted
+   body and composed program source equality (132 calls retained).
+2. Implement the not-yet-written RegistryEffects interpreter. data command must
+   restore String::clone's allocation iff error.cloneAllocates; PDA command must
+   emit its exact same seeds/program/reply; all preceding event prefixes retained.
+   Suggested interpreter: Spec of native Result, scalar Result.ok/fail/div kept,
+   data Err uses Spec.alloc then the SAME error, PDA uses pdaCall plus native key
+   conversion. Functional execution can take a per-allocation Bool stream;
+   prove its observation admitted generically by Program induction.
+3. Source-order canonical fold with CLOSED supplier laws at SAME arguments,
+   using LIB module7/8 when supplied, keeping the library a parameter meanwhile.
+   Do not duplicate NMX_R2_DecoderLibrary/RegistryTransport or define fields.
+4. Full all-Args representation/observation association, including arbitrary
+   deferred BorshIoError clone aborts and both registry branches. A value link
+   alone, Returned-only theorem or success-only decoder premise is insufficient.
+5. Raw own-root ax2, focused final import and retention for234, then ledger packet.
+
+234 has NO candidate.233 remains frozen at NMX_R2_NativeCanonical.fold and
+NMX_R2_RepresentedFold.fold with NMX_REV2_REMAINING items1–5; no233 scope was
+spent in this continuation.217 candidate export/audits stay as Stage E, with
+native contextual-composition review and final credit reserved to the ledger.
+No shipped-source, ELF, trust-row or headline change. No push.
+
+WIP COMMIT FAILED: git add could not write the worktree index.lock (ENOSPC).
+Last successful commit028c552dbcd contains217 candidate; all234 Stage F work
+and these restart notes remain UNCOMMITTED in this worktree. Do not claim a
+Stage F commit or push. Resolve disk space and commit preserved files first.
