@@ -1,0 +1,111 @@
+LIBC_generated/LIBC_Filled.lean:22:1: error: Tactic `rfl` failed: The left-hand side
+  AspisR1.OraclePortStdAllocation.filledSpec n 0#u8 env.reservation
+is not definitionally equal to the right-hand side
+  Result.ok
+    (if env.reservation = true then Except.ok ⟨List.replicate (↑n) 0#u8, ⋯⟩
+    else Except.error AspisR1.OraclePortStdAllocation.AllocationError.allocation)
+
+n : Usize
+env : Env
+⊢ AspisR1.OraclePortStdAllocation.filledSpec n 0#u8 env.reservation =
+    Result.ok
+      (if env.reservation = true then Except.ok ⟨List.replicate (↑n) 0#u8, ⋯⟩
+      else Except.error AspisR1.OraclePortStdAllocation.AllocationError.allocation)
+LIBC_generated/LIBC_Filled.lean:43:3: error: Tactic `rfl` failed: The left-hand side
+  LIB_Carriers.graph (value ↑n) (fun x => []) env
+is not definitionally equal to the right-hand side
+  LIB_Carriers.resultGraph
+    (fun r =>
+      match r with
+      | Except.ok v => Except.ok (LIB_Carriers.bytes v.deref)
+      | Except.error a => Except.error ())
+    (fun x => Result.ok (Except.error AspisR1.OraclePortStdAllocation.AllocationError.allocation)) (fun x => []) env
+
+case false
+n : Usize
+env : Env
+h : env.reservation = false
+⊢ LIB_Carriers.graph (value ↑n) (fun x => []) env =
+    LIB_Carriers.resultGraph
+      (fun r =>
+        match r with
+        | Except.ok v => Except.ok (LIB_Carriers.bytes v.deref)
+        | Except.error a => Except.error ())
+      (fun x => Result.ok (Except.error AspisR1.OraclePortStdAllocation.AllocationError.allocation)) (fun x => []) env
+LIBC_generated/LIBC_Filled.lean:44:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_Carriers.bytes ⟨List.replicate (↑?n) 0#u8, ⋯⟩
+in the target expression
+  LIB_Carriers.graph (value ↑n) (fun x => []) env =
+    LIB_Carriers.resultGraph
+      (fun r =>
+        match r with
+        | Except.ok v => Except.ok (LIB_Carriers.bytes v.deref)
+        | Except.error a => Except.error ())
+      (fun x => Result.ok (Except.ok ⟨List.replicate (↑n) 0#u8, ⋯⟩)) (fun x => []) env
+
+case true
+n : Usize
+env : Env
+h : env.reservation = true
+⊢ LIB_Carriers.graph (value ↑n) (fun x => []) env =
+    LIB_Carriers.resultGraph
+      (fun r =>
+        match r with
+        | Except.ok v => Except.ok (LIB_Carriers.bytes v.deref)
+        | Except.error a => Except.error ())
+      (fun x => Result.ok (Except.ok ⟨List.replicate (↑n) 0#u8, ⋯⟩)) (fun x => []) env
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    LIB_Carriers.graph (value ↑n) (fun x => []) env
+LIBC_generated/LIBC_Filled.lean:41:37: warning: This simp argument is unused:
+  LIB_Carriers.graph
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵i̵l̵d̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵o̵f̵F̵n̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵g̵r̵a̵p̵h̵,̵v̵a̵l̵u̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵G̵r̵a̵p̵h̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵O̵b̵s̵]̵[̲c̲h̲i̲l̲d̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲o̲f̲F̲n̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲h̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲r̲e̲s̲u̲l̲t̲G̲r̲a̲p̲h̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲r̲e̲s̲u̲l̲t̲O̲b̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Filled.lean:41:56: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp only [child, ̲LIB_Carriers.ofFn, ̲LIB_Carriers.graph,v̵a̵l̵u̵e̵,̵ ̲h,
+  ̵  ̵ ̵Bool.false_eq_true, ̲if_false, ̲if_true,
+  ̲ ̲ ̲ ̲ ̲LIB_Carriers.resultGraph, ̲LIB_Carriers.resultObs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Filled.lean:41:62: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [child, ̲LIB_Carriers.ofFn, ̲LIB_Carriers.graph, ̲value,h̵,̵
+  ̵  ̵ ̵Bool.false_eq_true, ̲if_false,
+  ̲ ̲ ̲ ̲ ̲if_true, ̲LIB_Carriers.resultGraph, ̲LIB_Carriers.resultObs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Filled.lean:42:39: warning: This simp argument is unused:
+  LIB_Carriers.resultGraph
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵i̵l̵d̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵o̵f̵F̵n̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵g̵r̵a̵p̵h̵,̵v̵a̵l̵u̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵G̵r̵a̵p̵h̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵O̵b̵s̵]̵[̲c̲h̲i̲l̲d̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲o̲f̲F̲n̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲g̲r̲a̲p̲h̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲h̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲r̲e̲s̲u̲l̲t̲O̲b̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LIBC_generated/LIBC_Filled.lean:42:64: warning: This simp argument is unused:
+  LIB_Carriers.resultObs
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵i̵l̵d̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵o̵f̵F̵n̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵g̵r̵a̵p̵h̵,̵v̵a̵l̵u̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵G̵r̵a̵p̵h̵,̵L̵I̵B̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵r̵e̵s̵u̵l̵t̵O̵b̵s̵]̵[̲c̲h̲i̲l̲d̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲o̲f̲F̲n̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲g̲r̲a̲p̲h̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲h̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲L̲I̲B̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲r̲e̲s̲u̲l̲t̲G̲r̲a̲p̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'LIBC_Filled.functional' does not depend on any axioms
+'LIBC_Filled.returns' does not depend on any axioms
+'LIBC_Filled.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBC_Filled.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBC_Filled.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

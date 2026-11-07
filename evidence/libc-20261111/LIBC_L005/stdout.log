@@ -1,0 +1,15 @@
+structure RSL.Env : Type
+number of parameters: 0
+fields:
+  RSL.Env.sha256 : List RSL.Bytes → RSL.B32
+  RSL.Env.pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+  RSL.Env.clock : Except RSL.ProgramError UInt64
+constructor:
+  RSL.Env.mk (sha256 : List RSL.Bytes → RSL.B32) (pda : List RSL.Bytes → RSL.B32 → Option RSL.B32)
+    (clock : Except RSL.ProgramError UInt64) : RSL.Env
+theorem LIB_Carriers.graph_functional : {A : Type} →
+  (value : RSL.Env → A) →
+    (events : RSL.Env → List RSL.Event) → RSL.Spec.Functional A (LIB_Carriers.graph value events) :=
+fun {A} value events env => Exists.intro { exit := RSL.Exit.ret (value env), events := events env } fun x => Iff.rfl
+@[reducible] def RSL.Bytes : Type :=
+List UInt8
