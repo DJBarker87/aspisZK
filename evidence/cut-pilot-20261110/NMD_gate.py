@@ -15,10 +15,10 @@ for n,h in pins.items():
   for line in json.loads(overlay.read_text()).get(n,[]):
    assert line.startswith('#[cfg_attr(kani,') and raw.count(line.encode())==1,('invalid cfg-only overlay',n,line)
    raw=raw.replace(line.encode(),b'',1)
- if n=='crates/aspis-r1-cost-probe/src/lib.rs':
+ if n=='crates/aspis-r1-cost-probe/src/lib.rs' and raw.startswith(b'#![cfg_attr(kani,feature(allocator_api))]\n'):
   prefix=b'#![cfg_attr(kani,feature(allocator_api))]\n'
   assert raw.startswith(prefix);raw=raw[len(prefix):]
- if n=='crates/aspis-r1-cost-probe/src/candidate.rs':
+ if n=='crates/aspis-r1-cost-probe/src/candidate.rs' and raw.endswith(b'\n#[cfg(kani)]\n#[path="NMD_native.rs"]\nmod NMD_native;\n'):
   suffix=b'\n#[cfg(kani)]\n#[path="NMD_native.rs"]\nmod NMD_native;\n'
   assert raw.endswith(suffix);raw=raw[:-len(suffix)]
  if n=='programs/r1-cost-probe/src/lib.rs' and raw.startswith(b'#![cfg_attr(kani,feature(allocator_api))]\n'):

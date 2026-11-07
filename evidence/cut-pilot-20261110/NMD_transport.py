@@ -1,6 +1,6 @@
 """Owned orchestration only; shared admission and launchers are unchanged."""
 from pathlib import Path
-import json, subprocess, time
+import json, subprocess, time, lzma, hashlib
 E=Path(__file__).resolve().parent
 B='/home/dombarker/project-offloads/codex-cx-cut-pilot-20261110'
 H='dombarker@100.108.41.90'
@@ -31,7 +31,7 @@ with (b/{(a+'-barrier-'+str(retry)+'.log')!r}).open('w') as f:
  r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py',str(p)],stdout=f,stderr=subprocess.STDOUT)
 print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
 ''')
-        (E/(a+f'-barrier-{retry}.log')).write_text(r.stdout+r.stderr)
+        raw=(r.stdout+r.stderr).encode();(E/(a+f'-barrier-{retry}.log.xz')).write_bytes(lzma.compress(raw));(E/(a+f'-barrier-{retry}.log.sha256')).write_text(hashlib.sha256(raw).hexdigest()+'\n')
         try:ad=json.loads(r.stdout)
         except json.JSONDecodeError:
             if retry==0:time.sleep(30);continue

@@ -56,7 +56,7 @@ x['deps_fingerprint']['selected_objects']=pins;(b/{(a+'.json')!r}).write_text(js
 (b/'NMD_native').mkdir(exist_ok=True)
 ''');assert r.returncode==0,r.stderr
     r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
-    (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
+    raw=(r.stdout+r.stderr).encode();(E/(a+'-launcher.log.xz')).write_bytes(lzma.compress(raw));(E/(a+'-launcher.log.sha256')).write_text(sha(raw)+'\n')
     r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
