@@ -21,6 +21,7 @@ for m in sorted(changed):
  # Canonical continuation definitions have simple, unparenthesized account arguments.
  s=re.sub(r'\(RSL\.RS\.ofExcept \((RSL\.OwnedAccount\.data \w+)\)\)',r'(\1)',s)
  s=s.replace('(RSL.RS.ofExcept (RSL.verifierCheckpoint verifierCheckpoint verifier false))','(RSL.verifierCheckpoint verifierCheckpoint verifier false)')
+ if m=='NMX_Heterogeneous':s=s.replace('import NMS_RSLRefine\n','')
  if m=='NMX_Semantics':
   s=s.replace('RSL.RS.ofExcept (RSL.verifierCheckpoint (NMX_R2_Carrier.account a) (NMX_R2_Carrier.key program) writable)','RSL.verifierCheckpoint (NMX_R2_Carrier.account a) (NMX_R2_Carrier.key program) writable')
   s=s.replace('match a.bytes with\n   | .Ok v => RSL.RS.pure v.deref\n   | .Err e => RSL.RS.throw (NMX_R2_Carrier.error e)','RSL.RS.ofCloned (NMX_R2_Carrier.reply (fun v => v.deref) a.bytes)')

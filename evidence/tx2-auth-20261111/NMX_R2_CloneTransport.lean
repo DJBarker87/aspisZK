@@ -14,13 +14,13 @@ theorem thrown {A B : Type} (encode : A → B) (e : ProgramError) :
 theorem error {A B : Type} (encode : A → B) (e : ProgramError) :
  NMX_R2_Heterogeneous.Refines encode
   (RS.ofCloned (.error e)) (RS.ofCloned (.error e)) := by
- unfold RS.ofCloned
- split
+ simp only [RS.ofCloned]
+ cases h : e.cloneAllocates <;> simp only [h,Bool.true_eq_false,Bool.false_eq_true,↓reduceIte]
+ · exact thrown encode e
  · apply NMX_R2_Heterogeneous.bind id encode
    · exact NMX_R2_HeterogeneousPrimitives.refl _
    · intro _
      exact thrown encode e
- · exact thrown encode e
 #print axioms thrown
 #print axioms error
 end NMX_R2_CloneTransport
