@@ -6,7 +6,7 @@ for item in steps:
  kind,expr,*arg=item
  proof+=indent+'apply NND_Returned.'+('rs_bind' if kind=='bind' else 'seq')+'\n'+indent+'· exact '+expr+'\n'+indent+'· '
  if kind=='bind':proof+='intro '+arg[0]+'\n'
- else:proof+='\n'
+ else:proof=proof.rstrip()+'\n'
  indent+='  '
 proof+=indent+'exact NND_Returned.rs_pure env _\n'
 s=s[:a]+proof+s[b:];p.write_text(s)

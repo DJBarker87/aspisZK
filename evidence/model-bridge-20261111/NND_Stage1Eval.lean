@@ -45,22 +45,22 @@ theorem body_returned (V : VLib) (P : PreparedNew V) (F : NND_Tx1ReturnedValues.
  unfold body bodyValue
  apply NND_Returned.seq
  · exact NND_Returned.ofExcept env _
- · 
+ ·
    apply NND_Returned.seq
    · exact NND_Returned.ofExcept env _
-   · 
+   ·
      apply NND_Returned.seq
      · exact NND_Returned.ofExcept env _
-     · 
+     ·
        apply NND_Returned.seq
        · exact NND_Returned.ofExcept env _
-       · 
+       ·
          apply NND_Returned.rs_bind
          · exact NND_Returned.ofExcept env _
          · intro checkpointData
            apply NND_Returned.seq
            · exact NND_Returned.ofExcept env _
-           · 
+           ·
              apply NND_Returned.rs_bind
              · exact NND_Returned.ofExcept env _
              · intro publicData
@@ -69,10 +69,10 @@ theorem body_returned (V : VLib) (P : PreparedNew V) (F : NND_Tx1ReturnedValues.
                · intro st
                  apply NND_Returned.seq
                  · exact NND_Returned.rs_lift _ env () (NND_Returned.alloc env)
-                 · 
+                 ·
                    apply NND_Returned.seq
                    · exact NND_Returned.check env _ _
-                   · 
+                   ·
                      apply NND_Returned.rs_bind
                      · exact NND_Returned.ofOption env _ _
                      · intro candidate
@@ -81,13 +81,13 @@ theorem body_returned (V : VLib) (P : PreparedNew V) (F : NND_Tx1ReturnedValues.
                        · intro proofData
                          apply NND_Returned.seq
                          · exact NND_Returned.check env _ _
-                         · 
+                         ·
                            apply NND_Returned.rs_bind
                            · exact NND_Returned.call _ _ _ env _ (NND_Tx1ReturnedValues.first_returned V P F _ env)
                            · intro checkpoint
                              apply NND_Returned.seq
                              · exact NND_Returned.check env _ _
-                             · 
+                             ·
                                exact NND_Returned.rs_pure env _
 
 #print axioms body_returned

@@ -22,3 +22,7 @@ AdapterRw was emitted from 81521c77f7 plus the retained candidate overlay, not f
      Ok(())
  }
 ```
+
+The complete local234 returned bridge now uses the fresh E001 replay and its per-definition equality. Fresh NMT E001/E002/E003 replays supply the 094/328/345 parent equalities; reused NMS/NMX receipts supply the241/242/233 links. These links do not silently discharge opaque children. The exact failed E002 zero extraction is retained; historical index-loop and CLOSED bounded native reference transports are support, not a fresh frozen emission. NMW dispatch remains context only and no NND wrapper equality is claimed.
+
+Final tree-level source check (NND_FROZEN_SOURCE_CHECK.json): crates, programs/r1-cost-probe and Cargo.lock equal 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; programs/aspis-pool equals b936275465. No shipped change was made, so the conditional three-ELF rebuild is not triggered. Historical ELF pins are not a new reproduction result.

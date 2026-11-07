@@ -14,7 +14,7 @@ theorem checkpoint_length_compare (x : Usize) :
  simp only [bne_iff_ne,ne_eq,usize_eq]
  rfl
 
-theorem checkpoint (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
+theorem checkpoint_law (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
  (p : solana_pubkey.Pubkey) (w : Bool) :
  outer (reply id)
  (r1_pool_adapter.owned.require_verifier_checkpoint (NGL_CheckpointModel.install ops) a p w) =
@@ -39,5 +39,5 @@ theorem checkpoint (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
 
 #print axioms usize_eq
 #print axioms checkpoint_length_compare
-#print axioms checkpoint
+#print axioms checkpoint_law
 end NND_Carrier

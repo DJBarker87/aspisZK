@@ -16,9 +16,11 @@ root or row credit is claimed. These are proof obligations, not new trust rows.
 | A1 / 328 | Fresh frozen first_decoded parent equality (exact tx1/observer/error call sites) | Full Ref094 returned law to concrete sdk.op10 and debug/error callback transport with runtime oracle environment, then BOTH Ok/Err direction. |
 | A1 / 094 | Fresh frozen parent token/definition equality to coherent CurrentCaller body | Original emitted nominal transports, complete CLOSED child installation at actual domains, scratch and serialized checkpoint value, and source/installed sdk.op10 association. No unvalidated NMT WIP is credited. |
 | NMW dispatcher context | Existing merged fresh wrappers readable | No fresh equality against dispatchers established by NND yet. A3/A4/A5 physical wrapper/allocator association belongs to NNE, not silently inferred from RSL allocation erasure. |
-| Gate | Focused successful scopes printed standard axioms | Own-root raw ax2 audit and focused NLX combined import still pending. Next ledger gate alone decides credit. |
+| Gate | Focused successful scopes printed standard axioms | 314 own-root raw ax2 audits PASS (standard axioms only; no cache disagreements), 149-module focused NLX combined import L267 PASS, 34,139 selected object-file retention L058 PASS. No exact A1/A2 candidate exists; next ledger gate alone decides credit. |
 
 No native/Kani attempt is authorized by this job (0 Kani). Both extraction
-slots are used; an extraction failure is no credit. Remaining value/carrier
-and fold work is Lean-only and is continuing within the original300-scope
-budget. No short-budget stop is claimed.
+slots are used; an extraction failure is no credit. The original budget is exhausted: 2/2 extraction, 300/300 actual formal
+scopes, 0/0 Kani. Remaining value/carrier and fold obligations are still
+Lean work; this stop is budget exhaustion, not Kani exhaustion. No short-budget
+stop is claimed. The NMM native217 child still lacks a committed full native
+association; its native gap belongs to that sibling, and is not assumed here.
