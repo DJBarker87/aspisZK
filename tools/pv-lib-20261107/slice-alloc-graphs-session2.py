@@ -42,6 +42,7 @@ theorem certified {sig} (stack : List Config)
   change PV_LIB.observe (⟨actual {args},stack⟩ : PV_THR2_IntrinsicState.State OWNER PV_RJ4IDB.NativeEvent) = _
   unfold actual result
   rw [h.1]
+  rfl
 #print axioms certified
 end {ns}
 '''

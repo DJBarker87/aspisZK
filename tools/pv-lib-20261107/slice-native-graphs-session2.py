@@ -18,6 +18,8 @@ def model (C : Carrier OWNER Data) (e : Entry) (callee : Data)
     (stack : List Config) :=
   PV_LIB.observe (⟨internalModel C e callee H w prior,stack⟩ :
     PV_THR2_IntrinsicState.State OWNER PV_RJ4IDB.NativeEvent)
+#print axioms internalModel
+#print axioms model
 end PV_LIB_SliceNativeGraph
 ''')
 for group,ns in {'SliceAllocNative':['f62','f46','f36','f37','f38'],
