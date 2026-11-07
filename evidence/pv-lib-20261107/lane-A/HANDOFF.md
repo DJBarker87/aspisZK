@@ -248,3 +248,5 @@ Session4 49166: pinned PV_THR2_PacketJoinedPrefixAgreement passed; session4 rece
 Session4 49167: pinned PV_FN_THREAD_JoinedPrefix passed; session4 receipt records resources/axioms.
 
 Session4 49168: pinned PV_FN_THREAD_f361Prefix passed; session4 receipt records resources/axioms.
+
+Session4 49169: pinned PV_FN_THREAD_f361OwnEntryPrefix passed; session4 receipt records resources/axioms.
