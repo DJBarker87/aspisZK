@@ -170,3 +170,5 @@ Session4 49127: pinned PV_FN_THREAD_f361ErrorDrops passed; session4 receipt reco
 Session4 49128: pinned PV_FN_THREAD_ReturnWithTail passed; session4 receipt records resources/axioms.
 
 Session4 49129: pinned PV_FN_THREAD_f361ErrorReturn passed; session4 receipt records resources/axioms.
+
+Session4 49130: pinned PV_FN_THREAD_f361ErrorComposition passed; session4 receipt records resources/axioms.
