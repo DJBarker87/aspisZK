@@ -212,3 +212,5 @@ Session4 49148: pinned PV_THR2_JoinedCertChunk2 passed; session4 receipt records
 Session4 49149: pinned PV_THR2_JoinedCertChunk3 passed; session4 receipt records resources/axioms.
 
 Session4 49150: pinned PV_THR2_JoinedCertChunk4 passed; session4 receipt records resources/axioms.
+
+Session4 49151: pinned PV_THR2_ReturnWaitingShape passed; session4 receipt records resources/axioms.
