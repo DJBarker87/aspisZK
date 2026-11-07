@@ -23,3 +23,8 @@ runtime/E_rec envelope with NO inclusion premise, by using the SAME event
 indicator on both sides. The old source/receipts remain as .lean.retired;
 no final native theorem is obtained by assuming inclusion. The audit manifest
 excludes that retired root; all other new roots are checked once.
+The owned new audit batches additionally hash the exact native audit binary
+and current own .olean files, archive those inputs, and verify them before
+each child audit. This strengthens (never bypasses) prior validation. The
+unchanged NFA walker/memory shim and all shared launch/admission tools remain
+untouched. Groups0-7 are not replayed.

@@ -1,23 +1,45 @@
-# NNC remaining obligations
+# NNC remaining after option B / Realizes amendment
 
-Target not yet established. No row promotion or complete concrete TAS instance is claimed. The checked factories inhabit the TAS structure types only after the listed installation obligations are supplied; they are not substitutes for those proofs.
+Target not yet established. No row promotion, concrete complete EVB/TAS field
+installation or final actual-native probability theorem is claimed.
+NNC_OPTIONB_STATUS.md gives the exact checked deliveries.
 
-| Member | Established | Exact remaining installation |
+| Member | Completed owned work | Exact remaining requirement |
 |---|---|---|
-| G1a common065 | NNC_CommonWeak.root: SAME native result/events, resolved and independent-C04-stop prefixes, CLOSED resume at native records, no Root0/C04 model installation | None in this native weak law. It intentionally cannot replace the canonical full065 row. |
-| G1a parent064/header | NNC_064Weak.root/accepted_header, NNC_WeakSpec.accepted_header, three extents only | None in the native weak/header lemmas. |
-| G1a TAS w/weak/writeFree/okHeader | NNC_WriteFree.law/writeFree and exact NNC_G1a.assemble type; all native outcomes retained | NNC_G1a.NativeRep for the actual I.f064 and a faithful ReadEvent renderer, with every syscall/abort prefix; concrete S.readerHeader iff and canonical V0 error carrier. No actual I/S host interpretation is defined by TAS_Interfaces. An arbitrary/empty renderer is NOT an installation. This is an OPEN correspondence obligation, not trust or an own-input clause. |
-| G1c writer | NNC_FirstCuts.writer derives SAME TX1 source cut, writer Root0 and header from TX1 only; NNC_RuntimeOracle.writer derives the oracle from existing extraction/syscall/p1 | Apply these to the concrete host Configuration and TX1 model acceptance. No accepted2 or second SourceCuts is needed. |
-| G1c persistence | NNC_Persistence core; NNC_NativePersistence derives protection/ordinary eligibility from TX1 acceptance/game, then uses approved RuntimePersistence | Concrete native selected checkpoint read/range at the SAME occurrence; no reader model acceptance may be used. |
-| G1c reader | NNC_RSLReads.from_reference and NNC_SelectedReader.from_reference derive full account read/index cuts, successful064 w, own extents, original58295 image and matched header from an accepted weak241 Ref | Weak entry213 -> selected240 snapshots -> SAME241 Ref via complete sibling roots/entry representation; associate RSL owned descriptors/byte carriers to native SecondCut and P2P_Origin.Fact. NMS241/242 actual-emitted RSL interpretation remains OPEN in its committed handoff. NNE host entry-image definitions are also required. |
-| G1c final TAS root0_or_event | NNC_BindingRoot native core and exact-type NNC_NMFPrime.assemble intermediate | Prove selected packet extraction/Associated from complete sibling packets and concrete host representation. Its current selected/rootImage/eventImage parameters are explicitly NOT new permitted top hypotheses or a complete child-parametric row fold. Full NMFPrime field is NOT delivered as closed. |
-| R0-rep | NNC_SnapshotRep.from_snapshots proves both byte equations and Root0 iff through CLOSED239; exact NNC_R0Rep.assemble | Concrete S.Root0Native unfolding must select this SAME snapshot/read/range witness. Canonical V0.Root0 must be definitionally NNC_ByteCarriers.Root0. TAS abstracts both; final host wiring must provide their actual definitions, not postulate the conclusion. |
-| Case split | NNC_BindingRoot.case_split; NNC_CaseSplit.from_headers mentions no TX2 behavior after matched header; exact TAS case-split constructor | At the concrete NMFPrime instance, eventIdentity is rfl because our assembler chooses S.Event c (S.model1 c) literally. No new collision event/loss or hash injectivity. |
+| G1a native065/064 | Root0-free Result/high-level-event laws, native resume/header, concrete rich syscall trace for every native outcome including independent C04 stop; NNC_ObservedLaw.w/writeFree/accepted_header with no arbitrary renderer | Host I.f064 must be interpreted as this SAME native-record observer at its actual per-Env digest/error carriers. TAS abstract Impl alone supplies no such definition. This is source/representation installation, not a new trust row or own-input clause. |
+| SAME adaptive selection | NNC_RecSelect.selects, ActualChoices.realizes/selected, ActualRecorded.selected_at_recorder: arbitrary a, exact original query bound, actual eval entries, rfl Realizes | None in the selector association. It does not manufacture native cuts from an unrelated abstract entry function. |
+| G1c native cut | WeakOps slot-only invariance, WeakReader.from_parent/join, WeakExtents.domain derive original-dictionary read/range/validator/encoder cuts and ALL064 extents from an accepted weak native PARENT at the SAME Entry.second snapshots; writer/persistence previously derived TX1-only | Actual weak entry -> that native weak241 parent, with the complete NMS/NND/NMV source/dictionary maps and actual op11 observation interpretation. No accepted canonical model2 is available off Root0 and none is used. A successful op11 endpoint may not replace its full row. |
+| NMF_B | RecRoot/NMFB/ActualRoot: Root0 or literal already-charged E_rec, at actual adversary choices and SAME supplied native cuts; row constructed only on Root0 arm | Install the preceding actual native producer to inhabit EVB.NNC_NMFPrimeB.root0_or_rec exactly. Current actual cut arguments are not declared new permitted headline hypotheses. |
+| R0-rep | WeakR0Rep.at_entry proves both byte equations and Root0 iff on concrete NNE Entry.state/account images from CLOSED snapshot/getter/range, without caller image premises | Concrete host Root0Native must select this SAME witness and V0 must use the proved byte-carrier predicate. An abstract Sig can choose an unrelated predicate; it cannot be proved by another generic constructor. |
+| Outcome inner event | RecRelease.remove, RecAccepted.accepted, ActualAccepted.actual fully retarget the HOST Outcome internal bad to E_rec; all original runtime/game/admission/source binders retained | None in the retargeting. Apply only after canonical accepted2 is obtained on Root0 arm; never use it to obtain native cuts off Root0. |
+| no second charge | NoSecondCharge and RecordedEnvelope.bound: SAME E_rec max envelope, one accountLoss, unchanged total/range and scan abort | None in the numerical envelope. |
+| FINAL actual probability | Full-space numerical envelope has NO NativeInclusion or Realizes premise. ActualObservation.output/issued and ActualRecorded identify exactly the adaptive execution it charges; unrestricted attack indicator cannot be erased by inherited support | Prove coverage from the actual weak entry using the still-open full source producer above, then apply the checked envelope. The earlier inclusion-parameterized numeric fold is RETIRED, not a final theorem. Realizes is never a probability filter; no attack outcome may be excluded. |
 
-## Budget disposition / under-80% review
+## Why unspent scopes cannot close another independent member
 
-All four owned units were attempted. Independent weak065/064, resume/header, writer derivation, native persistence, snapshot/R0 byte transport, accepted241 reference inversion and collision/case algebra have been proved and checked. The remaining items above require concrete observed-semantics/carrier definitions or complete sibling actual row packets, not another arithmetic lemma or an unchanged compiler replay. Read-only NMS/NND/NNE branch inspections are recorded in the handoff; no native-ready NMS RSL241/242 root or shared concrete TAS host S/I definition was available there. The parametric factories expose, rather than silently assume, that gap.
+Every owned independent member was attempted, with new native observer,
+weak-parent/dictionary inversion, numeric scope and concrete R0 representation
+work completed in this continuation rather than stopping at the old factories.
+The final read-only sibling review is pinned in NNC_OPTIONB_BRANCH_REVIEW.json:
+NMS at4d817565565 still says native_ready=false and no241/242 candidate;
+NND at9e725d4741f has neither A1 nor A2, with the original300-scope budget
+exhausted; NMX at10e6ca7bc2f still has no233 native observation root; the native
+217/op50 association also remains unresolved in its owning lane. NMS's newer
+revision2 source support was inspected, not imported or conflated with this
+branch's pinned original RSL/TAS closure.
 
-No remaining item is asserted to intrinsically require Kani: this job has zero Kani/extraction budget and did not stop on Kani exhaustion. Actual parent native interpretation belongs to the sibling owners under (bm)/(bj)/(bl). Re-proving their rows here would exceed this job's slice/prefix ownership and duplicate concurrent work; choosing an arbitrary I or S or assuming NativeRep/selected would hide the desired correspondence. A fresh resumed run can spend the remaining Lean scopes when those concrete definitions/packets exist. Do not count another generic factory or a repeated cached import as progress.
+Member by member, the only remaining G1a task is the concrete host/per-Env
+interpretation; G1c's producer needs the full row/dictionary maps above; R0-rep
+needs the host predicate's concrete definition; final probability needs that
+same actual coverage producer. None can be discharged by a repeated native
+header proof, another conditional factory, an unchanged manifest replay, or
+assuming the missing inclusion. Re-proving the sibling native decoders/owned
+rows here would cross the assigned slice and duplicate live work. No
+remaining obligation is asserted to intrinsically require Kani or extraction;
+this is not a Kani-exhaustion stop. The available scopes are retained for the
+missing actual definitions/packets; they are not burned on unchanged checks.
 
-Final evidence:53/250 scopes,0Kani,0extraction;197 scopes unspent for the reasons above. All24 current proof modules and the one ledger24 combined import PASS; all56 own raw ax2 walks standard-only with zero collector disagreements. Native/canonical row promotion and final concrete TAS installation are not claimed.
+All inherited failures/counts remain in NNC_ATTEMPTS.jsonl. No source version,
+metric, adversary quantifier, trust row, or frozen release artifact is changed.
+
+Final budget: 115/250 scopes; 62/197 option-B scopes; 135 remain for the installations above. All127 active own roots raw-audited, standard only. No final actual security theorem is claimed.

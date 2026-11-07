@@ -1,3 +1,52 @@
+# NNC option B final handoff
+
+Target not yet established. Branch codex/cx-root0-weak-20261107; no push, row
+promotion, shipped-source or trust change. All inherited attempts count:
+115/250 total formal scopes =53 original +4 interrupted option-B
++58 current continuation. Option-B budget used62/197;
+135 scopes remain, with the member-by-member reason in NNC_REMAINING.md.
+0Kani/0extraction. No new security metric, constant adversary or Realizes filter.
+
+Established on real host types: arbitrary-adversary recorder selection;
+NMF-B native core at that selector; full Outcome internal E_rec retargeting;
+actual eval-selected entry instantiations (Realizes by rfl); native064 rich
+event observer for all partial/stopped outcomes with concrete write-free w;
+weak-native-parent cut inversion, all three064 numeric clauses from SAME entry
+snapshots/range, concrete NNE entry-image R0 representation; unconditional
+full-oracle numerical max envelope <=total(Q0+Q1), charging E_rec ONCE.
+Exact names, statements and limitations: NNC_OPTIONB_STATUS.md.
+
+NOT established: the complete actual weak-entry -> native weak-parent/observer
+installation, the exact concrete EVB.NNC_NMFPrimeB field, or FINAL actual-native
+coverage by the envelope. NMS native241/242 and NND A1/A2 are still OPEN at the
+fresh pinned sibling review. The numerical envelope has NO inclusion premise;
+the earlier inclusion-parameterized numeric fold is explicitly RETIRED. No
+missing source interpretation is promoted to a trust row, successful-child
+premise, own-input clause or final security claim.
+
+Validation PASS: original56 raw audits reused;71 new active roots audited once,
+127 total, only [propext,Classical.choice,Quot.sound], zero disagreements.
+Focused ledger24+current modules import L100 PASS; exact source-to-successful-
+receipt identity validated. Total scope wall2367.372s;
+peakRSS7241800KiB;swap0. The30 failed scopes remain retained/excluded.
+Per-attempt receipts record target/exit/time/RSS/swap/source revision/hash,
+selected dependency and Aeneas pins, cgroup and #print axioms. All caps
+6G/8G/swap0/tasks64; no cap/timeout increase or unchanged failed-shape replay.
+379 compressed SHA pairs and117 input archives validate;
+no file over20MB. Not a cold/frozen-release replay or reproduced ELF claim.
+
+Export: /home/dombarker/project-offloads/codex-cx-root0-weak-20261111/NNC_exports_20261111, 54 modules,
+355 selected dependencies rehashed, own cache retained,
+zero deletions. NNC_EXPORT.json/NNC_RETENTION.json give hashes/sizes/free disk.
+Inherited frozen release/ELF pins below remain unchanged; no rebuild trigger.
+
+Stage commits:9efd5697b48,a6f479666e8,b130ee2909f,01fe1db3411,
+189326a6e21, plus this final audit/receipts commit. Plain commits, no push.
+
+---
+Historical progress notes below are retained; this header and
+NNC_OPTIONB_FINAL.json supersede earlier budgets/status counts.
+
 ## Native observation / weak-parent stage
 
 L080/L082-L088 PASS: concrete native query/event observation including BOTH

@@ -8,6 +8,9 @@ elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poo
 elif mode in ['fixtures','scan']:jobs=[(mode,['NNC_native/'+('NNC_ProofDriver' if mode=='scan' else 'NNC_ProofDriver'),mode])]
 else:
  batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NNC_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NNC_native/'+('NNC_OptionBDriver' if i>=8 else 'NNC_ProofDriver'),'proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
+if mode.startswith('batch') and int(mode[5:])>=8:
+ for filename,expected in json.loads((B/'NNC_AUDIT_RUNTIME_PINS.json').read_text()).items():
+  assert hashlib.sha256(Path(filename).read_bytes()).hexdigest()==expected,filename
 for name,command in jobs:
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

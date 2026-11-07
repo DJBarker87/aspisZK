@@ -54,3 +54,10 @@ no CLOSED TAS/TFM/EVB source was edited. A concrete EVB field instance is still
 not claimed while its native source/observer installations remain OPEN.
 The weak064 law additionally has the binding writeFree field. Root0-free
 header/event transport does not assert full canonical TX2 model equality.
+
+WIP correction recorded: the uncompiled selector theorem had treated an
+arbitrary DrvC.Configuration's SDK as its GExq caller dictionary. That requires
+stage alignment and is not an arbitrary-configuration definitional equality.
+The checked RecSelect theorem uses the ACTUAL FIp installed configuration and
+ARQ_Installation.dictionary. Every intended host instantiation has exactly
+this configuration; no attacker or query-budget parameter was narrowed.
