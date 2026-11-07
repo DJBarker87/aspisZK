@@ -1,0 +1,56 @@
+{"attempt": "PCG_K093", "exit_status": 1, "wall_seconds": 2.1775013508740813, "peak_rss_kib": "174120", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: failed to connect to jobserver from environment variable `CARGO_MAKEFLAGS="-j --jobserver-fds=8,9 --jobserver-auth=8,9"`: cannot open file descriptor 8 from the jobserver environment variable value: Bad file descriptor (os error 9)
+  |
+  = note: the build environment is likely misconfigured
+
+warning: unexpected `cfg` condition value: `static-syscalls`
+ --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-define-syscall-2.3.0/src/lib.rs:5:7
+  |
+5 | #[cfg(target_feature = "static-syscalls")]
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: expected values for `target_feature` are: `10e60`, `2e3`, `32s`, `3e3
+...
+MX_checks::alloc` exists but is inaccessible
+
+warning: unused import: `super::*`
+ --> programs/aspis-pool/src/PCG_293.rs:2:5
+  |
+2 | use super::*;
+  |     ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `KMX_copy_nonoverlapping`
+ --> programs/aspis-pool/src/PCG_318.rs:2:44
+  |
+2 | use crate::PCG_Address::{Context,reference,KMX_copy_nonoverlapping};
+  |                                            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::PCG_Address::KMX_copy_nonoverlapping`
+ --> programs/aspis-pool/src/PCG_324.rs:2:5
+  |
+2 | use crate::PCG_Address::KMX_copy_nonoverlapping;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `aspis-pool` (lib) due to 6 previous errors; 5 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 6 compilation errors.
+
+Running as unit: run-ra91e86420c514befbec6d7b877544253.scope; invocation ID: 1205646d5d31491199fd9e5a6d51d541

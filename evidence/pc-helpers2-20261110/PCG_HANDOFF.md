@@ -21,3 +21,7 @@ Native/Lean/source-fission certificate passes for the shared find/create wrapper
 
 ## Stage2 current checkpoint
 SDK provenance repair accepted; native pairs are listed above. Independent reference/extraction work covers all 24 rows. No new Pool row is CLOSED until the combined gate completes. Native results for conversions, owned tree, canonicality, page scalar/place access, codec, return-data window, global-root call log and packing iterations are retained. PCG_L049 was an elaboration failure, never a theorem result; its successor repairs an obsolete List lemma name. Packing full-loop/native association remains an explicit obligation. No shipped files changed; no ELF rebuild trigger.
+
+## Stage3 proof checkpoint
+
+All24 helper roots and their extracted/generic lemmas compile. Packing root now quantifies the entire Fin32 output inside its conclusion; no ghost index bound is a caller hypothesis. All selected native positive/control pairs pass/fail as expected. The final combined import L080 exits0 at peak RSS6367344KiB, swap0. NFX/raw89-root gate is running; Pool credit remains empty until it finishes. No budget increase or unchanged timed-out rerun occurred.

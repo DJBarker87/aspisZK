@@ -98,7 +98,7 @@
 + let page:u64=kani::any();let filled:u16=kani::any();let sequence:u64=kani::any();
 + p.page_number=page;p.filled=filled;
 + let location=root_history_location(sequence);
-+ assert!(location.slot<256);
++ assert!(location.slot<256);assert_eq!(location.page_number,sequence/256);assert_eq!(location.slot,(sequence%256) as u16);
 + let got=p.get(sequence);
 + if location.page_number!=page || location.slot>=filled {assert!(got.is_none());}
 + else {let root=got.unwrap();let slot=usize::from(location.slot);let expected=unsafe{p.roots.as_ptr().add(if cfg!(PCG_NEG_PAGE){(slot+1)%256}else{slot})};assert!(core::ptr::eq(root,expected));}
@@ -207,7 +207,8 @@
 +fn group_association(){let word:u64=kani::any();let group:usize=kani::any();kani::assume(group<8);let actual=((word>>(7*(7-group)))&0x7f)as u8;let expected=reference::group(word,group);assert!((actual==expected)!=cfg!(PCG_NEG_PACK));}
 --- /dev/null
 +++ b/programs/aspis-pool/src/PCG_296.rs
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,30 @@
++extern crate alloc;
 +use super::*;
 +use core::cell::Cell;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));

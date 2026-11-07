@@ -44,7 +44,7 @@ theorem row_186 (words : Array U32 8#usize) :
      contradiction
    simp [hp]
  · have hp := hall.mp h
-   simp [hp]
+   simpa using hp
 
 #print axioms step
 #print axioms suffix

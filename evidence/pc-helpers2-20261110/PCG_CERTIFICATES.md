@@ -1,23 +1,38 @@
-> PCG-F1 repair: original invalid-context native receipts are excluded. Whole-context exposure plus with_exposed_provenance passed Miri L057, SDK K092/K083, address K084/K085, master K086/K087 and digest K088/K089 (matched controls). Final combined gate is pending for the Pool rows.
+# Pool helper packet index
 
-# PCG certificate index
+All24 packets are candidates until the final combined gate. Each negative receipt must fail the intended assertion (or SDK missing-panic property), not compilation or unwind. Frozen graph, all-crate feature lists, KMX hashes, lock-before/after and exact source hashes are per attempt. No field multiplication or runtime SHA evaluation in Kani.
 
-## Stage 1: shared SDK program-address forwarding
-
-Hybrid certificate under(c-f)(2)/(be)(2), source-fission/one-step method and retained P6/D188 option-A semantic transport. It does not compute a PDA value and adds no runtime trust. ReviewedTranscription PCG-RT-SdkPda is a reclassification, not trust removal.
-
-| SDK member/segment | Positive | Matched failing control | Lean/model |
+| Pool row | Root | Native positives | Failing controls |
 |---|---|---|---|
-| Actual create wrapper, zero/one valid seed | K019 | K002 | validation_step, validation_all; complete createReply |
-| Source-identical arbitrary-count create syscall tail | K020 | K021 | create_forward, create_packet; PCG_SDK_SOURCE.json identity |
-| Actual arbitrary current seed length, including rejection | K022 | K023 | validation_step, validation_all, create_reject |
-| Actual try_find, arbitrary u64 status | K003 | K004 | tryFindReply, find_forward |
-| Actual find success, arbitrary descriptor count/address/bump | K024 | K025 | find_ok |
-| Actual find nonzero-status abort | K026 | K027 (missing required panic) | findReply abort arm |
-| Actual create status>2 abort | K028 | K029 (missing required panic) | createReply abort arm |
+|POOL:159|PCG_ErrorLaws.receipt|K052|K009|
+|POOL:160|PCG_ErrorLaws.account|K010|K011|
+|POOL:181|PCG_OwnedTree.row_181|K063|K056|
+|POOL:184|PCG_MarkerCodec.row_184|K064|K065|
+|POOL:186|PCG_CanonicalLaws.row_186|K057|K058|
+|POOL:189|PCG_ErrorLaws.forest|K012|K013|
+|POOL:241|PCG_PageLaws.row_241|K099|K100|
+|POOL:242|PCG_PageLaws.row_242|K048|K049|
+|POOL:287|PCG_ConversionLaws.row_287|K014|K015|
+|POOL:288|PCG_ConversionLaws.row_288|K016|K017|
+|POOL:293|PCG_PackComposition.row_293|K076 K078 K080|K077 K079 K081|
+|POOL:296|PCG_MarkerSeed.row_296|K101 K095|K094 K096|
+|POOL:318|PCG_MasterAddress.row_318|K086|K087|
+|POOL:323|PCG_CheckpointAddress.row_323|K084|K085|
+|POOL:324|PCG_GlobalLaw.row_324|K072|K073|
+|POOL:345|PCG_ReturnBridge.row_345|K066 K068 K070|K067 K069 K071|
+|POOL:368|PCG_DigestBridge.row_368|K088|K089|
+|POOL:374|PCG_AddressRoots.row_374|K084|K085|
+|POOL:375|PCG_AddressRoots.row_375|K084|K085|
+|POOL:376|PCG_AddressRoots.row_376|K084|K085|
+|POOL:377|PCG_AddressRoots.row_377|K084|K085|
+|POOL:379|PCG_AddressRoots.row_379|K097|K098|
+|POOL:390|PCG_AddressRoots.row_390|K084|K085|
+|POOL:391|PCG_AddressRoots.row_391|K084|K085|
 
-All selected positives exit0; controls fail the intended assertion or missing-panic property, not compilation/unwind. Exact KMX patch plus identical ptr-copy configuration in each pair. No timeout, memory kill, static writes, function-pointer observer or native multiplication. Source/registry audit L004 passes, including four rejecting source mutations. Earlier own-input failures are preserved and excluded in PCG_STAGE1_NOTES.md.
+SDK replacement: K092/K083 each cover the same eight original harnesses, with Miri L057 provenance repair. K084/K085 each cover stored_matches and all seven address requests; final379 uses the broader independent-descriptor K097/K098 pair. Old PCG-F1 context receipts are excluded, even where earlier reports said pass.
 
-L013 compiles the final SDK transcription, all eight roots printed with standard axioms only. L005 combines AspisR1.RPx_Deployed.deployed, actual ledger23 NLS_COMBINED_IMPORT (NLO receipt), NLF_SdkBorrowLaw, PCE_COMBINED_IMPORT and PCG_SdkPda. L007/008 build the optimized canonical NEP/NFX driver. Eight fixtures L009, NFX scan L010 exit0 (zero dangling/duplicate/incompatible owners/import defects), raw ax2 L011/012 over headline plus all eight SDK roots pass with standard axioms and collector agreement. All use binary728c8fe68a7254ef77ea163aa8ac8f82b5f876abd1b8b79e1fb5077d762722f0. Exact scope metrics/revision/source/dependency/axiom receipts are retained. This is a focused coherent cache gate, not a cold release replay or ELF rebuild.
+Native324 uses one exact seven-call local log and arbitrary canonical replies, composed with NJZ_TreeParent.source at every SAME left/right. K074 whole-function diagnostic timed out and is excluded; it was not retried. Native345 forwards the owned Option reply, retaining Vec pointer/length/capacity and arbitrary selected byte; its source has no payload reads/writes. Native296 has actual-argument diagnostic K101/K094 and arbitrary full child-reply log K095/K096. Exact source-fission erasure for324/345/296 is PCG_ASSOCIATIONS.json.
 
-SDK exports are pinned in PCG_SDK_EXPORT_MANIFEST.json. There is no newly CLOSED Pool row at this stage; consumers still need their exact seed/program/reply bridge and their own Stream C gate. PCG_CLOSED.json deliberately remains empty.
+Packing293 uses K076/077 word step, K078/079 one write/frame, K080/081 group association; PCG_PackLaw.read_suffix and PCG_PackComposition.chunk_induction compose the loops. PCG_LOOP_ASSOCIATION.json pins the frozen loop skeleton. No whole-digest Kani loop or concrete large Lean normalization.
+
+The all-root raw walk is authoritative under(ab')(3); collector disagreements, if any, stay recorded. Existing eight fixtures use the same unchanged binary. Full scope metrics and source revisions are in PCG_ATTEMPTS.jsonl and each receipt.

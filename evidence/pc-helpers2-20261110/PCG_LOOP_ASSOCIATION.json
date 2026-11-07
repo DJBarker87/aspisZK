@@ -1,0 +1,26 @@
+{
+ "row": "POOL:293",
+ "body_sha256": "ec042ba8cd1215cc4319af48cb2a43740f43208ecae479d0cfe86cda4d7b3a4d",
+ "exact_source_loop": true,
+ "native_steps": {
+  "word": "PCG_293::word_association K076/K077",
+  "write": "PCG_293::write_window K078/K079",
+  "group": "PCG_293::group_association K080/K081"
+ },
+ "invariants": [
+  "chunk<4",
+  "byte<7; word<256^byte; read index7*chunk+byte<28",
+  "group<8; offset8*chunk+group<32; all other positions unchanged",
+  "all loop counters increase by1 and stay <=8"
+ ],
+ "lean_associations": [
+  "PCG_PackLaw.read_suffix",
+  "PCG_PackComposition.chunk_word",
+  "PCG_PackComposition.chunk_group",
+  "PCG_PackComposition.pack_at",
+  "PCG_PackComposition.writeRange_exact",
+  "PCG_PackComposition.chunk_induction",
+  "PCG_PackComposition.row_293"
+ ],
+ "trust": "P6/D188 native contract semantic transport and reviewed source transcription; reclassification, not removal"
+}

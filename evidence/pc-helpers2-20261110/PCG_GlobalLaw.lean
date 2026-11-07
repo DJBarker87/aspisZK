@@ -31,7 +31,9 @@ theorem row_324 (roots : Fin 8 → Digest) (canonical : ∀ i, Canonical (roots 
  have f := child _ _ c.2 d.2
  have g := child _ _ e.2 f.2
  constructor
- · simpa only [run,e.1,f.1,a.1,b.1,c.1,d.1] using g.1
+ · exact g.1.trans (congrArg₂ parent
+     (e.1.trans (congrArg₂ parent a.1 b.1))
+     (f.1.trans (congrArg₂ parent c.1 d.1)))
  · exact g.2
 
 /-- Exact ordered call-log association for the extracted safe reference. -/

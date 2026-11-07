@@ -36,6 +36,9 @@ theorem fold_bound (bytes : List U8) (w k : Nat) (h : w < 256^k) :
 theorem word_bound (bytes : List U8) : word bytes < 256^bytes.length := by
  simpa [word] using fold_bound bytes 0 0 (by decide)
 
+theorem prefix_power (k : Nat) : 2^(8*k) = 256^k := by
+ rw [Nat.pow_mul]
+
 def readWord (w : U64) : List U8 → Result U64
  | [] => ok w
  | b::bs => do
@@ -43,7 +46,8 @@ def readWord (w : U64) : List U8 → Result U64
    readWord next bs
 
 theorem power_bound (k : Nat) (h : k ≤ 6) : 256^k ≤ 281474976710656 := by
- interval_cases k <;> decide
+ have cases : k=0 ∨ k=1 ∨ k=2 ∨ k=3 ∨ k=4 ∨ k=5 ∨ k=6 := by omega
+ rcases cases with h|h|h|h|h|h|h <;> subst k <;> decide
 
 /-- Induction from every native loop pre-state; the invariant proves all
 machine arithmetic stays within u64 and the next native step's domain. -/
@@ -74,8 +78,8 @@ theorem denominator_ref (g : Usize) :
  PCG_PackRef.denominator g = ok (U64.ofNatCore (denominator g.val) (by
   unfold denominator
   split <;> scalar_tac)) := by
- unfold PCG_PackRef.denominator denominator
- split <;> rfl
+ unfold PCG_PackRef.denominator
+ split <;> simp_all [denominator] <;> rfl
 
 theorem group_step (word : U64) (g : Usize) :
  ∃ out, PCG_PackRef.group word g = ok out ∧
@@ -83,12 +87,10 @@ theorem group_step (word : U64) (g : Usize) :
  let d := U64.ofNatCore (denominator g.val) (by
   unfold denominator
   split <;> scalar_tac)
- have hd : d ≠ 0#u64 := by
+ have hd : d.val ≠ 0 := by
    have hp := denominator_positive g.val
-   intro he
-   have hv := congrArg UScalar.val he
-   simp only [d,UScalar.val_ofNatCore] at hv
-   scalar_tac
+   change denominator g.val ≠ 0
+   omega
  obtain ⟨q,hq,vq⟩ := UScalar.div_spec (x:=word) (y:=d) hd
  obtain ⟨r,hr,vr⟩ := WP.spec_imp_exists
   (UScalar.rem_spec (x:=q) (y:=128#u64) (by decide))
@@ -129,6 +131,7 @@ theorem row_293 (digest : Array U8 32#usize) (offset : Nat) (h : offset < 32) :
 #print axioms word_step
 #print axioms fold_bound
 #print axioms word_bound
+#print axioms prefix_power
 #print axioms power_bound
 #print axioms read_suffix
 #print axioms denominator_positive

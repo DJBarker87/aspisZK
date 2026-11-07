@@ -1,3 +1,4 @@
+extern crate alloc;
 use super::*;
 use core::cell::Cell;
 include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
