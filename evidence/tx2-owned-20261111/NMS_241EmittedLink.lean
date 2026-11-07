@@ -14,6 +14,7 @@ theorem source (ops : Ops) (program : solana_pubkey.Pubkey)
   program accounts data slot = r1_pool_adapter.owned.stage2_owned ops program accounts data slot := by
  unfold NMS_Emitted.stage2 r1_pool_adapter.owned.stage2_owned
  simp only [NMS_EmittedLinks.validate,NMS_EmittedLinks.getter,bind_tc_ok]
+ rfl
 #print source
 #print axioms source
 end NMS_241EmittedLink

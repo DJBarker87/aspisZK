@@ -16,7 +16,9 @@ theorem proof_length (bytes : Slice U8) (scanned : r1_pool_adapter.ScannedAsqaPr
  simp only [lift,show Usize.checked_add 688#usize 57607#usize = some 58295#usize from
   AspisR1.AdapterRw.Scalar.checked_add_eq _ _ _ (by scalar_tac),bind_tc_ok] at accepted
  repeat' first
- | (solve | cases accepted; rfl)
+ | (solve | contradiction)
+ | (solve | cases accepted)
+ | (solve | cases accepted <;> rfl)
  | uncase_result
  | head_reduce accepted
  | split at accepted
