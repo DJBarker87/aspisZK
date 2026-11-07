@@ -11,3 +11,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49460 passed Unique612.installed: existing Fact implies the exact deterministic handler graph at f537/22550 for every answer; failures/pending unchanged.49459 failed a reply/answer equality projection, fixed via congrArg; failed source archived. No caller unsafe-validity discharge claimed.
 
 49461 passed exact pinned replay PV_FN_W4_NativeFootprint; see receipt for time/RSS/swap/revision/axioms.
+
+49462 passed exact pinned replay PV_FN_THREAD_f170_Entry; see receipt for time/RSS/swap/revision/axioms.
