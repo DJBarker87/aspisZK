@@ -11,7 +11,7 @@ theorem lane_injective : Function.Injective lane := by
  cases x
  cases y
  simp only [lane,RSL.LaneState.mk.injEq,byte_eq_iff,key_eq_iff,tree_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1.mk.injEq.mpr h
+ simpa only [AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1.mk.injEq] using h
 @[simp] theorem lane_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1) : lane x = lane y ↔ x = y :=
  ⟨fun h => lane_injective h,congrArg lane⟩
 #print axioms lane_injective

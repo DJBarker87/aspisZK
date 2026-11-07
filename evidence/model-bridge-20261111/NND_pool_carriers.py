@@ -16,8 +16,9 @@ for name,typ,target,fields in items:
  s='import '+prev+'\nset_option autoImplicit false\nnamespace NND_Carrier\n'
  s+='def '+fn+' (x : '+native+') : RSL.'+target+' :=\n { '+',\n   '.join(f+' := '+c+' x.'+f for f,c in fields)+' }\n'
  s+='theorem '+fn+'_injective : Function.Injective '+fn+' := by\n intro x y h\n cases x\n cases y\n simp only ['+fn+',RSL.'+target+'.mk.injEq'
+ if any(c=='id' for _,c in fields):s+=',id'
  for c in sorted({c for _,c in fields} - {'id'}):s+=','+c+'_eq_iff'
- s+='] at h\n exact '+native+'.mk.injEq.mpr h\n'
+ s+='] at h\n simpa only ['+native+'.mk.injEq] using h\n'
  s+='@[simp] theorem '+fn+'_eq_iff (x y : '+native+') : '+fn+' x = '+fn+' y ↔ x = y :=\n ⟨fun h => '+fn+'_injective h,congrArg '+fn+'⟩\n'
  s+='#print axioms '+fn+'_injective\n#print axioms '+fn+'_eq_iff\nend NND_Carrier\n'
  (E/(mod+'.lean')).write_text(s);prev=mod

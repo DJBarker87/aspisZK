@@ -1,0 +1,43 @@
+{"attempt": "NND_L076", "exit_status": 0, "wall_seconds": 5.773329593008384, "peak_rss_kib": "6577000", "swaps": "0", "print_axioms": "N/A: support"}
+structure NNC_SourceCuts.Cuts (ops : AdapterRw.Ops) (accounts1 accounts2 : Accounts) (saved : alloc.vec.Vec U8)
+  (f : FirstCut) (s : SecondCut) : Prop
+number of parameters: 6
+fields:
+  NNC_SourceCuts.Cuts.proof1Index : Slice.index_usize accounts1 0#usize = ok f.proofAccount
+  NNC_SourceCuts.Cuts.public1Index : Slice.index_usize accounts1 1#usize = ok f.publicAccount
+  NNC_SourceCuts.Cuts.proof1Read : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.proofAccount =
+      ok (core.result.Result.Ok f.raw)
+  NNC_SourceCuts.Cuts.public1Read : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops f.publicAccount =
+      ok (core.result.Result.Ok f.pub)
+  NNC_SourceCuts.Cuts.decode : ops.op4
+...
+.proof) :
+    Cuts ops accounts1 accounts2 saved f s
+theorem NNC_SourceCuts.on_cuts : ∀ (ops : AdapterRw.Ops) (id : Program) (e1 e2 : S2W_D189Entry.Entry) (data2 : Slice U8)
+  (slot : Slot) (saved : alloc.vec.Vec U8) (f : FirstCut) (s : SecondCut),
+  Cuts ops e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s →
+    P2P_Origin.Fact ops id (e2.second S2W_D189Wrappers.secondSizes) data2 slot s →
+      P2P_NativeSelection.pair ops id e1 e2 data2 slot = Hist_PairExperiment.select { first := f, second := s } :=
+fun ops id e1 e2 data2 slot saved f s cuts origin =>
+  let ⟨v, h✝⟩ := origin
+  let ⟨validate, encode⟩ := h✝
+  let ⟨proof1, public1⟩ := first ops e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s cuts
+  have proof2 := second ops e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s cuts;
+  have public2 :=
+    Hiq_ByteSelection.public2_read ops id (e2.second S2W_D189Wrappers.secondSizes) data2 slot v s.encoded validate
+      encode;
+  Eq.mpr
+    (_root_.id
+      (congrFun'
+        (congrArg Eq
+          (congr (congrArg Prod.mk (congr (congrArg R9PoolRuntimeBinding.Inputs.mk proof1) public1))
+            (congr (congrArg R9PoolRuntimeBinding.Inputs.mk proof2) public2)))
+        ({ proof := bytesOf ↑f.proof, pub := bytesOf ↑f.pub }, { proof := bytesOf ↑s.proof, pub := bytesOf ↑s.pub })))
+    (Eq.refl
+      ({ proof := bytesOf ↑f.proof, pub := bytesOf ↑f.pub }, { proof := bytesOf ↑s.proof, pub := bytesOf ↑s.encoded }))
+'NNC_SourceCuts.of_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_SourceCuts.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_SourceCuts.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_SourceCuts.on_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7281fe4303134cd2badbfb921698410d.scope; invocation ID: e8461967a71845aabef6c769df8ec38f

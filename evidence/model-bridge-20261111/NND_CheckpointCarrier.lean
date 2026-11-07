@@ -13,7 +13,7 @@ theorem checkpoint_injective : Function.Injective checkpoint := by
  cases x
  cases y
  simp only [checkpoint,RSL.Checkpoint.mk.injEq,byte_eq_iff,digest_eq_iff,key_eq_iff,slot_eq_iff,slots_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1.mk.injEq.mpr h
+ simpa only [AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1.mk.injEq] using h
 @[simp] theorem checkpoint_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1) : checkpoint x = checkpoint y ↔ x = y :=
  ⟨fun h => checkpoint_injective h,congrArg checkpoint⟩
 #print axioms checkpoint_injective

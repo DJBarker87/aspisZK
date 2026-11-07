@@ -13,7 +13,7 @@ theorem live_injective : Function.Injective live := by
  cases x
  cases y
  simp only [live,RSL.LiveSnapshot.mk.injEq,digest_eq_iff,frontier_eq_iff,key_eq_iff,slot_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.mk.injEq.mpr h
+ simpa only [AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.mk.injEq] using h
 @[simp] theorem live_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : live x = live y ↔ x = y :=
  ⟨fun h => live_injective h,congrArg live⟩
 #print axioms live_injective

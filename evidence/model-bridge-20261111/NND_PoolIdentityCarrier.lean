@@ -12,7 +12,7 @@ theorem poolIdentity_injective : Function.Injective poolIdentity := by
  cases x
  cases y
  simp only [poolIdentity,RSL.PoolIdentity.mk.injEq,key_eq_iff,word_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.format.PoolIdentityV1.mk.injEq.mpr h
+ simpa only [AdapterRw.aspis_statement.pool_v1.format.PoolIdentityV1.mk.injEq] using h
 @[simp] theorem poolIdentity_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.format.PoolIdentityV1) : poolIdentity x = poolIdentity y ↔ x = y :=
  ⟨fun h => poolIdentity_injective h,congrArg poolIdentity⟩
 #print axioms poolIdentity_injective

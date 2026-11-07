@@ -13,8 +13,8 @@ theorem master_injective : Function.Injective master := by
  intro x y h
  cases x
  cases y
- simp only [master,RSL.Master.mk.injEq,byte_eq_iff,policy_eq_iff,poolIdentity_eq_iff,slot_eq_iff,slots_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.mk.injEq.mpr h
+ simp only [master,RSL.Master.mk.injEq,id,byte_eq_iff,policy_eq_iff,poolIdentity_eq_iff,slot_eq_iff,slots_eq_iff] at h
+ simpa only [AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.mk.injEq] using h
 @[simp] theorem master_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) : master x = master y ↔ x = y :=
  ⟨fun h => master_injective h,congrArg master⟩
 #print axioms master_injective

@@ -11,7 +11,7 @@ theorem policy_injective : Function.Injective policy := by
  cases x
  cases y
  simp only [policy,RSL.VerifierPolicy.mk.injEq,byte_eq_iff,key_eq_iff] at h
- exact AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.mk.injEq.mpr h
+ simpa only [AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.mk.injEq] using h
 @[simp] theorem policy_eq_iff (x y : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1) : policy x = policy y ↔ x = y :=
  ⟨fun h => policy_injective h,congrArg policy⟩
 #print axioms policy_injective

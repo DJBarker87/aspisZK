@@ -1,0 +1,42 @@
+{"attempt": "NND_L079", "exit_status": 0, "wall_seconds": 3.8032133439555764, "peak_rss_kib": "6281300", "swaps": "0", "print_axioms": "N/A: support"}
+NND_replay/NNC_ResumeHeader.lean:22:4: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+       ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵] at tail
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NNC_ResumeHeader.resume_of_ok : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : NJJ_Common.Merkle)
+  (finish : NJJ_Common.Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  NJJ_Common.run wr rr (fu
+...
+R1Stage2.transport.Variant.S2 hash p a same
+  NLW_ReaderHeader.calls (NJC_ResumeCalls.digest d) hash H oracle ck proof pub calls length
+theorem NNC_ResumeHeader.native_ok : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    (↑ck).length = 1768 →
+      (↑pub).length ≤ 1880 →
+        CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest d) hash H →
+          ∀ (records : List (NLT_NativeInvocation.Occurrence H d hash)),
+            NLT_CompleteRoot.Native H d pub proof ck hash
+                (NLT_CompleteRoot.End.resolved (ok (core.result.Result.Ok ())) records) →
+              NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑ck) =
+                some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun H {X} d pub proof ck hash proofLength checkpointLength publicLength oracle records native =>
+  have weak :=
+    (NNC_CommonWeak.root H d pub proof ck hash proofLength publicLength).left
+      (NLT_CompleteRoot.End.resolved (ok (core.result.Result.Ok ())) records) native;
+  let ⟨p, h✝⟩ :=
+    resume_of_ok (NLT_FrameFromCuts.frame records).resume (NLT_FrameFromCuts.frame records).pending
+      (@NLP_NativeMerkle.action H) (NLB_Parent.finish (NLT_FrameFromCuts.frame records).finish) d pub proof ck hash
+      (Eq.symm weak.left)
+  let ⟨a, resumed⟩ := h✝
+  header_of_resume (NLT_FrameFromCuts.frame records).resume d hash H oracle pub proof ck checkpointLength p a resumed
+'NNC_ResumeHeader.resume_of_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_ResumeHeader.header_of_resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_ResumeHeader.native_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r54447ff220a445408cd5328436cd5b9f.scope; invocation ID: afd2fcb29d2949b39d2a4be2ac66cce1
