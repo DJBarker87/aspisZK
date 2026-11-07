@@ -1,0 +1,329 @@
+include!("NMP_helpers.rs");
+#[repr(transparent)] #[derive(Clone,Copy)]
+pub(crate) struct LoggedHash(pub(crate) *mut ());
+impl Digest32 for LoggedHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("no digest body at parent cut")}}
+#[derive(Clone,Copy)] struct Meta {ptr:*const u8,len:usize}
+fn meta(v:&[u8])->Meta{Meta{ptr:v.as_ptr(),len:v.len()}}
+fn same(a:Meta,b:Meta)->bool{a.ptr==b.ptr&&a.len==b.len}
+#[repr(C)] struct Frame<'a>{bytes:[u8;13831],log:Log<'a>}
+struct Log<'a>{
+ public:Public<'a>, stop:u8, control:u8, phase:u8, error:Error,
+ initial:([u8;32],u8),after:([u8;32],u8),challenges:Challenges,
+ parse_arg:Meta,root:Meta,records:[Meta;27],public_arg:Option<Public<'a>>,
+ public_root:Meta,begin_root:Meta,finish_root:Meta,begin_records:[Meta;27],finish_records:[Meta;27],
+ begin_t:([u8;32],u8),finish_t:([u8;32],u8),finish_c:Challenges,
+ owned:Option<OwnedFields>,
+}
+unsafe fn local<'a,H:Digest32>(hash:H)->&'a mut Log<'a>{
+ assert_eq!(core::mem::size_of::<H>(),core::mem::size_of::<LoggedHash>());
+ unsafe{&mut *((*(&hash as *const H as *const LoggedHash)).0 as *mut Log<'a>)}
+}
+fn same_public(a:Public<'_>,b:Public<'_>)->bool{match(a,b){
+ (Public::Transfer(p,t),Public::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),
+ (Public::Withdrawal(p,t),Public::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),_=>false}}
+// Existing bytes data-pointer channel, disjoint sibling field in ONE allocation.
+// It writes only Log, never the immutable bytes field.
+fn record(bytes:&[u8])->&[u8]{let a:u16=kani::any();let n:u16=kani::any();kani::assume((a as usize)+(n as usize)<=bytes.len());&bytes[a as usize..a as usize+n as usize]}
+fn parse_cut<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
+ let ptr=unsafe{bytes.as_ptr().add(core::mem::offset_of!(Frame<'static>,log)) as *mut Log<'a>};
+ let log=unsafe{&mut *ptr};assert_eq!(log.phase,0);log.parse_arg=meta(bytes);log.phase=1;
+ if log.control==2{log.parse_arg.len+=1;}
+ if log.stop==1{return Err(if log.control==1{flip(log.error)}else{log.error})}
+ let off:u16=kani::any();kani::assume((off as usize)+32<=bytes.len());
+ let root:&[u8;32]=bytes[off as usize..off as usize+32].try_into().unwrap();
+ let records=[record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes),record(bytes)];
+ log.root=meta(root);log.records=[meta(records[0]),meta(records[1]),meta(records[2]),meta(records[3]),meta(records[4]),meta(records[5]),meta(records[6]),meta(records[7]),meta(records[8]),meta(records[9]),meta(records[10]),meta(records[11]),meta(records[12]),meta(records[13]),meta(records[14]),meta(records[15]),meta(records[16]),meta(records[17]),meta(records[18]),meta(records[19]),meta(records[20]),meta(records[21]),meta(records[22]),meta(records[23]),meta(records[24]),meta(records[25]),meta(records[26])];
+ Ok(crate::r1_wire::NMP_factory::prefix(root,records))
+}
+fn public_cut<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<SemanticTranscript<H>,Error>{
+ let log=unsafe{local(hash)};assert_eq!(log.phase,1);log.phase=2;log.public_arg=Some(public);log.public_root=meta(root);
+ if log.control==2{log.public_root.len+=1;}
+ if log.stop==2{return Err(if log.control==1{flip(log.error)}else{log.error})}
+ Ok(crate::r1_wire::NMP_factory::make(hash,log.initial.0,log.initial.1))
+}
+fn begin_cut<H:Digest32>(p:&Prefix<'_>,t:&mut SemanticTranscript<H>)->Result<Challenges,Error>{
+ let (state,hash,row)=crate::r1_wire::NMP_factory::snapshot(t);let log=unsafe{local(hash)};
+ assert_eq!(log.phase,2);log.phase=3;log.begin_t=(state,row);log.begin_root=meta(p.c1_root);
+ let r=crate::r1_wire::NMP_factory::records(p);log.begin_records=[meta(r[0]),meta(r[1]),meta(r[2]),meta(r[3]),meta(r[4]),meta(r[5]),meta(r[6]),meta(r[7]),meta(r[8]),meta(r[9]),meta(r[10]),meta(r[11]),meta(r[12]),meta(r[13]),meta(r[14]),meta(r[15]),meta(r[16]),meta(r[17]),meta(r[18]),meta(r[19]),meta(r[20]),meta(r[21]),meta(r[22]),meta(r[23]),meta(r[24]),meta(r[25]),meta(r[26])];
+ // Full runtime transcript footprint: arbitrary state bytes and row; H carries ghost log.
+ let after=if log.control==3{log.initial}else{log.after};
+ *t=crate::r1_wire::NMP_factory::make(hash,after.0,after.1);
+ if log.stop==3{Err(if log.control==1{flip(log.error)}else{log.error})}else{Ok(log.challenges)}
+}
+struct OwnedFields{
+ roots:[[u8;32];2],challenges:Challenges,alpha:[QM31;10],claims:Box<[[QM31;29];3]>,
+ extra:[QM31;29],before_z1:[QM31;29],state_before_z0:[u8;32],z:[SecureCirclePoint;2],
+ transcript_state:[u8;32],transcript_row:u8,
+}
+fn owned()->OwnedFields{OwnedFields{
+ roots:kani::any(),challenges:arbitrary_challenges(),alpha:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],
+ claims:Box::new([[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()]]),
+ extra:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],before_z1:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],
+ state_before_z0:kani::any(),z:[SecureCirclePoint{x:arbitrary_q(),y:arbitrary_q()},SecureCirclePoint{x:arbitrary_q(),y:arbitrary_q()}],
+ transcript_state:kani::any(),transcript_row:kani::any()}}
+fn finish_cut<H:Digest32>(public:Public<'_>,p:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
+ let (state,hash,row)=crate::r1_wire::NMP_factory::snapshot(&t);let log=unsafe{local(hash)};
+ assert_eq!(log.phase,3);log.phase=4;log.finish_t=(state,row);log.finish_c=c;assert!(same_public(public,log.public));
+ log.finish_root=meta(p.c1_root);let r=crate::r1_wire::NMP_factory::records(&p);log.finish_records=[meta(r[0]),meta(r[1]),meta(r[2]),meta(r[3]),meta(r[4]),meta(r[5]),meta(r[6]),meta(r[7]),meta(r[8]),meta(r[9]),meta(r[10]),meta(r[11]),meta(r[12]),meta(r[13]),meta(r[14]),meta(r[15]),meta(r[16]),meta(r[17]),meta(r[18]),meta(r[19]),meta(r[20]),meta(r[21]),meta(r[22]),meta(r[23]),meta(r[24]),meta(r[25]),meta(r[26])];
+ if log.stop==4{return Err(if log.control==1{flip(log.error)}else{log.error})}
+ let mut v=log.owned.take().unwrap();if log.control==1{v.roots[0][0]^=1;}
+ Ok(Verified{roots:v.roots,challenges:v.challenges,alpha:v.alpha,claims:v.claims,extra:v.extra,before_z1:v.before_z1,state_before_z0:v.state_before_z0,z:v.z,transcript:crate::r1_wire::NMP_factory::make(hash,v.transcript_state,v.transcript_row)})
+}
+fn flip(e:Error)->Error{if e==Error::Terminal{Error::Public}else{Error::Terminal}}
+fn check(stop:u8,control:u8,group:u8){check_variant(stop,control,group,0)}
+fn check_variant(stop:u8,control:u8,group:u8,pub_mode:u8){
+ let transition=transition();let transfer=transfer();let withdrawal=withdraw();let variant:bool=kani::any();
+ let public=if pub_mode==1||pub_mode==0&&variant{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
+ let dummy=Meta{ptr:core::ptr::null(),len:0};let v=if stop>=5{Some(owned())}else{None};
+ let ci:usize=kani::any();let cj:usize=kani::any();kani::assume(ci<3&&cj<29);
+ let ri:usize=kani::any();let rj:usize=kani::any();kani::assume(ri<2&&rj<32);
+ let ai:usize=kani::any();kani::assume(ai<10);
+ let qi:usize=kani::any();kani::assume(qi<29);
+ let expected=v.as_ref().map(|v|(v.roots,v.challenges,v.alpha[ai],&*v.claims as *const [[QM31;29];3],v.claims[ci][cj],v.extra[qi],v.before_z1[qi],v.state_before_z0,v.z,v.transcript_state,v.transcript_row));
+ let mut f=Frame{bytes:kani::any(),log:Log{public,stop,control,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),parse_arg:dummy,root:dummy,records:[dummy;27],public_arg:None,public_root:dummy,begin_root:dummy,finish_root:dummy,begin_records:[dummy;27],finish_records:[dummy;27],begin_t:([0;32],0),finish_t:([0;32],0),finish_c:arbitrary_challenges(),owned:v}};
+ let hash=LoggedHash(&mut f.log as *mut _ as *mut ());
+ let row:usize=kani::any();kani::assume(row<27);
+ let bi:usize=kani::any();kani::assume(bi<13831);let before=if stop==1{f.bytes[bi]}else{0};
+ let out=super::verify_observed(public,&f.bytes,hash,None);let log=&f.log;
+ assert!(same(log.parse_arg,meta(&f.bytes)));if stop==1{assert_eq!(f.bytes[bi],before);}
+ assert_eq!(log.phase,if stop<5{stop}else{4});
+ if stop>=2{assert!(same_public(log.public_arg.unwrap(),public));assert!(same(log.public_root,log.root));}
+ if stop>=3{assert!(same(log.begin_root,log.root));assert!(same(log.begin_records[row],log.records[row]));assert_eq!(log.begin_t,log.initial);}
+ if stop>=4{assert!(same(log.finish_root,log.root));assert!(same(log.finish_records[row],log.records[row]));assert_eq!(log.finish_t,log.after);assert_eq!(log.finish_c,log.challenges);}
+ if stop<5{assert!(matches!(out,Err(e) if e==log.error));return}
+ let out=out.unwrap();let expected=expected.unwrap();
+ match group{
+ 0=>{assert_eq!(out.roots[ri][rj],expected.0[ri][rj]);},
+ 1=>{assert_eq!(out.challenges,expected.1);assert_eq!(out.alpha[ai],expected.2);},
+ 2=>{assert!(core::ptr::eq(&*out.claims,expected.3));assert_eq!(out.claims[ci][cj],expected.4);},
+ 3=>{assert_eq!(out.extra[qi],expected.5);assert_eq!(out.before_z1[qi],expected.6);},
+ _=>{assert_eq!(out.state_before_z0,expected.7);assert_eq!(out.z,expected.8);let(st,h,r)=crate::r1_wire::NMP_factory::snapshot(&out.transcript);assert_eq!(st,expected.9);assert_eq!(r,expected.10);assert!(h.0==hash.0);}
+ }
+}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_1(){check(1,0,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_2_calllog(){check(2,0,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_3_calllog(){check(3,0,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_4_calllog(){check(4,0,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_0_calllog(){check(5,0,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_1_calllog(){check(5,0,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_2_calllog(){check(5,0,2)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_3_calllog(){check(5,0,3)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_4_calllog(){check(5,0,4)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn reply_control(){check(5,1,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn argument_control(){check(5,2,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn footprint_control(){check(5,3,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_1_reply_control(){check(1,1,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_1_argument_control(){check(1,2,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_2_reply_control(){check(2,1,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_2_argument_control(){check(2,2,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_3_reply_control(){check(3,1,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_3_argument_control(){check(3,2,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_4_reply_control(){check(4,1,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_4_argument_control(){check(4,2,0)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch_1_stability(){check(1,0,0)}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_positive(){let a:[u8;4]=kani::any();let mut b=[0;4];b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<4);assert_eq!(a[i],b[i]);}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_negative(){let a:[u8;4]=kani::any();let mut b=[0;4];b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<4);assert_ne!(a[i],b[i]);}
+
+pub(crate) fn arbitrary_verified<H:Digest32>(hash:H)->Verified<H>{
+ let v=owned();Verified{roots:v.roots,challenges:v.challenges,alpha:v.alpha,claims:v.claims,extra:v.extra,before_z1:v.before_z1,state_before_z0:v.state_before_z0,z:v.z,transcript:crate::r1_wire::NMP_factory::make(hash,v.transcript_state,v.transcript_row)}
+}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_0_transfer(){check_variant(5,0,0,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_0_withdrawal(){check_variant(5,0,0,2)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_1_transfer(){check_variant(5,0,1,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_1_withdrawal(){check_variant(5,0,1,2)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_2_transfer(){check_variant(5,0,2,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_2_withdrawal(){check_variant(5,0,2,2)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_3_transfer(){check_variant(5,0,3,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_3_withdrawal(){check_variant(5,0,3,2)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_4_transfer(){check_variant(5,0,4,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_4_withdrawal(){check_variant(5,0,4,2)}

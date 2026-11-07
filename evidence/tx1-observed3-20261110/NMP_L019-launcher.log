@@ -1,0 +1,25 @@
+{"attempt": "NMP_L019", "exit_status": 0, "wall_seconds": 12.291061541996896, "peak_rss_kib": "5861368", "swaps": "0", "print_axioms": ["'_private.NMP_Canonical179.0.AspisR1.NMP_Canonical179.trace_none' depends on axioms: [propext, Quot.sound]", "'AspisR1.NMP_Canonical179.check' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'_private.NMP_Canonical179.0.AspisR1.NMP_Canonical179.trace_none' depends on axioms: [propext, Quot.sound]
+'AspisR1.NMP_Canonical179.check' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Canonical179.check : ∀ (bytes : Slice U8),
+  Canonical bytes → compact.check_values bytes = ok (core.result.Result.Ok ()) :=
+fun bytes canonical =>
+  have trace :=
+    trace_none (LPl.Check.predicate ↑bytes) ((↑bytes).length / 16) canonical ((↑bytes).length / 16) 0
+      (Decidable.byContradiction fun a => check._proof_1 bytes a)
+      (Decidable.byContradiction fun a => check._proof_2 bytes a);
+  NFU_CompactLeaves.check_result bytes none trace
+
+...
+'_private.NMP_Canonical179.0.AspisR1.NMP_Canonical179.trace_none' depends on axioms: [propext, Quot.sound]
+'AspisR1.NMP_Canonical179.check' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Canonical179.check : ∀ (bytes : Slice U8),
+  Canonical bytes → compact.check_values bytes = ok (core.result.Result.Ok ()) :=
+fun bytes canonical =>
+  have trace :=
+    trace_none (LPl.Check.predicate ↑bytes) ((↑bytes).length / 16) canonical ((↑bytes).length / 16) 0
+      (Decidable.byContradiction fun a => check._proof_1 bytes a)
+      (Decidable.byContradiction fun a => check._proof_2 bytes a);
+  NFU_CompactLeaves.check_result bytes none trace
+
+Running as unit: run-rb2484e2beb4b4b34b97964c6abe0383d.scope; invocation ID: b55a8666fb7d435eb0138f695634d77b

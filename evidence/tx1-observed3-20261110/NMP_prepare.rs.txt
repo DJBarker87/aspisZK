@@ -10,7 +10,7 @@ struct Log<'a>{
  sem_src:Meta,sem_dst:Meta,y_src:Meta,y_dst:Meta,sem_byte:u8,y_byte:u8,observed_sem_byte:u8,constructor_y_byte:u8,
  observed_public:Option<Public<'a>>,observed_bytes:Meta,
  sem_probe:Option<SemProbe>,constructor_probe:Option<SemProbe>,
- view_sem:Meta,view_y:Meta,view_r0:Meta,view_r1:Meta,view_final:Meta,view_inactive:E,view_variant:Variant,
+ view_sem:Meta,view_y:Meta,view_folded:Option<Meta>,view_query:Meta,view_r0:Meta,view_r1:Meta,view_final:Meta,view_inactive:E,view_variant:Variant,
  old_g:E,new_g:E,prepared_ptr:*const Prepared,expected_prepared:Option<PreparedProbe>,owned:Option<Box<Prepared>>,
  error:Error,
 }
@@ -29,13 +29,13 @@ fn any_error()->Error{let t:u8=kani::any();match t%8{0=>Error::Parse,1=>Error::S
 fn codec_error()->CodecError{let t:u8=kani::any();match t%3{0=>CodecError::Length,1=>CodecError::NonZeroHigh,_=>CodecError::NonCanonical}}
 fn filled<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{
  // Allocation and primitive initialization are (bl)(3) transcription steps.
- assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);
+ assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);
  let mut v=Vec::<T>::with_capacity(n);unsafe{core::ptr::write_bytes(v.as_mut_ptr(),0,n);v.set_len(n);}Ok(v)
 }
-fn filled_fail<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{assert_eq!(n,14759);Err(aspis_core::r0::Error::Allocation)}
+fn filled_fail<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(unsafe{*(&_value as *const T as *const u8)},0);Err(aspis_core::r0::Error::Allocation)}
 fn expand_semantic(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
- let log=unsafe{from_source(src,compact::OFF_SEMANTIC)};log.phase=1;log.sem_src=meta(src);log.sem_dst=meta(dst);
- if log.stop==2{return Err(codec_error())}
+ let log=unsafe{from_source(src,compact::OFF_SEMANTIC)};assert_eq!(log.phase,0);log.phase=1;log.sem_src=meta(src);log.sem_dst=meta(dst);
+ if log.stop==1||log.stop==2{return Err(codec_error())}
  assert_eq!(dst.len(),13831);
  let values:[u8;13831]=kani::any();log.sem_byte=values[log.probe_sem];
  // All mutable bytes are independently arbitrary, not a one-byte child law.
@@ -43,7 +43,7 @@ fn expand_semantic(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
  Ok(())
 }
 fn expand_values(src:&[u8],dst:&mut[u8])->Result<(),CodecError>{
- let log=unsafe{from_source(src,compact::OFF_Y1)};log.phase=2;log.y_src=meta(src);log.y_dst=meta(dst);
+ let log=unsafe{from_source(src,compact::OFF_Y1)};assert_eq!(log.phase,1);log.phase=2;log.y_src=meta(src);log.y_dst=meta(dst);
  if log.stop==3{return Err(codec_error())}
  assert_eq!(dst.len(),928);let values:[u8;928]=kani::any();log.y_byte=values[log.probe_y];
  if log.control!=3{unsafe{*(dst.as_mut_ptr() as *mut [u8;928])=values;}}
@@ -62,16 +62,16 @@ fn sem_probe<H:Digest32+Copy>(s:&crate::r1_semantic::Verified<H>,i:usize,ci:usiz
 }
 fn prepared_probe(s:&Prepared,i:usize,ci:usize,ri:usize,qi:usize)->PreparedProbe{PreparedProbe{variant:s.variant,root:s.roots[ri/32][ri%32],gamma:s.gamma,kappa:s.kappa,alpha:s.alpha[ci%2],rho:s.rho,query:s.queries[qi],semantic_alpha:s.semantic_alpha[i%10],z:s.z[ci%2],claim:s.claim,state:s.state[ri%32]}}
 fn observed<H:Digest32>(public:Public<'_>,bytes:&[u8],hash:H,_obs:Observer)->Result<crate::r1_semantic::Verified<H>,crate::r1_wire::Error>{
- let log=unsafe{from_hash(hash)};log.phase=3;log.observed_public=Some(public);log.observed_bytes=meta(bytes);log.observed_sem_byte=bytes[log.probe_sem];
+ let log=unsafe{from_hash(hash)};assert_eq!(log.phase,2);log.phase=3;log.observed_public=Some(public);log.observed_bytes=meta(bytes);log.observed_sem_byte=bytes[log.probe_sem];
  if log.control==2{log.observed_bytes.len+=1;}
  if log.stop==5&&log.control!=1{return Err(crate::r1_semantic::NMP_native::arbitrary_error())}
  let v=arbitrary_verified(hash);log.sem_probe=Some(sem_probe(&v,log.gi,log.ci,log.ri));Ok(v)
 }
 fn constructor<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut[E;29])->Result<Box<Prepared>,Error>{
- let log=unsafe{from_hash(hash)};log.phase=4;log.constructor_probe=Some(sem_probe(sem,log.gi,log.ci,log.ri));
- log.constructor_y_byte=v.y1[log.probe_y];log.view_sem=meta(v.semantic);log.view_y=meta(v.y1);log.view_r0=meta(v.round0);log.view_r1=meta(v.round1);log.view_final=meta(v.final_message);log.view_inactive=v.inactive;log.view_variant=v.variant;
+ let log=unsafe{from_hash(hash)};assert_eq!(log.phase,3);log.phase=4;log.constructor_probe=Some(sem_probe(sem,log.gi,log.ci,log.ri));
+ log.constructor_y_byte=v.y1[log.probe_y];log.view_folded=v.folded_root.map(|b|meta(b));log.view_query=meta(v.query_bytes);log.view_sem=meta(v.semantic);log.view_y=meta(v.y1);log.view_r0=meta(v.round0);log.view_r1=meta(v.round1);log.view_final=meta(v.final_message);log.view_inactive=v.inactive;log.view_variant=v.variant;
  log.old_g=g[log.gi];
- let next=core::array::from_fn(|_|E::NMP_arbitrary());log.new_g=next[log.gi];*g=next;
+ let next=[E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary()];log.new_g=next[log.gi];*g=next;
  if log.stop==6&&log.control!=1{return Err(log.error)}
  let mut p=log.owned.take().unwrap();if log.control==1{p.state[0]^=1;}Ok(p)
 }
@@ -79,19 +79,19 @@ fn arbitrary_prepared()->Box<Prepared>{
  fn e()->E{E::NMP_arbitrary()}
  fn q()->K{crate::r1_semantic::NMP_native::arbitrary_q()}
  let t:u8=kani::any();let variant=match t%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
- Box::new(Prepared{variant,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:q(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|q()),z:core::array::from_fn(|_|SecureCirclePoint{x:q(),y:q()}),claim:e(),state:kani::any()})
+ Box::new(Prepared{variant,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:q(),queries:kani::any(),semantic_alpha:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],z:[SecureCirclePoint{x:q(),y:q()},SecureCirclePoint{x:q(),y:q()}],claim:e(),state:kani::any()})
 }
 fn check(stop:u8,control:u8){
  let t=transition();let p=transfer();let w=withdraw();let variant:bool=kani::any();let public=if variant{Public::Transfer(&p,&t)}else{Public::Withdrawal(&w,&t)};
- let gi:usize=kani::any();kani::assume(gi<29);let mut g=core::array::from_fn(|_|E::NMP_arbitrary());let old_g=g[gi];
+ let gi:usize=kani::any();kani::assume(gi<29);let mut g=[E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary()];let old_g=g[gi];
  let probe_sem:usize=kani::any();let probe_y:usize=kani::any();kani::assume(probe_sem<13831&&probe_y<928);
  let ci:usize=kani::any();let ri:usize=kani::any();let qi:usize=kani::any();kani::assume(ci<3&&ri<64&&qi<22);
  let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
- let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
- let pi:usize=kani::any();kani::assume(pi<57607);let before=f.proof[pi];
+ let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_folded:None,view_query:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
+ // Functional/call-log split after retired K018; proof-buffer frame remains separate.
  let inactive=E::from_le_bytes(&f.proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]);
  let hash=LoggedHash(&mut f.log as *mut _ as *mut ());let out=super::prepare(public,&f.proof,hash,None,&mut g);let log=&f.log;
- assert_eq!(f.proof[pi],before);
+ 
  if stop==1{assert!(matches!(out,Err(Error::Allocation)));assert_eq!(g[gi],old_g);return}
  assert!(same(log.sem_src,meta(&f.proof[compact::OFF_SEMANTIC..compact::OFF_Y1])));assert_eq!(log.sem_dst.len,13831);
  if stop==2{assert!(matches!(out,Err(Error::Parse)));assert_eq!(log.phase,1);assert_eq!(g[gi],old_g);return}
@@ -100,6 +100,7 @@ fn check(stop:u8,control:u8){
  assert!(same_public(log.observed_public.unwrap(),public));assert!(same(log.observed_bytes,log.sem_dst));assert_eq!(log.observed_sem_byte,log.sem_byte);
  if stop==5{assert!(matches!(out,Err(Error::Semantic)));assert_eq!(log.phase,3);assert_eq!(g[gi],old_g);return}
  assert_eq!(log.phase,4);assert_eq!(log.constructor_y_byte,log.y_byte);assert!(log.sem_probe==log.constructor_probe);assert!(same(log.view_sem,log.sem_dst));assert!(same(log.view_y,log.y_dst));
+ assert_eq!(log.view_query.len,0);assert!(same(log.view_folded.unwrap(),meta(&f.proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1])));
  assert!(same(log.view_r0,meta(&f.proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT])));assert!(same(log.view_r1,meta(&f.proof[compact::OFF_ROUND1..compact::OFF_FINAL])));assert!(same(log.view_final,meta(&f.proof[compact::OFF_FINAL..compact::OFF_OPENINGS])));assert_eq!(log.view_inactive,inactive.unwrap());assert_eq!(log.view_variant,Variant::S2);
  assert_eq!(log.old_g,old_g);assert_eq!(g[gi],log.new_g);
  if stop==6{assert!(matches!(out,Err(e) if e==log.error));return}
@@ -152,7 +153,7 @@ fn branch_7(){check(7,0)}
 #[kani::stub(crate::r1_semantic::verify_observed,observed)]
 #[kani::stub(crate::verifier::Prepared::new,constructor)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn allocation_error(){check(1,0)}
+fn allocation_error_result(){check(1,0)}
 #[kani::proof] #[kani::unwind(40)]
 #[kani::stub(aspis_core::r0::heap::filled,filled)]
 #[kani::stub(crate::compact::expand_semantic,expand_semantic)]

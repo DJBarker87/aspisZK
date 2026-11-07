@@ -1,0 +1,587 @@
+'AspisR1.NMP_Reached137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Reached137.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Reached137.fold : ∀ {H : Type} (a b : Cuts H), Agreement a b → run (code a) = run (code b) :=
+fun {H} a b h =>
+  id
+    (id
+      (id
+        (NMP_ReachedAlgebra.bind a.parse b.parse
+          (fun p =>
+            match p with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok p => do
+              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript, begin := a.begin,
+                    mark1 := Code.done (), finish := a.finish }.mark0
+              let t ←
+                { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript, begin := a.begin,
+                        mark1 := Code.done (), finish := a.finish }.publicTranscript
+                    p
+              match t with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok t => do
+                  let __x ←
+                    { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript, begin := a.begin,
+                            mark1 := Code.done (), finish := a.finish }.begin
+                        p t
+                  match __x with
+                    | (r, after) =>
+                      match r with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok ch => do
+                        { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                        { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                            p after ch)
+          (fun p =>
+            match p with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok p => do
+              { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript, begin := b.begin,
+                    mark1 := Code.done (), finish := b.finish }.mark0
+              let t ←
+                { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript, begin := b.begin,
+                        mark1 := Code.done (), finish := b.finish }.publicTranscript
+                    p
+              match t with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok t => do
+                  let __x ←
+                    { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript, begin := b.begin,
+                            mark1 := Code.done (), finish := b.finish }.begin
+                        p t
+                  match __x with
+                    | (r, after) =>
+                      match r with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok ch => do
+                        { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                        { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                            p after ch)
+          h.parse fun lp p hp =>
+          core.result.Result.casesOn (motive := fun t =>
+            p = t →
+              run
+                  (match p with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok p => do
+                    { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript, begin := a.begin,
+                          mark1 := Code.done (), finish := a.finish }.mark0
+                    let t ←
+                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.publicTranscript
+                          p
+                    match t with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok t => do
+                        let __x ←
+                          { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                  begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                              p t
+                        match __x with
+                          | (r, after) =>
+                            match r with
+                            | core.result.Result.Err e => pure (core.result.Result.Err e)
+                            | core.result.Result.Ok ch => do
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                    begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                  p after ch) =
+                run
+                  (match p with
+                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                  | core.result.Result.Ok p => do
+                    { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript, begin := b.begin,
+                          mark1 := Code.done (), finish := b.finish }.mark0
+                    let t ←
+                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.publicTranscript
+                          p
+                    match t with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok t => do
+                        let __x ←
+                          { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                  begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                              p t
+                        match __x with
+                          | (r, after) =>
+                            match r with
+                            | core.result.Result.Err e => pure (core.result.Result.Err e)
+                            | core.result.Result.Ok ch => do
+                              { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                    begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                              { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                      begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                  p after ch))
+            p
+            (fun p_1 h_1 =>
+              Eq.ndrec (motive := fun p =>
+                run a.parse = (lp, ok p) →
+                  run
+                      (match p with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok p => do
+                        { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark0
+                        let t ←
+                          { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                  begin := a.begin, mark1 := Code.done (), finish := a.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                        begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                          begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                      p after ch) =
+                    run
+                      (match p with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok p => do
+                        { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark0
+                        let t ←
+                          { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                  begin := b.begin, mark1 := Code.done (), finish := b.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                      begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                        begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                                  { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                          begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                      p after ch))
+                (fun hp =>
+                  id
+                    (NMP_ReachedAlgebra.bind (a.publicTranscript p_1) (b.publicTranscript p_1)
+                      (fun t =>
+                        match t with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok t => do
+                          let __x ←
+                            { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                    begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                p_1 t
+                          match __x with
+                            | (r, after) =>
+                              match r with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok ch => do
+                                { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                        begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                    p_1 after ch)
+                      (fun t =>
+                        match t with
+                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                        | core.result.Result.Ok t => do
+                          let __x ←
+                            { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                    begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                p_1 t
+                          match __x with
+                            | (r, after) =>
+                              match r with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok ch => do
+                                { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                      begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                                { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                        begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                    p_1 after ch)
+                      (h.publicTranscript lp p_1 hp) fun lt t ht =>
+                      core.result.Result.casesOn (motive := fun t_1 =>
+                        t = t_1 →
+                          run
+                              (match t with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok t => do
+                                let __x ←
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                          begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                      p_1 t
+                                match __x with
+                                  | (r, after) =>
+                                    match r with
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                    | core.result.Result.Ok ch => do
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                            begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                          p_1 after ch) =
+                            run
+                              (match t with
+                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                              | core.result.Result.Ok t => do
+                                let __x ←
+                                  { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                          begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                      p_1 t
+                                match __x with
+                                  | (r, after) =>
+                                    match r with
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                    | core.result.Result.Ok ch => do
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                            begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                          p_1 after ch))
+                        t
+                        (fun t_1 h_2 =>
+                          Eq.ndrec (motive := fun t =>
+                            run (a.publicTranscript p_1) = (lt, ok t) →
+                              run
+                                  (match t with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok t => do
+                                    let __x ←
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                          p_1 t
+                                    match __x with
+                                      | (r, after) =>
+                                        match r with
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                        | core.result.Result.Ok ch => do
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                publicTranscript := a.publicTranscript, begin := a.begin,
+                                                mark1 := Code.done (), finish := a.finish }.mark1
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                  publicTranscript := a.publicTranscript, begin := a.begin,
+                                                  mark1 := Code.done (), finish := a.finish }.finish
+                                              p_1 after ch) =
+                                run
+                                  (match t with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok t => do
+                                    let __x ←
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                          p_1 t
+                                    match __x with
+                                      | (r, after) =>
+                                        match r with
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                        | core.result.Result.Ok ch => do
+                                          { parse := b.parse, mark0 := Code.done (),
+                                                publicTranscript := b.publicTranscript, begin := b.begin,
+                                                mark1 := Code.done (), finish := b.finish }.mark1
+                                          { parse := b.parse, mark0 := Code.done (),
+                                                  publicTranscript := b.publicTranscript, begin := b.begin,
+                                                  mark1 := Code.done (), finish := b.finish }.finish
+                                              p_1 after ch))
+                            (fun ht =>
+                              NMP_ReachedAlgebra.bind (a.begin p_1 t_1) (b.begin p_1 t_1)
+                                (fun __x =>
+                                  match __x with
+                                  | (r, after) =>
+                                    match r with
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                    | core.result.Result.Ok ch => do
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                            begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                          p_1 after ch)
+                                (fun __x =>
+                                  match __x with
+                                  | (r, after) =>
+                                    match r with
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                    | core.result.Result.Ok ch => do
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                            begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                          p_1 after ch)
+                                (h.begin lp p_1 lt t_1 hp ht) fun lb reply hb =>
+                                let ⟨reply, after, hb⟩ := reply
+                                core.result.Result.casesOn (motive := fun t =>
+                                  reply = t →
+                                    run
+                                        (match (reply, after) with
+                                        | (r, after) =>
+                                          match r with
+                                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                          | core.result.Result.Ok ch => do
+                                            { parse := a.parse, mark0 := Code.done (),
+                                                  publicTranscript := a.publicTranscript, begin := a.begin,
+                                                  mark1 := Code.done (), finish := a.finish }.mark1
+                                            { parse := a.parse, mark0 := Code.done (),
+                                                    publicTranscript := a.publicTranscript, begin := a.begin,
+                                                    mark1 := Code.done (), finish := a.finish }.finish
+                                                p_1 after ch) =
+                                      run
+                                        (match (reply, after) with
+                                        | (r, after) =>
+                                          match r with
+                                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                          | core.result.Result.Ok ch => do
+                                            { parse := b.parse, mark0 := Code.done (),
+                                                  publicTranscript := b.publicTranscript, begin := b.begin,
+                                                  mark1 := Code.done (), finish := b.finish }.mark1
+                                            { parse := b.parse, mark0 := Code.done (),
+                                                    publicTranscript := b.publicTranscript, begin := b.begin,
+                                                    mark1 := Code.done (), finish := b.finish }.finish
+                                                p_1 after ch))
+                                  reply
+                                  (fun c h_3 =>
+                                    Eq.ndrec (motive := fun reply =>
+                                      run (a.begin p_1 t_1) = (lb, ok (reply, after)) →
+                                        run
+                                            (match (reply, after) with
+                                            | (r, after) =>
+                                              match r with
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                              | core.result.Result.Ok ch => do
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                      publicTranscript := a.publicTranscript, begin := a.begin,
+                                                      mark1 := Code.done (), finish := a.finish }.mark1
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                        publicTranscript := a.publicTranscript, begin := a.begin,
+                                                        mark1 := Code.done (), finish := a.finish }.finish
+                                                    p_1 after ch) =
+                                          run
+                                            (match (reply, after) with
+                                            | (r, after) =>
+                                              match r with
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                              | core.result.Result.Ok ch => do
+                                                { parse := b.parse, mark0 := Code.done (),
+                                                      publicTranscript := b.publicTranscript, begin := b.begin,
+                                                      mark1 := Code.done (), finish := b.finish }.mark1
+                                                { parse := b.parse, mark0 := Code.done (),
+                                                        publicTranscript := b.publicTranscript, begin := b.begin,
+                                                        mark1 := Code.done (), finish := b.finish }.finish
+                                                    p_1 after ch))
+                                      (fun hb => h.finish lp p_1 lt t_1 lb c after hp ht hb) (Eq.symm h_3) hb)
+                                  (fun e h =>
+                                    Eq.ndrec (motive := fun reply =>
+                                      run (a.begin p_1 t_1) = (lb, ok (reply, after)) →
+                                        run
+                                            (match (reply, after) with
+                                            | (r, after) =>
+                                              match r with
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                              | core.result.Result.Ok ch => do
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                      publicTranscript := a.publicTranscript, begin := a.begin,
+                                                      mark1 := Code.done (), finish := a.finish }.mark1
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                        publicTranscript := a.publicTranscript, begin := a.begin,
+                                                        mark1 := Code.done (), finish := a.finish }.finish
+                                                    p_1 after ch) =
+                                          run
+                                            (match (reply, after) with
+                                            | (r, after) =>
+                                              match r with
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                              | core.result.Result.Ok ch => do
+                                                { parse := b.parse, mark0 := Code.done (),
+                                                      publicTranscript := b.publicTranscript, begin := b.begin,
+                                                      mark1 := Code.done (), finish := b.finish }.mark1
+                                                { parse := b.parse, mark0 := Code.done (),
+                                                        publicTranscript := b.publicTranscript, begin := b.begin,
+                                                        mark1 := Code.done (), finish := b.finish }.finish
+                                                    p_1 after ch))
+                                      (fun hb =>
+                                        Eq.refl
+                                          (run
+                                            (match (core.result.Result.Err e, after) with
+                                            | (r, after) =>
+                                              match r with
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                              | core.result.Result.Ok ch => do
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                      publicTranscript := a.publicTranscript, begin := a.begin,
+                                                      mark1 := Code.done (), finish := a.finish }.mark1
+                                                { parse := a.parse, mark0 := Code.done (),
+                                                        publicTranscript := a.publicTranscript, begin := a.begin,
+                                                        mark1 := Code.done (), finish := a.finish }.finish
+                                                    p_1 after ch)))
+                                      (Eq.symm h) hb)
+                                  (Eq.refl reply))
+                            (Eq.symm h_2) ht)
+                        (fun e h =>
+                          Eq.ndrec (motive := fun t =>
+                            run (a.publicTranscript p_1) = (lt, ok t) →
+                              run
+                                  (match t with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok t => do
+                                    let __x ←
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                          p_1 t
+                                    match __x with
+                                      | (r, after) =>
+                                        match r with
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                        | core.result.Result.Ok ch => do
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                publicTranscript := a.publicTranscript, begin := a.begin,
+                                                mark1 := Code.done (), finish := a.finish }.mark1
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                  publicTranscript := a.publicTranscript, begin := a.begin,
+                                                  mark1 := Code.done (), finish := a.finish }.finish
+                                              p_1 after ch) =
+                                run
+                                  (match t with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok t => do
+                                    let __x ←
+                                      { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                          p_1 t
+                                    match __x with
+                                      | (r, after) =>
+                                        match r with
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                        | core.result.Result.Ok ch => do
+                                          { parse := b.parse, mark0 := Code.done (),
+                                                publicTranscript := b.publicTranscript, begin := b.begin,
+                                                mark1 := Code.done (), finish := b.finish }.mark1
+                                          { parse := b.parse, mark0 := Code.done (),
+                                                  publicTranscript := b.publicTranscript, begin := b.begin,
+                                                  mark1 := Code.done (), finish := b.finish }.finish
+                                              p_1 after ch))
+                            (fun ht =>
+                              Eq.refl
+                                (run
+                                  (match core.result.Result.Err e with
+                                  | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                  | core.result.Result.Ok t => do
+                                    let __x ←
+                                      { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                          p_1 t
+                                    match __x with
+                                      | (r, after) =>
+                                        match r with
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                        | core.result.Result.Ok ch => do
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                publicTranscript := a.publicTranscript, begin := a.begin,
+                                                mark1 := Code.done (), finish := a.finish }.mark1
+                                          { parse := a.parse, mark0 := Code.done (),
+                                                  publicTranscript := a.publicTranscript, begin := a.begin,
+                                                  mark1 := Code.done (), finish := a.finish }.finish
+                                              p_1 after ch)))
+                            (Eq.symm h) ht)
+                        (Eq.refl t)))
+                (Eq.symm h_1) hp)
+            (fun e h =>
+              Eq.ndrec (motive := fun p =>
+                run a.parse = (lp, ok p) →
+                  run
+                      (match p with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok p => do
+                        { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark0
+                        let t ←
+                          { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                  begin := a.begin, mark1 := Code.done (), finish := a.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                        begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                          begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                      p after ch) =
+                    run
+                      (match p with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok p => do
+                        { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                              begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark0
+                        let t ←
+                          { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                  begin := b.begin, mark1 := Code.done (), finish := b.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                      begin := b.begin, mark1 := Code.done (), finish := b.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                        begin := b.begin, mark1 := Code.done (), finish := b.finish }.mark1
+                                  { parse := b.parse, mark0 := Code.done (), publicTranscript := b.publicTranscript,
+                                          begin := b.begin, mark1 := Code.done (), finish := b.finish }.finish
+                                      p after ch))
+                (fun hp =>
+                  Eq.refl
+                    (run
+                      (match core.result.Result.Err e with
+                      | core.result.Result.Err e => pure (core.result.Result.Err e)
+                      | core.result.Result.Ok p => do
+                        { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                              begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark0
+                        let t ←
+                          { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                  begin := a.begin, mark1 := Code.done (), finish := a.finish }.publicTranscript
+                              p
+                        match t with
+                          | core.result.Result.Err e => pure (core.result.Result.Err e)
+                          | core.result.Result.Ok t => do
+                            let __x ←
+                              { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                      begin := a.begin, mark1 := Code.done (), finish := a.finish }.begin
+                                  p t
+                            match __x with
+                              | (r, after) =>
+                                match r with
+                                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                                | core.result.Result.Ok ch => do
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                        begin := a.begin, mark1 := Code.done (), finish := a.finish }.mark1
+                                  { parse := a.parse, mark0 := Code.done (), publicTranscript := a.publicTranscript,
+                                          begin := a.begin, mark1 := Code.done (), finish := a.finish }.finish
+                                      p after ch)))
+                (Eq.symm h) hp)
+            (Eq.refl p))))

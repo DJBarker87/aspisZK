@@ -5,3 +5,5 @@ L006: the adopted code retains explicit lifted try/Residual administrative nodes
 L008: resource carrier used Lean reserved word protected as a binder; parser rejected it before any theorem audit. L014 renames the binder to objectId in OWN new modules. No target semantics changed.
 
 L014 also exposed reserved binder prefix; L015 changes it to headLog. Both parser failures are retained and neither provides theorem credit.
+
+Native queue stopped after K008 because assert_ne emits Kani runtime-format placeholder, not the literal assertion failed string. Reviewed sole failure in core::panicking::assert_failed_inner against the source control. No proof rerun; own validator recognizes that exact31-check/K008 shape only. Original false result remains in VERDICTS, correction in CONTROL_REVIEWS.

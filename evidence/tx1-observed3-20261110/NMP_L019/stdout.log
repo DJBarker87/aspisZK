@@ -1,0 +1,10 @@
+'_private.NMP_Canonical179.0.AspisR1.NMP_Canonical179.trace_none' depends on axioms: [propext, Quot.sound]
+'AspisR1.NMP_Canonical179.check' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Canonical179.check : ∀ (bytes : Slice U8),
+  Canonical bytes → compact.check_values bytes = ok (core.result.Result.Ok ()) :=
+fun bytes canonical =>
+  have trace :=
+    trace_none (LPl.Check.predicate ↑bytes) ((↑bytes).length / 16) canonical ((↑bytes).length / 16) 0
+      (Decidable.byContradiction fun a => check._proof_1 bytes a)
+      (Decidable.byContradiction fun a => check._proof_2 bytes a);
+  NFU_CompactLeaves.check_result bytes none trace

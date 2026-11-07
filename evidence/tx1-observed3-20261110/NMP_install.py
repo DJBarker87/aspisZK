@@ -26,3 +26,9 @@ release.update({n:r['sha256'] for n,r in json.loads((B/'NMP_POOL_FROZEN.json').r
 for n,h in expected.items():assert release[n]==h,('frozen overlay base mismatch',n)
 (B/'NMP_SOURCE_PINS.json').write_text(json.dumps(allpins,indent=1));(B/'NMP_FROZEN_FILE_PINS.json').write_text('{}');(B/'NMP_BASE_EXPECTED.json').write_text(json.dumps(release,indent=1))
 print('Installed NMP cfg-only harnesses; hashes and patch recorded')
+
+removed=[]
+for p in (B/'NMP_tmp').rglob('*'):
+ if p.is_file() and (p.name.startswith('external-sat') and p.suffix=='.cnf' or p.name.startswith('smt2_dec_problem')):
+  removed.append(dict(path=str(p),bytes=p.stat().st_size));p.unlink()
+(B/'NMP_TEMP_CLEANUP.json').write_text(json.dumps(dict(files=removed,bytes=sum(r['bytes'] for r in removed),tmpdir_retained=True,target_retained=True),indent=1))
