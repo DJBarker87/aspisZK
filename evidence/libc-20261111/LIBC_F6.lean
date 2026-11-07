@@ -3,7 +3,7 @@ import NHS_CheckpointPacket
 set_option autoImplicit false
 noncomputable section
 namespace LIBC_F6
-open Aeneas Aeneas.Std RSL
+open Aeneas Aeneas.Std RSL AspisR1
 /-- No invented post-abort state: the allocation outcome has exactly the
 empty event prefix and the successful path has all three actual digest calls. -/
 theorem outcomes (a : LIBC_Checkpoint.Args) (env : Env) (o : Obs Bytes) :

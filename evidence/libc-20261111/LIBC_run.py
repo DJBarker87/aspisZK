@@ -64,7 +64,14 @@ if kind=='lean':
  n='LIBC_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'LIBC_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LIBC_generated','-o','LIBC_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['LIBC_Driver','LIBC_ProofDriver','LIBC_PoolProofDriver','LIBC_PoolDriver']:command+=['-c','LIBC_native/'+target+'.c']
-else:raise ValueError('LIB runner supports one Lean module per scope')
+elif kind=='audit':
+ files['LIBC_AUDIT_ROOTS.json']=(E/'LIBC_AUDIT_ROOTS.json').read_text()
+ files['LIBC_AUDIT_MODULES.json']=(E/'LIBC_AUDIT_MODULES.json').read_text()
+ files['NLX_AUDIT_ROOTS.json']=files['LIBC_AUDIT_ROOTS.json']
+ files['NLX_AUDIT_MODULES.json']=files['LIBC_AUDIT_MODULES.json']
+ files['LIBC_audit.py']=(E/'LIBC_audit.py').read_text()
+ command=['python3','LIBC_audit.py',target]
+else:raise ValueError('Unsupported scoped target')
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/LIBC_tmp',CARGO_TARGET_DIR=B+'/LIBC_target',LEAN_PATH=':'.join([B+'/LIBC_objects']+json.loads((E/'LIBC_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path

@@ -10,9 +10,9 @@ theorem returned (a : Args) (env : Env) (r : Output) (ev : List Event) :
  child.law a env ⟨.ret r,ev⟩ ↔ ∃ native,
  model a env=.ok native ∧ r=port native ∧ ev=render (history a env) := by
  cases h : model a env <;> simp [child,LIB_Carriers.resultGraph,LIB_Carriers.resultObs,h]
-theorem functional (a : Args) : Child.Functional child := by
- intro x env o₁ o₂ h₁ h₂
- exact h₁.trans h₂.symm
+theorem functional : Child.Functional child := by
+ intro a _ env
+ exact ⟨LIB_Carriers.resultObs port (render (history a env)) (model a env),fun _ => Iff.rfl⟩
 /-- The checksum/folded-root input is the exact original B32, not a
 separately selected root or digest. -/
 theorem folded_same (a : Args) : LIB_Carriers.b32 (folded a)=a.2.2.1 := LIB_Env.key_roundtrip _
