@@ -13,3 +13,5 @@ L020: wideView field compiled from NHF_ViewResult.model/result at SAME proof/sem
 L027/L030: semantic expansion model and field compile. Mathematical interval selection reconstructs each output byte from CLOSED NGV header/payload laws, never from a native Cut image. Model dimensions and mutable output are complete at7015/13831. output_length uses a symbolic finite-list lemma to avoid reducing13831 cells. Standard axioms only. All four module19 fields are ready for LIB_ bundling; LIBC_VPrepare grouping is next.
 
 L029: F3 error support compiles. Fixed actual installation, both query/claim returned Err arms, fail/div, and full model equality. This is not yet a complete PreparedNew field: allocation/digest prefixes and own-input/caller clauses remain.
+
+L031: LIBC_VPrepare exports all four fields with exact RSL carrier types; each has its own graph/Returns/native-model association. Module19 DONE as a field-group export, not a VLib bundle or ledger row. L034: PreparedLog.full_result proves the full canonical typed hash-code result equals the emitted constructor at the same sem/View/g; ordered events come from that one code, not inferred from output equality.
