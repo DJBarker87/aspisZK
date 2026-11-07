@@ -1,0 +1,39 @@
+LIBB_PoolLib.library : RSL.PoolLib
+LIBB_PoolLib.deployed : RSL.DeployedIds
+LIBB_PoolLib.values : NND_PoolValues.Values LIBB_PoolLib.library
+LIBB_PoolNoWrite.laws : NMV_NoWrite.PoolLaws LIBB_PoolLib.library
+LIBB_PoolLib.scanner_extent : NMS_R2Facts242.ScannerExtent LIBB_PoolLib.library
+LIBB_EnvCommon.resolved (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (len : (↑proof).length = 57607)
+  (result : NJU_CommonObserved.R Unit)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (native :
+    NLT_NativeInvocation.Invocation (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) result
+      records)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  result = LIBB_Tx2EnvCode.common env pub proof ck ∧
+    List.map NLT_NativeInvocation.actual records = (LIBB_Tx2EnvCode.observed env pub proof ck).events
+LIBB_EnvCommon.stopped (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (len : (↑proof).length = 57607)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env))
+  (native :
+    NLT_C04Stop.At (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) records cut)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  ∃ reply suffix,
+    (LIBB_Tx2EnvCode.observed env pub proof ck).events =
+      List.map NLT_NativeInvocation.actual records ++
+        NJU_CommonObserved.Event.merkle cut.proof cut.prepared cut.folded reply :: suffix
+LIBB_EnvCommon.stopped_query (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (len : (↑proof).length = 57607) (root0 : NLP_InputDomain.Root0 ck proof)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env))
+  (native :
+    NLT_C04Stop.At (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) records cut)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  NLL_Prefix.At
+    (NLL_Parent.plan (LIBB_PartitionEnv.H env) cut.proof
+      (NLP_RootCodec.parsed cut.proof (AspisR1.Port3_BatchStage.root1 cut.prepared)) cut.prepared.queries 1#usize
+      (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+    (cut.inside ++ cut.pending.answered) cut.pending.parts

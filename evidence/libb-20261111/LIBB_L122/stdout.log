@@ -1,0 +1,694 @@
+LIBB_PoolCarriers.exact_carriers :
+  LIBB_PoolCarriers.Request = LIB_PoolCarriers.Request ∧
+    LIBB_PoolCarriers.Statement = LIB_PoolCarriers.Statement ∧
+      LIBB_PoolCarriers.Afterstate = LIB_PoolCarriers.Afterstate
+LIBB_ResultTotal.equation {A : Type} (r : Aeneas.Std.Result A) (h : LIBB_ResultTotal.Total r) :
+  r = Aeneas.Std.Result.ok (LIBB_ResultTotal.value r h)
+LIBB_ResultTotal.pure {A : Type} (a : A) : LIBB_ResultTotal.Total (Aeneas.Std.Result.ok a)
+LIBB_ResultTotal.bind {A B : Type} (r : Aeneas.Std.Result A) (k : A → Aeneas.Std.Result B)
+  (hr : LIBB_ResultTotal.Total r) (hk : ∀ (a : A), LIBB_ResultTotal.Total (k a)) : LIBB_ResultTotal.Total (r >>= k)
+LIBB_ResultTotal.outer {A B : Type} (r : Aeneas.Std.Result A) (f : A → B) (hr : LIBB_ResultTotal.Total r) :
+  LIBB_ResultTotal.Total (LIBB_ResultTotal.mapOuter f r)
+LIBB_Bytes.from_bytes (b : Aeneas.Std.Slice Aeneas.Std.U8)
+  (h : List.length (LIBB_Bytes.bytes b) ≤ Aeneas.Std.Usize.max) : LIBB_Bytes.fromBytes (LIBB_Bytes.bytes b) h = b
+LIBB_Bytes.bytes_from (bs : RSL.Bytes) (h : List.length bs ≤ Aeneas.Std.Usize.max) :
+  LIBB_Bytes.bytes (LIBB_Bytes.fromBytes bs h) = bs
+LIBB_Bytes.bytes_bound (b : Aeneas.Std.Slice Aeneas.Std.U8) : List.length (LIBB_Bytes.bytes b) ≤ Aeneas.Std.Usize.max
+LIBB_PolicyValue.back (p : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1) :
+  LIBB_PolicyValue.unpolicy (NND_Carrier.policy p) = p
+LIBB_PolicyValue.forth (p : RSL.VerifierPolicy) : NND_Carrier.policy (LIBB_PolicyValue.unpolicy p) = p
+LIBB_PolicyValue.total (p : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1) :
+  LIBB_ResultTotal.Total (NHY_PolicyModel.policy p)
+LIBB_PolicyValue.native (p : AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1) :
+  LIBB_ResultTotal.mapOuter LIBB_PolicyValue.isOk (NHY_PolicyModel.policy p) =
+    Aeneas.Std.Result.ok (LIBB_PolicyValue.validate (NND_Carrier.policy p))
+LIBB_V1ValidatorTotal.registry (r : NJI_V1Carrier.R) : LIBB_ResultTotal.Total (NJI_V1Models.registry r)
+LIBB_V1ValidatorTotal.entry (r : NJI_V1Carrier.E) : LIBB_ResultTotal.Total (NJI_V1Models.entry r)
+LIBB_V1ValidatorTotal.status (v : Aeneas.Std.U8) :
+  LIBB_ResultTotal.Total
+    (NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierEntryStatusV1.Insts.CoreConvertTryFromU8PoolV1VerifierRegistryFormatError.try_from
+      v)
+LIBB_V1DecoderTotal.registry_model (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NJQ_Registry.model b)
+LIBB_V1DecoderTotal.entry_model (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NJQ_Entry.model b)
+LIBB_V1DecoderTotal.registry (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NJQ_Canonical.registry b)
+LIBB_V1DecoderTotal.entry (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NJQ_Canonical.entry b)
+LIBB_V1DecoderValues.registry_bytes (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_V1DecoderValues.registry (LIBB_Bytes.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.registryV1 (LIBB_ResultTotal.value (NJQ_Canonical.registry b) ⋯)
+LIBB_V1DecoderValues.entry_bytes (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_V1DecoderValues.entry (LIBB_Bytes.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.entryV1 (LIBB_ResultTotal.value (NJQ_Canonical.entry b) ⋯)
+LIBB_V1DecoderValues.registry_result (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.registryV1) (NJQ_Canonical.registry b) =
+    Aeneas.Std.Result.ok (LIBB_V1DecoderValues.registry (LIBB_Bytes.bytes b))
+LIBB_V1DecoderValues.entry_result (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.entryV1) (NJQ_Canonical.entry b) =
+    Aeneas.Std.Result.ok (LIBB_V1DecoderValues.entry (LIBB_Bytes.bytes b))
+LIBB_V2ValidatorTotal.zero_binding (b : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  LIBB_ResultTotal.Total (NCX_Reference.required_binding_is_zero b)
+LIBB_V2ValidatorTotal.zero_binding_value (b : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  NCX_Reference.required_binding_is_zero b = Aeneas.Std.Result.ok (decide (↑b = List.replicate 32 0#u8))
+LIBB_V2ValidatorTotal.registry (r : NCX_Reference.VerifierRegistryV2) :
+  LIBB_ResultTotal.Total (NCX_Reference.validate_verifier_registry_v2 r)
+LIBB_V2ValidatorTotal.entry (r : NCX_Reference.VerifierRegistryEntryV2) :
+  LIBB_ResultTotal.Total (NCX_Reference.validate_verifier_registry_entry_v2 r)
+LIBB_V2DecoderTotal.registry_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.Total (NHY_RegistryModel.body b)
+LIBB_V2DecoderTotal.entry_model (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NIJ_EntryModel.body b)
+LIBB_V2DecoderTotal.registry (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NCX_Install.op33 b)
+LIBB_V2DecoderTotal.entry (b : Aeneas.Std.Slice Aeneas.Std.U8) : LIBB_ResultTotal.Total (NCX_Install.op34 b)
+LIBB_V2DecoderValues.registry_bytes (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_V2DecoderValues.registry (LIBB_Bytes.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.registryV2 (LIBB_ResultTotal.value (NCX_Install.op33 b) ⋯)
+LIBB_V2DecoderValues.entry_bytes (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_V2DecoderValues.entry (LIBB_Bytes.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.entryV2 (LIBB_ResultTotal.value (NCX_Install.op34 b) ⋯)
+LIBB_V2DecoderValues.registry_result (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.registryV2) (NCX_Install.op33 b) =
+    Aeneas.Std.Result.ok (LIBB_V2DecoderValues.registry (LIBB_Bytes.bytes b))
+LIBB_V2DecoderValues.entry_result (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.entryV2) (NCX_Install.op34 b) =
+    Aeneas.Std.Result.ok (LIBB_V2DecoderValues.entry (LIBB_Bytes.bytes b))
+LIBB_PoolRegistry.policy_root {E : Type} (missing : AspisR1.IDa_Deployed.Uninstalled E) (devnet : Bool) (indexError : E)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (p : NHY_PolicyModel.Policy) :
+  LIBB_ResultTotal.mapOuter LIBB_PolicyValue.isOk
+      ((NHJ_DeployedIds.configuration (NHY_PolicyModel.bindPolicy missing) devnet indexError reservation).adapter.op15
+        p) =
+    Aeneas.Std.Result.ok (LIBB_PoolRegistry.validatePolicy (NND_Carrier.policy p))
+LIBB_PoolRegistry.registry1_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.registryV1)
+      (NJQ_Canonical.mapOuter NJQ_Canonical.registryResult (NJY_Registry.model b)) =
+    Aeneas.Std.Result.ok (LIBB_PoolRegistry.decodeRegistryV1 (NND_Carrier.bytes b))
+LIBB_PoolRegistry.entry1_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.entryV1)
+      (NJQ_Canonical.mapOuter NJQ_Canonical.entryResult (NJY_Entry.model b)) =
+    Aeneas.Std.Result.ok (LIBB_PoolRegistry.decodeEntryV1 (NND_Carrier.bytes b))
+LIBB_PoolRegistry.registry1_root (b : Aeneas.Std.Slice Aeneas.Std.U8) (log : Option NJI_V1Carrier.R)
+  (out : Aeneas.Std.core.result.Result NJI_V1Carrier.R NJI_V1Carrier.F) (cut : NJY_Registry.Cut b log out) :
+  LIBB_V1DecoderValues.asOption NND_Carrier.registryV1 (NJQ_Canonical.registryResult out) =
+    LIBB_PoolRegistry.decodeRegistryV1 (NND_Carrier.bytes b)
+LIBB_PoolRegistry.entry1_root (b : Aeneas.Std.Slice Aeneas.Std.U8) (log : Option NJI_V1Carrier.E)
+  (out : Aeneas.Std.core.result.Result NJI_V1Carrier.E NJI_V1Carrier.F) (cut : NJY_Entry.Cut b log out) :
+  LIBB_V1DecoderValues.asOption NND_Carrier.entryV1 (NJQ_Canonical.entryResult out) =
+    LIBB_PoolRegistry.decodeEntryV1 (NND_Carrier.bytes b)
+LIBB_PoolRegistry.registry2_root (base : AdapterRw.Ops) (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.registryV2) do
+      let reply ← NHY_RegistryModel.body b
+      Aeneas.Std.Result.ok (NCX_Install.mapReturn NCX_Carrier.registry reply)) =
+    Aeneas.Std.Result.ok (LIBB_PoolRegistry.decodeRegistryV2 (NND_Carrier.bytes b))
+LIBB_PoolRegistry.entry2_root (base : AdapterRw.Ops) (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.entryV2) do
+      let reply ← NIJ_EntryModel.body b
+      Aeneas.Std.Result.ok (NCX_Install.mapReturn NCX_Carrier.entry reply)) =
+    Aeneas.Std.Result.ok (LIBB_PoolRegistry.decodeEntryV2 (NND_Carrier.bytes b))
+LIBB_PoolRegistry.registry1_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolRegistry.decodeRegistryV1 b)) env (LIBB_PoolRegistry.decodeRegistryV1 b)
+LIBB_PoolRegistry.registry2_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolRegistry.decodeRegistryV2 b)) env (LIBB_PoolRegistry.decodeRegistryV2 b)
+LIBB_PoolRegistry.entry1_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolRegistry.decodeEntryV1 b)) env (LIBB_PoolRegistry.decodeEntryV1 b)
+LIBB_PoolRegistry.entry2_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolRegistry.decodeEntryV2 b)) env (LIBB_PoolRegistry.decodeEntryV2 b)
+LIBB_AccountCarriers.byte : NMX_R2_Carrier.byte = NND_Carrier.byte
+LIBB_AccountCarriers.word : NMX_R2_Carrier.word = NND_Carrier.word
+LIBB_AccountCarriers.long : NMX_R2_Carrier.long = NND_Carrier.slot
+LIBB_AccountCarriers.bytes (b : Aeneas.Std.Slice Aeneas.Std.U8) : NMX_R2_Carrier.bytes b = NND_Carrier.bytes b
+LIBB_AccountCarriers.master (m : NMX_OwnedPackets.Master) : NMX_R2_Carrier.master m = NND_Carrier.master m
+LIBB_AccountCarriers.checkpoint (c : NMX_OwnedPackets.Checkpoint) :
+  NMX_R2_Carrier.checkpoint c = NND_Carrier.checkpoint c
+LIBB_AccountGraph.tail_option {A B F : Type} (f : A → B) (r : Aeneas.Std.core.result.Result A F) :
+  LIBB_V1DecoderValues.asOption f (NKF_BoxModel.tail r) = LIBB_V1DecoderValues.asOption f r
+LIBB_AccountGraph.project {A B F : Type} (f : A → B) (raw : Aeneas.Std.Result (Aeneas.Std.core.result.Result A F))
+  (decoded : Aeneas.Std.core.result.Result A AdapterRw.solana_program_error.ProgramError)
+  (h : NJQ_Canonical.mapOuter NKF_BoxModel.tail raw = Aeneas.Std.Result.ok decoded) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption f) raw =
+    Aeneas.Std.Result.ok (LIBB_V1DecoderValues.asOption f decoded)
+LIBB_AccountGraph.master_same (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_AccountDecoderReuse.master (NND_Carrier.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.master (NMX_MasterValue.decoded b)
+LIBB_AccountGraph.checkpoint_same (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_AccountDecoderReuse.checkpoint (NND_Carrier.bytes b) =
+    LIBB_V1DecoderValues.asOption NND_Carrier.checkpoint (NMX_CheckpointValue.decoded b)
+LIBB_AccountGraph.master_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.master) (NJQ_Canonical.master b) =
+    Aeneas.Std.Result.ok (LIBB_AccountDecoderReuse.master (NND_Carrier.bytes b))
+LIBB_AccountGraph.checkpoint_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.checkpoint) (NJQ_Canonical.checkpoint b) =
+    Aeneas.Std.Result.ok (LIBB_AccountDecoderReuse.checkpoint (NND_Carrier.bytes b))
+LIBB_PoolAccounts.master_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.master) (NJQ_Canonical.master b) =
+    Aeneas.Std.Result.ok (LIBB_AccountDecoderReuse.master (NND_Carrier.bytes b))
+LIBB_PoolAccounts.checkpoint_model (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.checkpoint) (NJQ_Canonical.checkpoint b) =
+    Aeneas.Std.Result.ok (LIBB_AccountDecoderReuse.checkpoint (NND_Carrier.bytes b))
+LIBB_PoolAccounts.master_root (b : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out : Aeneas.Std.core.result.Result NJQ_Master.M NJQ_Master.F) (cut : NJY_Master.Cut b out) :
+  LIBB_V1DecoderValues.asOption NND_Carrier.master (NJQ_Carrier.master_result out) =
+    LIBB_PoolAccounts.decodeMaster (NND_Carrier.bytes b)
+LIBB_PoolAccounts.checkpoint_root (b : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out : Aeneas.Std.core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F) (cut : NJY_Checkpoint.Cut b out) :
+  LIBB_V1DecoderValues.asOption NND_Carrier.checkpoint (NJQ_Carrier.checkpoint_result out) =
+    LIBB_PoolAccounts.decodeCheckpoint (NND_Carrier.bytes b)
+LIBB_PoolAccounts.master_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolAccounts.decodeMaster b)) env (LIBB_PoolAccounts.decodeMaster b)
+LIBB_PoolAccounts.checkpoint_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolAccounts.decodeCheckpoint b)) env (LIBB_PoolAccounts.decodeCheckpoint b)
+LIBB_NullifierBytes.injective : Function.Injective LIBB_NullifierBytes.key
+LIBB_NullifierBytes.roundtrip (d : LIBB_NullifierBytes.Digest) :
+  LIBB_NullifierBytes.digest (LIBB_NullifierBytes.key d) = some d
+LIBB_PoolDecoders.decode_root (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption id) (AspisR1.NFY_JHd_RequestNative.decode b) =
+    Aeneas.Std.Result.ok (LIBB_PoolDecoders.decodeRequest (LIB_Carriers.bytes b))
+LIBB_PoolDecoders.nullifier_source (q : LIBB_PoolCarriers.Request) :
+  LIBB_ResultTotal.mapOuter LIBB_NullifierBytes.key (NMS_RequestModels.nullifier q.public) =
+    Aeneas.Std.Result.ok (LIBB_PoolDecoders.reqNullifier q)
+LIBB_PoolDecoders.outputLane_source (d : LIBB_NullifierBytes.Digest) :
+  LIBB_ResultTotal.mapOuter (LIBB_V1DecoderValues.asOption NND_Carrier.byte) (NMS_RequestModels.outputLane d) =
+    Aeneas.Std.Result.ok (LIBB_PoolDecoders.outputLane (LIBB_NullifierBytes.key d))
+LIBB_PoolDecoders.profile_exact (q : LIBB_PoolCarriers.Request) :
+  LIBB_PoolDecoders.reqProfile q = LIB_Carriers.b32 q.verifier_profile
+LIBB_PoolDecoders.release_exact (q : LIBB_PoolCarriers.Request) :
+  LIBB_PoolDecoders.reqRelease q = LIB_Carriers.b32 q.verifier_release
+LIBB_PoolDecoders.program_exact (q : LIBB_PoolCarriers.Request) :
+  LIBB_PoolDecoders.reqPoolProgram q = LIB_Carriers.b32 q.pool_program
+LIBB_PoolDecoders.decode_returns (b : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolDecoders.decodeRequest b)) env (LIBB_PoolDecoders.decodeRequest b)
+LIBB_PoolDecoders.lane_returns (b : RSL.B32) (env : RSL.Env) :
+  NND_Returned.Returns (RSL.Spec.pure (LIBB_PoolDecoders.outputLane b)) env (LIBB_PoolDecoders.outputLane b)
+LIBB_ModelGraph.returned {A : Type} (m : RSL.Spec A) (code : Aeneas.Std.Result A) (fallback : A)
+  (law : NMS_R2N_Regular.Law m code) (env : RSL.Env) : NND_Returned.Returns m env (LIBB_ModelGraph.value fallback code)
+LIBB_ModelGraph.lift_returned {A : Type} (code : Aeneas.Std.Result A) (fallback : A) (env : RSL.Env) :
+  NND_Returned.Returns (NMS_R2N_Interpreted.liftResult code) env (LIBB_ModelGraph.value fallback code)
+LIBB_ModelGraph.lift_graph {A : Type} (code : Aeneas.Std.Result A) (env : RSL.Env) (o : RSL.Obs A) :
+  NMS_R2N_Interpreted.liftResult code env o ↔ o = LIB_Carriers.resultObs id [] code
+LIBB_ModelGraph.mapped_member {A B : Type} (f : A → B) (m : RSL.Spec A) :
+  NMS_R2N_Interpreted.Simulates f m (RSL.Spec.map f m)
+LIBB_AuthCarrier.exact_carrier (a : LIBB_AuthCarrier.Raw) : NMS_R2N_RSLPoolCarriers.authenticated a = NND_Carrier.auth a
+LIBB_AuthCarrier.roundtrip (a : LIBB_AuthCarrier.Raw) : LIBB_AuthCarrier.raw (NND_Carrier.auth a) = some a
+LIBB_PoolScan.same_input (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_PoolScan.scanProof (LIBB_Bytes.bytes b) = RSL.Spec.map LIBB_PoolScan.reply (NMS_R2N_ScanSites.interpreted b)
+LIBB_PoolScan.source_returns (b : Aeneas.Std.Slice Aeneas.Std.U8) (env : RSL.Env) :
+  NND_Returned.Returns (NMS_R2N_ScanSites.interpreted b) env
+    (LIBB_ModelGraph.value
+      (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      (AspisR1.NFY_JHf_Scan.source b))
+LIBB_PoolScan.returns (data : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolScan.scanProof data) env (LIBB_PoolScan.evaluator data)
+LIBB_PoolScan.native_copy (b : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NMS_R2N_Interpreted.Simulates LIBB_PoolScan.reply (NMS_R2N_ScanSites.interpreted b)
+    (LIBB_PoolScan.scanProof (LIBB_Bytes.bytes b))
+LIBB_PoolReconstruct.same_input (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) :
+  LIBB_PoolReconstruct.reconstruct q (NND_Carrier.auth a) c =
+    RSL.Spec.map LIBB_PoolReconstruct.reply (NMS_R2N_ReconstructSites.meaning q a c)
+LIBB_PoolReconstruct.source_returns (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) (env : RSL.Env) :
+  NND_Returned.Returns (NMS_R2N_ReconstructSites.meaning q a c) env
+    (LIBB_ModelGraph.value
+      (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      (AspisR1.NFY_JHf_ReconstructionSlot.source q a c))
+LIBB_PoolReconstruct.returns (q : LIBB_PoolCarriers.Request) (a : RSL.Authenticated) (c : LIBB_PoolCarriers.Afterstate)
+  (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolReconstruct.reconstruct q a c) env (LIBB_PoolReconstruct.evaluator q a c)
+LIBB_PoolReconstruct.native_copy (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) :
+  NMS_R2N_Interpreted.Simulates LIBB_PoolReconstruct.reply (NMS_R2N_ReconstructSites.meaning q a c)
+    (LIBB_PoolReconstruct.reconstruct q (NND_Carrier.auth a) c)
+LIBB_PoolEncode.root (s : LIBB_PoolCarriers.Statement) :
+  (NFY_NEQ_EncoderOracle.run
+        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+        NFY_NEM_PaymentReached.pay NFY_NEM_LateOracle.late
+        AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical (LIBB_PoolEncode.terminal s)).1 =
+    NFY_NBN_StatementEncoderSummary.observe (LIBB_PoolEncode.code s)
+LIBB_PoolEncode.returns (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolEncode.encodeStatement s) env (LIBB_PoolEncode.evaluator s)
+LIBB_PoolEncode.width (s : LIBB_PoolCarriers.Statement)
+  (raw : Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 1880#usize) AspisS6OuterNativeInstalled.Error)
+  (bytes : RSL.Bytes) (same : LIBB_PoolEncode.option raw = some bytes) : List.length bytes = 1880
+LIBB_PoolEmit.root (s : LIBB_PoolCarriers.Statement) :
+  NFY_NEU_EmitModel.run
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_result_against_statement_v1
+      NFY_NEY_EmitComposed.encode LIBB_PoolEmit.runtime LIBB_PoolEmit.initial (LIBB_PoolEncode.terminal s) =
+    LIBB_PoolEmit.code s
+LIBB_PoolEmit.returns (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolEmit.emitResult s) env (LIBB_PoolEmit.evaluator s)
+LIBB_PoolEmit.returned_event (st : LIBB_PoolEmit.State) (b : List Aeneas.Std.U8) :
+  List.map LIBB_PoolEmit.event (AspisR1.S2I.ReturnData.set st b).events =
+    List.map LIBB_PoolEmit.event st.events ++ [RSL.Event.returnData (NNC_ByteCarriers.host b)]
+LIBB_ObservationMap.exact_map {A B : Type} (f : A → B) (m : RSL.Spec A) (env : RSL.Env) (o : RSL.Obs B) :
+  RSL.Spec.map f m env o ↔ ∃ raw, m env raw ∧ o = NMS_R2N_Interpreted.mapObs f raw
+LIBB_ObservationMap.lift_graph {A B : Type} (f : A → B) (code : Aeneas.Std.Result A) (env : RSL.Env) (o : RSL.Obs B) :
+  RSL.Spec.map f (NMS_R2N_Interpreted.liftResult code) env o ↔ o = LIB_Carriers.resultObs f [] code
+LIBB_ObservationMap.alloc_map {A B : Type} (f : A → B) (m : RSL.Spec A) (env : RSL.Env) (o : RSL.Obs B) :
+  RSL.Spec.map f (RSL.Spec.alloc.bind fun x => m) env o ↔
+    RSL.Spec.map f m env o ∨ o = { exit := RSL.Exit.abort, events := [] }
+LIBB_ObservationMap.two_alloc_graph {A B : Type} (f : A → B) (code : Aeneas.Std.Result A) (env : RSL.Env)
+  (o : RSL.Obs B) :
+  RSL.Spec.map f (RSL.Spec.alloc.bind fun x => RSL.Spec.alloc.bind fun x => NMS_R2N_Interpreted.liftResult code) env o ↔
+    o = LIB_Carriers.resultObs f [] code ∨ o = { exit := RSL.Exit.abort, events := [] }
+LIBB_ObservationMap.return_source {A B : Type} (f : A → B) (m : RSL.Spec A) (env : RSL.Env) (b : B)
+  (events : List RSL.Event) (run : RSL.Spec.map f m env { exit := RSL.Exit.ret b, events := events }) :
+  ∃ a, m env { exit := RSL.Exit.ret a, events := events } ∧ b = f a
+LIBB_ReconstructGraph.exact_graph (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) (env : RSL.Env)
+  (o : RSL.Obs (Except RSL.ProgramError LIBB_PoolCarriers.Statement)) :
+  LIBB_PoolReconstruct.reconstruct q (NND_Carrier.auth a) c env o ↔
+    o = LIB_Carriers.resultObs LIBB_PoolReconstruct.reply [] (AspisR1.NFY_JHf_ReconstructionSlot.source q a c) ∨
+      NMS_R2N_ReconstructSites.reaches_boxes q a c ∧ o = { exit := RSL.Exit.abort, events := [] }
+LIBB_ScannerExtent.extent (data : RSL.Bytes) (env : RSL.Env) (scanned : LIBB_PoolCarriers.Afterstate × ℕ)
+  (events : List RSL.Event)
+  (run : LIBB_PoolScan.scanProof data env { exit := RSL.Exit.ret (Except.ok scanned), events := events }) :
+  scanned.2 = RSL.PROOF_BYTES
+LIBB_PoolEffects.encode_graph (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) (o : RSL.Obs (Option RSL.Bytes)) :
+  LIBB_PoolEffects.encodeStatement s env o ↔
+    o = LIB_Carriers.resultObs LIBB_PoolEncode.option [] (LIBB_PoolEncode.code s)
+LIBB_PoolEffects.emit_graph (s : LIBB_PoolCarriers.Statement) (env : RSL.Env)
+  (o : RSL.Obs (Except RSL.ProgramError Unit)) : LIBB_PoolEffects.emitResult s env o ↔ o = LIBB_PoolEmit.observation s
+LIBB_PoolEffects.reconstruct_graph (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) (env : RSL.Env)
+  (o : RSL.Obs (Except RSL.ProgramError LIBB_PoolCarriers.Statement)) :
+  LIBB_PoolReconstruct.reconstruct q (NND_Carrier.auth a) c env o ↔
+    o = LIB_Carriers.resultObs LIBB_PoolReconstruct.reply [] (AspisR1.NFY_JHf_ReconstructionSlot.source q a c) ∨
+      NMS_R2N_ReconstructSites.reaches_boxes q a c ∧ o = { exit := RSL.Exit.abort, events := [] }
+LIBB_PoolEffects.scanner_extent (data : RSL.Bytes) (env : RSL.Env) (scanned : LIBB_PoolCarriers.Afterstate × ℕ)
+  (events : List RSL.Event)
+  (run : LIBB_PoolScan.scanProof data env { exit := RSL.Exit.ret (Except.ok scanned), events := events }) :
+  scanned.2 = RSL.PROOF_BYTES
+LIBB_PoolEffects.scan_returns (data : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolScan.scanProof data) env (LIBB_PoolScan.evaluator data)
+LIBB_PoolEffects.reconstruct_returns (q : LIBB_PoolCarriers.Request) (a : RSL.Authenticated)
+  (c : LIBB_PoolCarriers.Afterstate) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolReconstruct.reconstruct q a c) env (LIBB_PoolReconstruct.evaluator q a c)
+LIBB_PoolEffects.encode_returns (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolEncode.encodeStatement s) env (LIBB_PoolEncode.evaluator s)
+LIBB_PoolEffects.emit_returns (s : LIBB_PoolCarriers.Statement) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_PoolEmit.emitResult s) env (LIBB_PoolEmit.evaluator s)
+LIBB_PoolLib.values : NND_PoolValues.Values LIBB_PoolLib.library
+LIBB_PoolLib.scanner_extent : NMS_R2Facts242.ScannerExtent LIBB_PoolLib.library
+LIBB_PoolLib.carrier_identity :
+  LIBB_PoolLib.library.Request = LIBB_PoolCarriers.Request ∧
+    LIBB_PoolLib.library.Statement = LIBB_PoolCarriers.Statement ∧
+      LIBB_PoolLib.library.Afterstate = LIBB_PoolCarriers.Afterstate
+LIBB_Tx2Reservation.reserved (env : RSL.Env) :
+  NJC_FilledClause.reserved (LIBB_Tx2Reservation.reservation env) = env.reservation
+LIBB_Tx2Reservation.ok_iff (env : RSL.Env) :
+  LIBB_Tx2Reservation.reservation env = Aeneas.Std.core.result.Result.Ok () ↔ env.reservation = true
+LIBB_Tx2Reservation.filled64_root (env : RSL.Env) :
+  NJC_FilledClause.native (LIBB_Tx2Reservation.reservation env) =
+    AspisR1.CheckpointBytes3Allocation.filled env.reservation 64#usize
+      { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+LIBB_Tx2Reservation.actual_filled64 (env : RSL.Env) (actual : AspisR1.NP6_StdModel.Reservation)
+  (bound : NJC_FilledClause.reserved actual = env.reservation) :
+  NJC_FilledClause.native actual = NJC_FilledClause.native (LIBB_Tx2Reservation.reservation env)
+LIBB_V2Carriers.exact_fields :
+  LIBB_V2Carriers.VErr = LIB_ErrorDebug.VErr ∧
+    LIBB_V2Carriers.debug = LIB_ErrorDebug.debug ∧ LIBB_V2Carriers.Root0 = LIB_Root0.root0
+LIBB_ProtocolBytes.host_native (bs : List Aeneas.Std.U8) :
+  LIBB_ProtocolBytes.host (AspisR1.MultiproofConeCanonical.bytesOf bs) = NNC_ByteCarriers.host bs
+LIBB_ProtocolBytes.host_protocol (bs : RSL.Bytes) : LIBB_ProtocolBytes.host (NNC_ByteCarriers.protocol bs) = bs
+LIBB_C04Partition.node (left right : RSL.Bytes) (hl : List.length left = 32) (hr : List.length right = 32) :
+  LIBB_C04Partition.partition ([18] ++ left ++ right) = [[18], left, right]
+LIBB_C04Partition.leaf (tag : UInt8) (n : ℕ) (value salt : RSL.Bytes) (size : n = if tag = 113 then 480 else 128)
+  (hv : List.length value = n) (hs : List.length salt = 32) :
+  LIBB_C04Partition.partition ([16, tag] ++ value ++ salt) = [[16, tag], value, salt]
+LIBB_HashModel.state_exact (out : RSL.B32) :
+  NNC_ResumeEvents.digest (AspisV8R19.SqueezeOracleBridge.encodeState (LIBB_HashModel.state out)) = out
+LIBB_Tx2Resolved.source_result (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_Tx2Resolved.observed env pub proof ck).result = LIBB_Tx2Resolved.common env pub proof ck
+LIBB_Tx2Resolved.parser (proof : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NLE_ParseInstall.parse proof =
+    NJS_Parse.map NLE_ParseInstall.reply
+      (NJS_Parse.map NJS_Parse.reply
+        (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+          (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof))
+LIBB_FlattenBytes.tag18 : NNC_ByteCarriers.hostByte 18#u8 = 18
+LIBB_FlattenBytes.tag16 : NNC_ByteCarriers.hostByte 16#u8 = 16
+LIBB_FlattenBytes.flatten (p : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) :
+  LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten p) =
+    List.flatMap (fun s => NNC_ByteCarriers.host ↑s) ↑p
+LIBB_FlattenBytes.node (left right : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  LIBB_C04Partition.partition
+      (LIBB_ProtocolBytes.host
+        (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.MultiproofConePhysicalDigest.parts left right))) =
+    NNC_ResumeEvents.parts (AspisR1.MultiproofConePhysicalDigest.parts left right)
+LIBB_C04PartialPartition.recover (n : ℕ) (value salt : RSL.Bytes) (hv : List.length value ≤ n)
+  (hs : List.length salt ≤ 32) (full : salt ≠ [] → List.length value = n) :
+  [List.take n (value ++ salt), List.take 32 (List.drop n (value ++ salt))] = [value, salt]
+LIBB_C04PartialPartition.leaf (tag : UInt8) (n : ℕ) (value salt : RSL.Bytes) (size : n = if tag = 113 then 480 else 128)
+  (hv : List.length value ≤ n) (hs : List.length salt ≤ 32) (full : salt ≠ [] → List.length value = n) :
+  LIBB_C04Partition.partition ([16, tag] ++ value ++ salt) = [[16, tag], value, salt]
+LIBB_C04LeafPartition.parts (tag : Aeneas.Std.U8) (n : ℕ) (value salt : Aeneas.Std.Slice Aeneas.Std.U8)
+  (size : n = if NNC_ByteCarriers.hostByte tag = 113 then 480 else 128) (hv : (↑value).length ≤ n)
+  (hs : (↑salt).length ≤ 32) (full : ↑salt ≠ [] → (↑value).length = n) :
+  LIBB_C04Partition.partition
+      (LIBB_ProtocolBytes.host
+        (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.parts tag value salt))) =
+    NNC_ResumeEvents.parts (AspisR1.Port4B_LeafCode.parts tag value salt)
+LIBB_C04LeafPartition.windows (o : Aeneas.Std.Slice Aeneas.Std.U8) (vs ve ss se n : ℕ) (order : vs ≤ ve)
+  (separated : ve ≤ ss) (saltWidth : se - ss = 32) (width : ve - vs = n) :
+  have value := List.take n (List.drop vs ↑o);
+  have salt := List.take 32 (List.drop ss ↑o);
+  value.length ≤ n ∧ salt.length ≤ 32 ∧ (salt ≠ [] → value.length = n)
+LIBB_C04InputPartition.input (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_C04Partition.partition
+      (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o))) =
+    NNC_ResumeEvents.parts (AspisR1.Port4B_LeafCode.input kind o)
+LIBB_C04LogGraph.append (a b : NLL.History) :
+  LIBB_C04LogGraph.render (a ++ b) = LIBB_C04LogGraph.render a ++ LIBB_C04LogGraph.render b
+LIBB_C04LogGraph.one (q : AspisR1.SdkC_Source.Query) (shape : LIBB_C04LogGraph.Canonical q) :
+  NNC_DigestTrace.render [NNC_DigestTrace.Step.attempted q] = LIBB_C04LogGraph.render (AspisR1.SdkC_Source.readLog [q])
+LIBB_C04LogGraph.log (queries : AspisR1.SdkC_Source.Log) (shape : ∀ q ∈ queries, LIBB_C04LogGraph.Canonical q) :
+  NNC_DigestTrace.render (List.map NNC_DigestTrace.Step.attempted queries) =
+    LIBB_C04LogGraph.render (AspisR1.SdkC_Source.readLog queries)
+LIBB_C04LogGraph.nodes (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (q : AspisR1.SdkC_Source.Query) :
+  q ∈ NNC_C04Events.nodes queries → LIBB_C04LogGraph.Canonical q
+LIBB_C04RichTrace.tree (kind : Aeneas.Std.Usize) (events : List NLL.Event) (q : AspisR1.SdkC_Source.Query) :
+  q ∈ NNC_C04Events.tree kind events → LIBB_C04LogGraph.Canonical q
+LIBB_C04RichTrace.shapes {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {proof : Aeneas.Std.Slice Aeneas.Std.U8} {raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize} {batch : Aeneas.Std.Usize}
+  {calls : List NLL_Parent.Call} {idx : NLL.Indices} {val : NLL.Values} {history : NLL.History} {out : NLL.Reply}
+  {trace : AspisR1.SdkC_Source.Log} (native : NNC_C04Events.Returned H proof raw batch calls idx val history out trace)
+  (q : AspisR1.SdkC_Source.Query) : q ∈ trace → LIBB_C04LogGraph.Canonical q
+LIBB_C04RichTrace.returned {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {proof : Aeneas.Std.Slice Aeneas.Std.U8} {raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize} {batch : Aeneas.Std.Usize}
+  {calls : List NLL_Parent.Call} {idx : NLL.Indices} {val : NLL.Values} {history : NLL.History} {out : NLL.Reply}
+  {trace : AspisR1.SdkC_Source.Log}
+  (native : NNC_C04Events.Returned H proof raw batch calls idx val history out trace) :
+  NNC_DigestTrace.render (List.map NNC_DigestTrace.Step.attempted trace) = LIBB_C04LogGraph.render history
+LIBB_C04StoppedTrace.pending_shapes {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {proof : Aeneas.Std.Slice Aeneas.Std.U8} {root : NLL.Root} {batch : ℕ} {kind lo n slot : Aeneas.Std.Usize}
+  {f : NLL.Frame} {events : List NLL.Event} {pending : NLL.Pending} {trace : AspisR1.SdkC_Source.Log}
+  (native : NNC_C04StopEvents.PendingTrace H proof root batch kind lo n slot f events pending trace)
+  (q : AspisR1.SdkC_Source.Query) : q ∈ trace → LIBB_C04LogGraph.Canonical q
+LIBB_C04StoppedTrace.shapes {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {proof : Aeneas.Std.Slice Aeneas.Std.U8} {raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize} {batch : Aeneas.Std.Usize}
+  {calls : List NLL_Parent.Call} {idx : NLL.Indices} {val : NLL.Values} {history : NLL.History} {pending : NLL.Pending}
+  {trace : AspisR1.SdkC_Source.Log}
+  (native : NNC_C04StopEvents.Stopped H proof raw batch calls idx val history pending trace)
+  (q : AspisR1.SdkC_Source.Query) : q ∈ trace → LIBB_C04LogGraph.Canonical q
+LIBB_C04StoppedTrace.stopped {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {proof : Aeneas.Std.Slice Aeneas.Std.U8} {raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize} {batch : Aeneas.Std.Usize}
+  {calls : List NLL_Parent.Call} {idx : NLL.Indices} {val : NLL.Values} {history : NLL.History} {pending : NLL.Pending}
+  {trace : AspisR1.SdkC_Source.Log}
+  (native : NNC_C04StopEvents.Stopped H proof raw batch calls idx val history pending trace) :
+  NNC_DigestTrace.render
+      (List.map NNC_DigestTrace.Step.attempted trace ++ [NNC_DigestTrace.Step.pending pending.parts]) =
+    LIBB_C04LogGraph.render (history ++ pending.answered)
+LIBB_ResumeReservation.filled (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  NJU_ResumeObserved.recordFilled a = NJU_ResumeObserved.recordFilled b
+LIBB_ResumeReservation.tail (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.finishTailG a = @NJU_ResumeObserved.finishTailG b
+LIBB_ResumeReservation.endBlock (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.queryEndG a = @NJU_ResumeObserved.queryEndG b
+LIBB_ResumeReservation.middle (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.queryMidG a = @NJU_ResumeObserved.queryMidG b
+LIBB_ResumeReservation.query (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.queryBlockG a = @NJU_ResumeObserved.queryBlockG b
+LIBB_ResumeReservation.body (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.resumeBodyG a = @NJU_ResumeObserved.resumeBodyG b
+LIBB_ResumeReservation.run (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  @NJU_ResumeObserved.run a = @NJU_ResumeObserved.run b
+LIBB_ResumeTrace.one (e : NJU_ResumeObserved.Event) :
+  NNC_DigestTrace.render (List.map NNC_DigestTrace.Step.attempted (NNC_ResumeEvents.queries [e])) =
+    NNC_ResumeEvents.render [e]
+LIBB_ResumeTrace.render (events : List NJU_ResumeObserved.Event) :
+  NNC_DigestTrace.render (List.map NNC_DigestTrace.Step.attempted (NNC_ResumeEvents.queries events)) =
+    NNC_ResumeEvents.render events
+LIBB_ResumeTrace.native {X : Type} (env : RSL.Env) (r : AspisR1.NP6_StdModel.Reservation)
+  (bound : NJC_FilledClause.reserved r = env.reservation) (d : VTop_Stages.aspis_core.digest.Digest32 X)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X) :
+  NNC_DigestTrace.render
+      (List.map NNC_DigestTrace.Step.attempted
+        (NNC_ResumeEvents.queries (NLT_NativeWindows.resumeRun d ck proof pub hash r).events)) =
+    NNC_ResumeEvents.render
+      (NJU_ResumeObserved.run (LIBB_Tx2Reservation.reservation env) (NJC_ResumeCalls.digest d) ck proof pub
+          NID_ResumeEmission.transport.Variant.S2 hash).events
+LIBB_Tx2TraceModel.no_write_event (env : RSL.Env) (e : NJU_CommonObserved.Event) (cell : ℕ) (bytes : RSL.Bytes) :
+  RSL.Event.write cell bytes ∉ LIBB_Tx2TraceModel.event env e
+LIBB_Tx2TraceModel.no_write (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (cell : ℕ)
+  (bytes : RSL.Bytes) : RSL.Event.write cell bytes ∉ LIBB_Tx2TraceModel.events env pub proof ck
+LIBB_Tx2ResolvedValues.functional (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_Tx2ResolvedValues.graph pub proof ck).Functional
+LIBB_Tx2ResolvedValues.returns (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_Tx2ResolvedValues.graph pub proof ck) env
+    (LIBB_Tx2ResolvedValues.evaluator env pub proof ck)
+LIBB_C04DetailGraph.transport {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {e : NJU_CommonObserved.Event} (detail : NLT_Subcuts.Detail H e) (law : NLT_C04Installed.Law H detail)
+  (trace : NNC_DigestTrace.Trace) (observed : NNC_C04Trace.FromDetail detail trace) :
+  LIBB_C04DetailGraph.RenderLaw H detail trace
+LIBB_C04DetailGraph.completed {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+  {e : NJU_CommonObserved.Event} (detail : NLT_Subcuts.Detail H e) (law : NLT_C04Installed.Law H detail)
+  (trace : NNC_DigestTrace.Trace) (observed : NNC_C04Trace.FromDetail detail trace) (history : NLL.History)
+  (done : NLT_Chronology.history detail = some history) :
+  NNC_DigestTrace.render trace = LIBB_C04LogGraph.render (NLP_C04Chronology.atEvent H e)
+LIBB_NoWriteGraph.lift {A : Type} (code : Aeneas.Std.Result A) : NMV_NoWrite.Free (NMS_R2N_Interpreted.liftResult code)
+LIBB_NoWriteGraph.map {A B : Type} (f : A → B) (m : RSL.Spec A) (free : NMV_NoWrite.Free m) :
+  NMV_NoWrite.Free (RSL.Spec.map f m)
+LIBB_ScanNoWrite.source (bytes : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NMV_NoWrite.Free (NMS_R2N_ScanSites.interpreted bytes)
+LIBB_ScanNoWrite.scan (data : RSL.Bytes) : NMV_NoWrite.Free (LIBB_PoolScan.scanProof data)
+LIBB_PoolNoWrite.reconstruct_source (q : LIBB_PoolCarriers.Request) (a : LIBB_AuthCarrier.Raw)
+  (c : LIBB_PoolCarriers.Afterstate) : NMV_NoWrite.Free (NMS_R2N_ReconstructSites.meaning q a c)
+LIBB_PoolNoWrite.reconstruct (q : LIBB_PoolCarriers.Request) (a : RSL.Authenticated)
+  (c : LIBB_PoolCarriers.Afterstate) : NMV_NoWrite.Free (LIBB_PoolReconstruct.reconstruct q a c)
+LIBB_PoolNoWrite.encode (s : LIBB_PoolCarriers.Statement) : NMV_NoWrite.Free (LIBB_PoolEncode.encodeStatement s)
+LIBB_PoolNoWrite.emit (s : LIBB_PoolCarriers.Statement) : NMV_NoWrite.Free (LIBB_PoolEmit.emitResult s)
+LIBB_PoolNoWrite.laws : NMV_NoWrite.PoolLaws LIBB_PoolLib.library
+LIBB_BoundSource.source (f : NLT_Interpreted.Uninstalled)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X)
+  (len : (↑proof).length = 57607) (result : NJU_CommonObserved.R Unit)
+  (records : List (NLT_NativeInvocation.Occurrence H d hash))
+  (native : NLT_NativeInvocation.Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records)
+  (bound : ∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) :
+  result =
+      NJJ_Common.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub
+        proof ck hash none ∧
+    List.map NLT_NativeInvocation.actual records =
+      (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d
+          pub proof ck hash none).events
+LIBB_DenseReservation.reply (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) {T : Type} (n : Aeneas.Std.Usize) (value : T) :
+  NHI_FilledModel.result a n value = NHI_FilledModel.result b n value
+LIBB_DenseReservation.emitted (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  FIo_Native.weights.Weights.dense_point_pair = FIo_Native.weights.Weights.dense_point_pair
+LIBB_RegularReservation.kind (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  FIo_Native.weights.process_kind = FIo_Native.weights.process_kind
+LIBB_RegularReservation.regular (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  FIo_Native.weights.process_regular_kinds = FIo_Native.weights.process_regular_kinds
+LIBB_PairReservation.emitted (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  FIo_Native.weights.Weights.pair = FIo_Native.weights.Weights.pair
+LIBB_PairReservation.installed (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  AspisR1.FIo_Install.pair a = AspisR1.FIo_Install.pair b
+LIBB_PairReservation.slots (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) :
+  AspisR1.IDa_Deployed.finish a = AspisR1.IDa_Deployed.finish b
+LIBB_PairReservation.finish (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) : NLB_Parent.finish a = NLB_Parent.finish b
+LIBB_CommonReservation.resume (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) : @NJJ_Common.resume a = @NJJ_Common.resume b
+LIBB_CommonReservation.pending (a b : AspisR1.NP6_StdModel.Reservation)
+  (h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b) : NJJ_Common.pending a = NJJ_Common.pending b
+LIBB_CommonReservation.source (a a' b b' c c' : AspisR1.NP6_StdModel.Reservation) (merkle : NJJ_Common.Merkle)
+  (ha : NJC_FilledClause.reserved a = NJC_FilledClause.reserved a')
+  (hb : NJC_FilledClause.reserved b = NJC_FilledClause.reserved b')
+  (hc : NJC_FilledClause.reserved c = NJC_FilledClause.reserved c') :
+  @NJJ_Common.run a b (fun {H} => merkle) (NLB_Parent.finish c) =
+    @NJJ_Common.run a' b' (fun {H} => merkle) (NLB_Parent.finish c')
+LIBB_CommonReservation.observed (a a' b b' c c' : AspisR1.NP6_StdModel.Reservation) (merkle : NJJ_Common.Merkle)
+  (ha : NJC_FilledClause.reserved a = NJC_FilledClause.reserved a')
+  (hb : NJC_FilledClause.reserved b = NJC_FilledClause.reserved b')
+  (hc : NJC_FilledClause.reserved c = NJC_FilledClause.reserved c') :
+  @NJU_CommonObserved.run a b (fun {H} => merkle) (NLB_Parent.finish c) =
+    @NJU_CommonObserved.run a' b' (fun {H} => merkle) (NLB_Parent.finish c')
+LIBB_RecordReservation.compatible (r : AspisR1.NP6_StdModel.Reservation) (e : NJU_CommonObserved.Event)
+  (input : NLT_NativeWindows.Input e) : NLT_NativeWindows.Compatible (LIBB_RecordReservation.frame r e input) e input
+LIBB_RecordReservation.tags (r : AspisR1.NP6_StdModel.Reservation) (e : NJU_CommonObserved.Event)
+  (input : NLT_NativeWindows.Input e) (bound : LIBB_RecordReservation.Bound r e input) :
+  NJC_FilledClause.reserved (LIBB_RecordReservation.frame r e input).resume = NJC_FilledClause.reserved r ∧
+    NJC_FilledClause.reserved (LIBB_RecordReservation.frame r e input).pending = NJC_FilledClause.reserved r ∧
+      NJC_FilledClause.reserved (LIBB_RecordReservation.frame r e input).finish = NJC_FilledClause.reserved r
+LIBB_RecordReservation.step (r : AspisR1.NP6_StdModel.Reservation)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X)
+  (len : (↑proof).length = 57607) (e : NJU_CommonObserved.Event)
+  (entered :
+    e ∈
+      (NJU_CommonObserved.run r r (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish r) d pub proof ck hash
+          none).events)
+  (recorded : NJU_CommonObserved.Event) (input : NLT_NativeWindows.Input recorded)
+  (question : NLT_NativeWindows.question recorded = NLT_NativeWindows.question e)
+  (bound : LIBB_RecordReservation.Bound r recorded input) : NLT_NativeWindows.window H d hash recorded input = e
+LIBB_TagSource.erase {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State} {X : Type}
+  {d : VTop_Stages.aspis_core.digest.Digest32 X} {hash : X} {A : Type} (r : AspisR1.NP6_StdModel.Reservation)
+  (p : NKE_Free.Program NJU_CommonObserved.Event A) (result : Aeneas.Std.Result A)
+  (records : List (NLT_NativeInvocation.Occurrence H d hash))
+  (invocation : NLT_NativeInvocation.Invocation H d hash p result records)
+  (compatible : ∀ record ∈ records, LIBB_RecordReservation.Bound r record.entered record.input) :
+  NLT_Continuation.Invocation (LIBB_TagSource.Local r H d hash) p result (List.map NLT_NativeInvocation.actual records)
+LIBB_TagSource.source (r : AspisR1.NP6_StdModel.Reservation)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X)
+  (len : (↑proof).length = 57607) (result : NJU_CommonObserved.R Unit)
+  (records : List (NLT_NativeInvocation.Occurrence H d hash))
+  (native : NLT_NativeInvocation.Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records)
+  (bound : ∀ record ∈ records, LIBB_RecordReservation.Bound r record.entered record.input) :
+  result = NJJ_Common.run r r (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish r) d pub proof ck hash none ∧
+    List.map NLT_NativeInvocation.actual records =
+      (NJU_CommonObserved.run r r (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish r) d pub proof ck hash
+          none).events
+LIBB_TagStopPrefix.source {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State} {X : Type}
+  {d : VTop_Stages.aspis_core.digest.Digest32 X} {hash : X} {A : Type} (r : AspisR1.NP6_StdModel.Reservation)
+  (p : NKE_Free.Program NJU_CommonObserved.Event A) (records : List (NLT_NativeInvocation.Occurrence H d hash))
+  (cut : NLT_C04Stop.Cut H) (stopped : NLT_C04Stop.At H d hash p records cut)
+  (compatible : ∀ record ∈ records, LIBB_RecordReservation.Bound r record.entered record.input)
+  (cuts :
+    ∀ e ∈ (NKE_Free.eval p).events,
+      ∀ (observed : NJU_CommonObserved.Event), LIBB_TagSource.Local r H d hash e observed → observed = e) :
+  ∃ e suffix,
+    (NKE_Free.eval p).events = List.map NLT_NativeInvocation.actual records ++ e :: suffix ∧
+      NLT_NativeWindows.question e = NLT_C04Stop.question cut
+LIBB_TagStop.source_prefix (r : AspisR1.NP6_StdModel.Reservation)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X)
+  (len : (↑proof).length = 57607) (records : List (NLT_NativeInvocation.Occurrence H d hash)) (cut : NLT_C04Stop.Cut H)
+  (stopped : NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut)
+  (bound : ∀ record ∈ records, LIBB_RecordReservation.Bound r record.entered record.input) :
+  ∃ reply suffix,
+    (NJU_CommonObserved.run r r (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish r) d pub proof ck hash
+          none).events =
+      List.map NLT_NativeInvocation.actual records ++
+        NJU_CommonObserved.Event.merkle cut.proof cut.prepared cut.folded reply :: suffix
+LIBB_TagStop.installed (r : AspisR1.NP6_StdModel.Reservation)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) {X : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : X)
+  (len : (↑proof).length = 57607) (root0 : NLP_InputDomain.Root0 ck proof)
+  (records : List (NLT_NativeInvocation.Occurrence H d hash)) (cut : NLT_C04Stop.Cut H)
+  (stopped : NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut)
+  (bound : ∀ record ∈ records, LIBB_RecordReservation.Bound r record.entered record.input) :
+  NLL_Prefix.At
+      (NLL_Parent.plan H cut.proof (NLP_RootCodec.parsed cut.proof (AspisR1.Port3_BatchStage.root1 cut.prepared))
+        cut.prepared.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded))
+        NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+      (cut.inside ++ cut.pending.answered) cut.pending.parts ∧
+    NLL_Prefix.At
+      (NLL_ObservedCalls.calls H cut.proof
+          (NLP_RootCodec.parsed cut.proof (AspisR1.Port3_BatchStage.root1 cut.prepared)) cut.prepared.queries 1#usize
+          (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI
+          NKV_ParentSource.zeroV).1
+      (cut.inside ++ cut.pending.answered) cut.pending.parts
+LIBB_PartitionEnv.digest_value (env : RSL.Env) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) :
+  (LIBB_PartitionEnv.digest env).digest () parts =
+    Aeneas.Std.Result.ok (LIB_Env.nativeKey (env.sha256 (NNC_ResumeEvents.parts parts)))
+LIBB_PartitionEnv.partition_value (env : RSL.Env) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8))
+  (partition :
+    LIBB_C04Partition.partition (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+      NNC_ResumeEvents.parts parts) :
+  AspisV8R19.SqueezeOracleBridge.encodeState (LIBB_PartitionEnv.H env (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+    LIB_Env.nativeKey (env.sha256 (NNC_ResumeEvents.parts parts))
+LIBB_PartitionEnv.leaf_value (env : RSL.Env) (kind : Aeneas.Std.Usize) (opening : Aeneas.Std.Slice Aeneas.Std.U8) :
+  AspisV8R19.SqueezeOracleBridge.encodeState
+      (LIBB_PartitionEnv.H env (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind opening))) =
+    LIB_Env.nativeKey (env.sha256 (NNC_ResumeEvents.parts (AspisR1.Port4B_LeafCode.input kind opening)))
+LIBB_Tx2EnvCode.source_result (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_Tx2EnvCode.observed env pub proof ck).result = LIBB_Tx2EnvCode.common env pub proof ck
+LIBB_Tx2EnvCode.parser (proof : Aeneas.Std.Slice Aeneas.Std.U8) :
+  NLE_ParseInstall.parse proof =
+    NJS_Parse.map NLE_ParseInstall.reply
+      (NJS_Parse.map NJS_Parse.reply
+        (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+          (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof))
+LIBB_Tx2EnvTrace.no_write_event (env : RSL.Env) (e : NJU_CommonObserved.Event) (cell : ℕ) (bytes : RSL.Bytes) :
+  RSL.Event.write cell bytes ∉ LIBB_Tx2EnvTrace.event env e
+LIBB_Tx2EnvTrace.no_write (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (cell : ℕ)
+  (bytes : RSL.Bytes) : RSL.Event.write cell bytes ∉ LIBB_Tx2EnvTrace.events env pub proof ck
+LIBB_EnvCommon.resolved (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (len : (↑proof).length = 57607)
+  (result : NJU_CommonObserved.R Unit)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (native :
+    NLT_NativeInvocation.Invocation (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) result
+      records)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  result = LIBB_Tx2EnvCode.common env pub proof ck ∧
+    List.map NLT_NativeInvocation.actual records = (LIBB_Tx2EnvCode.observed env pub proof ck).events
+LIBB_EnvCommon.stopped (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (len : (↑proof).length = 57607)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env))
+  (native :
+    NLT_C04Stop.At (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) records cut)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  ∃ reply suffix,
+    (LIBB_Tx2EnvCode.observed env pub proof ck).events =
+      List.map NLT_NativeInvocation.actual records ++
+        NJU_CommonObserved.Event.merkle cut.proof cut.prepared cut.folded reply :: suffix
+LIBB_EnvCommon.stopped_query (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (len : (↑proof).length = 57607) (root0 : NLP_InputDomain.Root0 ck proof)
+  (records : List (NLT_NativeInvocation.Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()))
+  (cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env))
+  (native :
+    NLT_C04Stop.At (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ()
+      (NLT_NativeSource.skeleton (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()) records cut)
+  (bound : LIBB_EnvCommon.Bound env records) :
+  NLL_Prefix.At
+    (NLL_Parent.plan (LIBB_PartitionEnv.H env) cut.proof
+      (NLP_RootCodec.parsed cut.proof (AspisR1.Port3_BatchStage.root1 cut.prepared)) cut.prepared.queries 1#usize
+      (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+    (cut.inside ++ cut.pending.answered) cut.pending.parts
+LIBB_Tx2Domain.native (env : RSL.Env) (publicBytes proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_Tx2Domain.domain (LIB_Carriers.bytes publicBytes) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes checkpoint) ↔
+    NMN_064.Domain
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := publicBytes, proof := proof, checkpoint := checkpoint,
+        hash := () }
+LIBB_RecordRender.one (env : RSL.Env) (record : LIBB_RecordRender.Record env) (trace : NNC_DigestTrace.Trace)
+  (source : NNC_RecordTrace.FromRecord record trace)
+  (bound : LIBB_RecordReservation.Bound (LIBB_Tx2Reservation.reservation env) record.entered record.input)
+  (law : NLT_C04Installed.Law (LIBB_PartitionEnv.H env) record.detail) : LIBB_RecordRender.Law env record trace
+LIBB_RecordRender.records (env : RSL.Env) (rs : List (LIBB_RecordRender.Record env)) (trace : NNC_DigestTrace.Trace)
+  (source : NNC_RecordTrace.Records rs trace) (bound : LIBB_EnvCommon.Bound env rs)
+  (laws : ∀ record ∈ rs, NLT_C04Installed.Law (LIBB_PartitionEnv.H env) record.detail) :
+  ∃ pieces, trace = pieces.flatten ∧ List.Forall₂ (LIBB_RecordRender.Law env) rs pieces
+LIBB_EnvDigestTrace.node (env : RSL.Env) (left right : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  (LIBB_PartitionEnv.digest env).digest () (AspisR1.MultiproofConePhysicalDigest.parts left right) =
+    Aeneas.Std.Result.ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (LIBB_PartitionEnv.H env
+          (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.MultiproofConePhysicalDigest.parts left right))))
+LIBB_EnvDigestTrace.leaf (env : RSL.Env) (kind : Aeneas.Std.Usize) (opening : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_PartitionEnv.digest env).digest () (AspisR1.Port4B_LeafCode.input kind opening) =
+    Aeneas.Std.Result.ok
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (LIBB_PartitionEnv.H env (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind opening))))
+LIBB_EnvDigestTrace.event (env : RSL.Env) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8))
+  (partition :
+    LIBB_C04Partition.partition (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+      NNC_ResumeEvents.parts parts) :
+  LIBB_C04LogGraph.render
+      [(AspisV8R19.SqueezeOracleBridge.flatten parts,
+          LIBB_PartitionEnv.H env (AspisV8R19.SqueezeOracleBridge.flatten parts))] =
+    [RSL.Event.digest (NNC_ResumeEvents.parts parts) (env.sha256 (NNC_ResumeEvents.parts parts))]
+LIBB_EnvValues.functional (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) :
+  (LIBB_EnvValues.graph pub proof ck).Functional
+LIBB_EnvValues.returns (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_EnvValues.graph pub proof ck) env (LIBB_EnvValues.evaluator env pub proof ck)
+LIBB_ParserGraph.source (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_Tx2EnvCode.code env pub proof ck =
+    match NLE_ParseInstall.parse proof with
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e) =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) => LIBB_Tx2EnvCode.common env pub proof ck

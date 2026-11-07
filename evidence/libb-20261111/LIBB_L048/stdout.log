@@ -1,0 +1,42 @@
+LIBB_generated/LIBB_FlattenBytes.lean:25:7: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+LIBB_generated/LIBB_FlattenBytes.lean:26:7: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+LIBB_generated/LIBB_FlattenBytes.lean:21:1: error: Type mismatch: After simplification, term
+  LIBB_C04Partition.node (NNC_ByteCarriers.host ↑left) (NNC_ByteCarriers.host ↑right)
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans (List.length_map NNC_ByteCarriers.hostByte)
+              (Eq.trans (List.Vector.length_val left)
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.Usize 32 (of_decide_eq_true (id (Eq.refl true))))))))
+          32)
+        (eq_self 32)))
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans (List.length_map NNC_ByteCarriers.hostByte)
+              (Eq.trans (List.Vector.length_val right)
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.Usize 32 (of_decide_eq_true (id (Eq.refl true))))))))
+          32)
+        (eq_self 32)))
+ has type
+  @Eq (List RSL.Bytes)
+    (LIBB_C04Partition.partition
+      ([18] ++ List.map NNC_ByteCarriers.hostByte ↑left ++ List.map NNC_ByteCarriers.hostByte ↑right))
+    [[18], List.map NNC_ByteCarriers.hostByte ↑left, List.map NNC_ByteCarriers.hostByte ↑right]
+but is expected to have type
+  @Eq (List RSL.Bytes)
+    (LIBB_C04Partition.partition
+      ([NNC_ByteCarriers.hostByte 18#u8] ++
+        (List.map NNC_ByteCarriers.hostByte ↑left ++ List.map NNC_ByteCarriers.hostByte ↑right)))
+    [[NNC_ByteCarriers.hostByte 18#u8], List.map NNC_ByteCarriers.hostByte ↑left,
+      List.map NNC_ByteCarriers.hostByte ↑right]
+'LIBB_FlattenBytes.flatten' depends on axioms: [propext, Quot.sound]
+'LIBB_FlattenBytes.node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

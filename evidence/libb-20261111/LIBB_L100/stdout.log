@@ -1,0 +1,258 @@
+LIBB_generated/LIBB_PairReservation.lean:25:64: error: unsolved goals
+a b : NP6_StdModel.Reservation
+h : NJC_FilledClause.reserved a = NJC_FilledClause.reserved b
+owner : FIo_Native.weights.Weights
+alpha : Slice FIo_Native.aspis_core.field.wide_exact.WideExact
+message : Slice U8
+kappa : FIo_Native.aspis_core.field.wide_exact.WideExact
+⊢ (do
+      let n ← message.len / 32#usize
+      let expected_n ← FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize
+      if (n != expected_n) = true then ok (core.result.Result.Err FIo_Native.verifier.Error.Parse)
+        else do
+          let we ← alpha.index_usize 0#usize
+          let ap0 ← FIo_Native.weights.powers 4#usize we
+          let ap1 ←
+            if alpha.len = 2#usize then do
+                let we1 ← alpha.index_usize 1#usize
+                FIo_Native.weights.powers 4#usize we1
+              else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)
+          let r ← NHI_FilledModel.result b n FIo_Native.aspis_core.field.QM31.ZERO
+          match r with
+            | core.result.Result.Ok v => do
+              let shared_two_point ← FIo_Native.weights.shared_two_point_guard owner alpha.len
+              let (r1, _, parts1) ←
+                FIo_Native.weights.process_regular_kinds owner shared_two_point alpha message alpha.len n ap0 ap1 v
+                    (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  if shared_two_point = true then do
+                    let (self1, common1) ←
+                      FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } owner
+                          (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+                    let r2 ← FIo_Native.weights.shared_partials message common1
+                    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val => do
+                        let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                        match cf2 with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            if alpha.len = 1#usize then do
+                              let dual1 ←
+                                FIo_Native.weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                              let groups1 ←
+                                FIo_Native.weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 message
+                                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                              let parts3 ←
+                                FIo_Native.weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2
+                                    dual1 groups1
+                              let parts4 ←
+                                FIo_Native.weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1
+                                    message ap0 parts3
+                              let k ← FIo_Native.weights.powers 7#usize kappa
+                              let sum ←
+                                FIo_Native.weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                              ok (core.result.Result.Ok sum)
+                            else do
+                              let low1 ←
+                                FIo_Native.weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                              let we1 ← FIo_Native.weights.grouped_inactive_pair self1 message low1
+                              let a ← parts2.update 0#usize we1
+                              let b ←
+                                FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                                    FIo_Native.transport.Variant.S2
+                              let libra ←
+                                if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                                  else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                              let parts3 ←
+                                FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } message a
+                                    libra
+                              let k ← FIo_Native.weights.powers 7#usize kappa
+                              let sum ←
+                                FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                              ok (core.result.Result.Ok sum)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              FIo_Native.aspis_core.field.wide_exact.WideExact
+                              (core.convert.FromSame FIo_Native.verifier.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          FIo_Native.aspis_core.field.wide_exact.WideExact
+                          (core.convert.FromSame FIo_Native.verifier.Error) residual
+                  else
+                    if alpha.len = 1#usize then do
+                      let dual1 ←
+                        FIo_Native.weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                            (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                      let groups1 ←
+                        FIo_Native.weights.Weights.pair_loop11 { start := 0#usize, «end» := n } owner message
+                            (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                      let parts2 ←
+                        FIo_Native.weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1
+                            groups1
+                      let parts3 ←
+                        FIo_Native.weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } owner message ap0
+                            parts2
+                      let k ← FIo_Native.weights.powers 7#usize kappa
+                      let sum ←
+                        FIo_Native.weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                            FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                    else do
+                      let low1 ←
+                        FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                            (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                      let we1 ← FIo_Native.weights.grouped_inactive_pair owner message low1
+                      let a ← parts1.update 0#usize we1
+                      let b ←
+                        FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq owner.variant
+                            FIo_Native.transport.Variant.S2
+                      let libra ←
+                        if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 owner.extra
+                          else FIo_Native.weights.twofold_libra_weights low1 owner.extra
+                      let parts2 ←
+                        FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } message a libra
+                      let k ← FIo_Native.weights.powers 7#usize kappa
+                      let sum ←
+                        FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                            FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                    residual
+            | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)) =
+    do
+    let n ← message.len / 32#usize
+    let expected_n ← FIo_Native.weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize
+    if (n != expected_n) = true then ok (core.result.Result.Err FIo_Native.verifier.Error.Parse)
+      else do
+        let we ← alpha.index_usize 0#usize
+        let ap0 ← FIo_Native.weights.powers 4#usize we
+        let ap1 ←
+          if alpha.len = 2#usize then do
+              let we1 ← alpha.index_usize 1#usize
+              FIo_Native.weights.powers 4#usize we1
+            else ok (Array.repeat 4#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ONE)
+        let r ← NHI_FilledModel.result b n FIo_Native.aspis_core.field.QM31.ZERO
+        match r with
+          | core.result.Result.Ok v => do
+            let shared_two_point ← FIo_Native.weights.shared_two_point_guard owner alpha.len
+            let (r1, _, parts1) ←
+              FIo_Native.weights.process_regular_kinds owner shared_two_point alpha message alpha.len n ap0 ap1 v
+                  (Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                if shared_two_point = true then do
+                  let (self1, common1) ←
+                    FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } owner
+                        (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+                  let r2 ← FIo_Native.weights.shared_partials message common1
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let (r3, parts2) ← FIo_Native.weights.shared_high val self1 ap0 ap1 parts1
+                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          if alpha.len = 1#usize then do
+                            let dual1 ←
+                              FIo_Native.weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                  (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                            let groups1 ←
+                              FIo_Native.weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 message
+                                  (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                            let parts3 ←
+                              FIo_Native.weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1
+                                  groups1
+                            let parts4 ←
+                              FIo_Native.weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 message
+                                  ap0 parts3
+                            let k ← FIo_Native.weights.powers 7#usize kappa
+                            let sum ←
+                              FIo_Native.weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                  FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                          else do
+                            let low1 ←
+                              FIo_Native.weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                  (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                            let we1 ← FIo_Native.weights.grouped_inactive_pair self1 message low1
+                            let a ← parts2.update 0#usize we1
+                            let b ←
+                              FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                                  FIo_Native.transport.Variant.S2
+                            let libra ←
+                              if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                                else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                            let parts3 ←
+                              FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } message a
+                                  libra
+                            let k ← FIo_Native.weights.powers 7#usize kappa
+                            let sum ←
+                              FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                  FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            FIo_Native.aspis_core.field.wide_exact.WideExact
+                            (core.convert.FromSame FIo_Native.verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        FIo_Native.aspis_core.field.wide_exact.WideExact
+                        (core.convert.FromSame FIo_Native.verifier.Error) residual
+                else
+                  if alpha.len = 1#usize then do
+                    let dual1 ←
+                      FIo_Native.weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                          (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                    let groups1 ←
+                      FIo_Native.weights.Weights.pair_loop11 { start := 0#usize, «end» := n } owner message
+                          (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                    let parts2 ←
+                      FIo_Native.weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1
+                          groups1
+                    let parts3 ←
+                      FIo_Native.weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } owner message ap0
+                          parts2
+                    let k ← FIo_Native.weights.powers 7#usize kappa
+                    let sum ←
+                      FIo_Native.weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                          FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+                  else do
+                    let low1 ←
+                      FIo_Native.weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                          (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                    let we1 ← FIo_Native.weights.grouped_inactive_pair owner message low1
+                    let a ← parts1.update 0#usize we1
+                    let b ←
+                      FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq owner.variant
+                          FIo_Native.transport.Variant.S2
+                    let libra ←
+                      if b = true then FIo_Native.weights.factored_s2_libra_weights ap0 ap1 owner.extra
+                        else FIo_Native.weights.twofold_libra_weights low1 owner.extra
+                    let parts2 ←
+                      FIo_Native.weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } message a libra
+                    let k ← FIo_Native.weights.powers 7#usize kappa
+                    let sum ←
+                      FIo_Native.weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                          FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                  residual
+          | core.result.Result.Err a => ok (core.result.Result.Err FIo_Native.verifier.Error.Allocation)
+'LIBB_PairReservation.reply' depends on axioms: [propext, Quot.sound]
+'LIBB_PairReservation.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PairReservation.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PairReservation.slots' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_PairReservation.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
