@@ -1,0 +1,45 @@
+{"attempt": "PCD_L036", "exit_status": 1, "wall_seconds": 4.790677998913452, "peak_rss_kib": "3822244", "swaps": "0", "print_axioms": ["'PCD_LaneBridge.extracted_segments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCD_LaneBridge.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCD_generated/PCD_LaneBridge.lean:29:4: error: Alternative `done` has not been provided
+PCD_generated/PCD_LaneBridge.lean:27:2: error: unsolved goals
+case isTrue.rejected
+lane : Lane
+after : After
+h✝ : decide (lane.tree.next_leaf_index.checked_add 1#u64 = some after.next_pair_index) = true
+visited✝ : ℕ
+⊢ (match Scan.rejected visited✝ with
+    | Scan.rejected visited => Result.ok (Exit.error (ProgramError.custom 1095966723))
+    | Scan.done visited => do
+      let value ← finish_lane lane after
+      Result.ok (Exit.ok value)) =
+    Result.ok
+      (match Scan.rejected visited✝ with
+      | Scan.rejected visited => Exit.error (ProgramError.custom 1095966723)
+      | Scan.done visited => Exit.
+...
+PCD_generated/PCD_LaneBridge.lean:29:4: error: Alternative `done` has not been provided
+PCD_generated/PCD_LaneBridge.lean:27:2: error: unsolved goals
+case isTrue.rejected
+lane : Lane
+after : After
+h✝ : decide (lane.tree.next_leaf_index.checked_add 1#u64 = some after.next_pair_index) = true
+visited✝ : ℕ
+⊢ (match Scan.rejected visited✝ with
+    | Scan.rejected visited => Result.ok (Exit.error (ProgramError.custom 1095966723))
+    | Scan.done visited => do
+      let value ← finish_lane lane after
+      Result.ok (Exit.ok value)) =
+    Result.ok
+      (match Scan.rejected visited✝ with
+      | Scan.rejected visited => Exit.error (ProgramError.custom 1095966723)
+      | Scan.done visited => Exit.ok (PCD_LaneValue.candidate lane after))
+PCD_generated/PCD_LaneBridge.lean:22:62: error: unsolved goals
+case isFalse
+lane : Lane
+after : After
+h✝ : ¬decide (lane.tree.next_leaf_index.checked_add 1#u64 = some after.next_pair_index) = true
+⊢ Result.ok (Exit.error (ProgramError.custom 1095966723)) = Result.ok (Exit.error (ProgramError.custom 1095966723))
+PCD_generated/PCD_LaneBridge.lean:30:15: error: unexpected token 'at'; expected command
+'PCD_LaneBridge.extracted_segments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCD_LaneBridge.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4e7b77c811de4030b655c21837c64b89.scope; invocation ID: f0515d87f5e6404e8f16f742f6bef716

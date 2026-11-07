@@ -1,0 +1,26 @@
+{"attempt": "PCD_K042", "exit_status": 1, "wall_seconds": 12.085719757014886, "peak_rss_kib": "671648", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Copt-level=3-Ccodegen-units=1-Zthreads=1-Clink-arg=-Wl,--threads=1-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cl
+...
+i/x86_64-unknown-linux-gnu/debug/deps/aspis_pool__RNvNtNtCslNYyPt5EtsS_10aspis_pool11pair_forest11PCD_harness20PCD_frontier_control.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pc-terminal-children1-cache-20261110/PCD_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_pool__RNvNtNtCslNYyPt5EtsS_10aspis_pool11pair_forest11PCD_harness20PCD_frontier_control.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pc-terminal-children1-cache-20261110/PCD_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_pool__RNvNtNtCslNYyPt5EtsS_10aspis_pool11pair_forest11PCD_harness20PCD_frontier_control.out'
+Finished goto-instrument in 0.053106505s
+Checking harness pair_forest::PCD_harness::PCD_frontier_control...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 33 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pc-terminal-children1-cache-20261110/PCD_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_pool__RNvNtNtCslNYyPt5EtsS_10aspis_pool11pair_forest11PCD_harness20PCD_frontier_control.out --verbosity 9 --json-ui`
+Finished run_cbmc in 7.6754317s
+
+VERIFICATION RESULT:
+ ** 1 of 324 failed (7 unreachable)
+Failed Checks: assertion failed: out != if pass { Ok(()) } else { Err(ProgramError::Custom(0x41532003)) }
+ File: "programs/aspis-pool/src/pair_forest.rs", line 5884, in pair_forest::PCD_harness::PCD_frontier_control
+
+VERIFICATION:- FAILED
+Verification Time: 7.675058s
+
+Manual Harness Summary:
+Verification failed for - pair_forest::PCD_harness::PCD_frontier_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r80835c9b19ec47fb86306ce1f3aef4f4.scope; invocation ID: 6daddc03976f450f9f6b24637d7a1b79

@@ -1,0 +1,26 @@
+fn next_pair_forest_lane_v1(
+    lane: &PoolV1PairForestLaneStateV1,
+    result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
+) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
+    let afterstate = result.verified_afterstate;
+    if lane.tree.next_leaf_index.checked_add(1) != Some(afterstate.next_pair_index) {
+        return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+    }
+    for (level, node) in afterstate.next_frontier.iter().enumerate() {
+        if (afterstate.next_pair_index >> level) & 1 == 0
+            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
+        {
+            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+        }
+    }
+    Ok(PoolV1PairForestLaneStateV1 {
+        master: lane.master,
+        bump: lane.bump,
+        lane_id: lane.lane_id,
+        tree: IncrementalMerkleTreeV1 {
+            next_leaf_index: afterstate.next_pair_index,
+            root: afterstate.next_root,
+            frontier: afterstate.next_frontier,
+        },
+    })
+}

@@ -1,0 +1,38 @@
+{"attempt": "PCD_L014", "exit_status": 1, "wall_seconds": 5.325748040806502, "peak_rss_kib": "2614896", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.U64.checked_add : Aeneas.Std.U64 → Aeneas.Std.U64 → Option Aeneas.Std.U64 :=
+fun x y => Aeneas.Std.core.num.checked_add_UScalar x y
+def Aeneas.Std.U64.wrapping_shr : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64 :=
+fun x s => Aeneas.Std.UScalar.wrapping_shr x s
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.o
+...
+def Aeneas.Std.U64.checked_add : Aeneas.Std.U64 → Aeneas.Std.U64 → Option Aeneas.Std.U64 :=
+fun x y => Aeneas.Std.core.num.checked_add_UScalar x y
+def Aeneas.Std.U64.wrapping_shr : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64 :=
+fun x s => Aeneas.Std.UScalar.wrapping_shr x s
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Aeneas.Std.Result.ok false
+PCD_generated/PCD_ScalarInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U64.checked_add_spec`
+PCD_generated/PCD_ScalarInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U64.checked_add_val`
+
+Running as unit: run-r0308858bd1964b71b585da79f66390e3.scope; invocation ID: fbd31a82806b4ebd8733414f594dcdfd

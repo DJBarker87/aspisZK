@@ -1,0 +1,17 @@
+def runSlice (bytes : Slice U8) : Result (core.result.Result AspisR1.NFY_JHd_RequestNative.Request AspisR1.NFY_JHd_RequestNative.FormatError) := do
+  let array ← core.array.TryFromSharedArraySlice.try_from 320#usize bytes
+  match array with
+  | .Err _ => ok (.Err AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength)
+  | .Ok array =>
+    let result ← run pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1
+      pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1 array
+    match result with
+    | .Err error => ok (.Err (AspisR1.NFY_JHd_RequestCarrier.mapPoolV1PairForestTerminalFormatErrorV1 error))
+    | .Ok request => ok (.Ok (AspisR1.NFY_JHd_RequestCarrier.request request))
+
+theorem result_state_effects {State : Type} (bytes : Slice U8) (state : State) :
+    (runSlice bytes,state,([] : List Unit)) =
+    (AspisR1.NFY_JHd_RequestNative.decode bytes,state,[]) := by rfl
+
+#print axioms array_result_state_effects
+#print axioms result_state_effects

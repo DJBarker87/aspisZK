@@ -1,0 +1,27 @@
+{"attempt": "PCD_L016", "exit_status": 0, "wall_seconds": 2.985843119909987, "peak_rss_kib": "2621652", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.num.checked_add_UScalar : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Option (Aeneas.Std.UScalar ty) :=
+fun {ty} x y => Aeneas.Std.Option.ofResult (x + y)
+def Aeneas.Std.UScalar.wrapping_shr : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.U32 → Aeneas.Std.UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU32 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U32 Aeneas.Std.U32 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.ne }
+def List.allM.{u, v} : {m : Type → T
+...
+def Aeneas.Std.core.num.checked_add_UScalar : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Option (Aeneas.Std.UScalar ty) :=
+fun {ty} x y => Aeneas.Std.Option.ofResult (x + y)
+def Aeneas.Std.UScalar.wrapping_shr : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.U32 → Aeneas.Std.UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU32 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U32 Aeneas.Std.U32 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.ne }
+def List.allM.{u, v} : {m : Type → Type u} → [Monad m] → {α : Type v} → (α → m Bool) → List α → m Bool :=
+fun {m} [Monad m] {α} p x => List.brecOn x (List.allM._f p)
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+
+Running as unit: run-rf611813aed5e4513a2d59f440bdf5216.scope; invocation ID: fb8e5c2448e548a284c964b32b4cdc6f
