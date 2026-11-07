@@ -1,0 +1,40 @@
+{"attempt": "NMT_L045", "exit_status": 0, "wall_seconds": 2.156169927911833, "peak_rss_kib": "2617588", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.bind.{u, v} : {α : Type u} →
+  {β : Type v} → (x : Aeneas.Std.Result.{u} α) → (f : α → Aeneas.Std.Result.{v} β) → Aeneas.Std.Result.{v} β :=
+fun {α : Type u} {β : Type v} (x : Aeneas.Std.Result.{u} α) (f : α → Aeneas.Std.Result.{v} β) =>
+  @Aeneas.Std.instReprResult.repr.match_1.{u, v + 1} α (fun (x : Aeneas.Std.Result.{u} α) => Aeneas.Std.Result.{v} β) x
+    (fun (v : α) => f v) (fun (v : Aeneas.Std.Error) => @Aeneas.Std.Result.fail.{v} β v) fun (_ : Unit) =>
+    @Aeneas.Std.Result.div.{v} β
+theorem AspisR1.NMT_CallTree.result_right : ∀ {A : Type} (r : Aeneas.Std.Result.{0} A),
+  @Eq.{1} (Aeneas.Std.Result.{0} A)
+    (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBin
+...
+(Aeneas.Std.Result.{0} A) r (@Aeneas.Std.Result.fail.{0} A e)) =>
+      @Eq.ndrec.{0, 1} (Aeneas.Std.Result.{0} A) (@Aeneas.Std.Result.fail.{0} A e)
+        (fun (r : Aeneas.Std.Result.{0} A) =>
+          @Eq.{1} (Aeneas.Std.Result.{0} A)
+            (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} A A r fun (a : A) =>
+              @Aeneas.Std.Result.ok.{0} A a)
+            r)
+        (@Eq.refl.{1} (Aeneas.Std.Result.{0} A)
+          (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} A A (@Aeneas.Std.Result.fail.{0} A e)
+            fun (a : A) => @Aeneas.Std.Result.ok.{0} A a))
+        r (@Eq.symm.{1} (Aeneas.Std.Result.{0} A) r (@Aeneas.Std.Result.fail.{0} A e) h))
+    (fun (h : @Eq.{1} (Aeneas.Std.Result.{0} A) r (@Aeneas.Std.Result.div.{0} A)) =>
+      @Eq.ndrec.{0, 1} (Aeneas.Std.Result.{0} A) (@Aeneas.Std.Result.div.{0} A)
+        (fun (r : Aeneas.Std.Result.{0} A) =>
+          @Eq.{1} (Aeneas.Std.Result.{0} A)
+            (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} A A r fun (a : A) =>
+              @Aeneas.Std.Result.ok.{0} A a)
+            r)
+        (@Eq.refl.{1} (Aeneas.Std.Result.{0} A)
+          (@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} A A (@Aeneas.Std.Result.div.{0} A)
+            fun (a : A) => @Aeneas.Std.Result.ok.{0} A a))
+        r (@Eq.symm.{1} (Aeneas.Std.Result.{0} A) r (@Aeneas.Std.Result.div.{0} A) h))
+    (@Eq.refl.{1} (Aeneas.Std.Result.{0} A) r)
+def AspisR1.NMT_CallTree.erase : {A : Type} → AspisR1.NMT_CallTree.Code A → Aeneas.Std.Result.{0} A :=
+fun {A : Type} (x : AspisR1.NMT_CallTree.Code A) =>
+  @AspisR1.NMT_CallTree.Code.brecOn.{1} A (fun (x : AspisR1.NMT_CallTree.Code A) => Aeneas.Std.Result.{0} A) x
+    (@AspisR1.NMT_CallTree.erase._f A)
+
+Running as unit: run-r45a7be2a31f24d04b76f93afbde2e016.scope; invocation ID: 9ed8b1b875634498a34990bf1e7d9e4b
