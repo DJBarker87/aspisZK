@@ -128,3 +128,5 @@ No row proof or comparison implication claimed. Wall0:02.11;
 peak4711028KiB;swap0;standard summary axioms only.
 
 PV_LIB_SPEC_F6Full compiled49761, cohortw3: exit0, wall0:02.11, peak4730196KiB, swap0; standard summary axioms only. Statement only.
+
+PV_LIB_SPEC_F170Full compiled49762, cohortw3: exit0, wall0:02.00, peak4728020KiB, swap0; standard summary axioms only. Statement only.
