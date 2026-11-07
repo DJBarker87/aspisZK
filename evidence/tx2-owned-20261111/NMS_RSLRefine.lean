@@ -3,7 +3,7 @@ set_option autoImplicit false
 namespace NMS_RSLRefine
 open RSL
 /-- Observation inclusion keeps the exact return/error carrier and every
-chronological prefix, including independent aborts and divergence. -/
+chronological preEvents, including independent aborts and divergence. -/
 def Refines {A : Type} (native model : Spec A) : Prop :=
  ∀ env observation, native env observation → model env observation
 
@@ -52,9 +52,9 @@ exported child-success or endpoint premise. -/
 theorem rsbind_return {A B : Type} (m : RS A) (k : A → RS B)
  (env : Env) (b : B) (events : List Event)
  (run : RS.bind m k env ⟨.ret (.ok b), events⟩) :
- ∃ a prefix suffix, m env ⟨.ret (.ok a),prefix⟩ ∧
-   k a env ⟨.ret (.ok b),suffix⟩ ∧ events = prefix ++ suffix := by
- rcases run with ⟨reply,prefix,o2,hm,hk,ho⟩ | ⟨_,_,ho⟩ | ⟨_,_,ho⟩
+ ∃ a preEvents suffix, m env ⟨.ret (.ok a),preEvents⟩ ∧
+   k a env ⟨.ret (.ok b),suffix⟩ ∧ events = preEvents ++ suffix := by
+ rcases run with ⟨reply,preEvents,o2,hm,hk,ho⟩ | ⟨_,_,ho⟩ | ⟨_,_,ho⟩
  · cases reply with
    | error e =>
      simp only [Spec.pure] at hk
@@ -64,7 +64,7 @@ theorem rsbind_return {A B : Type} (m : RS A) (k : A → RS B)
      cases o2 with
      | mk exit suffix =>
        cases ho
-       exact ⟨a,prefix,suffix,hm,hk,rfl⟩
+       exact ⟨a,preEvents,suffix,hm,hk,rfl⟩
  · cases ho
  · cases ho
 
