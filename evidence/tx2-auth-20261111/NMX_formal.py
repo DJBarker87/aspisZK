@@ -3,18 +3,18 @@ from NMX_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def _run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMX_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=6) or (a.startswith('NMX_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
+    assert ((a.startswith('NMX_L') and 1<=int(a[5:])<=1999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=6) or (a.startswith('NMX_K') and 1<=int(a[5:])<=1999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<676,'Redirect formal allowance exhausted (426 previous + 250)' 
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<826,'Resume formal allowance exhausted (626 previous + 200)' 
         combined=E/'NMX_COMBINED_IMPORT.lean'
         combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and x.get('axioms_accepted',True) and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
         # Revision2 has two new-root audits, its own combined import and retention.
         # Keep these slots even though the historical revision1 import is green.
         pending_final_slots=4
         if target not in ['NMX_COMBINED_IMPORT','NMX_R2_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention','retention_rev2','proof6','proof7']:
-            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<676-pending_final_slots,'Reserve every outstanding final import/retention slot'
+            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<826-pending_final_slots,'Reserve every outstanding final import/retention slot'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
@@ -25,7 +25,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     if kind=='extract':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x.get('kind')=='extract' for x in done)<6
-    env=json.loads((E/'NMX_R3_ENV.json').read_text())
+    env=json.loads((E/'NMX_R3_REGISTRY_ENV.json').read_text())
     env['TMPDIR']=B+'/NMX_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMX_target'
     env['CARGO_NET_OFFLINE']='true'

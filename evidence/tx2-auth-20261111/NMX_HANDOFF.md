@@ -407,3 +407,10 @@ WIP COMMIT FAILED: git add could not write the worktree index.lock (ENOSPC).
 Last successful commit028c552dbcd contains217 candidate; all234 Stage F work
 and these restart notes remain UNCOMMITTED in this worktree. Do not claim a
 Stage F commit or push. Resolve disk space and commit preserved files first.
+
+## Disk-restored resumption (2026-11-07)
+
+Lead merged preserved WIP and complete LIBB library. Local disk49GiB free; resume authorized. Prior626 formal/6 extraction/25 Kani. Own runner allows200 further formal scopes (at least150 authorized), through826 actual formal launches, and identifiers beyond999; unchanged admission/caps. Next L932 repairs failed part erasure with bounded definitional closure after simplification. No candidate234 yet;233 frozen until234 candidate.
+
+### Restored stage G checkpoint
+L939 isolated erasure cut, L945 tail erasure, L948 remaining parts and L947 effect interpreter/associativity PASS. All18 bounded continuation erasures are now accepted; old failed whole module remains historical only. L944 copies published LIB_/LIBB_ objects with verified hashes into NMX_LIBB_seed (NMX_LIBB_SEED.json). No instance fields are redefined. Failed syntactic variants are retained; constructor congruence replaced broad recursive congruence. Effects explicitly include clone allocation iff heap-carrying error; final canonical234/native observation fold remains OPEN. Scope L932 missing NND environment corrected in own runner. No cap increase, extraction, Kani or shipped changes.
