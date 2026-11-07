@@ -1,0 +1,27 @@
+'PV_W5_F31Classify.zero_capacity' depends on axioms: [propext, Quot.sound]
+'PV_W5_F31Classify.boundary_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_W5_F31Classify.value_classify' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-lib-20261107/sources/PV_W5_F31Classify.lean:91:5: warning: Variable name `prior` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem PV_W5_F31Child.classify : ∀ (resources : Resources) (encode : Encode) (base : Carrier PV_STX_World.World Data)
+  (ctrl : Control) (s : Store Data) (parent : Frame) (parents : List Frame) (a n : ℕ) (w : OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent) (external : PV_W5_NoAllocShim.External) (backend : PV_W5_NativeFrame.Backend)
+  (effects : PV_W5_LeafBoundary.Entry → OWNER → Address → Option Data),
+  PV_FN_SLICE_f31.Pre s (parent :: parents) a n w →
+    (PV_STX2_IntrinsicSemantics_Malloc fun {A} => resources) →
+      (PV_STX2_IntrinsicSemantics_AllocZeroed fun {A} => resources) →
+        PV_STX2_IntrinsicSemantics_GlobalDrop effects →
+          ∀ (value : Data),
+            (PV_FN_SLICE_f31.childReply (fun {A} => resources) (fun {A} => encode) base ctrl s (parent :: parents) a n w
+                    external backend).answer =
+                Answer.returned (Result.ok value) →
+              (∃ pointer,
+                  value =
+                    PV_STX2_Source7QConstructorResult.value
+                      (PV_W5_F35Success.inner pointer n PV_STX2_Source7GlobalClone.value)) ∨
+                (PV_FN_SLICE_f31.L ctrl).variant value = some 1 :=
+⋯
+'PV_W5_F31Child.classify' depends on axioms: [propext, Classical.choice, Quot.sound]
