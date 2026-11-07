@@ -1,0 +1,53 @@
+{"attempt": "NNC_L058", "exit_status": 1, "wall_seconds": 10.800332746002823, "peak_rss_kib": "5537992", "swaps": "0", "print_axioms": ["'AspisR1.NNC_RecSelect.selects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNC_generated/NNC_RecSelect.lean:40:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  GExq_Caller.sdk (FIp_Install.configuration err base reservation).adapter
+    (FIp_Install.configuration err base reservation).currentBase
+    (FIp_Install.configuration err base reservation).stageBase (FIp_Install.configuration err base reservation).finish
+    (FIp_Install.configuration err base reservation).reserved (FIp_Install.configuration err base reservation).query
+    (FIp_Install.configuration err base reservation).geometry
+    (FIp_Install.configuration err base reservation).boundaries (FIp_Install.configuration err base reservation).std
+in the target expression
+  S2W_D
+...
+tedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+base : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+reservation : NP6_StdModel.Reservation
+cfg : DrvC_Installation.Configuration FIo_Install.W C
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk cfg) native1 native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+e1 e2 : Entry
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state1 state2 final1 : A
+saved : alloc.vec.Vec U8
+post1 : Heap (ℕ → Record)
+accepted1 :
+  first native1 copy allocator e1 CPH_Program.verifier data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+a : Adversary A
+Q : ℕ
+queries : ∀ (K : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a K).length ≤ Q
+r1 : (eval H a.first).2 = { entry := e1, data := data1, state := state1 }
+r2 :
+  (eval H (a.second { entry := e1, data := data1, state := state1 } saved post1 final1)).2 =
+    { entry := e2, data := data2, slot := slot, state := state2 }
+⊢ S2W_DigestExtraction.AeneasExtraction
+    (GExq_Caller.sdk cfg.adapter cfg.currentBase cfg.stageBase cfg.finish cfg.reserved cfg.query cfg.geometry
+      cfg.boundaries cfg.std)
+    native1 native2 hashv
+NNC_generated/NNC_RecSelect.lean:71:18: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [eval,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNC_RecSelect.selects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r264e8287888c4ef1ac2fa99c231f84fd.scope; invocation ID: 09f70ff01028456d9c3c7348c39cbf9e

@@ -25,7 +25,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
             assert any(x.get('module')==dep and x.get('exit_status')==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NNC_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNC_generated','-o','NNC_objects/'+target.replace('.','/')+'.olean',src]
-        if target in ['NNC_ProofDriver','NNC_ScanDriver']:command+=['-c','NNC_native/'+target+'.c']
+        if target in ['NNC_ProofDriver','NNC_ScanDriver','NNC_OptionBDriver']:command+=['-c','NNC_native/'+target+'.c']
     assert command
     cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time=('focused Lean elaboration' if kind=='lean' else 'optimized Rust compilation then CBMC verification of '+target if kind=='kani' else 'optimized audit link' if kind=='link' else 'named raw axiom/module scan' if kind=='audit' else 'bounded source, metadata, export or hashing inspection'))
     files[a+'.json']=json.dumps(cfg)
