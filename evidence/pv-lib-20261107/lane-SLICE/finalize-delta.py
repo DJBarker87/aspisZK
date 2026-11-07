@@ -3,7 +3,7 @@ E=pathlib.Path('evidence/pv-lib-20261107/lane-SLICE')
 j=json.loads((E/'MAP_DELTA.json').read_text())
 receipts={r['target']:r for p in E.glob('receipt-*.json') if (r:=json.loads(p.read_text()))['accepted'] and not r['runtime_audit']}
 audit=json.loads((E/'RAW_AUDIT.json').read_text()) if (E/'RAW_AUDIT.json').exists() else None
-closed={'slice:f32':'PV_LIB_SLICE_F32','slice:f33':'PV_LIB_SLICE_F33','typedDrop178':'PV_LIB_SLICE_TypedDrop'}
+closed={'slice:f32':'PV_LIB_SLICE_F32','slice:f33':'PV_LIB_SLICE_F33'}
 for s in j['slots']:
  m=closed.get(s['child'])
  if m and m in receipts:
@@ -13,9 +13,9 @@ for s in j['slots']:
   s['instance']={'module':m,'model':m+'.model','law':m+'.law','theorem':m+'.certified','compiled':True,'attempt':r['attempt'],'source_sha256':r['source_sha256'],'graph_of_function':True,'raw_audited':bool(audit),'qualification':qualification}
   if audit:s['instance']['audit_attempt']=audit['attempt']
   if s['child']=='typedDrop178':s['instance']['provenance']={'branch':'codex/pv-w2-20261108','revision':'fc0340264851248e164a098c170cc53e22857085','sources':['lean/PV_FN_SLICE_f22_TypedDestructor.lean','lean/PV_FN_SLICE_f7_DestructorBinding.lean','lean/PV_FN_SLICE_f7_RuntimeDrop.lean'],'theorems':['PV_FN_SLICE_f22_TypedDestructor.run','PV_FN_SLICE_f22_TypedDestructor.w5_projection_identity','PV_FN_SLICE_f7_DestructorBinding.selected','PV_FN_SLICE_f7_RuntimeDrop.run'],'closed_leaf':'PV_W5_DropLeaf.contract (composed by the provider)'}
- if s['child']=='entryReferenceValidity' and 'PV_LIB_SLICE_EntryReference' in receipts:
-  r=receipts['PV_LIB_SLICE_EntryReference'];s['support']={'module':r['target'],'theorem':r['target']+'.certified','attempt':r['attempt'],'source_sha256':r['source_sha256'],'raw_audited':bool(audit),'claim':'SAME entry-selected header graph and non-null/alignment/address-bound projection for every column; implication to old entry obligation. Actual Foundation-construction discharge still missing.'}
-  s['reason']='Existing named reference-valid entry yields each selected column validity by the compiled provider-name adapter. The actual Foundation builder has not been proved to establish that entry; facet remains MISSING-CHILD-LEMMA.'
+ if s['child']=='typedDrop178' and 'PV_LIB_SLICE_TypedDrop' in receipts:
+  r=receipts['PV_LIB_SLICE_TypedDrop'];s['support']={'module':r['target'],'theorem':r['target']+'.certified','selector':r['target']+'.selected','attempt':r['attempt'],'source_sha256':r['source_sha256'],'raw_audited':bool(audit),'claim':'Exact typed f22 body graph and actual Regular22 selector by provider names. Full runtime-Drop suffix adapter is not installed.'}
+  s['reason']='Typed f22 body graph/selector now compiled. RuntimeDrop needs the remaining W2 replay cone beyond this lane ID block; full runtime/source178 carrier facet remains MISSING-CHILD-LEMMA.'
 j['qualification']='Overlay only; shared PLIB_MAP.json untouched. INSTANTIATED counts qualified provider graph adapters, not frozen-contract equivalence, actual caller discharge or parent/root closure.'
 j['lane_counts']={status:sum(s['status']==status for s in j['slots']) for status in ['INSTANTIATED','MISSING-CHILD-LEMMA','SPEC-ERROR']}
 (E/'MAP_DELTA.json').write_text(json.dumps(j,indent=2)+'\n')

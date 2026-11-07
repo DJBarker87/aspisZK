@@ -25,7 +25,7 @@ for r in receipts:
  for field in ['MemoryHigh=6G','MemoryMax=8G','MemorySwapMax=0','TasksMax=64']:assert field in cmd
  assert cmd.count('7000')==1 or r['runtime_audit']
  if r['target'].startswith('PV_LIB_SLICE_'):continue
- rev=entry['revision'] if r['target'].startswith('PV_STX2_') else '9d7395cb069f07f812e8e1352e0478111eaec9ee'
+ rev=r['source_revision'] if r['source_revision'] in ['fc0340264851248e164a098c170cc53e22857085',entry['revision']] else '9d7395cb069f07f812e8e1352e0478111eaec9ee'
  raw=subprocess.check_output(['git','show',rev+':lean/'+r['target']+'.lean']);assert sha(raw)==r['source_sha256']
  blob=subprocess.check_output(['git','rev-parse',rev+':lean/'+r['target']+'.lean'],text=True).strip();assert blob==r['source_index_blob']
  replays.append({'module':r['target'],'attempt':a,'source_revision':rev,'source_blob':blob,'source_sha256':sha(raw)})

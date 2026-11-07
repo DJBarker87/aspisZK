@@ -24,16 +24,18 @@ the full frozen source specification follows. No such strengthening is
 claimed or silently inserted into the frozen specifications. Those are
 separate caller/composition/adequacy obligations, as with the base adapters.
 
-The typed Drop model uses W2's `AfterDrop.finish` and the full actual handler
-reply. Its execution equality is supplied by `RuntimeDrop.run`, whose source
-projection is DERIVED from the actual typed f22 body and frame. Selection of
-Regular22 is reused from `DestructorBinding.selected`. It closes no full f7
-contract, whose f6 source/frame dependency remains unproved.
+The typed Drop support model reuses W2's actual `TypedDestructor.state` and
+`finalStore` by name. Its execution graph is certified by `TypedDestructor.run`,
+and source178 selects Regular22 by `DestructorBinding.selected`. This is the
+f22 body graph only. The RuntimeDrop/source178 suffix import stopped before
+Lean because the pathname was outside the accepted cache authority; its30-module
+replay cone exceeded the20 remaining Lean IDs. The smaller16-module body/selector
+cone is replayed instead. No object was loaded just because a pathname existed.
+The full runtime facet remains missing, as does f7's f6 source/frame dependency.
 
-The entry header model reuses `Source7EntrySelection.header` and
-`Source7EntryReferenceValid.column` BY NAME for all columns, including empty
-ones. It retains `FoundationConstructionEntryObligation` as the named caller
-obligation. It does not prove that the Foundation builder satisfies it.
+The entry-reference provider was reviewed by name. Its accepted-cohort preflight
+requires111 missing modules for ToVecCallReferenceEntry, and the actual Foundation
+construction discharge remains unproved. No entry-validity proof is claimed.
 
 No new native/operator/representation fact, T field, endpoint premise,
 implementation edit, ledger status, row consumer, or package-branch change.

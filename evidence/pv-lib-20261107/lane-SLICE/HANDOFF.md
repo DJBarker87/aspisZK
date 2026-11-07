@@ -153,3 +153,5 @@ Attempt 49669: PV_LIB_SLICE_TypedDrop, exit1.
 Attempt 49670: PV_FN_SLICE_f8_PrefixData, exit0.
 
 Attempt 49671: PV_FN_SLICE_f8_Prefix, exit0.
+
+Attempt 49672: PV_FN_W2_LifetimePrefix, exit0.
