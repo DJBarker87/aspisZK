@@ -1,0 +1,120 @@
+{
+  "attempt": "PCI_K014",
+  "kind": "kani",
+  "module": "POOL:280 actual exact PDA request and unchanged reply (PCG SDK bridge reused)",
+  "sources": [
+    "PCI_gate.py",
+    "PCI_src/programs/aspis-pool/src/history.rs",
+    "PCI_src/programs/aspis-pool/src/lib.rs",
+    "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs",
+    "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs"
+  ],
+  "command": [
+    "python3",
+    "PCI_gate.py",
+    "PCI_K014.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects:/home/dombarker/project-offloads/codex-pc-deposit-children2-cache-20261110",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCI_ROOT_ARG_MUTANT"
+  },
+  "timeout": 180,
+  "source_revision": "c61864363ae5a6eec9190e1f59c2b6182171c31f",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "seed_manifest_sha256": "98a9181ded68006eb0a44565def0c82c25851c6ce842c60f7a07fa9b69ee079b",
+    "selected_objects": {
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootAddress.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootAddress.olean",
+        "sha256": "cf3ef3e2c3581691b8864686e2f037bcf0fa82ad06695029795fe4c627d819bc"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Count.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Count.olean",
+        "sha256": "94106aecae65467032459b9da001fab734d09e8f4409513076a7ecc02d69f3b3"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Note.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Note.olean",
+        "sha256": "21aac47bf9590f7dbaa4b05e20ccd98297d1617429d61fc563df3e8632acec75"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Mul.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_Mul.olean",
+        "sha256": "a27ad9aeef832285f134d8887683d45465aab041d885b0412de5d0e4ad506fd1"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootRef/Types.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootRef/Types.olean",
+        "sha256": "ea18fe3d148548bf703253cf625216e31f0fcb338627c5578893e83a64a46e88"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootRef/Funs.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_RootRef/Funs.olean",
+        "sha256": "d83ac225f62877fc95df1be57bf9549de43011fb258faf8dc8a32017986db786"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Types.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Types.olean",
+        "sha256": "e4d7a7a107bdc8c120dcb93d867dc54f884b86eb037b7186f93703a5de3def61"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Funs.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_objects/PCI_NoteRef/Funs.olean",
+        "sha256": "dee1664ff05dd8b030134f829dbab97c235cd6e397c797bbd26f59e0ba1336e6"
+      }
+    },
+    "seed_note": "selected input files pinned by PCI_IMPORTS.json.xz, including all selected Aeneas objects and sidecars"
+  },
+  "expected_time": "Optimized compile then fixed seed descriptor forwarding; PCG repaired whole-context exposed provenance; no PDA value law",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_target",
+    "--lib",
+    "--features",
+    "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "history::PCI_RootNative::root_address",
+    "--output-format",
+    "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "exit_status": 1,
+  "wall_seconds": 39.46811380703002,
+  "peak_rss_kib": "540372",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfc91bab081ee4b5fa04ec8472dc08681.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "735621120",
+  "source_hashes": {
+    "PCI_gate.py": "92a057fdc4c69204bc4cab7c1f0c783d01b3fa1c808dfcd6829cac101290ba3d",
+    "PCI_src/programs/aspis-pool/src/history.rs": "3f01aaeabeca7333a557c448247f802f9f6808bab090a54ac6d5345dde642659",
+    "PCI_src/programs/aspis-pool/src/lib.rs": "56de1fde849a78bade8f0e56b5b3ec078cff07162b55af3fedd61161a623d12d",
+    "PCI_src/programs/aspis-pool/src/PCI_RootNative.rs": "3980b4b5bcbe9856f45ab204f0474caead5fa29e25840156c3af888e45cc77bf",
+    "PCI_src/programs/aspis-pool/src/PCI_CountNative.rs": "89da488745fa6408b5acf7c2ccb5d26a13603256a742595ebd57d792b288682d"
+  },
+  "print_axioms": "N/A: kani"
+}

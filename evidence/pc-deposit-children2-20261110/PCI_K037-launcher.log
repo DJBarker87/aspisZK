@@ -1,0 +1,52 @@
+{"attempt": "PCI_K037", "exit_status": 1, "wall_seconds": 6.544084283988923, "peak_rss_kib": "421044", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+deposit-children2-20261110/PCI_src/programs/aspis-pool/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCI_RootNative` should have a snake case name
+   --> programs/aspis-pool/src/history.rs:349:33
+    |
+349 | #[path="PCI_RootNative.rs"] mod PCI_RootNative;
+    |                                 ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pci_root_native`
+
+warning: module `PCI_CountNative` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5797:34
+     |
+5797 | #[path="PCI_CountNative.rs"] mod PCI_CountNative;
+     |                                  ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pci_count_native`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.15s
+Checking harness deposit_transport::PCI_DepositNative::decode_all...
+
+VERIFICATION RESULT:
+ ** 1 of 404 failed (4 unreachable)
+Failed Checks: assertion failed: same != cfg!(PCI_NEG_DEPOSIT)
+ File: "programs/aspis-pool/src/PCI_DepositNative.rs", line 40, in deposit_transport::PCI_DepositNative::decode_all
+
+VERIFICATION:- FAILED
+Verification Time: 3.3609998s
+
+Manual Harness Summary:
+Verification failed for - deposit_transport::PCI_DepositNative::decode_all
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r5d63b36dfc2545b3b4aa75e5a63bd456.scope; invocation ID: 76569c21e9ae4528b824d93453ce9b61

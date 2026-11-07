@@ -1,0 +1,50 @@
+{"attempt": "PCI_K047", "exit_status": 1, "wall_seconds": 25.51810397207737, "peak_rss_kib": "673812", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-deposit-children2-20261110/PCI_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx
+...
+ note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: module `PCI_NoteNative` should have a snake case name
+   --> crates/aspis-statement/src/spend.rs:659:33
+    |
+659 | #[path="PCI_NoteNative.rs"] mod PCI_NoteNative;
+    |                                 ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pci_note_native`
+
+warning: module `PCI_NoteCallers` should have a snake case name
+   --> crates/aspis-statement/src/spend.rs:662:34
+    |
+662 | #[path="PCI_NoteCallers.rs"] mod PCI_NoteCallers;
+    |                                  ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pci_note_callers`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 14.18s
+Checking harness spend::PCI_NoteCallers::note_caller...
+
+VERIFICATION RESULT:
+ ** 1 of 462 failed (3 unreachable)
+Failed Checks: assertion failed: (got.map(|x| x.0) == reply && unsafe { CALLS } == 1) !=
+    cfg!(PCI_NEG_NOTE_CALLER)
+ File: "crates/aspis-statement/src/PCI_NoteCallers.rs", line 33, in spend::PCI_NoteCallers::note_caller
+
+VERIFICATION:- FAILED
+Verification Time: 8.966175s
+
+Manual Harness Summary:
+Verification failed for - spend::PCI_NoteCallers::note_caller
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rcea5749c753d4c8d857fa9ea49f3aacf.scope; invocation ID: 4b31aafddcf0496ba23f07880c1ce26c
