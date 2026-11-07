@@ -268,3 +268,5 @@ Session4 49176: pinned PV_THR2_Packet12801Issue passed; session4 receipt records
 Session4 49177: pinned PV_FN_THREAD_f361OwnEntry124Pre passed; session4 receipt records resources/axioms.
 
 Session4 49180 passed PV_LIB_A_OwnerStoreTransport; exact receipt/axioms in session4.
+
+Session4 49183 passed PV_LIB_A_WriterSites; exact receipt/axioms in session4.

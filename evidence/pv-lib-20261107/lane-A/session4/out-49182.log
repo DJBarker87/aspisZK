@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_WriterSites.lean:58:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let wait ←
+      some
+          { request := PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments,
+            action := PV_STX2_Native.ReturnAction.child e.store.nextActivation (Place.local e.destination),
+            unwind := [] }
+    match wait.request with
+      | PV_STX2_Native.Request.child fn activation args =>
+        match P fn with
+        | some val => none
+        | none => do
+          let f ← PV_THR2_SourceStoreNative.function fn
+          pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+      | x => none
+is not definitionally equal to the right-hand side
+  some (site e f)
+
+P : Data → Option PV_STX2_SliceSyntax.Program
+e : Entry
+f : PV_THR2_SourceStoreNative.Function
+leaf : P e.callee = none
+meaning : PV_THR2_SourceStoreNative.function e.callee = some f
+⊢ (do
+      let wait ←
+        some
+            { request := PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments,
+              action := PV_STX2_Native.ReturnAction.child e.store.nextActivation (Place.local e.destination),
+              unwind := [] }
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match P fn with
+          | some val => none
+          | none => do
+            let f ← PV_THR2_SourceStoreNative.function fn
+            pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+        | x => none) =
+    some (site e f)
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_WriterSites.lean:57:65: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵T̵H̵R̵2̵_̵S̵o̵u̵r̵c̵e̵S̵t̵o̵r̵e̵N̵a̵t̵i̵v̵e̵.̵s̵e̵l̵e̵c̵t̵,̵p̵e̵n̵d̵i̵n̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵T̵H̵R̵2̵_̵I̵n̵t̵r̵i̵n̵s̵i̵c̵F̵r̵a̵m̵e̵E̵n̵t̵e̵r̵.̵p̵e̵n̵d̵i̵n̵g̵,̵P̵V̵_̵T̵H̵R̵2̵_̵S̵t̵a̵t̵i̵c̵R̵e̵p̵l̵y̵.̵w̵a̵i̵t̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵l̵e̵a̵f̵,̵m̵e̵a̵n̵i̵n̵g̵]̵[̲P̲V̲_̲T̲H̲R̲2̲_̲S̲o̲u̲r̲c̲e̲S̲t̲o̲r̲e̲N̲a̲t̲i̲v̲e̲.̲s̲e̲l̲e̲c̲t̲,̲ ̲p̲e̲n̲d̲i̲n̲g̲,̲ ̲P̲V̲_̲T̲H̲R̲2̲_̲I̲n̲t̲r̲i̲n̲s̲i̲c̲F̲r̲a̲m̲e̲E̲n̲t̲e̲r̲.̲p̲e̲n̲d̲i̲n̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲T̲H̲R̲2̲_̲S̲t̲a̲t̲i̲c̲R̲e̲p̲l̲y̲.̲w̲a̲i̲t̲,̲ ̲l̲e̲a̲f̲,̲ ̲m̲e̲a̲n̲i̲n̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_WriterSites.lean:57:82: warning: This simp argument is unused:
+  leaf
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_THR2_SourceStoreNative.select, ̲pending,
+  ̵  ̵ ̵ ̵PV_THR2_IntrinsicFrameEnter.pending,
+  ̲ ̲ ̲ ̲ ̲PV_THR2_StaticReply.wait, ̲Option.bind_some,l̵e̵a̵f̵,̵ ̲meaning]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_WriterSites.lean:57:87: warning: This simp argument is unused:
+  meaning
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_THR2_SourceStoreNative.select, ̲pending,
+  ̵  ̵ ̵ ̵PV_THR2_IntrinsicFrameEnter.pending,
+  ̲ ̲ ̲ ̲ ̲PV_THR2_StaticReply.wait, ̲Option.bind_some, ̲leaf,̵m̵e̵a̵n̵i̵n̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_WriterSites.source487' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source930' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source3447' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source3519' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source3641' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source3756' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source4327' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.source8248' depends on axioms: [propext]
+'PV_LIB_A_WriterSites.selected' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_WriterSites.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
