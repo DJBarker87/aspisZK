@@ -3,7 +3,7 @@
   "row_credit_claimed": false,
   "budget": {
     "authorized_scopes": 300,
-    "used_scopes": 96,
+    "used_scopes": 105,
     "kani": 0,
     "extraction": 0
   },
@@ -35,7 +35,7 @@
     "24": {
       "status": "WAITING",
       "module": "LIBC_S1",
-      "reason": "All six concrete fields fixed; Public type equality needs actual LIB_ VL* bundle; its publicDom compatibility is a bundle/principal obligation.",
+      "reason": "All six fields fixed; publicDom compatibility is proved by LIBC_S1Validated.validated at the SAME statement. Public type identity still needs actual LIB_ VL* bundle.",
       "support_compiled": true
     }
   },
@@ -153,8 +153,62 @@
     "S1Lib": {
       "status": "WAITING",
       "module": "LIBC_S1",
-      "reason": "All six concrete fields fixed; Public type equality needs actual LIB_ VL* bundle; its publicDom compatibility is a bundle/principal obligation.",
+      "reason": "All six fields fixed; publicDom compatibility is proved by LIBC_S1Validated.validated at the SAME statement. Public type identity still needs actual LIB_ VL* bundle.",
       "support_compiled": true
+    },
+    "checkValuesDom": {
+      "status": "DONE",
+      "module": "LIBC_CheckValuesDomain",
+      "theorem": "LIBC_CheckValuesDomain.native",
+      "caller_discharge": "LIBC_CanonicalScan.r4_value; LIBC_PreparedR4.expanded"
+    },
+    "S1.Statement": {
+      "status": "DONE",
+      "module": "LIBC_S1",
+      "theorem": "LIBC_S1.decoder",
+      "defining_term": "NMT_345.Statement",
+      "note": "Concrete pure field export; canonical bundle still external"
+    },
+    "S1.decodeStatement": {
+      "status": "DONE",
+      "module": "LIBC_S1Sources",
+      "theorem": "LIBC_S1Sources.decode",
+      "defining_term": "LIBC_S1.decode",
+      "note": "Concrete pure field export; canonical bundle still external"
+    },
+    "S1.decodeReachesAlloc": {
+      "status": "DONE",
+      "module": "LIBC_S1Sources",
+      "theorem": "LIBC_S1Sources.allocation",
+      "defining_term": "LIBC_S1.reaches",
+      "note": "Concrete pure field export; canonical bundle still external"
+    },
+    "S1.validateStatement": {
+      "status": "DONE",
+      "module": "LIBC_S1Sources",
+      "theorem": "LIBC_S1Sources.validate",
+      "defining_term": "LIBC_S1.valid",
+      "note": "Concrete pure field export; canonical bundle still external"
+    },
+    "S1.encodeCandidate": {
+      "status": "DONE",
+      "module": "LIBC_S1Sources",
+      "theorem": "LIBC_S1Sources.encode",
+      "defining_term": "LIBC_S1.encode",
+      "note": "Concrete pure field export; canonical bundle still external"
+    },
+    "S1.semanticPublic": {
+      "status": "WAITING",
+      "module": "LIBC_S1",
+      "theorem": "LIBC_S1.semantic",
+      "compatibility": "LIBC_S1Validated.validated",
+      "reason": "Actual VL*.Public identity cannot be supplied before external module22; native semantic value and its publicDom compatibility are proved"
     }
+  },
+  "audit": {
+    "own_roots": 169,
+    "standard_only": true,
+    "collector_agrees": true,
+    "summary": "LIBC_FINAL_AUDIT_SUMMARY.json"
   }
 }
