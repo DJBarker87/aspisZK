@@ -11,7 +11,7 @@ def definitions(s):
  ms=list(re.finditer(r'(?m)^(?:(?:noncomputable|private|protected) )?(def|theorem|lemma|abbrev|structure|inductive)\s+([^\s(]+)',s));return {m[2]:dict(kind=m[1],sha256=sha(s[m.start():ms[i+1].start() if i+1<len(ms) else len(s)].encode()))for i,m in enumerate(ms)}
 def main():
  old=load(OLD/'NMH_PROVENANCE.json');plan=load(E/'NML_PLAN.json');outputs=[];attempts={};tools=collections.Counter();detail=[]
- for q in plan['runs']:
+ for q in plan['runs']+plan.get('aeneas_resumptions',[]):
   a=q['run'];p=E/a/'receipt.json'
   if not p.exists():p=E/a/'configuration_receipt.json'
   n=E/(a+'_emitted')/'NHR_PINS.json'
@@ -31,7 +31,7 @@ def main():
  result=[];diffs=load(E/'NML_DIFFS_CLASSIFIED.json') if (E/'NML_DIFFS_CLASSIFIED.json').exists() else dict(blobs=[])
  classified={b['blob']:b for b in diffs['blobs']}
  for b in old['blobs']:
-  h=b['blob'];z=dict(b);z['inherited_NMH_verdict']=b['verdict'];z['NML_runs']=[q['run'] for q in plan['runs'] if h in q['members']];z['NML_attempts']=[a for a in z['NML_runs'] if a in attempts]
+  h=b['blob'];z=dict(b);z['inherited_NMH_verdict']=b['verdict'];z['NML_runs']=[q['run'] for q in plan['runs']+plan.get('aeneas_resumptions',[]) if h in q['members']];z['NML_attempts']=[a for a in z['NML_runs'] if a in attempts]
   raw=subprocess.check_output(['git','show','HEAD:'+b['committed_paths'][0]]);assert sha(raw)==h
   ds=definitions(raw.decode());candidates=[o for o in outputs if h in o['spec']['members']];comparisons=[]
   for o in candidates:

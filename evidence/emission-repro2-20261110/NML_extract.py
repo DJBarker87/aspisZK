@@ -20,12 +20,27 @@ rel=next(l.split(':',2)[2].strip().lstrip('/') for l in Path('/proc/self/cgroup'
 cg=Path('/sys/fs/cgroup')/rel
 assert {n:(cg/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')}=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
 out=E/(run+'_emitted');out.mkdir(exist_ok=True)
-m.options=lambda args,workspace,out:dict(charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],opacity=spec['opacity'],root=spec['configuration']['roots'])
+def recovered_options(args,workspace,out):
+ # NHR's frozen-native default expands crate:: to aspis_r1_cost_probe.
+ # Reference metadata uses the actual LLBC crate name; original argv is unchanged.
+ import tomllib
+ name=tomllib.loads((E/spec['reference_directory']/'Cargo.toml').read_text())['package']['name'].replace('-','_')
+ opacity=[dict(x,selector=x.get('selector',x['path']).replace('crate::',name+'::')) for x in spec['opacity']]
+ return dict(charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],opacity=opacity,root=spec['configuration']['roots'],charon_reuse=spec.get('reuse_charon'))
+m.options=recovered_options
 original_run=subprocess.run
 # Record distinct tool invocations, exact argv and GNU time metrics, even on failure.
 def measured(cmd,*a,**kw):
  tool=next((k for k in ['charon','aeneas'] if cmd[0]==spec[k+'_command'][0]),None)
  if not tool:return original_run(cmd,*a,**kw)
+ if tool=='charon' and spec.get('reuse_charon'):
+  old=spec['reuse_charon'];receipt=json.loads((E/old['receipt']).read_text());llbc=E/old['llbc']
+  assert receipt['exit']==0 and receipt['command']==cmd
+  assert hashlib.sha256(llbc.read_bytes()).hexdigest()==old['llbc_sha256']
+  assert receipt['archive_source_sha256']==spec['reference_sha256']
+  (out/'repro.llbc').write_bytes(llbc.read_bytes())
+  (out/'NML_CHARON_REUSE.json').write_text(json.dumps(dict(reused_successful_charon=old,original_receipt=receipt,new_charon_invocation=False,new_charon_charge=0),indent=2))
+  return subprocess.CompletedProcess(cmd,0)
  entry=dict(attempt=run,tool=tool,command=cmd,started_unix=time.time(),source_revision=json.loads((E/(os.environ.get('NML_BATCH_ATTEMPT',run)+'.json')).read_text())['source_revision'],frozen_validation_revision=m.REV,archive_source_git_blob=spec['configuration']['source']['git_blob'],tool_sha256=hashlib.sha256(Path(cmd[0]).read_bytes()).hexdigest(),archive_source_sha256=spec['reference_sha256'],archive_manifest_sha256=spec['manifest_sha256'])
  with (E/'NML_TOOL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n');f.flush();os.fsync(f.fileno())
  r=original_run(['/usr/bin/time','-v','-o',str(out/(tool+'.time'))]+cmd,*a,**kw)

@@ -15,7 +15,7 @@ def main():
   ref=E/r['reference_directory'];assert sha((ref/r['source_relative']).read_bytes())==r['reference_sha256'];assert sha((ref/'Cargo.toml').read_bytes())==r['manifest_sha256']
   assert '--release' in r['charon_command']
   for ex in r.get('package_extras',[]):assert sha((ref/ex['relative_path']).read_bytes())==ex['sha256']
- for f in list(E.glob('NML_[ELB][0-9][0-9][0-9]/receipt.json')):
+ for f in list(E.glob('NML_[ELBA][0-9][0-9][0-9]/receipt.json')):
   rc=load(f);a=rc['attempt'];ad=load(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
   assert rc['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
   assert rc['timeout']==180
