@@ -22,5 +22,8 @@ theorem fold{i} {{H W : Type}} (c : Calls) (s : Parent H W) {args[i]} :
  | (apply NMT_CallTree.result_congr; intro x; simp only '''+laws+''')
  | (split <;> simp only '''+laws+''')
 '''+f'#print axioms fold{i}\nend AspisR1.NMP_PrepareSuffix\n'
+ if i<=5:
+  text=text.replace('intro x; simp only','intro x; cases x <;> try simp only').replace('split <;> simp only','split <;> try simp only')
+  text=text.replace(f'#print axioms fold{i}',f' all_goals rfl\n#print axioms fold{i}')
  (E/f'NMP_PrepareSuffix{i}.lean').write_text(text)
 print('Drafted eight isolated prepare erasure suffixes')

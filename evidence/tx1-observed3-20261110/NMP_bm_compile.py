@@ -14,5 +14,7 @@ if (E/(target+'.lean')).exists():
 assert p.exists(),str(p)
 command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NMP_generated','-o','NMP_objects/'+target.replace('.','/')+'.olean',src]
 x=dict(attempt=a,kind='lean',module=target,sources=[src],command=command,timeout=180,env=env,expected_time='Focused new emitted-route module elaboration; one module only')
+if target in ['NMP_BM_Driver','NMP_BM_ProofDriver']:
+ command+=['-c','NMP_native/'+target+'.c'];x['collect']=['NMP_native/'+target+'.c']
 (E/(a+'.json')).write_text(json.dumps(x,indent=1)+'\n')
 r=subprocess.run([sys.executable,str(E/'NMP_run.py'),a]);raise SystemExit(r.returncode)

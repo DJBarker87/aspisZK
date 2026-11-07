@@ -1,0 +1,167 @@
+NMP_generated/NMP_ObservedStoppedPrefix.lean:14:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  c.c6 s.bytes
+in the target expression
+  (run do
+      let r ←
+        match State.parse s with
+          | State.parse s => do
+            let r ← NMT_CallTree.invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok p => pure (Sum.inr (State.mark0 s p))
+          | State.mark0 s p => do
+            NMT_CallTree.invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)
+            pure (Sum.inr (State.publicTranscript s p))
+          | State.publicTranscript s p => do
+            let r ←
+              NMT_CallTree.invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                  (c.c9 s.digest s.publicValue s.hash p.c1_root)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok t => pure (Sum.inr (State.begin_ s p t))
+          | State.begin_ s p t => do
+            let __x ← NMT_CallTree.invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)
+            match __x with
+              | (r, after) =>
+                match r with
+                | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok ch => pure (Sum.inr (State.mark1 s p after ch))
+          | State.mark1 s p t ch => do
+            NMT_CallTree.invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)
+            pure (Sum.inr (State.finish s p t ch))
+          | State.finish s p t ch => do
+            let r ←
+              NMT_CallTree.invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                  (c.c7 s.digest s.publicValue p t ch s.observer)
+            pure (Sum.inl r)
+      match r with
+        | Sum.inl out => pure out
+        | Sum.inr next => execute c 5 next) =
+    (fail e, [Event.call "TX1:138/parse" s.bytes (fail e)])
+
+H W : Type
+c : Calls
+s : Parent H W
+e : Error
+h : c.c6 s.bytes = fail e
+⊢ (run do
+      let r ←
+        match State.parse s with
+          | State.parse s => do
+            let r ← NMT_CallTree.invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok p => pure (Sum.inr (State.mark0 s p))
+          | State.mark0 s p => do
+            NMT_CallTree.invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)
+            pure (Sum.inr (State.publicTranscript s p))
+          | State.publicTranscript s p => do
+            let r ←
+              NMT_CallTree.invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                  (c.c9 s.digest s.publicValue s.hash p.c1_root)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok t => pure (Sum.inr (State.begin_ s p t))
+          | State.begin_ s p t => do
+            let __x ← NMT_CallTree.invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)
+            match __x with
+              | (r, after) =>
+                match r with
+                | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok ch => pure (Sum.inr (State.mark1 s p after ch))
+          | State.mark1 s p t ch => do
+            NMT_CallTree.invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)
+            pure (Sum.inr (State.finish s p t ch))
+          | State.finish s p t ch => do
+            let r ←
+              NMT_CallTree.invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                  (c.c7 s.digest s.publicValue p t ch s.observer)
+            pure (Sum.inl r)
+      match r with
+        | Sum.inl out => pure out
+        | Sum.inr next => execute c 5 next) =
+    (fail e, [Event.call "TX1:138/parse" s.bytes (fail e)])
+NMP_generated/NMP_ObservedStoppedPrefix.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  c.c6 s.bytes
+in the target expression
+  (run do
+      let r ←
+        match State.parse s with
+          | State.parse s => do
+            let r ← NMT_CallTree.invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok p => pure (Sum.inr (State.mark0 s p))
+          | State.mark0 s p => do
+            NMT_CallTree.invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)
+            pure (Sum.inr (State.publicTranscript s p))
+          | State.publicTranscript s p => do
+            let r ←
+              NMT_CallTree.invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                  (c.c9 s.digest s.publicValue s.hash p.c1_root)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok t => pure (Sum.inr (State.begin_ s p t))
+          | State.begin_ s p t => do
+            let __x ← NMT_CallTree.invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)
+            match __x with
+              | (r, after) =>
+                match r with
+                | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok ch => pure (Sum.inr (State.mark1 s p after ch))
+          | State.mark1 s p t ch => do
+            NMT_CallTree.invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)
+            pure (Sum.inr (State.finish s p t ch))
+          | State.finish s p t ch => do
+            let r ←
+              NMT_CallTree.invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                  (c.c7 s.digest s.publicValue p t ch s.observer)
+            pure (Sum.inl r)
+      match r with
+        | Sum.inl out => pure out
+        | Sum.inr next => execute c 5 next) =
+    (div, [Event.call "TX1:138/parse" s.bytes div])
+
+H W : Type
+c : Calls
+s : Parent H W
+h : c.c6 s.bytes = div
+⊢ (run do
+      let r ←
+        match State.parse s with
+          | State.parse s => do
+            let r ← NMT_CallTree.invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok p => pure (Sum.inr (State.mark0 s p))
+          | State.mark0 s p => do
+            NMT_CallTree.invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)
+            pure (Sum.inr (State.publicTranscript s p))
+          | State.publicTranscript s p => do
+            let r ←
+              NMT_CallTree.invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                  (c.c9 s.digest s.publicValue s.hash p.c1_root)
+            match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok t => pure (Sum.inr (State.begin_ s p t))
+          | State.begin_ s p t => do
+            let __x ← NMT_CallTree.invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)
+            match __x with
+              | (r, after) =>
+                match r with
+                | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok ch => pure (Sum.inr (State.mark1 s p after ch))
+          | State.mark1 s p t ch => do
+            NMT_CallTree.invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)
+            pure (Sum.inr (State.finish s p t ch))
+          | State.finish s p t ch => do
+            let r ←
+              NMT_CallTree.invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                  (c.c7 s.digest s.publicValue p t ch s.observer)
+            pure (Sum.inl r)
+      match r with
+        | Sum.inl out => pure out
+        | Sum.inr next => execute c 5 next) =
+    (div, [Event.call "TX1:138/parse" s.bytes div])
+'AspisR1.NMP_ObservedStoppedPrefix.abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NMP_ObservedStoppedPrefix.diverge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

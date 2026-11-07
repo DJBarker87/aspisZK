@@ -88,7 +88,7 @@ if x['kind'] in ['lean','audit','link']:
    if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
  for n in re.findall(r'^import (?:all )?([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  if x['kind'] in ['audit','link']:
-  for n in ['NMP_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']:rels.add(n.replace('.','/')+'.olean')
+  for n in [x.get('audit_combined','NMP_COMBINED_IMPORT'),'NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']+x.get('audit_modules',[]):rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:

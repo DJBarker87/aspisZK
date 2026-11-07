@@ -69,3 +69,16 @@ explicit approved own-input087 caller clause discharged by094, or be avoided
 by installing179's complete law on noncanonical inputs, including its Err.
 No stronger087 precondition or upstream caller success is silently adopted.
 This is source/domain analysis, not a completed runtime counterexample.
+
+## NMP-BM-S4: begin's Err carrier contains a private post-transcript
+
+Fresh emission150 returns (Rust Result<Challenges,Error>, postTranscript) on
+every returning arm. RSL.VLib.begin instead returns Except Error
+(Challenges × Transcript); its Err carries no post-transcript. Source137
+immediately returns that error, and NMP_ObservedBeginError.stopped_prefix
+proves no mark1/136 suffix is appended while its typed call log retains the
+complete after-transcript. Thus the dead local can be projected away for the
+parent value, but the full child digest/effect prefix still needs the actual
+canonical library interpretation; type equality alone does not prove it.
+This is a representation/projection obligation, not a claim that the canonical
+parent error observation is false or a license to discard oracle effects.

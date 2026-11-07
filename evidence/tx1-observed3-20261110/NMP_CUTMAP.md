@@ -35,3 +35,31 @@ These are literal/carrier gaps classified under(bl)(4). They do not alter the fr
 K090: actual prepare branch_3 selected correctly, CBMC status139 before any verification check. Fixed-array contract calibration on standalone stack arrays does NOT admit this heap-subwindow/nested-stub context. Exact cause unisolated. Parent use is withdrawn; new prepare shape assigns a full arbitrary typed byte array at both Ok/Err mutation cuts with exact KMX stubs, not a custom copy stub. No cap/time increase or unchanged replay.
 
 K091: CBMC status139 also occurs after removing point contracts; therefore K090 does NOT isolate contracts as the cause. Both contexts remain unadmitted. Next changed shape isolates the allocation/memset path: fresh initialized Box<[u8;14759]> converted to the identical Vec<u8> length/capacity under existing std/allocator trust; explicit full typed-array cut mutations remain. No backend/launcher change or cap/timeout increase.
+
+## Authoritative continuation under bm
+
+Whole-parent Kani137/087 is RETIRED; zero new Kani attempts. The following
+source-order cuts replace the earlier native-producer plan. E002/bc covers
+both bodies; all classifications retain their existing trust items.
+
+|Body/site|SAME arguments/reply retained|Current installation|
+|---|---|---|
+|137 parse138|original bytes; full Prefix/Error|Install138 full Result/type inverse; canonical library/domain/effect association pending|
+|137 mark0/mark1,130|original observer and literal0/1|source helper silent; CLOSED packet None-only, canonical137 arbitrary obs gap recorded|
+|137 public131|public, hash, parsed c1_root|Install131 source theorem and full Result at SAME converted arguments|
+|137 begin150|parsed Prefix, input transcript, complete post-transcript on Err/Ok|Install150 full tuple inverse; canonical Err dead-local projection/effects pending|
+|137 finish136|same public, parsed Prefix, AFTER-begin transcript, challenges, observer|explicit canonical RowSpec_136 parameter; no candidate root imported|
+|087 filled064|14759 and zero byte; complete Vec/r0Error|fixed std/allocator boundary, no allocator-success premise; physical canonical law interpretation pending|
+|087 split std|same returned Vec and13831; actual two writeback closures|std item; source machine retains closure identity through both writes|
+|087 semantic098|proof16..7031, original semantic destination and post destination|full source tuple;7015 own-input extent proved; CLOSED domain/effects not yet installed|
+|087 values099|proof7031..7495, original y1 and post y1|464 own-input extent proved; canonicality NOT inferred from expansion|
+|087 wide095|original proof, reassembled SAME semantic/y1 views|source association proved; full canonical library packet pending|
+|087 observed137|same public, v.semantic, hash, observer|fresh emitted body, canonical RowSpec_137 parameter in relational fold|
+|087 mark191|original observer, Phase::Semantic|canonical087 observerNone is an own-input clause; CLOSED mark interpretation pending|
+|087 Prepared179|SAME sem, View, hash and old g; full returned g|successful-only packet plus companions not yet composed into complete PreparedNew|
+
+(bl)(4): std slices, split, reassembly and map_err retain the std item;
+allocation internals/private drops remain outside the obligation, but each
+reached allocation failure and prior event prefix remains. Runtime digest
+values retain the existing runtime row; no syscall is unfolded. Literal
+remaining gaps are recorded as gaps, never as new trust or row credit.
