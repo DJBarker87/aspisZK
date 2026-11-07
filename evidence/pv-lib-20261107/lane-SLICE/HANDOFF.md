@@ -1,4 +1,4 @@
-# SLICE lane — pre-audit checkpoint
+# SLICE lane — first session handoff
 
 Branch codex/pv-lib-slice-20261107; base5e397cb3878. Own host directory
 /home/dombarker/project-offloads/codex-pv-lib-slice-20261107.
@@ -26,9 +26,31 @@ providers remain as enumerated in REMAINING.md; no placeholder theorem.
 modules,1 audit driver. F33 failures49666/49667 are archived; the combined-simp
 shape was retired and replaced by separate entry projections + explicit run
 rewrite49668. No memory kill, cap change, cold build, full manifest or unchanged
-failed-proof rerun. All source changes compile-green. Strict raw690 is next.
+failed-proof rerun. All active source changes compile-green. ONE strict raw audit49690 passed8/8
+new roots: zero unresolved constants, zero raw/summary mismatches; only
+propext/Classical.choice/Quot.sound. Exit0,wall0:05.11,peak6847748KiB,swaps0;
+source revisionbdb50f48bfcfa09f5c42db176780cd37ae2ed296. RAW_AUDIT.json retains the
+full receipt; RAW_GRAPH_ARCHIVE.json.xz and manifest retain the actual walks.
+The walker/private importAll collector is unchanged; only module/root arrays
+changed. Never rerun this audit unchanged.
 
-Next Lean49688–49689; raw49690–49699. One scope at a time;6G/8G/swap0/Tasks64,
+Next Lean49688–49689 (two unused IDs); raw49691–49699 only for new/changed roots. One scope at a time;6G/8G/swap0/Tasks64,
 Lean-M7000. Standalone STREAMB_SLOTS=3 turn before every ID; admission requires
 exit0 and allowed:true. HOST D931: writes only own directory, no host deletion.
 The base handoff is root HANDOFF.md; requested nested HANDOFF.md absent at base.
+
+Validation passed: VALIDATION.json checks all85 accepted source hashes,80
+pinned replay blobs, every admission/turn/cap, failed-input archives, exact
+active module receipts, the16-slot delta and the repository write boundary.
+Proposed overlay112 instantiated/53 missing/5 spec errors; the shared map is
+NOT edited. No parent row, frozen spec equivalence, full library/root closure
+or source7 entry-construction result. No own build scope remains running.
+
+Concrete next step: obtain a fresh block and replay the14 remaining W2 modules
+listed after the narrowed cone in TYPED_DROP_PREFLIGHT.json; import RuntimeDrop
+and certify its whole source178 suffix. Then complete the actual-pending repair
+and full f21 provider/branch assembly, followed by f13/f6 and the upper chain.
+Entry validity must come from actual Foundation construction, not ownership
+alone or an assumed copy-site validity fact. First-boundary/source-machine
+adequacy and top-level joint premise consistency remain unproved. No new
+semantics fact, endpoint hypothesis, trust field or metric change was made.
