@@ -30,6 +30,24 @@ actual_guard=actual_guard[:actual_guard.index('\n}')]
 assert norm(actual_guard)==norm(guard),'guard source cut drift'
 assert 'ifmaster==[0u8;32]' in norm(frozen)
 assert 'fnNMX_master_zero(master:&[u8;32])->bool{*master==[0u8;32]}' in norm(helper)
+prefix=frozen[frozen.index('    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES'):]
+prefix=prefix[:prefix.index('    let root = decode_digest_canonical(')]
+actual=helper[helper.index(' let actual:Result<NMX_prefix_state,ProgramError>=(||{')+len(' let actual:Result<NMX_prefix_state,ProgramError>=(||{'):]
+actual=actual[:actual.index('    let root_window:')]
+assert norm(actual)==norm(prefix).replace('bytes.len()','logical_len'),'entry-to-child prefix source drift'
+final=frozen[frozen.index('    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH]'):]
+final=final[:final.index('\n}')]
+actual=helper[helper.index(' let actual:Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>=(||{')+len(' let actual:Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>=(||{'):]
+actual=actual[:actual.index(' })();')]
+assert norm(actual)==norm(final).replace('bytes[72]','bump').replace('bytes[5]','lane_id'),'post-loop-to-return source drift'
+assert 'bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES].iter().any(|byte|*byte!=0)' in norm(frozen)
+assert 'fnNMX_reserved(bytes:&[u8;7])->bool{bytes.iter().any(|byte|*byte!=0)}' in norm(helper)
+constructor=frozen[frozen.index('    Ok(Box::new(PoolV1PairForestLaneStateV1 {'):]
+constructor=constructor[:constructor.index('\n}')].replace('Ok(Box::new','Box::new',1)[:-1]
+constructor=constructor.replace('bytes[72]','input.bump').replace('bytes[5]','input.lane_id').replace('        master,','        master: input.master,').replace('            next_leaf_index,','            next_leaf_index: input.tree.next_leaf_index,').replace('            root,','            root: input.tree.root,').replace('            frontier,','            frontier: input.tree.frontier,')
+actual=helper[helper.index(' let output =')+len(' let output ='):]
+actual=actual[:actual.index(';\n *output')]
+assert norm(actual)==norm(constructor),'constructor field/source drift'
 payload=json.loads(lzma.decompress((B/'NMX_FROZEN_PAYLOAD.json.xz').read_bytes()));diffs=[]
 for rel in ['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs','crates/aspis-core/src/field.rs']:
  original=base64.b64decode(payload[rel]).decode();diffs.extend(difflib.unified_diff(original.splitlines(True),(S/rel).read_text().splitlines(True),fromfile='a/'+rel,tofile='b/'+rel))

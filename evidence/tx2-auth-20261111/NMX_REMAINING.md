@@ -1,3 +1,22 @@
+# Current stage:217 candidate,234 next
+
+TX2:217 CANDIDATE under the authorized (ah) segmented route: NMX_R3_DecoderFold.root,
+with complete allocation observations, all Results/lengths, native segment pairs,
+whole-array frame association and rule-B induction. See NMX_217_NATIVE_COMPOSITION.md
+for precise scope and exclusions. Raw ax2 L890/L892 and final focused NLX combined
+import L893 pass. L894 retains the revision3 export and all loaded object pins.
+The ledger decides credit and the native contextual-composition review; no CLOSED
+count or headline result is claimed here. Own-input clauses: none.
+
+Next:234 extraction with exactly the two failed deployment-ID children opaque,
+CLOSED roots installed at SAME arguments; PoolLib remains a parameter until LIB_
+provides its instance. Do not build a replacement PoolLib/DeployedIds. LIB branch
+now has concrete deployed identifiers and completed TX1 bundles; TX2 completion
+remains separate.233 remains frozen at its two named revision2 folds and the
+existing five-item open list until234 also has a candidate. NMM remains retired.
+
+Everything below is historical and is superseded by this stage record.
+
 # Authorized fallback status
 
 217 is OPEN. Authorization now permits the pinned NCV emitted reference and

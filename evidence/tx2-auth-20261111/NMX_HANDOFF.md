@@ -286,3 +286,27 @@ case split. K019 master-zero contract PASS / K020 intended ensures FAIL; same
 frozen graph, features, KMX patch, no writes. No native row candidate yet:
 source-ordered full native contextual association remains to be assembled.
 234 and233 remain untouched under child-first order.
+
+### Fallback stage E:217 candidate packet and native source association
+
+K025 PASS/K026 intended FAIL reserved-byte predicate; K027 PASS/K028 intended FAIL
+complete native returned-record initializer and Box payload equality. K021 and
+K023 timed out at90seconds in CBMC, excluded and retired unchanged. They were
+split at individual source calls/guard and constructor. L885 whole-window source
+geometry, L886 whole-frontier write/frame equality, L888 complete source fold,
+L891 accepted/rejected arbitrary native step association pass. L890 audits eleven
+own roots and L892 two native-step roots; all raw ax2 matches standard axioms.
+Final focused combined import L893 includes NLX plus all new217 components,
+checks Env.reservation, and passes (20.4006s,6741340KiB,swap0). L894 retains
+NMX_exports_revision3_20261111 and every loaded object's hash in R3 closure pins.
+
+CANDIDATE proposed: TX2:217 / NMX_R3_DecoderFold.root under(ah), with
+ReviewedTranscription-TX2:217 (lead owns appendix entry). No own-input clauses;
+allocationSucceeded is universally quantified at each input/environment and
+.complete covers both final Box outcomes. Native/source composition, inherited
+pair validation, exact same-argument domains and exclusions are explicit in
+NMX_217_NATIVE_COMPOSITION.md / NMX_217_NDB_COMPONENTS.json. This is the segmented
+rule-B packet, not a single whole expected-length Kani contract. The ledger must
+review that contextual composition and assign credit; no CLOSED count here.
+K010's calibration compile failure is excluded and no stub_verified is used.
+Next234;233 remains frozen. No shipped repository source or trust-row change.

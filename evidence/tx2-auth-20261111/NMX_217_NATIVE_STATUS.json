@@ -1,6 +1,6 @@
 {
   "row": "TX2:217",
-  "status": "NO_CANDIDATE",
+  "status": "CANDIDATE_UNDER_AH_SEGMENTED_NATIVE",
   "standalone_length_pair": {
     "positive": "NMX_K005",
     "negative": "NMX_K006",
@@ -11,7 +11,7 @@
     ],
     "backing_bytes": 1,
     "modifies": [],
-    "full_native_length_transport": "OPEN"
+    "full_native_length_transport": "source first guard plus K012/K013 all-usize scalar gate and std slice-length law; no contents read"
   },
   "interface_controls": {
     "positive_contract": "NMX_K008",
@@ -23,7 +23,8 @@
       "status": "COMPILE_FAILURE_NOT_CONTROL_CREDIT",
       "reason": "Result<Box<PoolV1PairForestLaneStateV1>,ProgramError> does not implement kani::Arbitrary"
     },
-    "complete": false
+    "complete": false,
+    "use": "pilot excluded; no contract-interface substitution or stub_verified is used"
   },
   "uncredited": [
     "NMX_K001 compilation thread exhaustion followed by outer timeout",
@@ -190,7 +191,7 @@
       "NMX_K013"
     ],
     "status": "PASS / intended contract FAIL in each pair",
-    "native_whole_function_join": "OPEN",
+    "native_whole_function_join": "source-ordered segmented packet; see NativeStep.accepted/rejected, NativeFrame.write_unique and composition table; ledger review pending",
     "source": "NMX_217_iteration_refresh_host.py checks exact frozen assignment, guard and master-zero source fragments",
     "modifies": {
       "assignment": [
@@ -213,7 +214,20 @@
     "port": "NMX_R3_LanePort.pure_eq",
     "root": "NMX_R3_LaneAllocation.root",
     "full_observation": "NMX_R3_LaneAllocation.complete",
-    "status": "COMPLETE_REFERENCE_ONLY",
+    "status": "COMPLETE_ROW_REFERENCE_AND_FULL_OBSERVATION",
     "caller_clauses": []
-  }
+  },
+  "reserved_pair": [
+    "NMX_K025",
+    "NMX_K026"
+  ],
+  "constructor_pair": [
+    "NMX_K027",
+    "NMX_K028"
+  ],
+  "native_composition": "NMX_217_NATIVE_COMPOSITION.md",
+  "excluded_timeouts": [
+    "NMX_K021 combined128byte prefix",
+    "NMX_K023 combined final guard and203coordinate projections"
+  ]
 }
