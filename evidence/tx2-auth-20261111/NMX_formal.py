@@ -7,9 +7,9 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<40,'Actual Lean compiler budget exhausted (40)'
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<290,'Renewed Lean/link/audit budget exhausted (250 additional scopes)' 
         if target not in ['NMX_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention']:
-            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<38,'Reserve two final import/audit compiler slots'
+            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<288,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()

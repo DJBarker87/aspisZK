@@ -30,3 +30,6 @@ FINAL RETENTION IS INCOMPLETE: L051 exits1 after the own collector chose obsolet
 Frozen source and inherited ELF pins are in RESOURCE_SUMMARY. No shipped source, cfg(kani), trust row, security metric/adversary, wallet/key/account/fund/authority or sibling/session-A worktree changed; no push. Increased reliance on existing narrowed extraction/std/P6/D188 transport remains reclassification, never removal. Frozen3, L154 parameter, narrowedD188,100-bit PER-ATTEMPT/privacy/two-transaction requirements remain. Security target not established.
 
 Stage commits6554394c7ae andc2b1bb4241a precede this final audit/failure handoff commit. All remain local.
+
+## Renewed run, stage R0
+Lead renewal: 250 additional Lean/link/audit scopes, 0 extraction, 10 Kani only for flagged exits (none). Repaired collector rerun L052 PASS, exit0,39.456s,337628KiB RSS,swap0. Complete own export now retained and closure hashes rechecked unchanged in NMX_EXPORT.json/NMX_CLOSURE_PINS.json.xz. This supersedes the incomplete-retention warning above only; row233 stays OPEN. NMM branch read-only still supplies no candidate217/234. Canonical RSL233/234/217 are the new target/parameter statements; old NMX interfaces are not identified with them.

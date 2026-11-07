@@ -7,3 +7,7 @@ No row credit. Target not established.
 * NMX-F3: The parametric full-source program and fold must be connected to actual E002 control/value and canonical child owners. Fresh-emitted value equality alone, nominal Box labels alone or ClosedPackets as a hypothesis cannot close233. Every unapplied native owner/domain is listed in REMAINING.
 
 No(bc)-flagged owned exit exists, so no Kani run is authorized/needed for this row. No field products, copy-dependent native pass, function pointer, writable static, shipped edit or trust-row edit was attempted.
+
+## Renewal canonical interface differences and spurious edges
+The prior NMX_RowSpec_233 uses Aeneas carriers, explicit nominal owner IDs, full external World, and NLM_G operation events; canonical RSL.TX2_233.RowSpec_233 uses native-width UInt/list carriers, nondeterministic per-site allocation with abort-prefix observations, only observable Event.pda effects, and no explicit owner IDs/allocator internals. No equality between these statements is established. RSL233 Domain=True, as are RSL217 and234; canonical parameters replace the old statements in new work. RSL242 Domain=True (including the weak Root0 instance per TCK); no Root0 clause belongs in233.
+TX2:233→016 and233→039: RECLASSIFIED_SPURIOUS_BY_NAME finding (inventory edges retained; no discharge attempted). Frozen r1_pool_adapter_owned.rs:293 calls core u64::to_le_bytes on checkpoint_sequence:u64, not M31/WideExact conversions. Exact attribution: evidence/top-check-20261107/TCK_REPORT.md section5 and RSL_TX2_233.lean. No trust change.
