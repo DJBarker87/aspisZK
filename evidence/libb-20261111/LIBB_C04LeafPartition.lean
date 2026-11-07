@@ -6,14 +6,14 @@ open Aeneas Aeneas.Std
 /-- Any source view, including a truncated/error-prefix view, preserves the
 exact hashv parts. No successful opening decode is a precondition. -/
 theorem parts (tag : U8) (n : Nat) (value salt : Slice U8)
- (size : n = if NND_Carrier.byte tag = 113 then 480 else 128)
+ (size : n = if NNC_ByteCarriers.hostByte tag = 113 then 480 else 128)
  (hv : value.val.length ≤ n) (hs : salt.val.length ≤ 32)
  (full : salt.val ≠ [] → value.val.length = n) :
  LIBB_C04Partition.partition (LIBB_ProtocolBytes.host
   (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.parts tag value salt))) =
  NNC_ResumeEvents.parts (AspisR1.Port4B_LeafCode.parts tag value salt) := by
  rw [LIBB_FlattenBytes.flatten]
- have h := LIBB_C04PartialPartition.leaf (NND_Carrier.byte tag) n
+ have h := LIBB_C04PartialPartition.leaf (NNC_ByteCarriers.hostByte tag) n
   (NNC_ByteCarriers.host value.val) (NNC_ByteCarriers.host salt.val) size
   (by simpa only [NNC_ByteCarriers.host,List.length_map] using hv)
   (by simpa only [NNC_ByteCarriers.host,List.length_map] using hs) (by
@@ -22,7 +22,7 @@ theorem parts (tag : U8) (n : Nat) (value salt : Slice U8)
    simpa only [NNC_ByteCarriers.host,List.length_map] using full hraw)
  simpa only [AspisR1.Port4B_LeafCode.parts,NNC_ResumeEvents.parts,
   List.flatMap_cons,List.flatMap_nil,List.append_nil,List.map_cons,List.map_nil,
-  NNC_ByteCarriers.host,NND_Carrier.byte] using h
+  NNC_ByteCarriers.host,LIBB_FlattenBytes.tag16,List.append_assoc] using h
 
 /-- A slice that starts later than the value ends can contain salt only
 once the complete value is present. This is plain interval geometry. -/

@@ -13,8 +13,8 @@ theorem input (kind : Usize) (o : Slice U8) :
  split
  · apply LIBB_C04LeafPartition.parts 113#u8 480 _ _
    · decide
-   · simp only [sub,List.length_take,List.length_drop]; omega
-   · simp only [sub,List.length_take,List.length_drop]; omega
+   · simp [sub] <;> omega
+   · simp [sub] <;> omega
    · intro hne
      have hp : 0 < (sub o 608#usize 640#usize).val.length := List.length_pos_iff.mpr hne
      simp [sub] at hp ⊢
@@ -22,16 +22,16 @@ theorem input (kind : Usize) (o : Slice U8) :
  · split
    · apply LIBB_C04LeafPartition.parts 241#u8 128 _ _
      · decide
-     · simp only [sub,List.length_take,List.length_drop]; omega
-     · simp only [sub,List.length_take,List.length_drop]; omega
+     · simp [sub] <;> omega
+     · simp [sub] <;> omega
      · intro hne
        have hp : 0 < (sub o 640#usize 672#usize).val.length := List.length_pos_iff.mpr hne
        simp [sub] at hp ⊢
        omega
    · apply LIBB_C04LeafPartition.parts 114#u8 128 _ _
      · decide
-     · simp only [sub,List.length_take,List.length_drop]; omega
-     · simp only [sub,List.length_take,List.length_drop]; omega
+     · simp [sub] <;> omega
+     · simp [sub] <;> omega
      · intro hne
        have hp : 0 < (sub o 800#usize 832#usize).val.length := List.length_pos_iff.mpr hne
        simp [sub] at hp ⊢
