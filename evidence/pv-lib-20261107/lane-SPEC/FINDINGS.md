@@ -54,3 +54,27 @@ No row consumes it. PV_LIB_SPEC_Delivery supplies the correction: successful
 return additionally requires out.suspended = entry.suspended; failures and
 pending remain retained. This corrects a NEW lane support declaration, not a
 frozen PSPEC. The corrected callback exclusion theorem is the focused check.
+
+## SPEC-C2: frozen thread machine omits existing OWNER registration
+
+Checked49717: `PV_LIB_SPEC_RegistrationGap.raw_next`, `registered_next`, and
+`steps_differ`. At the actual emitted `PV_THR2_F361.live.body.drop113`
+(storage-live14320/local45), the literal `SourceStoreInterpreter.step` keeps
+OWNER.next, while the pinned `OwnInitInterpreterBridged.step` registers the
+source-selected descriptor and changes next to next+1. These steps differ for
+EVERY carrier, control, resolver, native handler, resources, values and store.
+The site is source syntax, not a fabricated native request or a future-read
+hypothesis. W3's registration is `OwnUniformBindings.step` ->
+`BindingRegister.register` -> `LocalBinding.generated`.
+
+Frozen COMMON says the thread step is LITERALLY SourceStoreInterpreter.step.
+It also requires allocation OWNER actions and the actual14756 registry-derived
+bridge. That literal replacement drops the existing registration layer.
+A proper combination must preserve existing OWNER/operator/bridged allocation
+actions and apply the five concrete source-store meanings at native writer
+polls. Merely selecting the raw five-writer interpreter does not do that.
+
+This is a demonstrated LOCAL model mismatch, not a source defect, original-entry
+reachability proof, contradiction of full joint premises, or failure of
+decodeBridged. No full composition witness/contradiction is claimed. Frozen
+files are unchanged; the exact correction proposal is in SESSION2_SPEC_CORRECTIONS.md.

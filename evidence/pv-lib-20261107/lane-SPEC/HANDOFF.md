@@ -92,3 +92,10 @@ cohort: exit0;wall0:01.42;peak2685908KiB;swap0;parent8a0e250e030;
 standard summary axioms. No new root/row contract claimed. Next Lean49715.
 
 49715 pinned unchanged PV_THR2_SourceStoreInterpreter replay: exit0;wall0:01.67;peak2678584KiB;swap0;source parent7c6951c0dba. Next Lean49716.
+
+49716 failed ONLY missing Resources/Encode namespace; exact failed source
+retained compressed. Changed import opening before49717.
+49717 RegistrationGap compiled: raw_next/registered_next/steps_differ show
+SPEC-C2 at actual14320, every environment. Exit0;wall0:02.25;peak4706924KiB;
+swap0;parenta20eb0c570d;standard summary axioms. See FINDINGS and correction
+proposal. Not full joint contradiction. Next Lean49718.
