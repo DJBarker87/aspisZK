@@ -1,0 +1,29 @@
+--- 
++++ 
+@@ -7,7 +7,25 @@
+ a=sys.argv[1]; assert re.fullmatch(r'NNG_[LKE][0-9]{3}',a)
+ x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
+ x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NNG_target')
+-assert 1<=int(a[-3:])<=({'L':400,'K':10,'E':2}[a[4]])
++assert int(a[-3:])>=1
++# Count actual scopes, including conservative unresolved submissions, not id gaps.
++submitted=set()
++for line in (E/'NNG_TRANSPORT.jsonl').read_text().splitlines():
++ row=json.loads(line)
++ if row.get('submitted'):submitted.add(row['attempt'])
++completed={json.loads(line)['attempt'] for line in (E/'NNG_ATTEMPTS.jsonl').read_text().splitlines() if json.loads(line).get('kind')!='wait'}
++assert a not in submitted, 'Never resubmit after any recorded submission; recover read-only'
++def budget_group(kind):
++ return 'lean_link_audit' if kind in ['lean','link','audit'] else ('kani' if kind=='kani' else ('extract' if kind=='extract' else None))
++used={'lean_link_audit':set(),'kani':set(),'extract':set()}
++for attempt in completed|submitted:
++ config=E/(attempt+'.json')
++ assert config.exists(), 'Missing submitted-attempt budget configuration: '+attempt
++ group=budget_group(json.loads(config.read_text())['kind'])
++ if group:used[group].add(attempt)
++limits={'lean_link_audit':400,'kani':10,'extract':2};group=budget_group(x['kind'])
++if group:assert len(used[group])<limits[group], 'Actual scope budget exhausted: '+group
++with (E/'NNG_BUDGET_ADMISSIONS.jsonl').open('a') as out:out.write(json.dumps({'attempt':a,'kind':x['kind'],'used':{g:len(s)for g,s in used.items()},'limits':limits,'unresolved_submissions':sorted(submitted-completed)})+'\n')
+ if x['command'][:2]==['python3','NNG_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
+ assert not (E/a/'receipt.json').exists(), 'Never resubmit'
+ if x['kind']=='kani':assert x['sources']==['NNG_gate.py','NNG_SOURCE_PINS.json','NNG_FROZEN_FILE_PINS.json','NNG_BASE_EXPECTED.json'] or (x['command'][:2]==['python3','NNG_gate_pair.py'] and x['sources']==['NNG_gate.py','NNG_gate_pair.py','NNG_SOURCE_PINS.json','NNG_FROZEN_FILE_PINS.json']),'Native inputs must be installed in a prior capped scope; never upload source snapshots'

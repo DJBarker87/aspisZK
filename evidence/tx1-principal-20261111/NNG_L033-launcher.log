@@ -1,0 +1,47 @@
+{"attempt": "NNG_L033", "exit_status": 1, "wall_seconds": 15.045223685912788, "peak_rss_kib": "6005272", "swaps": "0", "print_axioms": ["'AspisR1.NNG_InstallRounds.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_InstallRounds.same' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_InstallRounds.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_InstallRounds.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNG_InstallRounds.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_InstallRounds.lean:69:3: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have
+...
+   NJM_RoundsInduction.chain native token frame (NNG_Install.digest d)
+            (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) NJG_RoundsCode.sites
+            (running, Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO, toT10 t)
+  | x => True
+NNG_generated/NNG_InstallRounds.lean:76:3: error: Tactic `assumption` failed
+
+case h_4
+H : Type
+native : NJM_RoundsCut.Observations
+cut : NJM_RoundsCut.Cut native
+token frame : ℕ
+d : aspis_core.digest.Digest32 H
+bytes : Slice U8
+t : r1_wire.SemanticTranscript H
+heq✝ : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = div
+closed : True
+⊢ match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    ∃ running,
+      outer (NMP_ResultTransport.inner lowerReply toT13)
+            (rounds d (fromT12 (AspisR1PublicPreparation.PrefixAdapter.fromOld pre)) t) =
+          (NJM_RoundsInduction.chain native token frame (NNG_Install.digest d)
+              (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) NJG_RoundsCode.sites
+              (running, Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO, toT10 t)).2 ∧
+        AspisR1PublicPreparation.PreparedHashCode.run
+            (AspisR1PublicPreparation.S1SemanticCode.rounds NJM_RoundJoin.R (NNG_Install.digest d)
+              (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) (toT10 t)) =
+          NJM_RoundsInduction.chain native token frame (NNG_Install.digest d)
+            (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) NJG_RoundsCode.sites
+            (running, Array.repeat 10#usize AspisR1PublicPreparation.aspis_core.field.QM31.ZERO, toT10 t)
+  | x => True
+'AspisR1.NNG_InstallRounds.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc76b438022a7482bb3877e5959a78100.scope; invocation ID: 5e35607486ed46bdb9354df695bb8068

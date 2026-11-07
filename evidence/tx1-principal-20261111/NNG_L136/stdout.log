@@ -1,0 +1,10 @@
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+@[reducible] def Aeneas.Std.Array.length.{u} : {α : Type u} → {n : Usize} → Std.Array α n → ℕ :=
+fun {α} {n} v => (↑v).length
+def AspisR1.OraclePortStdBuilder.fromFn : {T C : Type} →
+  (n : Usize) → core.ops.function.FnMut C Usize T → C → Result (Std.Array T n) :=
+fun {T C} n f c => do
+  let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f (AspisR1.OraclePortStdBuilder.indices n) c
+  match __x with
+    | (xs, snd) => if h : xs.length = ↑n then Result.ok ⟨xs, h⟩ else Result.fail Error.panic

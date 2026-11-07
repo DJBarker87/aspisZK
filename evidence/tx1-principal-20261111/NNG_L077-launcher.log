@@ -1,0 +1,51 @@
+{"attempt": "NNG_L077", "exit_status": 1, "wall_seconds": 2.1735337520949543, "peak_rss_kib": "2440320", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Observed136.erase_tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNG_Observed136.producer_tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_Observed136.lean:28:2: error: Tactic `rfl` failed: The left-hand side
+  erase do
+    let r ← invoke "rounds" (s.prefixValue, s.transcript) (c.c10 s.digest s.prefixValue s.transcript)
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        invoke "mark2" (s.observer, 2#u8) (c.c9 s.observer 2#u8)
+        let r1 ← invoke "claims" s.prefixValue (c.c8 s.prefixValue)
+        let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let r2 ←
+              invoke "terminal" (s.publ
+...
+̵.̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵ ̵NMT_CallTree.erase_pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Observed136.lean:27:56: warning: This simp argument is unused:
+  NMT_CallTree.erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [NNG_FinishTree.tree, NMT_CallTree.erase_bind, NMT_CallTree.erase_invoke,
+  ̲  ̲ ̲ ̲N̵M̵T̵_̵C̵a̵l̵l̵T̵r̵e̵e̵.̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵ ̵N̵M̵T̵_̵C̵a̵l̵l̵T̵r̵e̵e̵.̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵N̲M̲T̲_̲C̲a̲l̲l̲T̲r̲e̲e̲.̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_Observed136.erase_tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NNG_generated/NNG_Observed136.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (run ?c).1
+in the target expression
+  (have s := input a obs env;
+    { exit := exit decode (emitted c s), events := List.flatMap (events env) (run (NNG_FinishTree.tree c s)).2 }) =
+    have out := run (NNG_FinishTree.tree c (input a obs env));
+    { exit := exit decode out.1, events := List.flatMap (events env) out.2 }
+
+H W : Type
+VL : RSL.VLib
+c : Calls
+input : RSL.TX1_136.Args VL → RSL.Observer → RSL.Env → Parent H W
+decode : Output H → Except VL.WErr (RSL.Verified VL)
+events : RSL.Env → Event → List RSL.Event
+a : RSL.TX1_136.Args VL
+obs : RSL.Observer
+env : RSL.Env
+⊢ (have s := input a obs env;
+    { exit := exit decode (emitted c s), events := List.flatMap (events env) (run (NNG_FinishTree.tree c s)).2 }) =
+    have out := run (NNG_FinishTree.tree c (input a obs env));
+    { exit := exit decode out.1, events := List.flatMap (events env) out.2 }
+'AspisR1.NNG_Observed136.producer_tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0aac2d79773447d8ba79bbb184a5c0f0.scope; invocation ID: 4f8847a32223411a9a6b2e6ab21f71ce

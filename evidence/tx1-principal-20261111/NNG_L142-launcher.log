@@ -1,0 +1,46 @@
+{"attempt": "NNG_L142", "exit_status": 0, "wall_seconds": 2.4971113048959523, "peak_rss_kib": "2463864", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Usize.wrapping_add : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun x y => Aeneas.Std.UScalar.wrapping_add x y
+equations:
+@[backward_defeq] theorem AspisR1.OraclePortStdBuilder.fromFnLoop.eq_1 : ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f [] x = Aeneas.Std.Result.ok ([], x)
+@[backward_defeq] theorem AspisR1.OraclePortStdBuilder.fromFnLoop.eq_2 : ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C) (i : Aeneas.Std.Usize)
+  (is : List Aeneas.Std.Usize),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f (i :: is) x = do
+    let __x ← f.call_mut x i
+  
+...
+Std.core.cmp.PartialOrd Idx Idx →
+    Aeneas.Std.core.cmp.PartialOrd Idx U →
+      Aeneas.Std.core.cmp.PartialOrd U Idx → Aeneas.Std.core.ops.range.RangeInclusive Idx → U → Aeneas.Std.Result Bool
+AspisR1.OraclePortStdBuilder.fromFnLoop.match_3: {C : Type} →
+  (motive : List Aeneas.Std.Usize → C → Sort u_1) →
+    (x : List Aeneas.Std.Usize) →
+      (x_1 : C) →
+        ((c : C) → motive [] c) →
+          ((i : Aeneas.Std.Usize) → (is : List Aeneas.Std.Usize) → (c : C) → motive (i :: is) c) → motive x x_1
+AspisR1.OraclePortStdBuilder.mapNext.eq_1: ∀ {C I A B : Type} (it : Aeneas.Std.core.iter.traits.iterator.Iterator I A)
+  (f : Aeneas.Std.core.ops.function.FnMut C A B) (m : Aeneas.Std.core.iter.adapters.map.Map I C),
+  AspisR1.OraclePortStdBuilder.mapNext it f m = do
+    let __x ← it.next m.iter
+    match __x with
+      | (x, i') =>
+        match x with
+        | none => Aeneas.Std.Result.ok (none, { iter := i', f := m.f })
+        | some x => do
+          let __x ← f.call_mut m.f x
+          match __x with
+            | (y, c') => Aeneas.Std.Result.ok (some y, { iter := i', f := c' })
+AspisR1.OraclePortStdBuilder.fromFnLoop._sunfold: {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → List Aeneas.Std.Usize → C → Aeneas.Std.Result (List T × C)
+AspisR1.OraclePortStdBuilder.rangeInclusiveContains_exhausted: ∀ {Idx U : Type}
+  (ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx) (lo : Aeneas.Std.core.cmp.PartialOrd Idx U)
+  (hi : Aeneas.Std.core.cmp.PartialOrd U Idx) (r : Aeneas.Std.core.ops.range.RangeInclusive Idx) (x : U) (a b : Bool),
+  r.exhausted = true →
+    lo.le r.start x = Aeneas.Std.Result.ok a →
+      hi.lt x r.end = Aeneas.Std.Result.ok b →
+        AspisR1.OraclePortStdBuilder.rangeInclusiveContains ord lo hi r x = Aeneas.Std.Result.ok (a && b)
+
+Running as unit: run-r158f1519926b4d928aea60120229f9dd.scope; invocation ID: 5d10182428b041ba9c6ce08143aea223

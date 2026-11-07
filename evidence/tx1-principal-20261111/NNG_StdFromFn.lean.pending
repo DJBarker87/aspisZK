@@ -1,0 +1,31 @@
+import NNG_StdArray
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNG_StdArray
+open Aeneas Aeneas.Std Result NNG_verify_finish
+
+def indices (n : Usize) : List Usize :=
+ (List.finRange n.val).map fun i => Usize.ofNat i.val (by
+  have hn := n.hmax
+  have hi := i.isLt
+  scalar_tac)
+
+theorem indices_length (n : Usize) : (indices n).length=n.val := by
+ simp only [indices,List.length_map,List.length_finRange]
+#print axioms indices_length
+
+/-- Complete std interpretation, including the mutation of the closure value
+between calls. The output carries the exact declared fixed-array extent. -/
+def fromFn {T F : Type} (n : Usize) (inst : core.ops.function.FnMut F Usize T)
+ (f : F) : Result (Array T n) := do
+ let (xs,_) ← visit inst (indices n) f
+ if h : xs.length=n.val then .ok ⟨xs,h⟩ else .fail .panic
+
+theorem fromFn_of_visit {T F : Type} (n : Usize) (inst : core.ops.function.FnMut F Usize T)
+ (f after : F) (xs : List T) (h : visit inst (indices n) f=.ok (xs,after)) :
+ ∃ value,fromFn n inst f=.ok value ∧ value.val=xs := by
+ have len : xs.length=n.val := (visit_length inst (indices n) f xs after h).trans (indices_length n)
+ refine ⟨⟨xs,len⟩,?_,rfl⟩
+ simp only [fromFn,h,bind_tc_ok,dif_pos len]
+#print axioms fromFn_of_visit
+end AspisR1.NNG_StdArray

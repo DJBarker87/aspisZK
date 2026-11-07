@@ -1,0 +1,50 @@
+{"attempt": "NNG_L437", "exit_status": 1, "wall_seconds": 19.495138390921056, "peak_rss_kib": "6767948", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Erasure137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_Erasure137.lean:9:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let reply ← invoke "TX1:138/parse" s.bytes (c.parse s.bytes)
+      match reply with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok p => NNG_Tree137.mark0 c s p) =
+    do
+    let r ← c.parse s.bytes
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        c.mark s.observer 0#u8
+        let r1 ← (fun {H} => c.publicTranscript) s.digest s.publicValue s.hash p.c1_root
+  
+...
+se s.bytes)
+      match reply with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok p => NNG_Tree137.mark0 c s p) =
+    do
+    let r ← c.parse s.bytes
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue p => do
+        c.mark s.observer 0#u8
+        let r1 ← (fun {H} => c.publicTranscript) s.digest s.publicValue s.hash p.c1_root
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r2, val1) ← (fun {H} => c.begin_) s.digest p val
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                c.mark s.observer 1#u8
+                (fun {H} => c.finish) s.digest s.publicValue p val1 val2 s.observer
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+'AspisR1.NNG_Erasure137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r80291ce3530d4dc7bd5f0d75c43dfd68.scope; invocation ID: e59ecac5b6bf458e8b17144878b60d79

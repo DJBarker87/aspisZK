@@ -1,0 +1,55 @@
+NNG_generated/NNG_LIBRounds.lean:26:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    NNG_EmittedCallGraph.resultMap (projectReply fallback)
+        (NMP_ResultTransport.outer (NMP_ResultTransport.inner NNG_Model134.raiseReply fromT13) _a) =
+      have canonical := ⋯;
+      ok (Except.ok (LIB_VScalarCarriers.ofRaw after.1 ⋯, LIB_VArray.lift after.2.1 ⋯, after.2.2))
+Error: Application type mismatch: The argument
+  h
+has type
+  (AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1PublicPreparation.S1SemanticCode.rounds NJM_RoundJoin.R (LIB_VCode.digest env)
+          (LIB_VCarriers.prefixRaw p) t)).2 =
+    ok (core.result.Result.Ok after)
+but is expected to have type
+  _a = ok (core.result.Result.Ok after)
+in the application
+  Eq.trans h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case h_1
+fallback : Value
+env : RSL.Env
+p : LIB_VCarriers.Prefix
+t : LIB_VCarriers.Transcript
+after :
+  AspisR1PublicPreparation.aspis_core.field.QM31 ×
+    Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize ×
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript Unit
+h :
+  (AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1PublicPreparation.S1SemanticCode.rounds NJM_RoundJoin.R (LIB_VCode.digest env)
+          (LIB_VCarriers.prefixRaw p) t)).2 =
+    ok (core.result.Result.Ok after)
+⊢ NNG_EmittedCallGraph.resultMap (projectReply fallback)
+      (NMP_ResultTransport.outer (NMP_ResultTransport.inner NNG_Model134.raiseReply fromT13)
+        (AspisR1PublicPreparation.PreparedHashCode.run
+            (AspisR1PublicPreparation.S1SemanticCode.rounds NJM_RoundJoin.R (LIB_VCode.digest env)
+              (LIB_VCarriers.prefixRaw p) t)).2) =
+    have canonical := ⋯;
+    ok (Except.ok (LIB_VScalarCarriers.ofRaw after.1 ⋯, LIB_VArray.lift after.2.1 ⋯, after.2.2))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNG_LIBRounds.projected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

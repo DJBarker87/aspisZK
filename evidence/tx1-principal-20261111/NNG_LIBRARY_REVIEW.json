@@ -1,0 +1,51 @@
+{
+ "revision": "8c9ffd24f0d4f8b4b4848f90c0b63154b9707342",
+ "path": "evidence/lib-map-20261107/LIB0_MAP.json",
+ "sha256": "2a66741318d87a1b0a1ad2949f9fc3a820edae6ce84fd2f57c219ba800e7c60e",
+ "concrete_instances_delivered": false,
+ "mapping_only": true,
+ "136_relevant_flags": {
+  "F1": {
+   "fields": [
+    "VLib.filled",
+    "VLib.accNew",
+    "VLib.weightsNew",
+    "VLib.claims",
+    "V2Lib.tx2auth"
+   ],
+   "classification": "demonstrable error in RSL rev2 (Env/nondeterminism)",
+   "evidence": "crates/aspis-core/src/r0/heap.rs:5-10 (filled: try_reserve_exact -> Err(Allocation)), :11-14 (uninit); callers candidate.rs:256 (prepare), verifier.rs:93 (Accumulator::new), verifier.rs:207 (BatchedWeights::new), verifier.rs:428 (resume, TX2:064), r1_semantic.rs:45 (claims). The CLOSED roots quantify the reservation (NKA_ClaimsRoot.claims: allocator/state/reservation; NGC/NIG filled roots: reservation; NKH caller clause: both arms).",
+   "consequence": "RSL.Env carries sha256/pda/clock only, so a fallible reservation outcome is not an oracle reply. A faithful Child law for these fields must admit both Ok and Err(Allocation) at the same arguments and Env, and impl : Args -> Env -> Obs cannot be the actual function. The RowSpec proofs are unaffected (a relational law admits the impl), but the TX1 returned path 345->328->094->087->filled/accNew/weightsNew and 136->claims becomes nondeterministic at fixed Env, so AMN.a1_forces_det makes A1 (NND_A1/A1min Err arm) and NND_Tx1ReturnedValues.returned unprovable; TX2 tx2auth gives the same for NND_Tx2Values.auth_ret. The rev2 header claim that the only nondeterminism is the aborting allocation site is false for try_reserve sites.",
+   "recommendation": "lead applies a rev2 patch: add a quantified reservation reply to RSL.Env (ruling (at) shape, one reply per fallible site occurrence), make the four VLib children and the 064 law read it, and bind it in Sig.EnvRep to the headline reservation binder. Alternative (worse): an owner ruling that try_reserve failure is outside the obligation, which would be a trust addition. LIB builds every other field now and leaves these five behind a parameter until the lead rules."
+  },
+  "F5": {
+   "fields": [
+    "VLib.qadd",
+    "VLib.qmul"
+   ],
+   "classification": "supplied by a CLOSED certificate theorem, not by the named ledger root (ledger hygiene); no RSL change",
+   "evidence": "TX1:024 root_owners = NEB_ArrayRefs.qm_injective; TX1:029 root_owners = AspisR1.NFS_QueryLoopRoot.root; certificates cite NEB_QMCalls.add/multiply, NEB_AdditiveFrames.qm_add, NEB_FieldFrames.qm_mul (canonQ inputs).",
+   "consequence": "LIB must cite the certificate theorems and use the canonical-subtype carrier so the functions are total.",
+   "recommendation": "report the root-name mismatch to the ledger owner at the next ledger."
+  },
+  "F7": {
+   "fields": [
+    "VLib.finishInputDom"
+   ],
+   "classification": "open derivation; possible missing child lemmas (canonicality exports of TX1:129, TX1:142, TX1:150); not an RSL error yet",
+   "evidence": "RSL_LEDGER_CLAUSES TX1:136: NLS-bf hd/hc/hp/hz/hl/hchi/ht/hm/asset, NJW-caller 134/142 (prose), NKN-caller 129 (prose), NLS-context.",
+   "consequence": "until each clause is classified as internally discharged or carried, 137 cannot prove finishInputDom from parse/public_transcript/begin.",
+   "recommendation": "LIB writes the clause-by-clause table and Lean transcription; carried clauses must be stated over (public, prefix, transcript, challenges) only."
+  },
+  "F8": {
+   "fields": [
+    "(transcription) TX1:130 mark"
+   ],
+   "classification": "missing child lemma, trivial (TX1:130 at arbitrary obs)",
+   "evidence": "r1_semantic.rs:75-80: let _=(obs,i) without detail-phases; ledger packet None-only (NMP_REMAINING).",
+   "consequence": "RowSpec_136/137 quantify obs.",
+   "recommendation": "one lemma on the emitted no-op body."
+  }
+ },
+ "disposition": "Specs remain frozen. F1 is a pending Env/top determinism finding; no success reservation is fixed. Continue independent136 field adapters and own-input domain derivations. F5 use certificate value laws rather than mislabeled row roots. F7 reuse NLU/NMC own-domain derivations; F8 generalize no-op from deployed frozen body, do not restrict136 observer."
+}

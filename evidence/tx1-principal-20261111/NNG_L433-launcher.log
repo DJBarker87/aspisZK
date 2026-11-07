@@ -1,0 +1,63 @@
+{"attempt": "NNG_L433", "exit_status": 1, "wall_seconds": 18.271031938958913, "peak_rss_kib": "6769196", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Caller136From137.fallback_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_Caller136From137.finish_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_Caller136From137.fallback_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_Caller136From137.lean:24:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env
+in the target expression
+  match Except.ok p with
+  | Except.error a => True
+  | Except.ok p =>
+    match LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => LIB_VDomains.finishInputDom a.public_ p t c
+
+a : Args
+env : RS
+...
+with
+  | Except.error a => True
+  | Except.ok p =>
+    match LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => LIB_VDomains.finishInputDom a.public_ p t c
+
+a : Args
+env : RSL.Env
+domain : RSL.TX1_137.Domain VL a
+p : LIB_VCarriers.Prefix
+t0 : LIB_VCarriers.Transcript
+c : LIB_VCarriers.Challenges
+t1 : LIB_VCarriers.Transcript
+parsed : LIB_VParsePrefix.eval a.bytes = Except.ok p
+transcripted : LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env = Except.ok t0
+begun : LIB_VBegin.eval (p, t0) env = Except.ok (c, t1)
+caller :
+  match Except.ok p with
+  | Except.error a => True
+  | Except.ok p =>
+    match LIB_VPublicTranscript.eval (a.public_, LIB_VCarriers.c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => LIB_VDomains.finishInputDom a.public_ p t c
+⊢ RSL.TX1_136.Domain VL { public_ := a.public_, prefix_ := p, transcript := t1, challenges := c }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.public_
+  has type
+    VL.Public
+  but is expected to have type
+    LIB_VCarriers.Public
+  in the application
+    Prod.mk a.public_
+'AspisR1.NNG_Caller136From137.finish_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc439b28eae72453cb245ad55bb2d406e.scope; invocation ID: 366c4789ca7d40a39d39f601beb157b1

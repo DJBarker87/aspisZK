@@ -1,0 +1,68 @@
+NNG_generated/NNG_Packet136.lean:50:4: error: Type mismatch
+  NNG_ConcreteRounds136.occurrence a.challenges.eta env a.prefix_ a.transcript domain.right.right
+has type
+  RSL.Spec.map (NNG_LIBRounds.projectReply a.challenges.eta)
+      (NNG_Interpret136.call NNG_LIBEvents136.events "rounds"
+        (fromT12 (LIB_VCarriers.prefixRaw a.prefix_), fromT10 a.transcript)
+        (NNG_Model134.rounds (NNG_LIBDigest.digest env) (fromT12 (LIB_VCarriers.prefixRaw a.prefix_))
+          (fromT10 a.transcript)))
+      env =
+    LIB_VRounds.semanticRounds.run (a.prefix_, a.transcript) env
+but is expected to have type
+  RSL.Spec.map (NNG_DProjection136.rounds (project a))
+      (NNG_Interpret136.call NNG_LIBEvents136.events "rounds"
+        ((input a obs env).prefixValue, (input a obs env).transcript)
+        ((calls a env).c10 (input a obs env).digest (input a obs env).prefixValue (input a obs env).transcript))
+      env =
+    VL.semanticRounds.run (a.prefix_, a.transcript) env
+NNG_generated/NNG_Packet136.lean:65:4: error: Type mismatch: After simplification, term
+  old
+ has type
+  @Eq (RSL.Obs (Except Unit NNG_LIBScalar.Value) → Prop)
+    (RSL.Spec.map (NNG_LIBTerminal.projectReply a.challenges.eta)
+      (NNG_Interpret136.call NNG_LIBEvents136.events "terminal"
+        (fromT9 a.public_, claims, alpha, NNG_LIBArrays.lowerChallenges a.challenges)
+        (NNG_ModelTerminal.call (fromT9 a.public_) claims alpha (NNG_LIBArrays.lowerChallenges a.challenges)))
+      env)
+    (LIB_VTerminal.terminalQm31.run
+      (a.public_, NNG_LIBArrays.projectClaims a.challenges.eta claims,
+        NNG_LIBArrays.projectArray a.challenges.eta alpha, a.challenges)
+      env)
+but is expected to have type
+  @Eq (RSL.Obs (Except Unit VL.QM31) → Prop)
+    (RSL.Spec.map (NNG_DProjection136.terminalReply (project a))
+      (NNG_Interpret136.call NNG_LIBEvents136.events "terminal"
+        ((input a obs env).publicValue, claims, alpha, (input a obs env).challenges)
+        ((calls a env).c7 (input a obs env).publicValue claims alpha (input a obs env).challenges))
+      env)
+    (VL.terminalQm31.run (a.public_, (project a).claims claims, (project a).alpha alpha, VL.origChallenges a.challenges)
+      env)
+NNG_generated/NNG_Packet136.lean:110:4: error: Type mismatch
+  NNG_ConcreteCircle136.circle0 env t rec frame
+has type
+  RSL.Spec.map NNG_LIBCircle.project
+      (NNG_Interpret136.call NNG_LIBEvents136.events "circle0" (t, rec)
+        (NNG_ModelCircle.call (NNG_LIBDigest.digest env) t rec))
+      env =
+    LIB_VCircle.circle.run (toT10 t, toT14 rec) env
+but is expected to have type
+  RSL.Spec.map (NNG_DProjection136.circleReply (project a))
+      (NNG_Interpret136.call NNG_LIBEvents136.events "circle0" (t, rec)
+        ((calls a env).c13 (input a obs env).digest t rec))
+      env =
+    VL.circle.run ((project a).transcript t, (project a).record rec) env
+NNG_generated/NNG_Packet136.lean:126:4: error: Type mismatch
+  NNG_ConcreteCircle136.circle1 env t rec frame
+has type
+  RSL.Spec.map NNG_LIBCircle.project
+      (NNG_Interpret136.call NNG_LIBEvents136.events "circle1" (t, rec)
+        (NNG_ModelCircle.call (NNG_LIBDigest.digest env) t rec))
+      env =
+    LIB_VCircle.circle.run (toT10 t, toT14 rec) env
+but is expected to have type
+  RSL.Spec.map (NNG_DProjection136.circleReply (project a))
+      (NNG_Interpret136.call NNG_LIBEvents136.events "circle1" (t, rec)
+        ((calls a env).c13 (input a obs env).digest t rec))
+      env =
+    VL.circle.run ((project a).transcript t, (project a).record rec) env
+'AspisR1.NNG_Packet136.closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,47 @@
+{"attempt": "NNG_L073", "exit_status": 1, "wall_seconds": 2.4800087180919945, "peak_rss_kib": "2436464", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Row136Fold.fold' depends on axioms: [sorryAx, Quot.sound]"]}
+NNG_generated/NNG_Row136Fold.lean:81:96: error: unexpected identifier; expected '}'
+NNG_generated/NNG_Row136Fold.lean:90:42: error: unsolved goals
+VL : VLib
+c : Calls VL
+h : FieldGraphs VL c
+a : TX1_136.Args VL
+⊢ (RE.bind (VL.semanticRounds.run (a.prefix_, a.transcript)) fun r =>
+      RE.bind (VL.claims.run a.prefix_) fun claims =>
+        (RE.mapErr (fun x => VL.wPublic)
+              (VL.terminalQm31.run (a.public_, claims, r.2.1, VL.origChallenges a.challenges))).bind
+          fun terminal =>
+          (RE.ofExcept (VL.validatedRecord a.prefix_ 25)).bind fun rec25 =>
+            (RE.ofExcept (VL.decodeK29 rec25 87)).bind fun extra =>
+              (RE.check
+                    (decide
+ 
+...
+es))).bind
+          fun terminal =>
+          (RE.ofExcept (VL.validatedRecord a.prefix_ 25)).bind fun rec25 =>
+            (RE.ofExcept (VL.decodeK29 rec25 87)).bind fun extra =>
+              (RE.check
+                    (decide
+                      (r.1 ≠
+                        VL.qadd (VL.qadd (VL.maskValue claims r.2.1) (VL.qmul (VL.eta a.challenges) terminal))
+                          (VL.at28 extra)))
+                    VL.wTerminal).seq
+                ((RE.ofExcept (VL.validatedRecord a.prefix_ 25)).bind fun rec25' =>
+                  RE.bind (VL.circle.run (r.2.2, rec25')) fun c0 =>
+                    (RE.ofExcept (VL.validatedRecord a.prefix_ 26)).bind fun rec26 =>
+                      (RE.ofExcept (VL.decodeK29 rec26 0)).bind fun beforeZ1 =>
+                        (RE.ofExcept (VL.validatedRecord a.prefix_ 26)).bind fun rec26' =>
+                          RE.bind (VL.circle.run (c0.2, rec26')) fun c1 =>
+                            (RE.check (decide (c0.1 = c1.1)) VL.wEqualCirclePoints).seq
+                              ((RE.ofExcept (VL.payload a.prefix_ 2)).bind fun p2 =>
+                                match TX1_136.toB32 p2 with
+                                | none => RE.lift Spec.panic
+                                | some root1 =>
+                                  RE.pure
+                                    { roots := (VL.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                                      claims := claims, extra := extra, before_z1 := beforeZ1,
+                                      state_before_z0 := VL.state r.2.2, z := (c0.1, c1.1), transcript := c1.2 }))
+NNG_generated/NNG_Row136Fold.lean:91:13: warning: declaration uses `sorry`
+'AspisR1.NNG_Row136Fold.fold' depends on axioms: [sorryAx, Quot.sound]
+
+Running as unit: run-rd9c8788a69b9427cbe64c0414c73ae3e.scope; invocation ID: 9667bec1be2e4979a50c2d874231a551

@@ -1,0 +1,57 @@
+import NMQ_COMBINED_IMPORT
+import NNG_DRowSpec136
+import NNG_Model134
+
+#print axioms AspisR1.NNG_DPublicMap136.projected
+#print axioms AspisR1.NNG_DPublicMap136.source
+#print axioms AspisR1.NNG_DRowSpec136.fold
+#print axioms AspisR1.NNG_DSourceAddExtra.source
+#print axioms AspisR1.NNG_DSourceAddMask.source
+#print axioms AspisR1.NNG_DSourceBeforeZ1.source
+#print axioms AspisR1.NNG_DSourceBlind.source
+#print axioms AspisR1.NNG_DSourceCircle0.source
+#print axioms AspisR1.NNG_DSourceCircle1.source
+#print axioms AspisR1.NNG_DSourceCircleGuard136.guard
+#print axioms AspisR1.NNG_DSourceCircleGuard136.source
+#print axioms AspisR1.NNG_DSourceClaims.source
+#print axioms AspisR1.NNG_DSourceExtra.source
+#print axioms AspisR1.NNG_DSourceHigh.source
+#print axioms AspisR1.NNG_DSourceIndex28.source
+#print axioms AspisR1.NNG_DSourceLow.source
+#print axioms AspisR1.NNG_DSourceMark2.source
+#print axioms AspisR1.NNG_DSourceMark3.source
+#print axioms AspisR1.NNG_DSourceMark4.source
+#print axioms AspisR1.NNG_DSourceMark5.source
+#print axioms AspisR1.NNG_DSourceMask.source
+#print axioms AspisR1.NNG_DSourceMultiply.source
+#print axioms AspisR1.NNG_DSourcePayload136.source
+#print axioms AspisR1.NNG_DSourceRecord25.source
+#print axioms AspisR1.NNG_DSourceRecord26.source
+#print axioms AspisR1.NNG_DSourceRoot136.a3
+#print axioms AspisR1.NNG_DSourceRoot136.panic_env
+#print axioms AspisR1.NNG_DSourceRoot136.root32
+#print axioms AspisR1.NNG_DSourceRounds.source
+#print axioms AspisR1.NNG_DSourceRow0.source
+#print axioms AspisR1.NNG_DSourceState136.source
+#print axioms AspisR1.NNG_DSourceTerminal.source
+#print axioms AspisR1.NNG_DSourceTerminalGuard.guard
+#print axioms AspisR1.NNG_DSourceTerminalGuard.source
+#print axioms AspisR1.NNG_EnvOccurrences136.addExtra
+#print axioms AspisR1.NNG_EnvOccurrences136.addMask
+#print axioms AspisR1.NNG_EnvOccurrences136.beforeZ1
+#print axioms AspisR1.NNG_EnvOccurrences136.circle0
+#print axioms AspisR1.NNG_EnvOccurrences136.circle1
+#print axioms AspisR1.NNG_EnvOccurrences136.claims
+#print axioms AspisR1.NNG_EnvOccurrences136.extra
+#print axioms AspisR1.NNG_EnvOccurrences136.mask
+#print axioms AspisR1.NNG_EnvOccurrences136.multiply
+#print axioms AspisR1.NNG_EnvOccurrences136.payload2
+#print axioms AspisR1.NNG_EnvOccurrences136.record25
+#print axioms AspisR1.NNG_EnvOccurrences136.record26
+#print axioms AspisR1.NNG_EnvOccurrences136.rounds
+#print axioms AspisR1.NNG_EnvOccurrences136.terminal
+#print axioms AspisR1.NNG_Model134.call_model
+#print axioms AspisR1.NNG_Model134.roundtrip
+#print axioms AspisR1.NNG_TreeEmission.erase_tree
+#print axioms AspisR1.NNG_TreeEmission.source_suffixes
+#print axioms AspisR1.NNG_TreeEmission.tree_suffixes
