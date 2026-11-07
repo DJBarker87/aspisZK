@@ -90,3 +90,46 @@ Accounting through L270: 269 actual scopes (L048 never launched),0 extraction,
 is not a stop condition. All resumed scopes terminal; no timeout or memory kill.
 Remaining is owned model/source/host composition, plus the listed principal row
 candidates. No LIB blocker remains. NNH_REMAINING.md is rewritten accordingly.
+
+Final continuation work (through L399, gates still being retained):
+- Rev3 registry transport could not import old NND_AccountCarrier: its stale
+  RSL.OwnedAccount.data equation collided with the new owner. NNH_REGISTRY_PORT
+  records the94 affected source restatements; pure unaffected converters are
+  reused, raw bytes/length getter values repaired and each module compiled.
+  The generator --check passes. No existing module/library/source was edited.
+- NNH_RegistryModel.represented (L380) transports full canonical234 returned
+  Ok/Err to the actual deployed SDK configuration at the same runtime EnvRep.
+  NNH_LaneModel / ModelLeafPorts.lane supplies the all-length217 value port to
+  actual sdk.op50. Native candidate acceptance is left to the ledger.
+- ModelConfig selects reserved:=env.reservation. ModelLeafPorts.pending (L395)
+  proves the native C06 constructor equals that model at the original width64,
+  both reservation arms. The earlier true-Bool mismatch is not retained at this
+  selected configuration. ModelConfig still has unfinished base DATA; it is
+  NOT total Missing.instance, A1 or A2.
+- Actual064 source prefix: parser fail/div/Err, and entered common's actual
+  resume fail/div/Err, now construct native records directly and prove exact
+  weak observations. Resume Err also has its canonical fold at original Dom064.
+  Original reservation payloads and exact attempted/replied digest prefixes
+  survive; no witness is selected from a Spec. Prefix.run computes endpoints;
+  None means ONLY the successful-resume continuation still needing execution.
+  PrefixCoverage.unfinished_iff/classify (L396) expose the exact remaining
+  variant/prepared/accumulator, without filtering inputs or inventing aborts.
+  Total I.f064, G1a and NMF_B are NOT claimed. These prefix support roots have
+  standard printed axioms; unused support roots were not raw-audited again.
+- Candidate fields: published complete136 and217 mathematical roots are copied
+  read-only with hashes and installed by LeafInstall. G0Candidates (L369) uses
+  them and actual libraries/stage/G2/dispatch/physical adapters. It has no nmo
+  proof argument and only r234 remains from nmm. Their native NNI_ ledger26 gate
+  is pending; integration assigns no row credit. Other row waits are exactly
+  234/233/242/241 and137/087/094/328/345, not LIB fields.
+- L397 final focused cached combined import passes. L398 raw-audits ONLY the
+  new G0 consumer and complete registry/pending/lane model ports: standard-only,
+  raw=collector, zero swaps. L399 inspects the actual consumer and missing field
+  statements. No final literal-host theorem, ExecB/RZ installation, probability
+  averaging, full NFX/non-vacuity/release replay or100-bit claim is made.
+- Owned client now charges actual submissions, including unresolved ones,
+  rather than identifier suffixes (L048 never launched); the400-scope ceiling
+  is unchanged. Owned finalizer reads receipts once, with the identical strict
+  successful-source hash check, and verifies added imports. It writes a NEW
+  retained export rather than overwriting the earlier one. Host launchers,
+  reservations, shared workspaces, caps and timeouts are untouched.

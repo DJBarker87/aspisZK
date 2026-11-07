@@ -22,8 +22,7 @@ and native producer; L270 audits the full Returns roots. No row credit.
 - Stage4 / A1: full345 Returns, including returned Err, is concrete. Remaining:
   pointwise094/op10/328/345 value-to-deployed-sdk transport at actual VL/P/C,
   SAME statement/public/afterstate carriers and runtime reservation.
-- Stage4 / A2: full241 Returns is concrete. Remaining: pointwise217/op50,
-  canonical234/233/242 and064/op11 value-to-deployed-sdk transport at the SAME
+- Stage4 / A2: full241 Returns is concrete. Remaining: 233/242 and064/op11 value-to-deployed-sdk transport at the SAME
   selected arguments; only the selected Ok direction is required.
 - Stage5 / host: literal Ctx/model1/model2, total NNH-owned Missing instance,
   physical Data/record Data, actual I0 and allocation observations, and runtime
@@ -36,7 +35,7 @@ and native producer; L270 audits the full Returns roots. No row credit.
   World and Runs/OutcomeRec. Prove averaging without filtering Realizes or
   restricting the adversary; queries and pair come from normalized a-top.
 
-Exactly the row-candidate waits in G0: NMM.r217/r234 (ledger26 is gating217;
+Historical checkpoint list (superseded by the final list below): NMM.r217/r234 (ledger26 is gating217;
 234 not delivered here), NMX.r233 (after217/234), NMS.r242/r241 (after233 and
 actual064), NMO.r136 (ledger26 is gating136), NMP.r137/r087 (after136),
 NMT.r094/r328/r345 (after087). Principal work is read-only and not duplicated.
@@ -48,3 +47,32 @@ the literal-host conditional theorem requested by the brief.
 Remaining owned work is Lean construction/transport, not Kani or budget
 exhaustion. No trust/source/spec/metric change is proposed; no native2=model,
 Root0, successful-child or digest-totality assumption is introduced.
+
+Final authoritative remaining list (through L399):
+
+- No LIB field is waiting. Actual136/217 candidate producers and mathematical
+  roots are installed in G0Candidates; their native NNI_ gate remains pending.
+  The EXACT remaining row-candidate proof arguments are234/233/242/241 and
+  137/087/094/328/345. None is assumed or duplicated here.
+- Actual064: Prefix.run computes all parser stops/errors and the actual first
+  resume fail/div/Err endpoint with exact native digest prefixes. Its ONLY
+  None class is parser Ok plus resume Ok at the SAME variant/p/a, proved by
+  PrefixCoverage.unfinished_iff. Finish that concrete source continuation
+  (powers/inactive/folded/C04/geometry/pending/query/flush/finish), including
+  independent stopped C04 prefixes. Construct total f064 and its weak/canonical
+  association; never map None to abort or choose a witness from an admitted Spec.
+- A2: actual SDK217 and full canonical234 value ports are ready. C06 is aligned
+  to actual env.reservation at width64, including Err. Compose233/242/064/241
+  model values and the selected Ok direction. A1 still needs094/op10/328/345
+  model transport. Both complete RSL Returns evaluators are ready.
+- ModelConfig is a source-linked PARTIAL selection with reserved:=Env.reservation
+  and actual op50; its remaining base DATA are not total Missing.instance.
+  Literal host Ctx/model/Missing/physical data/I0 still require construction.
+- Bind the derived weak-entry native cuts to that SAME headline recorder,
+  finish NMF_B, G1a/okHeader/R0Rep, RecSig/RecSelect/HeadlineB, and instantiate
+  RZ-STATE into actual ExecB/world/pair/query terms. Then literal Split/Headline/A0
+  and full-space averaging, final non-vacuity/NFX/release gates remain.
+
+All these owned items are Lean construction/transport; none needs new Kani.
+The new conditional theorem is a composition scaffold over unfinished host
+DATA, not the brief's final literal-host conditional theorem or final G0.

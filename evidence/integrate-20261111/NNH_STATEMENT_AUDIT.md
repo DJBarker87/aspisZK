@@ -40,3 +40,15 @@ must determine World, Runs and OutcomeRec over all H, without conditioning.
 Neither the final host non-vacuity construction nor a final NFX coherent-closure
 gate is claimed. The focused combined import and conditional-root audit are
 validation of support only.
+
+
+Final resume audit: NNH_StatementAudit (L399) prints the actual
+AspisR1.NNH_G0Candidates.deployed_splitB_conditional and the exact remaining
+NMN/G1a/A1/A2 types. Library parameters, nmv, nmo and nmm.r217 are supplied;
+only r234 remains from nmm. The136/217 native ledger gate is still pending.
+Sbase/runtime/physical data, remaining row roots, Split/Headline/A0,
+recorder/G1a/R0/A1/A2 and ExecB remain explicit. No final host theorem,
+Realizes installation or averaging is claimed. Prefix.run has Option output,
+so it is NOT of TAS.Impl.f064's total-observer type. PrefixCoverage proves
+that None is precisely the original successful parser/resume continuation;
+no abort, filter or winning-event exclusion is substituted for it.
