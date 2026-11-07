@@ -17,3 +17,9 @@ Next: inspect exact baseline clauses, source and predecessor interfaces; validat
 Copied FIRST NLX exports, then NLK exports, then NMD exports. NMM_SEED.json retains every imported file hash (6129527 bytes total). Shared caches and sibling worktrees remain read-only. S2W_run_host.py and lakefile copied unchanged from NLK. Own transport/validation runner copies are NMM-prefixed and recorded, with share/disk/admission gates.
 
 Prepared NMM_LaneTranscription, NMM_RegistryTranscription, NMM_AccountsTranscription and NMM_Ownership233. They have not compiled yet and earn no credit. NMM_L001 is waiting for Stream A count below2; every wait is in NMM_ATTEMPTS. No Lean/Kani/extraction process has been submitted.
+
+## Resumption under (bl)
+
+Ruling (bl) at research 0f4b24948fe was read first. It replaces (bj)(2)(c): Rust must havoc complete child replies and mutable bytes, log exact child arguments and replies into an existing-argument local channel, and compare the complete parent outcome with the transcription on those replies. CLOSED callee laws are composed only in Lean. Allocator internals and pure heap cleanup are outside row obligations; stopped arms retain only ordered observable event prefixes. Earlier text above about allocator-state observation is superseded.
+
+Read-only recovery found no host NMM_K001 artifacts. Its receipt is unresolved; one of 80 Kani attempts is charged and the shape is never resubmitted unchanged. See NMM_K001_RECOVERY.json. NMM_L001/L002 already count against the 60 Lean budget; their evidence is retained. No candidate is claimed.

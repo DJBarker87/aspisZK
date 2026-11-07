@@ -65,3 +65,9 @@ Target not yet established. This is an inventory, not a validated clause map. Fu
 - TX2:231 `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key`: CLOSED; roots `NFU_AdapterGetters.key`. Cut clause status: NOT YET TRANSCRIBED OR VALIDATED.
 
 - TX2:236 `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account`: CLOSED; roots `NHJ_ReadonlyPacket.readonly`. Cut clause status: NOT YET TRANSCRIBED OR VALIDATED.
+
+## Binding interpretation under (bl)
+
+No callee packet law will be translated into a Rust assume. Pure child replies, including error variants, are arbitrary Rust values; argument/reply logging and full parent comparison establish native plumbing only. Lean instantiates CLOSED roots at those exact calls. Allocation failures stop with the prior event prefix; allocation metadata, pure Box ownership bookkeeping and pure Drop are outside the obligation. Returned Box payloads remain full typed values. Account/return-data writes from Drop remain in scope. These classifications supersede allocator/cleanup blockers in the earlier NMM_FAILING_STEP draft.
+
+For immutable slice children, a candidate existing-argument channel is a real harness-local backing allocation containing the original input region and disjoint UnsafeCell log regions. Raw derived pointers must stay in that allocation, and shared input bytes remain immutable. This channel is unvalidated and earns no credit until controls pass. No integer-address reconstruction, writable static or function pointer is permitted.
