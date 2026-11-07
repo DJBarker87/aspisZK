@@ -105,3 +105,5 @@ Attempt 49645: PV_W5_F32CallInputs, passed pinned focused replay.
 Attempt 49646: PV_W5_F32OverlapCompletion, passed pinned focused replay.
 
 Attempt 49647: PV_W5_F32EmptyOverlap, passed pinned focused replay.
+
+Attempt 49648: PV_W5_F32PointerWords, passed pinned focused replay.
