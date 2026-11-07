@@ -4,7 +4,7 @@ import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def _run(a,kind,target,command=None,extra=None,env_extra=None):
     assert ((a.startswith('NNF_L') and 1<=int(a[-3:])<=999) or (a.startswith('NNF_E') and 1<=int(a[-3:])<=2) or (a.startswith('NNF_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
-    assert kind in ['lean','link','audit','inspect','extract','kani']
+    assert kind in ['lean','link','audit','inspect'], 'NNF has zero Kani/extraction budget'
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NNF_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<150,'Actual Lean compiler budget exhausted (150)'
@@ -78,6 +78,8 @@ if {kind!r}=='audit':
 if {kind!r}=='extract':
  names += [p for p in (b/{target!r}).rglob('*') if p.is_file() and p.suffix not in ['.olean','.ir']]
 if {kind!r}=='inspect':
+ names += [p for p in (b/'NNF_AUDIT_INPUTS').glob('*') if p.is_file()]
+ names += [p for p in b.glob('NNF_PIN_*') if p.is_file()]
  names += [b/n for n in ['NNF_TOOL_PINS.json','NNF_RETENTION.json','NNF_EXPORT.json','NNF_CLOSURE_PINS.json.xz','NNF_CLOSURE_PINS.json.sha256','NNF_UNUSED_POOL_FINDING.json'] if (b/n).is_file()]
 out={{}}
 for p in names:
