@@ -9,7 +9,7 @@ def batch(scope,jobs):
  lib='programs/r1-cost-probe/src/lib.rs';owned='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs'
  get=lambda n:subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+n],text=True)
  files={'NMN_src/'+lib:'#![cfg_attr(kani,feature(allocator_api))]\n'+get(lib),'NMN_src/'+owned:get(owned)+'\n#[cfg(kani)]\n#[path="NMN_program.rs"]\nmod NMN_program;\n'}
- for n in ['NMN_program.rs','NMN_heap.rs','NMN_statement.rs','NMN_format.rs','NMN_full.rs']:files['NMN_src/programs/r1-cost-probe/src/'+n]=(E/n).read_text()
+ for n in ['NMN_program.rs','NMN_heap.rs','NMN_statement.rs','NMN_format.rs','NMN_full.rs']:files['NMN_src/programs/r1-cost-probe/src/'+n]=read_harness(n)
  files['NMN_gate.py']=(E/'NMN_gate.py').read_text();files['NMN_program_batch.py']=(E/'NMN_program_batch.py').read_text()
  manifest={'scope':scope,'jobs':[]}
  for job in jobs:

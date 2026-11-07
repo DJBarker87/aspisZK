@@ -167,7 +167,7 @@
 +fn NMN_auth_reply_stability(){NMN_parent::<true,false,false,true,false>();}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMN_program.rs
-@@ -0,0 +1,768 @@
+@@ -0,0 +1,777 @@
 +use super::*;
 +use core::cell::UnsafeCell;
 +include!("NMN_statement.rs");
@@ -908,34 +908,43 @@
 +fn NMN_241_unicode_slot_write(){NMN_241_unicodeslot::<false,true,false>();}
 +
 +fn NMN_prefix_stop(_: &Pubkey,_:&[OwnedAccount],_:&[u8],_:Result<u64,PE>)->Result<ValidatedAsqa,PE>{panic!("242 must not be entered before guard");}
-+fn NMN_guard<const MODE:u8,const BAD:bool>(){
++fn NMN_guard<const MODE:u8,const BAD:bool,const SLOTERR:bool>(){
 + let key=Pubkey::new_from_array(kani::any());
 + let accounts:[OwnedAccount;9]=core::array::from_fn(|_|OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(kani::any()),bytes:Ok(Vec::new())});
 + let mut data:[u8;320]=kani::any();let n:usize=kani::any();let count:usize;let length:usize;
 + if MODE==0{kani::assume(n<=9 && n!=7);count=n;length=320;}
 + else if MODE==1{kani::assume(n<4);count=7;length=n;}
 + else{kani::assume(n<4);count=7;length=320;data[0]=b'A';data[1]=b'S';data[2]=b'Q';data[3]=b'8';let x:u8=kani::any();kani::assume(x!=data[n]);data[n]=x;}
-+ let result=stage2_owned(&key,&accounts[..count],&data[..length],Ok(kani::any()));
++ let slot=if SLOTERR{let u:u32=kani::any();kani::assume(u<=0x10ffff && !(0xd800..=0xdfff).contains(&u));let mut buf=[0u8;4];let text=char::from_u32(u).unwrap().encode_utf8(&mut buf);Err(PE::BorshIoError(text.to_owned()))}else{Ok(kani::any())};
++ let result=stage2_owned(&key,&accounts[..count],&data[..length],slot);
 + assert_eq!(result,Err(if BAD{PE::InvalidAccountData}else{PE::InvalidInstructionData}),"native prefix guard result");
 +}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_count_pass(){NMN_guard::<0,false>();}
++fn NMN_guard_count_pass(){NMN_guard::<0,false,false>();}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_count_control(){NMN_guard::<0,true>();}
++fn NMN_guard_count_control(){NMN_guard::<0,true,false>();}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_short_pass(){NMN_guard::<1,false>();}
++fn NMN_guard_short_pass(){NMN_guard::<1,false,false>();}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_short_control(){NMN_guard::<1,true>();}
++fn NMN_guard_short_control(){NMN_guard::<1,true,false>();}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_magic_pass(){NMN_guard::<2,false>();}
++fn NMN_guard_magic_pass(){NMN_guard::<2,false,false>();}
 +#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMN_guard_magic_control(){NMN_guard::<2,true>();}
++fn NMN_guard_magic_control(){NMN_guard::<2,true,false>();}
++
++#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_guard_clock_pass(){NMN_guard::<0,false,true>();}
++
++#[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_prefix_stop)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NMN_guard_clock_control(){NMN_guard::<0,true,true>();}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMN_heap.rs
 @@ -0,0 +1,34 @@

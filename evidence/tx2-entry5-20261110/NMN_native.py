@@ -5,7 +5,7 @@ def native(a,target):
  lib='crates/aspis-r1-cost-probe/src/lib.rs';cand='crates/aspis-r1-cost-probe/src/candidate.rs'
  get=lambda n:subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+n],text=True)
  orig={lib:get(lib),cand:get(cand)}
- altered={lib:'#![cfg_attr(kani,feature(allocator_api))]\n'+orig[lib],cand:orig[cand]+'\n#[cfg(kani)]\n#[path="NMN_native.rs"]\nmod NMN_native;\n','crates/aspis-r1-cost-probe/src/NMN_native.rs':(E/'NMN_native.rs').read_text()}
+ altered={lib:'#![cfg_attr(kani,feature(allocator_api))]\n'+orig[lib],cand:orig[cand]+'\n#[cfg(kani)]\n#[path="NMN_native.rs"]\nmod NMN_native;\n','crates/aspis-r1-cost-probe/src/NMN_native.rs':read_harness('NMN_native.rs')}
  patch=''.join(''.join(difflib.unified_diff(orig.get(n,'').splitlines(True),v.splitlines(True),fromfile='a/'+n if n in orig else '/dev/null',tofile='b/'+n)) for n,v in altered.items())
  (E/'NMN_HARNESSES.patch').write_text(patch);(E/'NMN_HARNESSES.patch.sha256').write_text(sha(patch.encode())+'\n')
  files={'NMN_src/'+n:v for n,v in altered.items()};files['NMN_source_overlays.json']='{}';files['NMN_gate.py']=(E/'NMN_gate.py').read_text()

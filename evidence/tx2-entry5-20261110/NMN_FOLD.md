@@ -12,7 +12,7 @@ Root hypotheses are H, the row's input Frame and Domain only. Domain contains pr
 
 NMN_Headline.accepted_occurrence reuses NMF_GameRoot.root0_or_existing_collision at the SAME accepted RPx_Deployed.deployed occurrence and preserves exactly its EXISTING charged collision alternative. Numeric input extents remain output-side caller obligations. It adds no new headline input hypothesis, hash injectivity, successful child premise or security metric. This is occurrence/domain support, not a replacement headline or a global soundness/privacy conclusion.
 
-Final own combined import/NFX/raw ax2 gates are pending. Candidate status awaits those gates; credit awaits the NEXT ledger gate.
+The064 worker combined/NFX/raw ax2 gates passed L015–L021. Candidate status is CANDIDATE; credit awaits the NEXT ledger gate. A supplemental gate incorporates later241 source-support lemmas.
 
 ##241
 
@@ -20,4 +20,6 @@ NMN_242Interface carries the exact full ValidatedAsqa/ProgramError types. Return
 
 NMN_241ValueFold.G is the exact source value/control transcription with the FULL242 Result parameter. Instantiating that parameter at the SAME source call gives NLE_OwnedFine.G and the actual emitted stage2_owned at the named headline installation. NMN_241Continuation proves all ProgramError rejection, outer failure and divergence preserve only the entered242 prefix. NMN_241Prefix factors the exact source prefix and proves wrong account counts enter no child. These are source/control components, NOT a full observable/native241 fold.
 
-Native241 experiments separately test primitive error variants, typed boxed payloads, bounded String byte windows and Slot error arguments. All restrictions and failed shapes are explicit in CUTMAP/FAILING_STEP. An original proof58295/checkpoint1768 buffer experiment is in progress. Remaining full-type String/borrowed-reply, callback argument channel, nested event/return-data, native decoding and caller-domain obligations prohibit241 credit. No pointer integer, bounded payload or source equality alone is promoted to a full packet.
+Native241 experiments separately test primitive error variants, typed boxed payloads, bounded String byte windows and Slot error arguments. All restrictions and failed shapes are explicit in CUTMAP/FAILING_STEP. Original proof58295 buffer experiments crashed/timed out and are retired; checkpoint1768 fixed-window construction passed its corruption control. Neither establishes full original-buffer241 transport. Remaining full-type String/borrowed-reply, callback argument channel, nested event/return-data, native decoding and caller-domain obligations prohibit241 credit. No pointer integer, bounded payload or source equality alone is promoted to a full packet.
+
+NMN_241Suffix gives exact after-auth success, full ProgramError mapping, mapper failure/divergence, and auth failure/divergence branch equations. These are source-support case equations, not a241 fold root. The mapper equations quantify their entered-call reply branch explicitly; they are never supplied as a hidden child success/domain premise to a native candidate. No canonical242 law, full native241 graph or primitive field theorem is invented.

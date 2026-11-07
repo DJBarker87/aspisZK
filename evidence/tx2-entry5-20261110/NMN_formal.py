@@ -2,6 +2,15 @@
 from NMN_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
+def read_harness(name):
+    # Reconstruct only an added cfg(kani) artifact, never a shipped source.
+    manifest=json.loads((E/'NMN_HARNESS_SOURCES.json').read_text());row=manifest[name]
+    patch=(E/'NMN_HARNESSES.patch').read_text();blocks=re.split(r'(?=^--- )',patch,flags=re.M)
+    matches=[b for b in blocks if b.startswith('--- /dev/null\n+++ b/'+row['path']+'\n')]
+    assert len(matches)==1,name
+    result=''.join(l[1:] for l in matches[0].splitlines(True)[2:] if l.startswith('+'))
+    assert sha(result.encode())==row['sha256'],name
+    return result
 def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert ((a.startswith('NMN_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMN_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
     assert kind!='extract','Extraction budget is zero'

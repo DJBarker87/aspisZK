@@ -23,8 +23,11 @@ for mod in ['NMN_064', 'NMN_241Continuation', 'NMN_241Prefix', 'NMN_241Suffix', 
 (B/'NMN_EXPORT.json').write_text(json.dumps(dict(path=str(export),files=files,bytes=sum(r['bytes'] for r in files)),indent=1)+'\n')
 # The inherited scratch corpus includes unused historical Pool source. It is
 # explicitly outside every selected verifier dependency closure; no Pool credit.
-different=[]
-(B/'NMN_UNUSED_POOL_FINDING.json').write_text(json.dumps(dict(owner_revision='b936275465',selected_pool_crates=False,credit='Inherited unused Pool corpus is outside every selected native closure; no Pool execution/parity or ELF rebuild is claimed.'),indent=1)+'\n')
+expected=json.loads((B/'NMN_POOL_OWNER_PINS.json').read_text());different=[]
+for rel,h in expected.items():
+ p=B/'NMN_src'/rel
+ if not p.exists() or sha(p)!=h:different.append(dict(path=rel,expected=h,actual=sha(p) if p.exists() else None))
+(B/'NMN_UNUSED_POOL_FINDING.json').write_text(json.dumps(dict(owner_revision='b936275465',different=different,selected_pool_crates=False,credit='Inherited unused Pool corpus is outside every selected native closure; no Pool execution/parity or ELF rebuild is claimed.'),indent=1)+'\n')
 seed=[]
 for p in (B/'NMN_seed').rglob('*'):
  if p.is_file():seed.append(dict(path=str(p),sha256=sha(p),bytes=p.stat().st_size))
@@ -42,4 +45,4 @@ for name in ['cargo-kani','cargo']:
 for name in ['lean','lake','leanc']:
  p=Path(env['LEAN_SYSROOT'])/'bin'/name;tools[str(p)]=dict(realpath=str(p.resolve()),sha256=sha(p))
 (B/'NMN_TOOL_PINS.json').write_text(json.dumps(tools,indent=1)+'\n')
-print(json.dumps(dict(export_files=len(files),closure_files=len(closure),modules=len(loaded),workspace_bytes=workspace,unused_pool_differences=len(different),aeneas_objects_checked=checked)))
+print(json.dumps(dict(export_files=len(files),closure_files=len(closure),modules=len(loaded),workspace_bytes=workspace,selected_pool_crates=False,aeneas_objects_checked=checked)))
