@@ -171,3 +171,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49865 passed exact pinned replay PV_THR2_TypedRepresentation_BoxDynFnOnce; see receipt for time/RSS/swap/revision/axioms.
 
 49866 passed exact pinned replay PV_FN_THREAD_f361BoxCodecGap; see receipt for time/RSS/swap/revision/axioms.
+
+49867 passed exact pinned replay PV_FN_THREAD_f361BoxBridged; see receipt for time/RSS/swap/revision/axioms.
