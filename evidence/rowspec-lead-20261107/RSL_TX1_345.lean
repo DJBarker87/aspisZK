@@ -28,6 +28,17 @@ the clone of a nonempty BorshIoError String is an allocation site
 unreachable there; the domain stays True.  (NMT-S2) the decoder's internal
 allocation sites reached before a later Err are represented by
 `S1Lib.decodeReachesAlloc`.
+Revision 4 (ruling (bs)): TX1:328's caller clause (P1880)
+public_bytes.length = 1880 is discharged here, not added to this Domain.  The
+first_decoded argument public_bytes is `publicData`, and the only arm that
+reaches the call has `C.decodeStatement publicData = some st`.  The frozen
+decoder rejects every other length first (pair_forest_terminal.rs:403,
+WrongLength), so the CLOSED TX1:332 law exports the length (`P1880Discharge`,
+to be proved by the instantiation); `p1880_of_decode` gives (P1880) at the
+call site.  At the only caller TX1:344 the same fact also follows from the
+snapshot: stage1 snapshots the public account with length1 = length2 =
+POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES (r1_pool_adapter_owned.rs:453),
+and snapshot stores Ok bytes only at an admitted length (lines 33-37).
 -/
 import RSL_TX1_328
 import RSL_Pool
@@ -106,6 +117,22 @@ def Ref (V : VLib) (P : PreparedNew V) (C : S1Lib V) (a : Args) : RS Bytes :=
   | _ => RS.lift Spec.panic   -- unreachable: length is 3 here
 
 def Domain (_a : Args) : Prop := True
+
+/-- Revision 4: the CLOSED TX1:332 decoder accepts only 1880-byte input
+(pair_forest_terminal.rs:403). -/
+def P1880Discharge (V : VLib) (C : S1Lib V) : Prop :=
+  ∀ (b : Bytes) (st : C.Statement), C.decodeStatement b = some st → b.length = STATEMENT_BYTES
+
+theorem p1880_len_eq : TX1_094.P1880_LEN = STATEMENT_BYTES := rfl
+
+/-- Where (P1880) is discharged: on the arm of `body` that reaches the
+first_decoded call, `decodeStatement publicData = some st`, and the call passes
+`publicData` as public_bytes, so 328's (P1880) holds at SAME arguments. -/
+theorem p1880_of_decode (V : VLib) (C : S1Lib V) (hD : P1880Discharge V C) (publicData proofData : Bytes)
+    (st : C.Statement) (hdec : C.decodeStatement publicData = some st) (n : Nat) :
+    (⟨C.semanticPublic st, publicData, slice proofData AFTERSTATE_BYTES PROOF_ACCOUNT_BYTES, n⟩ :
+      TX1_328.Args V).public_bytes.length = TX1_094.P1880_LEN :=
+  (hD publicData st hdec).trans p1880_len_eq.symm
 
 def RowSpec_345 (V : VLib) (P : PreparedNew V) (C : S1Lib V)
     (stage1_owned : Args → Env → Obs (Except ProgramError Bytes)) : Prop :=

@@ -48,6 +48,13 @@ open RSL
 #print axioms Spec.not_functional_both
 #print axioms TX1_087.domain_needs_R4
 #print axioms TX1_094.r4_of_scan
+-- Revision 4 (ruling (bs)) teeth
+#print axioms TX1_094.domain_needs_P1880
+#print axioms TX1_094.rejects_constErr
+#print axioms TX1_328.ref_k_det
+#print axioms TX1_328.rejects_silentRet
+#print axioms TX1_345.p1880_len_eq
+#print axioms TX1_345.p1880_of_decode
 #check @TX2_217.RowSpec_217
 #check @TX2_234.RowSpec_234
 #check @TX2_233.RowSpec_233

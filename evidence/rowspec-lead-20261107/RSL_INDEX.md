@@ -2,6 +2,8 @@
 
 Target not yet established. These are specifications, not proofs. No row is closed by this package.
 
+**Revision 4 (2026-11-07).** RSL_REVISION4.md: own-input clause (P1880) on TX1:094, caller clause on TX1:328, discharged in TX1:345.
+
 **Revision 2 (2026-11-07).** RSL_REVISION2.md supersedes parts of this index. It adds the clone allocation arm to the owned getters (NMT-S1), the decoder's reached-allocation arm to TX1:345 (NMT-S2) and the `format!` allocation in `lib.rs::error` (TX1:328, TX2:241). Domains are unchanged. TX1:328 no longer rejects the constant abort, because the frozen function can abort silently at that `format!` site.
 
 Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387, release features {pool-adapter, private-leaf-salts}, with cu-profiling, prover and detail-phases off. Each module defines `RowSpec_<row>` over the observed semantics of the actual frozen function, `impl : Args -> [SdkState ->] Env -> Obs Ret`. The spec says that on the row's own-input domain, the observation lies in `Ref`, a line-by-line transcription of the frozen body. Read the header of RSL_Base.lean first. The semantic choices that make the package full-strength are these:
@@ -171,13 +173,14 @@ Own-input clauses:
 Own-input clauses:
 - **(T1)** obs = None.
 - **(T2)** `V.publicDom public`.
+- **(P1880)** Revision 4 (ruling (bs)): `public_bytes.length = 1880`, required by the CLOSED TX1:186 checkpoint law at SAME public_bytes. Caller clause RSL4-caller:TX1:328:TX1:094:P1880; discharged in 345 (`TX1_345.P1880Discharge`, `p1880_of_decode`).
 
 ### TX1:328 first_decoded
 | Field | Value |
 |---|---|
 | Frozen signature | `fn first_decoded(public: …::r0::Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize) -> Result<Vec<u8>, ProgramError>` |
 | Spec | `RowSpec_328 V P`, module RSL_TX1_328.lean |
-| Own-input clauses | `V.publicDom public` |
+| Own-input clauses | `V.publicDom public`; Revision 4: (P1880) `public_bytes.length = 1880` (caller clause RSL4-caller:TX1:345:TX1:328:P1880) |
 | Children | OPEN `TX1_094.Ref` with obs = observer() = None; CLOSED TX1:NGB001 error (log line then InvalidInstructionData) and TX1:329 |
 | Shape | (bm) |
 
@@ -186,7 +189,7 @@ Own-input clauses:
 |---|---|
 | Frozen signature | `fn stage1_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8]) -> Result<Vec<u8>, ProgramError>` |
 | Spec | `RowSpec_345 V P C`, module RSL_TX1_345.lean |
-| Own-input clauses | none |
+| Own-input clauses | none (Revision 4: 328's (P1880) is discharged here from the CLOSED TX1:332 decoder length check, `P1880Discharge`, `p1880_of_decode`) |
 | Children | CLOSED TX1:339/340/341/335/342/332/276/267/278/173/268 (`C`, transcribed helpers; Revision 2: getter clone arms, `S1Lib.decodeReachesAlloc`); OPEN `TX1_328.Ref` |
 | Shape | (bm) |
 
