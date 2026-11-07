@@ -1,0 +1,51 @@
+import Lean
+import NFA_WALKER
+import NFA_MemoryLimit
+open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+unsafe def main (args : List String) : IO UInt32 := do
+  NFA_MemoryLimit.set
+  initSearchPath (← findSysroot)
+  enableInitializersExecution
+  let mode := args.headD "small"
+  let (modules, roots) ←
+    if mode == "fixtures" then
+      pure (#[`NEP_Planted, `NEP_Mutations],
+       #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else do
+      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMW_AUDIT_ROOTS.json"))
+      let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+      let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+      let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NMW_AUDIT_MODULES.json"))
+      let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
+      let some modules := selected[idx]? | throw (IO.userError "module group out of range")
+      pure (modules.map String.toName, names.map String.toName)
+  let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+    {} (loadExts := true) (level := .private)
+  let ctx : Command.Context := {
+    fileName := "NEP_Driver"
+    fileMap := FileMap.ofString ""
+    snap? := none
+    cancelTk? := none
+  }
+  let action : CommandElabM Bool := do
+    let mut failed := false
+    for root in roots do
+      try
+        elabCommand (← `(command| #print axioms $(mkIdent root)))
+        NEP.audit root ("NEP_" ++ mode ++ "_" ++ root.toString)
+      catch e =>
+        logError e.toMessageData
+        failed := true
+    return failed
+  let result ← ((action.run ctx).run (Command.mkState env)).toBaseIO
+  match result with
+  | .error e =>
+    IO.eprintln (← e.toMessageData.toString)
+    return 2
+  | .ok (failed, state) =>
+    for msg in state.messages.toList do IO.println (← msg.data.toString)
+    return if failed then 1 else 0

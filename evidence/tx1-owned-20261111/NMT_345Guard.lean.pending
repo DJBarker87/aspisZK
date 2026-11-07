@@ -1,0 +1,49 @@
+import NMT_stage1_owned.Funs
+set_option autoImplicit false
+noncomputable section
+namespace NMT_stage1_owned
+open Aeneas Aeneas.Std Result
+theorem NMT_wrong_count (NMT_call_0 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool) (NMT_call_1 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
+  T U),
+(Slice T) → (Array U N) → Result Bool) (NMT_call_2 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F)) (NMT_call_3 : aspis_r1_cost_probe.transport.Variant → Result Std.U8) (NMT_call_4 : Result Std.Usize) (NMT_call_5 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (NMT_call_6 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) (NMT_call_7 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    → Result (core.result.Result Unit
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)) (NMT_call_8 : Result Std.Usize) (NMT_call_9 : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+    Result (core.result.Result (Array Std.U8 688#usize)
+    aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)) (NMT_call_10 : solana_program_error.ProgramError → Result
+    solana_program_error.ProgramError) (NMT_call_11 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+    Std.U8) → (Slice Std.U8) → Std.Usize → Result (core.result.Result
+    (alloc.vec.Vec Std.U8) solana_program_error.ProgramError)) (NMT_call_12 : (Slice Std.U8) → Result (core.result.Result
+    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    solana_program_error.ProgramError)) (NMT_call_13 : r1_pool_adapter.owned.OwnedAccount → Result (core.result.Result Unit
+    solana_program_error.ProgramError)) (NMT_call_14 : r1_pool_adapter.owned.OwnedAccount → solana_pubkey.Pubkey → Bool →
+    Result (core.result.Result Unit solana_program_error.ProgramError)) (NMT_call_15 : ∀ {N : Std.Usize},
+(Array r1_pool_adapter.owned.OwnedAccount N) → Result (core.result.Result
+    Unit solana_program_error.ProgramError)) (NMT_call_16 : (Slice Std.U8) → Result (core.result.Result Unit
+    solana_program_error.ProgramError)) 
+  (program_id : solana_pubkey.Pubkey)
+  (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (data : Slice Std.U8)  (count : (Slice.len accounts != 3#usize)=true) :
+ r1_pool_adapter.owned.stage1_owned NMT_call_0 NMT_call_1 NMT_call_2 NMT_call_3 NMT_call_4 NMT_call_5 NMT_call_6 NMT_call_7 NMT_call_8 NMT_call_9 NMT_call_10 NMT_call_11 NMT_call_12 NMT_call_13 NMT_call_14 NMT_call_15 NMT_call_16 program_id accounts data =
+ (do
+  let first ← NMT_call_1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8,10#u8])
+  if first then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData) else do
+   let _second ← NMT_call_1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8,11#u8])
+   ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)) := by
+ unfold r1_pool_adapter.owned.stage1_owned
+ cases h : NMT_call_1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8,10#u8]) with
+ | fail e => simp only [h,bind_tc_fail]
+ | div => simp only [h,bind_tc_div]
+ | ok first =>
+   cases first <;> simp only [h,bind_tc_ok, count,ite_true,ite_false]
+   cases h2 : NMT_call_1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8,11#u8]) with
+   | fail e => simp only [h2,bind_tc_fail]
+   | div => simp only [h2,bind_tc_div]
+   | ok second => cases second <;> simp only [h2,bind_tc_ok,count,ite_true,ite_false]
+#print axioms NMT_wrong_count
+end NMT_stage1_owned
