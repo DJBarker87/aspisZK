@@ -1,0 +1,38 @@
+{"attempt": "NMB_L076", "exit_status": 0, "wall_seconds": 32.921942320186645, "peak_rss_kib": "6637872", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀
+...
+Rw.solana_pubkey.Pubkey)
+  (accounts : Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NMB_OwnedTyped.stage1Owned ops program accounts data).result =
+    AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+NMB_OwnedResult.occurrences : ∀ (ops : AdapterRw.Ops) (program : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Aeneas.Std.Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+  List.map NMB_TypedTrace.Event.site (NMB_OwnedTyped.stage1Owned ops program accounts data).events =
+    (AspisR1.NLD_Stage1Source.stage1Owned ops program accounts data).1
+NMB_TypedParentFold.copy : ∀ (s : NMB_TypedParent.State) (saved : NMB_TypedParent.Bytes),
+  NMB_TypedParentFold.erase (NMB_TypedParent.copyResult s saved) = NMB_Stage1Source.copyResult s saved
+NMB_TypedParentFold.continuation : ∀ (ops : AdapterRw.Ops) (p : NMB_TypedParent.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (accounts : Aeneas.Std.Slice NMB_Input.Owned) (s : NMB_TypedParent.State),
+  NMB_TypedParentFold.erase (NMB_TypedParent.continuation ops p d accounts s) =
+    NMB_Stage1Source.continuation ops p d accounts s
+NMB_TypedParentFold.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : NMB_TypedParent.Key)
+  (d : Aeneas.Std.Slice Aeneas.Std.U8) (alloc0 alloc1 alloc2 : Aeneas.Std.Result Unit),
+  NMB_TypedParentFold.erase (NMB_TypedParent.G x ops p d alloc0 alloc1 alloc2) =
+    NMB_Stage1Source.G x ops p d alloc0 alloc1 alloc2
+NMB_RowSpec094.frame_iff : ∀ (after before : AspisR1.NLJ_Packets.Frame094),
+  after = before ↔ NMB_RowSpec094.FrameEqual after before
+NMB_RowSpec094.equivalent : ∀ (native : AspisR1.NLJ_Packets.Native094),
+  NMB_RowSpec094.Required native ↔ AspisR1.NLJ_Packets.RowSpec_094 native
+
+Running as unit: run-rdb5cd6037f4f4c699fcba0abccac8d2c.scope; invocation ID: 698e7ed9e03a43d19063107f8cbfc0be
