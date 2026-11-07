@@ -126,3 +126,5 @@ Session4 49105: pinned PV_THR2_BoxDynRegistry14756 passed; session4 receipt reco
 Session4 49106: pinned PV_THR2_OwnInitBridgedAtSite passed; session4 receipt records resources/axioms.
 
 Session4 49107: pinned PV_THR2_BoxDynBinaryLayout passed; session4 receipt records resources/axioms.
+
+Session4 49108: pinned PV_THR2_OwnInitBridgedPinned passed; session4 receipt records resources/axioms.
