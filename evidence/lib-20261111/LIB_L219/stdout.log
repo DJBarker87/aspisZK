@@ -1,0 +1,30 @@
+LIB_Instances.VL : VLib
+LIB_Instances.P : PreparedNew LIB_Instances.VL
+LIB_Instances.C : TX1_345.S1Lib LIB_Instances.VL
+LIB_FullInstances.L : PoolLib
+LIB_FullInstances.V0 : TX2_241.V2Lib
+LIBB_PoolLib.values : NND_PoolValues.Values LIBB_PoolLib.library
+LIBB_V2Star.values : NND_Tx2Values.Values LIBB_V2Star.library
+LIBB_V2Star.gate : ∀ (x : Bytes × Bytes × Bytes),
+  TX2_241.Dom064 LIBB_V2Star.library x →
+    LIBB_ReturnFunctional.ReturnFunctional (LIBB_V2Star.library.tx2auth x.1 x.2.1 x.2.2)
+LIBB_V2Star.weak_identity {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  LIBB_V2Star.weak H d hash world = TCK.weaken LIBB_V2Star.library (NNC_ObservedLaw.w H d hash world)
+LIBB_V2Star.weak_exact {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  (LIBB_V2Star.weak H d hash world).tx2auth = NNC_ObservedLaw.w H d hash world
+LIB_FullInstances.library : LIB_FullInstances.Bundle
+LIB_ParseShapeTotal.source (proof : Aeneas.Std.Slice Aeneas.Std.U8) (env : Env) :
+  LIB_ParseShapeTotal.model (LIB_Carriers.bytes proof) env =
+    NJS_Parse.map NJS_Parse.reply
+      (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+        (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof)
+LIB_ParseShapeTotal.frozen_wrong_length (proof : Aeneas.Std.Slice Aeneas.Std.U8) (h : (↑proof).length ≠ 57607) :
+  NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+      (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+LIB_ParseShape094.width_not_required (pub : LIB_Instances.VL.Public) (env : Env) :
+  ∃ a o, a.k = SPLIT ∧ TX1_094.Ref LIB_Instances.VL LIB_Instances.P a env o ∧ List.length a.proof ≠ 57607
+'LIB_ParseShapeTotal.functional' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_ParseShape094.empty_reference' depends on axioms: [propext, Classical.choice, Quot.sound]

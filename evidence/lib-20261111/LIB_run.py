@@ -6,6 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-lib-20261111';C='/home/dombarker/pr
 if (E/'LIB_HOLD').exists():sys.exit(75)
 guard=E/'LIB_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('LIB_L[0-9]{3}',a) and 1<=int(a[-3:])<=999 and not (E/a).exists()
+assert int(a[-3:])<204 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=204)<80
 assert int(a[-3:])<182 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=182)<162
 assert int(a[-3:])<93 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=93)<250
 def ssh(code,data=None,submitted=False):
@@ -67,7 +68,10 @@ if kind=='lean':
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LIB_generated','-o','LIB_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['LIB_Driver','LIB_ProofDriver','LIB_PoolProofDriver','LIB_PoolDriver']:command+=['-c','LIB_native/'+target+'.c']
 elif kind=='audit':
- if target=='bundle-pins':
+ if target=='f9-pins':
+  sources=['LIB_f9_pin.py','LIB_F9_SELECTED_MODULES.json','LIB_F9_SOURCE_PINS.json']
+  command=['python3','LIB_f9_pin.py']
+ elif target=='bundle-pins':
   sources=['LIB_bundle_pin.py','LIB_BUNDLE_SELECTED_MODULES.json','LIB_BUNDLE_SOURCE_PINS.json']
   command=['python3','LIB_bundle_pin.py']
  elif target=='pins':
@@ -113,6 +117,10 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'LIB_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'LIB_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['LIB_LOADED_scan.jsonl','LIB_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {target!r}=='f9-pins':
+ for n in ['LIB_F9_EXPORT.json','LIB_F9_HOST.json','LIB_F9_CLOSURE_PINS.json.sha256']:
+  out[n]=(b/n).read_text()
+ out['LIB_F9_CLOSURE_PINS.json.xz.hex']=(b/'LIB_F9_CLOSURE_PINS.json.xz').read_bytes().hex()
 if {target!r}=='bundle-pins':
  for n in ['LIB_BUNDLE_EXPORT.json','LIB_BUNDLE_HOST.json','LIB_BUNDLE_CLOSURE_PINS.json.sha256']:
   out[n]=(b/n).read_text()

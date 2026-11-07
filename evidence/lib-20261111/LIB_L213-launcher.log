@@ -1,0 +1,45 @@
+{"attempt": "LIB_L213", "exit_status": 1, "wall_seconds": 24.163271359167993, "peak_rss_kib": "6750868", "swaps": "0", "print_axioms": ["'LIB_ParseShape094.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_ParseShape094.empty_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_ParseShape094.width_not_required' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LIB_generated/LIB_ParseShape094.lean:17:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (LIB_ParseShapeTotal.child.run a.proof).bind ?m.43 env ?o
+in the target expression
+  (LIB_Instances.VL.parseShape.run a.proof).bind
+      (fun r =>
+        match r with
+        | Except.ok a_1 =>
+          RE.bind (LIB_Instances.VL.canonicalScan.run a.proof) fun x =>
+            RE.bind
+              ((Spec.call (fun x => TX1_087.Domain LIB_Instances.VL x none)
+                    (TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+                    { public_ := a.public_, proof := a.proof, g := LIB_Instances.VL.zeroE29 }).bind
+                fun r =>
+                match r.1
+...
+FF_ROUND1) with
+                | none => RE.lift Spec.panic
+                | some folded =>
+                  RE.bind (LIB_Instances.VL.batchMerkle.run (a.proof, p, folded, 0)) fun x =>
+                    RE.bind (LIB_Instances.VL.geometry.run (p, 0, a.k)) fun geo =>
+                      RE.bind (LIB_Instances.VL.weightsNew.run acc) fun pending =>
+                        RE.bind (LIB_Instances.VL.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                          (RE.lift (LIB_Instances.VL.finish.run (r.2, r.1))).bind fun acc2 =>
+                            (RE.lift (LIB_Instances.VL.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind
+                              fun bytes => RE.pure bytes
+        | Except.error e => Spec.pure (Except.error e))
+      env o ↔
+    o = { exit := Exit.ret (Except.error LIB_Instances.VL.vParse), events := [] }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    LIB_Instances.VL.canonicalScan.run a✝.proof
+  has type
+    Spec (Except LIB_Instances.VL.VErr Unit)
+  but is expected to have type
+    RE LIB_Instances.VL.VErr Unit
+  in the application
+    RE.bind (LIB_Instances.VL.canonicalScan.run a✝.proof)
+'LIB_ParseShape094.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_ParseShape094.empty_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_ParseShape094.width_not_required' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0fe11b899bf149e594caed1a5ef50581.scope; invocation ID: 9bd66e796dfd4aeebac986e7fc8be46d
