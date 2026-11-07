@@ -1,6 +1,6 @@
 # NMM adapter fold result
 
-Target not established. No candidate roots or ledger promotions. Native allowance80/80 charged; extraction0. Final audit is in progress.
+Target not established. No candidate roots or ledger promotions. Native allowance80/80 charged; extraction0. Final audit passes; see NMM_AUDIT.json.
 
 | Native property | Positive | Failing controls | Scope |
 |---|---|---|---|

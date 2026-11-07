@@ -1,31 +1,27 @@
-# NMM TX2 adapters handoff
+# NMM TX2 adapter handoff
 
-Target not yet established. No candidate or CLOSED row is claimed.
+Target not established. No candidate roots, CLOSED rows or233 native fold. Baseline ledger24 remains581 CLOSED /0 QUALIFIED /18 OPEN. Branch codex/cx-tx2-adapters5-20261107; commits local, no push.
 
-Branch: codex/cx-tx2-adapters5-20261107. Scope: TX2:217 and TX2:234, then TX2:233 using gated candidate laws. Baseline ledger24: 581 CLOSED / 0 QUALIFIED / 18 OPEN.
+## Budget and current state
 
-Budgets: 80 Kani, 60 Lean, 0 extraction. Current attempts and admission waits are in NMM_ATTEMPTS.jsonl. Only NMM-prefixed modules and this evidence directory may change. No shipped source change, ELF rebuild, key action, or push is authorized by this handoff.
+80/80 charged native attempts,40/60 formal scopes,0 extraction. Native receipts:16 local positive passes,40 expected negative failures,21 retired90-second timeouts,2 compiler rejections and1 unresolved charged K001. K001 was inspected read-only and never resubmitted. The last scope is L040 with a recovered successful receipt. NMM_PENDING.json marks receipt recovery; no submitted job should be reissued.
 
-Method: ruling (bl) supersedes (bj)(2)(c): arbitrary typed callee replies and full mutable footprints, arguments and replies recorded via existing arguments into local records, native outcome versus transcription, CLOSED callee laws composed only in Lean. Allocator internals and pure cleanup are outside obligations; stopped outcomes retain only ordered event prefixes. NLM 233/242 drafts are weaker and cannot serve as complete packets.
+15 support modules compile at current hashes. Original768-byte lane outcomes, payload windows and ordered-prefix checks have failing controls. V1 registry first-PDA-error is controlled. Other late passing registry branches lack full control families; V1 all-PDA-success times out. See NMM_FOLD.md for the receipt matrix.
 
-Host workspace: /home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110. Seed order: ledger24 NLX exports, NLK export, NMD export, by copying with hashes. One capped scope at a time; admission requires exit 0 and allowed true, disk >=40 GB and fewer than two Stream A scopes. Caps: 6G/8G/swap0/tasks64; Lean -M7000.
+## Open members
 
-Current state: no candidate roots. See NMM_REMAINING.md for member-level obligations and NMM_FOLD.md for gated support. K001 was recovered read-only without a receipt, charged, and never resubmitted. All timeout shapes are retired.
+217 lacks total native association outside768 bytes;233 does not establish that extent before its call.234 lacks the V2 second-PDA local channel, full branch/control coverage and complete packet association.233 cannot start its native fold before217/234 candidate gates; all four returned authenticated owner/payload values remain preserved. NMM_REMAINING.md gives member-level reasons why a missing native producer cannot be filled by more model equalities or a new premise.
 
-## Seed and admission stage
+## Method and review
 
-Copied FIRST NLX exports, then NLK exports, then NMD exports. NMM_SEED.json retains every imported file hash (6129527 bytes total). Shared caches and sibling worktrees remain read-only. S2W_run_host.py and lakefile copied unchanged from NLK. Own transport/validation runner copies are NMM-prefixed and recorded, with share/disk/admission gates.
+Ruling(bl) replaces Rust callee-law assumptions: typed replies are havocked and recorded through existing arguments into local records, then compared with the transcription. CLOSED laws compose in Lean. No writable static/function-pointer channel, guessed stack address, RuntimeCpiReadonlyEntry7 or new trust row is used. Allocator internals/pure cleanup are excluded; stopped outcomes carry ordered prefixes without post-abort heaps. Free Ops/success hypotheses appear only in unpromoted model support.
 
-Prepared NMM_LaneTranscription, NMM_RegistryTranscription, NMM_AccountsTranscription and NMM_Ownership233. They have not compiled yet and earn no credit. NMM_L001 is waiting for Stream A count below2; every wait is in NMM_ATTEMPTS. No Lean/Kani/extraction process has been submitted.
+NMM_CUTMAP.md records interpretations and the V2 channel mismatch. NMM_REVIEWED_TRANSCRIPTIONS.json and all326 source-line entries bind the frozen Rust bodies to the model transcriptions. NMM_CALLER_CLAUSES.json adopts no root premise. NMM_HARNESSES.patch and SHA256 hold79 known executed snapshots, with original harness names and content-addressed replay inputs. The disabled pre-(bl) law builders are historical only.
 
-## Resumption under (bl)
+## Final audit and retained export
 
-Ruling (bl) at research 0f4b24948fe was read first. It replaces (bj)(2)(c): Rust must havoc complete child replies and mutable bytes, log exact child arguments and replies into an existing-argument local channel, and compare the complete parent outcome with the transcription on those replies. CLOSED callee laws are composed only in Lean. Allocator internals and pure heap cleanup are outside row obligations; stopped arms retain only ordered observable event prefixes. Earlier text above about allocator-state observation is superseded.
+Combined L032 imports ledger24 NLX, all15 modules and AspisR1.RPx_Deployed.deployed. L033's eight unchanged-binary fixtures pass. L034's47 raw roots use only propext/Classical.choice/Quot.sound, with full collector agreement. NFX L037 exits0 on17269 loaded modules with zero dangling references, duplicate owners or import mismatches. L039 pins33862 selected files, verifies copied seeds and239 initial Aeneas files unchanged. L038's syntax rejection is retained; only the owned pin script was repaired. One full combined import/audit, no unchanged replay.
 
-Read-only recovery found no host NMM_K001 artifacts. Its receipt is unresolved; one of 80 Kani attempts is charged and the shape is never resubmitted unchanged. See NMM_K001_RECOVERY.json. NMM_L001/L002 already count against the 60 Lean budget; their evidence is retained. No candidate is claimed.
+Export: `/home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110/NMM_exports_20261110_6ff8e5ec69e3` (2928885bytes), source-stage commit6ff8e5ec69e3. Prefix a copy of that export to NMM_ENV.json's dependency path. It contains checked support sources/objects/sidecars, not candidate roots. Own workspace1212063219bytes; free94270431232bytes at export. Target, TMPDIR and caches are retained. Every scope uses6G high/8G max/swap0/tasks64; Lean-M7000; Rust optimized. Exact target, exit, wall, RSS, swap, revision, source/dependency hashes and axioms are in receipts/journal.
 
-Owned runner recovery repair: NMM_PENDING.json is written before admission and marked only after receipt recovery. It adds interruption provenance without changing any source, dependency, resource or validation gate. An ambiguous submitted marker always requires read-only host recovery, never resubmission.
-
-Current stage update: K048/K049/K050 establish metadata/root/frontier observations; matching controls are K051–K054, K055/K056/K058/K063, and K059–K062 respectively. K057's timeout remains retired; K063 is the changed all-Ok/typed-record omission control and fails as intended. Ordered event prefix was not established by those unordered slot maps: NMM_order_native.py is prepared but unsubmitted, and NMM_OrderedPrefix.lean is being compiled as L029. Recover NMM_PENDING.json's attempt read-only before any new launch after an interruption. Native budget63/80 charged; formal scope29 is pending. No candidate roots; invalid-length217 association and V2 second-PDA local-channel gap remain explicit.
-
-Owned wait-journal repair: future share waits have timestamps/durations, and disk/reservation retry sleeps are also explicit wait records. Admission, disk, graph, source, caps, timeout and transport checks are unchanged; protected host launchers/reservation infrastructure are untouched.
+No shipped source changed or ELF rebuilt. Frozen crates/verifier/lock4bb3b3f5 and Poolb936 are retained; inherited ELFs are default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c34…. No protocol parameter,100-bit per-attempt target, privacy, two-transaction design or accepted trust item changed. No key/fund action or sibling/session-A write. Credit waits for a future authoritative ledger gate.

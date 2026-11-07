@@ -1,6 +1,6 @@
 # NMM remaining obligations
 
-Target not established. No candidate roots, CLOSED rows or233 native fold are claimed. The80/80 charged native allowance is exhausted, including unresolved K001; it was recovered read-only and never resubmitted. There were0 extractions. Formal audit scopes are still completing.
+Target not established. No candidate roots, CLOSED rows or233 native fold are claimed. The80/80 charged native allowance is exhausted, including unresolved K001; it was recovered read-only and never resubmitted. There were0 extractions. The required combined, raw-axiom, NFX, closure-pin and export gates are complete in40/60 formal scopes.
 
 ## TX2:217
 
