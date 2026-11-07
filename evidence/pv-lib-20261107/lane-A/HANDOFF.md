@@ -270,3 +270,5 @@ Session4 49177: pinned PV_FN_THREAD_f361OwnEntry124Pre passed; session4 receipt 
 Session4 49180 passed PV_LIB_A_OwnerStoreTransport; exact receipt/axioms in session4.
 
 Session4 49183 passed PV_LIB_A_WriterSites; exact receipt/axioms in session4.
+
+Session4 49185 passed PV_LIB_A_OwnerStoreActions; exact receipt/axioms in session4.

@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:18:37: error: unsolved goals
+case refl.none
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_A_OwnerStore.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+waiting : c.frame.waiting = none
+hc : c.frame.completed = none
+⊢ (do
+      let wait ← none
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match P fn with
+          | some val => none
+          | none => do
+            let f ← PV_THR2_SourceStoreNative.function fn
+            pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+        | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:23:46: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵waiting, ̲Option.bind_none]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:23:57: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵,̵w̵a̵i̵t̵i̵n̵g̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]̵[̲h̲c̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:31:14: error(lean.unknownIdentifier): Unknown identifier `Result`
+
+Note: It is not possible to treat `Result` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+
+Hint: Perhaps you meant `Except` in place of `Result`:
+  [apply] `Except`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:39:46: error: Invalid argument: Variable `done` is not a proposition or let-declaration
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreActions.lean:35:37: error: unsolved goals
+case refl
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_A_OwnerStore.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+result : sorry
+done : sorry
+⊢ (match c.frame.completed with
+    | some val => none
+    | none => do
+      let wait ← c.frame.waiting
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match P fn with
+          | some val => none
+          | none => do
+            let f ← PV_THR2_SourceStoreNative.function fn
+            pure { meaning := f, callee := fn, waiting := wait, arguments := args }
+        | x => none) =
+    none
+'PV_LIB_A_OwnerStoreActions.nonwaiting' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_OwnerStoreActions.completed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
