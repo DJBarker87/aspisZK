@@ -15,3 +15,7 @@ K065 inverse ensures failed exactly at dst[probe]!=word (1/117). Owned verdict p
 Future config repair: function-contracts flag belongs to native_command, not the gate wrapper command; corrected only unsubmitted configs. Fixed-array control plan now replaces native harness selector and all collected receipt stems, not only displayed module. No wrong-target scopes launched. K069 exactly detected the deliberate modifies violation; parser review retained.
 
 L034 diagnostic is a wrong namespace in own source; corrected AspisR1CurrentCaller.SdkD_PrepareSource to SdkD_PrepareSource, then L036 passed. The failed elaboration diagnostic containing sorryAx is excluded from accepted roots.
+
+K012 matches the intended corrupt-root assertion (1/995), rendered as a placeholder by Kani assert_eq. Owned validator now accepts exactly-one assert_failed_inner placeholder only for explicitly enumerated negative-control targets in committed plans. Unexpected checks, multiple failures, compile errors and timeouts still stop. No proof rerun for diagnostic interpretation.
+
+Stopped and restarted only the own local final-gate waiting client before K099 exists; it had submitted no scope. New queue compiles rejection-classifier support first (L078), refreshes audit inputs, then runs the final gate. Host scopes and native queue were not touched. Native inventory and audit-summary checks share final L080; all80 Lean/support labels remain unique.

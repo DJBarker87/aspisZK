@@ -15,8 +15,8 @@ text='import NLX_COMBINED_IMPORT\nimport NLZ_COMBINED_IMPORT\nimport NLR_COMBINE
 for n in [headline]+roots:text+='#print axioms '+n+'\n#check @'+n+'\n'
 (E/'NMP_generated/NMP_COMBINED_IMPORT.lean').write_text(text);(E/'NMP_COMBINED_IMPORT.lean').write_text(text)
 (E/'NMP_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,selected_receipts={m:str(latest[m][1].relative_to(E))for m in mods},row_roots=[]),indent=1))
-(E/'NMP_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots+[headline],groups=[[n] for n in roots+[headline]])))
-(E/'NMP_AUDIT_MODULES.json').write_text(json.dumps([['NMP_COMBINED_IMPORT'] for _ in roots+[headline]]))
+(E/'NMP_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots+[headline],groups=([[n] for n in roots[:30]]+[roots[30:],[headline]]))))
+(E/'NMP_AUDIT_MODULES.json').write_text(json.dumps([['NMP_COMBINED_IMPORT'] for _ in range(32)]))
 expected={};conflicts=[]
 for d,tag in [(P,'NLZ'),(L,'NLX')]:
  for line in (d/(tag+'_EXPECTED_IMPORTS.jsonl')).read_text().splitlines():
@@ -38,4 +38,4 @@ for name in ['Driver','ProofDriver']:
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:shutil.copyfile(P/'NLZ_native'/n,E/'NMP_native'/n)
 pins={n:hashlib.sha256((E/n).read_bytes()).hexdigest()for n in ['NMP_AUDIT_ROOTS.json','NMP_AUDIT_MODULES.json','NMP_EXPECTED_IMPORTS.jsonl','NMP_native/NFA_WALKER.c','NMP_native/NFA_MemoryLimit.c']}
 (E/'NMP_AUDIT_MANIFEST_PINS.json').write_text(json.dumps(pins,indent=1))
-print(json.dumps(dict(modules=len(mods),new_roots=len(roots),groups=len(roots)+1,expected_import_conflicts=0)))
+print(json.dumps(dict(modules=len(mods),new_roots=len(roots),groups=32,expected_import_conflicts=0)))

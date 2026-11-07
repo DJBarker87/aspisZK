@@ -21,7 +21,12 @@ if mode=='native':
   txt=(B/'NMP_src'/n).read_text()
   assert not re.search(r'\bstatic\s+mut\b',txt),n
   scan.append(n)
- out=dict(status='RETAINED_LOCAL_NATIVE_SUPPORT_ONLY',runs=rows,native_parent_realization=False,closed_rows=[],full_prefix_type_coverage=False,full_resource_packets=False,scanned_own_modules=scan,writable_static_suspended=[],option_fn_quarantine='None-path evidence requires the recorded same-configuration stability pair; no function-pointer value assertion',KMX_patch_sha256=H(B/'NMP_KMX.patch'),allocator_std_trust='retained, never removed',new_trust_rows=[])
+ rowmap={x['attempt']:x for x in rows}
+ stability=[]
+ for a,b in [('NMP_K086','NMP_K063'),('NMP_K093','NMP_K098')]:
+  x,y=rowmap[a],rowmap[b]
+  stability.append(dict(original=a,renamed_control=b,both_pass=x['verdict']=='PASS'and y['verdict']=='PASS',same_source_configuration=x['source_manifest_sha256']==y['source_manifest_sha256']))
+ out=dict(status='RETAINED_LOCAL_NATIVE_SUPPORT_ONLY',stability_pairs=stability,runs=rows,native_parent_realization=False,closed_rows=[],full_prefix_type_coverage=False,full_resource_packets=False,scanned_own_modules=scan,writable_static_suspended=[],option_fn_quarantine='None-path evidence requires the recorded same-configuration stability pair; no function-pointer value assertion',KMX_patch_sha256=H(B/'NMP_KMX.patch'),allocator_std_trust='retained, never removed',new_trust_rows=[])
  write('NMP_NATIVE_FINAL.json',out)
 elif mode=='retention':
  count=0
@@ -51,5 +56,11 @@ elif mode=='audit':
  for r in json.loads((B/'NMP_EXPORT.json').read_text())['files']:assert H(Path(r['path']))==r['sha256']
  out=dict(status='PASS_STANDARD_RAW_WITH_RETAINED_COLLECTOR_DISAGREEMENTS'if mismatches else'PASS',target_established=False,headline='AspisR1.RPx_Deployed.deployed',combined_audits=1,scan_modules=len(scan),dangling=0,duplicate_owners=0,import_mismatches=0,raw_roots=len(roots),raw_groups=groups,raw_all_standard=True,collector_disagreements=mismatches,fixtures=fixture,predecessor_comparison=comparison,closed_rows=[],qualified_rows=[],full_resource_packets=False,retention=json.loads((B/'NMP_RETENTION.json').read_text()),native_status=json.loads((B/'NMP_NATIVE_FINAL.json').read_text())['status'])
  write('NMP_AUDIT.json',out)
+elif mode=='final':
+ import subprocess
+ for part in ['native','audit']:
+  r=subprocess.run([sys.executable,str(Path(__file__).resolve()),part]);assert r.returncode==0,part
+ out=dict(status='PASS_FINAL',target_established=False)
+ write('NMP_FINAL.json',out)
 else:raise AssertionError(mode)
 print(json.dumps(dict(mode=mode,status=out['status'],target_established=False)))

@@ -11,3 +11,12 @@ no push, no key cleanup. All compiled work uses existing host launcher in serial
 6G/8G/no-swap/64-task scopes; Lean -M7000, deployed features and offline frozen lock.
 Budget: 100 Kani, 80 Lean/support, zero extraction. Attempts and audit status will be
 updated as stages complete. Formal-result fields live in per-attempt receipts.
+
+## Live checkpoint after mutable-frame calibration
+Target not yet established; no candidate root, no ledger delta. Both fixed-array generator interfaces passed K070-K085 and standard-axiom ByteHavocLaw covers all post-bytes. Dynamic slice K068 is an unadmitted compiler ICE. Copy K095/K100 passes/fails under current configuration. K011 combined return/halo timed out; retired. Split return K086 passed75.16s, zero swap. Root Transfer K012 reply, K013 argument, K014 omitted-write controls fail as intended; K012 formatting was manually reviewed, not rerun. Withdrawal K015 passed and K016/K017 controls fail; queue continues.
+
+Own local clients are sequential and preconditioned: NMP_native_queue continuing RETURN_PLAN after existing receipts; later prepare client waits K063, then runs K087-K099 excluding already-completed K095 and K100. NMP_AFTER_NATIVE waits K099's intended verdict, checks research for a merged NMO candidate read-only, compiles new rejection-resource support at L078 FIRST, refreshes audit inputs, then L038-L077, L079, L080. No scope is submitted while Stream A count>=2; all such waits are retained. Never blindly restart/resubmit a label with a receipt or active guard.
+
+L078 is now the new NMP_RejectionResources module (not the originally drafted native-final check). L077 pins/exports; L079 checks retention; final L080 runs native inventory then audit summary in one capped scope. Final audit uses32 distinct root groups (a few roots in one group, plus headline) and unchanged raw ax2 walker; final input generation occurs AFTER L078 is green. The local runner and scripts remain repairable only within own evidence; shared launcher/reservation are untouched.
+
+New support corrects inner Rust Err classification as well as outer failures: exact error value retained, no invented post-abort heap. Earlier generic ResourceFold is conditional returning-frame algebra only, never a native producer or row root. Full Prefix borrowed-object/extent coverage, hash-channel erasure, physical resource producer and SAME179 caller clauses remain OPEN. Full child136 law is explicit, never the weak NLI interface. All actual outcomes still need to be collected before final status.
