@@ -25,6 +25,11 @@ def value (oracle : PureOracle) (bytes : Slice U8) :=
  if h : bytes.val.length=768 then body oracle ⟨bytes,h⟩
  else (.Err .InvalidAccountData : core.result.Result NMM_LaneTranscription.Lane NMM_LaneTranscription.PE)
 
+theorem bad_length (oracle : PureOracle) (bytes : Slice U8) (bad : bytes.val.length ≠ 768) :
+ value oracle bytes = .Err .InvalidAccountData := by
+ unfold value
+ exact dif_neg bad
+
 theorem run_recorded (oracle : PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
  (levels : List (Fin 20)) (before : Frontier) :
  NMM_LaneReplies.run (fun position bytes => ok (oracle position bytes)) p next levels before =
@@ -91,6 +96,8 @@ theorem closed (bytes : Slice U8) :
   exact (NLK_LaneDigest.child input).symm
  rw [←transcription,functions,NMM_LaneReplies.adopted]
 
+#print bad_length
+#print axioms bad_length
 #print run_recorded
 #print axioms run_recorded
 #print body_recorded

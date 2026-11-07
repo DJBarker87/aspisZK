@@ -4,6 +4,7 @@ import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None):
     assert a.startswith('NMM_L') and 1<=int(a[-3:])<=60 and not (E/a).exists()
+    (E/'NMM_PENDING.json').write_text(json.dumps(dict(attempt=a,kind=kind,module=target,status='ADMISSION_OR_LAUNCH_PENDING',recovery='Recover read-only; never resubmit an ambiguous launch'),indent=1)+'\n')
     env=json.loads((E/'NMM_ENV.json').read_text())
     files=dict(extra or {})
     if kind=='lean':
@@ -67,6 +68,7 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NMM_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
     with (E/'NMM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+    (E/'NMM_PENDING.json').write_text(json.dumps(dict(attempt=a,kind=kind,module=target,status='RECEIPT_RECOVERED',exit_status=rc['exit_status']),indent=1)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
     return rc
 if __name__=='__main__':

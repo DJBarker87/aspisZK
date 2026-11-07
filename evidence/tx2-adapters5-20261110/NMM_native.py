@@ -26,7 +26,8 @@ def baseline():
 def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars=None,solver=None):
  assert a.startswith('NMM_K') and 1<=int(a[-3:]) and not (E/a).exists()
  used=[json.loads(line) for line in (E/'NMM_ATTEMPTS.jsonl').read_text().splitlines() if json.loads(line).get('kind')=='kani']
- assert len(used)<80,'Kani invocation budget exhausted; all receipt-bearing attempts count except verified prelaunch K001'
+ assert len(used)<80,'Kani invocation budget exhausted; unresolved K001 is charged'
+ (E/'NMM_PENDING.json').write_text(json.dumps(dict(attempt=a,kind='kani',module=target,status='ADMISSION_OR_LAUNCH_PENDING',recovery='Recover read-only; never resubmit an ambiguous launch'),indent=1)+'\n')
  x,files=baseline();key='NMM_src/'+parent
  files[key]+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
  files['NMM_src/'+str(Path(parent).parent/(module+'.rs'))]=text
@@ -88,5 +89,6 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in paths}}))
   else:p.write_text(t)
  rc=json.loads(out[a+'/receipt.json'])
  with (E/'NMM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+ (E/'NMM_PENDING.json').write_text(json.dumps(dict(attempt=a,kind='kani',module=target,status='RECEIPT_RECOVERED',exit_status=rc['exit_status']),indent=1)+'\n')
  print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
  return rc

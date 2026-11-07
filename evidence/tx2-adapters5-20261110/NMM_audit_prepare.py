@@ -2,7 +2,7 @@ from pathlib import Path
 import subprocess,json,re,hashlib,difflib
 E=Path(__file__).resolve().parent
 read=lambda p:subprocess.check_output(['git','show','HEAD:'+p],text=True)
-mods=['NMM_LaneTranscription','NMM_LaneReplies','NMM_RegistryTranscription','NMM_Ownership233','NMM_AccountsTranscription','NMM_PdaProjection','NMM_OutcomeCases','NMM_LaneScalarLoop','NMM_LaneScalarSource','NMM_LaneAcceptance']
+mods=['NMM_LaneTranscription','NMM_LaneReplies','NMM_RegistryTranscription','NMM_Ownership233','NMM_AccountsTranscription','NMM_PdaProjection','NMM_OutcomeCases','NMM_LaneScalarLoop','NMM_LaneScalarSource','NMM_LaneAcceptance','NMM_PayloadComponents','NMM_LaneSymbolic','NMM_LaneSuccess']
 receipts=[json.loads(l) for l in (E/'NMM_ATTEMPTS.jsonl').read_text().splitlines()]
 roots=[]
 for m in mods:
