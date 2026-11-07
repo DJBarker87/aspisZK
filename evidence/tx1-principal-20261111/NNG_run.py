@@ -1,6 +1,6 @@
 """NNG-owned input client; unchanged S2W launcher and admission infrastructure."""
 from pathlib import Path
-import json, subprocess, sys, time, hashlib, shlex, re, os, atexit
+import json, subprocess, sys, time, hashlib, shlex, re, os, atexit, lzma
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx1-principal-20261111'
@@ -13,7 +13,16 @@ submitted=set()
 for line in (E/'NNG_TRANSPORT.jsonl').read_text().splitlines():
  row=json.loads(line)
  if row.get('submitted'):submitted.add(row['attempt'])
-completed={json.loads(line)['attempt'] for attempt_file in sorted(E.glob('NNG_ATTEMPTS*.jsonl')) for line in attempt_file.read_text().splitlines() if json.loads(line).get('kind')!='wait'}
+def attempt_lines(path):
+ opener=lzma.open if path.suffix=='.xz' else open
+ if path.suffix=='.xz':
+  expected=Path(str(path)[:-3]+'.sha256').read_text().strip();digest=hashlib.sha256()
+  with lzma.open(path,'rb') as source:
+   for block in iter(lambda:source.read(1024*1024),b''):digest.update(block)
+  assert digest.hexdigest()==expected,'Compressed attempt archive hash mismatch: '+str(path)
+ with opener(path,'rt') as source:yield from source
+attempt_files=sorted(E.glob('NNG_ATTEMPTS*.jsonl'))+sorted(E.glob('NNG_ATTEMPTS*.jsonl.xz'))
+completed={json.loads(line)['attempt'] for attempt_file in attempt_files for line in attempt_lines(attempt_file) if json.loads(line).get('kind')!='wait'}
 assert a not in submitted, 'Never resubmit after any recorded submission; recover read-only'
 def budget_group(kind):
  return 'lean_link_audit' if kind in ['lean','link','audit'] else ('kani' if kind=='kani' else ('extract' if kind=='extract' else None))
