@@ -7,3 +7,5 @@
 328: blocked on 094 candidate; then NMT emitted map-error/return fold.
 345: blocked on 328 candidate; then NMT complete emitted fold and own-input domain discharge.
 344/333/330: instantiate NMV/NNF after 345 candidate. No candidate currently exists; no row credited.
+
+Amendment: use rev3 exclusively. LIB owns all VLib instances. The pending 136 fold must use CLOSED134 model equality, never the native-cut chain image. 087 R4 is propagated only to 094 and discharged by canonical_scan.
