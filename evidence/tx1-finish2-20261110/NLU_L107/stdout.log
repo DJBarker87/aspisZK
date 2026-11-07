@@ -1,0 +1,52 @@
+NLU_generated/NLU_Frontier.lean:34:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (run n ?s).summary
+in the target expression
+  (match ok (Sum.inr after) with
+      | fail err =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := fail err }, frontier := s }
+      | div =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := div }, frontier := s }
+      | ok (Sum.inl out) =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := ok out }, frontier := s }
+      | ok (Sum.inr after) =>
+        {
+          summary :=
+            { input := (run n after).summary.input, events := (NLU.step s).events ++ (run n after).summary.events,
+              reply := (run n after).summary.reply },
+          frontier := (run n after).frontier }).summary =
+    match ok (Sum.inr after) with
+    | fail e => { input := (NLU.step s).input, events := (NLU.step s).events, reply := fail e }
+    | div => { input := (NLU.step s).input, events := (NLU.step s).events, reply := div }
+    | ok (Sum.inl out) => { input := (NLU.step s).input, events := (NLU.step s).events, reply := ok out }
+    | ok (Sum.inr after) =>
+      { input := (NLU.fold n after).input, events := (NLU.step s).events ++ (NLU.fold n after).events,
+        reply := (NLU.fold n after).reply }
+
+case succ.ok.inr
+H : Type
+n : ℕ
+ih : ∀ (s : NLU.State H), (run n s).summary = NLU.fold n s
+s after : NLU.State H
+h : (NLU.step s).reply = ok (Sum.inr after)
+⊢ (match ok (Sum.inr after) with
+      | fail err =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := fail err }, frontier := s }
+      | div =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := div }, frontier := s }
+      | ok (Sum.inl out) =>
+        { summary := { input := (NLU.step s).input, events := (NLU.step s).events, reply := ok out }, frontier := s }
+      | ok (Sum.inr after) =>
+        {
+          summary :=
+            { input := (run n after).summary.input, events := (NLU.step s).events ++ (run n after).summary.events,
+              reply := (run n after).summary.reply },
+          frontier := (run n after).frontier }).summary =
+    match ok (Sum.inr after) with
+    | fail e => { input := (NLU.step s).input, events := (NLU.step s).events, reply := fail e }
+    | div => { input := (NLU.step s).input, events := (NLU.step s).events, reply := div }
+    | ok (Sum.inl out) => { input := (NLU.step s).input, events := (NLU.step s).events, reply := ok out }
+    | ok (Sum.inr after) =>
+      { input := (NLU.fold n after).input, events := (NLU.step s).events ++ (NLU.fold n after).events,
+        reply := (NLU.fold n after).reply }
+'AspisR1.NLU_Frontier.summary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLU_Frontier.reached' depends on axioms: [propext, Classical.choice, Quot.sound]

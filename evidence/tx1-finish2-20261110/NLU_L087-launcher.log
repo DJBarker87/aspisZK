@@ -1,0 +1,25 @@
+{"attempt": "NLU_L087", "exit_status": 0, "wall_seconds": 21.85251621599309, "peak_rss_kib": "6356256", "swaps": "0", "print_axioms": ["'AspisR1.NLU.some_of_initialized' does not depend on any axioms", "'AspisR1.NLU.verified_constructed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLU.some_of_initialized' does not depend on any axioms
+'AspisR1.NLU.verified_constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU.verified_constructed : ∀ {H : Type} (input : Input H) (s : State H),
+  Reachable input s →
+    s.machine.next = NLC_Finish.Event.verified →
+      ∃ verified,
+        (step s).reply = ok (Sum.inl (core.result.Result.Ok verified, Owner.transferred)) ∧
+          s.machine.locals.claims = some verified.claims ∧
+            verified.challenges = input.challenges ∧ s.owner = Owner.live :=
+⋯
+
+...
+'AspisR1.NLU.some_of_initialized' does not depend on any axioms
+'AspisR1.NLU.verified_constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU.verified_constructed : ∀ {H : Type} (input : Input H) (s : State H),
+  Reachable input s →
+    s.machine.next = NLC_Finish.Event.verified →
+      ∃ verified,
+        (step s).reply = ok (Sum.inl (core.result.Result.Ok verified, Owner.transferred)) ∧
+          s.machine.locals.claims = some verified.claims ∧
+            verified.challenges = input.challenges ∧ s.owner = Owner.live :=
+⋯
+
+Running as unit: run-rd24af646a6224e38ba06ca434931ca14.scope; invocation ID: 5c7acd7d70cd45b998677d7f08473c63

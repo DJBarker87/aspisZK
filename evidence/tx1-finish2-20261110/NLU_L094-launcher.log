@@ -1,0 +1,35 @@
+{"attempt": "NLU_L094", "exit_status": 0, "wall_seconds": 24.162945989053696, "peak_rss_kib": "6557884", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Claims.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLU_Claims.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Claims.source : ∀ {A H : Type} (i : NLU.Input H),
+  NLU.InputDomain i →
+    ∀ (allocator : S2W_D189Wrappers.Allocator A) (state : A) (rows : NKA_HeapCarrier.RowNative),
+      NKA_HeapCarrier.RowCut rows →
+        ∀ (box : NKA_HeapCarrier.BoxNative),
+          NKA_HeapCarrier.BoxCut box →
+            ∀ (owner : ℕ) (before : NKA_InitializedPrefix.Memory),
+              ∃ value,
+                NKA_ClaimsOwnership.AtAllocation (allocate allocator state) i.reservation rows box owner before value ∧
+                  native allocator state i.reservation rows box owner before value =
+         
+...
+'AspisR1.NLU_Claims.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Claims.source : ∀ {A H : Type} (i : NLU.Input H),
+  NLU.InputDomain i →
+    ∀ (allocator : S2W_D189Wrappers.Allocator A) (state : A) (rows : NKA_HeapCarrier.RowNative),
+      NKA_HeapCarrier.RowCut rows →
+        ∀ (box : NKA_HeapCarrier.BoxNative),
+          NKA_HeapCarrier.BoxCut box →
+            ∀ (owner : ℕ) (before : NKA_InitializedPrefix.Memory),
+              ∃ value,
+                NKA_ClaimsOwnership.AtAllocation (allocate allocator state) i.reservation rows box owner before value ∧
+                  native allocator state i.reservation rows box owner before value =
+                      cohort allocator state i.reservation i.prefix1 ∧
+                    native allocator state i.reservation rows box owner before value =
+                        NKA_ClaimsEffects.reference allocator state i.reservation i.prefix1 ∧
+                      toMainStatus
+                          (NJT_ClaimsRef_Value.unbox
+                            (NKA_ClaimsReference.run i.reservation (fromMainPrefix i.prefix1))) =
+                        claims (NP6_StdModel.calls i.reservation) i.prefix1 :=
+⋯
+
+Running as unit: run-rcd833bc7d5944f6e8d3729636f9ad9d1.scope; invocation ID: 251ed3a869d84f109c5e60cac7c2cd8e

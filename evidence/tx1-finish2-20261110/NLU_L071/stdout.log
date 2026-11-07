@@ -1,0 +1,35 @@
+NLU_generated/NLU_Nested.lean:18:19: error(lean.unknownIdentifier): Unknown identifier `NLC_Finish.ready_reads`
+NLU_generated/NLU_Nested.lean:16:54: error: unsolved goals
+H : Type
+input : Input H
+s : State H
+reached : Reachable input s
+atSite : s.machine.next = NLC_Finish.Event.lowArray
+inv : Invariant s
+⊢ ∃ claims,
+    s.machine.locals.claims = some claims ∧
+      s.owner = Owner.live ∧
+        ∀ (i : Usize) (inside : ↑i < 16),
+          (do
+              let c ← NLC_Finish.read s.machine.locals.claims
+              (FinishModel.closureFn9 s.machine.input.digest).call_mut c i) =
+            ok (NKQ_MaskLowStep.lowAt claims i inside, claims)
+NLU_generated/NLU_Nested.lean:39:19: error(lean.unknownIdentifier): Unknown identifier `NLC_Finish.ready_reads`
+NLU_generated/NLU_Nested.lean:37:56: error: unsolved goals
+H : Type
+input : Input H
+s : State H
+reached : Reachable input s
+atSite : s.machine.next = NLC_Finish.Event.highArray
+inv : Invariant s
+⊢ ∃ claims,
+    s.machine.locals.claims = some claims ∧
+      s.owner = Owner.live ∧
+        ∀ (i : Usize) (inside : ↑i < 10),
+          (do
+              let c ← NLC_Finish.read s.machine.locals.claims
+              (FinishModel.closureFn5 s.machine.input.digest).call_mut c i) =
+            ok (NKQ_MaskHighStep.highAt claims i inside, claims)
+'AspisR1.NLU.low_arguments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLU.high_arguments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLU.root_occurrences' depends on axioms: [propext, Classical.choice, Quot.sound]

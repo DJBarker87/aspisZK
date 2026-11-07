@@ -1,0 +1,37 @@
+{"attempt": "NLU_L096", "exit_status": 0, "wall_seconds": 35.70887259603478, "peak_rss_kib": "6565020", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Arithmetic.source : ∀ (r : NP6_StdModel.Reservation) (native : NLU_FieldLog.Native),
+  NLU_FieldLog.Cut native →
+    ∀ (f : Frame),
+      JFv_RoundArithmetic.Canonical f.eta →
+        JFv_RoundArithmetic.Canonical f.terminal →
+          JFv_RoundArithmetic.Canonical f.mask →
+            JFv_RoundArithmetic.Canonical f.extra →
+              ∃ replies,
+                code r f = ok replies.total ∧
+                  JFv_RoundArithmetic.Canonical replies.total ∧
+                    (native f replies).calls = 3 ∧
+                      (∀ (i : Fin 3), NLU.cell (native f replies).args ↑i ⋯
+...
+'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Arithmetic.source : ∀ (r : NP6_StdModel.Reservation) (native : NLU_FieldLog.Native),
+  NLU_FieldLog.Cut native →
+    ∀ (f : Frame),
+      JFv_RoundArithmetic.Canonical f.eta →
+        JFv_RoundArithmetic.Canonical f.terminal →
+          JFv_RoundArithmetic.Canonical f.mask →
+            JFv_RoundArithmetic.Canonical f.extra →
+              ∃ replies,
+                code r f = ok replies.total ∧
+                  JFv_RoundArithmetic.Canonical replies.total ∧
+                    (native f replies).calls = 3 ∧
+                      (∀ (i : Fin 3), NLU.cell (native f replies).args ↑i ⋯ = NLU_FieldLog.arguments f replies i) ∧
+                        (native f replies).returned = replies.total ∧
+                          FIv_NativeValue.decode (FIq_Carriers.toQ replies.total) =
+                            FIv_NativeValue.decode (FIq_Carriers.toQ f.mask) +
+                                FIv_NativeValue.decode (FIq_Carriers.toQ f.eta) *
+                                  FIv_NativeValue.decode (FIq_Carriers.toQ f.terminal) +
+                              FIv_NativeValue.decode (FIq_Carriers.toQ f.extra) :=
+⋯
+
+Running as unit: run-r33f6a531d48d422c81596fe1e8bcfcaf.scope; invocation ID: 46700d9d59a84dceaec0101ee24ef30f

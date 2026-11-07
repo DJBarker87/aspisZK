@@ -1,0 +1,20 @@
+'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Arithmetic.source : ∀ (r : NP6_StdModel.Reservation) (native : NLU_FieldLog.Native),
+  NLU_FieldLog.Cut native →
+    ∀ (f : Frame),
+      JFv_RoundArithmetic.Canonical f.eta →
+        JFv_RoundArithmetic.Canonical f.terminal →
+          JFv_RoundArithmetic.Canonical f.mask →
+            JFv_RoundArithmetic.Canonical f.extra →
+              ∃ replies,
+                code r f = ok replies.total ∧
+                  JFv_RoundArithmetic.Canonical replies.total ∧
+                    (native f replies).calls = 3 ∧
+                      (∀ (i : Fin 3), NLU.cell (native f replies).args ↑i ⋯ = NLU_FieldLog.arguments f replies i) ∧
+                        (native f replies).returned = replies.total ∧
+                          FIv_NativeValue.decode (FIq_Carriers.toQ replies.total) =
+                            FIv_NativeValue.decode (FIq_Carriers.toQ f.mask) +
+                                FIv_NativeValue.decode (FIq_Carriers.toQ f.eta) *
+                                  FIv_NativeValue.decode (FIq_Carriers.toQ f.terminal) +
+                              FIv_NativeValue.decode (FIq_Carriers.toQ f.extra) :=
+⋯

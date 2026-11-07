@@ -1,0 +1,120 @@
+structure AspisR1.NLU.InputDomain {H : Type} (i : AspisR1.NLU.Input H) : Prop
+number of parameters: 2
+fields:
+  AspisR1.NLU.InputDomain.parsedPrefix : AspisR1.NLU.ParsedPrefix i.prefix1
+  AspisR1.NLU.InputDomain.terminal : AspisR1.NLU_Terminal.InputDomain i.publicValue i.challenges
+  AspisR1.NLU.InputDomain.eta : AspisR1.JFv_RoundArithmetic.Canonical i.challenges.eta
+constructor:
+  AspisR1.NLU.InputDomain.mk {H : Type} {i : AspisR1.NLU.Input H} (parsedPrefix : AspisR1.NLU.ParsedPrefix i.prefix1)
+    (terminal : AspisR1.NLU_Terminal.InputDomain i.publicValue i.challenges)
+    (eta : AspisR1.JFv_RoundArithmetic.Canonical i.challenges.eta) : AspisR1.NLU.InputDomain i
+theorem AspisR1.NLU_Frontier.source : ∀ {H : Type} (input : AspisR1.NLU.Input H),
+  (AspisR1.NLU.digestLog
+        (AspisR1.NLU_Frontier.run (AspisR1.NLC_Finish.fuel (AspisR1.NLC_Finish.initial input))
+              (AspisR1.NLU.initial input)).summary.events,
+      AspisR1.NLU.eraseReply
+        (AspisR1.NLU_Frontier.run (AspisR1.NLC_Finish.fuel (AspisR1.NLC_Finish.initial input))
+              (AspisR1.NLU.initial input)).summary.reply) =
+    AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+        (AspisR1.IDa_Deployed.boundaries input.reservation) input.digest input.publicValue input.prefix1
+        input.transcript input.challenges none) :=
+⋯
+theorem AspisR1.NLU_Terminal.first_calls : ∀ {H : Type} (native : AspisR1.NJM_RoundsCut.Observations),
+  AspisR1.NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (i : AspisR1.NLU.Input H),
+      AspisR1.NLU.InputDomain i →
+        match
+          (AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R i.digest i.prefix1
+                i.transcript)).2 with
+        | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok rounds) =>
+          match AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls i.reservation) i.prefix1 with
+          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) =>
+            AspisR1.NLU_Terminal.Packet i.publicValue claims rounds.2.1 i.challenges ∧
+              AspisR1.NLU_Terminal.nativeTerminal i.publicValue claims rounds.2.1 i.challenges =
+                (AspisR1.IDa_Deployed.boundaries i.reservation).terminal i.publicValue claims rounds.2.1 i.challenges
+          | x => True
+        | x => True :=
+⋯
+theorem AspisR1.NLU_Claims.source : ∀ {A H : Type} (i : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain i →
+    ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A) (rows : AspisR1.NKA_HeapCarrier.RowNative),
+      AspisR1.NKA_HeapCarrier.RowCut rows →
+        ∀ (box : AspisR1.NKA_HeapCarrier.BoxNative),
+          AspisR1.NKA_HeapCarrier.BoxCut box →
+            ∀ (owner : ℕ) (before : AspisR1.NKA_InitializedPrefix.Memory),
+              ∃ value,
+                AspisR1.NKA_ClaimsOwnership.AtAllocation (AspisR1.NKA_ClaimsEffects.allocate allocator state)
+                    i.reservation rows box owner before value ∧
+                  AspisR1.NKA_ClaimsEffects.native allocator state i.reservation rows box owner before value =
+                      AspisR1.NKA_ClaimsEffects.cohort allocator state i.reservation i.prefix1 ∧
+                    AspisR1.NKA_ClaimsEffects.native allocator state i.reservation rows box owner before value =
+                        AspisR1.NKA_ClaimsEffects.reference allocator state i.reservation i.prefix1 ∧
+                      AspisR1.ClaimsUnrolledFinish.toMainStatus
+                          (AspisR1.NJT_ClaimsRef_Value.unbox
+                            (AspisR1.NKA_ClaimsReference.run i.reservation
+                              (AspisR1.ClaimsUnrolledFinish.fromMainPrefix i.prefix1))) =
+                        AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls i.reservation) i.prefix1 :=
+⋯
+theorem AspisR1.NLU_Decode.source : ∀ {H : Type} (i : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain i →
+    ∃ record25 record26,
+      i.prefix1.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record25) ∧
+        i.prefix1.validated_record 26#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record26) ∧
+          record25.row = 25#u8 ∧
+            record26.row = 26#u8 ∧
+              AspisR1.NKQ_RecordDomains.Ready record25 29#usize 87#usize ∧
+                AspisR1.NKQ_RecordDomains.Ready record26 29#usize 0#usize :=
+⋯
+theorem AspisR1.NLU_Circle.source : ∀ {Pointer H : Type} (i : AspisR1.NLU.Input H),
+  AspisR1.NLU.InputDomain i →
+    ∀ (template : AspisR1.NIX_DispatchCut.Pre Pointer)
+      (beforeFirst beforeSecond : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ∃ first second,
+        i.prefix1.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok first) ∧
+          i.prefix1.validated_record 26#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok second) ∧
+            first.row = 25#u8 ∧
+              second.row = 26#u8 ∧
+                AspisR1.NJM_InvocationRoots.Circle i.digest template beforeFirst first ∧
+                  AspisR1.NJM_InvocationRoots.Circle i.digest template beforeSecond second :=
+⋯
+theorem AspisR1.NLU_Arithmetic.source : ∀ (r : AspisR1.NP6_StdModel.Reservation) (native : AspisR1.NLU_FieldLog.Native),
+  AspisR1.NLU_FieldLog.Cut native →
+    ∀ (f : AspisR1.NLU_FieldLog.Frame),
+      AspisR1.JFv_RoundArithmetic.Canonical f.eta →
+        AspisR1.JFv_RoundArithmetic.Canonical f.terminal →
+          AspisR1.JFv_RoundArithmetic.Canonical f.mask →
+            AspisR1.JFv_RoundArithmetic.Canonical f.extra →
+              ∃ replies,
+                AspisR1.NLU_Arithmetic.code r f = Aeneas.Std.Result.ok replies.total ∧
+                  AspisR1.JFv_RoundArithmetic.Canonical replies.total ∧
+                    (native f replies).calls = 3 ∧
+                      (∀ (i : Fin 3),
+                          AspisR1.NLU.cell (native f replies).args ↑i ⋯ = AspisR1.NLU_FieldLog.arguments f replies i) ∧
+                        (native f replies).returned = replies.total ∧
+                          AspisR1.FIv_NativeValue.decode (AspisR1.FIq_Carriers.toQ replies.total) =
+                            AspisR1.FIv_NativeValue.decode (AspisR1.FIq_Carriers.toQ f.mask) +
+                                AspisR1.FIv_NativeValue.decode (AspisR1.FIq_Carriers.toQ f.eta) *
+                                  AspisR1.FIv_NativeValue.decode (AspisR1.FIq_Carriers.toQ f.terminal) +
+                              AspisR1.FIv_NativeValue.decode (AspisR1.FIq_Carriers.toQ f.extra) :=
+⋯
+theorem AspisR1.NLU_Construct.complete : ∀ (native : AspisR1.NLU_Construct.Native),
+  AspisR1.NLU_Construct.Cut native → ∀ (f : AspisR1.NLU_Construct.Frame), (native f).value = f.expected :=
+⋯
+theorem AspisR1.NLU_Generated.emitted_mul : ∀ (x y : AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.GenQ),
+  AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+      (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe x) →
+    AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+        (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe y) →
+      ∃ z,
+        AspisR1SemanticCallExtraction.aspis_core.field.QM31.mul x y = Aeneas.Std.Result.ok z ∧
+          AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+              (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe z) ∧
+            AspisR1.ExtractedMaskQM31Exact.decode
+                (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe z) =
+              AspisR1.ExtractedMaskQM31Exact.decode
+                  (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe x) *
+                AspisR1.ExtractedMaskQM31Exact.decode
+                  (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe y) :=
+⋯

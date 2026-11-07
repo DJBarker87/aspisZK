@@ -1,0 +1,7 @@
+'AspisR1.NLU_Terminal.install' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Terminal.install : ∀ (pub : Public) (claims : NLC_Finish.Claims) (alpha : NLC_Finish.Alpha)
+  (c : r1_wire.Challenges),
+  InputDomain pub c →
+    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) →
+      FIw_ArrayValue.canonical (mapArray toQ alpha) → Packet pub claims alpha c :=
+⋯

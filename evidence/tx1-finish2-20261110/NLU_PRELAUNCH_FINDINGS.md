@@ -1,0 +1,5 @@
+# Prelaunch input findings
+
+L019 requested a private unchanged RawTx1DigestLog replay but the owned client refused BEFORE launcher submission because direct dependency RawSourceGlobalOracleInitial.olean was absent. No Lean process ran and no receipt exists. Original configuration retained in NLU_L019-prelaunch.json and transport logs. Resolve the actual dependency chain first; this is an owned-input error, not a shared launcher failure or a proof verdict.
+
+Resolution: L055 passes after removing the redundant explicit historical FIq_Terminal import. Its public boundary declarations already come through NLU_State and the retained NLH/cohort modules. The direct guessed source-module import pulled a historical dependency outside this selected closure. No unchanged historical module was compiled, no shared cache was changed, and no historical proof is credited. The unlaunched source input is preserved byte-for-byte as NLU_UNLAUNCHED_RawTx1DigestLog.lean.txt. The extra private-plan copies were unused drafts and removed. The final NFX owner/import scan remains mandatory.

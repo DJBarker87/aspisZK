@@ -1,0 +1,148 @@
+//! NLU split native windows. Fixed deployed SolanaDigest; no hash call.
+use super::*;
+use aspis_core::field::{M31,CM31,QM31};
+use aspis_r1_cost_probe::r1_semantic::NLI_rounds::{source_high_iteration,source_construct,KMX_copy_nonoverlapping};
+use aspis_r1_cost_probe::r1_wire::{NLI_factory,Error};
+fn q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
+fn word(q:QM31,j:usize)->u32{match j{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
+fn high_window(frame:bool,bad:bool){
+ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));
+ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<10&&j<4);
+ let expected=word(claims[0][16+i],j);
+ let row:usize=kani::any();let col:usize=kani::any();kani::assume(row<3&&col<29);
+ let before=word(claims[row][col],j);
+ // Read and source frame are separate obligations. No completed-array premise.
+ let mut slot=core::mem::MaybeUninit::uninit();source_high_iteration(&claims,i,&mut slot);
+ let actual=unsafe{slot.assume_init()};
+ let selected=if frame{word(claims[row][col],j)==before}else{word(actual,j)==expected};
+ if bad{assert!(!selected)}else{assert!(selected)}
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_read_cut(){high_window(false,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_read_control(){high_window(false,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_frame_cut(){high_window(true,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_frame_control(){high_window(true,true)}
+fn root_window(bad:bool){
+ let data:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);
+ // Literal deployed try_into().unwrap() at payload length32. Other lengths
+ // follow the pinned Result/unwrap abort law; not covered by this window.
+ let root:[u8;32]=data.as_slice().try_into().unwrap();
+ let selected=root[j]==data[j];if bad{assert!(!selected)}else{assert!(selected)}
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn root_word_cut(){root_window(false)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn root_word_control(){root_window(true)}
+
+fn challenges()->aspis_r1_cost_probe::r1_wire::Challenges{aspis_r1_cost_probe::r1_wire::Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()}}
+fn check_construct(mode:u8,bad:bool){
+ let c1:[u8;32]=kani::any();let root:[u8;32]=kani::any();let ch=challenges();let alpha=core::array::from_fn(|_|q());let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let extra=core::array::from_fn(|_|q());let before=core::array::from_fn(|_|q());
+ let state:[u8;32]=kani::any();let z0=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};let z1=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};let tstate:[u8;32]=kani::any();let next:u8=kani::any();let transcript=NLI_factory::make(SolanaDigest,tstate,next);
+ let cell:usize=kani::any();let p:usize=kani::any();let col:usize=kani::any();kani::assume(cell<32&&p<3&&col<29);let owner=(&*claims as *const [[QM31;29];3]) as usize;let expected=claims[p][col];
+ let out=source_construct(&c1,root,ch,alpha,claims,extra,before,state,z0,z1,transcript);let (after,_,after_next)=NLI_factory::snapshot(&out.transcript);
+ let selected=match mode{0=>after[cell]==tstate[cell]&&after_next==next,1=>(&*out.claims as *const [[QM31;29];3]) as usize==owner&&out.claims[p][col]==expected,2=>out.roots[0][cell]==c1[cell]&&out.roots[1][cell]==root[cell],_=>false};
+ if bad{assert!(!selected)}else{assert!(selected)}
+}
+fn construct_window(mode:u8,bad:bool){
+ let c1:[u8;32]=kani::any();let root:[u8;32]=kani::any();let ch=challenges();
+ let alpha=core::array::from_fn(|_|q());let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));
+ let extra=core::array::from_fn(|_|q());let before=core::array::from_fn(|_|q());
+ let state:[u8;32]=kani::any();let z0=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};let z1=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};
+ let tstate:[u8;32]=kani::any();let next:u8=kani::any();let transcript=NLI_factory::make(SolanaDigest,tstate,next);
+ let row:usize=kani::any();let col:usize=kani::any();let j:usize=kani::any();let byte:usize=kani::any();let ai:usize=kani::any();
+ kani::assume(row<3&&col<29&&j<4&&byte<32&&ai<10);
+ let owner=(&*claims as *const [[QM31;29];3]) as usize;
+ let expected=word(claims[row][col],j);let ea=word(alpha[ai],j);let ex=word(extra[col],j);let eb=word(before[col],j);
+ let out=source_construct(&c1,root,ch,alpha,claims,extra,before,state,z0,z1,transcript);
+ let (after,_,after_next)=NLI_factory::snapshot(&out.transcript);
+ let selected=match mode{
+  0=>(&*out.claims as *const [[QM31;29];3]) as usize==owner,
+  1=>word(out.claims[row][col],j)==expected,
+  2=>word(out.alpha[ai],j)==ea,
+  3=>{let choose:bool=kani::any();if choose{word(out.extra[col],j)==ex}else{word(out.before_z1[col],j)==eb}},
+  4=>{let choose:bool=kani::any();if choose{out.roots[0][byte]==c1[byte]}else{out.roots[1][byte]==root[byte]}},
+  _=>after[byte]==tstate[byte]&&after_next==next,
+ };
+ if bad{assert!(!selected)}else{assert!(selected)}
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_owner_cut(){construct_window(0,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_owner_control(){construct_window(0,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_claims_cut(){construct_window(1,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_claims_control(){construct_window(1,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_alpha_cut(){construct_window(2,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_alpha_control(){construct_window(2,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_extra_cut(){construct_window(3,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_extra_control(){construct_window(3,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_roots_cut(){construct_window(4,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_roots_control(){construct_window(4,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_transcript_cut(){construct_window(5,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_transcript_control(){construct_window(5,true)}
+// Literal scalar guards, retaining owned Claims through the surviving arm.
+fn terminal_guard(running:QM31,masked_terminal:QM31,claims:Box<[[QM31;29];3]>)->Result<Box<[[QM31;29];3]>,Error>{
+ if running != masked_terminal { return Err(Error::Terminal); }
+ Ok(claims)
+}
+fn circle_guard(z0:aspis_core::circle::SecureCirclePoint,z1:aspis_core::circle::SecureCirclePoint,claims:Box<[[QM31;29];3]>)->Result<Box<[[QM31;29];3]>,Error>{
+ if z0 == z1 { return Err(Error::EqualCirclePoints); }
+ Ok(claims)
+}
+fn guard_window(circle:bool,bad:bool){
+ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));
+ let owner=(&*claims as *const [[QM31;29];3]) as usize;
+ let row:usize=kani::any();let col:usize=kani::any();let j:usize=kani::any();kani::assume(row<3&&col<29&&j<4);
+ let expected=word(claims[row][col],j);
+ let x=q();let y=q();let z=q();let w=q();
+ let p=aspis_core::circle::SecureCirclePoint{x,y};let r=aspis_core::circle::SecureCirclePoint{x:z,y:w};
+ let reject=if circle{p==r}else{x!=y};
+ let reply=if circle{circle_guard(p,r,claims)}else{terminal_guard(x,y,claims)};
+ let selected=match reply{
+  Err(e)=>reject&&if circle{matches!(e,Error::EqualCirclePoints)}else{matches!(e,Error::Terminal)},
+  Ok(c)=>!reject&&(&*c as *const [[QM31;29];3]) as usize==owner&&word(c[row][col],j)==expected,
+ };
+ if bad{assert!(!selected)}else{assert!(selected)}
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn terminal_guard_cut(){guard_window(false,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn terminal_guard_control(){guard_window(false,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn circle_guard_cut(){guard_window(true,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn circle_guard_control(){guard_window(true,true)}
