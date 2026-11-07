@@ -13,7 +13,7 @@ theorem outcomes (a : LIBC_Checkpoint.Args) (env : Env) (o : Obs Bytes) :
 DriverEstablishedDomain. This does not assume any preceding child succeeds. -/
 theorem current_pair (a : LIBC_Checkpoint.Args) :
  NGC_KNE_Caller.DriverEstablishedDomain (LIBC_CheckpointDomain.reached a) ↔
- NGC_KNE_Final.WriterDomain (LIBC_Checkpoint.prepared a) (LIBC_Checkpoint.accumulator a) :=
+ NGC_KNE_Caller.WriterDomain (LIBC_Checkpoint.prepared a) (LIBC_Checkpoint.accumulator a) :=
  LIBC_CheckpointDomain.driver_iff a
 #print axioms outcomes
 #print axioms current_pair

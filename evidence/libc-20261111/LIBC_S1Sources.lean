@@ -15,7 +15,7 @@ theorem decode (b : Bytes) : LIBC_S1.decode b =
   | .ok (.Ok st) => some st | _ => none
  else none := by
  unfold LIBC_S1.decode
- split <;> simp only [NMT_345.decode_closed]
+ split <;> simp only [NMT_345.decode_closed] <;> rfl
 theorem validate (s : NMT_345.Statement) : LIBC_S1.valid s =
  match NMT_345.mapOuter (NMT_345.mapCore id NMT_345Dec.fromT13)
   (NFY_NEE_ValidatorOracle.run NFY_NEM_PaymentReached.pay NFY_NEM_LaneReached.lane
@@ -23,6 +23,7 @@ theorem validate (s : NMT_345.Statement) : LIBC_S1.valid s =
  | .ok (.Ok ()) => true | _ => false := by
  unfold LIBC_S1.valid
  rw [NMT_345.validate_closed]
+ rfl
 theorem encode (s : NMT_345.Statement) : LIBC_S1.encode s =
  match NMT_345.mapOuter (NMT_345.mapCore id NMT_345Dec.fromT11)
   (NFY_NBN_EncoderSummary.after AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical
@@ -30,6 +31,7 @@ theorem encode (s : NMT_345.Statement) : LIBC_S1.encode s =
  | .ok (.Ok candidate) => some (candidate.val.map NMT_345.byte) | _ => none := by
  unfold LIBC_S1.encode
  rw [NMT_345.encode_closed]
+ rfl
 /-- F4: the field is the parent's source-fission probe immediately before
 the first snapshot Box, not the parent's eventual success bit. -/
 theorem allocation (b : Slice U8) :
