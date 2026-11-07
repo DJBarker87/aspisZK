@@ -35,7 +35,8 @@ def measured(cmd,*a,**kw):
 subprocess.run=measured
 import types
 args=types.SimpleNamespace(function='repro',cargo='/home/dombarker/.cargo/bin/cargo')
-ref=E/spec['reference_directory'];source=ref/'src/lib.rs';manifest=ref/'Cargo.toml'
+ref=E/spec['reference_directory'];source=ref/spec.get('source_relative','src/lib.rs');manifest=ref/'Cargo.toml'
+for extra in spec.get('package_extras',[]):assert hashlib.sha256((ref/extra['relative_path']).read_bytes()).hexdigest()==extra['sha256']
 assert hashlib.sha256(source.read_bytes()).hexdigest()==spec['reference_sha256']
 assert hashlib.sha256(manifest.read_bytes()).hexdigest()==spec['manifest_sha256']
 try:
@@ -44,6 +45,6 @@ finally:
  assert hashlib.sha256(source.read_bytes()).hexdigest()==spec['reference_sha256'],'STOP archive input drift'
  assert hashlib.sha256(manifest.read_bytes()).hexdigest()==spec['manifest_sha256'],'STOP archive manifest drift'
  lock=ref/'Cargo.lock'
- (out/'NML_REFERENCE_POSTCHECK.json').write_text(json.dumps(dict(source_sha256=spec['reference_sha256'],manifest_sha256=spec['manifest_sha256'],reference_basis=spec['reference_basis'],manifest_basis=spec['manifest_basis'],reference_lock_sha256=hashlib.sha256(lock.read_bytes()).hexdigest() if lock.exists() else None,reference_lock_note='Historical standalone std-only crate; no frozen-release dependency is substituted. Frozen release Cargo.lock independently checked by NHR_stage.',source_revision=''),indent=2))
+ (out/'NML_REFERENCE_POSTCHECK.json').write_text(json.dumps(dict(source_sha256=spec['reference_sha256'],manifest_sha256=spec['manifest_sha256'],reference_basis=spec['reference_basis'],manifest_basis=spec['manifest_basis'],reference_lock_sha256=hashlib.sha256(lock.read_bytes()).hexdigest() if lock.exists() else None,reference_lock_note='Historical standalone std-only crate; no frozen-release dependency is substituted. Frozen release Cargo.lock independently checked by NHR_stage.',source_revision=json.loads((E/(run+'.json')).read_text())['source_revision']),indent=2))
 print(json.dumps(dict(attempt=run,exit=status)),flush=True)
 sys.exit(status)

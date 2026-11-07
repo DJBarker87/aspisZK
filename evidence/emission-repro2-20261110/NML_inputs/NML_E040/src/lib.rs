@@ -27,12 +27,3 @@ pub fn pack_ref(v:[[u32;4];4])->[u32;4]{
  let d=v0[3] as u64+v1[2] as u64+v2[1] as u64+v3[0] as u64;
  [reduce_u62_ref(a),reduce_u62_ref(b),reduce_u62_ref(c),reduce_u62_ref(d)]
 }
-pub fn raw_pack_ref(v:[[u32;4];4],which:usize)->u64{
- let p=2147483647u64;let v0=v[0];let v1=v[1];let v2=v[2];let v3=v[3];
- if which==0 {v0[0] as u64+(p-v1[1] as u64)+2*v2[2] as u64+(p-v2[3] as u64)+(p-v3[2] as u64)+(2*p-2*v3[3] as u64)}
- else if which==1 {v0[1] as u64+v1[0] as u64+v2[2] as u64+2*v2[3] as u64+2*v3[2] as u64+(p-v3[3] as u64)}
- else if which==2 {v0[2] as u64+(p-v1[3] as u64)+v2[0] as u64+(p-v3[1] as u64)}
- else {v0[3] as u64+v1[2] as u64+v2[1] as u64+v3[0] as u64}
-}
-pub fn wellformed_step_ref(old:bool,a:u32,b:u32)->bool{old && a<b}
-pub fn double_observed_ref(p0:[u32;4],p1:[u32;4])->[u32;4]{[sub_ref(add_ref(p0[0],p1[0]),1),sub_ref(add_ref(p0[1],p1[1]),0),sub_ref(add_ref(p0[2],p1[2]),0),sub_ref(add_ref(p0[3],p1[3]),0)]}

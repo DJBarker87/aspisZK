@@ -15,15 +15,3 @@ fn cadd_ref(x:[u32;2],y:[u32;2])->[u32;2]{[add_ref(x[0],y[0]),add_ref(x[1],y[1])
 fn csub_ref(x:[u32;2],y:[u32;2])->[u32;2]{[sub_ref(x[0],y[0]),sub_ref(x[1],y[1])]}
 fn byr_ref(x:[u32;2])->[u32;2]{[sub_ref(add_ref(x[0],x[0]),x[1]),add_ref(x[0],add_ref(x[1],x[1]))]}
 pub fn channels_ref(sums:[[u64;3];3])->[u32;4]{let m0=reconstruct_ref(sums[0]);let m1=reconstruct_ref(sums[1]);let m2=reconstruct_ref(sums[2]);let a=cadd_ref(m0,byr_ref(m1));let b=csub_ref(csub_ref(m2,m0),m1);[a[0],a[1],b[0],b[1]]}
-pub fn value_ref(x:&[[u8;32];16],i:usize)->[u8;32]{x[i]}
-pub fn root_ref(x:&[[u8;32];16],root:&[u8;32])->bool{x[0]==*root}
-pub fn guard_ref(s2:bool,folds:usize,first:bool,second:bool)->bool{s2 && folds==2 && first && second}
-pub fn wide_neg_ref(x:[u32;8])->[u32;8]{[m31_neg_ref(x[0]),m31_neg_ref(x[1]),m31_neg_ref(x[2]),m31_neg_ref(x[3]),m31_neg_ref(x[4]),m31_neg_ref(x[5]),m31_neg_ref(x[6]),m31_neg_ref(x[7])]}
-pub fn pack_ref(v:[[u32;4];4])->[u32;4]{
- let p=2147483647u64;let v0=v[0];let v1=v[1];let v2=v[2];let v3=v[3];
- let a=v0[0] as u64+(p-v1[1] as u64)+2*v2[2] as u64+(p-v2[3] as u64)+(p-v3[2] as u64)+(2*p-2*v3[3] as u64);
- let b=v0[1] as u64+v1[0] as u64+v2[2] as u64+2*v2[3] as u64+2*v3[2] as u64+(p-v3[3] as u64);
- let c=v0[2] as u64+(p-v1[3] as u64)+v2[0] as u64+(p-v3[1] as u64);
- let d=v0[3] as u64+v1[2] as u64+v2[1] as u64+v3[0] as u64;
- [reduce_u62_ref(a),reduce_u62_ref(b),reduce_u62_ref(c),reduce_u62_ref(d)]
-}

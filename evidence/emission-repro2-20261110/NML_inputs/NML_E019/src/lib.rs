@@ -1,10 +1,8 @@
-#[derive(Clone,Copy,PartialEq,Eq)] pub struct M31(pub u32);
-#[derive(Clone,Copy,PartialEq,Eq)] pub struct CM31 {pub a:M31,pub b:M31}
-#[derive(Clone,Copy,PartialEq,Eq)] pub struct QM31 {pub c0:CM31,pub c1:CM31}
-pub fn NGO_decode_le(bytes:&[u8])->Option<QM31>{
- assert_eq!(bytes.len(),16);
- fn word(b:&[u8],i:usize)->u32{u32::from(b[i])|(u32::from(b[i+1])<<8)|(u32::from(b[i+2])<<16)|(u32::from(b[i+3])<<24)}
- let a=word(bytes,0);let b=word(bytes,4);let c=word(bytes,8);let d=word(bytes,12);
- if a>=0x7fffffff||b>=0x7fffffff||c>=0x7fffffff||d>=0x7fffffff{return None;}
- Some(QM31{c0:CM31{a:M31(a),b:M31(b)},c1:CM31{a:M31(c),b:M31(d)}})
-}
+pub fn sub_ref(x:u32,y:u32)->u32{if x>=y{x-y}else{x+2147483647-y}}
+pub fn one_sub(a:[u32;4])->[u32;4]{[sub_ref(1,a[0]),sub_ref(0,a[1]),sub_ref(0,a[2]),sub_ref(0,a[3])]}
+pub struct FactorPacket{pub left:[[u32;4];4],pub right:[[u32;4];4],pub row:[[u32;4];4]}
+pub fn factor_ref(a:[u32;4],b:[u32;4],replies:[[u32;4];4])->FactorPacket{let aa=one_sub(a);let bb=one_sub(b);FactorPacket{left:[aa,a,aa,a],right:[bb,bb,b,b],row:replies}}
+pub struct CirclePacket{pub row:[[u32;4];4],pub next:[u32;4]}
+pub fn circle_ref(x:[u32;4],y:[u32;4],product:[u32;4],next:[u32;4])->CirclePacket{CirclePacket{row:[[1,0,0,0],x,y,product],next}}
+pub struct All{pub factor:FactorPacket,pub circle:CirclePacket}
+pub fn all_factors(a:[u32;4],b:[u32;4],replies:[[u32;4];4],next:[u32;4])->All{All{factor:factor_ref(a,b,replies),circle:circle_ref(a,b,replies[0],next)}}

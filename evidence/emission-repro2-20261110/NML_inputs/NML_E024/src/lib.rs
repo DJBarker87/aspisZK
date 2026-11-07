@@ -1,11 +1,18 @@
-//! Scalar projections of Slice D source control and exact call descriptors.
-//! This is not a reference implementation of the whole prepare operation.
-pub fn prepared_control_ref(query_error:bool,claim_error:bool)->(u8,u8,bool){
- if query_error{(1,6,false)}else if claim_error{(2,9,true)}else{(0,9,true)}
+pub type Word=[u32;8];
+pub type Reply=Result<Word,u8>;
+pub struct Replies {pub round0:Reply,pub round1:Reply,pub weights:Result<(),u8>,pub pair:Reply,pub dot:Reply}
+pub struct Observed {pub result:Result<(),u8>,pub events:[u8;7],pub len:usize}
+fn event(o:&mut Observed,tag:u8){o.events[o.len]=tag;o.len+=1;}
+pub fn finish_ref(two:bool,next:usize,rhs:Word,r:Replies)->Observed {
+ let mut o=Observed{result:Ok(()),events:[255;7],len:0};
+ event(&mut o,0);
+ let mut claim=match r.round0 {Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
+ if two {event(&mut o,1);claim=match r.round1 {Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};}
+ event(&mut o,2);if let Err(e)=r.weights{o.result=Err(e);return o;}
+ event(&mut o,3);let pair=match r.pair{Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
+ if pair!=claim{o.result=Err(3);return o;}
+ event(&mut o,4);event(&mut o,5);
+ let actual=match r.dot{Ok(x)=>x,Err(e)=>{o.result=Err(e);return o;}};
+ if next!=22||actual!=rhs{o.result=Err(5);return o;}
+ event(&mut o,6);o
 }
-pub fn prepared_row_ref(index:u8)->Option<(u8,u32,bool)>{match index{
- 0=>Some((27,928,true)),1=>Some((28,32,false)),2=>Some((29,224,false)),
- 3=>Some((30,256,false)),4=>Some((31,2048,false)),5=>Some((32,0,false)),_=>None}}
-pub fn scratch_size_ref()->usize{13831+29*32}
-pub fn tx1_split_ref(k:usize)->bool{k==10}
-pub fn tx2_split_ref(next:usize)->bool{next==10}

@@ -1,11 +1,21 @@
-#![allow(dead_code)]
-pub fn reduce_u62_ref(x:u64)->u32 { let y=(x & 2147483647)+(x>>31);let z=(y & 2147483647)+(y>>31);let w=z as u32;if w>=2147483647 {w-2147483647}else{w} }
-pub fn m31_neg_ref(x:u32)->u32 {if x==0 {0}else{2147483647-x}}
-pub fn cm31_from_ref(x:u32)->[u32;2] {[x,0]}
-pub fn cm31_neg_ref(x:[u32;2])->[u32;2] {[m31_neg_ref(x[0]),m31_neg_ref(x[1])]}
-pub fn qm31_neg_ref(x:[u32;4])->[u32;4] {[m31_neg_ref(x[0]),m31_neg_ref(x[1]),m31_neg_ref(x[2]),m31_neg_ref(x[3])]}
-pub fn qm31_zero_ref(x:[u32;4])->bool { x[0]==0 && x[1]==0 && x[2]==0 && x[3]==0 }
-pub fn bits_ref(eight:bool)->u32 {if eight {3}else{1}}
-pub fn index_ref(x:&[u32;16],i:usize)->u32 {x[i]}
-fn add_ref(x:u32,y:u32)->u32 {let s=x+y;if s>=2147483647{s-2147483647}else{s}}
-pub fn prepared_ref(x:[u32;4])->[u32;9] {let a=add_ref(x[0],x[2]);let b=add_ref(x[1],x[3]);[x[0],x[1],add_ref(x[0],x[1]),x[2],x[3],add_ref(x[2],x[3]),a,b,add_ref(a,b)]}
+// Safe references for remaining caller composition. No field arithmetic,
+// pointers, callbacks, allocation, statics, or production-source edits.
+#[derive(Clone,Copy)]
+pub enum Error { Allocation, RowOrder{expected:u8,actual:u8}, InvalidRow, Tag{row:u8}, Length{row:u8}, NonCanonical{row:u8,value:usize}, Boundary{round:usize}, Terminal, EqualCirclePoints, TrailingBytes, Public }
+pub fn shape(row:u8)->Option<(u8,usize)>{match row{0|1|3..=13=>Some((0,0)),2=>Some((1,32)),14=>Some((3,32)),15..=24=>Some((2,896)),25=>Some((4,3712)),26=>Some((5,928)),_=>None}}
+// The validation reply is a complete value supplied at the original cut.
+pub fn parse_g(row:u8,record:&[u8],reply:Result<(),Error>)->Result<&[u8],Error>{
+ let(tag,size)=shape(row).ok_or(Error::InvalidRow)?;
+ if record.len()!=5+size{return Err(Error::Length{row});}
+ if record[0]!=tag{return Err(Error::Tag{row});}
+ if u32::from_le_bytes([record[1],record[2],record[3],record[4]])as usize!=size{return Err(Error::Length{row});}
+ let payload=&record[5..];if row>=14{reply?;}Ok(payload)
+}
+pub fn parse_at_g(bytes:&[u8],row:u8,offset:usize,reply:Result<(),Error>)->Result<(&[u8],usize),Error>{
+ let length=5+shape(row).unwrap().1;
+ let framed=bytes.get(offset..offset+length).ok_or(Error::Length{row})?;
+ parse_g(row,framed,reply)?;Ok((framed,offset+length))
+}
+pub const SLOT_NODES:[usize;6]=[146,146,128,172,172,150];
+pub const OFF_NODES:usize=28359;
+pub const fn slot_offset(slot:usize)->usize{let mut at=OFF_NODES;let mut i=0;while i<slot{at+=32*SLOT_NODES[i];i+=1;}at}

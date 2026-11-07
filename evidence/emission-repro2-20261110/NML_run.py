@@ -21,7 +21,9 @@ def share_gate():
   r=ssh('python3',(E/'NML_share.py').read_text());assert r.returncode==0,r.stderr
   x=json.loads(r.stdout)
   with (E/'NML_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share_check' if x['stream_a_count']<2 else 'wait',reason='Stream A scope gate',observation=x))+'\n')
-  if x['stream_a_count']<2:return x
+  if x['stream_a_count']<2:
+   assert x['free_bytes']>=40_000_000_000,'STOP disk changed below 40 GB; no scope submitted'
+   return x
   print(json.dumps(dict(attempt=a,wait='Stream A scopes',count=x['stream_a_count'])),flush=True);time.sleep(180)
 share_gate()
 # Disk admission before EVERY scope; no compiler runs here.

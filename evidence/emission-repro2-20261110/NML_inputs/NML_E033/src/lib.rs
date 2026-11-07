@@ -1,11 +1,5 @@
-#![allow(dead_code)]
-pub fn reduce_u62_ref(x:u64)->u32 { let y=(x & 2147483647)+(x>>31u32);let z=(y & 2147483647)+(y>>31u32);let w=z as u32;if w>=2147483647 {w-2147483647}else{w} }
-pub fn m31_neg_ref(x:u32)->u32 {if x==0 {0}else{2147483647-x}}
-pub fn cm31_from_ref(x:u32)->[u32;2] {[x,0]}
-pub fn cm31_neg_ref(x:[u32;2])->[u32;2] {[m31_neg_ref(x[0]),m31_neg_ref(x[1])]}
-pub fn qm31_neg_ref(x:[u32;4])->[u32;4] {[m31_neg_ref(x[0]),m31_neg_ref(x[1]),m31_neg_ref(x[2]),m31_neg_ref(x[3])]}
-pub fn qm31_zero_ref(x:[u32;4])->bool { x[0]==0 && x[1]==0 && x[2]==0 && x[3]==0 }
-pub fn bits_ref(eight:bool)->u32 {if eight {3}else{1}}
-pub fn index_ref(x:&[u32;16],i:usize)->u32 {x[i]}
-fn add_ref(x:u32,y:u32)->u32 {let s=x+y;if s>=2147483647{s-2147483647}else{s}}
-pub fn prepared_ref(x:[u32;4])->[u32;9] {let a=add_ref(x[0],x[2]);let b=add_ref(x[1],x[3]);[x[0],x[1],add_ref(x[0],x[1]),x[2],x[3],add_ref(x[2],x[3]),a,b,add_ref(a,b)]}
+// Safe references for the existing emitted field operations. No unsafe or Kani.
+pub fn neg_ref(x:u32)->u32{if x==0{0}else{2147483647-x}}
+pub fn canonical_ref(x:u32)->u32{x%2147483647}
+pub fn cm_bytes_ref(a:u32,b:u32)->[u8;8]{[a as u8,(a>>8u32)as u8,(a>>16u32)as u8,(a>>24u32)as u8,b as u8,(b>>8u32)as u8,(b>>16u32)as u8,(b>>24u32)as u8]}
+pub fn qm_bytes_ref(a:u32,b:u32,c:u32,d:u32)->[u8;16]{[a as u8,(a>>8u32)as u8,(a>>16u32)as u8,(a>>24u32)as u8,b as u8,(b>>8u32)as u8,(b>>16u32)as u8,(b>>24u32)as u8,c as u8,(c>>8u32)as u8,(c>>16u32)as u8,(c>>24u32)as u8,d as u8,(d>>8u32)as u8,(d>>16u32)as u8,(d>>24u32)as u8]}

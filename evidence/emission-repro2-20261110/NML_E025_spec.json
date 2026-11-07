@@ -1,37 +1,44 @@
 {
   "groups": [
-    "NMH_G055"
+    "NMH_G051"
   ],
   "members": [
-    "0feeabc55e3d27a5172ced87911f3a5d5bbbf0827c39793dbdcb4859bdbfcb6e"
+    "593efdf4262227cca834c2ba4be70d1af7a990d2f74c008eb645be2807258f89",
+    "66ce10ff32a899d435de0a66acc9be1eb54fa9308f105a2463f27e842f47c2ee"
   ],
-  "bytes": 4959,
+  "bytes": 4081,
   "configuration": {
     "receipt_paths": [
-      "evidence/slice-d-entry3-20261106/NHJ_E001-extraction-pins.json"
+      "evidence/slice-d-prepare-20261104/NFW_E001/stdout.log"
     ],
-    "receipt_git_blob": "54bab263deaa46b2916e68a026d35d5a71f3391e",
-    "receipt_sha256": "849028cbd6ca7bd332604b79de767f5d74a2896ea28c8a6f783e346d89702e1a",
-    "namespace": "NHJ_SnapshotReference",
+    "receipt_git_blob": "85c91c772774dd388f26a18e97af1831602fc95f",
+    "receipt_sha256": "0165e7a1db76c1b524742d76f4911653f44749d9d1f73aaebe9914c62b9a1c68",
+    "namespace": "NFW_Reference",
     "roots": [
-      "crate::snapshot_ref"
+      "crate::prepared_control_ref",
+      "crate::prepared_row_ref",
+      "crate::scratch_size_ref",
+      "crate::tx1_split_ref",
+      "crate::tx2_split_ref"
     ],
-    "reference_sha256": "e8a85ac95461fcd40751c9c63d31c5a8d500471f865be6b0d543ba6dc828c53b",
+    "reference_sha256": "4c06d6e1b79efbaa72e3ffdc5fd0f1f1b3142f53abb18ac9b5e483a4fa3536e2",
     "source": {
-      "git_blob": "8762426a28f97ce25cc42c29cdf4ca9515f41d4d",
-      "paths": [],
-      "bytes": 1272,
+      "git_blob": "ddf89df0a1469da27d436a04f8185a1b710024a8",
+      "paths": [
+        "evidence/slice-d-prepare-20261104/NFW_E001/sources/NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs"
+      ],
+      "bytes": 670,
       "embedded": [
         {
           "container_paths": [
-            "evidence/slice-d-entry3-20261106/NHJ_E001.llbc.xz"
+            "evidence/slice-d-prepare-20261104/NFW_E001_extraction/NFW_reference.llbc"
           ],
-          "container_git_blob": "f84a77d8c8843320c8a797b131445a291cf65a8d",
+          "container_git_blob": "c858f54279631fbeda891848cb68fcaf564d0637",
           "source_path": {
             "Local": "src/lib.rs"
           },
-          "crate": "nhj_snapshot_reference",
-          "sha256": "e8a85ac95461fcd40751c9c63d31c5a8d500471f865be6b0d543ba6dc828c53b"
+          "crate": "nfw_reference",
+          "sha256": "4c06d6e1b79efbaa72e3ffdc5fd0f1f1b3142f53abb18ac9b5e483a4fa3536e2"
         }
       ]
     },
@@ -51,12 +58,20 @@
       "--include",
       "core::option::_::ok_or",
       "--start-from",
-      "crate::snapshot_ref",
+      "crate::prepared_control_ref",
+      "--start-from",
+      "crate::prepared_row_ref",
+      "--start-from",
+      "crate::scratch_size_ref",
+      "--start-from",
+      "crate::tx1_split_ref",
+      "--start-from",
+      "crate::tx2_split_ref",
       "--dest-file",
-      "/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106/NHJ_E001.llbc",
+      "/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104/NFW_reference.llbc",
       "--",
       "--manifest-path",
-      "/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106/NHJ_ref/Cargo.toml",
+      "/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104/NFW_ref/Cargo.toml",
       "--offline",
       "--release",
       "--lib",
@@ -71,44 +86,30 @@
       "-backend",
       "lean",
       "-namespace",
-      "NHJ_SnapshotReference",
+      "NFW_Reference",
       "-dest",
-      "/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106/NHJ_extracted/NHJ_SnapshotReference",
+      "/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104/NFW_extracted",
       "-subdir",
-      "NHJ_SnapshotReference",
+      "NFW_Reference",
       "-split-files",
-      "/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106/NHJ_E001.llbc"
+      "/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104/NFW_reference.llbc"
     ],
-    "outputs": {
-      "NHJ_extracted/NHJ_SnapshotReference/NHJ_SnapshotReference/Types.lean": "5eeecc95471cd483cb79d6f886953005bbce2b156edcce3d204d1f320b516042",
-      "NHJ_extracted/NHJ_SnapshotReference/NHJ_SnapshotReference/FunsExternal_Template.lean": "a0bd07ab90c6a15eb250e6e76e09f37484740f8987f5adb7216917bad43c6d84",
-      "NHJ_extracted/NHJ_SnapshotReference/NHJ_SnapshotReference/Funs.lean": "0feeabc55e3d27a5172ced87911f3a5d5bbbf0827c39793dbdcb4859bdbfcb6e"
-    },
+    "outputs": {},
     "toolchain": "nightly-2026-09-17",
-    "basis": "Producing packet receipt with exact reference SHA256 matching archived Rust; exact emitted-output SHA256 link"
+    "basis": "Producing packet receipt with exact reference SHA256 matching archived Rust; exact namespace in same producing packet; reproduction still required"
   },
   "reference_basis": {
-    "embedded": {
-      "container_paths": [
-        "evidence/slice-d-entry3-20261106/NHJ_E001.llbc.xz"
-      ],
-      "container_git_blob": "f84a77d8c8843320c8a797b131445a291cf65a8d",
-      "source_path": {
-        "Local": "src/lib.rs"
-      },
-      "crate": "nhj_snapshot_reference",
-      "sha256": "e8a85ac95461fcd40751c9c63d31c5a8d500471f865be6b0d543ba6dc828c53b"
-    },
-    "git_blob": "8762426a28f97ce25cc42c29cdf4ca9515f41d4d"
+    "path": "evidence/slice-d-prepare-20261104/NFW_E001/sources/NFW_src/crates/aspis-r1-cost-probe/src/NFW_reference.rs",
+    "git_blob": "ddf89df0a1469da27d436a04f8185a1b710024a8"
   },
   "manifest_basis": {
-    "path": "evidence/slice-d-entry3-20261106/NHJ_extract.py",
-    "git_blob": "dc6a76f88fc14249c695eed9d3cc0f6dadcda4f0",
-    "sha256": "e9f8aaa885c428a57226e330d5ba096f9492a050eae04747a1dd0b8d6e03789a"
+    "path": "evidence/slice-d-prepare-20261104/NFW_E001/sources/NFW_extract.py",
+    "git_blob": "1b91c3587e471a8185831e8c3a9673a68a425538",
+    "sha256": "743d29b687d1e069af00b40cdb7fa0343711e58aa802dbe1b433fae1a6d45242"
   },
-  "reference_sha256": "e8a85ac95461fcd40751c9c63d31c5a8d500471f865be6b0d543ba6dc828c53b",
-  "manifest_sha256": "8cc421be81ab85956f512f19775874d390f81f5cd1edd8d8610e90405ecda141",
-  "original_manifest": "/home/dombarker/project-offloads/codex-cx-slice-d-entry3-20261106/NHJ_ref/Cargo.toml",
+  "reference_sha256": "4c06d6e1b79efbaa72e3ffdc5fd0f1f1b3142f53abb18ac9b5e483a4fa3536e2",
+  "manifest_sha256": "ae1a20cb849f3415b2c8173c86aa0e2fd1187910972316d16ce47121218e2f0e",
+  "original_manifest": "/home/dombarker/project-offloads/codex-cx-slice-d-prepare-20261104/NFW_ref/Cargo.toml",
   "charon_command": [
     "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
     "cargo",
@@ -125,7 +126,15 @@
     "--include",
     "core::option::_::ok_or",
     "--start-from",
-    "crate::snapshot_ref",
+    "crate::prepared_control_ref",
+    "--start-from",
+    "crate::prepared_row_ref",
+    "--start-from",
+    "crate::scratch_size_ref",
+    "--start-from",
+    "crate::tx1_split_ref",
+    "--start-from",
+    "crate::tx2_split_ref",
     "--dest-file",
     "/home/dombarker/project-offloads/codex-cx-emission-repro2-20261110/NML_E025_emitted/repro.llbc",
     "--",
@@ -145,16 +154,18 @@
     "-backend",
     "lean",
     "-namespace",
-    "NHJ_SnapshotReference",
+    "NFW_Reference",
     "-dest",
     "/home/dombarker/project-offloads/codex-cx-emission-repro2-20261110/NML_E025_emitted/raw",
     "-subdir",
-    "NHJ_SnapshotReference",
+    "NFW_Reference",
     "-split-files",
     "/home/dombarker/project-offloads/codex-cx-emission-repro2-20261110/NML_E025_emitted/repro.llbc"
   ],
+  "source_relative": "src/lib.rs",
   "variant_rank": 0,
   "run": "NML_E025",
+  "package_extras": [],
   "reference_directory": "NML_inputs/NML_E025",
   "opacity": [],
   "relocation": "Only input/output paths relocated; original standalone manifest and source bytes retained, original flags preserved. Frozen release graph validated separately by unchanged NHR_stage.extract."

@@ -1,12 +1,10 @@
-//! Scalar projections of Slice D source control and exact call descriptors.
-//! This is not a reference implementation of the whole prepare operation.
-pub fn prepared_control_ref(query_error:bool,claim_error:bool)->(u8,u8,bool){
- if query_error{(1,6,false)}else if claim_error{(2,9,true)}else{(0,9,true)}
+#[derive(Clone,Copy,PartialEq,Eq)] pub struct M31(pub u32);
+#[derive(Clone,Copy,PartialEq,Eq)] pub struct CM31 {pub a:M31,pub b:M31}
+#[derive(Clone,Copy,PartialEq,Eq)] pub struct QM31 {pub c0:CM31,pub c1:CM31}
+pub fn NGO_decode_le(bytes:&[u8])->Option<QM31>{
+ assert_eq!(bytes.len(),16);
+ fn word(b:&[u8],i:usize)->u32{u32::from(b[i])|(u32::from(b[i+1])<<8u32)|(u32::from(b[i+2])<<16u32)|(u32::from(b[i+3])<<24u32)}
+ let a=word(bytes,0);let b=word(bytes,4);let c=word(bytes,8);let d=word(bytes,12);
+ if a>=0x7fffffff||b>=0x7fffffff||c>=0x7fffffff||d>=0x7fffffff{return None;}
+ Some(QM31{c0:CM31{a:M31(a),b:M31(b)},c1:CM31{a:M31(c),b:M31(d)}})
 }
-pub fn prepared_row_ref(index:u8)->Option<(u8,u32,bool)>{match index{
- 0=>Some((27,928,true)),1=>Some((28,32,false)),2=>Some((29,224,false)),
- 3=>Some((30,256,false)),4=>Some((31,2048,false)),5=>Some((32,0,false)),_=>None}}
-// Closed form of the source sum, proved in NFW_StoredLayout.logical_split.
-pub fn scratch_size_ref()->usize{14759}
-pub fn tx1_split_ref(k:usize)->bool{k==10}
-pub fn tx2_split_ref(next:usize)->bool{next==10}

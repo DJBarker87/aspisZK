@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
 """Recover archive inputs by receipt hashes, never by name proximity."""
-import subprocess,json,hashlib,collections,re,lzma
+import subprocess,json,hashlib,collections,re,lzma,tomllib
 from pathlib import Path
 E=Path(__file__).resolve().parent
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def write(n,d): (E/n).write_text(json.dumps(d,indent=2)+'\n')
 raw=subprocess.check_output(['git','ls-tree','-rz','HEAD','evidence','docs/research/100bit-spend-path-20261013/evidence'])
-paths={};rs=collections.defaultdict(list);pins=collections.defaultdict(list);llbcs=collections.defaultdict(list)
+paths={};rs=collections.defaultdict(list);pins=collections.defaultdict(list);llbcs=collections.defaultdict(list);cargo_manifests=collections.defaultdict(list)
 provenance=json.load(open(E.parent/"emission-repro-20261110/NMH_PROVENANCE.json"))
-packets={"/".join(p.split("/")[:2]) for b in provenance["blobs"] for p in b["committed_paths"] if p.startswith("evidence/")}
+def packet(p):
+ if p.startswith('evidence/'):return '/'.join(p.split('/')[:2])
+ if '/evidence/' in p:
+  a,b=p.split('/evidence/',1);return a+'/evidence/'+b.split('/')[0]
+ return None
+packets={packet(p) for b in provenance['blobs'] for p in b['committed_paths'] if packet(p)}
 for row in raw.split(b'\0'):
  if not row:continue
- meta,p=row.split(b'\t');p=p.decode();oid=meta.decode().split()[2];paths[p]=oid
+ meta,p=row.split(b'\t');p=p.decode();oid=meta.decode().split()[2]
+ if p.startswith('evidence/emission-repro2-20261110/'):continue
+ paths[p]=oid
  if p.endswith('.rs'):rs[oid].append(p)
+ if p.endswith('/Cargo.toml'):cargo_manifests[oid].append(p)
  if p.endswith(('.llbc','.llbc.xz')) and any(p.startswith(q+'/') for q in packets):llbcs[oid].append(p)
  if ((('pin' in p.lower()) and p.endswith('.json')) or (p.endswith('/stdout.log') and re.search(r'/[A-Za-z]+_E[0-9]+/',p))) and not '/emission-repro2-' in p:pins[oid].append(p)
 del raw
@@ -60,19 +68,36 @@ for oid,ps in pins.items():
   records.append(dict(receipt_paths=ps,receipt_git_blob=oid,receipt_sha256=sha(raw),namespace=ns,roots=roots,reference_sha256=h,source=source[h],charon_command=cc,aeneas_command=ac,outputs=d.get('outputs',{}),toolchain=d.get('toolchain')))
 plan=json.load(open(E.parent/'emission-repro-20261110/NMH_PLAN.json'));inv=json.load(open(E.parent/'emission-repro-20261110/NMH_INVENTORY.json'))
 prov=json.load(open(E.parent/'emission-repro-20261110/NMH_PROVENANCE.json'));byhash={b['blob']:b for b in prov['blobs']}
+manifest_index=collections.defaultdict(list)
+for oid,ps in cargo_manifests.items():
+ try:
+  raw=blob(oid);doc=tomllib.loads(raw.decode());name=doc.get('package',{}).get('name','').replace('-','_')
+  if not name:continue
+  for p in ps:manifest_index[name].append(dict(path=p,git_blob=oid,sha256=sha(raw),lib=doc.get('lib',{}).get('path','src/lib.rs')))
+ except (ValueError,UnicodeDecodeError):pass
 results=[]
 for g in plan['groups']:
  matches=[r for r in records if r['namespace'] in g['namespace'] or set(g['members'])&hashes(r['outputs'])]
  # Hash link to archived Rust is mandatory; require producing packet association too.
  accepted=[]
  for r in matches:
-  emitting_packets={p.split('/')[1] for h in g['members'] for p in byhash[h]['committed_paths'] if p.startswith('evidence/')}
-  same_packet=any(p.startswith('evidence/') and p.split('/')[1] in emitting_packets for p in r['receipt_paths'])
+  emitting_packets={packet(p) for h in g['members'] for p in byhash[h]['committed_paths'] if packet(p)}
+  same_packet=any(packet(p) in emitting_packets for p in r['receipt_paths'])
   exact_output=bool(set(g['members'])&hashes(r['outputs']))
   if same_packet or exact_output:
    q=dict(r);q['basis']='Producing packet receipt with exact reference SHA256 matching archived Rust; '+('exact emitted-output SHA256 link' if exact_output else 'exact namespace in same producing packet; reproduction still required')
    accepted.append(q)
- results.append(dict(group=g['group'],members=g['members'],bytes=g['bytes'],crate=g['crate'],namespace=g['namespace'],annotated_symbols=g['annotated_symbols'],mappings=accepted,status='RECOVERED_HASH_LINKED_INPUT' if accepted else 'NO_HASH_LINKED_RECEIPT_FOUND',search=dict(reference_git_blobs=len(rs),reference_paths=sum(map(len,rs.values())),pin_git_blobs=len(pins),eligible_records=len(records))))
+ emission_packets={packet(p) for h in g['members'] for p in byhash[h]['committed_paths'] if packet(p)}
+ archive_sources=[]
+ for crate in g['crate']:
+  for mf in manifest_index[crate]:
+   if packet(mf['path']) not in emission_packets:continue
+   root=mf['path'].rsplit('/',1)[0];source_path=root+'/'+mf['lib']
+   if source_path not in paths:continue
+   data=blob(paths[source_path]);symbols=[a.rsplit('::',1)[-1] for a in g['annotated_symbols'] if a.startswith(crate+'::') and a.rsplit('::',1)[-1] not in ['_']]
+   missing=[n for n in symbols if n not in data.decode(errors='replace')]
+   archive_sources.append(dict(crate=crate,manifest=mf,input_path=source_path,git_blob=paths[source_path],sha256=sha(data),basis='Exact Cargo package name and archived lib path inside the producing emission packet; symbol coverage is diagnostic, not reproduction.',annotated_symbol_substrings_missing=missing,configuration='UNRECOVERED unless separately recorded in mappings'))
+ results.append(dict(archive_sources=archive_sources,group=g['group'],members=g['members'],bytes=g['bytes'],crate=g['crate'],namespace=g['namespace'],annotated_symbols=g['annotated_symbols'],mappings=accepted,status='RECOVERED_HASH_LINKED_INPUT' if accepted else 'NO_HASH_LINKED_RECEIPT_FOUND',search=dict(reference_git_blobs=len(rs),reference_paths=sum(map(len,rs.values())),pin_git_blobs=len(pins),eligible_records=len(records))))
 write('NML_INPUT_MAP.json',dict(schema=1,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),method='Exact producing receipt reference SHA256 to Git-object source bytes plus same packet/namespace or exact output hash; no name-proximity credit.',groups=results))
 write('NML_RECOVERED_RECORDS.json',records)
 print(json.dumps(dict(groups=len(results),recovered=sum(bool(g['mappings']) for g in results),records=len(records),rs_unique=len(rs),llbc_unique=len(llbcs),embedded=embedded)))
