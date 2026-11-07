@@ -1,0 +1,11 @@
+def AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq : AspisR1PublicPreparation.aspis_core.field.QM31 →
+  AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result Bool :=
+fun self other => do
+  let b ← AspisR1PublicPreparation.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c0 other.c0
+  if b = true then AspisR1PublicPreparation.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c1 other.c1
+    else Aeneas.Std.Result.ok false
+def Aeneas.Std.core.cmp.PartialEq.ne.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result Bool) → Self → Rhs → Aeneas.Std.Result Bool :=
+fun {Self Rhs} eq self other => do
+  let __do_lift ← eq self other
+  Aeneas.Std.Result.ok (decide ¬__do_lift = true)

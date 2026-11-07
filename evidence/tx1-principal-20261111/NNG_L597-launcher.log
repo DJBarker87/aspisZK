@@ -1,0 +1,45 @@
+{"attempt": "NNG_L597", "exit_status": 1, "wall_seconds": 21.465668983990327, "peak_rss_kib": "6771468", "swaps": "0", "print_axioms": ["'AspisR1.NNG_FinishReady136.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_FinishReady136.lean:54:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1PublicPreparation.ClaimsUnrolledFinish.claims`
+NNG_generated/NNG_FinishReady136.lean:55:41: error: unsolved goals
+W : Type
+env : RSL.Env
+s : Parent Unit W
+p : LIB_VCarriers.Prefix
+prefixEq : s.prefixValue = NNG_LIBData.lowerPrefix p
+c : LIB_VCarriers.Challenges
+challengeEq : s.challenges = NNG_LIBArrays.lowerChallenges c
+digestEq : s.digest = NNG_LIBDigest.digest env
+out : r1_semantic.Verified Unit
+native : emitted (NNG_ConcreteCalls136.calls env) s = ok (core.result.Result.Ok out)
+finish :
+  AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+      (NNG_Legac
+...
+ NNG_Model134.rounds s.digest (NNG_LIBData.lowerPrefix p) s.transcript =
+    ok (core.result.Result.Ok (fromT1 running, out.alpha, fromT10 t25))
+alphaDom : NNG_LIBArrayDomain.DomainArray out.alpha
+claimCall :
+  (NNG_LegacyConfig136.boundaries env).claims (toT12 s.prefixValue) =
+    ok (core.result.Result.Ok (NNG_InstallClaims.lowerClaims out.claims))
+rawClaims : NNG_LIBClaims.call env (NNG_LIBData.lowerPrefix p) = ok (core.result.Result.Ok out.claims)
+claimsDom : NNG_LIBClaimsDomain.DomainClaims out.claims
+extra :
+  AspisS1ExtractedRoundChildren.children.decode 29#usize record25 87#usize =
+    ok (core.result.Result.Ok (arr toT1 out.extra))
+before :
+  AspisS1ExtractedRoundChildren.children.decode 29#usize record26 0#usize =
+    ok (core.result.Result.Ok (arr toT1 out.before_z1))
+extraDom : NNG_LIBArrayDomain.DomainArray out.extra
+beforeDom : NNG_LIBArrayDomain.DomainArray out.before_z1
+reservation : env.reservation = true
+⊢ { fromFn := fun {T F} => OraclePortStdBuilder.fromFn, mask := FIp_SemanticArithmetic.mask,
+      add := FIp_SemanticArithmetic.add, mul := FIp_SemanticArithmetic.mul, terminal := FIq_Terminal.terminal,
+      circle := F3M_CircleSource.source, unwrapRoot := core.result.Result.unwrap core.fmt.DebugTryFromSliceError,
+      claims := sorry } =
+    { fromFn := fun {T F} => OraclePortStdBuilder.fromFn, mask := FIp_SemanticArithmetic.mask,
+      add := FIp_SemanticArithmetic.add, mul := FIp_SemanticArithmetic.mul, terminal := FIq_Terminal.terminal,
+      circle := F3M_CircleSource.source, unwrapRoot := core.result.Result.unwrap core.fmt.DebugTryFromSliceError,
+      claims := ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) }
+'AspisR1.NNG_FinishReady136.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r322d1791b34c444aaf54e2b312a16803.scope; invocation ID: 0f7333961c014615aac401ca2d85512c

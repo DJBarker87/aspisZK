@@ -1,0 +1,36 @@
+{"attempt": "NNG_L583", "exit_status": 0, "wall_seconds": 3.1798728560097516, "peak_rss_kib": "2647440", "swaps": "0", "print_axioms": []}
+Aeneas.Std.UScalar.add_spec.mvcgen_spec: ∀ {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty},
+  ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty → ⦃⌜True⌝⦄ (x + y) ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑x + ↑y⌝⦄
+Aeneas.Std.Usize.add_spec._proof_1_1: ∀ {x y : Aeneas.Std.Usize},
+  ↑x + ↑y ≤ Aeneas.Std.Usize.max → ↑x + ↑y ≤ Aeneas.Std.UScalar.max Aeneas.Std.UScalarTy.Usize
+Aeneas.Std.UScalar.add_equiv._proof_1_5: ∀ {ty : Aeneas.Std.UScalarTy} (x y y_1 : Aeneas.Std.UScalar ty),
+  ↑↑y_1 = ↑↑x + ↑↑y ∧ ↑↑x + ↑↑y < 2 ^ ty.numBits → ¬↑↑x + ↑↑y < 2 ^ ty.numBits → False
+Aeneas.Std.Usize.add_spec: ∀ {x y : Aeneas.Std.Usize},
+  ↑x + ↑y ≤ Aeneas.Std.Usize.max → Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑
+...
+d.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty)
+Aeneas.Std.UScalar.add_spec._proof_1_2: ∀ {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty},
+  ↑x + ↑y ≤ 2 ^ ty.numBits - 1 → 2 ^ ty.numBits ≤ ↑x + ↑y → 0 < 2 ^ ty.numBits → False
+Aeneas.Std.Usize.add_bv_spec._proof_1_1: ∀ {x y : Aeneas.Std.Usize},
+  ↑x + ↑y ≤ Aeneas.Std.Usize.max → ↑x + ↑y ≤ Aeneas.Std.UScalar.max Aeneas.Std.UScalarTy.Usize
+Aeneas.Std.UScalar.add_spec: ∀ {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty},
+  ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty → Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑y
+Aeneas.Std.UScalar.add_bv_spec: ∀ {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty},
+  ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty → Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+Aeneas.Std.Usize.add_spec.mvcgen_spec: ∀ {x y : Aeneas.Std.Usize},
+  ↑x + ↑y ≤ Aeneas.Std.Usize.max → ⦃⌜True⌝⦄ (x + y) ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑x + ↑y⌝⦄
+Aeneas.Std.UScalar.add_bv_spec._proof_1_2: ∀ {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty},
+  ↑x + ↑y ≤ 2 ^ ty.numBits - 1 → 2 ^ ty.numBits ≤ ↑x + ↑y → 0 < 2 ^ ty.numBits → False
+Aeneas.Std.UScalar.add_equiv._sparseCasesOn_1: {α : Type u} →
+  {motive : Aeneas.Std.Result α → Sort u_1} →
+    (t : Aeneas.Std.Result α) →
+      ((v : α) → motive (Aeneas.Std.Result.ok v)) →
+        ((e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) → (Nat.hasNotBit 3 t.ctorIdx → motive t) → motive t
+Aeneas.Std.UScalar.add_equiv: ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  match x + y with
+  | Aeneas.Std.Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+  | Aeneas.Std.Result.fail e => ¬Aeneas.Std.UScalar.inBounds ty (↑x + ↑y)
+  | x => ⊥
+
+Running as unit: run-rc0fa4a03235e4ee79368e54b5bd0c28b.scope; invocation ID: 4fce713715df4a73bc7f220e111842ba
