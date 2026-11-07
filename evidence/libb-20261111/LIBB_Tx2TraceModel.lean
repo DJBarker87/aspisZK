@@ -31,9 +31,17 @@ def observation (env : RSL.Env) (pub proof ck : Slice U8) : RSL.Obs (Except LIB_
 
 theorem no_write_event (env : RSL.Env) (e : NJU_CommonObserved.Event) (cell : Nat) (bytes : RSL.Bytes) :
  RSL.Event.write cell bytes ∉ event env e := by
- cases e <;> try simp only [event,List.not_mem_nil]
- · exact NNC_ResumeEvents.no_write _ _ _
- · intro member
+ cases e with
+ | resume ck proof pub reply => exact NNC_ResumeEvents.no_write _ _ _
+ | powers gamma reply => exact List.not_mem_nil
+ | inactive data reply => exact List.not_mem_nil
+ | geometry queries next reply => exact List.not_mem_nil
+ | pending weights reply => exact List.not_mem_nil
+ | query proof p a g geometry pending reply => exact List.not_mem_nil
+ | flush pending weights reply => exact List.not_mem_nil
+ | finish v p a reply => exact List.not_mem_nil
+ | merkle pr p folded reply =>
+   intro member
    obtain ⟨q,_,equal⟩ := List.mem_map.mp member
    cases equal
 
