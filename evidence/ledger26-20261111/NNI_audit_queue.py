@@ -5,7 +5,9 @@ n=len(json.loads((E/'NNI_AUDIT_ROOTS.json').read_text())['groups']);modes=['batc
 for i,mode in enumerate(modes,12):
  a=f'NNI_L{i:03}';p=E/a/'receipt.json'
  assert i<=57
- if p.exists():raise RuntimeError('Already submitted; use read-only receipt review, never auto-rerun')
+ if p.exists():
+  prior=json.loads(p.read_text());assert prior['module']==mode and prior['exit_status']==0
+  print(a+' retained completed receipt; no replay',flush=True);continue
  r=subprocess.run([sys.executable,str(E/'NNI_run.py'),a,'audit',mode],capture_output=True,text=True);(E/(a+'-client.log')).write_text(r.stdout+r.stderr)
  if r.returncode:
   good=True

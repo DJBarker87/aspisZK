@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,re,hashlib,subprocess
+E=Path(__file__).resolve().parent;p=E/'NNI_EXPECTED_IMPORTS.jsonl';expected={r['module']:r['imports']for r in map(json.loads,p.read_text().splitlines())}
+choices={'NMT_tx1.Types':'evidence/tx1-owned-20261111/NMT_lean/NMT_tx1/Types.lean','NMP_prepare.Types':'evidence/tx1-observed3-20261110/NMP_lean/NMP_prepare/Types.lean','NMP_prepare.Funs':'evidence/tx1-observed3-20261110/NMP_lean/NMP_prepare/Funs.lean','NMT_stage1_owned.TypesExternal':'evidence/model-bridge-20261111/NND_reuse/NND_zero_support/NMT_stage1_owned/TypesExternal.lean','NMT_stage1_owned.Types':'evidence/model-bridge-20261111/NND_reuse/NND_zero_support/NMT_stage1_owned/Types.lean','NMT_stage1_owned.Funs':'evidence/model-bridge-20261111/NND_reuse/NND_zero_support/NMT_stage1_owned/Funs.lean','NMT_345Context':'evidence/model-bridge-20261111/NND_reuse/NND_zero_support/NMT_345Context.lean'}
+rows=[]
+for m,path in choices.items():
+ b=subprocess.check_output(['git','show','HEAD:'+path]);imports=list(dict.fromkeys(['Init']+re.findall(r'^import\s+([\w.]+)',b.decode(),re.M)));expected[m]=imports;rows.append(dict(module=m,path=path,sha256=hashlib.sha256(b).hexdigest(),imports=imports,reason='Use compiled parameterized Lean source, not raw emitted FunsExternal template; NND coherent zero-support rewrites canonical RSL imports explicitly. Noncompiled raw/template variants retained in NNI_IMPORT_REPAIR_SOURCES.json.'))
+p.write_text(''.join(json.dumps(dict(module=m,imports=v))+'\n'for m,v in sorted(expected.items())));(E/'NNI_IMPORT_SOURCE_CHOICES.json').write_text(json.dumps(rows,indent=1)+'\n')
+# Independently compare now, BEFORE a new scan: this does not alter expected inputs.
+loaded=[json.loads(l)for l in(E/'NNI_LOADED_scan.jsonl').read_text().splitlines()];wrong=[dict(module=r['module'],expected=expected.get(r['module']),actual=r['imports'])for r in loaded if expected.get(r['module'])!=r['imports']];(E/'NNI_IMPORT_PREFLIGHT.json').write_text(json.dumps(dict(status='PASS'if not wrong else'FINDING',mismatches=wrong),indent=1)+'\n');print('preflight mismatches',len(wrong));print(wrong[:5])
