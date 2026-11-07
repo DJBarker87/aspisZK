@@ -11,3 +11,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46306 StoreDispatchV2 passed. Candidate extends D981 with11 exact primitive/ArcClone meanings, symbolic agreement against OWNER-aware base and all-answer world/event/stack framing. Full D984 coverage remains open at wrapper/type-drop/CellTake semantics; this candidate is not the final corrected thread-machine claim.
 
 46307 ScopeStoreV2 passed: count projections for457/611, with real overflow decrement and AtomicBool u8 encoding. They are not yet installed and do not establish whole native wrapper adequacy.
+
+46311 ArcMemoryV2 passed: symbolic read/write of the nested ArcInner count from exact source cells, weak/packet/metadata preservation and the actual12950 token. Failed46308–46310 are retained local elaboration failures only.
