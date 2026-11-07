@@ -50,3 +50,9 @@ numbering (provider start lemma BY NAME). These are entry-component witnesses,
 NOT full composed-machine/source-adequacy conjunctions or deployed builder proofs.
 49707 broad simplification of replicate/getElem was replaced with the symbolic
 List.getElem_replicate rewrite; failed input retained. Next Lean49709.
+
+Focused49709 passed PV_LIB_SPEC_Environment (1.25s,2606324KiB,swap0).
+Full site/occurrence/arguments/pre-world allocation and reservation channels,
+graph uniqueness and event-only abort observation are compiled. pendingEnv
+inhabits the CHANNEL TYPE only. No actual row handler/resource schedule binding
+or joint source/machine nonemptiness follows from this. Next Lean49710.
