@@ -63,3 +63,27 @@ FINAL budget:76/250 formal scopes (39 Lean,21 unchanged-spec support,1 optimized
 Final sibling review: NMT32a1a38db02 and NMS8c611eb403c still supply support rather than actual canonical345/241 roots. NMS now has the arbitrary-V canonical241 relational fold; it does not install actual emission/opaque child owners. No sibling worktree was written or proof duplicated.
 
 No candidate wrapper root or row credit. The deliverables are the exact RSL-parametric transcription folds, weak G2 full SDK-cell/token frame, full physical carrier interfaces, bounded controlled native snapshot/guard cuts, and complete remaining-obligation receipts. All final changes are committed locally; no push.
+
+## Resumed under ruling (bn)
+
+New run allowance: 2 extraction, 174 formal scopes, 26 Kani, preserving prior
+receipts and retired families. Both source-fission bodies erase mechanically
+to their frozen bodies using the PCG_ASSOCIATIONS method (NMV_fission.py,
+NMV_ASSOCIATIONS.json). Window arguments retain original program/accounts/data,
+all snapshot length pairs, full Vec/ProgramError child replies, and Clock slot.
+The generic Windows record is explicit/local; no writable static. Snapshot is
+one window interpreted by the existing full SDK/std snapshot law. Mutable
+borrow returns a guard-free handle consumed by the logged copy window.
+First route: fresh pinned extraction of both fission copies together; Kani
+is eligible only if a copy does not emit. Source signatures use abstract
+account/owned/handle descriptors; their interpretation remains a Lean obligation.
+The only new trust reliance is the lead's already-added ReviewedTranscription
+TX1:344/TX2:240 items; no trust-file edit is made here. TAS NMV_Roots is the
+required final interface. No actual row root is yet claimed by this stage.
+
+L081 / resumed E003: Charon PASS, Aeneas exits2 with `Not_found` at
+InterpReduceCollapse.collapse_ctx_following_sequence while joining contexts.
+No Lean body emitted and no native credit. Wall1.722s/RSS143616KiB/swap0.
+Next extraction isolates stage2 from the stage1 mutable handle/copy path;
+this is not an unchanged timeout or memory retry. Kani remains deferred until
+this isolation determines which individual bodies fail emission.
