@@ -271,11 +271,49 @@ impl WideExact {
 
     #[inline(always)]
     pub fn to_le_bytes(self) -> [u8; Self::BYTE_LEN] {
-        let mut bytes = [0; Self::BYTE_LEN];
-        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {
-            chunk.copy_from_slice(&limb.to_le_bytes());
-        }
-        bytes
+        let limbs = self.to_limbs();
+        let b0 = limbs[0].to_le_bytes();
+        let b1 = limbs[1].to_le_bytes();
+        let b2 = limbs[2].to_le_bytes();
+        let b3 = limbs[3].to_le_bytes();
+        let b4 = limbs[4].to_le_bytes();
+        let b5 = limbs[5].to_le_bytes();
+        let b6 = limbs[6].to_le_bytes();
+        let b7 = limbs[7].to_le_bytes();
+        [
+            b0[0],
+            b0[1],
+            b0[2],
+            b0[3],
+            b1[0],
+            b1[1],
+            b1[2],
+            b1[3],
+            b2[0],
+            b2[1],
+            b2[2],
+            b2[3],
+            b3[0],
+            b3[1],
+            b3[2],
+            b3[3],
+            b4[0],
+            b4[1],
+            b4[2],
+            b4[3],
+            b5[0],
+            b5[1],
+            b5[2],
+            b5[3],
+            b6[0],
+            b6[1],
+            b6[2],
+            b6[3],
+            b7[0],
+            b7[1],
+            b7[2],
+            b7[3]
+        ]
     }
 }
 
