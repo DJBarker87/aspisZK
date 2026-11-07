@@ -89,3 +89,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49821 passed exact pinned replay PV_FN_SLICE_f8_Suffix; see receipt for time/RSS/swap/revision/axioms.
 
 49822 passed exact pinned replay PV_FN_W2_BinaryReturnOutcome; see receipt for time/RSS/swap/revision/axioms.
+
+49823 passed exact pinned replay PV_FN_SLICE_f8_FullReplies; see receipt for time/RSS/swap/revision/axioms.
