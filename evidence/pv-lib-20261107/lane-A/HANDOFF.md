@@ -7,3 +7,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46304 StoreAtomicV2 passed. Correct646 stores numeric u8, superseding the46300 primitive draft646 (not credited). CAS distinguishes source Ok/Err, including weak spurious failure. ArcStore failed46301–46303 only local monadic elaboration; exact failed sources/receipts retained, no credit.
 
 46305 ArcStoreV2 passed: actual source pointer-chain resolution and symbolic wrapping count write, including Valid under the existing exact carrier. This is not12950 reachability or full native value/frame closure.
+
+46306 StoreDispatchV2 passed. Candidate extends D981 with11 exact primitive/ArcClone meanings, symbolic agreement against OWNER-aware base and all-answer world/event/stack framing. Full D984 coverage remains open at wrapper/type-drop/CellTake semantics; this candidate is not the final corrected thread-machine claim.
