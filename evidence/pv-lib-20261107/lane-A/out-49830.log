@@ -1,0 +1,9 @@
+'PV_FN_SLICE_f7_AfterDrop.received_eq' depends on axioms: [propext]
+'PV_FN_SLICE_f7_AfterDrop.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_SLICE_f7_AfterDrop.run : ∀ {E : Type} (x : PV_FN_SLICE_f7_AfterDrop.Input E)
+  (capture : PV_STX2_Syntax.Data) (r : PV_STX_Machine.Reply PV_EVHB_OwnerMachine.OWNER E PV_STX2_Syntax.Data)
+  (pre : PV_FN_SLICE_f7_AfterDrop.Pre x r),
+  PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H (PV_FN_SLICE_f7_AfterDrop.steps r)
+      (PV_FN_SLICE_f7_AfterDrop.received x capture r) =
+    PV_FN_SLICE_f7_AfterDrop.finish x capture r :=
+⋯
