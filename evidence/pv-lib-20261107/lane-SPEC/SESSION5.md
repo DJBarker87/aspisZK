@@ -126,3 +126,5 @@ PV_LIB_SPEC_F125Full: whole Pre/MachineSpec/Post/Contract compiled49760;
 exact literal package prefix proposition plus comparison compiled in same module.
 No row proof or comparison implication claimed. Wall0:02.11;
 peak4711028KiB;swap0;standard summary axioms only.
+
+PV_LIB_SPEC_F6Full compiled49761, cohortw3: exit0, wall0:02.11, peak4730196KiB, swap0; standard summary axioms only. Statement only.
