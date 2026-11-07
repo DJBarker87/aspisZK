@@ -1,0 +1,49 @@
+{"attempt": "NLW_L038", "exit_status": 0, "wall_seconds": 17.968415174167603, "peak_rss_kib": "6041548", "swaps": "0", "print_axioms": ["'NLW_EntryLocalFold.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_EntryLocalFold.Packet : {Account Ambient : Type} →
+  (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+    ChildCode Account Ambient → ChildObservation Account Ambient → State Account Ambient → Prop :=
+fun {Account Ambient} hashv callee child s =>
+  Hiq_DispatchSource.pool_route.admitted s.frame.data = Result.ok true →
+    NLW_ProcessSelect.LocalPacket hashv callee child s
+theorem NLW_EntryLocalFold.cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient) (s : State Account Ambient),
+  Packet hashv callee child s →
+    NHZ_DRIVER.Cuts hashv (NLM_Entry213.code callee s) (
+...
+).attempted)
+              (fun returned =>
+                NHZ_DRIVER.Cuts.leaf
+                  (NGQ_Cuts.Trace.done
+                    (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                      s.world)))
+              (Eq.symm h) returned)
+          (fun h =>
+            Eq.ndrec (motive := fun admitted =>
+              Hiq_DispatchSource.pool_route.admitted s.frame.data = Result.ok admitted →
+                NHZ_DRIVER.Cuts hashv
+                  (if admitted = true then code callee s
+                  else
+                    CheckpointBytes5Effect.Code.done
+                      (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                        s.world))
+                  (if admitted = true then observation child s
+                    else
+                      {
+                        result :=
+                          Result.ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                              s.world),
+                        attempted := [] }).result
+                  (if admitted = true then observation child s
+                    else
+                      {
+                        result :=
+                          Result.ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                              s.world),
+                        attempted := [] }).attempted)
+              (fun returned => NLW_ProcessLocalFold.cuts hashv callee child s (packet returned)) (Eq.symm h) returned)
+          (Eq.refl admitted)))
+'NLW_EntryLocalFold.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r59b2d446fa8a4706a236536b00ebc060.scope; invocation ID: 03ae600f04724b93957d4a96610dc1f1

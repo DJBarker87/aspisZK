@@ -1,0 +1,46 @@
+{"attempt": "NLW_L037", "exit_status": 0, "wall_seconds": 23.276595771079883, "peak_rss_kib": "6043868", "swaps": "0", "print_axioms": ["'NLW_ProcessLocalFold.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ProcessLocalFold.cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient) (s : State Account Ambient),
+  NLW_ProcessSelect.LocalPacket hashv callee child s →
+    NHZ_DRIVER.Cuts hashv (code callee s) (observation child s).result (observation child s).attempted :=
+fun {Account Ambient} hashv callee child s packet =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv (Hiq_DispatchSource.firstByte s.frame.data)
+        (fun head =>
+          CheckpointBytes5Effect.Code.step (Hiq_DispatchSource.copied head) fun value =>
+            dispatch callee { frame := s.frame, world := s.
+...
+orld := s.world, head := some head } value)
+        (fun head =>
+          NLM_CodeStep.select (Hiq_DispatchSource.copied head) fun value =>
+            dispatchObservation child { frame := s.frame, world := s.world, head := some head } value)
+        fun head firstCall =>
+        NLM_CodeStep.cut hashv (Hiq_DispatchSource.copied head)
+          (fun value => dispatch callee { frame := s.frame, world := s.world, head := some head } value)
+          (fun value => dispatchObservation child { frame := s.frame, world := s.world, head := some head } value)
+          fun value copiedCall =>
+          NLW_ProcessDispatch.cuts hashv callee child { frame := s.frame, world := s.world, head := some head } value
+            fun kind selected =>
+            packet kind
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind firstCall) fun head => do
+                            let value ← Hiq_DispatchSource.copied head
+                            NLW_ProcessSelect.dispatch s.frame.data value)
+                          (bind_tc_ok head fun y => do
+                            let value ← Hiq_DispatchSource.copied y
+                            NLW_ProcessSelect.dispatch s.frame.data value))
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind copiedCall) fun value =>
+                            NLW_ProcessSelect.dispatch s.frame.data value)
+                          (bind_tc_ok value (NLW_ProcessSelect.dispatch s.frame.data)))))
+                    (Result.ok kind)))
+                selected)))
+'NLW_ProcessLocalFold.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r506eeca3d1844379b42bceba7a7ffdd1.scope; invocation ID: 8e02e32ce3dc4294be3be0d691b2e4d9

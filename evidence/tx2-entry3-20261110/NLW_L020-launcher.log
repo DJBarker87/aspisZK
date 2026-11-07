@@ -1,0 +1,43 @@
+{"attempt": "NLW_L020", "exit_status": 0, "wall_seconds": 24.089598041959107, "peak_rss_kib": "6012264", "swaps": "0", "print_axioms": []}
+def NLW_AuthState.SourceSpec_065 : {Ambient : Type} →
+  Child Ambient → NP6_StdModel.Reservation → NP6_StdModel.Reservation → NJJ_Common.Merkle → NJJ_Common.Finish → Prop :=
+fun {Ambient} child wr rr merkle finish =>
+  ∀ {H : Type} (args : Args H) (world : World Ambient),
+    NLW_Root0.Domain args →
+      child args world =
+          { post := world,
+            run :=
+              NJU_CommonObserved.run wr rr (fun {H} => merkle) finish args.digest args.publicBytes args.proof
+                args.checkpoint args.hash none } ∧
+        (child args world).run.result =
+          NJJ_Common.run wr rr (fun {H} => merkle) finish args.digest args.publicBytes args.proof args.checkpoint
+            a
+...
+def NLW_AuthState.SourceSpec_065 : {Ambient : Type} →
+  Child Ambient → NP6_StdModel.Reservation → NP6_StdModel.Reservation → NJJ_Common.Merkle → NJJ_Common.Finish → Prop :=
+fun {Ambient} child wr rr merkle finish =>
+  ∀ {H : Type} (args : Args H) (world : World Ambient),
+    NLW_Root0.Domain args →
+      child args world =
+          { post := world,
+            run :=
+              NJU_CommonObserved.run wr rr (fun {H} => merkle) finish args.digest args.publicBytes args.proof
+                args.checkpoint args.hash none } ∧
+        (child args world).run.result =
+          NJJ_Common.run wr rr (fun {H} => merkle) finish args.digest args.publicBytes args.proof args.checkpoint
+            args.hash none
+def NLW_AuthState.transcription : {Ambient H : Type} →
+  Child Ambient → State Ambient H → Observation Ambient (Event Ambient H) Reply :=
+fun {Ambient H} child s =>
+  have p := NLE_ParseInstall.parse s.args.proof;
+  have e := Event.parse s p;
+  match p with
+  | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+  | div => { post := s.world, run := { result := div, events := [e] } }
+  | ok (core.result.Result.Err err) =>
+    { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+  | ok (core.result.Result.Ok a) =>
+    have c := child s.args s.world;
+    { post := c.post, run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } }
+
+Running as unit: run-r97af5e43f70d460e82078b56ff331c70.scope; invocation ID: 25d27dca43f845d980afefc4c4ffc7f3

@@ -1,0 +1,35 @@
+{"attempt": "NLW_L051", "exit_status": 0, "wall_seconds": 28.9458089559339, "peak_rss_kib": "6378716", "swaps": "0", "print_axioms": []}
+def NLW_064Reference.transcription : (H : Bytes → State) → Args → Records H → Result Reply :=
+fun H a records =>
+  match NLE_ParseInstall.parse a.proof with
+  | fail e => fail e
+  | div => div
+  | ok (core.result.Result.Err e) => ok (core.result.Result.Err e)
+  | ok (core.result.Result.Ok a_1) => commonResult H a records
+def NLW_064Reference.CommonFacts : (H : Bytes → State) → Args → Result Reply → Records H → Prop :=
+fun H a result records =>
+  result = commonResult H a records ∧
+    List.map NLT_NativeInvocation.actual records = (commonRun H a records).events ∧
+      (∀ r ∈ records,
+          NLT_NativeWindows.question (NLT_NativeInvocation.actual r) = NLT_NativeWindows.question r.entered)
+...
+def NLW_064Reference.transcription : (H : Bytes → State) → Args → Records H → Result Reply :=
+fun H a records =>
+  match NLE_ParseInstall.parse a.proof with
+  | fail e => fail e
+  | div => div
+  | ok (core.result.Result.Err e) => ok (core.result.Result.Err e)
+  | ok (core.result.Result.Ok a_1) => commonResult H a records
+def NLW_064Reference.CommonFacts : (H : Bytes → State) → Args → Result Reply → Records H → Prop :=
+fun H a result records =>
+  result = commonResult H a records ∧
+    List.map NLT_NativeInvocation.actual records = (commonRun H a records).events ∧
+      (∀ r ∈ records,
+          NLT_NativeWindows.question (NLT_NativeInvocation.actual r) = NLT_NativeWindows.question r.entered) ∧
+        (∀ r ∈ records, NLT_Root.CallLaw H r) ∧
+          ∀ (inside : NLL.History),
+            NLT_Chronology.completed records = some inside →
+              NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H) (List.map NLT_NativeInvocation.actual records) =
+                inside
+
+Running as unit: run-raab2d642af104a17aa4201ec61abb889.scope; invocation ID: 4715dc22e0a24ea1beb655ae0971aff5

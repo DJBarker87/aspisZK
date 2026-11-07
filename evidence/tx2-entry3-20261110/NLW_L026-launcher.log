@@ -1,0 +1,45 @@
+{"attempt": "NLW_L026", "exit_status": 0, "wall_seconds": 32.106078478042036, "peak_rss_kib": "6009068", "swaps": "0", "print_axioms": ["'NLW_AuthModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_AuthModel.frame : {H : Type} → Args H → NLE_Auth.Frame H :=
+fun {H} a =>
+  { digest := a.digest, publicBytes := a.publicBytes, proof := a.proof, checkpoint := a.checkpoint, hash := a.hash,
+    observer := none }
+theorem NLW_AuthModel.source : ∀ {Ambient H : Type} (ops : Ops) (child : Child Ambient) (s : State Ambient H),
+  (NLW_AuthSegments.fold (fun {H} => child) s).run.result =
+    NLE_Auth.source (NLE_AuthScope.install ops) (project (fun {H} => child) s.world) { frame := frame s.args } :=
+fun {Ambient H} ops child s =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a.run.result =
+            NLE_Auth.source (NLE_AuthScope.install ops) (project (fun {H} => child) s.
+...
+s x, Event.parsed s,
+                                    Event.common s (child s.args s.world)] } }).run.result =
+                    do
+                    let reply ← x
+                    NLE_Auth.tryR reply fun x => do
+                        NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        project (fun {H} => child) s.world
+                            { digest := s.args.digest, publicBytes := s.args.publicBytes, proof := s.args.proof,
+                              checkpoint := s.args.checkpoint, hash := s.args.hash, observer := none })
+                (fun p =>
+                  Eq.refl
+                    (match div with
+                        | fail err => { post := s.world, run := { result := fail err, events := [Event.parse s div] } }
+                        | div => { post := s.world, run := { result := div, events := [Event.parse s div] } }
+                        | ok (core.result.Result.Err err) =>
+                          { post := s.world,
+                            run := { result := ok (core.result.Result.Err err), events := [Event.parse s div] } }
+                        | ok (core.result.Result.Ok a) =>
+                          { post := (child s.args s.world).post,
+                            run :=
+                              { result := (child s.args s.world).run.result,
+                                events :=
+                                  [Event.parse s div, Event.parsed s,
+                                    Event.common s (child s.args s.world)] } }).run.result)
+                (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.args.proof)))
+            (Eq.refl (NLE_ParseInstall.parse s.args.proof))))))
+'NLW_AuthModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r667a7d6e332949fb93533b85f452f2e2.scope; invocation ID: 305386482db34b4e9b10a9315d9ae7d5

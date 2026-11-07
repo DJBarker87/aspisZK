@@ -1,0 +1,42 @@
+{"attempt": "NLW_L022", "exit_status": 0, "wall_seconds": 17.247142944019288, "peak_rss_kib": "6010276", "swaps": "0", "print_axioms": ["'NLW_AuthFold.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_AuthFold.common_domain' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_AuthFold.transcription : ∀ {Ambient H : Type} (child : Child Ambient) (s : State Ambient H),
+  NLW_AuthSegments.fold (fun {H} => child) s = NLW_AuthState.transcription (fun {H} => child) s :=
+fun {Ambient H} child s =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        NLE_ParseInstall.parse s.args.proof = t →
+          (have p := NLE_ParseInstall.parse s.args.proof;
+            have e := Event.parse s p;
+            match NLW_AuthSegments.parse s p with
+            | NLW_AuthSegments.ParseCut.aborted err => { post := s.world, run := { result := fail err, events := [e] } }
+            | NLW_AuthSegments.ParseCut.diverged => { post := s.world, run := { result := div, events :
+...
+   { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } })
+            (fun p =>
+              Eq.refl
+                (have p := div;
+                have e := Event.parse s p;
+                match NLW_AuthSegments.parse s p with
+                | NLW_AuthSegments.ParseCut.aborted err =>
+                  { post := s.world, run := { result := fail err, events := [e] } }
+                | NLW_AuthSegments.ParseCut.diverged => { post := s.world, run := { result := div, events := [e] } }
+                | NLW_AuthSegments.ParseCut.rejected err =>
+                  { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+                | NLW_AuthSegments.ParseCut.entered =>
+                  have next := NLW_AuthSegments.marker s;
+                  have c := NLW_AuthSegments.common (fun {H} {H} => child) next;
+                  { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed next, Event.common next c] } }))
+            (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.args.proof)))
+        (Eq.refl (NLE_ParseInstall.parse s.args.proof))))
+theorem NLW_AuthFold.common_domain : ∀ {Ambient H : Type} (s : State Ambient H) (v : transport.Variant),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Ok v) →
+    (↑s.args.publicBytes).length ≤ 1880 → NLW_Root0.Binds s.args.checkpoint s.args.proof → NLW_Root0.Domain s.args :=
+fun {Ambient H} s v parsed publicBound roots =>
+  ⟨⟨(NLE_ParseInstall.success s.args.proof v parsed).right, publicBound⟩, roots⟩
+'NLW_AuthFold.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_AuthFold.common_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4082adf6f430426f8411abcf9d051099.scope; invocation ID: 30ea7d2b576f4b8b87f24a39a71ced40

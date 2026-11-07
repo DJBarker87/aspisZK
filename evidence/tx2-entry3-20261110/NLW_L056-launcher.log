@@ -1,0 +1,48 @@
+{"attempt": "NLW_L056", "exit_status": 0, "wall_seconds": 28.902227943995968, "peak_rss_kib": "6408200", "swaps": "0", "print_axioms": ["'NLW_Full064.fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_Full064.no_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_Full064.fold : ∀ {Ambient X : Type} (H : Bytes → State),
+  ChildBridge H →
+    ∀ (s : Frame Ambient X),
+      (↑s.args.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds s.args.checkpoint s.args.proof →
+          ∀ (outcome : End H s.args) (events : List (Event Ambient X)),
+            Invocation H s outcome events → Law H s.args outcome ∧ events = chronology H s outcome :=
+⋯
+theorem NLW_Full064.no_invalid : ∀ (H : Bytes → State),
+  ChildBridge H →
+    ∀ {X : Type} (a : Args X),
+      (↑a.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds a.checkpoint a.proof →
+          ∀ (v : transport.Variant),
+            NLE_ParseInstall.parse a.proof = ok (core.result.Result.Ok v) →
+   
+...
+ence H d hash)),
+      ¬NLT_NativeInvocation.Invalid H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records
+def NLT_CompleteRoot.StoppedLaw : (H : Bytes → State) →
+  {X : Type} →
+    (d : aspis_core.digest.Digest32 X) →
+      Slice U8 →
+        Slice U8 → Slice U8 → (hash : X) → List (NLT_NativeInvocation.Occurrence H d hash) → NLT_C04Stop.Cut H → Prop :=
+fun H {X} d pub proof ck hash records cut =>
+  have f := NLT_FrameFromCuts.frame records;
+  (∃ reply suffix,
+      (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d
+            pub proof ck hash none).events =
+        List.map NLT_NativeInvocation.actual records ++
+          NJU_CommonObserved.Event.merkle cut.proof cut.prepared cut.folded reply :: suffix) ∧
+    (∀ r ∈ records,
+        NLT_NativeFacts.ResumeScope r.entered r.input ∧ NLT_AllocationInstalled.ResumeLaw d hash r.entered r.input) ∧
+      NLL_Prefix.At
+          (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+            (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H)
+                (NLB_Parent.finish f.finish) d pub proof ck hash none).events)
+          (cut.inside ++ cut.pending.answered) cut.pending.parts ∧
+        NLL_Prefix.At
+          (NLL_ObservedCalls.calls H cut.proof (NLP_RootCodec.parsed cut.proof (Port3_BatchStage.root1 cut.prepared))
+              cut.prepared.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded))
+              NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+          (cut.inside ++ cut.pending.answered) cut.pending.parts
+'NLW_Full064.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_Full064.no_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1536a714b3d645e39e5360b822fc4b8c.scope; invocation ID: 6cb097a3f8bd421daf77530fad53f2ca

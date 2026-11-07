@@ -1,0 +1,47 @@
+{"attempt": "NLW_L048", "exit_status": 0, "wall_seconds": 15.477745895041153, "peak_rss_kib": "6022080", "swaps": "0", "print_axioms": ["'NLW_WriterPair.map_slice' depends on axioms: [propext]", "'NLW_WriterPair.encoded_state_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_WriterPair.both' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_WriterPair.Roots : Prepared → Slice U8 → Prop :=
+fun p proof => p.roots 0 = rootState proof 16 ∧ p.roots 1 = rootState proof 63
+theorem NLW_WriterPair.map_slice : ∀ (bytes : List U8) (start count : ℕ),
+  MultiproofConeCanonical.bytesOf (List.take count (List.drop start bytes)) =
+    slice (MultiproofConeCanonical.bytesOf bytes) start count :=
+fun bytes start count =>
+  of_eq_true
+    (Eq.trans
+      (congrFun' (congrArg Eq (Eq.trans List.map_take (congrArg (List.take count) List.map_drop)))
+        (List.take count (List.drop start (List.map decodeByte bytes))))
+      (eq_self (List.take count (List.drop start (List.map decodeByte bytes)))))
+theorem NLW_WriterPair.encoded_state_bytes
+...
+                  _a =
+                    MultiproofConeCanonical.bytesOf
+                      ↑(encodeState
+                          ((SemanticRecordCodec.decodeState (slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+                            fun x => 0)))
+                (NLW_WriterRoot0.encoded H (MultiproofConeCanonical.bytesOf ↑proof)
+                  (MultiproofConeCanonical.bytesOf ↑pub) p a)))
+            (id
+              (Eq.mpr (id (congrArg (fun _a => bytes (p.roots 0) = _a) (encoded_state_bytes (rootState proof 16))))
+                (congrArg bytes roots.left)))))),
+    NLW_ByteIdentity.bytes_injective (List.take 32 (List.drop 144 ↑saved)) (NLW_CommittedRoots.proofRoot proof 63)
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = MultiproofConeCanonical.bytesOf (NLW_CommittedRoots.proofRoot proof 63))
+            (map_slice (↑saved) 144 32)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a => slice _a 144 32 = MultiproofConeCanonical.bytesOf (NLW_CommittedRoots.proofRoot proof 63))
+              encoding))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = MultiproofConeCanonical.bytesOf (NLW_CommittedRoots.proofRoot proof 63))
+                (NLW_WriterRoot1.encoded H (MultiproofConeCanonical.bytesOf ↑proof)
+                  (MultiproofConeCanonical.bytesOf ↑pub) p a)))
+            (id
+              (Eq.mpr (id (congrArg (fun _a => bytes (p.roots 1) = _a) (encoded_state_bytes (rootState proof 63))))
+                (congrArg bytes roots.right))))))⟩
+'NLW_WriterPair.map_slice' depends on axioms: [propext]
+'NLW_WriterPair.encoded_state_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_WriterPair.both' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc820ac065d0b4a23af929f5cf0a981aa.scope; invocation ID: 5c89ade03da4496480b24ec760b68f18

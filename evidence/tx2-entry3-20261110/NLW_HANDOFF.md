@@ -41,3 +41,7 @@ No CLOSED row or ledger delta. Remaining functions241/240/221/213 still require
 the full(bg) parent binding. Formal work continues with remaining Lean budget;
 Kani exhaustion is not a stop. All failed elaborations and exact scoped metrics
 are retained. No shipped source/ELF/key change or push.
+
+## Corrected child and source scope stage
+
+40/40 Kani invocations are complete; no further native invocation is authorized by this budget. K039 timed out and was retired. K040 matches K028 on the final program harness source. Native pairs are calibration/support only, with exact KMX configuration and frozen dependency graph receipts; no new CLOSED row. The corrected NLT complete-outcome interface replaces the withdrawn abort-incomplete projection; physical parent Frame binding remains OPEN. Writer/root/data persistence source support has been compiled through L048; subsequent focused receipts are authoritative for current sources.

@@ -1,0 +1,53 @@
+{"attempt": "NLW_L044", "exit_status": 0, "wall_seconds": 17.664726314134896, "peak_rss_kib": "6023108", "swaps": "0", "print_axioms": ["'NLW_ByteIdentity.byte_injective' does not depend on any axioms", "'NLW_ByteIdentity.bytes_injective' depends on axioms: [propext]", "'NLW_ByteIdentity.both_transport' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ByteIdentity.byte_injective : ∀ (a b : U8), decodeByte a = decodeByte b → a = b :=
+fun a b same => NLM_ScalarLaws.scalar_eq a b (congrArg (fun x => ↑x) same)
+theorem NLW_ByteIdentity.bytes_injective : ∀ (a b : List U8),
+  MultiproofConeCanonical.bytesOf a = MultiproofConeCanonical.bytesOf b → a = b :=
+fun a b same =>
+  List.rec (motive := fun a =>
+    ∀ (b : List U8), MultiproofConeCanonical.bytesOf a = MultiproofConeCanonical.bytesOf b → a = b)
+    (fun b same =>
+      List.casesOn (motive := fun t => b = t → [] = b) b
+        (fun h =>
+          Eq.ndrec (motive := fun b => MultiproofConeCanonical.bytesOf [] = MultiproofConeCanonical.bytesOf b → [] = b)
+            (fun same =>
+...
+  NLW_CommittedRoots.Both oldCheckpoint oldProof →
+    MultiproofConeCanonical.bytesOf ↑checkpoint = MultiproofConeCanonical.bytesOf ↑oldCheckpoint →
+      MultiproofConeCanonical.bytesOf ↑proof = MultiproofConeCanonical.bytesOf ↑oldProof →
+        NLW_CommittedRoots.Both checkpoint proof :=
+fun oldCheckpoint checkpoint oldProof proof saved cp pr =>
+  have hc := bytes_injective (↑checkpoint) (↑oldCheckpoint) cp;
+  have hp := bytes_injective (↑proof) (↑oldProof) pr;
+  Eq.mpr
+    (id
+      (congr
+        (congrArg And
+          (congr (congrArg Eq (congrArg (List.take 32) (congrArg (List.drop 112) hc)))
+            (congrArg Subtype.val
+              (congrArg encodeState
+                (congrFun'
+                  (congrArg Option.getD
+                    (congrArg SemanticRecordCodec.decodeState
+                      (congrFun'
+                        (congrFun' (congrArg OraclePortCompactDraft.slice (congrArg MultiproofConeCanonical.bytesOf hp))
+                          16)
+                        32)))
+                  fun x => 0)))))
+        (congr (congrArg Eq (congrArg (List.take 32) (congrArg (List.drop 144) hc)))
+          (congrArg Subtype.val
+            (congrArg encodeState
+              (congrFun'
+                (congrArg Option.getD
+                  (congrArg SemanticRecordCodec.decodeState
+                    (congrFun'
+                      (congrFun' (congrArg OraclePortCompactDraft.slice (congrArg MultiproofConeCanonical.bytesOf hp))
+                        63)
+                      32)))
+                fun x => 0))))))
+    saved
+'NLW_ByteIdentity.byte_injective' does not depend on any axioms
+'NLW_ByteIdentity.bytes_injective' depends on axioms: [propext]
+'NLW_ByteIdentity.both_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf3e5a8fe11ba45f6b327e999d8570aa2.scope; invocation ID: ea3a9c13e6dc46f7afc1fd0c81e4452f

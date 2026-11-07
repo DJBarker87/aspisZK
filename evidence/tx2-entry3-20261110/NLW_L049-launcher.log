@@ -1,0 +1,43 @@
+{"attempt": "NLW_L049", "exit_status": 0, "wall_seconds": 25.340236061019823, "peak_rss_kib": "6405044", "swaps": "0", "print_axioms": ["'NLW_RowSpec_065.root0_same' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[reducible] def NLW_RowSpec_065.RowSpec_065 : (Bytes → State) →
+  {X : Type} → VTop_Stages.aspis_core.digest.Digest32 X → Slice U8 → Slice U8 → Slice U8 → X → Prop :=
+fun H {X} d pub proof ck hash => NLT_CompleteRoot.RowSpec H d pub proof ck hash
+def NLT_CompleteRoot.RowSpec : (Bytes → State) →
+  {X : Type} → VTop_Stages.aspis_core.digest.Digest32 X → Slice U8 → Slice U8 → Slice U8 → X → Prop :=
+fun H {X} d pub proof ck hash =>
+  (∀ (outcome : NLT_CompleteRoot.End H d hash),
+      NLT_CompleteRoot.Native H d pub proof ck hash outcome → NLT_CompleteRoot.Law H d pub proof ck hash outcome) ∧
+    ∀ (records : List (NLT_NativeInvocation.Occurrence H d hash)),
+      ¬NLT_NativeInvocation.Invalid 
+...
+ d pub proof ck hash records cut
+def NLT_CompleteRoot.StoppedLaw : (H : Bytes → State) →
+  {X : Type} →
+    (d : VTop_Stages.aspis_core.digest.Digest32 X) →
+      Slice U8 →
+        Slice U8 → Slice U8 → (hash : X) → List (NLT_NativeInvocation.Occurrence H d hash) → NLT_C04Stop.Cut H → Prop :=
+fun H {X} d pub proof ck hash records cut =>
+  have f := NLT_FrameFromCuts.frame records;
+  (∃ reply suffix,
+      (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d
+            pub proof ck hash none).events =
+        List.map NLT_NativeInvocation.actual records ++
+          NJU_CommonObserved.Event.merkle cut.proof cut.prepared cut.folded reply :: suffix) ∧
+    (∀ r ∈ records,
+        NLT_NativeFacts.ResumeScope r.entered r.input ∧ NLT_AllocationInstalled.ResumeLaw d hash r.entered r.input) ∧
+      NLL_Prefix.At
+          (NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+            (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H)
+                (NLB_Parent.finish f.finish) d pub proof ck hash none).events)
+          (cut.inside ++ cut.pending.answered) cut.pending.parts ∧
+        NLL_Prefix.At
+          (NLL_ObservedCalls.calls H cut.proof (NLP_RootCodec.parsed cut.proof (Port3_BatchStage.root1 cut.prepared))
+              cut.prepared.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded))
+              NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+          (cut.inside ++ cut.pending.answered) cut.pending.parts
+theorem NLW_RowSpec_065.root0_same : ∀ (ck proof : Slice U8),
+  NLW_Root0.Binds ck proof ↔ NLP_InputDomain.Root0 ck proof :=
+fun ck proof => Iff.rfl
+'NLW_RowSpec_065.root0_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r14a50c6fbaf24cacab4287dafe6d113b.scope; invocation ID: 1a775f180a7e4bbd8a98f2b9ab0f0dc4

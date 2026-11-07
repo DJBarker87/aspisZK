@@ -1,0 +1,50 @@
+{"attempt": "NLW_L039", "exit_status": 0, "wall_seconds": 18.921434520976618, "peak_rss_kib": "5946852", "swaps": "0", "print_axioms": ["'NLW_StdSlotFinding.source_error_can_abort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_StdSlotFinding.badClone_does_not_affect_success' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_StdSlotFinding.source_error_can_abort : ∀ (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount),
+  a.bytes = core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData →
+    r1_pool_adapter.owned.OwnedAccount.data (badClone ops) a = fail Error.panic :=
+fun ops a stored =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | core.result.Result.Ok bytes =>
+                  have s := bytes.deref;
+                  ok (core.result.Result.Ok s)
+                | core.result.Result.Err error1 => do
+                  let pe ← (badClone ops).op35 e
+...
+theorem NLW_StdSlotFinding.source_error_can_abort : ∀ (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount),
+  a.bytes = core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData →
+    r1_pool_adapter.owned.OwnedAccount.data (badClone ops) a = fail Error.panic :=
+fun ops a stored =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | core.result.Result.Ok bytes =>
+                  have s := bytes.deref;
+                  ok (core.result.Result.Ok s)
+                | core.result.Result.Err error1 => do
+                  let pe ← (badClone ops).op35 error1
+                  ok (core.result.Result.Err pe))
+              stored)
+            (bind_tc_fail Error.panic fun y => ok (core.result.Result.Err y))))
+        (fail Error.panic))
+      (eq_self (fail Error.panic)))
+theorem NLW_StdSlotFinding.badClone_does_not_affect_success : ∀ (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
+  (bytes : Slice U8),
+  a.bytes = core.result.Result.Ok bytes →
+    r1_pool_adapter.owned.OwnedAccount.data (badClone ops) a = ok (core.result.Result.Ok bytes) :=
+fun ops a bytes stored => NLW_GetterSuccess.returned (badClone ops) a bytes stored
+'NLW_StdSlotFinding.source_error_can_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_StdSlotFinding.badClone_does_not_affect_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd4eb74eafefb448489cd012826c868a9.scope; invocation ID: 112ed0e6214741a5a48ba8e2e193e8f6

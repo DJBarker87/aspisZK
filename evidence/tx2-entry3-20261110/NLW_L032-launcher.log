@@ -1,0 +1,41 @@
+{"attempt": "NLW_L032", "exit_status": 0, "wall_seconds": 23.575422543101013, "peak_rss_kib": "6421920", "swaps": "0", "print_axioms": ["'NLW_064Fold.parameterized' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_064Fold.no_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_064Fold.parameterized : ∀ {Ambient : Type} (H : Bytes → State),
+  ChildBridge H →
+    ∀ (s : Frame Ambient),
+      (↑s.args.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds s.args.checkpoint s.args.proof →
+          ∀ (result : Result Reply) (records : Records H) (events : List (Event Ambient H)),
+            Invocation H s result records events →
+              result = transcription H s.args records ∧
+                events = chronology H s result records ∧ ChildFactsAtEntry H s.args result records :=
+⋯
+theorem NLW_064Fold.no_invalid : ∀ (H : Bytes → State),
+  ChildBridge H →
+    ∀ (a : Args),
+      (↑a.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds a.checkpoint a.proo
+...
+: X}
+  {A B : Type} (value : B) (next : B → NKE_Free.Program NJU_CommonObserved.Event A)
+  (records : List (NLT_NativeInvocation.Occurrence H d hash)),
+  NLT_NativeInvocation.Invalid H d hash (next value) records →
+    NLT_NativeInvocation.Invalid H d hash (NKE_Free.Program.prim (ok value) next) records
+NLT_NativeInvocation.Invalid.call_ok : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (codec : NKE_Free.Codec NJU_CommonObserved.Event B) (seed : Result B)
+  (next : B → NKE_Free.Program NJU_CommonObserved.Event A) (record : NLT_NativeInvocation.Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    ∀ (value : B),
+      codec.decode (NLT_NativeInvocation.actual record) = some (ok value) →
+        ∀ (records : List (NLT_NativeInvocation.Occurrence H d hash)),
+          NLT_NativeInvocation.Invalid H d hash (next value) records →
+            NLT_NativeInvocation.Invalid H d hash (NKE_Free.Program.call codec seed next) (record :: records)
+NLT_NativeInvocation.Invalid.mismatch : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A B : Type} (codec : NKE_Free.Codec NJU_CommonObserved.Event B) (seed : Result B)
+  (next : B → NKE_Free.Program NJU_CommonObserved.Event A) (record : NLT_NativeInvocation.Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    codec.decode (NLT_NativeInvocation.actual record) = none →
+      NLT_NativeInvocation.Invalid H d hash (NKE_Free.Program.call codec seed next) [record]
+'NLW_064Fold.parameterized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_064Fold.no_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re4abc38e8405402189da29e20b339bed.scope; invocation ID: 54b3a4aca5f44d708b5558b5cce262d0
