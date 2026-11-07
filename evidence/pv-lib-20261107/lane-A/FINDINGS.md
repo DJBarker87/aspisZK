@@ -87,3 +87,8 @@ slots; it is respected without editing the cap. Scopes remain serial within
 this lane, 6G/8G/swap0/Tasks64/-M7000. No external/package source, ledger,
 implementation, key, frozen spec or row consumer is edited. The requested
 base evidence/HANDOFF.md was absent; the committed root HANDOFF.md was read.
+
+The inherited wrapper used a per-target failed-source check. Its final guard is
+line-wide; the retrospective whole-line check proves that no accepted source
+reused any failed hash. LAUNCHER_PROVENANCE.json distinguishes the executed
+wrapper hash from that final guard-only change. No theorem/audit source changed.

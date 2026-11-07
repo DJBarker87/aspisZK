@@ -1,59 +1,77 @@
-# Remaining obligations after PLIB session 2
+# Remaining obligations after Lane A session 3
 
-PARTIAL package; target not yet established. The 29 frozen normative Markdown
-specs are not 29 elaborated Lean contracts. The map has170 slots:110
-INSTANTIATED (83 provider graph fields),55 MISSING-CHILD-LEMMA,5 SPEC-ERROR.
-All55 missing and5 error slots are enumerated individually in PLIB_MAP.json/.md.
-The reduction146→55 concerns graph adapters, not parent-row closure or source
-adequacy. Each instantiated slot retains its exact qualification.
+PARTIAL library; target not yet established. Frozen normative Markdown specs
+remain unchanged and are not 29 elaborated Lean contracts. PLIB_MAP.json now
+has170 slots:116 INSTANTIATED qualified provider graphs,49 MISSING-CHILD-LEMMA,
+5 SPEC-ERROR. The six added instances are graph/adaptor exports, not six closed
+rows or six complete source/caller adequacy results. No library is consumed in
+row proofs; endpoint premises removed0/added0. Shared PLIB_MAP.md and
+INSTANCES.json retain their session2 inventory; current Lane A additions and
+qualifications are in lane-A/MAP_DELTA.json and lane-A/HANDOFF.md. Other lane
+deltas have not been silently merged into this count.
 
-The55 missing slots consist of16 edges supplied by eleven distinct CLOSED
-providers,30 edges whose suppliers are OPEN/PARTIAL (20 OPEN,10 PARTIAL), and
-nine additional facets. An OPEN/PARTIAL supplier cannot be presented as a
-CLOSED root. Existing proofs may still supply additional exports; no claim
-that a new extraction is necessary has been established.
+## Lane A items1–3 remain partial
 
-Continue in OwnInit dependency order, then the slice chain:
+Of the original39 thread MISSING slots, five now have qualified graph exports
+(f170→277/278/279/280 and537→612);34 remain MISSING: nine CLOSED-provider edges,
+18 OPEN/PARTIAL-provider edges, and seven actual-caller facets. TypedDrop178's
+additional slice facet has a local suffix graph. These counts do not establish
+the remaining actual source/runtime/domain obligations on instantiated slots.
 
-1. thread:f9/f10/f93/f167: derive exact source-writer/native/value bindings from
-   the CLOSED proof modules and W4 named concrete meanings. Preserve every
-   malformed, fault and pending arm. Do not pick identity effects or assume
-   write-definedness. The comparison at CellReplace289 demonstrates the old
-   native gap but does not derive actual f170 setter provenance/field path.
-2. thread:f277/f278/f279/f280/f612: install pure value, world, representation
-   and actual source/caller adapters. Existing Unique612 Fact is reused by
-   Box458 but is not a separately installed612 provider graph.
-3. Finish actual-caller facets for name validity, ArcClone value/frame and
-   atomic counts; f6 machine transport; OwnInit numbering/resource environment/
-   registry frame. Arc124Counts, ArcClone360 and Registry now provide generic
-   graph certificates. Their concrete bindings remain missing. typedDrop178
-   and source7 entry-reference validity also remain missing.
-4. slice:f32/f33: derive deterministic models from the W5 proof modules.
-   SESSION2_SLICE_REPLAY_ORDER.json lists the missing dependency preflight;
-   only the f31 and copy cones were replayed. SESSION2_F33_PREFLIGHT.json lists
-   21 further modules needed for f33 after those replays. This is an object
-   availability observation, not a mathematical impossibility result. Use
-   focused pinned replay; do not launch a cold package build.
-5. Elaborate all29 frozen MachineSpec/Pre/Post contracts and compile explicit
-   comparisons with each package branch's existing statement. The component
-   source-store comparison is a start, not that deliverable. Frozen prose
-   may change only for demonstrated source error through SPEC_CORRECTIONS.md.
-6. Establish joint premise nonemptiness and source/machine adequacy for the
-   OwnInit and source7 compositions. Acyclic syntax alone is insufficient.
-   Actual handlers, typed builtin bindings, representation transport and
-   allocation/reservation schedules cannot be inferred from arbitrary full
-   replies or declared footprints.
+1. **Source writers9/10/93/167:** all five edges remain MISSING. Exact native
+   provider graphs and the new interpreter's graph with W4's named meanings
+   compile and pass strict audit. Malformed layouts remain undefined; every
+   full native reply is retained. Concrete pointer/layout/reservation Values,
+   actual reference paths/age, native returned values and continuous caller
+   bindings are not supplied. Never choose identity effects or assume
+   write-definedness. The upstream165 identity gap is demonstrated using two
+   source-constructed Range values; its new named exact-function semantics
+   graph is conditional support, not an original f15 derivation.
+2. **277/278/279/280/612:** new graphs, f170 source-operand/poll transport,
+   source-constructor/world facets and the612 exact-token/OWNER-lift binding
+   are compiled. The f361/f270 occurrences of279/280 remain four MISSING edges:
+   preserve their own emitted generic metadata and actual callers. Source/
+   binary adequacy, actual original-handler semantics, pointer/nullness/type
+   interpretation and source/value invariants required by full row composition
+   remain explicit lower obligations wherever not derived. New165 and280 facts
+   are inventoried in lane-A; neither adds a trust field or endpoint premise.
+3. **Actual caller facets:** name validity, ArcClone value/frame and atomic
+   counts; f6 machine transport; OwnInit numbering, resource environment and
+   registry/action composition remain MISSING. Numbering now has actual outer
+   thread-entry, generic child-push and lower-frame-bound exports, but no full
+   new-interpreter history invariant. The f6 generic transport lemma still uses
+   BeforeReturn, whereas the current interface requires BeforeDelivery; actual
+   resolver/handler agreement must be derived. TypedDrop178's graph reuses the
+   actual typed destructor/W5 Drop provider at the f7 suffix boundary; the f6
+   prefix and full f7 row remain pending. Source7 entry-reference validity is
+   still missing and must come from its Foundation caller.
 
-Five SPEC-ERROR facets remain: obsolete tagged-Box decode/all, false to_vec
-pending recognition, original-machine source writes289/93, and the OwnInit
-Some-only draft. The source7 closure has no listed native source-store writer;
-OwnInit reaches93/289 before14756. See TOP_COMPOSITION.md. Some is an outcome,
-not an entry premise. Do not compare activation counters or public abort state.
+The122-module pinned f361 name/actual124 cone has a46-module passing focused
+prefix.76 modules remain before those targets; this is an availability result,
+not an impossibility theorem. The exact next target is
+PV_THR2_OwnInitAllocationBridgedRetry (NAME_REPLAY_PLAN gives dependency
+order). Reuse the private lane-A host cache and accepted receipts; no cold
+package build. All112 assigned focused IDs are spent (106 pass,6 repaired
+failures); additional focused work needs a newly assigned block. Do not use raw
+IDs as focused IDs. Raw49482 passed the43 new roots once; do not rerun unchanged.
 
-No new semantics fact, endpoint premise, trust field, metric, implementation,
-ledger status or package branch changed. No row consumed the library. No full
-29-contract comparison, complete concrete library or top composition is claimed.
+## Other remaining deliverables
 
-Session2's one strict audit49481 passed82 new roots. Baseline49480 was reused.
-Next Lean49458; next raw49482 only for genuinely new/changed roots, never an
-unchanged rerun. Read HANDOFF.md and VALIDATION.json before continuing.
+4. slice32/33 deterministic models remain missing in the shared map. Preserve
+   the session2 focused pinned preflights/replay order; incorporate the other
+   lane's evidence explicitly when ready.
+5. Elaborate all29 frozen MachineSpec/Pre/Post contracts and compare them in
+   Lean with each package's compiled statement. Existing component/native
+   comparisons and library graphs are not that deliverable. Frozen prose may
+   change only for demonstrated source error through SPEC_CORRECTIONS.md.
+6. Establish joint premise nonemptiness and source/machine/binary adequacy for
+   OwnInit and source7. Acyclic syntax and independently compiled graph fields
+   are insufficient. Actual handlers, typed builtin bindings, representation
+   transport and site/occurrence allocation/reservation schedules must be
+   discharged, never inferred from arbitrary full replies or footprints.
+
+All five SPEC-ERROR facets remain: old tagged-Box decode/all, false to_vec
+pending recognition, original-machine writes289/93, and the OwnInit Some-only
+draft. OwnInit still passes93/289 before14756; source7 has no listed native
+source-store writer. Retain allBridged, every outcome arm, prefix-only process
+abort and thread25 numbering; never compare summary/expanded activation counters.

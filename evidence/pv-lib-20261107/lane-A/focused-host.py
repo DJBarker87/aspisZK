@@ -25,7 +25,7 @@ for p in sorted((B/'evidence').glob('results-*.json')):
 source_sha=hashlib.sha256(x['source'].encode()).hexdigest()
 for p in list((Q/'evidence').glob('receipt-*.json'))+list(E.glob('receipt-*.json')):
  r=json.load(open(p))
- if r['target']==m and not r['accepted']:assert r['source_sha256']!=source_sha,'unchanged failed source'
+ if not r['accepted']:assert r['source_sha256']!=source_sha,'unchanged failed source in this library line'
  if r['accepted'] and not r['runtime_audit']:expected[r['target']]=r
 external={r['module'].replace('/','.'):r for r in json.load(open(B/'evidence/external-authority.json'))}
 resolved={}

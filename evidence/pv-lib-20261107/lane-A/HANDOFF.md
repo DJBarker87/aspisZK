@@ -1,219 +1,106 @@
-# Lane A session 3
-
-Base 5e397cb3878; thread slots and typedDrop178 only. Target not yet established.
-Frozen specs unchanged. No row consumption, ledger or package edits.
-Host writes restricted to codex-pv-lib-20261107/lane-A. Serial 6G/8G/swap0/Tasks64/-M7000 scopes, standalone STREAMB_SLOTS=3 turn before every attempt.
-
-Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md read.
-
-49458 passed PV_LIB_A_NativeLeaves: five exact CLOSED native-boundary graphs (277/278/279/280/612), arbitrary full replies/effects retained. These alone do not close source-value/world/caller bindings. Wall2.06s, peak4602904KiB, swap0; standard axioms.
-
-49460 passed Unique612.installed: existing Fact implies the exact deterministic handler graph at f537/22550 for every answer; failures/pending unchanged.49459 failed a reply/answer equality projection, fixed via congrArg; failed source archived. No caller unsafe-validity discharge claimed.
-
-49461 passed exact pinned replay PV_FN_W4_NativeFootprint; see receipt for time/RSS/swap/revision/axioms.
-
-49462 passed exact pinned replay PV_FN_THREAD_f170_Entry; see receipt for time/RSS/swap/revision/axioms.
-
-49463 passed exact pinned replay PV_FN_W4_OwnChain; see receipt for time/RSS/swap/revision/axioms.
-
-49464 passed exact pinned replay PV_FN_W4_ReturnBoundary; see receipt for time/RSS/swap/revision/axioms.
-
-49465 passed exact pinned replay PV_FN_W4_One; see receipt for time/RSS/swap/revision/axioms.
-
-49466 passed exact pinned replay PV_FN_THREAD_f170_Segments; see receipt for time/RSS/swap/revision/axioms.
-
-49467 passed exact pinned replay PV_FN_W4_CallBoundary; see receipt for time/RSS/swap/revision/axioms.
-
-49468 passed exact pinned replay PV_FN_THREAD_f170_Row; see receipt for time/RSS/swap/revision/axioms.
-
-49469 passed exact pinned replay PV_FN_W4_StoreCounter; see receipt for time/RSS/swap/revision/axioms.
-
-49470 passed exact pinned replay PV_FN_W4_NativeContract; see receipt for time/RSS/swap/revision/axioms.
-
-49471 passed exact pinned replay PV_FN_THREAD_f170_NativeCalls; see receipt for time/RSS/swap/revision/axioms.
-
-49472 passed exact pinned replay PV_FN_W4_ReplaceEffects; see receipt for time/RSS/swap/revision/axioms.
-
-49473 passed exact pinned replay PV_THR2_LibrarySemantics_TLSFrames; see receipt for time/RSS/swap/revision/axioms.
-
-49474 passed exact pinned replay PV_FN_THREAD_f170_ActualNativeFrames; see receipt for time/RSS/swap/revision/axioms.
-
-49475 passed exact pinned replay PV_FN_THREAD_f170_SourceValueConstructors; see receipt for time/RSS/swap/revision/axioms.
-
-49476 passed exact pinned replay PV_THR2_LibrarySemantics_TLSSourceValuesFacts; see receipt for time/RSS/swap/revision/axioms.
-
-49477 passed exact pinned replay PV_THR2_LibrarySemantics_TLSPureWorldFacts; see receipt for time/RSS/swap/revision/axioms.
-
-49478 passed exact pinned replay PV_THR2_SourceStoreInterpreter; see receipt for time/RSS/swap/revision/axioms.
-
-49801 passed exact pinned replay PV_LIB_A_SourceWriters; see receipt for time/RSS/swap/revision/axioms.
-
-49802 passed exact pinned replay PV_LIB_A_PureCalls; see receipt for time/RSS/swap/revision/axioms.
-
-49803 passed exact pinned replay PV_LIB_A_PurePoll; see receipt for time/RSS/swap/revision/axioms.
-
-49804 passed exact pinned replay PV_LIB_A_PureValues; see receipt for time/RSS/swap/revision/axioms.
-
-49805 passed exact pinned replay PV_LIB_A_WriterNative; see receipt for time/RSS/swap/revision/axioms.
-
-49806 passed exact pinned replay PV_FN_SLICE_f8_PrefixData; see receipt for time/RSS/swap/revision/axioms.
-
-49807 passed exact pinned replay PV_FN_SLICE_f8_Prefix; see receipt for time/RSS/swap/revision/axioms.
-
-49808 passed exact pinned replay PV_FN_W2_LifetimePrefix; see receipt for time/RSS/swap/revision/axioms.
-
-49809 passed exact pinned replay PV_STX2_StoreCounter; see receipt for time/RSS/swap/revision/axioms.
-
-49810 passed exact pinned replay PV_STX2_LiveNumbering; see receipt for time/RSS/swap/revision/axioms.
-
-49811 passed exact pinned replay PV_FN_SLICE_f9_Prefix; see receipt for time/RSS/swap/revision/axioms.
-
-49812 passed exact pinned replay PV_FN_SLICE_f4_Prefix; see receipt for time/RSS/swap/revision/axioms.
-
-49813 passed exact pinned replay PV_FN_SLICE_f4_Repeat; see receipt for time/RSS/swap/revision/axioms.
-
-49814 passed exact pinned replay PV_FN_SLICE_f4_ArrayBuiltins; see receipt for time/RSS/swap/revision/axioms.
-
-49815 passed exact pinned replay PV_FN_SLICE_f7_DropStatements; see receipt for time/RSS/swap/revision/axioms.
-
-49816 passed exact pinned replay PV_FN_SLICE_f7_DropContract; see receipt for time/RSS/swap/revision/axioms.
-
-49817 passed exact pinned replay PV_FN_SLICE_f7_DropRuntime; see receipt for time/RSS/swap/revision/axioms.
-
-49818 passed exact pinned replay PV_FN_SLICE_f7_HandlerSpec; see receipt for time/RSS/swap/revision/axioms.
-
-49819 passed exact pinned replay PV_FN_SLICE_RuntimeBindings; see receipt for time/RSS/swap/revision/axioms.
-
-49820 passed exact pinned replay PV_FN_SLICE_f22_TypedDestructor; see receipt for time/RSS/swap/revision/axioms.
-
-49821 passed exact pinned replay PV_FN_SLICE_f8_Suffix; see receipt for time/RSS/swap/revision/axioms.
-
-49822 passed exact pinned replay PV_FN_W2_BinaryReturnOutcome; see receipt for time/RSS/swap/revision/axioms.
-
-49823 passed exact pinned replay PV_FN_SLICE_f8_FullReplies; see receipt for time/RSS/swap/revision/axioms.
-
-49824 passed exact pinned replay PV_FN_SLICE_f8; see receipt for time/RSS/swap/revision/axioms.
-
-49825 passed exact pinned replay PV_FN_SLICE_f7_Prefix; see receipt for time/RSS/swap/revision/axioms.
-
-49826 passed exact pinned replay PV_FN_W2_BinaryEnter; see receipt for time/RSS/swap/revision/axioms.
-
-49827 passed exact pinned replay PV_FN_SLICE_f7_Into8; see receipt for time/RSS/swap/revision/axioms.
-
-49828 passed exact pinned replay PV_FN_SLICE_f7_Suffix; see receipt for time/RSS/swap/revision/axioms.
-
-49829 passed exact pinned replay PV_FN_W2_DropReturnOutcome; see receipt for time/RSS/swap/revision/axioms.
-
-49830 passed exact pinned replay PV_FN_SLICE_f7_AfterDrop; see receipt for time/RSS/swap/revision/axioms.
-
-49831 passed exact pinned replay PV_FN_SLICE_f7_Statements; see receipt for time/RSS/swap/revision/axioms.
-
-49832 passed exact pinned replay PV_FN_SLICE_f7_Joins; see receipt for time/RSS/swap/revision/axioms.
-
-49833 passed exact pinned replay PV_FN_SLICE_f7_TypedDrop; see receipt for time/RSS/swap/revision/axioms.
-
-49834 passed exact pinned replay PV_FN_SLICE_f7_RuntimeDrop; see receipt for time/RSS/swap/revision/axioms.
-
-49835 passed exact pinned replay PV_LIB_A_Numbering; see receipt for time/RSS/swap/revision/axioms.
-
-49837 passed exact pinned replay PV_LIB_A_TypedDrop178; see receipt for time/RSS/swap/revision/axioms.
-
-49840 passed exact pinned replay PV_LIB_A_Range165; see receipt for time/RSS/swap/revision/axioms.
-
-49841 passed exact pinned replay PV_LIB_A_UniqueBinding; see receipt for time/RSS/swap/revision/axioms.
-
-49842 passed exact pinned replay PV_FN_THREAD_f361Provider124; see receipt for time/RSS/swap/revision/axioms.
-
-49843 passed exact pinned replay PV_FN_THREAD_f361Provider124Counts; see receipt for time/RSS/swap/revision/axioms.
-
-49844 passed exact pinned replay PV_FN_THREAD_f361BoxCallees; see receipt for time/RSS/swap/revision/axioms.
-
-49845 passed exact pinned replay PV_FN_THREAD_f361Callee126; see receipt for time/RSS/swap/revision/axioms.
-
-49846 passed exact pinned replay PV_THR2_PacketStructuredOneArg; see receipt for time/RSS/swap/revision/axioms.
-
-49847 passed exact pinned replay PV_FN_THREAD_f361Enter126; see receipt for time/RSS/swap/revision/axioms.
-
-49848 passed exact pinned replay PV_THR2_Spawn361MetadataChild81Reached; see receipt for time/RSS/swap/revision/axioms.
-
-49849 passed exact pinned replay PV_THR2_TypedRepresentation_PacketRef; see receipt for time/RSS/swap/revision/axioms.
-
-49850 passed exact pinned replay PV_THR2_Spawn361PacketField82Reached; see receipt for time/RSS/swap/revision/axioms.
-
-49851 passed exact pinned replay PV_THR2_PacketField82Store; see receipt for time/RSS/swap/revision/axioms.
-
-49852 passed exact pinned replay PV_THR2_PacketScopeRead; see receipt for time/RSS/swap/revision/axioms.
-
-49853 passed exact pinned replay PV_FN_THREAD_f361Packet126Join; see receipt for time/RSS/swap/revision/axioms.
-
-49854 passed exact pinned replay PV_FN_THREAD_f361Calls126; see receipt for time/RSS/swap/revision/axioms.
-
-49855 passed exact pinned replay PV_THR2_ClosureBoxAllocation; see receipt for time/RSS/swap/revision/axioms.
-
-49856 passed exact pinned replay PV_THR2_ClosureBoxActivationReply; see receipt for time/RSS/swap/revision/axioms.
-
-49857 passed exact pinned replay PV_THR2_OperatorSemantics_14119; see receipt for time/RSS/swap/revision/axioms.
-
-49858 passed exact pinned replay PV_THR2_OperatorSemantics_14121; see receipt for time/RSS/swap/revision/axioms.
-
-49859 passed exact pinned replay PV_THR2_BoxDynRepresentationBridge; see receipt for time/RSS/swap/revision/axioms.
-
-49860 passed exact pinned replay PV_THR2_OwnInitSourceCodecBridged; see receipt for time/RSS/swap/revision/axioms.
-
-49861 passed exact pinned replay PV_THR2_ClosureBoxRegistry; see receipt for time/RSS/swap/revision/axioms.
-
-49862 passed exact pinned replay PV_THR2_OwnInitAllocationSelection; see receipt for time/RSS/swap/revision/axioms.
-
-49863 passed exact pinned replay PV_THR2_OwnInitAllocationReply; see receipt for time/RSS/swap/revision/axioms.
-
-49864 passed exact pinned replay PV_THR2_OwnInitAllocationHandler; see receipt for time/RSS/swap/revision/axioms.
-
-49865 passed exact pinned replay PV_THR2_TypedRepresentation_BoxDynFnOnce; see receipt for time/RSS/swap/revision/axioms.
-
-49866 passed exact pinned replay PV_FN_THREAD_f361BoxCodecGap; see receipt for time/RSS/swap/revision/axioms.
-
-49867 passed exact pinned replay PV_FN_THREAD_f361BoxBridged; see receipt for time/RSS/swap/revision/axioms.
-
-49868 passed exact pinned replay PV_FN_THREAD_f361Bridged443; see receipt for time/RSS/swap/revision/axioms.
-
-49869 passed exact pinned replay PV_THR2_OwnInitAction; see receipt for time/RSS/swap/revision/axioms.
-
-49870 passed exact pinned replay PV_THR2_OwnInitInterpreter; see receipt for time/RSS/swap/revision/axioms.
-
-49871 passed exact pinned replay PV_THR2_OwnInitAllocationSteps; see receipt for time/RSS/swap/revision/axioms.
-
-49872 passed exact pinned replay PV_THR2_OwnInitAllocationRetry; see receipt for time/RSS/swap/revision/axioms.
-
-49873 passed exact pinned replay PV_THR2_OwnInitAllocationRun; see receipt for time/RSS/swap/revision/axioms.
-
-49874 passed exact pinned replay PV_THR2_OwnInitAllocationFrontier; see receipt for time/RSS/swap/revision/axioms.
-
-49875 passed exact pinned replay PV_THR2_BoxSelection; see receipt for time/RSS/swap/revision/axioms.
-
-49876 passed exact pinned replay PV_THR2_BoxTyped; see receipt for time/RSS/swap/revision/axioms.
-
-49877 passed exact pinned replay PV_THR2_OwnInitAllocationOwned; see receipt for time/RSS/swap/revision/axioms.
-
-49878 passed exact pinned replay PV_THR2_OwnInitAllocationCases; see receipt for time/RSS/swap/revision/axioms.
-
-49879 passed exact pinned replay PV_THR2_SourceOwnership; see receipt for time/RSS/swap/revision/axioms.
-
-49880 passed exact pinned replay PV_THR2_OwnInitHandlerCases; see receipt for time/RSS/swap/revision/axioms.
-
-49881 passed exact pinned replay PV_THR2_OwnInitAllocationOwnedAtState; see receipt for time/RSS/swap/revision/axioms.
-
-49882 passed exact pinned replay PV_THR2_OwnInitAllocationCasesAtState; see receipt for time/RSS/swap/revision/axioms.
-
-49883 passed exact pinned replay PV_THR2_OwnInitHandlerCasesAtState; see receipt for time/RSS/swap/revision/axioms.
-
-49884 passed exact pinned replay PV_THR2_OwnInitActualAllocationOwned; see receipt for time/RSS/swap/revision/axioms.
-
-49885 passed exact pinned replay PV_THR2_OwnInitAllocationHandlerBridged; see receipt for time/RSS/swap/revision/axioms.
-
-49886 passed exact pinned replay PV_THR2_OwnInitInterpreterBridged; see receipt for time/RSS/swap/revision/axioms.
-
-49887 passed exact pinned replay PV_LIB_A_Residual280; see receipt for time/RSS/swap/revision/axioms.
-
-49888 passed strict audit driver compile (0.74s,1588632KiB,swap0,standard axioms). 43 logical roots prepared; strict runtime audit still pending.
-
-49889 passed exact pinned replay PV_THR2_OwnInitAllocationBridgedSteps; see receipt for time/RSS/swap/revision/axioms.
+# Privacy library Lane A — session3 handoff
+
+Branch codex/pv-lib-20261107; base5e397cb3878. PARTIAL; target not yet
+established. No ledger, package branch, checker, implementation, key, frozen
+spec or row consumer changed. Endpoint premises removed0/added0; trust and
+metrics unchanged. Two new exact-function lower semantics facts are explicit
+below; neither is an endpoint or T field. No push/merge/main operation.
+
+## Exact result and limits
+
+PLIB_MAP.json:170 slots,116 qualified INSTANTIATED graphs,49 MISSING,5
+SPEC-ERROR. MAP_DELTA.json records every changed slot and all40 assigned
+thread/typedDrop assessments. Six new qualified instances are f170→277/278/
+279/280, f537→612 and the typedDrop178 facet. This is not six closed rows or
+six complete source/runtime/caller refinements. Of the39 original thread
+MISSING slots,34 remain MISSING. All seven thread caller facets remain missing.
+Other lane deltas are not silently incorporated; the shared Markdown map and
+INSTANCES.json retain the historical session2 inventory.
+
+Twelve new library/support modules under lean/PV_LIB_A_*.lean export43 audited
+roots. Native graphs instantiate CLOSED9/10/93/167/277/278/279/280/612 at the
+provider definitions; graph laws are equality to deterministic functions,
+never the provider's relational Post. SourceWriters identifies W4's new
+interpreter graph and named meanings without a write-definedness premise.
+Malformed layouts and every full native answer are retained. Concrete Values,
+actual reference paths/age, native source values and caller histories remain
+unbound, so the five writer edges stay MISSING.
+
+PureCalls/PurePoll/PureValues bind f170's source operands, derive source-store
+purity from W4's existing named memory facts, transport the graph to the new
+interpreter poll, and carry world/source constructors to the delivered locals.
+No identity delta is selected. Full nullable-pointer/source/value invariant,
+actual original-handler and source/binary adequacy remain explicit lower
+obligations. f361/f270's279/280 instantiations keep their own generic metadata
+and remain missing. No f170 row or end-to-end source run is claimed.
+
+Unique612/UniqueBinding reuse the existing exact Unique Fact, check the literal
+CLOSED612 emitted token and transport every answer through the actual OWNER
+lift. Unsafe argument validity and enclosing537/458 composition are not proved.
+TypedDrop178 reuses W2's actual typed suffix run and f22 source projection/W5
+CLOSED Drop instantiation; the f6 prefix and full f7 row stay pending. Numbering
+exports actual outer thread entry, generic push and lower-frame bounds, not
+preservation along the full new-interpreter history.
+
+## Exact new lower facts, not hidden assumptions
+
+RANGE165_SEMANTICS.json pins both Rust toolchains. CLOSED165 admits a changed,
+source-shaped Range result; old_contract_allows_range/sourceRange_distinct
+prove that gap. The one named RangeIntoIter165 fact supplies documented self
+identity, source purity and returned world/event behavior. Its deterministic
+graph certificate does not prove the original handler or actual f15 history.
+
+RESIDUAL280_SEMANTICS.json pins from_residual and identity From on both
+toolchains. CLOSED280 admits a source-shaped Ok at an Err residual;
+old_contract_allows_ok/constructors_distinct prove the gap. One named280 world/
+constructor fact supplies that missing facet, alongside W4's existing memory
+fact. Reached residual-input provenance/original-handler adequacy remain
+unproved. Every stopped arm remains in the graphs. These are thread-16 lower
+semantics obligations, not new Rust extraction or native correspondence claims.
+
+## Validation and resources
+
+All112 assigned focused IDs are spent:106 pass,6 repaired elaboration failures.
+Passing scopes comprise93 byte-identical pinned provider replays and13 new
+modules (12 library/support modules plus the unchanged strict-walker driver).
+Every passing focused compile has its own commit. Failed source versions and
+receipts are archived; no failed object is admitted. No OOM, timeout, cap
+increase, admission refusal, cold dependency build or unchanged regression.
+
+ONE strict raw audit49482 passed43/43 roots, zero unresolved and zero summary
+mismatches, only propext/Classical.choice/Quot.sound. Exit0; wall0:04.40;
+peak6813052KiB; swap0; source revision
+b25eb0257983b834744f42926b42dc5874f42a22. RAW_AUDIT.json, RAW_GRAPH_MANIFEST.json
+and compressed graph archive retain exact results. The prior walker/collector
+body is unchanged; only module/root arrays differ. Baseline49480/session2
+49481 evidence is reused, not replayed. VALIDATION.json checks all receipt
+source blobs/resolutions, source pins, own sources, raw roots, scope boundary,
+map delta and all33 frozen files. The failed-source guard hash and a
+whole-line historical non-reuse check are recorded there too. LAUNCHER_PROVENANCE
+records the executed guard and its final strengthening from per-target to
+line-wide refusal; no previously failed hash was reused. No complete-manifest, runtime, Kani, Rust,
+SBF or reproducible-build suite was rerun for these Lean-only changes.
+
+Host writes are only codex-pv-lib-20261107/lane-A. Parent/D937 caches are read-
+only and source/object hashes are checked before loads. Serial capped scopes:
+6G/8G/swap0/Tasks64/-M7000. Before each ID: standalone ssh STREAMB_SLOTS=3
+turn.sh; observed D977 host cap2 is respected. The requested base evidence/
+HANDOFF.md was absent; repository-root HANDOFF.md supplied the actual handoff.
+
+## Concrete next work
+
+NAME_REPLAY_STATUS.json records46/122 missing f361 name/actual124 dependencies
+replayed. This unused prefix has focused/source-hash evidence only; it is not
+covered by the43 own-root raw closure and needs its eventual consumer audit.
+76 remain; next is PV_THR2_OwnInitAllocationBridgedRetry. Reuse this
+private cache, never a cold package build. Availability is not impossibility.
+A new focused ID block is required. Raw49483 is unused only for genuinely
+new/changed roots; never rerun49482 unchanged. The generic f6 prefix lemma's
+BeforeReturn boundary is not a discharged BeforeDelivery transport instance.
+
+Finish actual writer Values/native/source bindings, f361 name/Arc/count caller
+facts, f6 resolver/handler transport and OwnInit numbering/history/resource/
+registry composition. Keep all five SPEC-ERROR facets and all18 OPEN/PARTIAL
+supplier edges qualified. Joint premise nonemptiness, complete29-contract
+comparisons and source/machine/binary adequacy remain unproved. REMAINING.md
+and FINDINGS.md give the exact limits; no library is consumed in row proofs.

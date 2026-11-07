@@ -13,6 +13,8 @@ for r in receipts:
   assert r['exit']=='0' and r['swaps']=='0' and 'sorryAx' not in '\n'.join(r['axioms_summary_based'])
   assert json.load(open(A/f"admission-{r['attempt']}.json"))['allowed'] is True
   for prop in ['MemoryHigh=6G','MemoryMax=8G','MemorySwapMax=0','TasksMax=64']:assert prop in r['command']
+failed_hashes={r['source_sha256'] for r in receipts if not r['accepted']}
+assert not failed_hashes.intersection(r['source_sha256'] for r in receipts if r['accepted'])
 provider_inputs={}
 for name in ['PURE_REPLAY_PLAN','DROP_REPLAY_PLAN','SOURCE_REPLAY_PLAN','NUMBER_REPLAY_PLAN','NAME_REPLAY_PLAN']:
  for x in json.load(open(A/(name+'.json'))):
@@ -47,5 +49,5 @@ assert changed=={s['slot'] for s in delta['changed_slots']}
 allowed=lambda p:p.startswith('lean/PV_LIB_A_') or p.startswith(str(A)+'/') or p in [str(E/'PLIB_MAP.json'),str(E/'REMAINING.md')]
 paths=subprocess.check_output(['git','diff','--name-only','5e397cb3878'],text=True).splitlines()
 assert all(allowed(p) for p in paths),[p for p in paths if not allowed(p)]
-result=dict(base='5e397cb3878',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),freeze_files_unchanged=len(freeze['files']),focused_scopes=sum(not r['runtime_audit'] for r in receipts),passing_focused_scopes=sum(r['accepted'] and not r['runtime_audit'] for r in receipts),failed_focused_scopes=[r['attempt'] for r in receipts if not r['accepted']],new_library_modules=modules,new_library_root_count=len(roots),strict_raw_audit=49482,source_authority_checks=provider_inputs,counts=m['counts'],scope_boundary='Own modules/evidence plus shared map JSON and REMAINING only; no endpoint/ledger/package changes',max_peak_rss_kbytes=max(int(r['peak_rss_kbytes']) for r in receipts),all_recorded_swaps_zero=all(r['swaps']=='0' for r in receipts))
+result=dict(failed_source_guard_sha256=sha((A/'focused-host.py').read_bytes()),historical_failed_source_hashes_reused=False,base='5e397cb3878',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),freeze_files_unchanged=len(freeze['files']),focused_scopes=sum(not r['runtime_audit'] for r in receipts),passing_focused_scopes=sum(r['accepted'] and not r['runtime_audit'] for r in receipts),failed_focused_scopes=[r['attempt'] for r in receipts if not r['accepted']],new_library_modules=modules,new_library_root_count=len(roots),strict_raw_audit=49482,source_authority_checks=provider_inputs,counts=m['counts'],scope_boundary='Own modules/evidence plus shared map JSON and REMAINING only; no endpoint/ledger/package changes',max_peak_rss_kbytes=max(int(r['peak_rss_kbytes']) for r in receipts),all_recorded_swaps_zero=all(r['swaps']=='0' for r in receipts))
 (A/'VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k] for k in ['focused_scopes','passing_focused_scopes','failed_focused_scopes','new_library_root_count','counts','max_peak_rss_kbytes']}))
