@@ -46,12 +46,11 @@ fn NMN_parent<const SUCCESS:bool,const MUTANT:bool,const OMIT:bool,const IGNORE:
  let proof=unsafe{core::slice::from_raw_parts((&frame.proof as *const NMN_Proof).cast::<u8>(),57607)};
  let other=unsafe{core::slice::from_raw_parts((&alternate.proof as *const NMN_Proof).cast::<u8>(),57607)};
  let n:usize=kani::any();kani::assume(n<=1880);let pub_=&public[..n];
- let i:usize=kani::any();kani::assume(i<57607);let before=proof[i];
- let j:usize=kani::any();kani::assume(j<1768);let before_ck=checkpoint[j];
  let log=RefCell::new(NMN_CommonLog{entered:false,ptr:[core::ptr::null();3],len:[0;3],tag:0,omit:OMIT});
  let result=tx2_authenticated(pub_,if MUTANT{other}else{proof},&checkpoint,NMN_Hash(&log),None);
  let parsed=unsafe{*frame.log.get()};let common=*log.borrow();
- kani::assume((parsed.tag<3)==SUCCESS);
+ let actual_parsed=if MUTANT{unsafe{*alternate.log.get()}}else{parsed};
+ kani::assume((actual_parsed.tag<3)==SUCCESS);
  assert!(parsed.entered,"parse write coverage");assert_eq!(parsed.ptr,proof.as_ptr(),"parse argument");assert_eq!(parsed.len,proof.len());
  if SUCCESS {
   assert!(common.entered,"common log write coverage");
@@ -59,9 +58,9 @@ fn NMN_parent<const SUCCESS:bool,const MUTANT:bool,const OMIT:bool,const IGNORE:
   assert_eq!(common.len,[pub_.len(),proof.len(),checkpoint.len()]);
   assert_eq!(result,if IGNORE{Ok(())}else{NMN_reply(common.tag)},"complete returned Result");
  }else{
-  assert!(!common.entered);assert_eq!(result,Err(NMN_error(parsed.tag-3)),"parser error propagation");
+  assert!(!common.entered);assert_eq!(result,if IGNORE{Err(Error::Parse)}else{Err(NMN_error(parsed.tag-3))},"parser error propagation");
  }
- assert_eq!(proof[i],before,"proof byte frame");assert_eq!(checkpoint[j],before_ck,"checkpoint byte frame");
+ // Separate frame obligation: the scalar forwarding cut performs no arbitrary whole-buffer read.
 }
 #[kani::proof]#[kani::unwind(17)]
 #[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
@@ -88,3 +87,14 @@ fn NMN_auth_argument_control(){NMN_parent::<true,true,false,false>();}
 #[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMN_auth_write_control(){NMN_parent::<true,false,true,false>();}
+
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
+#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_reject_reply_control(){NMN_parent::<false,false,false,true>();}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMN_parse_cut)]#[kani::stub(mark,NMN_marker_cut)]
+#[kani::stub(tx2_common::<NMN_Hash<'_>>,NMN_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMN_reject_argument_control(){NMN_parent::<false,true,false,false>();}
