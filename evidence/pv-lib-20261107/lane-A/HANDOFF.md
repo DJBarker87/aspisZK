@@ -122,3 +122,5 @@ Session4 49103: pinned PV_THR2_OwnInitAllocationBridgedRun passed; session4 rece
 Session4 49104: pinned PV_THR2_OwnInitAllocationBridgedFrontier passed; session4 receipt records resources/axioms.
 
 Session4 49105: pinned PV_THR2_BoxDynRegistry14756 passed; session4 receipt records resources/axioms.
+
+Session4 49106: pinned PV_THR2_OwnInitBridgedAtSite passed; session4 receipt records resources/axioms.
