@@ -108,3 +108,7 @@ away/writer/registration are compiled comparisons; source adequacy remains a
 named target, not a premise or discharge. No full contract count increases.
 Exit0;wall0:02.34;peak4714176KiB;swap0;parentf4e814b61f1;standard summary axioms.
 Next Lean49720; new-root audit still pending.
+
+49720 replayed pinned unchanged STX LiveNumbering in isolated W3;exit0;
+wall0:01.26;peak2626372KiB;swap0;parentd9ba6113daf;standard summary axioms.
+No counter lemmas re-proved or counter equality introduced. Next Lean49721.
