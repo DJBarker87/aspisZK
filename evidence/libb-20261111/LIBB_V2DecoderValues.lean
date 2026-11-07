@@ -22,23 +22,23 @@ def entry (bs : RSL.Bytes) : Option RSL.EntryV2 :=
   asOption entryV2 (value (NCX_Install.op34 (fromBytes bs h)) (LIBB_V2DecoderTotal.entry _))
  else none
 
-theorem registry_bytes (b : Slice U8) : registry (bytes b) =
+theorem registry_bytes (b : Slice U8) : registry (LIBB_Bytes.bytes b) =
  asOption registryV2 (value (NCX_Install.op33 b) (LIBB_V2DecoderTotal.registry b)) := by
  unfold registry
  simp only [dif_pos (bytes_bound b),from_bytes]
 
-theorem entry_bytes (b : Slice U8) : entry (bytes b) =
+theorem entry_bytes (b : Slice U8) : entry (LIBB_Bytes.bytes b) =
  asOption entryV2 (value (NCX_Install.op34 b) (LIBB_V2DecoderTotal.entry b)) := by
  unfold entry
  simp only [dif_pos (bytes_bound b),from_bytes]
 
 theorem registry_result (b : Slice U8) :
- LIBB_ResultTotal.mapOuter (asOption registryV2) (NCX_Install.op33 b) = ok (registry (bytes b)) := by
+ LIBB_ResultTotal.mapOuter (asOption registryV2) (NCX_Install.op33 b) = ok (registry (LIBB_Bytes.bytes b)) := by
  rw [equation _ (LIBB_V2DecoderTotal.registry b),registry_bytes]
  rfl
 
 theorem entry_result (b : Slice U8) :
- LIBB_ResultTotal.mapOuter (asOption entryV2) (NCX_Install.op34 b) = ok (entry (bytes b)) := by
+ LIBB_ResultTotal.mapOuter (asOption entryV2) (NCX_Install.op34 b) = ok (entry (LIBB_Bytes.bytes b)) := by
  rw [equation _ (LIBB_V2DecoderTotal.entry b),entry_bytes]
  rfl
 

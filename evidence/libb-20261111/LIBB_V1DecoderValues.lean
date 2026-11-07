@@ -22,23 +22,23 @@ def entry (bs : RSL.Bytes) : Option RSL.EntryV1 :=
   asOption entryV1 (value (NJQ_Canonical.entry (fromBytes bs h)) (LIBB_V1DecoderTotal.entry _))
  else none
 
-theorem registry_bytes (b : Slice U8) : registry (bytes b) =
+theorem registry_bytes (b : Slice U8) : registry (LIBB_Bytes.bytes b) =
  asOption registryV1 (value (NJQ_Canonical.registry b) (LIBB_V1DecoderTotal.registry b)) := by
  unfold registry
  simp only [dif_pos (bytes_bound b),from_bytes]
 
-theorem entry_bytes (b : Slice U8) : entry (bytes b) =
+theorem entry_bytes (b : Slice U8) : entry (LIBB_Bytes.bytes b) =
  asOption entryV1 (value (NJQ_Canonical.entry b) (LIBB_V1DecoderTotal.entry b)) := by
  unfold entry
  simp only [dif_pos (bytes_bound b),from_bytes]
 
 theorem registry_result (b : Slice U8) :
- LIBB_ResultTotal.mapOuter (asOption registryV1) (NJQ_Canonical.registry b) = ok (registry (bytes b)) := by
+ LIBB_ResultTotal.mapOuter (asOption registryV1) (NJQ_Canonical.registry b) = ok (registry (LIBB_Bytes.bytes b)) := by
  rw [equation _ (LIBB_V1DecoderTotal.registry b),registry_bytes]
  rfl
 
 theorem entry_result (b : Slice U8) :
- LIBB_ResultTotal.mapOuter (asOption entryV1) (NJQ_Canonical.entry b) = ok (entry (bytes b)) := by
+ LIBB_ResultTotal.mapOuter (asOption entryV1) (NJQ_Canonical.entry b) = ok (entry (LIBB_Bytes.bytes b)) := by
  rw [equation _ (LIBB_V1DecoderTotal.entry b),entry_bytes]
  rfl
 
