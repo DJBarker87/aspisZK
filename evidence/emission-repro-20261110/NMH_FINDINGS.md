@@ -22,6 +22,8 @@ No theorem, axiom or new trust item has been introduced. #print axioms is not ap
 
 ## Reproduction status from retained receipts
 
-11 serial scopes completed; verdict counts {'NOT_REPRODUCED': 318, 'DIFFERS': 17, 'REPRODUCED': 1}. Charged tools: {'Charon': 11, 'Aeneas': 9, 'Lean': 0, 'Kani': 0}. Total scoped wall 1379.503s; maximum reported process RSS 930688 KiB. Full per-tool GNU time results and cgroup peaks are in NMH_RUN_SUMMARY.json and original receipts. Failed scopes: NMH_E002, NMH_E004, NMH_E006. An incomplete killed-tool receipt is null, never inferred successful.
+24 serial scopes completed; verdict counts {'NOT_REPRODUCED': 318, 'DIFFERS': 17, 'REPRODUCED': 1}. Charged tools: {'Charon': 24, 'Aeneas': 22, 'Lean': 0, 'Kani': 0}. Total scoped wall 2491.505s; maximum reported process RSS 930688 KiB. Full per-tool GNU time results and cgroup peaks are in NMH_RUN_SUMMARY.json and original receipts. Failed scopes: NMH_E002, NMH_E004, NMH_E006, NMH_E019, NMH_E023. An incomplete killed-tool receipt is null, never inferred successful.
 
 A REPRODUCED verdict is limited to exact committed bytes or the named NHR discriminant-metadata adaptation. DIFFERS is a byte/configuration result, not a semantic counterexample. NMH_DEFINITION_COMPARISONS.json.xz retains exact NKT-style declaration segment hashes for every member and candidate output. No new normalization is used.
+
+Reproduced member `c8df287c4f3e9295f450ef8ffbdef9afaffb697a572137dbea5b1cefbe707415`: `evidence/batch-merkle-20261108/NJS_Extract/Types.lean`, run `NMH_E010`, normalization `NHR_parameterize.py discriminant metadata removal`. Raw output SHA `4d1d9dfe740578485189d48e3234f39d0bdd2b63ecc4d8986922dda7c438062c`; normalized SHA `c8df287c4f3e9295f450ef8ffbdef9afaffb697a572137dbea5b1cefbe707415`. This is blob provenance, not a new function/row/security proof.

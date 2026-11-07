@@ -10,7 +10,7 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 def main():
  inv=json.loads((E/'NMH_INVENTORY.json').read_text());blobs={b['blob']:b for b in inv['blobs']}
  aud=json.loads(lzma.decompress((A/'NKT_AUDIT.json.xz').read_bytes()));sup=json.loads(lzma.decompress((A/'NKT_SUPERSET.json.xz').read_bytes()))
- names=collections.defaultdict(set);defs=collections.defaultdict(list)
+ names=collections.defaultdict(set);private_names=collections.defaultdict(set);defs=collections.defaultdict(list)
  for f in aud['functions']+sup['functions']:
   h=f['emission_sha256']
   if h not in blobs:continue
@@ -19,7 +19,9 @@ def main():
  # Exact names from namespace declarations supplement the NKT conservative mapping.
  for h,b in blobs.items():
   text=subprocess.check_output(['git','show',inv['revision']+':'+b['paths'][0]],text=True)
-  for d in declarations(text):names[d['name']].add(h)
+  for d in declarations(text):
+   names[d['name']].add(h)
+   if d['private']:private_names[d['name']].add(h)
  ledger=json.loads(lzma.decompress((L/'NLX_LEDGER.json.xz').read_bytes()));rows=collections.defaultdict(set)
  for r in ledger['rows']:
   if r['status']=='CLOSED':
@@ -37,14 +39,19 @@ def main():
   if p is None:missing.append(dict(root=root,rows=sorted(rr),reason='No local archived root list; not treated as absence'));continue
   raw=lzma.decompress(p.read_bytes()) if p.suffix=='.xz' else p.read_bytes();side=p.with_suffix('.sha256')
   if side.exists():assert side.read_text().strip().split()[0]==sha(raw),(p,'sidecar')
-  reach=set(raw.decode().splitlines());used=reach.intersection(names)
+  reach=set(raw.decode().splitlines())
+  for n in reach:
+   if n.startswith('_private.'):
+    for private,hs in private_names.items():
+     if n.endswith('.'+private):names[n].update(hs)
+  used=reach.intersection(names)
   for n in used:
    for h in names[n]:hits[h][root].add(n)
   receipts.append(dict(root=root,path=str(p),sha256=sha(raw),rows=sorted(rr),matching_names=len(used)))
  out=[]
  for h,b in blobs.items():
   roots=[dict(root=r,names=sorted(ns),rows=sorted(rows[r])) for r,ns in sorted(hits[h].items())]
-  out.append(dict(blob=h,affected_CLOSED_rows=sorted({rr for r in roots for rr in r['rows']}),reaching_roots=roots,mapping='Exact lexical fully qualified declaration names intersect checked root lists; historical aliases sharing the same names remain conservative until selected source-to-object mapping is recovered.',unresolved_root_lists=len(missing)))
+  out.append(dict(blob=h,affected_CLOSED_rows=sorted({rr for r in roots for rr in r['rows']}),reaching_roots=roots,mapping='Lexical fully qualified declaration names and scoped _private suffix aliases intersect checked root lists; historical aliases sharing the same names remain conservative until selected source-to-object mapping is recovered.',unresolved_root_lists=len(missing)))
  raw=json.dumps(dict(ledger_sha256=sha((L/'NLX_LEDGER.json.xz').read_bytes()),closed_rows=sum(r['status']=='CLOSED' for r in ledger['rows']),roots=len(rows),missing_root_lists=missing,receipts=receipts,blobs=out),indent=2).encode();(E/'NMH_ROW_IMPACT.json.xz').write_bytes(lzma.compress(raw,preset=6));(E/'NMH_ROW_IMPACT.json.sha256').write_text(sha(raw)+'\n')
  print(json.dumps(dict(blobs=len(out),roots=len(rows),checked=len(receipts),missing=len(missing),affected_blobs=sum(bool(x['affected_CLOSED_rows']) for x in out))))
 if __name__=='__main__':main()

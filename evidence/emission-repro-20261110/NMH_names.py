@@ -31,5 +31,5 @@ def declarations(s):
   elif m[5]:scope.append(('section',''))
   else:
    ns='.'.join(x[1] for x in scope if x[0]=='namespace');name=m[7]
-   out.append(dict(name=(ns+'.' if ns else '')+name,short_name=name,kind=m[6],line=clean.count('\n',0,m.start())+1))
+   out.append(dict(name=(ns+'.' if ns else '')+name,short_name=name,kind=m[6],private=bool(re.search(r'\bprivate\s+',clean[m.start():m.end()])),line=clean.count('\n',0,m.start())+1))
  return out

@@ -1,6 +1,6 @@
 {
   "run": "NMH_E026",
-  "label": "weight-push",
+  "label": "independent-dot-finish",
   "configuration": {
     "charon_command": [
       "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
@@ -18,7 +18,9 @@
       "--include",
       "core::option::_::ok_or",
       "--start-from",
-      "crate::weights::push_byte_products",
+      "crate::fast_pairing::canonical::_::finish",
+      "--start-from",
+      "crate::fast_pairing::_::finish",
       "--dest-file",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/repro.llbc",
       "--",
@@ -42,21 +44,22 @@
       "-backend",
       "lean",
       "-namespace",
-      "NMH_weight_push",
+      "FIo_Native",
       "-dest",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/raw",
       "-subdir",
-      "NMH_weight_push",
+      "FIo_Native",
       "-split-files",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/repro.llbc"
     ],
     "roots": [
-      "crate::weights::push_byte_products"
+      "crate::fast_pairing::canonical::_::finish",
+      "crate::fast_pairing::_::finish"
     ],
     "opaque": [],
     "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
     "namespace": [
-      "NMH_weight_push"
+      "FIo_Native"
     ],
     "receipt": null
   },
@@ -76,7 +79,9 @@
     "--include",
     "core::option::_::ok_or",
     "--start-from",
-    "crate::weights::push_byte_products",
+    "crate::fast_pairing::canonical::_::finish",
+    "--start-from",
+    "crate::fast_pairing::_::finish",
     "--dest-file",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/repro.llbc",
     "--",
@@ -100,11 +105,11 @@
     "-backend",
     "lean",
     "-namespace",
-    "NMH_weight_push",
+    "FIo_Native",
     "-dest",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/raw",
     "-subdir",
-    "NMH_weight_push",
+    "FIo_Native",
     "-split-files",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E026_emitted/repro.llbc"
   ],
@@ -116,6 +121,21 @@
     "44783123aa6f4e7e1e0c492b25c5c41e695794ec170fde8f12925fc21deee7c8"
   ],
   "bytes": 218523,
-  "basis": "Diagnostic native-definition projection from archived source annotation; original historical full configuration remains unresolved. Deployed verifier features and NHR core Option/Result includes. Opaque boundaries are explicit in command, not a fidelity claim. No inferred opaque selectors: full reached frozen callee bodies are extracted. NHR opacity checks stay enabled; selected opaque list is genuinely empty.",
-  "diagnostic_only": true
+  "basis": "E019 rejects canonical::Dot::push at fast_pairing.rs:118-121 (InterpBorrows.ml:2731). Retire unlaunched weights::push_byte_products, which depends on that push; instead extract native canonical/public accumulator finish members, whose bodies do not call push. No source rewrite or opacity cut; original failed E019 retained.",
+  "diagnostic_only": true,
+  "execution_group": "NMH_RUN_G026",
+  "source_manifest": "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "function_set": [
+    "crate::fast_pairing::canonical::_::finish",
+    "crate::fast_pairing::_::finish"
+  ],
+  "opaque_list": [],
+  "feature_set": {
+    "default_features": true,
+    "explicit": [
+      "private-leaf-salts,optimized-terminal,program-build"
+    ]
+  },
+  "right_configuration_reason": "E019 rejects canonical::Dot::push at fast_pairing.rs:118-121 (InterpBorrows.ml:2731). Retire unlaunched weights::push_byte_products, which depends on that push; instead extract native canonical/public accumulator finish members, whose bodies do not call push. No source rewrite or opacity cut; original failed E019 retained.",
+  "replaces_unlaunched_dependency": "weights::push_byte_products -> canonical::Dot::push (known E019 rejection)"
 }

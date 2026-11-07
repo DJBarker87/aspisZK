@@ -9,8 +9,21 @@ def main():
  assert len(inv['blobs'])==336 and {r['blob'] for r in provenance['blobs']}=={r['blob'] for r in inv['blobs']}
  all_members=[h for g in plan['groups'] for h in g['members']];assert len(all_members)==336 and len(set(all_members))==336
  for p,v in pinned['files'].items():assert sha(Path(p).read_bytes())==v['sha256'],p
+ manifest=load(E/'NMH_STAGING_MANIFEST.json');trees={}
+ for rev in [plan['frozen_revision'],manifest['pool_amendment_revision']]:
+  tree={}
+  for line in subprocess.check_output(['git','ls-tree','-rz',rev]).split(b'\0'):
+   if not line:continue
+   meta,name=line.split(b'\t');mode,kind,oid=meta.decode().split()
+   if kind=='blob':tree[name.decode()]=(mode,oid)
+  trees[rev]=tree
+ for name,info in manifest['files'].items():
+  rev=manifest['pool_amendment_revision'] if name.startswith('programs/aspis-pool/') else plan['frozen_revision']
+  assert trees[rev][name]==(info['mode'],info['git_blob']),(name,'frozen git association')
  assert sha((E/'NMH_NHR_stage.py').read_bytes())==load(E/'NMH_STAGER_PIN.json')['sha256']
  budgets=provenance['budget_used'];assert budgets['Charon']<=30 and budgets['Aeneas']<=30 and budgets['Lean']==0 and budgets['Kani']==0
+ actual_tools=collections.Counter(json.loads(line)['tool'] for line in (E/'NMH_TOOL_ATTEMPTS.jsonl').read_text().splitlines())
+ assert budgets['Charon']==actual_tools['charon'] and budgets['Aeneas']==actual_tools['aeneas'],'regenerate comparison after new tool receipts'
  completed=[]
  for p in E.glob('NMH_E*/receipt.json'):
   r=load(p);a=r['attempt'];ad=load(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True,a
@@ -34,6 +47,8 @@ def main():
    assert r['run'] in completed
    if r['normalization'] is None:assert r['committed_hash']==r['reproduced_hash']
    else:assert r['normalized_hash']==r['committed_hash']
+  if r['verdict']=='DIFFERS':
+   spec=next(x for x in plan['runs'] if x['run']==r['run']);assert not spec.get('diagnostic_only') and not spec.get('repairs')
   if r['diff']:
    p=E/r['diff'];assert p.exists();assert sha(lzma.decompress(p.read_bytes()))==p.with_suffix('.sha256').read_text().strip()
  for p in E.rglob('*'):
