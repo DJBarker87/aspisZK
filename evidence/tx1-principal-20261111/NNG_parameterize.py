@@ -1,0 +1,68 @@
+"""Expose generated opaque callees as parameters; preserve raw files separately.
+This is a syntax-only compilation interface, not a callee semantics/refinement proof.
+"""
+from pathlib import Path
+import argparse,json,re,hashlib,difflib
+E=Path(__file__).resolve().parent
+p=argparse.ArgumentParser();p.add_argument('function');p.add_argument('--raw',required=True);a=p.parse_args()
+raw=E/a.raw;dest=E/'NNG_lean'/('NNG_'+a.function);dest.mkdir(parents=True,exist_ok=True)
+types=(raw/'Types.lean').read_text()
+# The global discriminant macro names ignore the namespace. Do not register duplicate metadata.
+adapted=re.sub(r'\bdiscriminant isize,?\s*','',types)
+adapted=re.sub(r'@\[\]\s*\n','',adapted)
+(dest/'Types.lean').write_text(adapted)
+extern=(raw/'FunsExternal_Template.lean').read_text()
+# A declaration extends to the next documentation block or end of file.
+decls=re.findall(r'^axiom\s+(\S+)\s*([\s\S]*?)(?=\n/--|\Z)',extern,re.M)
+assert decls
+variables=[];mapping=[]
+for i,(name,sig) in enumerate(decls):
+ sig=sig.strip();depth=0;colon=None
+ for j,ch in enumerate(sig):
+  if ch in '({[':depth+=1
+  elif ch in ')}]':depth-=1
+  elif ch==':' and depth==0:colon=j;break
+ assert colon is not None,(name,sig)
+ bind=sig[:colon].strip();ty=sig[colon+1:].strip();var='NNG_call_'+str(i)
+ variables.append('variable ('+var+' : '+(('∀ '+bind+',\n') if bind else '')+ty+')')
+ mapping.append(dict(generated_name=name,parameter=var,signature=sig))
+funs=(raw/'Funs.lean').read_text().replace('import NNG_'+a.function+'.FunsExternal\n','')
+# Add variables inside the generated namespace, where generated types resolve.
+needle='namespace NNG_'+a.function+'\n';assert needle in funs
+funs=funs.replace(needle,needle+'\n-- Opaque callees are explicit parameters, never axioms.\n'+'\n\n'.join(variables)+'\n',1)
+for m in sorted(mapping,key=lambda x:-len(x['generated_name'])):
+ funs=re.sub(r'(?<![A-Za-z0-9_.])'+re.escape(m['generated_name'])+r'(?![A-Za-z0-9_.])',m['parameter'],funs)
+# Explicit binder interface: no Lean section-variable generalization is used.
+# The earlier automatic-generalization shape is retired after L005/L006.
+params=[m['parameter'] for m in mapping]
+binders={m['parameter']:v[len('variable '):] for m,v in zip(mapping,variables)}
+starts=list(re.finditer(r'\bdef\s+(\S+)',funs));rebuilt=funs[:starts[0].start()];known=[]
+for j,d in enumerate(starts):
+ end=starts[j+1].start() if j+1<len(starts) else len(funs)
+ chunk=funs[d.start():end];name=d[1];offset=len(d[0]);head,body=chunk[:offset],chunk[offset:]
+ context=name.rsplit('.',1)[0]+'.' if '.' in name else ''
+ for earlier,uses in sorted(known,key=lambda z:-len(z[0])):
+  if not uses:continue
+  names=[earlier]
+  if context and earlier.startswith(context):names.append(earlier[len(context):])
+  for spelling in names:
+   body=re.sub(r'(?<![A-Za-z0-9_.])'+re.escape(spelling)+r'(?![A-Za-z0-9_.])',lambda _: '('+earlier+' '+' '.join(uses)+')',body)
+ uses=[v for v in params if re.search(r'(?<![A-Za-z0-9_])'+v+r'(?![A-Za-z0-9_])',body)]
+ known.append((name,uses));rebuilt+=head+' '+''.join(binders[v]+' ' for v in uses)+body
+funs=rebuilt
+# impl_def creates a recursive trait default before section parameter binding.
+# Expand just this generated trait into a parameterized ordinary definition.
+trait='aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31'
+old='impl_def '+trait+' : core.cmp.PartialEq\n  aspis_core.field.QM31 aspis_core.field.QM31 := {\n  eq := NNG_call_3\n  ne := core.cmp.PartialEq.ne.trait_default\n    '+trait+'\n}'
+new='def '+trait+' (NNG_call_3 : aspis_core.field.QM31 → aspis_core.field.QM31 → Result Bool) : core.cmp.PartialEq aspis_core.field.QM31 aspis_core.field.QM31 := {\n  eq := NNG_call_3\n  ne := fun x y => do let b ← NNG_call_3 x y; ok (!b)\n}'
+assert old in funs
+funs=funs.replace(old,new)
+# Supply the now explicit parameter at the sole external trait use.
+funs=funs.replace('                '+trait+' running','                ('+trait+' NNG_call_3) running')
+root={'verify_finish':'r1_semantic.verify_finish','verify_observed':'r1_semantic.verify_observed','prepare':'verifier.candidate.prepare'}[a.function]
+funs+='\n#print axioms NNG_'+a.function+'.'+root+'\n'
+(dest/'Funs.lean').write_text(funs)
+for stem,before,after in [('Types',types,adapted),('Funs',(raw/'Funs.lean').read_text(),funs)]:
+ (dest/(stem+'.diff')).write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='raw/'+stem+'.lean',tofile='compile/'+stem+'.lean')))
+(dest/'NNG_PARAMETERS.json').write_text(json.dumps(mapping,indent=2)+'\n')
+print(dest)

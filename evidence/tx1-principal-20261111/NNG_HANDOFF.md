@@ -7,3 +7,7 @@ Order: 136 → 137 → 087 → 094 → 328 → 345, then 344/333/330 by instanti
 Limits: 2 extraction, 400 Lean/link/audit scopes, 10 Kani only bc-flagged exits; one capped scope at a time, 6G/8G/no swap/64 tasks, Lean -M7000, no cap or timeout increases. Admission requires exit 0 and allowed:true, share<6, disk≥40GB. Use unchanged SInt2 launcher. No shipped-source, trust-row, key or artifact change authorized here.
 
 Frozen crates/programs-r1/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465. Inherited ELF pins f8c0ec72…/63ad3e9c…/e0e49c34… are not new rebuild claims. Standard axioms only; audit own new roots only. Increased extraction reliance under bm is retained P6/D188 reclassification, not removal.
+
+## Stage 1 emission
+
+E001 freshly emitted actual frozen verify_finish with complete opaque boundaries: exit0,60.30653578s,536564KiB,swap0. Tool, source, feature, graph/lock and raw LLBC/output pins are in NNG_emitted/verify_finish and E001. bc audit PASS: no deployed loop; every error/panic arm retained. Generated equality trait compilation interface repair is in NNG_REPAIRS.md (L003 rejected; L004 changed shape passes). Types L002 and parameterized body L004 compile, the latter prints only standard axioms. These remain support, not a candidate or child installation. Ledger25 retained export copied/hash-verified in L001; all selected imports and Aeneas objects pinned per scope. No Kani, new trust, shipped source or ELF change.
