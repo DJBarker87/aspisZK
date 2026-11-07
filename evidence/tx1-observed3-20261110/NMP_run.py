@@ -40,15 +40,15 @@ for line in out.splitlines():
   for pid in f.read_text().split():
    try: cwd=os.readlink('/proc/'+pid+'/cwd')
    except OSError:continue
-   if cwd.startswith('/home/dombarker/project-offloads/codex-cx-'):hit=True
+   if cwd.startswith('/home/dombarker/project-offloads/'):hit=True
  if hit:scopes.append(unit)
 print(json.dumps({'scopes':scopes,'count':len(scopes)}))""")
  assert r.returncode==0,r.stderr
  share=json.loads(r.stdout)
  with (E/'NMP_SHARE.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,**share))+'\n')
- if share['count']<2:break
- with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='Stream A saturation',**share))+'\n')
- print('Stream A wait: '+str(share['count'])+' scopes',flush=True)
+ if share['count']<6:break
+ with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='whole-host saturation under bm',**share))+'\n')
+ print('whole-host wait: '+str(share['count'])+' scopes',flush=True)
  for _ in range(3):time.sleep(60)
 for retry in range(11):
  r=ssh('python3',f'''from pathlib import Path
@@ -79,6 +79,7 @@ for n,t in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(__import__('base64').b64decode(t['base64'])) if isinstance(t,dict) else p.write_text(t)
 for n in ['NMP_objects','NMP_generated','NMP_tmp','NMP_native']:(b/n).mkdir(exist_ok=True)
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
+if x['kind']=='lean' and '-o' in x['command']:(b/x['command'][x['command'].index('-o')+1]).parent.mkdir(parents=True,exist_ok=True)
 if x['kind'] in ['lean','audit','link']:
  for root in roots:
   for stem in ['Aeneas','AeneasMeta']:
@@ -120,15 +121,15 @@ while True:
    for pid in f.read_text().split():
     try: cwd=os.readlink('/proc/'+pid+'/cwd')
     except OSError:continue
-    if cwd.startswith('/home/dombarker/project-offloads/codex-cx-'):hit=True
+    if cwd.startswith('/home/dombarker/project-offloads/'):hit=True
   if hit:scopes.append(unit)
  print(json.dumps({'scopes':scopes,'count':len(scopes)}))""".replace("\n ","\n"))
  assert r.returncode==0,r.stderr
  final_share=json.loads(r.stdout)
  with (E/'NMP_FINAL_ADMISSION.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share',**final_share))+'\n')
- if final_share['count']>=2:
-  with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final Stream A saturation',**final_share))+'\n')
-  print('Final Stream A wait: '+str(final_share['count'])+' scopes',flush=True)
+ if final_share['count']>=6:
+  with (E/'NMP_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final whole-host saturation under bm',**final_share))+'\n')
+  print('Final whole-host wait: '+str(final_share['count'])+' scopes',flush=True)
   for _ in range(3):time.sleep(60)
   continue
  r=ssh('python3',f'''from pathlib import Path

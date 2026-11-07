@@ -36,3 +36,5 @@ gated NMO candidate exists. Canonical RowSpec_137/087 remain the targets.
 Allocation aborts and error clones are audited explicitly; no silent weakening.
 The amended NMW transport payload supplies exact b936275465 Pool files.
 Existing objects and NMP support are reused; no frozen source changes.
+
+E001 exited101 before Rust extraction: own input PATH lacked rustup. Frozen graph/lock check passed. E002 repairs PATH and emits prepare plus reached verify_observed together; the137 opaque boundary is removed only to emit that same frozen child body. Both rows will have the SAME fresh extraction receipt. No Kani launched.
