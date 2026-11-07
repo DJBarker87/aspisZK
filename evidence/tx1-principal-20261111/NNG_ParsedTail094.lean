@@ -1,3 +1,4 @@
+import NNG_ProducerFull094
 import NNG_PrepareTail094
 set_option autoImplicit false
 noncomputable section
@@ -12,16 +13,16 @@ theorem source (env : RSL.Env) (s : NNG_Context094.Parent Unit)
  (publicWidth : (LIB_Carriers.bytes s.publicBytes).length=1880) :
  NNG_Reference094.prepare s env
   (observation NNG_Producer094.port (NNG_Events094.events env)
-   (NNG_Tree094.f_markParsed (NNG_InstalledCalls094.calls env) s)) := by
- unfold NNG_Tree094.f_markParsed
+   (NNG_PrepareTree094.f_markParsed (NNG_InstalledCalls094.calls env) s)) := by
+ unfold NNG_PrepareTree094.f_markParsed
  dsimp only
  rw [observer]
- change _ env (observation _ _ (NMT_CallTree.bind
+ change NNG_Reference094.prepare s env (observation NNG_Producer094.port (NNG_Events094.events env) (NMT_CallTree.bind
   (invoke "verifier.mark" ((none : Option (verifier.Phase → Result Unit)),verifier.Phase.Parsed) (ok ())) _))
  rw [NNG_Silent094.invoke_ok NNG_Producer094.port env _ _ _ _
   (NNG_Events094.silent env _ _ _ (by decide) (by decide) (by decide))]
- unfold NNG_Tree094.f_we
- change _ env (observation _ _ (NMT_CallTree.bind
+ unfold NNG_PrepareTree094.f_we
+ change NNG_Reference094.prepare s env (observation NNG_Producer094.port (NNG_Events094.events env) (NMT_CallTree.bind
   (invoke "aspis_core.field.wide_exact.WideExact.ZERO" () (ok (fromT3 AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO))) _))
  rw [NNG_Silent094.invoke_ok NNG_Producer094.port env _ _ _ _
   (NNG_Events094.silent env _ _ _ (by decide) (by decide) (by decide))]

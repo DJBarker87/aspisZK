@@ -1,6 +1,7 @@
 import NNG_Producer094
 import MultiproofConeSlices
 import NNG_Root32
+import NNG_CompactConstants094
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNG_FoldedCopy094
@@ -49,6 +50,7 @@ theorem source (env : RSL.Env) (s : NNG_Context094.Parent Unit)
   rw [dif_pos len]
   rfl
  unfold NNG_Tree094.f_i NNG_Tree094.f_i1 NNG_Tree094.f_s
+ rw [NNG_CompactConstants094.folded,NNG_CompactConstants094.round1]
  change observation _ _ (Code.plain (ok 7751#usize) (fun i=>Code.plain (ok 7783#usize) (fun j=>
   Code.plain (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.proof {start:=i,«end»:=j})
    (fun part=>NNG_Tree094.f_r4 (NNG_InstalledCalls094.calls env) s g p a part))))=_

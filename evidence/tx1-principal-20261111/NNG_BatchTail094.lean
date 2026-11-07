@@ -44,7 +44,7 @@ theorem source (env : RSL.Env) (s : NNG_Context094.Parent Unit)
   unfold NNG_Tree094.f_markMerkle
   dsimp only
   rw [observer]
-  change _ env (observation _ _ (NMT_CallTree.bind
+  change NNG_Reference094.geometry s (toT12 p) (arr toT3 g) (toT15 a) env (observation NNG_Producer094.port (NNG_Events094.events env) (NMT_CallTree.bind
    (invoke "verifier.mark" ((none : Option (verifier.Phase → Result Unit)),verifier.Phase.Merkle 0#usize) (ok ())) _))
   rw [NNG_Silent094.invoke_ok NNG_Producer094.port env _ _ _ _
    (NNG_Events094.silent env _ _ _ (by decide) (by decide) (by decide))]

@@ -1,0 +1,172 @@
+def RSL.TX1_094.Ref : (V : RSL.VLib) → RSL.PreparedNew V → RSL.TX1_094.Args V → RSL.RE V.VErr RSL.Bytes :=
+fun V P a =>
+  @RSL.RE.seq V.VErr RSL.Bytes
+    (@RSL.RE.check V.VErr (@bne Nat (@instBEqOfDecidableEq Nat instDecidableEqNat) (@RSL.TX1_094.Args.k V a) RSL.SPLIT)
+      V.vParse)
+    (@RSL.RE.seq V.VErr RSL.Bytes
+      (@RSL.Child.run RSL.Bytes (Except V.VErr Unit) V.parseShape (@RSL.TX1_094.Args.proof V a))
+      (@RSL.RE.seq V.VErr RSL.Bytes
+        (@RSL.Child.run RSL.Bytes (Except V.VErr Unit) V.canonicalScan (@RSL.TX1_094.Args.proof V a))
+        (@RSL.RE.bind V.VErr (Prod V.Prepared V.E29) RSL.Bytes
+          (@RSL.Spec.bind (Prod (Except V.VErr V.Prepared) V.E29) (Except V.VErr (Prod V.Prepared V.E29))
+            (@RSL.Spec.call (RSL.TX1_087.Args V) (Prod (Except V.VErr V.Prepared) V.E29)
+              (fun x => RSL.TX1_087.Domain V x (@none RSL.PhaseFn)) (RSL.TX1_087.Ref V P)
+              (@RSL.TX1_087.Args.mk V (@RSL.TX1_094.Args.public_ V a) (@RSL.TX1_094.Args.proof V a) V.zeroE29))
+            fun r =>
+            RSL.TX1_094.Ref.match_1 V (fun x => RSL.Spec (Except V.VErr (Prod V.Prepared V.E29)))
+              (@Prod.fst (Except V.VErr V.Prepared) V.E29 r)
+              (fun p =>
+                @RSL.Spec.pure (Except V.VErr (Prod V.Prepared V.E29))
+                  (@Except.ok V.VErr (Prod V.Prepared V.E29)
+                    (@Prod.mk V.Prepared V.E29 p (@Prod.snd (Except V.VErr V.Prepared) V.E29 r))))
+              fun e =>
+              @RSL.Spec.pure (Except V.VErr (Prod V.Prepared V.E29)) (@Except.error V.VErr (Prod V.Prepared V.E29) e))
+          fun pg =>
+          have p := @Prod.fst V.Prepared V.E29 pg;
+          have g := @Prod.snd V.Prepared V.E29 pg;
+          @RSL.RE.bind V.VErr V.Acc RSL.Bytes (@RSL.Child.run Unit (Except V.VErr V.Acc) V.accNew Unit.unit) fun acc =>
+            RSL.TX1_094.Ref.match_2 (fun x => RSL.RE V.VErr RSL.Bytes)
+              (RSL.TX1_136.toB32 (RSL.slice (@RSL.TX1_094.Args.proof V a) RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1))
+              (fun _ => @RSL.RE.lift V.VErr RSL.Bytes (@RSL.Spec.panic RSL.Bytes)) fun folded =>
+              @RSL.RE.seq V.VErr RSL.Bytes
+                (@RSL.Child.run (Prod RSL.Bytes (Prod V.Prepared (Prod RSL.B32 Nat))) (Except V.VErr Unit) V.batchMerkle
+                  (@Prod.mk RSL.Bytes (Prod V.Prepared (Prod RSL.B32 Nat)) (@RSL.TX1_094.Args.proof V a)
+                    (@Prod.mk V.Prepared (Prod RSL.B32 Nat) p
+                      (@Prod.mk RSL.B32 Nat folded (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                (@RSL.RE.bind V.VErr V.Geo RSL.Bytes
+                  (@RSL.Child.run (Prod V.Prepared (Prod Nat Nat)) (Except V.VErr V.Geo) V.geometry
+                    (@Prod.mk V.Prepared (Prod Nat Nat) p
+                      (@Prod.mk Nat Nat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@RSL.TX1_094.Args.k V a))))
+                  fun geo =>
+                  @RSL.RE.bind V.VErr V.Weights RSL.Bytes
+                    (@RSL.Child.run V.Acc (Except V.VErr V.Weights) V.weightsNew acc) fun pending =>
+                    @RSL.RE.bind V.VErr (Prod V.Acc V.Weights) RSL.Bytes
+                      (@RSL.Child.run
+                        (Prod RSL.Bytes (Prod V.Prepared (Prod V.Acc (Prod V.E29 (Prod V.Geo (Prod V.Weights Nat))))))
+                        (Except V.VErr (Prod V.Acc V.Weights)) V.queryLoop
+                        (@Prod.mk RSL.Bytes
+                          (Prod V.Prepared (Prod V.Acc (Prod V.E29 (Prod V.Geo (Prod V.Weights Nat)))))
+                          (@RSL.TX1_094.Args.proof V a)
+                          (@Prod.mk V.Prepared (Prod V.Acc (Prod V.E29 (Prod V.Geo (Prod V.Weights Nat)))) p
+                            (@Prod.mk V.Acc (Prod V.E29 (Prod V.Geo (Prod V.Weights Nat))) acc
+                              (@Prod.mk V.E29 (Prod V.Geo (Prod V.Weights Nat)) g
+                                (@Prod.mk V.Geo (Prod V.Weights Nat) geo
+                                  (@Prod.mk V.Weights Nat pending (@RSL.TX1_094.Args.k V a))))))))
+                      fun r =>
+                      @RSL.RE.bind V.VErr V.Acc RSL.Bytes
+                        (@RSL.RE.lift V.VErr V.Acc
+                          (@RSL.Child.run (Prod V.Weights V.Acc) V.Acc V.finish
+                            (@Prod.mk V.Weights V.Acc (@Prod.snd V.Acc V.Weights r) (@Prod.fst V.Acc V.Weights r))))
+                        fun acc2 =>
+                        @RSL.RE.bind V.VErr RSL.Bytes RSL.Bytes
+                          (@RSL.RE.lift V.VErr RSL.Bytes
+                            (@RSL.Child.run (Prod V.Prepared (Prod V.Acc (Prod RSL.Bytes RSL.Bytes))) RSL.Bytes
+                              V.checkpoint
+                              (@Prod.mk V.Prepared (Prod V.Acc (Prod RSL.Bytes RSL.Bytes)) p
+                                (@Prod.mk V.Acc (Prod RSL.Bytes RSL.Bytes) acc2
+                                  (@Prod.mk RSL.Bytes RSL.Bytes (@RSL.TX1_094.Args.proof V a)
+                                    (@RSL.TX1_094.Args.public_bytes V a))))))
+                          fun bytes => @RSL.RE.pure V.VErr RSL.Bytes bytes))))
+def AspisR1.NNG_ReferenceMatch094.original : AspisR1.NNG_ReferenceMatch094.Args → RSL.RE LIB_VCarriers.VErr RSL.Bytes :=
+fun a =>
+  @RSL.RE.bind LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29) RSL.Bytes
+    (@RSL.Spec.bind (Prod (Except LIB_Instances.VL.VErr LIB_Instances.VL.Prepared) LIB_Instances.VL.E29)
+      (Except LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29))
+      (@RSL.Spec.call (RSL.TX1_087.Args LIB_Instances.VL)
+        (Prod (Except LIB_Instances.VL.VErr LIB_Instances.VL.Prepared) LIB_Instances.VL.E29)
+        (fun x => RSL.TX1_087.Domain LIB_Instances.VL x (@none RSL.PhaseFn))
+        (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+        (@RSL.TX1_087.Args.mk LIB_Instances.VL (@RSL.TX1_094.Args.public_ LIB_Instances.VL a)
+          (@RSL.TX1_094.Args.proof LIB_Instances.VL a) LIB_Instances.VL.zeroE29))
+      fun r =>
+      AspisR1.NNG_ReferenceMatch094.original.match_1
+        (fun x => RSL.Spec (Except LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29)))
+        (@Prod.fst (Except LIB_Instances.VL.VErr LIB_Instances.VL.Prepared) LIB_Instances.VL.E29 r)
+        (fun p =>
+          @RSL.Spec.pure (Except LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29))
+            (@Except.ok LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29)
+              (@Prod.mk LIB_Instances.VL.Prepared LIB_Instances.VL.E29 p
+                (@Prod.snd (Except LIB_Instances.VL.VErr LIB_Instances.VL.Prepared) LIB_Instances.VL.E29 r))))
+        fun e =>
+        @RSL.Spec.pure (Except LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29))
+          (@Except.error LIB_VCarriers.VErr (Prod LIB_Instances.VL.Prepared LIB_Instances.VL.E29) e))
+    fun pg =>
+    have p := @Prod.fst LIB_Instances.VL.Prepared LIB_Instances.VL.E29 pg;
+    have g := @Prod.snd LIB_Instances.VL.Prepared LIB_Instances.VL.E29 pg;
+    @RSL.RE.bind LIB_VCarriers.VErr LIB_Instances.VL.Acc RSL.Bytes
+      (@RSL.Child.run Unit (Except LIB_Instances.VL.VErr LIB_Instances.VL.Acc) LIB_Instances.VL.accNew Unit.unit)
+      fun acc =>
+      AspisR1.NNG_ReferenceMatch094.original.match_2 (fun x => RSL.RE LIB_VCarriers.VErr RSL.Bytes)
+        (RSL.TX1_136.toB32 (RSL.slice (@RSL.TX1_094.Args.proof LIB_Instances.VL a) RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1))
+        (fun _ => @RSL.RE.lift LIB_VCarriers.VErr RSL.Bytes (@RSL.Spec.panic RSL.Bytes)) fun folded =>
+        @RSL.RE.seq LIB_VCarriers.VErr RSL.Bytes
+          (@RSL.Child.run (Prod RSL.Bytes (Prod LIB_Instances.VL.Prepared (Prod RSL.B32 Nat)))
+            (Except LIB_Instances.VL.VErr Unit) LIB_Instances.VL.batchMerkle
+            (@Prod.mk RSL.Bytes (Prod LIB_Instances.VL.Prepared (Prod RSL.B32 Nat))
+              (@RSL.TX1_094.Args.proof LIB_Instances.VL a)
+              (@Prod.mk LIB_Instances.VL.Prepared (Prod RSL.B32 Nat) p
+                (@Prod.mk RSL.B32 Nat folded (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          (@RSL.RE.bind LIB_VCarriers.VErr LIB_Instances.VL.Geo RSL.Bytes
+            (@RSL.Child.run (Prod LIB_Instances.VL.Prepared (Prod Nat Nat))
+              (Except LIB_Instances.VL.VErr LIB_Instances.VL.Geo) LIB_Instances.VL.geometry
+              (@Prod.mk LIB_Instances.VL.Prepared (Prod Nat Nat) p
+                (@Prod.mk Nat Nat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@RSL.TX1_094.Args.k LIB_Instances.VL a))))
+            fun geo =>
+            @RSL.RE.bind LIB_VCarriers.VErr LIB_Instances.VL.Weights RSL.Bytes
+              (@RSL.Child.run LIB_Instances.VL.Acc (Except LIB_Instances.VL.VErr LIB_Instances.VL.Weights)
+                LIB_Instances.VL.weightsNew acc)
+              fun pending =>
+              @RSL.RE.bind LIB_VCarriers.VErr (Prod LIB_Instances.VL.Acc LIB_Instances.VL.Weights) RSL.Bytes
+                (@RSL.Child.run
+                  (Prod RSL.Bytes
+                    (Prod LIB_Instances.VL.Prepared
+                      (Prod LIB_Instances.VL.Acc
+                        (Prod LIB_Instances.VL.E29 (Prod LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat))))))
+                  (Except LIB_Instances.VL.VErr (Prod LIB_Instances.VL.Acc LIB_Instances.VL.Weights))
+                  LIB_Instances.VL.queryLoop
+                  (@Prod.mk RSL.Bytes
+                    (Prod LIB_Instances.VL.Prepared
+                      (Prod LIB_Instances.VL.Acc
+                        (Prod LIB_Instances.VL.E29 (Prod LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat)))))
+                    (@RSL.TX1_094.Args.proof LIB_Instances.VL a)
+                    (@Prod.mk LIB_Instances.VL.Prepared
+                      (Prod LIB_Instances.VL.Acc
+                        (Prod LIB_Instances.VL.E29 (Prod LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat))))
+                      p
+                      (@Prod.mk LIB_Instances.VL.Acc
+                        (Prod LIB_Instances.VL.E29 (Prod LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat))) acc
+                        (@Prod.mk LIB_Instances.VL.E29 (Prod LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat)) g
+                          (@Prod.mk LIB_Instances.VL.Geo (Prod LIB_Instances.VL.Weights Nat) geo
+                            (@Prod.mk LIB_Instances.VL.Weights Nat pending
+                              (@RSL.TX1_094.Args.k LIB_Instances.VL a))))))))
+                fun r =>
+                @RSL.RE.bind LIB_VCarriers.VErr LIB_Instances.VL.Acc RSL.Bytes
+                  (@RSL.RE.lift LIB_VCarriers.VErr LIB_Instances.VL.Acc
+                    (@RSL.Child.run (Prod LIB_Instances.VL.Weights LIB_Instances.VL.Acc) LIB_Instances.VL.Acc
+                      LIB_Instances.VL.finish
+                      (@Prod.mk LIB_Instances.VL.Weights LIB_Instances.VL.Acc
+                        (@Prod.snd LIB_Instances.VL.Acc LIB_Instances.VL.Weights r)
+                        (@Prod.fst LIB_Instances.VL.Acc LIB_Instances.VL.Weights r))))
+                  fun acc2 =>
+                  @RSL.RE.bind LIB_VCarriers.VErr RSL.Bytes RSL.Bytes
+                    (@RSL.RE.lift LIB_VCarriers.VErr RSL.Bytes
+                      (@RSL.Child.run
+                        (Prod LIB_Instances.VL.Prepared (Prod LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes)))
+                        RSL.Bytes LIB_Instances.VL.checkpoint
+                        (@Prod.mk LIB_Instances.VL.Prepared (Prod LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes)) p
+                          (@Prod.mk LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes) acc2
+                            (@Prod.mk RSL.Bytes RSL.Bytes (@RSL.TX1_094.Args.proof LIB_Instances.VL a)
+                              (@RSL.TX1_094.Args.public_bytes LIB_Instances.VL a))))))
+                    fun bytes => @RSL.RE.pure LIB_VCarriers.VErr RSL.Bytes bytes)
+def AspisR1.NNG_ParseTail094.reference : AspisR1.NNG_Input094.Args →
+  RSL.Observer → RSL.Env → RSL.RE LIB_VCarriers.VErr RSL.Bytes :=
+fun a obs env =>
+  @RSL.RE.seq LIB_VCarriers.VErr RSL.Bytes
+    (@RSL.Child.run RSL.Bytes (Except LIB_Instances.VL.VErr Unit) LIB_Instances.VL.parseShape
+      (@RSL.TX1_094.Args.proof LIB_Instances.VL a))
+    (@RSL.RE.seq LIB_VCarriers.VErr RSL.Bytes
+      (@RSL.Child.run RSL.Bytes (Except LIB_Instances.VL.VErr Unit) LIB_Instances.VL.canonicalScan
+        (@RSL.TX1_094.Args.proof LIB_Instances.VL a))
+      (AspisR1.NNG_ReferenceMatch094.original a))
