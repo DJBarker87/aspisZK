@@ -60,3 +60,5 @@ D978 attempt 49688: PV_FN_SLICE_f8_Suffix: passing pinned replay.
 D978 attempt 49689: PV_FN_W2_BinaryReturnOutcome: passing pinned replay.
 
 D978 attempt 49900: PV_FN_SLICE_f8_FullReplies: passing pinned replay.
+
+D978 attempt 49901: PV_FN_SLICE_f8: passing pinned replay.
