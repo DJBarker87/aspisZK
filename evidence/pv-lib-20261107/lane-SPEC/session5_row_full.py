@@ -8,7 +8,7 @@ rows={270:(3,'PV_FN_THREAD_f270SummaryRun','from_entry'),166:(2,'PV_FN_THREAD_f1
 def cmd(args,**kwargs): return subprocess.run(args,check=True,**kwargs)
 def output(args):return subprocess.check_output(args,text=True)
 def extract(s,name):
- start=re.search(r'^theorem '+re.escape(name)+r'\b',s,re.M).end(); head=s[start:s.index(':= by',start)].strip(); depth=0
+ start=re.search(r'^theorem '+re.escape(name)+r'\b',s,re.M).end(); head=s[start:s.index(':=',start)].strip(); depth=0
  for j,c in enumerate(head):
   if c in '([{':depth+=1
   if c in ')]}':depth-=1
@@ -32,7 +32,7 @@ extra=''
 if n==270:
  extra=''' ∧ ∃ builder scope closure, i.arguments = [builder,scope,closure] ∧
     PV_THR2_TypedRepresentation_Builder.Shape builder ∧
-    ∃ name size hooks, r.carrier.field builder 0 = some name ∧
+    ∃ threadLabel size hooks, r.carrier.field builder 0 = some threadLabel ∧
       r.carrier.field builder 1 = some size ∧ r.carrier.field builder 2 = some hooks'''
 if n==1:
  extra=' ∧ ∃ n f flag, i.arguments = [.number n,f,flag] ∧ n < 2^64 ∧ ∃ b, r.carrier.truth flag = some b'
