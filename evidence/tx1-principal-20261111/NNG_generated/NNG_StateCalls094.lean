@@ -48,12 +48,30 @@ theorem accNew_graph (env : RSL.Env) :
  cases r <;> simp only [Function.comp_apply,fromT15_inverse,LIBC_AccNew.port]
 #print axioms accNew_graph
 
+def nativeWeights (weights : Slice aspis_core.field.QM31) : Slice AspisR1Stage2.aspis_core.field.QM31 :=
+ ⟨weights.val.map (LIBC_VStateCarriers.q ∘ toT1),by simpa only [List.length_map] using weights.property⟩
 def weightsNew (env : RSL.Env) (weights : Slice aspis_core.field.QM31) :
  Result (core.result.Result verifier.BatchedWeights verifier.Error) :=
  NMP_ResultTransport.outer (fromReply fromT13)
-  (Port3_PendingInstall.pending env.reservation
-    ((LIBC_VStateCarriers.mapVec LIBC_VStateCarriers.q
-      (⟨weights.val.map toT1,by simpa only [List.length_map] using weights.property⟩ : alloc.vec.Vec LIB_VCarriers.K))).deref))
+  (Port3_PendingInstall.pending env.reservation (nativeWeights weights))
+
+theorem weightsNew_graph (env : RSL.Env) (a : verifier.Accumulator)
+ (domain : LIBC_WeightsNew.Domain (toT15 a)) :
+ LIBC_WeightsNew.child.run (toT15 a) env
+ (LIB_Carriers.resultObs (port toT13) [] (weightsNew env a.weights.deref)) := by
+ refine ⟨domain,?_⟩
+ apply (LIBC_WeightsNew.graph _ env _).mpr
+ have same : nativeWeights a.weights.deref=(LIBC_VStateCarriers.toAcc (toT15 a)).weights.deref := by
+  apply Subtype.ext
+  simp only [nativeWeights,LIBC_VStateCarriers.toAcc,LIBC_VStateCarriers.mapVec,toT15,vec,List.map_map]
+  rfl
+ unfold weightsNew
+ rw [same]
+ apply obs_outer
+ intro r
+ rw [port_reply]
+ cases r <;> simp only [fromT13_inverse,LIBC_WeightsNew.port]
+#print axioms weightsNew_graph
 
 def geometry (env : RSL.Env) (queries : Array U32 22#usize) (start finish : Usize) :
  Result (core.result.Result verifier.QueryGeometry verifier.Error) :=
