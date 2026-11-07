@@ -121,3 +121,8 @@ It deliberately claims ENTRY COMPONENT only, not missing full common validity/
 resource bindings or a full MachineSpec/Pre/Post. Full count stays0/29.
 Exit0;wall0:02.25;peak4723240KiB;swap0;parent02f95d7c494;standard summary axioms.
 Next Lean49723.
+
+49723 new27-root strict audit driver compiled, same private importAll collector/
+walker suffix as49790; ONLY root/module arrays changed. Exit0;wall0:00.89;
+peak1587932KiB;swap0;parent7072ff5add2. Strict raw49791 is next, not yet run.
+Next Lean49724. No full frozen contracts or compositions claimed.
