@@ -55,3 +55,34 @@ Canonical scalar/key/error maps, deferred-error domain implications, full-observ
 CLOSED218/216 native sources are now applied at SAME bytes, allocator, owner and typed post-read cuts in NMX_MasterChild.source (L213) and NMX_CheckpointChild.source (L214). The adapter preserves actual owner/payload and returning allocator post; it removes only the pure heap-observation layer, never inventing a stopped post-state. NMX_BoxCommands L215 transports the two allocation-aware source commands to the canonical decoder library; NMX_PdaSound L216 covers the exact quantified reply/error and event. These remain local installations until their cuts are obtained at the233 occurrences.
 NMX_Semantics L210 is a dictionary-free source-command interpreter with independent Box/snapshot allocation aborts and full raw217/234 observations. It is not a native root by definition. Its source skeleton, semantic occurrence folds, and canonical body factor remain work in progress. Full domain=True versus SnapshotAccounts/native clone-error interpretation is still recorded as an exact statement difference; no narrowed domain has been silently adopted.
 Distinct21-comparison AC simplification hit the default heartbeat limit at218 and is retired; the replacement is generic loop-success/uniqueness induction (no conjunction enumeration or cap/heartbeat changes). The symbolic BitVec byte wrapper at220 printed standard axioms but exited1 due an extra tactic after closure; it is not counted as accepted until repaired.
+
+## Renewal stage R5–R8: dictionary-free source cuts and carrier continuations
+
+Accepted `NMX_Skeleton.source` selects only the named std condition slots;
+`NMX_SyntaxFactor` (next focused target) will connect its literal body to the
+55 dictionary-free `NMX_SF*` definitions. All six SF definitions and all six
+canonical `NMX_CB*` definitions compiled. `NMX_SemanticTail05.e055` proves the
+actual last occurrence preserves the complete final payload; `NMX_SemanticF05`
+extends through occurrence51, including the independent snapshot allocation
+abort. Its unused217/234 packet binders are being removed in a separate stronger
+wrapper; they must not hold unrelated suffixes behind OPEN children.
+
+`NMX_CommandTransport` now installs data, PDA and lane packets. Inline registry
+statement elaboration exceeded ordinary heartbeat limits twice, retired in
+`NMX_RETIRED_SHAPES_R3.json`; the separate typed `NMX_RegistryTransport.packet`
+passed with the full canonical registry tuple. No cap/heartbeat increase.
+Index, scalar inequality, result and observation transports preserve complete
+errors and stop prefixes. No native/runtime association is inferred merely
+from the dictionary-free interpretation definition.
+
+The R7 coordinator wrongly continued several finite distinctness windows after
+related simplifier failures (L253–258). All are uncredited and retired. New
+queues stop on failed required predecessors. The old21-comparison AC shape is
+not a useful predecessor; use symbolic loop induction and named small steps.
+The isolated byte wrapper passed; the proposed byte-position change failed
+because pinned `to_le_bytes` uses `BitVec.toLEBytes`, not the assumed syntactic
+shift chain. Inspect that actual shape before further arithmetic proofs.
+
+No candidate233 root, DomainTrue preserved, no security claim, no extraction or
+Kani used in this renewal. Native getter-error cloning, allocator divergence/
+std observation interpretation, and full217/234 native roots remain explicit.

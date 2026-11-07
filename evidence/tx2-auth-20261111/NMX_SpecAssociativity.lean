@@ -37,7 +37,7 @@ theorem bind {A B C : Type} (m : Spec A) (f : A → Spec B) (g : B → Spec C) :
      · cases he
        exact Or.inr (Or.inr ⟨_,hm,ho⟩)
  · intro h
-   rcases h with ⟨a,ea,tail,hm,hfg,ho⟩ | ⟨_,hm,ho⟩ | ⟨_,hm,ho⟩
+   rcases h with ⟨a,ea,tail,hm,hfg,ho⟩ | ⟨e,hm,ho⟩ | ⟨e,hm,ho⟩
    · rcases hfg with ⟨b,ef,o2,hf,hg,ht⟩ | ⟨ef,hf,ht⟩ | ⟨ef,hf,ht⟩
      · subst tail
        refine Or.inl ⟨b,ea ++ ef,o2,

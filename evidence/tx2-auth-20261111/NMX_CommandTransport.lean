@@ -18,7 +18,9 @@ theorem data (owners : Owners) (lane : NMX_RawChildren.LaneNative)
  (registry : NMX_RawChildren.RegistryNative) (a : r1_pool_adapter.owned.OwnedAccount) :
  NMX_Heterogeneous.Refines bytes (NMX_Semantics.command owners lane registry (.data a))
   (RSL.RS.ofExcept (RSL.OwnedAccount.data (account a))) := by
- unfold NMX_Semantics.command RSL.OwnedAccount.data account
+ change NMX_Heterogeneous.Refines bytes
+  (match a.bytes with | .Ok v => RSL.RS.pure v.deref | .Err e => RSL.RS.throw (error e))
+  (RSL.RS.ofExcept (reply (fun b => b.val.map byte) a.bytes))
  cases h : a.bytes with
  | Ok v => exact NMX_HeterogeneousPrimitives.pure bytes v.deref
  | Err e => exact thrown bytes (error e)
@@ -47,24 +49,9 @@ theorem lane (owners : Owners) (native : NMX_RawChildren.LaneNative)
  subst o
  exact ⟨True.intro,packet b env⟩
 
-theorem registry (owners : Owners) (nativeLane : NMX_RawChildren.LaneNative)
- (native : NMX_RawChildren.RegistryNative) (L : RSL.PoolLib) (D : RSL.DeployedIds)
- (packet : NMX_RawChildren.RowSpec_234 L D native)
- (v p : solana_pubkey.Pubkey) (ma : r1_pool_adapter.owned.OwnedAccount) (m : Master)
- (r e : r1_pool_adapter.owned.OwnedAccount) (slot : U64) :
- NMX_Heterogeneous.Refines id
-  (NMX_Semantics.command owners nativeLane native (.registry v p ma m r e slot))
-  (RSL.Spec.call RSL.TX2_234.Domain (RSL.TX2_234.Ref L D)
-   (NMX_CallArguments.registry v p ma m r e slot)) := by
- intro env o run
- change o = native ⟨v,p,ma,m,r,e,slot⟩ env at run
- subst o
- rw [NMX_HeterogeneousPrimitives.map_identity]
- exact ⟨True.intro,packet _ env⟩
 #print axioms thrown
 #print axioms data
 #print axioms pda
 #print axioms lane
-#print axioms registry
 end NMX_CommandTransport
 end

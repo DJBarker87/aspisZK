@@ -38,7 +38,7 @@ for p in B.glob('NMX_L*/receipt.json'):
   if source.is_file() and sha(source)==d['source_hashes'].get('NMX_generated/'+module+'.lean'):
    if module not in passes or int(d['attempt'][-3:])>int(passes[module]['attempt'][-3:]):passes[module]=d
 modules=json.loads((B/'NMX_EXPORT_MODULES.json').read_text());exports=[];srcs=[]
-out=B/'NMX_exports_20261111';out.mkdir(exist_ok=True)
+out=B/'NMX_exports_resume_20261107';out.mkdir(exist_ok=True)
 for m in modules:
  src=B/'NMX_generated'/(m+'.lean');rc=passes[m]
  assert sha(src)==rc['source_hashes']['NMX_generated/'+m+'.lean'],m

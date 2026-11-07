@@ -19,3 +19,11 @@ No candidate root and no row credit. `NMX_Parameterized233.fold` is a complete g
 | Parent242 | Small NMX_RowSpec_233 module committed in FIRST stage; exact NMS-copy provenance recorded | NMS must install a genuine233 root, not this interface or generic fold. Do not erase boxes or assume its law as a root premise. |
 
 Budget ends at40/40 Lean/link/audit/retention scopes and2/2 extraction. The10 Kani allowance is ONLY for(bc)-flagged own exits; there are none, so no Kani run is authorized or useful here. This is not a Kani-exhaustion stop: independent Lean source/control/owner/frame/erasure/closed-leaf work and own audits were attempted through the complete formal budget. Remaining obligations above are actual Lean/refinement/child-packet gaps, not new cryptographic assumptions. No timeout or memory-killed attempt occurred. Full gates/source-to-ELF and next ledger credit remain separate.
+
+R8 update: actual emitted value link is CLOSED as support
+`NMX_CutValueBridge.source`; full canonical/native association is still OPEN.
+The final five semantic occurrences are proved, with snapshot allocation abort,
+under an abstract observation interpreter. Continue backward from occurrence50
+using the same folded local method. Do not reuse the retired distinctness
+simp/AC or inline registry statement shapes. Failed prototype modules are not
+exportable even when their stdout prints some earlier successful theorems.
