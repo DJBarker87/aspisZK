@@ -51,3 +51,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49802 passed exact pinned replay PV_LIB_A_PureCalls; see receipt for time/RSS/swap/revision/axioms.
 
 49803 passed exact pinned replay PV_LIB_A_PurePoll; see receipt for time/RSS/swap/revision/axioms.
+
+49804 passed exact pinned replay PV_LIB_A_PureValues; see receipt for time/RSS/swap/revision/axioms.
