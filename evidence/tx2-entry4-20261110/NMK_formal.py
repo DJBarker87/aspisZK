@@ -7,7 +7,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind!='extract','Extraction budget is zero'
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NMK_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x['kind']=='lean' for x in done)<80,'Actual Lean compiler budget exhausted'
+        assert sum(x['kind']=='lean' for x in done)<80,'Actual Lean compiler budget exhausted (80)' 
         if target not in ['NMK_COMBINED_IMPORT','NMK_ProofDriver','NMK_ScanDriver']:
             assert sum(x['kind']=='lean' for x in done)<78,'Reserve two final import/audit compiler slots'
     if kind=='kani':

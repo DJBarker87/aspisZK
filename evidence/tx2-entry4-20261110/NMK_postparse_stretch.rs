@@ -1,0 +1,83 @@
+use super::*;
+use core::cell::RefCell;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+// Returning-arm experiment only. This local log is NOT the full NLT footprint.
+#[derive(Clone,Copy)]
+struct NMK_Log { entered:bool, pub_ptr:*const u8, pub_len:usize, proof_ptr:*const u8,
+ proof_len:usize, ck_ptr:*const u8, ck_len:usize, reply:u8, footprint:[u64;4] }
+#[derive(Clone,Copy)]
+struct NMK_Hash<'a>(&'a RefCell<NMK_Log>);
+impl aspis_core::Digest32 for NMK_Hash<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32] {
+  assert_eq!(parts.len(),3);
+  let reply:u8=kani::any();kani::assume(reply<9);
+  *self.0.borrow_mut()=NMK_Log {entered:true,pub_ptr:parts[0].as_ptr(),pub_len:parts[0].len(),
+   proof_ptr:parts[1].as_ptr(),proof_len:parts[1].len(),ck_ptr:parts[2].as_ptr(),ck_len:parts[2].len(),
+   reply,footprint:kani::any()};
+  let mut out=[0;32];out[0]=reply;out
+ }
+}
+fn NMK_reply(t:u8)->Result<(),Error>{match t {0=>Ok(()),1=>Err(Error::Parse),2=>Err(Error::Semantic),
+ 3=>Err(Error::Transcript),4=>Err(Error::Relation),5=>Err(Error::Merkle),6=>Err(Error::Query),
+ 7=>Err(Error::Checkpoint),_=>Err(Error::Allocation)}}
+fn NMK_header(p:&[u8])->bool {
+ p.len()==57607 && &p[..8]==compact::MAGIC && p[8]==2 && p[9..16].iter().all(|x|*x==0)
+}
+fn NMK_parse_cut(p:&[u8])->Result<Variant,Error>{
+ // CLOSED NLE_ParseInstall packet's complete returning law, no buffer writes.
+ assert_eq!(p.len(),57607); Ok(Variant::S2)
+}
+fn NMK_marker_cut(_obs:Observer,_phase:Phase){}
+fn NMK_common_cut<H:aspis_core::Digest32>(public:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
+ assert_eq!(proof.len(),57607,"common own extent");assert!(public.len()<=1880,"common own public extent");
+ // Root0 and the full NLT packet are NOT represented by this experimental cut.
+ NMK_reply(hash.digest(&[public,proof,checkpoint])[0])
+}
+fn NMK_common_perturbed<H:aspis_core::Digest32>(public:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
+ let tag=hash.digest(&[public,proof,checkpoint])[0];NMK_reply((tag+1)%9)
+}
+fn NMK_parent<const OK:bool,const SWAP:bool,const OMIT:bool>(){
+ let public:[u8;1880]=kani::any();let proof:[u8;57607]=kani::any();let ck:[u8;1768]=kani::any();
+ let n:usize=kani::any();kani::assume(n<=1880);let pub_= &public[..n];
+ // Post-parse stretch: successful parse reply is selected externally.
+ kani::assume(OK);
+ let seed=NMK_Log{entered:false,pub_ptr:core::ptr::null(),pub_len:0,proof_ptr:core::ptr::null(),proof_len:0,
+  ck_ptr:core::ptr::null(),ck_len:0,reply:kani::any(),footprint:kani::any()};
+ let log=RefCell::new(seed);let hash=NMK_Hash(&log);
+ let result=if SWAP{tx2_authenticated(pub_,&ck,&proof,hash,None)}else{tx2_authenticated(pub_,&proof,&ck,hash,None)};
+ let post=*log.borrow();
+ if OK {
+  assert!(post.entered);assert!(post.pub_ptr==pub_.as_ptr()&&post.pub_len==pub_.len());
+  assert!(post.proof_ptr==proof.as_ptr()&&post.proof_len==proof.len());
+  assert!(post.ck_ptr==ck.as_ptr()&&post.ck_len==ck.len());assert_eq!(result,NMK_reply(post.reply));
+  if OMIT {assert_eq!(post.footprint[3],seed.footprint[3],"omitted local footprint location control");}
+ } else {assert!(!post.entered);assert_eq!(result,Err(Error::Parse));assert_eq!(post.footprint,seed.footprint);}
+
+}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMK_parse_cut)]#[kani::stub(mark,NMK_marker_cut)]
+#[kani::stub(tx2_common::<NMK_Hash<'_>>,NMK_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_auth_return(){NMK_parent::<true,false,false>();}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMK_parse_cut)]#[kani::stub(mark,NMK_marker_cut)]
+#[kani::stub(tx2_common::<NMK_Hash<'_>>,NMK_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_auth_reject(){NMK_parent::<false,false,false>();}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMK_parse_cut)]#[kani::stub(mark,NMK_marker_cut)]
+#[kani::stub(tx2_common::<NMK_Hash<'_>>,NMK_common_perturbed)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_auth_perturbed(){NMK_parent::<true,false,false>();}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMK_parse_cut)]#[kani::stub(mark,NMK_marker_cut)]
+#[kani::stub(tx2_common::<NMK_Hash<'_>>,NMK_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_auth_argument_mutant(){NMK_parent::<true,true,false>();}
+#[kani::proof]#[kani::unwind(17)]
+#[kani::stub(parse_shape,NMK_parse_cut)]#[kani::stub(mark,NMK_marker_cut)]
+#[kani::stub(tx2_common::<NMK_Hash<'_>>,NMK_common_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_auth_omitted_location(){NMK_parent::<true,false,true>();}
+#[kani::proof]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMK_copy_negative(){let a:[u8;4]=kani::any();let mut b=[0;4];b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<4);assert_ne!(a[i],b[i]);}
