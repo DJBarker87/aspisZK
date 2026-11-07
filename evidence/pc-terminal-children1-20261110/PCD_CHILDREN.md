@@ -1,302 +1,59 @@
-# PCD child dependencies
+# PCD real call dependencies
 
-No child is promoted by this inventory review.
+This table follows the frozen source. PCD_CONSERVATIVE_CHILDREN.md preserves the initial MIR name-alternative inventory; generic `::new` alternatives are NOT call edges and never block a row.
 
-## POOL:311 programs/aspis-pool/src/pair_forest.rs::decode_terminal_checkpoint_box_v1
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::decode_retained_pair_forest_checkpoint_account_v1 | POOL:310 | INVENTORY_ONLY_NO_CREDIT
+No result is promoted by this table. Every callee use must be instantiated at SAME arguments.
 
-## POOL:312 programs/aspis-pool/src/pair_forest.rs::decode_terminal_lane_box_v1
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::decode_lane_account_from_program_invariant_v1 | POOL:306 | INVENTORY_ONLY_NO_CREDIT
+## POOL:311 decode_terminal_checkpoint_box_v1
+- POOL:310 (D) decode_retained_pair_forest_checkpoint_account_v1 — OPEN Pool child / native packet required
 
-## POOL:313 programs/aspis-pool/src/pair_forest.rs::decode_terminal_master_box_v1
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::decode_master_account | POOL:307 | INVENTORY_ONLY_NO_CREDIT
+## POOL:312 decode_terminal_lane_box_v1
+- POOL:306 (D) decode_lane_account_from_program_invariant_v1 — OPEN Pool child / native packet required
 
-## POOL:314 programs/aspis-pool/src/pair_forest.rs::decode_terminal_request_box_v1
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1 | POOL:207 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
+## POOL:313 decode_terminal_master_box_v1
+- POOL:307 (D) decode_master_account — OPEN Pool child / native packet required
 
-## POOL:319 programs/aspis-pool/src/pair_forest.rs::next_lane_image_box_v1
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::encode_lane_from_authenticated_result_v1 | POOL:315 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::next_pair_forest_lane_v1 | POOL:320 | INVENTORY_ONLY_NO_CREDIT
+## POOL:314 decode_terminal_request_box_v1
+- POOL:207 (B) decode_pool_v1_pair_forest_terminal_request_v1 — Stream A CLOSED packet; exact own-argument domain still required
 
-## POOL:320 programs/aspis-pool/src/pair_forest.rs::next_pair_forest_lane_v1
-- crates/aspis-core/src/circle_fri.rs::BaseCirclePoint::add | POOL:001 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::add | POOL:016 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::M31::add | POOL:029 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::QM31::add | POOL:045 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::add | POOL:060 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::add | POOL:095 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::next | POOL:143 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::index | POOL:155 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
+## POOL:319 next_lane_image_box_v1
+- POOL:320 (B) next_pair_forest_lane_v1 — PCD candidate; no closure until native packet and combined gate
+- POOL:315 (B) encode_lane_from_authenticated_result_v1 — OPEN Pool child / native packet required
 
-## POOL:339 programs/aspis-pool/src/pair_forest.rs::validate_authenticated_terminal_result_v1
-- crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_result_against_statement_v1 | POOL:213 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::terminal_common_box_v1 | POOL:336 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::transfer_terminal_statement_box_v1 | POOL:338 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest.rs::withdrawal_terminal_statement_box_v1 | POOL:342 | INVENTORY_ONLY_NO_CREDIT
+## POOL:320 next_pair_forest_lane_v1
+- POOL:278 (A) from — OPEN Pool child / native packet required
 
-## POOL:350 programs/aspis-pool/src/pair_forest_dispatch.rs::plan_pair_forest_terminal_dispatch_with_bytes_v1
-- crates/aspis-core/src/circle_fri.rs::BaseCirclePoint::add | POOL:001 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::add | POOL:016 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::M31::add | POOL:029 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::QM31::add | POOL:045 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::add | POOL:060 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::add | POOL:095 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::next | POOL:143 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::index | POOL:155 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::proof_transport_verifier | POOL:351 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::require_checkpoint_distinct | POOL:352 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::require_verifier_program | POOL:353 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/registry.rs::AuthenticatedVerifierSelectionV1::matches | POOL:370 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/registry.rs::AuthenticatedVerifierSelectionV1::matches_verifier_owner | POOL:371 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/registry.rs::authenticate_verifier_selection_v1 | POOL:372 | INVENTORY_ONLY_NO_CREDIT
+## POOL:339 validate_authenticated_terminal_result_v1
+- POOL:336 (B) terminal_common_box_v1 — OPEN Pool child / native packet required
+- POOL:338 (B) transfer_terminal_statement_box_v1 — OPEN Pool child / native packet required
+- POOL:342 (B) withdrawal_terminal_statement_box_v1 — OPEN Pool child / native packet required
+- POOL:213 (B) validate_pool_v1_pair_forest_terminal_result_against_statement_v1 — Stream A CLOSED packet; exact own-argument domain still required
 
-## POOL:347 programs/aspis-pool/src/pair_forest_dispatch.rs::dispatch_pair_forest_terminal_readonly_v1
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::invoke_pair_forest_terminal_with_runtime_v1 | POOL:348 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::plan_pair_forest_terminal_dispatch_v1 | POOL:349 | INVENTORY_ONLY_NO_CREDIT
+## POOL:350 plan_pair_forest_terminal_dispatch_with_bytes_v1
+- POOL:351 (B) proof_transport_verifier — OPEN Pool child / native packet required
+- POOL:353 (B) require_verifier_program — OPEN Pool child / native packet required
+- POOL:352 (D) require_checkpoint_distinct — OPEN Pool child / native packet required
+- POOL:372 (D) authenticate_verifier_selection_v1 — OPEN Pool child / native packet required
+- POOL:370 (A) matches — OPEN Pool child / native packet required
+- POOL:371 (A) matches_verifier_owner — OPEN Pool child / native packet required
 
-## POOL:348 programs/aspis-pool/src/pair_forest_dispatch.rs::invoke_pair_forest_terminal_with_runtime_v1
-- crates/aspis-core/src/circle_fri.rs::BaseCirclePoint::add | POOL:001 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_line_merkle.rs::ExactCursor<'a>::new | POOL:004 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_merkle.rs::ExactCursor<'a>::new | POOL:006 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/circle_query.rs::CircleQueryGammaPowers::new | POOL:014 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::add | POOL:016 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::CM31::new | POOL:025 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::M31::add | POOL:029 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Cm31Weights<N>::new | POOL:042 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new | POOL:044 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field.rs::QM31::add | POOL:045 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::add | POOL:060 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/field/wide_exact.rs::WideExact::new | POOL:066 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/merkle.rs::Radix4BinaryCapTopology::new | POOL:074 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Cursor<'a>::new | POOL:075 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/proof.rs::Header::write | POOL:077 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::BasisSize::len | POOL:078 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/basis.rs::NaturalBasis::new | POOL:079 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/merkle.rs::Tree::new | POOL:085 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Commitment::new | POOL:091 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::EncodingDomain::new | POOL:094 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::add | POOL:095 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::Row::new | POOL:096 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/prover.rs::insert | POOL:098 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::OpeningTranscript::new | POOL:107 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/r0/transcript.rs::SemanticTranscript::new | POOL:108 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_masked_switch.rs::Cursor<'a>::new | POOL:113 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_private_openings.rs::Cursor<'a>::new | POOL:118 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_query.rs::StateOnlyQueryPowers::new | POOL:121 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/state_only_spend_query.rs::StateOnlySpendQueryPowers::new | POOL:124 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/transcript.rs::Transcript::new | POOL:141 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::PackedM31Reader<'a>::new | POOL:142 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/v6_onefold.rs::V6FixedFieldReader<'a>::new | POOL:144 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-core/src/verify.rs::DomainPowerTable::new | POOL:148 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::ConstraintId::new | POOL:156 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/constraints_v4.rs::TensorSelectors::new | POOL:158 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/pool_v1/incremental_merkle.rs::ValidatedIncrementalMerkleTreeV1<'_>::deref | POOL:176 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_result_v1 | POOL:208 | INVENTORY_ONLY_NO_CREDIT
-- crates/aspis-statement/src/pool_v1/root_history.rs::RootHistoryPageV1::push | POOL:244 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/error.rs::ProgramError::from | POOL:278 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/instruction.rs::ProgramError::from | POOL:288 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::SolanaPairForestVerifierRuntimeV1::clear_return_data | POOL:344 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::SolanaPairForestVerifierRuntimeV1::get_return_data | POOL:345 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::SolanaPairForestVerifierRuntimeV1::invoke | POOL:346 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::proof_transport_verifier | POOL:351 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::require_checkpoint_distinct | POOL:352 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_forest_dispatch.rs::require_verifier_program | POOL:353 | INVENTORY_ONLY_NO_CREDIT
-- programs/aspis-pool/src/pair_state.rs::CanonicalPairPoolStateV1::deref | POOL:355 | INVENTORY_ONLY_NO_CREDIT
+## POOL:347 dispatch_pair_forest_terminal_readonly_v1
+- POOL:349 (B) plan_pair_forest_terminal_dispatch_v1 — OPEN Pool child / native packet required
+- POOL:348 (D) invoke_pair_forest_terminal_with_runtime_v1 — OPEN Pool child / native packet required
+
+## POOL:348 invoke_pair_forest_terminal_with_runtime_v1
+- POOL:353 (B) require_verifier_program — OPEN Pool child / native packet required
+- POOL:351 (B) proof_transport_verifier — OPEN Pool child / native packet required
+- POOL:352 (D) require_checkpoint_distinct — OPEN Pool child / native packet required
+- POOL:344 (A) clear_return_data — PCB-owned; typed PCD target drafted; instantiate only after merged root
+- POOL:346 (B) invoke — OPEN Pool child / native packet required
+- POOL:345 (A) get_return_data — PCB-owned; typed PCD target drafted; instantiate only after merged root
+- POOL:208 (B) decode_pool_v1_pair_forest_terminal_result_v1 — OPEN Pool child / native packet required
+
+## Standard operations
+Box allocation, scalar checked addition, raw fixed-array comparison, iteration, Vec/Rc operations and cleanup execute in the appropriate native cut under (au), the exact KMX rule and std/allocator trust. They are not extra child rows. Abort/cleanup prefixes are still obligations.
+
+## Shared findings
+The three boxed account decoders need the actual current-state SDK/decoder packets (306/307/310), not three new runtime success assumptions. POOL:319 also needs the deployed 315 encoder; POOL:339 needs the three actual Box statement constructors. These are recorded once here; no wrapper assumes them CLOSED.
+
+POOL:314 has a CLOSED shared decoder but still needs its OWN complete native forwarding/Box/abort/frame certificate. It is independent of the account decoders and is next after the first complete row. POOL:350 depends on actual registry authentication 372. POOL:347 includes 349, not merely 350. POOL:348 includes 346 and the PCB runtime wrappers; its passed-cell effect remains unconstrained.

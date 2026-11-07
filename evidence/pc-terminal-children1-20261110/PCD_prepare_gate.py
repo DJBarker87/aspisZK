@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 ats=[json.loads(l) for l in (E/'PCD_ATTEMPTS.jsonl').read_text().splitlines()]
 mods=sorted(p.stem for p in E.glob('PCD_*.lean') if p.stem not in ['PCD_COMBINED_IMPORT','PCD_ProofDriver'])
-roots=['AspisR1.RPx_Deployed.deployed','PCA.PCD_Owner.spec']
+roots=['AspisR1.RPx_Deployed.deployed','PCD_PRODUCERS.P1','PCD_PRODUCERS.P2','PCD_PRODUCERS.P3']
 pins=[]
 for m in mods:
  p=E/(m+'.lean');h=sha(p);ok=[r for r in ats if r['module']==m and r['exit_status']==0 and h in r['source_hashes'].values()]
@@ -15,7 +15,7 @@ for m in mods:
   name=re.match("'([^']+)'",line)[1]
   if name not in roots:roots.append(name)
  for row in re.findall(r'def (RowSpec_POOL_\d+)',p.read_text()):roots.append('PCD.'+row)
-(E/'PCD_COMBINED_IMPORT.lean').write_text('import NLS_COMBINED_IMPORT\nimport NLO_COMBINED_IMPORT\nimport NLF_SdkBorrowLaw\n'+''.join('import '+m+'\n' for m in mods)+'#print axioms AspisR1.RPx_Deployed.deployed\n#print axioms PCA.PCD_Owner.spec\n')
+(E/'PCD_COMBINED_IMPORT.lean').write_text('import NLS_COMBINED_IMPORT\nimport NLO_COMBINED_IMPORT\nimport NLF_SdkBorrowLaw\n'+''.join('import '+m+'\n' for m in mods)+'#print axioms AspisR1.RPx_Deployed.deployed\n')
 (E/'PCD_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots]),indent=1)+'\n')
 (E/'PCD_AUDIT_MODULES.json').write_text(json.dumps([['PCD_COMBINED_IMPORT']])+'\n')
 (E/'PCD_CURRENT_SOURCE_CHECK.json').write_text(json.dumps(pins,indent=1)+'\n')

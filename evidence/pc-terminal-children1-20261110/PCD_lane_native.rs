@@ -30,5 +30,5 @@
         kani::assume(old.checked_add(1) != Some(next));
         let lane = PCD_lane(old); let result = PCD_result(next);
         let out = super::next_pair_forest_lane_v1(&lane, &result);
-        assert!(out != Err(PoolV1ProgramError::StateHistoryMismatch.into()));
+        assert!(out != Err(ProgramError::Custom(0x41532003)));
     }

@@ -33,3 +33,6 @@ post-run lock unchanged. No full-row or producer closure. K003 dependency compil
 K004 code generation and a separate native rejection attempt; no timeout or cap increase.
 K013 fixed-size std comparison unwind failure retained. K015 wrong harness dispatch is excluded from frontier credit.
 Next: one arbitrary frontier iteration, post-loop return window, fixed model fold and coherent gate.
+
+## Stage 3: first complete lane-model candidate
+POOL:320 now has fixed extracted primitive references (E002), checked-add/array/frontier laws, 20 pinned empty roots, generic bounded-loop induction, full-record extensionality (L033), and complete Result range (L034). PCD_LaneModel.result_state_effects is a MODEL candidate, not a CLOSED Pool row. Actual structured frozen-body selection E006 and its Aeneas failure E007 establish (ay)(2) eligibility; PCD-RT-POOL320 records the handwritten whole-loop composition and option-A trust reclassification. K031 full snapshot fidelity timed out and was retired; the scalar-log split K036 passed, controls pending. Earlier native frontier and tail pairs remain source-segment evidence, not whole-row credit. No P1/P2/P3 producer hypothesis is discharged. The next deliverable is final source-ordered native segment/control packet plus the combined/raw-axiom/coherence gate.

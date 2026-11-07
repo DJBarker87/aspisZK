@@ -1,0 +1,222 @@
+{
+ "status": "SOURCE_COVERAGE_PASS_ONLY; not a row promotion",
+ "row": "POOL:320",
+ "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+ "source": "programs/aspis-pool/src/pair_forest.rs",
+ "source_sha256": "d9589cfde4f9c74c022850ba624f359b6dc35efa211ce1b117042f6984d085e4",
+ "function_sha256": "ba356088366b77efd76fda6143ed4f2b6613cdac5796aa5b05dc5b4b44c36047",
+ "body_sha256": "108d54044729b9042f5ccf8398cae839ec69d7977038d65e1d7b14eaff065dcd",
+ "lines": [
+  {
+   "line": 1384,
+   "source": "fn next_pair_forest_lane_v1(",
+   "category": "signature"
+  },
+  {
+   "line": 1385,
+   "source": "    lane: &PoolV1PairForestLaneStateV1,",
+   "category": "signature"
+  },
+  {
+   "line": 1386,
+   "source": "    result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,",
+   "category": "signature"
+  },
+  {
+   "line": 1387,
+   "source": ") -> Result<PoolV1PairForestLaneStateV1, ProgramError> {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1388,
+   "source": "    let afterstate = result.verified_afterstate;",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1389,
+   "source": "    if lane.tree.next_leaf_index.checked_add(1) != Some(afterstate.next_pair_index) {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1390,
+   "source": "        return Err(PoolV1ProgramError::StateHistoryMismatch.into());",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1391,
+   "source": "    }",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1392,
+   "source": "    for (level, node) in afterstate.next_frontier.iter().enumerate() {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1393,
+   "source": "        if (afterstate.next_pair_index >> level) & 1 == 0",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1394,
+   "source": "            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1395,
+   "source": "        {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1396,
+   "source": "            return Err(PoolV1ProgramError::StateHistoryMismatch.into());",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1397,
+   "source": "        }",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1398,
+   "source": "    }",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1399,
+   "source": "    Ok(PoolV1PairForestLaneStateV1 {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1400,
+   "source": "        master: lane.master,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1401,
+   "source": "        bump: lane.bump,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1402,
+   "source": "        lane_id: lane.lane_id,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1403,
+   "source": "        tree: IncrementalMerkleTreeV1 {",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1404,
+   "source": "            next_leaf_index: afterstate.next_pair_index,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1405,
+   "source": "            root: afterstate.next_root,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1406,
+   "source": "            frontier: afterstate.next_frontier,",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1407,
+   "source": "        },",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1408,
+   "source": "    })",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  },
+  {
+   "line": 1409,
+   "source": "}",
+   "category": "native guard/loop/returned-record and symbolic fold"
+  }
+ ],
+ "spans": [
+  {
+   "source": "programs/aspis-pool/src/pair_forest.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "function": "next_pair_forest_lane_v1",
+   "span": "        if (afterstate.next_pair_index >> level) & 1 == 0\n            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]\n        {\n            return Err(PoolV1ProgramError::StateHistoryMismatch.into());\n        }",
+   "span_sha256": "923ab29798be9cad4de388b81b4398c82a1e78b9d7b3a0608684c322620b65d6",
+   "source_contains": 1,
+   "fragment_contains": 1,
+   "cut": "one native enumerate next from arbitrary admissible level<20; cursor constructed without evaluating earlier body conditions; native level and node pointer checked at SAME frontier[level]",
+   "status": "SOURCE_SEGMENT_CANDIDATE; complete native/model association and row gate still required",
+   "method_precedent": "NKV_FRAGMENT_ASSOCIATION under ruling ay(3); no whole-buffer unwind"
+  },
+  {
+   "source": "programs/aspis-pool/src/pair_forest.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "function": "next_pair_forest_lane_v1",
+   "span": "    Ok(PoolV1PairForestLaneStateV1 {\n        master: lane.master,\n        bump: lane.bump,\n        lane_id: lane.lane_id,\n        tree: IncrementalMerkleTreeV1 {\n            next_leaf_index: afterstate.next_pair_index,\n            root: afterstate.next_root,\n            frontier: afterstate.next_frontier,\n        },\n    })",
+   "span_sha256": "43db8d5722e31b030ceba7530cef678451b7464bcfa2698c14283306882ee493",
+   "source_contains": 1,
+   "fragment_contains": 1,
+   "cut": "post-loop record return; arbitrary original lane/result; scalar observer tag/key_byte/level/word covers every returned field",
+   "status": "SOURCE_SEGMENT_CANDIDATE"
+  },
+  {
+   "source": "programs/aspis-pool/src/pair_forest.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "function": "next_pair_forest_lane_v1",
+   "span": "lane.tree.next_leaf_index.checked_add(1) != Some(afterstate.next_pair_index)",
+   "span_sha256": "db090a072d3216327371f323fd4950e6e4193e9d02a20b95813d80a1cba08ee5",
+   "source_contains": 1,
+   "fragment_contains": 1,
+   "cut": "complete checked-add guard at arbitrary old/next; no success premise",
+   "status": "SOURCE_SEGMENT_CANDIDATE"
+  }
+ ],
+ "reference_source_sha256": "5b58637413182255d08ca2286597be372610b0d2f4c7165225ffd7a8ea7cd536",
+ "error_conversion_source_sha256": "7a70c51c3a2f8e9ca09370f530704089ce2c85c658c1e6d7131fd984ebd17d2e",
+ "mutations": [
+  {
+   "name": "extra_effect",
+   "rejected": true
+  },
+  {
+   "name": "missing_guard",
+   "rejected": true
+  },
+  {
+   "name": "wrong_loop",
+   "rejected": true
+  },
+  {
+   "name": "wrong_master",
+   "rejected": true
+  },
+  {
+   "name": "wrong_bump",
+   "rejected": true
+  },
+  {
+   "name": "wrong_lane",
+   "rejected": true
+  },
+  {
+   "name": "wrong_root",
+   "rejected": true
+  },
+  {
+   "name": "wrong_frontier",
+   "rejected": true
+  },
+  {
+   "name": "wrong_index",
+   "rejected": true
+  },
+  {
+   "name": "wrong_error",
+   "rejected": true
+  }
+ ],
+ "missing": "actual-body extraction eligibility, final native controls, full formal/source certificate and coherent gate"
+}

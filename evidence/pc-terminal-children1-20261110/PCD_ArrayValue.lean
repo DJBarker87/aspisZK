@@ -7,7 +7,9 @@ theorem array_equal (a b : Array U32 8#usize) :
     core.array.equality.PartialEqArray.eq core.cmp.PartialEqU32 a b =
       Result.ok (decide (a.val = b.val)) := by
   unfold core.array.equality.PartialEqArray.eq
-  have lengths : a.length = b.length := rfl
+  have lengths : a.length = b.length := by
+    change a.val.length = b.val.length
+    exact a.property.trans b.property.symm
   rw [if_pos lengths]
   have callback :
       (fun x : U32 × U32 => do

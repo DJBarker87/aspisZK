@@ -67,6 +67,22 @@ out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 root=next(p for p in m['packages'] if p['name']=='aspis-pool')
 assert sorted(nodes[root['id']]['features'])==sorted(x['deployed_pool_features']),('STOP deployed root feature mismatch',nodes[root['id']]['features'])
+# Resolve features for the selected Pool package/target, not the metadata
+# workspace-wide feature union. Both records are retained, with distinct labels.
+tree_cmd=['/home/dombarker/.cargo/bin/cargo','tree','--locked','--offline','--manifest-path',str(S/'programs/aspis-pool/Cargo.toml'),'-p','aspis-pool','--features',','.join(x['deployed_pool_features']),'--format','{p}|{f}','--prefix','none','--edges','normal,build','--target','x86_64-unknown-linux-gnu']
+tr=subprocess.run(tree_cmd,cwd=S,capture_output=True,text=True)
+assert tr.returncode==0,tr.stderr
+resolved=[];seen_features=set()
+for line in tr.stdout.splitlines():
+ line=line.removesuffix(' (*)')
+ if '|' not in line:continue
+ package,feature_text=line.rsplit('|',1)
+ features=sorted(f for f in feature_text.split(',') if f)
+ key=(package,tuple(features))
+ if key not in seen_features:resolved.append(dict(package=package,features=features));seen_features.add(key)
+root_features=[q['features'] for q in resolved if q['package'].startswith('aspis-pool v')]
+assert root_features==[sorted(x['deployed_pool_features'])],root_features
+(B/(a+'-features-resolved.json')).write_text(json.dumps(dict(command=tree_cmd,target='x86_64-unknown-linux-gnu',selected_package='aspis-pool',resolved_features_every_crate=resolved,stdout=tr.stdout,stderr=tr.stderr,graph_metadata_feature_scope='workspace union retained separately; this cargo-tree record is selected-package/target resolution'),indent=1)+'\n')
 tools={}
 for label,cmd in [('cargo',['/home/dombarker/.cargo/bin/cargo','--version']),('kani',['/home/dombarker/.cargo/bin/cargo-kani','--version'])]:
  q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0

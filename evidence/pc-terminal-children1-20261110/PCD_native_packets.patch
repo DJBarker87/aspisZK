@@ -5,12 +5,12 @@
  }
  
 +#[cfg_attr(kani, kani::requires(lane.tree.next_leaf_index.checked_add(1) != Some(result.verified_afterstate.next_pair_index)))]
-+#[cfg_attr(kani, kani::ensures(|out| *out == Err(PoolV1ProgramError::StateHistoryMismatch.into())))]
++#[cfg_attr(kani, kani::ensures(|out| *out == Err(ProgramError::Custom(0x41532003))))]
 +#[cfg_attr(kani, kani::modifies())]
  fn next_pair_forest_lane_v1(
      lane: &PoolV1PairForestLaneStateV1,
      result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
-@@ -5792,3 +5795,158 @@
+@@ -5792,3 +5795,287 @@
          assert!(accounts[4].data.iter().any(|byte| *byte != 0));
      }
  }
@@ -54,7 +54,7 @@
 +        kani::assume(old.checked_add(1) != Some(next));
 +        let lane = PCD_lane(old); let result = PCD_result(next);
 +        let out = super::next_pair_forest_lane_v1(&lane, &result);
-+        assert!(out != Err(PoolV1ProgramError::StateHistoryMismatch.into()));
++        assert!(out != Err(ProgramError::Custom(0x41532003)));
 +    }
 +    fn PCD_frontier_reference(next: u64, level: u32, node: [u32;8], empty: [u32;8]) -> bool {
 +        if level >= 20 { return false; }
@@ -68,7 +68,7 @@
 +        let words = [node[0].0,node[1].0,node[2].0,node[3].0,node[4].0,node[5].0,node[6].0,node[7].0];
 +        let roots = [empty[0].0,empty[1].0,empty[2].0,empty[3].0,empty[4].0,empty[5].0,empty[6].0,empty[7].0];
 +        let pass = PCD_frontier_reference(result.verified_afterstate.next_pair_index, level as u32, words, roots);
-+        *out == if pass {Ok(())} else {Err(PoolV1ProgramError::StateHistoryMismatch.into())}
++        *out == if pass {Ok(())} else {Err(ProgramError::Custom(0x41532003))}
 +    })]
 +    #[kani::modifies()]
 +    fn PCD_frontier_segment(
@@ -76,7 +76,12 @@
 +        level: usize,
 +    ) -> ProgramResult {
 +        let afterstate = result.verified_afterstate;
-+        let node = &afterstate.next_frontier[level];
++        let mut cursor = afterstate.next_frontier.iter().enumerate();
++        if level != 0 { let _ = cursor.nth(level - 1); }
++        let Some((native_level, node)) = cursor.next() else { panic!("PCD valid iterator cut"); };
++        assert!(native_level == level);
++        assert!(core::ptr::eq(node, &afterstate.next_frontier[level]));
++        let level = native_level;
 +        if (afterstate.next_pair_index >> level) & 1 == 0
 +            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
 +        {
@@ -100,7 +105,7 @@
 +        let node = &result.verified_afterstate.next_frontier[level];
 +        let empty = &POOL_V1_PAIR_EMPTY_ROOTS[level];
 +        let pass = (result.verified_afterstate.next_pair_index >> level)&1 != 0 || *node == *empty;
-+        assert!(out != if pass {Ok(())} else {Err(PoolV1ProgramError::StateHistoryMismatch.into())});
++        assert!(out != if pass {Ok(())} else {Err(ProgramError::Custom(0x41532003))});
 +    }
 +    fn PCD_observe(lane: &PoolV1PairForestLaneStateV1, tag: u8, key_byte: usize, level: usize, word: usize) -> u64 {
 +        match tag {
@@ -166,6 +171,130 @@
 +            PCD_observe(&value,tag,key_byte,level,word) == PCD_expected_observation(&lane,&result,tag,key_byte,level,word),
 +            Err(_) => false };
 +        assert!(!exact);
++    }
++    fn PCD_checked_reference(old: u64, next: u64) -> bool {
++        match old.checked_add(1) { Some(n) => n == next, None => false }
++    }
++    #[kani::ensures(|out| *out == !PCD_checked_reference(lane.tree.next_leaf_index,result.verified_afterstate.next_pair_index))]
++    #[kani::modifies()]
++    fn PCD_guard_segment(lane: &PoolV1PairForestLaneStateV1,
++        result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++    ) -> bool {
++        let afterstate = result.verified_afterstate;
++        lane.tree.next_leaf_index.checked_add(1) != Some(afterstate.next_pair_index)
++    }
++    #[kani::proof_for_contract(PCD_guard_segment)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_guard_contract() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());
++        let _=PCD_guard_segment(&lane,&result);
++    }
++    #[kani::proof]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_guard_control() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());
++        let out=PCD_guard_segment(&lane,&result);
++        assert!(out == PCD_checked_reference(lane.tree.next_leaf_index,result.verified_afterstate.next_pair_index));
++    }
++    #[derive(Default)]
++    struct PCD_FidelityLog {
++        called: bool,
++        lane_ptr: usize,
++        result_ptr: usize,
++        reply_ok: bool,
++        reply_index_or_error: u64,
++    }
++    fn PCD_fid_record(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        out:&Result<PoolV1PairForestLaneStateV1,ProgramError>, log:&mut PCD_FidelityLog) {
++        log.called=true;log.lane_ptr=lane as *const _ as usize;log.result_ptr=result as *const _ as usize;
++        match out { Ok(value)=>{ log.reply_ok=true; log.reply_index_or_error=value.tree.next_leaf_index; },
++            Err(ProgramError::Custom(code))=>{log.reply_ok=false;log.reply_index_or_error=*code as u64;},
++            Err(_)=>{log.reply_ok=false;log.reply_index_or_error=u64::MAX;} }
++    }
++    fn PCD_fid_body(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        reject:bool,log:&mut PCD_FidelityLog)->Result<PoolV1PairForestLaneStateV1,ProgramError> {
++        let after=result.verified_afterstate;
++        let out=if reject {Err(ProgramError::Custom(0x41532003))} else {Ok(PoolV1PairForestLaneStateV1 {
++            master:lane.master,bump:lane.bump,lane_id:lane.lane_id,
++            tree:IncrementalMerkleTreeV1 {next_leaf_index:after.next_pair_index,root:after.next_root,frontier:after.next_frontier}
++        })};
++        PCD_fid_record(lane,result,&out,log);out
++    }
++    #[kani::requires(!log.called)]
++    #[kani::ensures(|_|true)]
++    #[kani::modifies(log)]
++    fn PCD_fid_weak(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        reject:bool,log:&mut PCD_FidelityLog)->Result<PoolV1PairForestLaneStateV1,ProgramError> {
++        PCD_fid_body(lane,result,reject,log)
++    }
++    #[kani::requires(!log.called)]
++    #[kani::ensures(|_|false)]
++    #[kani::modifies(log)]
++    fn PCD_fid_inverse(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        reject:bool,log:&mut PCD_FidelityLog)->Result<PoolV1PairForestLaneStateV1,ProgramError> {
++        PCD_fid_body(lane,result,reject,log)
++    }
++    #[kani::requires(!log.called)]
++    #[kani::ensures(|_|true)]
++    #[kani::modifies(log)]
++    fn PCD_fid_bad_modifies(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        reject:bool,log:&mut PCD_FidelityLog,counter:&mut u64)->Result<PoolV1PairForestLaneStateV1,ProgramError> {
++        *counter=counter.wrapping_add(1);
++        PCD_fid_body(lane,result,reject,log)
++    }
++    fn PCD_fid_oracle(lane:&PoolV1PairForestLaneStateV1,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        _reject:bool,log:&mut PCD_FidelityLog)->Result<PoolV1PairForestLaneStateV1,ProgramError> {
++        // All actual callee Err values are Custom; arbitrary payload and arm are unconstrained.
++        let out=if kani::any() {Ok(PCD_lane(kani::any()))} else {Err(ProgramError::Custom(kani::any()))};
++        PCD_fid_record(lane,result,&out,log);out
++    }
++    fn PCD_fid_exact(out:&Result<PoolV1PairForestLaneStateV1,ProgramError>,
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,reject:bool)->bool {
++        match out { Ok(lane)=>!reject && lane.tree.next_leaf_index==result.verified_afterstate.next_pair_index,
++            Err(e)=>reject && *e==ProgramError::Custom(0x41532003) }
++    }
++    #[kani::proof_for_contract(PCD_fid_weak)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_fidelity_weak_contract() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let mut log=PCD_FidelityLog::default();
++        let _=PCD_fid_weak(&lane,&result,kani::any(),&mut log);
++    }
++    #[kani::proof_for_contract(PCD_fid_inverse)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_fidelity_inverse_contract() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let mut log=PCD_FidelityLog::default();
++        let _=PCD_fid_inverse(&lane,&result,kani::any(),&mut log);
++    }
++    #[kani::proof]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_fidelity_real_caller() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
++        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
++        assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
++        assert!(PCD_fid_exact(&out,&result,reject));
++    }
++    #[kani::proof]
++    #[kani::stub(PCD_fid_weak,PCD_fid_oracle)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_fidelity_unimplied_caller() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
++        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
++        assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
++        assert!(PCD_fid_exact(&out,&result,reject));
++    }
++    #[kani::proof_for_contract(PCD_fid_bad_modifies)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_fidelity_modifies_violation() {
++        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
++        let mut counter:u64=kani::any();let before=counter;
++        let _=PCD_fid_bad_modifies(&lane,&result,reject,&mut log,&mut counter);
++        kani::cover!(counter!=before);
 +    }
 +
 +}
