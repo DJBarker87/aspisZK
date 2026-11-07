@@ -1,3 +1,4 @@
+import LIBC_HashShapes
 import NMQ_COMBINED_IMPORT
 import LIBC_VPrepare
 import LIBC_Prepared

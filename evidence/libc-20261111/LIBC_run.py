@@ -70,6 +70,7 @@ elif kind=='audit':
  files['NLX_AUDIT_ROOTS.json']=files['LIBC_AUDIT_ROOTS.json']
  files['NLX_AUDIT_MODULES.json']=files['LIBC_AUDIT_MODULES.json']
  files['LIBC_audit.py']=(E/'LIBC_audit.py').read_text()
+ sources=['LIBC_audit.py','LIBC_AUDIT_ROOTS.json','LIBC_AUDIT_MODULES.json']
  command=['python3','LIBC_audit.py',target]
 else:raise ValueError('Unsupported scoped target')
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/LIBC_tmp',CARGO_TARGET_DIR=B+'/LIBC_target',LEAN_PATH=':'.join([B+'/LIBC_objects']+json.loads((E/'LIBC_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')

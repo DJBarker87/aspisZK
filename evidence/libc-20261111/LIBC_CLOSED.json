@@ -1,86 +1,516 @@
 [
   {
     "field": "filled",
-    "module": "LIBC_Filled",
-    "theorem": "LIBC_Filled.model_port",
-    "supplying_roots": [
-      "AspisR1.NGC_ReferenceValues.heap",
-      "AspisR1.OraclePortStdAllocation.filled_exact"
+    "defining_term": "LIBC_Filled.child",
+    "bridge": "LIBC_Filled.model_port",
+    "source": "LIBC_Filled.lean",
+    "supplying": [
+      {
+        "row": "TX1:064",
+        "status": "CLOSED",
+        "function": "crates/aspis-core/src/r0/heap.rs::filled",
+        "owner_module": "NGC_DigestBridge",
+        "roots": [
+          "AspisR1.NGC_DigestBridge.forwarding",
+          "AspisR1.NGC_FinishContents.contents",
+          "AspisR1.NGC_Initialization.constructor",
+          "AspisR1.NGC_ReferenceValues.heap",
+          "AspisR1.NGC_ValueBridge.value"
+        ]
+      }
     ],
     "hypotheses": [
       {
-        "kind": "own_argument_domain",
-        "clause": "n \u2264 32768; zero u8 identity Clone"
+        "class": "original_own_argument_domain",
+        "clause": "n\u226432768; native zero byte/identity Clone"
       },
       {
-        "kind": "data",
-        "clause": "arguments and Env universally quantified"
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
       }
     ],
     "added_trust": [],
-    "discharged": [
-      "No child-success or allocator-success hypothesis"
+    "row_credit_claimed": false
+  },
+  {
+    "field": "expandSemantic",
+    "defining_term": "LIBC_ExpandSemantic.child",
+    "bridge": "LIBC_ExpandSemantic.model_port",
+    "source": "LIBC_ExpandSemantic.lean",
+    "supplying": [
+      {
+        "row": "TX1:098",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_semantic",
+        "owner_module": "NGV_AtPacket",
+        "roots": [
+          "NGV_AtPacket.result",
+          "NGV_DecodeAfterParse.result",
+          "NGV_ExpandAssociation.result",
+          "NGV_ParsePacket.result",
+          "NGV_RowFrame.outside",
+          "NGV_RowPayload.domains",
+          "NGV_SemanticDomains.row",
+          "NGV_SemanticPacket.coverage",
+          "NGV_SemanticPacket.result",
+          "NGV_SemanticStep.result",
+          "NGV_SemanticValues.rows",
+          "NGV_Validator.result"
+        ]
+      }
     ],
-    "remaining": [
-      "bundle and caller instantiation",
-      "ledger review"
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "7015 input /13831 output, arbitrary bytes"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
     ],
+    "added_trust": [],
     "row_credit_claimed": false
   },
   {
     "field": "expandValues",
-    "module": "LIBC_ExpandValues",
-    "theorem": "LIBC_ExpandValues.model_port",
-    "supplying_roots": [
-      "NFU_CompactLeaves.expand_result",
-      "NFU_CompactLeaves.expand_reject",
-      "NGV_ExpandPacket.result"
+    "defining_term": "LIBC_ExpandValues.child",
+    "bridge": "LIBC_ExpandValues.model_port",
+    "source": "LIBC_ExpandValues.lean",
+    "supplying": [
+      {
+        "row": "TX1:099",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
+        "owner_module": "NFU_CompactLeaves",
+        "roots": [
+          "NFU_CompactLeaves.expand_result"
+        ]
+      }
     ],
     "hypotheses": [
       {
-        "kind": "own_argument_domain",
-        "clause": "src.length \u2264 1856 \u2227 dst.length \u2264 3712"
+        "class": "original_own_argument_domain",
+        "clause": "source\u22641856/output\u22643712; guard failures included"
       },
       {
-        "kind": "data",
-        "clause": "arguments and Env universally quantified"
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
       }
     ],
     "added_trust": [],
-    "discharged": [
-      "No child-success or allocator-success hypothesis"
-    ],
-    "remaining": [
-      "bundle and caller instantiation",
-      "ledger review"
-    ],
     "row_credit_claimed": false
   },
   {
     "field": "wideView",
-    "module": "LIBC_WideView",
-    "theorem": "LIBC_WideView.model_port",
-    "supplying_roots": [
-      "AspisR1.NHF_ViewResult.result",
-      "AspisR1.NHF_ViewInstalled.result"
+    "defining_term": "LIBC_WideView.child",
+    "bridge": "LIBC_WideView.model_port",
+    "source": "LIBC_WideView.lean",
+    "supplying": [
+      {
+        "row": "TX1:095",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::wide_view",
+        "owner_module": "NHF_ViewDecoder",
+        "roots": [
+          "AspisR1.NHF_ViewDecoder.result",
+          "AspisR1.NHF_ViewFinish.result",
+          "AspisR1.NHF_ViewInstalled.result",
+          "AspisR1.NHF_ViewResult.result",
+          "AspisR1.NHF_ViewResult.result_state_effects",
+          "NEO_FieldView.addresses",
+          "NEO_FieldView.result",
+          "NET_WideModel.result",
+          "NET_WideModel.result_state_effects",
+          "NET_WideModel.roundtrip"
+        ]
+      }
     ],
     "hypotheses": [
       {
-        "kind": "own_argument_domain",
-        "clause": "proof.length = 57607 \u2227 semantic.length = 13831 \u2227 y1.length = 928"
+        "class": "original_own_argument_domain",
+        "clause": "proof57607/semantic13831/y1 928"
       },
       {
-        "kind": "data",
-        "clause": "arguments and Env universally quantified"
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
       }
     ],
     "added_trust": [],
-    "discharged": [
-      "No child-success or allocator-success hypothesis"
+    "row_credit_claimed": false
+  },
+  {
+    "field": "parseShape",
+    "defining_term": "LIBC_ParseShape.child",
+    "bridge": "LIBC_ParseShape.source",
+    "source": "LIBC_ParseShape.lean",
+    "supplying": [
+      {
+        "row": "TX1:086",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
+        "owner_module": "NJS_Parse",
+        "roots": [
+          "NJS_Parse.source",
+          "NJS_Parse.proof_bytes"
+        ]
+      }
     ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "proof57607; source checks remain outcomes"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "canonicalScan",
+    "defining_term": "LIBC_CanonicalScan.child",
+    "bridge": "LIBC_CanonicalScan.model_port",
+    "source": "LIBC_CanonicalScan.lean",
+    "supplying": [
+      {
+        "row": "TX1:084",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::canonical_scan",
+        "owner_module": "NKL_ScanRoot",
+        "roots": [
+          "NKL_ScanRoot.deployed",
+          "NKL_ScanRoot.adopted",
+          "NKL_ScanRoot.no_later_event",
+          "NKL_ScanRoot.success_events"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "proof57607; all source checks remain outcomes"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "accNew",
+    "defining_term": "LIBC_AccNew.child",
+    "bridge": "LIBC_AccNew.source",
+    "source": "LIBC_AccNew.lean",
+    "supplying": [
+      {
+        "row": "TX1:174",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new",
+        "owner_module": "NGC_DigestBridge",
+        "roots": [
+          "AspisR1.NGC_DigestBridge.forwarding",
+          "AspisR1.NGC_FinishContents.contents",
+          "AspisR1.NGC_Initialization.constructor",
+          "AspisR1.NGC_ReferenceValues.heap",
+          "AspisR1.NGC_ValueBridge.value"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "literal S2; both reservation outcomes"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "weightsNew",
+    "defining_term": "LIBC_WeightsNew.child",
+    "bridge": "LIBC_WeightsNew.source",
+    "source": "LIBC_WeightsNew.lean",
+    "supplying": [
+      {
+        "row": "TX1:176",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
+        "owner_module": "NJZ_Weights",
+        "roots": [
+          "NJZ_Weights.new_source"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "64 canonical original weights; same runtime reservation"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "finish",
+    "defining_term": "LIBC_Finish.child",
+    "bridge": "LIBC_Finish.source",
+    "source": "LIBC_Finish.lean",
+    "supplying": [
+      {
+        "row": "TX1:175",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
+        "owner_module": "NGC_DigestBridge",
+        "roots": [
+          "AspisR1.NGC_DigestBridge.forwarding",
+          "AspisR1.NGC_FinishContents.contents",
+          "AspisR1.NGC_Initialization.constructor",
+          "AspisR1.NGC_ReferenceValues.heap",
+          "AspisR1.NGC_ValueBridge.value"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "original pending/accumulator pair invariant"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "batchMerkle",
+    "defining_term": "LIBC_BatchMerkle.child",
+    "bridge": "LIBC_BatchMerkle.returning",
+    "source": "LIBC_BatchMerkle.lean",
+    "supplying": [
+      {
+        "row": "TX1:081",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
+        "owner_module": "NLN_TX1_081",
+        "roots": [
+          "NLN_TX1_081.root"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "NLO-bf64\u201367 verbatim; batch0; SAME proof/queries/roots/folded root"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "geometry",
+    "defining_term": "LIBC_Geometry.child",
+    "bridge": "LIBC_Geometry.source",
+    "source": "LIBC_Geometry.lean",
+    "supplying": [
+      {
+        "row": "TX1:181",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+        "owner_module": "NFN_GeometryPart08",
+        "roots": [
+          "NFN_NFB_GeometryComposed.accepted_physical",
+          "NFN_NFB_GeometryComposed.result_state_effects"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "deployed0..10 or10..22; canonical distinct original queries"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "queryLoop",
+    "defining_term": "LIBC_QueryLoop.child",
+    "bridge": "LIBC_QueryLoop.source",
+    "source": "LIBC_QueryLoop.lean",
+    "supplying": [
+      {
+        "row": "TX1:088",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop",
+        "owner_module": "NFG_QueryLoopSource",
+        "roots": [
+          "AspisR1.NFG_QueryLoopSource.complete",
+          "AspisR1.NFP_LoopTerminals.error",
+          "AspisR1.NFP_QueryAdvance.accepted",
+          "AspisR1.NFP_Resume.tx1",
+          "AspisR1.NFS_LoopTrace.source",
+          "AspisR1.NFS_LoopTraceDefs.compare",
+          "AspisR1.NFS_PacketRoot.loop",
+          "AspisR1.NFS_QueryInvariant.active",
+          "AspisR1.NFS_QueryLoopRoot.finite",
+          "AspisR1.NFS_QueryLoopRoot.tx1"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "original packet invariant; TX1 finish10, accumulator.next0"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "checkpoint",
+    "defining_term": "LIBC_Checkpoint.child",
+    "bridge": "LIBC_Checkpoint.run_model",
+    "source": "LIBC_Checkpoint.lean",
+    "supplying": [
+      {
+        "row": "TX1:186",
+        "status": "CLOSED",
+        "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
+        "owner_module": "NHS_CheckpointPacket",
+        "roots": [
+          "AspisR1.NHS_CheckpointPacket.source"
+        ]
+      }
+    ],
+    "hypotheses": [
+      {
+        "class": "original_own_argument_domain",
+        "clause": "current-pair DriverEstablishedDomain; stored57607/public1880"
+      },
+      {
+        "class": "universally_quantified_data",
+        "clause": "SAME original arguments and Env"
+      },
+      {
+        "class": "retained_runtime_realization",
+        "clause": "Env backend and reservation are model inputs; native runtime realization remains the existing integration trust item, not newly proved totality"
+      }
+    ],
+    "added_trust": [],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "PreparedNew",
+    "defining_term": "LIBC_Prepared.child V types",
+    "source": "LIBC_Prepared.lean",
+    "hypotheses": [
+      {
+        "class": "carrier_equalities",
+        "clause": "Only type identities, to be discharged by rfl at actual VL*; no operational dictionary or child-success premise"
+      },
+      {
+        "class": "original_own_argument_domain",
+        "clause": "See LIBC_PreparedDomain.lean"
+      }
+    ],
+    "added_trust": [],
     "remaining": [
-      "bundle and caller instantiation",
-      "ledger review"
+      "All operational content fixed; ten carrier type equalities need the actual LIB_ VL* bundle. Original upstream semantic/expanded provenance must be discharged by principal."
+    ],
+    "row_credit_claimed": false
+  },
+  {
+    "field": "S1Lib",
+    "defining_term": "LIBC_S1.library V tyPublic",
+    "source": "LIBC_S1.lean",
+    "hypotheses": [
+      {
+        "class": "carrier_equalities",
+        "clause": "Only type identities, to be discharged by rfl at actual VL*; no operational dictionary or child-success premise"
+      },
+      {
+        "class": "original_own_argument_domain",
+        "clause": "See S1 domain True; source allocation probe LIBC_FirstBox.lean"
+      }
+    ],
+    "added_trust": [],
+    "remaining": [
+      "All six concrete fields fixed; Public type equality needs actual LIB_ VL* bundle; its publicDom compatibility is a bundle/principal obligation."
     ],
     "row_credit_claimed": false
   }
