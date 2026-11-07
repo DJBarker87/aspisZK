@@ -64,7 +64,15 @@ if kind=='lean':
  n='LIBB_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'LIBB_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LIBB_generated','-o','LIBB_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['LIBB_Driver','LIBB_ProofDriver','LIBB_PoolProofDriver','LIBB_PoolDriver']:command+=['-c','LIBB_native/'+target+'.c']
-else:raise ValueError('LIB runner supports one Lean module per scope')
+elif kind=='link':
+ for n in ['LIBB_NFA_WALKER.c','LIBB_NFA_MemoryLimit.c']:files['LIBB_native/'+n]=(E/n).read_text()
+ sources=list(files)
+ command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','LIBB_native/LIBB_ProofDriver','LIBB_native/LIBB_ProofDriver.c','LIBB_native/LIBB_NFA_WALKER.c','LIBB_native/LIBB_NFA_MemoryLimit.c']
+elif kind=='audit':
+ for n in ['LIBB_batch.py','LIBB_AUDIT_ROOTS.json','LIBB_AUDIT_MODULES.json']:files[n]=(E/n).read_text()
+ sources=list(files)
+ command=['python3','LIBB_batch.py',target]
+else:raise ValueError('Unsupported own validation kind')
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/LIBB_tmp',CARGO_TARGET_DIR=B+'/LIBB_target',LEAN_PATH=':'.join([B+'/LIBB_objects']+json.loads((E/'LIBB_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
