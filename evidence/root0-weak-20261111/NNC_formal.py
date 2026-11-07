@@ -1,8 +1,9 @@
 """Focused formal submissions through unchanged host launcher, one module per scope."""
 from NNC_transport import *
-import hashlib,re,shlex,sys,lzma
+import hashlib,re,shlex,sys,lzma,os,atexit
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
+    guard=E/'NNC_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
     assert ((a.startswith('NNC_L') and 1<=int(a[-3:])<=999) or (a.startswith('NNC_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect'],'No Kani or extraction submissions'
     if kind=='lean':
@@ -10,10 +11,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
         assert sum(x.get('kind')=='lean' for x in done)<250,'Actual Lean compiler budget exhausted'
         if target not in ['NNC_COMBINED_IMPORT','NNC_ProofDriver','NNC_ScanDriver']:
             assert sum(x.get('kind')=='lean' for x in done)<248,'Reserve two final import/audit compiler slots'
-    if kind=='kani':
-        done=[json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind')=='kani' for x in done)<40,'Actual cargo-kani budget exhausted'
-    assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()])<250,'80 total scope budget exhausted'
+    assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()])<250,'250 total scope budget exhausted'
     env=json.loads((E/'NNC_ENV.json').read_text())
     env['TMPDIR']=B+'/NNC_tmp'
     env['CARGO_TARGET_DIR']=B+'/NNC_target'

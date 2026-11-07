@@ -1,0 +1,38 @@
+{"attempt": "NNC_L007", "exit_status": 0, "wall_seconds": 28.547772062011063, "peak_rss_kib": "6725352", "swaps": "0", "print_axioms": ["'NNC_BindingRoot.root0_of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_BindingRoot.root0_or_existing_collision' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_BindingRoot.case_split' does not depend on any axioms"]}
+theorem NNC_BindingRoot.root0_or_existing_collision : ∀ {A Ambient X : Type} (source : Program Bytes State A)
+  (project : A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) (Q : ℕ),
+  (∀ (H : Bytes → State), firstReads emptyTable (eval H source).1 ≤ Q + 1921) →
+    ∀ (H : Bytes → State) (ops : AdapterRw.Ops) (id : S2W_ExtractionBoundary.Program) (e1 e2 : S2W_D189Entry.Entry)
+      (data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot) (saved : alloc.vec.Vec U8) (f : FirstCut) (s : SecondCut),
+      NNC_SourceCuts.Cuts ops e1.first (e2.second S2W_D189Wrappers.secondSizes) saved f s →
+        P2P_Origin.Fact ops id (e2.second S2W_D189Wrappers.secondSizes) data2 slot s →
+          NLP
+...
+                          NLP_InputDomain.Root0 s.checkpoint s.proof ∧
+                              NLT_CompleteRoot.RowSpec H d s.pub s.proof s.checkpoint hash ∨
+                            BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q + 2965)
+                              (eval H
+                                (Hiq_RecordedJoint.program source project fun x =>
+                                  P2P_NativeSelection.pair ops id e1 e2 data2 slot)) :=
+fun {A Ambient X} source project Q budget H ops id e1 e2 data2 slot saved f s cuts origin writerRoot persisted
+    writerHeader d hash world domain oracle records events native =>
+  have alternative :=
+    P2P_Charge.binding_or_collision source project (fun x => P2P_NativeSelection.pair ops id e1 e2 data2 slot) Q budget
+      H;
+  Or.casesOn alternative (fun bad => Or.inr bad) fun good =>
+    have association := NNC_SourceCuts.on_cuts ops id e1 e2 data2 slot saved f s cuts origin;
+    have readerHeader :=
+      NNC_064Weak.accepted_header H
+        { args := { digest := d, publicBytes := s.pub, proof := s.proof, checkpoint := s.checkpoint, hash := hash },
+          world := world }
+        domain oracle records events native;
+    have root0 :=
+      root0_of_binding H saved f s writerRoot persisted writerHeader readerHeader
+        (Eq.mp (congrArg (fun _a => R9PoolRuntimeBinding.P2Prime H _a.1 _a.2) association) good);
+    Or.inl
+      ⟨root0, NLT_CompleteRoot.root H d s.pub s.proof s.checkpoint hash domain.proofExtent domain.publicBound root0⟩
+'NNC_BindingRoot.root0_of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_BindingRoot.root0_or_existing_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_BindingRoot.case_split' does not depend on any axioms
+
+Running as unit: run-r2f068a4d22924b7389cb4edaece9e7c6.scope; invocation ID: 6e91d590f1b74778906186dd855ed714
