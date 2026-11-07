@@ -1,0 +1,41 @@
+{"attempt": "NND_L180", "exit_status": 1, "wall_seconds": 3.106427452992648, "peak_rss_kib": "6572708", "swaps": "0", "print_axioms": ["'NND_RegistryEntry2Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_RegistryEntry2Value.lean:21:17: error: Invalid rewrite argument: The pattern to be substituted is a metavariable (`?f
+  (if ?P then ?x else ?y)`) in this equality
+  ?f (if ?P then ?x else ?y) = if ?P then ?f ?x else ?f ?y
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    instDecidableEqBool (NND_EntryV2Guard.bad v m entry t expected) true
+  has type
+    Decidable (
+...
+)
+  but is expected to have type
+    Decidable
+      ((!decide (entry.pool = m.key) || !decide (entry.policy_binding = r1_pool_adapter.AUDIT_POLICY_BINDING) ||
+                        !decide (entry.verifier_program = v) ||
+                      !decide (entry.profile_binding = r1_pool_adapter.PROFILE_BINDING) ||
+                    !decide (entry.release_binding = r1_pool_adapter.RELEASE_BINDING) ||
+                  entry.statement_version != 1#u8 ||
+                !decide (entry.loader_program = unkey RSL.LOADER_ID) ||
+              !decide (entry.programdata_address = expected) ||
+            !decide (entry.expected_upgrade_authority = Array.repeat 32#usize 0#u8) ||
+          !NIJ_ActiveSlots.active entry.status entry.activation_slot entry.retirement_slot t) =
+        true)
+  in the application
+    @ite (core.result.Result Unit solana_program_error.ProgramError)
+      ((!decide (entry.pool = m.key) || !decide (entry.policy_binding = r1_pool_adapter.AUDIT_POLICY_BINDING) ||
+                        !decide (entry.verifier_program = v) ||
+                      !decide (entry.profile_binding = r1_pool_adapter.PROFILE_BINDING) ||
+                    !decide (entry.release_binding = r1_pool_adapter.RELEASE_BINDING) ||
+                  entry.statement_version != 1#u8 ||
+                !decide (entry.loader_program = unkey RSL.LOADER_ID) ||
+              !decide (entry.programdata_address = expected) ||
+            !decide (entry.expected_upgrade_authority = Array.repeat 32#usize 0#u8) ||
+          !NIJ_ActiveSlots.active entry.status entry.activation_slot entry.retirement_slot t) =
+        true)
+      (instDecidableEqBool (NND_EntryV2Guard.bad v m entry t expected) true)
+'NND_RegistryEntry2Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra955da30e0734e0894d833a81f64e9ee.scope; invocation ID: dd07b40bdf3a44b1a42b6246e24641c8

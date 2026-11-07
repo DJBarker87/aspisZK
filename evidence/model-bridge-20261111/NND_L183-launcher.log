@@ -1,0 +1,39 @@
+{"attempt": "NND_L183", "exit_status": 1, "wall_seconds": 3.2733063159976155, "peak_rss_kib": "6572252", "swaps": "0", "print_axioms": ["'NND_RegistryEntry2Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_RegistryEntry2Value.lean:17:51: error: unsolved goals
+base : Ops
+D : RSL.DeployedIds
+env : RSL.Env
+v : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+t : U64
+entry : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2
+expected : solana_pubkey.Pubkey
+⊢ if decide (entry.pool = m.key) = true then
+    if decide (entry.policy_binding = r1_pool_adapter.AUDIT_POLICY_BINDING) = true then
+      if decide (entry.verifier_program = v) = true then
+        if decide (entry.profile_binding = r1_pool_adapter.PROFILE_BINDING) = true then
+          if decide (entry.release_binding = r1_pool_adapter.RELEASE_BINDING) = true then
+            if (entry.statement_versi
+...
+ry.release_binding = r1_pool_adapter.RELEASE_BINDING) = true then
+                if (entry.statement_version != 1#u8) = true then
+                  ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                else
+                  if decide (entry.loader_program = unkey RSL.LOADER_ID) = true then
+                    if decide (entry.programdata_address = expected) = true then
+                      if decide (entry.expected_upgrade_authority = Array.repeat 32#usize 0#u8) = true then
+                        if NIJ_ActiveSlots.active entry.status entry.activation_slot entry.retirement_slot t = true then
+                          ok (core.result.Result.Ok ())
+                        else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                      else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                  else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+              else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+          else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+        else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+      else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+'NND_RegistryEntry2Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c9fd147c8f544beb160fd8a812d0ca3.scope; invocation ID: 4acb653e391346adaaf81aa577463d90
