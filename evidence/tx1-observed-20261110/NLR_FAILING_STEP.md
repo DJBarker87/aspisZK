@@ -11,3 +11,5 @@ L048 constructor continuation hit the default200000-heartbeat whnf limit while t
 L073 also hit the default whnf heartbeat limit, this time in the defeq change itself; that shape is RETIRED. L074 uses the already proved exact constructor occurrence equation to expose only its symbolic bind, then congruence on the unopened constructor Code. Both failed inputs/logs retained. No limit change.
 
 L074 reaches the symbolic bind but implicit congruence inference still whnf-reduces the unopened constructor. RETIRED. L075 abstracts the exact constructor Code into a local variable before explicitly instantiating congruence; the statement and limits are unchanged.
+
+L122:180s outer timeout after inner proof14 walker exit0/all385 expected roots. Packaging shape retired; no walker replay. Split retained raw packaging into L139 and use faster lossless preset0 for independent later groups. This is an audit-process failure, not a positive scope pass.

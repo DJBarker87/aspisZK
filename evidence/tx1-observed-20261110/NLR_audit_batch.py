@@ -15,6 +15,6 @@ receipt=dict(target=mode,command=command,exit_status=r.returncode,wall_seconds=t
 (E/(mode+'.json')).write_text(json.dumps(receipt,indent=1)+'\n')
 for p in B.glob('NEP_'+mode+'_*'):
  if p.is_file():
-  blob=p.read_bytes();(E/(p.name+'.xz')).write_bytes(lzma.compress(blob));(E/(p.name+'.sha256')).write_text(hashlib.sha256(blob).hexdigest()+'\n')
+  blob=p.read_bytes();(E/(p.name+'.xz')).write_bytes(lzma.compress(blob,preset=0));(E/(p.name+'.sha256')).write_text(hashlib.sha256(blob).hexdigest()+'\n')
 print(json.dumps(dict(target=mode,exit=r.returncode,results=len(results),peak_rss_kib=receipt['peak_rss_kib'],swaps=receipt['swaps'])),flush=True)
 sys.exit(r.returncode)
