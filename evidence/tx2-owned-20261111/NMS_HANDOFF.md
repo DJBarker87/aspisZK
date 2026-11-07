@@ -71,3 +71,19 @@ Optional restricted-domain CLOSED238 carrier helper NMS_RSLCheckpoint was
 retired to .lean.pending after L254/L260 failed the same scalar-key rewrite
 shape. It is not imported or credited; checkpoint-native installation lies
 inside OPEN233, whose full packet remains the parent boundary.
+
+## RSL revision 2 resumed stage
+Prior attempts counted from JSONL: 173 Lean/link/audit scopes, extraction3/3,
+Kani0/20. The revision2 amendment supplies max(250-173,150)=150 additional
+formal scopes (total ceiling323); own runner records this in NMS_R2_BUDGET.json.
+Canonical revision2 Base/Pool/217/234/233/242/241 privately replayed L282-L288
+with new object root NMS_R2_RSL_objects. Historical revision1 objects are kept;
+new NMS_R2 modules import no historical NMS proof module.
+L289-L306 compile revision2 refinement algebra, successful getter/checkpoint
+inversion, full233-derived242 extent guarantees, canonical242 substitution,
+and canonical241 source fold parametric in EVERY V2Lib. Clone aborts and the
+format! allocation are retained by direct use of the canonical rev2 Ref/mapVErr.
+L292 exposed the known split-tactic discriminant issue; L297 uses explicit Bool
+constructors and passes. No cap, timeout, heartbeat or frozen source changed.
+These are canonical source folds, not yet native candidate roots: fixed CLOSED
+child interpretation and native carrier linkage remain required.
