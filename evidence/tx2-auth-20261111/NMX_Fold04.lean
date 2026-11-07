@@ -8,6 +8,7 @@ import NMX_S047
 import NMX_S048
 import NMX_S049
 import NMX_S050
+import NMX_UnusedWitnesses
 import NMX_Fold05
 set_option autoImplicit false
 noncomputable section
@@ -24,8 +25,8 @@ theorem e050 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : so
  NMX_ValueLink.erase (eval (source ops owners) (p050 owners ops master masterKey checkpoint checkpointKey lane laneKey wrongLanePda) ()) =
  v050 owners ops master masterKey checkpoint checkpointKey lane laneKey wrongLanePda := by
  unfold p050 v050
- rw [NMX_S050.step]
- simp only [NMX_Fold05.e051]
+ rw [NMX_S050.step ops owners wrongLanePda]
+ simp only [NMX_Fold05.e051] <;> rfl
 #print axioms e050
 
 def p049 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) (derivedLane : solana_pubkey.Pubkey) (laneKey : solana_pubkey.Pubkey) : Program Auth :=
@@ -40,8 +41,8 @@ theorem e049 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : so
  NMX_ValueLink.erase (eval (source ops owners) (p049 owners ops master masterKey checkpoint checkpointKey lane derivedLane laneKey) ()) =
  v049 owners ops master masterKey checkpoint checkpointKey lane derivedLane laneKey := by
  unfold p049 v049
- rw [NMX_S049.step]
- simp only [NMX_Fold04.e050]
+ rw [NMX_S049.step ops owners derivedLane laneKey]
+ simp only [NMX_Fold04.e050] <;> rfl
 #print axioms e049
 
 def p048 (owners : Owners) (ops : Ops) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) (derivedLane : solana_pubkey.Pubkey) : Program Auth :=
@@ -54,8 +55,8 @@ theorem e048 (owners : Owners) (ops : Ops) (laneAccount : r1_pool_adapter.owned.
  NMX_ValueLink.erase (eval (source ops owners) (p048 owners ops laneAccount master masterKey checkpoint checkpointKey lane derivedLane) ()) =
  v048 owners ops laneAccount master masterKey checkpoint checkpointKey lane derivedLane := by
  unfold p048 v048
- rw [NMX_S048.step]
- simp only [NMX_Fold04.e049]
+ rw [NMX_S048.step ops owners laneAccount]
+ simp only [NMX_Fold04.e049] <;> rfl
 #print axioms e048
 
 def p047 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) (laneSeeds : Slice (Slice U8)) : Program Auth :=
@@ -68,8 +69,8 @@ theorem e047 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (laneAc
  NMX_ValueLink.erase (eval (source ops owners) (p047 owners ops pool laneAccount master masterKey checkpoint checkpointKey lane laneSeeds) ()) =
  v047 owners ops pool laneAccount master masterKey checkpoint checkpointKey lane laneSeeds := by
  unfold p047 v047
- rw [NMX_S047.step]
- simp only [NMX_Fold04.e048]
+ rw [NMX_S047.step ops owners pool laneSeeds]
+ simp only [NMX_Fold04.e048] <;> rfl
 #print axioms e047
 
 def p046 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) : Program Auth :=
@@ -90,8 +91,8 @@ theorem e046 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p046 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane) ()) =
  v046 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane := by
  unfold p046 v046
- rw [NMX_S046.step]
- simp only [NMX_Fold04.e047]
+ rw [NMX_S046.step ops owners masterKey]
+ simp only [NMX_Fold04.e047] <;> rfl
 #print axioms e046
 
 def p045 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) : Program Auth :=
@@ -104,8 +105,8 @@ theorem e045 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p045 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane) ()) =
  v045 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane := by
  unfold p045 v045
- rw [NMX_S045.step]
- simp only [NMX_Fold04.e046]
+ rw [NMX_S045.step ops owners outputLane lane]
+ simp only [NMX_Fold04.e046] <;> rfl
 #print axioms e045
 
 def p044 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) (wrongLaneMaster : Bool) : Program Auth :=
@@ -118,8 +119,8 @@ theorem e044 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p044 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane wrongLaneMaster) ()) =
  v044 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane wrongLaneMaster := by
  unfold p044 v044
- rw [NMX_S044.step]
- simp only [NMX_Fold04.e045]
+ rw [NMX_S044.step ops owners wrongLaneMaster]
+ simp only [NMX_Fold04.e045] <;> rfl
 #print axioms e044
 
 def p043 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) (laneMasterBytes : Array U8 32#usize) : Program Auth :=
@@ -134,8 +135,8 @@ theorem e043 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p043 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane laneMasterBytes) ()) =
  v043 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane laneMasterBytes := by
  unfold p043 v043
- rw [NMX_S043.step]
- simp only [NMX_Fold04.e044]
+ rw [NMX_S043.step ops owners laneMasterBytes master lane]
+ simp only [NMX_Fold04.e044] <;> rfl
 #print axioms e043
 
 def p042 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) : Program Auth :=
@@ -148,8 +149,8 @@ theorem e042 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p042 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane) ()) =
  v042 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey lane := by
  unfold p042 v042
- rw [NMX_S042.step]
- simp only [NMX_Fold04.e043]
+ rw [NMX_S042.step ops owners masterKey]
+ simp only [NMX_Fold04.e043] <;> rfl
 #print axioms e042
 
 def p041 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (laneBytes : Slice U8) : Program Auth :=
@@ -162,8 +163,8 @@ theorem e041 (owners : Owners) (ops : Ops) (pool : solana_pubkey.Pubkey) (output
  NMX_ValueLink.erase (eval (source ops owners) (p041 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey laneBytes) ()) =
  v041 owners ops pool outputLane laneAccount master masterKey checkpoint checkpointKey laneBytes := by
  unfold p041 v041
- rw [NMX_S041.step]
- simp only [NMX_Fold04.e042]
+ rw [NMX_S041.step ops owners laneBytes NMX_UnusedWitnesses.lane]
+ simp only [NMX_Fold04.e042] <;> rfl
 #print axioms e041
 end NMX_Fold04
 end

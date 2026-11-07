@@ -18,7 +18,7 @@ theorem e055 (owners : Owners) (ops : Ops) (master : Box Master) (checkpoint : B
  NMX_ValueLink.erase (eval (source ops owners) (p055 owners ops master checkpoint lane laneKey live returnedMasterBytes returnedCheckpointBytes) ()) =
  v055 owners ops master checkpoint lane laneKey live returnedMasterBytes returnedCheckpointBytes := by
  unfold p055 v055
- rw [NMX_S055.step]
+ rw [NMX_S055.step ops owners laneKey]
  rfl
 #print axioms e055
 
@@ -32,7 +32,7 @@ theorem e054 (owners : Owners) (ops : Ops) (master : Box Master) (checkpoint : B
  NMX_ValueLink.erase (eval (source ops owners) (p054 owners ops master checkpoint checkpointKey lane laneKey live returnedMasterBytes) ()) =
  v054 owners ops master checkpoint checkpointKey lane laneKey live returnedMasterBytes := by
  unfold p054 v054
- rw [NMX_S054.step]
+ rw [NMX_S054.step ops owners checkpointKey]
  simp only [NMX_Fold05.e055]
 #print axioms e054
 
@@ -46,7 +46,7 @@ theorem e053 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : so
  NMX_ValueLink.erase (eval (source ops owners) (p053 owners ops master masterKey checkpoint checkpointKey lane laneKey live) ()) =
  v053 owners ops master masterKey checkpoint checkpointKey lane laneKey live := by
  unfold p053 v053
- rw [NMX_S053.step]
+ rw [NMX_S053.step ops owners masterKey]
  simp only [NMX_Fold05.e054]
 #print axioms e053
 
@@ -64,7 +64,7 @@ theorem e052 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : so
  NMX_ValueLink.erase (eval (source ops owners) (p052 owners ops master masterKey checkpoint checkpointKey lane laneKey snapshotPool) ()) =
  v052 owners ops master masterKey checkpoint checkpointKey lane laneKey snapshotPool := by
  unfold p052 v052
- rw [NMX_S052.step]
+ rw [NMX_S052.step ops owners snapshotPool master lane]
  simp only [NMX_Fold05.e053]
 #print axioms e052
 
@@ -78,7 +78,7 @@ theorem e051 (owners : Owners) (ops : Ops) (master : Box Master) (masterKey : so
  NMX_ValueLink.erase (eval (source ops owners) (p051 owners ops master masterKey checkpoint checkpointKey lane laneKey) ()) =
  v051 owners ops master masterKey checkpoint checkpointKey lane laneKey := by
  unfold p051 v051
- rw [NMX_S051.step]
+ rw [NMX_S051.step ops owners masterKey]
  simp only [NMX_Fold05.e052]
 #print axioms e051
 end NMX_Fold05

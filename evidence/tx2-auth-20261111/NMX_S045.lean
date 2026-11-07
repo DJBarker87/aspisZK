@@ -11,7 +11,7 @@ theorem step (ops : Ops) (owners : Owners) (outputLane : U8)
  NMX_ValueLink.erase (eval (source ops owners)
   (NMX_Program.bind (NMX_SourceProgram.check (lane.payload.lane_id != outputLane)) next) ()) =
  if (lane.payload.lane_id != outputLane) then ok (.Err .InvalidAccountData) else NMX_ValueLink.erase (eval (source ops owners) (next ()) ()) := by
- by_cases h : ((lane.payload.lane_id != outputLane)) = true <;> simp only [NMX_SourceProgram.check,h,↓reduceIte,NMX_Program.bind,eval,NMX_ValueLink.erase]
+ cases h : ((lane.payload.lane_id != outputLane)) <;> simp [NMX_SourceProgram.check,h,NMX_Program.bind,eval,NMX_ValueLink.erase]
 #print axioms step
 end NMX_S045
 end

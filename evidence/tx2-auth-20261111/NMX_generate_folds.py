@@ -42,6 +42,7 @@ for group in range(6):
  if lo>hi:continue
  # Files compile from tail group to head, while per-call statements compile source-order.
  imports=['NMX_S%03d'%i for i in range(lo,hi+1)]
+ if group in [1,2,4]:imports+=['NMX_UnusedWitnesses']
  if hi<55:imports+=['NMX_Fold%02d'%(group+1)]
  out='\n'.join('import '+m for m in imports)+f'''\nset_option autoImplicit false
 noncomputable section
@@ -82,11 +83,12 @@ theorem e{i:03d} (owners : Owners) {params} :
  NMX_ValueLink.erase (eval (source ops owners) (p{i:03d} owners {' '.join(st['params'])}) ()) =
  v{i:03d} owners {' '.join(st['params'])} := by
  unfold p{i:03d} v{i:03d}
- rw [NMX_S{i:03d}.step]
+ rw [NMX_S{i:03d}.step ops owners {' '.join(n if n in st['params'] else 'NMX_UnusedWitnesses.'+n for n in manifest[i-1]['parameters'])}]
 '''
   if i==55:out+=' rfl\n'
-  else:out+=f' simp only [{ns}.e{i+1:03d}]\n'
+  else:out+=f' simp only [{ns}.e{i+1:03d}] <;> rfl\n'
   out+=f'#print axioms e{i:03d}\n'
  out+=f'end NMX_Fold{group:02d}\nend\n'
- (E/f'NMX_Fold{group:02d}.lean').write_text(out)
+ if group!=5: (E/f'NMX_Fold{group:02d}.lean').write_text(out)
+ # Fold05 already accepted at L128; its proof text remains frozen.
 (E/'NMX_FOLD_PLAN.json').write_text(json.dumps(steps,indent=1)+'\n')

@@ -23,8 +23,30 @@ theorem fold (L : PoolLib) (D : DeployedIds)
  (a : TX2_233.Args) :
  Refines (replay L D laneNative registryNative a) (TX2_233.Ref L D a) := by
  unfold replay TX2_233.Ref
- split <;> first
- | exact NMX_RSL233Replay.body_fold L D laneNative registryNative lanePacket registryPacket _ _ _ _ _ _ _ _
- | exact refl _
+ generalize a.accounts = accounts
+ cases accounts with
+ | nil => exact refl _
+ | cons p rest1 =>
+   cases rest1 with
+   | nil => exact refl _
+   | cons m rest2 =>
+     cases rest2 with
+     | nil => exact refl _
+     | cons c rest3 =>
+       cases rest3 with
+       | nil => exact refl _
+       | cons l rest4 =>
+         cases rest4 with
+         | nil => exact refl _
+         | cons r rest5 =>
+           cases rest5 with
+           | nil => exact refl _
+           | cons e rest6 =>
+             cases rest6 with
+             | nil => exact refl _
+             | cons v rest7 =>
+               cases rest7 with
+               | nil => exact NMX_RSL233Replay.body_fold L D laneNative registryNative lanePacket registryPacket a p m c l r e v
+               | cons extra remaining => exact refl _
 #print axioms fold
 end NMX_RSL233Fold

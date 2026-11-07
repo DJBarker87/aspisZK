@@ -44,7 +44,7 @@ for block in blocks:
  else:continue
  num=len(manifest)+1;mod=f'NMX_S{num:03d}'
  if term.startswith('raw '):kind='raw';rhs=term[4:];proof='exact NMX_ResultSteps.raw ops owners _ next';out=f'({rhs}) >>= fun value => NMX_ValueLink.erase (eval (source ops owners) (next value) ())'
- elif term.startswith('check '):kind='check';cond=term[6:];out=f'if {cond} then ok (.Err .InvalidAccountData) else NMX_ValueLink.erase (eval (source ops owners) (next ()) ())';proof=f'by_cases h : ({cond}) = true <;> simp only [NMX_SourceProgram.check,h,↓reduceIte,NMX_Program.bind,eval,NMX_ValueLink.erase]'
+ elif term.startswith('check '):kind='check';cond=term[6:];out=f'if {cond} then ok (.Err .InvalidAccountData) else NMX_ValueLink.erase (eval (source ops owners) (next ()) ())';proof=f'cases h : ({cond}) <;> simp [NMX_SourceProgram.check,h,NMX_Program.bind,eval,NMX_ValueLink.erase]'
  else:
   mt=re.fullmatch(r'call \(\.(\w+) (.*)\)',term,re.S);assert mt,term
   cmd,args=mt.groups();A2,r,kind=commands[cmd];assert A==A2,(A,A2,term)

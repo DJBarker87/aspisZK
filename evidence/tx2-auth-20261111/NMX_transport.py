@@ -24,7 +24,11 @@ for line in names:
  root=pathlib.Path('/sys/fs/cgroup')/cg.lstrip('/')
  hit=False;own=False
  for f in root.rglob('cgroup.procs'):
-  for pid in f.read_text().split():
+  try:pids=f.read_text().split()
+  except OSError as ex:
+   if ex.errno!=95:raise
+   pids=f.with_name('cgroup.threads').read_text().split()
+  for pid in pids:
    try:
     cwd=str(pathlib.Path('/proc',pid,'cwd').resolve());hit |= cwd.startswith('/home/dombarker/project-offloads/codex-');own |= cwd=='/home/dombarker/project-offloads/codex-cx-tx2-auth-20261111'
    except OSError:pass

@@ -8,6 +8,7 @@ import NMX_S017
 import NMX_S018
 import NMX_S019
 import NMX_S020
+import NMX_UnusedWitnesses
 import NMX_Fold02
 set_option autoImplicit false
 noncomputable section
@@ -24,8 +25,8 @@ theorem e020 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p020 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey) ()) =
  v020 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey := by
  unfold p020 v020
- rw [NMX_S020.step]
- simp only [NMX_Fold02.e021]
+ rw [NMX_S020.step ops owners ]
+ simp only [NMX_Fold02.e021] <;> rfl
 #print axioms e020
 
 def p019 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (wrongMaster : Bool) : Program Auth :=
@@ -38,8 +39,8 @@ theorem e019 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p019 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey wrongMaster) ()) =
  v019 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey wrongMaster := by
  unfold p019 v019
- rw [NMX_S019.step]
- simp only [NMX_Fold01.e020]
+ rw [NMX_S019.step ops owners wrongMaster]
+ simp only [NMX_Fold01.e020] <;> rfl
 #print axioms e019
 
 def p018 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (masterKeyBytes : Array U8 32#usize) : Program Auth :=
@@ -54,8 +55,8 @@ theorem e018 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p018 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey masterKeyBytes) ()) =
  v018 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey masterKeyBytes := by
  unfold p018 v018
- rw [NMX_S018.step]
- simp only [NMX_Fold01.e019]
+ rw [NMX_S018.step ops owners pool masterKeyBytes master]
+ simp only [NMX_Fold01.e019] <;> rfl
 #print axioms e018
 
 def p017 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) : Program Auth :=
@@ -68,8 +69,8 @@ theorem e017 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p017 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey) ()) =
  v017 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master masterKey := by
  unfold p017 v017
- rw [NMX_S017.step]
- simp only [NMX_Fold01.e018]
+ rw [NMX_S017.step ops owners masterKey]
+ simp only [NMX_Fold01.e018] <;> rfl
 #print axioms e017
 
 def p016 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) : Program Auth :=
@@ -82,8 +83,8 @@ theorem e016 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p016 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master) ()) =
  v016 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount master := by
  unfold p016 v016
- rw [NMX_S016.step]
- simp only [NMX_Fold01.e017]
+ rw [NMX_S016.step ops owners masterAccount]
+ simp only [NMX_Fold01.e017] <;> rfl
 #print axioms e016
 
 def p015 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (masterBytes : Slice U8) : Program Auth :=
@@ -96,8 +97,8 @@ theorem e015 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p015 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount masterBytes) ()) =
  v015 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount masterBytes := by
  unfold p015 v015
- rw [NMX_S015.step]
- simp only [NMX_Fold01.e016]
+ rw [NMX_S015.step ops owners masterBytes NMX_UnusedWitnesses.master]
+ simp only [NMX_Fold01.e016] <;> rfl
 #print axioms e015
 
 def p014 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) : Program Auth :=
@@ -110,8 +111,8 @@ theorem e014 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p014 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount) ()) =
  v014 owners ops verifier pool outputLane slot masterAccount checkpointAccount laneAccount registryAccount entryAccount := by
  unfold p014 v014
- rw [NMX_S014.step]
- simp only [NMX_Fold01.e015]
+ rw [NMX_S014.step ops owners masterAccount]
+ simp only [NMX_Fold01.e015] <;> rfl
 #print axioms e014
 
 def p013 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (verifierCheckpoint : r1_pool_adapter.owned.OwnedAccount) : Program Auth :=
@@ -126,8 +127,8 @@ theorem e013 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p013 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) ()) =
  v013 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint := by
  unfold p013 v013
- rw [NMX_S013.step]
- simp only [NMX_Fold01.e014]
+ rw [NMX_S013.step ops owners proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint]
+ simp only [NMX_Fold01.e014] <;> rfl
 #print axioms e013
 
 def p012 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (verifierCheckpoint : r1_pool_adapter.owned.OwnedAccount) : Program Auth :=
@@ -140,8 +141,8 @@ theorem e012 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p012 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) ()) =
  v012 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint := by
  unfold p012 v012
- rw [NMX_S012.step]
- simp only [NMX_Fold01.e013]
+ rw [NMX_S012.step ops owners pool laneAccount]
+ simp only [NMX_Fold01.e013] <;> rfl
 #print axioms e012
 
 def p011 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (verifierCheckpoint : r1_pool_adapter.owned.OwnedAccount) : Program Auth :=
@@ -154,8 +155,8 @@ theorem e011 (owners : Owners) (ops : Ops) (verifier : solana_pubkey.Pubkey) (po
  NMX_ValueLink.erase (eval (source ops owners) (p011 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) ()) =
  v011 owners ops verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint := by
  unfold p011 v011
- rw [NMX_S011.step]
- simp only [NMX_Fold01.e012]
+ rw [NMX_S011.step ops owners pool checkpointAccount]
+ simp only [NMX_Fold01.e012] <;> rfl
 #print axioms e011
 end NMX_Fold01
 end

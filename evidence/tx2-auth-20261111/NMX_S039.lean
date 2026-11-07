@@ -10,7 +10,7 @@ theorem step (ops : Ops) (owners : Owners) (wrongCheckpointPda : Bool)
  NMX_ValueLink.erase (eval (source ops owners)
   (NMX_Program.bind (NMX_SourceProgram.check wrongCheckpointPda) next) ()) =
  if wrongCheckpointPda then ok (.Err .InvalidAccountData) else NMX_ValueLink.erase (eval (source ops owners) (next ()) ()) := by
- by_cases h : (wrongCheckpointPda) = true <;> simp only [NMX_SourceProgram.check,h,↓reduceIte,NMX_Program.bind,eval,NMX_ValueLink.erase]
+ cases h : (wrongCheckpointPda) <;> simp [NMX_SourceProgram.check,h,NMX_Program.bind,eval,NMX_ValueLink.erase]
 #print axioms step
 end NMX_S039
 end
