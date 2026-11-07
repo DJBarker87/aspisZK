@@ -9,3 +9,7 @@ Budget: 400 Lean/link/audit scopes, 1 extraction, 0 Kani. Used: 0 scopes, 0 extr
 Stage 0: read AGENTS security/proof discipline, local-lean/common rules, rev2 impact, ledger25 handoff, split-B brief and minimal A1/A2 brief. Preparing retained-object copies and prefix-owned rev2 restatements. The five repairs leave theorem statements unchanged.
 
 Retained assumptions: all existing runtime, std/copy and extraction trust; L154 queries; frozen3 per-attempt contract. No Root0, Realizes, success or hash-injectivity premise is authorized for the top. No final theorem is claimed.
+
+Stage 1 complete: 29/400 scopes, all exit0; 20 unchanged RSL rev2 dependency compiles and 9 NNH proof modules. Printed own axioms are standard-only. Peak RSS 6079536 KiB; swaps0. Exact per-target metrics/source revisions/hashes and Aeneas/dependency pins are in NNH_L001–029 receipts. This is focused cached validation, not a cold release replay. The restated wrapper packet still needs canonical PoolLaws and children; no complete concrete top field or row is claimed.
+
+Owned setup repair: recursive historical path traversal exhausted host disk before any compile; removed only redundant nested copies outside selected module namespaces (NNH_REDUNDANT_COPY_CLEANUP.json), retained source/selected caches, and replaced traversal with ledger25 selected-object plus direct sibling-module enumeration. 48,844 imported files are hashed in NNH_CACHE_IMPORTS.json.xz.
