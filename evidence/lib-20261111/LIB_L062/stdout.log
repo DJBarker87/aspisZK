@@ -1,0 +1,21 @@
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+@[reducible] def AspisR1.NP6_StdModel.Reservation : Type :=
+Aeneas.Std.core.result.Result Unit AspisR1.NP6_StdModel.ReserveError
+NFY_NEQ_DecodeScalar.digest_result_state_effects {State : Type} (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (state : State) :
+  (AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical bytes, state, []) =
+    (Aeneas.Std.Result.ok (NFY_NBP_DigestDecode.decoded bytes), state, [])
+NFY_NBP_DigestDecode.decoded (bytes : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+    AspisR1TerminalDecoder.atomic_statement.AtomicStatementError
+AspisR1.NKY_BoxAction.run {T S : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator S) (before : S) (bytes : ℕ)
+  (r : AspisR1.NP6_StdModel.Reservation) (owner : ℕ)
+  (decoded : Aeneas.Std.Result (Aeneas.Std.core.result.Result T AspisR1.NKY_BoxAction.PE)) :
+  Aeneas.Std.Result (Aeneas.Std.core.result.Result (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE × S)

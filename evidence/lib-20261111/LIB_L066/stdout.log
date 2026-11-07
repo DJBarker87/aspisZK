@@ -1,0 +1,13 @@
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+LIB_generated/LIB_InspectDigest.lean:7:7: error(lean.unknownIdentifier): Unknown constant `UScalar.from_le_bytes`
+UInt32.toBitVec_inj {a b : UInt32} : a.toBitVec = b.toBitVec ↔ a = b
+BitVec.ofNat_toNat {n : ℕ} (m : ℕ) (x : BitVec n) : BitVec.ofNat m x.toNat = BitVec.setWidth m x
+def NFY_NBG_WideBytes.word : Std.Array U8 32#usize → ℕ → U32 :=
+fun bytes i =>
+  core.num.U32.from_le_bytes
+    (Array.make 4#usize [(↑bytes)[4 * i]!, (↑bytes)[4 * i + 1]!, (↑bytes)[4 * i + 2]!, (↑bytes)[4 * i + 3]!] ⋯)
+@[reducible] def NFY_NBP_DecodeWord.word : Std.Array U8 32#usize → ℕ → U32 :=
+NFY_NBG_WideBytes.word
+@[reducible] def NFY_NBP_DecodeWord.P : U32 :=
+2147483647#u32
