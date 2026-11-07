@@ -1,0 +1,42 @@
+{"attempt": "NLW_L062", "exit_status": 0, "wall_seconds": 22.489111399045214, "peak_rss_kib": "6028024", "swaps": "0", "print_axioms": ["'NLW_ResumeHeader.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ResumeHeader.returned : ∀ (reservation : NP6_StdModel.Reservation) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State),
+  CheckpointBytes5Inputs.Oracle (NJC_ResumeCalls.digest d) hash H →
+    ∀ (ck proof pub : Slice U8) (p : verifier.Prepared) (a : verifier.Accumulator),
+      NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Result.ok (core.result.Result.Ok (p, a)) →
+        NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑ck) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun reservation {X} d hash H oracle ck proof pub p a entered =>
+  
+...
+theorem NLW_ResumeHeader.returned : ∀ (reservation : NP6_StdModel.Reservation) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State),
+  CheckpointBytes5Inputs.Oracle (NJC_ResumeCalls.digest d) hash H →
+    ∀ (ck proof pub : Slice U8) (p : verifier.Prepared) (a : verifier.Accumulator),
+      NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Result.ok (core.result.Result.Ok (p, a)) →
+        NLW_ReaderHeader.decode (MultiproofConeCanonical.bytesOf ↑ck) =
+          some (H (MultiproofConeCanonical.bytesOf ↑proof), H (MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun reservation {X} d hash H oracle ck proof pub p a entered =>
+  have size := NKE_ResumeWidth.checkpoint reservation d ck proof pub hash p a entered;
+  have same :=
+    NKE_ResumeDomain.action_ok
+      (NJC_ResumeCalls.cohort (NJC_FilledClause.reserved reservation) d ck proof pub AspisR1Stage2.transport.Variant.S2
+        hash)
+      (p, a)
+      (Eq.mp
+        (congrArg (fun _a => NHT_ResultPort.action _a = Result.ok (core.result.Result.Ok (p, a)))
+          (NJC_ResumeCalls.clause (NJC_FilledClause.reserved reservation) d ck proof pub
+            AspisR1Stage2.transport.Variant.S2 hash))
+        entered);
+  id
+    (fun same =>
+      let ⟨calls⟩ :=
+        CheckpointBytes4Comparison.successful_calls (NJC_FilledClause.reserved reservation) (NJC_ResumeCalls.digest d)
+          ck proof pub AspisR1Stage2.transport.Variant.S2 hash p a same
+      NLW_ReaderHeader.calls (NJC_ResumeCalls.digest d) hash H oracle ck proof pub calls size)
+    same
+'NLW_ResumeHeader.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r53065751ec734e748527bdda8d1dd933.scope; invocation ID: e23c3c2bbaba4b33973408344837f147

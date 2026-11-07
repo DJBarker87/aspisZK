@@ -19,3 +19,11 @@ NLW_StartScope reuses NLM's exact source derivation (archive43ed0dd4396f…) wit
 ## Trust and collision boundary
 
 NLW_Persistence applies the accepted CPR_DataPersistence.TwoTransactionLaw ONLY to observable data at live ordinary keys after successfulTX1. No owner,lamport or physical-frame equality is inferred. NLW_DigestBoundary records `Root0 OR a concrete differing-input/equal-hash event`,not hash injectivity. Hash realization is the existing SHA/H trust row; collision exclusion belongs in the existing headline event/bound. SAME actual resume digest-check installation,TX1 saved-root provenance and collision-event transport must still be supplied. No new trust row is introduced and no unconditional Root0 discharge is claimed.
+
+## Corrected complete-outcome interface
+
+NLW_Full064State/Law/Fold use immutable merged NLT_CompleteRoot fromfc8f4700f49. Original NLT_Root projection is retained only as resolved/reference-correlated support after NLT-F1. The full fold carries an independent C04 stop without creating a returned child Result or native suffix. It remains parameterized by the full child packet and explicit own caller clauses; it does not establish the actual compiled parent-to-Frame decoding relation. No proposed ReviewedTranscription item is counted as admitted.
+
+## Root provenance timing
+
+Actual successful resume supplies concrete stored-header/digest comparisons. A theorem conditional on that local reached success can be used after that call, not to justify the whole root or to assume an unrestricted child domain before that call. Root0 on the common callee's own inputs remains a caller obligation; both-root provenance and collision-event transport must be installed along the actual source path. The new serialization/persistence/header lemmas are conditional support only. Replacing that producer with P2Prime or successful-reader premises in a row root would not complete this job.

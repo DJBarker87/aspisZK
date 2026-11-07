@@ -1,0 +1,41 @@
+{"attempt": "NLW_L066", "exit_status": 0, "wall_seconds": 27.419645514106378, "peak_rss_kib": "6020680", "swaps": "0", "print_axioms": ["'NLW_PersistedRoots.saved' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_PersistedRoots.saved : ∀ {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → Image) (success : Tx → Bool) (loaded : Tx → Key → Option Bytes),
+  TwoTransactionLaw next ordinary before tentative success loaded →
+    ∀ (t u : Tx) (key : Key),
+      next t u →
+        ordinary t key →
+          success t = true →
+            (tentative t key).lamports ≠ 0 →
+              ∀ (oldCheckpoint checkpoint proof pub : Slice U8),
+                (tentative t key).data = bytesOf ↑oldCheckpoint →
+                  loaded u key = some (bytesOf ↑checkpoint) →
+                    ∀ (H : Bytes → State) (p : OraclePortCheckpointAbiC5.Prepared)
+      
+...
+theorem NLW_PersistedRoots.saved : ∀ {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → Image) (success : Tx → Bool) (loaded : Tx → Key → Option Bytes),
+  TwoTransactionLaw next ordinary before tentative success loaded →
+    ∀ (t u : Tx) (key : Key),
+      next t u →
+        ordinary t key →
+          success t = true →
+            (tentative t key).lamports ≠ 0 →
+              ∀ (oldCheckpoint checkpoint proof pub : Slice U8),
+                (tentative t key).data = bytesOf ↑oldCheckpoint →
+                  loaded u key = some (bytesOf ↑checkpoint) →
+                    ∀ (H : Bytes → State) (p : OraclePortCheckpointAbiC5.Prepared)
+                      (a : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E),
+                      bytesOf ↑oldCheckpoint = OraclePortCheckpointAbiC5.encode H (bytesOf ↑proof) (bytesOf ↑pub) p a →
+                        NLW_WriterPair.Roots p proof → NLW_CommittedRoots.Both checkpoint proof :=
+fun {Tx Key} next ordinary before tentative success loaded law t u key adjacent eligible accepted live oldCheckpoint
+    checkpoint proof pub write read H p a encoding roots =>
+  have persisted :=
+    NLW_Persistence.loaded_bytes next ordinary before tentative success loaded law t u key adjacent eligible accepted
+      live (bytesOf ↑checkpoint) read;
+  NLW_ByteIdentity.both_transport oldCheckpoint checkpoint proof proof
+    (NLW_WriterPair.both H proof pub oldCheckpoint p a encoding roots)
+    (Eq.mp (congrArg (fun _a => bytesOf ↑checkpoint = _a) write) persisted) rfl
+'NLW_PersistedRoots.saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r33540125de674fe9bac4b14de55b4589.scope; invocation ID: 32f8ff884ce14a118c7ecadb899c1d57

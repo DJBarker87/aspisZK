@@ -22,8 +22,8 @@ theorem digest_matches (H : Bytes → State) (saved loaded proof1 pub1 proof2 pu
  resume header check, and the EXISTING pair-indexed P2-prime condition. This
  exposes rather than discharges collision binding; it is not an entry root. -/
 theorem both (H : Bytes → State) (saved loaded proof1 pub1 proof2 pub2 : Slice U8)
- (p : OraclePortCompactDraft.Prepared)
- (a : QueryAccumulator.State OraclePortCompactDraft.K OraclePortCompactDraft.E)
+ (p : OraclePortCheckpointAbiC5.Prepared)
+ (a : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
  (encoding : bytesOf saved.val=OraclePortCheckpointAbiC5.encode H (bytesOf proof1.val) (bytesOf pub1.val) p a)
  (oldRoots : NLW_WriterPair.Roots p proof1)
  (persisted : bytesOf loaded.val=bytesOf saved.val)

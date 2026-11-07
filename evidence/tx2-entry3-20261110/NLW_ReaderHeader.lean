@@ -7,7 +7,7 @@ noncomputable section
 namespace NLW_ReaderHeader
 open Aeneas Aeneas.Std AspisR1
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
-open MultiproofConeCanonical
+open MultiproofConeCanonical OraclePortCompactDraft AspisR1Stage2
 /-- Concrete header decoder shared by the source writer and reader. -/
 def decode (cp : Bytes) : Option (State × State) := do
  let proof ← SemanticRecordCodec.decodeState (slice cp 16 32)
@@ -24,19 +24,27 @@ theorem calls {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
   (by decide) (by change 48≤ck.val.length; omega) c.proofField
  have pu:=AdapterRw.Ranges.selected_exact ck c.storedPublic 48#usize 80#usize
   (by decide) (by change 80≤ck.val.length; omega) c.publicField
+ have v16 : (16#usize).val=16 := by scalar_tac
+ have v48 : (48#usize).val=48 := by scalar_tac
+ have v80 : (80#usize).val=80 := by scalar_tac
+ have pfBytes : c.storedProof.val=(ck.val.drop 16).take 32 := by
+  simpa only [v16,v48,v80] using pf.1
+ have puBytes : c.storedPublic.val=(ck.val.drop 48).take 32 := by
+  simpa only [v16,v48,v80] using pu.1
  have pp:= (CheckpointBytes5Inputs.calls_inputs D hash ck proof pub c length).1
  have up:= (CheckpointBytes5Inputs.calls_inputs D hash ck proof pub c length).2.1
  have hp : SemanticRecordCodec.decodeState (slice (bytesOf ck.val) 16 32)=
   some (H (bytesOf proof.val)) := by
-  rw [←NLW_WriterPair.map_slice,←pf.1,c.proofEqual,
-   ←MultiproofConePhysicalTransport.digest_bytes,SemanticRecordCodec.decodeState_bytes]
+  rw [←NLW_WriterPair.map_slice,←pfBytes,c.proofEqual,
+   ←CheckpointBytesDigest.bytes_stateOf,SemanticRecordCodec.decodeState_bytes]
   rw [oracle _ _ c.proofCall,pp]
  have hu : SemanticRecordCodec.decodeState (slice (bytesOf ck.val) 48 32)=
   some (H (bytesOf pub.val)) := by
-  rw [←NLW_WriterPair.map_slice,←pu.1,c.publicEqual,
-   ←MultiproofConePhysicalTransport.digest_bytes,SemanticRecordCodec.decodeState_bytes]
+  rw [←NLW_WriterPair.map_slice,←puBytes,c.publicEqual,
+   ←CheckpointBytesDigest.bytes_stateOf,SemanticRecordCodec.decodeState_bytes]
   rw [oracle _ _ c.publicCall,up]
  simp only [decode,hp,hu,Option.bind_some]
+ rfl
 #print decode
 #print calls
 #print axioms calls

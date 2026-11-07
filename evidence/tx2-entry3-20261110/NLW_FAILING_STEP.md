@@ -21,3 +21,7 @@ matchK028's inverse. The first positiveK027 preceded added independent harness
 functions,so its source hash differs. K040 keeps the original harness name and
 property;its changed input is the documented final source set,not a renamed
 verdict. This consumes the last native allowance;it is not a replay ofK039.
+
+## Native parent/full-frame binding finding
+
+The current segment contracts are copied scalar fragments, not installed call-boundary segments of the ACTUAL compiled parent under an arbitrary payload/context decoder. The actual064 harness runs only zero-content carriers. Together they do not establish the(bg) native producer. Therefore no complete parent native fold or ReviewedTranscription admission is claimed. A future fix needs new scoped native windows and matched controls under the same frozen graph/KMX/deployed-feature rules; the remaining Lean allowance cannot substitute for that evidence. See NLW_INTERFACE_FINDINGS.md for paused adapter and root-timing gaps.

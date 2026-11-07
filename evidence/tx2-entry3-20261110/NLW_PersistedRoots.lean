@@ -19,8 +19,8 @@ theorem saved {Tx Key : Type} (next : Tx → Tx → Prop)
  (oldCheckpoint checkpoint proof pub : Slice U8)
  (write : (tentative t key).data=bytesOf oldCheckpoint.val)
  (read : loaded u key=some (bytesOf checkpoint.val))
- (H : Bytes → State) (p : OraclePortCompactDraft.Prepared)
- (a : QueryAccumulator.State OraclePortCompactDraft.K OraclePortCompactDraft.E)
+ (H : Bytes → State) (p : OraclePortCheckpointAbiC5.Prepared)
+ (a : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
  (encoding : bytesOf oldCheckpoint.val=OraclePortCheckpointAbiC5.encode H (bytesOf proof.val) (bytesOf pub.val) p a)
  (roots : NLW_WriterPair.Roots p proof) :
  NLW_CommittedRoots.Both checkpoint proof := by

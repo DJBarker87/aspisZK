@@ -1,0 +1,28 @@
+{"attempt": "NLW_L067", "exit_status": 0, "wall_seconds": 26.822239423869178, "peak_rss_kib": "6018400", "swaps": "0", "print_axioms": ["'NLW_RootCollision.alternatives' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_RootCollision.Collision : (Bytes → State) → Slice U8 → Slice U8 → Prop :=
+fun H oldProof proof => bytesOf ↑oldProof ≠ bytesOf ↑proof ∧ H (bytesOf ↑oldProof) = H (bytesOf ↑proof)
+theorem NLW_RootCollision.alternatives : ∀ (H : Bytes → State) (saved loaded proof1 pub1 proof2 pub2 : Slice U8),
+  bytesOf ↑loaded = bytesOf ↑saved →
+    NLW_CommittedRoots.Both saved proof1 →
+      NLW_ReaderHeader.decode (bytesOf ↑saved) = some (H (bytesOf ↑proof1), H (bytesOf ↑pub1)) →
+        NLW_ReaderHeader.decode (bytesOf ↑loaded) = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2)) →
+          NLW_CommittedRoots.Both loaded proof2 ∨ Collision H proof1 proof2 :=
+fun H saved loaded proof1 pub1 proof2 pub2 p
+...
+def NLW_RootCollision.Collision : (Bytes → State) → Slice U8 → Slice U8 → Prop :=
+fun H oldProof proof => bytesOf ↑oldProof ≠ bytesOf ↑proof ∧ H (bytesOf ↑oldProof) = H (bytesOf ↑proof)
+theorem NLW_RootCollision.alternatives : ∀ (H : Bytes → State) (saved loaded proof1 pub1 proof2 pub2 : Slice U8),
+  bytesOf ↑loaded = bytesOf ↑saved →
+    NLW_CommittedRoots.Both saved proof1 →
+      NLW_ReaderHeader.decode (bytesOf ↑saved) = some (H (bytesOf ↑proof1), H (bytesOf ↑pub1)) →
+        NLW_ReaderHeader.decode (bytesOf ↑loaded) = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2)) →
+          NLW_CommittedRoots.Both loaded proof2 ∨ Collision H proof1 proof2 :=
+fun H saved loaded proof1 pub1 proof2 pub2 persisted oldRoots writer reader =>
+  have checked := NLW_AuthenticatedRoots.digest_matches H saved loaded proof1 pub1 proof2 pub2 persisted writer reader;
+  have oldLoaded := NLW_ByteIdentity.both_transport saved loaded proof1 proof1 oldRoots persisted rfl;
+  if same : bytesOf ↑proof2 = bytesOf ↑proof1 then
+    Or.inl (NLW_ByteIdentity.both_transport loaded loaded proof1 proof2 oldLoaded rfl same)
+  else Or.inr ⟨Ne.symm same, Eq.symm checked.left⟩
+'NLW_RootCollision.alternatives' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re029ccfa146945aba2ef6253da62708a.scope; invocation ID: a7d2ace2655d4c689484e0a9c528dcda

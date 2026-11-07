@@ -36,6 +36,7 @@ theorem decoded (H : Bytes → State) (proof pub : Bytes) (p : Prepared)
  NLW_ReaderHeader.decode (encode H proof pub p a)=some (H proof,H pub) := by
  obtain ⟨hp,hu⟩:=fields H proof pub p a
  simp only [NLW_ReaderHeader.decode,hp,hu,SemanticRecordCodec.decodeState_bytes,Option.bind_some]
+ rfl
 #print fields
 #print decoded
 #print axioms fields

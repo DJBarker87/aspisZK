@@ -3,7 +3,7 @@ import NLP_ResumeRoots
 set_option autoImplicit false
 noncomputable section
 namespace NLW_ResumeHeader
-open Aeneas Aeneas.Std AspisR1
+open Aeneas Aeneas.Std AspisR1 VTop_Stages
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 /-- Lift concrete resume comparison records at the actually reached source
  invocation. This requires only the existing per-call hash realization law;
