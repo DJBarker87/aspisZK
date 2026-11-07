@@ -5,3 +5,5 @@ Target not yet established. Authorized continuation: module22 LIB_VLib, actual m
 First cost: focused elaboration of the concrete VLib record and per-field Returns, then Prepared/S1 identities. No generated arithmetic or shipped source changes. LIB_C_IMPORTS.json pins copy-only retained lane-C objects (merged32d984fae62); the existing coherent workspace and Aeneas objects are reused. No sibling worktree is accessed.
 
 L182 passed: LIB_VLib.library is concrete, every field projection is fixed by rfl, and all20 Child fields have Returns evaluators. reservation_functional covers the four TX1 fallible allocation fields. Definitions fix each Child to its merged supplier; original domains/events/error/abort prefixes remain. No row, runtime-totality or principal closure claimed.
+
+L183 passed: LIB_Prepared.child is actual P-star at LIB_VLib.library; ten identities are rfl. Full graph/Returns/caller clauses specialize LIBC_ without an operational parameter. Original semantic/expanded provenance remains the principal caller obligation.
