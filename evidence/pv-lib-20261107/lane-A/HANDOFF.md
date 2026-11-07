@@ -236,3 +236,5 @@ Session4 49160: pinned PV_THR2_JoinedCertChunk14 passed; session4 receipt record
 Session4 49161: pinned PV_THR2_JoinedCertChunk15 passed; session4 receipt records resources/axioms.
 
 Session4 49162: pinned PV_THR2_PacketJoinedTableAway passed; session4 receipt records resources/axioms.
+
+Session4 49163: pinned PV_THR2_PacketJoinedRetained121 passed; session4 receipt records resources/axioms.
