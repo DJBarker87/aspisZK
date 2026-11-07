@@ -8,7 +8,7 @@ Target not yet established; no ledger row credit. This continuation supersedes t
 - `LIB_ParseShape094.empty_reference` admits Err(Parse)/[] at proof[]/k10 for every pub/env. `width_not_required` explicitly refutes the old required_width premise at this instance. The historical NNG_Nonempty094.no_candidate proof cannot be transported to it. No complete actual094 RowSpec theorem is claimed: NNG_ still owns the emitted094 observation/Ref composition and all SAME reached-child domain proofs; exact boundary in LIB_F9_HANDOFF.md.
 - Module25 is now complete as `LIB_FullInstances.library`: L/D/V0/VL/P/C, with nine TX2 TAS type identities and the existing six TX1 identities. L-star and V0-star are actual LIBB_PoolLib.library/LIBB_V2Star.library; gate, Values and unchanged SAME-V0 weak registration are imported, not duplicated. No TX2 library field waits on LIBB_. Actual I.f064/EnvRep installation remains integration-owned.
 
-F9-only details: LIB_F9_HANDOFF.md, LIB_F9_STATUS.json, LIB_F9_PROVENANCE.json. Validation, own-root audit and retained export are being finalized. No shipped source, trust item, frozen spec, key, sibling worktree or release artifact changed; no push. Original runtime/std/tool/extraction/source-to-ELF obligations remain retained.
+F9-only details: LIB_F9_HANDOFF.md, LIB_F9_STATUS.json, LIB_F9_PROVENANCE.json. Validation is complete:22/80 scopes,39/39 raw ax2 roots standard-only, both coherent imports pass; retained export and exact metrics are in LIB_F9_EXPORT.json / LIB_F9_VALIDATION.json. No shipped source, trust item, frozen spec, key, sibling worktree or release artifact changed; no push. Original runtime/std/tool/extraction/source-to-ELF obligations remain retained.
 
 ## Historical bundle continuation (prior to F9)
 
