@@ -1,14 +1,15 @@
-# NLQ TX1 entry spine part 2
+# NLQ retained handoff
 
-Target not yet established. Work in progress; no row root or ledger credit.
-Owned rows: TX1:328,345,344,333,330. Baseline NLO ledger22:576 CLOSED /0 QUALIFIED /23 OPEN of599.
-Method: fold-first, exact typed open-child packets, NLF SDK token events and caller-domain review. Source erasures alone receive no native credit.
-Frozen source and security contract unchanged. No new trust, RuntimeCpiReadonlyEntry7 unused. No shipped-file changes or wallet actions. Commits local only.
-Budget:40 Kani,140 Lean,0 extraction; one admitted capped scope at a time. Workspace /home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110; CARGO_TARGET_DIR=workspace/NLQ_target.
-Next: seed NLD then NLF then NLO; inventory native windows and construct first_decoded fold.
+Target not yet established. All five owned rows remain OPEN; no row root, qualified candidate, or ledger promotion. Baseline ledger22 remains 576 CLOSED / 0 QUALIFIED / 23 OPEN of 599.
 
-Stage correction: provisional NLQ-F1 emission mismatch RETRACTED (NLQ_CORRECTIONS.md). Full emitted else includes eleven. K002..K009 are retained native regression/control pairs, not counterexamples to the model. No row promotion; target not yet established.
+The original WIP emission-mismatch diagnosis is RETRACTED (NLQ_CORRECTIONS.md). The complete emitted eleven branch is retained. NLJ_RowSpec094 is imported unchanged and remains an unproved child packet schema. No child094 credit is claimed.
 
-Resume audit: 31 Lean compiles, 10 Kani checks, 1 inspection recorded before resume; numbered gaps are not launches. L038 was a reserved `public1` token parse error. No active NLQ host process found; host free 70.99 GB. Continue at L039, counting inspection conservatively against Lean ceiling (32/140 used).
+Established source support: NLQ_FirstPacket.fold consumes that exact packet at the same arguments. NLQ_Stage1Fold/Body preserve full owned-child Result and copy/cleanup cases; NLQ_CheckpointDomain derives copy length at the reached successful child. NLQ_ClosedSnapshotStep/ClosedThreeSnapshots reuse CLOSED343 on one world chain. All first/second/third allocation fail/div prefixes and completed event chronology are retained; NLQ_ReplayThree.complete replays the exact normal trace. NLQ_DispatchSource and NLQ_DispatchTx1 preserve full Result/post/child prefix and eliminate lifecycle/stage2 on TX1 inputs. These are support theorems, not complete parameterized native folds.
 
-Resume stage update: L062 proves unconditional post-snapshot stage1 Result (splits on the actual owned-child expression; no child-success hypothesis); L060 derives the copy extent at that same branch. L070/L066 compose CLOSED snapshot343 over one SDK world chain. L071 proves malformed extents skip allocation entirely; L072 retains full completed snapshot chronology; L073 binds returned data to the original Entry bytes. Native K012 timed out and earns no credit. Source-stateful process/entry and full stage1 prefix assembly are being checked; no native row root or ledger delta is proposed.
+Open findings: NLQ-F2 (logging oracle has a narrow checkpoint footprint; K013–018 are qualified only) and NLQ-F3 (cell-indexed metadata carrier needs an existing-ABI association or per-account generalization). L119 plus K021/K022 establish only the stated metadata interface diagnostic, not a frozen-program finding. See NLQ_FAILING_STEP.md and NLQ_REMAINING.md for exact obligations per row.
+
+Host: dombarker@100.108.41.90; own workspace /home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110; CARGO_TARGET_DIR=workspace/NLQ_target. Seed order NLD, NLF, NLO; retained NLQ_CACHE_IMPORTS.json.xz records 63 files / 8,004,344 bytes and every imported hash. Original-owner NLM modules are privately replayed, unchanged; provenance is in NLQ_RESUME_IMPORTS.json. No sibling worktree was edited.
+
+Budget is cumulative: 40 Kani / 140 Lean / 0 extraction. Actual launches, including failures and the initial inspection, are counted in NLQ_ATTEMPTS.jsonl; numbered gaps are not attempts. NLQ_gate_queue.py enumerates the remaining numbered import/scan/raw audit/export scopes. NLQ_native_stage3.py enumerates the early-guard and ProgramResult shape controls. Run neither concurrently with another NLQ scope; require current-source dependency PASS, disk >=40GB, and reservation exit0 plus allowed:true. Never resubmit an already-submitted run. Latest audit status is NLQ_AUDIT.json; pending does not mean pass.
+
+Frozen release source parity is recorded in NLQ_RELEASE_SOURCE_CHECK.json. Rust harnesses are scratch-only via NLQ_NATIVE.patch with exact canonical KMX patch, frozen offline graph and unchanged-lock checks per run. No shipped-file change, ELF rebuild, new trust, RuntimeCpiReadonlyEntry7 use, metric change, or wallet/key action. Inherited release ELF pins are not new reproductions. All commits are local; do not push.

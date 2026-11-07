@@ -1,0 +1,42 @@
+{"attempt": "NLQ_L118", "exit_status": 0, "wall_seconds": 20.383319830987602, "peak_rss_kib": "6014664", "swaps": "0", "print_axioms": ["'NLQ_InstalledStage1.owned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_InstalledStage1.stage1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_InstalledStage1.owned : ∀ {CoreError : Type} (missing : Uninstalled CoreError) (indexError : CoreError)
+  (reservation : NP6_StdModel.Reservation) (p : AdapterRw.solana_pubkey.Pubkey)
+  (a : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (d : Slice U8),
+  (NLD_Stage1Source.stage1Owned (NLM_DeployedOps.ops missing indexError reservation) p a d).2 =
+    AdapterRw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p a d :=
+fun {CoreError} missing indexError reservation p a d =>
+  NLD_Stage1Source.erasure (NLM_DeployedOps.ops missing indexError reservation) p a d
+theorem NLQ_InstalledStage1.stage1 : ∀ {CoreError : Type} (missing : Uninstalled
+...
+Rw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p a d :=
+fun {CoreError} missing indexError reservation p a d =>
+  NLD_Stage1Source.erasure (NLM_DeployedOps.ops missing indexError reservation) p a d
+theorem NLQ_InstalledStage1.stage1 : ∀ {CoreError : Type} (missing : Uninstalled CoreError) (indexError : CoreError)
+  (reservation : NP6_StdModel.Reservation) (e : S2W_D189Entry.Entry) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8),
+  NLQ_Route.Tx1 d →
+    (NLQ_Stage1Parent.G e (NLM_DeployedOps.ops missing indexError reservation) p d 3 (ok ()) (ok ()) (ok ())).result =
+      do
+      let child ←
+        AdapterRw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p e.first d
+      match child with
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+        | core.result.Result.Err error => ok (core.result.Result.Err error) :=
+fun {CoreError} missing indexError reservation e p d tx1 =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = do
+            let child ←
+              AdapterRw.r1_pool_adapter.owned.stage1_owned (NLM_DeployedOps.ops missing indexError reservation) p
+                  e.first d
+            match child with
+              | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+              | core.result.Result.Err error => ok (core.result.Result.Err error))
+        (NLQ_Stage1Body.result e (NLM_DeployedOps.ops missing indexError reservation) p d (ok ()) (ok ()) (ok ()) tx1)))
+    (NLQ_Stage1Fold.result e (NLM_DeployedOps.ops missing indexError reservation) p d)
+'NLQ_InstalledStage1.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_InstalledStage1.stage1' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8d6703b71c8d47be812c92397e2996a9.scope; invocation ID: 9b756508a11b4795b6edafd96e79d5ce

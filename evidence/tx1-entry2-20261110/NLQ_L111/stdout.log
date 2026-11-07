@@ -1,0 +1,8 @@
+second_div : ∀ (e : Entry) (a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 1).1)).length = 1880 →
+    NLQ_SnapshotFold.G e (ok ()) div a2 =
+      { result := div,
+        events :=
+          (G (ready e 0 []) 0 58295 58295 (ok ())).events ++
+            allocationPrefix (ready e 1 [e.snapshot 0 58295 58295]) 1 div }
+'NLQ_SnapshotSecondDiv.second_div' depends on axioms: [propext, Classical.choice, Quot.sound]

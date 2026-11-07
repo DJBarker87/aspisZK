@@ -1,0 +1,26 @@
+// ProgramResult interface calibration for future process/entry contracts.
+// No frozen function contract is claimed or installed by these controls.
+#[kani::ensures(|r| *r==Err(ProgramError::Custom(x as u32)))]
+fn program_result_record(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
+#[kani::ensures(|r| *r!=Err(ProgramError::Custom(x as u32)))]
+fn program_result_invert(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
+#[kani::ensures(|r| r.is_err())]
+fn program_result_weak(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
+#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r.is_err())]
+fn program_result_badframe(x:&mut [u8;2])->ProgramResult{x[1]=x[1].wrapping_add(1);Err(ProgramError::Custom(0))}
+#[kani::proof_for_contract(program_result_record)]
+fn contract_program_result(){program_result_record(kani::any());}
+#[kani::proof_for_contract(program_result_invert)]
+fn contract_program_result_invert(){program_result_invert(kani::any());}
+#[kani::proof_for_contract(program_result_weak)]
+fn contract_program_result_weak(){program_result_weak(kani::any());}
+#[kani::proof]
+fn contract_program_result_real(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
+#[kani::proof] #[kani::stub_verified(program_result_weak)]
+fn contract_program_result_unimplied(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
+#[kani::proof_for_contract(program_result_badframe)]
+fn contract_program_result_frame(){let mut x:[u8;2]=kani::any();program_result_badframe(&mut x);}
+#[kani::proof] #[kani::stub_verified(program_result_record)]
+fn contract_program_result_caller(){let x:u8=kani::any();assert_eq!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
+#[kani::proof] #[kani::stub_verified(program_result_record)]
+fn contract_program_result_caller_control(){let x:u8=kani::any();assert_ne!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}

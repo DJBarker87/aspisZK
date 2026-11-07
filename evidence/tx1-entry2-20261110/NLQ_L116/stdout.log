@@ -1,0 +1,1020 @@
+theorem NLM_Snapshot.skip_allocation : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List Owned) (allocation : Result Unit),
+  ¬((S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+        (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi) →
+    G (ready e t owned) a lo hi allocation = G (ready e t owned) a lo hi (ok ()) :=
+fun e t a lo hi owned allocation skip =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (have acquisition := _a;
+              do
+              let guardReply ←
+                NJU_Log.record (Event.acquire (ready e t owned) a (ready e t owned).next acquisition.1)
+                    (ok acquisition.2)
+              match guardReply with
+                | Except.error a_1 =>
+                  have value :=
+                    have __src := (ready e t owned).input.snapshot a lo hi;
+                    { key := __src.key, owner := __src.owner, is_signer := __src.is_signer,
+                      is_writable := __src.is_writable, executable := __src.executable,
+                      length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+                      bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+                  do
+                  let _ ← NJU_Log.record (Event.returned (ready e t owned) a lo hi) (ok value)
+                  pure
+                      (value,
+                        { input := (ready e t owned).input, sdk := (ready e t owned).sdk,
+                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned ++ [value] })
+                | Except.ok g =>
+                  have live :=
+                    { input := (ready e t owned).input, sdk := acquisition.1, next := (ready e t owned).next + 1,
+                      owned := (ready e t owned).owned };
+                  do
+                  let payload ← NJU_Log.record (Event.deref live g) (ok (deref acquisition.1 g))
+                  let allowed : Prop := payload.bytes.length = lo ∨ payload.bytes.length = hi
+                  have __do_jp : Unit → Run (Owned × State) := fun __r => do
+                    let dropped ← NJU_Log.record (Event.release live g) (ok (release acquisition.1 g))
+                    match dropped with
+                      | Except.error a => liftM (fail Error.panic)
+                      | Except.ok restored =>
+                        have value := (ready e t owned).input.snapshot a lo hi;
+                        do
+                        let _ ← NJU_Log.record (Event.returned live a lo hi) (ok value)
+                        pure
+                            (value,
+                              { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                owned := (ready e t owned).owned ++ [value] })
+                  if allowed then do
+                      NJU_Log.record (Event.allocate live g payload.bytes.length) allocation
+                      __do_jp ()
+                    else __do_jp ()) =
+              have acquisition := _a;
+              do
+              let guardReply ←
+                NJU_Log.record (Event.acquire (ready e t owned) a (ready e t owned).next acquisition.1)
+                    (ok acquisition.2)
+              match guardReply with
+                | Except.error a_1 =>
+                  have value :=
+                    have __src := (ready e t owned).input.snapshot a lo hi;
+                    { key := __src.key, owner := __src.owner, is_signer := __src.is_signer,
+                      is_writable := __src.is_writable, executable := __src.executable,
+                      length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+                      bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+                  do
+                  let _ ← NJU_Log.record (Event.returned (ready e t owned) a lo hi) (ok value)
+                  pure
+                      (value,
+                        { input := (ready e t owned).input, sdk := (ready e t owned).sdk,
+                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned ++ [value] })
+                | Except.ok g =>
+                  have live :=
+                    { input := (ready e t owned).input, sdk := acquisition.1, next := (ready e t owned).next + 1,
+                      owned := (ready e t owned).owned };
+                  do
+                  let payload ← NJU_Log.record (Event.deref live g) (ok (deref acquisition.1 g))
+                  let allowed : Prop := payload.bytes.length = lo ∨ payload.bytes.length = hi
+                  have __do_jp : Unit → Run (Owned × State) := fun __r => do
+                    let dropped ← NJU_Log.record (Event.release live g) (ok (release acquisition.1 g))
+                    match dropped with
+                      | Except.error a => liftM (fail Error.panic)
+                      | Except.ok restored =>
+                        have value := (ready e t owned).input.snapshot a lo hi;
+                        do
+                        let _ ← NJU_Log.record (Event.returned live a lo hi) (ok value)
+                        pure
+                            (value,
+                              { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                                owned := (ready e t owned).owned ++ [value] })
+                  if allowed then do
+                      NJU_Log.record (Event.allocate live g payload.bytes.length) (ok ())
+                      __do_jp ()
+                    else __do_jp ())
+          (acquire e t a owned)))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congr
+                (congrArg NJU_Log.Run.mk
+                  (congrArg NJU_Log.Run.result
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x.result with
+                          | fail err =>
+                            { result := fail err,
+                              events :=
+                                (NJU_Log.record
+                                    (Event.deref
+                                      { input := (ready e t owned).input,
+                                        sdk := (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                      { cell := ((ready e t owned).sdk.accounts a).data,
+                                        token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                    (ok
+                                      (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))).events }
+                          | div =>
+                            { result := div,
+                              events :=
+                                (NJU_Log.record
+                                    (Event.deref
+                                      { input := (ready e t owned).input,
+                                        sdk := (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                      { cell := ((ready e t owned).sdk.accounts a).data,
+                                        token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                    (ok
+                                      (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))).events }
+                          | ok a_1 =>
+                            have next :=
+                              (fun payload =>
+                                  let allowed := payload.bytes.length = lo ∨ payload.bytes.length = hi;
+                                  have __do_jp := fun __r => do
+                                    let dropped ←
+                                      NJU_Log.record
+                                          (Event.release
+                                            { input := (ready e t owned).input,
+                                              sdk :=
+                                                (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                          (ok
+                                            (release
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                              { cell := ((ready e t owned).sdk.accounts a).data,
+                                                token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                    match dropped with
+                                      | Except.error a => liftM (fail Error.panic)
+                                      | Except.ok restored =>
+                                        have value := (ready e t owned).input.snapshot a lo hi;
+                                        do
+                                        let _ ←
+                                          NJU_Log.record
+                                              (Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi)
+                                              (ok value)
+                                        pure
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] });
+                                  if allowed then do
+                                    NJU_Log.record
+                                        (Event.allocate
+                                          { input := (ready e t owned).input,
+                                            sdk :=
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                          payload.bytes.length)
+                                        allocation
+                                    __do_jp ()
+                                  else __do_jp ())
+                                a_1;
+                            { result := next.result,
+                              events :=
+                                (NJU_Log.record
+                                      (Event.deref
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                      (ok
+                                        (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next,
+                                            kind := NLF_RefCell.Kind.shared }))).events ++
+                                  next.events })
+                        (congr
+                          (congrArg NJU_Log.Run.mk
+                            (congrArg ok
+                              (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                (ready e t owned).next)))
+                          (congrFun'
+                            (congrArg List.cons
+                              (congrArg
+                                (Event.deref
+                                  { input := (ready e t owned).input,
+                                    sdk :=
+                                      put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                        {
+                                          payload :=
+                                            ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).payload,
+                                          readers :=
+                                            (ready e t owned).next ::
+                                              ((ready e t owned).sdk.cells
+                                                  ((ready e t owned).sdk.accounts a).data).readers,
+                                          writer :=
+                                            ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).writer },
+                                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                  { cell := ((ready e t owned).sdk.accounts a).data, token := (ready e t owned).next,
+                                    kind := NLF_RefCell.Kind.shared })
+                                (congrArg ok
+                                  (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                    (ready e t owned).next))))
+                            [])))
+                      (congr
+                        (congrArg NJU_Log.Run.mk
+                          (congrArg NJU_Log.Run.result
+                            (Eq.trans
+                              (ite_cond_eq_false
+                                (do
+                                  NJU_Log.record
+                                      (Event.allocate
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                        ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).payload.bytes.length)
+                                      allocation
+                                  (fun __r => do
+                                        let dropped ←
+                                          NJU_Log.record
+                                              (Event.release
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                { cell := ((ready e t owned).sdk.accounts a).data,
+                                                  token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                              (ok
+                                                (release
+                                                  (acquired (ready e t owned) a,
+                                                      Except.ok (guard (ready e t owned) a)).1
+                                                  { cell := ((ready e t owned).sdk.accounts a).data,
+                                                    token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                        match dropped with
+                                          | Except.error a => liftM (fail Error.panic)
+                                          | Except.ok restored =>
+                                            have value := (ready e t owned).input.snapshot a lo hi;
+                                            do
+                                            let _ ←
+                                              NJU_Log.record
+                                                  (Event.returned
+                                                    { input := (ready e t owned).input,
+                                                      sdk :=
+                                                        (acquired (ready e t owned) a,
+                                                            Except.ok (guard (ready e t owned) a)).1,
+                                                      next := (ready e t owned).next + 1,
+                                                      owned := (ready e t owned).owned }
+                                                    a lo hi)
+                                                  (ok value)
+                                            pure
+                                                (value,
+                                                  { input := (ready e t owned).input, sdk := restored,
+                                                    next := (ready e t owned).next + 1,
+                                                    owned := (ready e t owned).owned ++ [value] }))
+                                      ())
+                                ((fun __r => do
+                                    let dropped ←
+                                      NJU_Log.record
+                                          (Event.release
+                                            { input := (ready e t owned).input,
+                                              sdk :=
+                                                (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                          (ok
+                                            (release
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                              { cell := ((ready e t owned).sdk.accounts a).data,
+                                                token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                    match dropped with
+                                      | Except.error a => liftM (fail Error.panic)
+                                      | Except.ok restored =>
+                                        have value := (ready e t owned).input.snapshot a lo hi;
+                                        do
+                                        let _ ←
+                                          NJU_Log.record
+                                              (Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi)
+                                              (ok value)
+                                        pure
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] }))
+                                  ())
+                                (eq_false
+                                  (Eq.mp
+                                    (congrArg Not
+                                      (congr
+                                        (congrArg Or
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (congrArg List.length
+                                                (congrArg Payload.bytes
+                                                  (shared_deref (ready e t owned).sdk
+                                                    ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                            lo))
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (congrArg List.length
+                                              (congrArg Payload.bytes
+                                                (shared_deref (ready e t owned).sdk
+                                                  ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                          hi)))
+                                    (Eq.mp
+                                      (congrArg (fun _a => ¬(_a.length = lo ∨ _a.length = hi))
+                                        (Eq.symm (current_payload e t a owned)))
+                                      skip))))
+                              (congr
+                                (congrArg NJU_Log.Run.mk
+                                  (congrArg NJU_Log.Run.result
+                                    (congrArg
+                                      (G.match_1 (fun dropped => Run (Owned × State))
+                                        (release
+                                          (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                            {
+                                              payload :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).payload,
+                                              readers :=
+                                                (ready e t owned).next ::
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).readers,
+                                              writer :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).writer })
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                        fun a => liftM (fail Error.panic))
+                                      (funext fun restored =>
+                                        congrArg
+                                          (NJU_Log.Run.mk
+                                            (ok
+                                              ((ready e t owned).input.snapshot a lo hi,
+                                                { input := (ready e t owned).input, sdk := restored,
+                                                  next := (ready e t owned).next + 1,
+                                                  owned :=
+                                                    (ready e t owned).owned ++
+                                                      [(ready e t owned).input.snapshot a lo hi] })))
+                                          (List.append_nil
+                                            [Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                                      {
+                                                        payload :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).payload,
+                                                        readers :=
+                                                          (ready e t owned).next ::
+                                                            ((ready e t owned).sdk.cells
+                                                                ((ready e t owned).sdk.accounts a).data).readers,
+                                                        writer :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).writer },
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))])))))
+                                (congrArg
+                                  (HAppend.hAppend
+                                    [Event.release
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                              {
+                                                payload :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).payload,
+                                                readers :=
+                                                  (ready e t owned).next ::
+                                                    ((ready e t owned).sdk.cells
+                                                        ((ready e t owned).sdk.accounts a).data).readers,
+                                                writer :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).writer },
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                        (ok
+                                          (release
+                                            (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                              {
+                                                payload :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).payload,
+                                                readers :=
+                                                  (ready e t owned).next ::
+                                                    ((ready e t owned).sdk.cells
+                                                        ((ready e t owned).sdk.accounts a).data).readers,
+                                                writer :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).writer })
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))])
+                                  (congrArg NJU_Log.Run.events
+                                    (congrArg
+                                      (G.match_1 (fun dropped => Run (Owned × State))
+                                        (release
+                                          (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                            {
+                                              payload :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).payload,
+                                              readers :=
+                                                (ready e t owned).next ::
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).readers,
+                                              writer :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).writer })
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                        fun a => liftM (fail Error.panic))
+                                      (funext fun restored =>
+                                        congrArg
+                                          (NJU_Log.Run.mk
+                                            (ok
+                                              ((ready e t owned).input.snapshot a lo hi,
+                                                { input := (ready e t owned).input, sdk := restored,
+                                                  next := (ready e t owned).next + 1,
+                                                  owned :=
+                                                    (ready e t owned).owned ++
+                                                      [(ready e t owned).input.snapshot a lo hi] })))
+                                          (List.append_nil
+                                            [Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                                      {
+                                                        payload :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).payload,
+                                                        readers :=
+                                                          (ready e t owned).next ::
+                                                            ((ready e t owned).sdk.cells
+                                                                ((ready e t owned).sdk.accounts a).data).readers,
+                                                        writer :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).writer },
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))])))))))))
+                        (congr
+                          (congrArg HAppend.hAppend
+                            (congrArg NJU_Log.Run.events
+                              (congr
+                                (congrArg NJU_Log.Run.mk
+                                  (congrArg ok
+                                    (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                      (ready e t owned).next)))
+                                (congrFun'
+                                  (congrArg List.cons
+                                    (congrArg
+                                      (Event.deref
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                              {
+                                                payload :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).payload,
+                                                readers :=
+                                                  (ready e t owned).next ::
+                                                    ((ready e t owned).sdk.cells
+                                                        ((ready e t owned).sdk.accounts a).data).readers,
+                                                writer :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).writer },
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                      (congrArg ok
+                                        (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                          (ready e t owned).next))))
+                                  []))))
+                          (congrArg NJU_Log.Run.events
+                            (Eq.trans
+                              (ite_cond_eq_false
+                                (do
+                                  NJU_Log.record
+                                      (Event.allocate
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                        ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).payload.bytes.length)
+                                      allocation
+                                  (fun __r => do
+                                        let dropped ←
+                                          NJU_Log.record
+                                              (Event.release
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                { cell := ((ready e t owned).sdk.accounts a).data,
+                                                  token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                              (ok
+                                                (release
+                                                  (acquired (ready e t owned) a,
+                                                      Except.ok (guard (ready e t owned) a)).1
+                                                  { cell := ((ready e t owned).sdk.accounts a).data,
+                                                    token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                        match dropped with
+                                          | Except.error a => liftM (fail Error.panic)
+                                          | Except.ok restored =>
+                                            have value := (ready e t owned).input.snapshot a lo hi;
+                                            do
+                                            let _ ←
+                                              NJU_Log.record
+                                                  (Event.returned
+                                                    { input := (ready e t owned).input,
+                                                      sdk :=
+                                                        (acquired (ready e t owned) a,
+                                                            Except.ok (guard (ready e t owned) a)).1,
+                                                      next := (ready e t owned).next + 1,
+                                                      owned := (ready e t owned).owned }
+                                                    a lo hi)
+                                                  (ok value)
+                                            pure
+                                                (value,
+                                                  { input := (ready e t owned).input, sdk := restored,
+                                                    next := (ready e t owned).next + 1,
+                                                    owned := (ready e t owned).owned ++ [value] }))
+                                      ())
+                                ((fun __r => do
+                                    let dropped ←
+                                      NJU_Log.record
+                                          (Event.release
+                                            { input := (ready e t owned).input,
+                                              sdk :=
+                                                (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                          (ok
+                                            (release
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                              { cell := ((ready e t owned).sdk.accounts a).data,
+                                                token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                    match dropped with
+                                      | Except.error a => liftM (fail Error.panic)
+                                      | Except.ok restored =>
+                                        have value := (ready e t owned).input.snapshot a lo hi;
+                                        do
+                                        let _ ←
+                                          NJU_Log.record
+                                              (Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi)
+                                              (ok value)
+                                        pure
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] }))
+                                  ())
+                                (eq_false
+                                  (Eq.mp
+                                    (congrArg Not
+                                      (congr
+                                        (congrArg Or
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (congrArg List.length
+                                                (congrArg Payload.bytes
+                                                  (shared_deref (ready e t owned).sdk
+                                                    ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                            lo))
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (congrArg List.length
+                                              (congrArg Payload.bytes
+                                                (shared_deref (ready e t owned).sdk
+                                                  ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                          hi)))
+                                    (Eq.mp
+                                      (congrArg (fun _a => ¬(_a.length = lo ∨ _a.length = hi))
+                                        (Eq.symm (current_payload e t a owned)))
+                                      skip))))
+                              (congr
+                                (congrArg NJU_Log.Run.mk
+                                  (congrArg NJU_Log.Run.result
+                                    (congrArg
+                                      (G.match_1 (fun dropped => Run (Owned × State))
+                                        (release
+                                          (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                            {
+                                              payload :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).payload,
+                                              readers :=
+                                                (ready e t owned).next ::
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).readers,
+                                              writer :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).writer })
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                        fun a => liftM (fail Error.panic))
+                                      (funext fun restored =>
+                                        congrArg
+                                          (NJU_Log.Run.mk
+                                            (ok
+                                              ((ready e t owned).input.snapshot a lo hi,
+                                                { input := (ready e t owned).input, sdk := restored,
+                                                  next := (ready e t owned).next + 1,
+                                                  owned :=
+                                                    (ready e t owned).owned ++
+                                                      [(ready e t owned).input.snapshot a lo hi] })))
+                                          (List.append_nil
+                                            [Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                                      {
+                                                        payload :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).payload,
+                                                        readers :=
+                                                          (ready e t owned).next ::
+                                                            ((ready e t owned).sdk.cells
+                                                                ((ready e t owned).sdk.accounts a).data).readers,
+                                                        writer :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).writer },
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))])))))
+                                (congrArg
+                                  (HAppend.hAppend
+                                    [Event.release
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                              {
+                                                payload :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).payload,
+                                                readers :=
+                                                  (ready e t owned).next ::
+                                                    ((ready e t owned).sdk.cells
+                                                        ((ready e t owned).sdk.accounts a).data).readers,
+                                                writer :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).writer },
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                        (ok
+                                          (release
+                                            (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                              {
+                                                payload :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).payload,
+                                                readers :=
+                                                  (ready e t owned).next ::
+                                                    ((ready e t owned).sdk.cells
+                                                        ((ready e t owned).sdk.accounts a).data).readers,
+                                                writer :=
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).writer })
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))])
+                                  (congrArg NJU_Log.Run.events
+                                    (congrArg
+                                      (G.match_1 (fun dropped => Run (Owned × State))
+                                        (release
+                                          (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                            {
+                                              payload :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).payload,
+                                              readers :=
+                                                (ready e t owned).next ::
+                                                  ((ready e t owned).sdk.cells
+                                                      ((ready e t owned).sdk.accounts a).data).readers,
+                                              writer :=
+                                                ((ready e t owned).sdk.cells
+                                                    ((ready e t owned).sdk.accounts a).data).writer })
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                        fun a => liftM (fail Error.panic))
+                                      (funext fun restored =>
+                                        congrArg
+                                          (NJU_Log.Run.mk
+                                            (ok
+                                              ((ready e t owned).input.snapshot a lo hi,
+                                                { input := (ready e t owned).input, sdk := restored,
+                                                  next := (ready e t owned).next + 1,
+                                                  owned :=
+                                                    (ready e t owned).owned ++
+                                                      [(ready e t owned).input.snapshot a lo hi] })))
+                                          (List.append_nil
+                                            [Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                                      {
+                                                        payload :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).payload,
+                                                        readers :=
+                                                          (ready e t owned).next ::
+                                                            ((ready e t owned).sdk.cells
+                                                                ((ready e t owned).sdk.accounts a).data).readers,
+                                                        writer :=
+                                                          ((ready e t owned).sdk.cells
+                                                              ((ready e t owned).sdk.accounts a).data).writer },
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi (ok ((ready e t owned).input.snapshot a lo hi))])))))))))))))
+                (congrArg
+                  (HAppend.hAppend
+                    [Event.acquire (ready e t owned) a (ready e t owned).next
+                        (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                          { payload := ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).payload,
+                            readers :=
+                              (ready e t owned).next ::
+                                ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).readers,
+                            writer := ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).writer })
+                        (ok
+                          (Except.ok
+                            { cell := ((ready e t owned).sdk.accounts a).data, token := (ready e t owned).next,
+                              kind := NLF_RefCell.Kind.shared }))])
+                  (congrArg NJU_Log.Run.events
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x.result with
+                          | fail err =>
+                            { result := fail err,
+                              events :=
+                                (NJU_Log.record
+                                    (Event.deref
+                                      { input := (ready e t owned).input,
+                                        sdk := (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                      { cell := ((ready e t owned).sdk.accounts a).data,
+                                        token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                    (ok
+                                      (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))).events }
+                          | div =>
+                            { result := div,
+                              events :=
+                                (NJU_Log.record
+                                    (Event.deref
+                                      { input := (ready e t owned).input,
+                                        sdk := (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                        next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                      { cell := ((ready e t owned).sdk.accounts a).data,
+                                        token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                    (ok
+                                      (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))).events }
+                          | ok a_1 =>
+                            have next :=
+                              (fun payload =>
+                                  let allowed := payload.bytes.length = lo ∨ payload.bytes.length = hi;
+                                  have __do_jp := fun __r => do
+                                    let dropped ←
+                                      NJU_Log.record
+                                          (Event.release
+                                            { input := (ready e t owned).input,
+                                              sdk :=
+                                                (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                          (ok
+                                            (release
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                              { cell := ((ready e t owned).sdk.accounts a).data,
+                                                token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                    match dropped with
+                                      | Except.error a => liftM (fail Error.panic)
+                                      | Except.ok restored =>
+                                        have value := (ready e t owned).input.snapshot a lo hi;
+                                        do
+                                        let _ ←
+                                          NJU_Log.record
+                                              (Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi)
+                                              (ok value)
+                                        pure
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] });
+                                  if allowed then do
+                                    NJU_Log.record
+                                        (Event.allocate
+                                          { input := (ready e t owned).input,
+                                            sdk :=
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                            next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                          payload.bytes.length)
+                                        allocation
+                                    __do_jp ()
+                                  else __do_jp ())
+                                a_1;
+                            { result := next.result,
+                              events :=
+                                (NJU_Log.record
+                                      (Event.deref
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                      (ok
+                                        (deref (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                          { cell := ((ready e t owned).sdk.accounts a).data,
+                                            token := (ready e t owned).next,
+                                            kind := NLF_RefCell.Kind.shared }))).events ++
+                                  next.events })
+                        (congr
+                          (congrArg NJU_Log.Run.mk
+                            (congrArg ok
+                              (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                (ready e t owned).next)))
+                          (congrFun'
+                            (congrArg List.cons
+                              (congrArg
+                                (Event.deref
+                                  { input := (ready e t owned).input,
+                                    sdk :=
+                                      put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                        {
+                                          payload :=
+                                            ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).payload,
+                                          readers :=
+                                            (ready e t owned).next ::
+                                              ((ready e t owned).sdk.cells
+                                                  ((ready e t owned).sdk.accounts a).data).readers,
+                                          writer :=
+                                            ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).writer },
+                                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                  { cell := ((ready e t owned).sdk.accounts a).data, token := (ready e t owned).next,
+                                    kind := NLF_RefCell.Kind.shared })
+                                (congrArg ok
+                                  (shared_deref (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                                    (ready e t owned).next))))
+                            [])))
+                      (congr
+                        (congrArg NJU_Log.Run.mk
+                          (congrArg NJU_Log.Run.result
+                            (Eq.trans
+                              (ite_cond_eq_false
+                                (do
+                                  NJU_Log.record
+                                      (Event.allocate
+                                        { input := (ready e t owned).input,
+                                          sdk :=
+                                            (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                          next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                        { cell := ((ready e t owned).sdk.accounts a).data,
+                                          token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }
+                                        ((ready e t owned).sdk.cells
+                                                ((ready e t owned).sdk.accounts a).data).payload.bytes.length)
+                                      allocation
+                                  (fun __r => do
+                                        let dropped ←
+                                          NJU_Log.record
+                                              (Event.release
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                { cell := ((ready e t owned).sdk.accounts a).data,
+                                                  token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                              (ok
+                                                (release
+                                                  (acquired (ready e t owned) a,
+                                                      Except.ok (guard (ready e t owned) a)).1
+                                                  { cell := ((ready e t owned).sdk.accounts a).data,
+                                                    token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                        match dropped with
+                                          | Except.error a => liftM (fail Error.panic)
+                                          | Except.ok restored =>
+                                            have value := (ready e t owned).input.snapshot a lo hi;
+                                            do
+                                            let _ ←
+                                              NJU_Log.record
+                                                  (Event.returned
+                                                    { input := (ready e t owned).input,
+                                                      sdk :=
+                                                        (acquired (ready e t owned) a,
+                                                            Except.ok (guard (ready e t owned) a)).1,
+                                                      next := (ready e t owned).next + 1,
+                                                      owned := (ready e t owned).owned }
+                                                    a lo hi)
+                                                  (ok value)
+                                            pure
+                                                (value,
+                                                  { input := (ready e t owned).input, sdk := restored,
+                                                    next := (ready e t owned).next + 1,
+                                                    owned := (ready e t owned).owned ++ [value] }))
+                                      ())
+                                ((fun __r => do
+                                    let dropped ←
+                                      NJU_Log.record
+                                          (Event.release
+                                            { input := (ready e t owned).input,
+                                              sdk :=
+                                                (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1,
+                                              next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                            { cell := ((ready e t owned).sdk.accounts a).data,
+                                              token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared })
+                                          (ok
+                                            (release
+                                              (acquired (ready e t owned) a, Except.ok (guard (ready e t owned) a)).1
+                                              { cell := ((ready e t owned).sdk.accounts a).data,
+                                                token := (ready e t owned).next, kind := NLF_RefCell.Kind.shared }))
+                                    match dropped with
+                                      | Except.error a => liftM (fail Error.panic)
+                                      | Except.ok restored =>
+                                        have value := (ready e t owned).input.snapshot a lo hi;
+                                        do
+                                        let _ ←
+                                          NJU_Log.record
+                                              (Event.returned
+                                                { input := (ready e t owned).input,
+                                                  sdk :=
+                                                    (acquired (ready e t owned) a,
+                                                        Except.ok (guard (ready e t owned) a)).1,
+                                                  next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                                                a lo hi)
+                                              (ok value)
+                                        pure
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] }))
+                                  ())
+                                (eq_false
+                                  (Eq.mp
+                                    (congrArg Not
+                                      (congr
+                                        (congrArg Or
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (congrArg List.length
+                                                (congrArg Payload.bytes
+                                                  (shared_deref (ready e t owned).sdk
+                                                    ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                            lo))
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (congrArg List.length
+                                              (congrArg Payload.bytes
+                                                (shared_deref (ready e t owned).sdk ((ready ⋯ ⋯ ⋯).sdk.accounts ⋯).data
+                                                  ⋯))))
+                                          ⋯)))
+                                    ⋯)))
+                              ⋯)))
+                        ⋯))))))
+            ⋯)
+          ⋯)))
+'NLM_Snapshot.skip_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]

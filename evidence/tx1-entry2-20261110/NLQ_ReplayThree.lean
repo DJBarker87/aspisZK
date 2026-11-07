@@ -12,8 +12,10 @@ theorem complete (e : Entry) :
  rw [NLQ_SnapshotEvents.chronology,NLQ_SnapshotReplay.append,NLQ_SnapshotReplay.append]
  rw [NLQ_ReplayNormal.normal]
  rw [NLQ_SnapshotEvents.returned_ready]
+ simp only [List.nil_append,List.cons_append,Nat.zero_add]
  rw [NLQ_ReplayNormal.normal]
  rw [NLQ_SnapshotEvents.returned_ready]
+ simp only [List.nil_append,List.cons_append,Nat.zero_add]
  rw [NLQ_ReplayNormal.normal]
  rfl
 #print complete

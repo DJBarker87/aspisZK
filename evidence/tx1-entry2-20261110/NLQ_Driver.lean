@@ -103,7 +103,7 @@ unsafe def main (args : List String) : IO UInt32 := do
       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
     let failed ← NLQ_AuditNER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NLQ_LOADED_scan.jsonl") expected
-    IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+    IO.println (if failed then "NLQ_SCAN_FAILED" else "NLQ_SCAN_ZERO_DANGLING")
     return if failed then 1 else 0
   let ctx : Command.Context := {
     fileName := "NEP_Driver"

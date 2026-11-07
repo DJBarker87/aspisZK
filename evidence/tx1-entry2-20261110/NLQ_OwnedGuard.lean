@@ -15,7 +15,8 @@ theorem ten_wrong_count (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubke
   simp [NLQ_EmissionGuard.installed,NLQ_EmissionGuard.equality,NGL_ReadonlyModel.install,
    NJD_Prefixes.ten,Array.make]
  unfold NLD_Stage1Source.stage1Owned
- simp [NLD_SourceTrace.call,NJD_Trace.call,Bind.bind,NJD_Trace.bind,h10,bad,NJD_Trace.pure]
+ simp [NLD_SourceTrace.call,NJD_Trace.call,Bind.bind,NJD_Trace.bind,h10,bad]
+ constructor <;> rfl
 #check @ten_wrong_count
 #print axioms ten_wrong_count
 end NLQ_OwnedGuard

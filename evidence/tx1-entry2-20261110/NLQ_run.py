@@ -48,7 +48,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
  if r.returncode==0 and ad.get('allowed') is True:break
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
-  print('reservation wait',flush=True);time.sleep(180);continue
+  print('reservation wait',flush=True)
+  for _ in range(3):time.sleep(60)
+  continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
 if kind=='lean':
@@ -60,14 +62,16 @@ elif kind=='link':
  sources=['NLQ_native/'+target+'.c','NLQ_native/NFA_WALKER.c','NLQ_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NLQ_native/'+target,*sources]
 elif kind=='audit':
- if target=='retention':files['NLQ_retention.py']=(E/'NLQ_retention.py').read_text()
+ if target=='retention':
+  files['NLQ_retention.py']=(E/'NLQ_retention.py').read_text()
+  files['NLQ_AUDIT_PLAN.json']=(E/'NLQ_AUDIT_PLAN.json').read_text()
  if target in ['close','review-close']:
   files['NLQ_pin.py']=(E/'NLQ_pin.py').read_text();files['NLQ_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger19-20261108/NKN_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target=='review-close':files['NLQ_generated/NLQ_HypothesisReview.lean']=(E/'NLQ_HypothesisReview.lean').read_text()
  sources=['NLQ_generated/NLQ_ProofDriver.lean','NLQ_generated/NLQ_Driver.lean','NLQ_batch.py','NLQ_AUDIT_ROOTS.json','NLQ_AUDIT_MODULES.json','NLQ_EXPECTED_IMPORTS.jsonl']+(['NLQ_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NLQ_pin.py','NLQ_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NLQ_generated/NLQ_HypothesisReview.lean']if target=='review-close'else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
- if target=='retention':sources+=['NLQ_retention.py']
+ if target=='retention':sources+=['NLQ_retention.py','NLQ_AUDIT_PLAN.json']
  command=['python3','NLQ_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NLQ_tmp',CARGO_TARGET_DIR=B+'/NLQ_target',LEAN_PATH=':'.join([B+'/NLQ_objects']+json.loads((E/'NLQ_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')

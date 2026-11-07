@@ -194,7 +194,7 @@
 +mod NLQ_owned;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NLQ_owned.rs
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,100 @@
 +use super::*;
 +fn metadata_reply(_: &Pubkey,accounts:&[OwnedAccount],_:&[u8])->Result<Vec<u8>,ProgramError>{
 + let value=(accounts[0].is_writable as u32)|((accounts[2].is_writable as u32)<<1);
@@ -223,3 +223,75 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
 +#[kani::stub(crate::r1_pool_adapter::owned::stage1_owned,metadata_reply)]
 +fn alias_metadata_coalesced_control(){metadata_check(true)}
++fn guard_check(owned:bool,count_guard:bool,bad:bool){
++ let program=Pubkey::new_from_array(kani::any());
++ let instruction=if count_guard {[3,if kani::any::<bool>(){10}else{11}]} else {let d:[u8;2]=kani::any();kani::assume(d!=[3,10]&&d!=[3,11]);d};
++ if owned {
++  let make=|| OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Err(ProgramError::InvalidAccountData),bytes:Err(ProgramError::AccountBorrowFailed)};
++  let storage=[make(),make(),make()];let accounts=if count_guard {&storage[..1]}else{&storage[..]};
++  let before=(accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable);
++  let result=super::stage1_owned(&program,accounts,&instruction);
++  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++  assert_eq!((accounts[0].key,accounts[0].owner,accounts[0].is_signer,accounts[0].is_writable,accounts[0].executable),before);
++  assert_eq!(accounts[0].length,Err(ProgramError::InvalidAccountData));assert_eq!(accounts[0].bytes,Err(ProgramError::AccountBorrowFailed));
++ } else {
++  let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut money:u64=kani::any();let before=money;
++  let mut bytes:[u8;2]=kani::any();let saved=bytes;
++  let account=AccountInfo::new(&key,kani::any(),kani::any(),&mut money,&mut bytes,&owner,kani::any(),kani::any());
++  let accounts=[account.clone(),account.clone(),account.clone(),account];
++  let n=if count_guard {let n:usize=kani::any();kani::assume(n<=4&&n!=3);n}else{3};
++  let result=super::stage1(&program,&accounts[..n],&instruction);
++  if bad {assert_eq!(result,Err(ProgramError::InvalidAccountData));}else{assert_eq!(result,Err(ProgramError::InvalidInstructionData));}
++  let guard=accounts[0].try_borrow_mut_data().unwrap();assert_eq!(guard[0],saved[0]);assert_eq!(guard[1],saved[1]);drop(guard);assert_eq!(accounts[0].lamports(),before);
++ }
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_instruction(){guard_check(false,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_instruction_control(){guard_check(false,false,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_count(){guard_check(false,true,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_count_control(){guard_check(false,true,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_owned_instruction(){guard_check(true,false,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_owned_instruction_control(){guard_check(true,false,true)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_owned_count(){guard_check(true,true,false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++fn guard_owned_count_control(){guard_check(true,true,true)}
++// ProgramResult interface calibration for future process/entry contracts.
++// No frozen function contract is claimed or installed by these controls.
++#[kani::ensures(|r| *r==Err(ProgramError::Custom(x as u32)))]
++fn program_result_record(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::ensures(|r| *r!=Err(ProgramError::Custom(x as u32)))]
++fn program_result_invert(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::ensures(|r| r.is_err())]
++fn program_result_weak(x:u8)->ProgramResult{Err(ProgramError::Custom(x as u32))}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r.is_err())]
++fn program_result_badframe(x:&mut [u8;2])->ProgramResult{x[1]=x[1].wrapping_add(1);Err(ProgramError::Custom(0))}
++#[kani::proof_for_contract(program_result_record)]
++fn contract_program_result(){program_result_record(kani::any());}
++#[kani::proof_for_contract(program_result_invert)]
++fn contract_program_result_invert(){program_result_invert(kani::any());}
++#[kani::proof_for_contract(program_result_weak)]
++fn contract_program_result_weak(){program_result_weak(kani::any());}
++#[kani::proof]
++fn contract_program_result_real(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof] #[kani::stub_verified(program_result_weak)]
++fn contract_program_result_unimplied(){let x:u8=kani::any();assert_eq!(program_result_weak(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof_for_contract(program_result_badframe)]
++fn contract_program_result_frame(){let mut x:[u8;2]=kani::any();program_result_badframe(&mut x);}
++#[kani::proof] #[kani::stub_verified(program_result_record)]
++fn contract_program_result_caller(){let x:u8=kani::any();assert_eq!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}
++#[kani::proof] #[kani::stub_verified(program_result_record)]
++fn contract_program_result_caller_control(){let x:u8=kani::any();assert_ne!(program_result_record(x),Err(ProgramError::Custom(x as u32)));}

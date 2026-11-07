@@ -1,0 +1,17 @@
+theorem NLQ_ProofPublicFrame.source : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    have s := (NLQ_SnapshotFold.final e).sdk;
+    have after := NLQ_CopyMetadata.post s 2 (S2W_ReturnedCheckpoint.nativeBytes saved);
+    after.cells (s.accounts 0).data = s.cells (s.accounts 0).data ∧
+      after.cells (s.accounts 1).data = s.cells (s.accounts 1).data :=
+fun e ops p d saved branch =>
+  id
+    (have disjoint := first_disjoint e ops p d saved branch;
+    ⟨NLQ_CopyFrame.outside (NLQ_SnapshotFold.final e).sdk 2 ((NLQ_SnapshotFold.final e).sdk.accounts 0).data
+        (S2W_ReturnedCheckpoint.nativeBytes saved)
+        (disjoint 0 (of_decide_eq_true (id (Eq.refl true))) (of_decide_eq_true (id (Eq.refl true)))),
+      NLQ_CopyFrame.outside (NLQ_SnapshotFold.final e).sdk 2 ((NLQ_SnapshotFold.final e).sdk.accounts 1).data
+        (S2W_ReturnedCheckpoint.nativeBytes saved)
+        (disjoint 1 (of_decide_eq_true (id (Eq.refl true))) (of_decide_eq_true (id (Eq.refl true))))⟩)
+'NLQ_ProofPublicFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
