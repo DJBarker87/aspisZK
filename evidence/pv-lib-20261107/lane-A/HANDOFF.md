@@ -215,3 +215,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49887 passed exact pinned replay PV_LIB_A_Residual280; see receipt for time/RSS/swap/revision/axioms.
 
 49888 passed strict audit driver compile (0.74s,1588632KiB,swap0,standard axioms). 43 logical roots prepared; strict runtime audit still pending.
+
+49889 passed exact pinned replay PV_THR2_OwnInitAllocationBridgedSteps; see receipt for time/RSS/swap/revision/axioms.
