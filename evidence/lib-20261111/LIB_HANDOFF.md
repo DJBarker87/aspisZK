@@ -33,3 +33,5 @@ No shipped source changed: crates/r1/Cargo.lock remain at4bb3b3f51e16b4525f1d103
 Final accounting is recorded after export pinning in LIB_BUNDLE_VALIDATION.json. All main modules were committed immediately after their focused compilation. Principal/ledger/release closure remains outside this delivery; the100-bit per-attempt target is not yet established.
 
 Final:22/162 continuation scopes; resumed total110/250 including prior88. All22 exits0; total scope wall791.303s; max RSS6991532KiB; swap0. L203 pins/export passed. No remaining independent authorized TX1 member; the remaining module25 TX2 fields require externally owned actual V0-star.
+
+Raw admission transcripts with trailing blank lines are preserved byte-for-byte as.log.xz plus uncompressed.log.sha256 (LIB_BUNDLE_RAW_ARCHIVES.json); no log bytes were normalized.
