@@ -11,7 +11,7 @@ theorem exact_map {A B : Type} (f : A → B) (m : Spec A) (env : Env) (o : Obs B
    rcases run with ⟨a,e1,o2,hm,hk,ho⟩ | ⟨e1,hm,ho⟩ | ⟨e1,hm,ho⟩
    · change o2 = ⟨.ret (f a),[]⟩ at hk
      subst o2
-     exact ⟨⟨.ret a,e1⟩,hm,by simpa only [List.append_nil] using ho⟩
+     exact ⟨⟨.ret a,e1⟩,hm,by simpa only [List.append_nil,mapObs,mapExit] using ho⟩
    · exact ⟨⟨.abort,e1⟩,hm,ho⟩
    · exact ⟨⟨.diverge,e1⟩,hm,ho⟩
  · rintro ⟨raw,h,rfl⟩
