@@ -104,3 +104,13 @@ registry composition. Keep all five SPEC-ERROR facets and all18 OPEN/PARTIAL
 supplier edges qualified. Joint premise nonemptiness, complete29-contract
 comparisons and source/machine/binary adequacy remain unproved. REMAINING.md
 and FINDINGS.md give the exact limits; no library is consumed in row proofs.
+
+## Session4 in progress, base639e27748ce (D981/D982)
+49101 passed PV_LIB_A_OwnerStore: OWNER-aware OwnInitInterpreterBridged plus
+W4's five source-store meanings, symbolic away agreement, installed graph and
+all-answer world/event/suspended-stack effects. 49100 local elaboration failure
+is retained in session4/failed-49100.lean.xz; repaired source differs. Receipts
+under session4 include exact target/revision/exit/wall/RSS/swap/axioms.
+Only the own focused wrapper's accepted IDs are extended for491xx; old IDs
+49458–49479 already used and are not reused. No shared launcher changed.
+No actual Values/caller adequacy or endpoint closure is claimed.
