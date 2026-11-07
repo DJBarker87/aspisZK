@@ -1,9 +1,13 @@
 """Serial exact pinned provider replay; own lane evidence and host only."""
-import pathlib,json,subprocess,sys,time
+import pathlib,json,subprocess,sys,time,hashlib
 E=pathlib.Path('evidence/pv-lib-20261107/lane-A')
 for item in json.load(open(E/sys.argv[1])):
  m=item['module'];p=item['source_path']
- if any(json.load(open(q))['target']==m and json.load(open(q))['accepted'] for q in E.glob('receipt-*.json')):continue
+ if 'source_sha256' in item:assert hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()==item['source_sha256'],m
+ passed=[json.load(open(q)) for q in E.glob('receipt-*.json') if json.load(open(q))['target']==m and json.load(open(q))['accepted']]
+ if passed:
+  assert passed[-1]['source_sha256']==hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest(),('accepted source differs',m)
+  continue
  subprocess.run(['git','add','--sparse',p],check=True)
  for retry in range(10):
   for q in E.glob('refusal-*.json'):
