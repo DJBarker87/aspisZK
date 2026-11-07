@@ -1,0 +1,38 @@
+import NNG_EmittedContext
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNG_StdArray
+open Aeneas Aeneas.Std Result NNG_verify_finish
+/-- std::array::from_fn interpretation: ascending indices, one mutable closure
+state, all callback error and stopped arms. Stack output has no allocation site. -/
+def visit {T F : Type} (inst : core.ops.function.FnMut F Usize T) :
+ List Usize → F → Result (List T × F)
+ | [],f => .ok ([],f)
+ | i::is,f => do
+   let (x,f1) ← inst.call_mut f i
+   let (xs,f2) ← visit inst is f1
+   .ok (x::xs,f2)
+
+theorem visit_length {T F : Type} (inst : core.ops.function.FnMut F Usize T)
+ (indices : List Usize) (f : F) (xs : List T) (after : F)
+ (h : visit inst indices f=.ok (xs,after)) : xs.length=indices.length := by
+ induction indices generalizing f xs after with
+ | nil => cases h; rfl
+ | cons i is ih =>
+   simp only [visit] at h
+   cases hr : inst.call_mut f i with
+   | fail e => simp only [hr,bind_tc_fail] at h; cases h
+   | div => simp only [hr,bind_tc_div] at h; cases h
+   | ok reply =>
+     rcases reply with ⟨x,f1⟩
+     simp only [hr,bind_tc_ok] at h
+     cases hs : visit inst is f1 with
+     | fail e => simp only [hs,bind_tc_fail] at h; cases h
+     | div => simp only [hs,bind_tc_div] at h; cases h
+     | ok reply2 =>
+       rcases reply2 with ⟨ys,f2⟩
+       simp only [hs,bind_tc_ok] at h
+       cases h
+       exact congrArg Nat.succ (ih f1 ys f2 hs)
+#print axioms visit_length
+end AspisR1.NNG_StdArray

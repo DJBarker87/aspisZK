@@ -11,3 +11,7 @@ Frozen crates/programs-r1/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b9
 ## Stage 1 emission
 
 E001 freshly emitted actual frozen verify_finish with complete opaque boundaries: exit0,60.30653578s,536564KiB,swap0. Tool, source, feature, graph/lock and raw LLBC/output pins are in NNG_emitted/verify_finish and E001. bc audit PASS: no deployed loop; every error/panic arm retained. Generated equality trait compilation interface repair is in NNG_REPAIRS.md (L003 rejected; L004 changed shape passes). Types L002 and parameterized body L004 compile, the latter prints only standard axioms. These remain support, not a candidate or child installation. Ledger25 retained export copied/hash-verified in L001; all selected imports and Aeneas objects pinned per scope. No Kani, new trust, shipped source or ELF change.
+
+## Library mapping review
+
+Read mapping-only commit8c9ffd24f0d from branch codex/cx-lib-map-20261107 (that branch was subsequently removed/renamed by its owner; immutable commit retained). No concrete instance is delivered by that commit. NNG_LIBRARY_REVIEW.json pins the mapping and relevant F1/F5/F7/F8 flags. No frozen spec is changed. F1 (fallible reservation absent from Env) is a pending top/library issue; conditional RowSpec work remains possible but cannot silently fix reservation to success. Canonicality/domain support from NLU/NMC/NMO is reusable; no new parent condition is introduced. Pool payload parity independently checked: all20 carried Pool files match b936275465.
