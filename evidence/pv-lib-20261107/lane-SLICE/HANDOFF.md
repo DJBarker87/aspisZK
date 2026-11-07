@@ -85,3 +85,5 @@ Attempt 49635: PV_W5_F32UnitCompletion, passed pinned focused replay.
 Attempt 49636: PV_W5_LocalBranch, passed pinned focused replay.
 
 Attempt 49637: PV_W5_F32OverlapTail, passed pinned focused replay.
+
+Attempt 49638: PV_W5_LocalCallCompletion, passed pinned focused replay.
