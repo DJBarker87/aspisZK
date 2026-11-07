@@ -78,3 +78,5 @@ D978 attempt 49907: PV_FN_SLICE_f7_AfterDrop: passing pinned replay.
 D978 attempt 49908: PV_FN_SLICE_f7_Statements: passing pinned replay.
 
 D978 attempt 49909: PV_FN_SLICE_f7_Joins: passing pinned replay.
+
+D978 attempt 49910: PV_FN_SLICE_f7_TypedDrop: passing pinned replay.
