@@ -18,6 +18,7 @@ def main():
   pin=load(n)
   for tool in ['charon','aeneas']:
    if (E/(a+'_emitted')/(tool+'_receipt.json')).exists():tools[tool]+=1
+  if a=='NML_E001' and (E/'NML_ADMISSION_FINDING.json').exists():continue
   if attempts[a]['exit_status']!=0 or pin.get('charon_exit')!=0 or pin.get('aeneas_exit')!=0 or pin.get('lock_before')!=pin.get('lock_after'):continue
   for f in (E/(a+'_emitted')/'raw').rglob('*'):
    if not f.is_file() or not f.name.endswith(('.lean','.lean.xz')):continue
@@ -44,6 +45,9 @@ def main():
    z.update(verdict='DIFFERS_SEMANTIC' if classified[h]['classification']=='SEMANTIC' else 'DIFFERS_NONSEMANTIC',reason=classified[h]['reason'],classification_evidence=classified[h])
   else:
    z.update(verdict='NOT_REPRODUCED',reason=('NMH byte difference remains UNCLASSIFIED: '+classified.get(h,{}).get('reason','no Lean definitional-equality evidence') if b['verdict']=='DIFFERS' else ('Archive rerun differs or fails; see exact definition comparisons and receipts' if z['NML_attempts'] else 'No admitted archive rerun: '+b['reason'])))
+  if 'NML_E001' in z['NML_attempts']:
+   z['excluded_NML_attempts']=['NML_E001'];z['admission_finding']='NML_ADMISSION_FINDING.json'
+   if z['verdict']=='NOT_REPRODUCED':z['reason']='E001 excluded from provenance credit: owned-client restart rechecked after 15.095 seconds instead of the required 180; no unchanged rerun. Original bytes also differ in the empty-Types import; see NML_E001_blob.diff.xz.'
   result.append(z)
  nonrepro=[b for b in result if b['verdict']!='REPRODUCED_FROM_ARCHIVE'];rows=sorted({r for b in nonrepro for r in b['affected_CLOSED_rows']})
  packet=dict(schema=1,target_established=False,counts=dict(collections.Counter(b['verdict'] for b in result)),budget_used=dict(Charon=tools['charon'],Aeneas=tools['aeneas'],Lean=sum((E/a/'receipt.json').exists() for a in ['NML_L%03d'%i for i in range(1,21)]),Kani=0),blobs=result,conservative_affected_CLOSED_rows=rows,affected_CLOSED_count=len(rows),rootless_CLOSED_unassessed=['TX1:059','TX2:040'],impact_method='Reuse NMH exact lexical declaration/scoped-private alias intersection with 1,081 archived CLOSED-root reachability lists; union remaining non-reproduced blob impacts. Historical aliases retained; no selected-source/object claim.')

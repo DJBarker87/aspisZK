@@ -49,6 +49,7 @@ No assumption is added, discharged or changed. Headline remains AspisR1.RPx_Depl
 
 Validation: NML_tests.py rejects namespace/body/addition/partial-match mutants; NML_validate.py audits coverage, budgets, source hashes, admitted/capped receipts and 20 MB hygiene. PASS_WITH_PROVENANCE_GAPS is never a universal extraction or 100-bit security pass.
 '''
+ if (E/'NML_ADMISSION_FINDING.json').exists():hand+='\nProcedural finding: E001 is excluded from all provenance credit because its restarted waiter rechecked after 15.095 seconds rather than 180. Its tool charges remain; resource admission/caps passed. NML_ADMISSION_FINDING.json and NML_FINDINGS.md retain the evidence. The client now preserves refusal deadlines across restarts. No unchanged rerun.\n'
  (E/'NML_HANDOFF.md').write_text(hand)
  print(json.dumps(dict(completed_extractions=40-len(pending),pending=len(pending),counts=p['counts'])))
 if __name__=='__main__':main()

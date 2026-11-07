@@ -17,6 +17,13 @@ def ssh(code,data=None,submitted=False):
  raise RuntimeError('Transport exhausted')
 # Read-only share gate; every refusal is recorded as a wait, never a launch.
 def share_gate():
+ # Preserve the full refusal deadline even after an owned-client restart.
+ events=[json.loads(l) for l in (E/'NML_ATTEMPTS.jsonl').read_text().splitlines()]
+ deadlines=[e.get('observation',e.get('observed',{})).get('time',0)+180 for e in events if e.get('kind')=='wait' and e.get('reason') in ['Stream A scope gate','Stream A scope count >=2']]
+ remaining=max(deadlines+[0])-time.time()
+ if remaining>0:
+  with (E/'NML_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait_continuation',reason='Preserve share deadline across client restart',seconds=remaining))+'\n')
+  time.sleep(remaining)
  while True:
   r=ssh('python3',(E/'NML_share.py').read_text());assert r.returncode==0,r.stderr
   x=json.loads(r.stdout)

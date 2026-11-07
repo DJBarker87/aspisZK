@@ -27,7 +27,15 @@ def main():
    snap=f.parent/'sources'/n
    if snap.exists():assert sha(snap.read_bytes())==h,(a,n)
   completed.append(dict(attempt=a,exit=rc['exit_status'],wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],source_revision=rc['source_revision'],print_axioms=rc['print_axioms']))
+ last_refusal={}
+ for e in events:
+  a=e.get('attempt');obs=e.get('observation',{})
+  if a=='NML_E001':continue
+  if e.get('kind')=='wait' and obs.get('stream_a_count',0)>=2:last_refusal[a]=obs['time']
+  elif e.get('kind')=='share_check':
+   if a in last_refusal:assert obs['time']-last_refusal.pop(a)>=180,(a,'short share recheck')
  for b in p['blobs']:
+  if b.get('run')=='NML_E001':assert b['verdict']!='REPRODUCED_FROM_ARCHIVE'
   if b['verdict']=='REPRODUCED_FROM_ARCHIVE' and b.get('input',{}).get('directory'):assert b['run'] in {r['attempt'] for r in completed}
   if b['verdict']=='DIFFERS_NONSEMANTIC':assert b['classification_evidence'].get('lean_receipt'),b['blob']
  for f in E.rglob('*'):
@@ -35,6 +43,6 @@ def main():
  assert not list(E.rglob('__pycache__'))
  base=subprocess.check_output(['git','rev-parse','1e13d368ea9^'],text=True).strip()
  names=subprocess.check_output(['git','diff','--name-only',base],text=True).splitlines();assert all(n.startswith('evidence/emission-repro2-20261110/') for n in names)
- result=dict(status='PASS_WITH_PROVENANCE_GAPS',target_established=False,coverage=336,counts=p['counts'],budget_used=p['budget_used'],completed=completed,remaining_CLOSED_impact=p['affected_CLOSED_count'],scope='No native/ledger/trust/security credit; archived-input provenance only',protected_paths_changed=[])
+ result=dict(status='PASS_WITH_PROVENANCE_GAPS_AND_EXCLUDED_ADMISSION_FINDING' if (E/'NML_ADMISSION_FINDING.json').exists() else 'PASS_WITH_PROVENANCE_GAPS',target_established=False,coverage=336,counts=p['counts'],budget_used=p['budget_used'],completed=completed,remaining_CLOSED_impact=p['affected_CLOSED_count'],scope='No native/ledger/trust/security credit; archived-input provenance only',protected_paths_changed=[])
  (E/'NML_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k] for k in ['status','coverage','counts','budget_used','remaining_CLOSED_impact']}))
 if __name__=='__main__':main()

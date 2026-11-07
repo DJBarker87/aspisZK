@@ -19,3 +19,7 @@ All 17 NMH differences initially remain UNCLASSIFIED. Namespace/import/parameter
 Only byte identity or the single NHR_parameterize.py discriminant-metadata normalization earns reproduction. Exact declaration segment comparisons are retained even where whole-blob reproduction fails. NMH's conservative lexical CLOSED-row impact is recomputed over remaining non-reproduced blobs; aliases remain conservative, and rootless TX1:059/TX2:040 remain unassessed. No row is reopened here.
 
 The unchanged NHR_stage.py validates the frozen source/graph/lock and tool pins for every extraction. Owned reference manifests/sources are checked independently. Stream A scope count, reservation exit0 + allowed:true, >=40 GB disk and exact 6G/8G/0/64 caps are required before submission. Refusals are waits, never tool launches. NML_ATTEMPTS.jsonl records the waits. No Kani is authorized.
+
+## NML-F4: E001 restart violated the share recheck interval
+
+NML_ADMISSION_FINDING.json records a 15.095-second recheck after the last >=2 refusal, caused by the owned receipt-context repair restarting its local waiter. Actual prelaunch count, reservation, caps and disk passed, but the required 180-second wait did not. E001 earns no provenance credit and its Charon/Aeneas charges remain. The owned client now preserves the deadline across restarts. No unchanged rerun was made. This finding does not affect the independently admitted NML_L001 arithmetic check.

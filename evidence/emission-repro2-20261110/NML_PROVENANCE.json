@@ -2,13 +2,14 @@
   "schema": 1,
   "target_established": false,
   "counts": {
-    "NOT_REPRODUCED": 335,
-    "REPRODUCED_FROM_ARCHIVE": 1
+    "NOT_REPRODUCED": 333,
+    "REPRODUCED_FROM_ARCHIVE": 1,
+    "DIFFERS_SEMANTIC": 2
   },
   "budget_used": {
-    "Charon": 1,
-    "Aeneas": 1,
-    "Lean": 0,
+    "Charon": 2,
+    "Aeneas": 2,
+    "Lean": 1,
     "Kani": 0
   },
   "blobs": [
@@ -13484,7 +13485,7 @@
       "diagnostic_runs": [],
       "definition_comparisons": "NMH_DEFINITION_COMPARISONS.json.xz",
       "verdict": "NOT_REPRODUCED",
-      "reason": "No admitted archive rerun: Emission names source/reference crate(s) absent from frozen manifest closure: nde_reference. Native projections cannot reconstruct an uncommitted/outlined driver.",
+      "reason": "Archive rerun differs or fails; see exact definition comparisons and receipts",
       "committed_hash": "2de5b98e5e29005466dcd60a8da02429fa4a12364547be64e0bb35b0c23072b2",
       "reproduced_hash": null,
       "reproduced_path": null,
@@ -13507,7 +13508,9 @@
       "NML_runs": [
         "NML_E002"
       ],
-      "NML_attempts": []
+      "NML_attempts": [
+        "NML_E002"
+      ]
     },
     {
       "blob": "6f08242840581835fae562818f26a99c10689bd5c4f3680653eef748f234badd",
@@ -18736,8 +18739,8 @@
         "NMH_E024"
       ],
       "definition_comparisons": "NMH_DEFINITION_COMPARISONS.json.xz",
-      "verdict": "NOT_REPRODUCED",
-      "reason": "NMH byte difference remains UNCLASSIFIED: Checked versus wrapping U32 addition in the exact field.M31.add declaration; paired scalar-body Lean check NML_L001 is pending. No conclusion on canonical-domain callers.",
+      "verdict": "DIFFERS_SEMANTIC",
+      "reason": "Exact field.M31.add bodies differ on U32 inputs (4294967295,1): committed checked addition returns fail integerOverflow; regenerated wrapping addition returns ok 0. This witness is outside canonical M31 and proves no canonical-domain caller defect.",
       "committed_hash": "44062509d639262d965f28ca8188801bdc21bbb0124f444818092fa0926520ba",
       "reproduced_hash": "9e11f5ddcf12ca9a201c050669d8c47b304d6bc2e746afed77f64503a1da61a8",
       "reproduced_path": "NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
@@ -18762,7 +18765,65 @@
       "known_defect": null,
       "inherited_NMH_verdict": "DIFFERS",
       "NML_runs": [],
-      "NML_attempts": []
+      "NML_attempts": [],
+      "classification_evidence": {
+        "blob": "44062509d639262d965f28ca8188801bdc21bbb0124f444818092fa0926520ba",
+        "committed_paths": [
+          "evidence/slice-q-compose6-20261104/NFG_L031/sources/NFG_InverseRef/Funs.lean"
+        ],
+        "candidate_path": "evidence/emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
+        "candidate_sha256": "9e11f5ddcf12ca9a201c050669d8c47b304d6bc2e746afed77f64503a1da61a8",
+        "diff": "evidence/emission-repro-20261110/NMH_DIFFS/44062509d639262d965f28ca8188801bdc21bbb0124f444818092fa0926520ba.diff.xz",
+        "diff_uncompressed_sha256": "1659264da26e59f30d1ff1d246d43db920642bdf73c3d3d2958a24e8020cc41b",
+        "classification": "SEMANTIC",
+        "reason": "Exact field.M31.add bodies differ on U32 inputs (4294967295,1): committed checked addition returns fail integerOverflow; regenerated wrapping addition returns ok 0. This witness is outside canonical M31 and proves no canonical-domain caller defect.",
+        "next_check": "NML_Diffs.body_difference0 / body_difference1 and printed axioms from NML_L001.",
+        "declaration_evidence": {
+          "same_definitions": [
+            "field.CM31.add",
+            "field.CM31.double",
+            "field.CM31.inv",
+            "field.CM31.inv_with",
+            "field.CM31.is_zero",
+            "field.CM31.neg",
+            "field.CM31.sub",
+            "field.M31.double",
+            "field.M31.inv",
+            "field.M31.is_zero",
+            "field.M31.reduce_u64",
+            "field.QM31.is_zero",
+            "field.QM31.square",
+            "field.QM31.try_inv",
+            "field.mul_by_r",
+            "field.square_n",
+            "field.square_n_loop",
+            "field.square_n_loop.body"
+          ],
+          "different_definitions": [
+            "field.CM31.mul",
+            "field.CM31.square",
+            "field.M31.add",
+            "field.M31.mul",
+            "field.M31.neg",
+            "field.M31.sub",
+            "field.QM31.inv",
+            "field.reduce_u64"
+          ],
+          "missing_definitions": [],
+          "additional_definitions": []
+        },
+        "lean_receipt": "NML_L001/receipt.json",
+        "lean_source": "NML_DiffArithmetic.lean",
+        "lean_theorem": "NML_Diffs.body_difference0",
+        "domain": "Full U32 function domain; counterexample is noncanonical",
+        "axioms": [
+          "'NML_Diffs.old0_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.old1_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.emitted_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.body_difference0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.body_difference1' depends on axioms: [propext, Classical.choice, Quot.sound]"
+        ]
+      }
     },
     {
       "blob": "d9cad55952f6843fbeba1dfdc48df8e46a284340a53cf98d7795e97f9e4a5a7a",
@@ -18777,8 +18838,8 @@
         "NMH_E024"
       ],
       "definition_comparisons": "NMH_DEFINITION_COMPARISONS.json.xz",
-      "verdict": "NOT_REPRODUCED",
-      "reason": "NMH byte difference remains UNCLASSIFIED: Checked versus wrapping U32 addition in the exact field.M31.add declaration; paired scalar-body Lean check NML_L001 is pending. No conclusion on canonical-domain callers.",
+      "verdict": "DIFFERS_SEMANTIC",
+      "reason": "Exact field.M31.add bodies differ on U32 inputs (4294967295,1): committed checked addition returns fail integerOverflow; regenerated wrapping addition returns ok 0. This witness is outside canonical M31 and proves no canonical-domain caller defect.",
       "committed_hash": "d9cad55952f6843fbeba1dfdc48df8e46a284340a53cf98d7795e97f9e4a5a7a",
       "reproduced_hash": "9e11f5ddcf12ca9a201c050669d8c47b304d6bc2e746afed77f64503a1da61a8",
       "reproduced_path": "NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
@@ -18803,7 +18864,65 @@
       "known_defect": null,
       "inherited_NMH_verdict": "DIFFERS",
       "NML_runs": [],
-      "NML_attempts": []
+      "NML_attempts": [],
+      "classification_evidence": {
+        "blob": "d9cad55952f6843fbeba1dfdc48df8e46a284340a53cf98d7795e97f9e4a5a7a",
+        "committed_paths": [
+          "evidence/slice-q-compose6-20261104/NFG_L032/sources/NFG_InverseRef/Funs.lean"
+        ],
+        "candidate_path": "evidence/emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
+        "candidate_sha256": "9e11f5ddcf12ca9a201c050669d8c47b304d6bc2e746afed77f64503a1da61a8",
+        "diff": "evidence/emission-repro-20261110/NMH_DIFFS/d9cad55952f6843fbeba1dfdc48df8e46a284340a53cf98d7795e97f9e4a5a7a.diff.xz",
+        "diff_uncompressed_sha256": "f4c61df5416e8e3aa0cc6a49cf4c325de1d1c3592a6adb8c9952e654ee7b2357",
+        "classification": "SEMANTIC",
+        "reason": "Exact field.M31.add bodies differ on U32 inputs (4294967295,1): committed checked addition returns fail integerOverflow; regenerated wrapping addition returns ok 0. This witness is outside canonical M31 and proves no canonical-domain caller defect.",
+        "next_check": "NML_Diffs.body_difference0 / body_difference1 and printed axioms from NML_L001.",
+        "declaration_evidence": {
+          "same_definitions": [
+            "field.CM31.add",
+            "field.CM31.double",
+            "field.CM31.inv",
+            "field.CM31.inv_with",
+            "field.CM31.is_zero",
+            "field.CM31.neg",
+            "field.CM31.sub",
+            "field.M31.double",
+            "field.M31.inv",
+            "field.M31.is_zero",
+            "field.M31.reduce_u64",
+            "field.QM31.is_zero",
+            "field.QM31.square",
+            "field.QM31.try_inv",
+            "field.mul_by_r",
+            "field.square_n",
+            "field.square_n_loop",
+            "field.square_n_loop.body"
+          ],
+          "different_definitions": [
+            "field.CM31.mul",
+            "field.CM31.square",
+            "field.M31.add",
+            "field.M31.mul",
+            "field.M31.neg",
+            "field.M31.sub",
+            "field.QM31.inv",
+            "field.reduce_u64"
+          ],
+          "missing_definitions": [],
+          "additional_definitions": []
+        },
+        "lean_receipt": "NML_L001/receipt.json",
+        "lean_source": "NML_DiffArithmetic.lean",
+        "lean_theorem": "NML_Diffs.body_difference1",
+        "domain": "Full U32 function domain; counterexample is noncanonical",
+        "axioms": [
+          "'NML_Diffs.old0_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.old1_overflow' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.emitted_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.body_difference0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+          "'NML_Diffs.body_difference1' depends on axioms: [propext, Classical.choice, Quot.sound]"
+        ]
+      }
     },
     {
       "blob": "ba291ddd72c07bd6ae61ccaeca6c53312467632a1474a0a28542897b7c58920e",

@@ -13,3 +13,5 @@ Archived full-package extension: Cargo package/lib paths in the producing packet
 Receipt-context repair before any submission: source revision/dirty state is refreshed after admission waits, immediately before uploading exact source snapshots. The initial local share waiter was terminated with no admission or submitted scope and restarted; zero tool charge.
 
 After E001, owned tool-receipt context is clarified: source_revision is the actual evidence snapshot revision; frozen_validation_revision separately labels NHR graph validation. E001 keeps its historical tool receipts and an explicit NML_E001_TOOL_CONTEXT_ERRATUM.json; exact archived source hashes and launcher source revision were already recorded. No rerun or verdict change.
+
+NML_ADMISSION_FINDING.json: the E001 waiter restart rechecked after 15.095 seconds instead of 180. Its outputs are excluded from provenance credit; tool charges retained. The owned runner now recovers the last refusal deadline from committed/local ATTEMPTS before any share check. No rerun.
