@@ -1,0 +1,72 @@
+{
+  "row": "TX2:217",
+  "route": "(ah) pinned emitted safe reference plus native actual frozen contracts",
+  "reviewed_transcription": "ReviewedTranscription-TX2:217",
+  "status": "OPEN; not a candidate",
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "reference": {
+    "path": "evidence/native-decref-20261028/NCV_reference.rs",
+    "sha256": "86562a4e43b48da0415d71c756a23a9f4d0029f796f9e834db11bd0857585ab8",
+    "root": "decode_lane_ref",
+    "source_lines": [
+      62,
+      72
+    ],
+    "extraction": "NCV_E008",
+    "emitted_path": "evidence/native-decref-20261028/NCV_generated/NCV_Reference/Funs.lean",
+    "emitted_sha256": "a5ed82cbdb22fa1f2a824984e730c3c4f1fe3b2237c138ee561419aef20fb379",
+    "op50": "NCV_Install.op50",
+    "unchanged_copy_in_harness": true
+  },
+  "source_order": [
+    {
+      "frozen_lines": "452-463",
+      "reference": "length/header rejection, decode_lane_ref 63-64",
+      "effects": "none"
+    },
+    {
+      "frozen_lines": "465-470",
+      "reference": "master bytes32 / zero, line65",
+      "effects": "none"
+    },
+    {
+      "frozen_lines": "471-479",
+      "reference": "tree/header, lines66-67",
+      "effects": "none"
+    },
+    {
+      "frozen_lines": "480-493",
+      "reference": "next-leaf word, capacity and root canonicality, lines68-69",
+      "effects": "none"
+    },
+    {
+      "frozen_lines": "494-506",
+      "reference": "decode_frontier helper; one source-ordered digest and empty-root check per level",
+      "effects": "local frontier write; no external effect"
+    },
+    {
+      "frozen_lines": "507-509",
+      "reference": "final empty-root rejection, line70",
+      "effects": "none"
+    },
+    {
+      "frozen_lines": "510-519",
+      "reference": "Box allocation + exact lane payload, line71",
+      "effects": "one Box allocation; full success or stopped allocation prefix"
+    }
+  ],
+  "bc_audit": {
+    "scope": "reachable NCV reference only",
+    "root": "loop-free; calls outlined loop function",
+    "equal": "in-loop return false encoded some false; tail true on none",
+    "zero": "in-loop return false encoded some false; tail true on none",
+    "bytes32": "tail array only after loop",
+    "digest": "in-loop Err encoded done Err; tail Ok array",
+    "eq_digest": "in-loop return false; tail true",
+    "decode_frontier": "in-loop digest residual and vacant-root rejection encoded done Err; terminal tail Ok frontier",
+    "post_loop_explicit_return_or_question_mark": false,
+    "flagged_exits": []
+  },
+  "limits": "native first-arm is small symbolic length only; no native all-length or full equality claim",
+  "library": "parameter; no constructed PoolLib or DeployedIds fields"
+}

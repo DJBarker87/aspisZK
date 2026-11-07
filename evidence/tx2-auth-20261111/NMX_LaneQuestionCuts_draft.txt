@@ -1,0 +1,24 @@
+import NMX_R3_LaneTry
+set_option autoImplicit false
+namespace NMX_R3_LaneQuestionCuts
+open Aeneas Aeneas.Std Result
+
+theorem frontier (b : Slice U8) (master : Array U8 32#usize) (laneId : U8)
+ (t : Slice U8) (next : U64) (root : Array U32 8#usize) :
+ NMX_R3_LaneCuts.frontier b master laneId t next root =
+ NMX_R3_LaneTry.question (NCV_Reference.decode_frontier t next)
+  (fun f => NMX_R3_LaneCuts.finish b master laneId next root f) := by
+ unfold NMX_R3_LaneCuts.frontier
+ erw [NMX_R3_LaneTry.source]
+
+theorem digest (b : Slice U8) (master : Array U8 32#usize) (laneId : U8)
+ (t : Slice U8) (next : U64) :
+ NMX_R3_LaneCuts.digest b master laneId t next =
+ NMX_R3_LaneTry.question (NCV_Reference.digest t 16#usize)
+  (fun r => NMX_R3_LaneCuts.frontier b master laneId t next r) := by
+ unfold NMX_R3_LaneCuts.digest
+ erw [NMX_R3_LaneTry.source]
+
+#print axioms frontier
+#print axioms digest
+end NMX_R3_LaneQuestionCuts

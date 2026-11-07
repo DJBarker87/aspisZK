@@ -1,0 +1,436 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,4 +1,6 @@
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
++#![cfg_attr(kani, feature(allocator_api))]
++#[cfg(kani)] extern crate alloc;
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+ use solana_program::{account_info::AccountInfo,entrypoint::ProgramResult,pubkey::Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+@@ -168,3 +170,6 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)] mod NMX_217_reference;
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NMX_KMX;
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -445,6 +445,9 @@
+ /// retains the pinned account format, frontier canonicality, and empty-root
+ /// conditions for each unoccupied subtree.
+ #[inline(never)]
++#[cfg_attr(kani, kani::requires(bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES))]
++#[cfg_attr(kani, kani::modifies())]
++#[cfg_attr(kani, kani::ensures(|r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>| NMX_217_native::result_matches(r,bytes) != NMX_217_native::INVERSE))]
+ fn decode_lane_from_pool_release(
+     bytes: &[u8],
+ ) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {
+@@ -971,3 +974,5 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)] #[path="NMX_217_native.rs"] mod NMX_217_native;
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="NMX_217_arbitrary.rs"] mod NMX_217_arbitrary;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMX_217_native.rs
+@@ -0,0 +1,36 @@
++use super::*;
++use crate::NMX_217_reference as R;
++pub const INVERSE: bool = option_env!("NMX_217_INVERSE").is_some();
++pub fn result_matches(r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>, bytes:&[u8])->bool {
++    match (r,R::decode_lane_ref(bytes)) {
++        (Err(ProgramError::InvalidAccountData),Err(()))=>true,
++        (Ok(a),Ok(b))=>a.bump==b.bump && a.master==b.master && a.lane_id==b.lane_id
++            && a.tree.next_leaf_index==b.next_leaf_index
++            && a.tree.root.map(|x|x.0)==b.root && a.tree.frontier.map(|row|row.map(|x|x.0))==b.frontier,
++        _=>false,
++    }
++}
++// A symbolic small slice exercises the first, length-only source arm.
++// This local native check is not generalized to other lengths without a
++// separate byte-independent length-arm transport.
++#[kani::proof_for_contract(super::decode_lane_from_pool_release)]
++#[kani::unwind(2)]
++fn NMX_217_wrong_length() {
++    let b:[u8;1]=kani::any();
++    let n:usize=kani::any(); kani::assume(n<=1);
++    let _=super::decode_lane_from_pool_release(&b[..n]);
++}
++
++#[path="NMX_217_fidelity.rs"] mod fidelity;
++
++// Source cut of the ACTUAL first guard at frozen r1_pool_adapter.rs:452.
++// Only substitution: bytes.len() is the scalar argument n.
++#[kani::modifies()]
++#[kani::ensures(|r: &bool| (*r == (n != 768)) != INVERSE)]
++fn NMX_217_first_guard(n:usize)->bool {
++    n != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
++}
++#[kani::proof_for_contract(NMX_217_first_guard)]
++fn NMX_217_all_lengths(){let n:usize=kani::any();let _=NMX_217_first_guard(n);}
++
++#[path="NMX_217_iteration.rs"] mod iteration;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMX_217_reference.rs
+@@ -0,0 +1,79 @@
++// Safe reference for the frozen TX2 decoders. No external decoder calls.
++// All wrapper failures map to InvalidAccountData, represented by Err(()).
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Identity { pub pool:[u8;32],pub asset_mint:[u8;32],pub token_program:[u8;32],pub asset_id:u32,pub deployment_domain:[u8;32] }
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Policy {pub flags:u8,pub registry_program:[u8;32],pub registry_authority:[u8;32],pub policy_binding:[u8;32]}
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Master {pub bump:u8,pub identity:Identity,pub verifier_policy:Policy,pub initialized_lane_mask:u8,pub has_checkpoint:bool,pub next_checkpoint_sequence:u64,pub last_checkpoint_lane_sequences:[u64;8]}
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Checkpoint {pub bump:u8,pub master:[u8;32],pub deployment_domain:[u8;32],pub checkpoint_sequence:u64,pub global_root:[u32;8],pub lane_sequences:[u64;8]}
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Lane {pub bump:u8,pub master:[u8;32],pub lane_id:u8,pub next_leaf_index:u64,pub root:[u32;8],pub frontier:[[u32;8];20]}
++pub const BINDING:[u8;32]=[65,83,80,73,83,70,79,82,69,83,84,56,2,2,2,8,1,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0];
++pub const EMPTY:[[u32;8];21]=[[1438900896,782233260,1544844157,891350894,986827501,300047813,266092546,1155026732],[141619947,1448060902,524379093,1944458907,1832113773,579270723,752346270,1038346536],[1119858538,128294437,939091034,659145897,1933666768,903679201,1182639487,1398246146],[1057897051,1132946363,794377079,1971564389,1255722275,926653737,2031728153,2024887573],[1410054462,673771449,940847521,274330358,1719505495,1690439941,203201419,1855504616],[1442759752,1540325866,188964047,101815282,1883549730,1774537487,1306717763,561084592],[244193611,984304317,1467689208,2063463197,1766003332,1300835127,1578947755,745931587],[673192756,38070812,1453532835,1340577407,368420458,1834405704,270061815,711700631],[27092219,1272373356,998194489,1458413288,887470405,1204987730,864453460,553704718],[1972918328,1234090299,977162835,1704494754,1617603773,1819200880,906453206,1653526885],[418360492,472096212,871749117,98906847,2026788776,1504737042,407274798,1800828893],[986339640,660349625,1012157959,454024326,987656904,622864739,1150440730,1280042062],[2118470693,1706590589,2128512933,167263577,409542414,1323179656,1880070613,2053396184],[260546973,1375125357,1584234519,1097072342,1685367984,1070989054,2113798037,958210542],[1239966481,992485427,1397515674,466658549,2071909237,712995354,2047452742,1680224983],[1796237568,1862343136,1954463912,1190686266,364700025,46960257,671215600,1214723477],[1127845264,662862400,84021756,995080286,1419670571,1966281459,837284626,2083375353],[1321679286,782621548,1415820264,74436574,776350425,323154748,429051705,1299980413],[1519171444,1235587172,1671492368,1449613582,547369941,1621086153,266860322,450526803],[19381883,1308966873,251977766,474343397,2069732268,1863820229,152153379,665567443],[1201428963,1296676114,441891487,1910121140,602621674,1294160489,1878016864,855887413]];
++pub fn equal(b:&[u8],v:&[u8])->bool {if b.len()!=v.len(){return false} let mut i=0;while i<b.len(){if b[i]!=v[i]{return false}i+=1;}true}
++pub fn zero(b:&[u8])->bool {let mut i=0;while i<b.len(){if b[i]!=0{return false}i+=1;}true}
++pub fn bytes32(b:&[u8],s:usize)->[u8;32]{let mut a=[0u8;32];let mut i=0;while i<32{a[i]=b[s+i];i+=1;}a}
++pub fn word64(b:&[u8],s:usize)->u64{u64::from_le_bytes([b[s],b[s+1],b[s+2],b[s+3],b[s+4],b[s+5],b[s+6],b[s+7]])}
++pub fn word32(b:&[u8],s:usize)->u32{u32::from_le_bytes([b[s],b[s+1],b[s+2],b[s+3]])}
++pub fn digest(b:&[u8],s:usize)->Result<[u32;8],()>{let mut out=[0u32;8];let mut i=0;while i<8{let x=word32(b,s+4*i);if x>=2147483647{return Err(())}out[i]=x;i+=1;}Ok(out)}
++pub fn eq_digest(a:&[u32;8],b:&[u32;8])->bool{let mut i=0;while i<8{if a[i]!=b[i]{return false}i+=1;}true}
++pub fn identity(b:&[u8])->Result<Identity,()>{
++ if b.len()!=144 || !equal(&b[..4],b"ASPI") || b[4]!=1 || !zero(&b[5..8]) || !zero(&b[108..112]) {return Err(())}
++ let asset_id=word32(b,104);if asset_id>=2147483647{return Err(())}
++ Ok(Identity{pool:bytes32(b,8),asset_mint:bytes32(b,40),token_program:bytes32(b,72),asset_id,deployment_domain:bytes32(b,112)})
++}
++pub fn valid_policy(p:&Policy)->bool{
++ if p.flags & !3 !=0 || zero(&p.registry_program) || zero(&p.policy_binding) {return false}
++ let immutable=p.flags&1!=0;let deployment=p.flags&2!=0;
++ if deployment && !immutable{return false}
++ immutable==zero(&p.registry_authority)
++}
++pub fn policy(b:&[u8])->Result<Policy,()>{
++ if b.len()!=104 || !equal(&b[..4],b"ASPP") || b[4]!=1 || !zero(&b[6..8]){return Err(())}
++ let p=Policy{flags:b[5],registry_program:bytes32(b,8),registry_authority:bytes32(b,40),policy_binding:bytes32(b,72)};
++ if !valid_policy(&p){return Err(())}Ok(p)
++}
++pub fn valid_master(m:&Master)->bool{
++ if zero(&m.identity.pool)||zero(&m.identity.asset_mint)||zero(&m.identity.token_program)||zero(&m.identity.deployment_domain)||!valid_policy(&m.verifier_policy){return false}
++ if !valid_sequences(&m.last_checkpoint_lane_sequences){return false}
++ let nonzero=!zero_sequences(&m.last_checkpoint_lane_sequences);
++ if (!m.has_checkpoint&&(m.next_checkpoint_sequence!=0||nonzero))||(m.has_checkpoint&&m.next_checkpoint_sequence==0){return false}true
++}
++pub fn decode_master_ref(b:&[u8])->Result<Box<Master>,()>{
++ if b.len()!=384{return Err(())}
++ if !equal(&b[..4],b"ASM8")||b[4]!=2||b[5]!=8||b[6]!=1||!zero(&b[50..64])||!zero(&b[312..320])||!equal(&b[8..40],&BINDING){return Err(())}
++ let has_checkpoint=match b[49]{0=>false,1=>true,_=>return Err(())};
++ let id=identity(&b[64..208])?;let p=policy(&b[208..312])?;
++ let seq=sequences(b,320);
++ let m=Master{bump:b[7],identity:id,verifier_policy:p,initialized_lane_mask:b[48],has_checkpoint,next_checkpoint_sequence:word64(b,40),last_checkpoint_lane_sequences:seq};
++ if !valid_master(&m){return Err(())}Ok(Box::new(m))
++}
++pub fn decode_checkpoint_ref(b:&[u8])->Result<Box<Checkpoint>,()>{
++ if b.len()!=192{return Err(())}
++ if !equal(&b[..4],b"ASC8")||b[4]!=2||b[5]!=8||b[6]!=1||!zero(&b[176..]){return Err(())}
++ let master=bytes32(b,8);let deployment_domain=bytes32(b,40);
++ if zero(&master)||zero(&deployment_domain){return Err(())}
++ let global_root=digest(b,80)?;
++ let seq=sequences(b,112);if !valid_sequences(&seq){return Err(())}
++ Ok(Box::new(Checkpoint{bump:b[7],master,deployment_domain,checkpoint_sequence:word64(b,72),global_root,lane_sequences:seq}))
++}
++pub fn decode_lane_ref(b:&[u8])->Result<Box<Lane>,()>{
++ if b.len()!=768{return Err(())}
++ if !equal(&b[..4],b"ASL8")||b[4]!=2||b[5]>=8||b[6]!=8||b[7]!=20||!equal(&b[8..40],&BINDING)||!zero(&b[73..80]){return Err(())}
++ let master=bytes32(b,40);if zero(&master){return Err(())}
++ let tree=&b[80..];
++ if !equal(&tree[..4],b"ASPT")||tree[4]!=1||tree[5]!=20||tree[6]!=3||tree[7]!=1{return Err(())}
++ let next_leaf_index=word64(tree,8);if next_leaf_index>1048576{return Err(())}
++ let root=digest(tree,16)?;let frontier=decode_frontier(tree,next_leaf_index)?;
++ if next_leaf_index==0&&!eq_digest(&root,&EMPTY[20]){return Err(())}
++ Ok(Box::new(Lane{bump:b[72],master,lane_id:b[5],next_leaf_index,root,frontier}))
++}
++// Include the Option language item required by pinned Aeneas loop-return lowering.
++pub fn option_item(x:Option<u8>)->Option<u8>{x}
++
++pub fn sequences(b:&[u8],start:usize)->[u64;8]{let mut seq=[0u64;8];let mut i=0;while i<8{seq[i]=word64(b,start+8*i);i+=1;}seq}
++pub fn valid_sequences(seq:&[u64;8])->bool{let mut i=0;while i<8{if seq[i]>1048576{return false}i+=1;}true}
++pub fn zero_sequences(seq:&[u64;8])->bool{let mut i=0;while i<8{if seq[i]!=0{return false}i+=1;}true}
++pub fn decode_frontier(tree:&[u8],next:u64)->Result<[[u32;8];20],()>{let mut frontier=[[0u32;8];20];let mut level=0;while level<20{let node=digest(tree,48+32*level)?;frontier[level]=node;if (next>>level)&1==0&&!eq_digest(&node,&EMPTY[level]){return Err(())}level+=1;}Ok(frontier)}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMX_217_fidelity.rs
+@@ -0,0 +1,25 @@
++use super::*;
++// Result<Box<Lane>,ProgramError> contract interface controls only.
++#[kani::ensures(|r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>| r.is_err())]
++#[kani::modifies()]
++fn NMX_shape()->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{
++    Err(ProgramError::InvalidAccountData)
++}
++#[kani::proof_for_contract(NMX_shape)]
++fn NMX_shape_contract(){let _=NMX_shape();}
++#[kani::proof]
++fn NMX_shape_real(){
++    assert!(matches!(NMX_shape(),Err(ProgramError::InvalidAccountData)),"NMX uninferred caller assertion");
++}
++#[kani::proof]
++#[kani::stub_verified(NMX_shape)]
++fn NMX_shape_stub(){
++    assert!(matches!(NMX_shape(),Err(ProgramError::InvalidAccountData)),"NMX uninferred caller assertion");
++}
++#[kani::modifies()]
++#[kani::ensures(|r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>| r.is_err())]
++fn NMX_shape_write(x:&mut u8)->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{
++    *x=1; Err(ProgramError::InvalidAccountData)
++}
++#[kani::proof_for_contract(NMX_shape_write)]
++fn NMX_shape_modifies(){let mut x=0;let _=NMX_shape_write(&mut x);}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMX_217_iteration.rs
+@@ -0,0 +1,233 @@
++use super::*;
++fn NMX_assign_post(r:&Result<(),ProgramError>,node:&[M31;8],window:&[u8;32],j:usize,old_j:u32)->bool {
++    match R::digest(window,0) {
++        Err(())=>matches!(r,Err(ProgramError::InvalidAccountData)) && node[j].0==old_j,
++        Ok(row)=>r.is_ok() && node[j].0==row[j],
++    }
++}
++// Source lines497-502, after the proven 32-byte window/cast cut.
++#[kani::requires(j<8 && node[j].0==before_j)]
++#[kani::modifies(node)]
++#[kani::ensures(|r:&Result<(),ProgramError>| NMX_assign_post(r,node,window,j,before_j) != INVERSE)]
++fn NMX_assign(node:&mut [M31;8],window:&[u8;32],j:usize,before_j:u32)->Result<(),ProgramError>{
++    *node = decode_digest_canonical(
++        window,
++    ).map_err(|_| ProgramError::InvalidAccountData)?;
++    Ok(())
++}
++#[kani::proof_for_contract(NMX_assign)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_assign_contract(){
++    let raw:[u32;8]=kani::any();let mut node=raw.map(M31);
++    let window:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<8);
++    let before_j=node[j].0;let _=NMX_assign(&mut node,&window,j,before_j);
++}
++fn NMX_guard_post(node:&[M31;8],next_leaf_index:u64,level:usize)->bool{
++    let raw=[node[0].0,node[1].0,node[2].0,node[3].0,node[4].0,node[5].0,node[6].0,node[7].0];
++    (next_leaf_index>>level)&1==0 && !R::eq_digest(&raw,&R::EMPTY[level])
++}
++// Source line503, separated from writes to retire the combined K013/K014 shape.
++#[kani::requires(level<20 && next_leaf_index<=1048576)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| (*r==NMX_guard_post(node,next_leaf_index,level)) != INVERSE)]
++fn NMX_guard(node:&[M31;8],next_leaf_index:u64,level:usize)->bool{
++    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++    (next_leaf_index >> level) & 1 == 0 && *node != V7_PAIR_EMPTY_ROOTS[level]
++}
++#[kani::proof_for_contract(NMX_guard)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_guard_contract(){
++    let raw:[u32;8]=kani::any();let node=raw.map(M31);
++    let next_leaf_index:u64=kani::any();let level:usize=kani::any();
++    kani::assume(level<20 && next_leaf_index<=1048576);
++    let _=NMX_guard(&node,next_leaf_index,level);
++}
++// Frozen line468, with the owned array supplied by a shared view at the cut.
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| (*r==R::zero(master)) != INVERSE)]
++fn NMX_master_zero(master:&[u8;32])->bool{*master == [0u8;32]}
++#[kani::proof_for_contract(NMX_master_zero)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_master_zero_contract(){let master:[u8;32]=kani::any();let _=NMX_master_zero(&master);}
++
++// Complete frozen entry-to-first-digest segment. The borrowed prefix contains
++// exactly original bytes[0..128]; logical_len is the original slice metadata.
++struct NMX_prefix_state { master:[u8;32], lane:u8, bump:u8, next:u64, root_window:[u8;32] }
++fn NMX_prefix_observe(p:&NMX_prefix_state,j:usize)->u64 {
++ match j {0=>p.lane as u64,1=>p.bump as u64,2=>p.next,
++  3..=34=>p.master[j-3] as u64,_=>p.root_window[j-35] as u64}
++}
++fn NMX_prefix_reference(b:&[u8;128],n:usize)->Option<NMX_prefix_state>{
++ if n!=768{return None}
++ if !R::equal(&b[..4],b"ASL8")||b[4]!=2||b[5]>=8||b[6]!=8||b[7]!=20||!R::equal(&b[8..40],&R::BINDING)||!R::zero(&b[73..80]){return None}
++ let master=R::bytes32(b,40);if R::zero(&master){return None}
++ let t=&b[80..];if !R::equal(&t[..4],b"ASPT")||t[4]!=1||t[5]!=20||t[6]!=3||t[7]!=1{return None}
++ let next=R::word64(t,8);if next>1048576{return None}
++ Some(NMX_prefix_state{master,lane:b[5],bump:b[72],next,root_window:R::bytes32(t,16)})
++}
++fn NMX_prefix_post(r:bool)->bool {r != INVERSE}
++#[kani::requires(j<67)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| NMX_prefix_post(*r))]
++fn NMX_prefix(bytes:&[u8;128],logical_len:usize,j:usize)->bool {
++ let actual:Result<NMX_prefix_state,ProgramError>=(||{
++    if logical_len != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
++        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC
++        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION
++        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT
++        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
++        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
++        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
++            .iter()
++            .any(|byte| *byte != 0)
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let master: [u8; 32] = bytes[40..72]
++        .try_into()
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    if master == [0u8; 32] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++    if tree[..4] != POOL_V1_TREE_STATE_MAGIC
++        || tree[4] != POOL_V1_TREE_STATE_VERSION
++        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || tree[6] != POOL_V1_TREE_HASH_VERSION
++        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let next_leaf_index = u64::from_le_bytes(
++        tree[8..16]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if next_leaf_index > POOL_V1_PAIR_CAPACITY {
++        return Err(ProgramError::InvalidAccountData);
++    }
++
++    let root_window:[u8;32]=tree[16..48].try_into().map_err(|_|ProgramError::InvalidAccountData)?;
++    Ok(NMX_prefix_state{master,lane:bytes[5],bump:bytes[72],next:next_leaf_index,root_window})
++ })();
++ match (actual,NMX_prefix_reference(bytes,logical_len)) {
++  (Err(ProgramError::InvalidAccountData),None)=>true,
++  (Ok(a),Some(b))=>NMX_prefix_observe(&a,j)==NMX_prefix_observe(&b,j),
++  _=>false,
++ }
++}
++#[kani::proof_for_contract(NMX_prefix)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_prefix_contract(){let bytes:[u8;128]=kani::any();let logical_len:usize=kani::any();let j:usize=kani::any();kani::assume(j<67);let _=NMX_prefix(&bytes,logical_len,j);}
++
++fn NMX_lane_observe(a:&PoolV1PairForestLaneStateV1,j:usize)->u64{
++ match j{0=>a.bump as u64,1=>a.lane_id as u64,2=>a.tree.next_leaf_index,
++  3..=34=>a.master[j-3] as u64,35..=42=>a.tree.root[j-35].0 as u64,
++  _=>a.tree.frontier[(j-43)/8][(j-43)%8].0 as u64}
++}
++fn NMX_final_post(r:bool)->bool{r != INVERSE}
++#[kani::requires(j<203)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| NMX_final_post(*r))]
++fn NMX_final(bump:u8,master:[u8;32],lane_id:u8,next_leaf_index:u64,
++ root:[M31;8],frontier:[[M31;8];20],j:usize)->bool{
++ use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++ let actual:Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>=(||{
++    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    Ok(Box::new(PoolV1PairForestLaneStateV1 {
++        bump: bump,
++        master,
++        lane_id: lane_id,
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index,
++            root,
++            frontier,
++        },
++    }))
++ })();
++ let row=root.map(|x|x.0);
++ let rejected=next_leaf_index==0&&!R::eq_digest(&row,&R::EMPTY[20]);
++ let expected=match j{0=>bump as u64,1=>lane_id as u64,2=>next_leaf_index,
++ 3..=34=>master[j-3] as u64,35..=42=>root[j-35].0 as u64,
++ _=>frontier[(j-43)/8][(j-43)%8].0 as u64};
++ match actual{Err(e)=>rejected&&matches!(e,ProgramError::InvalidAccountData),
++ Ok(a)=>!rejected&&NMX_lane_observe(&a,j)==expected}
++}
++#[kani::proof_for_contract(NMX_final)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_final_contract(){let j:usize=kani::any();kani::assume(j<203);let _=NMX_final(kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),j);}
++
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| (*r == !R::zero(bytes)) != INVERSE)]
++fn NMX_reserved(bytes:&[u8;7])->bool {bytes.iter().any(|byte|*byte != 0)}
++#[kani::proof_for_contract(NMX_reserved)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_reserved_contract(){let bytes:[u8;7]=kani::any();let _=NMX_reserved(&bytes);}
++
++#[kani::modifies()]
++#[kani::ensures(|r:&bool| *r != INVERSE)]
++fn NMX_construct(input:&PoolV1PairForestLaneStateV1)->bool{
++ let output =
++    Box::new(PoolV1PairForestLaneStateV1 {
++        bump: input.bump,
++        master: input.master,
++        lane_id: input.lane_id,
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index: input.tree.next_leaf_index,
++            root: input.tree.root,
++            frontier: input.tree.frontier,
++        },
++    });
++ *output==*input
++}
++#[kani::proof_for_contract(NMX_construct)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NMX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NMX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NMX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NMX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NMX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NMX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NMX_construct_contract(){
++ let input=PoolV1PairForestLaneStateV1{bump:kani::any(),master:kani::any(),lane_id:kani::any(),tree:IncrementalMerkleTreeV1{next_leaf_index:kani::any(),root:kani::any(),frontier:kani::any()}};
++ let _=NMX_construct(&input);
++}
+--- /dev/null
++++ b/crates/aspis-core/src/NMX_217_arbitrary.rs
+@@ -0,0 +1,6 @@
++// Kani-only type support for the complete native M31 memory representation.
++// Every u32 bit pattern is generated; no canonicality or success restriction.
++use super::M31;
++impl kani::Arbitrary for M31 {
++    fn any()->Self { M31(kani::any::<u32>()) }
++}

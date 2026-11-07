@@ -4,7 +4,9 @@ E=Path(__file__).resolve().parent
 sha=lambda b:hashlib.sha256(b).hexdigest()
 xs=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
 attempts=[x for x in xs if x.get('kind') in ['lean','link','audit','inspect','extract']]
-assert len([x for x in attempts if x['kind']!='extract'])==40
+formal_count=len([x for x in attempts if x['kind']!='extract'])
+assert formal_count==290,formal_count
+assert not any(x.get('kind')=='kani' for x in xs)
 assert len([x for x in attempts if x['kind']=='extract'])==2
 pairs=0
 for p in E.rglob('*.xz'):
@@ -23,7 +25,7 @@ for row in json.loads((E/'NMX_AUDIT_C_PINS.json').read_text()):
  p=E/'NMX_native'/('NMX_'+Path(row['destination']).name+'.xz')
  assert sha(lzma.decompress(p.read_bytes()))==row['sha256']
 raw=[]
-for i in range(4):
+for i in range(len(json.loads((E/'NMX_AUDIT_ROOTS.json').read_text())['groups'])):
  d=json.loads((E/f'NMX_audit/proof{i}/proof{i}.json').read_text());assert d['exit_status']==0
  for row in d['results']:
   assert set(row['walked_axioms']) <= {'propext','Classical.choice','Quot.sound'}
@@ -33,7 +35,12 @@ expected=json.loads((E/'NMX_AUDIT_ROOTS.json').read_text())['records'];assert {x
 mods=json.loads((E/'NMX_EXPORT_MODULES.json').read_text())
 for m in mods:
  s=(E/(m+'.lean')).read_text()
+ s=re.sub(r'/\-.*?\-/','',s,flags=re.S)
  assert not re.search(r'\b(sorry|admit|native_decide|axiom)\b|set_option (maxRecDepth|maxHeartbeats)', '\n'.join(l for l in s.splitlines() if not l.lstrip().startswith('--'))),m
 assert not any(p.stat().st_size>20_000_000 for p in E.rglob('*') if p.is_file())
-report=dict(status='PASS',formal_scopes=40,extraction_scopes=2,kani_runs=0,own_raw_roots=len(raw),compressed_sha_pairs=pairs,input_objects=len(idx['objects']),standard_axioms_only=True,collector_agreement=True,validated_source_modules=len(mods),export_complete=False,job_gate='INCOMPLETE',no_file_over20MB=True,security_target_established=False)
+export=json.loads((E/'NMX_EXPORT.json').read_text())
+assert {r['module'] for r in export['source_inputs']}==set(mods)
+for r in export['source_inputs']:assert sha((E/(r['module']+'.lean')).read_bytes())==r['sha256']
+assert json.loads((E/'NMX_CLOSED.json').read_text())['rows'][0]['candidate'] is False
+report=dict(status='PASS',formal_scopes=formal_count,renewal_formal_scopes=formal_count-40,extraction_scopes=2,kani_runs=0,own_raw_roots=len(raw),compressed_sha_pairs=pairs,input_objects=len(idx['objects']),standard_axioms_only=True,collector_agreement=True,validated_source_modules=len(mods),export_complete=True,support_only=True,job_gate='INCOMPLETE',no_file_over20MB=True,security_target_established=False)
 (E/'NMX_VALIDATION.json').write_text(json.dumps(report,indent=1)+'\n');print(json.dumps(report))

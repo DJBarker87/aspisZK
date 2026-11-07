@@ -8,6 +8,10 @@ nmn_path=B.parent/'codex-cx-tx2-entry5-20261110/NMN_CLOSURE_PINS.json.xz'
 nmn=json.loads(lzma.decompress(nmn_path.read_bytes()))
 predecessors=[dict(path=str(B/'NMX_PREDECESSOR_PINS.json.xz'),sha256=sha(B/'NMX_PREDECESSOR_PINS.json.xz')),dict(path=str(nmn_path),sha256=sha(nmn_path))]
 old['selected_objects'] += (nmn if isinstance(nmn,list) else nmn['selected_objects'])
+canonical=B/'NMX_NMS_CANONICAL_SEED.json'
+if canonical.is_file():
+ for row in json.loads(canonical.read_text()):
+  old['selected_objects'].append(dict(module=Path(row['copy']).name.split('.')[0],path=row['copy'],sha256=row['sha256'],bytes=row['bytes']))
 unique={}
 for row in old['selected_objects']:
  key=(row['module'],''.join(Path(row['path']).suffixes))
@@ -34,7 +38,7 @@ for p in B.glob('NMX_L*/receipt.json'):
   if source.is_file() and sha(source)==d['source_hashes'].get('NMX_generated/'+module+'.lean'):
    if module not in passes or int(d['attempt'][-3:])>int(passes[module]['attempt'][-3:]):passes[module]=d
 modules=json.loads((B/'NMX_EXPORT_MODULES.json').read_text());exports=[];srcs=[]
-out=B/'NMX_exports_20261111';out.mkdir(exist_ok=True)
+out=B/'NMX_exports_resume_20261107';out.mkdir(exist_ok=True)
 for m in modules:
  src=B/'NMX_generated'/(m+'.lean');rc=passes[m]
  assert sha(src)==rc['source_hashes']['NMX_generated/'+m+'.lean'],m

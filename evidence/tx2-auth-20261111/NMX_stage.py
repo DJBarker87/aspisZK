@@ -123,8 +123,8 @@ def stage(workspace):
 def validate(workspace, out, cargo, function=None):
     manifest = stage(workspace)
     expected = manifest['files']['Cargo.lock']['sha256']
-    package = 'programs/r1-cost-probe' if function in ['entry','process','auth'] else 'crates/aspis-r1-cost-probe'
-    features = 'pool-adapter,private-leaf-salts' if function in ['entry','process','auth'] else FEATURES
+    package = 'programs/r1-cost-probe' if function in ['entry','process','auth','lane','registry'] else 'crates/aspis-r1-cost-probe'
+    features = 'pool-adapter,private-leaf-salts' if function in ['entry','process','auth','lane','registry'] else FEATURES
     cmd = [cargo,'+1.94.1','metadata','--manifest-path',str(workspace/package/'Cargo.toml'),'--locked','--offline','--format-version','1','--features',features]
     r = subprocess.run(cmd,capture_output=True,text=True,env={**os.environ,'CARGO_NET_OFFLINE':'true'})
     (out/'metadata.stderr').write_text(r.stderr); (out/'metadata.stdout').write_text(r.stdout)
@@ -151,18 +151,18 @@ def validate(workspace, out, cargo, function=None):
     return manifest
 
 def options(args, workspace, out):
-    selection = {'auth': ('crate::r1_pool_adapter::owned::authenticate_asq8_accounts', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'process': ('crate::r1_pool_adapter::process', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'entry': ('crate::process_r1_cost_probe_instruction', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'debug': ('crate::verifier::_::fmt', 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'), 'error': ('crate::error', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program')}
+    selection = {'lane': ('crate::r1_pool_adapter::decode_lane_from_pool_release', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'registry': ('crate::r1_pool_adapter::owned::authenticate_invariant_release_registry', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'auth': ('crate::r1_pool_adapter::owned::authenticate_asq8_accounts', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'process': ('crate::r1_pool_adapter::process', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'entry': ('crate::process_r1_cost_probe_instruction', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program'), 'debug': ('crate::verifier::_::fmt', 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'), 'error': ('crate::error', 'programs/r1-cost-probe', 'pool-adapter,private-leaf-salts', 'aspis_r1_cost_probe_program')}
     root, package, features, owner = selection.get(args.function, ('crate::verifier::candidate::'+args.function, 'crates/aspis-r1-cost-probe', FEATURES, 'aspis_r1_cost_probe'))
     spec = json.loads(Path(args.opacity).read_text())
     opacity = spec[args.function]
     assert all(x['path'].startswith(('crate::','aspis_core::')) and x['why'] for x in opacity)
     cmd = [str(TOOLROOT/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or','--start-from',root]
     for x in opacity: cmd += ['--opaque',x.get('selector',x['path'])]
-    if args.function in ['entry','process','auth']:cmd += ['--opaque','solana_account_info::AccountInfo']
+    if args.function in ['entry','process','auth','lane','registry']:cmd += ['--opaque','solana_account_info::AccountInfo']
     for ty in spec['include_types']: cmd += ['--include',ty]
     llbc = out/(args.function+'.llbc')
     cmd += ['--dest-file',str(llbc),'--','--manifest-path',str(workspace/package/'Cargo.toml'),'--locked','--offline','--release','--lib','--jobs','1','--features',features]
-    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',('NMX_'+args.function if args.function in ['entry','process','auth'] else 'NMX_'+args.function),'-dest',str(out/'raw'),'-subdir',('NMX_'+args.function if args.function in ['entry','process','auth'] else 'NMX_'+args.function),'-split-files',str(llbc)]
+    aeneas = [str(TOOLROOT/'aeneas-b59d5188-extended'),'-diagnose-translation','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',('NMX_'+args.function if args.function in ['entry','process','auth','lane','registry'] else 'NMX_'+args.function),'-dest',str(out/'raw'),'-subdir',('NMX_'+args.function if args.function in ['entry','process','auth','lane','registry'] else 'NMX_'+args.function),'-split-files',str(llbc)]
     return dict(charon_command=cmd,aeneas_command=aeneas,opacity=opacity,root=root,root_owner=owner,root_package=package,root_features=features)
 
 def extract(args, workspace, out):
@@ -224,7 +224,7 @@ def main():
     modes=p.add_mutually_exclusive_group(required=True)
     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
     p.add_argument('--workspace',type=Path,default=E/'NMX_workspace'); p.add_argument('--out',type=Path,default=E/'NMX_preflight')
-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['auth','prepare','tx1','tx2_authenticated','tx2_common','error','debug','entry','process']); p.add_argument('--opacity',default=str(E/'NMX_OPACITY.json'))
+    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['lane','registry','auth','prepare','tx1','tx2_authenticated','tx2_common','error','debug','entry','process']); p.add_argument('--opacity',default=str(E/'NMX_OPACITY.json'))
     a=p.parse_args()
     if a.export: export(); return 0
     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)
