@@ -9,3 +9,5 @@ Reuse: merged LIB modules 0–5 and 6 are imported, never re-proved. Partial reg
 Validation pending. No new hypotheses discharged or added. Next deliverable: module 6 import and carrier interface, then registry module.
 
 Module 6 imported unchanged via LIBB_PoolCarriers; L001 exit0, 19.528s, peak6460896KiB, swap0; standard axioms only. Carrier choices DONE, no new source equivalence or principal credit.
+
+Module 7: L012 passes policy and four registry/entry exact model/root laws plus Returns evaluators. Helpers L002–L011 pass except excluded L007 ambiguity failure, repaired by qualification at L008. No child-success/allocator-success premise or trust added. Definitions are model values, never native Cut images; native cuts remain explicit only in separate supplier-root association lemmas.
