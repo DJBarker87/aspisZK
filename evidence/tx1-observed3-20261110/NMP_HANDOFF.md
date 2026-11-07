@@ -38,3 +38,13 @@ The amended NMW transport payload supplies exact b936275465 Pool files.
 Existing objects and NMP support are reused; no frozen source changes.
 
 E001 exited101 before Rust extraction: own input PATH lacked rustup. Frozen graph/lock check passed. E002 repairs PATH and emits prepare plus reached verify_observed together; the137 opaque boundary is removed only to emit that same frozen child body. Both rows will have the SAME fresh extraction receipt. No Kani launched.
+
+E002 joint extraction PASS: exit0,84.7748s,538816KiB RSS,swap0; both actual
+parents emitted under one receipt, pins/graph/declaration inventory retained.
+BC audit passes15 own source spans: no loops or post-loop exits. L081 Types
+and L082 parameterized Funs pass; each emitted definition prints no axioms.
+Raw FunsExternal templates remain evidence only, never imported as axioms.
+L083 copies/pins existing NMT_CallTree objects; L084 exact12-boundary parent
+context passes. Six137 occurrence modules are drafted, not yet validated.
+Host-share follows bm4e whole-host six-scope replacement; prior stricter waits
+are retained. No Kani, no frozen-file edits, no row closure claimed.

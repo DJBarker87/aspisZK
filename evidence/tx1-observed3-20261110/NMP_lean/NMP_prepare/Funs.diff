@@ -1,0 +1,336 @@
+--- raw/Funs.lean
++++ compile/Funs.lean
+@@ -2,7 +2,6 @@
+ -- [aspis_r1_cost_probe]: function definitions
+ import Aeneas
+ import NMP_prepare.Types
+-import NMP_prepare.FunsExternal
+ open Aeneas Aeneas.Std Result ControlFlow Error
+ set_option linter.dupNamespace false
+ set_option linter.hashCommand false
+@@ -19,17 +18,64 @@
+ 
+ namespace NMP_prepare
+ 
++-- Opaque callees are explicit parameters, never axioms.
++variable (NMP_call_0 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
++  core.ops.function.FnOnce O E F),
++(core.result.Result T E) → O → Result (core.result.Result T F))
++
++variable (NMP_call_1 : ∀ {T : Type} (coremarkerCopyInst : core.marker.Copy T),
++Std.Usize → T → Result (core.result.Result (alloc.vec.Vec T)
++    aspis_core.r0.Error))
++
++variable (NMP_call_2 : (Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → Result
++    (core.result.Result verifier.View verifier.Error))
++
++variable (NMP_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++(r1_semantic.Verified H) → verifier.View → H → (Array
++    aspis_core.field.wide_exact.WideExact 29#usize) → Result
++    ((core.result.Result verifier.Prepared verifier.Error) × (Array
++    aspis_core.field.wide_exact.WideExact 29#usize)))
++
++variable (NMP_call_4 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit)
++
++variable (NMP_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++r1_wire.Prefix → (r1_wire.SemanticTranscript H) → Result
++    ((core.result.Result aspis_core.state_only_prefix.r0.Challenges
++    r1_wire.Error) × (r1_wire.SemanticTranscript H)))
++
++variable (NMP_call_6 : (Slice Std.U8) → Result (core.result.Result r1_wire.Prefix r1_wire.Error))
++
++variable (NMP_call_7 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
++    r1_wire.Prefix → (r1_wire.SemanticTranscript H) →
++    aspis_core.state_only_prefix.r0.Challenges → (Option (verifier.Phase →
++    Result Unit)) → Result (core.result.Result (r1_semantic.Verified H)
++    r1_wire.Error))
++
++variable (NMP_call_8 : (Option (verifier.Phase → Result Unit)) → Std.U8 → Result Unit)
++
++variable (NMP_call_9 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → H →
++    (Array Std.U8 32#usize) → Result (core.result.Result
++    (r1_wire.SemanticTranscript H) r1_wire.Error))
++
++variable (NMP_call_10 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
++    compact.CodecError) × (Slice Std.U8)))
++
++variable (NMP_call_11 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
++    compact.CodecError) × (Slice Std.U8)))
++
+ /-- [aspis_r1_cost_probe::verifier::candidate::{impl core::convert::From<aspis_r1_cost_probe::compact::CodecError> for aspis_r1_cost_probe::verifier::Error}::from]:
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 23:4-25:5
+     Visibility: public -/
+-def verifier.Error.Insts.CoreConvertFromCodecError.from
++def verifier.Error.Insts.CoreConvertFromCodecError.from 
+   (ce : compact.CodecError) : Result verifier.Error := do
+   ok verifier.Error.Parse
+ 
+ /-- Trait implementation: [aspis_r1_cost_probe::verifier::candidate::{impl core::convert::From<aspis_r1_cost_probe::compact::CodecError> for aspis_r1_cost_probe::verifier::Error}]
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 22:0-26:1 -/
+ @[reducible]
+-def verifier.Error.Insts.CoreConvertFromCodecError : core.convert.From
++def verifier.Error.Insts.CoreConvertFromCodecError  : core.convert.From
+   verifier.Error compact.CodecError := {
+   «from» := verifier.Error.Insts.CoreConvertFromCodecError.from
+ }
+@@ -37,30 +83,41 @@
+ /-- [aspis_r1_cost_probe::r1_semantic::verify_observed]:
+     Source: 'crates/aspis-r1-cost-probe/src/r1_semantic.rs', lines 311:0-318:1
+     Visibility: public -/
+-def r1_semantic.verify_observed
++def r1_semantic.verify_observed (NMP_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++r1_wire.Prefix → (r1_wire.SemanticTranscript H) → Result
++    ((core.result.Result aspis_core.state_only_prefix.r0.Challenges
++    r1_wire.Error) × (r1_wire.SemanticTranscript H))) (NMP_call_6 : (Slice Std.U8) → Result (core.result.Result r1_wire.Prefix r1_wire.Error)) (NMP_call_7 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
++    r1_wire.Prefix → (r1_wire.SemanticTranscript H) →
++    aspis_core.state_only_prefix.r0.Challenges → (Option (verifier.Phase →
++    Result Unit)) → Result (core.result.Result (r1_semantic.Verified H)
++    r1_wire.Error)) (NMP_call_8 : (Option (verifier.Phase → Result Unit)) → Std.U8 → Result Unit) (NMP_call_9 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → H →
++    (Array Std.U8 32#usize) → Result (core.result.Result
++    (r1_wire.SemanticTranscript H) r1_wire.Error)) 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+   (bytes : Slice Std.U8) (hash : H)
+   (obs : Option (verifier.Phase → Result Unit)) :
+   Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+   := do
+-  let r ← r1_wire.Prefix.parse bytes
++  let r ← NMP_call_6 bytes
+   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+   match cf with
+   | core.ops.control_flow.ControlFlow.Continue p =>
+-    r1_semantic.mark obs 0#u8
++    NMP_call_8 obs 0#u8
+     let r1 ←
+-      r1_semantic.public_transcript aspis_coredigestDigest32Inst public1 hash
++      NMP_call_9 aspis_coredigestDigest32Inst public1 hash
+         p.c1_root
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+     match cf1 with
+     | core.ops.control_flow.ControlFlow.Continue val =>
+-      let (r2, val1) ← r1_wire.begin aspis_coredigestDigest32Inst p val
++      let (r2, val1) ← NMP_call_5 aspis_coredigestDigest32Inst p val
+       let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+       match cf2 with
+       | core.ops.control_flow.ControlFlow.Continue val2 =>
+-        r1_semantic.mark obs 1#u8
+-        r1_semantic.verify_finish aspis_coredigestDigest32Inst public1 p val1
++        NMP_call_8 obs 1#u8
++        NMP_call_7 aspis_coredigestDigest32Inst public1 p val1
+           val2 obs
+       | core.ops.control_flow.ControlFlow.Break residual =>
+         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+@@ -76,19 +133,19 @@
+ /-- [aspis_r1_cost_probe::compact::HEADER]
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 26:0-26:29
+     Visibility: public -/
+-@[global_simps, irreducible] def compact.HEADER : Std.Usize := 16#usize
++@[global_simps, irreducible] def compact.HEADER  : Std.Usize := 16#usize
+ 
+ /-- [aspis_r1_cost_probe::compact::OFF_SEMANTIC]
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 38:0-38:39
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.OFF_SEMANTIC : Std.Usize := compact.HEADER
++def compact.OFF_SEMANTIC  : Std.Usize := compact.HEADER
+ 
+ /-- [aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES]
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 33:0-33:72
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.SEMANTIC_COMPACT_VALUES : Result Std.Usize := do
++def compact.SEMANTIC_COMPACT_VALUES  : Result Std.Usize := do
+   let i ← 10#usize * 28#usize
+   let i1 ← 1#usize + i
+   let i2 ← 87#usize + 29#usize
+@@ -99,7 +156,7 @@
+     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 8:0-8:43
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def verifier.SEMANTIC_BYTES : Result Std.Usize := do
++def verifier.SEMANTIC_BYTES  : Result Std.Usize := do
+   let i ← 29#usize * 32#usize
+   12903#usize + i
+ 
+@@ -107,13 +164,13 @@
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 31:0-31:68
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.LOGICAL_SEMANTIC : Result Std.Usize := verifier.SEMANTIC_BYTES
++def compact.LOGICAL_SEMANTIC  : Result Std.Usize := verifier.SEMANTIC_BYTES
+ 
+ /-- [aspis_r1_cost_probe::compact::COMPACT_SEMANTIC]
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 34:0-34:84
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.COMPACT_SEMANTIC : Result Std.Usize := do
++def compact.COMPACT_SEMANTIC  : Result Std.Usize := do
+   let i ← compact.SEMANTIC_COMPACT_VALUES
+   let i1 ← 16#usize * i
+   let i2 ← compact.LOGICAL_SEMANTIC
+@@ -123,7 +180,7 @@
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 39:0-39:58
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.OFF_Y1 : Result Std.Usize := do
++def compact.OFF_Y1  : Result Std.Usize := do
+   let i ← compact.COMPACT_SEMANTIC
+   compact.OFF_SEMANTIC + i
+ 
+@@ -131,13 +188,13 @@
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 35:0-35:38
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.COMPACT_Y1 : Result Std.Usize := 29#usize * 16#usize
++def compact.COMPACT_Y1  : Result Std.Usize := 29#usize * 16#usize
+ 
+ /-- [aspis_r1_cost_probe::compact::OFF_INACTIVE]
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 40:0-40:52
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.OFF_INACTIVE : Result Std.Usize := do
++def compact.OFF_INACTIVE  : Result Std.Usize := do
+   let i ← compact.OFF_Y1
+   let i1 ← compact.COMPACT_Y1
+   i + i1
+@@ -146,12 +203,12 @@
+     Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 36:0-36:38
+     Visibility: public -/
+ @[global_simps, irreducible]
+-def compact.LOGICAL_Y1 : Result Std.Usize := 29#usize * 32#usize
++def compact.LOGICAL_Y1  : Result Std.Usize := 29#usize * 32#usize
+ 
+ /-- [aspis_r1_cost_probe::verifier::candidate::prepare::{impl core::ops::function::FnOnce<(aspis_r1_cost_probe::r1_wire::Error,), aspis_r1_cost_probe::verifier::Error> for aspis_r1_cost_probe::verifier::candidate::prepare::closure#1<H>}::call_once]:
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 261:89-261:108 -/
+ def
+-  verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
++  verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   (c : verifier.candidate.prepare.closure_1 H) (tupled_args : r1_wire.Error) :
+   Result verifier.Error
+@@ -162,7 +219,7 @@
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 261:89-261:108 -/
+ @[reducible]
+ def
+-  verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
++  verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) :
+   core.ops.function.FnOnce (verifier.candidate.prepare.closure_1 H)
+   r1_wire.Error verifier.Error := {
+@@ -174,7 +231,7 @@
+ /-- [aspis_r1_cost_probe::verifier::candidate::prepare::{impl core::ops::function::FnOnce<(aspis_core::r0::Error,), aspis_r1_cost_probe::verifier::Error> for aspis_r1_cost_probe::verifier::candidate::prepare::closure<H>}::call_once]:
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 256:113-256:134 -/
+ def
+-  verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
++  verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   (c : verifier.candidate.prepare.closure H)
+   (tupled_args : aspis_core.r0.Error) :
+@@ -186,7 +243,7 @@
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 256:113-256:134 -/
+ @[reducible]
+ def
+-  verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
++  verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) :
+   core.ops.function.FnOnce (verifier.candidate.prepare.closure H)
+   aspis_core.r0.Error verifier.Error := {
+@@ -197,7 +254,29 @@
+ 
+ /-- [aspis_r1_cost_probe::verifier::candidate::prepare]:
+     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 255:0-264:1 -/
+-def verifier.candidate.prepare
++def verifier.candidate.prepare (NMP_call_0 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
++  core.ops.function.FnOnce O E F),
++(core.result.Result T E) → O → Result (core.result.Result T F)) (NMP_call_1 : ∀ {T : Type} (coremarkerCopyInst : core.marker.Copy T),
++Std.Usize → T → Result (core.result.Result (alloc.vec.Vec T)
++    aspis_core.r0.Error)) (NMP_call_2 : (Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → Result
++    (core.result.Result verifier.View verifier.Error)) (NMP_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++(r1_semantic.Verified H) → verifier.View → H → (Array
++    aspis_core.field.wide_exact.WideExact 29#usize) → Result
++    ((core.result.Result verifier.Prepared verifier.Error) × (Array
++    aspis_core.field.wide_exact.WideExact 29#usize))) (NMP_call_4 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit) (NMP_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++r1_wire.Prefix → (r1_wire.SemanticTranscript H) → Result
++    ((core.result.Result aspis_core.state_only_prefix.r0.Challenges
++    r1_wire.Error) × (r1_wire.SemanticTranscript H))) (NMP_call_6 : (Slice Std.U8) → Result (core.result.Result r1_wire.Prefix r1_wire.Error)) (NMP_call_7 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
++    r1_wire.Prefix → (r1_wire.SemanticTranscript H) →
++    aspis_core.state_only_prefix.r0.Challenges → (Option (verifier.Phase →
++    Result Unit)) → Result (core.result.Result (r1_semantic.Verified H)
++    r1_wire.Error)) (NMP_call_8 : (Option (verifier.Phase → Result Unit)) → Std.U8 → Result Unit) (NMP_call_9 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
++aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → H →
++    (Array Std.U8 32#usize) → Result (core.result.Result
++    (r1_wire.SemanticTranscript H) r1_wire.Error)) (NMP_call_10 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
++    compact.CodecError) × (Slice Std.U8))) (NMP_call_11 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
++    compact.CodecError) × (Slice Std.U8))) 
+   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+   (proof : Slice Std.U8) (hash : H)
+@@ -209,9 +288,9 @@
+   let i ← compact.LOGICAL_SEMANTIC
+   let i1 ← compact.LOGICAL_Y1
+   let i2 ← lift (Std.Usize.wrapping_add i i1)
+-  let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
++  let r ← NMP_call_1 core.marker.CopyU8 i2 0#u8
+   let r1 ←
+-    core.result.Result.map_err
++    NMP_call_0
+       (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+       aspis_coredigestDigest32Inst) r ()
+   let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+@@ -224,7 +303,7 @@
+     let s1 ←
+       core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+         Std.U8) proof { start := compact.OFF_SEMANTIC, «end» := i3 }
+-    let (r2, semantic1) ← compact.expand_semantic s1 semantic
++    let (r2, semantic1) ← NMP_call_10 s1 semantic
+     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+     match cf1 with
+     | core.ops.control_flow.ControlFlow.Continue _ =>
+@@ -233,7 +312,7 @@
+         core.slice.index.Slice.index
+           (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) proof
+           { start := i3, «end» := i4 }
+-      let (r3, y11) ← compact.expand_values s2 y1
++      let (r3, y11) ← NMP_call_11 s2 y1
+       let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+       match cf2 with
+       | core.ops.control_flow.ControlFlow.Continue _ =>
+@@ -245,22 +324,22 @@
+         let s5 ←
+           alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice
+             Std.U8) val1 { start := i }
+-        let r4 ← verifier.candidate.wide_view proof s4 s5
++        let r4 ← NMP_call_2 proof s4 s5
+         let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+         match cf3 with
+         | core.ops.control_flow.ControlFlow.Continue v =>
+           let r5 ←
+-            r1_semantic.verify_observed aspis_coredigestDigest32Inst public1
++            (r1_semantic.verify_observed NMP_call_5 NMP_call_6 NMP_call_7 NMP_call_8 NMP_call_9) aspis_coredigestDigest32Inst public1
+               v.semantic hash obs
+           let r6 ←
+-            core.result.Result.map_err
++            NMP_call_0
+               (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+               aspis_coredigestDigest32Inst) r5 ()
+           let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+           match cf4 with
+           | core.ops.control_flow.ControlFlow.Continue val2 =>
+-            verifier.mark obs verifier.Phase.Semantic
+-            verifier.Prepared.new aspis_coredigestDigest32Inst val2 v hash g
++            NMP_call_4 obs verifier.Phase.Semantic
++            NMP_call_3 aspis_coredigestDigest32Inst val2 v hash g
+           | core.ops.control_flow.ControlFlow.Break residual =>
+             let r7 ←
+               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+@@ -291,3 +370,5 @@
+     ok (r2, g)
+ 
+ end NMP_prepare
++
++#print axioms NMP_prepare.verifier.candidate.prepare
