@@ -9,11 +9,21 @@ theorem byte_injective : Function.Injective nativeByte := by
  intro a b h
  apply UScalar.eq_of_val_eq
  have hv := congrArg UInt8.toNat h
- simpa only [nativeByte,UInt8.toNat_ofNat_of_lt' a.bv.isLt,
-   UInt8.toNat_ofNat_of_lt' b.bv.isLt] using hv
+ exact (UInt8.toNat_ofNat_of_lt' a.bv.isLt).symm.trans
+  (hv.trans (UInt8.toNat_ofNat_of_lt' b.bv.isLt))
 
 theorem bytes_eq (xs ys : List U8) : xs.map nativeByte = ys.map nativeByte ↔ xs = ys := by
- exact ⟨fun h => List.map_injective byte_injective h,fun h => congrArg (List.map nativeByte) h⟩
+ constructor
+ · intro h
+   induction xs generalizing ys with
+   | nil => cases ys <;> simp_all
+   | cons x xs ih =>
+     cases ys with
+     | nil => cases h
+     | cons y ys =>
+       have hs := List.cons.inj h
+       rw [byte_injective hs.1,ih ys hs.2]
+ · intro h; rw [h]
 
 theorem stage1 (data : Slice U8) :
  Hiq_ReleaseRoute.stage1 data ↔ nativeBytes data = [3,10] ∨ nativeBytes data = [3,11] := by
@@ -34,6 +44,7 @@ theorem first_guard (program : RSL.B32) (accounts : List RSL.AccountInfo) (data 
  Hiq_ReleaseRoute.stage1 data ∧ accounts.length = 3 := by
  rw [stage1]
  simp [RSL.TX1_344.badRoute]
+ tauto
 
 theorem second_guard (program : RSL.B32) (accounts : List RSL.AccountInfo) (data : Slice U8) :
  RSL.TX2_240.badRoute ⟨program,accounts,nativeBytes data⟩ = false ↔
