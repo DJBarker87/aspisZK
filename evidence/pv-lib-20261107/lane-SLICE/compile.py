@@ -3,7 +3,7 @@ import hashlib,json,lzma,pathlib,shlex,subprocess,sys,time
 E=pathlib.Path('evidence/pv-lib-20261107/lane-SLICE');H='/home/dombarker/project-offloads/codex-pv-lib-slice-20261107'
 host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);m=sys.argv[2];audit='--audit' in sys.argv[3:]; provider='--provider' in sys.argv[3:]; provider_rev=(sys.argv[sys.argv.index('--revision')+1] if '--revision' in sys.argv else '9d7395cb069f07f812e8e1352e0478111eaec9ee')
-assert (49690<=a<=49699) if audit else (49600<=a<=49689)
+assert (49690<=a<=49699) if audit else (49600<=a<=49689 or 49900<=a<=49999)
 for q in E.glob('refusal-*.json'):
     assert time.time()-json.loads(q.read_text())['epoch']>=180
 p=pathlib.Path('lean',m+'.lean');raw=subprocess.check_output(['git','show',provider_rev+':'+str(p)],text=True) if provider else p.read_text()

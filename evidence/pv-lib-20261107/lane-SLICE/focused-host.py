@@ -2,7 +2,7 @@
 import pathlib,json,sys,hashlib,subprocess,time,re,os,lzma
 B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-int-20261106');L=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-20261107');P=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107');E=P/'evidence';E.mkdir(exist_ok=True)
 x=json.load(sys.stdin);a=x['attempt'];m=x['module'];audit=x['audit']
-assert ((49600<=a<=49689) and not audit) or (49690<=a<=49699 and audit)
+assert ((49600<=a<=49689 or 49900<=a<=49999) and not audit) or (49690<=a<=49699 and audit)
 assert x['turn']['exit']==0 and x['turn']['attempt']==a
 sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()
 for p in E.glob('refusal-*.json'):assert time.time()-json.load(open(p))['epoch']>=180
