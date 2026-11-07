@@ -1,0 +1,47 @@
+{"attempt": "NMB_L033", "exit_status": 0, "wall_seconds": 22.35490954318084, "peak_rss_kib": "6009312", "swaps": "0", "print_axioms": ["'NMB_Stage1Result.copied' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Stage1Result.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Stage1Result.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Result.continuation : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (NMB_Stage1Source.continuation ops p d (NMB_ThreeSnapshots.first x) (NMB_Stage1Tail.ready x)).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error) :=
+fun x ops p d =>
+  have source := NLD_Stage1Source.erasure ops p (NMB_ThreeSnapshots.first x) d;
+  casesOn (motive := fun t =>
+    (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).2 = t →
+      (NMB_S
+...
+t x) d)
+                                    h)
+                                  (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1))
+                              [])))))
+                    (bind_tc_div fun y =>
+                      match y with
+                      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+                      | core.result.Result.Err error => ok (core.result.Result.Err error)))
+                  (eq_self div)))))
+        (Eq.symm h) (Eq.refl (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).2))
+    (Eq.refl (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).2)
+theorem NMB_Stage1Result.result : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  (G x ops p d (ok ()) (ok ()) (ok ())).result = do
+    let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d
+    match child with
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+      | core.result.Result.Err error => ok (core.result.Result.Err error) :=
+fun x ops p d =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a.result = do
+            let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d
+            match child with
+              | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+              | core.result.Result.Err error => ok (core.result.Result.Err error))
+        (NMB_Stage1Tail.source x ops p d)))
+    (continuation x ops p d)
+'NMB_Stage1Result.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Stage1Result.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Stage1Result.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rca7f18526c5a444ba7b71d8f70c0ca24.scope; invocation ID: 02f46fb2ae5e448cbad36ae2fda642c6

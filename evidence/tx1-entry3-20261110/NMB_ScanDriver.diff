@@ -1,0 +1,24 @@
+--- evidence/tx1-entry2-20261110/NLQ_Driver.lean
++++ NMB_ScanDriver.lean
+@@ -93,17 +93,17 @@
+   initSearchPath (← findSysroot)
+   enableInitializersExecution
+   let mode := args.headD "small"
+-  let (modules, roots) := if mode == "scan" then (#[`NLQ_COMBINED_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NMB_COMBINED_IMPORT], #[]) else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NLQ_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NMB_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NLQ_AuditNER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NLQ_LOADED_scan.jsonl") expected
+-    IO.println (if failed then "NLQ_SCAN_FAILED" else "NLQ_SCAN_ZERO_DANGLING")
++    let failed ← NLQ_AuditNER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NMB_LOADED_scan.jsonl") expected
++    IO.println (if failed then "NMB_SCAN_FAILED" else "NMB_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
+     fileName := "NEP_Driver"

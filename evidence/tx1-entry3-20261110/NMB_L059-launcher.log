@@ -1,0 +1,40 @@
+{"attempt": "NMB_L059", "exit_status": 0, "wall_seconds": 22.035925118951127, "peak_rss_kib": "5971212", "swaps": "0", "print_axioms": ["'NMB_RowSpec094.frame_iff' depends on axioms: [propext]", "'NMB_RowSpec094.equivalent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NMB_RowSpec094.Required : Native094 → Prop :=
+fun native =>
+  ∀ (base : Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (D : aspis_core.digest.Digest32 Unit)
+    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (publicBytes proof : Slice U8)
+    (k : Usize) (before after : Frame094)
+    (observed : NGP_L181.Observation (core.result.Result (alloc.vec.Vec U8) verifier.Error)),
+    before.proof = proof →
+      before.publicBytes = publicBytes →
+        native base B std hashv D public1 publicBytes proof k before after observed →
+          (observed.result, 
+...
+def NMB_RowSpec094.Required : Native094 → Prop :=
+fun native =>
+  ∀ (base : Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (D : aspis_core.digest.Digest32 Unit)
+    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (publicBytes proof : Slice U8)
+    (k : Usize) (before after : Frame094)
+    (observed : NGP_L181.Observation (core.result.Result (alloc.vec.Vec U8) verifier.Error)),
+    before.proof = proof →
+      before.publicBytes = publicBytes →
+        native base B std hashv D public1 publicBytes proof k before after observed →
+          (observed.result, observed.attempted) =
+              SdkC_Source.run hashv
+                (NGQ_Normalize.normalize (GExp_FirstCode.code base B std hashv D public1 publicBytes proof k)) [] ∧
+            FrameEqual after before
+theorem NMB_RowSpec094.equivalent : ∀ (native : Native094), Required native ↔ RowSpec_094 native :=
+fun native =>
+  {
+    mp := fun h base B std hashv D public1 publicBytes proof k before after observed hp hu entered =>
+      have packet := h base B std hashv D public1 publicBytes proof k before after observed hp hu entered;
+      ⟨packet.left, (frame_iff after before).mpr packet.right⟩,
+    mpr := fun h base B std hashv D public1 publicBytes proof k before after observed hp hu entered =>
+      have packet := h base B std hashv D public1 publicBytes proof k before after observed hp hu entered;
+      ⟨packet.left, (frame_iff after before).mp packet.right⟩ }
+'NMB_RowSpec094.frame_iff' depends on axioms: [propext]
+'NMB_RowSpec094.equivalent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rff782fa9653c43e6bd8463e7924af7db.scope; invocation ID: 070d4edd1f5e4e0a8107919ee0a85210

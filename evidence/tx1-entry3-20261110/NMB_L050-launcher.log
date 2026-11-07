@@ -1,0 +1,43 @@
+{"attempt": "NMB_L050", "exit_status": 0, "wall_seconds": 24.42024899297394, "peak_rss_kib": "5999684", "swaps": "0", "print_axioms": ["'NMB_SnapshotReplayNormal.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_SnapshotReplayNormal.source : ∀ (x : NMB_Input.Input) (t a lo hi : ℕ) (owned : List Owned),
+  NMB_SnapshotReplay.replay (ready x t owned) (G (ready x t owned) a lo hi (ok ())).events =
+    returned (ready x t owned) a lo hi :=
+fun x t a lo hi owned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => NMB_SnapshotReplay.replay (ready x t owned) _a = returned (ready x t owned) a lo hi)
+        (NMB_SnapshotTrace.source x t a lo hi owned)))
+    (id
+      (if h :
+          (NLF_SdkModel.deref (acquired (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)).bytes.length =
+              lo ∨
+            (NLF_SdkModel.deref (acquired (ready x t owned) a) (NMB_Snapshot.guard (ready x t
+...
+y x t owned).next (acquired (ready x t owned) a)
+                              (ok (Except.ok (NMB_Snapshot.guard (ready x t owned) a))),
+                            Event.deref (live (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)
+                              (ok
+                                (NLF_SdkModel.deref (acquired (ready x t owned) a)
+                                  (NMB_Snapshot.guard (ready x t owned) a)))])
+                        (if_neg h)))
+                    [Event.release (live (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)
+                        (ok (Except.ok (ready x t owned).sdk)),
+                      Event.returned (live (ready x t owned) a) a lo hi
+                        (ok ((ready x t owned).input.snapshot a lo hi))])))
+              (returned (ready x t owned) a lo hi)))
+          (Eq.refl
+            (NMB_SnapshotReplay.replay (ready x t owned)
+              ([Event.acquire (ready x t owned) a (ready x t owned).next (acquired (ready x t owned) a)
+                      (ok (Except.ok (NMB_Snapshot.guard (ready x t owned) a))),
+                    Event.deref (live (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)
+                      (ok
+                        (NLF_SdkModel.deref (acquired (ready x t owned) a)
+                          (NMB_Snapshot.guard (ready x t owned) a)))] ++
+                  [] ++
+                [Event.release (live (ready x t owned) a) (NMB_Snapshot.guard (ready x t owned) a)
+                    (ok (Except.ok (ready x t owned).sdk)),
+                  Event.returned (live (ready x t owned) a) a lo hi
+                    (ok ((ready x t owned).input.snapshot a lo hi))])))))
+'NMB_SnapshotReplayNormal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r967a671da463480bada0bb414c06b915.scope; invocation ID: 1da30b8d35aa4ef5b72c3393cdcaa5d1

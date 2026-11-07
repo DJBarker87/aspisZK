@@ -1,0 +1,23 @@
+{"attempt": "NMB_L070", "exit_status": 0, "wall_seconds": 23.97600609692745, "peak_rss_kib": "5922844", "swaps": "0", "print_axioms": ["'NMB_OwnedResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_OwnedResult.occurrences' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_OwnedResult.source : ∀ (ops : AdapterRw.Ops) (program : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (data : Slice U8),
+  (NMB_OwnedTyped.stage1Owned ops program accounts data).result =
+    AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data :=
+fun ops program accounts data =>
+  have h := congrArg Prod.snd (NMB_OwnedTyped.forget_eq ops program accounts data);
+  Eq.trans h (NLD_Stage1Source.erasure ops program accounts data)
+'NMB_OwnedResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_OwnedResult.occurrences' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NMB_OwnedResult.source : ∀ (ops : AdapterRw.Ops) (program : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (data : Slice U8),
+  (NMB_OwnedTyped.stage1Owned ops program accounts data).result =
+    AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data :=
+fun ops program accounts data =>
+  have h := congrArg Prod.snd (NMB_OwnedTyped.forget_eq ops program accounts data);
+  Eq.trans h (NLD_Stage1Source.erasure ops program accounts data)
+'NMB_OwnedResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_OwnedResult.occurrences' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r528f509ab69942fd89a8ec65cb1562db.scope; invocation ID: db8c0f5b00a0442ab51c181d23b4025e

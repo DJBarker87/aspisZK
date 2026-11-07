@@ -1,0 +1,39 @@
+{"attempt": "NMB_L049", "exit_status": 0, "wall_seconds": 14.018051489954814, "peak_rss_kib": "6026540", "swaps": "0", "print_axioms": ["'NMB_Stage1Post.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Post.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    have out := G x ops p d (ok ()) (ok ()) (ok ());
+    out.post.snapshots.sdk = NMB_ReadonlyFrame.after x saved ∧
+      out.post.snapshots.owned = [] ∧
+        out.post.checkpoint = none ∧ out.post.snapshots.next = 3 ∧ out.post.snapshots.input = x :=
+fun x ops p d saved branch =>
+  have child := Eq.trans (NLD_Stage1Source.erasure ops p (NMB_ThreeSnapshots.first x) d) branch;
+  have copied := NMB_Stage1CopyDomain.source x ops p d saved branch;
+  id
+    (
+...
+py
+                                                      (NLQ_CopyTrace.G (NMB_Stage1Tail.ready x).snapshots.sdk 2
+                                                          (NMB_Stage1Tail.ready x).snapshots.next
+                                                          (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                                    [Event.cleanup before after] }
+                                            | NLF_CopyStep.Outcome.abort sdk =>
+                                              { result := fail Error.panic,
+                                                post :=
+                                                  {
+                                                    snapshots :=
+                                                      have __src := (NMB_Stage1Tail.ready x).snapshots;
+                                                      { input := __src.input, sdk := sdk, next := __src.next,
+                                                        owned := __src.owned },
+                                                    checkpoint := some saved },
+                                                events :=
+                                                  List.map Event.copy
+                                                    (NLQ_CopyTrace.G (NMB_Stage1Tail.ready x).snapshots.sdk 2
+                                                        (NMB_Stage1Tail.ready x).snapshots.next
+                                                        (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                                          copied)))))))))
+                        x))))))
+            ⟨rfl, ⟨True.intro, ⟨True.intro, ⟨rfl, rfl⟩⟩⟩⟩)))
+    copied
+'NMB_Stage1Post.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r91e9fd89d99445d9a845d6b7642192c2.scope; invocation ID: 266e97f47668403f9244609e3e8a496d

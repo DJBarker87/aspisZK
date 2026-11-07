@@ -39,6 +39,7 @@ for n,t in files.items():
   for line in t.splitlines():
    if line.startswith('import '):rels.update(d.replace('.','/')+'.olean' for d in line[7:].split() if d!='all')
 if {kind!r} in ['audit','link','inspect']:rels.update(n+'.olean' for n in ['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
+if {kind!r}=='audit':rels.add('NMB_COMBINED_IMPORT.olean')
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -71,7 +72,9 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
         if not p.exists():p.write_bytes(lzma.compress(raw))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NMB_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
-    with (E/'NMB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+    summary={k:v for k,v in rc.items() if k!='deps_fingerprint'}
+    summary['deps_fingerprint_ref']={'receipt':a+'/receipt.json','sha256':sha((E/a/'receipt.json').read_bytes())}
+    with (E/'NMB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
     if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][-1500:])),flush=True)
     return rc

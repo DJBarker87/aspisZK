@@ -1,0 +1,43 @@
+{"attempt": "NMB_L069", "exit_status": 0, "wall_seconds": 29.402702651917934, "peak_rss_kib": "6171244", "swaps": "0", "print_axioms": ["'NMB_OwnedTyped.forget_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_OwnedTyped.forget_eq : ∀ (ops : Ops) (program : solana_pubkey.Pubkey)
+  (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (data : Slice U8),
+  forget (stage1Owned ops program accounts data) = AspisR1.NLD_Stage1Source.stage1Owned ops program accounts data :=
+fun ops program accounts data =>
+  id
+    (id
+      (NMB_TypedCongr.bind_congr
+        (call 2863 [("program_id", pack program), ("accounts", pack accounts), ("data", pack data)]
+          (ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] stage1Owned._proof_4)))
+        (AspisR1.NLD_SourceTrace.call 2863
+          (ops.op1 core.cmp.PartialEqU8 data
+            (Array.make 2#usize [3#u8, 10#u8] AspisR1.NL
+...
+                                           pack checkpoint_account) ::
+                                                                                  ("r", pack r) ::
+                                                                                    ("cf", pack cf) ::
+                                                                                      ("r1", pack r1) :: y;
+                                                                          ("program_id", pack program) ::
+                                                                            ("accounts", pack accounts) ::
+                                                                              ("data", pack data) ::
+                                                                                ("b", pack b) :: ("i", pack i) :: y)
+                                                                          ⋯
+                                                                    let i3 ← ⋯
+                                                                    let i4 ← ⋯
+                                                                    ⋯
+                                                            | ⋯ => ⋯
+                                                        | ⋯ => ⋯
+                                                    | ⋯ => ⋯
+                                                | ⋯ => ⋯
+                                            | ⋯ => ⋯
+                                        | ⋯ => ⋯
+                                    | ⋯ => ⋯
+                                | ⋯ => ⋯
+                            | ⋯ => ⋯
+                        | ⋯ => ⋯
+                    | ⋯ => ⋯
+                | ⋯ => ⋯
+          else ⋯)
+        ⋯ ⋯ ⋯))
+'NMB_OwnedTyped.forget_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r003e865af22a42f793dff3bd61cd37a8.scope; invocation ID: bb0fcfb5ee5443d3b74f49905af6931f

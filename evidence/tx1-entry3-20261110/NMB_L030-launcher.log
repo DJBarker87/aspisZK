@@ -1,0 +1,51 @@
+{"attempt": "NMB_L030", "exit_status": 0, "wall_seconds": 13.834474268136546, "peak_rss_kib": "5995460", "swaps": "0", "print_axioms": ["'NMB_Stage1CopyDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1CopyDomain.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (NLQ_CopyTrace.G x.sdk 2 3 (S2W_ReturnedCheckpoint.nativeBytes saved)).outcome =
+      NLF_CopyStep.Outcome.returned
+        (put x.sdk (x.sdk.accounts 2).data
+          (have __src := x.sdk.cells (x.sdk.accounts 2).data;
+          {
+            payload :=
+              have __src := (x.sdk.cells (x.sdk.accounts 2).data).payload;
+              { bytes := S2W_ReturnedCheckpoint.nativeBytes saved, money := _
+...
+NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (NLQ_CopyTrace.G x.sdk 2 3 (S2W_ReturnedCheckpoint.nativeBytes saved)).outcome =
+      NLF_CopyStep.Outcome.returned
+        (put x.sdk (x.sdk.accounts 2).data
+          (have __src := x.sdk.cells (x.sdk.accounts 2).data;
+          {
+            payload :=
+              have __src := (x.sdk.cells (x.sdk.accounts 2).data).payload;
+              { bytes := S2W_ReturnedCheckpoint.nativeBytes saved, money := __src.money },
+            readers := __src.readers, writer := __src.writer }))
+        (Except.ok ()) :=
+fun x ops p d saved accepted =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            NLF_CopyStep.Outcome.returned
+              (put x.sdk (x.sdk.accounts 2).data
+                (let __src := x.sdk.cells (x.sdk.accounts 2).data;
+                {
+                  payload :=
+                    let __src := (x.sdk.cells (x.sdk.accounts 2).data).payload;
+                    { bytes := S2W_ReturnedCheckpoint.nativeBytes saved, money := __src.money },
+                  readers := __src.readers, writer := __src.writer }))
+              (Except.ok ()))
+        (NLQ_CopyTrace.erasure x.sdk 2 3 (S2W_ReturnedCheckpoint.nativeBytes saved))))
+    (NLF_CopyStep.success x.sdk 2 3 (S2W_ReturnedCheckpoint.nativeBytes saved)
+      (Eq.refl (x.sdk.cells (x.sdk.accounts 2).data).writer) (Eq.refl (x.sdk.cells (x.sdk.accounts 2).data).readers)
+      (id
+        (Eq.mpr
+          (id
+            (congr (congrArg Eq (List.length_map S2W_ReturnedCheckpoint.nativeByte))
+              (List.length_map S2W_ReturnedCheckpoint.nativeByte)))
+          (NMB_CheckpointLength.source x ops p d saved accepted))))
+'NMB_Stage1CopyDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2c45f94e5da4b9b8194300bda418d57.scope; invocation ID: 3e0192088c0544398ce976c17e693d96

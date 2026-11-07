@@ -1,0 +1,45 @@
+{"attempt": "NMB_L057", "exit_status": 0, "wall_seconds": 19.603523623896763, "peak_rss_kib": "6001604", "swaps": "0", "print_axioms": ["'NMB_CleanupAdmitted.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_CleanupAdmitted.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    NMB_Cleanup.G
+        (have __src := NMB_Stage1Tail.ready x;
+        { snapshots := __src.snapshots, checkpoint := some saved }) =
+      [Drop.checkpoint saved, Drop.bytesValue 0 (x.buffers (x.handles 0).1),
+        Drop.bytesValue 1 (x.buffers (x.handles 1).1), Drop.bytesValue 2 (x.buffers (x.handles 2).1)] :=
+fun x ops p d saved accepted =>
+  let ⟨proof, right✝⟩ := NMB_AcceptedExtents.source x ops p d saved accepted
+  let ⟨pub, cp⟩ := right✝
+
+...
+  is_signer := (x.descriptors 2).is_signer, is_writable := (x.descriptors 2).is_writable,
+                      executable := (x.descriptors 2).executable,
+                      length := core.result.Result.Ok (x.buffers (x.handles 2).1).len,
+                      bytes := core.result.Result.Ok (x.buffers (x.handles 2).1) }]))
+              (congrArg (HAppend.hAppend [Drop.bytesValue 0 (x.buffers (x.handles 0).1)])
+                (congr
+                  (congrArg HAppend.hAppend
+                    (congrArg (HAppend.hAppend [])
+                      (congrFun'
+                        (congrArg List.cons
+                          (congrFun' (congrArg Drop.bytesValue (zero_add 1)) (x.buffers (x.handles 1).1)))
+                        [])))
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg HAppend.hAppend
+                        (congrArg (HAppend.hAppend [])
+                          (congrFun'
+                            (congrArg List.cons
+                              (congrFun' (congrArg Drop.bytesValue (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                (x.buffers (x.handles 2).1)))
+                            [])))
+                      [])
+                    (List.append_nil [Drop.bytesValue 2 (x.buffers (x.handles 2).1)])))))))
+        [Drop.checkpoint saved, Drop.bytesValue 0 (x.buffers (x.handles 0).1),
+          Drop.bytesValue 1 (x.buffers (x.handles 1).1), Drop.bytesValue 2 (x.buffers (x.handles 2).1)])
+      (eq_self
+        [Drop.checkpoint saved, Drop.bytesValue 0 (x.buffers (x.handles 0).1),
+          Drop.bytesValue 1 (x.buffers (x.handles 1).1), Drop.bytesValue 2 (x.buffers (x.handles 2).1)]))
+'NMB_CleanupAdmitted.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r02f1c7502f5e4fd4b3245c5b22f6fb45.scope; invocation ID: 150092420ead4625a33545e0bbf8a55f

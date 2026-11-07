@@ -16,7 +16,6 @@ theorem fail (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8
  dsimp only
  rw [NMB_Stage1Tail.source]
  simp only [continuation,branch]
- rfl
 theorem divergence (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
  (branch : (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).2=.div) :
  let s := NMB_Stage1Tail.ready x
@@ -27,7 +26,6 @@ theorem divergence (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Sl
  dsimp only
  rw [NMB_Stage1Tail.source]
  simp only [continuation,branch]
- rfl
 #print fail
 #print divergence
 #print axioms fail
