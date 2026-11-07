@@ -8,12 +8,12 @@ open NNG_LIBArrays NNG_LIBScalar
 
 /-- Exactly one original input and environment, with the arbitrary raw
 observer retained. No model result is an input or caller hypothesis. -/
-def input (pub : LIB_VCarriers.Public) (prefix : LIB_VCarriers.Prefix)
+def input (pub : LIB_VCarriers.Public) (pre : LIB_VCarriers.Prefix)
     (t : LIB_VCarriers.Transcript) (challenges : LIB_VCarriers.Challenges)
     (observer : Observer) (env : RSL.Env) : Parent Unit Unit where
   digest := NNG_LIBDigest.digest env
   publicValue := NNG_LIBData.lowerPublic pub
-  prefixValue := NNG_LIBData.lowerPrefix prefix
+  prefixValue := NNG_LIBData.lowerPrefix pre
   transcript := fromT10 t
   challenges := lowerChallenges challenges
   observer := observer
