@@ -1,4 +1,4 @@
-import SCE_Experiment
+import RPz8_SCE_Experiment
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNH_StateNormalize
@@ -61,7 +61,7 @@ theorem logs (a : Adversary Bool) (H : Bytes → State)
  (i : FirstInputs Bool) (saved : alloc.vec.Vec U8) (post : Heap (Nat → Record)) (final : Bool) :
  (eval H (normalize a).first).1 = (eval H a.first).1 ∧
  (eval H ((normalize a).second i saved post final)).1 = (eval H (a.second i saved post final)).1 := by
- exact ⟨congrArg Prod.fst (first_eval a H), congrArg Prod.fst (second_eval a H i saved post final)⟩
+ simp only [first_eval, second_eval, and_self]
 
 #print axioms eval_map
 #print axioms first_eval
