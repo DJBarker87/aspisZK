@@ -12,9 +12,10 @@ def sha(p):
  return h.hexdigest()
 a=int(sys.argv[1]);module=sys.argv[2];rev=sys.argv[3]
 cohort=sys.argv[4] if len(sys.argv)>4 else 'base'
-assert cohort in ['base','stx','w3']
+assert cohort in ['base','stx','w3','w4']
 O=P/('objects-'+cohort if cohort!='base' else 'objects');O.mkdir(exist_ok=True)
 J=P/('J-'+cohort+'.json' if cohort!='base' else 'J.json')
+if cohort=='w4': B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-w4-20261108')
 if cohort=='w3': B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-w3-20261108')
 if cohort=='stx': B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-stx-20261104')
 assert 49700<=a<=49799

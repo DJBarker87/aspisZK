@@ -8,7 +8,14 @@ rows={270:(3,'PV_FN_THREAD_f270SummaryRun','from_entry'),166:(2,'PV_FN_THREAD_f1
 def cmd(args,**kwargs): return subprocess.run(args,check=True,**kwargs)
 def output(args):return subprocess.check_output(args,text=True)
 def extract(s,name):
- start=re.search(r'^theorem '+re.escape(name)+r'\b',s,re.M).end(); head=s[start:s.index(':=',start)].strip(); depth=0
+ start=re.search(r'^theorem '+re.escape(name)+r'\b',s,re.M).end(); depth=0; end=None
+ for j in range(start,len(s)-1):
+  c=s[j]
+  if c in '([{⟨':depth+=1
+  if c in ')]}⟩':depth-=1
+  if s[j:j+2]==':=' and depth==0:end=j;break
+ assert end is not None
+ head=s[start:end].strip(); depth=0
  for j,c in enumerate(head):
   if c in '([{':depth+=1
   if c in ')]}':depth-=1
