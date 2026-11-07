@@ -25,3 +25,14 @@ New support corrects inner Rust Err classification as well as outer failures: ex
 NMP_FINAL_PLAN.json supersedes the earlier live checkpoint's order. After native K099, the waiting client reads this plan: L078 rejection resources, L038/L039/L040 focused symbolic pass/digits/rho-certificate construction, then regenerate all audit inputs. L041 combined import, L042/L043 drivers, L044/L045 optimized links, L046 fixtures, L047 scan, L048-L07629 distinct raw groups, L077 closure pins/export, L079 retention, L080 native inventory plus audit summary. All80 labels remain unique. The new rho modules are DRAFT until their focused receipts are green; no rho clause is promoted yet. Raw collection globs point to each actual proof group. Native return queue and host caps are unchanged.
 
 Latest correction: K089 was a selector-input failure; K090 reached CBMC and crashed139 in the heap-contract context. L079 now installs explicit typed-array byte havoc before the eight remaining native labels. NMP_FINAL_PLAN.json skips already-consumed L079; L080 now performs native inventory, retention and audit summary sequentially. No parent uses point/stub_verified after this install; standalone stack calibration remains separately retained.
+
+## Ruling bm continuation (2026-11-07)
+Prior 100 Kani/80 Lean allowance is spent. Whole-parent Kani for137/087 is
+retired after CBMC139 and receives no further attempts. New budget: E001-E002
+(two fresh pinned extractions), L081-L280 (200 Lean/link/audit scopes), zero Kani.
+Route: emitted ACTUAL frozen bodies, bc exit audit, source-order step modules,
+SAME-argument child transports. Child136 is canonical RSL RowSpec_136 until a
+gated NMO candidate exists. Canonical RowSpec_137/087 remain the targets.
+Allocation aborts and error clones are audited explicitly; no silent weakening.
+The amended NMW transport payload supplies exact b936275465 Pool files.
+Existing objects and NMP support are reused; no frozen source changes.

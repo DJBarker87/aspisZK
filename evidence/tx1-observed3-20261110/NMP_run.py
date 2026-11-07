@@ -7,7 +7,7 @@ B='/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110'
 a=sys.argv[1]; assert re.fullmatch(r'NMP_[LKE][0-9]{3}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
 x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NMP_target')
-assert 1<=int(a[-3:])<=({'L':80,'K':100,'E':0}[a[4]])
+assert 1<=int(a[-3:])<=({'L':280,'K':0,'E':2}[a[4]])
 if x['command'][:2]==['python3','NMP_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'
 if x['kind']=='kani':assert x['sources']==['NMP_gate.py','NMP_SOURCE_PINS.json','NMP_FROZEN_FILE_PINS.json','NMP_BASE_EXPECTED.json'] or (x['command'][:2]==['python3','NMP_gate_pair.py'] and x['sources']==['NMP_gate.py','NMP_gate_pair.py','NMP_SOURCE_PINS.json','NMP_FROZEN_FILE_PINS.json']),'Native inputs must be installed in a prior capped scope; never upload source snapshots'
