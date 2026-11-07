@@ -1,0 +1,44 @@
+{"attempt": "NNH_L507", "exit_status": 1, "wall_seconds": 4.002774266991764, "peak_rss_kib": "6637380", "swaps": "0", "print_axioms": ["'NNH_AuthMasterStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_AuthMasterStep.lean:28:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NNH_Tx2ModelSlots.install base env).op38 (NNH_AuthSeeds.master master.identity.asset_mint master.bump) pool
+in the target expression
+  (do
+      let r8 ←
+        (NNH_Tx2ModelSlots.install base env).op38
+            (Array.make 3#usize
+                [r1_pool_adapter.PAIR_FOREST_MASTER_SEED, master.identity.asset_mint.to_slice,
+                  (Array.make 1#usize [master.bump] ⋯).to_slice]
+                ⋯).to_slice
+            pool
+      let r9 ←
+        core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_asq8_accounts.closure.Insts.CoreOpsFuncti
+...
+m pool m master r e slot
+              let cf9 ←
+                match r10 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot
+                    m.key master
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+                    residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+            residual) =
+    NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot m.key master
+NNH_generated/NNH_AuthMasterStep.lean:24:31: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵c̵o̵d̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲d̲e̲c̲o̲d̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNH_AuthMasterStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r23bf3f6f9b354f82a3274bb3548a3c32.scope; invocation ID: cce1a3f31042497188b1d559d60bc816

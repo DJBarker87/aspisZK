@@ -1,0 +1,30 @@
+NNH_generated/NNH_PdaOk.lean:27:34: error: Type mismatch: After simplification, term
+  h
+ has type
+  True
+but is expected to have type
+  k = expected
+NNH_generated/NNH_PdaOk.lean:28:5: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NNH_generated/NNH_PdaOk.lean:38:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  unkey (key ?x)
+in the target expression
+  Result.ok
+      (match some (key expected) with
+      | some k => core.result.Result.Ok (unkey k)
+      | none => core.result.Result.Err solana_pubkey.PubkeyError.InvalidSeeds) =
+    Result.ok (core.result.Result.Ok expected)
+
+base : Ops
+env : Env
+seeds : Slice (Slice U8)
+program expected : solana_pubkey.Pubkey
+success : env.pda (List.map bytes ↑seeds) (key program) = some (key expected)
+⊢ Result.ok
+      (match some (key expected) with
+      | some k => core.result.Result.Ok (unkey k)
+      | none => core.result.Result.Err solana_pubkey.PubkeyError.InvalidSeeds) =
+    Result.ok (core.result.Result.Ok expected)
+'NNH_PdaOk.guard' depends on axioms: [propext, sorryAx]
+'NNH_PdaOk.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

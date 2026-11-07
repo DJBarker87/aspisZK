@@ -1,0 +1,41 @@
+structure NID_ResumeFields.Domain (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator) : Prop
+number of parameters: 2
+fields:
+  NID_ResumeFields.Domain.variant : p.variant = AspisR1Stage2.transport.Variant.S2
+  NID_ResumeFields.Domain.gamma : NID_ResumeCanonical.ECanonical p.gamma
+  NID_ResumeFields.Domain.kappa : NID_ResumeCanonical.ECanonical p.kappa
+  NID_ResumeFields.Domain.alpha : ∀ x ∈ ↑p.alpha, NID_ResumeCanonical.ECanonical x
+  NID_ResumeFields.Domain.rho : NID_ResumeCanonical.KCanonical p.rho
+  NID_ResumeFields.Domain.semantic : ∀ x ∈ ↑p.semantic_alpha, NID_ResumeCanonical.KCanonical x
+  NID_ResumeFields.Domain.coordinates : ∀ z ∈ ↑p.z,
+      NID_ResumeCanonical.KCanonical z.x ∧ NID_ResumeCanonical.KCanonical z.y
+  NID_ResumeFields.Domain.claim : NID_ResumeCanonical.ECanonical p.claim
+  NID_ResumeFields.Domain.rhs : NID_ResumeCanonical.ECanonical a.rhs
+  NID_ResumeFields.Domain.power : NID_ResumeCanonical.KCanonical a.power
+  NID_ResumeFields.Domain.width : (↑a.weights).length = 64
+  NID_ResumeFields.Domain.weights : ∀ x ∈ ↑a.weights, NID_ResumeCanonical.KCanonical x
+constructor:
+  NID_ResumeFields.Domain.mk {p : AspisR1Stage2.verifier.Prepared} {a : AspisR1Stage2.verifier.Accumulator}
+    (variant : p.variant = AspisR1Stage2.transport.Variant.S2) (gamma : NID_ResumeCanonical.ECanonical p.gamma)
+    (kappa : NID_ResumeCanonical.ECanonical p.kappa) (alpha : ∀ x ∈ ↑p.alpha, NID_ResumeCanonical.ECanonical x)
+    (rho : NID_ResumeCanonical.KCanonical p.rho) (semantic : ∀ x ∈ ↑p.semantic_alpha, NID_ResumeCanonical.KCanonical x)
+    (coordinates : ∀ z ∈ ↑p.z, NID_ResumeCanonical.KCanonical z.x ∧ NID_ResumeCanonical.KCanonical z.y)
+    (claim : NID_ResumeCanonical.ECanonical p.claim) (rhs : NID_ResumeCanonical.ECanonical a.rhs)
+    (power : NID_ResumeCanonical.KCanonical a.power) (width : (↑a.weights).length = 64)
+    (weights : ∀ x ∈ ↑a.weights, NID_ResumeCanonical.KCanonical x) : NID_ResumeFields.Domain p a
+NID_ResumeFields.Domain.semantic
+NID_ResumeFields.Domain.power
+NKO_C07.at_actual
+NID_ResumeFields.Domain.width
+NID_ResumeFields.Domain.rhs
+NID_ResumeFields.Domain.alpha
+NID_ResumeFields.Domain.variant
+NID_ResumeFields.Domain.rho
+NHT_QueryTail.source
+NID_ResumeFields.returned
+NID_ResumeFields.Domain.gamma
+NID_ResumeFields.Domain.coordinates
+NID_ResumeFields.Domain.weights
+NID_ResumeFields.Domain.kappa
+NID_ResumeFields.Domain.claim
+NKO_C07.source

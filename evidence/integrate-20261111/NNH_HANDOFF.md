@@ -159,3 +159,257 @@ Final retention and handoff (L400–L401):
   owned Lean constructions and external candidate gates in NNH_REMAINING.md
   and per-field NNH_G0_MISSING.json. No LIB wait, row credit, stronger trust,
   invented native observation, final soundness claim or hidden assumption.
+
+2026-11-07 lead continuation: reconciled 400 completed actual submissions
+(L001–L401 except never-launched L048). Latest lead allowance adds 300 scopes,
+so the owned client now admits at most 700 total actual submissions. No host
+launcher, cap, timeout, reservation or validation changed. Final 16GiB scope
+remains unused and reserved for the final combined G0 import. Local disk
+47GiB free; earlier disk-full incidents retained. No unchanged rebuild/audit.
+
+Continuation item1: concrete total064 constructed (L406–438). Native row cuts
+are computed from arbitrary row prestates, followed by symbolic row/height
+induction, exact tree/three-call construction, explicit disjoint query frame
+and structural program-record induction. No native/library Spec witness is
+chosen. NNH_064Execute computes every parser/common Result and its rich trace.
+NNH_064Install.root fills the exact TAS.NMN_Root at install I0 (L435), and
+NNH_064WeakField.weak/writeFree supply the Root0-free observer (L437).
+The external SDK frame is universally quantified in the native proof; the
+empty auxiliary frame used for the canonical field is not a physical World.
+No literal-host association or final G1a/NMF_B is claimed: the SAME runtime
+digest43/error44 and header realization still belong to that installation.
+The independent stopped-C04 arms of the supplier law are retained unchanged;
+the deterministic Env-backed execution uses its returning runtime oracle.
+
+One fixed-heartbeat failure (L411) came from elaborating the concrete terminal
+constructor. It was split into a symbolic result/constructor helper (L412)
+and direct application (L413), both pass; no limits/options changed. Other
+failed source/input/representation tactics are retained and uncredited.
+NNH_RecordedCharge.bound (L405) instantiates the full-space E_rec expectation
+for a-top's actual bounded recorder, one accountLoss Q; the inclusion from
+actual top failure at that SAME recorder remains open. No Realizes filter.
+NNH_GATE_REFRESH pins immutable read-only branch evidence: NNI_ credits136
+only (583 CLOSED,16 OPEN);217 is rejected pending ruling(t) Kani controls.
+NMX has since published/audited234, not yet ledger-credited; no native credit
+is inferred here and no sibling worktree is modified.
+
+Item1 consumer gate: L439 passes NNH_G0With064.deployed_splitB_conditional
+with nmn removed from its argument list and NNH_064Install.refines supplied
+concretely. L440 audits only that NEW consumer, concrete weak field and
+a-top recorder bound: raw=collector, standard axioms only, zero swaps. This
+transitively covers the new native execution chain. The top remains a
+conditional scaffold over unfinished physical host/row/A1/A2/NMF fields.
+439 completed actual scopes throughL440;39 new of300,261 remain. No unresolved
+submission, extraction or Kani. No 16GiB scope used. Continuing item2.
+
+Item2 checkpoint: checkpoint cloned-error value transport L446, selected
+source scanner/reconstruction/lane/nullifier slots L448, scanner Ok port L450,
+actual selected checkpoint L451, reconstruction Ok port L452 pass. No A1/A2
+field yet. L454's dictionary-wide currentBase erasure probe failed and is
+retired (NNH_MissingErasure.lean.txt); minimal pointwise transports remain the
+authorized route, and no erasure fact is assumed. L455 did NOT launch: owned
+selected-import pin preflight found missing NCK_Distinct.olean. Its sources
+are being restated under NNH with the coherent canonical owner import for a
+model-only distinct-success port, not replayed or claimed as native credit.
+
+Source/header refinement: L463 proves the two exact singleton digest calls
+transport to LIBB_HashModel.H without arbitrary Env repartition invariance.
+L464's dependent rewrite is retired in favor of specializing the native frame
+to the actual Env digest (L466 passes, standard axioms). L465 was a prelaunch
+missing-object diagnostic and NEVER launched; no failed dependency is credited.
+Likewise L455/456 are prelaunch missing-object checks, not formal scopes.
+The old NCK replay helper's semireducible step* shape (L457) and concrete
+seven-account broad simplification (L462 fixed-heartbeat failure) are retired.
+Symbolic inner/outer distinct-success inductions are the replacement; no
+heartbeat/cap raise, unchanged replay or native credit is used.
+
+Concrete G1a delivered: NNH_G1aEnv.field (L467) supplies weak/refinement,
+writeFree and okHeader with no Oracle/header argument. Its Sig.readerHeader
+is the actual singleton Env hash, proved from the two SAME actual digest
+calls (L463/L466), without partition invariance. NNH_G0WithG1a's conditional
+consumer removes BOTH nmn and g1a arguments (L469). Raw consumer audit L470
+matches collect_axioms: standard-only,1,860,121 edges/58,168 reachable constants,
+6.319s,6,993,680KiB,swap0. It is still not a literal-host top; NMF_B and all
+other listed host/row/model fields remain visible. No unchanged audit rerun.
+
+G1a stage checkpoint: actual-entry producer NNH_EnvEntryNative.produce L478
+and same-record physical-frame transport NNH_064World.transport L485 /
+NNH_EnvEntryWorld.native L486 pass, standard axioms. This does NOT establish
+same-headline recorder association, a physical Missing or NMF_B. L482 indexed
+elimination shape failed; L485 generalizes the whole Frame first, preserving
+all indices. A2 support: ValueOk L479, AuthOkPrefix L481 (L480 corrected let
+layout), AuthNativeGuards L484 (L483 corrected fixed-array proof and explicit
+library binder) pass. The latter derives six actual native guard successes
+from returned evaluator success, no assumed native child success.
+482 actual completed scopes through L486 (never launched L048/455/456/465),
+82 of this fresh300 used,218 remain. No extraction/Kani/16GiB scope.
+
+A2 axiom gate finding: L530 U64Bytes and its dependent successful elaborations
+L531/532/534/540/542 carry native bv_decide axioms. NONE of these receives
+standard-axiom credit. No audited G0 root imports them. The default checker
+is retired; U64Bytes.lean.txt archives the rejected proof. Replacement is the
+new NNH_U64BytesKernel, using bit projections with fixed indices and ordinary
+kernel-checked simp lemmas. Dependent source imports are being changed to the
+replacement and will be rebuilt before any claim or audit.
+
+L543 is standard-only kernel bit projection; rebuilt dependent chain L544–548
+standard-only. Full authentication Ok source port is now NNH_AuthPort.value,
+not an A2 field. L559 whole-source dictionary congruence reached fixed200000
+heartbeats and is RETIRED, not retried. Replacement uses individual source
+fragments with callee function equalities discharged bottom-up. No caps,
+heartbeats or timeouts increased. No rows credited.
+
+Canonical source authentication -> deployed SDK is now NNH_AuthSdkPort.value
+L581 (standard only), valid at every actual argument returning Ok at L/D.
+NNH_Tx2Configuration selects the source helper slots and reservation; its
+residual Missing records remain DATA, not a total literal-host witness.
+No RowSpec233/native gate credit or A2-field credit is claimed. It is the
+pointwise model port consumed by the remaining242/241 composition. Native
+scanner/reconstruction continuation NNH_ValidateTailPort.value L564 is also
+standard only; source validation prefix still needs its named request-size
+calculation. L570's rfl-first dispatch inspected child function equalities and
+hit heartbeats; L572 passes by supplying the already-proved child equalities
+explicitly before any projection reflexivity. The whole-function L559 shape
+remains retired. No memory/timeout/heartbeat changes, no shipped files.
+
+
+## Continuation through L629
+
+Recovered L624–L626 terminal exit0; no resubmission. L623 was never invoked.
+L627 `NNH_CommonResumeDomain.source` derives original canonical field domains
+from the actual successful common run and checkpoint extent, without a native
+child-success premise. L629 `NNH_Tx2ConcreteInputs.produce` preserves the
+SAME validated result, actual index0/index6 accounts/getter slices and encoded
+1880-byte statement at the concrete source SDK. It retains residual Missing
+as explicit data; this is not A2 or literal-host installation.
+
+L595 `NNH_ValidateSdkPort.value` completes canonical validation-to-SDK Ok
+transport, after L581 authentication. L596 supplies canonical encode Ok;
+L597 canonical emit projection; L605 authValues Ok -> actual canonical064
+source code Ok; L606 exact validated proof extent. L610/L612 select source
+standard-operation slots; L615 identifies the actual digest value; L617
+selects the frozen error returned value and records source pin. L621/L625
+add a parent-only Returns evaluator/check and recover existing Dom064 at the
+callee. This introduces no library leaf Values or caller premise.
+
+All accepted roots above print only propext/Classical.choice/Quot.sound.
+L628 failed because `public` is a Lean keyword; L629 replaces that identifier.
+Range discovery L630/L631 has unknown-name errors and earns no proof credit.
+No source or library spec changed. 136 remains ledger26 credited;217 rejected
+pending native shape controls, no new credit assigned here.
+
+The owned export finalizer now parses complete multiline axioms and rejects
+nonstandard latest module roots, including the old U64 native-checker branch.
+Its new destination is NNH_exports_continuation_20261111; prior retained
+exports are preserved. This stricter script has only Python syntax validation
+so far; a host retention scope is still required before claiming a new export.
+
+A2 remaining: same SDK op11 success from canonical064 source success under
+original Dom064, then stage2 prefix/suffix and AMN.viaReturns2. A1 remaining:
+094/op10/328/345 Ok and weak Err. Literal host/Missing, physical same-recorder
+NMF_B and ExecB and failure inclusion are still open. The all-H charge helper
+is not the final deployed averaging field. Final16GiB scope remains unused.
+
+
+## Source-continuation checkpoint through L701
+
+Canonical total064 and G1a remain the only newly completed top fields from
+this continuation (L435/L467, conditional consumer L469, raw L440/L470).
+Stage2/Env adapters and136 were already installed. No A1/A2, literal NMF_B,
+ExecB or deployed averaging field is claimed. Target not established.
+
+A2: `NNH_Stage2To064.source` (L667) reduces the full actual SDK stage2 at a
+successful canonical parent value to the SAME op11 call with the SAME
+encoded statement/proof segment/checkpoint. `NNH_Stage2ResumeOccurrence`
+(L699) supplies its actual installed reader's Prepared/Accumulator/domain.
+`NNH_CommonPendingCut`/`CommonReservation`/`AuthReservation` (L673–675)
+prove successful source execution forces the Env reservation tag true.
+`NNH_ReservationOkBinding.source` (L700) then identifies the actual runtime
+reservation with canonical LIBB's reservation, using ONLY the existing host
+representation equation. No unconditional agreement of arbitrary reservations
+is claimed. The query/Merkle/finish continuation into actual sdk.op11 is
+still unproved, and no callee-success or Root0 premise replaces it.
+
+A1: `NNH_Tx1BadRoute.source` (L672) proves actual native Err for the RSL bad
+route. `NNH_Stage1NativePublic.produce` (L698) preserves actual account1,
+getter bytes and installed decoder result. `NNH_S1CodecOk` (L681) provides
+canonical decoder/validator/encoder Ok ports; op21/op24 installation is still
+needed. Full successful body/callee cuts, exact proof extent, successful route
+[3,10], original publicDom and rev3 R4 are proved in L683–701.
+`NNH_Stage1PrepareDomain.prepare/caller` (L701) supplies the original087/094
+caller domains. These are model/caller support, not new row or interface credit.
+The op10/094/328/345 transport and weak Err body/decoder-totality composition
+remain open. Returns alone is not treated as native liveness.
+
+Own source-selection correction: the emitted AdapterRw trait at lines134–135
+has eq=op1, ne=op0. `NNH_AdapterStd` reversed these TX1-only slots. It is
+superseded by `NNH_AdapterStdCorrect` (L658), `NNH_CorrectConfiguration`
+(L659) and rebuilt dependent input producers L660–701. Existing TX2 ports
+are unaffected: neither slot is reached by the TX2 body, and those ports
+already quantify over residual adapter data. No correct literal Missing is
+claimed from the old selection. All prototypes/failed receipts remain visible.
+
+All successful current helper roots above print only standard axioms.
+The six historical native-checker scopes remain rejected. The only latest
+module still having nonstandard axioms is the superseded NNH_U64Bytes;
+the stricter finalizer excludes it. No unmodified regression is rerun, and
+no new helper raw audit is claimed: none is yet consumed by a new G0 field.
+The existing consumed-field raw audits remain L440/L470 (rev3).
+
+At L701,696 actual scopes have completed. Only five IDs were never submitted:
+L048,L455,L456,L465,L623. Runner allowance is700 actual scopes, not ID suffixes.
+The final16GiB G0-only aggregation reservation is untouched. Ordinary focused
+combined import, retained-export validation and exact final accounting follow.
+
+
+## Final checkpoint: 700/700 actual scopes; no new export
+
+All700 actual submissions are terminal: original400 plus resumed300;
+0 extraction/0 Kani. Six IDs never launched:048,455,456,465,623,705.
+L705 is an owned dependency-fingerprint preflight failure, NOT a Lean launch:
+missing NNH_Stage1ZeroCurrent.olean after L704 failed. It is recorded as a
+preflight failure without exit_status/submitted:true and earns no credit.
+I erroneously requested the dependent import after its prerequisite failed;
+the unchanged launcher/fingerprint checks rejected it before submission.
+No shared infrastructure failed and no scope was resubmitted.
+
+Final focused combination L703 FAILED on duplicate equation ownership:
+obsolete NND_AccountCarrier and rev3 RSL_TX2_234 both export
+RSL.OwnedAccount.data.eq_1. The newly reused NND_ZeroCarrier import reaches
+the old owner; NNH_Stage1ZeroOk is therefore coherence-quarantined despite
+its individual standard-axiom elaboration. L704's carrier replacement failed
+on the unavailable byte_beq name. L706 instead proves that Bool equality
+pointwise from byte_eq_iff, avoiding the old AccountCarrier dependency;
+NNH_Stage1ZeroCurrent.projection/source PASS with standard axioms.
+NNH_ContinuationCombined now imports that replacement, but has NOT been
+compiled after this source/dependency change. Do not claim the new closure
+is coherent until that exact focused import passes. No failed combined root
+is admitted, and no new retained export was created. The prior resume export
+and all owned caches/objects remain retained. The stricter finalizer also
+excludes both old U64 native-checker and quarantined ZeroOk objects; that
+updated export path/validator has not been executed on this continuation.
+
+Exact last successful proof: L706,2.633599s,peakRSS5885652KiB,swap0,
+source revision388d2b5cc43 with dirty source hash pinned in its receipt.
+L702 compiled the exact unproved model target types tx2Op11/tx1Ok/tx1Err.
+These propositions are never hypotheses of a claimed final G0. L700 binds
+actual reservation on the successful064 path via existing EnvRep; L701
+produces original087/094 domains at the SAME accepted statement/proof.
+No new row caller clause. No field waits for an undelivered LIB_/LIBB_ leaf.
+
+The literal-host NMF_B/ExecB and all-H deployed averaging are still open:
+Ctx/Missing/physical World and SAME recorder/source-cut association, then
+failure inclusion at that recorder, remain required. RecordedCharge.bound
+is full-space and single-charge, but is not the missing deployed field.
+No Realizes conditioning, arbitrary adversary restriction, new trust row,
+shipped-file change, ELF rebuild, wallet/key action or push occurred.
+The sole16GiB scope remains reserved for an actual final G0 import and unused.
+The disk-full incident remains recorded in the historical handoff; no new
+ENOSPC occurred (local78GiB free at final check; per-scope host≥40GB).
+
+Next order: compile NNH_ContinuationCombined with the corrected carrier;
+finish NNH_ExactRemainingTypes.tx2Op11's query/Merkle/finish model suffix,
+compose A2, then A1 Ok/weakErr and literal-host/NMF_B/ExecB/averaging.
+Ledger26 refresh remains26980b13109f:136 CREDITED and plugged;
+217 REJECTED pending Kani controls,234 uncredited mathematical candidate.
+No new principal/native row is credited by this job.

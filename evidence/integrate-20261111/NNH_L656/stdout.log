@@ -1,0 +1,16 @@
+NNH_generated/NNH_RequestMagic.lean:17:63: error: Tactic `rfl` failed: The left-hand side
+  List.map byte ↑magic
+is not definitionally equal to the right-hand side
+  RSL.REQUEST_MAGIC
+
+data : Slice U8
+length : 4 ≤ (↑data).length
+same : List.take 4 (bytes data) = RSL.REQUEST_MAGIC
+⊢ List.map byte ↑magic = RSL.REQUEST_MAGIC
+NNH_generated/NNH_RequestMagic.lean:19:2: error: Type mismatch
+  same
+has type
+  List.take 4 (bytes data) = RSL.REQUEST_MAGIC
+but is expected to have type
+  List.map byte (List.take 4 ↑data) = RSL.REQUEST_MAGIC
+'NNH_RequestMagic.get' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

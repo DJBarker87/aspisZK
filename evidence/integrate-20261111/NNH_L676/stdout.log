@@ -1,0 +1,34 @@
+AspisS6CurrentCodecInstallation.decode (bytes : Slice U8) :
+  Result (core.result.Result AspisS6CurrentCodecInstallation.Statement AspisS6CurrentCodecInstallation.PE)
+NMT_345.decodeCall (bytes : Slice U8) : Result (core.result.Result NMT_345.Statement NMT_345.PE)
+NMT_345.validateCall (s : NMT_345.Statement) : Result (core.result.Result Unit NMT_345.FormatError)
+NMT_345.encodeCall (a : NMT_345.Afterstate) : Result (core.result.Result (Std.Array U8 688#usize) NMT_345.EncodeError)
+def AspisS6CurrentCodecInstallation.decode : Slice U8 →
+  Result (core.result.Result AspisS6CurrentCodecInstallation.Statement AspisS6CurrentCodecInstallation.PE) :=
+fun bytes => AspisS6CurrentBoxedDecoderSource.decode_public_statement_box AspisS6CurrentCodecInstallation.boxOps bytes
+def NMT_345Dec.fromT8 : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 :=
+fun x =>
+  match x with
+  | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer x0 x1 =>
+    NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+      (NMT_345Dec.fromT7 x0) (NMT_345Dec.fromT3 x1)
+  | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal x0 x1 =>
+    NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+      (NMT_345Dec.fromT7 x0) (NMT_345Dec.fromT2 x1)
+LIBC_Bytes.to_native
+LIBC_WeightsNew.native_arguments
+LIBC_S1Sources.decode
+LIBC_Bytes.from_native
+LIBC_ExpandValues.native_result
+LIBC_WideView.native_arguments
+LIBC_S1.reaches_native
+LIBC_S1.decoder
+LIBC_Usize.from_native
+NMT_345.decode_closed
+LIBC_ExpandSemantic.native_result
+LIBC_CanonicalScan.native_result
+LIBC_CheckValuesDomain.native
+LIBC_Prepared.native_same_arguments
+LIBC_ExpandValues.native_arguments
+LIBC_PreparedLaw.native_result

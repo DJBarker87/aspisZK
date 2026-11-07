@@ -1,0 +1,264 @@
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Result.ok false
+theorem NBG_Utilities.lists : ∀ (xs ys : List U8),
+  xs.length = ys.length →
+    List.allM
+        (fun x =>
+          match x with
+          | (x, y) => do
+            let b ← core.cmp.PartialEqU8.ne x y
+            Result.ok (decide ¬b = true))
+        (xs.zip ys) =
+      Result.ok (decide (xs = ys)) :=
+fun xs ys width =>
+  List.rec (motive := fun xs =>
+    ∀ (ys : List U8),
+      xs.length = ys.length →
+        List.allM
+            (fun x =>
+              match x with
+              | (x, y) => do
+                let b ← core.cmp.PartialEqU8.ne x y
+                Result.ok (decide ¬b = true))
+            (xs.zip ys) =
+          Result.ok (decide (xs = ys)))
+    (fun ys width =>
+      List.casesOn (motive := fun t =>
+        ys = t →
+          List.allM
+              (fun x =>
+                match x with
+                | (x, y) => do
+                  let b ← core.cmp.PartialEqU8.ne x y
+                  Result.ok (decide ¬b = true))
+              ([].zip ys) =
+            Result.ok (decide ([] = ys)))
+        ys
+        (fun h =>
+          Eq.ndrec (motive := fun ys =>
+            [].length = ys.length →
+              List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← core.cmp.PartialEqU8.ne x y
+                      Result.ok (decide ¬b = true))
+                  ([].zip ys) =
+                Result.ok (decide ([] = ys)))
+            (fun width =>
+              Eq.refl
+                (List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← core.cmp.PartialEqU8.ne x y
+                      Result.ok (decide ¬b = true))
+                  ([].zip [])))
+            (Eq.symm h) width)
+        (fun y ys_1 h =>
+          Eq.ndrec (motive := fun ys =>
+            [].length = ys.length →
+              List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← core.cmp.PartialEqU8.ne x y
+                      Result.ok (decide ¬b = true))
+                  ([].zip ys) =
+                Result.ok (decide ([] = ys)))
+            (fun width => Classical.byContradiction fun a => NBG_Utilities.lists._proof_1 ys_1 width) (Eq.symm h) width)
+        (Eq.refl ys))
+    (fun x xs ih ys width =>
+      List.casesOn (motive := fun t =>
+        ys = t →
+          List.allM
+              (fun x =>
+                match x with
+                | (x, y) => do
+                  let b ← core.cmp.PartialEqU8.ne x y
+                  Result.ok (decide ¬b = true))
+              ((x :: xs).zip ys) =
+            Result.ok (decide (x :: xs = ys)))
+        ys
+        (fun h =>
+          Eq.ndrec (motive := fun ys =>
+            (x :: xs).length = ys.length →
+              List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← core.cmp.PartialEqU8.ne x y
+                      Result.ok (decide ¬b = true))
+                  ((x :: xs).zip ys) =
+                Result.ok (decide (x :: xs = ys)))
+            (fun width => Classical.byContradiction fun a => NBG_Utilities.lists._proof_2 xs width) (Eq.symm h) width)
+        (fun y ys_1 h =>
+          Eq.ndrec (motive := fun ys =>
+            (x :: xs).length = ys.length →
+              List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← core.cmp.PartialEqU8.ne x y
+                      Result.ok (decide ¬b = true))
+                  ((x :: xs).zip ys) =
+                Result.ok (decide (x :: xs = ys)))
+            (fun width =>
+              have tail := Nat.succ.inj width;
+              if same : x = y then
+                Eq.ndrec (motive := fun y =>
+                  (x :: xs).length = (y :: ys_1).length →
+                    List.allM
+                        (fun x =>
+                          match x with
+                          | (x, y) => do
+                            let b ← core.cmp.PartialEqU8.ne x y
+                            Result.ok (decide ¬b = true))
+                        ((x :: xs).zip (y :: ys_1)) =
+                      Result.ok (decide (x :: xs = y :: ys_1)))
+                  (fun width =>
+                    have comp :=
+                      of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Decidable.decide.congr_simp (¬x = x) False
+                                  (Eq.trans (congrArg Not (eq_self x)) not_true_eq_false))
+                                (decide_false instDecidableFalse)))
+                            false)
+                          (eq_self false));
+                    Eq.mpr
+                      (id
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg List.allM
+                                    (funext fun x =>
+                                      bind_tc_ok (core.cmp.impls.PartialEqU8.ne x.1 x.2) fun y =>
+                                        Result.ok (decide ¬y = true)))
+                                  ((x, x) :: xs.zip ys_1))
+                                (List.allM.eq_2
+                                  (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) (x, x)
+                                  (xs.zip ys_1)))
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Bind.bind
+                                    (congrArg Result.ok
+                                      (Decidable.decide.congr_simp
+                                        (¬core.cmp.impls.PartialEqU8.ne (x, x).1 (x, x).2 = true) (¬false = true)
+                                        (congrArg Not (congrFun' (congrArg Eq comp) true)))))
+                                  fun __do_lift =>
+                                  match __do_lift with
+                                  | true =>
+                                    List.allM
+                                      (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                      (xs.zip ys_1)
+                                  | false => pure false)
+                                (bind_tc_ok (decide ¬false = true) fun y =>
+                                  match y with
+                                  | true =>
+                                    List.allM
+                                      (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                      (xs.zip ys_1)
+                                  | false => pure false))))
+                          (Result.ok (decide (x :: xs = x :: ys_1)))))
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (Eq
+                                (List.allM (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                  (xs.zip ys_1)))
+                              (congrArg Result.ok
+                                (Decidable.decide.congr_simp (x :: xs = x :: ys_1) (xs = ys_1)
+                                  (Eq.trans (List.cons.injEq x xs x ys_1)
+                                    (Eq.trans (congrFun' (congrArg And (eq_self x)) (xs = ys_1))
+                                      (true_and (xs = ys_1))))))))
+                          (Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (congrFun'
+                                  (congrArg List.allM
+                                    (funext fun x =>
+                                      bind_tc_ok (core.cmp.impls.PartialEqU8.ne x.1 x.2) fun y =>
+                                        Result.ok (decide ¬y = true)))
+                                  (xs.zip ys_1)))
+                              (Result.ok (decide (xs = ys_1))))
+                            (ih ys_1 tail)))))
+                  same width
+              else
+                have comp :=
+                  of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (Decidable.decide.congr_simp (¬x = y) True
+                              (Eq.trans (congrArg Not (eq_false same)) not_false_eq_true))
+                            (decide_true instDecidableTrue)))
+                        true)
+                      (eq_self true));
+                Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg List.allM
+                                (funext fun x =>
+                                  bind_tc_ok (core.cmp.impls.PartialEqU8.ne x.1 x.2) fun y =>
+                                    Result.ok (decide ¬y = true)))
+                              ((x, y) :: xs.zip ys_1))
+                            (List.allM.eq_2 (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                              (x, y) (xs.zip ys_1)))
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Bind.bind
+                                (congrArg Result.ok
+                                  (Decidable.decide.congr_simp (¬core.cmp.impls.PartialEqU8.ne (x, y).1 (x, y).2 = true)
+                                    (¬True)
+                                    (congrArg Not (Eq.trans (congrFun' (congrArg Eq comp) true) (eq_self true))))))
+                              fun __do_lift =>
+                              match __do_lift with
+                              | true =>
+                                List.allM (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                  (xs.zip ys_1)
+                              | false => pure false)
+                            (bind_tc_ok (decide ¬True) fun y =>
+                              match y with
+                              | true =>
+                                List.allM (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                  (xs.zip ys_1)
+                              | false => pure false))))
+                      (Result.ok (decide (x :: xs = y :: ys_1)))))
+                  (id
+                    (of_eq_true
+                      (Eq.trans
+                        (congrArg (Eq (Result.ok false))
+                          (congrArg Result.ok
+                            (Eq.trans
+                              (Decidable.decide.congr_simp (x :: xs = y :: ys_1) False
+                                (Eq.trans (List.cons.injEq x xs y ys_1)
+                                  (Eq.trans (congrFun' (congrArg And (eq_false same)) (xs = ys_1))
+                                    (false_and (xs = ys_1)))))
+                              (decide_false instDecidableFalse))))
+                        (eq_self (Result.ok false))))))
+            (Eq.symm h) width)
+        (Eq.refl ys))
+    xs ys width
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯

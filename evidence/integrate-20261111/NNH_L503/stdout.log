@@ -1,0 +1,16 @@
+NNH_generated/NNH_EndianInspect.lean:2:0: error: Unknown option `pp.maxDepth`
+def Aeneas.Std.core.num.U64.to_le_bytes : Aeneas.Std.U64 → Aeneas.Std.Array Aeneas.Std.U8 8#usize :=
+fun x => ⟨List.map Aeneas.Std.UScalar.mk x.bv.toLEBytes, ⋯⟩
+def NND_Carrier.slot : Aeneas.Std.U64 → UInt64 :=
+fun x => { toBitVec := x.bv }
+def NND_Carrier.byte : Aeneas.Std.U8 → UInt8 :=
+fun x => { toBitVec := x.bv }
+UInt64.toNat_shiftRight (a b : UInt64) : (a >>> b).toNat = a.toNat >>> (b.toNat % 64)
+UInt64.toNat_toUInt8 (x : UInt64) : x.toUInt8.toNat = x.toNat % 2 ^ 8
+BitVec.toNat_ushiftRight {n : ℕ} (x : BitVec n) (i : ℕ) : (x >>> i).toNat = x.toNat >>> i
+def Aeneas.Std.core.cmp.PartialEq.ne.trait_default : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool :=
+fun {Self Rhs} PartialEqInst self other => Aeneas.Std.core.cmp.PartialEq.ne.default PartialEqInst.eq self other
+@[reducible] def AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey : AdapterRw.Ops →
+  Aeneas.Std.core.cmp.PartialEq AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.Pubkey :=
+fun ops => { eq := ops.op36, ne := fun self other => Aeneas.Std.core.cmp.PartialEq.ne.default ops.op36 self other }

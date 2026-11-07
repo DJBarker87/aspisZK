@@ -1,0 +1,73 @@
+NNH_generated/NNH_Stage2Suffix.lean:19:182: error: unsolved goals
+ops : Ops
+val : r1_pool_adapter.ValidatedAsqa
+proof checkpoint segment : Slice U8
+encoded : Std.Array U8 1880#usize
+proofSize : proof.len = 58295#usize
+validatedSize : val.proof_length = 57607#usize
+late : ops.op19 = ok 1520#usize
+encode : ops.op22 val.statement = ok (core.result.Result.Ok encoded)
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 688#usize, «end» := 58295#usize } =
+    ok segment
+encodedSize : encoded.to_slice.len = 1880#usize
+⊢ (if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+      else do
+        let o2 ← observer ops
+        let r6 ← ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) encoded.to_slice segment checkpoint () o2
+        let r7 ←
+          match r6 with
+            | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+            | core.result.Result.Err e => do
+              let e1 ←
+                (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error solana_program_error.ProgramError).call_once ops.op44
+                    e
+              ok (core.result.Result.Err e1)
+        let cf5 ←
+          match r7 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf5 with
+          | core.ops.control_flow.ControlFlow.Continue a => ops.op53 val.statement
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    do
+    let obs ← observer ops
+    let reply ← ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) encoded.to_slice segment checkpoint () obs
+    let mapped ←
+      match reply with
+        | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+        | core.result.Result.Err e => do
+          let e1 ←
+            (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error solana_program_error.ProgramError).call_once ops.op44 e
+          ok (core.result.Result.Err e1)
+    let cf ←
+      match mapped with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ops.op53 val.statement
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame solana_program_error.ProgramError) residual
+NNH_generated/NNH_Stage2Suffix.lean:26:73: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲validatedSize, ̲NNH_Stage2Sizes.checkedEnd, ̲lift, ̲core.option.Option.ok_or,
+     ̲core.result.Result.Insts.CoreOpsTry.branch, ̲proofSize, ̲bne_self_eq_false,i̵f̵_̵f̵a̵l̵s̵ ̲e,̵e̵ncode,
+     ̲core.result.Result.map_err, ̲Port4C_GeometryStd.mapError]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_Stage2Suffix.lean:29:53: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲encodedSize, ̲bne_self_eq_false,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲range]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNH_Stage2Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

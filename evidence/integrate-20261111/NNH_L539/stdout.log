@@ -1,0 +1,31 @@
+NNH_generated/NNH_AuthSevenShape.lean:33:38: error: Application type mismatch: The argument
+  hxs
+has type
+  ↑xs = [p, m, c, l, r, e, v]
+but is expected to have type
+  [p, m, c, l, r, e, v] = [p, m, c, l, r, e, v]
+in the application
+  And.intro hxs
+NNH_generated/NNH_AuthSevenShape.lean:34:16: error: Type mismatch: After simplification, term
+  success
+ has type
+  @Eq (Except RSL.ProgramError RSL.Authenticated)
+    (match List.map account [p, m, c, l, r, e, v] with
+    | [p_1, m_1, c_1, l_1, r_1, e_1, v_1] =>
+      NNH_AuthEval.bodyValue L D
+        { verifier_program := key program, accounts := List.map account [p, m, c, l, r, e, v], pool_program := key pool,
+          output_lane := byte lane, current_slot := NND_Carrier.slot slot }
+        p_1 m_1 c_1 l_1 r_1 e_1 v_1 env
+    | x =>
+      Except.error
+        (if (List.map account [p, m, c, l, r, e, v]).length < 7 then RSL.ProgramError.notEnoughAccountKeys
+        else RSL.ProgramError.invalidArgument))
+    (Except.ok out)
+but is expected to have type
+  @Eq (Except RSL.ProgramError RSL.Authenticated)
+    (NNH_AuthEval.bodyValue L D
+      { verifier_program := key program, accounts := List.map account [p, m, c, l, r, e, v], pool_program := key pool,
+        output_lane := byte lane, current_slot := NND_Carrier.slot slot }
+      (account p) (account m) (account c) (account l) (account r) (account e) (account v) env)
+    (Except.ok out)
+'NNH_AuthSevenShape.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

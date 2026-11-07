@@ -1,0 +1,95 @@
+NNH_generated/NNH_AuthMasterStep.lean:30:23: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.map_err`
+NNH_generated/NNH_AuthMasterStep.lean:20:116: error: unsolved goals
+base : Ops
+env : RSL.Env
+program pool : solana_pubkey.Pubkey
+m c l r e : r1_pool_adapter.owned.OwnedAccount
+lane : U8
+slot : U64
+data : Slice U8
+master : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+read : r1_pool_adapter.owned.OwnedAccount.data (NNH_Tx2ModelSlots.install base env) m = ok (core.result.Result.Ok data)
+decode : NKF_MasterBox.reference data = ok (core.result.Result.Ok master)
+pool_eq : master.identity.pool = m.key
+mask_eq : master.initialized_lane_mask = 255#u8
+pda :
+  (NNH_Tx2ModelSlots.install base env).op38
+      (Array.make 3#usize
+          [r1_pool_adapter.PAIR_FOREST_MASTER_SEED, master.identity.asset_mint.to_slice,
+            (Array.make 1#usize [master.bump] ⋯).to_slice]
+          ⋯).to_slice
+      pool =
+    ok (core.result.Result.Ok m.key)
+registry :
+  r1_pool_adapter.owned.authenticate_invariant_release_registry (NNH_Tx2ModelSlots.install base env) program pool m
+      master r e slot =
+    ok (core.result.Result.Ok ())
+decoder : (NNH_Tx2ModelSlots.install base env).op48 data = ok (core.result.Result.Ok master)
+⊢ (do
+      let r9 ←
+        core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_asq8_accounts.closure.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+            (core.result.Result.Ok m.key) ()
+      let cf8 ←
+        match r9 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf8 with
+        | core.ops.control_flow.ControlFlow.Continue val2 => do
+          let b1 ←
+            core.cmp.PartialEq.ne.trait_default
+                (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (NNH_Tx2ModelSlots.install base env)) val2 m.key
+          if b1 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else
+              NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot m.key
+                master
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+            residual) =
+    NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot m.key master
+NNH_generated/NNH_AuthMasterStep.lean:24:31: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵c̵o̵d̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲d̲e̲c̲o̲d̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_AuthMasterStep.lean:30:61: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵N̵N̵H̵_̵A̵u̵t̵h̵S̵l̵o̵t̵F̵a̵c̵t̵s̵.̵n̵e̵_̵s̵e̵l̵f̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵r̵e̵g̵i̵s̵t̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲N̲N̲H̲_̲A̲u̲t̲h̲S̲l̲o̲t̲F̲a̲c̲t̲s̲.̲n̲e̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲r̲e̲g̲i̲s̲t̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_AuthMasterStep.lean:31:2: warning: This simp argument is unused:
+  NNH_AuthSlotFacts.ne_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵N̵N̵H̵_̵A̵u̵t̵h̵S̵l̵o̵t̵F̵a̵c̵t̵s̵.̵n̵e̵_̵s̵e̵l̵f̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵r̵e̵g̵i̵s̵t̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲r̲e̲g̲i̲s̲t̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_AuthMasterStep.lean:31:28: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲Aeneas.Std.core.result.Result.map_err,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵NNH_AuthSlotFacts.ne_self,B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵ ̲if_false, ̲registry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_AuthMasterStep.lean:31:47: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲Aeneas.Std.core.result.Result.map_err,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵NNH_AuthSlotFacts.ne_self, ̲Bool.false_eq_true,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̲ ̲ ̲ ̲registry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNH_AuthMasterStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

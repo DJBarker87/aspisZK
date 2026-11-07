@@ -1,0 +1,60 @@
+{"attempt": "NNH_L414", "exit_status": 1, "wall_seconds": 3.0012259450741112, "peak_rss_kib": "5914072", "swaps": "0", "print_axioms": ["'AspisR1.NNH_MerkleLoopExecute.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_MerkleLoopExecute.lean:44:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  MultiproofConeLeafContent.next f.scratch (Port4B_NativeLeaf.decodedIndex (key f)) (digest H proof kind lo f) bound
+in the target expression
+  Loop H proof root batch kind lo n slot f
+    (match none with
+      | none =>
+        ([event H proof kind lo f], core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, f.scratch.idx,
+          f.scratch.val)
+      | some next =>
+        (event H proof kind lo f :: (run H proof root batch kind lo slot fuel (NLL.advance f next)).1,
+          (run H proof root batch kind lo slot fuel (NLL.advance f next)).2)).1
+    (match none w
+...
+oot batch kind lo slot fuel (NLL.advance f next)).2)).2
+
+case succ.some
+H : Bytes → State
+proof : Slice U8
+root : Root
+batch : ℕ
+kind lo n slot : Usize
+small : ↑n ≤ 16
+fuel : ℕ
+ih :
+  ∀ (f : Frame),
+    ↑f.position + fuel = ↑n →
+      ↑f.scratch.n + fuel ≤ 16 →
+        Loop H proof root batch kind lo n slot f (run H proof root batch kind lo slot fuel f).1
+          (run H proof root batch kind lo slot fuel f).2
+f : Frame
+span : ↑f.position + (fuel + 1) = ↑n
+room : ↑f.scratch.n + (fuel + 1) ≤ 16
+more : f.position < n
+bound : ↑f.scratch.n < 16
+next : MultiproofConeRef.reference.Scratch
+source :
+  MultiproofConeRef.reference.leaf_step f.scratch (Port4B_NativeLeaf.decodedIndex (key f)) (digest H proof kind lo f) =
+    Result.ok (some next)
+step :
+  MultiproofConeLeafContent.next f.scratch (Port4B_NativeLeaf.decodedIndex (key f)) (digest H proof kind lo f) bound =
+    some next
+⊢ Loop H proof root batch kind lo n slot f
+    (match some next with
+      | none =>
+        ([event H proof kind lo f], core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, f.scratch.idx,
+          f.scratch.val)
+      | some next =>
+        (event H proof kind lo f :: (run H proof root batch kind lo slot fuel (NLL.advance f next)).1,
+          (run H proof root batch kind lo slot fuel (NLL.advance f next)).2)).1
+    (match some next with
+      | none =>
+        ([event H proof kind lo f], core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, f.scratch.idx,
+          f.scratch.val)
+      | some next =>
+        (event H proof kind lo f :: (run H proof root batch kind lo slot fuel (NLL.advance f next)).1,
+          (run H proof root batch kind lo slot fuel (NLL.advance f next)).2)).2
+'AspisR1.NNH_MerkleLoopExecute.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf3e38da98a35479c8b7a126d083043ac.scope; invocation ID: e801adbbe9524df296f3c2fbd42d28c9

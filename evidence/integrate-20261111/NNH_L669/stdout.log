@@ -1,0 +1,35 @@
+NNH_generated/NNH_Tx1RouteCompare.lean:29:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => Result.ok (decide _a) = Result.ok (decide (bytes data = [3, byte tag]))
+Error: Application type mismatch: The argument
+  instDecidableEqList ↑data [3#u8, tag]
+has type
+  Decidable (↑data = [3#u8, tag])
+but is expected to have type
+  Decidable _a
+in the application
+  @decide _a (instDecidableEqList ↑data [3#u8, tag])
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+missing : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE
+env : RSL.Env
+err : NFN_NEW_GeometryDictionary.CE
+reserve : NP6_StdModel.Reservation
+data : Slice U8
+tag : U8
+same : ↑data = [3#u8, tag] ↔ bytes data = [3, byte tag]
+⊢ Result.ok (decide (↑data = [3#u8, tag])) = Result.ok (decide (bytes data = [3, byte tag]))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    data
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑data
+'NNH_Tx1RouteCompare.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

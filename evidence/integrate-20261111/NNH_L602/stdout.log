@@ -1,0 +1,49 @@
+NKO_C07.at_actual (wr rr : NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (proofArg : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights))
+  (entered :
+    NJU_CommonObserved.Event.query proofArg p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events) :
+  proofArg = proof ∧
+    NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+      NID_ResumeFields.Domain p a ∧
+        a.next = 10#usize ∧
+          pending = NFW_QueryResume.pending a ∧
+            (↑a.weights).length = 64 ∧
+              (↑pending.raw).length = 64 ∧
+                (↑geometry.inverses).length = 12 ∧
+                  (↑geometry.line_z).length = 12 ∧ NHT_PacketOps.powers 29#usize p.gamma = Aeneas.Std.Result.ok g
+NHT_PacketOps.query_source (base : NHT_PacketOps.QueryOps) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator) (width : (↑a.weights).length = 64)
+  (weights : NFS_NEV_WeightDomains.Canonical (NEV_AccumulateCarriers.fromAccumulator a).weights)
+  (rhs : NBO_TailDomain.WideCanonical a.rhs) (power : NBF_PowerStep.Canonical a.power)
+  (rho : NBF_PowerStep.Canonical p.rho) (start : ↑a.next = 10) (gamma : NFN_LPi_FieldValues.NE)
+  (canonicalGamma : NFN_LPi_FieldValues.canonE gamma) (g : Aeneas.Std.Array NFN_LPi_FieldValues.NE 29#usize)
+  (powers : FIo_Native.weights.powers 29#usize gamma = Aeneas.Std.Result.ok g)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (qPlace gPlace : ℕ) :
+  NHT_PacketOps.query base qPlace gPlace proof p a (FIp_DotsAdapter.fromArray g) none geometry
+      (NFW_QueryResume.pending a) 22#usize =
+    NHT_ResultPort.action
+      (Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed base) proof p a
+        (FIp_DotsAdapter.fromArray g) none geometry (NFW_QueryResume.pending a) 22#usize)
+NKO_C06.returned (wr rr : NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H)
+  (weights : Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31) (pending : VTop_Stages.verifier.BatchedWeights)
+  (entered :
+    NJU_CommonObserved.Event.pending weights (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending)) ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events) :
+  (↑pending.raw).length = 64 ∧ pending.terms = 0#usize
+NJJ_Common.source (unused : VTop_Stages.Ops) (weightReservation rawReservation : NP6_StdModel.Reservation)
+  (merkle : NJJ_Common.Merkle) (finish : NJJ_Common.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) :
+  NHT_EmittedCommon.tx2_common (NJJ_Common.install unused weightReservation rawReservation (fun {H} => merkle) finish) d
+      pub proof ck hash none =
+    NJJ_Common.run weightReservation rawReservation (fun {H} => merkle) finish d pub proof ck hash none
+NLB_Parent.finish (r : NP6_StdModel.Reservation) : NJU_CommonObserved.Finish
+NIG_Slots.installed (r : NP6_StdModel.Reservation) : Port3_NativeFinishBody.Ops NIG_Slots.W
