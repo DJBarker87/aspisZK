@@ -39,3 +39,5 @@ caller clause as conclusions. It is a target only, not a proved packet or root.
 The existing NLJ module is imported read-only and never edited. Every schema
 change and every retained premise will be listed in NLV_CALLER_CLAUSES.json;
 no success/endpoint/callee Result premise is admitted at a row root.
+
+The strengthened resource schemas typecheck (L095/L096). Typechecking is NOT certification that a schema captures every ledger caller/resource clause. Physical typed payload decoding, nested Vec ownership/shared/exclusive borrow interpretation and every179 caller-domain conclusion still need review against the exact native/ABI observation. NLV_RowSpec087 is a proposed stronger target, NOT a certified full-strength087 packet. Its source_projection/full_source_cut prove SOURCE support only. Neither is supplied to a native094 root; none exists. The parameterized NLV.Invocation fold leaves the complete physical producer OPEN and cannot turn this target or the weak sibling schema into closure.

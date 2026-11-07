@@ -17,3 +17,5 @@ No failure earns row credit. No timeout/cap was raised.
   RETIRED. No unchanged replay or limit increase. Replacement splits the
   emission definitions, pair-elimination lemma, individual suffix transports,
   and focused structural source normalization. No recurrence normalization.
+
+L103 prelaunch refused subprocess.olean: link config put own Python script first and the strict Lean import parser treated its import as a Lean module. No scope launched. L104 repair explicitly lists actual Lean drivers first, retaining all C/Python source inputs and stronger actual dependency coverage. No validation, cap or timeout weakened.

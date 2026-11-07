@@ -15,3 +15,5 @@ It is UNPROVED and must be reviewed against the ledger before use. No resource
 or native087 root exists. NLV does not replace that obligation with the weak
 source clause, and emits no094 root. The full-resource interface itself must
 be tied to the actual frozen heap/ABI through existing P6, not a chosen witness.
+
+Completeness review remains OPEN even for the stronger NLV target: exact179 semantic/compact/opening/query/rho caller domains and nested allocation/borrow decoding must be spelled out and derived from native observations. No claim that a typechecked target by itself is a complete be(1) packet is made. It is never consumed as a094 native root parameter.

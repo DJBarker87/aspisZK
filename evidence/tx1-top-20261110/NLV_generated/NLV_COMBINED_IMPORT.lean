@@ -4,6 +4,7 @@ import NLC_COMBINED_IMPORT
 import NLN_TX1_081
 import NLV_Algebra
 import NLV_All
+import NLV_BatchInstall
 import NLV_Continuation
 import NLV_CutFold
 import NLV_Deployed
@@ -98,6 +99,12 @@ import NLV_Tree
 #check @AspisR1.NLV_Algebra.right
 #print axioms AspisR1.NLV_Algebra.same
 #check @AspisR1.NLV_Algebra.same
+#print axioms AspisR1.NLV_BatchInstall.at_call
+#check @AspisR1.NLV_BatchInstall.at_call
+#print axioms AspisR1.NLV_BatchInstall.event_extents
+#check @AspisR1.NLV_BatchInstall.event_extents
+#print axioms AspisR1.NLV_BatchInstall.event_inputs
+#check @AspisR1.NLV_BatchInstall.event_inputs
 #print axioms AspisR1.NLV_Deployed.dictionary
 #check @AspisR1.NLV_Deployed.dictionary
 #print axioms AspisR1.NLV_Deployed.digest_slot
