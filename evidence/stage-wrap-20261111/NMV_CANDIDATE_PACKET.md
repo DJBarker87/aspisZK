@@ -33,7 +33,7 @@ K060 covers rejected routes. K058/K059 give the exact canonical KMX copy
 pass/fail. Corresponding reply/footprint failures are retained in
 NMV_BN_NATIVE.json. K045/K046 remain retired timeouts without credit.
 
-K061/K062 now fail ONLY the intended child-count assertions, with unchanged
+K063/K064 now fail ONLY the intended child-count assertions, with unchanged
 Log<0>. Parent arguments change from &owned to &owned[1..].
 NMV_CONTROL_RESUME.json compares exact source fingerprints, environments,
 all-crate features, graph/offline/post-lock evidence against reused K035/K041.
@@ -75,3 +75,13 @@ ReviewedTranscription-TX1:344/TX2:240, SDK/std/runtime rows remain retained
 option-A reclassification. No trust row is changed or claimed removed.
 Physical A3/A4/A5 and coherent release replay remain outside this packet.
 Target not yet established.
+
+Final exact receiver fingerprint: K063/K064 embed the ENTIRE archived
+K035/K041 harness source unchanged, followed only by the prepared two-control
+appendix. The checker requires byte equality of that prefix, the entire
+fission source and supporting module sources, all command arguments except
+harness selection, every Rust environment entry and every crate feature.
+LEAN_PATH alone adds the NNC seed (irrelevant to cargo-kani); this is recorded.
+K061/K062 used the later descriptor receiver and are supplementary failures,
+not the final exact-prefix pairing. The stricter comparison repairs the
+initial review's omission of receiver-prefix equality. No positive rerun.

@@ -1,3 +1,64 @@
+# Current controls-only resume disposition (read first)
+
+**TX1:344/TX2:240 parent folds are CANDIDATE-ready under (bn), with full
+345/241 RowSpec parameters. No ledger credit or release claim.**
+
+Final exact-source parent controls K063/K064 FAIL only at count7/3 assertions,
+exit1,3.174s/369576KiB and3.261s/376376KiB,swap0. They embed the COMPLETE
+archived passing K035/K041 harness prefix unchanged; frozen/fission/support
+source, Rust environment, command (except selected harness), all features and
+post-lock hashes match. Only unused LEAN_PATH adds the NNC seed.
+NMV_CONTROL_RESUME.json and NMV_control_review.py enforce these comparisons.
+K061/K062 also fail but used later descriptor fields; retained as supplementary
+evidence, superseded for exact-prefix credit. The initial review omitted this
+prefix check; the stricter check and two changed-source controls correct it.
+All old receiver-log controls remain excluded. No unchanged pass was rerun.
+
+Deliverables: NMV_CandidateRoots.root344/root240 and exact TAS packet;
+NMV_NNCWeak.weak240/frame/sdk specialize the NNC write-free law factory with
+its explicit trace renderer. Root0/selected-run premises are absent from the
+weak instance. Full canonical345/241 remain parameters because neither sibling
+has a candidate at NMV_RESUME_SIBLINGS.json's committed reviews. Full G2 event
+frame retains canonical PoolLaws for scan226/reconstruct224/encode165/emit219;
+those concrete library installations and native064 renderer are not silently
+assumed discharged. See NMV_CANDIDATE_PACKET.md and NMV_REMAINING.md.
+
+L126 focused ledger24+NMV+NNC combined import PASS18.142s/6744444KiB/swap0.
+L127 raw ax2 PASS18.925s/6756572KiB/swap0 for all6 new roots, collector
+agreement and standard axioms only. Each new top's printed axioms appear in
+focused and final receipts. Old129 roots/eight fixtures reused, not rerun.
+L123/L124 failed namespace elaborations are retained/excluded; changed L125
+passes. No emitted body, fresh extraction, whole-manifest/all-root audit or
+ELF reproduction claim. ReviewedTranscription344/240 and existing SDK/std/runtime
+trust retained as option-A reclassification, no trust-file edit.
+
+L128 retention PASS0.495s/86500KiB/swap0:320 selected objects,109 copied
+seed files rehashed,124 own/support export artifacts; inherited launcher
+61cf135a… unchanged, no inherited dependency variants. Hostfree95413104640bytes;
+workspace1777632099bytes,zero deletions. Export remains
+/home/dombarker/project-offloads/codex-cx-stage-wrap-20261111/NMV_exports_20261111.
+Prepend it to NMV_ENV's exact LEAN_PATH; import NMV_CONTROLS_COMBINED_IMPORT.
+NNC_NMV/RSL242 nonselected variant was not copied; actual selected hash matches.
+
+This resume uses **0/0 extraction,8/136 formal scopes,4/12 controls-only Kani**.
+All scopes6G/8G/no-swap/64tasks,Lean-M7000,one scope at a time,allowed:true
+AND exit0,share<6,disk>=40GB. No timeout/cap increase or retired rerun.
+Member-by-member under80% review is in NMV_REMAINING.md: owned folds are done;
+remaining concrete child/library/physical installations are absent or outside
+the slice, and the lead owns ledger review. No duplicate replay is warranted.
+
+No crates/programs/Cargo.lock,trust row,security game/metric,key,wallet/account,
+fund/authority,sibling/session-A worktree or shared infrastructure changed.
+No ELF rebuild trigger; inherited pins f8c0ec72…/63ad3e9c…/e0e49c34… are
+inventory only.100-bit PER-ATTEMPT/privacy/two-transaction target unestablished.
+Stage commits6eef3ffe88b(controls),cbe9afb2626(packet/NNC),then final gates.
+Final local receipt validation PASS:135 own raw/printed standard-only roots,
+8 reused fixtures,213 archived inputs,937 compressed SHA pairs;zero files>20MB.
+NMV_NNC_PROVENANCE.json matches all8 reached NNC objects to its committed export.
+No push. Historical notes below retain superseded findings and budgets.
+
+---
+
 CURRENT (bn continuation): target not established; 344/240 remain OPEN. Full-carrier concrete window folds and exact TAS fields compile; mandatory parent-argument controls are NOT satisfied (NMV-CONTROL-1). Children345/241 and four canonical library effect-law installations remain open. Historical stop reasons and progress claims below are superseded where noted.
 
 FINAL STATUS: target not established; no CANDIDATE wrapper root, no row credit. Canonical full-strength parametric transcription folds and Root0-free weak-instance G2 state frame PASS. Actual universal native producers and child345/241 installation remain OPEN. Historical stage notes follow; the250 formal-scope amendment supersedes the original50 text.

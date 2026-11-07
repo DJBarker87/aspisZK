@@ -114,3 +114,12 @@ NNC_SUPPORT_SEED.json). No dependency is replaced and no incompatible variant
 is installed. Only absent objects are copied with source/destination hashes.
 L123/L124 are failed new-module namespace elaborations, retained and excluded;
 the corrected source qualifies native and host byte/error/state namespaces.
+
+Final fingerprint review supersedes the K061/K062 exact-source claim above:
+their receiver includes later data_ptr/data_len/copy_ptr fields. Same frozen
+and fission hashes did not establish identical receiver sources. K063/K064
+use byte-for-byte archived K035/K041 harness prefixes and fail the same count
+assertions. NMV_control_review.py now asserts the COMPLETE base prefix,
+Kani command except selected harness, Rust environment, features and locks.
+Only unrelated LEAN_PATH has an extra NNC object path. K061/K062 are retained
+supplementary failures, not exact-prefix control credit. No pass was rerun.

@@ -2,13 +2,18 @@ from NMV_formal import *
 from NMV_program import artifact
 import difflib
 
-def native(a,target,parent=False):
+def native(a,target,parent=False,parent_base=None):
  lib='programs/r1-cost-probe/src/lib.rs';owned='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs'
  get=lambda n:subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+n],text=True)
  orig={lib:get(lib),owned:get(owned)}
  program=artifact('NMV_program.rs')+'\n#[path="NMV_Fission.rs"]\nmod NMV_Fission;\n#[path="NMV_FissionHarness.rs"]\nmod NMV_FissionHarness;\n'
  altered={lib:'#![cfg_attr(kani,feature(allocator_api))]\n'+orig[lib],owned:orig[owned]+'\n#[cfg(kani)]\n#[path="NMV_program.rs"]\nmod NMV_program;\n','programs/r1-cost-probe/src/NMV_program.rs':program,'programs/r1-cost-probe/src/NMV_parent.rs':artifact('NMV_parent.rs'),'programs/r1-cost-probe/src/NMV_Fission.rs':(E/'NMV_Fission.rs').read_text(),'programs/r1-cost-probe/src/NMV_FissionHarness.rs':(E/'NMV_FissionHarness.rs').read_text()}
  if parent:
+  if parent_base:
+   import lzma
+   idx=json.loads((E/'NMV_INPUTS.json').read_text());h=idx['attempts'][parent_base]['NMV_src/programs/r1-cost-probe/src/NMV_FissionHarness.rs']
+   raw=lzma.decompress((E/idx['objects'][h]['path']).read_bytes());assert sha(raw)==h
+   altered['programs/r1-cost-probe/src/NMV_FissionHarness.rs']=raw.decode()
   altered['programs/r1-cost-probe/src/NMV_ParentMutants.rs']=(E/'NMV_ParentMutants.rs.pending').read_text()
   altered['programs/r1-cost-probe/src/NMV_FissionHarness.rs']+='\n'+(E/'NMV_ParentMutantHarness.rs.pending').read_text()
  patch=''.join(''.join(difflib.unified_diff(orig.get(n,'').splitlines(True),v.splitlines(True),fromfile='a/'+n if n in orig else '/dev/null',tofile='b/'+n)) for n,v in altered.items())

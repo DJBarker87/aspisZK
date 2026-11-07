@@ -58,9 +58,10 @@ assert not [str(p) for p in E.rglob('*') if p.is_file() and p.stat().st_size>20_
 
 # (bn) continuation, exact budget and dispositions; receiver-log controls
 # must never be relabelled as required parent-call-site controls.
-assert len([x for x in scopes if x['kind']=='kani' and int(x['attempt'][5:])>=35])==26
+assert len([x for x in scopes if x['kind']=='kani' and 35<=int(x['attempt'][5:])<=60])==26
 native=json.loads((E/'NMV_BN_NATIVE.json').read_text())
-assert native['status']=='SOURCE_ASSOCIATION_OPEN_REQUIRED_PARENT_CONTROLS_NOT_RUN'
+assert native['historical_status']=='SOURCE_ASSOCIATION_OPEN_REQUIRED_PARENT_CONTROLS_NOT_RUN'
+assert native['status']=='SOURCE_FISSION_CANDIDATE_READY_PARENT_CONTROLS_VALIDATED'
 for row in native['attempts']:
  a=row['attempt'];i=int(a[5:]);rc=json.loads((E/a/'receipt.json').read_text())
  log=lzma.decompress((E/a/'stdout.log.xz').read_bytes()).decode()
@@ -73,14 +74,21 @@ for row in native['attempts']:
  assert json.loads((E/(a+'-graph-check.json')).read_text())['graph_matches_frozen']
  assert json.loads((E/(a+'-lock-check.json')).read_text())['unchanged']
  if i in {37,43,49,53}:assert row['status']=='FAIL_RECEIVER_LOG_MUTATION_NOT_PARENT_ARGUMENT_CONTROL'
-pending=json.loads((E/'NMV_PARENT_MUTANTS_PENDING.json').read_text());assert pending['status']=='NOT_RUN_NO_CREDIT'
+pending=json.loads((E/'NMV_PARENT_MUTANTS_PENDING.json').read_text());assert pending['status']=='RUN_EXPECTED_FAILURE_K063_K064'
 for n,h in pending['files'].items():assert sha((E/n).read_bytes())==h
 
+subprocess.run(['python3',str(E/'NMV_control_review.py')],check=True,capture_output=True)
+resume=[x for x in scopes if int(x['attempt'][5:])>= (61 if x['kind']=='kani' else 121)]
+assert all(x['kind']!='extract' for x in resume)
+assert sum(x['kind']=='kani' for x in resume)<=12
+assert sum(x['kind']!='kani' for x in resume)<=136
+for x in resume:
+ if x['kind']=='kani':assert x['module'] in ['NMV_fission_stage1_parent_argument_control','NMV_fission_stage2_parent_argument_control']
 counts=dict(collections.Counter(x['kind'] for x in scopes))
 formal=sum(counts.get(k,0) for k in ['lean','support','link','audit','inspect'])
-assert formal<=250 and counts.get('kani',0)<=60 and counts.get('extract',0)==4
+assert formal<=250 and counts.get('kani',0)<=72 and counts.get('extract',0)==4
 shipped=subprocess.check_output(['git','diff','--name-only','15aa63e1307','--','crates','programs','Cargo.lock'],text=True).splitlines();assert not shipped
 subprocess.run(['git','diff','--exit-code','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs/r1-cost-probe','Cargo.lock'],check=True,capture_output=True)
 subprocess.run(['git','diff','--exit-code','b936275465','--','programs/aspis-pool'],check=True,capture_output=True)
-report=dict(status='SUPPORT_GATES_PASS_ACTUAL_WRAPPER_ROOTS_OPEN',candidate_roots=[],credited_rows=0,own_theorems=len(audited),raw_audits=audited,scope_counts=counts,formal_scopes=formal,actual_extractions=3,extract_scopes=4,extraction_note='L001 argparse rejected; L002 snapshot; L081/L082 fission attempts, no emitted bodies',input_objects=checks,compressed_pairs=pairs,fixtures=len(fixtures),scope_overlap='Inherited NMV_SCOPE_TIMES.json: L012/K006 overlap retained for lead review',retired_family_late_attempt='Inherited K025 near-duplicate retained in NMV_FINDINGS.md',failed_or_negative_attempts=[x['attempt'] for x in scopes if x['exit_status']!=0],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),no_shipped_changes=True,standard_axioms_only=True,remaining='NMV_REMAINING.md',new_own_roots=55,native_association='OPEN: NMV-CONTROL-1',required_parent_controls='PREPARED_NOT_RUN')
+report=dict(status='CANDIDATE_READY_PARENT_FOLDS_CHILD_ROWS_PARAMETERIZED',candidate_roots=['NMV_CandidateRoots.root344','NMV_CandidateRoots.root240'],credited_rows=0,own_theorems=len(audited),raw_audits=audited,scope_counts=counts,formal_scopes=formal,actual_extractions=3,extract_scopes=4,extraction_note='L001 argparse rejected; L002 snapshot; L081/L082 fission attempts, no emitted bodies',input_objects=checks,compressed_pairs=pairs,fixtures=len(fixtures),scope_overlap='Inherited NMV_SCOPE_TIMES.json: L012/K006 overlap retained for lead review',retired_family_late_attempt='Inherited K025 near-duplicate retained in NMV_FINDINGS.md',failed_or_negative_attempts=[x['attempt'] for x in scopes if x['exit_status']!=0],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),no_shipped_changes=True,standard_axioms_only=True,remaining='NMV_REMAINING.md',new_own_roots=61,native_association='Reviewed source-fission packet under (bn); ledger review pending',required_parent_controls='K063/K064 FAIL at intended count assertions')
 (E/'NMV_AUDIT.json').write_text(json.dumps(report,indent=1)+'\n');print(json.dumps({k:v for k,v in report.items() if k!='raw_audits'}))

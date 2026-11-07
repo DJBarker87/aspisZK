@@ -586,7 +586,7 @@
 +}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMV_FissionHarness.rs
-@@ -0,0 +1,305 @@
+@@ -0,0 +1,189 @@
 +use super::NMV_Fission::*;
 +use super::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
 +#[derive(Clone,Copy,Default)]
@@ -594,21 +594,21 @@
 +struct Log<const MODE:u8> {
 + events:[Event;12], n:usize, replies:[u64;7], sn:usize,
 + seen:[u64;7], count:usize, pid:u8, coord:usize,
-+ data0:u8, data_ptr:usize, data_len:usize, copy_ptr:usize, slot_seen:Result<u64,u32>, slot:Result<u64,u32>,
++ data0:u8, slot_seen:Result<u64,u32>, slot:Result<u64,u32>,
 + reply:Option<ProgramResult>, cp:Option<Result<Vec<u8>,ProgramError>>,
 + borrow_ok:bool, copy_len:usize, copy_byte:u8, copies:usize,
 +}
 +impl<const M:u8> Log<M> {
 + fn event(&mut self,e:Event){self.events[self.n]=e;self.n+=1;}
 + fn args(&mut self,p:&Pubkey,a:&[u64],d:&[u8]) {
-+  self.pid=p[self.coord];self.count=a.len();self.data0=d[0];self.data_ptr=(d.as_ptr() as usize).wrapping_add(if M==5 {1}else{0});self.data_len=d.len();
++  self.pid=p[self.coord];self.count=a.len();self.data0=d[0];
 +  let mut i=0;while i<a.len(){self.seen[i]=if M==2 && i==0 {a[i]^1}else{a[i]};i+=1;}
 + }
 +}
 +struct Write;
 +impl<const M:u8> WriteWindow<Log<M>> for Write {
 + fn copy_from_slice(self,l:&mut Log<M>,s:&[u8]) {
-+  l.event(Event{tag:6,..Event::default()});l.copy_len=s.len();l.copy_ptr=s.as_ptr() as usize;
++  l.event(Event{tag:6,..Event::default()});l.copy_len=s.len();
 +  if !s.is_empty(){l.copy_byte=s[0];}if M!=3 {l.copies+=1;}
 + }
 +}
@@ -636,7 +636,7 @@
 + }
 +}
 +fn log<const M:u8>(slot:Result<u64,u32>)->Log<M>{
-+ Log{events:[Event::default();12],n:0,replies:kani::any(),sn:0,seen:[0;7],count:0,pid:0,coord:0,data0:0,data_ptr:0,data_len:0,copy_ptr:0,slot_seen:Ok(0),slot,
++ Log{events:[Event::default();12],n:0,replies:kani::any(),sn:0,seen:[0;7],count:0,pid:0,coord:0,data0:0,slot_seen:Ok(0),slot,
 + reply:None,cp:None,borrow_ok:kani::any(),copy_len:0,copy_byte:0,copies:0}
 +}
 +// Full declared ProgramError type is used at every boundary; payloads are small
@@ -758,122 +758,6 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn NMV_fission_stage1_footprint_control(){stage1_test::<3,2>();}
-+// Independent slice-descriptor cuts. The full-result family K035-K044 remains
-+// unchanged in purpose; no two-enum product is reached in these cuts.
-+fn slices_stage2<const M:u8>(){
-+ let a:[u64;7]=kani::any();let p:Pubkey=kani::any();
-+ let d=[65,83,81,56,kani::any(),kani::any(),kani::any(),kani::any()];
-+ let n:usize=kani::any();kani::assume(n>=4&&n<=8);let d=&d[..n];
-+ let mut l=log::<M>(Ok(kani::any()));l.reply=Some(Ok(()));
-+ let out=stage2(&mut l,&p,&a,d);
-+ if M==1{assert!(out.is_err());}else{assert!(out.is_ok());}
-+ assert_eq!(l.data_ptr,d.as_ptr() as usize);assert_eq!(l.data_len,n);
-+ assert_eq!(l.n,10);assert_eq!(l.count,7);
-+}
-+fn slices_stage1<const M:u8>(){
-+ let a:[u64;3]=kani::any();let p:Pubkey=kani::any();let d=if kani::any(){[3,10]}else{[3,11]};
-+ let mut l=log::<M>(Ok(0));l.borrow_ok=true;l.cp=Some(Ok(vec![kani::any()]));
-+ let out=stage1(&mut l,&p,&a,&d);
-+ if M==1{assert!(out.is_err());}else{assert!(out.is_ok());}
-+ assert_eq!(l.data_ptr,d.as_ptr() as usize);assert_eq!(l.data_len,2);assert_eq!(l.copies,1);
-+}
-+struct CLog<const M:u8>{ base:Log<0>, reply:Option<Result<Clock,ProgramError>>, seen:Option<Result<u64,ProgramError>> }
-+struct CWrite;
-+impl<const M:u8> WriteWindow<CLog<M>> for CWrite {fn copy_from_slice(self,_:&mut CLog<M>,_:&[u8]){panic!()}}
-+impl<const M:u8> Windows for CLog<M>{
-+ type Account=u64;type Owned=u64;type Write=CWrite;
-+ fn snapshot(l:&mut Self,a:&u64,x:usize,y:usize)->u64{<Log<0> as Windows>::snapshot(&mut l.base,a,x,y)}
-+ fn stage1_owned(_:&mut Self,_:&Pubkey,_:&[u64],_:&[u8])->Result<Vec<u8>,ProgramError>{panic!()}
-+ fn stage2_owned(l:&mut Self,p:&Pubkey,a:&[u64],d:&[u8],s:Result<u64,ProgramError>)->ProgramResult{l.base.args(p,a,d);l.seen=Some(s);Ok(())}
-+ fn try_borrow_mut_data(_:&mut Self,_:&u64)->Result<CWrite,ProgramError>{panic!()}
-+ fn set_return_data(l:&mut Self,d:&[u8]){<Log<0> as Windows>::set_return_data(&mut l.base,d)}
-+ fn clock_get(l:&mut Self)->Result<Clock,ProgramError>{if M==1{Ok(Clock{slot:0})}else{l.reply.take().unwrap()}}
-+}
-+fn clock_test<const M:u8>(){
-+ let k:u8=kani::any();kani::assume(k<26);let x:u32=kani::any();let b:u8=kani::any();let slot:u64=kani::any();let ok:bool=kani::any();
-+ let mut l=CLog::<M>{base:log::<0>(Ok(0)),reply:Some(if ok{Ok(Clock{slot})}else{Err(error(k,x,b))}),seen:None};
-+ let a:[u64;7]=kani::any();let p:Pubkey=kani::any();
-+ assert!(stage2(&mut l,&p,&a,&[65,83,81,56]).is_ok());
-+ let s=l.seen.unwrap();if ok {match s{Ok(v)=>assert_eq!(v,slot),Err(_)=>panic!()}}else{same_error(s.unwrap_err(),k,x,b);}
-+ assert_eq!(l.base.data_len,4);assert_eq!(l.base.sn,7);
-+}
-+fn copy_descriptor_test(){
-+ let a:[u64;3]=kani::any();let p:Pubkey=kani::any();let d=[3,10];let n:usize=kani::any();kani::assume(n<=4);
-+ let mut cp=Vec::with_capacity(4);let mut i=0;while i<n{cp.push(kani::any());i+=1;}
-+ let ptr=cp.as_ptr() as usize;
-+ let mut l=log::<0>(Ok(0));l.borrow_ok=true;l.cp=Some(Ok(cp));
-+ assert!(stage1(&mut l,&p,&a,&d).is_ok());
-+ assert_eq!(l.copy_ptr,ptr);assert_eq!(l.copy_len,n);assert_eq!(l.copies,1);
-+}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice2_pass(){slices_stage2::<0>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice2_reply_control(){slices_stage2::<1>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice2_argument_control(){slices_stage2::<5>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice2_footprint_control(){slices_stage2::<3>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice1_pass(){slices_stage1::<0>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice1_reply_control(){slices_stage1::<1>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice1_argument_control(){slices_stage1::<5>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_slice1_footprint_control(){slices_stage1::<3>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_clock_pass(){clock_test::<0>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_clock_reply_control(){clock_test::<1>();}
-+
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_copy_descriptor(){copy_descriptor_test();}
-+#[kani::proof]#[kani::unwind(16)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+fn NMV_fission_rejected_routes(){
-+ let a:[u64;7]=kani::any();let n:usize=kani::any();kani::assume(n<=7);
-+ let d:[u8;5]=kani::any();let m:usize=kani::any();kani::assume(m<=5);
-+ let data=&d[..m];let accounts=&a[..n];let p:Pubkey=kani::any();
-+ kani::assume(!(data==&[3,10]||data==&[3,11])||n!=3);
-+ kani::assume(n!=7||data.get(..4)!=Some(&[65,83,81,56][..]));
-+ let mut l1=log::<0>(Ok(0));let mut l2=log::<0>(Ok(0));
-+ assert!(matches!(stage1(&mut l1,&p,accounts,data),Err(ProgramError::InvalidInstructionData)));
-+ assert!(matches!(stage2(&mut l2,&p,accounts,data),Err(ProgramError::InvalidInstructionData)));
-+ assert_eq!(l1.n,0);assert_eq!(l2.n,0);
-+}
 +
 +// To append to NMV_FissionHarness only for the two pending negative runs.
 +#[path="NMV_ParentMutants.rs"] mod parent_mutants;

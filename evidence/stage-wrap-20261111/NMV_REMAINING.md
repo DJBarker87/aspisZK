@@ -1,36 +1,37 @@
-# NMV remaining obligations after (bn)
+# NMV remaining after controls-only resume
 
-Target not established. TX1:344/TX2:240 remain OPEN; no CANDIDATE or row credit.
-55 new tops and exact TAS field types pass; native source association does not.
+Target not yet established. Parent344/240 folds are CANDIDATE-ready under
+(bn), with full child RowSpec parameters; no row is self-credited.
+Authoritative packet: NMV_CANDIDATE_PACKET.md and NMV_CLOSED.json.
 
-| Member | Established in this continuation | Exact remaining obligation |
+| Member | Delivered | Remaining |
 |---|---|---|
-| source fission344/240 | Both bodies erase exactly under PCG_ASSOCIATIONS normalisation/substitutions; frozen bytes pinned. Charon translates, Aeneas fails internal context joins in both authorized extraction attempts. | ReviewedTranscription344/240 trust is retained. No emitted-body or (bc) audit pass is claimed. |
-| snapshot | `NMV_SnapshotExec.law`, arbitrary metadata/bytes/lengths/aliases/tokens, allocation success/abort and drop; canonical snapshots law. Existing actual small native snapshot evidence retained. | Part of parent native-to-full-carrier review; not a new universal actual SDK certificate. |
-| TX2:240 native association | Full child Result and argument/log checks K035; separate slice descriptors K047, full Clock Result K055, rejected routes K060, with reply/omission failures. No native buffer >=1768. | **Required parent-argument control NOT satisfied.** K037/K049 corrupt the receiver log, not parent arguments. Correct call-site mutant prepared in NMV_PARENT_MUTANTS_PENDING.json; NOT RUN. Ledger must review descriptor/full-carrier cut association. |
-| TX1:344 native association | Full child error K039, exclusive failure K040, copy K041, slice descriptors K051, checkpoint Vec descriptor K057; matching reply/omission failures; canonical KMX K058/K059. | **Required parent-argument control NOT satisfied.** K043/K053 corrupt the receiver log. Correct parent call-site mutant prepared but NOT RUN. Native-to-full-carrier association remains open. |
-| canonical344/240 composition | `NMV_ConcreteWindows.root344/root240`, per-invocation arbitrary allocation observations, full SDK/std/runtime interpretation, full child Result/effects/stopped prefixes. `NMV_TasRoots.field344/field240` are exact TAS types at SAME child constants. No free wrapper-producer/endpoint/Windows-law premise in these concrete roots. | Native source association above. These are interpreter folds, not actual frozen-wrapper roots. |
-| TX1:345 child | Full `RSL.TX1_345.RowSpec_345` parameter at exact original three snapshots/program/data. | NMT0ee9ec4cc539 has no candidate. Install its actual full root when committed; no successful-child substitute. |
-| TX2:241 child | Full `RSL.TX2_241.RowSpec_241` parameter for EVERY V; snapshot D1 and Root0 domain transport proved internally. | NMS3278354f9fec has no candidate. Install its full V-parametric root, including weak instance, when committed. |
-| G2 | `NMV_G2Reference.frame` proves full event/payload clause; `NMV_TasRoots.weak240/weakFrame` install the interpreter weak instance, no Root0/selection premise. Full SDK cell/token frame inherited and retained. | Actual weak240 packet needs native association and actual weak241. `PoolLaws L` for CLOSED scan226/reconstruct224/encode165/emit219 must be installed at canonical L; arbitrary PoolLib fields may write. This is a slice-boundary effect-law obligation, NOT an own-input clause or new trust item. |
-| TAS package | `NMV_TasRoots.packet` inhabits EXACT `TAS.NMV_Roots` at the installed interpreter Impl, with canonical library effect laws explicit. | Does not equate that Impl with the actual frozen functions. No native association is inferred from type-checking the package. |
-| physical A3/A4/A5 | Complete physical SDK/allocator carrier support and G2 frame retained. | Separate owner's representation/history obligations; no sibling candidate/worktree edited. |
-| proof/resource gate | 55 new raw ax2 audits and printed axioms PASS standard-only; final focused combined import PASS L112; export/rehash PASS L120; local validation PASS. | These gates do not discharge missing native controls. No unchanged manifest/all-root replay required or run. |
+| source fission344/240 | Prior mechanical copy equality and both pinned extraction failures reused; K063/K064 parent argument mutants fail with exact archived positive harness prefixes. Reply and footprint controls reused. | Ledger review/admission of the source-fission packet; reviewed-transcription trust retained. No emitted-body claim. |
+| snapshot/windows | Full SDK/std/runtime interpretation, complete allocation/abort/drop, full error and arbitrary contents; prior focused laws reused unchanged. | No independent owned proof remains. |
+| TX1:344 | NMV_CandidateRoots.root344, exact canonical RowSpec with full345 at SAME arguments; TAS field/packet. | NMT's canonical345 candidate does not exist at pinned branch. Keep full RowSpec_345 parameter. |
+| TX2:240 | NMV_CandidateRoots.root240, EVERY V2Lib, original-input Domain only, internal child-domain derivation; TAS field/packet. | NMS's actual canonical241 candidate does not exist at pinned branch. Keep full RowSpec_241 parameter. |
+| G2 weak instance | NMV_NNCWeak.weak240/frame/sdk install NNC_WriteFree.law and writeFree with the explicit renderer. No Root0/selected-run premise; returned full SDK cells/token frame. | Actual weak241 child; faithful native064 renderer remains NNC/A2's obligation. Full event frame retains canonical PoolLaws for scan226/reconstruct224/encode165/emit219. No arbitrary library write-freeness is inferred. |
+| physical A3/A4/A5 | Existing full physical carrier support and TAS exact field types retained. | Separate owner's physical observation/history installation, outside this job. |
+| gates | L126 combined import, L127 six-new-root raw audit and L128 export/rehash pass; old129 roots/eight fixtures reused unchanged. | No new whole-manifest/all-root or ELF replay is indicated by these changes. |
 
-New-run budget: **2/2 extraction, 38/174 formal scopes, 26/26 Kani**.
-Historical+new:114/250 formal,60/60 Kani; actual extractions3 over4 labelled
-scopes (historical L001 was pre-extractor argparse failure). No budget moved
-between kinds. K045/K046 timeouts and L099 heartbeat automation are retired;
-manual/isolate replacements have distinct source shapes. No cap/timeout raised.
+Allowance used: **0/0 extraction, 8/136 formal scopes, 4/12 controls-only Kani**.
+Formal includes L123/L124 failed namespace elaborations, excluded from credit.
+K061/K062 supplementary failures used the later descriptor receiver; final
+exact-source controls are K063/K064. No unchanged positive was rerun, no
+retired timeout shape was retried, no cap or timeout was raised.
 
-Why stop below80% of the formal allowance: every independent owned Lean
-obligation (SDK/std windows, snapshots, full canonical folds, weak/full-state
-frames, event algebra, TAS fields, audits/import/export) is attempted and checked.
-The344 and240 source gaps each require a genuine new Kani parent-mutant run;
-no formal replay can produce that verdict. The345 and241 gaps need separately
-owned committed roots, which do not exist at the immutable reviews. G2's four
-canonical-library effect installations are outside this job's function list
-and need the actual L dictionary/closed owners; their exact required laws and
-the complete conditional reference proof are already named. Physical linkage
-belongs to A3/A4/A5. No unchanged replay, free producer premise, extra Root0
-clause or duplicate sibling proof is a valid use of the remaining136 scopes.
+Under80% budget review, member by member: both owned parent roots now have
+the complete requested folds; their only child instantiations require absent
+NMT/NMS candidates. Snapshot/window/carrier laws are already complete and
+unchanged, so another compile is not progress. G2's NNC specialization is
+complete; installing arbitrary PoolLib effect laws is false in general and
+the four concrete CLOSED-library installations lie outside this slice.
+Native064 trace rendering and physical A3/A4/A5 belong to other owners.
+Ledger credit is a review operation, not an additional local theorem. No
+unmet required parent control remains that warrants another Kani run. No
+independent authorized obligation is left that can consume the remaining
+128 formal or8 Kani scopes without duplicate proof/replay, sibling work or
+an unsupported producer/effect hypothesis.
+
+Frozen source/lock and ELF inventory pins unchanged; no shipped changes,
+trust-row edit, security-metric change, key/account operation, deletion or push.
