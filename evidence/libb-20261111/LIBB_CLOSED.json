@@ -2959,5 +2959,69 @@
   "validation": "LIBB_RESUME_VALIDATION.json",
   "raw_coverage": "LIBB_RESUME_AUDIT_COVERAGE.json",
   "selected_pins": "LIBB_RESUME_PINS.json.xz"
+ },
+ "gate_clarification_20261107": {
+  "modules": [
+   12,
+   13
+  ],
+  "status": "DONE under bq clarification; no ledger credit claimed",
+  "roots": [
+   {
+    "module": "LIBB_ReturnTrace",
+    "roots": [
+     "bind",
+     "lift",
+     "pure",
+     "record"
+    ],
+    "classification": "Generic log invariant; all hypotheses are explicit structural induction premises, instantiated in source run."
+   },
+   {
+    "module": "LIBB_ReturnRun",
+    "roots": [
+     "run"
+    ],
+    "classification": "Unconditional source-run invariant, arbitrary original reservation and child functions used only in supporting lemma; canonical source Gate instantiates the fixed CLOSED child functions."
+   },
+   {
+    "module": "LIBB_ReturnObservation",
+    "roots": [
+     "pieces",
+     "common",
+     "resolved",
+     "functional"
+    ],
+    "classification": "Source stopped-prefix relation; returned parent cannot contain failed Merkle child; complete ordered returned event equality."
+   },
+   {
+    "module": "LIBB_Tx2AuthGate",
+    "roots": [
+     "returnFunctional",
+     "returned_resolved"
+    ],
+    "classification": "Canonical byte law, original Env.reservation; unconditional returned observation uniqueness; no native witness or renderer choice."
+   },
+   {
+    "module": "LIBB_V2Star",
+    "roots": [
+     "gate",
+     "returns",
+     "writeFree",
+     "exact_bundle",
+     "canonical_identity",
+     "weak_identity",
+     "weak_exact"
+    ],
+    "classification": "SAME concrete V0 and unchanged weak law; original Dom064; H/d/hash/world retain original host binding."
+   }
+  ],
+  "added_caller_clauses": [],
+  "added_trust": [],
+  "changed_specs": [],
+  "retained": "Original NMN_064 own-input clauses, SAME-record Bound064 runtime representation, standard runtime/std/tool trust; I.f064/EnvRep installation integration-owned.",
+  "validation": "LIBB_GATE_VALIDATION.json",
+  "raw_coverage": "LIBB_GATE_AUDIT_COVERAGE.json",
+  "security_target_established": false
  }
 }
