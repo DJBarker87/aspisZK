@@ -23,3 +23,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46317 RangeHistoryV2 passed: existing165 semantics at the exact source request derives returned identity; source move and first93 request preserve local7; first93 source write1->2 follows. The reused prefix is explicitly original-interpreter evidence; no full corrected-machine/history or loop closure is claimed.
 
 46318 ArcPollV2 passed: actual12950 request selects the new ArcClone source-count action and delivers the full original reply. This resolves the local dispatch defect only; source-cell/returned-value/frame histories and complete D984 adequacy remain open.
+
+46319 RangeTraceV2 passed: continuous ORIGINAL165->first93-issued history by named segment composition, including the actual source move. OWNER/D984 predecessor transport and later-iteration invariant remain open.

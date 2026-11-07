@@ -17,7 +17,7 @@ def ancestors(nodes):
  while pending:
   for c in reverse.get(pending.pop(),[]):
    if c not in out:out.add(c);pending.append(c)
- return sorted(out)
+ return sorted(out & set(edges))
 def nm(f):return '::'.join(p['Ident'][0] if 'Ident'in p else 'impl['+str(p['Impl'].get('Trait','inherent'))+']' if 'Impl'in p else '?' for p in f['item_meta']['name'])
 calls={}
 for f in fs.values():
@@ -25,6 +25,11 @@ for f in fs.values():
   if 'call_identity'in c:
    for t in en.target(c['callee'],'thread'):
     calls.setdefault(t,[]).append(dict(caller='thread:f'+str(f['function']),site=c['call_identity']['statement'],source_path=c['call_identity']['path']))
+# Conservative raw-call propagation across installed native summaries. This is
+# a MAY-affect relation, not a claim those nested requests were interpreted.
+for target,occurrences in calls.items():
+ if isinstance(target,int):
+  for occurrence in occurrences:reverse.setdefault('thread:f'+str(target),set()).add(occurrence['caller'])
 # Exact primitive candidates; body wrappers are explicitly distinguished.
 meanings={9:'IntoIterNext9',10:'VecAppend10',93:'RangeNext93',167:'VecPush167',289:'CellReplace289',
  351:'FetchAdd351',581:'FetchSub581',557:'AtomicStore557',646:'AtomicBoolStore646',442:'MemReplace442',
@@ -101,6 +106,13 @@ for n in [94906,94915,94917]:
  cohort=json.loads(lzma.decompress((P/f'slice-N{n}.json.xz').read_bytes()))
  for f in cohort['functions']:
   if 'body'not in f['code']:rawSlice.append(dict(cohort=n,id='slice:f'+str(f['function']),name=nm(f),classification='Recorded raw leaf; see installed native-boundary and typed Drop classifications'))
+for boundary in boundaries:
+ if boundary['id'] in {'thread:f168','thread:f454'}:
+  boundary['classification']='COMPOSITE-SOURCE-WRITER; EFFECT-COMPOSITION-OPEN'
+for entry in entries:
+ if entry['id'] in {'thread:f486','thread:f584','thread:f683','thread:f322','thread:f248','thread:f325','thread:f549','thread:f654'}:
+  entry['may_affect_via_typed_drop']=sorted({r for site in drops for r in site['affected_rows']})
+  entry['drop_propagation_qualification']='Conservative type-dependent destructor footprint; exact emitted-type dispatch is not discharged.'
 result=dict(schema=2,base='bbb785242b876aa943e9627aa46a7ffa350a860a860a'[:40],ruling='D984 thread-26 double-prime',criterion='ANY source-store cell, including BoxNew/Arc pointees; OWNER-only effects are separate',
  witness=dict(branch='codex/pv-lib-spec-20261107',revision='f2798a4fac4',module='PV_LIB_SPEC_F361ArcMachineGap',roots=['native_poll','count_unchanged','increment_impossible'],attempt=49735,site=12950),
  authority=json.load(open('evidence/pv-ledger-20261108/enumeration.json'))['source_pins'],
