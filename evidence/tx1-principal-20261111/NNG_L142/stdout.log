@@ -1,0 +1,181 @@
+def Aeneas.Std.Usize.wrapping_add : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun x y => Aeneas.Std.UScalar.wrapping_add x y
+equations:
+@[backward_defeq] theorem AspisR1.OraclePortStdBuilder.fromFnLoop.eq_1 : ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f [] x = Aeneas.Std.Result.ok ([], x)
+@[backward_defeq] theorem AspisR1.OraclePortStdBuilder.fromFnLoop.eq_2 : ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C) (i : Aeneas.Std.Usize)
+  (is : List Aeneas.Std.Usize),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f (i :: is) x = do
+    let __x ← f.call_mut x i
+    match __x with
+      | (x, c') => do
+        let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f is c'
+        match __x with
+          | (xs, c'') => Aeneas.Std.Result.ok (x :: xs, c'')
+AspisR1.OraclePortStdBuilder.iterMap_spec: ∀ {C I A B : Type} (it : Aeneas.Std.core.iter.traits.iterator.Iterator I A)
+  (f : Aeneas.Std.core.ops.function.FnMut C A B) (i : I) (c : C),
+  AspisR1.OraclePortStdBuilder.iterMap it f i c = Aeneas.Std.Result.ok { iter := i, f := c }
+AspisR1.OraclePortStdBuilder.mapNext.match_1: {C B : Type} →
+  (motive : B × C → Sort u_1) → (x : B × C) → ((y : B) → (c' : C) → motive (y, c')) → motive x
+AspisR1.OraclePortStdBuilder.rangeContains: {Idx U : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Idx Idx →
+    Aeneas.Std.core.cmp.PartialOrd Idx U →
+      Aeneas.Std.core.cmp.PartialOrd U Idx → Aeneas.Std.core.ops.range.Range Idx → U → Aeneas.Std.Result Bool
+AspisR1.OraclePortStdBuilder.fromFn_pure: ∀ {T C : Type} (n : Aeneas.Std.Usize)
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (g : Aeneas.Std.Usize → T),
+  (∀ (c : C) (i : Aeneas.Std.Usize), f.call_mut c i = Aeneas.Std.Result.ok (g i, c)) →
+    ∀ (c : C),
+      AspisR1.OraclePortStdBuilder.fromFn n f c =
+        Aeneas.Std.Result.ok (Aeneas.Std.Array.make n (List.map g (AspisR1.OraclePortStdBuilder.indices n)) ⋯)
+AspisR1.OraclePortStdBuilder.fromFnLoop_pure: ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (g : Aeneas.Std.Usize → T),
+  (∀ (c : C) (i : Aeneas.Std.Usize), f.call_mut c i = Aeneas.Std.Result.ok (g i, c)) →
+    ∀ (is : List Aeneas.Std.Usize) (c : C),
+      AspisR1.OraclePortStdBuilder.fromFnLoop f is c = Aeneas.Std.Result.ok (List.map g is, c)
+AspisR1.OraclePortStdBuilder.fromFnLoop.eq_def: ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : List Aeneas.Std.Usize) (x_1 : C),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f x x_1 =
+    match x, x_1 with
+    | [], c => Aeneas.Std.Result.ok ([], c)
+    | i :: is, c => do
+      let __x ← f.call_mut c i
+      match __x with
+        | (x, c') => do
+          let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f is c'
+          match __x with
+            | (xs, c'') => Aeneas.Std.Result.ok (x :: xs, c'')
+AspisR1.OraclePortStdBuilder.fromFn: {T C : Type} →
+  (n : Aeneas.Std.Usize) →
+    Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → C → Aeneas.Std.Result (Aeneas.Std.Array T n)
+AspisR1.OraclePortStdBuilder.rangeContains.eq_1: ∀ {Idx U : Type} (_ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx)
+  (lo : Aeneas.Std.core.cmp.PartialOrd Idx U) (hi : Aeneas.Std.core.cmp.PartialOrd U Idx)
+  (r : Aeneas.Std.core.ops.range.Range Idx) (x : U),
+  AspisR1.OraclePortStdBuilder.rangeContains _ord lo hi r x = do
+    let b ← lo.le r.start x
+    if b = true then hi.lt x r.end else Aeneas.Std.Result.ok false
+AspisR1.OraclePortStdBuilder.fromFnLoop.eq_2: ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C) (i : Aeneas.Std.Usize)
+  (is : List Aeneas.Std.Usize),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f (i :: is) x = do
+    let __x ← f.call_mut x i
+    match __x with
+      | (x, c') => do
+        let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f is c'
+        match __x with
+          | (xs, c'') => Aeneas.Std.Result.ok (x :: xs, c'')
+AspisR1.OraclePortStdBuilder.mapNext.match_2: {A : Type} →
+  (motive : Option A → Sort u_1) → (x : Option A) → (Unit → motive none) → ((x : A) → motive (some x)) → motive x
+AspisR1.OraclePortStdBuilder.rangeInclusiveContains_spec: ∀ {Idx U : Type}
+  (ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx) (lo : Aeneas.Std.core.cmp.PartialOrd Idx U)
+  (hi : Aeneas.Std.core.cmp.PartialOrd U Idx) (r : Aeneas.Std.core.ops.range.RangeInclusive Idx) (x : U) (a b : Bool),
+  r.exhausted = false →
+    lo.le r.start x = Aeneas.Std.Result.ok a →
+      hi.le x r.end = Aeneas.Std.Result.ok b →
+        AspisR1.OraclePortStdBuilder.rangeInclusiveContains ord lo hi r x = Aeneas.Std.Result.ok (a && b)
+AspisR1.OraclePortStdBuilder.rangeInclusiveContains.eq_1: ∀ {Idx U : Type}
+  (_ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx) (lo : Aeneas.Std.core.cmp.PartialOrd Idx U)
+  (hi : Aeneas.Std.core.cmp.PartialOrd U Idx) (r : Aeneas.Std.core.ops.range.RangeInclusive Idx) (x : U),
+  AspisR1.OraclePortStdBuilder.rangeInclusiveContains _ord lo hi r x = do
+    let b ← lo.le r.start x
+    if b = true then if r.exhausted = true then hi.lt x r.end else hi.le x r.end else Aeneas.Std.Result.ok false
+AspisR1.OraclePortStdBuilder.fromFnLoop: {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → List Aeneas.Std.Usize → C → Aeneas.Std.Result (List T × C)
+AspisR1.OraclePortStdBuilder.fromFnLoop.eq_1: ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (x : C),
+  AspisR1.OraclePortStdBuilder.fromFnLoop f [] x = Aeneas.Std.Result.ok ([], x)
+AspisR1.OraclePortStdBuilder.iterMap: {C I A B : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I A →
+    Aeneas.Std.core.ops.function.FnMut C A B → I → C → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.map.Map I C)
+AspisR1.OraclePortStdBuilder.mapNext.match_3: {I A : Type} →
+  (motive : Option A × I → Sort u_1) → (x : Option A × I) → ((x : Option A) → (i' : I) → motive (x, i')) → motive x
+AspisR1.OraclePortStdBuilder.fromFnLoop._unsafe_rec: {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → List Aeneas.Std.Usize → C → Aeneas.Std.Result (List T × C)
+AspisR1.OraclePortStdBuilder.fromFn.eq_1: ∀ {T C : Type} (n : Aeneas.Std.Usize)
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (c : C),
+  AspisR1.OraclePortStdBuilder.fromFn n f c = do
+    let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f (AspisR1.OraclePortStdBuilder.indices n) c
+    match __x with
+      | (xs, snd) =>
+        if h : xs.length = ↑n then Aeneas.Std.Result.ok ⟨xs, h⟩ else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+AspisR1.OraclePortStdBuilder.mapNext_none: ∀ {C I A B : Type} (it : Aeneas.Std.core.iter.traits.iterator.Iterator I A)
+  (f : Aeneas.Std.core.ops.function.FnMut C A B) (m : Aeneas.Std.core.iter.adapters.map.Map I C) (i' : I),
+  it.next m.iter = Aeneas.Std.Result.ok (none, i') →
+    AspisR1.OraclePortStdBuilder.mapNext it f m = Aeneas.Std.Result.ok (none, { iter := i', f := m.f })
+AspisR1.OraclePortStdBuilder.fromFnLoop._f: {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T →
+    (x : List Aeneas.Std.Usize) →
+      List.below (motive := fun x => C → Aeneas.Std.Result (List T × C)) x → C → Aeneas.Std.Result (List T × C)
+AspisR1.OraclePortStdBuilder.fromFnLoop.match_2: {T C : Type} →
+  (motive : T × C → Sort u_1) → (x : T × C) → ((x : T) → (c' : C) → motive (x, c')) → motive x
+Aeneas.Std.Usize.wrapping_add.eq_1: ∀ (x y : Aeneas.Std.Usize), x.wrapping_add y = Aeneas.Std.UScalar.wrapping_add x y
+AspisR1.OraclePortStdBuilder.indices.eq_1: ∀ (n : Aeneas.Std.Usize),
+  AspisR1.OraclePortStdBuilder.indices n = List.ofFn fun i => Aeneas.Std.Usize.ofNatCore ↑i ⋯
+AspisR1.OraclePortStdBuilder.rangeContains_spec: ∀ {Idx U : Type} (ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx)
+  (lo : Aeneas.Std.core.cmp.PartialOrd Idx U) (hi : Aeneas.Std.core.cmp.PartialOrd U Idx)
+  (r : Aeneas.Std.core.ops.range.Range Idx) (x : U) (a b : Bool),
+  lo.le r.start x = Aeneas.Std.Result.ok a →
+    hi.lt x r.end = Aeneas.Std.Result.ok b →
+      AspisR1.OraclePortStdBuilder.rangeContains ord lo hi r x = Aeneas.Std.Result.ok (a && b)
+AspisR1.OraclePortStdBuilder.indices._proof_1: ∀ (n : Aeneas.Std.Usize) (i : Fin ↑n),
+  ↑i < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+Aeneas.Std.Usize.wrapping_add.step_spec: ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x.wrapping_add y)) fun x_1 => x_1 = x.wrapping_add y
+AspisR1.OraclePortStdBuilder.indices: Aeneas.Std.Usize → List Aeneas.Std.Usize
+Aeneas.Std.Usize.wrapping_add.step_spec.mvcgen_spec: ∀ (x y : Aeneas.Std.Usize),
+  ⦃⌜True⌝⦄ Aeneas.Std.lift (x.wrapping_add y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = x.wrapping_add y⌝⦄
+AspisR1.OraclePortStdBuilder.fromFnLoop.match_1: {T C : Type} →
+  (motive : List T × C → Sort u_1) → (x : List T × C) → ((xs : List T) → (c'' : C) → motive (xs, c'')) → motive x
+AspisR1.OraclePortStdBuilder.fromFnLoop_cons: ∀ {T C : Type}
+  (f : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T) (i : Aeneas.Std.Usize) (is : List Aeneas.Std.Usize)
+  (c c' c'' : C) (x : T) (xs : List T),
+  f.call_mut c i = Aeneas.Std.Result.ok (x, c') →
+    AspisR1.OraclePortStdBuilder.fromFnLoop f is c' = Aeneas.Std.Result.ok (xs, c'') →
+      AspisR1.OraclePortStdBuilder.fromFnLoop f (i :: is) c = Aeneas.Std.Result.ok (x :: xs, c'')
+Aeneas.Std.Usize.wrapping_add_val_eq: ∀ (x y : Aeneas.Std.Usize),
+  ↑(x.wrapping_add y) = (↑x + ↑y) % Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize
+AspisR1.OraclePortStdBuilder.mapNext: {C I A B : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I A →
+    Aeneas.Std.core.ops.function.FnMut C A B →
+      Aeneas.Std.core.iter.adapters.map.Map I C →
+        Aeneas.Std.Result (Option B × Aeneas.Std.core.iter.adapters.map.Map I C)
+AspisR1.OraclePortStdBuilder.mapNext_some: ∀ {C I A B : Type} (it : Aeneas.Std.core.iter.traits.iterator.Iterator I A)
+  (f : Aeneas.Std.core.ops.function.FnMut C A B) (m : Aeneas.Std.core.iter.adapters.map.Map I C) (i' : I) (x : A)
+  (y : B) (c' : C),
+  it.next m.iter = Aeneas.Std.Result.ok (some x, i') →
+    f.call_mut m.f x = Aeneas.Std.Result.ok (y, c') →
+      AspisR1.OraclePortStdBuilder.mapNext it f m = Aeneas.Std.Result.ok (some y, { iter := i', f := c' })
+Aeneas.Std.Usize.wrapping_add: Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize
+Aeneas.Std.Usize.wrapping_add_bv_eq: ∀ (x y : Aeneas.Std.Usize), (x.wrapping_add y).bv = x.bv + y.bv
+AspisR1.OraclePortStdBuilder.rangeInclusiveContains: {Idx U : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Idx Idx →
+    Aeneas.Std.core.cmp.PartialOrd Idx U →
+      Aeneas.Std.core.cmp.PartialOrd U Idx → Aeneas.Std.core.ops.range.RangeInclusive Idx → U → Aeneas.Std.Result Bool
+AspisR1.OraclePortStdBuilder.fromFnLoop.match_3: {C : Type} →
+  (motive : List Aeneas.Std.Usize → C → Sort u_1) →
+    (x : List Aeneas.Std.Usize) →
+      (x_1 : C) →
+        ((c : C) → motive [] c) →
+          ((i : Aeneas.Std.Usize) → (is : List Aeneas.Std.Usize) → (c : C) → motive (i :: is) c) → motive x x_1
+AspisR1.OraclePortStdBuilder.mapNext.eq_1: ∀ {C I A B : Type} (it : Aeneas.Std.core.iter.traits.iterator.Iterator I A)
+  (f : Aeneas.Std.core.ops.function.FnMut C A B) (m : Aeneas.Std.core.iter.adapters.map.Map I C),
+  AspisR1.OraclePortStdBuilder.mapNext it f m = do
+    let __x ← it.next m.iter
+    match __x with
+      | (x, i') =>
+        match x with
+        | none => Aeneas.Std.Result.ok (none, { iter := i', f := m.f })
+        | some x => do
+          let __x ← f.call_mut m.f x
+          match __x with
+            | (y, c') => Aeneas.Std.Result.ok (some y, { iter := i', f := c' })
+AspisR1.OraclePortStdBuilder.fromFnLoop._sunfold: {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → List Aeneas.Std.Usize → C → Aeneas.Std.Result (List T × C)
+AspisR1.OraclePortStdBuilder.rangeInclusiveContains_exhausted: ∀ {Idx U : Type}
+  (ord : Aeneas.Std.core.cmp.PartialOrd Idx Idx) (lo : Aeneas.Std.core.cmp.PartialOrd Idx U)
+  (hi : Aeneas.Std.core.cmp.PartialOrd U Idx) (r : Aeneas.Std.core.ops.range.RangeInclusive Idx) (x : U) (a b : Bool),
+  r.exhausted = true →
+    lo.le r.start x = Aeneas.Std.Result.ok a →
+      hi.lt x r.end = Aeneas.Std.Result.ok b →
+        AspisR1.OraclePortStdBuilder.rangeInclusiveContains ord lo hi r x = Aeneas.Std.Result.ok (a && b)

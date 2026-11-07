@@ -1,0 +1,41 @@
+{"attempt": "NNG_L146", "exit_status": 0, "wall_seconds": 2.3986149339471012, "peak_rss_kib": "2463396", "swaps": "0", "print_axioms": []}
+@[irreducible] def Aeneas.Std.UScalar.size : Aeneas.Std.UScalarTy → ℕ :=
+Aeneas.Std.wrapped✝.1
+@[implicit_reducible] def Aeneas.Std.UScalarTy.numBits : Aeneas.Std.UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | Aeneas.Std.UScalarTy.Usize => System.Platform.numBits
+  | Aeneas.Std.UScalarTy.U8 => 8
+  | Aeneas.Std.UScalarTy.U16 => 16
+  | Aeneas.Std.UScalarTy.U32 => 32
+  | Aeneas.Std.UScalarTy.U64 => 64
+  | Aeneas.Std.UScalarTy.U128 => 128
+Aeneas.Std.UScalar.size_U16_eq: Aeneas.Std.U16.size = 65536
+Aeneas.Std.UScalarTy.cNumBits.eq_2: ∀ (ty : Aeneas.Std.UScalarTy),
+  (ty = Aeneas.Std.UScalarTy.Usize → False) → ty.cNumBits = ty.numBits
+Aeneas.Std.UScalarTy.U128_numBits_eq: Aeneas.Std.UScalarTy.U128
+...
+umToBitVec ≤ 5#3
+Aeneas.Std.UScalarTy.cNumBits_le._simp_1_11: (32 ≤ System.Platform.numBits) = True
+Aeneas.Std.UScalarTy.U32.sizeOf_spec: sizeOf Aeneas.Std.UScalarTy.U32 = 1
+Aeneas.Std.UScalar.size_U64_eq: Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.U64 = 18446744073709551616
+Aeneas.Std.UScalarTy.U128.sizeOf_spec: sizeOf Aeneas.Std.UScalarTy.U128 = 1
+Aeneas.Std.UScalar.size_UScalarTyU64: Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.U64 = Aeneas.Std.U64.size
+Aeneas.Std.UScalarTy.U16_numBits_eq: Aeneas.Std.UScalarTy.U16.numBits = 16
+Aeneas.Std.UScalarTy.cNumBits_nonzero: ∀ (ty : Aeneas.Std.UScalarTy), ty.cNumBits ≠ 0
+Aeneas.Std.UScalar.size_UScalarTyU128: Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.U128 = Aeneas.Std.U128.size
+Aeneas.Std.UScalarTy.Usize.sizeOf_spec: sizeOf Aeneas.Std.UScalarTy.Usize = 1
+Aeneas.Std.UScalarTy.U64_numBits_eq: Aeneas.Std.UScalarTy.U64.numBits = 64
+Aeneas.Std.Usize.size_scalarTac_eq: Aeneas.Std.Usize.size = Aeneas.Std.Usize.max + 1 ∧
+  Aeneas.Std.Usize.size = 2 ^ System.Platform.numBits
+Aeneas.Std.UScalarTy.cNumBits._sparseCasesOn_1.else_eq: ∀ {motive : Aeneas.Std.UScalarTy → Sort u}
+  (t : Aeneas.Std.UScalarTy) (Usize : motive Aeneas.Std.UScalarTy.Usize) («else» : Nat.hasNotBit 1 t.ctorIdx → motive t)
+  (h : Nat.hasNotBit 1 t.ctorIdx), Aeneas.Std.UScalarTy.cNumBits._sparseCasesOn_1 t Usize «else» = «else» h
+Aeneas.Std.UScalarTy.U8.sizeOf_spec: sizeOf Aeneas.Std.UScalarTy.U8 = 1
+Aeneas.Std.Usize.size_def: Aeneas.Std.Usize.size = 2 ^ Aeneas.Std.Usize.numBits
+Aeneas.Std.UScalarTy.cNumBits_le: ∀ (ty : Aeneas.Std.UScalarTy), ty.cNumBits ≤ ty.numBits
+Aeneas.Std.UScalar.size_U128_eq: Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.U128 =
+  340282366920938463463374607431768211456
+Aeneas.Std.UScalarTy.numBits.eq_4: Aeneas.Std.UScalarTy.U32.numBits = 32
+
+Running as unit: run-rfc7a538c672046acabff30ade46cc9bc.scope; invocation ID: 33229406f36b4867a171530ec5c562bb

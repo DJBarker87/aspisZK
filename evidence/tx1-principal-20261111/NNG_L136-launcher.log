@@ -1,0 +1,25 @@
+{"attempt": "NNG_L136", "exit_status": 0, "wall_seconds": 1.8540841850917786, "peak_rss_kib": "2432992", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+@[reducible] def Aeneas.Std.Array.length.{u} : {α : Type u} → {n : Usize} → Std.Array α n → ℕ :=
+fun {α} {n} v => (↑v).length
+def AspisR1.OraclePortStdBuilder.fromFn : {T C : Type} →
+  (n : Usize) → core.ops.function.FnMut C Usize T → C → Result (Std.Array T n) :=
+fun {T C} n f c => do
+  let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f (AspisR1.OraclePortStdBuilder.indices n) c
+  match __x with
+    | (xs, snd) => if h : xs.length = ↑n then Result.ok ⟨xs, h⟩ else Result.fail Error.panic
+
+...
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+@[reducible] def Aeneas.Std.Array.length.{u} : {α : Type u} → {n : Usize} → Std.Array α n → ℕ :=
+fun {α} {n} v => (↑v).length
+def AspisR1.OraclePortStdBuilder.fromFn : {T C : Type} →
+  (n : Usize) → core.ops.function.FnMut C Usize T → C → Result (Std.Array T n) :=
+fun {T C} n f c => do
+  let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f (AspisR1.OraclePortStdBuilder.indices n) c
+  match __x with
+    | (xs, snd) => if h : xs.length = ↑n then Result.ok ⟨xs, h⟩ else Result.fail Error.panic
+
+Running as unit: run-red13a6f62d3142cbbf49d8f1a386e18d.scope; invocation ID: 7f527319c1cc42beaa2ee9b58afb39d9

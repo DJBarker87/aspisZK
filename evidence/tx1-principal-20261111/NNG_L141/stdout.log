@@ -1,0 +1,10 @@
+def AspisR1.OraclePortStdBuilder.fromFnLoop : {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T →
+    List Aeneas.Std.Usize → C → Aeneas.Std.Result (List T × C) :=
+fun {T C} f x x_1 =>
+  List.brecOn (motive := fun x => C → Aeneas.Std.Result (List T × C)) x (AspisR1.OraclePortStdBuilder.fromFnLoop._f f)
+    x_1
+def AspisR1.OraclePortStdBuilder.indices : Aeneas.Std.Usize → List Aeneas.Std.Usize :=
+fun n => List.ofFn fun i => Aeneas.Std.Usize.ofNatCore ↑i ⋯
+NNG_generated/NNG_InspectBuilder136.lean:5:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NNG_generated/NNG_InspectBuilder136.lean:5:13: error: unexpected identifier; expected ':'

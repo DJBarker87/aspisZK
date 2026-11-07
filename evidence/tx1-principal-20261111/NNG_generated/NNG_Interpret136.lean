@@ -46,19 +46,17 @@ theorem exact_graph {A : Type} (events : RSL.Env → NMT_CallTree.Event → List
     have tails : (fun a => interpret events (k a)) =
         (fun a => graph (fun env => observation id (events env) (k a))) := funext ih
     rw [tails, silent_graph events, graph_bind]
-    funext env out
-    unfold graph
-    rw [←observation_bind]
-    rfl
+    apply congrArg graph
+    funext env
+    exact (observation_bind id (events env) (.plain r .done) k).symm
   | call s args r k ih =>
     change RSL.Spec.bind (call events s args r) (fun a => interpret events (k a)) = _
     have tails : (fun a => interpret events (k a)) =
         (fun a => graph (fun env => observation id (events env) (k a))) := funext ih
     rw [tails, call_graph, graph_bind]
-    funext env out
-    unfold graph
-    rw [←observation_bind]
-    rfl
+    apply congrArg graph
+    funext env
+    exact (observation_bind id (events env) (invoke s args r) k).symm
 #print axioms exact_graph
 
 /-- Interpretation is constructive at the actual observation: no existence
