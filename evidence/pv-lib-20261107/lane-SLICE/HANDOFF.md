@@ -90,3 +90,5 @@ D978 attempt 49913: PV_STX2_Source7EntryOwnedRegistered: passing pinned replay.
 D978 attempt 49914: PV_STX2_Source7EntryOwnedWellFormed: passing pinned replay.
 
 D978 attempt 49915: PV_STX2_Source7EntryOwnedIndexed: passing pinned replay.
+
+D978 attempt 49916: PV_STX2_Source7EntryOwnedAligned: passing pinned replay.
