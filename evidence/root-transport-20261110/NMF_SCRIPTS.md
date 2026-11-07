@@ -1,0 +1,11 @@
+# Owned scripts and repaired inputs
+
+NMF_transport/seed/formal/audit/batch are owned adaptations of retained NLW scripts. The existing S2W_run_host.py and S2H_reservation.py are unchanged. Admission remains exit0 AND allowed:true; disk checks retain >=40GB and wait/retry rules; all scopes retain MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64 and Lean-M7000. The runner forbids Kani/extraction and enforces an additional 80-total-scope ceiling. The only native executable built is the optimized existing audit driver; no Rust verification, native functional bridge, SBF or extraction runs.
+
+L001's diagnostic #print names were corrected in L002. L003's original unprefixed SdkD imports selected an incompatible historical Phase owner; L004 uses the unchanged RPz7 canonical owners from the actual headline closure. L004's missing map_slice reference was replaced in L005 by explicit map_take/map_drop equalities. L008's unresolved accumulator placeholder was repaired in L009 by giving the header theorem its expected type. L010 strengthens the successful L009 statement with the requested direct NLT application, leaving both extent clauses unchanged. All failures are retained; no timed-out or memory-killed shape was rerun. No infrastructure repair, proof rename, cap or timeout increase was used.
+
+The audit driver changes only NLW -> NMF module/manifest/output filenames; NMF_DRIVER.diff preserves the full diff. The raw walker source is byte-identical to NEP_WALKER.lean; NMF_WALKER_PIN.json pins the selected object and unchanged C code. The same adapted optimized driver passes all eight planted/mutation fixtures. Expected import records are the unchanged NLW/coherent ledger23 records plus exact imports of NMF modules. No scanner or axiom validation was weakened.
+
+All foreign paths are read-only dependency/source inputs; every host write is under this job's own codex-cx-root-transport-20261110 directory. There are no key, account, authority, fund, sibling worktree, or session-A mutations. Seeds and own compiled caches are retained.
+
+Storage hygiene: launcher/barrier logs and the two borrowed generated audit C inputs are retained as .xz plus original-byte .sha256. The owned link wrapper reads exactly those decompressed C bytes; no validation or executed code changes. NMF_HYGIENE.json lists the conversion.
