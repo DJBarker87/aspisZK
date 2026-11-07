@@ -1,3 +1,11 @@
+# Session5 in progress
+
+D984 accepted. First complete operational statement module f361 compiled49739;
+Contract is an unproved Prop. Full table is a parameter to be completed by lane A.
+Next row270; no endpoint premise removed. See SESSION5.md.
+
+---
+
 # SPEC session4 checkpoint — first row blocked by checked local mismatch
 
 Resumed a84dc05c68e; D983 scope is18 THREAD-PATH rows only. Slice/source7 now
