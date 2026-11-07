@@ -177,3 +177,5 @@ Attempt 49681: PV_FN_SLICE_f7_DropRuntime, exit0.
 Attempt 49682: PV_FN_SLICE_f7_HandlerSpec, exit0.
 
 Attempt 49683: PV_FN_SLICE_RuntimeBindings, exit0.
+
+Attempt 49684: PV_FN_SLICE_f22_TypedDestructor, exit0.
