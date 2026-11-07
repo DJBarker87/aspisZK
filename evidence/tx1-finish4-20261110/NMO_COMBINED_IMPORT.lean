@@ -22,7 +22,10 @@ import NMO_MaskStored
 import NMO_MaskValue
 import NMO_MulAtState
 import NMO_PrefixBounds
+import NMO_PrefixEmbedding
 import NMO_PrefixErrors
+import NMO_PrefixRegion
+import NMO_PrefixStep
 import NMO_TerminalStored
 import NMO_TerminalWindows
 import NMO_Transcription
@@ -104,12 +107,24 @@ import NMO_Transcription
 #check @AspisR1.NMO_PrefixBounds.native_windows
 #print axioms AspisR1.NMO_PrefixBounds.record_lengths
 #check @AspisR1.NMO_PrefixBounds.record_lengths
+#print axioms AspisR1.NMO_PrefixEmbedding.represented
+#check @AspisR1.NMO_PrefixEmbedding.represented
+#print axioms AspisR1.NMO_PrefixEmbedding.slice_append
+#check @AspisR1.NMO_PrefixEmbedding.slice_append
 #print axioms AspisR1.NMO_PrefixErrors.claims_error
 #check @AspisR1.NMO_PrefixErrors.claims_error
 #print axioms AspisR1.NMO_PrefixErrors.rounds_abort
 #check @AspisR1.NMO_PrefixErrors.rounds_abort
 #print axioms AspisR1.NMO_PrefixErrors.rounds_error
 #check @AspisR1.NMO_PrefixErrors.rounds_error
+#print axioms AspisR1.NMO_PrefixRegion.source
+#check @AspisR1.NMO_PrefixRegion.source
+#print axioms AspisR1.NMO_PrefixRegion.total
+#check @AspisR1.NMO_PrefixRegion.total
+#print axioms AspisR1.NMO_PrefixRegion.windows
+#check @AspisR1.NMO_PrefixRegion.windows
+#print axioms AspisR1.NMO_PrefixStep.geometry
+#check @AspisR1.NMO_PrefixStep.geometry
 #print axioms AspisR1.NMO_TerminalStored.map_written
 #check @AspisR1.NMO_TerminalStored.map_written
 #print axioms AspisR1.NMO_TerminalStored.reachable
