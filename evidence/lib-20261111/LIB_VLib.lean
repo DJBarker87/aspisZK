@@ -3,7 +3,7 @@ import LIB_VRecordsAll
 import LIB_VParse
 import LIB_VSemantic
 import LIBC_VPrepare
-import LIBC_VTx1A
+import LIB_VTx1A
 import LIBC_VTx1B
 import LIBC_CheckValuesDomain
 set_option autoImplicit false
@@ -69,7 +69,7 @@ def library : VLib where
  expandValues := LIBC_VPrepare.expandValues
  wideView := LIBC_VPrepare.wideView
  viewSemantic := LIB_VCarriers.viewSemantic
- parseShape := LIBC_VTx1A.parseShape
+ parseShape := LIB_VTx1A.parseShape
  canonicalScan := LIBC_VTx1A.canonicalScan
  zeroE29 := LIB_VCarriers.zeroE29
  accNew := LIBC_VTx1A.accNew
@@ -189,7 +189,7 @@ theorem wideView_exact : library.wideView = LIBC_VPrepare.wideView := rfl
 #print axioms wideView_exact
 theorem viewSemantic_exact : library.viewSemantic = LIB_VCarriers.viewSemantic := rfl
 #print axioms viewSemantic_exact
-theorem parseShape_exact : library.parseShape = LIBC_VTx1A.parseShape := rfl
+theorem parseShape_exact : library.parseShape = LIB_VTx1A.parseShape := rfl
 #print axioms parseShape_exact
 theorem canonicalScan_exact : library.canonicalScan = LIBC_VTx1A.canonicalScan := rfl
 #print axioms canonicalScan_exact
@@ -247,7 +247,7 @@ def wideViewValue (a : Bytes × Bytes × Bytes) (env : Env) := LIBC_WideView.val
 theorem wideView_returns (a : Bytes × Bytes × Bytes) (env : Env) : NND_Returned.Returns (library.wideView.law a) env (wideViewValue a env) := LIBC_WideView.returns a env
 #print axioms wideView_returns
 def parseShapeValue (a : Bytes) (env : Env) := LIBC_ParseShape.value a env
-theorem parseShape_returns (a : Bytes) (env : Env) : NND_Returned.Returns (library.parseShape.law a) env (parseShapeValue a env) := LIBC_ParseShape.returns a env
+theorem parseShape_returns (a : Bytes) (env : Env) : NND_Returned.Returns (library.parseShape.law a) env (parseShapeValue a env) := LIB_ParseShapeTotal.returns a env
 #print axioms parseShape_returns
 def canonicalScanValue (a : Bytes) (env : Env) := LIBC_CanonicalScan.value a env
 theorem canonicalScan_returns (a : Bytes) (env : Env) : NND_Returned.Returns (library.canonicalScan.law a) env (canonicalScanValue a env) := LIBC_CanonicalScan.returns a env
