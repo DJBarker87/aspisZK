@@ -10,6 +10,6 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem splitZero {W : Type} (c : Calls) (s : CheckpointData W) :
  raw04 c s = tryStep (c.c16 s.checkpointData) (fun _ => raw05 c s) :=
- emitted_try _ _
+ emitted_try (c.c16 s.checkpointData) (fun _ => raw05 c s)
 #print axioms splitZero
 end NMT_345

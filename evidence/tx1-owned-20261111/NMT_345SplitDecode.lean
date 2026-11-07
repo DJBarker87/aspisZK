@@ -10,6 +10,6 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem splitDecode {W : Type} (c : Calls) (s : PublicData W) :
  raw06 c s = tryStep (c.c12 s.publicData) (fun statement => raw07 c ⟨s,statement⟩) :=
- emitted_try _ _
+ emitted_try (c.c12 s.publicData) (fun statement => raw07 c ⟨s,statement⟩)
 #print axioms splitDecode
 end NMT_345

@@ -22,7 +22,7 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem split{name} {{W : Type}} (c : Calls) (s : {phase} W) :
  {before} c s = tryStep ({call}) ({next}) :=
- emitted_try _ _
+ emitted_try ({call}) ({next})
 #print axioms split{name}
 end NMT_345
 '''

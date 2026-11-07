@@ -22,20 +22,18 @@ theorem checkpointCore_value (a : Account) (program : Key) (writable : Bool) :
  rw [NGL_CheckpointModel.result]
  unfold NGL_CheckpointModel.reply checkpointValue
  simp only [toAccount]
- split
- · rfl
- · cases a.length with
+ by_cases hm : (!decide (a.owner = program) || a.is_signer || a.executable || a.is_writable != writable) = true
+ · simp only [if_pos hm]; rfl
+ · simp only [if_neg hm]
+   cases a.length with
    | Err e => simp only [mapCore,mapOuter,from_toPE]
-   | Ok n => simp only [mapCore]; split <;> rfl
+   | Ok n =>
+     simp only [mapCore,id_eq]
+     cases hn : (n != 1768#usize) <;> rfl
 
 theorem checkpoint_size_bool (n : Usize) :
  (n.val != RSL.CHECKPOINT_BYTES) = (n != 1768#usize) := by
- by_cases h : n = 1768#usize
- · subst n; rfl
- · have hn : n.val ≠ 1768 := by
-    intro e
-    exact h (UScalar.eq_of_val_eq e)
-   simp [h,hn,RSL.CHECKPOINT_BYTES]
+ rfl
 
 theorem key_ne (x y : Key) :
  decide (key x ≠ key y) = !(decide (x = y)) := by

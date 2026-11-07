@@ -10,6 +10,14 @@ candidate. Native domains are explicit; generic emitted/std supplements are
 not expanded Kani passes. Remaining steps are active. No328/094 row proof
 started before345 completion. See NMT_RSL_ADOPTION.md and per-scope receipts.
 
+Resumed stage2 checkpoint: exact emitted per-call boundaries through proof-data
+read PASS; concrete full-result decoder/validator/common/encoder/semantic-public
+transports PASS; first CLOSED source-position installations and payment-domain
+invariants PASS. Still no complete345 canonical observable fold;328/094 remain
+deferred under binding order. NMT_REMAINING is the active member table;
+NMT_RESUME_PROGRESS records counts. New-root raw audit is pending, so old58-root
+audit is NOT claimed for these additions. No timeout/OOM/cap increase.
+
 Prior run record follows unchanged:
 
 # NMT final handoff

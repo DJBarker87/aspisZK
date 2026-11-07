@@ -35,13 +35,13 @@ theorem zero_all_loop (bytes : Slice U8) (n : Nat) (i : Usize)
       if_pos (show i < Slice.len bytes from inside),call,hz,
       show (0#u8 != 0#u8) = false from rfl,Bool.false_eq_true,if_false,lift,bind_tc_ok]
      rw [tail]
-     change _ = .ok (if ((b == 0#u8) && (bytes.val.drop (i.val+1)).all (· == 0#u8)) then _ else _)
+     change _ = Result.ok (if ((b == 0#u8) && (bytes.val.drop (i.val+1)).all (· == 0#u8)) then (none : Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)) else some (.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized))
      simp only [hz,beq_self_eq_true,Bool.true_and]
      simpa only [r1_pool_adapter.owned.require_zero_loop,
       r1_pool_adapter.owned.require_zero_loop.body,lift,bind_tc_ok,inc] using rest
    · rw [NFQ_ZeroGateModel.reject_at bytes i b inside selected hz]
      rw [tail]
-     change _ = .ok (if ((b == 0#u8) && (bytes.val.drop (i.val+1)).all (· == 0#u8)) then _ else _)
+     change _ = Result.ok (if ((b == 0#u8) && (bytes.val.drop (i.val+1)).all (· == 0#u8)) then (none : Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)) else some (.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized))
      simp [hz]
 #print axioms zero_all_loop
 end NMT_345

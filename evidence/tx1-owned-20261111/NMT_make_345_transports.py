@@ -11,7 +11,8 @@ plans=[]
 for label,can,exclude,imports in [
  ('Dec','AspisR1TerminalDecoder',{'aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public'},['NFY_Part058']),
  ('Prep','AspisR1PublicPreparation',set(),['NJB_SemanticPublic']),
- ('First','NMT_first',set(),['NMT_first.Types'])]:
+ ('First','NMT_first',set(),['NMT_first.Types']),
+ ('FIq','FIq_Native',{'aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1','aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1'},['NKR_DigestChildren','NKR_TermPublic'])]:
  # Only statement value types needed by semantic_public on prep/first; errors
  # are transported on the decoder path once, not duplicated needlessly.
  selected=[(k,n,b) for k,n,b in items if n not in exclude and (label=='Dec' or 'Error' not in n)]
@@ -58,7 +59,7 @@ open Aeneas Aeneas.Std AspisR1.NMT_Transport
   for d,other,ty in [('to','from','NMT_stage1_owned.'+n),('from','to',cname(n))]:
    t+=f'@[simp] theorem {d}{alias}_inverse (x : {ty}) : {other}{alias} ({d}{alias} x) = x := by\n cases x <;> simp [{d}{alias},{other}{alias}]\n#print axioms {d}{alias}_inverse\n'
   t+=f'end NMT_345{label}\n';(E/(mod+'.lean')).write_text(t)
-  plans.append(dict(module=mod,kind=kind,type=n,alias=alias,target=cname(n),purpose={'Dec':'CLOSED decoder/validator/encoder exact carriers','Prep':'CLOSED semantic_public exact source carriers','First':'OPEN328 own-argument transport'}[label]));prior=mod
+  plans.append(dict(module=mod,kind=kind,type=n,alias=alias,target=cname(n),purpose={'Dec':'CLOSED decoder/validator/encoder exact carriers','Prep':'CLOSED semantic_public exact source carriers','First':'OPEN328 own-argument transport','FIq':'Concrete NKR publicDom caller-clause model'}[label]));prior=mod
 (E/'NMT_345_TRANSPORTS.json').write_text(json.dumps(plans,indent=1)+'\n')
 (E/'NMT_345TransportBase.lean').write_text('''import NMT_345Context
 import NMT_Transport_T16

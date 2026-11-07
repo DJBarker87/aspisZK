@@ -10,6 +10,6 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem splitSelected {W : Type} (c : Calls) (s : Selected W) :
  rawSelected c s = tryStep (c.c15 (selectedArray s)) (fun _ => raw00 c s) :=
- emitted_try _ _
+ emitted_try (c.c15 (selectedArray s)) (fun _ => raw00 c s)
 #print axioms splitSelected
 end NMT_345

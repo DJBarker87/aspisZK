@@ -1,28 +1,21 @@
-# NMT remaining obligations
+# NMT remaining obligations — resumed run active
 
-Target not yet established. No CANDIDATE root, no completed RowSpec087-parameterized
-fold ready for one-line instantiation, and no ledger credit. The next ledger
-still decides; baseline ledger24 is581 CLOSED/0 QUALIFIED/18 OPEN.
+Target not established. No candidate and no complete canonical parameterized
+fold yet. Only345 is active; binding order345→328→094 remains in force.
+Canonical targets/clauses are NMT_RSL_PROVENANCE and NMT_CALLER_CLAUSES.
 
-| Member | Checked support | Exact remaining obligation |
+| Member | Current checked progress | Exact remaining obligation |
 |---|---|---|
-|094 tx1|Fresh actual extraction E001, bc audit; explicit callee interface;17 typed structural transports with inverses; proposed complete-output RowSpec094|Prove the actual emitted parent's full SAME-call effectful fold into GExp/source/cohort; install CLOSED parse/scan/constructor/batch/geometry/query/flush/checkpoint roots on every reached own-argument domain. Whole-call-tree erasure L049/L051 is unproved at the first nested parse/control-flow continuation; the whole normalization shape is retired. This is a Lean proof gap, not a counterexample.|
-|094 prepare087|Total-producer RowSpec087 target retains every returned Rust Result plus scratch, ordered attempts and returning frame; stopped arm has no post-world|Sibling NMP has no committed candidate/root at final read-only check. Even with such a root, NMT has not yet completed the emitted087 representation transport and full094 fold; it is NOT ready for one-line instantiation.|
-|328 first_decoded|Fresh actual extraction E002 (also first); NMT_328_erase links full typed call tree to emission; NMT_emitted_fold interprets complete std map_err with deployed None and original Public/public/proof/k|Install the full094 packet at EXACT recorded arguments, prove raw-first/canonical carrier transport and digest-backend interpretation, expand child digest events and CLOSED error callback's complete RuntimeLog/stopped prefix, and discharge094 own extents at the caller occurrence. Current value/call-tree laws do not establish the observable row.|
-|345 stage1_owned|Fresh actual extraction E003; bc audit and full explicit interface|Install all seven CLOSED child roots in NMT_CHILD_ROWS at SAME original owned-account/public/statement/afterstate/proof arguments. Link opaque external statement projections and SDK/std equality/clone/constants to their canonical owners. Prove full typed source-ordered parent fold over ALL Results and stopped prefixes, including exact proof688..58295 selection and328 clauses. L052 wrong-count lemma failed elaboration and earns no guard credit. Full tree draft is unproved and was not submitted; do not import *.pending.|
-|RowSpec strength review|Total producer rather than arbitrary relation; complete Result/ordered attempts/returning frame, exact scratch; explicit runtime projection clause with domain witness|Next gate must review these proposed specs against complete ledger obligations and(bl)(3). No native/physical producer is installed, and no canonical-strength/equivalence certificate is claimed.|
-|Final gate|Focused ledger24 combined import and own-root raw ax2 audit are reported in NMT_AUDIT|These checks validate support only. No global/all-roots audit, cold release replay, SBF rebuild or source-to-ELF closure is claimed.|
+|345 source|E003 reused; exact emitted_route10/admitted_select; raw00…12 full-state continuations; boundary_distinct and eight subsequent single-call equations PASS|Finish remaining validator/map_err/common/encoder/constant/range/tag/public/328 call occurrences in source order and fold; no whole-call-tree normalization.|
+|345 pure children|CLOSED339 literal3, both340 occurrences and342 installed at exact source positions; full-result332/276/267/278/268 source/model transports PASS; complete ProgramError and30+6 structural value isomorphisms checked|Install the remaining concrete root interpretations at their occurrences; close canonical byte/key/error/length and std primitive transports. Generic clone/zero complements are explicit emitted/std support, not expanded Kani claims.|
+|345 publicDom|Payment common/transfer/withdrawal canonicality guard lemmas PASS; exact FIq public-carrier transport PASS|Derive NKR_DigestChildren.Domain(NKR_TermPublic.value semanticPublic) from actual validator's SAME returning arm, then instantiate canonical V.publicDom; never add this as345 input premise.|
+|345 observation|Full Obs bind/try/abort/divergence-prefix algebra and full canonical328 call packet PASS|Connect source steps to the full canonical RSL.Ref, including allocation abort, returning complete Result, original account/public/proof arguments and328 effects retained on post-child rejection. No complete RowSpec328-parameterized fold is claimed.|
+|328|E002 and previous-run value/std-map_err support retained read-only|Deferred until345 fold complete. Then full094 RowSpec at SAME Public/public/proof/k/None, complete RuntimeLog/error effects and representation/domain binding.|
+|094|E001 and previous-run17 structural transports retained|Deferred until328 fold complete. Then one step per actual call occurrence, CLOSED child domains internally derived and full087 RowSpec at SAME inputs/scratch. L049/L051 whole-tree shape retired.|
+|087 parameter|Canonical full-strength RSL spec adopted; NMP branch a8c1c9a1e14 last inspected without candidate|Instantiate only a concrete matching sibling root when available; no child result/success/endpoint or backend-projection premise.|
+|Gate|Historical audit58 roots remains valid for previous support only|Own new tops need raw ax2, all printed axioms and focused ledger24 combined import, exact pins/export/retention/local validation.|
 
-All seven345 child names requested by the job have CLOSED ledger24 records;
-none is reported as a missing inventory row. Their use remains uninstalled.
-The fresh emission also exposes SDK/std or external projection boundaries;
-those are recorded as interpretation/representation obligations, not silently
-trusted by an external inventory label.
-
-The remaining094/328/345 associations above are **Lean-only obligations**, not
-items requiring Kani. This job uses the full60 Lean/link/audit allowance; it
-must not claim that native exhaustion caused the stop. All3 extraction slots
-are used. Kani0/20: every owned body emits and its bc audit found no flagged
-exit, so the job's restricted Kani allowance has no eligible native target.
-Using it on unrelated probes would violate the route/cost rules. No timeout,
-memory kill, cap increase or unchanged timeout rerun occurred.
+New restricted Kani has no eligible target: every owned body emits and reused
+bc audit has no flagged exit. Remaining obligations are Lean-only. This is an
+ACTIVE checkpoint, not an early stop or claim that Kani blocks Lean work.
+All launch receipts preserve caps, timeouts, disk/share and admission evidence.

@@ -10,6 +10,6 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem splitProofData {W : Type} (c : Calls) (s : Candidate W) :
  raw09 c s = tryStep (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data c.c10 s.proofAccount) (fun bytes => raw10 c ⟨s,bytes⟩) :=
- emitted_try _ _
+ emitted_try (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data c.c10 s.proofAccount) (fun bytes => raw10 c ⟨s,bytes⟩)
 #print axioms splitProofData
 end NMT_345

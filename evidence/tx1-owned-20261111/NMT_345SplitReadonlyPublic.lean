@@ -10,6 +10,6 @@ open Aeneas Aeneas.Std Result
 continuation over the same full parent state; every Result arm is exact. -/
 theorem splitReadonlyPublic {W : Type} (c : Calls) (s : Selected W) :
  raw01 c s = tryStep (c.c13 s.publicAccount) (fun _ => raw02 c s) :=
- emitted_try _ _
+ emitted_try (c.c13 s.publicAccount) (fun _ => raw02 c s)
 #print axioms splitReadonlyPublic
 end NMT_345
