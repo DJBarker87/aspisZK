@@ -73,7 +73,7 @@ def zeroE29 : E29 := Array.repeat 29#usize AspisR1PublicPreparation.aspis_core.f
 /-- Emitted From<CodecError>, frozen candidate.rs:22, no dictionary or premise. -/
 theorem codec_native (e : CodecErr) :
  NMP_prepare.verifier.Error.Insts.CoreConvertFromCodecError.from e = .ok .Parse := rfl
-theorem codec_exact (e : CodecErr) : codecToV e = LIB_ErrorDebug.VErr.Parse := rfl
+theorem codec_exact (e : CodecErr) : codecToV e = vParse := rfl
 theorem prefix_source (p : Prefix) :
  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse p.source = .ok (.Ok p.parsed) := p.parse_eq
 theorem prefix_fields (p : Prefix) :

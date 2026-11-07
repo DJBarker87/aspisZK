@@ -1,0 +1,48 @@
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Aeneas.Std.Array.index_usize.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) : Result α
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some val => Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def AspisR1.CandidateStrictQM31Parser.limbsToCandidate : AspisR1.RetainedFieldByteCodec.QM31Limbs →
+  AspisR1CandidateParser.field.QM31 :=
+fun limbs =>
+  {
+    c0 :=
+      { a := AspisR1.M31ParserRefinement.valueToU32 (limbs 0), b := AspisR1.M31ParserRefinement.valueToU32 (limbs 1) },
+    c1 :=
+      { a := AspisR1.M31ParserRefinement.valueToU32 (limbs 2), b := AspisR1.M31ParserRefinement.valueToU32 (limbs 3) } }
+@[reducible] def AspisR1.RetainedFieldByteCodec.M31Value : Type :=
+Fin AspisR1.RetainedFieldByteCodec.m31Modulus
+inductive AspisR1PublicPreparation.PreparedHashCode.Event : Type 1
+number of parameters: 0
+constructors:
+AspisR1PublicPreparation.PreparedHashCode.Event.digest : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H → Slice (Slice U8) → Result (Std.Array U8 32#usize) → AspisR1PublicPreparation.PreparedHashCode.Event
+inductive AspisR1PublicPreparation.PreparedHashCode.Code : Type → Type 1
+number of parameters: 1
+constructors:
+AspisR1PublicPreparation.PreparedHashCode.Code.done : {A : Type} → A → AspisR1PublicPreparation.PreparedHashCode.Code A
+AspisR1PublicPreparation.PreparedHashCode.Code.step : {A B : Type} →
+  Result B → (B → AspisR1PublicPreparation.PreparedHashCode.Code A) → AspisR1PublicPreparation.PreparedHashCode.Code A
+AspisR1PublicPreparation.PreparedHashCode.Code.digest : {A H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H →
+      Slice (Slice U8) →
+        (Std.Array U8 32#usize → AspisR1PublicPreparation.PreparedHashCode.Code A) →
+          AspisR1PublicPreparation.PreparedHashCode.Code A
+AspisR1PublicPreparation.PreparedHashCode.run {A : Type} :
+  AspisR1PublicPreparation.PreparedHashCode.Code A → AspisR1PublicPreparation.PreparedHashCode.Log × Result A
+constructor AspisR1PublicPreparation.PreparedHashCode.Event.digest : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H → Slice (Slice U8) → Result (Std.Array U8 32#usize) → AspisR1PublicPreparation.PreparedHashCode.Event

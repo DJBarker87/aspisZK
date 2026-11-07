@@ -1,0 +1,39 @@
+{"attempt": "LIB_L109", "exit_status": 1, "wall_seconds": 19.31687703402713, "peak_rss_kib": "6437840", "swaps": "0", "print_axioms": ["'LIB_VRecords.raw_host' does not depend on any axioms", "'LIB_VRecords.row_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VRecords.validated_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIB_VRecords.validated_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VRecords.selected_of_validated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VRecords.payload_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VRecords.payload_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VRecords.state_exact' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+LIB_generated/LIB_VRecords.lean:14:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  e ≥ 0
+  0 ≤ e - 256*f ≤ 255
+  e - 256*f - g ≥ 1
+where
+ e := ↑n
+ f := ↑n / 256
+ g := ↑(UScalar.cMax UScalarTy.U8)
+LIB_generated/LIB_VRecords.lean:26:82: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+LIB_generated/LIB_VRecords.lean:33:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (prefixRaw p).validated_record r = Result.ok (raw (host (Classical.choose ⋯)))
+Error: Application type mismatch: The argument
+  validatedRecord._proof_1 p ↑r
+has type
+  ∃ out, (prefixRaw p).validated_record (row ↑r) =
+...
+he application
+  Classical.choose ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+p : Prefix
+r : U8
+⊢ Except.map LIB_Carriers.bytes (host (Classical.choose ⋯)) = Except.map LIB_Carriers.bytes (host (Classical.choose ⋯))
+'LIB_VRecords.raw_host' does not depend on any axioms
+'LIB_VRecords.row_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.validated_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VRecords.validated_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.selected_of_validated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.payload_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.payload_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.state_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r72779b9a608b4817ad4d47c8a6266f86.scope; invocation ID: 9a1e45180cc94560b30fe3d7a9946f47

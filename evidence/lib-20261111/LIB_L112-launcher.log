@@ -1,0 +1,54 @@
+{"attempt": "LIB_L112", "exit_status": 1, "wall_seconds": 20.910346846096218, "peak_rss_kib": "6421324", "swaps": "0", "print_axioms": ["'LIB_VDecodeCanonical.limbs' depends on axioms: [propext, Quot.sound]", "'LIB_VDecodeCanonical.answer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIB_VDecodeCanonical.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VDecodeCanonical.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIB_VDecodeCanonical.array' depends on axioms: [propext, Quot.sound]"]}
+LIB_generated/LIB_VDecodeCanonical.lean:44:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => Canon (↑_a)[j]
+Error: Application type mismatch: The argument
+  hj
+has type
+  j < (↑updated).length
+but is expected to have type
+  j < (↑_a).length
+in the application
+  (↑_a)[j]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used
+...
+eTrace.Range
+out✝ : Std.Array Q N
+final✝ : NGD_DecodeTrace.Final N
+iter nextIter : NGD_DecodeTrace.Range
+index : Usize
+out updated : Std.Array NGD_DecodeTrace.Q N
+live : ↑index < ↑N
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = Result.ok (some index, nextIter)
+q : NGD_DecodeTrace.Q
+reply : NGD_DecodeTrace.answer d index live = core.result.Result.Ok q
+store : out.update index q = Result.ok updated
+final : NGD_DecodeTrace.Final N
+rest : NGD_DecodeTrace.Trace d nextIter updated final
+ih : All updated → All final.1
+before : All out
+j : ℕ
+hj : j < (↑updated).length
+⊢ Canon (↑updated)[j]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    updated
+  has type
+    Std.Array NGD_DecodeTrace.Q N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑updated
+LIB_generated/LIB_VDecodeCanonical.lean:52:1: error: 'change' tactic failed, pattern
+  (0 < 2147483647 ∧ 0 < 2147483647) ∧ 0 < 2147483647 ∧ 0 < 2147483647
+is not definitionally equal to target
+  Canon AspisR1DecodeKFullV10.aspis_core.field.QM31.ZERO
+'LIB_VDecodeCanonical.limbs' depends on axioms: [propext, Quot.sound]
+'LIB_VDecodeCanonical.answer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VDecodeCanonical.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VDecodeCanonical.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VDecodeCanonical.array' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-rf97ac9e817044cc1bfd700f1bb69232a.scope; invocation ID: abf77184a3ba4b58b9926ec9698350a6

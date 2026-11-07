@@ -1,0 +1,86 @@
+LIB_generated/LIB_VRecords.lean:14:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  e ≥ 0
+  0 ≤ e - 256*f ≤ 255
+  e - 256*f - g ≥ 1
+where
+ e := ↑n
+ f := ↑n / 256
+ g := ↑(UScalar.cMax UScalarTy.U8)
+LIB_generated/LIB_VRecords.lean:26:82: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+LIB_generated/LIB_VRecords.lean:33:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (prefixRaw p).validated_record r = Result.ok (raw (host (Classical.choose ⋯)))
+Error: Application type mismatch: The argument
+  validatedRecord._proof_1 p ↑r
+has type
+  ∃ out, (prefixRaw p).validated_record (row ↑r) = Result.ok out
+but is expected to have type
+  ∃ x, (prefixRaw p).validated_record _a = Result.ok x
+in the application
+  Classical.choose ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+p : Prefix
+r : U8
+⊢ (prefixRaw p).validated_record r = Result.ok (raw (host (Classical.choose ⋯)))
+LIB_generated/LIB_VRecords.lean:41:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_fail`
+LIB_generated/LIB_VRecords.lean:42:23: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_div`
+LIB_generated/LIB_VRecords.lean:45:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+LIB_generated/LIB_VRecords.lean:47:16: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+LIB_generated/LIB_VRecords.lean:49:37: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `NJN_PdaModel.ok`
+  [apply] `NMS_R2ErrorMeaning.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `NJN_PdaModel.Reply.ok`
+  [apply] `Result.ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+LIB_generated/LIB_VRecords.lean:49:3: error: Type mismatch
+  congrArg (fun x => ?m.204) same
+has type
+  ?m.205 { row := r, framed := bytes } = ?m.204
+but is expected to have type
+  Result.ok (core.result.Result.Ok bytes) = Result.ok (core.result.Result.Ok record.framed)
+LIB_generated/LIB_VRecords.lean:51:57: error: unsolved goals
+p : Prefix
+r : U8
+⊢ ∃ out, FinishModel.payload (prefixRaw p) r = Result.ok out
+LIB_generated/LIB_VRecords.lean:52:1: error: unexpected identifier; expected command
+LIB_generated/LIB_VRecords.lean:68:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    Except.map LIB_Carriers.bytes (host (Classical.choose ⋯)) =
+      Except.map LIB_Carriers.bytes (host (Classical.choose ⋯))
+Error: Application type mismatch: The argument
+  payload._proof_1 p ↑r
+has type
+  ∃ out, FinishModel.payload (prefixRaw p) (row ↑r) = Result.ok out
+but is expected to have type
+  ∃ x, FinishModel.payload (prefixRaw p) _a = Result.ok x
+in the application
+  Classical.choose ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+p : Prefix
+r : U8
+⊢ Except.map LIB_Carriers.bytes (host (Classical.choose ⋯)) = Except.map LIB_Carriers.bytes (host (Classical.choose ⋯))
+'LIB_VRecords.raw_host' does not depend on any axioms
+'LIB_VRecords.row_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.validated_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VRecords.validated_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.selected_of_validated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.payload_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.payload_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIB_VRecords.state_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
