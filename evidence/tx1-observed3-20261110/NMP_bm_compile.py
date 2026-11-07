@@ -7,6 +7,8 @@ a,target=sys.argv[1:3]
 assert re.fullmatch(r'NMP_L\d{3}',a) and 81<=int(a[-3:])<=280
 assert target.startswith('NMP_') and not (E/a/'receipt.json').exists()
 env=json.loads((E/'NMP_L036.json').read_text())['env']
+if target in ['NMP_BM_Driver','NMP_BM_ProofDriver']:
+ env['LEAN_PATH']+=':'+env['LEAN_SYSROOT']+'/lib/lean'
 src='NMP_generated/'+target.replace('.','/')+'.lean'
 p=E/src
 if (E/(target+'.lean')).exists():
