@@ -303,6 +303,23 @@ theorem Spec.bind_emit_head {β : Type} (ev : Event) (k : Unit → Spec β) (env
   · simp [Spec.emit] at hm
   · simp [Spec.emit] at hm
 
+
+/-- If `m` admits exactly one silent returning observation, `bind m k` is `k`. -/
+theorem Spec.bind_det {α β : Type} (m : Spec α) (k : α → Spec β) (env : Env) (x : α)
+    (hm : ∀ o, m env o ↔ o = ⟨.ret x, []⟩) (o : Obs β) :
+    Spec.bind m k env o ↔ k x env o := by
+  constructor
+  · intro h
+    rcases h with ⟨a, e1, o2, h1, h2, ho⟩ | ⟨e1, h1, _⟩ | ⟨e1, h1, _⟩
+    · have := (hm _).mp h1
+      simp only [Obs.mk.injEq, Exit.ret.injEq] at this
+      rcases this with ⟨rfl, rfl⟩
+      subst ho; cases o2; simpa using h2
+    · have := (hm _).mp h1; simp at this
+    · have := (hm _).mp h1; simp at this
+  · intro h
+    exact Or.inl ⟨x, [], o, (hm _).mpr rfl, h, by cases o; rfl⟩
+
 /-- A `throw` reference admits exactly one observation. -/
 theorem RS.throw_obs {α : Type} (e : ProgramError) (env : Env) (o : Obs (Except ProgramError α)) :
     (RS.throw e : RS α) env o ↔ o = ⟨.ret (.error e), []⟩ := Iff.rfl
