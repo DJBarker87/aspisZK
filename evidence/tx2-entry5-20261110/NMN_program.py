@@ -9,7 +9,7 @@ def program(a,target):
  patch=''.join(''.join(difflib.unified_diff(orig.get(n,'').splitlines(True),v.splitlines(True),fromfile='a/'+n if n in orig else '/dev/null',tofile='b/'+n)) for n,v in altered.items())
  (E/'NMN_PROGRAM.patch').write_text(patch);(E/'NMN_PROGRAM.patch.sha256').write_text(sha(patch.encode())+'\n')
  files={'NMN_src/'+n:v for n,v in altered.items()};
- for helper in ['NMN_heap.rs','NMN_statement.rs']:
+ for helper in ['NMN_heap.rs','NMN_statement.rs','NMN_format.rs','NMN_full.rs']:
   files['NMN_src/programs/r1-cost-probe/src/'+helper]=(E/helper).read_text()
  files['NMN_gate.py']=(E/'NMN_gate.py').read_text()
  cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NMN_src/programs/r1-cost-probe/Cargo.toml','--target-dir',B+'/NMN_target','--features','pool-adapter,private-leaf-salts','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']

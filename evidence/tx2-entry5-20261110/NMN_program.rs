@@ -650,3 +650,5 @@ fn NMN_241_slot_argument(){NMN_241_sloterror::<true,false,false>();}
 #[kani::proof]#[kani::unwind(33)]#[kani::stub(validate_asq8,NMN_validate_error_nostring)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMN_241_slot_write(){NMN_241_sloterror::<false,true,false>();}
+
+include!("NMN_full.rs");
