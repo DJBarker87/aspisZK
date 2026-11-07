@@ -25,3 +25,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46318 ArcPollV2 passed: actual12950 request selects the new ArcClone source-count action and delivers the full original reply. This resolves the local dispatch defect only; source-cell/returned-value/frame histories and complete D984 adequacy remain open.
 
 46319 RangeTraceV2 passed: continuous ORIGINAL165->first93-issued history by named segment composition, including the actual source move. OWNER/D984 predecessor transport and later-iteration invariant remain open.
+
+46320 exact pinned f6 provider replay PV_FN_THREAD_f6Reply121 passed; cache preparation only, not caller/transport closure. See receipt.
