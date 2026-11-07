@@ -10,7 +10,7 @@
 +pub(crate) mod NLV_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NLV_native.rs
-@@ -0,0 +1,305 @@
+@@ -0,0 +1,446 @@
 +//! TX1 parent candidate. The frozen body is transcribed in source order;
 +//! only child calls become methods of ONE local log. No native row credit
 +//! until each method is installed from its CLOSED packet at SAME arguments.
@@ -94,12 +94,12 @@
 +fn withdraw()->aspis_statement::pool_v1::PoolV1WithdrawalPublicV1{use aspis_statement::pool_v1::PoolV1WithdrawalPublicV1;fn d()->[M31;8]{let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:d(),nullifier:d(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:d()}}
 +// K002 replacement: complete first-error cuts, isolated BEFORE unused owned
 +// fixtures are constructed. No successful normal spine is claimed here.
-+struct PrefixLog{window:u8,scratch:E,stop:u8,error:Error,calls:[u8;4],count:usize,j:usize,prepared:Option<Box<Prepared>>,public:(u64,u64,usize,usize,u8)}
++struct PrefixLog{field:usize,window:u8,scratch:E,stop:u8,error:Error,calls:[u8;4],count:usize,j:usize,prepared:Option<Box<Prepared>>,public:(u64,u64,usize,usize,u8)}
 +impl PrefixLog{
 + fn enter(&mut self,t:u8){self.calls[self.count]=t;self.count+=1;}
 + fn parse(&mut self,_:&[u8])->Result<Variant,Error>{self.enter(0);if self.stop==0{Err(self.error)}else{Ok(Variant::S2)}}
 + fn scan(&mut self,_:&[u8])->Result<(),Error>{self.enter(1);if self.stop==1{Err(self.error)}else{Ok(())}}
-+ fn prepare(&mut self,p:Public<'_>,_:&[u8],_:Hash,_:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{self.enter(2);if self.window==1{self.public=public_words(p,self.j,self.j);}if self.window==2{self.scratch=g[self.j%29];}for x in g.iter_mut(){*x=e();}if self.stop==2{Err(self.error)}else{Ok(self.prepared.take().unwrap())}}
++ fn prepare(&mut self,p:Public<'_>,_:&[u8],_:Hash,_:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{self.enter(2);if self.window==1{self.public=public_words(p,self.field,self.j);}if self.window==2{self.scratch=g[self.j%29];}for x in g.iter_mut(){*x=e();}if self.stop==2{Err(self.error)}else{Ok(self.prepared.take().unwrap())}}
 + fn accumulator(&mut self,_:Variant)->Result<Accumulator,Error>{self.enter(3);Err(self.error)}
 +}
 +fn prefix_source(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:Hash,obs:Observer,log:&mut PrefixLog)->Result<(),Error>{
@@ -116,11 +116,11 @@
 +fn prefix_check(mode:u8,bad:bool){prefix_window(mode,0,bad)}
 +fn prefix_window(mode:u8,window:u8,bad:bool){
 + let proof:[u8;57607]=kani::any();let bytes:[u8;1880]=kani::any();let j:usize=usize::from(kani::any::<u16>());kani::assume(j<57607);let before=proof[j];let public_before=bytes[j%1880];
-+ let t=crate::r1_semantic::NKQ_rejections::transition();let transfer=crate::r1_semantic::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&t)}else{Public::Withdrawal(&withdrawal,&t)};let pub_words=if window==1{public_words(public,j,j)}else{(0,0,0,0,255)};
-+ let error=err();let prepared=if mode==3{Some(prepared())}else{None};let mut log=PrefixLog{window,scratch:E::ZERO,stop:mode,error,calls:[255;4],count:0,j,prepared,public:(0,0,0,0,255)};
++ let t=crate::r1_semantic::NKQ_rejections::transition();let transfer=crate::r1_semantic::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&t)}else{Public::Withdrawal(&withdrawal,&t)};let field:usize=usize::from(kani::any::<u16>());kani::assume(field<576);let pub_words=if window==1{public_words(public,field,j)}else{(0,0,0,0,255)};
++ let error=err();let prepared=if mode==3{Some(prepared())}else{None};let mut log=PrefixLog{field,window,scratch:E::ZERO,stop:mode,error,calls:[255;4],count:0,j,prepared,public:(0,0,0,0,255)};
 + let out=prefix_source(public,&bytes,&proof,10,Hash,None,&mut log);
 + let ordered=log.count==mode as usize+1&&log.calls[0]==0&&(mode<1||log.calls[1]==1)&&(mode<2||log.calls[2]==2)&&(mode<3||log.calls[3]==3);
-+ let good=matches!(out,Err(e) if e==error)&&ordered&&proof[j]==before&&bytes[j%1880]==public_before&&(window!=1||log.public==pub_words&&public_words(public,j,j)==pub_words)&&(window!=2||log.scratch==E::ZERO)&&(mode<3||log.prepared.is_none());
++ let good=matches!(out,Err(e) if e==error)&&ordered&&proof[j]==before&&bytes[j%1880]==public_before&&(window!=1||log.public==pub_words&&public_words(public,field,j)==pub_words)&&(window!=2||log.scratch==E::ZERO)&&(mode<3||log.prepared.is_none());
 + if bad{assert!(!good,"NLV matched corruption")}else{assert!(good,"NLV prefix selected first error")}
 +}
 +
@@ -316,3 +316,144 @@
 +#[kani::proof] #[kani::unwind(4097)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn prepare_scratch_control(){prefix_window(2,2,true)}
++
++// Isolated per-occurrence candidate windows, NOT a physical TX1 producer.
++// No callee internals are credited. Field/digest arithmetic is unreachable.
++fn small_window(mode:u8,bad:bool){
++ let j=usize::from(kani::any::<u16>());let tag=usize::from(kani::any::<u16>());
++ let good=match mode{
++  0=>{let k=usize::from(kani::any::<u16>());let error=err();let mut called=false;
++   let source=||->Result<(),Error>{if k!=SPLIT{return Err(Error::Parse)}called=true;Err(error)};
++   let mut source=source;let out=source();matches!(out,Err(e)if e==if k==SPLIT{error}else{Error::Parse})&&called==(k==SPLIT)},
++  1=>{let g=[E::ZERO;29];g[j%29]==E::ZERO},
++  2=>{let proof:[u8;57607]=kani::any();let slice=&proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1];slice.len()==32&&slice[j%32]==proof[compact::OFF_FOLDED_ROOT+j%32]&&slice.as_ptr()as usize==proof.as_ptr()as usize+compact::OFF_FOLDED_ROOT},
++  3=>{let bytes:[u8;32]=kani::any();let root:Result<[u8;32],_>=bytes.as_slice().try_into();matches!(root,Ok(r)if r[j%32]==bytes[j%32])},
++  4=>{let bytes:[u8;32]=kani::any();let root:Result<[u8;32],core::array::TryFromSliceError>=Ok(bytes);let root=root.unwrap();root[j%32]==bytes[j%32]},
++  5=>{let queries:[u32;22]=kani::any();let before=queries[j%22];let k=10;let start=0;let end=k;let borrowed=&queries;start==0&&end==10&&borrowed[j%22]==before&&borrowed.as_ptr()==queries.as_ptr()},
++  6=>{let a=accumulator();let before=acell(&a,4*(tag%64),j);let pointer=a.weights.as_ptr();let weights=&a.weights;weights.len()==64&&coord(weights[tag%64],j)as u64==before&&weights.as_ptr()==pointer},
++  7=>{let g=core::array::from_fn::<E,29,_>(|_|e());let before=g[j%29];let borrowed=&g;borrowed[j%29]==before&&borrowed.as_ptr()==g.as_ptr()},
++  8=>{let p=prepared();let before=pcell(&p,tag,j);let ptr=&*p as *const Prepared;let borrowed=&p;pcell(borrowed,tag,j)==before&&&**borrowed as *const Prepared==ptr},
++  9=>{let a=accumulator();let before=acell(&a,tag,j);let pointer=a.weights.as_ptr();let moved=a;acell(&moved,tag,j)==before&&moved.weights.as_ptr()==pointer},
++  10=>{let geom=geometry();let before=geom.inverses[tag%10][j%5];let pointer=geom.inverses.as_ptr();let borrowed=&geom;borrowed.inverses[tag%10][j%5]==before&&borrowed.inverses.as_ptr()==pointer},
++  11=>{let p=make_pending();let before=p.raw[tag%64][j%4];let terms=p.terms;let pointer=p.raw.as_ptr();let moved=p;moved.raw[tag%64][j%4]==before&&moved.terms==terms&&moved.raw.as_ptr()==pointer},
++  // One arbitrary native write iteration; full-vector loop association is OPEN.
++  12=>{let mut a=accumulator();let rhs=a.rhs;let power=a.power;let next=a.next;let after=q();let index=tag%64;let other=j%64;let before=a.weights[other];let weights=&mut a.weights;weights[index]=after;
++   a.rhs==rhs&&a.power==power&&a.next==next&&a.weights[index]==after&&(other==index||a.weights[other]==before)},
++  13=>{let bytes=Vec::from(kani::any::<[u8;1768]>());let before=bytes[j%1768];let pointer=bytes.as_ptr();let out:Result<Vec<u8>,Error>=Ok(bytes);
++   matches!(out,Ok(ref b)if b.len()==1768&&b[j%1768]==before&&b.as_ptr()==pointer)},
++  _=>unreachable!()
++ };
++ if bad{assert!(!good,"NLV matched corruption")}else{assert!(good,"NLV isolated candidate window")}
++}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_00_cut(){small_window(0,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_00_control(){small_window(0,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_01_cut(){small_window(1,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_01_control(){small_window(1,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_02_cut(){small_window(2,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_02_control(){small_window(2,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_03_cut(){small_window(3,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_03_control(){small_window(3,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_04_cut(){small_window(4,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_04_control(){small_window(4,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_05_cut(){small_window(5,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_05_control(){small_window(5,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_06_cut(){small_window(6,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_06_control(){small_window(6,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_07_cut(){small_window(7,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_07_control(){small_window(7,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_08_cut(){small_window(8,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_08_control(){small_window(8,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_09_cut(){small_window(9,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_09_control(){small_window(9,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_10_cut(){small_window(10,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_10_control(){small_window(10,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_11_cut(){small_window(11,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_11_control(){small_window(11,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_12_cut(){small_window(12,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_12_control(){small_window(12,true)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_13_cut(){small_window(13,false)}
++
++#[kani::proof] #[kani::unwind(4097)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parent_window_13_control(){small_window(13,true)}

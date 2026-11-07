@@ -24,9 +24,9 @@ structure State where
  scratchExclusive : Bool
  logical : Option NLV.Allocation
  semanticOwner : Option NLV.Allocation
- semanticValue : Option (r1_semantic.Verified Unit)
+ semanticValue : Option (AspisR1CurrentCaller.r1_semantic.Verified Unit)
  preparedOwner : Option NLV.Allocation
- preparedValue : Option verifier.Prepared
+ preparedValue : Option AspisR1CurrentCaller.verifier.Prepared
  semanticView : Option View
  y1View : Option View
 /-- Source-owned buffer at each exact occurrence, including disjoint rebuild. -/
@@ -55,7 +55,7 @@ def viewValues : Local → Option (Slice U8 × Slice U8)
  | .mark _ v _ => some (v.semantic,v.y1)
  | .constructor _ v _ => some (v.semantic,v.y1)
  | _ => none
-def semanticValue : Local → Option (r1_semantic.Verified Unit)
+def semanticValue : Local → Option (AspisR1CurrentCaller.r1_semantic.Verified Unit)
  | .mapSemantic _ _ (.Ok sem) => some sem
  | .mark _ _ sem => some sem
  | .constructor _ _ sem => some sem

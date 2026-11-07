@@ -24,3 +24,5 @@ RowSpec correction draft explicitly retains raw Rust Result alongside its model
 rejection transport; see NLV_ROWSPEC_REVIEW.md (NLV-F1). No row root or credit.
 
 Stage3: L081 ordered typed→SDK digest trace, L082 source trace existence, L083 initial physical carrier construction, L086 all38 frame/rank clauses, L088 source step/frame/progress assembly, L089 exact continuation induction, L090 complete initial SAME-argument source identity and parameterized physical fold, L091 selector coverage pass. Standard axioms only. Physical Cut producer and full child-resource installation remain OPEN. K003/K005 pass parse/scan first-error windows with K004/K006 matched failing controls; K007 timeout is retired without credit.
+
+Stage4: stronger NLV_RowSpec087/094 targets typecheck at L095/L096, source-only child application and full-packet projection at L097. They are UNPROVED resource targets, never native row roots. Sibling latest8c9d4e93d33 still reports087 OPEN. K008/K009 split error/order and K010/K011 independent public window positive/control verdicts pass. Stronger actual native producer/heap association, child domains and complete owned cleanup remain OPEN.

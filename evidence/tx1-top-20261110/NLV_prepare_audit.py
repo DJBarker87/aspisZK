@@ -23,7 +23,7 @@ groups=[allroots[len(allroots)*j//30:len(allroots)*(j+1)//30]for j in range(30)]
 (E/'NLV_AUDIT_MODULES.json').write_text(json.dumps([['NLV_COMBINED_IMPORT']for _ in groups]))
 expected={};conflicts=[]
 for path in [W/'NLS_EXPECTED_IMPORTS.jsonl',P/'NLJ_EXPECTED_IMPORTS.jsonl',C/'NLC_EXPECTED_IMPORTS.jsonl',N/'NLN_EXPECTED_IMPORTS.jsonl']:
- for line in path.read_text().splitlines():
+ for line in (path.read_text() if path.exists() else lzma.decompress((path.parent/json.loads(path.with_suffix(path.suffix+'.ref.json').read_text())['owned_input']).read_bytes()).decode()).splitlines():
   x=json.loads(line)
   if x['module']in expected and expected[x['module']]['imports']!=x['imports']:conflicts.append([expected[x['module']],x])
   expected[x['module']]=x

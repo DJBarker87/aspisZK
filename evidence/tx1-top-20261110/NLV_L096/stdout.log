@@ -1,0 +1,120 @@
+def AspisR1.NLV_Interface.CarrierBindings : NLV.State → ResourceSnapshot → Prop :=
+fun s r =>
+  (∀ (kind : NLV.OwnedKind),
+      r.payload kind ≠ none →
+        r.initialized kind = true ∧
+          ∃ a, s.ownership.allocations kind = some a ∧ a.live = true ∧ a.address > 0 ∧ a.initialized ≤ a.capacity) ∧
+    match s.core.locals with
+    | NLJ_Tx1.Local.prepare g => r.payload NLV.OwnedKind.scratch = some (Payload.scratch g)
+    | NLJ_Tx1.Local.accumulator g p =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p)
+    | NLJ_Tx1.Local.markPrepare g p a =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.foldedSlice g p a =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.foldedCopy g p a slice =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.foldedUnwrap g p a reply =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.batch0 g p a folded =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.markMerkle g p a =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.geometry g p a =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.pending g p a geom =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a) ∧
+            r.payload NLV.OwnedKind.geometry = some (Payload.geometry geom)
+    | NLJ_Tx1.Local.query g p a geom pending =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+          r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a) ∧
+            r.payload NLV.OwnedKind.geometry = some (Payload.geometry geom) ∧
+              r.payload NLV.OwnedKind.pending = some (Payload.pending pending)
+    | NLJ_Tx1.Local.finishPending p a pending =>
+      r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+        r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a) ∧
+          r.payload NLV.OwnedKind.pending = some (Payload.pending pending)
+    | NLJ_Tx1.Local.checkpoint p a =>
+      r.payload NLV.OwnedKind.prepared = some (Payload.prepared p) ∧
+        r.payload NLV.OwnedKind.accumulator = some (Payload.accumulator a)
+    | NLJ_Tx1.Local.markCheckpoint b => r.payload NLV.OwnedKind.checkpoint = some (Payload.checkpoint b)
+    | NLJ_Tx1.Local.returned b => r.payload NLV.OwnedKind.checkpoint = some (Payload.checkpoint b)
+    | x => True
+def AspisR1.NLV_Interface.RowSpec_094 : {C : Type} →
+  IDa_Deployed.Uninstalled C → C → NP6_StdModel.Reservation → Native094 → Prop :=
+fun {C} missing indexError reservation native =>
+  ∀ (i : NLJ_Tx1.Input) (frame : NLJ_Packets.Frame094),
+    CallerDomain i →
+      i.digest = NLV_Deployed.digest missing indexError reservation →
+        have s := NLV.initial i frame;
+        have out := native s;
+        NLV.Invocation (NLV_Deployed.configuration missing indexError reservation) s.core.input.hashv 20 s
+            out.model.result out.model.attempted out.events out.after ∧
+          ResultTransport out ∧
+            ReturnedOwnership out ∧
+              (∀ e ∈ out.events, CarrierBindings e.pre (out.resources e) ∧ BatchDomain e.pre ∧ CheckpointDomain e.pre) ∧
+                NGP_L181.NativeAssociation s.core.input.hashv
+                    (NGQ_Normalize.normalize
+                      (GExp_FirstCode.code (NLV_Deployed.configuration missing indexError reservation).base
+                        (NLV_Deployed.configuration missing indexError reservation).boundaries
+                        (NLV_Deployed.configuration missing indexError reservation).std s.core.input.hashv
+                        s.core.input.digest s.core.input.publicValue s.core.input.publicBytes s.core.input.proof
+                        s.core.input.k))
+                    out.model ∧
+                  out.after.external = s.external ∧ out.after.core.input = s.core.input
+def AspisR1.NLV_Interface.ResultTransport : Observation094 → Prop :=
+fun out =>
+  out.terminal = Option.map (fun e => e.kind) out.events.getLast? ∧
+    match out.raw with
+    | ok (core.result.Result.Ok bytes) => out.model.result = ok (core.result.Result.Ok bytes)
+    | ok (core.result.Result.Err e) =>
+      if out.terminal = some NLJ_Tx1.Event.batch0 then
+        (e = verifier.Error.Parse ∨ e = verifier.Error.Merkle) ∧
+          (out.model.result = ok (core.result.Result.Err e) ∨ out.model.result = fail Error.panic)
+      else out.model.result = ok (core.result.Result.Err e)
+    | fail e => out.model.result = fail e
+    | div => out.model.result = div
+def AspisR1.NLV_Interface.BatchDomain : NLV.State → Prop :=
+fun s =>
+  match s.core.locals with
+  | NLJ_Tx1.Local.batch0 scratch p accumulator folded =>
+    have prepared := Tx1Q_Carriers.prepared p;
+    (↑s.core.input.proof).length = 57607 ∧
+      ∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+          (∀ j < 22, ↑(↑prepared.queries)[j]! < 262144) ∧
+            ∀ (k : Fin 3),
+              Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots prepared folded) k =
+                AspisV8R19.SqueezeOracleBridge.encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)
+  | x => True
+def AspisR1.NLV_Interface.CheckpointDomain : NLV.State → Prop :=
+fun s =>
+  match s.core.locals with
+  | NLJ_Tx1.Local.checkpoint p a =>
+    ↑s.core.input.k = 10 ∧
+      p.variant = transport.Variant.S2 ∧
+        (↑s.core.input.proof).length = 57607 ∧
+          (↑s.core.input.publicBytes).length = 1880 ∧
+            ↑a.next = 10 ∧
+              (↑a.weights).length = 64 ∧
+                NGC_KNE_Caller.WriterDomain (CheckpointBytes3Namespaces.toPrepared (Tx1Q_Carriers.prepared p))
+                  (CheckpointBytes3Namespaces.toAccumulator (Tx1Q_Carriers.accumulator a))
+  | x => True
