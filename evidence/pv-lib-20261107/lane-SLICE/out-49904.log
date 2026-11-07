@@ -1,0 +1,24 @@
+'PV_FN_SLICE_f7_Into8.enter8' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_Into8.through8' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_Into8.frame' depends on axioms: [propext, Quot.sound]
+theorem PV_FN_SLICE_f7_Into8.through8 : ∀ {E : Type} (x : PV_FN_SLICE_f7_Prefix.Input E)
+  (pre : PV_FN_SLICE_f7_Prefix.Pre x)
+  (resolve8 : x.P PV_FN_SLICE_f7_Prefix.source.2.1 = Option.some PV_STX2_SliceF8.program)
+  (resolve6 : x.P PV_FN_SLICE_f8_PrefixData.source.2.1 = Option.some PV_STX2_SliceF6.program)
+  (callee6 : PV_FN_SLICE_f6Consumer.Contract (PV_FN_SLICE_f7_Prefix.input8 x)),
+  PV_FN_SLICE_f8.Post (PV_FN_SLICE_f7_Prefix.input8 x) ∧
+    ∃ o,
+      PV_FN_SLICE_f8_FullReplies.Executed6 (PV_FN_SLICE_f7_Prefix.input8 x) o ∧
+        ∃ n,
+          PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H n
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        { frame := { activation := x.a, remaining := PV_STX2_SliceF7.program.body },
+                          callers := x.parent :: x.parents, store := x.s },
+                    world := x.w, events := x.es },
+                suspended := x.stack } =
+            PV_FN_SLICE_f8_FullReplies.finish (PV_FN_SLICE_f7_Prefix.input8 x) o :=
+⋯
