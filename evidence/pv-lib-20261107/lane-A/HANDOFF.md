@@ -274,3 +274,5 @@ Session4 49183 passed PV_LIB_A_WriterSites; exact receipt/axioms in session4.
 Session4 49185 passed PV_LIB_A_OwnerStoreActions; exact receipt/axioms in session4.
 
 Session4 49189 passed PV_LIB_A_RangeWriter; exact receipt/axioms in session4.
+
+Session4 49190 passed PV_LIB_A_WriterNumbering; exact receipt/axioms in session4.
