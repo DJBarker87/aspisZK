@@ -40,6 +40,13 @@ def run {A : Type} : Code A → Result A × List Event
  Aeneas.Std.bind (Aeneas.Std.bind r f) g=Aeneas.Std.bind r (fun a => Aeneas.Std.bind (f a) g) := by cases r <;> rfl
 #print axioms result_right
 #print axioms result_assoc
+theorem result_congr {A B : Type} (r : Result A) (f g : A → Result B)
+ (same : ∀ a,f a=g a) : Aeneas.Std.bind r f=Aeneas.Std.bind r g := by
+ cases r with
+ | ok a => exact same a
+ | fail e => rfl
+ | div => rfl
+#print axioms result_congr
 theorem erase_bind {A B : Type} (c : Code A) (k : A → Code B) :
  erase (bind c k) = (erase c >>= fun a => erase (k a)) := by
  induction c with

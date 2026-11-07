@@ -53,3 +53,21 @@ L048 proves328 tree erasure to the fresh actual emission. This is a parent
 call-association support theorem, not a full observable child composition.
 The generic erasure reduction was replaced by named laws over literal Std.bind;
 L045 records why the notation-level law did not rewrite that emitted primitive.
+
+Stage2 checked support: NMT_first.NMT_328_erase (L048) binds the typed call
+tree to the fresh actual328 emission; NMT_first.NMT_emitted_fold (L053)
+interprets std map_err for EVERY outer/native Result and invokes error only
+on the returned Err arm. Generic CallTree.run_result/stopped_prefix retain
+complete calls and stop without a suffix. These are NOT complete observable
+row folds: child digest/log expansions and their canonical representations
+are not yet installed. Whole094 erasure L049/L051 remained unproved; the
+large normalization/congruence shape is retired, with exact source/log inputs
+retained. Unproved094/345 tree and345 guard drafts are *.lean.pending and
+excluded from the gate. L052 guard elaboration failed; no guard claim.
+
+Current checked sources:33 modules/58 printed own roots. L054 combined import
+with ledger24 NLX_COMBINED_IMPORT PASS,17.890s/6743684KiB/swap0; L055 audit
+driver compile PASS. No CANDIDATE or ready one-line RowSpec087 instantiation
+exists. All seven explicitly requested345 child function names have CLOSED
+ledger24 rows, retained verbatim in NMT_CHILD_ROWS.json; their emitted-carrier
+and SAME-call installations remain the caller's obligation.

@@ -36,12 +36,12 @@ aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
     match r with
     | .Ok bytes => .ok (.Ok bytes)
     | .Err e => do let mapped ← NMT_call_6 e; .ok (.Err mapped))
-  := by
+ := by
  unfold first_decoded observer NMT_std_map_err
- simp only [bind_tc_ok, BuiltinFnOnce, AspisR1.NMT_CallTree.result_right, AspisR1.NMT_CallTree.result_assoc]
+ simp only [bind_tc_ok, BuiltinFnOnce]
  cases h : NMT_call_1 (SolanaDigest.Insts.Aspis_coreDigestDigest32 NMT_call_4 NMT_call_5) public1 public_bytes proof k () none with
- | fail e => simp only [h,bind_tc_fail]
- | div => simp only [h,bind_tc_div]
- | ok r => cases r <;> simp only [h,bind_tc_ok]
+ | fail e => simp [h,Aeneas.Std.bind]
+ | div => simp [h,Aeneas.Std.bind]
+ | ok r => cases r <;> simp [h,Aeneas.Std.bind]
 #print axioms NMT_emitted_fold
 end NMT_first

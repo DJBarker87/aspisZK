@@ -63,6 +63,6 @@ for fn,root,row in [('tx1','verifier.candidate.tx1','094'),('first','first_decod
  text+=' unfold NMT_'+row+'_tree '+root+'\n'
  laws='[Bind.bind, Pure.pure, MonadLift.monadLift, AspisR1.NMT_CallTree.bind,erase,invoke, erase_bind,erase_lift,erase_pure,erase_invoke,result_right,result_assoc,'+','.join(wrappers)+']'
  text+=' simp only '+laws+'\n'
- text+=" repeat' first\n | rfl\n | (split <;> simp only "+laws+")\n | (congr 1 <;> first | rfl | (funext x; simp only "+laws+"))\n"
+ text+=" repeat' first\n | rfl\n | (split <;> simp only "+laws+")\n | (apply result_congr; intro x; simp only "+laws+")\n"
  text+='#print axioms NMT_'+row+'_erase\nend NMT_'+fn+'\n'
  (E/f'NMT_{row}Tree.lean').write_text(text)
