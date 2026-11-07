@@ -1,0 +1,15 @@
+PV_FN_SLICE_f7_Drop.Contract : Prop
+def PV_FN_SLICE_f7_Drop.Summary : PV_FN_SLICE_f7_Drop.Cut →
+  PV_W5_NativeFrame.Backend → (PV_STX2_Store.Address → Option PV_STX2_Syntax.Data) → Prop :=
+fun x H changes =>
+  PV_W5_DropLeaf.Post (PV_FN_SLICE_ValueCarrier.carrier x.C) (PV_FN_SLICE_f7_Drop.entry x) H x.w
+      PV_FN_SLICE_f7_Drop.source x.capture changes ∧
+    (PV_FN_SLICE_f7_Drop.effects x changes).nextActivation = x.s.nextActivation ∧
+      PV_W1_OwnerWellFormed.OwnerWellFormed (PV_FN_SLICE_f7_Drop.reply x H).world
+          (PV_FN_SLICE_f7_Drop.effects x changes).nextActivation ∧
+        (PV_FN_SLICE_f7_Drop.reply x H).answer =
+            (H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture)
+                (PV_EVHB_OwnerMachine.world x.w)).answer ∧
+          (PV_FN_SLICE_f7_Drop.reply x H).events =
+            (H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture)
+                (PV_EVHB_OwnerMachine.world x.w)).events

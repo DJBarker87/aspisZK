@@ -1,0 +1,14 @@
+'PV_FN_SLICE_f7_HandlerSpec.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_HandlerSpec.all_drops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_HandlerSpec.at_source178' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_SLICE_f7_HandlerSpec.at_source178 : ∀ (H : PV_FN_SLICE_f7_HandlerSpec.Handler)
+  (spec : PV_FN_SLICE_f7_HandlerSpec.Spec H) (x : PV_FN_SLICE_f7_Drop.Cut)
+  (changes : PV_STX2_Store.Address → Option PV_STX2_Syntax.Data)
+  (pre : PV_W1_OwnerWellFormed.OwnerWellFormed x.w x.s.nextActivation),
+  ∃ fallback,
+    PV_FN_SLICE_f7_Drop.Summary x fallback changes ∧
+      H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture) x.w = PV_FN_SLICE_f7_Drop.reply x fallback ∧
+        PV_W1_OwnerWellFormed.OwnerWellFormed
+          (H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture) x.w).world
+          (PV_FN_SLICE_f7_Drop.effects x changes).nextActivation :=
+⋯

@@ -1,0 +1,88 @@
+'PV_W5_F33Contract.body_shape' does not depend on any axioms
+'PV_W5_F33Contract.panic_shape' depends on axioms: [propext]
+'PV_W5_F33Contract.comparison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_W5_F33Contract.source6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_W5_F33Contract.frame' depends on axioms: [propext]
+'PV_W5_F33Contract.footer7' depends on axioms: [propext, Quot.sound]
+'PV_W5_F33Contract.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_SLICE_f33.contract : ∀ (D : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data)
+  (control : PV_STX2_SliceMachine.Control) (P : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program)
+  (H : PV_W5_UbCheckPrimitives.Handler) (base : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data)
+  (ctrl : PV_STX2_SliceMachine.Control) (word : PV_STX2_Syntax.Data → ℕ)
+  (addresses : PV_STX2_Syntax.Data → PV_STX2_Store.Address) (backend : PV_W5_NativeFrame.Backend)
+  (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (parent : PV_STX2_SliceMachine.Frame)
+  (parents : List PV_STX2_SliceMachine.Frame) (a newLen capacity : ℕ) (w : PV_EVHB_OWNER.OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent) (pre : PV_FN_SLICE_f33.Pre s a newLen capacity w)
+  (spec : PV_FN_SLICE_f33.MachineSpec D control P H base ctrl word addresses backend),
+  PV_FN_SLICE_f33.Post D control P H s parent parents a w prior :=
+⋯
+structure PV_FN_SLICE_f33.Pre (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (a newLen capacity : ℕ)
+  (w : PV_EVHB_OWNER.OWNER) : Prop
+number of parameters: 5
+fields:
+  PV_FN_SLICE_f33.Pre.wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation
+  PV_FN_SLICE_f33.Pre.live : a < s.nextActivation
+  PV_FN_SLICE_f33.Pre.newLenWord : newLen < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f33.Pre.capacityWord : capacity < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f33.Pre.lengthArg : s.cells { activation := a, localIndex := 1 } =
+      Option.some (PV_STX2_Syntax.Data.number newLen)
+  PV_FN_SLICE_f33.Pre.capacityArg : s.cells { activation := a, localIndex := 2 } =
+      Option.some (PV_STX2_Syntax.Data.number capacity)
+constructor:
+  PV_FN_SLICE_f33.Pre.mk {s : PV_STX2_Store.Store PV_STX2_Syntax.Data} {a newLen capacity : ℕ} {w : PV_EVHB_OWNER.OWNER}
+    (wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation) (live : a < s.nextActivation)
+    (newLenWord : newLen < PV_STX2_Source7CapacityScalars.modulus)
+    (capacityWord : capacity < PV_STX2_Source7CapacityScalars.modulus)
+    (lengthArg : s.cells { activation := a, localIndex := 1 } = Option.some (PV_STX2_Syntax.Data.number newLen))
+    (capacityArg : s.cells { activation := a, localIndex := 2 } = Option.some (PV_STX2_Syntax.Data.number capacity)) :
+    PV_FN_SLICE_f33.Pre s a newLen capacity w
+structure PV_FN_SLICE_f33.MachineSpec (D : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data)
+  (control : PV_STX2_SliceMachine.Control) (P : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program)
+  (H : PV_W5_UbCheckPrimitives.Handler) (base : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data)
+  (ctrl : PV_STX2_SliceMachine.Control) (word : PV_STX2_Syntax.Data → ℕ)
+  (addresses : PV_STX2_Syntax.Data → PV_STX2_Store.Address) (backend : PV_W5_NativeFrame.Backend) : Prop
+number of parameters: 9
+fields:
+  PV_FN_SLICE_f33.MachineSpec.carrier : D = PV_W5_StringLiterals.C base word addresses
+  PV_FN_SLICE_f33.MachineSpec.control : control = PV_W5_UbCheckPrimitives.K ctrl
+  PV_FN_SLICE_f33.MachineSpec.leaves : ∀ (callee : PV_STX2_Syntax.Data),
+      PV_STX2_ChainCaptures.regular callee = Option.some 37 → P callee = Option.none
+  PV_FN_SLICE_f33.MachineSpec.native : ∀ (callee : PV_STX2_Syntax.Data) (activation : ℕ)
+      (args : List PV_STX2_Syntax.Data) (world : PV_EVHB_OWNER.OWNER),
+      PV_STX2_ChainCaptures.regular callee = Option.some 37 →
+        H (PV_STX2_Native.Request.child callee activation args) world =
+          PV_STX2_Source7QUniformResourceHandler.lift backend (PV_STX2_Native.Request.child callee activation args)
+            world
+constructor:
+  PV_FN_SLICE_f33.MachineSpec.mk {D : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data}
+    {control : PV_STX2_SliceMachine.Control} {P : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program}
+    {H : PV_W5_UbCheckPrimitives.Handler} {base : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data}
+    {ctrl : PV_STX2_SliceMachine.Control} {word : PV_STX2_Syntax.Data → ℕ}
+    {addresses : PV_STX2_Syntax.Data → PV_STX2_Store.Address} {backend : PV_W5_NativeFrame.Backend}
+    (carrier : D = PV_W5_StringLiterals.C base word addresses) :
+    control = PV_W5_UbCheckPrimitives.K ctrl →
+      ∀
+        (leaves :
+          ∀ (callee : PV_STX2_Syntax.Data),
+            PV_STX2_ChainCaptures.regular callee = Option.some 37 → P callee = Option.none)
+        (native :
+          ∀ (callee : PV_STX2_Syntax.Data) (activation : ℕ) (args : List PV_STX2_Syntax.Data)
+            (world : PV_EVHB_OWNER.OWNER),
+            PV_STX2_ChainCaptures.regular callee = Option.some 37 →
+              H (PV_STX2_Native.Request.child callee activation args) world =
+                PV_STX2_Source7QUniformResourceHandler.lift backend
+                  (PV_STX2_Native.Request.child callee activation args) world),
+        PV_FN_SLICE_f33.MachineSpec D control P H base ctrl word addresses backend
+def PV_FN_SLICE_f33.Post : (D : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data) →
+  (control : PV_STX2_SliceMachine.Control) →
+    (P : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program) →
+      (H : PV_W5_UbCheckPrimitives.Handler) →
+        (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) →
+          (parent : PV_STX2_SliceMachine.Frame) →
+            (parents : List PV_STX2_SliceMachine.Frame) →
+              (a : ℕ) → (w : PV_EVHB_OWNER.OWNER) → (prior : List PV_RJ4IDB.NativeEvent) → Prop :=
+fun D control P H s parent parents a w prior =>
+  PV_W5_LocalCompletion.Result D control P H (PV_FN_SLICE_f33.start s parent parents a w prior) a (parent :: parents)
+    PV_FN_SLICE_f33.unit 64
+'PV_FN_SLICE_f33.contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f33.provider' depends on axioms: [propext, Classical.choice, Quot.sound]

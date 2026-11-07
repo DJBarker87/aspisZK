@@ -1,0 +1,10 @@
+def PV_FN_SLICE_f32.OriginalContract : Prop :=
+∀ (D : Carrier OWNER Data) (K : Control) (programs : Data → Option PV_STX2_SliceSyntax.Program)
+  (H : PV_W5_UbCheckPrimitives.Handler) (base : Carrier OWNER Data) (ctrl : Control) (word : Data → ℕ)
+  (staticAddress : Address) (backend : PV_W5_NativeFrame.Backend) (s : Store Data) (parent : Frame)
+  (parents : List Frame) (a : ℕ) (source destination : Data) (size alignment count : ℕ) (w : OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent),
+  Pre s a source destination size alignment count w →
+    OriginalMachineSpec D K programs H base ctrl word staticAddress backend →
+      Post D K programs H s parent parents a w prior
+'PV_FN_SLICE_f32.MachineSpec.toOriginal' depends on axioms: [propext, Classical.choice, Quot.sound]

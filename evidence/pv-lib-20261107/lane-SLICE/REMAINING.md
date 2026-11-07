@@ -1,0 +1,41 @@
+# SLICE lane remaining obligations after D978
+
+Target not yet established. No row consumes this library.
+
+The runtime typedDrop178 facet now has the exact full-reply source178/suffix
+graph and installed-handler binding. This is not f7 own-entry closure: the
+preceding f8/f6 execution remains with the OPEN supplier rows.
+
+The Foundation entry adapter compiles exact conditional assembly from
+Source7EntryOwned'' and CallerClauses to the provider-named
+FoundationConstructionEntryObligation''''', with converse, old-entry
+compatibility and column reference-validity projection. Actual Foundation
+construction must establish the indexed registration, non-null, alignment and
+initialized-range bounds from its real Vec provenance. That caller obligation
+remains; no validity assumption is inserted into the run or at a copy site.
+
+D978 WAITING-ON-ROW slots (do not prove supplier rows in this lane):
+
+- slice:f13 -> slice:f21: WAITING-ON-ROW slice:f21 (PARTIAL).
+- slice:f6 -> slice:f13: WAITING-ON-ROW slice:f13 (OPEN).
+- slice:f8 -> slice:f6: WAITING-ON-ROW slice:f6 (OPEN).
+- slice:f7 -> slice:f8: WAITING-ON-ROW slice:f8 (OPEN).
+- slice:f9 -> slice:f8: WAITING-ON-ROW slice:f8 (OPEN).
+- slice:f4 -> slice:f7: WAITING-ON-ROW slice:f7 (OPEN).
+- slice:f4 -> slice:f9: WAITING-ON-ROW slice:f9 (OPEN).
+- slice:f5 -> slice:f6: WAITING-ON-ROW slice:f6 (OPEN).
+- slice:f2 -> slice:f4: WAITING-ON-ROW slice:f4 (OPEN).
+- slice:f2 -> slice:f5: WAITING-ON-ROW slice:f5 (OPEN).
+- slice:f1 -> slice:f2: WAITING-ON-ROW slice:f2 (OPEN).
+- slice:f0 -> slice:f1: WAITING-ON-ROW slice:f1 (OPEN).
+
+F32/F33 remain the prior qualified bounded supplied-machine graphs. Literal
+provider Pre, actual caller-domain discharge, first-boundary/source-machine
+adequacy, joint premise consistency, frozen-contract equivalence and top-level
+source7 composition are not supplied by these adapters. The old f21 pending
+recognizer diagnostic is retained on its supplier branch; this lane does not
+repair or assemble that PARTIAL row.
+
+Continue only with CLOSED provider adapters or explicit caller-obligation
+support within the authorized library scope. Do not consume this library in
+row proofs, change frozen specs, or attempt OPEN/PARTIAL suppliers.
