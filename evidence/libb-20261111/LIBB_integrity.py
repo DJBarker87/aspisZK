@@ -5,6 +5,12 @@ E=Path(__file__).resolve().parent;final='--final'in sys.argv
 allowed={'propext','Classical.choice','Quot.sound'}
 rows=[json.loads(p.read_text()) for p in sorted(E.glob('LIBB_L[0-9][0-9][0-9]/receipt.json'))]
 assert len(rows)<=300
+printed_theorems=0
+for source in E.glob('LIBB_*.lean'):
+ text=source.read_text();declarations=re.findall(r'^(?:theorem|lemma)\s+([\w.]+)',text,re.M)
+ printed=set(re.findall(r'^#print axioms\s+([\w.]+)',text,re.M))
+ assert set(declarations)<=printed,(source,set(declarations)-printed)
+ printed_theorems+=len(declarations)
 if final:assert len(rows)==300
 shares={}
 for s in (E/'LIBB_ATTEMPTS.jsonl').read_text().splitlines():
@@ -63,7 +69,7 @@ assert not oversize,oversize
 base='198f29a487ce5a72061c3ff09063c8cf176e7f11'
 changed=subprocess.check_output(['git','diff','--name-only',base,'--','crates','programs','Cargo.lock'],text=True).splitlines();assert not changed,changed
 allchanges=subprocess.check_output(['git','diff','--name-only',base],text=True).splitlines();assert all(p.startswith('evidence/libb-20261111/')for p in allchanges)
-answer=dict(final=final,scopes=len(rows),source_snapshots_checked=sources,own_roots=len(idx),raw_roots_checked=len(audited),compressed_raw_hashes_checked=compressed,aeneas_objects_stable=len(aeneas),retained_own_objects=len(export['objects']),oversize=[],shipped_source_changes=[],foreign_changes=[],caps_exact=True,admissions_exact=True,disk_checks_pass=True,share_checks_pass=True,unchanged_timeout_or_memory_kill_replay=False,target_established=False,row_credit_claimed=False)
+answer=dict(final=final,scopes=len(rows),source_snapshots_checked=sources,printed_theorems=printed_theorems,own_roots=len(idx),raw_roots_checked=len(audited),compressed_raw_hashes_checked=compressed,aeneas_objects_stable=len(aeneas),retained_own_objects=len(export['objects']),oversize=[],shipped_source_changes=[],foreign_changes=[],caps_exact=True,admissions_exact=True,disk_checks_pass=True,share_checks_pass=True,unchanged_timeout_or_memory_kill_replay=False,target_established=False,row_credit_claimed=False)
 (E/'LIBB_INTEGRITY.json').write_text(json.dumps(answer,indent=2)+'\n')
 (E/'LIBB_AENEAS_PINS.json').write_text(json.dumps({k:next(iter(v))for k,v in sorted(aeneas.items())},indent=1)+'\n')
 print(json.dumps(answer))
