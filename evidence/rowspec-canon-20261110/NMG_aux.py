@@ -6,6 +6,22 @@ if mode=='link':
  r=subprocess.run([T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NMG_native/'+name,*sources]);assert r.returncode==0
  p=B/'NMG_native'/name;(B/(name+'_BINARY_PIN.json')).write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size,sources={n:hashlib.sha256((B/n).read_bytes()).hexdigest() for n in sources})))
  print(name+' optimized link exit0');sys.exit(0)
+if mode=='proof0':
+ rows=[json.loads(l) for l in (B/'NMG_LOADED_scan.jsonl').read_text().splitlines()]
+ roots=__import__('os').environ['LEAN_PATH'].split(':');pins=[]
+ for row in rows:
+  rel=row['module'].replace('.','/')+'.olean'
+  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
+  assert p is not None,rel
+  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
+   if z.is_file():pins.append(dict(module=row['module'],path=str(z),sha256=hashlib.sha256(z.read_bytes()).hexdigest(),bytes=z.stat().st_size))
+ data=json.dumps(dict(selected_objects=pins,LEAN_PATH=roots,modules=len(rows))).encode();(B/'NMG_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(data,preset=1));(B/'NMG_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(data).hexdigest()+'\n')
+ export=B/'NMG_exports_20261110';export.mkdir(exist_ok=True);exported=[]
+ for p in (B/'NMG_objects').iterdir():
+  if p.is_file() and p.name.startswith('NMG_') and any(p.name.endswith(x) for x in ['.olean','.olean.private','.olean.server','.ir']):
+   q=export/p.name;shutil.copy2(p,q);exported.append(dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest(),bytes=q.stat().st_size))
+ (B/'NMG_EXPORT.json').write_text(json.dumps(dict(path=str(export),files=exported,disk=shutil.disk_usage(B)._asdict(),own_bytes=int(subprocess.check_output(['du','-sb',str(B)]).split()[0]))))
+
 folder=B/'NMG_audit'/mode;folder.mkdir(parents=True,exist_ok=True)
 if mode=='scan':cmd=['NMG_native/NMG_Driver','scan']
 else:cmd=['NMG_native/NMG_ProofDriver',mode]
