@@ -1,0 +1,1 @@
+Extended the OWN runner attempt-range assertions from L310 to L485 to represent the fresh 200-scope allowance beginning L286. All admission, share, disk, source/dependency pins, caps and timeout validation are unchanged. Old proved modules are preserved; revision-2 spec copies change import names only.

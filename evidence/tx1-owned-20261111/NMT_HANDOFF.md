@@ -1,3 +1,7 @@
+# Revision 2 continuation — active
+
+Fresh allowance: 200 Lean/link/audit scopes from L286, no extraction, 20 restricted Kani. Prior runs used 285 scopes total. The lead adopted NMT-S1/S2 as allocation arms; the historical stop below is superseded. Canonical revision-2 sources are pinned by NMT_R2_SPEC_PROVENANCE.json. Work continues in order 345, 328, 094. No candidate is yet claimed.
+
 # NMT resumed handoff — no candidate row
 
 **Target not established. TX1:345,328,094 remain OPEN; credit requested0.**
