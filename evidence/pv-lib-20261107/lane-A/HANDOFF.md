@@ -15,3 +15,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46311 ArcMemoryV2 passed: symbolic read/write of the nested ArcInner count from exact source cells, weak/packet/metadata preservation and the actual12950 token. Failed46308–46310 are retained local elaboration failures only.
 
 46313 ScopeDispatchV2 passed after46312 reserved-name parser repair: OWNER-aware candidate includes13 new meanings plus original5, generic neutral agreement and full-reply effects. Typed Drop, destructor branches and native backing adequacy remain open.
+
+46315 CellTakeV2 passed after46314 keyword repair.641 derives SpawnHooks::default from the existing source type metadata.683 nonempty-source weak count and486 strong decrement PREFIX projections compile; neither is installed as complete destructor semantics.
