@@ -180,3 +180,5 @@ Session4 49132: pinned PV_FN_THREAD_f361Call124 passed; session4 receipt records
 Session4 49133: pinned PV_FN_THREAD_f361JoinStatements passed; session4 receipt records resources/axioms.
 
 Session4 49134: pinned PV_FN_THREAD_LocalSourceFrame passed; session4 receipt records resources/axioms.
+
+Session4 49135: pinned PV_FN_THREAD_ExpressionFrame passed; session4 receipt records resources/axioms.
