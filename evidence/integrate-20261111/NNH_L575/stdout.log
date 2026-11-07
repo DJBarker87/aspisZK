@@ -1,0 +1,12 @@
+def NNH_ScalarOpInspect.mulOp : Result Usize :=
+@HMul.hMul (UScalar UScalarTy.Usize) (UScalar UScalarTy.Usize) (Result (UScalar UScalarTy.Usize))
+  (@instHMulUScalarResult UScalarTy.Usize)
+  (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) mulOp._proof_1)
+  (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) mulOp._proof_2)
+def NNH_ScalarOpInspect.addOp : Result Usize :=
+@HAdd.hAdd (UScalar UScalarTy.Usize) (UScalar UScalarTy.Usize) (Result (UScalar UScalarTy.Usize))
+  (@instHAddUScalarResult UScalarTy.Usize)
+  (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) addOp._proof_1)
+  (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 96) (instOfNatNat (nat_lit 96))) addOp._proof_2)
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow

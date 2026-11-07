@@ -1,0 +1,118 @@
+NNH_generated/NNH_AuthMasterStep.lean:28:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NNH_Tx2ModelSlots.install base env).op38 (NNH_AuthSeeds.master master.identity.asset_mint master.bump) pool
+in the target expression
+  (do
+      let r8 ←
+        (NNH_Tx2ModelSlots.install base env).op38
+            (Array.make 3#usize
+                [r1_pool_adapter.PAIR_FOREST_MASTER_SEED, master.identity.asset_mint.to_slice,
+                  (Array.make 1#usize [master.bump] ⋯).to_slice]
+                ⋯).to_slice
+            pool
+      let r9 ←
+        core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_asq8_accounts.closure.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+            r8 ()
+      let cf8 ←
+        match r9 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf8 with
+        | core.ops.control_flow.ControlFlow.Continue val2 => do
+          let b1 ←
+            core.cmp.PartialEq.ne.trait_default
+                (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (NNH_Tx2ModelSlots.install base env)) val2 m.key
+          if b1 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else do
+              let r10 ←
+                r1_pool_adapter.owned.authenticate_invariant_release_registry (NNH_Tx2ModelSlots.install base env)
+                    program pool m master r e slot
+              let cf9 ←
+                match r10 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot
+                    m.key master
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+                    residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+            residual) =
+    NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot m.key master
+
+base : Ops
+env : RSL.Env
+program pool : solana_pubkey.Pubkey
+m c l r e : r1_pool_adapter.owned.OwnedAccount
+lane : U8
+slot : U64
+data : Slice U8
+master : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+read : r1_pool_adapter.owned.OwnedAccount.data (NNH_Tx2ModelSlots.install base env) m = ok (core.result.Result.Ok data)
+decode : NKF_MasterBox.reference data = ok (core.result.Result.Ok master)
+pool_eq : master.identity.pool = m.key
+mask_eq : master.initialized_lane_mask = 255#u8
+pda :
+  (NNH_Tx2ModelSlots.install base env).op38 (NNH_AuthSeeds.master master.identity.asset_mint master.bump) pool =
+    ok (core.result.Result.Ok m.key)
+registry :
+  r1_pool_adapter.owned.authenticate_invariant_release_registry (NNH_Tx2ModelSlots.install base env) program pool m
+      master r e slot =
+    ok (core.result.Result.Ok ())
+decoder : (NNH_Tx2ModelSlots.install base env).op48 data = ok (core.result.Result.Ok master)
+⊢ (do
+      let r8 ←
+        (NNH_Tx2ModelSlots.install base env).op38
+            (Array.make 3#usize
+                [r1_pool_adapter.PAIR_FOREST_MASTER_SEED, master.identity.asset_mint.to_slice,
+                  (Array.make 1#usize [master.bump] ⋯).to_slice]
+                ⋯).to_slice
+            pool
+      let r9 ←
+        core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_asq8_accounts.closure.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+            r8 ()
+      let cf8 ←
+        match r9 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf8 with
+        | core.ops.control_flow.ControlFlow.Continue val2 => do
+          let b1 ←
+            core.cmp.PartialEq.ne.trait_default
+                (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (NNH_Tx2ModelSlots.install base env)) val2 m.key
+          if b1 = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else do
+              let r10 ←
+                r1_pool_adapter.owned.authenticate_invariant_release_registry (NNH_Tx2ModelSlots.install base env)
+                    program pool m master r e slot
+              let cf9 ←
+                match r10 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot
+                    m.key master
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+                    residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            r1_pool_adapter.AuthenticatedAsq8Accounts (core.convert.FromSame solana_program_error.ProgramError)
+            residual) =
+    NNH_AuthTailParts.checkpoint (NNH_Tx2ModelSlots.install base env) program m c l r e pool lane slot m.key master
+NNH_generated/NNH_AuthMasterStep.lean:24:31: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵c̵o̵d̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲d̲e̲c̲o̲d̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNH_AuthMasterStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

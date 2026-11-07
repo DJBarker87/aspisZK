@@ -1,0 +1,29 @@
+NNH_generated/NNH_ValidateHeadStep.lean:26:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← 3#usize * 32#usize
+    let i1 ← 8#usize + i
+    i1 + 216#usize
+is not definitionally equal to the right-hand side
+  ok 320#usize
+
+base : Ops
+env : RSL.Env
+program : solana_pubkey.Pubkey
+xs : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+q : LIBB_PoolCarriers.Request
+lane : U8
+slot : U64
+length : (↑data).length = 320
+decode : AspisR1.NFY_JHd_RequestNative.decode data = ok (core.result.Result.Ok q)
+profile : q.verifier_profile = r1_pool_adapter.PROFILE_BINDING
+release : q.verifier_release = r1_pool_adapter.RELEASE_BINDING
+pool : q.pool_program = NND_Carrier.unkey D.pool
+lane_ok : NMS_RequestModels.outputLane (LIBB_PoolDecoders.nullifier q) = ok (core.result.Result.Ok lane)
+size : data.len = 320#usize
+⊢ (do
+      let i ← 3#usize * 32#usize
+      let i1 ← 8#usize + i
+      i1 + 216#usize) =
+    ok 320#usize
+'NNH_ValidateHeadStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

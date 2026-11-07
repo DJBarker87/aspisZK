@@ -1,0 +1,15 @@
+@[implicit_reducible] def Aeneas.Std.instHMulUScalarResult : {ty : UScalarTy} →
+  HMul (UScalar ty) (UScalar ty) (Result (UScalar ty)) :=
+fun {ty} => { hMul := fun x y => x.mul y }
+@[implicit_reducible] def Aeneas.Std.instHAddUScalarResult : {ty : UScalarTy} →
+  HAdd (UScalar ty) (UScalar ty) (Result (UScalar ty)) :=
+fun {ty} => { hAdd := fun x y => x.add y }
+def Aeneas.Std.UScalar.tryMkOpt : (ty : UScalarTy) → ℕ → Option (UScalar ty) :=
+fun ty x => if h : UScalar.check_bounds ty x = true then some (UScalar.ofNatCore x ⋯) else none
+def Aeneas.Std.Result.ofOption.{u} : {a : Type u} → Option a → Error → Result a :=
+fun {a} x e =>
+  match x with
+  | some x => ok x
+  | none => fail e
+NNH_generated/NNH_ScalarOpInstances.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.mul_eq`
+NNH_generated/NNH_ScalarOpInstances.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.add_eq`

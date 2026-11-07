@@ -1,0 +1,72 @@
+import NNH_AuthPort
+set_option autoImplicit false
+noncomputable section
+namespace NNH_AuthCallCongr
+open Aeneas Aeneas.Std AdapterRw
+/-- Congruence on the slots actually reached by authentication and its registry
+child. These projection equations will be discharged by the configuration,
+never supplied as an interface hypothesis. -/
+theorem same (left right : Ops)
+ (h13 : left.op13=right.op13)
+ (h14 : left.op14=right.op14)
+ (h15 : left.op15=right.op15)
+ (h16 : left.op16=right.op16)
+ (h18 : left.op18=right.op18)
+ (h25 : left.op25=right.op25)
+ (h26 : left.op26=right.op26)
+ (h27 : left.op27=right.op27)
+ (h28 : left.op28=right.op28)
+ (h29 : left.op29=right.op29)
+ (h30 : left.op30=right.op30)
+ (h31 : left.op31=right.op31)
+ (h32 : left.op32=right.op32)
+ (h33 : left.op33=right.op33)
+ (h34 : left.op34=right.op34)
+ (h35 : left.op35=right.op35)
+ (h36 : left.op36=right.op36)
+ (h37 : left.op37=right.op37)
+ (h38 : left.op38=right.op38)
+ (h39 : left.op39=right.op39)
+ (h40 : left.op40=right.op40)
+ (h41 : left.op41=right.op41)
+ (h45 : left.op45=right.op45)
+ (h46 : left.op46=right.op46)
+ (h48 : left.op48=right.op48)
+ (h49 : left.op49=right.op49)
+ (h50 : left.op50=right.op50)
+ (program pool : solana_pubkey.Pubkey) (xs : Slice r1_pool_adapter.owned.OwnedAccount)
+ (lane : U8) (slot : U64) :
+ r1_pool_adapter.owned.authenticate_asq8_accounts left program xs pool lane slot=
+ r1_pool_adapter.owned.authenticate_asq8_accounts right program xs pool lane slot := by
+ cases left
+ cases right
+ cases h13
+ cases h14
+ cases h15
+ cases h16
+ cases h18
+ cases h25
+ cases h26
+ cases h27
+ cases h28
+ cases h29
+ cases h30
+ cases h31
+ cases h32
+ cases h33
+ cases h34
+ cases h35
+ cases h36
+ cases h37
+ cases h38
+ cases h39
+ cases h40
+ cases h41
+ cases h45
+ cases h46
+ cases h48
+ cases h49
+ cases h50
+ rfl
+#print axioms same
+end NNH_AuthCallCongr

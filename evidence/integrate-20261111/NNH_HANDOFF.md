@@ -243,3 +243,31 @@ library binder) pass. The latter derives six actual native guard successes
 from returned evaluator success, no assumed native child success.
 482 actual completed scopes through L486 (never launched L048/455/456/465),
 82 of this fresh300 used,218 remain. No extraction/Kani/16GiB scope.
+
+A2 axiom gate finding: L530 U64Bytes and its dependent successful elaborations
+L531/532/534/540/542 carry native bv_decide axioms. NONE of these receives
+standard-axiom credit. No audited G0 root imports them. The default checker
+is retired; U64Bytes.lean.txt archives the rejected proof. Replacement is the
+new NNH_U64BytesKernel, using bit projections with fixed indices and ordinary
+kernel-checked simp lemmas. Dependent source imports are being changed to the
+replacement and will be rebuilt before any claim or audit.
+
+L543 is standard-only kernel bit projection; rebuilt dependent chain L544–548
+standard-only. Full authentication Ok source port is now NNH_AuthPort.value,
+not an A2 field. L559 whole-source dictionary congruence reached fixed200000
+heartbeats and is RETIRED, not retried. Replacement uses individual source
+fragments with callee function equalities discharged bottom-up. No caps,
+heartbeats or timeouts increased. No rows credited.
+
+Canonical source authentication -> deployed SDK is now NNH_AuthSdkPort.value
+L581 (standard only), valid at every actual argument returning Ok at L/D.
+NNH_Tx2Configuration selects the source helper slots and reservation; its
+residual Missing records remain DATA, not a total literal-host witness.
+No RowSpec233/native gate credit or A2-field credit is claimed. It is the
+pointwise model port consumed by the remaining242/241 composition. Native
+scanner/reconstruction continuation NNH_ValidateTailPort.value L564 is also
+standard only; source validation prefix still needs its named request-size
+calculation. L570's rfl-first dispatch inspected child function equalities and
+hit heartbeats; L572 passes by supplying the already-proved child equalities
+explicitly before any projection reflexivity. The whole-function L559 shape
+remains retired. No memory/timeout/heartbeat changes, no shipped files.

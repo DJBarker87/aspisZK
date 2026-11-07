@@ -1,0 +1,10 @@
+import NNH_ToLEBytes8
+#print Aeneas.Std.UScalar.bv
+#print Aeneas.Std.U8.bv
+#print UInt64.ofNat
+#print UInt64.shiftRight
+#print UInt64.toUInt8
+#print UInt8.ofBitVec
+#check BitVec.extractLsb'_extractLsb'
+#check BitVec.extractLsb'_ushiftRight
+#check UInt8.eq_of_toBitVec_eq

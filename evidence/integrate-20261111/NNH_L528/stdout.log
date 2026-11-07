@@ -1,0 +1,14 @@
+@[reducible] def Aeneas.Std.UScalar.bv : {ty : Aeneas.Std.UScalarTy} → Aeneas.Std.UScalar ty → BitVec ty.numBits :=
+fun ty self => self.1
+@[reducible] def Aeneas.Std.U8.bv : Aeneas.Std.U8 → BitVec 8 :=
+fun x => x.bv
+def UInt64.ofNat : ℕ → UInt64 :=
+fun n => { toBitVec := BitVec.ofNat 64 n }
+protected def UInt64.shiftRight : UInt64 → UInt64 → UInt64 :=
+fun a b => { toBitVec := a.toBitVec >>> (b.mod 64).toBitVec }
+def UInt64.toUInt8 : UInt64 → UInt8 :=
+fun a => a.toNat.toUInt8
+constructor UInt8.ofBitVec : BitVec 8 → UInt8
+NNH_generated/NNH_WordProjectionInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `BitVec.extractLsb'_extractLsb'`
+NNH_generated/NNH_WordProjectionInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `BitVec.extractLsb'_ushiftRight`
+UInt8.eq_of_toBitVec_eq {a b : UInt8} (h : a.toBitVec = b.toBitVec) : a = b

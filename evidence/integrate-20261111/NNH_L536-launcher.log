@@ -1,0 +1,59 @@
+{"attempt": "NNH_L536", "exit_status": 1, "wall_seconds": 1.140988914994523, "peak_rss_kib": "2623532", "swaps": "0", "print_axioms": ["'NNH_AuthSevenShape.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_AuthSevenShape.lean:15:25: error: unexpected token 'as'; expected identifier
+NNH_generated/NNH_AuthSevenShape.lean:13:101: error: unsolved goals
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+program pool : solana_pubkey.Pubkey
+xs : Slice r1_pool_adapter.owned.OwnedAccount
+lane : U8
+slot : U64
+out : RSL.Authenticated
+success :
+  (match
+      { verifier_program := key program, accounts := List.map account ↑xs, pool_program := key pool,
+          output_lane := byte lane, current_slot := NND_Carrier.slot slot }.accounts with
+    | [p, m, c, l, r, e, v] =>
+      NNH_AuthEval.bodyValue L D
+        { verifier_program := key program, accounts := List.map account ↑xs, pool_prog
+...
+NNH_generated/NNH_AuthSevenShape.lean:15:25: error: unexpected token 'as'; expected identifier
+NNH_generated/NNH_AuthSevenShape.lean:13:101: error: unsolved goals
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+program pool : solana_pubkey.Pubkey
+xs : Slice r1_pool_adapter.owned.OwnedAccount
+lane : U8
+slot : U64
+out : RSL.Authenticated
+success :
+  (match
+      { verifier_program := key program, accounts := List.map account ↑xs, pool_program := key pool,
+          output_lane := byte lane, current_slot := NND_Carrier.slot slot }.accounts with
+    | [p, m, c, l, r, e, v] =>
+      NNH_AuthEval.bodyValue L D
+        { verifier_program := key program, accounts := List.map account ↑xs, pool_program := key pool,
+          output_lane := byte lane, current_slot := NND_Carrier.slot slot }
+        p m c l r e v env
+    | x =>
+      Except.error
+        (if
+            { verifier_program := key program, accounts := List.map account ↑xs, pool_program := key pool,
+                    output_lane := byte lane, current_slot := NND_Carrier.slot slot }.accounts.length <
+              7 then
+          RSL.ProgramError.notEnoughAccountKeys
+        else RSL.ProgramError.invalidArgument)) =
+    Except.ok out
+a✝ : List r1_pool_adapter.owned.OwnedAccount
+hxs : ↑xs = a✝
+⊢ ∃ p m c l r e v,
+    a✝ = [p, m, c, l, r, e, v] ∧
+      NNH_AuthEval.bodyValue L D
+          { verifier_program := key program, accounts := accounts xs, pool_program := key pool,
+            output_lane := byte lane, current_slot := NND_Carrier.slot slot }
+          (account p) (account m) (account c) (account l) (account r) (account e) (account v) env =
+        Except.ok out
+'NNH_AuthSevenShape.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r681c221c49bc4b248a8c8acdfa0e8e5d.scope; invocation ID: 66251779a4ca4c169e297c92bc20c28f

@@ -1,0 +1,31 @@
+{"attempt": "NNH_L528", "exit_status": 1, "wall_seconds": 3.868014342850074, "peak_rss_kib": "6617796", "swaps": "0", "print_axioms": []}
+@[reducible] def Aeneas.Std.UScalar.bv : {ty : Aeneas.Std.UScalarTy} → Aeneas.Std.UScalar ty → BitVec ty.numBits :=
+fun ty self => self.1
+@[reducible] def Aeneas.Std.U8.bv : Aeneas.Std.U8 → BitVec 8 :=
+fun x => x.bv
+def UInt64.ofNat : ℕ → UInt64 :=
+fun n => { toBitVec := BitVec.ofNat 64 n }
+protected def UInt64.shiftRight : UInt64 → UInt64 → UInt64 :=
+fun a b => { toBitVec := a.toBitVec >>> (b.mod 64).toBitVec }
+def UInt64.toUInt8 : UInt64 → UInt8 :=
+fun a => a.toNat.toUInt8
+constructor UInt8.ofBitVec : BitVec 8 → UInt8
+NNH_generated/NNH_WordProjectionInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `BitVec.extractLsb'_extractLsb'`
+NNH_generated/NNH_WordProjectionInspect.lea
+...
+@[reducible] def Aeneas.Std.UScalar.bv : {ty : Aeneas.Std.UScalarTy} → Aeneas.Std.UScalar ty → BitVec ty.numBits :=
+fun ty self => self.1
+@[reducible] def Aeneas.Std.U8.bv : Aeneas.Std.U8 → BitVec 8 :=
+fun x => x.bv
+def UInt64.ofNat : ℕ → UInt64 :=
+fun n => { toBitVec := BitVec.ofNat 64 n }
+protected def UInt64.shiftRight : UInt64 → UInt64 → UInt64 :=
+fun a b => { toBitVec := a.toBitVec >>> (b.mod 64).toBitVec }
+def UInt64.toUInt8 : UInt64 → UInt8 :=
+fun a => a.toNat.toUInt8
+constructor UInt8.ofBitVec : BitVec 8 → UInt8
+NNH_generated/NNH_WordProjectionInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `BitVec.extractLsb'_extractLsb'`
+NNH_generated/NNH_WordProjectionInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `BitVec.extractLsb'_ushiftRight`
+UInt8.eq_of_toBitVec_eq {a b : UInt8} (h : a.toBitVec = b.toBitVec) : a = b
+
+Running as unit: run-rf2e3a215b79545578313f479c820050b.scope; invocation ID: eed2efac25d947f5bb2baa20558cee8d

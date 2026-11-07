@@ -1,0 +1,54 @@
+{"attempt": "NNH_L526", "exit_status": 1, "wall_seconds": 4.5684006658848375, "peak_rss_kib": "6617052", "swaps": "0", "print_axioms": ["'NNH_U64Bytes.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_U64Bytes.lean:13:11: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [8,
+ U8.bv (BitVec.extractLsb' 0 8 (BitVec.extractLsb' 8 56 x.bv)#uscalar),
+ x.bv]
+Consider the following assignment:
+U8.bv (BitVec.extractLsb' 0 8 (BitVec.extractLsb' 8 56 x.bv)#uscalar) = 255#8
+x.bv = 18446744073709551615#64
+8 = 18446744073709551615
+NNH_generated/NNH_U64Bytes.lean:13:11: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [16,
+ U8.bv (BitVec.extractLsb' 0 8 (BitVec.extractLsb' 8 48 (BitVec.extractLsb' 8 56 x.bv))#u
+...
+8.bv
+  (BitVec.extractLsb' 8 8
+      (BitVec.extractLsb' 8 16
+        (BitVec.extractLsb' 8 24
+          (BitVec.extractLsb' 8 32
+            (BitVec.extractLsb' 8 40 (BitVec.extractLsb' 8 48 (BitVec.extractLsb' 8 56 x.bv))))))#uscalar) = 255#8
+x.bv = 18446744073709551615#64
+56 = 18446744073709551615
+NNH_generated/NNH_U64Bytes.lean:8:73: warning: This simp argument is unused:
+  byte
+
+Hint: Omit it from the simp argument list.
+  simp only [bytes, ̲Array.to_slice, ̲core.num.U64.to_le_bytes, ̲RSL.u64le, ̲slot,̵b̵y̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_U64Bytes.lean:9:34: warning: This simp argument is unused:
+  List.map_map
+
+Hint: Omit it from the simp argument list.
+  simp only [NNH_ToLEBytes8.expand, ̲List.m̵a̵p̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵range_succ, ̲List.range_zero, ̲List.map_append, ̲List.map_cons,
+  ̲ ̲ ̲ ̲List.map_nil, ̲List.nil_append, ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_U64Bytes.lean:9:79: warning: This simp argument is unused:
+  List.map_append
+
+Hint: Omit it from the simp argument list.
+  simp only [NNH_ToLEBytes8.expand, ̲List.map_map, ̲List.range_succ, ̲List.range_zero, ̲List.map_a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵cons,
+  ̲ ̲ ̲ ̲List.map_nil, ̲List.nil_append, ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNH_generated/NNH_U64Bytes.lean:10:28: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [List.cons.injEq,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NNH_U64Bytes.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r595013f061f24bcd8e2bca046f020d5b.scope; invocation ID: 25e0ee0acde448ee8bd80554b293241a

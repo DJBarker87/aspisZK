@@ -1,0 +1,19 @@
+Aeneas.Std.UScalar.mul_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x * ↑y ≤ UScalar.max ty) :
+  x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+Aeneas.Std.UScalar.mul_equiv {ty : UScalarTy} (x y : UScalar ty) :
+  match x.mul y with
+  | Result.ok z => ↑x * ↑y ≤ UScalar.max ty ∧ ↑z = ↑x * ↑y ∧ z.bv = x.bv * y.bv
+  | Result.fail e => UScalar.max ty < ↑x * ↑y
+  | Result.div => False
+Aeneas.Std.UScalar.add_equiv {ty : UScalarTy} (x y : UScalar ty) :
+  match x + y with
+  | Result.ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+  | Result.fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+  | x => ⊥
+Aeneas.Std.UScalar.tryMk_eq (ty : UScalarTy) (x : ℕ) :
+  match UScalar.tryMk ty x with
+  | Result.ok y => ↑y = x ∧ UScalar.inBounds ty x
+  | Result.fail e => ¬UScalar.inBounds ty x
+  | x => False
