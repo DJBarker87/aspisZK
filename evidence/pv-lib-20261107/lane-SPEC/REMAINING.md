@@ -1,55 +1,37 @@
-# Session 2 frontier and correction
+# Session 3 completion frontier
 
-This task remains INCOMPLETE:0/29 full contracts,0/2 full joint witnesses or
-checked full-joint contradictions. Both composition requests remain outstanding.
-SPEC-C2 is a checked local machine mismatch, not a full-joint contradiction.
-Resolve its exact recorded COMMON correction while preserving old OWNER,
-operator and bridged allocation layers. ThreadMachine is a compiled candidate,
-not an adoption of a changed shared frozen specification or source adequacy.
-Continue OwnInit chain first, with complete per-row package comparison, then
-source7 contracts; only then the two concrete joint witnesses. Prove no row.
+Task remains INCOMPLETE:0/29 full frozen contracts and0/2 full joint witnesses
+or full-joint contradictions. D981/SPEC-C2 is approved and applied through the
+shared PSPEC_COMMON.md and SPEC_CORRECTIONS.md. Fresh strict49792 PASSED27/27
+session2 roots after adding the reached Pre.mk summary. Original49791 exit1
+remains uncredited. Final49793 PASSED46/46 new roots, each set walked once.
 
-One strict raw49791 ran;exit1 from six missing constructor summaries.49724
-prints the already-reached provider Pre.mk; offline constructor-summary union
-reconciles all27 retained raw walks, standard axioms only, zero unresolved.
-SESSION2_RAW_AUDIT.json preserves exit1 and explicit reconciliation. No rerun.
-Next Lean49725..49789; next raw49792..49799 for changed/new roots only.
+Next Lean49732..49789; next raw49794..49799 for new/changed inputs only. No
+active own scope. Use whole budget; IDs remain, no impossibility is claimed.
 
-# SPEC remaining work
+1. Finish f361 MachineSpec: actual emitted resolver, every named leaf fact,
+   source-associated runtime Values and full allocation/reservation environment.
+   Complete registered/capture/reference validity and heap footprint statements.
+   F361Contract's Pre/reference/Post are explicitly components, with literal
+   provider comparisons. Do not treat PackageTransport/SourceAdequacy targets
+   as discharged premises. Then continue270/166/15 and the OwnInit chain.
+2. Elaborate every remaining frozen full MachineSpec/Pre/Post and compile each
+   comparison against its exact pinned package statement. CONTRACT_INDEX.json
+   lists all29 rows and frozen hashes. Source7/to_vec components remain partial.
+3. Compile complete OwnInit and source7 joint premise conjunctions, then exhibit
+   ONE concrete witness per FULL conjunction or a checked contradiction.
+   OwnInitEntry.entry_nonempty now gives initialized same-world capture entry
+   storage. Source7Entry.entry_nonempty gives the source7 reference entry
+   component. Neither includes the machine/resource/native/child conjunction.
+4. State/discharge complete source-machine adequacy and continuous actual14756
+   history with decodeBridged/allBridged and SourceInitBoxOwnership. Preserve all
+   Result arms, genuine pending, no Some/decode-success Pre and no activation
+   counter equality. ADEQUACY_OBLIGATIONS.md now records the D981 machine.
+5. Reconcile a coherent dependency closure before a combined composition claim.
+   Separate cached cohorts are not one release. Historical146 object conflicts
+   and222 absent-base modules are observations, not impossibility/minimality.
 
-The requested task is INCOMPLETE. IDs are not exhausted. Next Lean49725 through
-49789; next raw49792 only for genuinely changed/new roots. Never rerun49790 or49791 unchanged. No host scope is active.
-
-1. Elaborate ALL29 complete frozen contracts. CONTRACT_INDEX.json enumerates
-   every row and its frozen hash. Full count is0/29: PV_LIB_SPEC_ToVec is a
-   compiled statement/boundary component, not the finished frozen contract.
-   Finish binding its source-associated resource environment and full machine
-   facts; then complete the other28 row statements in dependency order.
-2. Compile ALL package-statement comparisons. F361Entry now gives the literal
-   provider entry-name/scope/numbering COMPONENT comparison only. The ToVec Pre identity,
-   corrected-pending implication and actual prefix11 exclusion are compiled.
-   The other frozen comparison paragraphs remain prose. Read the exact pinned
-   provider definitions, including the currently PARTIAL statements; do not
-   invent weaker consumer representations or treat a missing provider as closed.
-3. Complete OwnInit and source7 joint nonemptiness on ONE concrete instance
-   including MachineSpec, original entry, named leaf/representation/resource
-   facts and actual child domains. Existing entry_nonempty/toVec_entry_nonempty
-   prove the entry COMPONENT only. pendingEnv inhabits the environment TYPE only.
-   Legacy decoder contradiction does not contradict the frozen bridged premises.
-4. Elaborate and discharge the concrete source/machine adequacy obligations.
-   ADEQUACY_OBLIGATIONS.md records their exact intended quantifiers and boundaries,
-   but is not a compiled complete proof-obligation package. Preserve continuous
-   actual14756 history, allBridged, source/binary layout, concrete native writers,
-   source7 entry provenance and OWNER actions, full resource replies and genuine
-   first pending/completion/divergence boundaries. No branch-success premise.
-5. Reconcile a dependency closure before claiming combined composition. Base
-   and STX were audited separately.146 object conflicts and222 missing-base
-   diagnostic-cone modules were observed;222 is NOT a proved minimal replay
-   count or an impossibility result. Prefer approved coherent cache reuse;
-   otherwise use focused pinned unchanged source replay in this host directory.
-
-Use PV_LIB_SPEC_Delivery.Boundary/First, not the superseded generic
-PV_LIB_SPEC_Boundary.Terminal/Boundary/First/Diverges (SPEC-B1).
-No frozen specification has changed; any genuine frozen-source error needs
-before/after/witness via the required correction record, never silent weakening.
-No existing row proof may consume the library in this preparatory job.
+Use ThreadContract for the D981 thread behavioral component. Old Boundary's
+raw-writer machine is superseded for thread consumers; no old provider is edited.
+D981 changes only the quoted common machine clause/revision heading. Other
+frozen text is unchanged. Prove no row and consume no library in row proofs.

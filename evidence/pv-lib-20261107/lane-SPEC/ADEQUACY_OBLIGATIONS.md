@@ -35,7 +35,10 @@ Original entry: OrderedFamiliesEntryOwned' at the actual public n/captures,
 full typed-reference/OWNER validity, live/saved/suspended numbering, and actual
 call arguments/continuations. No Some/returned/decode-success condition.
 
-Machine: PV_THR2_SourceStoreInterpreter.step with its literal interpret,
+Machine (D981 correction): PV_LIB_SPEC_ThreadMachine.step extends the pinned
+OWNER-aware OwnInitInterpreterBridged step with the five source-store meanings,
+preserving intrinsic priority. Away agreement is against the OWNER-aware step,
+not the raw intrinsic interpreter. Its writer branches use the literal interpret,
 actual emitted program dispatch, named runtime carrier/operator semantics and
 full framed native environment. Bind Values' pointer/layout/allocation values
 to the pinned runtime. At each of the reached93/289 (and any other reached

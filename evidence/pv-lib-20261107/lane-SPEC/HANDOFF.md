@@ -1,3 +1,89 @@
+# SPEC session 3 current handoff — requested task remains incomplete
+
+Branch codex/pv-lib-spec-20261107; resumed9ea4f7cc336. D981 correction and the
+fresh strict session2-root audit are COMPLETE. Full frozen contracts remain
+0/29; full OwnInit/source7 joint witnesses remain0/2. No full-joint contradiction
+is established, and no row is proved. IDs remain available: next Lean49732,
+next raw49794, only for new/changed inputs. No active own host scope remains.
+
+## D981 and strict evidence
+
+SPEC-C2 is now APPROVED/APPLIED, not a proposal: shared PSPEC_COMMON.md revision2
+and SPEC_CORRECTIONS.md record exact before/after, frozen pins, actual14320
+witness and affected consumers. ThreadMachine.step preserves the pinned
+OWNER registration/operator/bridged allocation layers plus the five concrete
+source-store meanings at eight writer sites. away compares to the OWNER-aware
+interpreter. The original freeze remains the historical revision1 authority;
+only the two explicitly authorized shared correction files changed.
+
+Fresh strict49792 ran the SAME27 session2 roots with a CHANGED reached
+constructor-summary union: Pre.mk was added. Walker/collector/traversal and
+roots are unchanged. Exit0;27/27;zero unresolved/disagreements; standard axioms
+only;wall0:25.13;peak6753692KiB;swap0. Original49791 EXIT1 is retained and still
+gets no credit. SESSION3_RAW_AUDIT.json explains the pre-amend source-revision
+label:717108101a2 contains the exact driver, also in amended3525701591b.
+
+Final strict49793 covers46 NEW roots only:exit0;46/46;zero unresolved or
+summary disagreements;standard axioms only;wall0:26.32;peak6705140KiB;swap0;
+source d51ff7b4c6b. Both audits retain their exact27/46 reachable inventories
+and hashes in SESSION3[_NEW]_RAW_GRAPH_ARCHIVE.json.xz and manifests.
+This is TWO distinct input sets, each walked once; no unchanged raw rerun.
+
+## Compiled work and limits
+
+* ThreadContract provides corrected-machine boundary/reference/behavioral Post
+  statements, first ACTUAL pending, own completion/delivery, infinite prefixes,
+  event-only abort and counter abstraction. No row-specific MachineSpec or
+  source/runtime adequacy is discharged by defining this reference.
+* F361Contract binds the actual provider carrier/control/programs/framed handler
+  and resources to the corrected machine. Pre adds registered non-null/aligned/
+  bounded header validity to the literal name/scope/numbering entry component.
+  pre_comparison and implies_package compare the actual provider Pre; registration
+  preserves14320 locally. Post compares to the independent corrected reference,
+  drops frames after abort and retains the provider source-cell Frame elsewhere.
+  This is NOT a full frozen f361 contract: complete source-associated Values,
+  allocation/reservation environment, emitted resolver/leaf inventory, complete
+  capture/reference provenance and heap footprints still require binding.
+  PackageTransport and SourceAdequacy are named TARGETS, never presumed facts.
+* OwnInitEntry.entry_nonempty jointly inhabits the actual provider's complete
+  OrderedFamiliesEntryOwned prime entry component on ONE concrete OWNER: initialized
+  run image, public n=0, F and empty handles, plus the same registered source
+  reference in the closure. It uses named byte codec lemmas, not recurrence
+  reduction. This is neither original-entry reachability nor a full composition
+  witness; it supplies no full machine/resource/child premise conjunction.
+
+Five passing focused compiles49725/26/28/30/31, committed after each; failures
+49727 and49729 were archived and changed before retry. Full target/exit/wall/
+RSS/swap/revision/hash/#print-axioms receipts are retained. Every scope used
+6G/8G/swap0/Tasks64/-M7000 and a separate STREAMB_SLOTS=3 turn command; the
+shared cap2 was retained. turn.sh printed harmless vanished /proc cmdline
+warnings and exited0; every reservation separately admitted with allowed:true
+and exit0. No refusal, transport255, cap raise, OOM or package rebuild occurred.
+No external/provider/shared object was written. Cohorts remain isolated; no
+combined coherent release or minimal replay-count claim is made.
+
+No endpoint premise was removed/added; no T/security/source/ledger/package-branch
+change, row consumption, Rust/SBF/Kani/extraction/full manifest, key action,
+push or merge. The SPEC release target is not yet established.
+
+## Next concrete work
+
+Complete f361's full named MachineSpec and source/resource/representation
+bindings, then270/166 and the remaining OwnInit chain, then source7, using the
+exact frozen comparisons. Establish the TWO full joint conjunction witnesses
+or checked contradictions only after their complete premises are compiled.
+Do not credit separate entry witnesses, graph definitions or arbitrary full
+reply channels as that conjunction. CONTRACT_INDEX.json and REMAINING.md retain
+0/29 and0/2; no exhaustion or mathematical impossibility is claimed.
+
+Recheck evidence without Lean/raw replay:
+`python3 evidence/pv-lib-20261107/lane-SPEC/validate_session3.py`.
+Older validators describe their historical uncorrected freeze and are historical;
+D981 is the explicit exception in the session3 validator. Historical handoffs
+follow, including the original uncredited49791 failure.
+
+---
+
 # SPEC session 2 current handoff — requested task remains incomplete
 
 Branch codex/pv-lib-spec-20261107, resumed4fcc1573c698. Full frozen contracts

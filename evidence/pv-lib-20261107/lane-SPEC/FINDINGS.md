@@ -87,3 +87,18 @@ of the structure name omits its constructor's type dependencies. Focused49724
 prints Pre.mk's three standard axioms. The retained graph is reconciled offline
 by the same constructor-summary UNION policy; no walker change, raw rerun or
 exit0 claim. SESSION2_RAW_AUDIT.json records each reconciliation separately.
+
+## Session3 D981 resolution and audit credit
+
+SPEC-C2 is lead-approved (D981) and applied to shared PSPEC_COMMON.md through
+SPEC_CORRECTIONS.md with exact before/after and the existing14320 witness.
+Earlier references above to an untouched freeze or correction candidate are
+historical. No full joint-premise contradiction is inferred from that witness.
+
+Strict49791 exited1 and is uncredited. Fresh49792 has CHANGED input: the
+reached provider Pre.mk is in the constructor-summary union. Same27 roots and
+unchanged walker: exit0,27/27. New-root49793 separately passes46/46; no rerun.
+
+OwnInitEntry.entry_nonempty establishes only the concrete original-capture
+ENTRY conjunction, not all composed premises. No new circular premise or
+contradiction of either FULL frozen composition has been established.
