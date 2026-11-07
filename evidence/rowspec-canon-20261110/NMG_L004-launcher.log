@@ -1,0 +1,48 @@
+{"attempt": "NMG_L004", "exit_status": 0, "wall_seconds": 11.15684272791259, "peak_rss_kib": "6202316", "swaps": "0", "print_axioms": ["'AspisR1.NHS_PreparedPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NHS_PreparedPacket.source : ∀ (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix)
+  (beforeSemantic : AspisR1PublicPreparation.r1_wire.SemanticTranscript Unit)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+  (obs : Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit))
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified Unit),
+  AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+        { fromFn := @AspisR1Publ
+...
+reservation i v frame domain sem returned
+  let ⟨initial, h✝¹⟩ := h✝
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨c, h✝³⟩ := h✝²
+  let ⟨left✝, right✝⟩ := h✝³
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², finish⟩ := right✝¹
+  have actual :=
+    AspisR1.NLR_FinishReservation.constructor_clause reservation
+      (AspisR1.NLR_PrepareSemantic137.observedInput reservation i v).digest
+      (AspisR1.NLR_PrepareSemantic137.observedInput reservation i v).publicValue p after c
+      ((AspisR1CurrentCaller.S1SemanticCarrier.semanticEquiv Unit).symm sem) finish;
+  Exists.intro p
+    (Exists.intro after
+      (Exists.intro c
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              AspisR1PublicPreparation.FinishModel.finish _a
+                  (have __src := AspisR1.IDa_Deployed.boundaries reservation;
+                  { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask,
+                    add := __src.add, mul := __src.mul, terminal := __src.terminal, circle := __src.circle,
+                    unwrapRoot := __src.unwrapRoot,
+                    claims :=
+                      AspisR1.ClaimsUnrolledFinish.claims
+                        (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) })
+                  (AspisR1.NLR_PrepareSemantic137.observedInput reservation i v).digest
+                  (AspisR1.NLR_PrepareSemantic137.observedInput reservation i v).publicValue p after c none =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok
+                    ((AspisR1CurrentCaller.S1SemanticCarrier.semanticEquiv Unit).symm sem)))
+            AspisR1.NLJ_RoundPort.rounds)
+          actual)))
+'AspisR1.NHS_PreparedPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r921edd331c19476b864d1dce4651b2eb.scope; invocation ID: 02a9b8a394964d8e938e06a257e27455

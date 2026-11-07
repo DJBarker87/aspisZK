@@ -1,0 +1,1907 @@
+{
+ "NMG_Driver": {
+  "command": [
+   "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+   "env",
+   "lean",
+   "-j1",
+   "-M7000",
+   "-DElab.async=false",
+   "-R",
+   "NMG_generated",
+   "-o",
+   "NMG_objects/NMG_Driver.olean",
+   "-c",
+   "NMG_native/NMG_Driver.c",
+   "NMG_generated/NMG_Driver.lean"
+  ]
+ },
+ "NMG_ProofDriver": {
+  "command": [
+   "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+   "env",
+   "lean",
+   "-j1",
+   "-M7000",
+   "-DElab.async=false",
+   "-R",
+   "NMG_generated",
+   "-o",
+   "NMG_objects/NMG_ProofDriver.olean",
+   "-c",
+   "NMG_native/NMG_ProofDriver.c",
+   "NMG_generated/NMG_ProofDriver.lean"
+  ]
+ },
+ "link_NMG_Driver": {
+  "kind": "link",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_native/NMG_Driver.c",
+   "NMG_native/NFA_WALKER.c",
+   "NMG_native/NFA_MemoryLimit.c"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "link",
+   "NMG_Driver"
+  ],
+  "upload": [
+   "NMG_aux.py"
+  ],
+  "copy_inputs": [
+   [
+    "/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/NFA_WALKER.c",
+    "NMG_native/NFA_WALKER.c"
+   ],
+   [
+    "/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/NFA_MemoryLimit.c",
+    "NMG_native/NFA_MemoryLimit.c"
+   ]
+  ],
+  "outputs": [
+   "NMG_Driver_BINARY_PIN.json"
+  ]
+ },
+ "link_NMG_ProofDriver": {
+  "kind": "link",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_native/NMG_ProofDriver.c",
+   "NMG_native/NFA_WALKER.c",
+   "NMG_native/NFA_MemoryLimit.c"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "link",
+   "NMG_ProofDriver"
+  ],
+  "upload": [
+   "NMG_aux.py"
+  ],
+  "copy_inputs": [
+   [
+    "/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/NFA_WALKER.c",
+    "NMG_native/NFA_WALKER.c"
+   ],
+   [
+    "/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/NFA_MemoryLimit.c",
+    "NMG_native/NFA_MemoryLimit.c"
+   ]
+  ],
+  "outputs": [
+   "NMG_ProofDriver_BINARY_PIN.json"
+  ]
+ },
+ "fixtures": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "fixtures"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/fixtures",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "scan": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "scan"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/scan",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof0": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof0"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof0",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export",
+  "outputs": [
+   "NMG_CLOSURE_PINS.json.xz",
+   "NMG_CLOSURE_PINS.json.sha256",
+   "NMG_EXPORT.json"
+  ]
+ },
+ "proof1": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof1"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof1",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof2": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof2"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof2",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof3": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof3"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof3",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof4": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof4"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof4",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof5": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof5"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof5",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof6": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof6"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof6",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof7": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof7"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof7",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof8": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof8"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof8",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof9": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof9"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof9",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof10": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof10"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof10",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof11": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof11"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof11",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof12": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof12"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof12",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof13": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof13"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof13",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof14": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof14"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof14",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof15": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof15"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof15",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof16": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof16"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof16",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof17": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof17"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof17",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof18": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof18"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof18",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof19": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof19"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof19",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof20": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof20"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof20",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof21": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof21"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof21",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof22": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof22"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof22",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof23": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof23"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof23",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof24": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof24"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof24",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof25": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof25"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof25",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof26": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof26"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof26",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof27": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof27"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof27",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof28": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof28"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof28",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof29": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof29"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof29",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof30": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof30"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof30",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof31": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof31"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof31",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof32": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof32"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof32",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof33": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof33"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof33",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof34": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof34"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof34",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof35": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof35"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof35",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof36": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof36"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof36",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof37": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof37"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof37",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof38": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof38"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof38",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof39": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof39"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof39",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof40": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof40"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof40",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof41": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof41"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof41",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof42": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof42"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof42",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof43": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof43"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof43",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof44": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof44"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof44",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof45": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof45"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof45",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof46": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof46"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof46",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof47": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof47"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof47",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof48": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof48"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof48",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof49": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof49"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof49",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof50": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof50"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof50",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof51": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof51"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof51",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof52": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof52"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof52",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof53": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof53"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof53",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof54": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof54"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof54",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof55": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof55"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof55",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof56": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof56"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof56",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof57": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof57"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof57",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof58": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof58"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof58",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof59": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof59"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof59",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof60": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof60"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof60",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof61": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof61"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof61",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof62": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof62"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof62",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof63": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof63"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof63",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof64": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof64"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof64",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof65": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof65"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof65",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof66": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof66"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof66",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof67": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof67"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof67",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof68": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof68"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof68",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof69": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof69"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof69",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof70": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof70"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof70",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof71": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof71"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof71",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof72": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof72"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof72",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof73": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof73"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof73",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof74": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof74"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof74",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof75": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof75"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof75",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export",
+  "outputs": [
+   "NMG_FINAL_HOST.json"
+  ]
+ },
+ "proof76": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof76"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof76",
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+ },
+ "proof77": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof77"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof77"
+ },
+ "proof78": {
+  "kind": "audit",
+  "sources": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "command": [
+   "python3",
+   "NMG_aux.py",
+   "proof78"
+  ],
+  "upload": [
+   "NMG_aux.py",
+   "NMG_AUDIT_ROOTS.json",
+   "NMG_AUDIT_MODULES.json",
+   "NMG_EXPECTED_IMPORTS.jsonl"
+  ],
+  "retrieve_dir": "NMG_audit/proof78"
+ },
+ "retention": {
+  "kind": "audit",
+  "sources": [
+   "NMG_retain.py",
+   "NMG_CLOSURE_PINS.json.xz",
+   "NMG_CLOSURE_PINS.json.sha256",
+   "NMG_EXPORT.json",
+   "NMG_FINAL_HOST.json"
+  ],
+  "command": [
+   "python3",
+   "NMG_retain.py"
+  ],
+  "upload": [
+   "NMG_retain.py"
+  ],
+  "outputs": [
+   "NMG_FINAL_HOST.json"
+  ],
+  "expected_time": "Read-only rehash of pinned selected proof objects, exports and tools; no proof replay"
+ }
+}
