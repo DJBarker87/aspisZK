@@ -22,8 +22,10 @@ theorem source (base : Ops) (env : RSL.Env) (aborts : Bool) (failure : Error)
  | Ok v => simp only [NMX_R3_RegistryRun.command,hb,r1_pool_adapter.owned.OwnedAccount.data,NMX_R3_RegistryRun.scalar]
  | Err e =>
   rw [NMX_ErrorCloneCut.data_error _ _ e hb]
-  change (if aborts && (NND_Carrier.error e).cloneAllocates then ⟨.abort,[]⟩ else ⟨.ret (.Err e),[]⟩) =
-   NMX_R3_RegistryRun.scalar (do let copied ← clone aborts failure e; Result.ok (.Err copied))
+  simp only [NMX_R3_RegistryRun.command,hb,install]
+  change ((if aborts && (NND_Carrier.error e).cloneAllocates then ⟨.abort,[]⟩ else ⟨.ret (.Err e),[]⟩) :
+   RSL.Obs (core.result.Result (Slice U8) solana_program_error.ProgramError)) =
+   NMX_R3_RegistryRun.scalar (do let copied ← clone aborts failure e; Result.ok (core.result.Result.Err copied : core.result.Result (Slice U8) solana_program_error.ProgramError))
   unfold clone
   cases flag : (aborts && (NND_Carrier.error e).cloneAllocates) <;>
    simp only [flag,Bool.false_eq_true,↓reduceIte,bind_tc_ok,bind_tc_fail,NMX_R3_RegistryRun.scalar]

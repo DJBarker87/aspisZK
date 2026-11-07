@@ -430,3 +430,11 @@ L1044 PASS proposes NMX_R3_RegistryRoot.root against EXACT canonical revision3 R
 L1037 establishes all four supplied decoders reject nil and impossible oversized canonical bytes symbolically. L1039/1040 give typed representatives, L1042 proves equality of the ENTIRE reference relations under the projection, including stop prefixes; bounds do NOT enter Domain. The representative preserves all actual representable byte payloads. Only fields which234 never observes (snapshot lengths and non-policy master payload) are normalized, with full Ref equality proved. No standalone inference from mere output equality is used.
 
 Raw own-root ax2, final combined import and export retention remain pending; no ledger credit yet. Explicit per-data-site/std and opaque-ID binding packets are being finalized against the existing supplier roots.233 now may be instantiated after those234 evidence gates, using its frozen two targets and supplied module8. No new233 scope yet.
+
+### Stage J:234 evidence gates complete
+
+L1046 PDA atom, L1047 opaque deployment-ID bindings and L1049 full actual-data-clone source binding PASS. All168 own current new theorem declarations pass raw ax2 (L1050–1060); collectAxioms and printed axioms agree, only propext/Classical.choice/Quot.sound. L1063 focused combined NLX + LIB_BUNDLE_IMPORT + LIBB_V2Star + existing217 + new234 PASS17.8467s/6810348KiB/swap0. L1062 was a missing retained NDB dependency path; fixed by reusing exact L893 NMX_NDB/NCV read-only roots, no proof/source alteration. L1061 separately pins/copies current accepted module12/13 Gate objects because the historical78-object LIBB export predates those modules. L1064 retains NMX_exports_registry_20261111 and every loaded object hash; every RSL owner resolves to the private revision3 rebuild.
+
+NMX_234_VALIDATION.json, NMX_234_CUTMAP.json (132 original lexical call occurrences), NMX_234_EXPORT.json and compressed closure pins are the complete234 packet. No all-roots audit or unchanged full regression. Candidate remains subject to the ledger, no CLOSED credit claimed.
+
+The first authorized233 instantiation scopes are now in progress after both child candidates exist and234 gates pass. No new233 reification/bounds/association was attempted while its child gate was open.
