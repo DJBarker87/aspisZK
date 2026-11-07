@@ -23,7 +23,7 @@ for parent in dep['order']:
   slots.append(dict(slot=parent+' -> '+child,parent=parent,child=child,sites=sites,
    provider_status=c['status'],root=p,provider_definitions=definitions,
    adapter='Literal provider Input/Pre/value/finalStore/output definitions listed here; SAME emitted operands and current entry state. Graph equality, required-cell frame and numbering; reached-machine transport where specialized. No whole-store/counter equality.',
-   status=status,reason=reason,instance=inst))
+   status=status,reason=reason,instance=None))
 facets=[
  ('thread:OwnInit','decodeBridged14756','SPEC-ERROR','PV_THR2_OwnInitSourceCodec.decodeBridged; PV_THR2_BoxDynRepresentationBridge; PV_THR2_OwnInitActualAllocationOwned.allBridged; SourceInitBoxOwnership','Old decode/all/Shape cannot be used at tagged source14756. Full actual bridge/source/binary adequacy and continuous milestone composition remain missing.'),
  ('slice:f21','actualPending','SPEC-ERROR','PV_STX2_ToVecCallSummary.Pending; PV_STX2_ToVecCallPendingDiagnostic.actual_entry_false_pending','Old pending accepts an ignored native answer on BODY push. Need completed=none and resolver=none recognizer tests.'),
@@ -33,11 +33,11 @@ facets=[
  ('slice:f0','entryReferenceValidity','MISSING-CHILD-LEMMA','Source7EntryOwned; PV_STX2_ToVecCallReferenceEntry.Pre; PV_STX2_OwnerAllocationReferenceValid.OwnerWellFormed','Foundation-construction caller must discharge registered non-null/aligned typed initialized ranges. No runtime validity premise added.'),
  ('thread:f361','nameValidity','MISSING-CHILD-LEMMA','PV_FN_THREAD_f361NameEntryValidity.Pre\'; PV_FN_THREAD_f361ScopeEntryValidity.Shape','Caller270 supplies actual Builder.name; opaque String representation source/binary adequacy remains explicit.'),
  ('thread:f6','machineTransport','MISSING-CHILD-LEMMA','PV_THR2_RunAgreement.prefix_identity; PV_FN_THREAD_f6Joins.GlobalOriginalTransport','Reached resolver/handler agreement to old CLOSED124/126 specialized machines must be derived.'),
- ('thread:f361','arcCloneValueFrame','MISSING-CHILD-LEMMA','PV_THR2_LibrarySemantics_ArcClone; PV_FN_THREAD_f360.contract_frame; PV_FN_THREAD_f124.contract','Generic CLOSED360 permits too much. Exact same-pointer/count/data frame requires named semantic fact and actual handler binding.'),
- ('thread:f361','atomicCounts','MISSING-CHILD-LEMMA','PV_THR2_LibrarySemantics_AtomicUsizeNew; PV_FN_THREAD_f121.contract_value; PV_FN_THREAD_f124.contract','Strong=weak=1 are actual provider exports; do not use arbitrary121 payload as their value law.'),
+ ('thread:f361','arcCloneValueFrame','MISSING-CHILD-LEMMA','PV_THR2_LibrarySemantics_ArcClone; PV_FN_THREAD_f360.contract_frame; PV_FN_THREAD_f124.contract','PV_LIB_ArcClone360 now reuses the named source semantics and overflow guard. Actual f361 handler/value/frame binding remains missing; the generic graph alone does not discharge this facet.'),
+ ('thread:f361','atomicCounts','MISSING-CHILD-LEMMA','PV_THR2_LibrarySemantics_AtomicUsizeNew; PV_FN_THREAD_f121.contract_value; PV_FN_THREAD_f124.contract','PV_LIB_Arc124Counts now joins actual strong=weak=1 exports to the same construction graph. Actual f361 caller binding and retained representation/frame transport remain missing.'),
  ('slice:f7','typedDrop178','MISSING-CHILD-LEMMA','PV_FN_SLICE_f22_TypedDestructor.run; PV_FN_SLICE_f7_DestructorBinding.selected; PV_FN_SLICE_f7_RuntimeDrop.run','W2 typed destructor proof exists; PLIB graph/runtime carrier adapter has not been installed.'),
  ('thread:OwnInit','numbering','MISSING-CHILD-LEMMA','PV_STX2_LiveNumbering.Numbered; initial; push; waiting_mono; stack_mono; caller_older','Reuse existing invariant lemmas by name at actual caller entries; no equality of summary and expanded counters.'),
- ('thread:OwnInit','registryFrame','MISSING-CHILD-LEMMA','PV_THR2_OwnUniformResourceHandler.lift; PV_W1_OwnerWellFormed.OwnerWellFormed','Framed native lift must be instantiated on every answer. Do not allow environment to rewrite ghost places/next.'),
+ ('thread:OwnInit','registryFrame','MISSING-CHILD-LEMMA','PV_THR2_OwnUniformResourceHandler.lift; PV_W1_OwnerWellFormed.OwnerWellFormed','PV_LIB_Registry.certified proves the concrete lift graph and frame on every answer, with prefix-only abort. Binding this builder to the actual OwnInit environment and composing explicit OWNER actions remain missing.'),
  ('thread:OwnInit','resourceEnv','MISSING-CHILD-LEMMA','PSPEC_COMMON.Env; existing Resources/Backend request functions','Site/occurrence indexed reservation/allocation channel is specified; a source-associated concrete environment binding for all leaves is absent.'),
 ]
 for parent,child,status,defs,reason in facets:

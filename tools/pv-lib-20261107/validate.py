@@ -41,5 +41,35 @@ raw_audit=json.loads((E/'RAW_AUDIT.json').read_text())
 assert raw_audit['strict_raw'] and raw_audit['unresolved']==0 and raw_audit['summary_mismatches']==0
 assert raw_audit['root_count']==38
 results['strict_raw_audit']={k:raw_audit[k] for k in ['attempt','root_count','unresolved','summary_mismatches']}
+session2=json.loads((E/'SESSION2_RAW_AUDIT.json').read_text())
+roots=json.loads((E/'SESSION2_AUDIT_ROOTS.json').read_text())
+assert session2['strict_raw'] and session2['unresolved']==0 and session2['summary_mismatches']==0
+assert session2['root_count']==82 and {r['root'] for r in session2['roots']}==set(roots['roots'])
+assert all(r['equal'] and set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} for r in session2['roots'])
+suffix=lambda p:pathlib.Path(p).read_text().split('  let env ← importModules',1)[1]
+assert suffix('lean/PV_LIB_RawAudit.lean')==suffix('lean/PV_LIB_RawAudit2.lean')
+archive=(E/'SESSION2_RAW_GRAPH_ARCHIVE.json.xz').read_bytes()
+manifest=json.loads((E/'SESSION2_RAW_GRAPH_MANIFEST.json').read_text())
+assert sha(archive)==manifest['archive_sha256']
+payload=lzma.decompress(archive)
+assert sha(payload)==manifest['uncompressed_sha256']
+contents=json.loads(payload)
+assert len(contents)==len(manifest['files'])
+for f in manifest['files']:
+    b=contents[f['name']].encode()
+    assert len(b)==f['bytes'] and sha(b)==f['sha256']
+replays=[]
+for r in receipts:
+    if not (49326<=r['attempt']<=49479 and r['accepted']) or r['target'].startswith('PV_LIB_'):continue
+    if r['attempt']<=49385:rev='fc0340264851248e164a098c170cc53e22857085'
+    elif r['attempt']<=49448:rev='9d7395cb069f07f812e8e1352e0478111eaec9ee'
+    else:rev='ce2f78097fa7e3cabc7b66fdfb9445c067917831'
+    raw=subprocess.check_output(['git','show',rev+':lean/'+r['target']+'.lean'])
+    assert sha(raw)==r['source_sha256']==sha(pathlib.Path('lean',r['target']+'.lean').read_bytes())
+    replays.append(dict(module=r['target'],attempt=r['attempt'],revision=rev,source_sha256=sha(raw)))
+assert len(replays)==85
+results['session2_unchanged_provider_replays']=replays
+results['session2_strict_raw_audit']={k:session2[k] for k in ['attempt','root_count','unresolved','summary_mismatches']}
+assert all(p.stat().st_size<20_000_000 for p in E.rglob('*') if p.is_file())
 (E/'VALIDATION.json').write_text(json.dumps(results,indent=2)+'\n')
-print(json.dumps({k:v for k,v in results.items() if k not in ['active_sources','formal_results']},indent=2))
+print(json.dumps({k:v for k,v in results.items() if k not in ['active_sources','formal_results','session2_unchanged_provider_replays']},indent=2))
