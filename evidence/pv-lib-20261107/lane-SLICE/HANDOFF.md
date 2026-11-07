@@ -169,3 +169,5 @@ Attempt 49677: PV_FN_SLICE_f4_Repeat, exit0.
 Attempt 49678: PV_FN_SLICE_f4_ArrayBuiltins, exit0.
 
 Attempt 49679: PV_FN_SLICE_f7_DropStatements, exit0.
+
+Attempt 49680: PV_FN_SLICE_f7_DropContract, exit0.
