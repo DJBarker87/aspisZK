@@ -39,3 +39,5 @@ theorem body_returned (V : VLib) (P : PreparedNew V) (F : NND_Tx1ReturnedValues.
 end NND_Stage1Eval
 '''
 (E/'NND_Stage1Eval.lean').write_text(header+s+proof)
+import runpy
+runpy.run_path(str(E/'NND_tx1_body_proof.py'))

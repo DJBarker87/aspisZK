@@ -25,6 +25,22 @@ theorem ten {A : Type} (a b c d e f g h i j : Bool) (err good : A) :
  cases a <;> cases b <;> cases c <;> cases d <;> cases e <;> cases f <;>
  cases g <;> cases h <;> cases i <;> cases j <;> rfl
 
+theorem six {A : Type} (a b c d e f : Bool) (err good : A) :
+ (if a then if b then if c then if d then if e then if f then err else good
+   else err else err else err else err else err) =
+ (if !a || (!b || !c || !d || !e || f) then err else good) := by
+ cases a <;> cases b <;> cases c <;> cases d <;> cases e <;> cases f <;> rfl
+
+theorem eightFlags {A : Type} (a b c d e f g h : Bool) (err good : A) :
+ (if a then if b then if c then if d then if e then if f then
+   if g then if h then err else good else err
+   else err else err else err else err else err else err) =
+ (if !a || !b || !c || !d || !e || !f || !g || h then err else good) := by
+ cases a <;> cases b <;> cases c <;> cases d <;> cases e <;> cases f <;>
+ cases g <;> cases h <;> rfl
+
+#print axioms eightFlags
+#print axioms six
 #print axioms ten
 #print axioms eight
 #print axioms or_guard
