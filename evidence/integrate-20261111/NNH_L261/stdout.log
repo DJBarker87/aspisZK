@@ -1,0 +1,110 @@
+NNH_generated/NNH_Tx1Returns.lean:53:1: error: Tactic `apply` failed: could not unify the conclusion of `NNH_ReturnedRE.bind
+  ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+    match r.1 with
+    | Except.ok p => Spec.pure (Except.ok (p, r.2))
+    | Except.error e => Spec.pure (Except.error e))
+  ?m.57 env (preparedValue ?m.60 env) ?m.59 (prepared_returned ?m.60 env)`
+  Returns
+    (RE.bind
+      ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+        match r.1 with
+        | Except.ok p => Spec.pure (Except.ok (p, r.2))
+        | Except.error e => Spec.pure (Except.error e))
+      ?m.57)
+    env (bindValue (preparedValue ?m.60 env) ?m.59)
+with the goal
+  Returns
+    (RE.bind
+      ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P)
+            { public_ := a.public_, proof := a.proof, g := V.zeroE29 }).bind
+        fun r =>
+        match r.1 with
+        | Except.ok p => Spec.pure (Except.ok (p, r.2))
+        | Except.error e => Spec.pure (Except.error e))
+      fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      RE.bind (V.accNew.run ()) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => RE.lift Spec.panic
+        | some folded =>
+          RE.bind (V.batchMerkle.run (a.proof, p, folded, 0)) fun x =>
+            RE.bind (V.geometry.run (p, 0, a.k)) fun geo =>
+              RE.bind (V.weightsNew.run acc) fun pending =>
+                RE.bind (V.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                  (RE.lift (V.finish.run (r.2, r.1))).bind fun acc2 =>
+                    (RE.lift (V.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind fun bytes => RE.pure bytes)
+    env
+    (bindValue (preparedValue { public_ := a.public_, proof := a.proof, g := V.zeroE29 } env) fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      bindValue (LIB_VLib.accNewValue () env) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => Except.error V.vParse
+        | some folded =>
+          bindValue (LIB_VLib.batchMerkleValue (a.proof, p, folded, 0) env) fun x =>
+            bindValue (LIB_VLib.geometryValue (p, 0, a.k) env) fun geo =>
+              bindValue (LIB_VLib.weightsNewValue acc env) fun pending =>
+                bindValue (LIB_VLib.queryLoopValue (a.proof, p, acc, g, geo, pending, a.k) env) fun r =>
+                  bindValue (Except.ok (LIB_VLib.finishValue (r.2, r.1) env)) fun acc2 =>
+                    bindValue (Except.ok (LIB_VLib.checkpointValue (p, acc2, a.proof, a.public_bytes) env)) fun bytes =>
+                      Except.ok bytes)
+
+Note: The full type of `NNH_ReturnedRE.bind
+  ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+    match r.1 with
+    | Except.ok p => Spec.pure (Except.ok (p, r.2))
+    | Except.error e => Spec.pure (Except.error e))
+  ?m.57 env (preparedValue ?m.60 env) ?m.59 (prepared_returned ?m.60 env)` is
+  (∀ (a : V.Prepared × V.E29), Returns (?m.57 a) env (?m.59 a)) →
+    Returns
+      (RE.bind
+        ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+          match r.1 with
+          | Except.ok p => Spec.pure (Except.ok (p, r.2))
+          | Except.error e => Spec.pure (Except.error e))
+        ?m.57)
+      env (bindValue (preparedValue ?m.60 env) ?m.59)
+
+a : TX1_094.Args V
+env : Env
+a✝² a✝¹ a✝ : Unit
+⊢ Returns
+    (RE.bind
+      ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P)
+            { public_ := a.public_, proof := a.proof, g := V.zeroE29 }).bind
+        fun r =>
+        match r.1 with
+        | Except.ok p => Spec.pure (Except.ok (p, r.2))
+        | Except.error e => Spec.pure (Except.error e))
+      fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      RE.bind (V.accNew.run ()) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => RE.lift Spec.panic
+        | some folded =>
+          RE.bind (V.batchMerkle.run (a.proof, p, folded, 0)) fun x =>
+            RE.bind (V.geometry.run (p, 0, a.k)) fun geo =>
+              RE.bind (V.weightsNew.run acc) fun pending =>
+                RE.bind (V.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                  (RE.lift (V.finish.run (r.2, r.1))).bind fun acc2 =>
+                    (RE.lift (V.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind fun bytes => RE.pure bytes)
+    env
+    (bindValue (preparedValue { public_ := a.public_, proof := a.proof, g := V.zeroE29 } env) fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      bindValue (LIB_VLib.accNewValue () env) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => Except.error V.vParse
+        | some folded =>
+          bindValue (LIB_VLib.batchMerkleValue (a.proof, p, folded, 0) env) fun x =>
+            bindValue (LIB_VLib.geometryValue (p, 0, a.k) env) fun geo =>
+              bindValue (LIB_VLib.weightsNewValue acc env) fun pending =>
+                bindValue (LIB_VLib.queryLoopValue (a.proof, p, acc, g, geo, pending, a.k) env) fun r =>
+                  bindValue (Except.ok (LIB_VLib.finishValue (r.2, r.1) env)) fun acc2 =>
+                    bindValue (Except.ok (LIB_VLib.checkpointValue (p, acc2, a.proof, a.public_bytes) env)) fun bytes =>
+                      Except.ok bytes)
+'NNH_Tx1Returns.prepared_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNH_Tx1Returns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NNH_Tx1Returns.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

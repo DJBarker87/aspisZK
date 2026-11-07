@@ -1,0 +1,42 @@
+{"attempt": "NNH_L250", "exit_status": 1, "wall_seconds": 3.123879602877423, "peak_rss_kib": "6611900", "swaps": "0", "print_axioms": ["'NNH_FinishReturns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_FinishReturns.lean:54:1: error: Tactic `apply` failed: could not unify the conclusion of `NNH_ReturnedRE.bind (RE.check ?m.96 ?m.97) ?m.92 env
+  (if ?m.96 = true then Except.error ?m.97 else Except.ok ()) ?m.94 (NNH_ReturnedRE.check env ?m.96 ?m.97)`
+  Returns ((RE.check ?m.96 ?m.97).bind ?m.92) env
+    (bindValue (if ?m.96 = true then Except.error ?m.97 else Except.ok ()) ?m.94)
+with the goal
+  Returns
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    (RE.check (decide (r.1 ≠ masked)) V.wTerminal).seq
+      (have stateBefore := V.state r.2.2;
+      (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fu
+...
+challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })))
+    env
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    bindValue (if decide (r.1 ≠ masked) = true then Except.error V.wTerminal else Except.ok ()) fun x =>
+      have stateBefore := V.state r.2.2;
+      bindValue (V.validatedRecord a.prefix_ 25) fun rec25' =>
+        bindValue (LIB_VLib.circleValue (r.2.2, rec25') env) fun c0 =>
+          have z0 := c0.1;
+          have t2 := c0.2;
+          bindValue (V.validatedRecord a.prefix_ 26) fun rec26 =>
+            bindValue (V.decodeK29 rec26 0) fun beforeZ1 =>
+              bindValue (V.validatedRecord a.prefix_ 26) fun rec26' =>
+                bindValue (LIB_VLib.circleValue (t2, rec26') env) fun c1 =>
+                  have z1 := c1.1;
+                  have t3 := c1.2;
+                  bindValue (if decide (z0 = z1) = true then Except.error V.wEqualCirclePoints else Except.ok ())
+                    fun x =>
+                    bindValue (V.payload a.prefix_ 2) fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => Except.error V.wPublic
+                      | some root1 =>
+                        Except.ok
+                          { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })
+'NNH_FinishReturns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2ba988eff60049e1b77c3fbf8e549016.scope; invocation ID: 989d4a23ee7e4ecf84be56204c481885
