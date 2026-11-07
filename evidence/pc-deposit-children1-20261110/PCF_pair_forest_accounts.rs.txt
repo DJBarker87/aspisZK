@@ -192,8 +192,8 @@ pub fn pool_v1_pair_forest_output_lane_v1(
 
 /// Canonical lane for a public deposit commitment.
 #[inline]
-#[cfg_attr(all(kani,not(PCF_NEG_LANE)),kani::ensures(|r| *r == PCF_Lane::reference(commitment)))]
-#[cfg_attr(all(kani,PCF_NEG_LANE),kani::ensures(|r| *r != PCF_Lane::reference(commitment)))]
+#[cfg_attr(all(kani,not(PCF_DIRECT),not(PCF_NEG_LANE)),kani::ensures(|r| *r == PCF_Lane::reference(commitment)))]
+#[cfg_attr(all(kani,not(PCF_DIRECT),PCF_NEG_LANE),kani::ensures(|r| *r != PCF_Lane::reference(commitment)))]
 pub fn pool_v1_pair_forest_deposit_lane_v1(
     commitment: &Digest,
 ) -> Result<u8, PoolV1PairForestAccountErrorV1> {

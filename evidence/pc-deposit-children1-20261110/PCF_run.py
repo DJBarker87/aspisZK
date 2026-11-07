@@ -83,14 +83,14 @@ x['deps_fingerprint']={{'seed_manifest_sha256':hashlib.sha256((b/'PCF_IMPORTS.js
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
-import json
+import json,base64
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+{task.get('collect',[])!r}
-print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
+print(json.dumps({{n:base64.b64encode((b/n).read_bytes()).decode() for n in names if (b/n).is_file()}}))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
-for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(__import__('base64').b64decode(s))
 assert a+'/receipt.json' in out,'missing receipt after submission; recover only'
-rc=json.loads(out[a+'/receipt.json']);assert rc['attempt']==a
+rc=json.loads(__import__('base64').b64decode(out[a+'/receipt.json']));assert rc['attempt']==a
 with (E/'PCF_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 print(json.dumps({k:rc.get(k) for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 # Details stay in evidence; terminal summary only.

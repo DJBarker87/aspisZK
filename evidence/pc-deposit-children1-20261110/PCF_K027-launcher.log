@@ -1,0 +1,44 @@
+{"attempt": "PCF_K027", "exit_status": 1, "wall_seconds": 5.761596607044339, "peak_rss_kib": "476436", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+g.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+   Compiling aspis-pool v0.1.0 (/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool)
+error[E0432]: unresolved import `crate::KMX_stubs`
+ --> programs/aspis-pool/src/PCF_AppendNative.rs:2:12
+  |
+2 | use crate::KMX_stubs::{KMX_copy_from_slice,KMX_copy_nonoverlapping};
+  |            ^^^^^^^^^ could not find `KMX_stubs` in the crate root
+
+warning: unused imports: `decode_pool_v1_pair_forest_terminal_statement_v1` and `encode_pool_v1_pair_forest_terminal_request_v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `aspis-pool` (lib) due to 1 previous error; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r20c36f1ccc8b4a7684f916b72b0dff0b.scope; invocation ID: b7a5a32ce9eb4537a2c244dc7df759de

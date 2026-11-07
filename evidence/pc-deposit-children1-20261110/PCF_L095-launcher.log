@@ -1,0 +1,58 @@
+{"attempt": "PCF_L095", "exit_status": 1, "wall_seconds": 3.168993259081617, "peak_rss_kib": "5398788", "swaps": "0", "print_axioms": ["'PCF_AppendStep.live' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCF_generated/PCF_AppendStep.lean:44:2: error: Tactic `apply` failed: could not unify the conclusion of `@PCF_CopyMap.result`
+  (do
+      let (window, back) ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut ?r ?data
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 window ?src
+      ok (?f (back copied))) =
+    ok (?f (Slice.setSlice! ?data ↑(core.ops.range.Range.start ?r) ↑?src))
+with the goal
+  (do
+      let __x ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := start, «end» := last } data
+      let copied ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 __x.1 (AspisR1.S2K.DigestBytes.bytes roots[i]).to_slice
+      ok (cont (PCF_Iterato
+...
+    let (window, back) ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut r data
+            let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 window src
+            ok (f (back copied))) =
+          ok (f (data.setSlice! ↑r.start ↑src))
+
+header : PCB_AppendFullRef.RootPageHeaderV1
+roots : Slice Root
+i : ℕ
+count : Usize
+data : Slice U8
+count_eq : ↑count = i
+live : i < roots.length
+capacity : ↑header.filled + roots.length ≤ 256
+extent : 64 + 32 * (↑header.filled + roots.length) ≤ data.length
+count' : Usize
+vc' : ↑count' = ↑count + 1
+hit :
+  core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorSliceIter Root)
+      (PCF_Iterator.cursor roots i count) =
+    ok (some (count, roots[i]), PCF_Iterator.cursor roots (i + 1) count')
+idx : Usize := core.convert.num.FromUsizeU16.from header.filled
+vidx : ↑idx = ↑header.filled
+slot : UScalar UScalarTy.Usize
+hs : idx + count = ok slot
+vs : ↑slot = ↑idx + ↑count
+mul : UScalar UScalarTy.Usize
+hm : slot * 32#usize = ok mul
+vm : ↑mul = ↑slot * ↑32#usize
+start : UScalar UScalarTy.Usize
+hstart : 64#usize + mul = ok start
+vstart : ↑start = ↑64#usize + ↑mul
+last : UScalar UScalarTy.Usize
+hlast : start + 32#usize = ok last
+vlast : ↑last = ↑start + ↑32#usize
+⊢ (do
+      let __x ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := start, «end» := last } data
+      let copied ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 __x.1 (AspisR1.S2K.DigestBytes.bytes roots[i]).to_slice
+      ok (cont (PCF_Iterator.cursor roots (i + 1) count', __x.2 copied))) =
+    ok
+      (cont (PCF_Iterator.cursor roots (i + 1) count', data.setSlice! ↑start ↑(AspisR1.S2K.DigestBytes.bytes roots[i])))
+'PCF_AppendStep.live' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r17271e37d1364b06a81d1b3917770fa8.scope; invocation ID: c2193b0e775447ea8322b2e009908bcd

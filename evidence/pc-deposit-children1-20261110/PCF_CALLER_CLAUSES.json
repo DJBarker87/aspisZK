@@ -85,6 +85,10 @@
       ],
       "text": "_262 = append_roots_unchecked(move _282, move _261, move _263) -> [return: bb128, unwind unreachable];"
      }
+    ],
+    "reference_only_hypotheses_verbatim": [
+     "header.filled.val + roots.length \u2264256",
+     "64+32*(header.filled.val+roots.length) \u2264data.length"
     ]
    },
    {
@@ -108,9 +112,18 @@
       ],
       "text": "_244 = append_roots_unchecked(move _292, move _250, move _251) -> [return: bb104, unwind unreachable];"
      }
+    ],
+    "reference_only_hypotheses_verbatim": [
+     "header.filled.val + roots.length \u2264256",
+     "64+32*(header.filled.val+roots.length) \u2264data.length"
     ]
    }
-  ]
+  ],
+  "reference_only_hypotheses": [
+   "header.filled.val + roots.length \u2264256",
+   "64+32*(header.filled.val+roots.length) \u2264data.length"
+  ],
+  "reference_only_root": "PCF_AppendComplete.complete; no native row credit"
  },
  {
   "row": "POOL:280",
@@ -282,7 +295,8 @@
    }
   ],
   "verbatim_domain": "All valid live shared Digest inputs, with all eight raw u32 limbs unrestricted; no additional semantic hypothesis.",
-  "root": "PCF_LaneModel.complete"
+  "root": "PCF_LaneModel.complete",
+  "native_route": "PCF_AK_ROUTE.json; direct real body; future caller uses explicit-constructor logging stubs, never stub_verified."
  },
  {
   "row": "POOL:304",
@@ -400,6 +414,10 @@
       ],
       "text": "scope 166 (inlined require_exact_account_count) {"
      }
+    ],
+    "reference_only_hypotheses_verbatim": [
+     "same_count : s.accountCount = accounts.length",
+     "expected : Usize and accounts : Slice T; no finite count bound"
     ]
    },
    {
@@ -423,6 +441,10 @@
       ],
       "text": "scope 61 (inlined require_exact_account_count) {"
      }
+    ],
+    "reference_only_hypotheses_verbatim": [
+     "same_count : s.accountCount = accounts.length",
+     "expected : Usize and accounts : Slice T; no finite count bound"
     ]
    },
    {
@@ -446,9 +468,18 @@
       ],
       "text": "scope 311 (inlined require_exact_account_count) {"
      }
+    ],
+    "reference_only_hypotheses_verbatim": [
+     "same_count : s.accountCount = accounts.length",
+     "expected : Usize and accounts : Slice T; no finite count bound"
     ]
    }
-  ]
+  ],
+  "reference_only_hypotheses": [
+   "same_count : s.accountCount = accounts.length",
+   "expected : Usize and accounts : Slice T; no finite count bound"
+  ],
+  "reference_only_root": "PCF_CountSliceState.complete; no universal native row credit"
  },
  {
   "row": "POOL:364",
@@ -590,7 +621,8 @@
    }
   ],
   "verbatim_domain": "All valid live immutable AccountInfo arguments; aliasing permitted; no additional semantic predicate on key, owner, flags, lamports, data or borrow state.",
-  "root": "PCF_Payer.result_state_effects"
+  "root": "PCF_Payer.result_state_effects",
+  "native_route": "PCF_AK_ROUTE.json; direct real body; future caller uses explicit-constructor logging stubs, never stub_verified."
  },
  {
   "row": "POOL:365",
@@ -647,6 +679,7 @@
    }
   ],
   "verbatim_domain": "All valid live immutable AccountInfo arguments; aliasing permitted; no additional semantic predicate on key, owner, flags, lamports, data or borrow state.",
-  "root": "PCF_Token.result_state_effects"
+  "root": "PCF_Token.result_state_effects",
+  "native_route": "PCF_AK_ROUTE.json; direct real body; future caller uses explicit-constructor logging stubs, never stub_verified."
  }
 ]

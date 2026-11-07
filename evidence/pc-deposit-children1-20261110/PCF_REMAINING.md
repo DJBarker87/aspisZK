@@ -1,14 +1,65 @@
 # PCF remaining obligations
 
-3 assigned rows CLOSED under PCF_AUDIT_STAGE2.json. Budget remains; work continues.
+3 assigned rows CLOSED,10 OPEN. All110 formal/link/audit scopes used; Kani53/110 and extraction4/14. Extra native or extraction scopes cannot replace the facts below. No remaining Lean-only gap is treated as native exhaustion: complete append and all-count slice/state/error laws were proved before this handoff.
 
-- POOL:272: Calls OPEN outside-job POOL:273 spend::note_commitment_with. No ledger23 CLOSED packet exists. Do not duplicate this callee or unwind field multiplication/hash.
-- POOL:165: SAME owner_key/value/asset_id/salt wrapper needs POOL:272; that row depends on outside-job273. Wrapper cannot close with a child-result hypothesis.
-- POOL:279: PCB geometry/copy/count contracts and extracted reference retained. Missing complete iterator-to-window, encoder/flat-byte, range-lens/KMX, emitted-loop and post-loop count associations; Lean-only work remains before any changed native cut.
-- POOL:280: PCF-F1 (PCF_PDA_FINDING.md): exact op38 request/reply/bump/frame still lacks an admitted native association. Pure opaque-callback alternative K023/K024 both hit unsupported-foreign-function checks, not semantic controls. No SDK/PDA value law or unsafe context surrogate adopted.
-- POOL:220: Actual body calls outside-job OPEN POOL:223 PairLeafWitness::validate. Shared tree-parent166 is CLOSED in ledger23, but that does not close the validator or the caller.
-- POOL:222: Actual body constructs a witness then calls outside-job OPEN223 validate. No endpoint/success assumption may replace that packet.
-- POOL:304: Actual deployed body calls outside-job OPEN305 decode_lane_account (191 decoder); preserve stored-bump fast/slow PDA paths, exact loans, errors and allocation prefix. The feature-disabled deposit-invariant audit body earns no deployed credit.
-- POOL:309: Actual body calls outside-job OPEN277 decode_deposit_instruction_with_magic_v1. PCC decoder target remains a draft; no callee packet exists to instantiate.
-- POOL:326: Actual body calls outside-job OPEN168 append_one_with_empty_roots and a lane-state encoder without a CLOSED ledger23 packet. Complete owned Box/allocation/errors and exact SAME tree/leaf/encoder arguments remain.
-- POOL:332: All-Nat count split L002, scalar reference extraction E001 and complete machine-word law L026 pass. Direct actual-body extraction E003 timed out180s with no usable emission; no unchanged replay. Full actual-frozen count/slice-length association remains; finite explicit AccountInfo fixtures alone do not prove unbounded rejection counts. No count bound or admitted-success premise adopted.
+## POOL:272
+
+Calls OPEN outside-job POOL:273 spend::note_commitment_with. No ledger23 CLOSED packet exists. Do not duplicate this callee or unwind field multiplication/hash.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:165
+
+SAME owner_key/value/asset_id/salt wrapper needs POOL:272; that row depends on outside-job273. Wrapper cannot close with a child-result hypothesis.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:279
+
+Full E_full extracted reference is now proved: PCF_AppendComplete.complete (L104), with iterator, geometry, CLOSED encoder value, range/KMX frame, full induction and post-loop count write. Actual complete frozen-function native association is still OPEN. Empty-loop native K032 timed out90s; descriptor isolation K051 and CLOSED-encoder isolation K054 also timed out90s. K033 was retired, not a negative pass. Safe fixed-array-reference mutable-slice/unit controls K046–K050 pass expected verdicts, but no whole-native base or arbitrary-prestate native-loop certificate exists. Do not repeat these timed-out shapes or relabel the model law as a row bridge.
+
+Why no further permitted independent attempt: Model/Lean-only obligations completed. Next fact is a native complete-function/base/step association; three distinct admitted90s attempts timed out. A useful next launch needs a smaller admitted native slice/iterator cut, not another descriptor, bound or timeout change. Existing PCB window/geometry/count passes are already reused and must not be duplicated.
+
+## POOL:280
+
+PCF-F1 (PCF_PDA_FINDING.md): exact op38 request/reply/bump/frame still lacks an admitted native association. Pure opaque-callback alternative K023/K024 both hit unsupported-foreign-function checks, not semantic controls. No SDK/PDA value law or unsafe context surrogate adopted.
+
+Why no further permitted independent attempt: Exact op38 byte-request/reply/bump/frame transport needs an admitted runtime-call observation interface. K023/K024 foreign callback controls are unsupported, no semantic pass. Replacing PDA values or hidden/static function-pointer context would violate the route; further unchanged probes cannot advance it.
+
+## POOL:220
+
+Actual body calls outside-job OPEN POOL:223 PairLeafWitness::validate. Shared tree-parent166 is CLOSED in ledger23, but that does not close the validator or the caller.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:222
+
+Actual body constructs a witness then calls outside-job OPEN223 validate. No endpoint/success assumption may replace that packet.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:304
+
+Actual deployed body calls outside-job OPEN305 decode_lane_account (191 decoder); preserve stored-bump fast/slow PDA paths, exact loans, errors and allocation prefix. The feature-disabled deposit-invariant audit body earns no deployed credit.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:309
+
+Actual body calls outside-job OPEN277 decode_deposit_instruction_with_magic_v1. PCC decoder target remains a draft; no callee packet exists to instantiate.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:326
+
+Actual body depends on outside-job OPEN168 append_one_with_empty_roots and OPEN195 encode_pool_v1_pair_forest_lane_state_v1. Same tree, leaf, lane-state encoding, owned Box/allocation and all Result/error effects still require those packets; no child-result hypothesis or duplicate worker proof.
+
+Why no further permitted independent attempt: Needs an outside-job CLOSED callee packet before caller composition; none is available in the frozen ledger23 authority.
+
+## POOL:332
+
+E004 borrow-minimal generic slice reference extracted with NCO pins; PCF_CountSlice.projection/complete and PCF_CountSliceState.complete (L110/L115) prove the slice-owned length, both Err arms and entire unchanged state/empty effects for ALL lengths/expected words. Native K067/K068 verify all expected-word constructor classes at valid SDK extent1 only; this is explicitly partial and does not bound or cover all rejection counts. Universal actual frozen SDK-slice-length/native association remains OPEN. Full extraction E003 timed out180s; no invalid/virtual slice or returned-success premise is adopted.
+
+Why no further permitted independent attempt: Model-side all-count/slice/state/error obligations are complete. Remaining fact requires a native full-length or admitted source-ordered metadata association; fixed-extent observations do not imply it. The finite admitted-count recipe(c-c) does not license bounding the leaf rejection domain. Formal scope budget is exhausted; another bounded fixture would not advance the missing universal association.
+
+The three completed rows364/365/199 need no unchanged rerun. Together these thirteen entries explain the stop even though less than80% of the aggregate allowance was used. No transaction shapes, exploit inputs, unsafe virtual references, new hash/PDA-value trust, or sibling-owned proofs were constructed to spend unused budget.

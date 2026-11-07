@@ -1,0 +1,344 @@
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes the pair-forest initialization, checkpoint,
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -131,6 +131,9 @@
+     Ok(())
+ }
+ 
++#[cfg_attr(all(kani,not(PCF_DIRECT),not(PCF_NEG_PAYER)),kani::ensures(|r| PCF_Processor::payer_contract(payer,system_program_account,r)))]
++#[cfg_attr(all(kani,not(PCF_DIRECT),PCF_NEG_PAYER),kani::ensures(|r| !PCF_Processor::payer_contract(payer,system_program_account,r)))]
++#[cfg_attr(all(kani,not(PCF_DIRECT)),kani::modifies())]
+ pub(crate) fn require_payer_and_system_program(
+     payer: &AccountInfo<'_>,
+     system_program_account: &AccountInfo<'_>,
+@@ -331,6 +334,9 @@
+     Ok(())
+ }
+ 
++#[cfg_attr(all(kani,not(PCF_DIRECT),not(PCF_NEG_TOKEN)),kani::ensures(|r| PCF_Processor::token_contract(account,r)))]
++#[cfg_attr(all(kani,not(PCF_DIRECT),PCF_NEG_TOKEN),kani::ensures(|r| !PCF_Processor::token_contract(account,r)))]
++#[cfg_attr(all(kani,not(PCF_DIRECT)),kani::modifies())]
+ pub(crate) fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {
+     if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+         || !account.executable
+@@ -681,3 +687,7 @@
+     }
+ 
+ }
++
++#[cfg(any(kani,PCF_EXTRACT))]
++#[path="PCF_Processor.rs"]
++mod PCF_Processor;
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -270,6 +270,12 @@
+     }
+ }
+ 
++#[cfg_attr(kani,kani::requires(roots.is_empty()))]
++#[cfg_attr(kani,kani::requires(data.len()>=58))]
++#[cfg_attr(kani,kani::requires(header.filled<=256))]
++#[cfg_attr(kani,kani::modifies(data[56..58].first_chunk_mut::<2>().unwrap()))]
++#[cfg_attr(all(kani,not(PCF_NEG_APPEND_ZERO)),kani::ensures(|_| data[56] == header.filled as u8 && data[57] == (header.filled >> 8) as u8))]
++#[cfg_attr(all(kani,PCF_NEG_APPEND_ZERO),kani::ensures(|_| !(data[56] == header.filled as u8 && data[57] == (header.filled >> 8) as u8)))]
+ pub(crate) fn append_roots_unchecked(data: &mut [u8], header: RootPageHeaderV1, roots: &[Digest]) {
+     debug_assert!(usize::from(header.filled) + roots.len() <= POOL_V1_ROOT_HISTORY_CAPACITY);
+     for (offset, root) in roots.iter().enumerate() {
+@@ -344,3 +350,7 @@
+         assert!(validate_root_page_bytes_from_program_invariant(&data, &pool, 0).is_err());
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCF_AppendNative.rs"]
++mod PCF_AppendNative;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,7 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCF_CountNative.rs"]
++mod PCF_CountNative;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -192,6 +192,8 @@
+ 
+ /// Canonical lane for a public deposit commitment.
+ #[inline]
++#[cfg_attr(all(kani,not(PCF_DIRECT),not(PCF_NEG_LANE)),kani::ensures(|r| *r == PCF_Lane::reference(commitment)))]
++#[cfg_attr(all(kani,not(PCF_DIRECT),PCF_NEG_LANE),kani::ensures(|r| *r != PCF_Lane::reference(commitment)))]
+ pub fn pool_v1_pair_forest_deposit_lane_v1(
+     commitment: &Digest,
+ ) -> Result<u8, PoolV1PairForestAccountErrorV1> {
+@@ -819,3 +821,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCF_Lane.rs"]
++mod PCF_Lane;
+--- /dev/null
++++ b/programs/aspis-pool/src/PCF_Processor.rs
+@@ -0,0 +1,113 @@
++use super::*;
++#[path="PCF_AccountReference.rs"] mod reference;
++fn exact(r:&ProgramResult,code:u32)->bool {
++    match r {Ok(())=>code==0,Err(ProgramError::Custom(c))=>*c==code && code!=0,_=>false}
++}
++pub(super) fn payer_contract(p:&AccountInfo<'_>,s:&AccountInfo<'_>,r:&ProgramResult)->bool {
++    let code=reference::payer_reference(p.is_signer,p.is_writable,p.executable,p.owner==&system_program::id(),
++        s.key==&system_program::id(),s.owner==&native_loader::id(),s.executable,s.is_signer,s.is_writable);
++    exact(r,code)
++}
++pub(super) fn token_contract(a:&AccountInfo<'_>,r:&ProgramResult)->bool {
++    let code=reference::token_reference(a.key==&LEGACY_SPL_TOKEN_PROGRAM_ID,a.executable,a.is_signer,a.is_writable,
++        a.owner==&bpf_loader::id(),a.owner==&bpf_loader_upgradeable::id(),a.owner==&loader_v4::id());
++    exact(r,code)
++}
++#[cfg(kani)]
++#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_payer_and_system_program))]
++#[cfg_attr(PCF_DIRECT,kani::proof)]
++fn payer_contract_proof(){
++    let pk=Pubkey::new_from_array(kani::any());let po=Pubkey::new_from_array(kani::any());
++    let sk=Pubkey::new_from_array(kani::any());let so=Pubkey::new_from_array(kani::any());
++    let mut pl:u64=kani::any();let mut sl:u64=kani::any();let mut pd=[];let mut sd=[];
++    let p=AccountInfo::new(&pk,kani::any(),kani::any(),&mut pl,&mut pd,&po,kani::any(),kani::any());
++    let s=AccountInfo::new(&sk,kani::any(),kani::any(),&mut sl,&mut sd,&so,kani::any(),kani::any());
++    let result=require_payer_and_system_program(&p,&s);
++    #[cfg(all(PCF_DIRECT,not(PCF_NEG_PAYER)))] assert!(payer_contract(&p,&s,&result));
++    #[cfg(all(PCF_DIRECT,PCF_NEG_PAYER))] assert!(!payer_contract(&p,&s,&result));
++}
++#[cfg(kani)]
++#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_token_program_account))]
++#[cfg_attr(PCF_DIRECT,kani::proof)]
++fn token_contract_proof(){
++    let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++    let mut lamports:u64=kani::any();let mut data=[];
++    let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
++    let result=require_token_program_account(&a);
++    #[cfg(all(PCF_DIRECT,not(PCF_NEG_TOKEN)))] assert!(token_contract(&a,&result));
++    #[cfg(all(PCF_DIRECT,PCF_NEG_TOKEN))] assert!(!token_contract(&a,&result));
++}
++
++#[cfg(kani)]
++#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_payer_and_system_program))]
++#[cfg_attr(PCF_DIRECT,kani::proof)]
++fn payer_alias_contract_proof(){
++    let pk=Pubkey::new_from_array(kani::any());let po=Pubkey::new_from_array(kani::any());
++    let sk=Pubkey::new_from_array(kani::any());let so=Pubkey::new_from_array(kani::any());
++    let mut lamports:u64=kani::any();let mut data=[];
++    let p=AccountInfo::new(&pk,kani::any(),kani::any(),&mut lamports,&mut data,&po,kani::any(),kani::any());
++    let mut s=p.clone();s.key=&sk;s.owner=&so;s.is_signer=kani::any();s.is_writable=kani::any();s.executable=kani::any();s.rent_epoch=kani::any();
++    let result=require_payer_and_system_program(&p,&s);
++    #[cfg(all(PCF_DIRECT,not(PCF_NEG_PAYER)))] assert!(payer_contract(&p,&s,&result));
++    #[cfg(all(PCF_DIRECT,PCF_NEG_PAYER))] assert!(!payer_contract(&p,&s,&result));
++}
++
++#[cfg(kani)]
++#[kani::proof]
++fn constants_proof(){
++ assert_eq!((system_program::id()).to_bytes(),[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
++ assert_eq!((native_loader::id()).to_bytes(),[5,135,132,191,20,139,164,40,47,176,18,87,72,136,169,241,83,160,125,173,247,101,192,69,92,154,151,3,128,0,0,0]);
++ assert_eq!((bpf_loader::id()).to_bytes(),[2,168,246,145,78,136,161,110,57,90,225,40,148,143,250,105,86,147,55,104,24,221,71,67,82,33,243,198,0,0,0,0]);
++ assert_eq!((bpf_loader_upgradeable::id()).to_bytes(),[2,168,246,145,78,136,161,176,226,16,21,62,247,99,174,43,0,194,185,61,22,193,36,210,192,83,122,16,4,128,0,0]);
++ assert_eq!((loader_v4::id()).to_bytes(),[5,18,180,17,81,81,227,122,173,10,139,197,211,136,46,123,127,218,76,243,210,192,40,200,207,131,54,24,0,0,0,0]);
++ assert_eq!((LEGACY_SPL_TOKEN_PROGRAM_ID).to_bytes(),[6,221,246,225,215,101,161,147,217,203,225,70,206,235,121,172,28,180,133,237,95,91,55,145,58,140,245,133,126,255,0,169]);
++ #[cfg(PCF_NEG_IDS)] assert_ne!(system_program::id().to_bytes(),[0;32]);
++}
++
++#[cfg(kani)]
++#[kani::modifies()]
++#[kani::ensures(|r| matches!(r,Ok(())))]
++fn empty_frame(a:&AccountInfo<'_>)->ProgramResult {let _=a.is_signer;Ok(())}
++#[cfg(kani)]
++#[kani::modifies()]
++#[kani::ensures(|r| matches!(r,Ok(())))]
++fn bad_frame(a:&AccountInfo<'_>)->ProgramResult {
++ let mut value=a.lamports.borrow_mut();**value=(**value).wrapping_add(1);Ok(())
++}
++#[cfg(kani)]
++#[kani::proof_for_contract(empty_frame)]
++fn empty_frame_proof(){
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut lamports:u64=kani::any();let mut data=[];
++ let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
++ let _=empty_frame(&a);
++}
++#[cfg(kani)]
++#[kani::proof_for_contract(bad_frame)]
++fn bad_frame_proof(){
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut lamports:u64=kani::any();let mut data=[];
++ let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
++ let _=bad_frame(&a);
++}
++
++// Method calibration only: no PDA value is computed or assumed.
++#[cfg(kani)]
++extern "C" { fn __CPROVER_uninterpreted_PCF_u8(x:u8)->u8; }
++#[cfg(kani)]
++#[kani::proof]
++fn pda_uf_repeat(){
++ let x:u8=kani::any();let a=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};
++ let b=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};assert_eq!(a,b);
++}
++#[cfg(kani)]
++#[kani::proof]
++fn pda_uf_unimplied(){
++ let x:u8=kani::any();let y:u8=kani::any();kani::assume(x!=y);
++ let a=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};
++ let b=unsafe{__CPROVER_uninterpreted_PCF_u8(y)};assert_eq!(a,b);
++}
++
++#[cfg(all(kani,PCF_ARBITRARY_PROGRAM))]
++#[kani::proof]
++fn program_result_capability(){let _: ProgramResult = kani::any();}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCF_AccountReference.rs
+@@ -0,0 +1,15 @@
++// Value-only references. Zero denotes Ok; each nonzero value is the exact Custom payload.
++pub fn payer_reference(signer:bool,writable:bool,executable:bool,system_owner:bool,
++    system_key:bool,native_owner:bool,system_executable:bool,system_signer:bool,system_writable:bool)->u32 {
++    if !signer || !writable || executable || !system_owner {0x41532034}
++    else if !system_key || !native_owner || !system_executable || system_signer || system_writable {0x41532033}
++    else {0}
++}
++pub fn token_reference(token_key:bool,executable:bool,signer:bool,writable:bool,
++    bpf_owner:bool,upgradeable_owner:bool,v4_owner:bool)->u32 {
++    if !token_key || !executable || signer || writable || !(bpf_owner || upgradeable_owner || v4_owner) {0x41532013}
++    else {0}
++}
++pub fn count_reference(count:usize,expected:usize)->u8 {
++    if count != expected {if count<expected {1} else {2}} else {0}
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCF_AppendNative.rs
+@@ -0,0 +1,43 @@
++use super::*;
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(super) fn bytes(root:&Digest)->[u8;32]{
++ let w0=root[0].0.to_le_bytes();
++ let w1=root[1].0.to_le_bytes();
++ let w2=root[2].0.to_le_bytes();
++ let w3=root[3].0.to_le_bytes();
++ let w4=root[4].0.to_le_bytes();
++ let w5=root[5].0.to_le_bytes();
++ let w6=root[6].0.to_le_bytes();
++ let w7=root[7].0.to_le_bytes();
++ [w0[0],w0[1],w0[2],w0[3],w1[0],w1[1],w1[2],w1[3],w2[0],w2[1],w2[2],w2[3],w3[0],w3[1],w3[2],w3[3],w4[0],w4[1],w4[2],w4[3],w5[0],w5[1],w5[2],w5[3],w6[0],w6[1],w6[2],w6[3],w7[0],w7[1],w7[2],w7[3]]
++}
++#[kani::proof_for_contract(append_roots_unchecked)]
++#[kani::stub(encode_digest_canonical,bytes)]
++#[kani::unwind(4)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn empty(){
++ let mut data:[u8;58]=kani::any();
++ let h=RootPageHeaderV1{pool:Pubkey::new_from_array(kani::any()),page_number:kani::any(),first_sequence:kani::any(),filled:kani::any()};
++ kani::assume(h.filled<=256);
++ append_roots_unchecked(&mut data,h,&[]);
++}
++#[kani::requires(data.len()>=2)]
++#[kani::modifies(data.first_chunk_mut::<2>().unwrap())]
++#[kani::ensures(|_| data[0]==(if flag {7}else{8}))]
++fn shape(data:&mut[u8],flag:bool){ data[0]=if flag {7}else{8}; data[1]=if flag {9}else{10}; }
++#[kani::proof_for_contract(shape)] fn shape_positive(){let mut d:[u8;2]=kani::any();shape(&mut d,kani::any());}
++#[kani::proof] fn shape_real(){let mut d:[u8;2]=kani::any();let flag:bool=kani::any();shape(&mut d,flag);assert_eq!(d[1],if flag {9}else{10});}
++#[kani::proof] #[kani::stub_verified(shape)]
++fn shape_stub(){let mut d:[u8;2]=kani::any();let flag:bool=kani::any();shape(&mut d,flag);assert_eq!(d[1],if flag {9}else{10});}
++#[kani::requires(data.len()>=2)] #[kani::modifies(data.first_chunk_mut::<2>().unwrap())] #[kani::ensures(|_| data[0]!=(if flag {7}else{8}))]
++fn shape_inverse(data:&mut[u8],flag:bool){data[0]=if flag {7}else{8};data[1]=if flag {9}else{10};}
++#[kani::proof_for_contract(shape_inverse)]fn shape_inverse_proof(){let mut d:[u8;2]=kani::any();shape_inverse(&mut d,kani::any());}
++#[kani::requires(data.len()>=2)] #[kani::modifies(data.first_chunk_mut::<1>().unwrap())] #[kani::ensures(|_| data[0]==(if flag {7}else{8}))]
++fn shape_bad_frame(data:&mut[u8],flag:bool){data[0]=if flag {7}else{8};data[1]=if flag {9}else{10};}
++#[kani::proof_for_contract(shape_bad_frame)]fn shape_bad_frame_proof(){let mut d:[u8;2]=kani::any();shape_bad_frame(&mut d,kani::any());}
++#[kani::proof] #[kani::unwind(4)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_inverse(){let src:[u8;2]=kani::any();let mut dst:[u8;2]=kani::any();dst.copy_from_slice(&src);let j:usize=kani::any();kani::assume(j<2);assert_ne!(dst[j],src[j]);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCF_CountNative.rs
+@@ -0,0 +1,18 @@
++use super::*;
++#[path="PCF_CountSliceReference.rs"]mod reference;
++fn exact(result:&ProgramResult,tag:u8)->bool {
++ match(result,tag){(Ok(()),0)=>true,(Err(ProgramError::NotEnoughAccountKeys),1)=>true,(Err(ProgramError::InvalidArgument),2)=>true,_=>false}
++}
++// A comparison/constructor observation at one VALID SDK slice extent.
++// This is NOT the universal native slice-length certificate and earns no row credit.
++#[kani::proof]
++fn constructor_classes(){
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut lamports:u64=kani::any();let mut data=[];
++ let info=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
++ let accounts=[info];let expected:usize=kani::any();
++ let result=require_exact_account_count(&accounts,expected);
++ let tag=reference::count_reference(&accounts,expected);
++ #[cfg(not(PCF_NEG_COUNT))]assert!(exact(&result,tag));
++ #[cfg(PCF_NEG_COUNT)]assert!(!exact(&result,tag));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCF_CountSliceReference.rs
+@@ -0,0 +1,8 @@
++// Borrow-minimal typed slice view of frozen pair_forest.rs:371-380.
++// Payload T is never inspected; exact full reply arms are 0/1/2.
++pub fn count_reference<T>(accounts: &[T], expected: usize) -> u8 {
++    if accounts.len() != expected {
++        return if accounts.len() < expected { 1 } else { 2 };
++    }
++    0
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCF_Lane.rs
+@@ -0,0 +1,32 @@
++use super::*;
++use aspis_core::field::M31;
++#[path="PCF_LaneReference.rs"]mod scalar;
++const PCF_P:u32=2147483647;
++fn canonical_reply(d:&Digest)->bool {
++ d[0].0<PCF_P && d[1].0<PCF_P && d[2].0<PCF_P && d[3].0<PCF_P &&
++ d[4].0<PCF_P && d[5].0<PCF_P && d[6].0<PCF_P && d[7].0<PCF_P
++}
++fn first_reply(d:&Digest)->u8 {
++ assert!(canonical_reply(d));
++ d[0].0 as u8
++}
++pub(super) fn reference(d:&Digest)->Result<u8,PoolV1PairForestAccountErrorV1> {
++ let r=scalar::lane_reference(d[0].0,d[1].0,d[2].0,d[3].0,d[4].0,d[5].0,d[6].0,d[7].0);
++ if r==256 {Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)} else {Ok(r as u8)}
++}
++#[cfg(kani)]
++#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(pool_v1_pair_forest_deposit_lane_v1))]
++#[cfg_attr(PCF_DIRECT,kani::proof)]
++#[kani::stub(digest_is_canonical,canonical_reply)]
++#[kani::stub(first_canonical_byte,first_reply)]
++fn lane_contract_proof(){
++ let w:[u32;8]=kani::any();
++ let d=[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])];
++ let result=pool_v1_pair_forest_deposit_lane_v1(&d);
++ #[cfg(all(PCF_DIRECT,not(PCF_NEG_LANE)))] assert_eq!(result,reference(&d));
++ #[cfg(all(PCF_DIRECT,PCF_NEG_LANE))] assert_ne!(result,reference(&d));
++}
++
++#[cfg(all(kani,PCF_ARBITRARY_LANE))]
++#[kani::proof]
++fn forest_result_capability(){let _: Result<u8,PoolV1PairForestAccountErrorV1> = kani::any();}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCF_LaneReference.rs
+@@ -0,0 +1,5 @@
++pub fn lane_reference(a:u32,b:u32,c:u32,d:u32,e:u32,f:u32,g:u32,h:u32)->u16 {
++ if a>=2147483647 || b>=2147483647 || c>=2147483647 || d>=2147483647 ||
++    e>=2147483647 || f>=2147483647 || g>=2147483647 || h>=2147483647 {256}
++ else {(a as u8 & 7) as u16}
++}

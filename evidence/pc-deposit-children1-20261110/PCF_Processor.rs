@@ -14,33 +14,42 @@ pub(super) fn token_contract(a:&AccountInfo<'_>,r:&ProgramResult)->bool {
     exact(r,code)
 }
 #[cfg(kani)]
-#[kani::proof_for_contract(require_payer_and_system_program)]
+#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_payer_and_system_program))]
+#[cfg_attr(PCF_DIRECT,kani::proof)]
 fn payer_contract_proof(){
     let pk=Pubkey::new_from_array(kani::any());let po=Pubkey::new_from_array(kani::any());
     let sk=Pubkey::new_from_array(kani::any());let so=Pubkey::new_from_array(kani::any());
     let mut pl:u64=kani::any();let mut sl:u64=kani::any();let mut pd=[];let mut sd=[];
     let p=AccountInfo::new(&pk,kani::any(),kani::any(),&mut pl,&mut pd,&po,kani::any(),kani::any());
     let s=AccountInfo::new(&sk,kani::any(),kani::any(),&mut sl,&mut sd,&so,kani::any(),kani::any());
-    let _=require_payer_and_system_program(&p,&s);
+    let result=require_payer_and_system_program(&p,&s);
+    #[cfg(all(PCF_DIRECT,not(PCF_NEG_PAYER)))] assert!(payer_contract(&p,&s,&result));
+    #[cfg(all(PCF_DIRECT,PCF_NEG_PAYER))] assert!(!payer_contract(&p,&s,&result));
 }
 #[cfg(kani)]
-#[kani::proof_for_contract(require_token_program_account)]
+#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_token_program_account))]
+#[cfg_attr(PCF_DIRECT,kani::proof)]
 fn token_contract_proof(){
     let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
     let mut lamports:u64=kani::any();let mut data=[];
     let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
-    let _=require_token_program_account(&a);
+    let result=require_token_program_account(&a);
+    #[cfg(all(PCF_DIRECT,not(PCF_NEG_TOKEN)))] assert!(token_contract(&a,&result));
+    #[cfg(all(PCF_DIRECT,PCF_NEG_TOKEN))] assert!(!token_contract(&a,&result));
 }
 
 #[cfg(kani)]
-#[kani::proof_for_contract(require_payer_and_system_program)]
+#[cfg_attr(not(PCF_DIRECT),kani::proof_for_contract(require_payer_and_system_program))]
+#[cfg_attr(PCF_DIRECT,kani::proof)]
 fn payer_alias_contract_proof(){
     let pk=Pubkey::new_from_array(kani::any());let po=Pubkey::new_from_array(kani::any());
     let sk=Pubkey::new_from_array(kani::any());let so=Pubkey::new_from_array(kani::any());
     let mut lamports:u64=kani::any();let mut data=[];
     let p=AccountInfo::new(&pk,kani::any(),kani::any(),&mut lamports,&mut data,&po,kani::any(),kani::any());
     let mut s=p.clone();s.key=&sk;s.owner=&so;s.is_signer=kani::any();s.is_writable=kani::any();s.executable=kani::any();s.rent_epoch=kani::any();
-    let _=require_payer_and_system_program(&p,&s);
+    let result=require_payer_and_system_program(&p,&s);
+    #[cfg(all(PCF_DIRECT,not(PCF_NEG_PAYER)))] assert!(payer_contract(&p,&s,&result));
+    #[cfg(all(PCF_DIRECT,PCF_NEG_PAYER))] assert!(!payer_contract(&p,&s,&result));
 }
 
 #[cfg(kani)]
@@ -98,3 +107,7 @@ fn pda_uf_unimplied(){
  let a=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};
  let b=unsafe{__CPROVER_uninterpreted_PCF_u8(y)};assert_eq!(a,b);
 }
+
+#[cfg(all(kani,PCF_ARBITRARY_PROGRAM))]
+#[kani::proof]
+fn program_result_capability(){let _: ProgramResult = kani::any();}

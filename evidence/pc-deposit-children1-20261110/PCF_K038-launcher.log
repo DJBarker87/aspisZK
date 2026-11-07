@@ -1,0 +1,43 @@
+{"attempt": "PCF_K038", "exit_status": 1, "wall_seconds": 4.747040511807427, "peak_rss_kib": "233332", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+error originates in the attribute macro `kani::modifies` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0308]: mismatched types
+  --> programs/aspis-pool/src/PCF_AppendNative.rs:25:34
+   |
+25 | #[kani::requires(data.len()>=2)] #[kani::modifies(data.as_mut_ptr() as *mut [u8;1])] #[kani::ensures(|_| data[0]==(if flag {7}else{8...
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                                  |
+   |                                  expected `&_`, found `*mut [u8; 1]`
+   |                                  arguments to this function are incorrect
+   |
+   = note: expected reference `&_`
+            found raw pointer `*mut [u8; 1]`
+note: function defined here
+  --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+   = note: this error originates in the attribute macro `kani::modifies` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0606]: casting `&*mut u8` as `*mut [u8; 1]` is invalid
+  --> programs/aspis-pool/src/PCF_AppendNative.rs:25:34
+   |
+25 | #[kani::requires(data.len()>=2)] #[kani::modifies(data.as_mut_ptr() as *mut [u8;1])] #[kani::ensures(|_| data[0]==(if flag {7}else{8...
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `kani::modifies` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0308, E0606.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `aspis-pool` (lib) due to 8 previous errors; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 8 compilation errors.
+
+Running as unit: run-rbb3a44fedbb145969e7a658aad8949d3.scope; invocation ID: 7d06cedfba2b46788ce02638f3c4ee68

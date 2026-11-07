@@ -1,0 +1,44 @@
+{"attempt": "PCF_L081", "exit_status": 0, "wall_seconds": 2.660172777948901, "peak_rss_kib": "2643652", "swaps": "0", "print_axioms": []}
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_20
+TYPE ∀ {α : Type u_1} (P : Unit → Prop) (k : Unit → Aeneas.Std.Result α) (Q : α → Prop),
+  Aeneas.Std.WP.qimp_spec P k Q = (P () → Aeneas.Std.WP.spec (k ()) Q)
+VALUE fun {α} P k Q => propext (Aeneas.Std.WP.qimp_spec_unit P k Q)
+FOUND Aeneas.Std.Array.getElem?_Nat_eq
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : ℕ), v[i]? = (↑v)[i]?
+VALUE fun {α} {n} v i => Eq.refl v[i]?
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_24
+TYPE ∀ {p : Prop}, (∀ (a : Unit), p) = p
+VALUE fun {p} => propext Aeneas.Std.WP.forall_unit
+FOUND Aeneas.Std.Array.index_usize.match_1.congr_eq_1
+TYPE ∀ {α : Type u_1} (motive : Option
+...
+ ∀ {α : Sort u_1} {β : Sort u_2} (P₀ : β → Aeneas.Std.WP.Post α) (P₁ : Aeneas.Std.WP.Post α),
+  Aeneas.Std.WP.qimp (fun x => ∃ y, P₀ y x) P₁ = ∀ (x : β), Aeneas.Std.WP.qimp (P₀ x) P₁
+VALUE fun {α} {β} P₀ P₁ => propext (Aeneas.Std.WP.qimp_exists P₀ P₁)
+FOUND Aeneas.Std.Array.index_usize
+TYPE {α : Type u} → {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α
+VALUE fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_25
+TYPE ∀ {α : Prop}, (True → α) = α
+VALUE fun {α} => propext true_imp_iff
+FOUND Aeneas.Std.Array.index_usize_const_spec.match_1_2
+TYPE ∀ {n : Aeneas.Std.Usize} {α : Type u_1} [inst : Inhabited α] (p : Aeneas.Std.Usize → α → Bool)
+  (a : Aeneas.Std.Array α n) (i : ℕ)
+  (motive :
+    (l : List α) → i + l.length = ↑n → (∀ (j : ℕ), l[j]! = a[i + j]!) → Aeneas.Std.Array.allIdx p l i = true → Prop)
+  (l : List α) (hi : i + l.length = ↑n) (hl : ∀ (j : ℕ), l[j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p l i = true),
+  (∀ (hi : i + [].length = ↑n) (hl : ∀ (j : ℕ), [][j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p [] i = true),
+      motive [] hi hl h) →
+    (∀ (hd : α) (l : List α) (hi : i + (hd :: l).length = ↑n) (hl : ∀ (j : ℕ), (hd :: l)[j]! = a[i + j]!)
+        (h : Aeneas.Std.Array.allIdx p (hd :: l) i = true), motive (hd :: l) hi hl h) →
+      motive l hi hl h
+VALUE fun {n} {α} [Inhabited α] p a i motive l hi hl h h_1 h_2 =>
+  List.casesOn (motive := fun x =>
+    ∀ (hi : i + x.length = ↑n) (hl : ∀ (j : ℕ), x[j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p x i = true),
+      motive x hi hl h)
+    l (fun hi hl h => h_1 hi hl h) (fun head tail hi hl h => h_2 head tail hi hl h) hi hl h
+
+Running as unit: run-r1980dcb2261f4ebfac233a72985ef45f.scope; invocation ID: 6d74442ec994407984e1350602e0c94a
