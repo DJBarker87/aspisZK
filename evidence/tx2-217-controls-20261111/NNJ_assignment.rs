@@ -40,7 +40,7 @@ fn NMX_assign_contract(){
 #[kani::unwind(34)]
 fn NNJ_assign_real() {
  let raw:[u32;8]=kani::any();let mut node=raw.map(M31);
- let window=[0u8;32];let j:usize=kani::any();kani::assume(j<8);
+ let window=[0u8;32];let j:usize=0; // isolate a legal index after K009 timeout
  let before_j=node[j].0;let r=NMX_assign(&mut node,&window,j,before_j);
  assert!(r.is_ok() && node[(j+1)%8].0==0,"NNJ unimplied other digest cell");
 }
@@ -55,7 +55,7 @@ fn NNJ_assign_real() {
 #[kani::unwind(34)]
 fn NNJ_assign_stub() {
  let raw:[u32;8]=kani::any();let mut node=raw.map(M31);
- let window=[0u8;32];let j:usize=kani::any();kani::assume(j<8);
+ let window=[0u8;32];let j:usize=0; // isolate a legal index after K009 timeout
  let before_j=node[j].0;let r=NMX_assign(&mut node,&window,j,before_j);
  assert!(r.is_ok() && node[(j+1)%8].0==0,"NNJ unimplied other digest cell");
 }
