@@ -23,6 +23,13 @@ is discharged here, because canonical_scan (candidate.rs:54-55) runs
 before prepare.  The obligation is `R4Discharge V` (a property of the CLOSED
 TX1:084 law NKL_ScanRoot, to be proved by the instantiation); `r4_of_scan`
 shows it yields (R4) at the 087 call site.
+Revision 4 (ruling (bs), NNG_ TX1:186 checkpoint length): own-input clause
+(P1880) public_bytes.length = 1880 is added under (bf)(2).  The CLOSED TX1:186
+checkpoint law (NHS_CheckpointPacket), reached at SAME public_bytes, requires
+it; frozen tx1 never checks it.  It is a caller clause of TX1:328
+(RSL4-caller:TX1:328:TX1:094:P1880), which passes public_bytes through
+unchanged, and is discharged in TX1:345 (`TX1_345.P1880Discharge`,
+`TX1_345.p1880_of_decode`).
 NLJ094 defect avoided: the RowSpec constrains the observation of the ACTUAL
 function (a total function of its arguments and oracle replies); it is not a
 statement about an arbitrary invocation relation, so the empty relation does
@@ -82,8 +89,11 @@ theorem r4_of_scan (V : VLib) (hR4 : R4Discharge V) (a : Args V) (env : Env) (ev
       OFF_Y1 OFF_INACTIVE) :=
   hR4 a.proof env ev hs.2
 
-def Domain (V : VLib) (_a : Args V) (obs : Observer) (pub : V.Public) : Prop :=
-  obs = none ∧ V.publicDom pub
+/-- Revision 4: the public statement length, POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES. -/
+def P1880_LEN : Nat := 1880
+
+def Domain (V : VLib) (a : Args V) (obs : Observer) (pub : V.Public) : Prop :=
+  obs = none ∧ V.publicDom pub ∧ a.public_bytes.length = P1880_LEN
 
 def RowSpec_094 (V : VLib) (P : PreparedNew V)
     (tx1 : Args V → Observer → Env → Obs (Except V.VErr Bytes)) : Prop :=
@@ -100,6 +110,7 @@ constant abort. -/
 theorem rejects_constErr (V : VLib) (P : PreparedNew V) (a : Args V) (e : V.VErr)
     (hne : V.vParse ≠ V.vAllocation) (hk : a.k = SPLIT) (hlen : a.proof.length = VPROOF_BYTES)
     (hpub : V.publicDom a.public_)
+    (hP : a.public_bytes.length = P1880_LEN)
     (hy1 : V.checkValuesDom (slice a.proof OFF_Y1 OFF_INACTIVE))
     (hps : ∀ o, V.parseShape.run a.proof env0 o ↔ o = ⟨.ret (.ok ()), []⟩)
     (hcs : ∀ o, V.canonicalScan.run a.proof env0 o ↔ o = ⟨.ret (.ok ()), []⟩)
@@ -107,8 +118,8 @@ theorem rejects_constErr (V : VLib) (P : PreparedNew V) (a : Args V) (e : V.VErr
     (hfill : ∀ o, V.filled.law (LOGICAL_SEMANTIC + LOGICAL_Y1) env0 o ↔ o = ⟨.ret (.error ()), []⟩) :
     ¬ RowSpec_094 V P (fun _ _ _ => ⟨.ret (.error e), []⟩) := by
   intro h
-  have h1 := h { a with k := 0 } none env0 ⟨rfl, hpub⟩
-  have h2 := h a none env0 ⟨rfl, hpub⟩
+  have h1 := h { a with k := 0 } none env0 ⟨rfl, hpub, hP⟩
+  have h2 := h a none env0 ⟨rfl, hpub, hP⟩
   unfold Ref at h1 h2
   have c1 : (({ a with k := 0 } : Args V).k != SPLIT) = true := by simp [SPLIT]
   rw [c1, RE.check_true, RE.seq_throw] at h1
@@ -133,5 +144,11 @@ theorem rejects_constErr (V : VLib) (P : PreparedNew V) (a : Args V) (e : V.VErr
   simp [RE.throw, Spec.pure] at h1 h2
   rw [h1] at h2
   exact hne h2
+
+/-- Revision 4 teeth: (P1880) is a genuine narrowing; an input whose
+public_bytes length differs from 1880 is outside the Domain. -/
+theorem domain_needs_P1880 (V : VLib) (a : Args V) (obs : Observer) (pub : V.Public)
+    (h : a.public_bytes.length ≠ P1880_LEN) : ¬ Domain V a obs pub :=
+  fun hd => h hd.2.2
 
 end RSL.TX1_094
