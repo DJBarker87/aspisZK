@@ -278,6 +278,31 @@ theorem RS.ofExcept_ok {α : Type} (a : α) : (RS.ofExcept (.ok a) : RS α) = RS
 theorem RS.check_bool (b : Bool) (e : ProgramError) :
     RS.check b e = if b then RS.throw e else RS.pure () := rfl
 
+
+/-- `l[i]` on a slice: panics (abort, prefix only) when out of range. -/
+def RS.index {α : Type} (l : List α) (i : Nat) : RS α :=
+  match l[i]? with
+  | some a => RS.pure a
+  | none => RS.lift Spec.panic
+
+theorem Spec.call_trivial {A B : Type} (dom : A → Prop) (law : A → Spec B) (a : A)
+    (h : dom a) : Spec.call dom law a = law a := by
+  funext env o
+  apply propext
+  exact ⟨fun hc => hc.2, fun hl => ⟨h, hl⟩⟩
+
+
+/-- Every observation of `emit ev >>= k` starts with `ev`. -/
+theorem Spec.bind_emit_head {β : Type} (ev : Event) (k : Unit → Spec β) (env : Env) (o : Obs β)
+    (h : Spec.bind (Spec.emit ev) k env o) : ∃ rest, o.events = ev :: rest := by
+  rcases h with ⟨u, e1, o2, hm, _, ho⟩ | ⟨e1, hm, _⟩ | ⟨e1, hm, _⟩
+  · simp only [Spec.emit, Obs.mk.injEq] at hm
+    rcases hm with ⟨_, rfl⟩
+    subst ho
+    exact ⟨o2.events, rfl⟩
+  · simp [Spec.emit] at hm
+  · simp [Spec.emit] at hm
+
 /-- A `throw` reference admits exactly one observation. -/
 theorem RS.throw_obs {α : Type} (e : ProgramError) (env : Env) (o : Obs (Except ProgramError α)) :
     (RS.throw e : RS α) env o ↔ o = ⟨.ret (.error e), []⟩ := Iff.rfl
