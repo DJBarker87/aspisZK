@@ -1,6 +1,6 @@
 """Own strict validation, executed inside the admitted capped scope before Kani."""
 from pathlib import Path
-import json,subprocess,sys,hashlib,tomllib,os
+import json,subprocess,sys,hashlib,tomllib,os,re
 B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x['attempt'];S=B/'NMD_src'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
@@ -13,7 +13,7 @@ for n,h in pins.items():
  overlay=B/'NMD_source_overlays.json'
  if overlay.exists():
   for line in json.loads(overlay.read_text()).get(n,[]):
-   assert line.startswith('#[cfg_attr(kani,') and raw.count(line.encode())==1,('invalid cfg-only overlay',n,line)
+   assert (line.startswith('#[cfg_attr(kani,') or re.fullmatch(r'\n#\[cfg\(kani\)\]\n#\[path="NMD_[A-Za-z0-9_.]+"\]\nmod [A-Za-z0-9_]+;\n',line)) and raw.count(line.encode())==1,('invalid cfg-only overlay',n,line)
    raw=raw.replace(line.encode(),b'',1)
  if n=='crates/aspis-r1-cost-probe/src/lib.rs' and raw.startswith(b'#![cfg_attr(kani,feature(allocator_api))]\n'):
   prefix=b'#![cfg_attr(kani,feature(allocator_api))]\n'

@@ -10,7 +10,7 @@ def native(a,target):
  patch=''.join(''.join(difflib.unified_diff(orig.get(n,'').splitlines(True),v.splitlines(True),fromfile='a/'+n if n in orig else '/dev/null',tofile='b/'+n)) for n,v in altered.items());(E/'NMD_native.patch').write_text(patch)
  files={'NMD_src/'+n:v for n,v in altered.items()}
  files['NMD_source_overlays.json']='{}'
- for frozen_path in ['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter_owned.rs']:
+ for frozen_path in ['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter_owned.rs','crates/aspis-r1-cost-probe/src/verifier.rs']:
   files['NMD_src/'+frozen_path]=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+frozen_path],text=True)
  files.update({'NMD_gate.py':(E/'NMD_gate.py').read_text(),'NMD_expected_KMX.patch':frozen['NLF_KMX_copy_stubs.patch'],'NMD_FROZEN_PINS.json':frozen['NLF_FROZEN_PINS.json'],'NMD_EXTRA_PINS.json':json.dumps({n:z['sha256'] for n,z in json.loads((E.parent/'tx2-entry2-20261110/NLM_NATIVE_EXTRA_PINS.json').read_text()).items()})})
  for section in frozen['NLF_KMX_copy_stubs.patch'].split('diff --git ')[1:]:

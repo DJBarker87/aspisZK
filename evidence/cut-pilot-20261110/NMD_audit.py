@@ -6,7 +6,7 @@ def audit(a,kind,target):
   r=ssh('python3',f"from pathlib import Path;print(Path({(B+'/NMD_native/')!r}+{target!r}+'.c').read_text(),end='')");assert r.returncode==0,r.stderr
   extra['NMD_native/'+target+'.c']=r.stdout
   for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
-   extra['NMD_native/'+n]=(E.parent/'tx2-entry-20261109'/'NLE_native'/n).read_text()
+   extra['NMD_native/'+n]=subprocess.check_output(['git','show','HEAD:evidence/tx2-entry-20261109/NLE_native/'+n],text=True)
   cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NMD_native/'+target,
    'NMD_native/'+target+'.c','NMD_native/NFA_WALKER.c','NMD_native/NFA_MemoryLimit.c']
  elif kind=='audit':

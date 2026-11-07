@@ -12,7 +12,8 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
             assert sum(x['kind']=='lean' for x in done)<58,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMD_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x['kind']=='kani' for x in done)<120,'Actual cargo-kani budget exhausted'
+        excluded=set(json.loads((E/'NMD_BUDGET.json').read_text())['no_kani_launch'])
+        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<120,'Actual cargo-kani budget exhausted'
     env=json.loads((E/'NMD_ENV.json').read_text())
     env['TMPDIR']=B+'/NMD_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMD_target'

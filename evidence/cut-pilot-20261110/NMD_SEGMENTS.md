@@ -8,3 +8,7 @@ S2: preserve complete parent state and all five exact arguments to common; deleg
 S3: forward common's reply unchanged; do not invent a returned Result after an independent child stop.
 
 NMD_CutState and NMD_SegmentFold are proposed full-record/chronological interfaces. Their native producer remains an obligation. Physical is an explicit additional carrier, not a claimed decoder or a RowSpec discharge. No copied scalar fragment or address identity is promoted to byte identity.
+
+Current native status: S1 marker has K078/K079 positive, K080/K082 failing controls and K081 stability under deployed(None,Parsed), scoped to the local no-write/return contract. S0 parser's three original-allocation attempts K057/K070/K071 timed out and are retired. S2 common's complete declared heap/allocator/ownership footprint is not installed. Minimal generic-record controls are not that packet; a concrete wrapper is rejected by pinned Kani's generic-signature check. S3 return forwarding remains dependent on a complete actual-parent producer. No segment set is emitted as a complete native064 certificate.
+
+NMD_ComputedFold.run/transcription/same_fold/fold now compile. They define the complete G fold, prove exact equality to NLW's full-outcome relation for the SAME selected child, and instantiate NLT_CompleteRoot through NMD_CandidateFold. Independent C04 stops are retained; no normal Result is invented. ChildAt/Segments are explicit native premises, not hidden implementation assumptions or a candidate root.

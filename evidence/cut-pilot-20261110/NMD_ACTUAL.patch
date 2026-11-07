@@ -26,8 +26,10 @@
 +mod NMD_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMD_native.rs
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,47 @@
 +use super::*;
++#[repr(C)]
++struct NMD_Buffer {header:[u8;16],tail:[u8;57591]}
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +// Exact deployed enum coverage; feature prover is disabled in deployed receipts.
 +impl kani::Arbitrary for Error {
@@ -43,15 +45,15 @@
 +}
 +#[kani::proof_for_contract(parse_shape)]#[kani::unwind(9)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMD_actual_parse_contract(){let bytes:[u8;57607]=kani::any();parse_shape(&bytes);}
++fn NMD_actual_parse_contract(){let storage=NMD_Buffer{header:kani::any(),tail:kani::any()};let bytes=unsafe{core::slice::from_raw_parts(core::ptr::addr_of!(storage).cast::<u8>(),core::mem::size_of::<NMD_Buffer>())};parse_shape(&bytes);}
 +#[kani::proof]#[kani::unwind(9)]
 +#[kani::stub_verified(parse_shape)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMD_actual_parse_caller(){let bytes:[u8;57607]=kani::any();let result=parse_shape(&bytes);assert_eq!(result,NMD_parse_ref(&bytes));}
++fn NMD_actual_parse_caller(){let storage=NMD_Buffer{header:kani::any(),tail:kani::any()};let bytes=unsafe{core::slice::from_raw_parts(core::ptr::addr_of!(storage).cast::<u8>(),core::mem::size_of::<NMD_Buffer>())};let result=parse_shape(&bytes);assert_eq!(result,NMD_parse_ref(&bytes));}
 +#[kani::proof]#[kani::unwind(9)]
 +#[kani::stub_verified(parse_shape)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMD_actual_parse_caller_inverse(){let bytes:[u8;57607]=kani::any();let result=parse_shape(&bytes);assert_ne!(result,NMD_parse_ref(&bytes));}
++fn NMD_actual_parse_caller_inverse(){let storage=NMD_Buffer{header:kani::any(),tail:kani::any()};let bytes=unsafe{core::slice::from_raw_parts(core::ptr::addr_of!(storage).cast::<u8>(),core::mem::size_of::<NMD_Buffer>())};let result=parse_shape(&bytes);assert_ne!(result,NMD_parse_ref(&bytes));}
 +#[kani::proof]#[kani::unwind(4)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NMD_copy_control(){let src:[u8;2]=kani::any();let mut dst=[0u8;2];dst.copy_from_slice(&src);assert!(dst[1]!=src[1]);}
@@ -59,4 +61,16 @@
 +#[kani::proof]#[kani::unwind(9)]
 +#[kani::stub_verified(parse_shape)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-+fn NMD_actual_parse_frame(){let bytes:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<57607);let before=bytes[i];let _result=parse_shape(&bytes);assert_eq!(bytes[i],before);}
++fn NMD_actual_parse_frame(){let storage=NMD_Buffer{header:kani::any(),tail:kani::any()};let bytes=unsafe{core::slice::from_raw_parts(core::ptr::addr_of!(storage).cast::<u8>(),core::mem::size_of::<NMD_Buffer>())};let i:usize=kani::any();kani::assume(i<57607);let before=bytes[i];let _result=parse_shape(&bytes);assert_eq!(bytes[i],before);}
++
++#[kani::proof_for_contract(mark)]
++fn NMD_actual_marker_contract(){mark(None,Phase::Parsed);}
++#[kani::proof]
++#[kani::stub_verified(mark)]
++fn NMD_actual_marker_caller(){let frame:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<32);let before=frame[i];mark(None,Phase::Parsed);assert_eq!(frame[i],before);}
++#[kani::proof]
++#[kani::stub_verified(mark)]
++fn NMD_actual_marker_caller_inverse(){let frame:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<32);let before=frame[i];mark(None,Phase::Parsed);assert_ne!(frame[i],before);}
++#[kani::proof]
++#[kani::stub_verified(mark)]
++fn NMD_actual_marker_stability(){let frame:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<32);let before=frame[i];mark(None,Phase::Parsed);assert_eq!(frame[i],before);}
