@@ -31,3 +31,10 @@ The STX coherent cache is read-only and isolated under objects-stx/J-stx.json;
 composition. TOVEC_REPLAY_PLAN.json gives222 absent base modules; none replayed.
 Host turn.sh now also obeys its D977 cap file (currently2) despite requested
 STREAMB_SLOTS=3. No cap or gate file edited. Next Lean49705.
+
+Focused49706 passed PV_LIB_SPEC_Composition (2.01s,4607428KiB,swap0).
+Legacy tagged-Box/old-decoder conjunction is checked contradictory. This is
+NOT a contradiction of the frozen bridged OwnInit premises. Generic joint
+nonemptiness definition is only bookkeeping; not a top-level witness.
+49705 reserved binder `instance` fixed to `x`; failed input archived.
+Next Lean49707; no raw audit run yet.
