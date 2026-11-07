@@ -68,10 +68,361 @@ Ok((NMO_q(),alpha,W::make(hash,kani::any(),kani::any())))
 fn NMO_word(q:QM31,j:usize)->u32{match j{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
 fn NMO_claims_ok(p:&Prefix<'_>)->Result<Box<[[QM31;29];3]>,Error>{
  let carrier=unsafe{&*(p.c1_root.as_ptr() as *const NMO_Carrier)};
- let raw:Box<[[[u32;4];29];3]>=kani::any();
- assert_eq!(core::mem::size_of::<[[QM31;29];3]>(),core::mem::size_of::<[[[u32;4];29];3]>());
- assert_eq!(core::mem::align_of::<[[QM31;29];3]>(),core::mem::align_of::<[[[u32;4];29];3]>());
- let claims:Box<[[QM31;29];3]>=unsafe{Box::from_raw(Box::into_raw(raw).cast())};
+ let mut allocation=Box::<[[QM31;29];3]>::new_uninit();
+ assert_eq!(core::mem::size_of::<[[QM31;29];3]>(),348*core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<[[QM31;29];3]>(),core::mem::align_of::<u32>());
+ let words=allocation.as_mut_ptr().cast::<u32>();
+ unsafe {
+  words.add(0).write(kani::any());
+  words.add(1).write(kani::any());
+  words.add(2).write(kani::any());
+  words.add(3).write(kani::any());
+  words.add(4).write(kani::any());
+  words.add(5).write(kani::any());
+  words.add(6).write(kani::any());
+  words.add(7).write(kani::any());
+  words.add(8).write(kani::any());
+  words.add(9).write(kani::any());
+  words.add(10).write(kani::any());
+  words.add(11).write(kani::any());
+  words.add(12).write(kani::any());
+  words.add(13).write(kani::any());
+  words.add(14).write(kani::any());
+  words.add(15).write(kani::any());
+  words.add(16).write(kani::any());
+  words.add(17).write(kani::any());
+  words.add(18).write(kani::any());
+  words.add(19).write(kani::any());
+  words.add(20).write(kani::any());
+  words.add(21).write(kani::any());
+  words.add(22).write(kani::any());
+  words.add(23).write(kani::any());
+  words.add(24).write(kani::any());
+  words.add(25).write(kani::any());
+  words.add(26).write(kani::any());
+  words.add(27).write(kani::any());
+  words.add(28).write(kani::any());
+  words.add(29).write(kani::any());
+  words.add(30).write(kani::any());
+  words.add(31).write(kani::any());
+  words.add(32).write(kani::any());
+  words.add(33).write(kani::any());
+  words.add(34).write(kani::any());
+  words.add(35).write(kani::any());
+  words.add(36).write(kani::any());
+  words.add(37).write(kani::any());
+  words.add(38).write(kani::any());
+  words.add(39).write(kani::any());
+  words.add(40).write(kani::any());
+  words.add(41).write(kani::any());
+  words.add(42).write(kani::any());
+  words.add(43).write(kani::any());
+  words.add(44).write(kani::any());
+  words.add(45).write(kani::any());
+  words.add(46).write(kani::any());
+  words.add(47).write(kani::any());
+  words.add(48).write(kani::any());
+  words.add(49).write(kani::any());
+  words.add(50).write(kani::any());
+  words.add(51).write(kani::any());
+  words.add(52).write(kani::any());
+  words.add(53).write(kani::any());
+  words.add(54).write(kani::any());
+  words.add(55).write(kani::any());
+  words.add(56).write(kani::any());
+  words.add(57).write(kani::any());
+  words.add(58).write(kani::any());
+  words.add(59).write(kani::any());
+  words.add(60).write(kani::any());
+  words.add(61).write(kani::any());
+  words.add(62).write(kani::any());
+  words.add(63).write(kani::any());
+  words.add(64).write(kani::any());
+  words.add(65).write(kani::any());
+  words.add(66).write(kani::any());
+  words.add(67).write(kani::any());
+  words.add(68).write(kani::any());
+  words.add(69).write(kani::any());
+  words.add(70).write(kani::any());
+  words.add(71).write(kani::any());
+  words.add(72).write(kani::any());
+  words.add(73).write(kani::any());
+  words.add(74).write(kani::any());
+  words.add(75).write(kani::any());
+  words.add(76).write(kani::any());
+  words.add(77).write(kani::any());
+  words.add(78).write(kani::any());
+  words.add(79).write(kani::any());
+  words.add(80).write(kani::any());
+  words.add(81).write(kani::any());
+  words.add(82).write(kani::any());
+  words.add(83).write(kani::any());
+  words.add(84).write(kani::any());
+  words.add(85).write(kani::any());
+  words.add(86).write(kani::any());
+  words.add(87).write(kani::any());
+  words.add(88).write(kani::any());
+  words.add(89).write(kani::any());
+  words.add(90).write(kani::any());
+  words.add(91).write(kani::any());
+  words.add(92).write(kani::any());
+  words.add(93).write(kani::any());
+  words.add(94).write(kani::any());
+  words.add(95).write(kani::any());
+  words.add(96).write(kani::any());
+  words.add(97).write(kani::any());
+  words.add(98).write(kani::any());
+  words.add(99).write(kani::any());
+  words.add(100).write(kani::any());
+  words.add(101).write(kani::any());
+  words.add(102).write(kani::any());
+  words.add(103).write(kani::any());
+  words.add(104).write(kani::any());
+  words.add(105).write(kani::any());
+  words.add(106).write(kani::any());
+  words.add(107).write(kani::any());
+  words.add(108).write(kani::any());
+  words.add(109).write(kani::any());
+  words.add(110).write(kani::any());
+  words.add(111).write(kani::any());
+  words.add(112).write(kani::any());
+  words.add(113).write(kani::any());
+  words.add(114).write(kani::any());
+  words.add(115).write(kani::any());
+  words.add(116).write(kani::any());
+  words.add(117).write(kani::any());
+  words.add(118).write(kani::any());
+  words.add(119).write(kani::any());
+  words.add(120).write(kani::any());
+  words.add(121).write(kani::any());
+  words.add(122).write(kani::any());
+  words.add(123).write(kani::any());
+  words.add(124).write(kani::any());
+  words.add(125).write(kani::any());
+  words.add(126).write(kani::any());
+  words.add(127).write(kani::any());
+  words.add(128).write(kani::any());
+  words.add(129).write(kani::any());
+  words.add(130).write(kani::any());
+  words.add(131).write(kani::any());
+  words.add(132).write(kani::any());
+  words.add(133).write(kani::any());
+  words.add(134).write(kani::any());
+  words.add(135).write(kani::any());
+  words.add(136).write(kani::any());
+  words.add(137).write(kani::any());
+  words.add(138).write(kani::any());
+  words.add(139).write(kani::any());
+  words.add(140).write(kani::any());
+  words.add(141).write(kani::any());
+  words.add(142).write(kani::any());
+  words.add(143).write(kani::any());
+  words.add(144).write(kani::any());
+  words.add(145).write(kani::any());
+  words.add(146).write(kani::any());
+  words.add(147).write(kani::any());
+  words.add(148).write(kani::any());
+  words.add(149).write(kani::any());
+  words.add(150).write(kani::any());
+  words.add(151).write(kani::any());
+  words.add(152).write(kani::any());
+  words.add(153).write(kani::any());
+  words.add(154).write(kani::any());
+  words.add(155).write(kani::any());
+  words.add(156).write(kani::any());
+  words.add(157).write(kani::any());
+  words.add(158).write(kani::any());
+  words.add(159).write(kani::any());
+  words.add(160).write(kani::any());
+  words.add(161).write(kani::any());
+  words.add(162).write(kani::any());
+  words.add(163).write(kani::any());
+  words.add(164).write(kani::any());
+  words.add(165).write(kani::any());
+  words.add(166).write(kani::any());
+  words.add(167).write(kani::any());
+  words.add(168).write(kani::any());
+  words.add(169).write(kani::any());
+  words.add(170).write(kani::any());
+  words.add(171).write(kani::any());
+  words.add(172).write(kani::any());
+  words.add(173).write(kani::any());
+  words.add(174).write(kani::any());
+  words.add(175).write(kani::any());
+  words.add(176).write(kani::any());
+  words.add(177).write(kani::any());
+  words.add(178).write(kani::any());
+  words.add(179).write(kani::any());
+  words.add(180).write(kani::any());
+  words.add(181).write(kani::any());
+  words.add(182).write(kani::any());
+  words.add(183).write(kani::any());
+  words.add(184).write(kani::any());
+  words.add(185).write(kani::any());
+  words.add(186).write(kani::any());
+  words.add(187).write(kani::any());
+  words.add(188).write(kani::any());
+  words.add(189).write(kani::any());
+  words.add(190).write(kani::any());
+  words.add(191).write(kani::any());
+  words.add(192).write(kani::any());
+  words.add(193).write(kani::any());
+  words.add(194).write(kani::any());
+  words.add(195).write(kani::any());
+  words.add(196).write(kani::any());
+  words.add(197).write(kani::any());
+  words.add(198).write(kani::any());
+  words.add(199).write(kani::any());
+  words.add(200).write(kani::any());
+  words.add(201).write(kani::any());
+  words.add(202).write(kani::any());
+  words.add(203).write(kani::any());
+  words.add(204).write(kani::any());
+  words.add(205).write(kani::any());
+  words.add(206).write(kani::any());
+  words.add(207).write(kani::any());
+  words.add(208).write(kani::any());
+  words.add(209).write(kani::any());
+  words.add(210).write(kani::any());
+  words.add(211).write(kani::any());
+  words.add(212).write(kani::any());
+  words.add(213).write(kani::any());
+  words.add(214).write(kani::any());
+  words.add(215).write(kani::any());
+  words.add(216).write(kani::any());
+  words.add(217).write(kani::any());
+  words.add(218).write(kani::any());
+  words.add(219).write(kani::any());
+  words.add(220).write(kani::any());
+  words.add(221).write(kani::any());
+  words.add(222).write(kani::any());
+  words.add(223).write(kani::any());
+  words.add(224).write(kani::any());
+  words.add(225).write(kani::any());
+  words.add(226).write(kani::any());
+  words.add(227).write(kani::any());
+  words.add(228).write(kani::any());
+  words.add(229).write(kani::any());
+  words.add(230).write(kani::any());
+  words.add(231).write(kani::any());
+  words.add(232).write(kani::any());
+  words.add(233).write(kani::any());
+  words.add(234).write(kani::any());
+  words.add(235).write(kani::any());
+  words.add(236).write(kani::any());
+  words.add(237).write(kani::any());
+  words.add(238).write(kani::any());
+  words.add(239).write(kani::any());
+  words.add(240).write(kani::any());
+  words.add(241).write(kani::any());
+  words.add(242).write(kani::any());
+  words.add(243).write(kani::any());
+  words.add(244).write(kani::any());
+  words.add(245).write(kani::any());
+  words.add(246).write(kani::any());
+  words.add(247).write(kani::any());
+  words.add(248).write(kani::any());
+  words.add(249).write(kani::any());
+  words.add(250).write(kani::any());
+  words.add(251).write(kani::any());
+  words.add(252).write(kani::any());
+  words.add(253).write(kani::any());
+  words.add(254).write(kani::any());
+  words.add(255).write(kani::any());
+  words.add(256).write(kani::any());
+  words.add(257).write(kani::any());
+  words.add(258).write(kani::any());
+  words.add(259).write(kani::any());
+  words.add(260).write(kani::any());
+  words.add(261).write(kani::any());
+  words.add(262).write(kani::any());
+  words.add(263).write(kani::any());
+  words.add(264).write(kani::any());
+  words.add(265).write(kani::any());
+  words.add(266).write(kani::any());
+  words.add(267).write(kani::any());
+  words.add(268).write(kani::any());
+  words.add(269).write(kani::any());
+  words.add(270).write(kani::any());
+  words.add(271).write(kani::any());
+  words.add(272).write(kani::any());
+  words.add(273).write(kani::any());
+  words.add(274).write(kani::any());
+  words.add(275).write(kani::any());
+  words.add(276).write(kani::any());
+  words.add(277).write(kani::any());
+  words.add(278).write(kani::any());
+  words.add(279).write(kani::any());
+  words.add(280).write(kani::any());
+  words.add(281).write(kani::any());
+  words.add(282).write(kani::any());
+  words.add(283).write(kani::any());
+  words.add(284).write(kani::any());
+  words.add(285).write(kani::any());
+  words.add(286).write(kani::any());
+  words.add(287).write(kani::any());
+  words.add(288).write(kani::any());
+  words.add(289).write(kani::any());
+  words.add(290).write(kani::any());
+  words.add(291).write(kani::any());
+  words.add(292).write(kani::any());
+  words.add(293).write(kani::any());
+  words.add(294).write(kani::any());
+  words.add(295).write(kani::any());
+  words.add(296).write(kani::any());
+  words.add(297).write(kani::any());
+  words.add(298).write(kani::any());
+  words.add(299).write(kani::any());
+  words.add(300).write(kani::any());
+  words.add(301).write(kani::any());
+  words.add(302).write(kani::any());
+  words.add(303).write(kani::any());
+  words.add(304).write(kani::any());
+  words.add(305).write(kani::any());
+  words.add(306).write(kani::any());
+  words.add(307).write(kani::any());
+  words.add(308).write(kani::any());
+  words.add(309).write(kani::any());
+  words.add(310).write(kani::any());
+  words.add(311).write(kani::any());
+  words.add(312).write(kani::any());
+  words.add(313).write(kani::any());
+  words.add(314).write(kani::any());
+  words.add(315).write(kani::any());
+  words.add(316).write(kani::any());
+  words.add(317).write(kani::any());
+  words.add(318).write(kani::any());
+  words.add(319).write(kani::any());
+  words.add(320).write(kani::any());
+  words.add(321).write(kani::any());
+  words.add(322).write(kani::any());
+  words.add(323).write(kani::any());
+  words.add(324).write(kani::any());
+  words.add(325).write(kani::any());
+  words.add(326).write(kani::any());
+  words.add(327).write(kani::any());
+  words.add(328).write(kani::any());
+  words.add(329).write(kani::any());
+  words.add(330).write(kani::any());
+  words.add(331).write(kani::any());
+  words.add(332).write(kani::any());
+  words.add(333).write(kani::any());
+  words.add(334).write(kani::any());
+  words.add(335).write(kani::any());
+  words.add(336).write(kani::any());
+  words.add(337).write(kani::any());
+  words.add(338).write(kani::any());
+  words.add(339).write(kani::any());
+  words.add(340).write(kani::any());
+  words.add(341).write(kani::any());
+  words.add(342).write(kani::any());
+  words.add(343).write(kani::any());
+  words.add(344).write(kani::any());
+  words.add(345).write(kani::any());
+  words.add(346).write(kani::any());
+  words.add(347).write(kani::any());
+ }
+ let claims=unsafe{allocation.assume_init()};
  let mut l=carrier.log.borrow_mut();l.claims+=1;
  let bytes=if l.window==0{&p.c1_root[..]}else{W::record(p,l.window-1)};
  l.claim_ptr=bytes.as_ptr() as usize;l.claim_len=bytes.len();
@@ -109,9 +460,11 @@ fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool,const PART:u8,con
  let prefix=W::prefix(&carrier.root,records);
  let expected=if window==0{&prefix.c1_root[..]}else{W::record(&prefix,window-1)};
  let state:[u8;32]=kani::any();let next:u8=kani::any();let transcript=W::make(NMO_Hash(&carrier.log),state,next);
- let transfer=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NMO_digest(),nullifier:NMO_digest(),asset_id:M31(kani::any()),recipient_commitment:NMO_digest(),change_commitment:NMO_digest()};
- let withdrawal=PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NMO_digest(),nullifier:NMO_digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:NMO_digest()};
- let transitionValue=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:NMO_digest(),frontier:core::array::from_fn(|_|NMO_digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:NMO_digest(),next_frontier:core::array::from_fn(|_|NMO_digest())}};
+ // All these structs contain only integers and fixed arrays of integers;
+ // every initialized bit pattern is a valid value. No fields are constrained.
+ let transfer:PoolV1PrivateTransferPublicV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()],PoolV1PrivateTransferPublicV1>(kani::any())};
+ let withdrawal:PoolV1WithdrawalPublicV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()],PoolV1WithdrawalPublicV1>(kani::any())};
+ let transitionValue:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
  let publicCarrier=NMO_PublicCarrier{transition:transitionValue,log:&carrier.log};let transition=&publicCarrier.transition;
  let choose:bool=kani::any();let public=if choose{Public::Withdrawal(&withdrawal,transition)}else{Public::Transfer(&transfer,transition)};
  let expected_public=if choose{&withdrawal as *const _ as usize}else{&transfer as *const _ as usize};
@@ -132,383 +485,798 @@ fn NMO_parent<const IGNORE:bool,const ARG:bool,const OMIT:bool,const PART:u8,con
  assert_eq!(post.frame,seed.after,"complete reachable terminal frame");
 
 }
+fn NMO_footprint_only<const PART:u8,const ROW:usize,const LIMB:usize>(){
+ const IGNORE:bool=false;const ARG:bool=false;const OMIT:bool=true;
+
+ let window:usize=kani::any();kani::assume(window<28);let reply:[u8;32]=kani::any();kani::assume(reply[0]<11);
+ let col:usize=kani::any();kani::assume(col<29);let ci=if PART==0{ROW*29+col}else{let i:usize=kani::any();kani::assume(i<10);i};let cj=if PART<=1{LIMB}else{let j:usize=kani::any();kani::assume(j<4);j};let channel:usize=kani::any();kani::assume(channel<15);
+ let seed=NMO_State{window,rounds:0,claims:0,round_ptr:0,round_len:0,claim_ptr:0,claim_len:0,state:[0;32],next:0,reply,frame:kani::any(),mid:kani::any(),after:kani::any(),omit:OMIT,ci,cj,channel,expected_alpha:0,expected_claim:0,claim_owner:0,terminal_calls:0,seen_alpha:0,seen_claim:0,seen_ch:0,public_ptr:0,transition_ptr:0,variant:false};
+ let carrier=NMO_Carrier{root:kani::any(),log:RefCell::new(seed)};
+ let proof:[u8;57575]=kani::any();let lens:[usize;27]=kani::any();
+ let records=core::array::from_fn(|i|{kani::assume(lens[i]<=57575);&proof[..lens[i]]});
+ let prefix=W::prefix(&carrier.root,records);
+ let expected=if window==0{&prefix.c1_root[..]}else{W::record(&prefix,window-1)};
+ let state:[u8;32]=kani::any();let next:u8=kani::any();let transcript=W::make(NMO_Hash(&carrier.log),state,next);
+ // All these structs contain only integers and fixed arrays of integers;
+ // every initialized bit pattern is a valid value. No fields are constrained.
+ let transfer:PoolV1PrivateTransferPublicV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()],PoolV1PrivateTransferPublicV1>(kani::any())};
+ let withdrawal:PoolV1WithdrawalPublicV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()],PoolV1WithdrawalPublicV1>(kani::any())};
+ let transitionValue:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
+ let publicCarrier=NMO_PublicCarrier{transition:transitionValue,log:&carrier.log};let transition=&publicCarrier.transition;
+ let choose:bool=kani::any();let public=if choose{Public::Withdrawal(&withdrawal,transition)}else{Public::Transfer(&transfer,transition)};
+ let expected_public=if choose{&withdrawal as *const _ as usize}else{&transfer as *const _ as usize};
+ let challenges=Challenges{lambda:NMO_q(),chi:NMO_q(),theta:NMO_q(),zc:core::array::from_fn(|_|NMO_q()),mu:NMO_q(),eta:NMO_q()};
+ let supplied_public=if ARG{if choose{Public::Transfer(&transfer,transition)}else{Public::Withdrawal(&withdrawal,transition)}}else{public};
+ let result=verify_finish(supplied_public,prefix,transcript,challenges,None);
+ let post=*carrier.log.borrow();
+ assert_eq!(post.frame[3],seed.after[3],"omitted reachable byte window must fail");
+}
+// Reachability traps for this terminal-Err partition. A path entering any
+// downstream arithmetic fails here; no field product is ever sent to SAT.
+fn NMO_unreachable_record<'a>(_:&Prefix<'a>,_:u8)->Result<wire::ValidatedRecord<'a>,Error> where 'a:'a {panic!("terminal Err must stop before record getter")}
+fn NMO_unreachable_payload<'a>(_:&Prefix<'a>,_:u8)->Result<&'a[u8],Error> where 'a:'a {panic!("terminal Err must stop before payload getter")}
+fn NMO_unreachable_decode<'a,const N:usize>(_:&wire::ValidatedRecord<'a>,_:usize)->Result<[QM31;N],Error> where 'a:'a {panic!("terminal Err must stop before decoder")}
+fn NMO_unreachable_circle<H:Digest32>(_:&mut SemanticTranscript<H>,_:wire::ValidatedRecord<'_>)->Result<SecureCirclePoint,Error>{panic!("terminal Err must stop before circle")}
+fn NMO_unreachable_mask(_low:&[QM31;16],_high:&[QM31;10],_blind:QM31,_alpha:&[QM31;10])->QM31{panic!("terminal Err must stop before mask")}
+fn NMO_unreachable_mul(_left:QM31,_right:QM31)->QM31{panic!("terminal Err must stop before multiplication")}
+fn NMO_unreachable_add(_left:QM31,_right:QM31)->QM31{panic!("terminal Err must stop before addition")}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_error(){NMO_parent::<false,false,false,0,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_reply_control(){NMO_parent::<true,false,false,0,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_argument_control(){NMO_parent::<false,true,false,0,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_footprint_control(){NMO_parent::<false,false,true,0,0,0>();}
+fn NMO_terminal_footprint_control(){NMO_footprint_only::<0,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l1(){NMO_parent::<false,false,false,0,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l1_reply_control(){NMO_parent::<true,false,false,0,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l1_argument_control(){NMO_parent::<false,true,false,0,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r0_l1_footprint_control(){NMO_parent::<false,false,true,0,0,1>();}
+fn NMO_terminal_claim_r0_l1_footprint_control(){NMO_footprint_only::<0,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l2(){NMO_parent::<false,false,false,0,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l2_reply_control(){NMO_parent::<true,false,false,0,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l2_argument_control(){NMO_parent::<false,true,false,0,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r0_l2_footprint_control(){NMO_parent::<false,false,true,0,0,2>();}
+fn NMO_terminal_claim_r0_l2_footprint_control(){NMO_footprint_only::<0,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l3(){NMO_parent::<false,false,false,0,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l3_reply_control(){NMO_parent::<true,false,false,0,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r0_l3_argument_control(){NMO_parent::<false,true,false,0,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r0_l3_footprint_control(){NMO_parent::<false,false,true,0,0,3>();}
+fn NMO_terminal_claim_r0_l3_footprint_control(){NMO_footprint_only::<0,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l0(){NMO_parent::<false,false,false,0,1,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l0_reply_control(){NMO_parent::<true,false,false,0,1,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l0_argument_control(){NMO_parent::<false,true,false,0,1,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r1_l0_footprint_control(){NMO_parent::<false,false,true,0,1,0>();}
+fn NMO_terminal_claim_r1_l0_footprint_control(){NMO_footprint_only::<0,1,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l1(){NMO_parent::<false,false,false,0,1,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l1_reply_control(){NMO_parent::<true,false,false,0,1,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l1_argument_control(){NMO_parent::<false,true,false,0,1,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r1_l1_footprint_control(){NMO_parent::<false,false,true,0,1,1>();}
+fn NMO_terminal_claim_r1_l1_footprint_control(){NMO_footprint_only::<0,1,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l2(){NMO_parent::<false,false,false,0,1,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l2_reply_control(){NMO_parent::<true,false,false,0,1,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l2_argument_control(){NMO_parent::<false,true,false,0,1,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r1_l2_footprint_control(){NMO_parent::<false,false,true,0,1,2>();}
+fn NMO_terminal_claim_r1_l2_footprint_control(){NMO_footprint_only::<0,1,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l3(){NMO_parent::<false,false,false,0,1,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l3_reply_control(){NMO_parent::<true,false,false,0,1,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r1_l3_argument_control(){NMO_parent::<false,true,false,0,1,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r1_l3_footprint_control(){NMO_parent::<false,false,true,0,1,3>();}
+fn NMO_terminal_claim_r1_l3_footprint_control(){NMO_footprint_only::<0,1,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l0(){NMO_parent::<false,false,false,0,2,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l0_reply_control(){NMO_parent::<true,false,false,0,2,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l0_argument_control(){NMO_parent::<false,true,false,0,2,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r2_l0_footprint_control(){NMO_parent::<false,false,true,0,2,0>();}
+fn NMO_terminal_claim_r2_l0_footprint_control(){NMO_footprint_only::<0,2,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l1(){NMO_parent::<false,false,false,0,2,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l1_reply_control(){NMO_parent::<true,false,false,0,2,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l1_argument_control(){NMO_parent::<false,true,false,0,2,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r2_l1_footprint_control(){NMO_parent::<false,false,true,0,2,1>();}
+fn NMO_terminal_claim_r2_l1_footprint_control(){NMO_footprint_only::<0,2,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l2(){NMO_parent::<false,false,false,0,2,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l2_reply_control(){NMO_parent::<true,false,false,0,2,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l2_argument_control(){NMO_parent::<false,true,false,0,2,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r2_l2_footprint_control(){NMO_parent::<false,false,true,0,2,2>();}
+fn NMO_terminal_claim_r2_l2_footprint_control(){NMO_footprint_only::<0,2,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l3(){NMO_parent::<false,false,false,0,2,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l3_reply_control(){NMO_parent::<true,false,false,0,2,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_claim_r2_l3_argument_control(){NMO_parent::<false,true,false,0,2,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_claim_r2_l3_footprint_control(){NMO_parent::<false,false,true,0,2,3>();}
+fn NMO_terminal_claim_r2_l3_footprint_control(){NMO_footprint_only::<0,2,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l0(){NMO_parent::<false,false,false,1,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l0_reply_control(){NMO_parent::<true,false,false,1,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l0_argument_control(){NMO_parent::<false,true,false,1,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_alpha_l0_footprint_control(){NMO_parent::<false,false,true,1,0,0>();}
+fn NMO_terminal_alpha_l0_footprint_control(){NMO_footprint_only::<1,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l1(){NMO_parent::<false,false,false,1,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l1_reply_control(){NMO_parent::<true,false,false,1,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l1_argument_control(){NMO_parent::<false,true,false,1,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_alpha_l1_footprint_control(){NMO_parent::<false,false,true,1,0,1>();}
+fn NMO_terminal_alpha_l1_footprint_control(){NMO_footprint_only::<1,0,1>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l2(){NMO_parent::<false,false,false,1,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l2_reply_control(){NMO_parent::<true,false,false,1,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l2_argument_control(){NMO_parent::<false,true,false,1,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_alpha_l2_footprint_control(){NMO_parent::<false,false,true,1,0,2>();}
+fn NMO_terminal_alpha_l2_footprint_control(){NMO_footprint_only::<1,0,2>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l3(){NMO_parent::<false,false,false,1,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l3_reply_control(){NMO_parent::<true,false,false,1,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_alpha_l3_argument_control(){NMO_parent::<false,true,false,1,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_alpha_l3_footprint_control(){NMO_parent::<false,false,true,1,0,3>();}
+fn NMO_terminal_alpha_l3_footprint_control(){NMO_footprint_only::<1,0,3>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_challenges(){NMO_parent::<false,false,false,2,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_challenges_reply_control(){NMO_parent::<true,false,false,2,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_challenges_argument_control(){NMO_parent::<false,true,false,2,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_challenges_footprint_control(){NMO_parent::<false,false,true,2,0,0>();}
+fn NMO_terminal_challenges_footprint_control(){NMO_footprint_only::<2,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_prefix(){NMO_parent::<false,false,false,3,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_prefix_reply_control(){NMO_parent::<true,false,false,3,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_prefix_argument_control(){NMO_parent::<false,true,false,3,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_prefix_footprint_control(){NMO_parent::<false,false,true,3,0,0>();}
+fn NMO_terminal_prefix_footprint_control(){NMO_footprint_only::<3,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_receiver_frame(){NMO_parent::<false,false,false,4,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_receiver_frame_reply_control(){NMO_parent::<true,false,false,4,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMO_terminal_receiver_frame_argument_control(){NMO_parent::<false,true,false,4,0,0>();}
 #[kani::proof]#[kani::unwind(90)]
+#[kani::stub(Prefix::validated_record,NMO_unreachable_record)]#[kani::stub(Prefix::payload,NMO_unreachable_payload)]
+#[kani::stub(wire::ValidatedRecord::decode_k,NMO_unreachable_decode)]
+#[kani::stub(SemanticTranscript::<NMO_Hash<'_>>::circle_validated,NMO_unreachable_circle)]
+#[kani::stub(aspis_core::state_only_hiding::state_only_selected_mask_value,NMO_unreachable_mask)]
+#[kani::stub(QM31::mul,NMO_unreachable_mul)]#[kani::stub(QM31::add,NMO_unreachable_add)]
 #[kani::stub(semantic_rounds,NMO_rounds_ok)]#[kani::stub(claims,NMO_claims_ok)]
 #[kani::stub(Public::terminal_qm31,NMO_terminal_err)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMO_terminal_receiver_frame_footprint_control(){NMO_parent::<false,false,true,4,0,0>();}
+fn NMO_terminal_receiver_frame_footprint_control(){NMO_footprint_only::<4,0,0>();}

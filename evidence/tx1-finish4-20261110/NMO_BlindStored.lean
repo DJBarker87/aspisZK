@@ -15,7 +15,7 @@ theorem blind_written {H : Type} (input : NLU.Input H) (domain : NLU.InputDomain
  obtain ⟨claims,stored⟩:=NMC_Records.some_slot s.machine.locals.claims initialized
  have canonical:=NKQ_MaskCanonical.claim_cell claims (NMO_ClaimsAtState.claims input domain s reached claims stored) 0 27 (by decide) (by decide)
  have row:=NKQ_ArrayWindows.read claims 0#usize (by decide)
- have value:=NKQ_ArrayWindows.read (NKQ_ArrayWindows.cell claims 0 (by decide)) 27#usize (by decide)
+ have value:=NKQ_ArrayWindows.read (NKQ_ArrayWindows.cell claims (0#usize).val (by decide)) 27#usize (by decide)
  have actual : PreparedHashCode.erase (NLC_Finish.step s.machine)=ok (.inr after) := by
   rw [←PreparedHashCode.run_value];exact head
  simp only [NLC_Finish.step,atSite] at actual
@@ -24,7 +24,9 @@ theorem blind_written {H : Type} (input : NLU.Input H) (domain : NLU.InputDomain
             let b ← Array.index_usize r 27#usize
             ok (Sum.inr (NLC_Finish.put s.machine .alpha {s.machine.locals with blind:=some b}) : Post H))=ok (Sum.inr after : Post H) at actual
  rw [stored] at actual
- simp only [NLC_Finish.read,bind_tc_ok,row,value] at actual
+ simp only [NLC_Finish.read,bind_tc_ok,row] at actual
+ rw [value] at actual
+ simp only [bind_tc_ok] at actual
  have chosen:=Sum.inr.inj (Result.ok.inj actual)
  cases chosen
  intro b saved
