@@ -135,6 +135,9 @@ structure VLib where
   vAllocation : VErr
   /-- `impl From<CodecError> for Error` (candidate.rs:22): every codec error is Parse. -/
   codecToV : CodecErr → VErr
+  -- `format!("{:?}", e)` for verifier::Error: the payload of lib.rs::error's log
+  -- line (CLOSED TX1:NGB001 / TX2:211, NIS_ErrorJoin)
+  debugV : VErr → String
   -- own-input domain of verify_finish (TX1:136): the (bf)(2) clauses that its
   -- children place on 136's OWN arguments and that 136 cannot discharge
   -- internally, verbatim from the ledger records NJW/NKN/NLS_explicit_child_domains
