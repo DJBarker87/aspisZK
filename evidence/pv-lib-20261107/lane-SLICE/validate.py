@@ -14,7 +14,13 @@ for r in receipts:
  a=r['attempt'];assert 49600<=a<=49689 or 49690<=a<=49699
  t=json.loads((E/f'turn-{a}.json').read_text());assert t['exit']==0 and t['command']==['ssh','dombarker@100.108.41.90','STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh']
  admit=json.loads((E/f'admission-{a}.json').read_text());assert admit['allowed'] is True
- assert r['accepted'] and r['exit']=='0' and r['swaps']=='0',a
+ assert r['swaps']=='0',a
+ if not r['accepted']:
+  archived=E/'failed-sources'/f'{a}.lean.xz'
+  assert sha(lzma.decompress(archived.read_bytes()))==r['source_sha256']
+  assert accepted[r['target']]['source_sha256']!=r['source_sha256']
+  continue
+ assert r['exit']=='0',a
  cmd=r['command']
  for field in ['MemoryHigh=6G','MemoryMax=8G','MemorySwapMax=0','TasksMax=64']:assert field in cmd
  assert cmd.count('7000')==1 or r['runtime_audit']
@@ -32,6 +38,6 @@ for s in delta['slots']:
 changed=subprocess.check_output(['git','diff','--name-only',base],text=True).splitlines()
 assert all(p.startswith(str(E)+'/') or (p.startswith('lean/PV_LIB_SLICE_') and p.endswith('.lean')) for p in changed),changed
 raw=json.loads((E/'RAW_AUDIT.json').read_text());assert raw['strict_raw'] and raw['unresolved']==0 and raw['summary_mismatches']==0
-summary={'source_base':base,'lane':'SLICE','new_sources':checks,'pinned_replays':replays,'passing_compiles':len([r for r in receipts if not r['runtime_audit']]),'raw_audits':len([r for r in receipts if r['runtime_audit']]),'maximum_peak_rss_kib':max(int(r['peak_rss_kbytes']) for r in receipts),'swaps':0,'overlay_counts':dict(collections.Counter(s['status'] for s in slots.values())),'raw_roots':raw['root_count'],'write_boundary_passed':True,'endpoint_premises_removed':0,'endpoint_premises_added':0,'qualification':'Qualified graph adapters/support only; no parent-row or frozen-spec/full-root closure.'}
+summary={'source_base':base,'lane':'SLICE','new_sources':checks,'pinned_replays':replays,'passing_compiles':len([r for r in receipts if r['accepted'] and not r['runtime_audit']]),'failed_compiles':len([r for r in receipts if not r['accepted']]),'raw_audits':len([r for r in receipts if r['runtime_audit']]),'maximum_peak_rss_kib':max(int(r['peak_rss_kbytes']) for r in receipts),'swaps':0,'overlay_counts':dict(collections.Counter(s['status'] for s in slots.values())),'raw_roots':raw['root_count'],'write_boundary_passed':True,'endpoint_premises_removed':0,'endpoint_premises_added':0,'qualification':'Qualified graph adapters/support only; no parent-row or frozen-spec/full-root closure.'}
 (E/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps({k:v for k,v in summary.items() if k not in ['new_sources','pinned_replays']},indent=2))
