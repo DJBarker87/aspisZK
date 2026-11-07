@@ -309,3 +309,54 @@ original Dom064, then stage2 prefix/suffix and AMN.viaReturns2. A1 remaining:
 094/op10/328/345 Ok and weak Err. Literal host/Missing, physical same-recorder
 NMF_B and ExecB and failure inclusion are still open. The all-H charge helper
 is not the final deployed averaging field. Final16GiB scope remains unused.
+
+
+## Source-continuation checkpoint through L701
+
+Canonical total064 and G1a remain the only newly completed top fields from
+this continuation (L435/L467, conditional consumer L469, raw L440/L470).
+Stage2/Env adapters and136 were already installed. No A1/A2, literal NMF_B,
+ExecB or deployed averaging field is claimed. Target not established.
+
+A2: `NNH_Stage2To064.source` (L667) reduces the full actual SDK stage2 at a
+successful canonical parent value to the SAME op11 call with the SAME
+encoded statement/proof segment/checkpoint. `NNH_Stage2ResumeOccurrence`
+(L699) supplies its actual installed reader's Prepared/Accumulator/domain.
+`NNH_CommonPendingCut`/`CommonReservation`/`AuthReservation` (L673–675)
+prove successful source execution forces the Env reservation tag true.
+`NNH_ReservationOkBinding.source` (L700) then identifies the actual runtime
+reservation with canonical LIBB's reservation, using ONLY the existing host
+representation equation. No unconditional agreement of arbitrary reservations
+is claimed. The query/Merkle/finish continuation into actual sdk.op11 is
+still unproved, and no callee-success or Root0 premise replaces it.
+
+A1: `NNH_Tx1BadRoute.source` (L672) proves actual native Err for the RSL bad
+route. `NNH_Stage1NativePublic.produce` (L698) preserves actual account1,
+getter bytes and installed decoder result. `NNH_S1CodecOk` (L681) provides
+canonical decoder/validator/encoder Ok ports; op21/op24 installation is still
+needed. Full successful body/callee cuts, exact proof extent, successful route
+[3,10], original publicDom and rev3 R4 are proved in L683–701.
+`NNH_Stage1PrepareDomain.prepare/caller` (L701) supplies the original087/094
+caller domains. These are model/caller support, not new row or interface credit.
+The op10/094/328/345 transport and weak Err body/decoder-totality composition
+remain open. Returns alone is not treated as native liveness.
+
+Own source-selection correction: the emitted AdapterRw trait at lines134–135
+has eq=op1, ne=op0. `NNH_AdapterStd` reversed these TX1-only slots. It is
+superseded by `NNH_AdapterStdCorrect` (L658), `NNH_CorrectConfiguration`
+(L659) and rebuilt dependent input producers L660–701. Existing TX2 ports
+are unaffected: neither slot is reached by the TX2 body, and those ports
+already quantify over residual adapter data. No correct literal Missing is
+claimed from the old selection. All prototypes/failed receipts remain visible.
+
+All successful current helper roots above print only standard axioms.
+The six historical native-checker scopes remain rejected. The only latest
+module still having nonstandard axioms is the superseded NNH_U64Bytes;
+the stricter finalizer excludes it. No unmodified regression is rerun, and
+no new helper raw audit is claimed: none is yet consumed by a new G0 field.
+The existing consumed-field raw audits remain L440/L470 (rev3).
+
+At L701,696 actual scopes have completed. Only five IDs were never submitted:
+L048,L455,L456,L465,L623. Runner allowance is700 actual scopes, not ID suffixes.
+The final16GiB G0-only aggregation reservation is untouched. Ordinary focused
+combined import, retained-export validation and exact final accounting follow.

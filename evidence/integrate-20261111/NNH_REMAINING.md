@@ -1,3 +1,29 @@
+# Current continuation targets (supersedes historical text below)
+
+1. Total computed064 NMN field and actual-entry-to-weak-native producer are
+delivered (`NNH_064Install.root`, `NNH_EnvEntryWorld.native`); G1a is concrete.
+Their conditional G0 consumer is `NNH_G0WithG1a`, raw audited L470.
+2. A2: canonical parent-to-actual-op11 reduction, same buffers, installed reader
+and runtime reservation Ok agreement are proved. Prove the remaining actual
+SDK op11 query/Merkle/finish continuation at original Dom064 and EnvRep.
+A1: actual bad-route Err, codec Ok, same public getter/decoder, successful body
+cuts and original087/094 public/R4 domains are proved. Complete op21/op24,
+op10/094/328/345 Ok transport and weak Err body (including needed decoder
+liveness). No library field is missing. `NNH_ExactRemainingTypes.lean` records
+unproved model targets only; no final top imports them as hypotheses.
+3. Literal Missing/Ctx/model functions/World and SAME headline recorder cuts
+remain uninstantiated; hence literal NMF_B and RZ-STATE ExecB are not installed.
+4. Full-space single-charge `NNH_RecordedCharge.bound` is available. Prove
+failure inclusion at that SAME recorder and instantiate the literal world/pair
+before claiming the all-H deployed averaging field. Never condition Realizes.
+
+Ledger26 remains136 CREDITED and installed;217 REJECTED pending ruling(t)
+controls;234 audited mathematical candidate exists but is not credited.
+Principals137/087/094/328/345,234/233/242/241 remain explicit pending fields.
+No extra row caller domain, trust row or shipped-source change was introduced.
+
+---
+
 # Active continuation status (supersedes historical lists below)
 
 Item1 canonical total064 is DELIVERED: `AspisR1.NNH_064Install.root` at the

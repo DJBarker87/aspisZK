@@ -88,7 +88,7 @@ elif kind=='audit':
  command=['python3','NNH_finalize_host.py'] if target=='retention' else ['NNH_native/NNH_ProofDriver',target]
 
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join(([B+'/NNH_exports_resume_20261111'] if target=='NNH_ExportCheck' else [])+[B+'/NNH_objects']+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join(([B+'/NNH_exports_continuation_20261111'] if target=='NNH_ContinuationExportCheck' else ([B+'/NNH_exports_resume_20261111',B+'/NNH_objects'] if target=='NNH_ExportCheck' else [B+'/NNH_objects']))+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -103,7 +103,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NNH_FINAL_COMBINED_IMPORT'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
+elif x['kind']=='audit':modules += ['NNH_FINAL_COMBINED_IMPORT','NNH_ContinuationCombined'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -130,7 +130,7 @@ if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{tar
 
 out={{n:(b/n).read_text() for n in names}}
 if {target!r}=='retention':
- for n in ['NNH_EXPORT.json','NNH_FINAL_HOST.json','NNH_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
+ for n in ['NNH_EXPORT.json','NNH_EXPORT_REJECTED.json','NNH_FINAL_HOST.json','NNH_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
  out['NNH_CLOSURE_PINS.json.xz.hex']=(b/'NNH_CLOSURE_PINS.json.xz').read_bytes().hex()
 if {target!r} in ['close','review-close','review-retention']:
  for n in ['NNH_PREDECESSOR_COMPARISON.json','NNH_EXPORT.json','NNH_TOOL_PINS.json','NNH_CLOSURE_PINS.json.sha256']:

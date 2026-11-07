@@ -1,0 +1,52 @@
+{"attempt": "NNH_L646", "exit_status": 1, "wall_seconds": 3.1065884579438716, "peak_rss_kib": "6674240", "swaps": "0", "print_axioms": ["'NNH_Stage2Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_Stage2Suffix.lean:19:182: error: unsolved goals
+ops : Ops
+val : r1_pool_adapter.ValidatedAsqa
+proof checkpoint segment : Slice U8
+encoded : Std.Array U8 1880#usize
+proofSize : proof.len = 58295#usize
+validatedSize : val.proof_length = 57607#usize
+late : ops.op19 = ok 1520#usize
+encode : ops.op22 val.statement = ok (core.result.Result.Ok encoded)
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 688#usize, «end» := 58295#usize } =
+    ok segment
+encodedSize : encoded.to_slice.len = 1880#usize
+⊢ (do
+      let o2 ← observer ops
+      let r6 ← ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) encoded.to_slice 
+...
+ror.ProgramError).call_once ops.op44 e
+            ok (core.result.Result.Err e1)
+      let cf5 ←
+        match r7 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue a => ops.op53 val.statement
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    do
+    let obs ← observer ops
+    let reply ← ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) encoded.to_slice segment checkpoint () obs
+    let mapped ←
+      match reply with
+        | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+        | core.result.Result.Err e => do
+          let e1 ←
+            (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error solana_program_error.ProgramError).call_once ops.op44 e
+          ok (core.result.Result.Err e1)
+    let cf ←
+      match mapped with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ops.op53 val.statement
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame solana_program_error.ProgramError) residual
+'NNH_Stage2Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8a4a8faa67ce4e6cb841b0b59eee13f4.scope; invocation ID: 63c1d72543dc41f49282f0561c291d0a

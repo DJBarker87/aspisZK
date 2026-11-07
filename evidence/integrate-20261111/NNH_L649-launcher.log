@@ -1,0 +1,59 @@
+{"attempt": "NNH_L649", "exit_status": 0, "wall_seconds": 3.140714655863121, "peak_rss_kib": "6669760", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Result.ok false
+theorem NBG_Utilities.lists : ∀ (xs ys : List U8),
+  xs.length = ys.length →
+    List.allM
+        (fun x =>
+          match x with
+          | (x, y) => do
+            let b ← core.cmp.PartialEqU8.ne x y
+            Result.ok (decide ¬b = true))
+        (xs.zip ys) =
+      Result.ok (decide (xs = ys)) :=
+fun
+...
+                      (¬True)
+                                    (congrArg Not (Eq.trans (congrFun' (congrArg Eq comp) true) (eq_self true))))))
+                              fun __do_lift =>
+                              match __do_lift with
+                              | true =>
+                                List.allM (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                  (xs.zip ys_1)
+                              | false => pure false)
+                            (bind_tc_ok (decide ¬True) fun y =>
+                              match y with
+                              | true =>
+                                List.allM (fun x => Result.ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true))
+                                  (xs.zip ys_1)
+                              | false => pure false))))
+                      (Result.ok (decide (x :: xs = y :: ys_1)))))
+                  (id
+                    (of_eq_true
+                      (Eq.trans
+                        (congrArg (Eq (Result.ok false))
+                          (congrArg Result.ok
+                            (Eq.trans
+                              (Decidable.decide.congr_simp (x :: xs = y :: ys_1) False
+                                (Eq.trans (List.cons.injEq x xs y ys_1)
+                                  (Eq.trans (congrFun' (congrArg And (eq_false same)) (xs = ys_1))
+                                    (false_and (xs = ys_1)))))
+                              (decide_false instDecidableFalse))))
+                        (eq_self (Result.ok false))))))
+            (Eq.symm h) width)
+        (Eq.refl ys))
+    xs ys width
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+
+Running as unit: run-r0d53a4a6343d4f458586a2dcd2b3c5fe.scope; invocation ID: 68416b6cd3604c5b860c2414d1d8b37a
