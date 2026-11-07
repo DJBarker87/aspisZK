@@ -99,3 +99,5 @@ Attempt 49642: PV_W5_F32LiteralPrefix, passed pinned focused replay.
 Attempt 49643: PV_W5_F32LiteralEntry, passed pinned focused replay.
 
 Attempt 49644: PV_W5_F32Stable, passed pinned focused replay.
+
+Attempt 49645: PV_W5_F32CallInputs, passed pinned focused replay.
