@@ -4,7 +4,7 @@ import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert ((a.startswith('NMF_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMF_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
-    assert kind=='lean','Lean-only job: no Kani/extraction/link submissions' 
+    assert kind in ['lean','link','audit','inspect'],'No Kani or extraction submissions'
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NMF_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x['kind']=='lean' for x in done)<80,'Actual Lean compiler budget exhausted'

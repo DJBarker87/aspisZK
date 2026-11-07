@@ -74,7 +74,11 @@ theorem root0_or_existing_collision {W A CoreError Tx : Type}
     ∃ f s, SourceCuts (DrvC_Installation.sdk c) e1.first (e2.second secondSizes) saved f s ∧
       NLP_InputDomain.Root0 saved.deref f.proof ∧
       bytesOf s.checkpoint.val=bytesOf saved.val ∧
-      (NLP_InputDomain.Root0 s.checkpoint s.proof ∨
+      ((NLP_InputDomain.Root0 s.checkpoint s.proof ∧
+        (s.proof.val.length=57607 → s.pub.val.length≤1880 →
+          NLT_CompleteRoot.RowSpec H
+            (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (DrvC_Installation.sdk c))
+            s.pub s.proof s.checkpoint ())) ∨
         BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
           (eval H (Hiq_RecordedJoint.program (F3X_Account.program c hashv P)
             F3X_Projection.project select))) := by
@@ -113,11 +117,10 @@ theorem root0_or_existing_collision {W A CoreError Tx : Type}
       (P2P_NativeSelection.pair (DrvC_Installation.sdk c) CPH_Program.verifier e1 e2 data2 slot).2 at good
     rw [association] at good
     obtain ⟨pm,written⟩:=encoding
-    have writer:=NLW_WriterHeader.decoded H (bytesOf f.proof.val) (bytesOf f.pub.val) pm _
     have writerHeader : NLW_ReaderHeader.decode (bytesOf saved.val)=
       some (H (bytesOf f.proof.val),H (bytesOf f.pub.val)) := by
       rw [written,Tx2N_Reader.writer_bytes]
-      exact writer
+      exact NLW_WriterHeader.decoded H (bytesOf f.proof.val) (bytesOf f.pub.val) pm _
     have oracle : CheckpointBytes5Inputs.Oracle
       (VTop_Checkpoint.digest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (DrvC_Installation.sdk c))) () H := by
       intro parts digest returned
@@ -128,7 +131,12 @@ theorem root0_or_existing_collision {W A CoreError Tx : Type}
     have matched:=NLW_AuthenticatedRoots.digest_matches H saved.deref s.checkpoint
       f.proof f.pub s.proof s.pub persisted writerHeader readerHeader
     have equal:=good matched
-    exact Or.inl (NMF_InputTransport.root0 saved.deref s.checkpoint f.proof s.proof savedRoot persisted equal.1)
+    have root0:=NMF_InputTransport.root0 saved.deref s.checkpoint f.proof s.proof savedRoot persisted equal.1
+    refine Or.inl ⟨root0,?_⟩
+    intro proofLength publicLength
+    exact NLT_CompleteRoot.root H
+      (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (DrvC_Installation.sdk c))
+      s.pub s.proof s.checkpoint () proofLength publicLength root0
 #print root0_or_existing_collision
 #print axioms root0_or_existing_collision
 end NMF_GameRoot
