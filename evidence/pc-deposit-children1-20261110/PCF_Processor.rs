@@ -81,3 +81,20 @@ fn bad_frame_proof(){
  let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut data,&owner,kani::any(),kani::any());
  let _=bad_frame(&a);
 }
+
+// Method calibration only: no PDA value is computed or assumed.
+#[cfg(kani)]
+extern "C" { fn __CPROVER_uninterpreted_PCF_u8(x:u8)->u8; }
+#[cfg(kani)]
+#[kani::proof]
+fn pda_uf_repeat(){
+ let x:u8=kani::any();let a=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};
+ let b=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};assert_eq!(a,b);
+}
+#[cfg(kani)]
+#[kani::proof]
+fn pda_uf_unimplied(){
+ let x:u8=kani::any();let y:u8=kani::any();kani::assume(x!=y);
+ let a=unsafe{__CPROVER_uninterpreted_PCF_u8(x)};
+ let b=unsafe{__CPROVER_uninterpreted_PCF_u8(y)};assert_eq!(a,b);
+}

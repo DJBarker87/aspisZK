@@ -1,0 +1,42 @@
+{"attempt": "PCF_L041", "exit_status": 0, "wall_seconds": 3.35136152501218, "peak_rss_kib": "2634384", "swaps": "0", "print_axioms": []}
+FOUND List.setSlice!_getElem?_suffix._proof_1_4
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), ¬s'.length ≤ s'.length → False
+FOUND Array.getElem!_setSlice!_suffix._simp_1_2
+TYPE ∀ {α : Type u} [inst : Inhabited α] {xs : Array α} {i : ℕ}, xs[i]! = xs.toList[i]!
+FOUND List.setSlice!_getElem?_suffix._proof_1_5
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → ¬s'.length ≤ j - i → False
+FOUND List.setSlice!.eq_1
+TYPE ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' =
+    List.take i s ++ List.take (min s'.length (s.length - i)) s' ++ List.drop (i + min s'.length (s.length - i)) s
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix
+TYPE ∀ {α : Type
+...
+ (s' : List α) (i j : ℕ) (h : i ≤ j ∧ j - i < s'.length ∧ j < s.size),
+  (s.setSlice! i s')[j] = s'[j - i]
+FOUND Array.getElem_setSlice!_middle._proof_2
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.size → j - i < s'.length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!
+TYPE {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ → List α → Aeneas.Std.alloc.vec.Vec α
+FOUND Aeneas.Std.Slice.setSlice!_getElem_prefix._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (i j : ℕ), j < i ∧ j < s.length → j < (↑s).length
+FOUND Aeneas.Std.Slice.setSlice!_val
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (i : ℕ) (s' : List α), ↑(s.setSlice! i s') = (↑s).setSlice! i s'
+FOUND Aeneas.Std.Array.setSlice!_getElem_middle._proof_2
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+FOUND List.getElem!_setSlice!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND Array.getElem!_setSlice!_prefix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND List.getElem!_setSlice!_middle._proof_1_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → ¬i ≤ s.length → False
+FOUND Array.getElem!_setSlice!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND List.getElem_setSlice!_middle._proof_1
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (s.setSlice! i s').length
+
+Running as unit: run-ra822f3fb4cba4fea80df72c0e337deab.scope; invocation ID: 9d5f89f1201043f8824fee9786fe601b

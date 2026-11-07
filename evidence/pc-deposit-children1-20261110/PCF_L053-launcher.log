@@ -1,0 +1,50 @@
+{"attempt": "PCF_L053", "exit_status": 0, "wall_seconds": 2.654857010114938, "peak_rss_kib": "2630832", "swaps": "0", "print_axioms": []}
+FOUND BitVec.toLEBytes
+TYPE {w : ℕ} → BitVec w → List Byte
+VALUE fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+FOUND BitVec.getElem!_toLEBytes._simp_1_2
+TYPE ∀ {α : Type u_1} [inst : LT α] {x y : α}, (x > y) = (y < x)
+FOUND BitVec.getElem_toLEBytes_eq_false
+TYPE ∀ {w : ℕ} (b : BitVec w) (i j : ℕ) (hi : i < b.toLEBytes.length) (h : j < 8),
+  w ≤ 8 * i + j → b.toLEBytes[i][j] = false
+FOUND BitVec.getElem!_toLEBytes._unary
+TYPE ∀ j < 8, ∀ (_x : (w : ℕ) ×' (_ : BitVec w) ×' ℕ), _x.2.1.toLEBytes[_x.2.2]![j]! = _x.2.1[8 * _x.2.2 + j]!
+FOUND BitVec.testBit_getElem!_toLEBytes
+TYPE ∀ {w : ℕ} (x : BitVec w) (i j : ℕ), j < 8 → x.toLEBytes[i]!.testBit j = x[8 * i + j]!
+FOUND BitVec.fromLEBytes_toLEBytes._
+...
+estBit j = v[8 * i + j]
+FOUND BitVec.toLEBytes.eq_def
+TYPE ∀ {w : ℕ} (b : BitVec w),
+  b.toLEBytes = if w > 0 then BitVec.setWidth 8 b :: (BitVec.setWidth (w - 8) (b >>> 8)).toLEBytes else []
+FOUND BitVec.toLEBytes_length._proof_1_2
+TYPE ∀ {w : ℕ}, ¬w = 0 → ¬w > 0 → False
+FOUND BitVec.getElem!_toLEBytes._simp_1_3
+TYPE ∀ {α : Type u_2} [inst : Preorder α] (x : α), (x < x) = False
+FOUND BitVec.toLEBytes_getElem_testBit_eq_false._proof_1_1
+TYPE ∀ {w : ℕ} (v : BitVec w) (i j : ℕ), ¬j < 8 → ¬8 ≤ j → False
+FOUND BitVec.toLEBytes_length._unary
+TYPE ∀ (_x : (w : ℕ) ×' BitVec w), _x.2.toLEBytes.length = (_x.1 + 7) / 8
+FOUND BitVec.testBit_getElem_toLEBytes_eq_getElem._proof_1
+TYPE ∀ {w : ℕ} (x : BitVec w) (i j : ℕ), j < 8 ∧ 8 * i + j < w → ¬8 * i + j < w → False
+FOUND BitVec.getElem!_toLEBytes._simp_1_6
+TYPE ∀ (n : ℕ), (n < 0) = False
+FOUND BitVec.getElem!_toLEBytes._proof_1_8
+TYPE ∀ {w : ℕ} (i j : ℕ), j < 8 → ¬i = 0 → 8 * (i - 1) + j < w - 8 → ¬8 + (8 * (i - 1) + j) = 8 * i + j → False
+FOUND BitVec.getElem!_toLEBytes
+TYPE ∀ {w : ℕ} (b : BitVec w) (i j : ℕ), j < 8 → b.toLEBytes[i]![j]! = b[8 * i + j]!
+FOUND BitVec.toLEBytes_getElem!_testBit._simp_1_5
+TYPE ∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, (¬a < b) = (b ≤ a)
+FOUND BitVec.fromLEBytes_toLEBytes._proof_1_2
+TYPE ∀ {w : ℕ}, w % 8 = 0 → ¬(w + 7) / 8 = w / 8 → False
+FOUND BitVec.toLEBytes_getElem!_testBit
+TYPE ∀ {w : ℕ} (v : BitVec w) (i j : ℕ), j < 8 → v.toLEBytes[i]!.testBit j = v[8 * i + j]!
+FOUND BitVec.getElem!_toLEBytes._proof_1_5
+TYPE ∀ {w : ℕ} (j : ℕ), ¬w = 0 → ¬w > 0 → False
+FOUND BitVec.toLEBytes._unary.eq_def
+TYPE ∀ (_x : (w : ℕ) ×' BitVec w),
+  BitVec.toLEBytes._unary _x =
+    let ⟨w, b⟩ := _x
+    if w > 0 then BitVec.setWidth 8 b :: BitVec.toLEBytes._unary ⟨w - 8, BitVec.setWidth (w - 8) (b >>> 8)⟩ else []
+
+Running as unit: run-recfb6a2c8d10404aab68eb96c4556d43.scope; invocation ID: 4d4929106dfe4794842d2901ad0b01c3

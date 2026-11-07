@@ -1,0 +1,24 @@
+PCF_generated/PCF_Iterator.lean:16:4: error: Tactic `unfold` failed to unfold `core.slice.iter.IteratorSliceIter.next` in
+  (do
+      let __x ← (core.iter.traits.iterator.IteratorSliceIter T).next (cursor s i count).iter
+      match __x with
+        | (opt, iter') =>
+          match opt with
+          | none => ok (none, { iter := iter', count := (cursor s i count).count })
+          | some a => do
+            let count' ← (cursor s i count).count + 1#usize
+            ok (some ((cursor s i count).count, a), { iter := iter', count := count' })) =
+    ok (none, cursor s i count)
+PCF_generated/PCF_Iterator.lean:29:4: error: Tactic `unfold` failed to unfold `core.slice.iter.IteratorSliceIter.next` in
+  (do
+      let __x ← (core.iter.traits.iterator.IteratorSliceIter T).next (cursor s i count).iter
+      match __x with
+        | (opt, iter') =>
+          match opt with
+          | none => ok (none, { iter := iter', count := (cursor s i count).count })
+          | some a => do
+            let count' ← (cursor s i count).count + 1#usize
+            ok (some ((cursor s i count).count, a), { iter := iter', count := count' })) =
+    ok (some (count, s[i]), cursor s (i + 1) out)
+'PCF_Iterator.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCF_Iterator.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

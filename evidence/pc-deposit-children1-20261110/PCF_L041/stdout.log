@@ -1,0 +1,366 @@
+FOUND List.setSlice!_getElem?_suffix._proof_1_4
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), ¬s'.length ≤ s'.length → False
+FOUND Array.getElem!_setSlice!_suffix._simp_1_2
+TYPE ∀ {α : Type u} [inst : Inhabited α] {xs : Array α} {i : ℕ}, xs[i]! = xs.toList[i]!
+FOUND List.setSlice!_getElem?_suffix._proof_1_5
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → ¬s'.length ≤ j - i → False
+FOUND List.setSlice!.eq_1
+TYPE ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' =
+    List.take i s ++ List.take (min s'.length (s.length - i)) s' ++ List.drop (i + min s'.length (s.length - i)) s
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+FOUND List.getElem_setSlice!_middle._proof_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ) (h : j < i ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.Array.setSlice!_getElem_middle._proof_1_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND Vector.getElem!_setSlice!_same
+TYPE ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.Array.setSlice!_getElem!_suffix
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} [inst : Inhabited α] (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.Array.setSlice!_getElem_suffix._proof_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Aeneas.Std.Slice.setSlice!.eq_1
+TYPE ∀ {α : Type u} (s : Aeneas.Std.Slice α) (i : ℕ) (s' : List α), s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+FOUND List.getElem!_setSlice!_prefix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.Array.setSlice!_getElem_prefix._proof_2
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (i j : ℕ),
+  j < i ∧ j < s.length → j < (↑s).length
+FOUND Vector.getElem_setSlice!_middle
+TYPE ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < n), (s.setSlice! i s')[j] = s'[j - i]
+FOUND Aeneas.Std.Array.setSlice!_getElem_prefix._proof_1_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  j < i ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND Aeneas.Std.Array.setSlice!_getElem_suffix
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.Array.setSlice!_getElem!_middle
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} [inst : Inhabited α] (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND Aeneas.Std.Array.setSlice!_getElem_suffix._proof_2
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑s).length
+FOUND Vector.getElem!_setSlice!_suffix
+TYPE ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_length
+TYPE ∀ {α : Type u} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α), (s.setSlice! i s').length = s.length
+FOUND List.setSlice!_getElem?_suffix._proof_1_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → j < s.length → ¬s'.length ≤ s.length - i → False
+FOUND Array.setSlice!
+TYPE {α : Type u_1} → Array α → ℕ → List α → Array α
+FOUND List.getElem!_setSlice!_suffix._proof_1_4
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), ¬s'.length ≤ s'.length → False
+FOUND List.setSlice!_getElem?_suffix
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]? = s[j]?
+FOUND Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut
+TYPE {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+VALUE fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    Aeneas.Std.Result.ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+FOUND List.setSlice!_drop
+TYPE ∀ {α : Type u_1} (l : List α) (i : ℕ), l.setSlice! i (List.drop i l) = l
+FOUND Aeneas.Std.Array.setSlice!_getElem_prefix._proof_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  j < i ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND List.getElem!_setSlice!_suffix._proof_1_3
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → j < s.length → ¬i ≤ s.length → False
+FOUND Aeneas.Std.Slice.setSlice!_getElem_suffix._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑s).length
+FOUND Array.getElem!_setSlice!_prefix._simp_1_2
+TYPE ∀ {α : Type u} [inst : Inhabited α] {xs : Array α} {i : ℕ}, xs[i]! = xs.toList[i]!
+FOUND Aeneas.Std.Array.setSlice!_getElem_middle._proof_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_suffix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND List.getElem_setSlice!_same._proof_1
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  (j < i ∨ i + s'.length ≤ j) ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND Array.getElem_setSlice!_same._proof_2
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ), (j < i ∨ i + s'.length ≤ j) ∧ j < s.size → j < s.size
+FOUND List.getElem_setSlice!_prefix._proof_1
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), j < i ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND Vector.getElem_setSlice!_same
+TYPE ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ)
+  (h : (j < i ∨ i + s'.length ≤ j) ∧ j < n), (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.Array.setSlice!.eq_1
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+FOUND Vector.getElem_setSlice!_prefix
+TYPE ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ) (h : j < i ∧ j < s.size),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Array.getElem_setSlice!_same
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ) (h : (j < i ∨ i + s'.length ≤ j) ∧ j < s.size),
+  (s.setSlice! i s')[j] = s[j]
+FOUND List.setSlice!_getElem?_prefix
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]? = s[j]?
+FOUND Array.getElem_setSlice!_suffix._simp_1_2
+TYPE ∀ {α : Type u} {xs : Array α} {i : ℕ} (h : i < xs.size), xs[i] = xs.toList[i]
+FOUND Aeneas.Std.Slice.setSlice!_getElem!_suffix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Array.getElem!_setSlice!_suffix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑s).length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_3
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (i j : ℕ), j < i ∧ j < s.length → j < (↑s).length
+FOUND List.map_setSlice!
+TYPE ∀ {α : Type u_1} {β : Type u_2} (s : List α) (i : ℕ) (s' : List α) (f : α → β),
+  List.map f (s.setSlice! i s') = (List.map f s).setSlice! i (List.map f s')
+FOUND List.getElem_setSlice!_suffix
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+FOUND Array.getElem_setSlice!_suffix._proof_2
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < s.size → j < s.size
+FOUND Array.getElem_setSlice!_prefix._proof_1
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ), j < i ∧ j < s.size → j < (s.setSlice! i s').size
+FOUND Vector.getElem!_setSlice!_middle
+TYPE ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND List.length_setSlice!
+TYPE ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α), (s.setSlice! i s').length = s.length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+FOUND Aeneas.Std.Slice.setSlice!_length
+TYPE ∀ {α : Type u} (s : Aeneas.Std.Slice α) (i : ℕ) (s' : List α), (s.setSlice! i s').length = s.length
+FOUND Vector.getElem_setSlice!_same._proof_1
+TYPE ∀ {α : Type u_1} {n : ℕ} (s' : List α) (i j : ℕ), (j < i ∨ i + s'.length ≤ j) ∧ j < n → ¬j < n → False
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_prefix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND List.length_setSlice!._proof_1_3
+TYPE ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α),
+  ¬min i s.length + (min s'.length (s.length - i) + (s.length - (i + min s'.length (s.length - i)))) = s.length → False
+FOUND List.setSlice!_getElem?_middle._proof_1_3
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → ¬j - i < s'.length → False
+FOUND List.setSlice!
+TYPE {α : Type u_1} → List α → ℕ → List α → List α
+VALUE fun {α} s i s' =>
+  have s0 := List.take i s;
+  have n := min s'.length (s.length - i);
+  have s1 := List.take n s';
+  have s2 := List.drop (i + n) s;
+  s0 ++ s1 ++ s2
+FOUND Aeneas.Std.Array.setSlice!_getElem_prefix
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+FOUND List.setSlice!_drop._simp_1_1
+TYPE ∀ {α : Type u_1} (l0 l1 : List α), (l0 = l1) = ∀ (i : ℕ), l0[i]? = l1[i]?
+FOUND Array.getElem_setSlice!_suffix
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.size),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.Slice.setSlice!_getElem_prefix
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ) (h : j < i ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+FOUND List.getElem!_setSlice!_suffix._proof_1_5
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → ¬s'.length ≤ j - i → False
+FOUND Array.getElem_setSlice!_prefix._simp_1_2
+TYPE ∀ {α : Type u} {xs : Array α} {i : ℕ} (h : i < xs.size), xs[i] = xs.toList[i]
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i : ℕ),
+  (↑(s.setSlice! i s')).length < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+FOUND Aeneas.Std.Slice.setSlice!_getElem_middle._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+FOUND Aeneas.Std.core.slice.Slice.copy_from_slice
+TYPE {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+VALUE fun {T} x s src =>
+  if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+FOUND Array.getElem_setSlice!_prefix
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ) (h : j < i ∧ j < s.size), (s.setSlice! i s')[j] = s[j]
+FOUND List.setSlice!_getElem?_suffix._proof_1_3
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → j < s.length → ¬i ≤ s.length → False
+FOUND List.getElem_setSlice!_middle
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length),
+  (s.setSlice! i s')[j] = s'[j - i]
+FOUND Aeneas.Std.Array.setSlice!_getElem_suffix._proof_1_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND List.getElem!_setSlice!_suffix._proof_1_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → j < s.length → ¬s'.length ≤ s.length - i → False
+FOUND Vector.getElem!_setSlice!_prefix
+TYPE ∀ {α : Type u_1} {n : ℕ} [inst : Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND Array.setSlice!.eq_1
+TYPE ∀ {α : Type u_1} (a : Array α) (i : ℕ) (s : List α), a.setSlice! i s = { toList := a.toList.setSlice! i s }
+FOUND List.setSlice!_getElem?_suffix._proof_1_6
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → ¬i ≤ j → False
+FOUND Aeneas.Std.Slice.setSlice!_getElem!_prefix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND Array.getElem!_setSlice!_middle._simp_1_2
+TYPE ∀ {α : Type u} [inst : Inhabited α] {xs : Array α} {i : ℕ}, xs[i]! = xs.toList[i]!
+FOUND Aeneas.Std.Slice.setSlice!_getElem_middle
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ) (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length),
+  (s.setSlice! i s')[j] = s'[j - i]
+FOUND Vector.setSlice!.eq_1
+TYPE ∀ {α : Type u_1} {n : ℕ} (a : Vector α n) (i : ℕ) (s : List α),
+  a.setSlice! i s = Vector.mk (a.toArray.setSlice! i s) ⋯
+FOUND List.getElem!_setSlice!_same
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND List.getElem_setSlice!_prefix._proof_2
+TYPE ∀ {α : Type u_1} (s : List α) (i j : ℕ), j < i ∧ j < s.length → j < s.length
+FOUND Array.getElem_setSlice!_middle._proof_1
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → j < (s.setSlice! i s').size
+FOUND List.getElem!_setSlice!_suffix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Array.getElem_setSlice!_same._proof_1
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ),
+  (j < i ∨ i + s'.length ≤ j) ∧ j < s.size → j < (s.setSlice! i s').size
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  ((↑s).setSlice! i s').length ≤ Aeneas.Std.Usize.max
+FOUND Aeneas.Std.Array.setSlice!_getElem!_prefix
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} [inst : Inhabited α] (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND List.getElem_setSlice!_same._proof_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), (j < i ∨ i + s'.length ≤ j) ∧ j < s.length → j < s.length
+FOUND Array.getElem_setSlice!_prefix._proof_2
+TYPE ∀ {α : Type u_1} (s : Array α) (i j : ℕ), j < i ∧ j < s.size → j < s.size
+FOUND List.getElem_setSlice!_suffix._proof_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < s.length → j < s.length
+FOUND Array.getElem_setSlice!_middle._simp_1_2
+TYPE ∀ {α : Type u} {xs : Array α} {i : ℕ} (h : i < xs.size), xs[i] = xs.toList[i]
+FOUND Array.getElem!_setSlice!_same
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ),
+  j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+FOUND Aeneas.Std.Slice.setSlice!_getElem!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND Vector.getElem_setSlice!_middle._proof_2
+TYPE ∀ {α : Type u_1} {n : ℕ} (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < n → ¬j - i < s'.length → False
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  j < i ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Array.getElem_setSlice!_suffix._proof_1
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.size → j < (s.setSlice! i s').size
+FOUND List.setSlice!_getElem?_middle._proof_1_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → ¬i ≤ s.length → False
+FOUND List.getElem_setSlice!_prefix
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Aeneas.Std.Slice.setSlice!_getElem_suffix
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.Slice.setSlice!
+TYPE {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α
+FOUND List.length_setSlice!._simp_1_2
+TYPE ∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, (a ⊓ b ≤ a) = True
+FOUND Aeneas.Std.core.slice.iter.IteratorSliceIter.next
+TYPE {T : Type} → Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T)
+VALUE fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Aeneas.Std.Result.ok (some x, it)
+  else Aeneas.Std.Result.ok (none, it)
+FOUND List.getElem_setSlice!_same
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ) (h : (j < i ∨ i + s'.length ≤ j) ∧ j < s.length),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Vector.setSlice!._proof_1
+TYPE ∀ {α : Type u_1} {n : ℕ} (a : Vector α n) (i : ℕ) (s : List α), (a.toArray.setSlice! i s).size = n
+FOUND Vector.setSlice!
+TYPE {α : Type u_1} → {n : ℕ} → Vector α n → ℕ → List α → Vector α n
+FOUND List.setSlice!_getElem?_middle
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]? = s'[j - i]?
+FOUND Vector.getElem_setSlice!_suffix._proof_1
+TYPE ∀ {α : Type u_1} {n : ℕ} (s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < n → ¬j < n → False
+FOUND Aeneas.Std.Slice.setSlice!_getElem_middle._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Vector.getElem_setSlice!_suffix
+TYPE ∀ {α : Type u_1} {n : ℕ} [Inhabited α] (s : Vector α n) (s' : List α) (i j : ℕ) (h : i + s'.length ≤ j ∧ j < n),
+  (s.setSlice! i s')[j] = s[j]
+FOUND Vector.getElem_setSlice!_middle._proof_1
+TYPE ∀ {α : Type u_1} {n : ℕ} (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < n → ¬j < n → False
+FOUND List.getElem_setSlice!_suffix._proof_1
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < s.length → j < (s.setSlice! i s').length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+FOUND Aeneas.Std.Slice.setSlice!._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (i : ℕ) (s' : List α),
+  ((↑s).setSlice! i s').length ≤ Aeneas.Std.Usize.max
+FOUND List.setSlice!_getElem?_same
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), j < i ∨ i + s'.length ≤ j → (s.setSlice! i s')[j]? = s[j]?
+FOUND Aeneas.Std.Slice.setSlice!_getElem_prefix._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  j < i ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Aeneas.Std.Array.setSlice!_getElem_middle
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ)
+  (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!.eq_1
+TYPE ∀ {α : Type u} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α), s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+FOUND List.getElem!_setSlice!_suffix._proof_1_6
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i + s'.length ≤ j → ¬i ≤ j → False
+FOUND Aeneas.Std.Array.setSlice!._proof_1
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (i : ℕ) (s' : List α),
+  ((↑s).setSlice! i s').length = ↑n
+FOUND Aeneas.Std.Array.setSlice!
+TYPE {α : Type u} → {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → ℕ → List α → Aeneas.Std.Array α n
+FOUND Aeneas.Std.Slice.setSlice!_getElem_suffix._proof_1
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (s' : List α) (i j : ℕ),
+  i + s'.length ≤ j ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+FOUND Vector.getElem_setSlice!_prefix._proof_1
+TYPE ∀ {n : ℕ} (i j : ℕ), j < i ∧ j < n → ¬j < n → False
+FOUND Array.length_setSlice!
+TYPE ∀ {α : Type u_1} (s : Array α) (i : ℕ) (s' : List α), (s.setSlice! i s').size = s.size
+FOUND Array.getElem_setSlice!_middle
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ) (h : i ≤ j ∧ j - i < s'.length ∧ j < s.size),
+  (s.setSlice! i s')[j] = s'[j - i]
+FOUND Array.getElem_setSlice!_middle._proof_2
+TYPE ∀ {α : Type u_1} (s : Array α) (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.size → j - i < s'.length
+FOUND Aeneas.Std.alloc.vec.Vec.setSlice!
+TYPE {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ → List α → Aeneas.Std.alloc.vec.Vec α
+FOUND Aeneas.Std.Slice.setSlice!_getElem_prefix._proof_2
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (i j : ℕ), j < i ∧ j < s.length → j < (↑s).length
+FOUND Aeneas.Std.Slice.setSlice!_val
+TYPE ∀ {α : Type u_1} (s : Aeneas.Std.Slice α) (i : ℕ) (s' : List α), ↑(s.setSlice! i s') = (↑s).setSlice! i s'
+FOUND Aeneas.Std.Array.setSlice!_getElem_middle._proof_2
+TYPE ∀ {α : Type u_1} {n : Aeneas.Std.Usize} (s : Aeneas.Std.Array α n) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+FOUND List.getElem!_setSlice!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND Array.getElem!_setSlice!_prefix
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+FOUND List.getElem!_setSlice!_middle._proof_1_2
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → ¬i ≤ s.length → False
+FOUND Array.getElem!_setSlice!_middle
+TYPE ∀ {α : Type u_1} [inst : Inhabited α] (s : Array α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.size → (s.setSlice! i s')[j]! = s'[j - i]!
+FOUND List.getElem_setSlice!_middle._proof_1
+TYPE ∀ {α : Type u_1} (s s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (s.setSlice! i s').length
