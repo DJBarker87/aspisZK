@@ -1,11 +1,25 @@
-# NMD remaining obligations
+# NMD remaining obligations and below80% Lean accounting
 
-Target not yet established. Work is active; unused budget is not exhaustion.
+Target not yet established. Ledger23 remains580 CLOSED /0 QUALIFIED /19 OPEN. No TX2:064 candidate root or status promotion. This pilot owns only064; Root0 and public1880 provenance remain241 caller clauses, not an independent new task here.
 
-Stage1: complete all exact-carrier controls and retry only own-input/trait-construction repairs. Contract failures remain findings; no renames to change verdicts.
-Stage2: install proof_for_contract on ACTUAL parse/marker/common and prove parent original-length arbitrary-content forwarding and complete footprint, with matched controls. Scalar/zero-buffer calibration earns no native credit.
-Stage3: where a shape is unsupported, identify a legal local record reachable through existing arguments and havoc the remainder. A readonly slice is not an interior-mutable log channel.
-Stage4: informational latest-release K-3 reproduction, original names; no change to pinned toolchain and no verification credit.
-Stage5: compile full-record segment specification, equivalence to NLW full-outcome fold, candidate child elimination, then combined headline/import/NFX/raw-ax2 gate. Root0/public1880 stay caller clauses.
+## Member-by-member accounting
 
-No remaining member is declared impossible yet. Below80% stop accounting must be replaced with actual member-by-member evidence at handoff; the current list is a work queue, not such an accounting.
+- **Parse/S0.** Actual parse_shape proof_for_contract with arbitrary original buffer contents timed out in three materially different shapes: symbolic extent K057; fixed original extent/CBMC array mode K070; separate repr(C) header16 and arbitrary suffix57591 K071. All are retired at90s, no larger cap or unchanged rerun. Minimal Result<Variant,Error> controls pass after exhaustive local-enum Arbitrary, so this is no longer a returned-carrier compiler obstruction. The actual full-original-allocation contract is absent. Reusing CLOSED NLE parser semantics does not create that missing Kani contract or native boundary. Next deliverable: a different validated native window/frame mechanism on the actual compiled parser at the original allocation, with a matched failing control. Further conditional Lean lemmas cannot assert it.
+
+- **Release marker/S1.** Actual frozen mark at(None,Parsed) has a local empty-modifies/unit-return contract, positive/negative caller checks, inverted ensures and required stability pair (K078–K082), under deployed features and(ae)/(al). The complete model marker identity and its placement are already in the checked folds. This is a local marker certificate; exact same-parent installation and the overall allocator/physical state interpretation are not thereby obtained. No remaining independent marker algebra is deferred to Kani.
+
+- **tx2_common/S2.** Corrected NLT_CompleteRoot.root is reused at the SAME parsed arguments, including its independent C04 stopped arm; proof57607 is derived internally and caller publicBound/Root0 retained. The actual compiled child's full heap/allocator/borrow/ownership/effect footprint is not installed as a Kani contract. Generic-record controls expose the extra interface issue: a concrete full-record wrapper checks locally, but pinned Kani rejects substitution for generic H even with matching generic arity and an explicit instantiation (K118/K119). The ordinary generic H.digest record channel works in a minimal no-allocator control; it is not an interpretation of065's complete physical footprint. No extra SDK/allocator state is invented inside a scalar record. Completing this member requires new native full-footprint evidence, not another RowSpec wrapper. RouteB is not silently adopted on the actual064/065 call merely because its direct Result shape controls pass while composition fails.
+
+- **064 return/S3 and full parent.** NMD_ComputedFold defines an executable complete-outcome G fold and proves equality with NLW's complete selected-child transcription, then uses the corrected NLT candidate. All independent stops remain distinct from returned Results. ChildAt/Segments and physical/native interpretation remain explicit premises; no actual compiled parent producer supplies them. Thus no parent native segment set or row root is emitted. The missing same-parent interpretation cannot be manufactured by a Lean projection or by turning addresses into byte identity.
+
+- **Guard/ProgramResult method shapes.** Ref/RefMut/ProgramResult verified stubs reject missing Arbitrary. Safe-constructor/local-record tests are bounded minimal interface calibrations only; they do not extend to live SDK borrow aliases, arbitrary guard payloads or allocator ownership without their full child packet and caller-established domain.064 itself has no Ref/RefMut/ProgramResult child return, so more unrelated SDK wrapper proofs are outside this slice. No unreviewed stronger precondition is promoted.
+
+- **Newest-tool information.** Same-workspace, hash-identical NEF_K002 Rust sources falsely pass on0.67 and correctly fail on0.68; literal-None0.68 control passes. Pins/quarantine remain unchanged. A toolchain adoption is outside this worker's authorization. Static-writing reproductions earn no verification credit.
+
+## Lean allowance
+
+Lean allowance is not exhausted. The complete-outcome segment relation, literal computed fold equality, selected-child candidate elimination, argument-domain proof, and all new top-theorem audits have been compiled. The final combined gate passes: headline import, NFX17297 modules/zero defects, and9 standard-only raw roots. No assigned independent mathematical lemma is left uncompiled. Every remaining064 obligation above needs an actual-native producer/full footprint or caller material explicitly assigned to241. Creating another free Physical/Ops record, assumed successful child observation, or parameterized wrapper would not discharge it. The unused allowance is disclosed rather than filled with unchanged replays or vacuous wrappers. Native budget is120/120 actual invocations;7/60 Lean compiles. Final scope totals and receipts are in NMD_AUDIT.json. All owned host jobs are terminal.
+
+## Corpus-scope finding
+
+The inherited scratch archive has15 historical UNUSED Pool files differing from ownerb936275465. Every121 collected metadata closure (120 actual invocations plus one prelaunch graph) excludes aspis-pool. No Pool code was compiled/reached and no Pool parity or ELF result is claimed. Selected verifier/crates/R1-program bodies retain their separate frozen4bb3b3f5 validation. See NMD_UNUSED_POOL_FINDING.json.

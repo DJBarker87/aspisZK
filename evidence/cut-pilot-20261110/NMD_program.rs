@@ -1,46 +1,38 @@
-// Minimal ProgramResult Route B control. Its result domain is exactly
-// Ok(()) or Custom(arg), established by this body, not every SDK error.
+// Isolated one-cell ProgramResult control replacing retired K123's four-u64
+// old-state/rotate/wrapping shape. Complete mutable footprint: one existing u8.
 use super::*;
 use solana_program::{entrypoint::ProgramResult,program_error::ProgramError};
 include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-fn NMD_model(before:[u64;4],arg:u32)->[u64;4]{[arg as u64,before[1].wrapping_add(1),before[2]^(arg as u64),before[3].rotate_left(1)]}
-fn NMD_reply(ok:bool,arg:u32)->ProgramResult{if ok{Ok(())}else{Err(ProgramError::Custom(arg))}}
-#[kani::modifies(state)]
-#[kani::ensures(|out|*state==NMD_model(old(*state),arg)&&*out==NMD_reply(ok,arg))]
-fn NMD_program_child(ok:bool,arg:u32,state:&mut[u64;4])->ProgramResult{
- state[0]=arg as u64;state[1]=state[1].wrapping_add(1);state[2]^=arg as u64;state[3]=state[3].rotate_left(1);NMD_reply(ok,arg)
-}
-#[kani::modifies(state)]
-#[kani::ensures(|out|!(*state==NMD_model(old(*state),arg)&&*out==NMD_reply(ok,arg)))]
-fn NMD_inverse_child(ok:bool,arg:u32,state:&mut[u64;4])->ProgramResult{NMD_program_child(ok,arg,state)}
-fn NMD_construct_program_cut(ok:bool,arg:u32,state:&mut[u64;4])->ProgramResult{
- let before=*state;*state=kani::any();
- let out=if kani::any(){Ok(())}else{Err(ProgramError::Custom(kani::any()))};
- kani::assume(*state==NMD_model(before,arg));kani::assume(out==NMD_reply(ok,arg));out
-}
-fn NMD_construct_program_bad_reply(ok:bool,arg:u32,state:&mut[u64;4])->ProgramResult{let before=*state;*state=kani::any();kani::assume(*state==NMD_model(before,arg));NMD_reply(!ok,arg)}
-fn NMD_construct_program_bad_state(ok:bool,arg:u32,state:&mut[u64;4])->ProgramResult{*state=kani::any();state[0]=arg as u64+1;NMD_reply(ok,arg)}
-fn NMD_parent(){let before:[u64;4]=kani::any();let mut state=before;let ok:bool=kani::any();let arg:u32=kani::any();let out=NMD_program_child(ok,arg,&mut state);assert_eq!(out,NMD_reply(ok,arg));assert_eq!(state,NMD_model(before,arg));}
-#[kani::proof_for_contract(NMD_program_child)]
+fn NMD_matches(out:&ProgramResult,ok:bool,arg:u32)->bool{match out{Ok(())=>ok,Err(ProgramError::Custom(v))=>!ok&&*v==arg,_=>false}}
+#[cfg_attr(NMD_contract_checks,kani::modifies(state))]
+#[cfg_attr(NMD_contract_checks,kani::ensures(|out|*state==word&&NMD_matches(out,ok,arg)))]
+fn NMD_program_child(ok:bool,arg:u32,word:u8,state:&mut u8)->ProgramResult{*state=word;if ok{Ok(())}else{Err(ProgramError::Custom(arg))}}
+#[cfg_attr(NMD_contract_checks,kani::modifies(state))]
+#[cfg_attr(NMD_contract_checks,kani::ensures(|out|!(*state==word&&NMD_matches(out,ok,arg))))]
+fn NMD_inverse_child(ok:bool,arg:u32,word:u8,state:&mut u8)->ProgramResult{NMD_program_child(ok,arg,word,state)}
+fn NMD_construct_program_cut(ok:bool,arg:u32,word:u8,state:&mut u8)->ProgramResult{*state=kani::any();let out=if kani::any(){Ok(())}else{Err(ProgramError::Custom(kani::any()))};kani::assume(*state==word&&NMD_matches(&out,ok,arg));out}
+fn NMD_construct_bad_reply(ok:bool,arg:u32,word:u8,state:&mut u8)->ProgramResult{*state=word;if ok{Err(ProgramError::Custom(arg))}else{Ok(())}}
+fn NMD_construct_bad_state(ok:bool,arg:u32,word:u8,state:&mut u8)->ProgramResult{*state=word^1;if ok{Ok(())}else{Err(ProgramError::Custom(arg))}}
+fn NMD_parent(){let mut state:u8=kani::any();let ok:bool=kani::any();let arg:u32=kani::any();let word:u8=kani::any();let out=NMD_program_child(ok,arg,word,&mut state);assert!(NMD_matches(&out,ok,arg));assert_eq!(state,word);}
+#[cfg(NMD_contract_checks)]
+#[kani::proof_for_contract(NMD_program_child)]#[kani::unwind(4)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMD_program_contract(){let mut state:[u64;4]=kani::any();NMD_program_child(kani::any(),kani::any(),&mut state);}
-#[kani::proof_for_contract(NMD_inverse_child)]
+fn NMD_program_contract(){NMD_parent();}
+#[cfg(NMD_contract_checks)]
+#[kani::proof_for_contract(NMD_inverse_child)]#[kani::unwind(4)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMD_program_inverse(){let mut state:[u64;4]=kani::any();NMD_inverse_child(kani::any(),kani::any(),&mut state);}
-#[kani::proof]
-#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn NMD_program_real(){NMD_parent();}
-#[kani::proof]
-#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NMD_program_inverse(){let mut state:u8=kani::any();NMD_inverse_child(kani::any(),kani::any(),kani::any(),&mut state);}
+#[kani::proof]#[kani::unwind(4)]
 #[kani::stub(NMD_program_child,NMD_construct_program_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NMD_program_cut(){NMD_parent();}
-#[kani::proof]
+#[kani::proof]#[kani::unwind(4)]
+#[kani::stub(NMD_program_child,NMD_construct_bad_reply)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-#[kani::stub(NMD_program_child,NMD_construct_program_bad_reply)]
 fn NMD_program_bad_reply(){NMD_parent();}
-#[kani::proof]
+#[kani::proof]#[kani::unwind(4)]
+#[kani::stub(NMD_program_child,NMD_construct_bad_state)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-#[kani::stub(NMD_program_child,NMD_construct_program_bad_state)]
 fn NMD_program_bad_state(){NMD_parent();}
 #[kani::proof]#[kani::unwind(4)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
