@@ -184,3 +184,30 @@ E004 Charon exit0, initial Aeneas exit2 (deployment-ID child type assertion). L6
 Redirect usage:8/250 formal scopes (five rev3 owner rebuilds, three Aeneas continuation scopes),2/2 fresh extraction scopes,0 Kani. The Aeneas continuations reuse exact hashed LLBC without Charon reruns and are charged as formal scopes; raw receipts retain their commands and nonzero exits. Historical totals434 formal scopes,4 extraction scopes,0 Kani. Remaining242 formal scopes are not a reason to stop. No available member can currently deliver an authorized candidate:217 has no emitted body under either tried loop encoding; its non-emitting-body fallback needs native work outside the zero-Kani allowance (no(bc) emission verdict exists).234 principal proofs follow217 under the redirect; its partial emission additionally needs CLOSED deployment-ID linking via LIB_, with no generated admissions accepted.233 is expressly frozen before both children have candidates;242/241 and every other slice are outside this assignment. No extra support module/audit is substituted for row progress. Lead must resolve the217 emitted-route failure or authorize a precise non-emitting-body native route.
 
 No new theorem/root, caller extent assumption, PoolLib/DeployedIds field, shipped-file change, runtime trust change, wallet/key cleanup or push. No row candidate and no security progress claimed. All objects, source payloads and TMP remain retained. Target not yet established.
+
+## Authorized fallback resumption, stage A
+
+The lead's 2026-11-07 AUTHORIZED FALLBACKS supersedes the prior zero-Kani
+obstruction: 242 formal scopes remain, two additional extractions and 30 Kani
+runs for217 with controls.233 remains frozen. `NMX_FALLBACK_AUTH.json` records
+the precise route and ReviewedTranscription-TX2:217 classification; the lead
+adds the trust appendix on merge. No trust file is changed here.
+
+L669 PASS: `NMX_R3_LaneLength.reference/observation` prove the canonical first
+length arm for EVERY nonexpected length, exact InvalidAccountData and empty
+trace. L670 copies NCV proof objects read-only with source/object hashes;
+L671 fails only on a folded account-size constant in the canonical bridge;
+changed proof L672 PASS. `NMX_R3_ReferenceLength.emitted/canonical` covers the
+same arm of the pinned emitted safe reference and op50 error map. These are
+model-side facts, not a full native217 root or a candidate. New RSL imports
+resolve exclusively to the rebuilt revision3 owners.
+
+L673 prepares the actual frozen decoder in OWN scratch with cfg(kani)-only
+contracts and the byte-identical NCV reference, exact KMX patch and strict
+frozen-lock validator. K001/K002 queue is the first-arm contract and matched
+inversion, with a one-byte symbolic slice. No large-buffer unwind. This native
+cut does not by itself extend a small bounded harness to all Rust slice lengths;
+that byte-independent arm association remains explicit. Expected-length native
+iteration, total emitted-reference/canonical correspondence and the full native
+composition remain OPEN.234 then uses the two deployment-ID opacity amendment;
+233 cannot resume until both candidates. No row credit or security claim.

@@ -3,7 +3,7 @@ from NMX_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def _run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMX_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=4) or (a.startswith('NMX_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
+    assert ((a.startswith('NMX_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=6) or (a.startswith('NMX_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
@@ -19,11 +19,12 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
         flags=E/'NMX_BC_FLAGGED_EXITS.json'
-        assert flags.exists() and target in json.loads(flags.read_text()).get('authorized_targets',[]),'Redirect: zero Kani unless this target is bc-flagged'
-        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<10,'Historical hard Kani cap'
+        auth=json.loads((E/'NMX_FALLBACK_AUTH.json').read_text())
+        assert target in auth['authorized_kani_targets'] or (flags.exists() and target in json.loads(flags.read_text()).get('authorized_targets',[])), 'Kani target outside explicit 217 fallback authorization'
+        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<30,'Fallback hard Kani cap'
     if kind=='extract':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind')=='extract' for x in done)<4
+        assert sum(x.get('kind')=='extract' for x in done)<6
     env=json.loads((E/'NMX_R3_ENV.json').read_text())
     env['TMPDIR']=B+'/NMX_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMX_target'
