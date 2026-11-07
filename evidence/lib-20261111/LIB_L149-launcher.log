@@ -1,0 +1,69 @@
+{"attempt": "LIB_L149", "exit_status": 1, "wall_seconds": 18.81023351708427, "peak_rss_kib": "6430576", "swaps": "0", "print_axioms": ["'LIB_VDomains.eval_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIB_VDomains.eval_prefix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIB_VDomains.eval_asset' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIB_VDomains.finish_of_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LIB_generated/LIB_VDomains.lean:62:15: error: Tactic `assumption` failed
+
+case ok.error
+pub : Public
+b : RSL.Bytes
+env : RSL.Env
+hp : publicDom pub
+hb : LIB_VParsePrefix.semanticBytesDom b
+p : Prefix
+parsed : LIB_VParsePrefix.eval b = Except.ok p
+e : WErr
+transcript : LIB_VPublicTranscript.eval (pub, c1Root p) env = Except.error e
+⊢ match Except.ok p with
+  | Except.error a => True
+  | Except.ok p =>
+    match LIB_VPublicTranscript.eval (pub, c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => finishInputDom pub p t c
+LIB_generated/LIB_VDomains.lean:65:16: error
+...
+blicTranscript.eval (pub, c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => finishInputDom pub p t c
+LIB_generated/LIB_VDomains.lean:65:16: error: Tactic `assumption` failed
+
+case ok.ok.error
+pub : Public
+b : RSL.Bytes
+env : RSL.Env
+hp : publicDom pub
+hb : LIB_VParsePrefix.semanticBytesDom b
+p : Prefix
+parsed : LIB_VParsePrefix.eval b = Except.ok p
+initial : Transcript
+transcript : LIB_VPublicTranscript.eval (pub, c1Root p) env = Except.ok initial
+e : WErr
+begun : LIB_VBegin.eval (p, initial) env = Except.error e
+⊢ match Except.ok p with
+  | Except.error a => True
+  | Except.ok p =>
+    match LIB_VPublicTranscript.eval (pub, c1Root p) env with
+    | Except.error a => True
+    | Except.ok initial =>
+      match LIB_VBegin.eval (p, initial) env with
+      | Except.error a => True
+      | Except.ok (c, t) => finishInputDom pub p t c
+LIB_generated/LIB_VDomains.lean:66:22: error: Invalid `⟨...⟩` notation: The expected type
+  match LIB_VPublicTranscript.eval (pub, c1Root p) env with
+  | Except.error a => True
+  | Except.ok initial =>
+    match LIB_VBegin.eval (p, initial) env with
+    | Except.error a => True
+    | Except.ok (c, t) => finishInputDom pub p t c
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+'LIB_VDomains.eval_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VDomains.eval_prefix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VDomains.eval_asset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIB_VDomains.finish_of_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbb2f21f65b0446e09b2590825f6916e3.scope; invocation ID: ab393134bd6e46f581cb83cc6045f5cb

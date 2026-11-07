@@ -5,7 +5,8 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-lib-20261111';C='/home/dombarker/project-offloads/codex-cx-lib-20261111';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'LIB_HOLD').exists():sys.exit(75)
 guard=E/'LIB_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('LIB_L[0-9]{3}',a) and 1<=int(a[-3:])<=300 and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('LIB_L[0-9]{3}',a) and 1<=int(a[-3:])<=999 and not (E/a).exists()
+assert int(a[-3:])<93 or sum(1 for z in E.glob('LIB_L[0-9][0-9][0-9]/receipt.json') if int(z.parent.name[-3:])>=93)<250
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -64,7 +65,15 @@ if kind=='lean':
  n='LIB_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'LIB_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LIB_generated','-o','LIB_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['LIB_Driver','LIB_ProofDriver','LIB_PoolProofDriver','LIB_PoolDriver']:command+=['-c','LIB_native/'+target+'.c']
-else:raise ValueError('LIB runner supports one Lean module per scope')
+elif kind=='audit':
+ if target=='pins':
+  sources=['LIB_pin.py','LIB_SELECTED_MODULES.json','LIB_FINAL_SOURCE_PINS.json','LIB_AUDITOR_PIN.json','LIB_FINAL_AUDIT_SUMMARY.json']
+  command=['python3','LIB_pin.py']
+ else:
+  sources=['LIB_audit.py','LIB_AUDIT_ROOTS.json','LIB_AUDIT_MODULES.json','LIB_AUDITOR_PIN.json','LIB_REUSED_AUDITOR_SOURCE.txt']
+  command=['python3','LIB_audit.py',target]
+ for n in sources:files[n]=(E/n).read_text()
+else:raise ValueError('LIB runner supports one Lean module or one own-root audit per scope')
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/LIB_tmp',CARGO_TARGET_DIR=B+'/LIB_target',LEAN_PATH=':'.join([B+'/LIB_objects']+json.loads((E/'LIB_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
@@ -100,6 +109,10 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'LIB_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'LIB_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['LIB_LOADED_scan.jsonl','LIB_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
+if {target!r}=='pins':
+ for n in ['LIB_EXPORT.json','LIB_FINAL_HOST.json','LIB_CLOSURE_PINS.json.sha256']:
+  out[n]=(b/n).read_text()
+ out['LIB_CLOSURE_PINS.json.xz.hex']=(b/'LIB_CLOSURE_PINS.json.xz').read_bytes().hex()
 if {target!r} in ['close','review-close','review-retention']:
  for n in ['LIB_PREDECESSOR_COMPARISON.json','LIB_EXPORT.json','LIB_TOOL_PINS.json','LIB_CLOSURE_PINS.json.sha256']:
   if (b/n).exists():out[n]=(b/n).read_text()
