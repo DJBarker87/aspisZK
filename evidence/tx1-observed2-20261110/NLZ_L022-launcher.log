@@ -1,0 +1,34 @@
+{"attempt": "NLZ_L022", "exit_status": 1, "wall_seconds": 23.873772986931726, "peak_rss_kib": "6311248", "swaps": "0", "print_axioms": ["'AspisR1.NLZ_Split087.split' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLZ_generated/NLZ_Split087.lean:16:70: error: No goals to be solved
+'AspisR1.NLZ_Split087.split' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLZ_Split087.split : ∀ (h : Heap) (logical : Window) (bytes : List U8),
+  View h logical bytes →
+    logical.length = 14759 →
+      View h (subwindow logical 0 13831) (List.take 13831 bytes) ∧
+        View h (subwindow logical 13831 928) (List.take 928 (List.drop 13831 bytes)) ∧
+          Disjoint (subwindow logical 0 13831) (subwindow logical 13831 928) :=
+fun h logical bytes view extent =>
+  have left :=
+    subview h logical bytes 0 13831 view
+      (Eq.mpr (id (congrArg (fun _a => 0 + 13831 ≤ _a) extent))
+        (Deci
+...
+NLZ_generated/NLZ_Split087.lean:16:70: error: No goals to be solved
+'AspisR1.NLZ_Split087.split' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLZ_Split087.split : ∀ (h : Heap) (logical : Window) (bytes : List U8),
+  View h logical bytes →
+    logical.length = 14759 →
+      View h (subwindow logical 0 13831) (List.take 13831 bytes) ∧
+        View h (subwindow logical 13831 928) (List.take 928 (List.drop 13831 bytes)) ∧
+          Disjoint (subwindow logical 0 13831) (subwindow logical 13831 928) :=
+fun h logical bytes view extent =>
+  have left :=
+    subview h logical bytes 0 13831 view
+      (Eq.mpr (id (congrArg (fun _a => 0 + 13831 ≤ _a) extent))
+        (Decidable.byContradiction fun a => split._proof_1 logical a));
+  have right :=
+    subview h logical bytes 13831 928 view
+      (Eq.mpr (id (congrArg (fun _a => 13831 + 928 ≤ _a) extent)) (le_refl (13831 + 928)));
+  ⟨left, ⟨right, Or.inr (Or.inl (id (id (Decidable.byContradiction fun a => split._proof_2 logical a))))⟩⟩
+
+Running as unit: run-rc0d07a33a1df4da8bc4bd190dee38768.scope; invocation ID: feaf3aa5db5e471ea302351b404de505

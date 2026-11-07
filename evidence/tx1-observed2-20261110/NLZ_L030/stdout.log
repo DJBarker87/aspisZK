@@ -1,0 +1,28 @@
+'AspisR1.NLZ_Split087.split' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLZ_Split087.split : ∀ (h : Heap) (logical : Window) (bytes : List U8),
+  View h logical bytes →
+    logical.length = 14759 →
+      View h (subwindow logical 0 13831) (List.take 13831 bytes) ∧
+        View h (subwindow logical 13831 928) (List.take 928 (List.drop 13831 bytes)) ∧
+          Disjoint (subwindow logical 0 13831) (subwindow logical 13831 928) :=
+fun h logical bytes view extent =>
+  have left :=
+    subview h logical bytes 0 13831 view (Decidable.byContradiction fun a => split._proof_1 logical extent a);
+  have right :=
+    subview h logical bytes 13831 928 view (Decidable.byContradiction fun a => split._proof_2 logical extent a);
+  ⟨left,
+    ⟨right,
+      Or.inr
+        (Or.inl
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (congr
+                    (congrArg HAdd.hAdd
+                      (congrArg Window.offset
+                        (congrFun' (congrArg (Window.mk logical.allocation) (add_zero logical.offset)) 13831)))
+                    (congrArg Window.length
+                      (congrFun' (congrArg (Window.mk logical.allocation) (add_zero logical.offset)) 13831))))
+                (logical.offset + 13831))
+              (Std.le_refl._simp_1 (logical.offset + 13831)))))⟩⟩

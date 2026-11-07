@@ -16,11 +16,12 @@ structure Observation137 where
 Resource chain, child footprints, abort cleanup and claims ownership are
 mandatory named obligations still missing below; none can be discharged by
 this value projection. It is forbidden as a child packet until strengthened. -/
-def RowSpec_137 (native : NLJ_Observed.Input Unit → Heap → Observation137) : Prop :=
- ∀ i h,
- let o := native i h
+def RowSpec_137 (native : NLJ_Observed.Input Unit → Heap → Window → Observation137) : Prop :=
+ ∀ i h window,
+ i.bytes.val.length=13831 → View h window i.bytes.val →
+ let o := native i h window
  o.initialHeap = h ∧
- View h o.inputWindow i.bytes.val ∧
+ o.inputWindow = window ∧
  NLJ_Observed.Invocation 6 (NLJ_Observed.initial i) o.reply o.log o.events ∧
  PreparedHashCode.run (S1SemanticCode.verify
   (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation))

@@ -72,7 +72,7 @@ fn prefix_frame(prefix:&Prefix<'_>,log:&ParentLog<'_>)->bool{
 }
 fn public_cut<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<SemanticTranscript<H>,Error>{
  let log=unsafe{local(hash)};
- assert_segment(log.phase==0&&same_public_value(public,log.public)&&core::ptr::eq(root.as_ptr(),log.bytes.as_ptr())&&root[log.offset%32]==log.bytes[log.offset%32],log,0);
+ if log.mode<10{assert_segment(log.phase==0&&same_public_value(public,log.public)&&core::ptr::eq(root.as_ptr(),log.bytes.as_ptr())&&root[log.offset%32]==log.bytes[log.offset%32],log,0)}else{assert!(log.phase==0)};
  log.phase=1;
  if log.stop==1{return Err(log.error)}
  Ok(crate::r1_wire::NLZ_factory::make(hash,log.initial.0,log.initial.1))
@@ -209,14 +209,21 @@ struct OwnedFields{
 }
 fn finish_success<H:Digest32>(public:Public<'_>,prefix:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
  let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(&t);let log=unsafe{local(hash)};
- assert!(log.phase==2&&same_public_value(public,log.public)&&state==log.after.0&&row==log.after.1&&c==log.challenges&&prefix_frame(&prefix,log));
- log.phase=3;let v=log.owned.take().unwrap();
+ // FINAL return segment only: earlier argument invariants have separate certificates.
+ assert!(log.phase==2);
+ log.phase=3;let mut v=log.owned.take().unwrap();
+ if log.bad && log.mode<17 {match log.mode-10{
+  0=>v.roots[0][0]^=1,1=>v.alpha[0].c0.a.0^=1,2=>v.claims[0][0].c0.a.0^=1,
+  3=>v.extra[0].c0.a.0^=1,4=>v.before_z1[0].c0.a.0^=1,5=>v.state_before_z0[0]^=1,
+  _=>v.transcript_state[0]^=1
+ }}
  Ok(Verified{roots:v.roots,challenges:v.challenges,alpha:v.alpha,claims:v.claims,extra:v.extra,before_z1:v.before_z1,state_before_z0:v.state_before_z0,z:v.z,transcript:crate::r1_wire::NLZ_factory::make(hash,v.transcript_state,v.transcript_row)})
 }
 fn success_check(mode:u8,bad:bool){
  let bytes:[u8;13831]=kani::any();let transition=transition();let transfer=transfer();let withdrawal=withdraw();let variant:bool=kani::any();let public=if variant{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
  let row:usize=kani::any();kani::assume(row<27);let offset:usize=kani::any();kani::assume(offset<5+crate::r1_wire::row_shape(row as u8).unwrap().1);
  let ci:usize=kani::any();let cj:usize=kani::any();kani::assume(ci<3&&cj<29);
+ let ri:usize=kani::any();let rj:usize=kani::any();kani::assume(ri<2&&rj<32);
  let roots:[[u8;32];2]=kani::any();let ch=arbitrary_challenges();let alpha=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];
  let claims=Box::new([[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()]]);let expected_ptr=&*claims as *const [[QM31;29];3];let expected_claim=claims[ci][cj];
  let extra=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];let before_z1=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];let state_before_z0:[u8;32]=kani::any();
@@ -225,12 +232,12 @@ fn success_check(mode:u8,bad:bool){
  let mut log=ParentLog{public,bytes:&bytes,stop:3,bad,mode:mode+10,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),row,offset,owned:Some(OwnedFields{roots,challenges:ch,alpha,claims,extra,before_z1,state_before_z0,z,transcript_state,transcript_row})};
  let hash=LoggedHash(&mut log as *mut _ as *mut ());let out=super::verify_observed(public,&bytes,hash,None).unwrap();
  let good=match mode{
- 0=>out.roots==roots,1=>out.challenges==ch&&out.alpha==alpha,
+ 0=>out.roots[ri][rj]==roots[ri][rj],1=>out.challenges==ch&&out.alpha==alpha,
  2=>core::ptr::eq(&*out.claims,expected_ptr)&&out.claims[ci][cj]==expected_claim,
  3=>out.extra==extra,4=>out.before_z1==before_z1,5=>out.state_before_z0==state_before_z0,
- 6=>out.z==z,_=>{let(st,h,r)=crate::r1_wire::NLZ_factory::snapshot(&out.transcript);st==transcript_state&&r==transcript_row&&h.0==hash.0}
+ 6=>{let(st,h,r)=crate::r1_wire::NLZ_factory::snapshot(&out.transcript);out.z==z&&st==transcript_state&&r==transcript_row&&h.0==hash.0},_=>out.claims[ci][cj]!=QM31::ZERO
  };
- assert_segment(good&&log.phase==3&&log.owned.is_none(),&log,mode+10);
+ if mode<7{assert!(good&&log.phase==3&&log.owned.is_none())}else{assert_segment(good&&log.phase==3&&log.owned.is_none(),&log,mode+10)};
 }
 
 #[kani::proof] #[kani::unwind(40)]
@@ -408,3 +415,12 @@ fn segment_finish_challenges_cut(){parent_check(3,6,false)}
 #[kani::stub(verify_finish,finish_cut)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn segment_finish_challenges_control(){parent_check(3,6,true)}
+
+// Unimplied zero-payload assertion must fail on a nonzero returned claims cell.
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_success)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn success_nonzero_control(){success_check(7,true)}

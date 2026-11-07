@@ -32,6 +32,7 @@ theorem subview (h : Heap) (w : Window) (bytes : List U8) (offset length : Nat)
    rw [←slice_nested o.initialized w.offset w.length offset length inside,initialized]
    simp only [List.drop_replicate,List.take_replicate]
    rw [Nat.min_eq_left (by omega)]
+   rfl
 #print axioms slice_nested
 #print axioms subview
 end AspisR1.NLZ_Resources

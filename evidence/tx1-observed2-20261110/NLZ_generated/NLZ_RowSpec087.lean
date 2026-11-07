@@ -17,11 +17,12 @@ structure Observation087 where
 /-- Draft ONLY. A fixed cfg and complete resource chain/allocator installation
 must replace this schema before (be) admission. No native producer is proved. -/
 def RowSpec_087 (cfg : NLJ_Prepare.Configuration)
- (native : NLJ_Prepare.Input Unit → Heap → Observation087) : Prop :=
- ∀ i h,
- let o := native i h
+ (native : NLJ_Prepare.Input Unit → Heap → Window → Observation087) : Prop :=
+ ∀ i h window,
+ i.proof.val.length=57607 → View h window i.proof.val →
+ let o := native i h window
  o.initialHeap = h ∧
- View h o.proofWindow i.proof.val ∧
+ o.proofWindow = window ∧
  NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) o.reply o.log o.events ∧
  PreparedHashCode.run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std
   i.digest i.publicValue i.proof i.hash i.scratch) = (o.log,o.reply)
