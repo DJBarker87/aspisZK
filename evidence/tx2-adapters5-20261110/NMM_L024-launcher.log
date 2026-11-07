@@ -1,0 +1,44 @@
+{"attempt": "NMM_L024", "exit_status": 1, "wall_seconds": 20.80837113619782, "peak_rss_kib": "6328652", "swaps": "0", "print_axioms": ["'NMM_LaneSymbolic.bad_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.run_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.body_recorded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.transcription' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMM_generated/NMM_LaneSymbolic.lean:15:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply] `NIJ_EntryStatus.Err`
+  [apply] `NIX_CircleLogLaw.Err`
+  [apply] `NIL_Carriers.Cohort.Err`
+  [apply] `NIL_Carriers.Fresh.Err`
+  [apply] `core.result.Result.Err`
+NMM_generated/NMM_LaneSymbolic.lean:18:14: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply] `NIJ_EntryStatus.Err`
+ 
+...
+ult.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData :=
+⋯
+'NMM_LaneSymbolic.bad_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.run_recorded : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
+  (levels : List (Fin 20)) (before : Frontier),
+  NMM_LaneReplies.run (fun position bytes => ok (oracle position bytes)) p next levels before =
+    ok (NKF_LaneTrace.run NLK_LaneTable.empty (NLK_LaneLoop.occupied next) (raw oracle p) levels before) :=
+⋯
+'NMM_LaneSymbolic.run_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.body_recorded : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized),
+  NMM_LaneReplies.sized (fun position input => ok (oracle position input)) p = ok (body oracle p) :=
+⋯
+'NMM_LaneSymbolic.body_recorded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.transcription : ∀ (oracle : PureOracle) (bytes : Slice U8),
+  NMM_LaneReplies.value (fun position input => ok (oracle position input)) bytes = ok (value oracle bytes) :=
+⋯
+'NMM_LaneSymbolic.transcription' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.projection : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized) (byte : Fin 32) (level : Fin 20)
+  (word : Fin 8), NMM_LaneScalarSource.mapOut byte level word (body oracle p) = fields oracle p byte level word :=
+⋯
+'NMM_LaneSymbolic.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.closed : ∀ (bytes : Slice U8),
+  ok (value (fun x => NLK_LaneDigest.decode) bytes) = NLK_LaneProgram.reference bytes :=
+⋯
+'NMM_LaneSymbolic.closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8bc4e90e70664695bd359bea36a757fc.scope; invocation ID: fcd83ecac2a146faabb4c3afcf2eb68a

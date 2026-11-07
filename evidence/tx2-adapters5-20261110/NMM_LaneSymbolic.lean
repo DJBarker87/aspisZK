@@ -10,7 +10,8 @@ abbrev PureOracle := Nat → Array U8 32#usize → core.result.Result Node Unit
 def raw (oracle : PureOracle) (p : NLK_LaneInput.Sized) (level : Fin 20) :=
  oracle (level.val+1) (NLK_LaneInput.frontier p level)
 
-def body (oracle : PureOracle) (p : NLK_LaneInput.Sized) :=
+def body (oracle : PureOracle) (p : NLK_LaneInput.Sized) :
+ core.result.Result NMM_LaneTranscription.Lane NMM_LaneTranscription.PE :=
  match NLK_LaneHeader.sourcePrefix p with
  | .Err e => .Err e
  | .Ok f =>
@@ -53,8 +54,8 @@ theorem body_recorded (oracle : PureOracle) (p : NLK_LaneInput.Sized) :
  | Err e => rfl
  | Ok f =>
   cases r : oracle 0 (NLK_LaneInput.root p) with
-  | Err e => rfl
-  | Ok root => simp only [bind_tc_ok,run_recorded];rfl
+  | Err e => simp only [bind_tc_ok,r]
+  | Ok root => simp only [bind_tc_ok,r,run_recorded]
 
 theorem transcription (oracle : PureOracle) (bytes : Slice U8) :
  NMM_LaneReplies.value (fun position input => ok (oracle position input)) bytes = ok (value oracle bytes) := by
@@ -64,7 +65,8 @@ theorem transcription (oracle : PureOracle) (bytes : Slice U8) :
  · rfl
 
 def fields (oracle : PureOracle) (p : NLK_LaneInput.Sized)
- (byte : Fin 32) (level : Fin 20) (word : Fin 8) :=
+ (byte : Fin 32) (level : Fin 20) (word : Fin 8) :
+ core.result.Result NMM_LaneScalarSource.Fields NMM_LaneTranscription.PE :=
  match NLK_LaneHeader.sourcePrefix p with
  | .Err e => .Err e
  | .Ok f =>

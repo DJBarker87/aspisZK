@@ -1,0 +1,45 @@
+{"attempt": "NMM_L025", "exit_status": 0, "wall_seconds": 20.76193314488046, "peak_rss_kib": "6366996", "swaps": "0", "print_axioms": ["'NMM_LaneSymbolic.bad_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.run_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.body_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMM_LaneSymbolic.closed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NMM_generated/NMM_LaneSymbolic.lean:45:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NMM_LaneSymbolic.bad_length : ∀ (oracle : PureOracle) (bytes : Slice U8),
+  (↑bytes).length ≠ 768 →
+    value oracle bytes = core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData :=
+⋯
+'NMM_LaneSymbolic.bad_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.run_recorded : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
+  (levels : List (Fin 20)) (before : Frontier),
+  NMM
+...
+gth ≠ 768 →
+    value oracle bytes = core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData :=
+⋯
+'NMM_LaneSymbolic.bad_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.run_recorded : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized) (next : U64)
+  (levels : List (Fin 20)) (before : Frontier),
+  NMM_LaneReplies.run (fun position bytes => ok (oracle position bytes)) p next levels before =
+    ok (NKF_LaneTrace.run NLK_LaneTable.empty (NLK_LaneLoop.occupied next) (raw oracle p) levels before) :=
+⋯
+'NMM_LaneSymbolic.run_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.body_recorded : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized),
+  NMM_LaneReplies.sized (fun position input => ok (oracle position input)) p = ok (body oracle p) :=
+⋯
+'NMM_LaneSymbolic.body_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.transcription : ∀ (oracle : PureOracle) (bytes : Slice U8),
+  NMM_LaneReplies.value (fun position input => ok (oracle position input)) bytes = ok (value oracle bytes) :=
+⋯
+'NMM_LaneSymbolic.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.projection : ∀ (oracle : PureOracle) (p : NLK_LaneInput.Sized) (byte : Fin 32) (level : Fin 20)
+  (word : Fin 8), NMM_LaneScalarSource.mapOut byte level word (body oracle p) = fields oracle p byte level word :=
+⋯
+'NMM_LaneSymbolic.projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NMM_LaneSymbolic.closed : ∀ (bytes : Slice U8),
+  ok (value (fun x => NLK_LaneDigest.decode) bytes) = NLK_LaneProgram.reference bytes :=
+⋯
+'NMM_LaneSymbolic.closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0c8704cd9a17423692ed2ae50cc2b519.scope; invocation ID: d8afe6e0d3a64df6a7b74a7c54d79619

@@ -1,10 +1,19 @@
 import NMM_LaneSymbolic
+import Init.Data.List.Nat.Pairwise
+import Init.Data.Fin.Lemmas
 set_option autoImplicit false
 set_option pp.proofs false
 noncomputable section
 namespace NMM_LaneSuccess
 open Aeneas Aeneas.Std Result AspisR1 NKP_LaneCuts
 attribute [local instance] Classical.propDecidable
+
+theorem levels_unique (n : Nat) : (List.finRange n).Nodup := by
+ change List.Pairwise (fun (a b : Fin n) => a ≠ b) (List.finRange n)
+ apply List.pairwise_iff_getElem.mpr
+ intro i j hi hj hij same
+ have equal : i=j := by simpa only [List.getElem_finRange,Fin.val_cast] using congrArg Fin.val same
+ omega
 
 theorem loop (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized)
  (next : U64) (nodes : Frontier)
@@ -17,7 +26,7 @@ theorem loop (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized)
  have final : NMM_LaneAcceptance.writeAll nodes NLK_LaneLoop.levels NLK_LaneLoop.zero = nodes := by
   funext level
   apply NMM_LaneAcceptance.writeAll_selected
-  · simp [NLK_LaneLoop.levels]
+  · exact levels_unique 20
   · simp [NLK_LaneLoop.levels]
  rw [final]
 
@@ -34,12 +43,15 @@ theorem body (oracle : NMM_LaneSymbolic.PureOracle) (p : NLK_LaneInput.Sized)
  NMM_LaneSymbolic.body oracle p =
  .Ok (NKP_LaneCarrier.make f.bump f.master f.lane f.next root nodes) := by
  unfold NMM_LaneSymbolic.body
- rw [header,rootReply,loop oracle p f.next nodes frontierReplies guards]
+ simp only [header,rootReply]
+ rw [loop oracle p f.next nodes frontierReplies guards]
  have good : ¬ (f.next.val=0 ∧ root≠NLK_LaneTable.final) := by
   intro bad
   exact bad.2 (terminal bad.1)
  simp only [NKP_LaneCompletion.finish,if_neg good]
 
+#print levels_unique
+#print axioms levels_unique
 #print loop
 #print axioms loop
 #print body
