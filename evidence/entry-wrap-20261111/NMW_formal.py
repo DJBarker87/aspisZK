@@ -7,7 +7,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMW_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<50,'Actual Lean compiler budget exhausted (50)' 
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<50,'Actual Lean compiler budget exhausted (50)'
         if target not in ['NMW_COMBINED_IMPORT','NMW_ProofDriver','NMW_ScanDriver']:
             assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<48,'Reserve two final import/audit compiler slots'
     if kind=='kani':
@@ -87,7 +87,7 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
     out=json.loads(r.stdout)
     for n,t in out.items():
-        p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+        p=E/('NMW_'+n if n.startswith('NEP_') else n);p.parent.mkdir(parents=True,exist_ok=True)
         if n.endswith('.base64'):
             import base64
             (E/n.removesuffix('.base64')).write_bytes(base64.b64decode(t))
