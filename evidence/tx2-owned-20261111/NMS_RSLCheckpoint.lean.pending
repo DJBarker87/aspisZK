@@ -34,7 +34,7 @@ theorem model (a : r1_pool_adapter.owned.OwnedAccount) (program : solana_pubkey.
  rw [NHJ_CheckpointPacket.decode_encode a.length (native_domain a safe)]
  unfold RSL.verifierCheckpoint
  dsimp only [account,RSL.OwnedAccount.data_len]
- rw [NMS_RSLScalarEq.key_neq]
+ rw [NMS_RSLScalarEq.key_neq a.owner program]
  split
  · rfl
  · cases stored : a.length with

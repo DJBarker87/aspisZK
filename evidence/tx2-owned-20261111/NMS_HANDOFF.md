@@ -58,3 +58,16 @@ GeneralGetters needed a stored-value case split; normal trace projections
 needed explicit event equality; obsolete NDO_RequestOperations conflicts
 with NFY_Part042 ownership, so coherent NFY closure and NMS_RequestModels
 definitions replace that import. Failed inspections are retained, not credits.
+
+L230/L231 compile raw Rust-try transport and the actual typed064-domain
+transport using COMPLETE interpreted getter observations (not raw getter
+success assumed at the root). L250 compiles literal241 substitution of the
+full242 packet at original program/accounts/data/slot. L252/L253 formally
+preserve every normal Ok/Err observation under the clone-reference change,
+conditional on the recursive child normal-transport property. Abort arms
+are explicitly excluded from that normal-only lemma.
+
+Optional restricted-domain CLOSED238 carrier helper NMS_RSLCheckpoint was
+retired to .lean.pending after L254/L260 failed the same scalar-key rewrite
+shape. It is not imported or credited; checkpoint-native installation lies
+inside OPEN233, whose full packet remains the parent boundary.

@@ -18,22 +18,23 @@ theorem fold (ops : Ops) (effects : Effects)
  Refines (NMS_Effect241.stage2 ops effects program accounts data slot)
   (NMS_Effect241.stage2 ops {effects with validate := validate} program accounts data slot) := by
  unfold NMS_Effect241.stage2
+ dsimp only
  cases count : (Slice.len accounts != 7#usize) with
- | true => exact refl _
+ | true => exact NMS_RSLRefine.refl _
  | false =>
-   apply NMS_RSLRefine.bind (refl _)
-   intro prefix
-   apply NMS_RSLRefine.bind (refl _)
+   apply NMS_RSLRefine.bind (NMS_RSLRefine.refl _)
+   intro dataPrefix
+   apply NMS_RSLRefine.bind (NMS_RSLRefine.refl _)
    intro magic
-   apply NMS_RSLRefine.bind (refl _)
+   apply NMS_RSLRefine.bind (NMS_RSLRefine.refl _)
    intro magicSlice
-   apply NMS_RSLRefine.bind (refl _)
+   apply NMS_RSLRefine.bind (NMS_RSLRefine.refl _)
    intro different
    cases different with
-   | true => exact refl _
+   | true => exact NMS_RSLRefine.refl _
    | false =>
      apply NMS_RSLRefine.bind child
      intro reply
-     exact refl _
+     exact NMS_RSLRefine.refl _
 #print axioms fold
 end NMS_241ValidateSubstitution
