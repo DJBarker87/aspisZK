@@ -5,6 +5,7 @@ E=Path(__file__).resolve().parent
 assert not(E/'NMQ_CLIENT_ACTIVE').exists(),'Do not archive active client outputs'
 rows=[]
 for p in list(E.rglob('*')):
+ if p.name=='NMQ_finish-client.log':continue
  if p.is_file()and p.suffix!='.xz'and(p.suffix in ['.log','.c']or p.stat().st_size>20_000_000):
   b=p.read_bytes();Path(str(p)+'.sha256').write_text(hashlib.sha256(b).hexdigest()+'\n');Path(str(p)+'.xz').write_bytes(lzma.compress(b,preset=6));p.unlink();rows.append(str(p.relative_to(E)))
 for p in E.rglob('*.xz'):

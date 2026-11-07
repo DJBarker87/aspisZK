@@ -120,7 +120,7 @@ if {target!r} in ['close','review-close','review-retention']:
  for n in ['NMQ_PREDECESSOR_COMPARISON.json','NMQ_EXPORT.json','NMQ_TOOL_PINS.json','NMQ_CLOSURE_PINS.json.sha256']:
   if (b/n).exists():out[n]=(b/n).read_text()
  if (b/'NMQ_CLOSURE_PINS.json.xz').exists():out['NMQ_CLOSURE_PINS.json.xz.hex']=(b/'NMQ_CLOSURE_PINS.json.xz').read_bytes().hex()
-if {target!r} in ['retention','review-retention']:
+if {target!r} in ['close','retention','review-retention']:
  if (b/'NMQ_FINAL_HOST.json').exists():out['NMQ_FINAL_HOST.json']=(b/'NMQ_FINAL_HOST.json').read_text()
 for name in ['NMQ_Driver','NMQ_ProofDriver','NMQ_PoolProofDriver','NMQ_PoolDriver']:
  p=b/'NMQ_native'/name

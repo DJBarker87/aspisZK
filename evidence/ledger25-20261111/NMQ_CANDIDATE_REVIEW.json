@@ -1,257 +1,341 @@
 {
- "row": "TX2:064",
- "primary_root": "NMN_064.root",
- "owner_module": "NMN_064",
- "status": "SOURCE_CERTIFICATES_REVIEWED_GATE_PENDING",
- "gate_admitted": false,
- "basis_obligation_statement_hash": "93162e763939a35e4797277ac517689df13bc7c63fe2530b69dfef852b14f979",
  "basis_obligation_sha256": "93162e763939a35e4797277ac517689df13bc7c63fe2530b69dfef852b14f979",
- "source_identity": {
-  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
-  "parent_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
-  "overlay_parent_sha256": "769820e272f879f53ac28949f513e234237cf18280a24ce237771485cda53051",
-  "only_change": "cfg(kani) harness module appended"
+ "basis_obligation_statement_hash": "93162e763939a35e4797277ac517689df13bc7c63fe2530b69dfef852b14f979",
+ "canonical_child_packets": [
+  {
+   "canonical_roots": [
+    {
+     "obligation_statement_sha256": "a5e3eb41e36b5aaf7fd887960c1d495edbb181eb9372f665387408b589c99ca2",
+     "owner_module": "NJS_Parse",
+     "root": "NJS_Parse.source"
+    },
+    {
+     "obligation_statement_sha256": "45ee44a74fad4b1204d1c3e0f627da28e39690895c45676e71a8833367e5fa7c",
+     "owner_module": "NJS_Parse",
+     "root": "NJS_Parse.proof_bytes"
+    }
+   ],
+   "child": "parse_shape",
+   "model_transport": "NLE_ParseInstall.emitted / success",
+   "owner_module": "NJS_Parse",
+   "retained_domain": [],
+   "row": "TX2:057"
+  },
+  {
+   "canonical_roots": [
+    {
+     "obligation_statement_sha256": "671f5c02736987e098de2a0fe18b2e7c91c61481a560335e3eae6a6167befbd1",
+     "owner_module": "NFS_QueryLoopRoot",
+     "root": "AspisR1.NFS_QueryLoopRoot.root"
+    }
+   ],
+   "child": "mark",
+   "model_transport": "NHV_ReleaseOps.mark",
+   "owner_module": "NFS_QueryLoopRoot",
+   "retained_domain": [
+    {
+     "discharged_by": "NEO-observer-root:TX2:118",
+     "name": "NEO::deployed_mark_none.PacketDomain",
+     "statement": "Deployed cfg-constant None; every Phase after its original argument evaluation"
+    }
+   ],
+   "row": "TX2:118"
+  },
+  {
+   "canonical_roots": [
+    {
+     "obligation_statement_sha256": "66e0a2599034d202be7ef3957dfc77aed3f1c2c1c61304cea8628eb2c3bb7f8a",
+     "owner_module": "NLT_CompleteRoot",
+     "root": "NLT_CompleteRoot.root"
+    }
+   ],
+   "child": "tx2_common",
+   "model_transport": "NLT_CompleteRoot.root",
+   "owner_module": "NLT_CompleteRoot",
+   "retained_domain": [],
+   "row": "TX2:065"
+  }
+ ],
+ "canonical_children": [
+  {
+   "child": "parse_shape",
+   "derived": "NMN_064.parser",
+   "model_definition_or_transport": "NLE_ParseInstall.emitted / success",
+   "same": "s.args.proof"
+  },
+  {
+   "child": "mark",
+   "derived": "NMN_Observer and NLW full fold",
+   "model_definition_or_transport": "NHV_ReleaseOps.mark",
+   "same": "deployed None, Parsed"
+  },
+  {
+   "child": "tx2_common",
+   "derived": "NMK_Domain.child / NLW_064CandidateFold.child",
+   "model_definition_or_transport": "NLT_CompleteRoot.root",
+   "same": "s.args.digest/publicBytes/proof/checkpoint/hash"
+  }
+ ],
+ "common_stop": "Independent stopped End carries only ordered prefix; no returned native reply, post-abort world, cleanup or suffix.",
+ "configuration_identical_except_harness": true,
+ "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+ "full_Result_domains": {
+  "common": "unit success +8 Error variants",
+  "parser": "3 Variant successes +8 Error variants",
+  "stopped": "panic branch K022; prefix only under bl3"
  },
+ "full_source_fingerprint": {
+  "NMN_gate.py": "d16359b8a8a5484b6485be8f0e201210273b2277d4c0a0bc53ca4e601c13c271",
+  "NMN_source_overlays.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "NMN_src/crates/aspis-r1-cost-probe/src/NMN_native.rs": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+  "NMN_src/crates/aspis-r1-cost-probe/src/candidate.rs": "769820e272f879f53ac28949f513e234237cf18280a24ce237771485cda53051",
+  "NMN_src/crates/aspis-r1-cost-probe/src/lib.rs": "7d5c0a2542523eb7517e2fe86c91f0d56ee33f59e0c7a7f3284d8e40eb014d51"
+ },
+ "full_source_fingerprint_sha256": "eb616e94de153a38251dfc1234fa48bf40742cba5cf05be5f1e60eceb5a27073",
+ "gate_admitted": true,
+ "hypothesis_inventory": {
+  "cuts": "Existing aq2 per-occurrence reservations/locations/native input frames, nested in canonical CLOSED child owners",
+  "native": "subject of conclusion; full entered parser/common executions at recorded arguments, not endpoint laws",
+  "no_child_success_hypothesis": true,
+  "no_extra_global_state": true,
+  "no_free_Ops_Run": true,
+  "original_generics": "H, Ambient, X, original Frame/digest/hash/world",
+  "own_input_Prop": "Exactly four fields of Domain on ORIGINAL arguments, bf2"
+ },
+ "kernel_statement": {
+  "obligation_statement": "\u2200 {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes \u2192 AspisV8R19.SourceDuplexStep.State)\n  (s : NLW_Full064.Frame Ambient X) (domain : @NMN_064.Domain X (@NLW_Full064.Frame.args Ambient X s)),\n  @NMN_064.RowSpec Ambient X H s",
+  "owner_module": "NMN_064",
+  "root": "NMN_064.root"
+ },
+ "kmx_stub_sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+ "marker_owner_note": "TX2:118 canonical enclosing owner NFS_QueryLoopRoot; inherited NEO deployed_mark_none.PacketDomain is cfg-constant None at EVERY Phase after original argument evaluation. NHV_ReleaseOps.mark is the existing model definition/transport, not a new competing packet owner; Parsed is inside that retained domain. NMD K078/K079 and K080/K082 are supporting controlled actual(None,Parsed) calibration, not a new row promotion.",
  "native_certificates": [
   {
    "attempt": "NMN_K014",
-   "root": "verifier::candidate::NMN_native::NMN_auth_return",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 0,
-   "verdict": "PASS",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "e29d395b27c244be8f6195cfa7e1d7662681e11870a21cc82be408a9b5f9aa8f",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K014/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K014/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_return",
+   "verdict": "PASS"
   },
   {
    "attempt": "NMN_K015",
-   "root": "verifier::candidate::NMN_native::NMN_auth_reject",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 0,
-   "verdict": "PASS",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "a9756854f5cf17c5463fd62dd6be344315a3cadc1f19b844a8154793b17ec59a",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K015/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K015/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_reject",
+   "verdict": "PASS"
   },
   {
    "attempt": "NMN_K016",
-   "root": "verifier::candidate::NMN_native::NMN_auth_reply_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "b0e93896851e19a5efc9ad8393e834d3ebd9fef6427edc02afb1d3cc35673743",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K016/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K016/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_reply_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K017",
-   "root": "verifier::candidate::NMN_native::NMN_auth_argument_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "3df31e916424b96303b68bab1037a13c44ffdef229986efcf83ca0cb7fa61965",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K017/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K017/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_argument_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K018",
-   "root": "verifier::candidate::NMN_native::NMN_auth_write_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "3dddaa48067d5980f99d496358470946ff7ee4cc2e0e78cc4176360ac998cd2c",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K018/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K018/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_write_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K019",
-   "root": "verifier::candidate::NMN_native::NMN_reject_reply_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "9284d075647c24301628fd6ed4e8393f8bd42a6ad2049000fa90bea795f7859c",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K019/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K019/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_reject_reply_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K020",
-   "root": "verifier::candidate::NMN_native::NMN_reject_argument_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "49d026654047c0bddb307224dc7e3ae5e2c72f1411f5a93c4e692d797ce6e9e3",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K020/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K020/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_reject_argument_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K021",
-   "root": "verifier::candidate::NMN_native::NMN_reject_write_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "06b52d73429c8e41af4ff503572bb7438a3e3adfc33b6a8ed74b00c17f204e20",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K021/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K021/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_reject_write_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K022",
-   "root": "verifier::candidate::NMN_native::NMN_common_stop_control",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "7eda53740f3bc7b9bf9d56975bca77bee7d1fe2cd9a78867d787e346448d51a7",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K022/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K022/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_common_stop_control",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K023",
-   "root": "verifier::candidate::NMN_native::NMN_auth_return_stability",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 0,
-   "verdict": "PASS",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "77729da252964355e88a4e97c54a058d2199ce061ebbe3e1e9853d5b0379545c",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K023/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K023/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_return_stability",
+   "verdict": "PASS"
   },
   {
    "attempt": "NMN_K024",
-   "root": "verifier::candidate::NMN_native::NMN_auth_reply_stability",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "34bad4dfc0e07290fb9965034ec09b97f0b03eaa005b0cc9f546d452bd7d038d",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K024/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K024/receipt.json",
+   "root": "verifier::candidate::NMN_native::NMN_auth_reply_stability",
+   "verdict": "FAIL"
   },
   {
    "attempt": "NMN_K025",
-   "root": "verifier::candidate::NMN_native::KMX_checks::KMX_ptr_correct",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 0,
-   "verdict": "PASS",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "990f9a06eacfe9ec50ad1f1383afc5ae06fe2f766bbb66fcb648c1cbf97f6adb",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K025/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K025/receipt.json",
+   "root": "verifier::candidate::NMN_native::KMX_checks::KMX_ptr_correct",
+   "verdict": "PASS"
   },
   {
    "attempt": "NMN_K026",
-   "root": "verifier::candidate::NMN_native::KMX_checks::KMX_ptr_wrong",
+   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
    "exit": 1,
-   "verdict": "FAIL",
-   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
    "graph_sha256": "17b35f5e4639973c8832a4eb7094966e212444365e1cfa45cf1aa78cc443c0a0",
    "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
    "log_sha256": "68bf5d6f4e33fbf2124cc9cbcfa099f2252d7f68ced6250639af463e34dc5e2e",
-   "configuration_sha256": "c134c9171de1adbf83a40333742713cb9a0e2529d2ef01381e17557b781a8efa",
-   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K026/receipt.json"
+   "native_sha256": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
+   "receipt": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_K026/receipt.json",
+   "root": "verifier::candidate::NMN_native::KMX_checks::KMX_ptr_wrong",
+   "verdict": "FAIL"
   }
  ],
- "configuration_identical_except_harness": true,
- "full_source_fingerprint": {
-  "NMN_src/crates/aspis-r1-cost-probe/src/lib.rs": "7d5c0a2542523eb7517e2fe86c91f0d56ee33f59e0c7a7f3284d8e40eb014d51",
-  "NMN_src/crates/aspis-r1-cost-probe/src/candidate.rs": "769820e272f879f53ac28949f513e234237cf18280a24ce237771485cda53051",
-  "NMN_src/crates/aspis-r1-cost-probe/src/NMN_native.rs": "69174c7fcdfe75da4bfaf108c51108de4fe638ff59b42b4d11fb954402be3e4c",
-  "NMN_source_overlays.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
-  "NMN_gate.py": "d16359b8a8a5484b6485be8f0e201210273b2277d4c0a0bc53ca4e601c13c271"
- },
- "full_source_fingerprint_sha256": "eb616e94de153a38251dfc1234fa48bf40742cba5cf05be5f1e60eceb5a27073",
- "kmx_stub_sha256": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
- "full_Result_domains": {
-  "parser": "3 Variant successes +8 Error variants",
-  "common": "unit success +8 Error variants",
-  "stopped": "panic branch K022; prefix only under bl3"
- },
- "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
- "write_footprint": "Empty child &mut/account-data/return-data footprint. LOCAL channel writes tested by K018/K021; never a fabricated account frame.",
+ "no_241_promotion": true,
  "observer": "Literal deployed None; no Option/fn-pointer value inspected; K023/K024 stability matches original verdicts, no renaming.",
  "own_argument_clauses": [
   {
-   "predicate": "proof.val.length = 57607",
-   "classification": "064 own-input extent of native full-allocation class; 241 SAME getter/checked_add/range facts via NLW_StartScope"
+   "classification": "064 own-input extent of native full-allocation class; 241 SAME getter/checked_add/range facts via NLW_StartScope",
+   "predicate": "proof.val.length = 57607"
   },
   {
-   "predicate": "checkpoint.val.length = 1768",
-   "classification": "064 own-input extent of native full-allocation class; 241 SAME checkpoint getter fact"
+   "classification": "064 own-input extent of native full-allocation class; 241 SAME checkpoint getter fact",
+   "predicate": "checkpoint.val.length = 1768"
   },
   {
-   "predicate": "publicBytes.val.length \u2264 1880",
-   "classification": "064 own-input domain; 241 encoder fact discharges at occurrence"
+   "classification": "064 own-input domain; 241 encoder fact discharges at occurrence",
+   "predicate": "publicBytes.val.length \u2264 1880"
   },
   {
-   "predicate": "NLP_InputDomain.Root0 checkpoint proof",
-   "classification": "064 own-input domain; NMF accepted headline occurrence OR existing charged collision"
+   "classification": "064 own-input domain; NMF accepted headline occurrence OR existing charged collision",
+   "predicate": "NLP_InputDomain.Root0 checkpoint proof"
   }
  ],
+ "owner_module": "NMN_064",
+ "primary_root": "NMN_064.root",
+ "reused_native_tool_pins": {
+  "/home/dombarker/.cargo/bin/cargo": {
+   "realpath": "/home/dombarker/.cargo/bin/rustup",
+   "sha256": "5be191e8c70a5007074254cb74d78dbfdd25cd5a61c27de7b8e5410122ec24f4"
+  },
+  "/home/dombarker/.cargo/bin/cargo-kani": {
+   "realpath": "/home/dombarker/.cargo/bin/cargo-kani",
+   "sha256": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3"
+  },
+  "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake": {
+   "realpath": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+   "sha256": "60330ab6f07dce20f3fa9ebb08e8b984ea9549eac172afeb15d9d2227060e2b3"
+  },
+  "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean": {
+   "realpath": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+   "sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+  },
+  "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/leanc": {
+   "realpath": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/leanc",
+   "sha256": "0f51753a7921fadb2813b24c9e9e3cfccf02bdb606b7a34feebd763c63754fcc"
+  }
+ },
+ "reused_tool_pins_source": "/Users/dominic/ZK/.worktrees/cx-ledger25/evidence/tx2-entry5-20261110/NMN_TOOL_PINS.json",
  "root0_decision": {
   "admissible_as_own_input_clause": true,
   "caller": "TX2:241",
   "caller_status": "OPEN",
+  "event": "unchanged Q0+Q1+2965 event and same program/projection/selector",
   "headline_theorem": "NMF_GameRoot.root0_or_existing_collision",
   "installation": "NMN_Headline.accepted_occurrence",
-  "same_occurrence": true,
-  "proof": "Same f/s SourceCuts selected from RPx_Deployed.deployed; literal saved root0 + SAME persisted checkpoint + reached resume proof-digest binding yields literal Root0 s.checkpoint s.proof OR EXISTING BinRawByteCollisionTargets.event.",
-  "event": "unchanged Q0+Q1+2965 event and same program/projection/selector",
   "no_global_root0": true,
   "no_hash_injectivity": true,
   "no_new_trust": true,
-  "not_a_universal_failed_prefix_fact": true
+  "not_a_universal_failed_prefix_fact": true,
+  "proof": "Same f/s SourceCuts selected from RPx_Deployed.deployed; literal saved root0 + SAME persisted checkpoint + reached resume proof-digest binding yields literal Root0 s.checkpoint s.proof OR EXISTING BinRawByteCollisionTargets.event.",
+  "same_occurrence": true
  },
- "hypothesis_inventory": {
-  "original_generics": "H, Ambient, X, original Frame/digest/hash/world",
-  "own_input_Prop": "Exactly four fields of Domain on ORIGINAL arguments, bf2",
-  "native": "subject of conclusion; full entered parser/common executions at recorded arguments, not endpoint laws",
-  "cuts": "Existing aq2 per-occurrence reservations/locations/native input frames, nested in canonical CLOSED child owners",
-  "no_free_Ops_Run": true,
-  "no_child_success_hypothesis": true,
-  "no_extra_global_state": true
+ "row": "TX2:064",
+ "source_identity": {
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "only_change": "cfg(kani) harness module appended",
+  "overlay_parent_sha256": "769820e272f879f53ac28949f513e234237cf18280a24ce237771485cda53051",
+  "parent_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794"
  },
- "canonical_children": [
-  {
-   "child": "parse_shape",
-   "root": "NLE_ParseInstall.emitted / success",
-   "same": "s.args.proof",
-   "derived": "NMN_064.parser"
-  },
-  {
-   "child": "mark",
-   "root": "NHV_ReleaseOps.mark",
-   "same": "deployed None, Parsed",
-   "derived": "NMN_Observer and NLW full fold"
-  },
-  {
-   "child": "tx2_common",
-   "root": "NLT_CompleteRoot.root",
-   "same": "s.args.digest/publicBytes/proof/checkpoint/hash",
-   "derived": "NMK_Domain.child / NLW_064CandidateFold.child"
-  }
- ],
+ "status": "PASS_COMPLETE_ROOT_GATE_ADMITTED",
+ "trust": "Existing option-A P6/D188 native semantic transport RECLASSIFICATION; no trust removal",
  "withdrawn_root": "NLT_Root.root",
  "withdrawn_root_credit": false,
- "common_stop": "Independent stopped End carries only ordered prefix; no returned native reply, post-abort world, cleanup or suffix.",
- "trust": "Existing option-A P6/D188 native semantic transport RECLASSIFICATION; no trust removal",
- "no_241_promotion": true
+ "write_footprint": "Empty child &mut/account-data/return-data footprint. LOCAL channel writes tested by K018/K021; never a fabricated account frame."
 }
