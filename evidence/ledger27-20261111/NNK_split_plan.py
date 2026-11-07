@@ -1,0 +1,7 @@
+from pathlib import Path
+import json,hashlib
+E=Path(__file__).resolve().parent;p=E/'NNK_AUDIT_ROOTS.json';old=json.loads(p.read_text());assert len(old['groups'])==48
+(E/'NNK_PRE_SPLIT_ROOTS.json').write_bytes(p.read_bytes());full=old['groups'][41];assert len(full)==120
+old['groups'][41]=full[:60];old['groups'].append(full[60:]);assert len([r for g in old['groups']for r in g])==len(set(r for g in old['groups']for r in g))==12987
+p.write_text(json.dumps(old,indent=1)+'\n');(E/'NNK_AUDIT_MODULES.json').write_text(json.dumps([['NNK_COMBINED_IMPORT']]*49,indent=1)+'\n')
+(E/'NNK_TIMEOUT_SPLIT.json').write_text(json.dumps(dict(failure='NNK_L046',exit=124,outer_wall_seconds=180.00418987101875,completed_child_receipts=0,credit=0,prior_NNI_same_group_seconds=173.3064387680497,diagnosis='Legitimate raw traversal aggregation was near existing180s outer bound before the larger combined import. No kernel recurrence evaluation. Native child was killed before child time report; outer RSS is not native-child RSS.',old_group=full,replacements=[dict(attempt='NNK_L047',mode='split41a',group=41,roots=full[:60]),dict(attempt='NNK_L048',mode='split41b',group=48,roots=full[60:])],caps_unchanged=True,timeout_unchanged=True,no_unchanged_rerun=True,budget_plan='47/48 split;49 original42+tiny43 sequential;50–53 groups44–47;54–56 focused statement modules;57 owners;58 scan;59 pin;60 integrity+final retention'),indent=1)+'\n')
