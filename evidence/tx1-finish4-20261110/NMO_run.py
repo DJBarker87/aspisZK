@@ -28,6 +28,7 @@ for disk_retry in range(7):
  if disk_retry==6:raise RuntimeError('STOP disk below40GB after six waits')
  for _ in range(10):time.sleep(60)
 # Stream A share: count scopes by actual process cwd, never by unit names.
+postshare_disk_retries=0
 while True:
  r=ssh('python3', '''import subprocess,pathlib,json
 rows=[]
@@ -42,7 +43,17 @@ print(json.dumps(dict(stream_a=sum(r['cx']for r in rows),scopes=rows)))''')
  assert r.returncode==0,r.stderr
  info=json.loads(r.stdout)
  with (E/'NMO_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share_check',**info))+'\n')
- if info['stream_a']<2:break
+ if info['stream_a']<2:
+  fresh=ssh('python3',"import shutil,json;print(json.dumps(shutil.disk_usage('/home/dombarker/project-offloads')._asdict()))")
+  assert fresh.returncode==0,fresh.stderr
+  disk=json.loads(fresh.stdout)
+  (E/(a+'-disk-after-share.json')).write_text(json.dumps(disk))
+  if disk['free']>=40_000_000_000:break
+  if postshare_disk_retries>=6:raise RuntimeError('STOP disk below40GB after six post-share waits')
+  postshare_disk_retries+=1
+  with (E/'NMO_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='Disk below40GB after share wait',seconds=600))+'\n')
+  for _ in range(10):time.sleep(60)
+  continue
  print(json.dumps(dict(attempt=a,kind='wait',reason='Stream A saturation')),flush=True)
  with (E/'NMO_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='Stream A saturation',seconds=180))+'\n')
  for _ in range(3):time.sleep(60)

@@ -19,7 +19,7 @@ for n,h in expected.items():
  changed=True
  while changed:
   changed=False
-  for module in ['NMO_finish','NMO_wire','NMC_program','NMC_segments','NLU_program','NLI_program','NLI_factory','NLI_rounds','NLC_native','NLC_factory']:
+  for module in ['NMO_finish','NMO_wire','NMO_stage','NMO_terminal','NMC_program','NMC_segments','NLU_program','NLI_program','NLI_factory','NLI_rounds','NLC_native','NLC_factory']:
    for visibility in ['pub','pub(crate)']:
     for suffix in [('\n#[cfg(kani)]\n'+visibility+' mod '+module+';\n').encode(),('\n#[cfg(kani)]\n#[path = "'+module+'.rs"]\n'+visibility+' mod '+module+';\n').encode()]:
      if raw.endswith(suffix):raw=raw[:-len(suffix)];changed=True
