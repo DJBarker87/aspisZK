@@ -115,6 +115,14 @@ for name,owner,note in [
 # The verifier slot is a composition, never a Root0-unconditional instance.
 verifier=dict(slot='VerifierCPI.330/348',kind='composed top-level supplier',supplier=['NMN_064.root','NNC_064Weak','NNC_BindingRoot','TCK_REPORT option B / Realizes / RZ-STATE'],classification='OPEN-ROW',row='POOL:348',exact_statement='NMN_064.Domain: proofExtent=57607, checkpointExtent=1768, publicBound<=1880, Root0 checkpoint proof. Use the NNC Root0-free weak law first; derive Root0 OR the existing E_rec on the SAME realized execution; only then use NMN_064.root in the Root0 branch. Both internal Outcome bad and the outer event are E_rec, charged once.',domain_clauses=['57607 proof bytes','1768 checkpoint bytes','public <=1880','Root0 only on the derived branch, NEVER as an unconditional caller assumption'],discharged_by='Exact Pool CPI slice/entry/statement association plus Stream A selected weak/option-B top; Root0 not checked by frozen Rust',representation='Exact metas/infos/order, selected program, proof suffix/checkpoint/public bytes, full errors and effects, runtime context; readonly-entry law remains PENDING/UNUSED',supplied=False)
 out.append(verifier)
+# Read-only merged LIBB L-star is concrete; module12/13 V0 remains external.
+for r in out:
+ if r['slot'].startswith('RSL.PoolLib.'):
+  field=r['slot'].split('.')[-1]
+  r['canonical_library_assignment']='LIBB_PoolLib.library.'+field
+  r['assignment_source']='evidence/libb-20261111/LIBB_PoolLib.lean'
+  r['original_domain']='The SAME CLOSED supplier domain retained in LIBB model/source association; no extra success or Ops premise'
+  r['import_delivery']='Not in supplied LIB_BUNDLE_EXPORT; library needs missing NMS/NMX modules and quarantined LIB_Carriers closure. No new alias claimed compiled.'
 # Stage-3 delivery status is distinct from the mandatory full-gate result.
 for r in out:
  if r['slot'].startswith('RSL.PoolLib.') and r['slot'].split('.')[-1] in ['validatePolicy','decodeRegistryV1','decodeRegistryV2','decodeEntryV1','decodeEntryV2']:

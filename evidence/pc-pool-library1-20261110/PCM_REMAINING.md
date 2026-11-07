@@ -1,14 +1,16 @@
-# PCM remaining obligations
+# PCM remaining work
 
-Supporting work only. No row credit and no parent consumption. Stage 1 is frozen. Stage 3 is PARTIAL: policy, four registry/entry decoders, deployed identifiers, terminal lane/request and payer/token source-carrier graphs compile; their final combined gate is blocked. Source-carrier graphs have not been cast into PCM account/error/effect views.
+Budget exhausted:200/200 Lean/link/audit scopes,10/10 extraction scopes,0 Kani. Supporting work only; no Pool row credit or parent consumer. The required full gate FAILED, not CONDITIONAL/CLOSED. Own supporting imports,146 raw ax2 roots and NFX canonical scan pass separately.
 
-The full mandatory import needs 47 prohibited-origin objects listed in PCM_BLOCKED_CONTEXT.json. None was copied. A user clarification is pending; do not infer permission. LIBB's completed V0-star/weak registration is a separate external delivery dependency; do not duplicate its live work.
+The 47 prohibited-origin objects remain absent (PCM_BLOCKED_CONTEXT.json); the combined import stops at NMK_CompleteFold. The requested clarification received no answer. Never infer approval or seed entry5. The supplied LIB bundle lacks the newer concrete LIBB/NMX/NMS object delivery; LIBB_PoolLib.library nevertheless exists on research and is the canonical assignment for all20 PoolLib fields. Its V0 module12/13 remains WAITING, not an open leaf to duplicate here. PCE_COMBINED_IMPORT also needs unchanged PCA objects not in the selected closure.
 
-Concrete fields: PCM_Inst_Registry.install updates exactly five RSL.PoolLib fields, leaving the others as the named remaining : RSL.PoolLib parameter. PCM_Inst_Deployed.ids preserves the devnet selector and deployment binders. PCM_Inst_TerminalSource and PCM_Inst_AccountSource retain exact original source-carrier deterministic models and original own-input domains. Their PCM/RSL representation adapters are unproved.
+Six compiled groups: Registry (five fields), Deployed (two IDs), TerminalSource, AccountSource, PdaSource, GraphCompositions. Source-carrier groups retain complete deterministic model graphs and original own-input domains, but their PCM/RSL carrier/error/state/effect maps are unproved. The PDA environment adapter must identify the SAME headline Env.pda occurrence, not create another oracle. PoolAccounts and NoteSource drafts are text only and excluded from accepted imports/audits. Every unfilled field stays a named parameter; there is no relation-as-model, False domain or success-only replacement.
 
-Every unfilled slot below retains exactly one classification. A needed-lemma name is a task, not a declaration. Native bridge/caller-domain obligations need the future owner jobs; this job has 0 Kani and no whole-function native scope. No runtime trust item is silently supplied.
+The missing mathematical adapters and full observation folds need Lean/representation work, not necessarily Kani. This job cannot launch another scope. OPEN native ownership rows need their future authorized direct hybrid owner campaign, same-argument CLOSED callees and proven caller clauses. Zero Kani is not presented as the reason for stopping Lean work.
 
-| Slot | Classification | Remaining |
+## Every unfilled slot
+
+| Slot | Classification | Remaining / named parameter |
 |---|---|---|
 | POOL:294.Children.encode | OPEN-ROW | POOL:294 at this SAME source call; representation by its native cut/entry admission |
 | POOL:294.Children.canonicalNullifier | MISSING-CHILD-LEMMA | PCM_adapter_294_canonicalNullifier |
@@ -147,26 +149,26 @@ Every unfilled slot below retains exactly one classification. A needed-lemma nam
 | POOL:337.Decoder/SDK | OPEN-ROW | POOL:337; same input and writable flag (312 true, 313 false, 304 generic decoder true) |
 | POOL:356.Decoder/SDK | OPEN-ROW | POOL:356; same input and writable flag (312 true, 313 false, 304 generic decoder true) |
 | POOL:357.Decoder/SDK | OPEN-ROW | POOL:357; same input and writable flag (312 true, 313 false, 304 generic decoder true) |
-| RSL.PoolLib.Request | MISSING-CHILD-LEMMA | PCM_shared_Request |
-| RSL.PoolLib.Statement | MISSING-CHILD-LEMMA | PCM_shared_Statement |
-| RSL.PoolLib.Afterstate | MISSING-CHILD-LEMMA | PCM_shared_Afterstate |
-| RSL.PoolLib.decodeRequest | MISSING-CHILD-LEMMA | PCM_shared_decodeRequest |
-| RSL.PoolLib.reqProfile | MISSING-CHILD-LEMMA | PCM_shared_reqProfile |
-| RSL.PoolLib.reqRelease | MISSING-CHILD-LEMMA | PCM_shared_reqRelease |
-| RSL.PoolLib.reqPoolProgram | MISSING-CHILD-LEMMA | PCM_shared_reqPoolProgram |
-| RSL.PoolLib.reqNullifier | MISSING-CHILD-LEMMA | PCM_shared_reqNullifier |
-| RSL.PoolLib.outputLane | MISSING-CHILD-LEMMA | PCM_shared_outputLane |
-| RSL.PoolLib.decodeMaster | MISSING-CHILD-LEMMA | PCM_shared_decodeMaster |
-| RSL.PoolLib.decodeCheckpoint | MISSING-CHILD-LEMMA | PCM_shared_decodeCheckpoint |
-| RSL.PoolLib.validatePolicy | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit |
-| RSL.PoolLib.decodeRegistryV1 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit |
-| RSL.PoolLib.decodeRegistryV2 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit |
-| RSL.PoolLib.decodeEntryV1 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit |
-| RSL.PoolLib.decodeEntryV2 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit |
-| RSL.PoolLib.scanProof | MISSING-CHILD-LEMMA | PCM_shared_scanProof |
-| RSL.PoolLib.reconstruct | MISSING-CHILD-LEMMA | PCM_shared_reconstruct |
-| RSL.PoolLib.encodeStatement | MISSING-CHILD-LEMMA | PCM_shared_encodeStatement |
-| RSL.PoolLib.emitResult | MISSING-CHILD-LEMMA | PCM_shared_emitResult |
+| RSL.PoolLib.Request | MISSING-CHILD-LEMMA | PCM_shared_Request; concrete canonical term LIBB_PoolLib.library.Request; object/import delivery still required |
+| RSL.PoolLib.Statement | MISSING-CHILD-LEMMA | PCM_shared_Statement; concrete canonical term LIBB_PoolLib.library.Statement; object/import delivery still required |
+| RSL.PoolLib.Afterstate | MISSING-CHILD-LEMMA | PCM_shared_Afterstate; concrete canonical term LIBB_PoolLib.library.Afterstate; object/import delivery still required |
+| RSL.PoolLib.decodeRequest | MISSING-CHILD-LEMMA | PCM_shared_decodeRequest; concrete canonical term LIBB_PoolLib.library.decodeRequest; object/import delivery still required |
+| RSL.PoolLib.reqProfile | MISSING-CHILD-LEMMA | PCM_shared_reqProfile; concrete canonical term LIBB_PoolLib.library.reqProfile; object/import delivery still required |
+| RSL.PoolLib.reqRelease | MISSING-CHILD-LEMMA | PCM_shared_reqRelease; concrete canonical term LIBB_PoolLib.library.reqRelease; object/import delivery still required |
+| RSL.PoolLib.reqPoolProgram | MISSING-CHILD-LEMMA | PCM_shared_reqPoolProgram; concrete canonical term LIBB_PoolLib.library.reqPoolProgram; object/import delivery still required |
+| RSL.PoolLib.reqNullifier | MISSING-CHILD-LEMMA | PCM_shared_reqNullifier; concrete canonical term LIBB_PoolLib.library.reqNullifier; object/import delivery still required |
+| RSL.PoolLib.outputLane | MISSING-CHILD-LEMMA | PCM_shared_outputLane; concrete canonical term LIBB_PoolLib.library.outputLane; object/import delivery still required |
+| RSL.PoolLib.decodeMaster | MISSING-CHILD-LEMMA | PCM_shared_decodeMaster; concrete canonical term LIBB_PoolLib.library.decodeMaster; object/import delivery still required |
+| RSL.PoolLib.decodeCheckpoint | MISSING-CHILD-LEMMA | PCM_shared_decodeCheckpoint; concrete canonical term LIBB_PoolLib.library.decodeCheckpoint; object/import delivery still required |
+| RSL.PoolLib.validatePolicy | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit; concrete canonical term LIBB_PoolLib.library.validatePolicy; object/import delivery still required |
+| RSL.PoolLib.decodeRegistryV1 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit; concrete canonical term LIBB_PoolLib.library.decodeRegistryV1; object/import delivery still required |
+| RSL.PoolLib.decodeRegistryV2 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit; concrete canonical term LIBB_PoolLib.library.decodeRegistryV2; object/import delivery still required |
+| RSL.PoolLib.decodeEntryV1 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit; concrete canonical term LIBB_PoolLib.library.decodeEntryV1; object/import delivery still required |
+| RSL.PoolLib.decodeEntryV2 | MISSING-CHILD-LEMMA | Required combined-import/scan/raw-ax2 gate; no pre-gate credit; concrete canonical term LIBB_PoolLib.library.decodeEntryV2; object/import delivery still required |
+| RSL.PoolLib.scanProof | MISSING-CHILD-LEMMA | PCM_shared_scanProof; concrete canonical term LIBB_PoolLib.library.scanProof; object/import delivery still required |
+| RSL.PoolLib.reconstruct | MISSING-CHILD-LEMMA | PCM_shared_reconstruct; concrete canonical term LIBB_PoolLib.library.reconstruct; object/import delivery still required |
+| RSL.PoolLib.encodeStatement | MISSING-CHILD-LEMMA | PCM_shared_encodeStatement; concrete canonical term LIBB_PoolLib.library.encodeStatement; object/import delivery still required |
+| RSL.PoolLib.emitResult | MISSING-CHILD-LEMMA | PCM_shared_emitResult; concrete canonical term LIBB_PoolLib.library.emitResult; object/import delivery still required |
 | Representation.RuntimeCpiAccountView | OPEN-ROW | Native/representation owner of POOL:330; not assumed by PCM |
 | Representation.RuntimeReturnData | OPEN-ROW | Native/representation owner of POOL:348; not assumed by PCM |
 | Representation.RuntimeReturnDataClear | OPEN-ROW | Native/representation owner of POOL:348; not assumed by PCM |
@@ -181,4 +183,60 @@ Every unfilled slot below retains exactly one classification. A needed-lemma nam
 | RSL.DeployedIds.pool | MISSING-CHILD-LEMMA | Required complete gate |
 | RSL.DeployedIds.registry | MISSING-CHILD-LEMMA | Required complete gate |
 
-PCM_Top.check retains 23 named bridge fields in Payload plus assemble, owner specifications and the physical acceptance/trace/Realizes binders. It does not prove the physical CPI/entry association. Pool:330 and TAS verifier TX1:330 are different functions and cannot be substituted by their row number. NMN_064.root must be installed at the same arguments only after the NNC weak law yields Root0 OR the existing E_rec through option B. RZ-STATE and construction of Realizes for all worlds remain external top obligations. RuntimeCpiReadonlyEntry7 is PENDING/UNUSED.
+## Top
+
+PCM_Top.check compiles against literal RSL.PoolLib and EVB.top_splitB_full. Owners.Spec has the full328/330/327 specifications. Payload and assemble explicitly retain23 existing top bridge fields. The function from those owner proofs to the physical verifier-entry/CPI interfaces is UNPROVED. Pool:330 is not TAS verifier TX1:330. No row-number coercion is available. Same-occurrence NMN_064.root must follow the NNC weak law and option B: Root0 OR the existing E_rec, charged once. Realizes construction for all worlds/RZ-STATE and the retained runtime hypotheses are external obligations, not established or used as a filter here. RuntimeCpiReadonlyEntry7 remains PENDING/UNUSED.
+
+## Every specification's route disposition
+
+The no-local-guard test is source-based; a guard-free caller may still need a CLOSED/fission packet for a transitive guard callee. An unresolved emission is a finding, not a native-route waiver. External extraction templates are retained as .lean.txt and never imported as axioms.
+
+| Row | Status | Route | Remaining |
+|---|---|---|---|
+| POOL:165 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:220 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:279 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:286 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:289 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:294 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:301 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:304 | OPEN | GUARD_FREE_FRESH_EXTRACTION_FINDING | Resolve the exact pinned-tool diagnostic; no failed emission is credited |
+| POOL:308 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:309 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:311 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:312 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:313 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:314 | CLOSED | CLOSED_CHILD_REUSE_ONLY | Consume SAME-argument CLOSED child and prove PCM/RSL representation; not re-owned |
+| POOL:319 | OPEN | GUARD_FREE_FRESH_EXTRACTION_FINDING | Resolve the exact pinned-tool diagnostic; no failed emission is credited |
+| POOL:320 | CLOSED | CLOSED_CHILD_REUSE_ONLY | Consume SAME-argument CLOSED child and prove PCM/RSL representation; not re-owned |
+| POOL:321 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:322 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:326 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:327 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:328 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:330 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:333 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:334 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:336 | OPEN | GUARD_FREE_EMITTED_EXTERNAL_ADAPTER_PENDING | Instantiate emitted external carriers/functions with standard-axiom CLOSED adapters; emitted templates are text only, never an admitted axiom |
+| POOL:337 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:338 | OPEN | GUARD_FREE_EMITTED_EXTERNAL_ADAPTER_PENDING | Instantiate emitted external carriers/functions with standard-axiom CLOSED adapters; emitted templates are text only, never an admitted axiom |
+| POOL:339 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:340 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:341 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:342 | OPEN | GUARD_FREE_EMITTED_EXTERNAL_ADAPTER_PENDING | Instantiate emitted external carriers/functions with standard-axiom CLOSED adapters; emitted templates are text only, never an admitted axiom |
+| POOL:347 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:348 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:349 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:350 | OPEN | GUARD_FREE_FRESH_EXTRACTION_FINDING | Resolve the exact pinned-tool diagnostic; no failed emission is credited |
+| POOL:356 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:357 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:358 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:361 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:362 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:367 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:382 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:383 | OPEN | GUARD_FREE_EXTRACTION_OPEN_BUDGET | Fresh pinned Charon/Aeneas route check remains; 10 extraction scopes exhausted. Guard-free means no local guard acquisition; transitive guard callees must first consume their own CLOSED/fission packet. |
+| POOL:388 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:389 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:395 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |
+| POOL:396 | OPEN | GUARD_HOLDING_BN_SOURCE_FISSION | Fission the actual guard-held segments and preserve borrow-token lifetimes, ordered effects and stop prefixes |

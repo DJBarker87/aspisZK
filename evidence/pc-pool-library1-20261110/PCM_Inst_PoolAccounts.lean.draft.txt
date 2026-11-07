@@ -1,0 +1,64 @@
+import PCM_Returns
+import PCM_AccountGraph
+import PCM_ResultTotal
+import PCM_V1DecoderValues
+import NJY_Roots
+import NND_MasterCarrier
+import NND_CheckpointCarrier
+set_option autoImplicit false
+noncomputable section
+namespace PCM_Inst_PoolAccounts
+open Aeneas Aeneas.Std NND_Carrier
+open PCM_V1DecoderValues (asOption)
+abbrev decodeMaster := PCM_AccountDecoderReuse.master
+abbrev decodeCheckpoint := PCM_AccountDecoderReuse.checkpoint
+abbrev master_model := PCM_AccountGraph.master_model
+abbrev checkpoint_model := PCM_AccountGraph.checkpoint_model
+
+/-- Supplying root composed at the original input and full decoder Result. -/
+theorem master_root (b : Slice U8)
+ (out : core.result.Result NJQ_Master.M NJQ_Master.F) (cut : NJY_Master.Cut b out) :
+ asOption master (NJQ_Carrier.master_result out) = decodeMaster (bytes b) := by
+ exact Result.ok.inj ((congrArg (PCM_ResultTotal.mapOuter (asOption master))
+  (NJQ_Canonical.master_result b out cut)).trans (master_model b))
+
+theorem checkpoint_root (b : Slice U8)
+ (out : core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F)
+ (cut : NJY_Checkpoint.Cut b out) :
+ asOption checkpoint (NJQ_Carrier.checkpoint_result out) = decodeCheckpoint (bytes b) := by
+ exact Result.ok.inj ((congrArg (PCM_ResultTotal.mapOuter (asOption checkpoint))
+  (NJQ_Canonical.checkpoint_result b out cut)).trans (checkpoint_model b))
+
+theorem master_returns (b : RSL.Bytes) (env : RSL.Env) :
+ PCM_Returns.Returns (RSL.Spec.pure (decodeMaster b)) env (decodeMaster b) :=
+ PCM_Returns.pure env _
+theorem checkpoint_returns (b : RSL.Bytes) (env : RSL.Env) :
+ PCM_Returns.Returns (RSL.Spec.pure (decodeCheckpoint b)) env (decodeCheckpoint b) :=
+ PCM_Returns.pure env _
+def install (remaining : RSL.PoolLib) : RSL.PoolLib :=
+ {remaining with decodeMaster := decodeMaster, decodeCheckpoint := decodeCheckpoint}
+
+def graph {A B : Type} (model : A → B) (a : A) (_ : RSL.Env) (o : RSL.Obs B) : Prop :=
+ True ∧ o = ⟨.ret (model a),[]⟩
+
+theorem installed_master (remaining : RSL.PoolLib) :
+ (install remaining).decodeMaster = decodeMaster := rfl
+
+theorem installed_checkpoint (remaining : RSL.PoolLib) :
+ (install remaining).decodeCheckpoint = decodeCheckpoint := rfl
+
+theorem master_type : (RSL.PoolLib.decodeMaster : RSL.PoolLib → (RSL.Bytes → Option RSL.Master)) = RSL.PoolLib.decodeMaster := rfl
+
+theorem checkpoint_type : (RSL.PoolLib.decodeCheckpoint : RSL.PoolLib → (RSL.Bytes → Option RSL.Checkpoint)) = RSL.PoolLib.decodeCheckpoint := rfl
+#print axioms installed_master
+#print axioms installed_checkpoint
+#print axioms master_type
+#print axioms checkpoint_type
+#print axioms master_model
+#print axioms checkpoint_model
+#print axioms master_root
+#print axioms checkpoint_root
+#print axioms master_returns
+#print axioms checkpoint_returns
+end PCM_Inst_PoolAccounts
+end

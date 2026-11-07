@@ -22,7 +22,7 @@ env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B
 features='default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint'
 pins=dict(attempt=a,phase=plan['phase'],roots=plan.get('roots',[]),toolchain=env['RUSTUP_TOOLCHAIN'],charon_sha256=sha(C),aeneas_sha256=sha(A),pool_files=manifest,lock_before=lock_before,expected_work='Compilation / fresh MIR and Lean emission only; no arithmetic gate, Kani, SHA unwind, native loop proof or whole-function native comparison',native_credit=False)
 output=B/(a+'_pins.json')
-if plan['phase']=='charon':
+if plan['phase'] in ['charon','both']:
  meta=['cargo','metadata','--manifest-path',str(S/'programs/aspis-pool/Cargo.toml'),'--format-version','1','--offline','--locked','--features',features]
  r=subprocess.run(meta,cwd=S,env=env,text=True,capture_output=True)
  (B/(a+'_metadata.stderr')).write_text(r.stderr)
@@ -39,7 +39,14 @@ if plan['phase']=='charon':
 else:
  llbc=B/plan['llbc'];assert sha(llbc)==plan['llbc_sha256']
  cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',plan['namespace'],'-dest',str(B/(a+'_emitted')),'-subdir',plan['namespace'],'-split-files',str(llbc)]
-pins['command']=cmd;output.write_text(json.dumps(pins,indent=1));r=subprocess.run(cmd,cwd=S if plan['phase']=='charon' else B,env=env)
+pins['command']=cmd;output.write_text(json.dumps(pins,indent=1));r=subprocess.run(cmd,cwd=S if plan['phase'] in ['charon','both'] else B,env=env)
+if plan['phase']=='both':
+ pins['charon_exit']=r.returncode
+ if r.returncode==0:
+  llbc=B/(a+'.llbc');pins['llbc_sha256']=sha(llbc)
+  acmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',plan['namespace'],'-dest',str(B/(a+'_emitted')),'-subdir',plan['namespace'],'-split-files',str(llbc)]
+  pins['aeneas_command']=acmd;output.write_text(json.dumps(pins,indent=1))
+  r=subprocess.run(acmd,cwd=B,env=env)
 pins.update(exit=r.returncode,lock_after=sha(S/'Cargo.lock'))
 assert pins['lock_after']==lock_before,'STOP: frozen lock changed'
 if (B/(a+'.llbc')).exists():pins['llbc_sha256']=sha(B/(a+'.llbc'))
