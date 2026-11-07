@@ -1,0 +1,264 @@
+BitVec.fromLEBytes_getElem! : ∀ (v : List Byte) (j : ℕ), (BitVec.fromLEBytes v)[j]! = v[j / 8]!.testBit (j % 8)
+BitVec.getLsbD_concat_zero : ∀ {w : ℕ} {x : BitVec w} {b : Bool}, (x.concat b).getLsbD 0 = b
+BitVec.setWidth_ofNat_one_eq_ofNat_one_of_lt : ∀ {v w : ℕ}, 0 < v → BitVec.setWidth w 1#v = 1#w
+BitVec.getLsbD_one : ∀ {w i : ℕ}, (1#w).getLsbD i = (decide (0 < w) && decide (i = 0))
+BitVec.getLsbD_false_of_lt_ctz : ∀ {w i : ℕ} {x : BitVec w}, i < x.ctz.toNat → x.getLsbD i = false
+BitVec.setWidth_append_append_eq_shiftLeft_setWidth_or : ∀ {w w' w'' w''' : ℕ} {b : BitVec w} {b' : BitVec w'}
+  {b'' : BitVec w''},
+  BitVec.setWidth w''' (b ++ b' ++ b'') =
+    BitVec.setWidth w''' b <<< (w' + w'') ||| BitVec.setWidth w''' b' <<< w'' ||| BitVec.setWidth w''' b''
+BitVec.setWidth_mul : ∀ {w i : ℕ} (x y : BitVec w),
+  i ≤ w → BitVec.setWidth i (x * y) = BitVec.setWidth i x * BitVec.setWidth i y
+BitVec.getLsbD_allOnes : ∀ {v i : ℕ}, (BitVec.allOnes v).getLsbD i = decide (i < v)
+BitVec.getLsbD_rotateRightAux_of_lt : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  i < w - r → (x.rotateRightAux r).getLsbD i = x.getLsbD (r + i)
+BitVec.getLsbD_reverse : ∀ {w i : ℕ} {x : BitVec w}, x.reverse.getLsbD i = x.getMsbD i
+BitVec.setWidth_setWidth : ∀ {u : ℕ} {x : BitVec u} {w v : ℕ},
+  ¬(v < u ∧ v < w) → BitVec.setWidth w (BitVec.setWidth v x) = BitVec.setWidth w x
+BitVec.setWidth_xor : ∀ {w k : ℕ} {x y : BitVec w},
+  BitVec.setWidth k (x ^^^ y) = BitVec.setWidth k x ^^^ BitVec.setWidth k y
+BitVec.getLsbD_sshiftRight : ∀ {w : ℕ} (x : BitVec w) (s i : ℕ),
+  (x.sshiftRight s).getLsbD i = (!decide (w ≤ i) && if s + i < w then x.getLsbD (s + i) else x.msb)
+BitVec.getLsbD_true_clz_of_ne_zero : ∀ {w : ℕ} {x : BitVec w}, 0 < w → x ≠ 0#w → x.getLsbD (w - 1 - x.clz.toNat) = true
+BitVec.getLsbD_cpopLayer : ∀ {oldLen k w iterNum : ℕ} {oldLayer : BitVec (oldLen * w)} {newLayer : BitVec (iterNum * w)}
+  (hold : 2 * (iterNum - 1) < oldLen),
+  (∀ i < iterNum,
+      BitVec.extractLsb' (i * w) w newLayer =
+        BitVec.extractLsb' (2 * i * w) w oldLayer + BitVec.extractLsb' ((2 * i + 1) * w) w oldLayer) →
+    (oldLayer.cpopLayer newLayer hold).getLsbD k =
+      (BitVec.extractLsb' (2 * ((k - k % w) / w) * w) w oldLayer +
+            BitVec.extractLsb' ((2 * ((k - k % w) / w) + 1) * w) w oldLayer).getLsbD
+        (k % w)
+BitVec.getLsbD_setWidth : ∀ {n : ℕ} (m : ℕ) (x : BitVec n) (i : ℕ),
+  (BitVec.setWidth m x).getLsbD i = (decide (i < m) && x.getLsbD i)
+BitVec.getLsbD_intMax : ∀ {i : ℕ} (w : ℕ), (BitVec.intMax w).getLsbD i = decide (i + 1 < w)
+BitVec.fromLEBytes_getElem!._proof_1_6 : ∀ (j : ℕ), ¬j < 8 → 0 < j / 8
+BitVec.fromLEBytes_toLEBytes : ∀ {w : ℕ} (h : w % 8 = 0) (b : BitVec w),
+  BitVec.fromLEBytes b.toLEBytes = BitVec.cast ⋯ b
+BitVec.setWidth_cast : ∀ {w v k : ℕ} {x : BitVec w} {h : w = v},
+  BitVec.setWidth k (BitVec.cast h x) = BitVec.setWidth k x
+BitVec.setWidth_or : ∀ {w k : ℕ} {x y : BitVec w},
+  BitVec.setWidth k (x ||| y) = BitVec.setWidth k x ||| BitVec.setWidth k y
+BitVec.setWidth_ofNat_of_le : ∀ {v w : ℕ}, v ≤ w → ∀ (x : ℕ), BitVec.setWidth v (BitVec.ofNat w x) = BitVec.ofNat v x
+BitVec.setWidth_setWidth_succ_eq_setWidth_setWidth_add_twoPow : ∀ {w : ℕ} (x : BitVec w) (i : ℕ),
+  BitVec.setWidth w (BitVec.setWidth (i + 1) x) = BitVec.setWidth w (BitVec.setWidth i x) + (x &&& BitVec.twoPow w i)
+BitVec.setWidth_setWidth_succ_eq_setWidth_setWidth_or_twoPow_of_getLsbD_true : ∀ {w : ℕ} {x : BitVec w} {i : ℕ},
+  x.getLsbD i = true →
+    BitVec.setWidth w (BitVec.setWidth (i + 1) x) = BitVec.setWidth w (BitVec.setWidth i x) ||| BitVec.twoPow w i
+BitVec.setWidth_cons : ∀ {w : ℕ} {a : Bool} {x : BitVec w}, BitVec.setWidth w (BitVec.cons a x) = x
+BitVec.getLsbD_cons : ∀ (b : Bool) {n : ℕ} (x : BitVec n) (i : ℕ),
+  (BitVec.cons b x).getLsbD i = if i = n then b else x.getLsbD i
+BitVec.fromLEBytes_getElem!._proof_1_15 : ∀ (j : ℕ) (v' : List Byte),
+  ¬j < 8 → 0 < j / 8 → (j - 8) / 8 = j / 8 - 1 → ¬(j - 8) % 8 = j % 8 → False
+BitVec.setWidth_append_eq_shiftLeft_setWidth_or : ∀ {w w' w'' : ℕ} {b : BitVec w} {b' : BitVec w'},
+  BitVec.setWidth w'' (b ++ b') = BitVec.setWidth w'' b <<< w' ||| BitVec.setWidth w'' b'
+BitVec.setWidth_add_eq_mod : ∀ {w i : ℕ} {x y : BitVec w},
+  BitVec.setWidth i (x + y) = (BitVec.setWidth i x + BitVec.setWidth i y) % BitVec.twoPow i w
+BitVec.getLsbD_srem : ∀ {w i : ℕ} {x y : BitVec w},
+  (x.srem y).getLsbD i =
+    match x.msb, y.msb with
+    | false, false => (x % y).getLsbD i
+    | false, true => (x % -y).getLsbD i
+    | true, false => (-(-x % y)).getLsbD i
+    | true, true => (-(-x % -y)).getLsbD i
+BitVec.getLsbD_true_ctz_of_ne_zero : ∀ {w : ℕ} {x : BitVec w}, x ≠ 0#w → x.getLsbD x.ctz.toNat = true
+BitVec.getLsbD_append : ∀ {n m i : ℕ} {x : BitVec n} {y : BitVec m},
+  (x ++ y).getLsbD i = if i < m then y.getLsbD i else x.getLsbD (i - m)
+BitVec.getLsbD_neg : ∀ {w i : ℕ} {x : BitVec w},
+  (-x).getLsbD i = (x.getLsbD i ^^ decide (i < w) && decide (∃ j < i, x.getLsbD j = true))
+BitVec.getLsbD_extractAndExtend : ∀ {w v k : ℕ} {x : BitVec w},
+  0 < v → (BitVec.extractAndExtend v x).getLsbD k = (BitVec.extractAndExtendBit ((k - k % v) / v) v x).getLsbD (k % v)
+BitVec.setWidth_eq : ∀ {n : ℕ} (x : BitVec n), BitVec.setWidth n x = x
+BitVec.getLsbD_eq_extractLsb' : ∀ {w : ℕ} (x : BitVec w) (i : ℕ), x.getLsbD i = (BitVec.extractLsb' i 1 x == 1#1)
+BitVec.getLsbD_ofBool : ∀ (b : Bool) (i : ℕ), (BitVec.ofBool b).getLsbD i = (decide (i = 0) && b)
+BitVec.getLsbD_rotateLeftAux_of_lt : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  i < r → (x.rotateLeftAux r).getLsbD i = x.getLsbD (w - r + i)
+BitVec.setWidth_eq_extractLsb' : ∀ {v : ℕ} {x : BitVec v} {w : ℕ},
+  w ≤ v → BitVec.setWidth w x = BitVec.extractLsb' 0 w x
+BitVec.getLsbD_add_add_bool : ∀ {w i : ℕ},
+  i < w →
+    ∀ (x y : BitVec w) (c : Bool),
+      (x + y + BitVec.setWidth w (BitVec.ofBool c)).getLsbD i = (x.getLsbD i ^^ (y.getLsbD i ^^ BitVec.carry i x y c))
+BitVec.getLsbD_concat : ∀ {w : ℕ} (x : BitVec w) (b : Bool) (i : ℕ),
+  (x.concat b).getLsbD i = if i = 0 then b else x.getLsbD (i - 1)
+BitVec.fromLEBytes_getElem!._proof_1_14 : ∀ (j : ℕ) (v' : List Byte),
+  ¬j < 8 → 0 < j / 8 → ¬(j - 8) / 8 = j / 8 - 1 → False
+BitVec.getLsbD_udiv : ∀ {w : ℕ} (n d : BitVec w),
+  0#w < d →
+    ∀ (i : ℕ),
+      (n / d).getLsbD i =
+        (decide (i < w) && (BitVec.divRec w { n := n, d := d } (BitVec.DivModState.init w)).q.getLsbD i)
+BitVec.getLsbD_flattenList : ∀ {w : ℕ} (vs : List (BitVec w)) (i : ℕ),
+  (BitVec.flattenList vs).getLsbD i =
+    (decide (i < w * vs.length) && (vs[vs.length - 1 - i / w]?.getD 0#w).getLsbD (i % w))
+BitVec.getLsbD_umod : ∀ {w i : ℕ} {n d : BitVec w},
+  (n % d).getLsbD i =
+    if d = 0#w then n.getLsbD i else (BitVec.divRec w { n := n, d := d } (BitVec.DivModState.init w)).r.getLsbD i
+BitVec.getLsbD_twoPow : ∀ {w : ℕ} (i j : ℕ), (BitVec.twoPow w i).getLsbD j = (decide (i < w) && decide (i = j))
+BitVec.fromLEBytes_getElem._proof_1 : ∀ (v : List Byte), ∀ j < 8 * v.length, ¬j / 8 < v.length → False
+BitVec.getLsbD_ofFnBE : ∀ {n : ℕ} (f : Fin n → Bool) (i : ℕ),
+  (BitVec.ofFnBE f).getLsbD i = if h : i < n then f ⟨i, h⟩.rev else false
+BitVec.getLsbD_or : ∀ {v i : ℕ} {x y : BitVec v}, (x ||| y).getLsbD i = (x.getLsbD i || y.getLsbD i)
+BitVec.fromLEBytes_getElem!._simp_1_12 : ∀ {α : Type u_1} [inst : LE α] {x y : α}, (x ≥ y) = (y ≤ x)
+BitVec.getLsbD_rotateLeftAux_of_ge : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  i ≥ r → (x.rotateLeftAux r).getLsbD i = (decide (i < w) && x.getLsbD (i - r))
+BitVec.getLsbD_cast : ∀ {w v i : ℕ} (h : w = v) (x : BitVec w), (BitVec.cast h x).getLsbD i = x.getLsbD i
+BitVec.getLsbD_sshiftRight' : ∀ {w : ℕ} {x y : BitVec w} {i : ℕ},
+  (x.sshiftRight' y).getLsbD i = (!decide (w ≤ i) && if y.toNat + i < w then x.getLsbD (y.toNat + i) else x.msb)
+BitVec.getLsbD_rotateLeft : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  (x.rotateLeft r).getLsbD i =
+    bif decide (i < r % w) then x.getLsbD (w - r % w + i) else decide (i < w) && x.getLsbD (i - r % w)
+BitVec.setWidth_add : ∀ {w i : ℕ} (x y : BitVec w),
+  i ≤ w → BitVec.setWidth i (x + y) = BitVec.setWidth i x + BitVec.setWidth i y
+BitVec.getLsbD_shiftLeft : ∀ {m i : ℕ} (x : BitVec m) (n : ℕ),
+  (x <<< n).getLsbD i = (decide (i < m) && !decide (i < n) && x.getLsbD (i - n))
+BitVec.getLsbD_succ_last : ∀ {w : ℕ} (x : BitVec (w + 1)), x.getLsbD w = decide (2 ^ w ≤ x.toNat)
+BitVec.getLsbD_ushiftRight : ∀ {n : ℕ} (x : BitVec n) (i j : ℕ), (x >>> i).getLsbD j = x.getLsbD (i + j)
+BitVec.getLsbD_and : ∀ {v i : ℕ} {x y : BitVec v}, (x &&& y).getLsbD i = (x.getLsbD i && y.getLsbD i)
+BitVec.getLsbD_add : ∀ {w i : ℕ},
+  i < w → ∀ (x y : BitVec w), (x + y).getLsbD i = (x.getLsbD i ^^ (y.getLsbD i ^^ BitVec.carry i x y false))
+BitVec.getLsbD_signExtend : ∀ {w : ℕ} (x : BitVec w) {v i : ℕ},
+  (BitVec.signExtend v x).getLsbD i = (decide (i < v) && if i < w then x.getLsbD i else x.msb)
+BitVec.setWidth_ushiftRight_eq_extractLsb : ∀ {w w' w'' : ℕ} {b : BitVec w},
+  BitVec.setWidth w'' (b >>> w') = BitVec.extractLsb' w' w'' b
+BitVec.getLsbD_extractLsb' : ∀ {n : ℕ} (start len : ℕ) (x : BitVec n) (i : ℕ),
+  (BitVec.extractLsb' start len x).getLsbD i = (decide (i < len) && x.getLsbD (start + i))
+BitVec.setWidth_eq_append._proof_2 : ∀ {v w : ℕ}, v ≤ w → w - v + v = w
+BitVec.getLsbD_smod : ∀ {w i : ℕ} {x y : BitVec w},
+  (x.smod y).getLsbD i =
+    match x.msb, y.msb with
+    | false, false => (x % y).getLsbD i
+    | false, true => if x % -y = 0#w then false else (x % -y + y).getLsbD i
+    | true, false => if -x % y = 0#w then false else (y - -x % y).getLsbD i
+    | true, true => (-(-x % -y)).getLsbD i
+BitVec.setWidth_not : ∀ {w k : ℕ} {x : BitVec w}, k ≤ w → BitVec.setWidth k (~~~x) = ~~~BitVec.setWidth k x
+BitVec.getLsbD_ofFnLE : ∀ {n : ℕ} (f : Fin n → Bool) (i : ℕ),
+  (BitVec.ofFnLE f).getLsbD i = if h : i < n then f ⟨i, h⟩ else false
+BitVec.fromLEBytes_getElem!._simp_1_9 : ∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : LT α] [AddLeftStrictMono α]
+  [AddLeftReflectLT α] (a : α) {b : α}, (a < a + b) = (0 < b)
+BitVec.getLsbD_last : ∀ {w : ℕ} (x : BitVec w), x.getLsbD (w - 1) = decide (2 ^ (w - 1) ≤ x.toNat)
+BitVec.getLsbD_eq_getElem?_getD : ∀ {w : ℕ} {x : BitVec w} {i : ℕ}, x.getLsbD i = x[i]?.getD false
+BitVec.fromLEBytes_toLEBytes._simp_1_1 : ∀ {n : ℕ} (b0 b1 : BitVec n), (b0 = b1) = ∀ i < n, b0[i]! = b1[i]!
+BitVec.setWidth_one : ∀ {w : ℕ} {x : BitVec w}, BitVec.setWidth 1 x = BitVec.ofBool (x.getLsbD 0)
+BitVec.getLsbD_rotateLeft_of_le : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  r < w →
+    (x.rotateLeft r).getLsbD i = bif decide (i < r) then x.getLsbD (w - r + i) else decide (i < w) && x.getLsbD (i - r)
+BitVec.getLsbD_of_ge : ∀ {w : ℕ} (x : BitVec w) (i : ℕ), w ≤ i → x.getLsbD i = false
+BitVec.getLsbD_false_of_clzAuxRec : ∀ {w n : ℕ} {x : BitVec w},
+  (∀ (i : ℕ), n < i → x.getLsbD i = false) → ∀ (j : ℕ), x.getLsbD (w - (x.clzAuxRec n).toNat + j) = false
+BitVec.setWidth_eq_append : ∀ {v : ℕ} {x : BitVec v} {w : ℕ} (h : v ≤ w),
+  BitVec.setWidth w x = BitVec.cast ⋯ (0#(w - v) ++ x)
+BitVec.getLsbD_extract : ∀ {n : ℕ} (hi lo : ℕ) (x : BitVec n) (i : ℕ),
+  (BitVec.extractLsb hi lo x).getLsbD i = (decide (i ≤ hi - lo) && x.getLsbD (lo + i))
+BitVec.getLsbD_eq_getElem : ∀ {w : ℕ} {x : BitVec w} {i : ℕ} (h : i < w), x.getLsbD i = x[i]
+BitVec.getLsbD_shiftLeft' : ∀ {w₁ w₂ : ℕ} {x : BitVec w₁} {y : BitVec w₂} {i : ℕ},
+  (x <<< y).getLsbD i = (decide (i < w₁) && !decide (i < y.toNat) && x.getLsbD (i - y.toNat))
+BitVec.fromLEBytes_toLEBytes._proof_1 : ∀ {w : ℕ}, w % 8 = 0 → ¬w = 8 * ((w + 7) / 8) → False
+BitVec.getLsbD_extractLsb : ∀ {n hi lo : ℕ} {x : BitVec n} {i : ℕ},
+  (BitVec.extractLsb hi lo x).getLsbD i = (decide (i < hi - lo + 1) && x.getLsbD (lo + i))
+BitVec.getLsbD_concat_succ : ∀ {w : ℕ} {x : BitVec w} {b : Bool} {i : ℕ}, (x.concat b).getLsbD (i + 1) = x.getLsbD i
+BitVec.setWidth_ofNat_of_le_of_lt : ∀ {w v x : ℕ},
+  w ≤ v → x < 2 ^ w → BitVec.setWidth v (BitVec.ofNat w x) = BitVec.ofNat v x
+BitVec.fromLEBytes_getElem!._simp_1_8 : ∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : Preorder α]
+  {a b c : α} [PosMulStrictMono α] [PosMulReflectLT α], 0 < a → (a * b < a * c) = (b < c)
+BitVec.getLsbD_rotateRight_of_lt : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  r < w →
+    (x.rotateRight r).getLsbD i =
+      bif decide (i < w - r) then x.getLsbD (r + i) else decide (i < w) && x.getLsbD (i - (w - r))
+BitVec.getLsbD_sdiv : ∀ {w i : ℕ} {x y : BitVec w},
+  (x.sdiv y).getLsbD i =
+    match x.msb, y.msb with
+    | false, false => (x / y).getLsbD i
+    | false, true => (-(x / -y)).getLsbD i
+    | true, false => (-(-x / y)).getLsbD i
+    | true, true => (-x / -y).getLsbD i
+BitVec.fromLEBytes_getElem!._simp_1_11 : ∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : Zero α]
+  [IsBotZeroClass α], a < b → (0 < b) = True
+BitVec.getLsbD_ofNatLT : ∀ {n : ℕ} (x : ℕ) (lt : x < 2 ^ n) (i : ℕ), (x#'lt).getLsbD i = x.testBit i
+BitVec.getLsbD_zero_length : ∀ {i : ℕ} (x : BitVec 0), x.getLsbD i = false
+BitVec.fromLEBytes_getElem!.match_1_2 : ∀ (motive : List Byte → Prop) (v : List Byte),
+  (v = [] → motive []) → (∀ (x : Byte) (v' : List Byte), v = x :: v' → motive (x :: v')) → motive v
+BitVec.setWidth_and : ∀ {w k : ℕ} {x y : BitVec w},
+  BitVec.setWidth k (x &&& y) = BitVec.setWidth k x &&& BitVec.setWidth k y
+BitVec.setWidth_eq_append_extractLsb' : ∀ {v : ℕ} {x : BitVec v} {w : ℕ},
+  BitVec.setWidth w x = BitVec.cast ⋯ (0#(w - v) ++ BitVec.extractLsb' 0 (min v w) x)
+BitVec.setWidth_one_eq_ofBool_getLsb_zero : ∀ {w : ℕ} (x : BitVec w), BitVec.setWidth 1 x = BitVec.ofBool (x.getLsbD 0)
+BitVec.fromLEBytes_getElem : ∀ (v : List Byte) (j : ℕ) (hj : j < 8 * v.length),
+  (BitVec.fromLEBytes v)[j] = v[j / 8].testBit (j % 8)
+BitVec.getLsbD_xor : ∀ {v i : ℕ} {x y : BitVec v}, (x ^^^ y).getLsbD i = (x.getLsbD i ^^ y.getLsbD i)
+BitVec.getLsbD_rotateRightAux_of_ge : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  i ≥ w - r → (x.rotateRightAux r).getLsbD i = (decide (i < w) && x.getLsbD (i - (w - r)))
+BitVec.fromLEBytes_toLEBytes._proof_1_2 : ∀ {w : ℕ}, w % 8 = 0 → ¬(w + 7) / 8 = w / 8 → False
+BitVec.fromLEBytes_getElem!._proof_1_13 : ∀ (j : ℕ), ¬j < 8 → ¬8 ≤ j → False
+BitVec.setWidth_append_eq_right : ∀ {w w' : ℕ} {a : BitVec w} {b : BitVec w'}, BitVec.setWidth w' (a ++ b) = b
+BitVec.getLsbD_abs : ∀ {w i : ℕ} {x : BitVec w}, x.abs.getLsbD i = if x.msb = true then (-x).getLsbD i else x.getLsbD i
+BitVec.setWidth_neg_of_le : ∀ {v w : ℕ} {x : BitVec v}, w ≤ v → BitVec.setWidth w (-x) = -BitVec.setWidth w x
+BitVec.getLsbD_shiftConcat_eq_decide : ∀ {w : ℕ} (x : BitVec w) (b : Bool) (i : ℕ),
+  (x.shiftConcat b).getLsbD i = (decide (i < w) && (decide (i = 0) && b || decide (0 < i) && x.getLsbD (i - 1)))
+BitVec.getLsbD_mul : ∀ {w : ℕ} (x y : BitVec w) (i : ℕ), (x * y).getLsbD i = (x.mulRec y w).getLsbD i
+BitVec.setWidth_extractLsb'_of_le : ∀ {w len₁ len₂ start : ℕ} {c : BitVec w},
+  len₁ ≤ len₂ → BitVec.setWidth len₁ (BitVec.extractLsb' start len₂ c) = BitVec.extractLsb' start len₁ c
+BitVec.getLsbD_ofNat : ∀ (n x i : ℕ), (BitVec.ofNat n x).getLsbD i = (decide (i < n) && x.testBit i)
+BitVec.fromLEBytes_getElem!._f : ∀ (v : List Byte)
+  (f : List.below (motive := fun v => ∀ (j : ℕ), (BitVec.fromLEBytes v)[j]! = v[j / 8]!.testBit (j % 8)) v) (j : ℕ),
+  (BitVec.fromLEBytes v)[j]! = v[j / 8]!.testBit (j % 8)
+BitVec.getLsbD_ofFin : ∀ {n : ℕ} (x : Fin (2 ^ n)) (i : ℕ), { toFin := x }.getLsbD i = (↑x).testBit i
+BitVec.getLsbD_of_zero_length : ∀ {w i : ℕ}, w = 0 → ∀ (x : BitVec w), x.getLsbD i = false
+BitVec.getLsbD_fill : ∀ {w i : ℕ} {v : Bool}, (BitVec.fill w v).getLsbD i = (v && decide (i < w))
+BitVec.getLsbD_intMin : ∀ {i : ℕ} (w : ℕ), (BitVec.intMin w).getLsbD i = decide (i + 1 = w)
+BitVec.getLsbD_rotateRight : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ},
+  (x.rotateRight r).getLsbD i =
+    bif decide (i < w - r % w) then x.getLsbD (r % w + i) else decide (i < w) && x.getLsbD (i - (w - r % w))
+BitVec.setWidth_eq_append_extractLsb'._proof_2 : ∀ {v w : ℕ}, w - v + min v w = w
+BitVec.fromLEBytes_getElem!._proof_1_5 : ∀ (j : ℕ) (v' : List Byte), j < 8 → j < 8 * (v'.length + 1)
+BitVec.getLsbD_ofBoolListLE : ∀ {bs : List Bool} {i : ℕ}, (BitVec.ofBoolListLE bs).getLsbD i = bs.getD i false
+BitVec.fromLEBytes_toLEBytes._simp_1_3 : ∀ {m n : ℕ}, (m ∣ n) = (n % m = 0)
+BitVec.getLsbD_ofBoolListBE : ∀ {bs : List Bool} {i : ℕ},
+  (BitVec.ofBoolListBE bs).getLsbD i = (decide (i < bs.length) && bs.getD (bs.length - 1 - i) false)
+BitVec.getLsbD_eq_getMsbD : ∀ {w : ℕ} (x : BitVec w) (i : ℕ), x.getLsbD i = (decide (i < w) && x.getMsbD (w - 1 - i))
+BitVec.setWidth_append._proof_2 : ∀ {v k : ℕ}, ¬k ≤ v → k - v + v = k
+BitVec.setWidth_append : ∀ {w v k : ℕ} {x : BitVec w} {y : BitVec v},
+  BitVec.setWidth k (x ++ y) = if h : k ≤ v then BitVec.setWidth k y else BitVec.cast ⋯ (BitVec.setWidth (k - v) x ++ y)
+BitVec.setWidth_append_append_append_eq_shiftLeft_setWidth_or : ∀ {w w' w'' w''' w'''' : ℕ} {b : BitVec w}
+  {b' : BitVec w'} {b'' : BitVec w''} {b''' : BitVec w'''},
+  BitVec.setWidth w'''' (b ++ b' ++ b'' ++ b''') =
+    BitVec.setWidth w'''' b <<< (w' + w'' + w''') ||| BitVec.setWidth w'''' b' <<< (w'' + w''') |||
+        BitVec.setWidth w'''' b'' <<< w''' |||
+      BitVec.setWidth w'''' b'''
+BitVec.getLsbD_extractAndExtendBit : ∀ {w k len i : ℕ} {x : BitVec w},
+  (BitVec.extractAndExtendBit k len x).getLsbD i = (decide (i = 0) && decide (0 < len) && x.getLsbD k)
+BitVec.setWidth_append_of_eq : ∀ {v w w' v' : ℕ} {x : BitVec v} {y : BitVec w},
+  w' = w → BitVec.setWidth (v' + w') (x ++ y) = BitVec.setWidth v' x ++ BitVec.setWidth w' y
+BitVec.fromLEBytes_getElem!._simp_1_7 : ∀ {α : Type u_3} [inst : Semiring α] [inst_1 : PartialOrder α] [IsOrderedRing α]
+  [Nontrivial α] {n : ℕ} [inst_4 : n.AtLeastTwo], (0 < OfNat.ofNat n) = True
+BitVec.setWidth_setWidth_of_le : ∀ {w k l : ℕ} (x : BitVec w),
+  k ≤ l → BitVec.setWidth k (BitVec.setWidth l x) = BitVec.setWidth k x
+BitVec.getLsbD_shiftConcat : ∀ {w : ℕ} (x : BitVec w) (b : Bool) (i : ℕ),
+  (x.shiftConcat b).getLsbD i = (decide (i < w) && if i = 0 then b else x.getLsbD (i - 1))
+BitVec.getLsbD_sub : ∀ {w i : ℕ} {i_lt : i < w} {x y : BitVec w},
+  (x - y).getLsbD i = (x.getLsbD i ^^ ((~~~y + 1#w).getLsbD i ^^ BitVec.carry i x (~~~y + 1#w) false))
+BitVec.getLsbD_replicate : ∀ {i n w : ℕ} {x : BitVec w},
+  (BitVec.replicate n x).getLsbD i = (decide (i < w * n) && x.getLsbD (i % w))
+BitVec.getLsbD_rev : ∀ {w : ℕ} (x : BitVec w) (i : Fin w), x.getLsbD ↑i.rev = x.getMsbD ↑i
+BitVec.getLsbD_zero : ∀ {w i : ℕ}, (0#w).getLsbD i = false
+BitVec.setWidth_ushiftRight : ∀ {w i : ℕ} {x : BitVec w} {y : ℕ},
+  w ≤ i → BitVec.setWidth i (x >>> y) = BitVec.setWidth i x >>> y
+BitVec.getLsbD_not : ∀ {v i : ℕ} {x : BitVec v}, (~~~x).getLsbD i = (decide (i < v) && !x.getLsbD i)
+BitVec.setWidth_succ : ∀ {w i : ℕ} (x : BitVec w),
+  BitVec.setWidth (i + 1) x = BitVec.cons (x.getLsbD i) (BitVec.setWidth i x)
+BitVec.getLsbD_true_of_eq_clzAuxRec_of_ne_zero : ∀ {w n : ℕ} {x : BitVec w},
+  ¬x = 0#w → (∀ (i : ℕ), n < i → x.getLsbD i = false) → x.getLsbD (w - 1 - (x.clzAuxRec n).toNat) = true
+BitVec.getLsbD_setWidth' : ∀ {m n : ℕ} (ge : m ≥ n) (x : BitVec n) (i : ℕ),
+  (BitVec.setWidth' ge x).getLsbD i = x.getLsbD i
+BitVec.fromLEBytes_getElem!._simp_1_10 : ∀ {n : ℕ}, (n < 1) = (n = 0)
+BitVec.setWidth_shiftLeft_of_le : ∀ {w i : ℕ} {x : BitVec w} {y : ℕ},
+  i ≤ w → BitVec.setWidth i (x <<< y) = BitVec.setWidth i x <<< y
+BitVec.setWidth_setWidth_succ_eq_setWidth_setWidth_of_getLsbD_false : ∀ {w : ℕ} {x : BitVec w} {i : ℕ},
+  x.getLsbD i = false → BitVec.setWidth w (BitVec.setWidth (i + 1) x) = BitVec.setWidth w (BitVec.setWidth i x)
+BitVec.fromLEBytes_getElem!._simp_1_4 : ∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClass α] {a : α},
+  (0 ≤ a) = True
+BitVec.setWidth_zero : ∀ (m n : ℕ), BitVec.setWidth m 0#n = 0#m
+BitVec.getLsbD_shiftLeftZeroExtend : ∀ {m i : ℕ} (x : BitVec m) (n : ℕ),
+  (x.shiftLeftZeroExtend n).getLsbD i = (!decide (i < n) && x.getLsbD (i - n))
+BitVec.setWidth_setWidth_eq_self : ∀ {w : ℕ} {a : BitVec w} {w' : ℕ},
+  a < BitVec.twoPow w w' → BitVec.setWidth w (BitVec.setWidth w' a) = a

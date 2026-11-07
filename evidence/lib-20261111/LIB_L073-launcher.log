@@ -1,0 +1,35 @@
+{"attempt": "LIB_L073", "exit_status": 0, "wall_seconds": 21.07752091786824, "peak_rss_kib": "6445516", "swaps": "0", "print_axioms": []}
+BitVec.getElem!_shiftLeft_eq : ∀ {w : ℕ} (v : BitVec w) (n i : ℕ), n ≤ i ∧ i < w → (v <<< n)[i]! = v[i - n]!
+BitVec.getElem_set : ∀ {n : ℕ} {bv : BitVec n} {b : Bool} {i : Fin n} {j : ℕ} {j_lt : j < n},
+  (BitVec.set i b bv)[j] = if ↑i = j then b else bv[j]
+BitVec.getElem_ofBoolListLE._f : ∀ {ls : List Bool}
+  (f : List.below (motive := fun {ls} => ∀ {i : ℕ} (i_lt : i < ls.length), (BitVec.ofBoolListLE ls)[i] = ls[i]) ls)
+  {i : ℕ} (i_lt : i < ls.length), (BitVec.ofBoolListLE ls)[i] = ls[i]
+BitVec.eq_of_getLsbD_eq : ∀ {w : ℕ} {x y : BitVec w}, (∀ i < w, x.getLsbD i = y.getLsbD i) → x = y
+BitVec.getElem_append._proof_2 : ∀ {n m i : ℕ}, i < n + m → ¬i < m → i - m < n
+BitVec.getElem_abs : ∀ {w 
+...
+Elem!_mod_pow2_false._proof_1_9 : ∀ {w : ℕ} (x : BitVec w) (j n : ℕ), n + 1 ≤ j → ¬1 ≤ j → False
+BitVec.getElem_concat : ∀ {w : ℕ} (x : BitVec w) (b : Bool) (i : ℕ) (h : i < w + 1),
+  (x.concat b)[i] = if h : i = 0 then b else x[i - 1]
+BitVec.getElem_concat._proof_2 : ∀ {w : ℕ}, ∀ i < w + 1, ¬i = 0 → i - 1 < w
+BitVec.getElem_and : ∀ {w : ℕ} {x y : BitVec w} {i : ℕ} (h : i < w), (x &&& y)[i] = (x[i] && y[i])
+BitVec.testBit_toNat_eq_false : ∀ {n : ℕ} (b : BitVec n) (i : ℕ), n ≤ i → b.toNat.testBit i = false
+BitVec.getElem_rotateRight : ∀ {w : ℕ} {x : BitVec w} {r i : ℕ} (h : i < w),
+  (x.rotateRight r)[i] = if h' : i < w - r % w then x[r % w + i] else x[i - (w - r % w)]
+BitVec.getElem_setWidth_eq_getElem._proof_1_2 : ∀ {n : ℕ}, ∀ i < n, i < n
+BitVec.getElem!_eq_getElem : ∀ {w : ℕ} (x : BitVec w) (i : ℕ) (hi : i < w), x[i]! = x[i]
+BitVec.getElem_rotateRight._proof_2 : ∀ {w r i : ℕ}, i < w - r % w → r % w + i < w
+BitVec.testBit_getElem_toLEBytes_eq_getElem._proof_1 : ∀ {w : ℕ} (x : BitVec w) (i j : ℕ),
+  j < 8 ∧ 8 * i + j < w → ¬8 * i + j < w → False
+BitVec.getElem_eq_getElem? : ∀ {w : ℕ} (l : BitVec w) (i : ℕ) (h : i < w), l[i] = l[i]?.get ⋯
+BitVec.getElem!_mod_pow2_false._simp_1_7 : ∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1], (1 = 0) = False
+BitVec.testBit_toNat : ∀ {w i : ℕ} (x : BitVec w), x.toNat.testBit i = x.getLsbD i
+BitVec.getElem_sshiftRight : ∀ {w : ℕ} {x : BitVec w} {s i : ℕ} (h : i < w),
+  (x.sshiftRight s)[i] = if h : s + i < w then x[s + i] else x.msb
+BitVec.getElem_replicate : ∀ {i n w : ℕ} {x : BitVec w} (h : i < w * n),
+  (BitVec.replicate n x)[i] = if h' : w = 0 then false else x[i % w]
+BitVec.getElem_ofBool_zero : ∀ {b : Bool}, (BitVec.ofBool b)[0] = b
+BitVec.getElem_allOnes : ∀ {v : ℕ} (i : ℕ) (h : i < v), (BitVec.allOnes v)[i] = true
+
+Running as unit: run-r54c947bb7f0049fb8150a7ac5ef0c893.scope; invocation ID: 845fd8b2a3c54f3385463cd75cc7bf0e
