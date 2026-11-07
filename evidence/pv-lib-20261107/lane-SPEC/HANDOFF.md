@@ -38,3 +38,15 @@ NOT a contradiction of the frozen bridged OwnInit premises. Generic joint
 nonemptiness definition is only bookkeeping; not a top-level witness.
 49705 reserved binder `instance` fixed to `x`; failed input archived.
 Next Lean49707; no raw audit run yet.
+
+Focused49708 passed PV_LIB_SPEC_Source7Entry (2.56s,4741648KiB,swap0).
+entry_nonempty witnesses TOGETHER the complete existing five-prime source7
+entry validity/registration clauses and full allocation OWNER invariant.
+It uses a concrete OWNER with sixteen empty columns, non-null aligned dangling
+references, bounded byte extents, chosen entry headers and registrations.
+toVec_entry_nonempty additionally inhabits the literal STX to_vec.Pre, including
+its real saved caller, call argument store, full OWNER invariant and thread25
+numbering (provider start lemma BY NAME). These are entry-component witnesses,
+NOT full composed-machine/source-adequacy conjunctions or deployed builder proofs.
+49707 broad simplification of replicate/getElem was replaced with the symbolic
+List.getElem_replicate rewrite; failed input retained. Next Lean49709.
