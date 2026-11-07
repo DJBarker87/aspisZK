@@ -1,0 +1,74 @@
+import NMS_RSLGetterContract
+import NMS_SafePackets
+import NMS_RSLScalarEq
+import NHJ_CheckpointPacket
+set_option autoImplicit false
+noncomputable section
+namespace NMS_RSLCheckpoint
+open Aeneas Aeneas.Std AdapterRw NMS_RSLPoolCarriers NMS_RSLScalars
+
+theorem native_domain (a : r1_pool_adapter.owned.OwnedAccount)
+ (safe : NMS_SafePackets.LengthErrors (account a)) : NGL_LengthCarrier.domain a.length := by
+ cases stored : a.length with
+ | Ok n => exact Or.inl ⟨n,rfl⟩
+ | Err e =>
+   have image : (account a).length = .error (NMS_RSLError.error e) := by
+     simp only [account,stored,NMS_RSLError.reply]
+   rcases safe _ image with same | same
+   · have h := congrArg NMS_RSLError.raw same
+     have eq : e = .AccountBorrowFailed := by
+       rw [NMS_RSLError.left] at h
+       exact h
+     exact Or.inr (Or.inl (congrArg core.result.Result.Err eq))
+   · have h := congrArg NMS_RSLError.raw same
+     have eq : e = .InvalidAccountData := by
+       rw [NMS_RSLError.left] at h
+       exact h
+     exact Or.inr (Or.inr (congrArg core.result.Result.Err eq))
+
+theorem model (a : r1_pool_adapter.owned.OwnedAccount) (program : solana_pubkey.Pubkey)
+ (writable : Bool) (safe : NMS_SafePackets.LengthErrors (account a)) :
+ NMS_RSLError.reply id (NHJ_CheckpointPacket.G a program writable (NHJ_CheckpointPacket.encode a.length)) =
+ RSL.verifierCheckpoint (account a) (b32 program) writable := by
+ unfold NHJ_CheckpointPacket.G
+ rw [NHJ_CheckpointPacket.decode_encode a.length (native_domain a safe)]
+ unfold RSL.verifierCheckpoint
+ dsimp only [account,RSL.OwnedAccount.data_len]
+ rw [NMS_RSLScalarEq.key_neq]
+ split
+ · rfl
+ · cases stored : a.length with
+   | Err e => rfl
+   | Ok n =>
+     by_cases same : n.val = RSL.CHECKPOINT_BYTES
+     · have rawSame : n = 1768#usize := NLM_ScalarLaws.scalar_eq n _
+         (same.trans NMS_RSLScalarEq.checkpoint_value.symm)
+       simp only [stored,NMS_RSLError.reply,rawSame,beq_self_eq_true,bne_self_eq_false,
+         NMS_RSLScalarEq.checkpoint_value]
+       simp [same]
+     · have distinct : n ≠ 1768#usize := by
+         intro h
+         have v := congrArg (fun x : Usize => x.val) h
+         exact same (v.trans NMS_RSLScalarEq.checkpoint_value)
+       simp [stored,NMS_RSLError.reply,distinct,same]
+
+/-- CLOSED TX2:238 at the original account/program/writable arguments,
+transported into the canonical complete RSL ProgramError carrier. -/
+theorem closed (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
+ (program : solana_pubkey.Pubkey) (writable : Bool)
+ (safe : NMS_SafePackets.LengthErrors (account a)) :
+ NMS_Interpreted.Simulates (NMS_RSLError.reply id)
+  (NMS_Interpreted.liftResult (r1_pool_adapter.owned.require_verifier_checkpoint
+    (NGL_CheckpointModel.install ops) a program writable))
+  (RSL.RS.ofExcept (RSL.verifierCheckpoint (account a) (b32 program) writable)) := by
+ rw [NHJ_CheckpointPacket.substitute ops a program writable (native_domain a safe)]
+ intro env observation run
+ subst observation
+ change (⟨.ret (NMS_RSLError.reply id (NHJ_CheckpointPacket.G a program writable
+   (NHJ_CheckpointPacket.encode a.length))),[]⟩ : RSL.Obs _) = _
+ rw [model a program writable safe]
+ rfl
+#print axioms native_domain
+#print axioms model
+#print axioms closed
+end NMS_RSLCheckpoint

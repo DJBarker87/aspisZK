@@ -1,18 +1,63 @@
 {
-  "status":"DRAFT_OWN_INPUT_CLAUSES_NOT_ROW_CREDIT",
-  "review":"NMQ_PARENT_CLAUSES.json at sibling428e747c3e0 read-only",
-  "rows":[
-    {"row":"TX2:242","own_input_clauses":[],"open_child":"TX2:233","child_parameter":"NMS_RowSpec233.RowSpec_233","classification":"bd(3)/be(1) parameterized fold only; not a root hypothesis"},
-    {"row":"TX2:241","caller":"TX2:240","own_input_clauses":[
-      {"verbatim":"NMS_241OwnClauses.CheckpointBytes accounts","definition":"For every account/bytes selected from ORIGINAL accounts[6].bytes=Ok bytes, bytes.deref.val.length=1768.","classification":"bf(2) own-input extent; stage2 snapshot must discharge at SAME buffer"},
-      {"verbatim":"NMS_241OwnClauses.Root0Bytes accounts","definition":"For ORIGINAL account0/account6 byte vectors and the deterministic proof[688..proof.len] suffix, NLP_InputDomain.Root0 checkpointBytes.deref suffix.","classification":"bf(2) own-input provenance, placement admitted by NMQ; accepted occurrence OR existing charged collision supplied above240; no global failed-prefix Root0 claim"}
-    ],"child064_clauses":[
-      {"verbatim":"proof.val.length=57607","disposition":"From CLOSED scanner proof_length via242, SAME checked_add and guard/range in241; local numeric cut NMS_241Domain.from_entered, parent installation still in progress"},
-      {"verbatim":"checkpoint.val.length=1768","disposition":"241 own-input CheckpointBytes, carried to240"},
-      {"verbatim":"publicBytes.val.length≤1880","disposition":"fixed1880 encoder reply array gives equality1880; parent association still in progress"},
-      {"verbatim":"NLP_InputDomain.Root0 checkpoint proof","disposition":"241 own-input Root0Bytes at exact indexed slices; carried to240"}
-    ]}
+ "status": "CANONICAL_CLAUSES_PLUS_EXPLICIT_PROPOSED_DIFFERENCE_NO_ROW_CREDIT",
+ "rows": [
+  {
+   "row": "TX2:242",
+   "canonical_own_domain": "RSL.TX2_242.Domain a := True",
+   "open_child": "TX2:233",
+   "child_parameter": "RSL.TX2_233.RowSpec_233",
+   "source_fold": "NMS_RSL242Fold.fold"
+  },
+  {
+   "row": "TX2:241",
+   "caller": "TX2:240",
+   "canonical_own_domain": "RSL.TX2_241.Domain V a",
+   "own_input_clauses": [
+    {
+     "verbatim": "\u2200 x \u2208 a.accounts, RSL.TX2_241.Consistent x",
+     "classification": "D1; caller snapshot consistency, no independent child endpoint"
+    },
+    {
+     "verbatim": "\u2200 acc0 acc6 ck pr, a.accounts.length = 7 \u2192 a.accounts[0]? = some acc0 \u2192 a.accounts[6]? = some acc6 \u2192 acc6.bytes = .ok ck \u2192 acc0.bytes = .ok pr \u2192 pr.length = RSL.PROOF_ACCOUNT_BYTES \u2192 V.Root0 ck (RSL.slice pr RSL.AFTERSTATE_BYTES RSL.PROOF_ACCOUNT_BYTES)",
+     "classification": "D2; original own input only; no unconditional/global Root0"
+    }
+   ],
+   "child064_clauses": [
+    {
+     "clause": "proof length57607",
+     "from": "CLOSED scanner width plus SAME checked_add, length guard and range; NMS_RSLDomains.entered / typed NMS_RSLNativeDomain.entered (pending compile)"
+    },
+    {
+     "clause": "checkpoint1768",
+     "from": "242/233 successful verifierCheckpoint plus D1, NOT the stronger retired CheckpointBytes hypothesis"
+    },
+    {
+     "clause": "public\u22641880",
+     "from": "CLOSED fixed1880 encoder return, NMS_RSLRanges.public_extent"
+    },
+    {
+     "clause": "V.Root0 checkpoint proof",
+     "from": "canonical D2 at admitted original proof image; remains inside Domain V a"
+    }
+   ]
+  }
+ ],
+ "proposed_difference": {
+  "verbatim": "NMS_SafePackets.Safe a.accounts",
+  "definition": "For every original account, both bytes Err and length Err are AccountBorrowFailed or InvalidAccountData.",
+  "classification": "Additional own-input caller clause proposed under bf(2), not silently included in canonical RSL True/domain or any credited root. Needed for existing CLOSED NHJ native clone domains; all returning snapshot records establish it via NMS_SnapshotBoth.both (pending compile at this update).",
+  "propagation": "233\u2192242\u2192241\u2192240; actual240 snapshots discharge internally, so no new headline clause.",
+  "source_folds": [
+   "NMS_Safe242Fold.fold",
+   "NMS_Safe241Fold.fold"
   ],
-  "forbidden_premises_added":false,
-  "trust_changes":false
+  "alternative": "An allocation-aware general-error getter reference would retain full original-input domain; canonical pure getter has no independent stopped-clone arm."
+ },
+ "retired_clauses": [
+  "NMS_241OwnClauses.CheckpointBytes accounts",
+  "NMS_241OwnClauses.Root0Bytes accounts"
+ ],
+ "forbidden_premises_added": false,
+ "trust_changes": false,
+ "native_row_root_claimed": false
 }

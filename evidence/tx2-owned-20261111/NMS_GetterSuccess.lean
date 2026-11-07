@@ -14,7 +14,7 @@ theorem stored (ops : Ops) (account : r1_pool_adapter.owned.OwnedAccount) (bytes
  | Ok original =>
   simp only [NMS_Emitted.get,h] at returned
   cases returned
-  exact ⟨original,h,rfl⟩
+  exact ⟨original,rfl,rfl⟩
  | Err error =>
   simp only [NMS_Emitted.get,h] at returned
   exact False.elim (AspisR1.AdapterRw.Cuts.error_bind_ne_ok (ops.op35 error) bytes returned)

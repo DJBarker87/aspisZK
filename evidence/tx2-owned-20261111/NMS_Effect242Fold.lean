@@ -32,20 +32,92 @@ theorem fold (ops : Ops) (actual model : Effects) (children : Links actual model
  Refines (NMS_Effect242.validate ops actual auth program accounts data slot)
   (NMS_Effect242.validate ops model referenceAuth program accounts data slot) := by
  unfold NMS_Effect242.validate
- repeat' first
- | (solve | exact children.first _)
- | (solve | exact children.lane _)
- | (solve | exact children.nullifier _)
- | (solve | exact children.decode _)
- | (solve | exact children.pubkey _)
- | (solve | exact children.pool)
- | (solve | exact children.scan _)
- | (solve | exact children.reconstruct _ _ _)
- | (solve | exact children.data _)
- | (solve | exact child233 _ _ _ _ _)
- | (solve | exact refl _)
- | (apply NMS_RSLRefine.bind)
- | intro
- | split
+ apply NMS_RSLRefine.bind (refl _)
+ intro requestSize
+ cases hguard : (Slice.len data != requestSize) with
+ | false =>
+   apply NMS_RSLRefine.bind (children.decode _)
+   intro decoded
+   apply NMS_RSLRefine.bind (refl _)
+   intro mappedDecode
+   apply NMS_RSLRefine.bind (refl _)
+   intro flowDecode
+   cases flowDecode with
+   | Break residual => exact refl _
+   | Continue value =>
+     apply NMS_RSLRefine.bind (refl _)
+     intro profileMismatch
+     cases hguard : profileMismatch with
+     | false =>
+       apply NMS_RSLRefine.bind (refl _)
+       intro releaseMismatch
+       cases hguard : releaseMismatch with
+       | false =>
+         apply NMS_RSLRefine.bind (children.pool)
+         intro poolId
+         apply NMS_RSLRefine.bind (refl _)
+         intro poolMismatch
+         cases hguard : poolMismatch with
+         | false =>
+           apply NMS_RSLRefine.bind (children.pubkey _)
+           intro poolProgram
+           apply NMS_RSLRefine.bind (children.nullifier _)
+           intro nullifier
+           apply NMS_RSLRefine.bind (children.lane _)
+           intro laneReply
+           apply NMS_RSLRefine.bind (refl _)
+           intro mappedLane
+           apply NMS_RSLRefine.bind (refl _)
+           intro flowLane
+           cases flowLane with
+           | Break residual => exact refl _
+           | Continue value =>
+             apply NMS_RSLRefine.bind (refl _)
+             intro flowSlot
+             cases flowSlot with
+             | Break residual => exact refl _
+             | Continue value =>
+               apply NMS_RSLRefine.bind (child233 _ _ _ _ _)
+               intro authReply
+               apply NMS_RSLRefine.bind (refl _)
+               intro flowAuth
+               cases flowAuth with
+               | Break residual => exact refl _
+               | Continue value =>
+                 apply NMS_RSLRefine.bind (children.first _)
+                 intro firstAccount
+                 apply NMS_RSLRefine.bind (refl _)
+                 intro accountReply
+                 apply NMS_RSLRefine.bind (refl _)
+                 intro flowAccount
+                 cases flowAccount with
+                 | Break residual => exact refl _
+                 | Continue value =>
+                   apply NMS_RSLRefine.bind (children.data _)
+                   intro read
+                   apply NMS_RSLRefine.bind (refl _)
+                   intro flowData
+                   cases flowData with
+                   | Break residual => exact refl _
+                   | Continue value =>
+                     apply NMS_RSLRefine.bind (children.scan _)
+                     intro scanner
+                     apply NMS_RSLRefine.bind (refl _)
+                     intro flowScanner
+                     cases flowScanner with
+                     | Break residual => exact refl _
+                     | Continue value =>
+                       apply NMS_RSLRefine.bind (children.reconstruct _ _ _)
+                       intro reconstruction
+                       apply NMS_RSLRefine.bind (refl _)
+                       intro flowStatement
+                       cases flowStatement with
+                       | Break residual => exact refl _
+                       | Continue value =>
+                         exact refl _
+         | true => exact refl _
+       | true => exact refl _
+     | true => exact refl _
+ | true => exact refl _
 #print axioms fold
 end NMS_Effect242Fold
