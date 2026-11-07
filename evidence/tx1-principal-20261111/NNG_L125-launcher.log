@@ -1,0 +1,61 @@
+{"attempt": "NNG_L125", "exit_status": 1, "wall_seconds": 1.8012347200419754, "peak_rss_kib": "2437768", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Interpret136.silent_graph' does not depend on any axioms", "'AspisR1.NNG_Interpret136.call_graph' depends on axioms: [propext, Quot.sound]", "'AspisR1.NNG_Interpret136.exact_graph' depends on axioms: [sorryAx]", "'AspisR1.NNG_Interpret136.actual' depends on axioms: [sorryAx]"]}
+'AspisR1.NNG_Interpret136.silent_graph' does not depend on any axioms
+NNG_generated/NNG_Interpret136.lean:33:31: warning: This simp argument is unused:
+  graph
+
+Hint: Omit it from the simp argument list.
+  simp only [call, g̵r̵a̵p̵h̵,̵ ̵observation, invoke, run, exit, id_eq, List.flatMap_cons,
+  ̲  ̲ ̲ ̲List.flatMap_nil, List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_Interpret136.call_graph' depends on axioms: [propext, Quot.sound]
+NNG_generated/NNG_Interpret136.lean:51:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  append (observation id ?events ?code) fun a => observation ?decode ?events (?k a)
+
+...
+env) =
+    (out = (fun env => observation id (events env) (Code.plain r k)) env)
+
+case plain
+A : Type
+events : RSL.Env → Event → List RSL.Event
+B✝ : Type
+r : Result B✝
+k : B✝ → Code A
+ih : ∀ (a : B✝), interpret events (k a) = graph fun env => observation id (events env) (k a)
+tails : (fun a => interpret events (k a)) = fun a => graph fun env => observation id (events env) (k a)
+env : RSL.Env
+out : RSL.Obs A
+⊢ (out =
+      (fun env =>
+          append (observation id (events env) (Code.plain r Code.done)) fun a => observation id (events env) (k a))
+        env) =
+    (out = (fun env => observation id (events env) (Code.plain r k)) env)
+NNG_generated/NNG_Interpret136.lean:60:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  append (observation id ?events ?code) fun a => observation ?decode ?events (?k a)
+in the target expression
+  (out =
+      (fun env => append (observation id (events env) (invoke s args r)) fun a => observation id (events env) (k a))
+        env) =
+    (out = (fun env => observation id (events env) (Code.call s args r k)) env)
+
+case call
+A : Type
+events : RSL.Env → Event → List RSL.Event
+Args✝ B✝ : Type
+s : String
+args : Args✝
+r : Result B✝
+k : B✝ → Code A
+ih : ∀ (a : B✝), interpret events (k a) = graph fun env => observation id (events env) (k a)
+tails : (fun a => interpret events (k a)) = fun a => graph fun env => observation id (events env) (k a)
+env : RSL.Env
+out : RSL.Obs A
+⊢ (out =
+      (fun env => append (observation id (events env) (invoke s args r)) fun a => observation id (events env) (k a))
+        env) =
+    (out = (fun env => observation id (events env) (Code.call s args r k)) env)
+'AspisR1.NNG_Interpret136.exact_graph' depends on axioms: [sorryAx]
+'AspisR1.NNG_Interpret136.actual' depends on axioms: [sorryAx]
+
+Running as unit: run-r40e99f19db344f729985e1b369ef59b7.scope; invocation ID: abe0bdaa13b14d81abdf11474d61ce71

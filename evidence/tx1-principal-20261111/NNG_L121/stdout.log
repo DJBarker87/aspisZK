@@ -1,0 +1,26 @@
+'AspisR1.NNG_ObservationAlgebra.run_bind' does not depend on any axioms
+NNG_generated/NNG_ObservationAlgebra.lean:52:9: error: unsolved goals
+case ok
+A B C : Type
+decode : B → C
+events : Event → List RSL.Event
+code : Code A
+k : A → Code B
+log : List Event
+a : A
+⊢ {
+      exit :=
+        match (run (k a)).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.flatMap events log ++ List.flatMap events (run (k a)).2 } =
+    {
+      exit :=
+        match (run (k (id a))).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.flatMap events log ++ List.flatMap events (run (k (id a))).2 }
+'AspisR1.NNG_ObservationAlgebra.observation_bind' depends on axioms: [sorryAx]
+'AspisR1.NNG_ObservationAlgebra.graph_bind' depends on axioms: [propext, Quot.sound]

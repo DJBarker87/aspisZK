@@ -33,6 +33,7 @@ for i,l in enumerate(lines):
 Q='Q';T='r1_wire.SemanticTranscript H';Rec='r1_wire.ValidatedRecord';Pt='aspis_core.circle.SecureCirclePoint';BR='Array U8 32#usize'
 types={k:Q for k in ['running','val2','q','mask','q1','q2','q3','masked_terminal']}
 types.update(alpha='Alpha',transcript1=T,val1='Claims',a='Array Q 16#usize',a1='Alpha',a2='K29',vr=Rec,val3='K29',b='Bool',state_before_z0=BR,vr1=Rec,transcript2=T,val4=Pt,vr2=Rec,val5='K29',vr3=Rec,transcript3=T,val6=Pt,b1='Bool',val7='Slice U8',a3=BR)
+types['r2']='core.result.Result Q aspis_core.state_only_prefix.r0.Error'
 types['r11']='core.result.Result (Array U8 32#usize) core.array.TryFromSliceError'
 types.update(r4='core.result.Result r1_wire.ValidatedRecord r1_wire.Error',r7='core.result.Result r1_wire.ValidatedRecord r1_wire.Error')
 lookup={p['start']:p for p in points}

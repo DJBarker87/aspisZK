@@ -375,7 +375,7 @@ def f_mark3 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (val2 : Q) (
   c.c9 obs 3#u8
   f_a c s running val2 alpha transcript1 val1
 
-def f_r3 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (alpha : Alpha) (transcript1 : r1_wire.SemanticTranscript H) (val1 : Claims) : Result (Output H) := do
+def f_r3 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (alpha : Alpha) (transcript1 : r1_wire.SemanticTranscript H) (val1 : Claims) (r2 : core.result.Result Q aspis_core.state_only_prefix.r0.Error) : Result (Output H) := do
   let aspis_coredigestDigest32Inst := s.digest
   let public1 := s.publicValue
   let prefix1 := s.prefixValue
@@ -405,7 +405,7 @@ def f_r2 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (alpha : Alpha)
   let r2 ←
     c.c7
       public1 val1 alpha challenges
-  f_r3 c s running alpha transcript1 val1
+  f_r3 c s running alpha transcript1 val1 r2
 
 def f_r1 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (alpha : Alpha) (transcript1 : r1_wire.SemanticTranscript H) : Result (Output H) := do
   let aspis_coredigestDigest32Inst := s.digest

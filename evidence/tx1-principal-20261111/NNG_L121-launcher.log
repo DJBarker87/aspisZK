@@ -1,0 +1,54 @@
+{"attempt": "NNG_L121", "exit_status": 1, "wall_seconds": 1.9836915209889412, "peak_rss_kib": "2441864", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ObservationAlgebra.run_bind' does not depend on any axioms", "'AspisR1.NNG_ObservationAlgebra.observation_bind' depends on axioms: [sorryAx]", "'AspisR1.NNG_ObservationAlgebra.graph_bind' depends on axioms: [propext, Quot.sound]"]}
+'AspisR1.NNG_ObservationAlgebra.run_bind' does not depend on any axioms
+NNG_generated/NNG_ObservationAlgebra.lean:52:9: error: unsolved goals
+case ok
+A B C : Type
+decode : B → C
+events : Event → List RSL.Event
+code : Code A
+k : A → Code B
+log : List Event
+a : A
+⊢ {
+      exit :=
+        match (run (k a)).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.flatMap events log ++ List.flatMap events (run (k a)).2 } =
+    {
+      exit :=
+        match (run (k (id a))).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.fla
+...
+'AspisR1.NNG_ObservationAlgebra.run_bind' does not depend on any axioms
+NNG_generated/NNG_ObservationAlgebra.lean:52:9: error: unsolved goals
+case ok
+A B C : Type
+decode : B → C
+events : Event → List RSL.Event
+code : Code A
+k : A → Code B
+log : List Event
+a : A
+⊢ {
+      exit :=
+        match (run (k a)).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.flatMap events log ++ List.flatMap events (run (k a)).2 } =
+    {
+      exit :=
+        match (run (k (id a))).1 with
+        | ok a => RSL.Exit.ret (decode a)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events := List.flatMap events log ++ List.flatMap events (run (k (id a))).2 }
+'AspisR1.NNG_ObservationAlgebra.observation_bind' depends on axioms: [sorryAx]
+'AspisR1.NNG_ObservationAlgebra.graph_bind' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r532ab50dd7744186aee7685b12262dc0.scope; invocation ID: 095e4236ddc6417fb82344ce8c0aeae2

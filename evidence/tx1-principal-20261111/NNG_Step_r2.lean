@@ -16,6 +16,6 @@ theorem occurrence_r2 {H W : Type} (c : Calls) (s : Parent H W) (running : Q) (a
     let r2 ←
       c.c7
         public1 val1 alpha challenges
-    f_r3 c s running alpha transcript1 val1) := rfl
+    f_r3 c s running alpha transcript1 val1 r2) := rfl
 #print axioms occurrence_r2
 end AspisR1.NNG_SourceSuffixes
