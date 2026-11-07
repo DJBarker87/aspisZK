@@ -1,0 +1,44 @@
+{"attempt": "NMT_L327", "exit_status": 1, "wall_seconds": 0.28643464809283614, "peak_rss_kib": "483540", "swaps": "0", "print_axioms": ["'NMT_R2_345.body_packet' depends on axioms: [propext, sorryAx]", "'NMT_R2_345.source_packet' depends on axioms: [propext, sorryAx]"]}
+NMT_generated/NMT_R2_345Fold.lean:63:1: error: Type mismatch
+  stepFirst_valid V P C library child packet ?m.91 env
+has type
+  RS.bind
+    (@Spec.call (NMT_R2.TX1_328.Args V) (Except ProgramError Bytes) (NMT_R2.TX1_328.Domain V) (NMT_R2.TX1_328.Ref V P)
+      (firstArgs V C ?m.91))
+    (fun bytes =>
+      (RS.check (List.length bytes != List.length (ProofData.toCandidate ?m.91).checkpointData)
+            ProgramError.invalidAccountData).seq
+        (RS.pure bytes))
+    env (stepFirst V C child ?m.91 env)
+but is expected to have type
+  RS.bind
+    (@Spec.call (NMT_R2.TX1_328.Args V) (Except ProgramError Bytes) (NMT_R2.TX1_328.Domain V) (NMT_R2.TX1_328.Ref V P)
+      { public_ := C.semanticPu
+...
+NMT_generated/NMT_R2_345Fold.lean:63:1: error: Type mismatch
+  stepFirst_valid V P C library child packet ?m.91 env
+has type
+  RS.bind
+    (@Spec.call (NMT_R2.TX1_328.Args V) (Except ProgramError Bytes) (NMT_R2.TX1_328.Domain V) (NMT_R2.TX1_328.Ref V P)
+      (firstArgs V C ?m.91))
+    (fun bytes =>
+      (RS.check (List.length bytes != List.length (ProofData.toCandidate ?m.91).checkpointData)
+            ProgramError.invalidAccountData).seq
+        (RS.pure bytes))
+    env (stepFirst V C child ?m.91 env)
+but is expected to have type
+  RS.bind
+    (@Spec.call (NMT_R2.TX1_328.Args V) (Except ProgramError Bytes) (NMT_R2.TX1_328.Domain V) (NMT_R2.TX1_328.Ref V P)
+      { public_ := C.semanticPublic st, public_bytes := pub, proof := slice proof AFTERSTATE_BYTES PROOF_ACCOUNT_BYTES,
+        k := (List.getD s.original.data 1 0).toNat })
+    (fun checkpoint =>
+      (RS.check (List.length checkpoint != List.length ck) ProgramError.invalidAccountData).seq (RS.pure checkpoint))
+    env
+    (stepFirst V C child
+      { toParent := s, checkpointData := ck, publicData := pub, statement := st, validated := validated,
+        candidate := candidate, proofData := proof }
+      env)
+'NMT_R2_345.body_packet' depends on axioms: [propext, sorryAx]
+'NMT_R2_345.source_packet' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r4e5214b1c6654a76bb3e84757c949872.scope; invocation ID: e158ff1e99484c1ba600e9fa1bc495a7

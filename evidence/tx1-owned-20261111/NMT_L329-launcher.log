@@ -1,0 +1,45 @@
+{"attempt": "NMT_L329", "exit_status": 1, "wall_seconds": 12.032079224009067, "peak_rss_kib": "5940836", "swaps": "0", "print_axioms": ["'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_CheckpointEquation.lean:31:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep)) a.owner
+    program
+in the target expression
+  (do
+      let b ←
+        core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep))
+            (toAccount a).owner program
+      if b = true then Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if (toAccount a).is_signer = true then
+            Result.ok (core.result.Result.Err AdapterRw.solana_
+...
+
+              else do
+                let r ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a)
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let i ← (ops keep).op12 AdapterRw.aspis_r1_cost_probe.transport.Variant.S2
+                    if (val != i) = true then
+                        Result.ok
+                          (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      else Result.ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    if a.owner ≠ program then
+      Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if a.is_signer = true then
+        Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if a.executable = true then
+          Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if (a.is_writable != writable) = true then
+            Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else do
+            let length ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a)
+            finish length
+'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r617bb8f5a2624624be4f7a6275b13823.scope; invocation ID: ed91a82991d44696ae731a1cb12f2f7d

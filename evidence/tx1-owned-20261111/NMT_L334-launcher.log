@@ -1,0 +1,66 @@
+{"attempt": "NMT_L334", "exit_status": 1, "wall_seconds": 12.275328611955047, "peak_rss_kib": "5945320", "swaps": "0", "print_axioms": ["'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_CheckpointEquation.lean:34:3: error: `simp` made no progress
+NMT_generated/NMT_R2_CheckpointEquation.lean:47:20: error: unsolved goals
+case neg.isFalse.isFalse.isFalse.ok.Ok
+keep : Bool
+a : Account
+program : Key
+writable : Bool
+comparison :
+  core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep)) a.owner
+      program =
+    Result.ok (decide (a.owner ≠ program))
+h : ¬a.owner ≠ program
+h✝² : ¬a.is_signer = true
+h✝¹ : ¬a.executable = true
+h✝ : ¬(a.is_writable != writable) = true
+a✝ : Usize
+hr :
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a) = Result.ok (core.result.Result.Ok a✝)
+⊢ (if ↑a✝
+...
+ unsolved goals
+case neg.isFalse.isFalse.isFalse.ok.Ok
+keep : Bool
+a : Account
+program : Key
+writable : Bool
+comparison :
+  core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep)) a.owner
+      program =
+    Result.ok (decide (a.owner ≠ program))
+h : ¬a.owner ≠ program
+h✝² : ¬a.is_signer = true
+h✝¹ : ¬a.executable = true
+h✝ : ¬(a.is_writable != writable) = true
+a✝ : Usize
+hr :
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a) = Result.ok (core.result.Result.Ok a✝)
+⊢ (if ↑a✝ = 1768 then Result.ok (core.result.Result.Ok ())
+    else Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+    Result.ok
+      (if ↑a✝ = 1768 then core.result.Result.Ok ()
+      else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+
+case neg.isFalse.isFalse.isFalse.ok.Err
+keep : Bool
+a : Account
+program : Key
+writable : Bool
+comparison :
+  core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep)) a.owner
+      program =
+    Result.ok (decide (a.owner ≠ program))
+h : ¬a.owner ≠ program
+h✝² : ¬a.is_signer = true
+h✝¹ : ¬a.executable = true
+h✝ : ¬(a.is_writable != writable) = true
+a✝ : AdapterRw.solana_program_error.ProgramError
+hr :
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a) = Result.ok (core.result.Result.Err a✝)
+⊢ core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) (core.result.Result.Err a✝) =
+    Result.ok (core.result.Result.Err a✝)
+'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r52e5b6c0b9f5496194ac8682edddf5ae.scope; invocation ID: 65919c9204874131b018c1f00061697f

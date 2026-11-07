@@ -1,0 +1,56 @@
+{"attempt": "NMT_L332", "exit_status": 1, "wall_seconds": 18.38106953795068, "peak_rss_kib": "5945480", "swaps": "0", "print_axioms": ["'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_CheckpointEquation.lean:34:3: error: `simp` made no progress
+NMT_generated/NMT_R2_CheckpointEquation.lean:46:39: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← Result.ok (core.result.Result.Ok a✝)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i ← (ops keep).op12 AdapterRw.aspis_r1_cost_probe.transport.Variant.S2
+        if (val != i) = true then
+            Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else Result.ok (core.result.Result.Ok ())
+      | core.ops.control_flow.ControlFlow.Break r
+...
+ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+is not definitionally equal to the right-hand side
+  do
+    let length ← Result.ok (core.result.Result.Ok a✝)
+    finish length
+
+case neg.isFalse.isFalse.isFalse.ok.Ok
+keep : Bool
+a : Account
+program : Key
+writable : Bool
+comparison :
+  core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops keep)) a.owner
+      program =
+    Result.ok (decide (a.owner ≠ program))
+h : ¬a.owner ≠ program
+h✝² : ¬a.is_signer = true
+h✝¹ : ¬a.executable = true
+h✝ : ¬(a.is_writable != writable) = true
+a✝ : Usize
+hr :
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a) = Result.ok (core.result.Result.Ok a✝)
+⊢ (do
+      let r ← Result.ok (core.result.Result.Ok a✝)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← (ops keep).op12 AdapterRw.aspis_r1_cost_probe.transport.Variant.S2
+          if (val != i) = true then
+              Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else Result.ok (core.result.Result.Ok ())
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    do
+    let length ← Result.ok (core.result.Result.Ok a✝)
+    finish length
+'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r331ce91b9568450d812fd4a361d83edf.scope; invocation ID: d3a1b4c6f2114fda9eae78143a66404a

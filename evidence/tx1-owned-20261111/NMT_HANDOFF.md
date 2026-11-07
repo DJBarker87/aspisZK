@@ -1,3 +1,7 @@
+# Revision 2 stage 2 — active
+
+See NMT_R2_STAGE2.md for checked source-fold and unrestricted actual-getter results and exact remaining associations. 345 remains OPEN at the actual-parent boundary;328/094 follow only after its complete parameterized fold. Historical observation-gap stop is superseded.
+
 # Revision 2 continuation — active
 
 Fresh allowance: 200 Lean/link/audit scopes from L286, no extraction, 20 restricted Kani. Prior runs used 285 scopes total. The lead adopted NMT-S1/S2 as allocation arms; the historical stop below is superseded. Canonical revision-2 sources are pinned by NMT_R2_SPEC_PROVENANCE.json. Work continues in order 345, 328, 094. No candidate is yet claimed.
