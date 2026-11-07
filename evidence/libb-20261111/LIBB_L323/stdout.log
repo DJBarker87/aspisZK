@@ -1,0 +1,56 @@
+LIBB_V2Lib.library : RSL.TX2_241.V2Lib
+LIBB_V2Lib.values : NND_Tx2Values.Values LIBB_V2Lib.library
+LIBB_Tx2Auth.native {Ambient : Type} (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (world : NLM_PacketTypes.World Ambient)
+  (domain : LIBB_Tx2Domain.domain (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck))
+  (outcome :
+    NLW_Full064.End (LIBB_PartitionEnv.H env)
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () })
+  (events : List (NLW_Full064.Event Ambient Unit))
+  (invocation :
+    NMN_064.Native (LIBB_PartitionEnv.H env)
+      {
+        args :=
+          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () },
+        world := world }
+      outcome events)
+  (bound : LIBB_ObservationFold.Bound064 env pub proof ck outcome) (trace : NNC_DigestTrace.Trace)
+  (source : NNC_ObservedWeak.TraceOf outcome trace) :
+  NLW_Full064.Law (LIBB_PartitionEnv.H env)
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () }
+      outcome ∧
+    events =
+        NLW_Full064.chronology (LIBB_PartitionEnv.H env)
+          {
+            args :=
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () },
+            world := world }
+          outcome ∧
+      LIBB_Tx2Auth.law (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+        {
+          exit :=
+            NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () }
+              outcome,
+          events := NNC_DigestTrace.render trace }
+LIBB_Tx2Auth.returns (pub proof ck : RSL.Bytes) (env : RSL.Env) :
+  NND_Returned.Returns (LIBB_Tx2Auth.law pub proof ck) env (LIBB_Tx2Auth.value pub proof ck env)
+LIBB_Tx2Auth.writeFree (pub proof ck : RSL.Bytes) : RSL.TAS.WriteFree (LIBB_Tx2Auth.law pub proof ck)
+LIBB_Tx2Auth.resolved_functional (pub proof ck : RSL.Bytes) : (LIBB_Tx2Auth.resolved pub proof ck).Functional
+LIBB_V2Lib.returned_gate (pub proof ck : RSL.Bytes) (env : RSL.Env)
+  (_domain : RSL.TX2_241.Dom064 LIBB_V2Lib.library (pub, proof, ck)) :
+  NND_Returned.Returns (LIBB_V2Lib.library.tx2auth pub proof ck) env (LIBB_V2Lib.values.auth pub proof ck env) ∧
+    (LIBB_Tx2Auth.resolved pub proof ck).Functional
+LIBB_V2Lib.weak_exact {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  (LIBB_V2Lib.weak H d hash world).tx2auth = NNC_ObservedLaw.w H d hash world
+LIBB_V2Lib.canonical_identity :
+  RSL.TAS.lib LIBB_V2Lib.library LIBB_V2Lib.library.Root0 LIBB_V2Lib.library.tx2auth = LIBB_V2Lib.library
+LIBB_V2Lib.weak_identity {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  LIBB_V2Lib.weak H d hash world = RSL.TCK.weaken LIBB_V2Lib.library (NNC_ObservedLaw.w H d hash world)
+LIB_Instances.VL : RSL.VLib
+LIB_Instances.P : RSL.PreparedNew LIB_Instances.VL
+LIB_Instances.C : RSL.TX1_345.S1Lib LIB_Instances.VL

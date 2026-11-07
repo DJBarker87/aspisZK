@@ -1,0 +1,78 @@
+LIBB_generated/LIBB_ObservationFold.lean:68:26: error: unsolved goals
+case this
+env : RSL.Env
+pub proof ck : Slice U8
+len : (↑proof).length = 57607
+publicLen : (↑pub).length ≤ 1880
+root0 : NLP_InputDomain.Root0 ck proof
+records : List (Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ())
+cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env)
+native :
+  NLT_CompleteRoot.Native (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()
+    (NLT_CompleteRoot.End.c04Stopped records cut)
+bound : Bound env (NLT_CompleteRoot.End.c04Stopped records cut)
+before : NNC_DigestTrace.Trace
+beforeSource : NNC_RecordTrace.Records records before
+reply : R Unit
+suffix : List Event
+events :
+  (LIBB_Tx2EnvCode.observed env pub proof ck).events =
+    List.map actual records ++ Event.merkle cut.proof cut.prepared cut.folded reply :: suffix
+log : SdkC_Source.Log
+child :
+  NNC_C04StopEvents.Stopped (LIBB_PartitionEnv.H env) cut.proof cut.prepared.queries 1#usize
+    (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV
+    cut.inside cut.pending log
+⊢ ?m.193
+
+case c04Stopped
+env : RSL.Env
+pub proof ck : Slice U8
+len : (↑proof).length = 57607
+publicLen : (↑pub).length ≤ 1880
+root0 : NLP_InputDomain.Root0 ck proof
+records : List (Occurrence (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) ())
+cut : NLT_C04Stop.Cut (LIBB_PartitionEnv.H env)
+native :
+  NLT_CompleteRoot.Native (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) pub proof ck ()
+    (NLT_CompleteRoot.End.c04Stopped records cut)
+bound : Bound env (NLT_CompleteRoot.End.c04Stopped records cut)
+before : NNC_DigestTrace.Trace
+beforeSource : NNC_RecordTrace.Records records before
+reply : R Unit
+suffix : List Event
+events :
+  (LIBB_Tx2EnvCode.observed env pub proof ck).events =
+    List.map actual records ++ Event.merkle cut.proof cut.prepared cut.folded reply :: suffix
+log : SdkC_Source.Log
+child :
+  NNC_C04StopEvents.Stopped (LIBB_PartitionEnv.H env) cut.proof cut.prepared.queries 1#usize
+    (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV
+    cut.inside cut.pending log
+this : ?m.193
+⊢ LIBB_ObservationModel.Common env pub proof ck
+    {
+      exit :=
+        match NLT_CompleteRoot.End.c04Stopped records cut, native, bound, ⋯ with
+        | NLT_CompleteRoot.End.resolved result records, native, bound, source => NNC_WeakSpec.resultExit result
+        | NLT_CompleteRoot.End.c04Stopped records cut_1, native, bound, source => RSL.Exit.abort,
+      events :=
+        NNC_DigestTrace.render
+          (before ++
+            (List.map NNC_DigestTrace.Step.attempted log ++ [NNC_DigestTrace.Step.pending cut.pending.parts])) }
+LIBB_generated/LIBB_ObservationFold.lean:72:13: error: unexpected token ':='; expected ':'
+LIBB_generated/LIBB_ObservationFold.lean:78:68: error: unexpected token ','; expected ':'
+LIBB_generated/LIBB_ObservationFold.lean:83:32: error: Application type mismatch: The argument
+  outcome
+has type
+  NLT_CompleteRoot.End (LIBB_PartitionEnv.H env) a.digest a.hash
+but is expected to have type
+  Outcome env
+in the application
+  Bound env outcome
+LIBB_generated/LIBB_ObservationFold.lean:101:7: error: Internal error in mkElimApp: Expected first 3 arguments of motive in conclusion to be one of the targets:
+  ?m.30 outcome events native
+'LIBB_ObservationFold.tx2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.resolved_details' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.stopped_details' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationFold.common' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

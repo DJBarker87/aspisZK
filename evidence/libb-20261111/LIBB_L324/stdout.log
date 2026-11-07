@@ -1,0 +1,93 @@
+def RSL.Spec.Functional : {α : Type} → RSL.Spec α → Prop :=
+fun {α} m => ∀ (env : RSL.Env), ∃ o, ∀ (o' : RSL.Obs α), m env o' ↔ o' = o
+def LIBB_Tx2Auth.law : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBB_V2Carriers.VErr Unit) :=
+fun pub proof ck =>
+  if h : LIBB_Tx2Auth.Fits pub proof ck then
+    LIBB_ObservationModel.law (LIB_Bytes.fromBytes pub ⋯) (LIB_Bytes.fromBytes proof ⋯) (LIB_Bytes.fromBytes ck ⋯)
+  else RSL.Spec.panic
+def LIBB_Tx2Auth.resolved : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBB_V2Carriers.VErr Unit) :=
+fun pub proof ck =>
+  if h : LIBB_Tx2Auth.Fits pub proof ck then
+    LIBB_EnvValues.graph (LIB_Bytes.fromBytes pub ⋯) (LIB_Bytes.fromBytes proof ⋯) (LIB_Bytes.fromBytes ck ⋯)
+  else RSL.Spec.panic
+def LIBB_Tx2Auth.value : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Env → Except LIBB_V2Carriers.VErr Unit :=
+fun pub proof ck env =>
+  if h : LIBB_Tx2Auth.Fits pub proof ck then
+    LIBB_EnvValues.evaluator env (LIB_Bytes.fromBytes pub ⋯) (LIB_Bytes.fromBytes proof ⋯) (LIB_Bytes.fromBytes ck ⋯)
+  else Except.error AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint
+theorem LIBB_Tx2Auth.native : ∀ {Ambient : Type} (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (world : NLM_PacketTypes.World Ambient),
+  LIBB_Tx2Domain.domain (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) →
+    ∀
+      (outcome :
+        NLW_Full064.End (LIBB_PartitionEnv.H env)
+          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () })
+      (events : List (NLW_Full064.Event Ambient Unit)),
+      NMN_064.Native (LIBB_PartitionEnv.H env)
+          {
+            args :=
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () },
+            world := world }
+          outcome events →
+        LIBB_ObservationFold.Bound064 env pub proof ck outcome →
+          ∀ (trace : NNC_DigestTrace.Trace),
+            NNC_ObservedWeak.TraceOf outcome trace →
+              NLW_Full064.Law (LIBB_PartitionEnv.H env)
+                  { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                    hash := () }
+                  outcome ∧
+                events =
+                    NLW_Full064.chronology (LIBB_PartitionEnv.H env)
+                      {
+                        args :=
+                          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof,
+                            checkpoint := ck, hash := () },
+                        world := world }
+                      outcome ∧
+                  LIBB_Tx2Auth.law (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+                    {
+                      exit :=
+                        NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+                          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof,
+                            checkpoint := ck, hash := () }
+                          outcome,
+                      events := NNC_DigestTrace.render trace } :=
+⋯
+theorem LIBB_Tx2Auth.returns : ∀ (pub proof ck : RSL.Bytes) (env : RSL.Env),
+  NND_Returned.Returns (LIBB_Tx2Auth.law pub proof ck) env (LIBB_Tx2Auth.value pub proof ck env) :=
+⋯
+theorem LIBB_Tx2Auth.resolved_functional : ∀ (pub proof ck : RSL.Bytes),
+  (LIBB_Tx2Auth.resolved pub proof ck).Functional :=
+⋯
+def LIBB_V2Lib.library : RSL.TX2_241.V2Lib :=
+{ VErr := LIBB_V2Carriers.VErr, debug := LIBB_V2Carriers.debug, Root0 := LIBB_V2Carriers.Root0,
+  tx2auth := LIBB_Tx2Auth.law }
+def LIBB_V2Lib.values : NND_Tx2Values.Values LIBB_V2Lib.library :=
+{ auth := LIBB_Tx2Auth.value, auth_ret := ⋯ }
+theorem LIBB_V2Lib.returned_gate : ∀ (pub proof ck : RSL.Bytes) (env : RSL.Env),
+  RSL.TX2_241.Dom064 LIBB_V2Lib.library (pub, proof, ck) →
+    NND_Returned.Returns (LIBB_V2Lib.library.tx2auth pub proof ck) env (LIBB_V2Lib.values.auth pub proof ck env) ∧
+      (LIBB_Tx2Auth.resolved pub proof ck).Functional :=
+⋯
+theorem LIBB_V2Lib.domain_exact : ∀ (pub proof ck : RSL.Bytes),
+  RSL.TX2_241.Dom064 LIBB_V2Lib.library (pub, proof, ck) ↔ LIBB_Tx2Domain.domain pub proof ck :=
+⋯
+def LIBB_V2Lib.weak : {Ambient X : Type} →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    VTop_Stages.aspis_core.digest.Digest32 X → X → NLM_PacketTypes.World Ambient → RSL.TX2_241.V2Lib :=
+fun {Ambient X} H d hash world => RSL.TAS.lib LIBB_V2Lib.library (fun x x_1 => True) (NNC_ObservedLaw.w H d hash world)
+@[defeq] theorem LIBB_V2Lib.weak_exact : ∀ {Ambient X : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (d : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (world : NLM_PacketTypes.World Ambient),
+  (LIBB_V2Lib.weak H d hash world).tx2auth = NNC_ObservedLaw.w H d hash world :=
+⋯
+@[defeq] theorem LIBB_V2Lib.canonical_identity : RSL.TAS.lib LIBB_V2Lib.library LIBB_V2Lib.library.Root0
+    LIBB_V2Lib.library.tx2auth =
+  LIBB_V2Lib.library :=
+⋯
+@[defeq] theorem LIBB_V2Lib.weak_identity : ∀ {Ambient X : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (d : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (world : NLM_PacketTypes.World Ambient),
+  LIBB_V2Lib.weak H d hash world = RSL.TCK.weaken LIBB_V2Lib.library (NNC_ObservedLaw.w H d hash world) :=
+⋯

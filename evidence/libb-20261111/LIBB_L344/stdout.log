@@ -1,0 +1,71 @@
+LIBB_V2Star.library : RSL.TX2_241.V2Lib
+LIBB_V2Star.values : NND_Tx2Values.Values LIBB_V2Star.library
+LIBB_V2Star.gate : ∀ (x : RSL.Bytes × RSL.Bytes × RSL.Bytes),
+  RSL.TX2_241.Dom064 LIBB_V2Star.library x →
+    LIBB_ReturnFunctional.ReturnFunctional (LIBB_V2Star.library.tx2auth x.1 x.2.1 x.2.2)
+LIBB_Tx2Auth.native {Ambient : Type} (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (world : NLM_PacketTypes.World Ambient)
+  (domain : LIBB_Tx2Domain.domain (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck))
+  (outcome :
+    NLW_Full064.End (LIBB_PartitionEnv.H env)
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () })
+  (events : List (NLW_Full064.Event Ambient Unit))
+  (invocation :
+    NMN_064.Native (LIBB_PartitionEnv.H env)
+      {
+        args :=
+          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () },
+        world := world }
+      outcome events)
+  (bound : LIBB_ObservationFold.Bound064 env pub proof ck outcome) (trace : NNC_DigestTrace.Trace)
+  (source : NNC_ObservedWeak.TraceOf outcome trace) :
+  NLW_Full064.Law (LIBB_PartitionEnv.H env)
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () }
+      outcome ∧
+    events =
+        NLW_Full064.chronology (LIBB_PartitionEnv.H env)
+          {
+            args :=
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () },
+            world := world }
+          outcome ∧
+      LIBB_Tx2Auth.law (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+        {
+          exit :=
+            NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () }
+              outcome,
+          events := NNC_DigestTrace.render trace }
+LIBB_V2Star.weak_identity {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  LIBB_V2Star.weak H d hash world = RSL.TCK.weaken LIBB_V2Star.library (NNC_ObservedLaw.w H d hash world)
+LIBB_V2Star.weak_exact {Ambient X : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (d : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) :
+  (LIBB_V2Star.weak H d hash world).tx2auth = NNC_ObservedLaw.w H d hash world
+LIB_Instances.VL : RSL.VLib
+LIB_Instances.P : RSL.PreparedNew LIB_Instances.VL
+LIB_Instances.C : RSL.TX1_345.S1Lib LIB_Instances.VL
+def LIBB_ReturnFunctional.ReturnFunctional : {α : Type} → RSL.Spec α → Prop :=
+fun {α} m =>
+  ∀ (env : RSL.Env) (o₁ o₂ : RSL.Obs α) (r₁ r₂ : α),
+    m env o₁ → m env o₂ → o₁.exit = RSL.Exit.ret r₁ → o₂.exit = RSL.Exit.ret r₂ → o₁ = o₂
+theorem LIBB_Tx2AuthGate.returnFunctional : ∀ (pub proof ck : RSL.Bytes),
+  LIBB_ReturnFunctional.ReturnFunctional (LIBB_Tx2Auth.law pub proof ck) :=
+⋯
+theorem LIBB_Tx2AuthGate.returned_resolved : ∀ (pub proof ck : RSL.Bytes) (env : RSL.Env)
+  (o : RSL.Obs (Except LIBB_V2Carriers.VErr Unit)) (r : Except LIBB_V2Carriers.VErr Unit),
+  LIBB_Tx2Auth.law pub proof ck env o → o.exit = RSL.Exit.ret r → LIBB_Tx2Auth.resolved pub proof ck env o :=
+⋯
+theorem LIBB_V2Star.gate : ∀ (x : RSL.Bytes × RSL.Bytes × RSL.Bytes),
+  RSL.TX2_241.Dom064 LIBB_V2Star.library x →
+    LIBB_ReturnFunctional.ReturnFunctional (LIBB_V2Star.library.tx2auth x.1 x.2.1 x.2.2) :=
+⋯
+@[reducible] def LIBB_V2Star.library : RSL.TX2_241.V2Lib :=
+LIBB_V2Lib.library
+@[reducible] def LIBB_V2Star.weak : {Ambient X : Type} →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    VTop_Stages.aspis_core.digest.Digest32 X → X → NLM_PacketTypes.World Ambient → RSL.TX2_241.V2Lib :=
+fun {Ambient X} H d hash world => RSL.TAS.lib LIBB_V2Star.library (fun x x_1 => True) (NNC_ObservedLaw.w H d hash world)
+'LIBB_V2Star.gate' depends on axioms: [propext, Classical.choice, Quot.sound]

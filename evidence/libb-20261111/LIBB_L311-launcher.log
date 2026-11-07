@@ -1,0 +1,56 @@
+{"attempt": "LIBB_L311", "exit_status": 1, "wall_seconds": 18.6587110881228, "peak_rss_kib": "6738656", "swaps": "0", "print_axioms": ["'LIBB_ObservationValues.prefix_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.piece_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.pieces_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.common_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.writeFree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.returned_unique' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LIBB_ObservationValues.resolved_functional' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+LIBB_generated/LIBB_ObservationValues.lean:51:85: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (LIB_Carriers.resultObs LIBB_ObservationModel.convert ?events ?r).events
+in the target expression
+  RSL.Event.write cell bytes ∉
+    (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.events env pub proof ck) (LIBB_Tx2EnvCode.code env pub proof ck)).events
+
+case fail
+pub proof ck : Slice U8
+env : RSL.Env
+cell : ℕ
+bytes : RSL.Bytes
+e : Error
+parsed : NLE_ParseInstall.parse proof = Result.fail e
+⊢ RSL.Event.write ce
+...
+ck) (LIBB_Tx2EnvCode.code env pub proof ck)).events
+LIBB_generated/LIBB_ObservationValues.lean:54:86: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (LIB_Carriers.resultObs LIBB_ObservationModel.convert ?events ?r).events
+in the target expression
+  RSL.Event.write cell bytes ∉
+    (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.events env pub proof ck) (LIBB_Tx2EnvCode.code env pub proof ck)).events
+
+case ok.Err
+pub proof ck : Slice U8
+env : RSL.Env
+cell : ℕ
+bytes : RSL.Bytes
+e : VTop_Stages.verifier.Error
+parsed : NLE_ParseInstall.parse proof = Result.ok (core.result.Result.Err e)
+⊢ RSL.Event.write cell bytes ∉
+    (LIB_Carriers.resultObs
+        (fun r =>
+          match r with
+          | core.result.Result.Ok PUnit.unit => Except.ok ()
+          | core.result.Result.Err e => Except.error e)
+        (LIBB_Tx2EnvTrace.events env pub proof ck) (LIBB_Tx2EnvCode.code env pub proof ck)).events
+'LIBB_ObservationValues.prefix_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.piece_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.pieces_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.common_no_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.writeFree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.returned_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LIBB_ObservationValues.resolved_functional' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7a8c072236c445e6a812c5d7f283d26f.scope; invocation ID: f7a41399d8ec48c485b0fa9dac33fdae
