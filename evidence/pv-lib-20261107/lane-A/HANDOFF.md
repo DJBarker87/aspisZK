@@ -211,3 +211,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49885 passed exact pinned replay PV_THR2_OwnInitAllocationHandlerBridged; see receipt for time/RSS/swap/revision/axioms.
 
 49886 passed exact pinned replay PV_THR2_OwnInitInterpreterBridged; see receipt for time/RSS/swap/revision/axioms.
+
+49887 passed exact pinned replay PV_LIB_A_Residual280; see receipt for time/RSS/swap/revision/axioms.
