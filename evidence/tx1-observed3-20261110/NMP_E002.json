@@ -1,0 +1,34 @@
+{
+ "attempt": "NMP_E002",
+ "kind": "extract",
+ "module": "prepare",
+ "sources": [
+  "NMP_stage.py",
+  "NMP_OPACITY.json",
+  "NMP_STAGING_MANIFEST.json",
+  "NMP_FROZEN_PAYLOAD.json.xz",
+  "NMP_FROZEN_PAYLOAD.json.sha256"
+ ],
+ "command": [
+  "python3",
+  "NMP_stage.py",
+  "--extract",
+  "--function",
+  "prepare",
+  "--workspace",
+  "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_emission_src",
+  "--out",
+  "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_emitted/prepare",
+  "--opacity",
+  "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_OPACITY.json"
+ ],
+ "timeout": 180,
+ "env": {
+  "TMPDIR": "/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_tmp",
+  "CARGO_NET_OFFLINE": "true"
+ },
+ "expected_time": "Optimized pinned Charon extraction then Aeneas emission; no arithmetic gate",
+ "collect_globs": [
+  "NMP_emitted/prepare/**/*"
+ ]
+}
