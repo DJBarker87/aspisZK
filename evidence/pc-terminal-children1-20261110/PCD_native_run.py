@@ -3,6 +3,27 @@ import base64
 features=['default','pair-forest-account-evidence','pair-forest-source-invariant-audit','pair-forest-source-result-invariant-audit','pair-forest-verifier-lane-invariant-audit','r1-split-checkpoint']
 a=sys.argv[1]
 harnesses={
+ 'PCD_K045':'PCD_box_contract',
+ 'PCD_K046':'PCD_box_corrupt_control',
+ 'PCD_K047':'PCD_box_allocation_control',
+ 'PCD_K048':'PCD_box_fresh_control',
+ 'PCD_K049':'PCD_box_weak_contract',
+ 'PCD_K050':'PCD_box_inverse_contract',
+ 'PCD_K051':'PCD_box_real_caller',
+ 'PCD_K052':'PCD_box_unimplied_caller',
+ 'PCD_K053':'PCD_box_modifies_control',
+ 'PCD_K078':'PCD_box_fresh_control',
+ 'PCD_K079':'PCD_request_contract','PCD_K080':'PCD_request_control',
+ 'PCD_K060':'PCD_result_box_weak_contract',
+ 'PCD_K061':'PCD_result_box_inverse_contract',
+ 'PCD_K062':'PCD_result_box_real_caller',
+ 'PCD_K063':'PCD_result_box_unimplied_caller',
+ 'PCD_K064':'PCD_result_box_modifies_control',
+ 'PCD_K059':'PCD_box_contract',
+ 'PCD_K057':'PCD_box_contract','PCD_K058':'PCD_box_owner_contract',
+ 'PCD_K056':'PCD_box_contract',
+ 'PCD_K054':'PCD_decode_tail_contract','PCD_K055':'PCD_decode_tail_control',
+ 'PCD_K043':'PCD_request_contract','PCD_K044':'PCD_request_control',
  'PCD_K039':'PCD_iterator_contract','PCD_K040':'PCD_iterator_control',
  'PCD_K041':'PCD_frontier_contract','PCD_K042':'PCD_frontier_control',
  'PCD_K037':'PCD_fidelity_real_caller','PCD_K038':'PCD_fidelity_unimplied_caller',
@@ -17,16 +38,19 @@ harnesses={
  'PCD_K009':'PCD_frontier_contract','PCD_K010':'PCD_frontier_control','PCD_K013':'PCD_frontier_contract','PCD_K014':'PCD_frontier_control',
  'PCD_K015':'PCD_frontier_contract','PCD_K016':'PCD_frontier_control','PCD_K019':'PCD_frontier_contract','PCD_K020':'PCD_frontier_control',
  'PCD_K017':'PCD_finish_contract','PCD_K018':'PCD_finish_control'}
+case_plan=E/'PCD_NATIVE_CASE_PLAN.json'
+if case_plan.exists():harnesses.update({item['attempt']:item['harness'] for item in json.loads(case_plan.read_text())['steps']})
 harness=harnesses.get(a,'PCD_checked_rejection_contract')
 frontier=harness.startswith('PCD_frontier_')
 args=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/PCD_src/programs/aspis-pool/Cargo.toml','--target-dir',B+'/PCD_target','--features',','.join(features),'--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness','pair_forest::PCD_harness::'+harness,'--output-format','terse']
+if a in {'PCD_K079','PCD_K080'}:args+=['--solver','minisat']
 if a=='PCD_K004':args+=['--only-codegen']
-else:args+=['--unwind',('33' if a in {'PCD_K015','PCD_K016','PCD_K019','PCD_K020','PCD_K023','PCD_K024','PCD_K041','PCD_K042'} else '10') if frontier else '1','--verbose']
+else:args+=['--unwind',('33' if a in {'PCD_K015','PCD_K016','PCD_K019','PCD_K020','PCD_K023','PCD_K024','PCD_K041','PCD_K042'} else '10') if frontier else ('33' if harness.startswith('PCD_request_') else '1'),'--verbose']
 x=dict(attempt=a,root_package='aspis-pool',metadata_features=','.join('aspis-pool/'+f for f in features),deployed_pool_features=features,native_command=args,expected_harness='pair_forest::PCD_harness::'+harness)
 files={'PCD_native_gate.py':(E/'PCD_native_gate.py').read_text(),'PCD_native_config.json':json.dumps(x)}
 files.update(json.loads((E/'PCD_NATIVE_REPAIR_FILES.json').read_text()))
 env=dict(CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',CARGO_PROFILE_RELEASE_OPT_LEVEL='3',CARGO_BUILD_JOBS='1',RUSTC_BOOTSTRAP='1',RUSTFLAGS='-Copt-level=3 -Ccodegen-units=1 -Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1',CARGO_PROFILE_DEV_CODEGEN_UNITS='1',CARGO_PROFILE_RELEASE_CODEGEN_UNITS='1',CARGO_PROFILE_DEV_BUILD_OVERRIDE_CODEGEN_UNITS='1',CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_CODEGEN_UNITS='1',CARGO_PROFILE_DEV_BUILD_OVERRIDE_OPT_LEVEL='3',CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL='3')
-target='Returned-record Result<Lane,ProgramError> fidelity with explicit-constructor/local-record stubs (ak)' if harness.startswith('PCD_fidelity_') else 'POOL:320 complete checked-add guard against extracted reference' if harness.startswith('PCD_guard_') else 'POOL:320 post-loop returned record at one arbitrary scalar observer' if harness.startswith('PCD_finish_') else 'POOL:320 one native frontier iteration at arbitrary pre-state/level (source-segment candidate)' if frontier else 'POOL:320 actual frozen checked-add rejection segment, arbitrary remaining fields (not a row root)'
+target='Result<Box<Request>,ProgramError> shape fidelity with explicit constructor/local record' if harness.startswith('PCD_result_box_') else 'POOL:314 native source tail after the CLOSED decoder, all 106 child error constructors and full record' if harness.startswith('PCD_decode_tail_') else 'POOL:314 safe Box value/move/ownership and returned-Box fidelity with local logs (aa/ak/ay)' if harness.startswith('PCD_box_') else 'POOL:314 actual frozen wrapper against safe unboxed reference at one arbitrary output window, fixed accepted-length segment' if harness.startswith('PCD_request_') else 'Returned-record Result<Lane,ProgramError> fidelity with explicit-constructor/local-record stubs (ak)' if harness.startswith('PCD_fidelity_') else 'POOL:320 complete checked-add guard against extracted reference' if harness.startswith('PCD_guard_') else 'POOL:320 post-loop returned record at one arbitrary scalar observer' if harness.startswith('PCD_finish_') else 'POOL:320 one native frontier iteration at arbitrary pre-state/level (source-segment candidate)' if frontier else 'POOL:320 actual frozen checked-add rejection segment, arbitrary remaining fields (not a row root)'
 (E/(a+'_PHASE.json')).write_text(json.dumps(dict(attempt=a,expected_phase='optimized compilation then CBMC: '+target,command=args),indent=1)+'\n')
 r=run(a,'kani',target,['python3','PCD_native_gate.py','PCD_native_config.json'],files,env)
 rr=ssh('python3',f'''from pathlib import Path

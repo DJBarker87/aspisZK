@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess,lzma,json,sys
 E=Path(__file__).resolve().parent
-jobs=[('PCD_K039',None),('PCD_K040','assertion failed'),('PCD_K041',None),('PCD_K042','assertion failed'),('PCD_K025',None),('PCD_K026','assertion failed'),('PCD_K027',None),('PCD_K028','assertion failed')]
+jobs=[('PCD_K078','freshness inverse'),('PCD_K079',None),('PCD_K080','actual wrapper inverse')]
 for a,negative in jobs:
  r=subprocess.run([sys.executable,str(E/'PCD_native_run.py'),a],capture_output=True,text=True)
  log=E/a/'stdout.log.xz'

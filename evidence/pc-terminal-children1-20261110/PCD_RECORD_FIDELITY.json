@@ -30,5 +30,56 @@
  "scope": "per-shape fidelity at a scalar reply window; not a caller packet or a full argument/reply logging bridge",
  "K2_quarantined": [],
  "K3_suspended": [],
- "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+ "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+ "owned_Box_Request": {
+  "controls": [
+   {
+    "attempt": "PCD_K049",
+    "verdict": "PASS weak"
+   },
+   {
+    "attempt": "PCD_K050",
+    "verdict": "FAIL inverse ensures"
+   },
+   {
+    "attempt": "PCD_K051",
+    "verdict": "PASS real caller"
+   },
+   {
+    "attempt": "PCD_K052",
+    "verdict": "FAIL unimplied caller assertion"
+   },
+   {
+    "attempt": "PCD_K053",
+    "verdict": "FAIL out-of-frame write"
+   }
+  ],
+  "interface": "Box<Request>; local log; explicit constructor oracle only in control; no stub_verified"
+ },
+ "result_Box_Request": {
+  "carrier": "Result<Box<PoolV1PairForestTerminalRequestV1>,ProgramError>",
+  "controls": [
+   {
+    "attempt": "PCD_K060",
+    "expected": "PASS weak"
+   },
+   {
+    "attempt": "PCD_K061",
+    "expected": "FAIL inverse ensures"
+   },
+   {
+    "attempt": "PCD_K062",
+    "expected": "PASS real caller"
+   },
+   {
+    "attempt": "PCD_K063",
+    "expected": "FAIL unimplied caller"
+   },
+   {
+    "attempt": "PCD_K064",
+    "expected": "FAIL out-of-frame write"
+   }
+  ],
+  "interface": "local logs and explicit constructor oracle only in control; no stub_verified; reachable final Err exactly InvalidInstructionData"
+ }
 }

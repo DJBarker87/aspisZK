@@ -19,26 +19,26 @@ noncomputable section
 
 namespace PCD_FrozenRequest
 
-/-- [aspis_pool::pair_forest::decode_terminal_request_box_v1::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_pool::pair_forest::decode_terminal_request_box_v1::closure}::call_once]:
+/-- [aspis_pool::pair_forest::decode_terminal_request_box_v1::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PCD_PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::PCD_ProgramError> for aspis_pool::pair_forest::decode_terminal_request_box_v1::closure}::call_once]:
     Source: 'programs/aspis-pool/src/pair_forest.rs', lines 1420:21-1420:61 -/
 def
   pair_forest.decode_terminal_request_box_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once
   (c : pair_forest.decode_terminal_request_box_v1.closure)
   (tupled_args :
-  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  aspis_statement.pool_v1.pair_forest_terminal.PCD_PoolV1PairForestTerminalFormatErrorV1)
   :
-  Result solana_program_error.ProgramError
+  Result solana_program_error.PCD_ProgramError
   := do
-  ok solana_program_error.ProgramError.InvalidInstructionData
+  ok solana_program_error.PCD_ProgramError.InvalidInstructionData
 
-/-- Trait implementation: [aspis_pool::pair_forest::decode_terminal_request_box_v1::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_pool::pair_forest::decode_terminal_request_box_v1::closure}]
+/-- Trait implementation: [aspis_pool::pair_forest::decode_terminal_request_box_v1::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PCD_PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::PCD_ProgramError> for aspis_pool::pair_forest::decode_terminal_request_box_v1::closure}]
     Source: 'programs/aspis-pool/src/pair_forest.rs', lines 1420:21-1420:61 -/
 @[reducible]
 def
   pair_forest.decode_terminal_request_box_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
   : core.ops.function.FnOnce pair_forest.decode_terminal_request_box_v1.closure
-  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
-  solana_program_error.ProgramError := {
+  aspis_statement.pool_v1.pair_forest_terminal.PCD_PoolV1PairForestTerminalFormatErrorV1
+  solana_program_error.PCD_ProgramError := {
   call_once :=
     pair_forest.decode_terminal_request_box_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once
 }
@@ -49,7 +49,7 @@ def pair_forest.decode_terminal_request_box_v1
   (instruction_data : Slice Std.U8) :
   Result (core.result.Result
     aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
-    solana_program_error.ProgramError)
+    solana_program_error.PCD_ProgramError)
   := do
   let r ←
     aspis_statement.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_v1
@@ -65,6 +65,6 @@ def pair_forest.decode_terminal_request_box_v1
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
-      (core.convert.FromSame solana_program_error.ProgramError) residual
+      (core.convert.FromSame solana_program_error.PCD_ProgramError) residual
 
 end PCD_FrozenRequest

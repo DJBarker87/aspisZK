@@ -17,3 +17,13 @@ No extracted post-loop explicit return is relied on: all three references are lo
 
 PCA state/borrow scaffolding is read-only precedent. No conditional PCA theorem is treated as CLOSED.
 PCD rows remain subject to complete Result/effect/frame/abort, SAME arguments, native controls and the combined gate.
+
+## Focused packet completed before combined gate
+
+POOL:320 has full own-argument PCD_Row320.result_state_effects (L051), extracted E002 primitive equalities, native guard/rejection/iterator/frontier/return cuts and matched controls. Its whole-loop (ah) transcription is PCD-RT-POOL320, eligible by actual E006/E007 selection/failure. PCD_LaneBridge.result_state_effects (L037) contains no unknown Ops or endpoint premise.
+
+POOL:314 actual frozen wrapper was emitted in E009; the safe unboxed Rust reference was emitted in E011 under the frozen dependency subgraph. Nine generated type identifiers were reversibly prefixed solely to avoid global discriminant-instance collisions; Rust-origin strings and all declaration bodies are retained. PCD_RequestBridge.reference_eq_emitted/local_roundtrip/cohort_roundtrip/observations_complete (L050) bridge the exact adopted carrier and complete 14-tag projection. PCD_RequestRoot.result_state_effects/emitted_reply (L053), PCD_BoxFold (L052) and PCD_CopyJoin (L054) retain every Err, child error payload, abort prefix, typed copied value and frame. Concrete external functions delegate to the CLOSED NLO request decoder at SAME bytes; no template axiom, free callee reply or successful endpoint is imported.
+
+Native (ay)(3) composition cuts at the original decoder return: the closed decoder packet supplies its complete result; the actual remaining map_err/try/Box source expression is checked at any typed reply (106 constructors across seven error families), with exact final InvalidInstructionData Err. The full payload copy is checked over metadata tags0..2 and singleton tags3..13, arbitrary bounded indices and matched controls. The original PCD_box_contract name is fixed across cases. Allocation identity/freshness K058 and the wrong-allocation K047/freshness K078 controls retain the exact created Box. The exact Result<Box<Request>,ProgramError> shape has its own K060..064 controls. Existing Allocator trust covers returning fresh ownership or abort; no new runtime assumption is added. Whole-wrapper timeout K043 gives no credit; segment composition is explicit, not a relabelled conditional result.
+
+The source checker fixes SAME instruction_data, original closure/error, allocation order and return; all candidate roots still require the final deployed/NLO/NLF combined import, raw ax2/eight fixtures and NFX scan. No NIB-P1/P2/P3 binder is claimed discharged by these constituent rows.

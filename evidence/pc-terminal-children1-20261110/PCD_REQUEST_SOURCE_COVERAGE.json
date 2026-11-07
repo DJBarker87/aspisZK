@@ -1,0 +1,22 @@
+{
+ "row": "POOL:314",
+ "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+ "source": "programs/aspis-pool/src/pair_forest.rs",
+ "function_sha256": "44d0bd52b1d52ae916a268137f1b65efc0189d25ea989102b0947e811473f12a",
+ "function": "fn decode_terminal_request_box_v1(\n    instruction_data: &[u8],\n) -> Result<Box<PoolV1PairForestTerminalRequestV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_terminal_request_v1(instruction_data)\n            .map_err(|_| ProgramError::InvalidInstructionData)?,\n    ))\n}",
+ "status": "SOURCE_COVERAGE_ONLY",
+ "segments": [
+  "CLOSED decoder on SAME instruction_data slice",
+  "original map_err closure",
+  "try early return on every Err",
+  "Box allocation only after Ok",
+  "return exact allocated Box"
+ ],
+ "native_tail_substitution": "Replace ONLY the already evaluated decoder expression by the cut variable reply; no free reply in the concrete emitted row root",
+ "mutations": {
+  "wrong_argument": true,
+  "wrong_error": true,
+  "extra_call": true
+ },
+ "missing": "native value/ownership/tail certificates and final combined gate"
+}

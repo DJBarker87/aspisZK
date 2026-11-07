@@ -20,8 +20,16 @@ base=(E/'PCD_lane_native.rs').read_text();base=base.replace('    #[kani::proof_f
 kmx='    mod kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n'
 meta['annotation']=meta['annotation'].replace('Err(PoolV1ProgramError::StateHistoryMismatch.into())','Err(ProgramError::Custom(0x41532003))')
 meta['root_annotation']='#![cfg_attr(kani, feature(allocator_api))]\n'
-meta['suffix']='\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCD_harness {\n    use super::*;\n'+kmx+base+frag+finish+guardFragment+(E/'PCD_iterator_native.rs').read_text()+(E/'PCD_fidelity_native.rs').read_text()+'\n}\n'
-start=source.index('fn next_pair_forest_lane_v1(');modified=source[:start]+meta['annotation']+source[start:]+meta['suffix'];meta['modified_sha256']=sha(modified)
+meta['suffix']='\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCD_harness {\n    use super::*;\n'+kmx+base+frag+finish+guardFragment+(E/'PCD_iterator_native.rs').read_text()+(E/'PCD_fidelity_native.rs').read_text()+(E/'PCD_request_reference.rs').read_text()+(E/'PCD_request_native.rs').read_text()+(E/'PCD_box_native.rs').read_text()+(E/'PCD_decode_tail_native.rs').read_text()+(E/'PCD_result_box_fidelity.rs').read_text()+'\n}\n'
+meta['request_annotation']='''#[cfg_attr(kani, kani::ensures(|out| {
+    let tag:u8=kani::any(); let i:usize=kani::any(); let j:usize=kani::any();
+    tag>=14 || i>=8 || j>=32 || PCD_harness::PCD_request_exact(out,instruction_data,tag,i,j)
+}))]
+#[cfg_attr(kani, kani::modifies())]
+'''
+start=source.index('fn next_pair_forest_lane_v1(');modified=source[:start]+meta['annotation']+source[start:]
+request_start=modified.index('fn decode_terminal_request_box_v1(')
+modified=modified[:request_start]+meta['request_annotation']+modified[request_start:]+meta['suffix'];meta['modified_sha256']=sha(modified)
 (E/'PCD_NATIVE_PATCH_META.json').write_text(json.dumps(meta,indent=1)+'\n');(E/'PCD_native_packets.patch').write_text(''.join(difflib.unified_diff(source.splitlines(True),modified.splitlines(True),fromfile='a/'+meta['source'],tofile='b/'+meta['source'])))
 rootpath='programs/aspis-pool/src/lib.rs';root=subprocess.check_output(['git','show','b936275465600469312d1f058cdc91ea2a11f3dc:'+rootpath],text=True)
 rootmodified=meta['root_annotation']+root

@@ -14,7 +14,9 @@ for m in mods:
   assert 'sorryAx' not in line,line
   name=re.match("'([^']+)'",line)[1]
   if name not in roots:roots.append(name)
- for row in re.findall(r'def (RowSpec_POOL_\d+)',p.read_text()):roots.append('PCD.'+row)
+ for row in re.findall(r'def (RowSpec_POOL_\d+)',p.read_text()):
+  ns=re.search(r'^namespace (\S+)',p.read_text(),re.M)[1]
+  roots.append(ns+'.'+row)
 (E/'PCD_COMBINED_IMPORT.lean').write_text('import NLS_COMBINED_IMPORT\nimport NLO_COMBINED_IMPORT\nimport NLF_SdkBorrowLaw\n'+''.join('import '+m+'\n' for m in mods)+'#print axioms AspisR1.RPx_Deployed.deployed\n')
 (E/'PCD_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots]),indent=1)+'\n')
 (E/'PCD_AUDIT_MODULES.json').write_text(json.dumps([['PCD_COMBINED_IMPORT']])+'\n')

@@ -6,7 +6,7 @@ namespace PCD_FrozenRequest
 open Aeneas Aeneas.Std
 -- Concrete structural carrier maps. Every child error constructor is retained;
 -- no axiom, free Ops, unknown result or accepted-only premise is installed.
-def mapPoolV1TreeError (x : AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError) : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError :=
+def mapPoolV1TreeError (x : AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError) : aspis_statement.pool_v1.incremental_merkle.PCD_PoolV1TreeError :=
   match x with
   | .TreeFull => .TreeFull
   | .InsufficientCapacity => .InsufficientCapacity
@@ -22,7 +22,7 @@ def mapPoolV1TreeError (x : AdapterRw.aspis_statement.pool_v1.incremental_merkle
   | .NonCanonicalDigest => .NonCanonicalDigest
   | .NonZeroReserved => .NonZeroReserved
 
-def mapPoolV1PairForestAccountErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 :=
+def mapPoolV1PairForestAccountErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) : aspis_statement.pool_v1.pair_forest_accounts.PCD_PoolV1PairForestAccountErrorV1 :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
@@ -46,7 +46,7 @@ def mapPoolV1PairForestAccountErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pai
   | .Policy => .Policy
   | .Tree x0 => .Tree (mapPoolV1TreeError x0)
 
-def mapPoolV1PaymentStatementFormatError (x : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) : aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError :=
+def mapPoolV1PaymentStatementFormatError (x : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) : aspis_statement.pool_v1.payment_relation.PCD_PoolV1PaymentStatementFormatError :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
@@ -63,7 +63,7 @@ def mapPoolV1PaymentStatementFormatError (x : AdapterRw.aspis_statement.pool_v1.
   | .InvalidEnvelope => .InvalidEnvelope
   | .EnvelopeMismatch => .EnvelopeMismatch
 
-def mapPoolV1PairLiveSnapshotErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 :=
+def mapPoolV1PairLiveSnapshotErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) : aspis_statement.pool_v1.pair_tree_profile.PCD_PoolV1PairLiveSnapshotErrorV1 :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
@@ -75,7 +75,7 @@ def mapPoolV1PairLiveSnapshotErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair
   | .TreeFull => .TreeFull
   | .NonCanonicalDigest => .NonCanonicalDigest
 
-def mapPoolV1PairVerifierTransportErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+def mapPoolV1PairVerifierTransportErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) : aspis_statement.pool_v1.pair_terminal.PCD_PoolV1PairVerifierTransportErrorV1 :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
@@ -93,7 +93,7 @@ def mapPoolV1PairVerifierTransportErrorV1 (x : AdapterRw.aspis_statement.pool_v1
   | .InvalidAfterstateIndex => .InvalidAfterstateIndex
   | .NonCanonicalAfterstate => .NonCanonicalAfterstate
 
-def mapPoolV1PairLatePublicStatementErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 :=
+def mapPoolV1PairLatePublicStatementErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) : aspis_statement.pool_v1.pair_tree_profile.PCD_PoolV1PairLatePublicStatementErrorV1 :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
@@ -108,7 +108,7 @@ def mapPoolV1PairLatePublicStatementErrorV1 (x : AdapterRw.aspis_statement.pool_
   | .Afterstate x0 => .Afterstate (mapPoolV1PairVerifierTransportErrorV1 x0)
   | .AfterstateIndexMismatch => .AfterstateIndexMismatch
 
-def mapPoolV1PairForestTerminalFormatErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 :=
+def mapPoolV1PairForestTerminalFormatErrorV1 (x : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) : aspis_statement.pool_v1.pair_forest_terminal.PCD_PoolV1PairForestTerminalFormatErrorV1 :=
   match x with
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic

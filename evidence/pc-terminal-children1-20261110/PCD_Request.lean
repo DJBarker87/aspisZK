@@ -14,7 +14,7 @@ structure Owned (α : Type) where
   value : α
 
 def wrapReply {α ε : Type} (allocation : Allocation) :
-    Aeneas.Result (core.result.Result α ε) → PCD.Exit (Owned α)
+    Result (core.result.Result α ε) → PCD.Exit (Owned α)
   | .ok (.Err _) => .error .invalidInstructionData
   | .ok (.Ok value) => match allocation with
     | .returned block => .ok ⟨block,value⟩
@@ -33,7 +33,8 @@ premise is imposed. This model-only lemma neither supplies the native forwarding
 certificate nor licenses an unconstrained child stub. -/
 theorem same_input {State : Type} (bytes : Slice U8) (allocation : Allocation) (state : State) :
     (source bytes allocation,state) = (specification bytes allocation,state) := by
-  have same := congrArg Prod.fst (NFY_NFD_RequestOracle.result_state_effects bytes state)
+  have same : NFY_NFD_RequestOracle.runSlice bytes = AspisR1.NFY_JHd_RequestNative.decode bytes :=
+    congrArg Prod.fst (NFY_NFD_RequestOracle.result_state_effects bytes state)
   unfold source specification
   rw [same]
 
@@ -41,10 +42,10 @@ theorem error_before_allocation {α ε : Type} (allocation : Allocation) (error 
     wrapReply (α:=α) allocation (.ok (.Err error)) = .error .invalidInstructionData := rfl
 
 theorem allocated_value {α ε : Type} (block : Nat) (value : α) :
-    wrapReply (ε:=ε) (.returned block) (.ok (.Ok value)) = .ok ⟨block,value⟩ := rfl
+    wrapReply (α:=α) (ε:=ε) (.returned block) (.ok (.Ok value)) = .ok ⟨block,value⟩ := rfl
 
 theorem allocation_abort {α ε : Type} (value : α) :
-    wrapReply (ε:=ε) .aborted (.ok (.Ok value)) = .abort := rfl
+    wrapReply (α:=α) (ε:=ε) .aborted (.ok (.Ok value)) = .abort := rfl
 #print axioms same_input
 #print axioms error_before_allocation
 #print axioms allocated_value

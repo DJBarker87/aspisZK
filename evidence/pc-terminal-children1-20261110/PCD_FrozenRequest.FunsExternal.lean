@@ -19,7 +19,7 @@ def core.result.Result.map_err {T E F O : Type}
 all payment fields and all 22 terminal/nested error constructors. -/
 def aspis_statement.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_v1
     (bytes : Slice U8) : Result (core.result.Result LocalRequest
-      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) := do
+      aspis_statement.pool_v1.pair_forest_terminal.PCD_PoolV1PairForestTerminalFormatErrorV1) := do
   let result ← NFY_NFD_RequestOracle.runSlice bytes
   match result with
   | .Ok request => .ok (.Ok (mapRequest request))
