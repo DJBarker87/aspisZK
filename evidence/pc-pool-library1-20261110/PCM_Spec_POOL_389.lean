@@ -1,3 +1,5 @@
+import PCM_Witness
+import PCM_StepLaws
 import PCM_Vault
 set_option autoImplicit false
 namespace PCM_POOL_389
@@ -46,4 +48,13 @@ def Ref (C : Children) (a : Args) : Computation WithdrawalPlan := do
 
 def RowSpec (C : Children) (impl : Args → State → Env → Observation WithdrawalPlan) : Prop :=
   PCM.RowSpec (fun _ => True) (Ref C) impl
+
+theorem rejects_wrong_error (C : Children) :
+    ¬ RowSpec C (fun _ s _ => ⟨.ret (.error .invalidArgument,s),[]⟩) := by
+  let a : Args := ⟨zero32,zero32,PCM.identity0,[],zero32,0,none⟩
+  apply PCM.rejects_error (fun _ : Args => True) (Ref C) a (.notEnoughAccountKeys) .invalidArgument trivial
+  · unfold Ref
+    exact PCM.Computation.bind_throw _ _
+  · intro h; cases h
+#print axioms rejects_wrong_error
 end PCM_POOL_389

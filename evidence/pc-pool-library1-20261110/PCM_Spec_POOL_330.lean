@@ -28,6 +28,9 @@ structure Children where
   exactDelta : Child (List AccountInfo × WithdrawalPlan) Unit
   writeNewPage : Child (AccountInfo × B32 × UInt64 × UInt64 × List Digest) Unit
   appendRoots : Child (AccountInfo × Header × List Digest) Unit
+  /-- Actual FnOnce S callback; bound to sol_set_return_data at the deployed site.
+  The producer program/context comes from runtime association, not program_id. -/
+  setReturnData : Child Bytes Unit
 
 /-- Deployed direct-result-audit is OFF; both validation and result encoding
 are real calls, with their allocation-abort prefixes kept. -/
@@ -96,9 +99,7 @@ def Ref (C : Children) (runtime : Runtime) (a : Args) (currentSlot : UInt64) : C
         | .same header => C.appendRoots.call (page,header,[result.verified_afterstate.next_root])
         | .rollover _ number => C.writeNewPage.call (page,laneAccount.key,number,result.verified_afterstate.next_pair_index,[result.verified_afterstate.next_root])
         write marker ready.encoded_marker
-        emit (.sdk (.returnData resultBytes))
-        let s ← get
-        put {s with returnData := some (a.program,resultBytes)}
+        C.setReturnData.call resultBytes
 
 def RowSpec (C : Children) (runtime : Runtime)
     (impl : Args → UInt64 → State → Env → Observation Unit) : Prop :=

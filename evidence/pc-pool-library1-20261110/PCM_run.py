@@ -64,7 +64,7 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  raise RuntimeError('STOP shared admission failure')
 source=(E/(target+'.lean')).read_text()
 files={'PCM_sources/'+target+'.lean':source}
-config=dict(attempt=a,kind='lean',module=target,sources=list(files),command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCM_sources','-o','PCM_objects/'+target+'.olean','PCM_sources/'+target+'.lean'],env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCM_tmp',LEAN_PATH=B+'/PCM_objects:'+B+'/PCM_seed'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused PCM declaration elaboration')
+config=dict(attempt=a,kind='lean',module=target,sources=list(files),command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCM_sources','-o','PCM_objects/'+target+'.olean','PCM_sources/'+target+'.lean'],env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCM_tmp',LEAN_PATH=B+'/PCM_objects:'+B+'/PCM_seed:'+B+'/PCM_children:'+B+'/PCM_dependencies:'+B+'/PCM_context'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused PCM declaration elaboration')
 config['deployed_resolved_packages']=json.loads((E/'PCM_DEPLOYED_FEATURES.json').read_text())
 config['feature_validation']='Inherited NKZ deployed build; this scope compiles Lean only'
 files[a+'.json']=json.dumps(config)
@@ -80,7 +80,15 @@ for m in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):
  for s in ['', '.private','.server']:
   q=Path(str(p)+s)
   if q.exists():pins[str(q)]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest())
-x['deps_fingerprint']={{'selected_objects':pins}}
+# Pin every Aeneas library object this LEAN_PATH can resolve, including sidecars.
+for root in x['env']['LEAN_PATH'].split(':'):
+ for stem in ['Aeneas','AeneasMeta']:
+  files=list((Path(root)/stem).rglob('*')) if (Path(root)/stem).is_dir() else []
+  files += [Path(root)/(stem+'.olean')]
+  for q in files:
+   if q.is_file() and any(str(q).endswith(s) for s in ['.olean','.olean.private','.olean.server','.ir']):
+    pins[str(q)]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest())
+x['deps_fingerprint']={{'selected_objects':pins,'context_manifest_sha256':hashlib.sha256((b/'PCM_CONTEXT_IMPORTS.json.xz').read_bytes()).hexdigest()}}
 (b/{(a+'.json')!r}).write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)

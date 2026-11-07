@@ -1,3 +1,5 @@
+import PCM_Witness
+import PCM_StepLaws
 import PCM_Carriers
 set_option autoImplicit false
 namespace PCM_POOL_350
@@ -58,4 +60,13 @@ def Ref (C : Children) (a : Args) : Computation DispatchPlan := do
   Computation.pure ⟨selected,a.request_bytes⟩
 def RowSpec (C : Children) (impl : Args → State → Env → Observation DispatchPlan) : Prop :=
   PCM.RowSpec (fun _ => True) (Ref C) impl
+
+theorem rejects_wrong_error (C : Children) :
+    ¬ RowSpec C (fun _ s _ => ⟨.ret (.error .invalidArgument,s),[]⟩) := by
+  let a : Args := ⟨zero32,PCM.account0,PCM.account0,PCM.account0,PCM.policy0,[],PCM.account0,PCM.account0,none,{PCM.request0 with pool_program := B32.ofFill 1},0,[]⟩
+  apply PCM.rejects_error (fun _ : Args => True) (Ref C) a (.custom 0x4153202b) .invalidArgument trivial
+  · unfold Ref
+    exact PCM.Computation.bind_throw _ _
+  · intro h; cases h
+#print axioms rejects_wrong_error
 end PCM_POOL_350

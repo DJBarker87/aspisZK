@@ -1,0 +1,35 @@
+{"attempt": "PCM_L147", "exit_status": 1, "wall_seconds": 0.49250930617563426, "peak_rss_kib": "471024", "swaps": "0", "print_axioms": ["'PCM_POOL_361.rejects_wrong_error' depends on axioms: [propext, sorryAx]"]}
+PCM_sources/PCM_Spec_POOL_361.lean:35:4: error: 'change' tactic failed, pattern
+  (Computation.pure ()).bind ?m.48 = ?m.50
+is not definitionally equal to target
+  (match a with
+    | (program, master, seeds, marker, payer, system, planned, rent) =>
+      have __do_jp := fun __r => do
+        let prep ← C.recheck.call (program, marker)
+        check (prep != Preparation.programOwnedZeroed) (ProgramError.custom 1095966757)
+        let lamports ← readLamports marker
+        check (!C.rentExempt rent lamports 208) (ProgramError.custom 1095966757)
+        Computation.pure planned;
+      if (planned.preparation == Preparation.createOrAllocateSystemOwned) = true then do
+        let seed ← C.seedStr
+...
+PCM_sources/PCM_Spec_POOL_361.lean:35:4: error: 'change' tactic failed, pattern
+  (Computation.pure ()).bind ?m.48 = ?m.50
+is not definitionally equal to target
+  (match a with
+    | (program, master, seeds, marker, payer, system, planned, rent) =>
+      have __do_jp := fun __r => do
+        let prep ← C.recheck.call (program, marker)
+        check (prep != Preparation.programOwnedZeroed) (ProgramError.custom 1095966757)
+        let lamports ← readLamports marker
+        check (!C.rentExempt rent lamports 208) (ProgramError.custom 1095966757)
+        Computation.pure planned;
+      if (planned.preparation == Preparation.createOrAllocateSystemOwned) = true then do
+        let seed ← C.seedString.call planned.seed
+        let __r ← C.createWithSeed.call (payer, marker, master, seed, system, 208, program, seeds, rent)
+        __do_jp __r
+      else __do_jp ()) =
+    Computation.throw (ProgramError.custom 1095966757)
+'PCM_POOL_361.rejects_wrong_error' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r5043dab34e9d48bd9dad747861157e54.scope; invocation ID: d9588deecd9041598490585849c9c384

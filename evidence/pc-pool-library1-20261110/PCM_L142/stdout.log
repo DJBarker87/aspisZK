@@ -1,0 +1,19 @@
+PCM_sources/PCM_PageLaws.lean:23:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case hk
+bad : ProgramError
+account : AccountInfo
+offset : Nat
+bytes : Bytes
+s : State
+⊢ Avoid bad
+    (have old := s.bytes account;
+    if offset + List.length bytes ≤ List.length old then
+      write account (List.take offset old ++ bytes ++ List.drop (offset + List.length bytes) old)
+    else fun x x_1 o => o = { exit := Exit.abort, events := [] })
+'PCM.Page.get_avoid' does not depend on any axioms
+'PCM.Page.write_avoid' does not depend on any axioms
+'PCM.Page.patch_avoid' depends on axioms: [sorryAx]
+'PCM.Page.roots_avoid' depends on axioms: [propext, sorryAx]

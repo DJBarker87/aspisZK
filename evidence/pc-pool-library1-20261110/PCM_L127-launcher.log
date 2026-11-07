@@ -1,0 +1,60 @@
+{"attempt": "PCM_L127", "exit_status": 1, "wall_seconds": 0.4912726990878582, "peak_rss_kib": "470952", "swaps": "0", "print_axioms": ["'PCM_POOL_339.avoids_wrong_error' depends on axioms: [propext, sorryAx]", "'PCM_POOL_339.rejects_wrong_error' depends on axioms: [propext, sorryAx]"]}
+PCM_sources/PCM_Spec_POOL_339.lean:36:4: error: Tactic `apply` failed: could not unify the conclusion of `@bind_avoid`
+  Avoid ?bad (Computation.bind ?m ?k)
+with the goal
+  Avoid ProgramError.invalidArgument
+    (have __do_jp := fun statement =>
+      mapError (fun x => ProgramError.custom 1095966765) (C.validate.call (statement, result));
+    match request.pub with
+    | Payment.transfer p => do
+      let statement ← PCM_POOL_338.Ref (common, p)
+      __do_jp statement
+    | Payment.withdrawal p => do
+      let statement ← PCM_POOL_342.Ref (common, p)
+      __do_jp statement)
+
+Note: The full type of `@bind_avoid` is
+  ∀ {A B : Type} (bad : ProgramError) (m : Computation A) (k : A → Computat
+...
+PCM_sources/PCM_Spec_POOL_339.lean:36:4: error: Tactic `apply` failed: could not unify the conclusion of `@bind_avoid`
+  Avoid ?bad (Computation.bind ?m ?k)
+with the goal
+  Avoid ProgramError.invalidArgument
+    (have __do_jp := fun statement =>
+      mapError (fun x => ProgramError.custom 1095966765) (C.validate.call (statement, result));
+    match request.pub with
+    | Payment.transfer p => do
+      let statement ← PCM_POOL_338.Ref (common, p)
+      __do_jp statement
+    | Payment.withdrawal p => do
+      let statement ← PCM_POOL_342.Ref (common, p)
+      __do_jp statement)
+
+Note: The full type of `@bind_avoid` is
+  ∀ {A B : Type} (bad : ProgramError) (m : Computation A) (k : A → Computation B),
+    Avoid bad m → (∀ (a : A), Avoid bad (k a)) → Avoid bad (m.bind k)
+
+case hk
+C : Children
+ma ca la : B32
+master : Master
+checkpoint : Checkpoint
+lane : LaneState
+output : UInt8
+request : Request
+result : TerminalResult
+common : Common
+⊢ Avoid ProgramError.invalidArgument
+    (have __do_jp := fun statement =>
+      mapError (fun x => ProgramError.custom 1095966765) (C.validate.call (statement, result));
+    match request.pub with
+    | Payment.transfer p => do
+      let statement ← PCM_POOL_338.Ref (common, p)
+      __do_jp statement
+    | Payment.withdrawal p => do
+      let statement ← PCM_POOL_342.Ref (common, p)
+      __do_jp statement)
+'PCM_POOL_339.avoids_wrong_error' depends on axioms: [propext, sorryAx]
+'PCM_POOL_339.rejects_wrong_error' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r962c3f3b4fb94965b02cd46fdcbdae58.scope; invocation ID: afb11f90b762407cbe1e97ef22b83623

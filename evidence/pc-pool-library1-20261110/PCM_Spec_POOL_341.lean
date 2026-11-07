@@ -1,3 +1,5 @@
+import PCM_Witness
+import PCM_StepLaws
 import PCM_Carriers
 import PCM_ErrorMap
 set_option autoImplicit false
@@ -26,4 +28,13 @@ def Ref (C : Children) (a : Args) : Computation Unit := do
 
 def RowSpec (C : Children) (impl : Args → State → Env → Observation Unit) : Prop :=
   PCM.RowSpec (fun _ => True) (Ref C) impl
+
+theorem rejects_wrong_error (C : Children) :
+    ¬ RowSpec C (fun _ s _ => ⟨.ret (.error .invalidArgument,s),[]⟩) := by
+  let a : Args := ⟨B32.ofFill 1,PCM.account0,PCM.account0,PCM.account0,⟨0,PCM.identity0,PCM.policy0,0,false,0,[]⟩,⟨0,zero32,zero32,0,[],[]⟩,PCM.lane0,PCM.request0⟩
+  apply PCM.rejects_error (fun _ : Args => True) (Ref C) a (.custom 0x4153202b) .invalidArgument trivial
+  · unfold Ref
+    exact PCM.Computation.bind_throw _ _
+  · intro h; cases h
+#print axioms rejects_wrong_error
 end PCM_POOL_341

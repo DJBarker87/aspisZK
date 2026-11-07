@@ -15,3 +15,5 @@ Trust retained: native semantic transport is P6/D188 reclassification; RuntimePe
 No assumptions discharged or rows closed. All stage deliverables and checks remain pending.
 
 Checkpoint: source-control-flow drafts and focused checks are in progress; PCM_SPEC_INDEX.md and PCM_SPEC_DIFFS.md describe their limits. No stage is reported complete or frozen. 47 forbidden-origin context objects are quarantined in PCM_BLOCKED_CONTEXT.json; the non-quarantined bundle context has been copied with per-object hashes, never hardlinked. No Kani, extraction, native row proof or shipped source change.
+
+Stage 1: 47 per-function source specifications and their rejection checks are pinned in PCM_SPEC_FREEZE.json. All latest focused source hashes match exit-0 receipts, with standard printed axioms. No native source-to-model proof or row credit is claimed. The semantic source set is frozen; subsequent stages instantiate it and record gaps. The required import gate remains held on 47 forbidden-origin context objects, pending the explicit clarification already requested.
