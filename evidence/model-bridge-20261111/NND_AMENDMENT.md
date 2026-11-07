@@ -1,6 +1,6 @@
 # TAS amendment recovery
 
-Base: 707f5eef5b5; WIP retained in 2d5b467717b. Previous attempts E001–E002 and L001–L030 remain charged (2/2 extraction, 30/300 Lean/link/audit, 0 Kani). Failed attempts confer no credit, including L021 recovery sorryAx; L024 supersedes it with standard axioms only.
+Base: 707f5eef5b5; WIP retained in 2d5b467717b. Previous attempts E001–E002 and L001–L030 remain charged (2/2 extraction, 27 actual scopes / highest identifier L030 (three identifiers unused), of 300 Lean/link/audit, 0 Kani). Failed attempts confer no credit, including L021 recovery sorryAx; L024 supersedes it with standard axioms only.
 
 Authoritative targets: evidence/top-assembly-20261107/TAS_Interfaces.lean lines 317–324, `RSL.TAS.NND_A1.stage1` and `RSL.TAS.NND_A2.stage2`. Both quantify c,a,env,o,r and require Exhibited, EnvRep, Ref, and o.exit = ret r. Conclusion is ModelRet at the SAME arguments, for Ok AND Err. Per-definition equality alone is insufficient. No global endpoint equality or abstract Ops compatibility may be promoted into a root.
 

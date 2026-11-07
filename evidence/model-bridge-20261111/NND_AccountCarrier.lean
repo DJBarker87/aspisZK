@@ -20,7 +20,7 @@ theorem getter (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount) :
  outer (reply bytes)
   (r1_pool_adapter.owned.OwnedAccount.data {ops with op35 := fun e => ok e} a) =
  ok ((account a).data) := by
- cases h : a.bytes <;> simp [r1_pool_adapter.owned.OwnedAccount.data,outer,reply,account,RSL.OwnedAccount.data,h]
+ cases h : a.bytes <;> simp [r1_pool_adapter.owned.OwnedAccount.data,outer,reply,account,RSL.OwnedAccount.data,h,bytes,alloc.vec.Vec.deref]
 
 theorem accounts_length (xs : Slice r1_pool_adapter.owned.OwnedAccount) :
  (accounts xs).length = xs.val.length := by simp [accounts]

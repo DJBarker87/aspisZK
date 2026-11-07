@@ -1,0 +1,49 @@
+{"attempt": "NND_L037", "exit_status": 1, "wall_seconds": 0.48556086188182235, "peak_rss_kib": "472176", "swaps": "0", "print_axioms": ["'NND_RegistryEval.immutable_returned' depends on axioms: [propext, sorryAx, Quot.sound]", "'NND_RegistryEval.v1_returned' depends on axioms: [propext, sorryAx, Quot.sound]", "'NND_RegistryEval.returned' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NND_generated/NND_RegistryEval.lean:66:22: error: unexpected token 'theorem'; expected '=>'
+NND_generated/NND_RegistryEval.lean:56:67: error: unsolved goals
+case hm
+L : PoolLib
+D : DeployedIds
+a : Args
+env : Env
+⊢ Returns (RS.ofExcept a.registry_account.data) env (id a.registry_account.data)
+
+case hk
+L : PoolLib
+D : DeployedIds
+a : Args
+env : Env
+⊢ ∀ (a_1 : Bytes),
+    Returns
+      ((RS.ofOption (L.decodeRegistryV2 a_1) ProgramError.invalidAccountData).bind fun r =>
+        (RSL.pdaOrErr [SEED_REGISTRY_V2, a.master_account.key.bytes, mk1 r.bump] D.registry).bind fun expected =>
+          (RS.check (decide (a.registry_account.key ≠ expected)) ProgramError.invalidAccountData).seq
+            
+...
+[SEED_ENTRY, a.master_account.key.bytes, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes,
+                            mk1 e.bump]
+                          D.registry).bind
+                      fun expectedE =>
+                      (RS.check (decide (a.entry_account.key ≠ expectedE)) ProgramError.invalidAccountData).seq
+                        ((RS.check (entryV1Bad a e) ProgramError.invalidAccountData).seq (RS.pure ()))))))
+      env
+      (ebind (option (L.decodeRegistryV1 a_1) ProgramError.invalidAccountData) fun r =>
+        ebind (pdaValue env [SEED_REGISTRY, a.master_account.key.bytes, mk1 r.bump] D.registry) fun expected =>
+          eseq (echeck (decide (a.registry_account.key ≠ expected)) ProgramError.invalidAccountData)
+            (eseq (echeck (registryV1Bad a r) ProgramError.invalidAccountData)
+              (eseq (id (readonlyAccount a.entry_account D.registry))
+                (ebind (id a.entry_account.data) fun edata =>
+                  ebind (option (L.decodeEntryV1 edata) ProgramError.invalidAccountData) fun e =>
+                    ebind
+                      (pdaValue env
+                        [SEED_ENTRY, a.master_account.key.bytes, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes,
+                          mk1 e.bump]
+                        D.registry)
+                      fun expectedE =>
+                      eseq (echeck (decide (a.entry_account.key ≠ expectedE)) ProgramError.invalidAccountData)
+                        (eseq (echeck (entryV1Bad a e) ProgramError.invalidAccountData) (Except.ok ()))))))
+'NND_RegistryEval.immutable_returned' depends on axioms: [propext, sorryAx, Quot.sound]
+'NND_RegistryEval.v1_returned' depends on axioms: [propext, sorryAx, Quot.sound]
+'NND_RegistryEval.returned' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-reb2e98b568a8402bb9c6e732e5279604.scope; invocation ID: af87c5014f7d4536b8a55008e1168e04

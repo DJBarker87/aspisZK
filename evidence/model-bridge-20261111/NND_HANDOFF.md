@@ -15,3 +15,8 @@ L001 private closure seed PASS. L002 inspection contains two unknown identifier 
 
 ## Resume with TAS amendment
 See NND_AMENDMENT.md. The WIP carriers through L030 have successful receipts; AccountCarrier and Stage2Link are not yet checked. No A1/A2 field is inhabited. No old failed attempt is reset.
+
+## Returned-arm support stage
+L032 checks NND_Stage2Link.source against fresh NMS emission; L033 checks NND_AccountCarrier getter with full ProgramError. L035–L036 establish returned-arm composition for RSL bind, allocation, panic, errors, environment/PDA and master/checkpoint Box sites. Allocation aborts remain admitted; no returning/post-abort heap is invented. L039 NND_RegistryEval.returned establishes the full RSL234 returned value (both registry branches, both Ok/Err, SAME env.pda replies) as its explicit executable value. This does NOT yet identify that value with the AdapterRw/sdk body; no A2/row credit. All successful printed axioms are standard only (or none). Exact target, status, wall/RSS/swap, revision/hashes and import/Aeneas pins are in per-attempt receipts. Prior compile count corrected: 27 actual scopes through identifier L030, not 30 actual; identifiers L017–L019 were unused and are not reclaimed.
+
+L043 scalar bit/equality transport and L044 registry predicate transport PASS: all four native CLOSED flag helpers and both active_at helpers equal RSL predicates at the mapped records and slot, without hypotheses. L040–L042 elaboration repairs are excluded; only L043/L044 certify the current sources. No native decoder instance or A1/A2 root yet.
