@@ -51,3 +51,10 @@ subsequent intrinsic callers preserves the original suspended stack as a SUFFIX
 while their callback is executing; equality at those prefixes would wrongly
 exclude a real pending callback. FrameComparison states the precise relation
 to the no-intrinsic-prefix frame used by270. Statements only; next15.
+
+## thread:f15
+
+PV_LIB_SPEC_F15Whole: whole Pre/MachineSpec/Post/Contract compiled49743;
+exact literal package prefix proposition plus comparison compiled in same module.
+No row proof or comparison implication claimed. Wall0:02.36;
+peak4707952KiB;swap0;standard summary axioms only.
