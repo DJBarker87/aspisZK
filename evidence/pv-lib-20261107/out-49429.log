@@ -1,0 +1,20 @@
+'PV_W5_F31Replies.native_reply1' depends on axioms: [propext, Quot.sound]
+'PV_W5_F31Replies.reply1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_W5_F31Replies.source8 : ∀ (resources : Resources) (encode : Encode) (D : Carrier OWNER Data) (K : Control)
+  (H : PV_W5_F35Modes.HType) (s : Store Data) (parents : List Frame) (a : ℕ) (length alloc layout : Data) (w : OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent),
+  s.cells { activation := a, localIndex := 1 } = some length →
+    s.cells { activation := a, localIndex := 2 } = some alloc →
+      s.cells { activation := a, localIndex := 3 } = some layout →
+        PV_STX2_Source7IterationBindings.advance (fun {A} => resources) (fun {A} => encode) (carrier D) K
+            (fun x => none) H 8
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := PV_STX2_Source7CtorF31.program.body }, callers := parents,
+                    store := s },
+              world := w, events := prior } =
+          received (carrier D) s parents a length alloc layout
+            (H (PV_STX2_Native.Request.child callee s.nextActivation [length, initValue, alloc, layout]) w) prior :=
+⋯
+'PV_W5_F31Replies.source8' depends on axioms: [propext, Classical.choice, Quot.sound]
