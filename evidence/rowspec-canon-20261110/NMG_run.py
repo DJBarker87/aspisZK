@@ -1,7 +1,8 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-rowspec-canon-20261110';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-a,target=sys.argv[1:];assert re.fullmatch('NMG_L[0-9]{3}',a) and 1<=int(a[-3:])<=100 and not (E/a).exists()
+a,target=sys.argv[1:];assert re.fullmatch('NMG_L[0-9]{3}',a) and 1<=int(a[-3:])<=101 and not (E/a).exists()
+assert len((E/'NMG_ATTEMPTS.jsonl').read_text().splitlines())<100,'Actual capped-scope budget exhausted'
 guard=E/'NMG_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

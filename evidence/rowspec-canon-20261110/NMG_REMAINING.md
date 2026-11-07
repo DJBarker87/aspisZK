@@ -26,3 +26,7 @@ TX1:179: exact remaining compact/opening/query/rho/configuration clauses and alr
 The remaining canonical specifications and formal comparisons are Lean work. They do NOT all require Kani, and NMG does not claim that they do. Native parent production, once those interfaces are complete, is outside this job and follows the separate(bi) pilot; no Kani work was attempted.
 
 Validation continues on the combined cached forest under the stated allowance. Attempt totals and any incomplete gate are reported in NMG_AUDIT.json and NMG_ATTEMPTS.jsonl. No unchanged timeout/memory-kill rerun or cap increase is permitted.
+
+The generic NMG_179_TotalBlock utility also retains an uninstalled global-totality premise; narrow it to the three bounded call shapes before using it at179. This is Lean work, not a reason to request Kani or add trust.
+
+Final stop:100/100 actual capped scopes used (unsubmitted L002 excluded; retention L101 is the100th actual scope). No remaining prover allowance. Canonical RowSpec/comparison and caller-domain obligations above are unfinished Lean work, not a Kani-exhaustion stop. Support import/scan/raw audit and retention pass; job gate remains INCOMPLETE.

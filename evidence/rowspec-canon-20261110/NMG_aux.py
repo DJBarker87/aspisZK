@@ -41,4 +41,9 @@ else:
  good=all(set(x['walked_axioms'])<= {'propext','Classical.choice','Quot.sound'} for x in results) if mode!='fixtures' else r.returncode==0 and len(results)==8 and all(x['equal'] for x in results)
 receipt=dict(mode=mode,command=cmd,binary_pin=json.loads(pin.read_text()),exit_status=r.returncode,wall_seconds=time.monotonic()-start,results=results,raw_standard_only=good,archives=manifest)
 (folder/'result.json').write_text(json.dumps(receipt,indent=1));print(json.dumps(dict(mode=mode,exit_status=r.returncode,roots=len(results),standard_only=good)))
+if mode=='proof75':
+ tools={}
+ for n in ['lean','lake','leanc']:
+  p=Path(T)/'bin'/n;tools[str(p)]=dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+ (B/'NMG_FINAL_HOST.json').write_text(json.dumps(dict(tools=tools,disk=shutil.disk_usage(B)._asdict(),own_bytes=int(subprocess.check_output(['du','-sb',str(B)]).split()[0]),export_retained=str(B/'NMG_exports_20261110'),cache_retained=True)))
 sys.exit(r.returncode)

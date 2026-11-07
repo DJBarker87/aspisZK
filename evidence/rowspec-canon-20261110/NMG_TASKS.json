@@ -1814,7 +1814,10 @@
    "NMG_EXPECTED_IMPORTS.jsonl"
   ],
   "retrieve_dir": "NMG_audit/proof75",
-  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export"
+  "expected_time": "Raw ax2/coherence traversal and lossless archive; proof0 also pins selected cached objects and retains own export",
+  "outputs": [
+   "NMG_FINAL_HOST.json"
+  ]
  },
  "proof76": {
   "kind": "audit",
@@ -1879,5 +1882,26 @@
    "NMG_EXPECTED_IMPORTS.jsonl"
   ],
   "retrieve_dir": "NMG_audit/proof78"
+ },
+ "retention": {
+  "kind": "audit",
+  "sources": [
+   "NMG_retain.py",
+   "NMG_CLOSURE_PINS.json.xz",
+   "NMG_CLOSURE_PINS.json.sha256",
+   "NMG_EXPORT.json",
+   "NMG_FINAL_HOST.json"
+  ],
+  "command": [
+   "python3",
+   "NMG_retain.py"
+  ],
+  "upload": [
+   "NMG_retain.py"
+  ],
+  "outputs": [
+   "NMG_FINAL_HOST.json"
+  ],
+  "expected_time": "Read-only rehash of pinned selected proof objects, exports and tools; no proof replay"
  }
 }
