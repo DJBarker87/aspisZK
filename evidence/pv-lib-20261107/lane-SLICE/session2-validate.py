@@ -61,5 +61,10 @@ new_driver=pathlib.Path('lean/PV_LIB_SLICE_RawAudit2.lean').read_text()
 assert old_driver[old_driver.index('  let env'):]==new_driver[new_driver.index('  let env'):]
 
 summary={'source_base':base,'lane':'SLICE','new_sources':checks,'pinned_replays':replays,'passing_compiles':len([r for r in receipts if r['accepted'] and not r['runtime_audit']]),'failed_compiles':len([r for r in receipts if not r['accepted']]),'preflight_stops':[49669],'raw_audits':len([r for r in receipts if r['runtime_audit']]),'maximum_peak_rss_kib':max(int(r['peak_rss_kbytes']) for r in receipts),'swaps':0,'overlay_counts':dict(collections.Counter(s['status'] for s in slots.values())),'raw_roots':raw['root_count'],'session2_base':'821f00b325e','write_boundary_passed':True,'endpoint_premises_removed':0,'endpoint_premises_added':0,'qualification':'Qualified graph adapters/support only; no parent-row or frozen-spec/full-root closure.'}
+session2_receipts=[r for r in receipts if r['attempt']>=49900 or r['attempt'] in [49688,49689,49691]]
+summary['session2']={'passing_compiles':sum(r['accepted'] and not r['runtime_audit'] for r in session2_receipts),'failed_compiles':sum(not r['accepted'] for r in session2_receipts),'strict_raw_audits':sum(r['runtime_audit'] for r in session2_receipts),'pinned_provider_replays':len(session2),'refusals':len([p for p in E.glob('refusal-*.json') if int(p.stem.split('-')[-1])>=49900]),'maximum_peak_rss_kib':max(int(r['peak_rss_kbytes']) for r in session2_receipts),'next_lean':49920,'next_raw':49692}
+assert summary['session2']['passing_compiles']==22
+assert summary['session2']['failed_compiles']==0
+assert summary['session2']['strict_raw_audits']==1
 (E/'SESSION2_VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps({k:v for k,v in summary.items() if k not in ['new_sources','pinned_replays']},indent=2))

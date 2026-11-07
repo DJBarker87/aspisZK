@@ -1,39 +1,41 @@
-# SLICE lane obligation review
+# SLICE lane remaining obligations after D978
 
 Target not yet established. No row consumes this library.
 
-The pinned provider exports determine the remaining order:
-f21 -> f13 -> f6 -> f5/f8 -> f7/f9 -> f4 -> f2 -> f1 -> f0.
-These arrows mean callee before caller, not a claimed composition theorem.
+The runtime typedDrop178 facet now has the exact full-reply source178/suffix
+graph and installed-handler binding. This is not f7 own-entry closure: the
+preceding f8/f6 execution remains with the OPEN supplier rows.
 
-- f21: the pinned STX handoff explicitly says no full ToVecCallSummary theorem.
-  The actual-pending diagnostic refutes its old recognizer at BODY push11.
-  A correct boundary must be introduced in a new module before branch assembly.
-- f13/f6/f5: no CLOSED provider is named by the base map. A graph of an
-  assumed child output would leave a new parameter and cannot supply the slot.
-- f8/f7: W2's conditional contracts retain the named f6 source/capture/frame
-  interface. A conditional theorem is not a CLOSED provider. The exact typed
-  Drop suffix is independently adaptable without claiming the full f7 row.
-- f9/f4: W2 proves own-prefix/guard/repeat helpers, not full own-entry contracts.
-  The source-complete carrier and all16 iterations, mutable output validity,
-  callback transport, write/count/cleanup suffix and full frame remain.
-- f2/f1/f0: full children above are absent. An interpreter function or a graph
-  reflexivity theorem alone cannot discharge their frozen specifications.
-- source7 entryReferenceValidity: the reference-valid entry predicate and
-  per-column projection already exist by name. The actual Foundation builder
-  must establish the predicate. This lane must not turn that discharge into
-  an assumed in-run validity premise or claim it from ownership alone.
+The Foundation entry adapter compiles exact conditional assembly from
+Source7EntryOwned'' and CallerClauses to the provider-named
+FoundationConstructionEntryObligation''''', with converse, old-entry
+compatibility and column reference-validity projection. Actual Foundation
+construction must establish the indexed registration, non-null, alignment and
+initialized-range bounds from its real Vec provenance. That caller obligation
+remains; no validity assumption is inserted into the run or at a copy site.
 
-The graph adapters do not prove machine/source adequacy, first-boundary
-strengthenings absent from old contracts, actual-caller domain discharge,
-joint premise nonemptiness, or source7 composition. Those limits are retained
-in the map delta. No frozen specification is changed to match these gaps.
+D978 WAITING-ON-ROW slots (do not prove supplier rows in this lane):
 
-Focused replay checkpoint: f32/f33 provider graphs are compiled; actual f21
-caller discharge and frozen first-boundary/source adequacy remain. The typed
-f22 three-instruction prefix graph and selector are supporting evidence only.
-After the16-module narrowed replay,14 additional W2 modules remain before
-RuntimeDrop can be imported authoritatively; then its full source178 suffix
-graph must be installed. Only two Lean IDs remain in this session block.
-The source7-entry preflight found at least111 missing object modules and is
-not a cohort-acceptance proof; the actual Foundation builder obligation remains.
+- slice:f13 -> slice:f21: WAITING-ON-ROW slice:f21 (PARTIAL).
+- slice:f6 -> slice:f13: WAITING-ON-ROW slice:f13 (OPEN).
+- slice:f8 -> slice:f6: WAITING-ON-ROW slice:f6 (OPEN).
+- slice:f7 -> slice:f8: WAITING-ON-ROW slice:f8 (OPEN).
+- slice:f9 -> slice:f8: WAITING-ON-ROW slice:f8 (OPEN).
+- slice:f4 -> slice:f7: WAITING-ON-ROW slice:f7 (OPEN).
+- slice:f4 -> slice:f9: WAITING-ON-ROW slice:f9 (OPEN).
+- slice:f5 -> slice:f6: WAITING-ON-ROW slice:f6 (OPEN).
+- slice:f2 -> slice:f4: WAITING-ON-ROW slice:f4 (OPEN).
+- slice:f2 -> slice:f5: WAITING-ON-ROW slice:f5 (OPEN).
+- slice:f1 -> slice:f2: WAITING-ON-ROW slice:f2 (OPEN).
+- slice:f0 -> slice:f1: WAITING-ON-ROW slice:f1 (OPEN).
+
+F32/F33 remain the prior qualified bounded supplied-machine graphs. Literal
+provider Pre, actual caller-domain discharge, first-boundary/source-machine
+adequacy, joint premise consistency, frozen-contract equivalence and top-level
+source7 composition are not supplied by these adapters. The old f21 pending
+recognizer diagnostic is retained on its supplier branch; this lane does not
+repair or assemble that PARTIAL row.
+
+Continue only with CLOSED provider adapters or explicit caller-obligation
+support within the authorized library scope. Do not consume this library in
+row proofs, change frozen specs, or attempt OPEN/PARTIAL suppliers.
