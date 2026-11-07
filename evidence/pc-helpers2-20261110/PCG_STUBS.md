@@ -1,4 +1,4 @@
-> SUSPENDED NATIVE CONTEXT SUPPORT: PCG-F1 / PCG_FINDINGS.md. Do not consume the SDK/address/digest packets until repaired receipts replace their support. Logical Lean results are unaffected.
+> PCG-F1 repair: original invalid-context native receipts are excluded. Whole-context exposure plus with_exposed_provenance passed Miri L057, SDK K092/K083, address K084/K085, master K086/K087 and digest K088/K089 (matched controls). Final combined gate is pending for the Pool rows.
 
 # PCG stub and domain register
 

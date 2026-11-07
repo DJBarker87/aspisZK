@@ -41,8 +41,15 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
 files={n:(E/p).read_text() for n,p in task.get('files',{}).items()};sources=list(files)
 if kind=='kani':
  import re
- for n,text in files.items():
+ pending=list(files)
+ while pending:
+  n=pending.pop();text=files[n]
   if n.endswith('.rs'):
+   for dep in re.findall(r'path="(PCG_[^"]+\.rs)"',text):
+    dest=str(Path(n).parent/dep)
+    if dest not in files:
+     assert (E/dep).is_file(), 'missing own dependency '+dep
+     files[dest]=(E/dep).read_text();sources.append(dest);pending.append(dest)
    for dep in re.findall(r'path="(PCG_[0-9]+\.rs)"',text):
     assert str(Path(n).parent/dep) in files,'own cfg module missing upload: '+dep
 

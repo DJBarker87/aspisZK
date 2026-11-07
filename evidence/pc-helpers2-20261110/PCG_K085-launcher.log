@@ -1,0 +1,65 @@
+{"attempt": "PCG_K085", "exit_status": 1, "wall_seconds": 37.68789380113594, "peak_rss_kib": "737132", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+17s
+
+Checking harness PCG_Address::request_376...
+
+VERIFICATION RESULT:
+ ** 1 of 101 failed (1 unreachable)
+Failed Checks: assertion failed: (got == (c.reply, c.bump)) != cfg!(PCG_NEG_ADDRESS)
+ File: "programs/aspis-pool/src/PCG_Address.rs", line 42, in PCG_Address::request_376
+
+VERIFICATION:- FAILED
+Verification Time: 0.81477976s
+
+Checking harness PCG_Address::request_375...
+
+VERIFICATION RESULT:
+ ** 1 of 101 failed (1 unreachable)
+Failed Checks: assertion failed: (got == (c.reply, c.bump)) != cfg!(PCG_NEG_ADDRESS)
+ File: "programs/aspis-pool/src/PCG_Address.rs", line 38, in PCG_Address::request_375
+
+VERIFICATION:- FAILED
+Verification Time: 1.9041967s
+
+Checking harness PCG_Address::request_374...
+
+VERIFICATION RESULT:
+ ** 1 of 101 failed (1 unreachable)
+Failed Checks: assertion failed: (got == (c.reply, c.bump)) != cfg!(PCG_NEG_ADDRESS)
+ File: "programs/aspis-pool/src/PCG_Address.rs", line 34, in PCG_Address::request_374
+
+VERIFICATION:- FAILED
+Verification Time: 1.7871912s
+
+Checking harness PCG_Address::stored_matches...
+
+VERIFICATION RESULT:
+ ** 1 of 91 failed
+Failed Checks: assertion failed: (got == expected) != cfg!(PCG_NEG_ADDRESS)
+ File: "programs/aspis-pool/src/PCG_Address.rs", line 28, in PCG_Address::stored_matches
+
+VERIFICATION:- FAILED
+Verification Time: 0.6321637s
+
+Manual Harness Summary:
+Verification failed for - PCG_Address::request_323
+Verification failed for - PCG_Address::request_391
+Verification failed for - PCG_Address::request_390
+Verification failed for - PCG_Address::request_377
+Verification failed for - PCG_Address::request_376
+Verification failed for - PCG_Address::request_375
+Verification failed for - PCG_Address::request_374
+Verification failed for - PCG_Address::stored_matches
+Complete - 0 successfully verified harnesses, 8 failures, 8 total.
+
+Running as unit: run-rfb8fefb7484749b69532b1325146d72c.scope; invocation ID: 95d70976386046e08ab7eeeacf697033

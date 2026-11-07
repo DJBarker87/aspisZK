@@ -1,4 +1,4 @@
-> SUSPENDED NATIVE CONTEXT SUPPORT: PCG-F1 / PCG_FINDINGS.md. Do not consume the SDK/address/digest packets until repaired receipts replace their support. Logical Lean results are unaffected.
+> PCG-F1 repair: original invalid-context native receipts are excluded. Whole-context exposure plus with_exposed_provenance passed Miri L057, SDK K092/K083, address K084/K085, master K086/K087 and digest K088/K089 (matched controls). Final combined gate is pending for the Pool rows.
 
 # PCG helpers batch 2
 
@@ -18,3 +18,6 @@ Prior PCB failed shapes are retired. Per-arm From equivalences are admitted by (
 ## Stage1 SDK forwarding packet
 
 Native/Lean/source-fission certificate passes for the shared find/create wrappers. Exact selected positives/controls, limitations and trust reclassification: PCG_CERTIFICATES.md, PCG_STUBS.md and PCG_CORRESPONDENCE.md. Source checksum/segment identity L004; final SDK Lean L013; coherent headline/ledger23/NLF/PCE import L005; optimized canonical driver L007/008; eight fixtures L009; NFX L010 exit0; raw ax2 headline+eight SDK roots L011/012 standard axioms, collector agreement. No Pool row CLOSED yet. SDK objects/export pins: PCG_SDK_EXPORT_MANIFEST.json. PCF can reuse this shared SDK packet, then must prove its own280 exact seed/program/reply law and gate it.
+
+## Stage2 current checkpoint
+SDK provenance repair accepted; native pairs are listed above. Independent reference/extraction work covers all 24 rows. No new Pool row is CLOSED until the combined gate completes. Native results for conversions, owned tree, canonicality, page scalar/place access, codec, return-data window, global-root call log and packing iterations are retained. PCG_L049 was an elaboration failure, never a theorem result; its successor repairs an obsolete List lemma name. Packing full-loop/native association remains an explicit obligation. No shipped files changed; no ELF rebuild trigger.

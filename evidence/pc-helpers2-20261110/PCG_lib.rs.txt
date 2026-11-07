@@ -107,6 +107,10 @@ pub use verifier_dispatch::{
     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
 };
 
-#[cfg(kani)]
+#[cfg(all(kani,PCG_SDK_NATIVE))]
 #[path="PCG_SdkPda.rs"]
 mod PCG_SdkPda;
+
+#[cfg(kani)]
+#[path="PCG_Address.rs"]
+mod PCG_Address;

@@ -26,7 +26,7 @@ for row in rows:
  if row in [374,375]:params+=',profile:Key,release:Key';args+=',profile,release';count=4;other=['pool','profile','release'];lens=[len(domain),32,32,32]
  if row==323:
   params+=',sequence:u64';args+=',sequence';count=3;other=['pool','le_padded(sequence)','[0;32]'];lens=[len(domain),32,8,0]
- padded=list(domain.encode())+[0]*(32-len(domain));ref=f'pub fn request_{row}({params})->Request{{Request{{program,seeds:[{padded},'+','.join(other)+f'],lengths:{lens},count:{count}'+'}}}\n'
+ padded=list(domain.encode())+[0]*(32-len(domain));ref=f'pub fn request_{row}({params})->Request{{Request{{program,seeds:[{padded},'+','.join(other)+f'],lengths:{lens},count:{count}'+'}}\n'
  refs+=ref
  meta[str(row)]=dict(function=fn,path=p,domain=domain,constant=const,count=count,params=params,args=args,full_function_sha256=r['full_function_sha256'],frozen_body_sha256=r['frozen_body_sha256'])
  # Actual callers are added separately after this value-reference stage.

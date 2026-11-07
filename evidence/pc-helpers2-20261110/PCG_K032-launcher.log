@@ -1,0 +1,61 @@
+{"attempt": "PCG_K032", "exit_status": 1, "wall_seconds": 2.2103392800781876, "peak_rss_kib": "187548", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: failed to connect to jobserver from environment variable `CARGO_MAKEFLAGS="-j --jobserver-fds=8,9 --jobserver-auth=8,9"`: cannot open file descriptor 8 from the jobserver environment variable value: Bad file descriptor (os error 9)
+  |
+  = note: the build environment is likely misconfigured
+
+warning: unexpected `cfg` condition value: `static-syscalls`
+ --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-define-syscall-2.3.0/src/lib.rs:5:7
+  |
+5 | #[cfg(target_feature = "static-syscalls")]
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: expected values for `target_feature` are: `10e60`, `2e3`, `32s`, `3e3
+...
+grams/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0282]: type annotations needed
+   --> programs/aspis-pool/src/pair_dispatch.rs:279:8
+    |
+279 |     if returned_data.len() != POOL_V1_PAIR_VERIFIER_RESULT_BYTES {
+    |        ^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+    --> programs/aspis-pool/src/pair_forest.rs:1173:31
+     |
+1173 |     lane_data.copy_from_slice(next_lane_image.as_ref());
+     |                               ^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+    --> programs/aspis-pool/src/pair_forest.rs:2117:24
+     |
+2117 |         lane_data.push(lane.try_borrow_mut_data()?);
+     |                        ^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+   --> programs/aspis-pool/src/pair_forest_dispatch.rs:373:8
+    |
+373 |     if returned_data.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES {
+    |        ^^^^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+   --> programs/aspis-pool/src/pair_processor.rs:377:5
+    |
+377 |     next_state.write_encoding_prevalidated(&mut next_image);
+    |     ^^^^^^^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+   --> programs/aspis-pool/src/pair_processor.rs:535:5
+    |
+535 |     next_state.write_encoding_prevalidated(&mut next_image);
+    |     ^^^^^^^^^^ cannot infer type
+
+Some errors have detailed explanations: E0282, E0463.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `aspis-pool` (lib) due to 8 previous errors; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 8 compilation errors.
+
+Running as unit: run-r0dc891d1591f4b6aba372aa7f02d1db9.scope; invocation ID: fea2630bf6394bbe84e78bbbed795836
