@@ -21,3 +21,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46316 OwnerStoreV2 candidate passed: original5+14 new source projections, all-answer641 effects, OWNER-aware neutral agreement and trace-indexed finite lift. Complete Drop/opaque-wrapper/source-backing adequacy remains open; no final corrected-machine or row claim.
 
 46317 RangeHistoryV2 passed: existing165 semantics at the exact source request derives returned identity; source move and first93 request preserve local7; first93 source write1->2 follows. The reused prefix is explicitly original-interpreter evidence; no full corrected-machine/history or loop closure is claimed.
+
+46318 ArcPollV2 passed: actual12950 request selects the new ArcClone source-count action and delivers the full original reply. This resolves the local dispatch defect only; source-cell/returned-value/frame histories and complete D984 adequacy remain open.
