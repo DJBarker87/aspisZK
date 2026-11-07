@@ -25,9 +25,9 @@ theorem project_lower_claims (fallback : Value) (a : LIB_VCarriers.Claims) :
   arr_inverse lowerArray (projectArray fallback) (project_lower_array fallback) a
 #print axioms project_lower_claims
 
-def lowerChallenges (a : LIB_VCarriers.Challenges) : aspis_core.state_only_prefix.r0.Challenges :=
+def lowerChallenges (a : LIB_VCarriers.Challenges) : NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges :=
   ⟨lower a.lambda,lower a.chi,lower a.theta,lowerArray a.zc,lower a.mu,lower a.eta⟩
-def projectChallenges (fallback : Value) (a : aspis_core.state_only_prefix.r0.Challenges) : LIB_VCarriers.Challenges :=
+def projectChallenges (fallback : Value) (a : NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges) : LIB_VCarriers.Challenges :=
   ⟨project fallback a.lambda,project fallback a.chi,project fallback a.theta,
    projectArray fallback a.zc,project fallback a.mu,project fallback a.eta⟩
 
@@ -48,5 +48,6 @@ theorem at28 (fallback : Value) (a : K29) :
     LIB_VCarriers.at28 (projectArray fallback a) = project fallback (NNG_Array136.get a 28#usize (by decide)) := by
   unfold LIB_VCarriers.at28 projectArray NNG_Array136.get arr
   simp only [List.getElem_map]
+  rfl
 #print axioms at28
 end AspisR1.NNG_LIBArrays

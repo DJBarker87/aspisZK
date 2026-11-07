@@ -10,8 +10,9 @@ def Domain (x : Raw) : Prop := LIB_VScalarCarriers.CanonicalRaw (toT1 x)
 def lower (x : Value) : Raw := fromT1 (LIB_VScalarCarriers.toRaw x)
 /-- Total projection uses an input canonical scalar only outside Domain;
 all source equality uses prove Domain from CLOSED returned-value laws. -/
-def project (fallback : Value) (x : Raw) : Value :=
-  if h : Domain x then LIB_VScalarCarriers.ofRaw (toT1 x) h else fallback
+def project (fallback : Value) (x : Raw) : Value := by
+  classical
+  exact if h : Domain x then LIB_VScalarCarriers.ofRaw (toT1 x) h else fallback
 
 theorem lower_domain (x : Value) : Domain (lower x) := by
   unfold Domain lower
