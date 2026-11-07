@@ -30,7 +30,8 @@ def main():
   if rec.exists():runs[a]=dict(receipt=load(rec),pins=load(pins) if pins.exists() else {},spec=r)
   for f in (E/(a+'_emitted')/'raw').rglob('*'):
    if not f.is_file() or not (f.name.endswith('Funs.lean') or f.name.endswith('Types.lean') or f.name.endswith('Funs.lean.xz') or f.name.endswith('Types.lean.xz')):continue
-   if not pins.exists() or load(pins).get('aeneas_exit')!=0:continue
+   if not pins.exists() or load(pins).get('aeneas_exit')!=0 or a not in runs or runs[a]['receipt']['exit_status']!=0:continue
+   if load(pins).get('lock_after')!=load(pins).get('lock_before'):continue
    b=lzma.decompress(f.read_bytes()) if f.suffix=='.xz' else f.read_bytes();outputs.append(dict(run=a,path=str(f.relative_to(E)),hash=sha(b),bytes=b,defs=definitions(b.decode()),types=f.name in ['Types.lean','Types.lean.xz']))
  if (E/'NMH_TOOL_ATTEMPTS.jsonl').exists():
   for line in (E/'NMH_TOOL_ATTEMPTS.jsonl').read_text().splitlines():tool_counts[json.loads(line)['tool']]+=1
@@ -64,7 +65,7 @@ def main():
   diff=None
   if verdict=='DIFFERS':
    diff='NMH_DIFFS/'+h+'.diff.xz';raw=''.join(difflib.unified_diff(old.decode().splitlines(True),chosen['bytes'].decode().splitlines(True),fromfile=z['paths'][0],tofile=chosen['path'])).encode();p=E/diff;p.write_bytes(lzma.compress(raw,preset=6));p.with_suffix('.sha256').write_text(sha(raw)+'\n')
-  result.append(dict(blob=h,group=g['group'],run=chosen['run'] if chosen else None,attempted_runs=attempted,verdict=verdict,reason=reason,committed_hash=h,reproduced_hash=chosen['hash'] if chosen else None,reproduced_path=chosen['path'] if chosen else None,committed_paths=z['paths'],normalization=None if not norm else 'NHR_parameterize.py discriminant metadata removal',diff=diff,affected_CLOSED_rows=impact[h]['affected_CLOSED_rows'],impact_scope=impact[h]['mapping'],known_defect='NKT-F1 / ruling (bc) post-loop return family' if any('batch_tree' in a['name'] for a in z['annotations']) else None))
+  result.append(dict(blob=h,group=g['group'],run=chosen['run'] if chosen else None,attempted_runs=attempted,verdict=verdict,reason=reason,committed_hash=h,reproduced_hash=chosen['hash'] if chosen else None,reproduced_path=chosen['path'] if chosen else None,committed_paths=z['paths'],normalization=None if not norm else 'NHR_parameterize.py discriminant metadata removal',normalized_hash=sha(nhr_types(norm['bytes'].decode()).encode()) if norm else None,diff=diff,affected_CLOSED_rows=impact[h]['affected_CLOSED_rows'],impact_scope=impact[h]['mapping'],known_defect='NKT-F1 / ruling (bc) post-loop return family' if any('batch_tree' in a['name'] for a in z['annotations']) else None))
   details.append(dict(blob=h,definitions={n:{k:v for k,v in d.items() if k!='text'} for n,d in ds.items()},comparisons=comparisons))
  packet=dict(schema=1,target_established=False,counts=dict(collections.Counter(r['verdict'] for r in result)),budget_used=dict(Charon=tool_counts['charon'],Aeneas=tool_counts['aeneas'],Lean=0,Kani=0),blobs=result)
  (E/'NMH_PROVENANCE.json').write_text(json.dumps(packet,indent=2)+'\n')

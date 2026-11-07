@@ -2,7 +2,7 @@
 
 Target not yet established. No ledger or trust item changed.
 
-Completed scopes: 8/30. Tool charges: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kani': 0}. No Lean scope is justified solely to repair missing tool/source provenance; object compilation is reserved for a reproduced module needing an object-hash comparison.
+Completed scopes: 11/30. Tool charges: {'Charon': 11, 'Aeneas': 9, 'Lean': 0, 'Kani': 0}. No Lean scope is justified solely to repair missing tool/source provenance; object compilation is reserved for a reproduced module needing an object-hash comparison.
 
 ## Member-by-member status
 
@@ -181,8 +181,7 @@ Completed scopes: 8/30. Tool charges: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kan
 | 8b0986edbc7dcda96378f6ea06a89b666e2d6b31cd1f6cde339218c0ab9adb10 | NMH_G122 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: r1_post25_sampler_extraction. Native projections cannot reconstruct an uncommitted/outlined driver. |
 | 82801757d4ceedb9c4d4fa3236a83e537269193cabafd63de63be642621e1396 | NMH_G031 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: r1_post25_sampler_extraction. Native projections cannot reconstruct an uncommitted/outlined driver. |
 | cc5bc18dd2c51d83c32f1aee1112f0b3e3cb78622d33e322d5430a0e7727bd47 | NMH_G060 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: aspis_r1_stage2_adopted_caller. Native projections cannot reconstruct an uncommitted/outlined driver. |
-| 21cc61a0ab3bd831535ef23aafa34674798d3e93ea8b6dcf349f693c5827392e | NMH_G149 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E010,NMH_E029 |
-| c8df287c4f3e9295f450ef8ffbdef9afaffb697a572137dbea5b1cefbe707415 | NMH_G149 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E010 |
+| 21cc61a0ab3bd831535ef23aafa34674798d3e93ea8b6dcf349f693c5827392e | NMH_G149 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
 | 6f53933c7ab7c3a1a86faa53b5e9d3d83e3a2b6fabba2a2a049f27489759fac0 | NMH_G072 | NOT_REPRODUCED | Archived configuration selects a reference/outlined function or crate absent from frozen release; frozen source cannot supply that driver. |
 | 49dc98897501386c94fba6e7350855892718e9bf1c5c2d0dd74878b6e0b0a5af | NMH_G160 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: aspis_r1_prefix_parser_extract. Native projections cannot reconstruct an uncommitted/outlined driver. |
 | 6c7fd788f20aad862364869a478cac4234ec82b888a030092d279258779964ca | NMH_G154 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: aspis_r1_parse_record_extract. Native projections cannot reconstruct an uncommitted/outlined driver. |
@@ -331,8 +330,8 @@ Completed scopes: 8/30. Tool charges: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kan
 | 1c0bbeaaae4e2e07e28050b893ce3a440250804f1a98af7c542a240933df073f | NMH_G074 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: neb_additive_reference. Native projections cannot reconstruct an uncommitted/outlined driver. |
 | dd4ea35e1f6937a746e4d0c494e48d46f01ed7721d861fc670dfc546dd1f8e13 | NMH_G026 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: neb_parser_reference. Native projections cannot reconstruct an uncommitted/outlined driver. |
 | 2c14e67ade7c7b5bccf6bac24359e66bcf226a9a4d109aeaf342dfc0c99e20d6 | NMH_G044 | NOT_REPRODUCED | Emission names source/reference crate(s) absent from frozen manifest closure: neb_q_reference. Native projections cannot reconstruct an uncommitted/outlined driver. |
-| 915dec94b50204fb890f3fa9b8fbb4b30037ab0347b8e10745f331f8f73b9401 | NMH_G150 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E011 |
-| 993fee6cde3a9f1810940499afdee05b281f55f7891de7f6f0af3f1b24a6b0d3 | NMH_G150 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E011 |
+| 915dec94b50204fb890f3fa9b8fbb4b30037ab0347b8e10745f331f8f73b9401 | NMH_G150 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
+| 993fee6cde3a9f1810940499afdee05b281f55f7891de7f6f0af3f1b24a6b0d3 | NMH_G150 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
 | 56a4828444b2e594bac79d9e914a8c92492a6bc2d7c4287a17d51602ef185301 | NMH_G125 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
 | 61381eacf275780620b02483054ede7313daa9423410b5db3decb8d8ac6b34a2 | NMH_G027 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
 | ba38154a96f8b894cbd966ea436caea52a0d28809270d7565693b6306f5aa375 | NMH_G085 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
@@ -342,8 +341,8 @@ Completed scopes: 8/30. Tool charges: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kan
 | d8d428b038558cca6c89092257b3ad1a18a355141dce25df4ce05c9a38767e89 | NMH_G119 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E030 |
 | 16cdf784efd3a74e45cbf15a14b4a2b80a3b45b410d917c381ddea45d2b8f613 | NMH_G119 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E030 |
 | 6f30719c8bb4fe504b260c0cdaa51677b6ebc371e2160d638bd77f5e7af609df | NMH_G047 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E030 |
-| 22eea1f2980748432a693fc99658f450c1604fb9275833bbeaf257d1fb0792b2 | NMH_G144 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E009 |
-| bd36fcb9cd5374bba5bd72c54460a347812f48048f3ccb942b5bda33a9000a01 | NMH_G144 | NOT_REPRODUCED | Planned extraction not yet attempted: NMH_E009 |
+| 22eea1f2980748432a693fc99658f450c1604fb9275833bbeaf257d1fb0792b2 | NMH_G144 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
+| bd36fcb9cd5374bba5bd72c54460a347812f48048f3ccb942b5bda33a9000a01 | NMH_G144 | DIFFERS | Committed bytes differ from emitted bytes; no permitted normalization establishes identity. Candidate configurations/projections do not establish historical origin. |
 
 DIFFERS entries require review of their compressed diff and archived transformation chain. NOT_REPRODUCED entries require the stated source/configuration or a successful changed/split tool shape. Missing historical drivers are not inserted into frozen source. Each affected CLOSED row and checked reaching root is retained in NMH_PROVENANCE.json and NMH_ROW_IMPACT.json.xz; no status is changed here.
 

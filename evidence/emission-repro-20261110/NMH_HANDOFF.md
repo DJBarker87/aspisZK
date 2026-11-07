@@ -2,7 +2,7 @@
 
 **Target not yet established.** Branch codex/cx-emission-repro-20261107; local commits only, no push. This packet investigates NKT-F2, without a new row proof, ledger edit, trust change or shipped-source change.
 
-8/30 serial extraction scopes completed. Verdicts for all 336 requested blobs: {'NOT_REPRODUCED': 324, 'DIFFERS': 12}. Tool charges: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kani': 0}; limits Charon30/Aeneas30/Lean10/Kani0. See NMH_PROVENANCE.json for each blob's committed/reproduced hashes, run, verdict, reason and affected CLOSED rows. NMH_PLAN.json records packet partitions and one explicit configuration per run. NMH_REMAINING.md records every unresolved member.
+11/30 serial extraction scopes completed. Verdicts for all 336 requested blobs: {'NOT_REPRODUCED': 318, 'DIFFERS': 17, 'REPRODUCED': 1}. Tool charges: {'Charon': 11, 'Aeneas': 9, 'Lean': 0, 'Kani': 0}; limits Charon30/Aeneas30/Lean10/Kani0. See NMH_PROVENANCE.json for each blob's committed/reproduced hashes, run, verdict, reason and affected CLOSED rows. NMH_PLAN.json records packet partitions and one explicit configuration per run. NMH_REMAINING.md records every unresolved member.
 
 Frozen crates, verifier program and Cargo.lock: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Pool: b936275465 (full git revision and per-file git/SHA pins in NMH_STAGING_MANIFEST.json). NMH_NHR_stage.py is unchanged NHR_stage.py; NMH_extract.py supplies archived options or explicitly labelled diagnostic selectors through its API. All original source/lock/graph/tool checks remain. NMH_CLIENT_CHANGES.md records the owned controller adaptations. No shared launcher, reservation, shim, workspace or sibling worktree changed.
 

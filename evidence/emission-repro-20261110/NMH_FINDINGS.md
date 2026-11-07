@@ -22,6 +22,6 @@ No theorem, axiom or new trust item has been introduced. #print axioms is not ap
 
 ## Reproduction status from retained receipts
 
-8 serial scopes completed; verdict counts {'NOT_REPRODUCED': 324, 'DIFFERS': 12}. Charged tools: {'Charon': 8, 'Aeneas': 6, 'Lean': 0, 'Kani': 0}. Total scoped wall 964.302s; maximum reported process RSS 868736 KiB. Full per-tool GNU time results and cgroup peaks are in NMH_RUN_SUMMARY.json and original receipts. Failed scopes: NMH_E002, NMH_E004, NMH_E006. An incomplete killed-tool receipt is null, never inferred successful.
+11 serial scopes completed; verdict counts {'NOT_REPRODUCED': 318, 'DIFFERS': 17, 'REPRODUCED': 1}. Charged tools: {'Charon': 11, 'Aeneas': 9, 'Lean': 0, 'Kani': 0}. Total scoped wall 1379.503s; maximum reported process RSS 930688 KiB. Full per-tool GNU time results and cgroup peaks are in NMH_RUN_SUMMARY.json and original receipts. Failed scopes: NMH_E002, NMH_E004, NMH_E006. An incomplete killed-tool receipt is null, never inferred successful.
 
 A REPRODUCED verdict is limited to exact committed bytes or the named NHR discriminant-metadata adaptation. DIFFERS is a byte/configuration result, not a semantic counterexample. NMH_DEFINITION_COMPARISONS.json.xz retains exact NKT-style declaration segment hashes for every member and candidate output. No new normalization is used.

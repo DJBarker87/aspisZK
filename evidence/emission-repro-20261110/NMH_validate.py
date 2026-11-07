@@ -33,6 +33,7 @@ def main():
   if r['verdict']=='REPRODUCED':
    assert r['run'] in completed
    if r['normalization'] is None:assert r['committed_hash']==r['reproduced_hash']
+   else:assert r['normalized_hash']==r['committed_hash']
   if r['diff']:
    p=E/r['diff'];assert p.exists();assert sha(lzma.decompress(p.read_bytes()))==p.with_suffix('.sha256').read_text().strip()
  for p in E.rglob('*'):
