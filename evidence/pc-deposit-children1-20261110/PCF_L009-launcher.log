@@ -1,0 +1,61 @@
+{"attempt": "PCF_L009", "exit_status": 0, "wall_seconds": 2.521181503077969, "peak_rss_kib": "2585284", "swaps": "0", "print_axioms": []}
+FOUND Aeneas.Std.UScalar.cast
+TYPE {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty
+VALUE fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+FOUND Aeneas.Std.UScalar.and
+TYPE {ty : Aeneas.Std.UScalarTy} → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty
+VALUE fun {ty} x y => (x.bv &&& y.bv)#uscalar
+FOUND Aeneas.Std.UScalar.cast_val_eq
+TYPE ∀ {src_ty : Aeneas.Std.UScalarTy} (tgt_ty : Aeneas.Std.UScalarTy) (x : Aeneas.Std.UScalar src_ty),
+  ↑(Aeneas.Std.UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits
+VALUE fun {src_ty} tgt_ty x =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (co
+...
+Nat.testBit_mod_two_pow x n i)))
+      (Bool.casesOn (motive := fun t =>
+        x.testBit i = t → (x.testBit i && (2 ^ n - 1).testBit i) = (decide (i < n) && x.testBit i)) (x.testBit i)
+        (fun h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (congrArg false.and (Nat.testBit_two_pow_sub_one n i)) (Bool.false_and (decide (i < n)))))
+                  (Bool.and_false (decide (i < n))))
+                (eq_self false)))
+        (fun h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (congrArg true.and (Nat.testBit_two_pow_sub_one n i)) (Bool.true_and (decide (i < n)))))
+                  (Bool.and_true (decide (i < n))))
+                (eq_self (decide (i < n)))))
+        (Eq.refl (x.testBit i)))
+FOUND Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+TYPE {I Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate I →
+      Aeneas.Std.Result (Option (Aeneas.Std.Usize × Item) × Aeneas.Std.core.iter.adapters.enumerate.Enumerate I)
+VALUE fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => Aeneas.Std.Result.ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        Aeneas.Std.Result.ok (some (self.count, a), { iter := iter', count := count' })
+FOUND Aeneas.Std.core.slice.iter.Iter
+TYPE Type → Type
+VALUE <not-available>
+FOUND Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+TYPE Type u → Type u
+VALUE <not-available>
+
+Running as unit: run-r29d8e8a7000c4f658e86a8e6736d171a.scope; invocation ID: ee1fed03d8984e49a8efc06c3606b5d8

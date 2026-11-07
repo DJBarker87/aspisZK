@@ -1,0 +1,101 @@
+{
+  "attempt": "PCF_K004",
+  "kind": "kani",
+  "module": "POOL:365 inverted contract",
+  "sources": [
+    "PCF_gate.py",
+    "PCF_src/programs/aspis-pool/src/processor.rs",
+    "PCF_src/programs/aspis-pool/src/PCF_Processor.rs",
+    "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs"
+  ],
+  "command": [
+    "python3",
+    "PCF_gate.py",
+    "PCF_K004.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects:/home/dombarker/project-offloads/codex-pc-deposit-children1-cache-20261110",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_TOKEN"
+  },
+  "timeout": 180,
+  "source_revision": "5ddd5b140b23de0be34c6b1c29fbab9d1dec99e9",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "seed_manifest_sha256": "28c10de7bb477b9f438f2ddb70d824a1fb38fc2bb0206a1b9e3e54d380905d1e",
+    "selected_objects": {
+      "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountLaws.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountLaws.olean",
+        "sha256": "9f4cbb9613c8dd6d52237d027ab9279cf4778d5d22db7932a0382cc6945ef4b7"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_Count.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_Count.olean",
+        "sha256": "0bd74e4b60cd146261c60c5dca4c7e924e66b7358b719796542e415d9d32f890"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountRef/Types.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountRef/Types.olean",
+        "sha256": "fe2a653392f2ac1df4aa3e4ce35f54dc8751bd5465a5cd506fea5539c24f3af4"
+      },
+      "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountRef/Funs.olean": {
+        "path": "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_objects/PCF_AccountRef/Funs.olean",
+        "sha256": "f2b738abe09b38a16214dcacf34532e145d54ded65fbed7f3b382307d2b71aef"
+      }
+    },
+    "seed_note": "selected input files pinned by PCF_IMPORTS.json.xz, including all selected Aeneas objects and sidecars"
+  },
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+    "--lib",
+    "--features",
+    "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "processor::PCF_Processor::token_contract_proof",
+    "--output-format",
+    "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "exit_status": 1,
+  "wall_seconds": 67.19411645689979,
+  "peak_rss_kib": "2252348",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r245d1442c9a741e991c371ecba03ed1d.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2906550272",
+  "source_hashes": {
+    "PCF_gate.py": "56d03c775ea3eee654bf06261d1374c5558161348c3b4a186b2705fe0347c7be",
+    "PCF_src/programs/aspis-pool/src/processor.rs": "7a6941a62e5b64584c0f56090ed1077dddffdfb30d98b84bd0030e905534cbbe",
+    "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "8f92d5a168fcb4007cc1431a5aa0e1e68b421368a2e9ad74403694e87f3cdb75",
+    "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "5442c2cb80d8bcf9efdae7f6c0b6e812fc7592069773e8234918af1073960648"
+  },
+  "print_axioms": "N/A: kani"
+}
