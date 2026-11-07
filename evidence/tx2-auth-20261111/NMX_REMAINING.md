@@ -1,3 +1,13 @@
+# Current child-first redirect status
+
+Target not yet established; no217 or234 CANDIDATE. Rev3 canonical TX2 owners rebuilt L661–665.217 Charon succeeds but both pinned Aeneas loop encodings fail before Lean body emission: [exact finding](NMX_217_EXTRACTION_FINDING.json). No(bc)-flagged emitted exit authorizes Kani.234 has a diagnostic emitted root only, with failed deployment-ID children replaced by generated admissions; these files were never compiled: [exact finding](NMX_234_EXTRACTION_FINDING.json). Principal234 proofs await217 under the prescribed order.
+
+233 is FROZEN preparation at `NMX_R2_NativeCanonical.fold` and `NMX_R2_RepresentedFold.fold`. [NMX_REV2_REMAINING.md](NMX_REV2_REMAINING.md) items1–5 are its unchanged open list. No more233 reification, bounds, association or audits before both child candidates. NMM is retired; do not check its branch.
+
+Library remains a parameter. LIB_ branch snapshot3ae8089d114d33e10fe0c5d7c41717371f4e0421 has LIB_Deployed concrete identifier sources and rev2 carrier support, but its handoff still records rev3 migration pending and no complete shared PoolLib installation. Copy and validate supplying LIB_ instances with provenance against rev3 when available; do not construct NMX replacements.
+
+Redirect spent8/250 formal scopes and2/2 extraction scopes;0 Kani.242 formal scopes remain. The stop is the failed217 extraction plus the zero-Kani/native-route constraint and child-first gate, not formal allowance. See NMX_HANDOFF.md for member-by-member disposition. All following text is historical.
+
 # Current revision2 status
 
 See [NMX_REV2_REMAINING.md](NMX_REV2_REMAINING.md) for the current target, proved steps and exact remaining obligations. The historical revision1/renewal status below is retained for provenance; its clone-target mismatch has been superseded by the revision2 native getter/guard packets. No CANDIDATE is claimed.
