@@ -1,3 +1,26 @@
+# D985 session4 remaining proof obligations
+
+All11 whole statements are compiled: f21,f13,f6,f5,f8,f7,f9,f4,f2,f1,f0/source7.
+Each has named Pre, Post, MachineSpec and Contract : Prop, and an explicit
+SESSION4_<row>_COMPARISON.md. Source7Joint.joint proves non-emptiness of the
+complete f0 Pre jointly with MachineSpec and its explicit resource environment.
+No Contract is proved; no slot status or ledger row is changed.
+
+Remaining work is PROOF work: source/runtime primitive adequacy and bindings,
+D877 graph-summary transport and caller-domain discharge, frame preservation,
+actual Foundation-construction validity, and Contract instances/composition.
+These are not missing statements and were not added as desired-post premises.
+No endpoint premise or trust item changes. Privacy target not yet established.
+
+The source7 witness supplies a concrete valid sixteen-empty-column Foundation,
+not an actual builder or clone run; it does not discharge an OPEN supplier.
+The accepted f21 package Success.vector defect stays recorded separately.
+Historical evidence and the WAITING-ON-ROW slot map below remain qualified.
+No unchanged manifest, runtime, adversarial or reproducible-build regression
+is needed for this statement-only work.
+
+--- historical ---
+
 # D983 session3 remaining — whole-contract-first order
 
 Full contracts0/11. Only PV_LIB_SLICE_Spec_f21 candidate is compiled/audited;

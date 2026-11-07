@@ -1,3 +1,62 @@
+# SLICE session4 complete — D985 statements only
+
+Started896d708bf39 on codex/pv-lib-slice-20261107, same worktree.
+All11 whole contract STATEMENTS compiled in the requested order:
+f21/49924, f13/49926, f6/49928, f5/49929, f8/49930, f7/49931,
+f9/49932, f4/49933, f2/49934, f1/49935, f0-source7/49936.
+Each PV_LIB_SLICE_Spec_<row> contains named Pre, Post, MachineSpec and
+Contract : Prop. No Contract inhabitant, row closure or library consumer.
+SESSION4_CONTRACT_INDEX.json and SESSION4_<row>_COMPARISON.md index them.
+
+f21 Success uses SliceToVecFinish.vector at the SAME fresh header and final
+length n, including positive n. D985's accepted construction-length defect
+and the checked package comparison are retained. Full heap/continuation frames
+are stated; their proofs, source/runtime primitive adequacy/bindings and D877
+summary graph transport remain future proof work, not statement blockers.
+The generic entry/first-boundary/reference/frame clauses live in f13's
+PV_LIB_SLICE_Statements namespace; f6 adds the shared array/capture clauses.
+Each row retains its pinned emitted body, all replies and effects, abort-only
+event observation, exact actual pending boundary and infinite prefixes.
+
+PV_LIB_SLICE_Spec_Source7Joint.joint compiled49941 proves a concrete joint
+witness of the COMPLETE f0 Pre AND its actual MachineSpec/resource environment
+for every Resources/Encode, with no Pre/success/Contract/run hypothesis. It
+uses sixteen legal empty columns and the same entry-selected registrations,
+headers, places, typed bytes and source descriptor array. This is premise
+non-emptiness, not a builder provenance theorem or a successful clone run.
+SESSION4_SOURCE7_JOINT.md states the precise claim and its limits.
+
+13 focused compiles passed (11 statements, witness, audit driver); 7 changed
+failed inputs are archived49923/25/27/37/38/39/40, with diagnostics retained.
+No memory kill, cap increase, refusal, cold dependency replay or full manifest.
+Every attempt has standalone STREAMB_SLOTS=3 SSH turn and allowed:true admission.
+All scopes6G/8G/swap0/Tasks64, Lean-M7000, serial. New sources/objects use
+sources-stx4/objects-stx4/J-stx4; session3 artifacts stay immutable read-only.
+The corrected SPEC-C2/common and all11 frozen source bodies were byte-checked:
+SESSION4_INPUT_PINS.json. Frozen prose was not edited.
+
+ONE strict audit49693 passed120/120 NEW/CHANGED roots, exit0, wall2:45.18,
+peak6782604KiB, swaps0; source revisionf9bdc376a0e0e96ba7fca2e247be325bf4980794.
+Only propext/Classical.choice/Quot.sound, zero unresolved and zero summary/raw
+mismatches. Driver49942 compiles with standard axioms only. Private importAll
+walker/collector unchanged; only module/root arrays and explicit reached-
+constructor summary candidates differ from accepted session3. Actual walks
+and graph-file hashes are retained in SESSION4_RAW_GRAPH_ARCHIVE.json.xz and
+SESSION4_RAW_GRAPH_MANIFEST.json; results/receipt in SESSION4_RAW_AUDIT.json.
+Do not rerun this audit unchanged. No root changed or was added after it.
+
+SESSION4_VALIDATION.json/session4-validate.py validate sources, commits, caps,
+admissions, turns, failed archives, unchanged slot statuses, source pins,
+unchanged audit logic and actual raw graph archive without Lean replay.
+Slot status counts stay3 qualified INSTANTIATED/12 WAITING-ON-ROW/1 missing.
+Remaining proof work is listed in REMAINING.md. Privacy target not established.
+Endpoint premises removed0/added0; no trust item or metric changed.
+No shared map, ledger, checker, pv-common, package branch, key, implementation,
+push or merge action. Next unused Lean49943; raw49694 (new/changed roots only).
+No own scope remains after the audit.
+
+--- historical checkpoints (superseded statement counts) ---
+
 # Session 4 source7 witness checked
 
 All11 statement modules compiled in order; every comparison recorded.
