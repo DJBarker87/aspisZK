@@ -1,13 +1,13 @@
 {
  "target_established": false,
  "row_credit_claimed": false,
- "report_revision": "ba1823ca3c0e57057eec5abefb245a0f37c60c39",
+ "report_revision": "673eeae4468361ebda9b13a7fc4fad1cfa2f4efc",
  "budget": 300,
- "scopes_used": 105,
- "scopes_remaining": 195,
+ "scopes_used": 112,
+ "scopes_remaining": 188,
  "kani_used": 0,
  "extractions_used": 0,
- "outer_wall_seconds": 2070.8156129647978,
+ "outer_wall_seconds": 2238.8369066116866,
  "peak_rss_kib": 6563552,
  "swaps": 0,
  "failed_scopes": [
@@ -124,6 +124,12 @@
    "kind": "lean",
    "target": "LIBB_RecordReservation",
    "exit": 1
+  },
+  {
+   "attempt": "LIBB_L110",
+   "kind": "lean",
+   "target": "LIBB_PartitionEnv",
+   "exit": 1
   }
  ],
  "changed_source_modules": [
@@ -181,9 +187,15 @@
   "LIBB_DenseReservation",
   "LIBB_RegularReservation",
   "LIBB_PairReservation",
-  "LIBB_CommonReservation"
+  "LIBB_CommonReservation",
+  "LIBB_RecordReservation",
+  "LIBB_TagSource",
+  "LIBB_TagStopPrefix",
+  "LIBB_TagStop",
+  "LIBB_PartitionEnv",
+  "LIBB_Tx2EnvCode"
  ],
- "own_roots": 168,
+ "own_roots": 194,
  "raw_audits_completed": 30,
  "pending_raw_audits": [
   "LIBB_V2DecoderTotal.entry",
@@ -323,7 +335,33 @@
   "LIBB_PoolNoWrite.reconstruct",
   "LIBB_PoolNoWrite.encode",
   "LIBB_PoolNoWrite.emit",
-  "LIBB_PoolNoWrite.laws"
+  "LIBB_PoolNoWrite.laws",
+  "LIBB_BoundSource.source",
+  "LIBB_DenseReservation.reply",
+  "LIBB_DenseReservation.emitted",
+  "LIBB_RegularReservation.kind",
+  "LIBB_RegularReservation.regular",
+  "LIBB_PairReservation.emitted",
+  "LIBB_PairReservation.installed",
+  "LIBB_PairReservation.slots",
+  "LIBB_PairReservation.finish",
+  "LIBB_CommonReservation.resume",
+  "LIBB_CommonReservation.pending",
+  "LIBB_CommonReservation.source",
+  "LIBB_CommonReservation.observed",
+  "LIBB_RecordReservation.compatible",
+  "LIBB_RecordReservation.tags",
+  "LIBB_RecordReservation.step",
+  "LIBB_TagSource.erase",
+  "LIBB_TagSource.source",
+  "LIBB_TagStopPrefix.source",
+  "LIBB_TagStop.source_prefix",
+  "LIBB_TagStop.installed",
+  "LIBB_PartitionEnv.digest_value",
+  "LIBB_PartitionEnv.partition_value",
+  "LIBB_PartitionEnv.leaf_value",
+  "LIBB_Tx2EnvCode.source_result",
+  "LIBB_Tx2EnvCode.parser"
  ],
  "scope_fields": [
   {
@@ -3931,6 +3969,260 @@
     "-o",
     "LIBB_objects/LIBB_RecordReservation.olean",
     "LIBB_generated/LIBB_RecordReservation.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L106",
+   "kind": "lean",
+   "module": "LIBB_RecordReservation",
+   "exit_status": 0,
+   "wall_seconds": 23.981930715031922,
+   "peak_rss_kib": "6465892",
+   "swaps": "0",
+   "source_revision": "ba1823ca3c0e57057eec5abefb245a0f37c60c39",
+   "source_hashes": {
+    "LIBB_generated/LIBB_RecordReservation.lean": "e60e19ba6a060326e45df0de41929d489e37faadfb5e150fdfadba47ff60b4a5"
+   },
+   "print_axioms": [
+    "'LIBB_RecordReservation.compatible' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_RecordReservation.tags' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_RecordReservation.step' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_RecordReservation.olean",
+    "LIBB_generated/LIBB_RecordReservation.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L107",
+   "kind": "lean",
+   "module": "LIBB_TagSource",
+   "exit_status": 0,
+   "wall_seconds": 25.788608158007264,
+   "peak_rss_kib": "6466296",
+   "swaps": "0",
+   "source_revision": "1a64b8ded9717eba5af2c9c4b3095ff85c80a3d4",
+   "source_hashes": {
+    "LIBB_generated/LIBB_TagSource.lean": "f7eea42ba318900906a92908c62023e719e9a4a0f83f4c1a9dc04fdc67de70be"
+   },
+   "print_axioms": [
+    "'LIBB_TagSource.erase' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_TagSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_TagSource.olean",
+    "LIBB_generated/LIBB_TagSource.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L108",
+   "kind": "lean",
+   "module": "LIBB_TagStopPrefix",
+   "exit_status": 0,
+   "wall_seconds": 24.130850241985172,
+   "peak_rss_kib": "6467560",
+   "swaps": "0",
+   "source_revision": "e334f34fa7665ad39bb07e6b77c53dd4f7db088e",
+   "source_hashes": {
+    "LIBB_generated/LIBB_TagStopPrefix.lean": "594b40889adfc2e35cfabc576cb0365bd4697b79c8048e0460f488b46ea9e59f"
+   },
+   "print_axioms": [
+    "'LIBB_TagStopPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_TagStopPrefix.olean",
+    "LIBB_generated/LIBB_TagStopPrefix.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L109",
+   "kind": "lean",
+   "module": "LIBB_TagStop",
+   "exit_status": 0,
+   "wall_seconds": 26.536514124833047,
+   "peak_rss_kib": "6467700",
+   "swaps": "0",
+   "source_revision": "59ad59b64601800f595f05d12e1e1c3bebe1b193",
+   "source_hashes": {
+    "LIBB_generated/LIBB_TagStop.lean": "02bc130ceeb3a86898e865f149e5f1fd15568e5c88b780ee1a9444d4c2b3551c"
+   },
+   "print_axioms": [
+    "'LIBB_TagStop.source_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_TagStop.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_TagStop.olean",
+    "LIBB_generated/LIBB_TagStop.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L110",
+   "kind": "lean",
+   "module": "LIBB_PartitionEnv",
+   "exit_status": 1,
+   "wall_seconds": 23.23731353506446,
+   "peak_rss_kib": "6428496",
+   "swaps": "0",
+   "source_revision": "60e4605b3f55fc42dccb26a9d8e3980d982253ee",
+   "source_hashes": {
+    "LIBB_generated/LIBB_PartitionEnv.lean": "e58ee6df1db87e4b461eefcc140e62fa67d575411154e13a55614c3f29e3dbbb"
+   },
+   "print_axioms": [
+    "'LIBB_PartitionEnv.digest_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_PartitionEnv.partition_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_PartitionEnv.leaf_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_PartitionEnv.olean",
+    "LIBB_generated/LIBB_PartitionEnv.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L111",
+   "kind": "lean",
+   "module": "LIBB_PartitionEnv",
+   "exit_status": 0,
+   "wall_seconds": 23.066294292919338,
+   "peak_rss_kib": "6468504",
+   "swaps": "0",
+   "source_revision": "60e4605b3f55fc42dccb26a9d8e3980d982253ee",
+   "source_hashes": {
+    "LIBB_generated/LIBB_PartitionEnv.lean": "976c0cdabf49debf90f6fd6b12f4805dbbd70a7b3541e5c6da8be55015056207"
+   },
+   "print_axioms": [
+    "'LIBB_PartitionEnv.digest_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_PartitionEnv.partition_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_PartitionEnv.leaf_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_PartitionEnv.olean",
+    "LIBB_generated/LIBB_PartitionEnv.lean"
+   ]
+  },
+  {
+   "attempt": "LIBB_L112",
+   "kind": "lean",
+   "module": "LIBB_Tx2EnvCode",
+   "exit_status": 0,
+   "wall_seconds": 21.279782579047605,
+   "peak_rss_kib": "6471840",
+   "swaps": "0",
+   "source_revision": "a4caa058d1f650486e511f928dc9f213ab8fca1c",
+   "source_hashes": {
+    "LIBB_generated/LIBB_Tx2EnvCode.lean": "4610f3f9bd0d739a2309a86e7d6d0ac7422b234e855b4986294447b865e38225"
+   },
+   "print_axioms": [
+    "'LIBB_Tx2EnvCode.source_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'LIBB_Tx2EnvCode.parser' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+   },
+   "command": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "env",
+    "lean",
+    "-j1",
+    "-M7000",
+    "-DElab.async=false",
+    "-R",
+    "LIBB_generated",
+    "-o",
+    "LIBB_objects/LIBB_Tx2EnvCode.olean",
+    "LIBB_generated/LIBB_Tx2EnvCode.lean"
    ]
   }
  ],
