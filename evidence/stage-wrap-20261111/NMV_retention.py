@@ -21,6 +21,8 @@ for path,row in pins.items():
  elif actual not in versions[path]:changed.append(path)
 assert not changed,changed
 seed=json.loads((B/'NMV_RETAINED_SEEDS.json').read_text())
+extra_seed=B/'NMV_NNC_SEED.json'
+if extra_seed.exists():seed += json.loads(extra_seed.read_text())['files']
 for r in seed:
  assert sha(Path(r['destination']))==r['sha256'],r
 runner=B/'S2W_run_host.py';inherited=B.parent/'codex-cx-sound-int2-20261025/S2W_run_host.py'

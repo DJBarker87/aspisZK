@@ -98,3 +98,28 @@ as pending source, using the unmodified Log<0> receiver and perturbing only
 No scope is relabelled or charged to the Lean allowance. A new Kani allowance
 is required to run them; no additional Kani is launched in this continuation.
 Lean-only composition and gates continue under the remaining formal budget.
+
+## Controls-only resume correction
+
+NMV-CONTROL-1 is corrected by K061/K062, both failing at the intended parent
+child-count assertion, with the unchanged receiver and exact frozen/fission
+source fingerprints/configuration matched to reused positives. The historical
+receiver-control exclusion above is retained. No claim is made that K037/43/49/53
+became valid. Full source-fission candidate-ready packet: NMV_CANDIDATE_PACKET.md.
+
+NNC seed inspection found a nonselected RSL_TX2_242 object variant in
+NNC_seed/RSL. It was NOT copied or selected. NNC_ENV selects NNC_seed/NMV
+first, whose hash5d30d2e3… is exactly our existing selected object (see
+NNC_SUPPORT_SEED.json). No dependency is replaced and no incompatible variant
+is installed. Only absent objects are copied with source/destination hashes.
+L123/L124 are failed new-module namespace elaborations, retained and excluded;
+the corrected source qualifies native and host byte/error/state namespaces.
+
+Final fingerprint review supersedes the K061/K062 exact-source claim above:
+their receiver includes later data_ptr/data_len/copy_ptr fields. Same frozen
+and fission hashes did not establish identical receiver sources. K063/K064
+use byte-for-byte archived K035/K041 harness prefixes and fail the same count
+assertions. NMV_control_review.py now asserts the COMPLETE base prefix,
+Kani command except selected harness, Rust environment, features and locks.
+Only unrelated LEAN_PATH has an extra NNC object path. K061/K062 are retained
+supplementary failures, not exact-prefix control credit. No pass was rerun.
