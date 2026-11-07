@@ -157,3 +157,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49858 passed exact pinned replay PV_THR2_OperatorSemantics_14121; see receipt for time/RSS/swap/revision/axioms.
 
 49859 passed exact pinned replay PV_THR2_BoxDynRepresentationBridge; see receipt for time/RSS/swap/revision/axioms.
+
+49860 passed exact pinned replay PV_THR2_OwnInitSourceCodecBridged; see receipt for time/RSS/swap/revision/axioms.
