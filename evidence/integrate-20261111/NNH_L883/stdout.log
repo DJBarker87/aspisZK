@@ -1,0 +1,29 @@
+def AspisS1ValuesOwnedInstallation.withValues : AspisR1CurrentCaller.Ops → AspisR1CurrentCaller.Ops :=
+fun ops =>
+  { op0 := ops.op0, op1 := @AspisR1CurrentCaller.Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4,
+    op5 := ops.op5, op6 := @AspisR1CurrentCaller.Ops.op6 ops, op7 := ops.op7, op8 := @AspisR1CurrentCaller.Ops.op8 ops,
+    op9 := @AspisR1CurrentCaller.Ops.op9 ops, op10 := ops.op10, op11 := AspisS1ValuesOwnedInstallation.expandValues,
+    op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := @AspisR1CurrentCaller.Ops.op16 ops,
+    op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+def AspisS1ValuesOwnedInstallation.nativeValues : AspisS1NativeCompact.Ops :=
+{ expandValues := AspisS1ValuesOwnedInstallation.expandValues }
+def AspisR1.SAQ_Constructor.install : {C : Type} →
+  C → AspisR1.Port3_NativeGeometryBody.Ops C → AspisR1.Port3_NativeGeometryBody.Ops C :=
+fun {C} indexError ops =>
+  have __src := AspisR1.SAQ_GeometrySource.install ops;
+  { op0 := @AspisR1.Port3_NativeGeometryBody.Ops.op0 C __src, op1 := @AspisR1.Port3_NativeGeometryBody.Ops.op1 C __src,
+    op2 := @AspisR1.Port3_NativeGeometryBody.Ops.op2 C __src, op3 := @AspisR1.Port3_NativeGeometryBody.Ops.op3 C __src,
+    op4 := @AspisR1.Port3_NativeGeometryBody.Ops.op4 C __src, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7,
+    op8 := __src.op8, op9 := __src.op9, op10 := __src.op10, op11 := __src.op11,
+    op12 := AspisR1.SAQ_Constructor.fibre indexError, op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+    mapIterator := @AspisR1.Port3_NativeGeometryBody.Ops.mapIterator C __src }
+def AspisR1.SAQ_GeometrySource.install : {C : Type} →
+  AspisR1.Port3_NativeGeometryBody.Ops C → AspisR1.Port3_NativeGeometryBody.Ops C :=
+fun {C} ops =>
+  have __src := AspisR1.SAQ_Geometry.install ops;
+  { op0 := @AspisR1.Port3_NativeGeometryBody.Ops.op0 C __src, op1 := @AspisR1.Port3_NativeGeometryBody.Ops.op1 C __src,
+    op2 := @AspisR1.Port3_NativeGeometryBody.Ops.op2 C __src, op3 := @AspisR1.Port3_NativeGeometryBody.Ops.op3 C __src,
+    op4 := @AspisR1.Port3_NativeGeometryBody.Ops.op4 C __src, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7,
+    op8 := __src.op8, op9 := __src.op9, op10 := __src.op10, op11 := AspisR1.SAQ_Inverse.source, op12 := __src.op12,
+    op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+    mapIterator := @AspisR1.Port3_NativeGeometryBody.Ops.mapIterator C __src }

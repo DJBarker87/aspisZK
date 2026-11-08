@@ -804,3 +804,37 @@ or with larger caps. Two offset tactic approaches (L866/L867) are retired;
 the failed source remains .lean.txt, excluded from imports. L871/L872 type
 errors in QueryDomain were corrected via explicit deref and unshadowed list
 membership (L873). No whole-dictionary congruence or buffer unfolding added.
+
+### Run 5b T4 OPEN at cap (20/20 scopes L874–893)
+
+Exact open goal: RSL.TAS.NND_A1 (NNH_Run5bHost.S_host L0 copy std) VL P C.
+The full canonical VL/P current returned-path association and 328/345 source
+composition remain unproved. Specifically: scan/semantic-Verified linkage,
+Prepared input/output ports, geometry/query/batch/checkpoint continuations,
+common/afterstate nominal association, and the global weak Err implication.
+No A1 field is installed and no conditional G0 consumer is introduced.
+
+Compiled support: CurrentShape.parse L875; adapter slot/current inventory L876;
+PreparedCore.installed L877; PreparedSlot.source L878; ReturnedGraph L879;
+CurrentExpand.semantic L881; PreparedDigest.digest L882; CurrentValues.slot
+L887; CurrentInitial.returned L886; PreparedModel.source L889 (FULL Result,
+errors and scratch writeback against NGN_Emitted.prepared actual);
+CurrentPending.source L891; CurrentView.returned L892; A1Domain.returned L893.
+All are NNH_Run5b names under AspisR1, and all passing printed axioms are
+standard only. The canonical caller-domain theorem carries the original R4
+and proves P1880 at the SAME decoded statement, without adding a clause.
+
+Weak Err restatement at the corrected physical signature, BEFORE:
+returned RSL Err -> exists pe, model1 = ok(Err pe).
+AFTER: returned RSL Err -> not exists saved, model1 = ok(Ok saved).
+The quantifiers, carriers and Ok arm are unchanged. This is the owner-approved
+NNH_AcceptanceSig/RecordSig restatement already used in T1; it does not claim
+exact error-payload agreement. Completing the global implication still needs
+the current/source composition; ReturnedGraph.not_ok is only a local lemma.
+
+Fourteen passes, six proof/type failures. L874 fixed an already-rewritten
+branch; L880 removed a nonexistent expansion function name (L881 semantic,
+L887 actual values-owned slot); L884/L885 nominal-variant rewrites retired
+and replaced by source congruence (L886); L888 replaced accumulator rewrite
+with explicit slice roundtrip (L891); L890 added the exact bytes-carrier length
+unfolding (L892). No memory/timeout/cap increase and no unchanged failed rerun.

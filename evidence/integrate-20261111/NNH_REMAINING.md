@@ -2,7 +2,7 @@
 
 T1 corrected host CLOSED; T2 corrected NMF_B CLOSED. T3 A2 OPEN at its 14-scope cap: NNH_ExactRemainingTypes.tx2Op11, then RSL.TAS.NND_A2 at NNH_Run5bHost.S_host. Blockers: returned outer geometry traversal transport at the SAME queries; query loop association at actual installed ports (invariant is now proved); Merkle parent call transport at same resume occurrence; compact offset arithmetic transport and common converse; Stage2To064 + op44/op53 + Returns + AMN.viaReturns2 composition.
 
-T4 A1, T5 Split.rest, T6 O1, T7 outer/bound are next. Condition (4) remains RECORDED, never marked proved here.
+T4 A1 is OPEN at its 20-scope cap: full current returned-path transport, 328/345 composition and global weak Err implication. T5 Split.rest, T6 O1, T7 outer/bound are next. Condition (4) remains RECORDED, never marked proved here.
 
 ---
 
