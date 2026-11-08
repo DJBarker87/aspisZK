@@ -44,7 +44,8 @@ print(json.dumps(dict(scopes=found,count=len(found))))
   if disk['free']>=40_000_000_000:break
   record(dict(event='wait',reason='disk below40GB',disk=disk))
   if dr==6:raise RuntimeError('Disk exhausted')
-  time.sleep(600)
+  
+  for _ in range(10):time.sleep(60)
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
 b=Path({B!r})
@@ -60,9 +61,11 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   record(dict(event='wait',reason='reservation refusal',exit=r.returncode,reservation=ad));time.sleep(180);continue
  raise RuntimeError('STOP admission')
-n='NNW_generated/'+target+'.lean';files={n:(E/(target+'.lean')).read_text()}
+n='NNW_generated/'+target+'.lean';files={n:(E/(target+'.lean')).read_text()} if target!='NNW_RAW_AX2' else {n:(E/n).read_text() for n in ['NNW_audit.py','NNW_AUDIT_ROOTS.json','NNW_AUDIT_MODULES.json']}
 roots=[B+'/NNW_objects']+json.loads((E/'NNW_PATHS.json').read_text())
 cfg=dict(attempt=a,kind='lean',module=target,sources=[n],command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNW_generated','-o','NNW_objects/'+target+'.olean',n],env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNW_tmp',LEAN_PATH=':'.join(roots)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused proof elaboration and kernel checking')
+if target=='NNW_RAW_AX2':
+ cfg.update(kind='raw_ax2',sources=list(files),command=['python3','NNW_audit.py'],expected_time='Raw ax2 closure traversal of delivered RestLaw')
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re
@@ -75,7 +78,7 @@ s=c/'S2W_run_host.py';d=b/'S2W_run_host.py'
 if d.exists():assert d.read_bytes()==s.read_bytes()
 else:d.write_bytes(s.read_bytes())
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+modules=re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M) if x['kind']=='lean' else ['NNW_Rest']
 rels=set(n.replace('.','/')+'.olean' for n in modules)
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -93,13 +96,23 @@ record(dict(event='submission',submitted=True,module=target))
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
-import json,hashlib
+import json,hashlib,lzma
 b=Path({B!r});a={a!r};out={{str(p.relative_to(b)):p.read_text() for p in (b/a).rglob('*') if p.is_file()}};out[a+'.json']=(b/(a+'.json')).read_text()
 p=b/'NNW_objects'/{(target+'.olean')!r}
 if p.exists():out[a+'/NNW_PRODUCT.json']=json.dumps(dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
+if {target!r}=='NNW_RAW_AX2':
+ for p in (b/'NNW_audit_inputs').glob('NEP_*'):
+  if p.is_file():
+   raw=p.read_bytes();name=a+'/NNW_'+p.name
+   if p.name.endswith('_REACHABLE.txt') or len(raw)>20_000_000:
+    out[name+'.xz.hex']=lzma.compress(raw,preset=6).hex();out[name+'.sha256']=hashlib.sha256(raw).hexdigest()+'\\n'
+   else:out[name]=raw.decode()
 print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
-for n,t in json.loads(r.stdout).items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+for n,t in json.loads(r.stdout).items():
+ p=E/(n[:-4] if n.endswith('.xz.hex') else n);p.parent.mkdir(parents=True,exist_ok=True)
+ if n.endswith('.xz.hex'):p.write_bytes(bytes.fromhex(t))
+ else:p.write_text(t)
 rc=json.loads((E/a/'receipt.json').read_text());record({k:v for k,v in rc.items() if k!='deps_fingerprint'})
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}))
 print((E/a/'stdout.log').read_text()[-5000:]);sys.exit(rc['exit_status'])
