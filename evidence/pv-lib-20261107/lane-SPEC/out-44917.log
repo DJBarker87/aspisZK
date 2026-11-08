@@ -1,0 +1,287 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:36:58: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_1.isTrue
+p scope : ℕ
+w : OWNER
+address : ℕ
+lower : p ≤ address
+upper : address < p + 32
+small : address - p < 32
+x✝ : Option (Fin 256)
+b✝ : Fin 256
+heq✝ :
+  (if address - p < 8 then some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p))
+    else
+      if address - p < 16 then some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p - 8))
+      else
+        if address - p < 24 then some (PV_LIB_SPEC_ArcImageGap.byte scope (address - p - 16))
+        else if address - p < 32 then some (PV_LIB_SPEC_ArcImageGap.byte (2 ^ 63 + 2) (address - p - 24)) else none) =
+    some b✝
+h✝ : address - p < 8
+⊢ some ↑b✝ = Option.map Fin.val (some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p)))
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:36:82: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:36:58: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2.isTrue
+p scope : ℕ
+w : OWNER
+address : ℕ
+lower : p ≤ address
+upper : address < p + 32
+small : address - p < 32
+x✝ : Option (Fin 256)
+heq✝ :
+  (if address - p < 8 then some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p))
+    else
+      if address - p < 16 then some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p - 8))
+      else
+        if address - p < 24 then some (PV_LIB_SPEC_ArcImageGap.byte scope (address - p - 16))
+        else if address - p < 32 then some (PV_LIB_SPEC_ArcImageGap.byte (2 ^ 63 + 2) (address - p - 24)) else none) =
+    none
+h✝ : address - p < 8
+⊢ w.world.memory address = Option.map Fin.val (some (PV_LIB_SPEC_ArcImageGap.byte 1 (address - p)))
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:36:82: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:37:43: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ArcImageGap.initialImage scope ?m.139
+in the target expression
+  (match image scope (address - p) with
+    | some b => some ↑b
+    | none => w.world.memory address) =
+    w.world.memory address
+
+case neg
+p scope : ℕ
+w : OWNER
+address : ℕ
+lower : p ≤ address
+upper : ¬address < p + 32
+⊢ (match image scope (address - p) with
+    | some b => some ↑b
+    | none => w.world.memory address) =
+    w.world.memory address
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:37:91: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ c ≤ 31
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 32
+where
+ a := ↑address
+ b := ↑p
+ c := ↑?m.139
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:36:93: warning: This simp argument is unused:
+  if_pos small
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵f̵_̵p̵o̵s̵ ̵s̵m̵a̵l̵l̵,̵Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:60:56: error: Ambiguous term
+  Place
+Possible interpretations:
+  PV_EVHB_OwnerMachine.Place : Type
+  
+  PV_STX2_Syntax.Place : Type
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:140:11: error: unsolved goals
+case returned.ok
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+p : ℕ
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+⊢ (match (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:141:16: error: Tactic `rfl` failed: The left-hand side
+  have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+  have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+  | x => out
+is not definitionally equal to the right-hand side
+  PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+    (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case returned.fail
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+e : Aeneas.Std.Error
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned (Aeneas.Std.Result.fail e)
+⊢ (have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+    have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+    | x => out) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:142:13: error: Tactic `rfl` failed: The left-hand side
+  have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+  have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+  | x => out
+is not definitionally equal to the right-hand side
+  PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+    (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case returned.div
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned Aeneas.Std.Result.div
+⊢ (have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+    have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+    | x => out) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:143:15: error: Tactic `rfl` failed: The left-hand side
+  have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+  have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+  | x => out
+is not definitionally equal to the right-hand side
+  PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+    (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case fault
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+f : Fault
+eq : (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer = Answer.fault f
+⊢ (have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+    have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+    | x => out) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:144:15: error: Tactic `rfl` failed: The left-hand side
+  have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+  have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+  | x => out
+is not definitionally equal to the right-hand side
+  PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+    (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case pending
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+eq : (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer = Answer.pending
+⊢ (have r := PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w shape 8;
+    have out := PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out else { answer := out.answer, world := initialized p scope out.world, events := out.events }
+    | x => out) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:140:25: warning: This simp argument is unused:
+  if_pos (unsuccessful p (h.symm.trans eq))
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵f̵_̵p̵o̵s̵ ̵(̵u̵n̵s̵u̵c̵c̵e̵s̵s̵f̵u̵l̵ ̵p̵ ̵(̵h̵.̵s̵y̵m̵m̵.̵t̵r̵a̵n̵s̵ ̵e̵q̵)̵)̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_SparseArc.shape' does not depend on any axioms
+'PV_LIB_SPEC_SparseArc.image' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.memory' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.initialized' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.binary_agreement' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_SparseArc.written' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_SparseArc.unwritten' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.payload' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_SparseArc.descriptor' depends on axioms: [propext, sorryAx]
+'PV_LIB_SPEC_SparseArc.owned' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.returned_owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.other' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

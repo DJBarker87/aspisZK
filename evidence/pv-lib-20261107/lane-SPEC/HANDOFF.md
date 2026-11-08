@@ -1,3 +1,13 @@
+# Session8 checkpoint
+
+SparseArc compiled44919. Fixed adopted48/8 layout; four sparse qwords;
+all holes retain allocator memory. Named allocation/registration/header/OWNER
+facts reused by name. All non-success/null answers retained. Runtime install,
+source operand association, total-image result recheck and full joint witness
+remain in progress. See SESSION8.md. Next44920; one final new-root audit due.
+
+---
+
 # Session7 handoff — checked ABI obstruction, full joint witness still open
 
 Continued68ca35c7931. Concrete N95807 TLS/atomic descriptors compiled44910.

@@ -1,0 +1,369 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:43:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if address - p < 32 then ?m.163 else ?m.164
+in the target expression
+  ∃ b, some (PV_LIB_SPEC_ArcImageGap.byte (2 ^ 63 + 2) (address - p - 24)) = some b
+
+case isFalse.isFalse.isFalse
+p scope : ℕ
+w : OWNER
+address : ℕ
+lower : p ≤ address
+upper : address < p + 32
+small : address - p < 32
+h✝² : ¬address - p < 8
+h✝¹ : ¬address - p < 16
+h✝ : ¬address - p < 24
+⊢ ∃ b, some (PV_LIB_SPEC_ArcImageGap.byte (2 ^ 63 + 2) (address - p - 24)) = some b
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:45:21: error: Tactic `rfl` failed: The left-hand side
+  match some b with
+  | some b => some ↑b
+  | none => w.world.memory address
+is not definitionally equal to the right-hand side
+  Option.map Fin.val (PV_LIB_SPEC_ArcImageGap.initialImage scope (address - p))
+
+case pos
+p scope : ℕ
+w : OWNER
+address : ℕ
+lower : p ≤ address
+upper : address < p + 32
+small : address - p < 32
+b : Fin 256
+stored : image scope (address - p) = some b
+⊢ (match some b with
+    | some b => some ↑b
+    | none => w.world.memory address) =
+    Option.map Fin.val (PV_LIB_SPEC_ArcImageGap.initialImage scope (address - p))
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:153:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer
+in the target expression
+  (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case returned.ok
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+p : ℕ
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+⊢ (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:154:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer
+in the target expression
+  (match Answer.returned (Aeneas.Std.Result.fail e) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case returned.fail
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+e : Aeneas.Std.Error
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned (Aeneas.Std.Result.fail e)
+⊢ (match Answer.returned (Aeneas.Std.Result.fail e) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:155:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer
+in the target expression
+  (match Answer.returned Aeneas.Std.Result.div with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case returned.div
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+eq :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    Answer.returned Aeneas.Std.Result.div
+⊢ (match Answer.returned Aeneas.Std.Result.div with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:156:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer
+in the target expression
+  (match Answer.fault f with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case fault
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+f : Fault
+eq : (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer = Answer.fault f
+⊢ (match Answer.fault f with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseArc.lean:157:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer
+in the target expression
+  (match Answer.pending with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+
+case pending
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scope : ℕ
+unsuccessful :
+  ∀ (p : ℕ),
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc 48) (world w)).answer = Answer.returned (Aeneas.Std.Result.ok p) →
+      p = 0
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer =
+    (resources (PV_EVHB_GlobalSystem.Primitive.malloc shape.width) (world w)).answer
+eq : (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8).answer = Answer.pending
+⊢ (match Answer.pending with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).answer,
+          world :=
+            initialized p scope
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)) =
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader shape 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w shape 8)
+'PV_LIB_SPEC_SparseArc.shape' does not depend on any axioms
+'PV_LIB_SPEC_SparseArc.image' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.memory' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.initialized' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.binary_agreement' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_SparseArc.written' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_SparseArc.unwritten' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.payload' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_SparseArc.descriptor' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.owned' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseArc.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.returned_owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseArc.other' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
