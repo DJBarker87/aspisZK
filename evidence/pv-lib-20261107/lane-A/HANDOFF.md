@@ -105,3 +105,6 @@ source prefixes from being executed again on each pending poll. retry and
 pending_retry preserve the exact request/config/world/event suffix. This is a
 partial source model, with the same unimplemented typed Drop/wrapper coverage;
 it is not promoted as the completed v2 or as an OwnInit history.
+47430 passed the exact source-backed Thread214 field/count projection after
+retaining47429's match-reduction failure. This is source-backed only; native
+world/result and OWNER-only backing are not silently called closed.
