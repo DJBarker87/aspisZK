@@ -1,0 +1,495 @@
+RSL.NNT.LawRefines : (V0 : RSL.TX2_241.V2Lib) →
+  (RSL.Bytes → RSL.Bytes → Prop) → (RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except.{0, 0} V0.VErr Unit)) → Prop
+RSL.NNT.NMS_RootsL : (L : RSL.PoolLib) →
+  RSL.DeployedIds → (V0 : RSL.TX2_241.V2Lib) → (VL : RSL.VLib) → RSL.TAS.Impl L V0 VL → Prop
+RSL.NNT.NNC_G1aL : RSL.TAS.Sig →
+  (L : RSL.PoolLib) → (V0 : RSL.TX2_241.V2Lib) → (VL : RSL.VLib) → RSL.TAS.Impl L V0 VL → Type
+NNT_Root241.parametric : ∀ (choices : NMX_R4_Authentication.Choices) (R0 : RSL.Bytes → RSL.Bytes → Prop)
+  (w : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except.{0, 0} NMX_R9_StageTwo.V.VErr Unit)),
+  RSL.NNT.LawRefines NMX_R9_StageTwo.V R0 w →
+    RSL.TX2_242.RowSpec_242 NMX_R9_StageTwo.L NMX_R9_StageTwo.D (NMX_R6_Validation.validate choices) →
+      RSL.TX2_241.RowSpec_241 NMX_R9_StageTwo.L NMX_R9_StageTwo.D (RSL.TAS.lib NMX_R9_StageTwo.V R0 w)
+        (NMX_R9_StageTwo.stage2 choices)
+NNT_Root241.weak_instance : ∀ (ch : NMX_R4_Authentication.Choices),
+  RSL.TX2_242.RowSpec_242 NMX_R9_StageTwo.L NMX_R9_StageTwo.D (NMX_R6_Validation.validate ch) →
+    RSL.TX2_241.RowSpec_241 NMX_R9_StageTwo.L NMX_R9_StageTwo.D
+      (RSL.TAS.lib NMX_R9_StageTwo.V (fun x x_1 => True) NMX_R9_StageTwo.V.tx2auth) (NMX_R9_StageTwo.stage2 ch)
+NNT_Root241.canonical_instance : ∀ (ch : NMX_R4_Authentication.Choices),
+  RSL.TX2_242.RowSpec_242 NMX_R9_StageTwo.L NMX_R9_StageTwo.D (NMX_R6_Validation.validate ch) →
+    RSL.TX2_241.RowSpec_241 NMX_R9_StageTwo.L NMX_R9_StageTwo.D
+      (RSL.TAS.lib NMX_R9_StageTwo.V NMX_R9_StageTwo.V.Root0 NMX_R9_StageTwo.V.tx2auth) (NMX_R9_StageTwo.stage2 ch)
+NNT_Field.r241 : ∀ (ch : NMX_R4_Authentication.Choices), NNT_Field.Required ch
+@NNT_LawOk.native_of_ok : ∀ {Ambient : Type} (env : RSL.Env) (pub proof ck : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  Eq.{1} (List.length.{0} ↑proof) 57607 →
+    ∀ (world : NLM_PacketTypes.World Ambient) (o : RSL.Obs (Except.{0, 0} VTop_Stages.verifier.Error Unit)),
+      LIBB_ObservationModel.law pub proof ck env o →
+        Eq.{1} o.exit (RSL.Exit.ret (Except.ok.{0, 0} ())) →
+          ∃ records events,
+            NMN_064.Native (LIBB_PartitionEnv.H env)
+              {
+                args :=
+                  { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                    hash := () },
+                world := world }
+              (NLW_Full064.End.common
+                (NLT_CompleteRoot.End.resolved (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} ()))
+                  records))
+              events
+@NNT_G1aLaw.native_bytes_of_ok : ∀ {Ambient : Type} (env : RSL.Env) (pub pr ck : RSL.Bytes)
+  (world : NLM_PacketTypes.World Ambient) (o : RSL.Obs (Except.{0, 0} NNH_Libraries.V0.VErr Unit)),
+  RSL.TX2_241.Dom064 (RSL.TAS.lib NNH_Libraries.V0 (fun x x_1 => True) NNH_Libraries.V0.tx2auth)
+      (Prod.mk.{0, 0} pub (Prod.mk.{0, 0} pr ck)) →
+    NNH_Libraries.V0.tx2auth pub pr ck env o →
+      Eq.{1} o.exit (RSL.Exit.ret (Except.ok.{0, 0} ())) →
+        ∃ pu proof cp,
+          Eq.{1} (NNC_ByteCarriers.host ↑pu) pub ∧
+            Eq.{1} (NNC_ByteCarriers.host ↑proof) pr ∧
+              Eq.{1} (NNC_ByteCarriers.host ↑cp) ck ∧
+                NNC_064Weak.Domain
+                    { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := proof, checkpoint := cp,
+                      hash := () } ∧
+                  ∃ records events,
+                    NMN_064.Native (LIBB_PartitionEnv.H env)
+                      {
+                        args :=
+                          { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := proof, checkpoint := cp,
+                            hash := () },
+                        world := world }
+                      (NLW_Full064.End.common
+                        (NLT_CompleteRoot.End.resolved
+                          (Aeneas.Std.Result.ok.{0} (Aeneas.Std.core.result.Result.Ok.{0, 0} ())) records))
+                      events
+NNT_G1aLaw.field : (S : RSL.TAS.Sig) →
+  (I : RSL.TAS.Impl NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL) →
+    RSL.NNT.NNC_G1aL (AspisR1.NNH_G1aEnv.sig S) NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL I
+@NNT_WeakEntryLaw.produce : ∀ {Ambient : Type} (env : RSL.Env) (world : NLM_PacketTypes.World Ambient)
+  (I0 : RSL.TAS.Impl NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL)
+  (alloc1 alloc2 : NMV_ConcreteWindows.Allocation),
+  RSL.TX2_241.RowSpec_241 NNH_Libraries.L NNH_Libraries.D NNT_WeakEntryLaw.weak I0.f241 →
+    ∀ (a : RSL.TX2_240.Args) (s post : RSL.SdkState),
+      RSL.TAS.ASQ8 a.data →
+        Eq.{1} ((NNH_InstalledImpl.install I0 alloc1 alloc2).entry a s env).exit
+            (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) post)) →
+          Nonempty.{1} (NNT_WeakEntryLaw.Packet env world I0 a)
+@NNT_TopL.stage1Root : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMO_Root L V0 VL I →
+    RSL.TAS.NMP_Roots L V0 VL P I →
+      RSL.TAS.NMT_Roots L V0 VL P C I → RSL.TAS.NMV_Roots L D V0 VL P C I → RSL.TX1_344.RowSpec_344 VL P C I.f344
+@NNT_TopL.validateRoot : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMM_Roots L D V0 VL I →
+    RSL.TAS.NMX_Root L D V0 VL I → RSL.NNT.NMS_RootsL L D V0 VL I → RSL.TX2_242.RowSpec_242 L D I.f242
+@NNT_TopL.entryRoot : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMM_Roots L D V0 VL I →
+    RSL.TAS.NMX_Root L D V0 VL I →
+      RSL.NNT.NMS_RootsL L D V0 VL I →
+        RSL.TAS.NMV_Roots L D V0 VL P C I →
+          RSL.TAS.NMW_Roots L D V0 VL P C I →
+            RSL.TAS.NMT_Roots L V0 VL P C I →
+              RSL.TAS.NMP_Roots L V0 VL P I →
+                RSL.TAS.NMO_Root L V0 VL I →
+                  ∀ (R0 : RSL.Bytes → RSL.Bytes → Prop)
+                    (w : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except.{0, 0} V0.VErr Unit)),
+                    RSL.NNT.LawRefines V0 R0 w → RSL.TX1_330.RowSpec_330 L D (RSL.TAS.lib V0 R0 w) VL P C I.entry
+@NNT_TopL.row333_is_221 : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL} (V : RSL.TX2_241.V2Lib),
+  Eq.{1} (RSL.TX1_333.RowSpec_333 L D V VL P C I.process)
+    (RSL.TX2_221.RowSpec_221 L D V (RSL.TX1_344.asStage1 VL P C) I.process)
+@NNT_TopL.row330_is_213 : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL} (V : RSL.TX2_241.V2Lib),
+  Eq.{1} (RSL.TX1_330.RowSpec_330 L D V VL P C I.entry)
+    (RSL.TX2_213.RowSpec_213 L D V (RSL.TX1_344.asStage1 VL P C) I.entry)
+@NNT_TopL.weakEntry : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMM_Roots L D V0 VL I →
+    RSL.TAS.NMX_Root L D V0 VL I →
+      RSL.NNT.NMS_RootsL L D V0 VL I →
+        RSL.TAS.NMV_Roots L D V0 VL P C I →
+          RSL.TAS.NMW_Roots L D V0 VL P C I →
+            RSL.TAS.NMT_Roots L V0 VL P C I →
+              RSL.TAS.NMP_Roots L V0 VL P I →
+                RSL.TAS.NMO_Root L V0 VL I →
+                  ∀ {S : RSL.TAS.Sig} (g : RSL.NNT.NNC_G1aL S L V0 VL I) (a : RSL.TX2_213.Args) (s : RSL.SdkState)
+                    (env : RSL.Env),
+                    RSL.TX2_213.Ref L D (RSL.TAS.lib V0 (fun x x_1 => True) g.w) (RSL.TX1_344.asStage1 VL P C) a s env
+                      (I.entry a s env)
+@NNT_TopL.canonicalRef240 : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMM_Roots L D V0 VL I →
+    RSL.TAS.NMX_Root L D V0 VL I →
+      RSL.NNT.NMS_RootsL L D V0 VL I →
+        RSL.TAS.NMV_Roots L D V0 VL P C I →
+          RSL.TAS.NMW_Roots L D V0 VL P C I →
+            RSL.TAS.NMT_Roots L V0 VL P C I →
+              RSL.TAS.NMP_Roots L V0 VL P I →
+                RSL.TAS.NMO_Root L V0 VL I →
+                  ∀ (a : RSL.TX2_213.Args) (s : RSL.SdkState) (env : RSL.Env),
+                    RSL.TAS.ASQ8 a.data → RSL.TX2_240.Domain V0 a s → RSL.TX2_240.Ref L D V0 a s env (I.entry a s env)
+@NNT_TopL.asq8Frame : ∀ {L : RSL.PoolLib} {D : RSL.DeployedIds} {V0 : RSL.TX2_241.V2Lib} {VL : RSL.VLib}
+  {P : RSL.PreparedNew VL} {C : RSL.TX1_345.S1Lib VL} {I : RSL.TAS.Impl L V0 VL},
+  RSL.TAS.NMM_Roots L D V0 VL I →
+    RSL.TAS.NMX_Root L D V0 VL I →
+      RSL.NNT.NMS_RootsL L D V0 VL I →
+        RSL.TAS.NMV_Roots L D V0 VL P C I →
+          RSL.TAS.NMW_Roots L D V0 VL P C I →
+            RSL.TAS.NMT_Roots L V0 VL P C I →
+              RSL.TAS.NMP_Roots L V0 VL P I →
+                RSL.TAS.NMO_Root L V0 VL I →
+                  ∀ {S : RSL.TAS.Sig} (g : RSL.NNT.NNC_G1aL S L V0 VL I) (a : RSL.TX2_213.Args) (s : RSL.SdkState)
+                    (env : RSL.Env), RSL.TAS.ASQ8 a.data → RSL.TAS.Frame s (I.entry a s env)
+@NNT_TopL.domain240_of_rep : ∀ {V0 : RSL.TX2_241.V2Lib} {S : RSL.TAS.Sig},
+  RSL.TAS.NNC_R0Rep S V0 → ∀ (c : S.Ctx), S.Root0Native c → RSL.TX2_240.Domain V0 (S.args2 c) (S.state2 c)
+NNT_TopL.top : ∀ (S : RSL.TAS.Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib)
+  (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I) (nmf : NNT_TopL.NNC_NMFPrime S L D V0 VL P C I g1a),
+                        NNT_TopL.NNC_CaseSplit S L D V0 VL P C I nmf →
+                          RSL.TAS.NNC_R0Rep S V0 →
+                            RSL.TAS.NND_A1 S VL P C →
+                              RSL.TAS.NND_A2 S L D V0 →
+                                RSL.TAS.NNE_A3 S VL P C →
+                                  RSL.TAS.NNE_A4 S L D V0 →
+                                    RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                      RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                        ∀ (c : S.Ctx),
+                                          S.Exhibited c →
+                                            S.Queries c (S.model1 c) →
+                                              S.GameFrame c →
+                                                S.TraceRep c I.entry →
+                                                  (∃ s',
+                                                      Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                        (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                    S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                      (∃ s',
+                                                          Eq.{1} (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                            (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                        S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                          S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                            (S.Concl c (S.model1 c) (S.model2 c) ∨
+                                                              S.Event c (S.model1 c))
+NNT_TopL.event_top_splitB : ∀ (S : RSL.TAS.Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib)
+  (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I) (R : RSL.EVB.RecSig S),
+                        RSL.EVB.RecSelect S R →
+                          NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                            RSL.TAS.NNC_R0Rep S V0 →
+                              RSL.TAS.NND_A1 S VL P C →
+                                RSL.TAS.NND_A2 S L D V0 →
+                                  RSL.TAS.NNE_A3 S VL P C →
+                                    RSL.TAS.NNE_A4 S L D V0 →
+                                      RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                        RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                          ∀ (c : S.Ctx),
+                                            S.Exhibited c →
+                                              S.Queries c (S.model1 c) →
+                                                S.GameFrame c →
+                                                  S.TraceRep c I.entry →
+                                                    R.Realizes c →
+                                                      (∃ s',
+                                                          Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                            (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                        S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                          (∃ s',
+                                                              Eq.{1} (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                                (RSL.Exit.ret
+                                                                  (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                            S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                              S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                                sp.Rest c (S.model1 c) (S.model2 c) ∧
+                                                                  (sp.Outcome c (S.model1 c) (S.model2 c) ∨
+                                                                    R.EventRec c)
+NNT_TopL.event_top_splitB_full : ∀ (S : RSL.TAS.Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib)
+  (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I) (R : RSL.EVB.RecSig S),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                            ∀ (c : S.Ctx),
+                                              S.Exhibited c →
+                                                S.Queries c (S.model1 c) →
+                                                  S.GameFrame c →
+                                                    S.TraceRep c I.entry →
+                                                      R.Realizes c →
+                                                        (∃ s',
+                                                            Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                              (RSL.Exit.ret
+                                                                (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                          S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                            (∃ s',
+                                                                Eq.{1}
+                                                                  (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                                  (RSL.Exit.ret
+                                                                    (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                              S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                                S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                                  sp.Rest c (S.model1 c) (S.model2 c) ∧
+                                                                    (hb.OutcomeRec c (S.model1 c) (S.model2 c) ∨
+                                                                      R.EventRec c)
+@NNT_TopL.top_splitB : ∀ {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S} (L : RSL.PoolLib) (D : RSL.DeployedIds)
+  (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL)
+  (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                            ∀ (X : RSL.TASB.ExecB S R) (fx : X.Fixed) (w : X.World) (H : X.Oracle),
+                                              X.QueriesF fx →
+                                                RSL.TASB.Runs S I (RSL.TASB.ctxB X fx w H) →
+                                                  S.Bound (RSL.TASB.ctxB X fx w H) (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                      (S.model2 (RSL.TASB.ctxB X fx w H)) ∧
+                                                    sp.Rest (RSL.TASB.ctxB X fx w H) (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                        (S.model2 (RSL.TASB.ctxB X fx w H)) ∧
+                                                      (hb.OutcomeRec (RSL.TASB.ctxB X fx w H)
+                                                          (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                          (S.model2 (RSL.TASB.ctxB X fx w H)) ∨
+                                                        X.ERec fx H)
+@NNT_TopL.fail_sub_rec : ∀ {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S} (L : RSL.PoolLib) (D : RSL.DeployedIds)
+  (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL)
+  (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                            ∀ (X : RSL.TASB.ExecB S R) (fx : X.Fixed) (w : X.World) (H : X.Oracle),
+                                              X.QueriesF fx →
+                                                RSL.TASB.Runs S I (RSL.TASB.ctxB X fx w H) ∧
+                                                    ¬hb.OutcomeRec (RSL.TASB.ctxB X fx w H)
+                                                        (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                        (S.model2 (RSL.TASB.ctxB X fx w H)) →
+                                                  X.ERec fx H
+@NNT_TopL.deployed_charge : ∀ {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S} (L : RSL.PoolLib) (D : RSL.DeployedIds)
+  (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL)
+  (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          RSL.TAS.NNE_EntryRep S L V0 VL I →
+                                            ∀ (X : RSL.TASB.ExecB S R) (Ex : RSL.TASB.Expect X.Oracle) (fx : X.Fixed)
+                                              (wOf : X.Oracle → X.World),
+                                              X.QueriesF fx →
+                                                ∀ (r m : X.Oracle → ℚ) (T : ℚ),
+                                                  (∀ (H : X.Oracle), LE.le.{0} 0 (m H)) →
+                                                    (∀ (H : X.Oracle),
+                                                        LE.le.{0} (r H)
+                                                          (HAdd.hAdd.{0, 0, 0} (m H) (RSL.TASB.ind (X.ERec fx H)))) →
+                                                      LE.le.{0}
+                                                          (HAdd.hAdd.{0, 0, 0} (Ex.E m)
+                                                            (Ex.E fun H => RSL.TASB.ind (X.ERec fx H)))
+                                                          T →
+                                                        LE.le.{0}
+                                                          (Ex.E fun H =>
+                                                            max.{0} (r H)
+                                                              (RSL.TASB.ind
+                                                                (RSL.TASB.Runs S I (RSL.TASB.ctxB X fx (wOf H) H) ∧
+                                                                  ¬hb.OutcomeRec (RSL.TASB.ctxB X fx (wOf H) H)
+                                                                      (S.model1 (RSL.TASB.ctxB X fx (wOf H) H))
+                                                                      (S.model2 (RSL.TASB.ctxB X fx (wOf H) H)))))
+                                                          T
+NNT_TopL.top_splitB_counts : ∀ (S : RSL.TAS.Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib)
+  (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I) (R : RSL.EVB.RecSig S),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          ∀ (c : S.Ctx),
+                                            S.Exhibited c →
+                                              S.Queries c (S.model1 c) →
+                                                S.GameFrame c →
+                                                  S.TraceRep c I.entry →
+                                                    R.Realizes c →
+                                                      (∃ s',
+                                                          Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                            (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                        S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                          (∃ s',
+                                                              Eq.{1} (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                                (RSL.Exit.ret
+                                                                  (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                            Eq.{1} (List.length.{0} (S.args1 c).accounts) 3 →
+                                                              Eq.{1} (List.length.{0} (S.args2 c).accounts) 7 →
+                                                                S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                                  S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                                    sp.Rest c (S.model1 c) (S.model2 c) ∧
+                                                                      (hb.OutcomeRec c (S.model1 c) (S.model2 c) ∨
+                                                                        R.EventRec c)
+@NNT_TopL.top_splitB_physical : ∀ {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S} (L : RSL.PoolLib) (D : RSL.DeployedIds)
+  (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL)
+  (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I),
+                        RSL.EVB.RecSelect S R →
+                          ∀ (hb : RSL.EVB.HeadlineB S R),
+                            NNT_TopL.NNC_NMFPrimeB S L D V0 VL P C I g1a R →
+                              RSL.TAS.NNC_R0Rep S V0 →
+                                RSL.TAS.NND_A1 S VL P C →
+                                  RSL.TAS.NND_A2 S L D V0 →
+                                    RSL.TAS.NNE_A3 S VL P C →
+                                      RSL.TAS.NNE_A4 S L D V0 →
+                                        RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                          (∀ (c : S.Ctx), Eq.{1} (List.length.{0} (S.args1 c).accounts) 3) →
+                                            (∀ (c : S.Ctx), Eq.{1} (List.length.{0} (S.args2 c).accounts) 7) →
+                                              ∀ (X : RSL.TASB.ExecB S R) (fx : X.Fixed) (w : X.World) (H : X.Oracle),
+                                                X.QueriesF fx →
+                                                  RSL.TASB.Runs S I (RSL.TASB.ctxB X fx w H) →
+                                                    S.Bound (RSL.TASB.ctxB X fx w H) (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                        (S.model2 (RSL.TASB.ctxB X fx w H)) ∧
+                                                      sp.Rest (RSL.TASB.ctxB X fx w H)
+                                                          (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                          (S.model2 (RSL.TASB.ctxB X fx w H)) ∧
+                                                        (hb.OutcomeRec (RSL.TASB.ctxB X fx w H)
+                                                            (S.model1 (RSL.TASB.ctxB X fx w H))
+                                                            (S.model2 (RSL.TASB.ctxB X fx w H)) ∨
+                                                          X.ERec fx H)
+NNT_TopL.selected_top_split : ∀ (S : RSL.TAS.Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib)
+  (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL) (sp : RSL.TFM.Split S),
+  RSL.TAS.Headline S →
+    RSL.TAS.A0_Digest S →
+      RSL.TAS.NMM_Roots L D V0 VL I →
+        RSL.TAS.NMX_Root L D V0 VL I →
+          RSL.NNT.NMS_RootsL L D V0 VL I →
+            RSL.TAS.NMV_Roots L D V0 VL P C I →
+              RSL.TAS.NMW_Roots L D V0 VL P C I →
+                RSL.TAS.NMT_Roots L V0 VL P C I →
+                  RSL.TAS.NMP_Roots L V0 VL P I →
+                    RSL.TAS.NMO_Root L V0 VL I →
+                      ∀ (g1a : RSL.NNT.NNC_G1aL S L V0 VL I) (nmf : NNT_TopL.NNC_NMFPrime S L D V0 VL P C I g1a),
+                        NNT_TopL.NNC_CaseSplit S L D V0 VL P C I nmf →
+                          RSL.TAS.NNC_R0Rep S V0 →
+                            RSL.TAS.NND_A1 S VL P C →
+                              RSL.TAS.NND_A2 S L D V0 →
+                                RSL.TAS.NNE_A3 S VL P C →
+                                  RSL.TAS.NNE_A4 S L D V0 →
+                                    RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                      ∀ (c : S.Ctx),
+                                        S.Exhibited c →
+                                          S.Queries c (S.model1 c) →
+                                            S.GameFrame c →
+                                              S.TraceRep c I.entry →
+                                                (∃ s',
+                                                    Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                      (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                  S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                    (∃ s',
+                                                        Eq.{1} (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                          (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                      Eq.{1} (List.length.{0} (S.args1 c).accounts) 3 →
+                                                        Eq.{1} (List.length.{0} (S.args2 c).accounts) 7 →
+                                                          S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                            S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                              sp.Rest c (S.model1 c) (S.model2 c) ∧
+                                                                (sp.Outcome c (S.model1 c) (S.model2 c) ∨
+                                                                  S.Event c (S.model1 c))
