@@ -1,3 +1,31 @@
+# Remaining obligations after Lane A session10 — PARTIAL
+
+Import PV_LIB_A_StoreActionTable10 for the PARTIAL v2DestructionPrograms10 /
+v2DestructionStep10 / DestructionState10 surface. Legacy v2 stays unchanged.
+The original-carrier direct-unit gap is checked and corrected using the existing
+aggregate fallback. Actual584's8-instruction guard construction and661's6-step
+683 issuance compile on the latest snapshot-aware OWNER machine. Borrowed Global,
+source Weak pointer/count/write-definedness,581 old-value pending snapshots,
+actual486 local3 return/comparison and both branch syntax are checked locally.
+
+FIRST still finish the FULL486/584/248/661 source-to-OWNER composition: actual
+222/320 entry/return, initial581 write/snapshot and both486 branches/fence,
+arbitrary-T/nonempty/dynamic payload destruction and its source/allocator/
+backing frames, actual implicit guard entry/683 polling and both count branches,
+then every resource reply on the SAME producer-registered physical pointer.
+Local provider-root/numbering facts in the new lemmas still need derivation from
+that actual history; they were not inserted in row Pre/MachineSpec/endpoint.
+Unknown/custom allocators remain gaps. Generic layout/sparse byte binding open.
+
+THEN dynamic callbacks/collect4/remaining wrappers; THEN corrected-machine
+Range93, f6 and OwnInit histories in dependency order. No history/slot promoted.
+All170 slot records/statuses unchanged. Endpoint premises removed0/added0,
+changed0, new T fields0, row closures0. Target not yet established.
+
+D991: ZERO new byte images, no total-image re-credit or uninitialized-byte
+forgetting. See lane-A/session10/MODEL_FINDINGS.md, SUPPORT.json, PROVENANCE.json
+and RAW_AUDIT.json. Earlier sections below remain historical evidence.
+
 # Remaining obligations after Lane A session9 — PARTIAL
 
 Option157 and the actual source Global allocator provenance are now bound.
