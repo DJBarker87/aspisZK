@@ -15,3 +15,9 @@ excess is predominantly file-backed. Otherwise it stops the process. Caps and
 180 s limit are unchanged. No successful compile is repeated to hide this gap;
 L015/L016 resource inspection is retrospective, explicitly distinguished from
 the remaining live inspections. The formal theorem/axiom results are separate.
+
+Final clarification: none of L015–L020 emitted a pause receipt. L017–L020 did
+use the descendant-aware guard, but their live RSS threshold was not recorded
+as crossed. All six cgroup peaks were715423744–728379392 bytes. The GNU-time
+large-RSS attribution is an inference from imported closures and these physical
+peaks, not a retained /proc mapping proof. No live-stop compliance is claimed.
