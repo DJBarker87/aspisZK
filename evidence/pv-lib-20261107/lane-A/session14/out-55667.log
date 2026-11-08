@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ScopeIncrementShape14.lean:23:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (carrier C b).dereference w
+    (PV_STX2_TypedReferences.reference { activation := a, localIndex := slot, fields := [2] } Data.null)
+in the target expression
+  (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := slot, fields := [2] } Data.null] with
+    | [reference] => do
+      let p ←
+        do
+          let p ← (carrier C b).dereference w reference
+          pure { activation := p.activation, localIndex := p.localIndex, fields := p.fields ++ [0, 0, 0] }
+      let n ← numberAt (carrier C b) (stored s a slot atomicKind cellKind strong weak thread panicked 0) p
+      writeAddress (carrier C b) (stored s a slot atomicKind cellKind strong weak thread panicked 0) p
+          (some (Data.number ((fun old => if old > modulus / 2 - 1 then old else (old + 1) % modulus) n)))
+    | x => none) =
+    some (stored s a slot atomicKind cellKind strong weak thread panicked 1)
+
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a slot : ℕ
+atomicKind cellKind strong weak thread panicked : Data
+⊢ (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := slot, fields := [2] } Data.null] with
+    | [reference] => do
+      let p ←
+        do
+          let p ← (carrier C b).dereference w reference
+          pure { activation := p.activation, localIndex := p.localIndex, fields := p.fields ++ [0, 0, 0] }
+      let n ← numberAt (carrier C b) (stored s a slot atomicKind cellKind strong weak thread panicked 0) p
+      writeAddress (carrier C b) (stored s a slot atomicKind cellKind strong weak thread panicked 0) p
+          (some (Data.number ((fun old => if old > modulus / 2 - 1 then old else (old + 1) % modulus) n)))
+    | x => none) =
+    some (stored s a slot atomicKind cellKind strong weak thread panicked 1)
+'PV_LIB_A_ScopeIncrementShape14.zero_increment' depends on axioms: [propext]
+'PV_LIB_A_ScopeIncrementShape14.increment' depends on axioms: [propext, sorryAx]
