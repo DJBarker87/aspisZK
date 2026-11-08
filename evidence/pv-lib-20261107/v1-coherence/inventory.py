@@ -20,7 +20,16 @@ for p in sorted(pathlib.Path('evidence/pv-lib-20261107').rglob('*ROOTS.json')):
  if 'v1-coherence' in str(p):continue
  b=p.read_bytes();inputs[str(p)]=sha(b);walk(json.loads(b),str(p))
 walk(json.loads(manifest),'v1 manifest')
-pv=sorted(p.stem for p in pathlib.Path('lean').glob('PV_LIB_*.lean'));modules.update(pv)
+# Retained Lean driver arrays are root lists too, even where a JSON list was replaced.
+for path in subprocess.check_output(['git','ls-tree','-r','--name-only',rev,'lean'],text=True).splitlines():
+ if 'PV_LIB_' not in path or 'RawAudit' not in path or not path.endswith('.lean'):continue
+ source=subprocess.check_output(['git','show',rev+':'+path],text=True)
+ start=source.find('let (modules, roots) :=');stop=source.find('let env ←',start)
+ if start<0 or stop<0:continue
+ arrays=re.findall(r'#\[(.*?)\]',source[start:stop],re.S)
+ if len(arrays)!=2:continue
+ for root in re.findall(r'`([\w.\x27]+)',arrays[1]):roots.setdefault(root,[]).append(path)
+pv=sorted(pathlib.Path(p).stem for p in subprocess.check_output(['git','ls-tree','-r','--name-only',rev,'lean'],text=True).splitlines() if pathlib.Path(p).name.startswith('PV_LIB_') and p.endswith('.lean'));modules.update(pv)
 sources={};external=set();order=[];active=set()
 def visit(m):
  if m in sources or m in external:return

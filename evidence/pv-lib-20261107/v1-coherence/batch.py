@@ -13,6 +13,14 @@ for m in batch:
   if d=='Lean':continue
   p=O/(d.replace('.','/')+'.olean');assert p.exists(),('missing dependency',m,d)
   dep_hash[d]=hashlib.file_digest(p.open('rb'),'sha256').hexdigest()
+ # A missing-module failure may repeat only once the named missing object exists.
+ for prior in E.glob('receipt-*-'+m+'.json'):
+  old=json.load(open(prior))
+  if old.get('accepted'):continue
+  oldlog=E/prior.name.replace('receipt-','out-').replace('.json','.log')
+  if oldlog.exists():
+   absent=re.findall(r"unknown module prefix '([^']+)'",oldlog.read_text())
+   assert all((O/(d.replace('.','/')+'.olean')).exists() for d in absent),('unchanged missing dependency',m,absent)
  log=E/f'out-{a}-{m}.log';tim=E/f'time-{a}-{m}.log'
  cmd=['/usr/bin/time','-v','-o',str(tim),'timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(V/'J.json'),str(O),str(S),str(o),str(s),'7000']
  t=time.time()

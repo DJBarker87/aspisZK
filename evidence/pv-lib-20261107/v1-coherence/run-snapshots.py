@@ -2,16 +2,43 @@
 Invoked inside one admitted capped scope; fresh process per original cohort.
 """
 import pathlib,json,lzma,hashlib,subprocess,os,sys
-V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';O=V/'objects-resolved';groups=json.loads(lzma.decompress((V/'SNAPSHOT_PLAN.json.xz').read_bytes()));base=json.load(open(V/'J.json'));a=int(sys.argv[1]);assert 56500<=a<=56589
+V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';O=V/'objects-resolved';base=json.load(open(V/'J.json'));a=int(sys.argv[1]);assert 56500<=a<=56589
 sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()
-results=[];authorities={}
+# Split the 95 MiB source-authority manifest in a short-lived preparation process.
+# Keep only one original cohort's authority in the parent beside a Lean child.
+prep="""import pathlib,json,lzma,sys
+V=pathlib.Path(sys.argv[1]);D=V/'snapshot-plans';D.mkdir(exist_ok=True)
+groups=json.loads(lzma.decompress((V/'SNAPSHOT_PLAN.json.xz').read_bytes()));names=[]
 for g in groups:
+ p=D/(g['driver']+'.json.xz');p.write_bytes(lzma.compress(json.dumps(g).encode()));names.append(str(p))
+(D/'index.json').write_text(json.dumps(names))
+"""
+subprocess.run([sys.executable,'-c',prep,str(V)],check=True)
+group_paths=json.load(open(V/'snapshot-plans/index.json'))
+def snapshot(name,request,path):
+ env=os.environ.copy()
+ for k,v in base.items():
+  if v is None:env.pop(k,None)
+  else:env[k]=v
+ env['LEAN_PATH']=str(path)
+ log=E/f'statements-{a}-{name}.jsonl';tim=E/f'statements-{a}-{name}.time'
+ cmd=['/usr/bin/time','-v','-o',str(tim),'timeout','600',base['LEAN'],'-j1','-M7000','-DElab.async=false','--run',str(V/'sources/PV_LIB_V1_StatementSnapshot.lean'),str(request)]
+ with log.open('w') as f:r=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT,cwd=V)
+ if r.returncode:
+  print(name,'FAILED',log.read_text()[-4000:],flush=True);sys.exit(1)
+ return dict(exit=r.returncode,sha256=sha(log),log=str(log),time=str(tim),command=cmd,types={x['root']:{k:v for k,v in x.items() if k!='root'} for x in (json.loads(l) for l in log.read_text().splitlines() if l.startswith('{'))})
+# ONE common merged environment, with exactly the final strict audit's import array.
+merged_request=V/'merged-snapshot.json';union=json.load(open(V/'AUDIT_ROOTS.json'));merged_request.write_text(json.dumps({k:union[k] for k in ['modules','roots']}))
+merged=snapshot('MERGED-UNION',merged_request,O)
+print('Unified merged root types retained:',len(merged['types']),flush=True)
+results=[]
+for group_path in group_paths:
+ g=json.loads(lzma.decompress(pathlib.Path(group_path).read_bytes()))
  name=g['driver'];dest=V/'snapshot-authorities'/name;dest.mkdir(parents=True,exist_ok=True)
  if 'host_resolution' in g:
   p=pathlib.Path(g['host_resolution']);z=json.loads(lzma.decompress(p.read_bytes()));authority=z.get('modules',z)
  else:authority=g['resolution']
- authorities[name]=authority
- (E/'BASELINE_AUTHORITIES.json.xz').write_bytes(lzma.compress(json.dumps(authorities).encode()))
+ (E/('BASELINE_AUTHORITY-'+name+'.json.xz')).write_bytes(lzma.compress(json.dumps(authority).encode()))
  for m,v in authority.items():
   if not isinstance(v,dict) or 'path' not in v:continue
   p=pathlib.Path(v['path']);assert sha(p)==v['sha256'],('baseline cache changed',name,m)
@@ -20,23 +47,12 @@ for g in groups:
   for ext in ['.olean.private','.olean.server','.ilean','.ir']:
    src=pathlib.Path(str(p).removesuffix('.olean')+ext);link=pathlib.Path(str(q).removesuffix('.olean')+ext)
    if src.exists() and not link.exists():link.symlink_to(src)
- request=V/(name+'-snapshot.json');request.write_text(json.dumps({k:g[k] for k in ['modules','roots']}))
- outputs={}
- for mode,path in [('source',dest),('merged',O)]:
-  env=os.environ.copy()
-  for k,v in base.items():
-   if v is None:env.pop(k,None)
-   else:env[k]=v
-  env['LEAN_PATH']=str(path)
-  log=E/f'statements-{a}-{name}-{mode}.jsonl';tim=E/f'statements-{a}-{name}-{mode}.time'
-  cmd=['/usr/bin/time','-v','-o',str(tim),'timeout','600',base['LEAN'],'-j1','-M7000','-DElab.async=false','--run',str(V/'sources/PV_LIB_V1_StatementSnapshot.lean'),str(request)]
-  with log.open('w') as f:r=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT,cwd=V)
-  outputs[mode]=dict(exit=r.returncode,sha256=sha(log),log=str(log),time=str(tim),command=cmd)
-  if r.returncode:
-   print(name,mode,'FAILED',log.read_text()[-4000:],flush=True);sys.exit(1)
-  outputs[mode]['types']={x['root']:{k:v for k,v in x.items() if k!='root'} for x in map(json.loads,log.read_text().splitlines())}
- differences=[root for root in g['roots'] if outputs['source']['types'][root]!=outputs['merged']['types'][root]]
- rec=dict(group=name,roots=len(g['roots']),differences=differences,source_cohort_attempt=g['attempt'],source={k:v for k,v in outputs['source'].items() if k!='types'},merged={k:v for k,v in outputs['merged'].items() if k!='types'})
- results.append(rec);(E/f'STATEMENT_COMPARISONS-{a}.json').write_text(json.dumps(results,indent=2));print(json.dumps(dict(group=name,roots=len(g['roots']),differences=len(differences))),flush=True)
+ # Only requested roots are compared; historical drivers also contain eight extra roots.
+ roots=[r for r in g['roots'] if r in merged['types']]
+ request=V/(name+'-snapshot.json');request.write_text(json.dumps(dict(modules=g['modules'],roots=roots)))
+ source=snapshot(name+'-source',request,dest)
+ differences=[root for root in roots if source['types'][root]!=merged['types'][root]]
+ rec=dict(group=name,roots=len(roots),differences=differences,source_cohort_attempt=g['attempt'],source={k:v for k,v in source.items() if k!='types'},merged={k:v for k,v in merged.items() if k!='types'})
+ results.append(rec);(E/f'STATEMENT_COMPARISONS-{a}.json').write_text(json.dumps(results,indent=2));print(json.dumps(dict(group=name,roots=len(roots),differences=len(differences))),flush=True)
  if differences:print(differences,flush=True)
 sys.exit(1 if any(r['differences'] for r in results) else 0)
