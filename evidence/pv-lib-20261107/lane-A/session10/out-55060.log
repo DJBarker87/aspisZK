@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:26:76: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : SourceSite
+old : ℕ
+action : site.action = SourceAction.inherited (Action.primitive PV_LIB_A_StoreDispatchV2.Function.fetchSub581)
+waiting : c.frame.waiting = some site.waiting
+⊢ sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+        PV_LIB_A_WeakDropSource.Tail.done
+        (PV_LIB_A_FetchSubReply10.handler H { waiting := site.waiting, old := old } site.waiting.request w) =
+      sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+        PV_LIB_A_WeakDropSource.Tail.done (PV_THR2_LibrarySemantics_FetchSubValue581 old (H site.waiting.request w)) ∧
+    (if
+          (sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+                  PV_LIB_A_WeakDropSource.Tail.done
+                  (PV_LIB_A_FetchSubReply10.handler H { waiting := site.waiting, old := old } site.waiting.request
+                    w)).applied.isSome =
+            true then
+        some { waiting := site.waiting, old := old }
+      else none) =
+      if
+          (sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+                  PV_LIB_A_WeakDropSource.Tail.done
+                  (PV_THR2_LibrarySemantics_FetchSubValue581 old (H site.waiting.request w))).applied.isSome =
+            true then
+        some { waiting := site.waiting, old := old }
+      else none
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:29:79: warning: This simp argument is unused:
+  at_request
+
+Hint: Omit it from the simp argument list.
+  simp [PV_LIB_A_FetchSubMachine10.step, ̲poll, ̲action, ̲waiting, ̲PV_LIB_A_WeakOwnerFree10.step,
+      PV_LIB_A_WeakOwnerFree9.step, ̲v2ProvenanceStep, ̲PV_LIB_A_GenericDropMachine9.step,
+      PV_LIB_A_DeferredActions.step, ̲PV_LIB_A_DeferredActions.deferred, ̲sourceStep,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_FetchSubRetry10.graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_FetchSubRetry10.pending' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_FetchSubRetry10.begin' depends on axioms: [propext, Classical.choice, Quot.sound]

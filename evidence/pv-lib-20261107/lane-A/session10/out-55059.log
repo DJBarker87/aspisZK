@@ -1,0 +1,258 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:27:8: error: Ambiguous term
+  step
+Possible interpretations:
+  PV_LIB_A_FetchSubMachine10.step : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources →
+          Encode →
+            PV_LIB_StoreActionTable.Handler →
+              Values OWNER PV_RJ4IDB.NativeEvent → PV_LIB_A_FetchSubMachine10.State → PV_LIB_A_FetchSubMachine10.State
+  
+  PV_LIB_StoreActionTable.step : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources →
+          Encode →
+            PV_LIB_StoreActionTable.Handler →
+              Values OWNER PV_RJ4IDB.NativeEvent → PV_LIB_StoreActionTable.State → PV_LIB_StoreActionTable.State
+  
+  PV_STX2_SliceMachine.step : Carrier ?m.33 Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        (PV_STX2_Native.Request Data → ?m.33 → Reply ?m.33 ?m.34 Data) →
+          Config → ?m.33 → PV_STX2_SliceMachine.Prefix ?m.33 ?m.34
+  
+  PV_STX_Machine.step : PV_STX_Machine.Handler ?m.33 ?m.34 ?m.35 →
+    PV_STX_Code.Config ?m.33 ?m.36 → ?m.34 → PV_STX_Machine.Prefix ?m.33 ?m.34 ?m.35 ?m.36
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:26:76: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : SourceSite
+old : ℕ
+action : site.action = SourceAction.inherited (Action.primitive PV_LIB_A_StoreDispatchV2.Function.fetchSub581)
+waiting : c.frame.waiting = some site.waiting
+⊢ PV_LIB_A_FetchSubMachine10.step C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          {
+            base :=
+              { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                suspended := stack },
+            applied := some (site, PV_LIB_A_WeakDropSource.Tail.done) },
+        saved := some { waiting := site.waiting, old := old } } =
+    {
+      base :=
+        sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+          PV_LIB_A_WeakDropSource.Tail.done (PV_THR2_LibrarySemantics_FetchSubValue581 old (H site.waiting.request w)),
+      saved :=
+        if
+            (sourceReceive (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c es stack site
+                    PV_LIB_A_WeakDropSource.Tail.done
+                    (PV_THR2_LibrarySemantics_FetchSubValue581 old (H site.waiting.request w))).applied.isSome =
+              true then
+          some { waiting := site.waiting, old := old }
+        else none }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:27:13: warning: This simp argument is unused:
+  poll
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:27:18: warning: This simp argument is unused:
+  action
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:27:25: warning: This simp argument is unused:
+  waiting
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:27:33: warning: This simp argument is unused:
+  PV_LIB_A_WeakOwnerFree10.step
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:28:4: warning: This simp argument is unused:
+  PV_LIB_A_WeakOwnerFree9.step
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:28:33: warning: This simp argument is unused:
+  v2ProvenanceStep
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:28:50: warning: This simp argument is unused:
+  PV_LIB_A_GenericDropMachine9.step
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:29:4: warning: This simp argument is unused:
+  PV_LIB_A_DeferredActions.step
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:29:34: warning: This simp argument is unused:
+  PV_LIB_A_DeferredActions.deferred
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:29:68: warning: This simp argument is unused:
+  sourceStep
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲a̲t̲_̲r̲e̲q̲u̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:29:79: warning: This simp argument is unused:
+  at_request
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵t̵e̵p̵,̵p̵o̵l̵l̵,̵a̵c̵t̵i̵o̵n̵,̵w̵a̵i̵t̵i̵n̵g̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵d̵e̵f̵e̵r̵r̵e̵d̵,̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵a̵t̵_̵r̵e̵q̵u̵e̵s̵t̵]̵[̲s̲t̲e̲p̲,̲ ̲p̲o̲l̲l̲,̲ ̲a̲c̲t̲i̲o̲n̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲d̲e̲f̲e̲r̲r̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:60:13: error: Ambiguous term
+  step
+Possible interpretations:
+  PV_LIB_A_FetchSubMachine10.step : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources →
+          Encode →
+            PV_LIB_StoreActionTable.Handler →
+              Values OWNER PV_RJ4IDB.NativeEvent → PV_LIB_A_FetchSubMachine10.State → PV_LIB_A_FetchSubMachine10.State
+  
+  PV_LIB_StoreActionTable.step : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources →
+          Encode →
+            PV_LIB_StoreActionTable.Handler →
+              Values OWNER PV_RJ4IDB.NativeEvent → PV_LIB_StoreActionTable.State → PV_LIB_StoreActionTable.State
+  
+  PV_STX2_SliceMachine.step : Carrier ?m.23 Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        (PV_STX2_Native.Request Data → ?m.23 → Reply ?m.23 ?m.24 Data) →
+          Config → ?m.23 → PV_STX2_SliceMachine.Prefix ?m.23 ?m.24
+  
+  PV_STX_Machine.step : PV_STX_Machine.Handler ?m.23 ?m.24 ?m.25 →
+    PV_STX_Code.Config ?m.23 ?m.26 → ?m.24 → PV_STX_Machine.Prefix ?m.23 ?m.24 ?m.25 ?m.26
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:59:98: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : SourceSite
+old : ℕ
+selection : selected P c = some site
+source : readOld (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w site = some old
+⊢ PV_LIB_A_FetchSubMachine10.step C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          {
+            base :=
+              { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                suspended := stack } } } =
+    poll C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } }
+      { waiting := site.waiting, old := old }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:60:23: warning: This simp argument is unused:
+  selection
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵w̵r̵a̵p̵,̵s̵e̵l̵e̵c̵t̵i̵o̵n̵,̵s̵o̵u̵r̵c̵e̵]̵[̲s̲t̲e̲p̲,̲ ̲w̲r̲a̲p̲,̲ ̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FetchSubRetry10.lean:60:33: warning: This simp argument is unused:
+  source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵w̵r̵a̵p̵,̵s̵e̵l̵e̵c̵t̵i̵o̵n̵,̵s̵o̵u̵r̵c̵e̵]̵[̲s̲t̲e̲p̲,̲ ̲w̲r̲a̲p̲,̲ ̲s̲e̲l̲e̲c̲t̲i̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_FetchSubRetry10.graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_FetchSubRetry10.pending' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_FetchSubRetry10.begin' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
