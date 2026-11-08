@@ -96,3 +96,7 @@ This is not yet a complete arbitrary-T destructor/table repair. No caller
 history is promoted. Session7 receipts preserve the6G/8G/swap0/Tasks64 caps.
 47425 passed all six exact raw504 metadata checks. Only417/437/629 have
 trivial drops;477/602/762 explicitly do not. Generator --check passes.
+47427 passed CellSetPatch after retaining/fixing47426's two local reduction
+errors. It adds exact metadata-selected bool/tuple504 delivery on the OWNER
+machine, with a full-reply theorem and agreement against the OWNER base. The
+arbitrary-T, last-reference and wrapper gaps are not marked closed.
