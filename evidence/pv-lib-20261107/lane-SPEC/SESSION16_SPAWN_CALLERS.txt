@@ -1,0 +1,28 @@
+   fad29:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+   fad30:	48 ff c3             	inc    %rbx
+   fad33:	48 8b 44 24 40       	mov    0x40(%rsp),%rax
+   fad38:	48 8d 0c 6d 00 00 00 	lea    0x0(,%rbp,2),%rcx
+   fad3f:	00 
+   fad40:	48 01 e9             	add    %rbp,%rcx
+   fad43:	4c 89 2c c8          	mov    %r13,(%rax,%rcx,8)
+   fad47:	4c 89 74 c8 08       	mov    %r14,0x8(%rax,%rcx,8)
+   fad4c:	4c 89 7c c8 10       	mov    %r15,0x10(%rax,%rcx,8)
+   fad51:	48 ff c5             	inc    %rbp
+   fad54:	48 89 6c 24 48       	mov    %rbp,0x48(%rsp)
+   fad59:	48 83 fb 10          	cmp    $0x10,%rbx
+   fad5d:	74 72                	je     fadd1 <_ZN3std6thread6scoped5scope17h57c9aaa07de00b81E+0x141>
+   fad5f:	48 b8 00 00 00 00 00 	movabs $0x8000000000000000,%rax
+   fad66:	00 00 80 
+   fad69:	48 89 44 24 68       	mov    %rax,0x68(%rsp)
+   fad6e:	f0 49 ff 04 24       	lock incq (%r12)
+   fad73:	0f 8e 22 04 00 00    	jle    fb19b <_ZN3std6thread6scoped5scope17h57c9aaa07de00b81E+0x50b>
+   fad79:	48 8d 7c 24 20       	lea    0x20(%rsp),%rdi
+   fad7e:	48 8d 74 24 68       	lea    0x68(%rsp),%rsi
+   fad83:	31 d2                	xor    %edx,%edx
+   fad85:	45 31 c0             	xor    %r8d,%r8d
+   fad88:	4d 89 e1             	mov    %r12,%r9
+   fad8b:	53                   	push   %rbx
+   fad8c:	ff 74 24 08          	push   0x8(%rsp)
+   fad90:	e8 bb 56 fe ff       	call   e0450 <_ZN3std6thread9lifecycle15spawn_unchecked17h0ace9ff053441f26E>
+   fad95:	48 83 c4 10          	add    $0x10,%rsp
+   fad99:	4c 8b 6c 24 20       	mov    0x20(%rsp),%r13
