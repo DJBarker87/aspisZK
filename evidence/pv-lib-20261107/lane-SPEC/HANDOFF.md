@@ -1,3 +1,18 @@
+# Session16 live — original64 on retained v2; full task OPEN
+
+Continued ad69c95986e; thread-29/LOG D1005 is binding.
+`PV_LIB_SPEC_TlsAt64.original64` consumes the original bound278 reply on the
+same Entry14 input and environment. Its actual context8074 is consumed and
+both child8/local0 and caller5/local5 contain the typed Result::Ok pointer.
+`PV_LIB_SPEC_NativeDelivery16.full` applies the existing FULL native-delivery
+contract by name and preserves every status, world and event. No callee body
+was unfolded for278. No endpoint premise, T field or frozen source changed.
+TLS279/forwarded18/replacement, original physical stack map/reached295/454,
+full Values binding and complete joint witness remain OPEN. No contradiction
+of the complete premise set is established. Final audit not yet run.
+
+---
+
 # Session15 checkpoint — original63/2 native replies; full task OPEN
 
 Continued27fa457421791364e945ac744b1c8c70cbdfde72, LOG D1003.
