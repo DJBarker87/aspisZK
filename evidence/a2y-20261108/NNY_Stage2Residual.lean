@@ -28,14 +28,14 @@ theorem continuation_iff (ops : AdapterRw.Ops) (statement : LIBB_PoolCarriers.St
        unfold NNH_Stage2To064.continuation at success
        rw [called] at success
        cases mapped : ops.op44 e with
-       | fail panic =>
-         simp only [bind_tc_ok,core.result.Result.map_err,Port4C_GeometryStd.mapError,mapped,bind_tc_fail] at success
+       | fail failure =>
+         simp only [bind_tc_ok,core.result.Result.map_err,BuiltinFnOnce,Port4C_GeometryStd.mapError,mapped,bind_tc_fail] at success
          cases success
        | div =>
-         simp only [bind_tc_ok,core.result.Result.map_err,Port4C_GeometryStd.mapError,mapped,bind_tc_div] at success
+         simp only [bind_tc_ok,core.result.Result.map_err,BuiltinFnOnce,Port4C_GeometryStd.mapError,mapped,bind_tc_div] at success
          cases success
        | ok error =>
-         simp only [bind_tc_ok,core.result.Result.map_err,Port4C_GeometryStd.mapError,mapped,
+         simp only [bind_tc_ok,core.result.Result.map_err,BuiltinFnOnce,Port4C_GeometryStd.mapError,mapped,
            core.result.Result.Insts.CoreOpsTry.branch] at success
          cases success
  · intro called
