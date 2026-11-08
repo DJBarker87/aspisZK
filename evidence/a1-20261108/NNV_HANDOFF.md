@@ -1,3 +1,49 @@
+# A1 NNV continuation handoff
+
+**No A1 term or ledger closure. Target not yet established.** Exact parent:
+`RSL.TAS.NND_A1 (AspisR1.NNH_Run5bHost.S_host L0 copy std)
+ NNH_Libraries.VL NNH_Libraries.P NNH_Libraries.C`.
+
+The new authorization is exhausted: **50/50 scopes L051-L100**, 32 passes and
+18 failures; 0 Kani, 0 extraction. These counts are validation metadata, not
+security progress. The historical L001-L050 evidence is retained separately.
+
+Final NNV_COMBINED_IMPORT2 passes L100: exit 0, wall 28.54144829697907 s,
+peak RSS 6,952,244 KiB, swaps 0, source revision
+`df346686ae209d1786d5d0dc9cfe42d4b8dccf94`. It imports the original combined closure plus 31 accepted
+continuation modules and prints 45 new roots, standard axioms only. Exact
+source/dependency/Aeneas object hashes, command, limits, exit, timing, RSS,
+swap and axiom lines are in NNV_COMPILE.tsv and NNV_L100/receipt.json.
+
+Closed local support now includes the SAME finish-tail decomposition,
+derived decoder domains, native rounds/circle/terminal ports; canonical
+prepare-front and scratch provenance; exact current View/query input ports;
+source common/getter and host encoder ports; local current flush/checkpoint
+association; and encoder Ok reflection. Exact theorem statements are in the
+accepted NNV modules and NNV_ACCEPTED_ROOTS.json. Their original local domains
+remain visible; no full body or A1 correspondence follows from the import.
+
+NNV_REMAINING.md is the authoritative seven-item specification/disposition.
+The first unclosed semantic op9 goal remains open. Fixed finish composition,
+complete native prepare/domain, query/evaluator and batch associations, body
+continuations, owned 328/345 composition, global weak Err and A1 assembly
+remain Lean-only obligations. No remaining member needs Kani or extraction.
+No delivered-type rfl example or raw ax2 audit of an A1 term is claimed.
+
+All 42 read-only Run5b object hashes are unchanged. The own NNV_objects overlay
+is retained. NNV_CONTINUATION_VALIDATION.json records all 50 admitted scopes,
+share counts below six, disk above 40 GB and the required caps. L095's digest
+mismatch/heartbeat failure and inappropriate direct polymorphic projection
+are recorded below and retired; no cap/heartbeat/timeout was raised and no
+unchanged timed-out shape was retried. Unaccepted drafts are .lean.txt.
+
+No frozen Rust, RSL, shipped source, artifact, security target or trust boundary
+changed. No ELF rebuild, full release replay, push, other worktree edit or
+other job scope operation occurred. Stage commits are on
+`codex/cx-a1-20261107`; continuation base `40d0b7d0c20`.
+
+## Historical handoff and stage notes
+
 # A1 NNV final handoff
 
 Final validation: **50/50 scopes**, 37 passes and 13 failures (includes
@@ -186,3 +232,6 @@ excluded from the combined import. The 42 read-only Run5b object hashes are
 unchanged (NNV_CONTINUATION_PIN_RECHECK.json). The final authorized scope is
 NNV_L100, NNV_COMBINED_IMPORT2: original combined import plus 31 new accepted
 modules and 45 new printed roots. No A1 term or row credit is delivered.
+
+
+target not yet established
