@@ -21,3 +21,5 @@ PV_LIB_SPEC_SuccessResources compiled 44930, cohort w3: exit0, wall 0:02.63, pea
 PV_LIB_SPEC_LocalOwnership compiled 44933, cohort w3: exit0, wall 0:02.83, peak 4773328KiB, swap 0; source 71506ca73eec85138c25da074d02597e5fdaa2cc; standard summary axioms only.
 
 PV_LIB_SPEC_LocalInitMemory compiled 44935, cohort w3: exit0, wall 0:02.51, peak 4765896KiB, swap 0; source e0c649810cb2a9b0c4ed0c7caae879b5f3099c91; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession8 compiled 44936, cohort w3: exit0, wall 0:00.88, peak 1590324KiB, swap 0; source 8a1842980add01ee9c3dfa9fbfe9cff8ad287d38; standard summary axioms only.
