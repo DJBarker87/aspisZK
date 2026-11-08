@@ -1,0 +1,111 @@
+structure RSL.TAS.Sig : Type 1
+number of parameters: 0
+fields:
+  RSL.TAS.Sig.Ctx : Type
+  RSL.TAS.Sig.First : Type
+  RSL.TAS.Sig.Second : Type
+  RSL.TAS.Sig.model1 : self.Ctx → self.First
+  RSL.TAS.Sig.model2 : self.Ctx → self.Second
+  RSL.TAS.Sig.Exhibited : self.Ctx → Prop
+  RSL.TAS.Sig.Extraction : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Accepted1 : self.Ctx → self.First → Prop
+  RSL.TAS.Sig.Accepted2 : self.Ctx → self.Second → Prop
+  RSL.TAS.Sig.GameFrame : self.Ctx → Prop
+  RSL.TAS.Sig.Recorded1 : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Recorded2 : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Game : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.mkGame : ∀ (c : self.Ctx) (n1 : self.First) (n2 : self.Second),
+      self.GameFrame c → self.Recorded1 c n1 n2 → self.Recorded2 c n1 n2 → self.Game c n1 n2
+  RSL.TAS.Sig.Queries : self.Ctx → self.First → Prop
+  RSL.TAS.Sig.Concl : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Bound : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Event : self.Ctx → self.First → Prop
+  RSL.TAS.Sig.args1 : self.Ctx → RSL.TX2_240.Args
+  RSL.TAS.Sig.args2 : self.Ctx → RSL.TX2_240.Args
+  RSL.TAS.Sig.state1 : self.Ctx → RSL.SdkState
+  RSL.TAS.Sig.state2 : self.Ctx → RSL.SdkState
+  RSL.TAS.Sig.env1 : self.Ctx → RSL.Env
+  RSL.TAS.Sig.env2 : self.Ctx → RSL.Env
+  RSL.TAS.Sig.Out1 : self.Ctx → RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState) → Prop
+  RSL.TAS.Sig.Out2 : self.Ctx → RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState) → Prop
+  RSL.TAS.Sig.EnvRep : self.Ctx → RSL.Env → Prop
+  RSL.TAS.Sig.env1_rep : ∀ (c : self.Ctx), self.EnvRep c (self.env1 c)
+  RSL.TAS.Sig.env2_rep : ∀ (c : self.Ctx), self.EnvRep c (self.env2 c)
+  RSL.TAS.Sig.TraceRep : self.Ctx →
+      (RSL.TX2_213.Args → RSL.SdkState → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState)) → Prop
+  RSL.TAS.Sig.Root0Native : self.Ctx → Prop
+  RSL.TAS.Sig.readerHeader : RSL.Env → RSL.Bytes → RSL.Bytes → RSL.Bytes → Prop
+  RSL.TAS.Sig.ModelRet1 : self.Ctx → RSL.TX1_345.Args → Except RSL.ProgramError RSL.Bytes → Prop
+  RSL.TAS.Sig.ModelRet2 : self.Ctx → RSL.TX2_241.Args → Except RSL.ProgramError Unit → Prop
+constructor:
+  RSL.TAS.Sig.mk (Ctx First Second : Type) (model1 : Ctx → First) (model2 : Ctx → Second) (Exhibited : Ctx → Prop)
+    (Extraction : Ctx → First → Second → Prop) (Accepted1 : Ctx → First → Prop) (Accepted2 : Ctx → Second → Prop)
+    (GameFrame : Ctx → Prop) (Recorded1 Recorded2 Game : Ctx → First → Second → Prop)
+    (mkGame :
+      ∀ (c : Ctx) (n1 : First) (n2 : Second), GameFrame c → Recorded1 c n1 n2 → Recorded2 c n1 n2 → Game c n1 n2)
+    (Queries : Ctx → First → Prop) (Concl Bound : Ctx → First → Second → Prop) (Event : Ctx → First → Prop)
+    (args1 args2 : Ctx → RSL.TX2_240.Args) (state1 state2 : Ctx → RSL.SdkState) (env1 env2 : Ctx → RSL.Env)
+    (Out1 Out2 : Ctx → RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState) → Prop) (EnvRep : Ctx → RSL.Env → Prop)
+    (env1_rep : ∀ (c : Ctx), EnvRep c (env1 c)) (env2_rep : ∀ (c : Ctx), EnvRep c (env2 c))
+    (TraceRep :
+      Ctx → (RSL.TX2_213.Args → RSL.SdkState → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState)) → Prop)
+    (Root0Native : Ctx → Prop) (readerHeader : RSL.Env → RSL.Bytes → RSL.Bytes → RSL.Bytes → Prop)
+    (ModelRet1 : Ctx → RSL.TX1_345.Args → Except RSL.ProgramError RSL.Bytes → Prop)
+    (ModelRet2 : Ctx → RSL.TX2_241.Args → Except RSL.ProgramError Unit → Prop) : RSL.TAS.Sig
+AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : Library W F) : Prop
+AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type} (L : Library W (ℕ → Record)) (e : Entry) (w : W)
+  (n : ℕ) : Prop
+AspisR1.S2W_TrustedStd.TrustedStd {F : Type} (copy : Heap F → ℕ → Payload → S2W_TrustedStd.Outcome F) : Prop
+AspisR1.CPR_DataPersistence.TwoTransactionLaw {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → CPR_DataPersistence.Image) (success : Tx → Bool)
+  (loaded : Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) : Prop
+AspisR1.FJp_Residual.numeric {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record))
+  (allocator : S2W_D189Wrappers.Allocator A) (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C)
+  (r : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (extraction :
+    S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+      hashv)
+  (a : SCE_Experiment.Adversary A) (std : S2W_TrustedStd.TrustedStd copy) (D : LiteralByteProtocol.Decoder)
+  (words : CanonicalCutEnrichedTranscript.Words)
+  (owners :
+    FJp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+      (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries)
+  (Q0 Q1 : ℕ)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1) :
+  F3T_RuntimeBound.failureModel (ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv a) ≤
+    F3T_Numeric.total (Q0 + Q1)
+AspisR1.FJv_GlobalTerminal.owners {C : Type} (missing : IDa_Deployed.Uninstalled C) (err : C)
+  (r : NP6_StdModel.Reservation) (B : AspisR1PublicPreparation.FinishModel.Boundaries) :
+  FJv_GlobalOwners.Owners (FJt_GlobalTerminal.configuration missing err r) B
+NNH_generated/NNH_HostBinderCheck.lean:13:7: error(lean.unknownIdentifier): Unknown identifier `NNE_PhysicalAccepted.err`
+NNE_EntryArgs.args (e : Entry) (count : ℕ) (program : S2W_ExtractionBoundary.Program) (data : Slice U8) :
+  RSL.TX2_240.Args
+NNE_Entry.state (e : Entry) (next : ℕ) : RSL.SdkState
+NNE_RecordSig.GameFrame (S : RSL.TAS.Sig) (d : NNE_AcceptanceSig.Data S) (r : NNE_RecordSig.Data S) (c : S.Ctx) : Prop
+structure RSL.EVB.RecSig (S : RSL.TAS.Sig) : Type
+number of parameters: 1
+fields:
+  RSL.EVB.RecSig.Realizes : S.Ctx → Prop
+  RSL.EVB.RecSig.EventRec : S.Ctx → Prop
+  RSL.EVB.RecSig.SelectsPair : S.Ctx → Prop
+constructor:
+  RSL.EVB.RecSig.mk {S : RSL.TAS.Sig} (Realizes EventRec SelectsPair : S.Ctx → Prop) : RSL.EVB.RecSig S
+structure RSL.EVB.RecSelect (S : RSL.TAS.Sig) (R : RSL.EVB.RecSig S) : Prop
+number of parameters: 2
+fields:
+  RSL.EVB.RecSelect.selects : ∀ (c : S.Ctx),
+      S.Exhibited c →
+        S.Extraction c (S.model1 c) (S.model2 c) →
+          S.Accepted1 c (S.model1 c) → S.Queries c (S.model1 c) → R.Realizes c → R.SelectsPair c
+constructor:
+  RSL.EVB.RecSelect.mk {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S}
+    (selects :
+      ∀ (c : S.Ctx),
+        S.Exhibited c →
+          S.Extraction c (S.model1 c) (S.model2 c) →
+            S.Accepted1 c (S.model1 c) → S.Queries c (S.model1 c) → R.Realizes c → R.SelectsPair c) :
+    RSL.EVB.RecSelect S R

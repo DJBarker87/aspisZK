@@ -162,3 +162,49 @@ S2–S8 NOT ATTEMPTED; no totality premise or op43 retargeting installed.
 Owner condition(4) remains unproved at the host. Used3/160 fresh scopes;
 157 remain unspent because of the explicit P2 stop, not budget exhaustion.
 No new export/final consumer/raw audit/manifest replay;16GiB reserved unused.
+
+
+## P2 resolution and S2 boundary, 2026-11-08
+
+Target not yet established. P2 resolution DGP(a) applied literally.
+L710/711 failed only on missing namespace openings in the delivered statement
+file; L712 PASS after opening S2Trust and S2W_D189Entry in the retained
+dependency copy. No DGP source or statement changed. All six discharge roots
+standard-only. Three resolution scopes used, leaving154 before S2.
+
+S2 used exactly16 actual scopes L713–729, excluding719. L719 was an owned
+dependency-fingerprint rejection before launch: I requested the dependent
+module before checking L718's prerequisite failure. No scope submitted and
+no credit. L720 repaired the missing namespace, then dependent launches were
+sequenced on successful predecessors.
+
+Concrete literal host: NNH_HostSeed.m0 (explicit divergent residual slots),
+NNH_HostCtx.Ctx/Fixed/World, missingLit, envOf and literal model1/2.
+NNH_LiteralHost.S_host installs NNH_HostEnv plus NNE Data/RecordSig.Data.
+A0 and R0Rep PASS L724; Headline PASS L726; RecSig/RecSelect and normalized
+ExecB PASS L728; literal conclusion decomposition PASS L729. All standard-only.
+No arbitrary Sbase or new G0 consumer. Full receipts pin exact source,
+dependency/Aeneas objects, revision, exit, time, RSS, swap and axioms.
+
+Representation choices: dictionaries (Type1) are substituted outside TAS's
+Type-valued Ctx. L/sdk/copy/std are host-family parameters. Entry-specific
+runtime admissions and original RuntimePersistence live in retained, carried
+by GameFrame and Game; total build has no admission premise on arbitrary i/j.
+Post1/post2 in the headline conclusion are NNE's exact physical writeBracket
+and e2.heap. Original World post fields are unused residual DATA. No new trust.
+Only the Env/Exhibited representation non-vacuity was checked (L728); full
+physical Frame/Trace non-vacuity remains required before final release.
+QueriesF collects the per-world L154 parameters as forall J K, issued(model1 J)
+(normalize a) K has length at mostQ0+Q1; queries_mk specializes at J=H. This
+is the forall-world family of original L154 bounds, not literally id under
+DGP's oracle-dependent model. No final averaging field is claimed.
+
+S2 cap blocker: Split.rest remains unproved. Exact target is forall c n1 n2,
+S_host.Extraction c n1 n2 -> S_host.Accepted1 c n1 ->
+S_host.Game c n1 n2 -> S_host.Queries c n1 ->
+NNH_HostSplit.rest L copy c n1 n2. It must be built from the Root0-free
+FJp_ARCore branch terms, especially FJp_Cost.source_cost/owners at the literal
+configuration. conclusion_iff is proved, not this field. No premise added.
+P3/P4/P5 from the old preflight remain not run; explicit newest instruction
+resumed S2 after P2. S3 starts next. Fresh run5 used22/160 actual scopes;138
+remain. S8's16GiB scope unused. No export, row credit, push or shipped edit.
