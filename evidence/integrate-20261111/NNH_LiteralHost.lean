@@ -1,3 +1,4 @@
+import NNH_RecordSig
 import NNH_HostClaims
 import NND_Carrier
 import NNH_G1aEnv
@@ -97,7 +98,7 @@ def data (std : S2W_TrustedStd.TrustedStd copy) : NNE_AcceptanceSig.Data (envSig
  copy := copy
  std := std
 
-def record : NNE_RecordSig.Data (envSig (Tx := Tx) L copy) where
+def record : NNH_RecordSig.Data (envSig (Tx := Tx) L copy) where
  Tx := Tx
  p := fun c => c.world.p
  t := fun c => c.world.t
@@ -115,7 +116,7 @@ def retained (c : Ctx W Tx) : Prop :=
   (CPG_Projection.success c.world.p) (CPG_Projection.loaded c.world.p)
 
 def S_host (std : S2W_TrustedStd.TrustedStd copy) : RSL.TAS.Sig :=
- let S := NNE_RecordSig.physical (envSig (Tx := Tx) L copy) (data (Tx := Tx) L copy std) (record (Tx := Tx) L copy)
+ let S := NNH_RecordSig.physical (envSig (Tx := Tx) L copy) (data (Tx := Tx) L copy std) (record (Tx := Tx) L copy)
  {S with
   GameFrame := fun c => S.GameFrame c ∧ retained L c
   Game := fun c n1 n2 => S.Game c n1 n2 ∧ retained L c

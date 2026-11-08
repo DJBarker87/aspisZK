@@ -529,3 +529,54 @@ focused rev4 Returns dependency rebuild before any A1 credit. Current own
 NNH_dependency_inputs RSL TX1 files are still rev3 (no P1880); do not mistake
 cached focused elaboration for a rev4 coherent release replay. Fresh run5
 used40/160 actual scopes;120 remain;0 Kani/extraction,16GiB unused.
+
+
+## S4 boundary (55/55 scopes L748–802)
+
+Target not yet established; A1 is NOT delivered. The approved weak Err
+restatement is implemented in NNH_AcceptanceSig.physical, NNH_Stage1Error,
+NNH_Stage1View, NNH_InvocationView, NNH_RuntimeTrace and NNH_RecordSig.
+Before: returned RSL Err -> exists pe, model1 = ok(Err pe).
+After: returned RSL Err -> not exists saved, model1 = ok(Ok saved).
+A3/A4/A5 compile with that clause; no NNE merged module was edited.
+The complete physical host now uses NNH_RecordSig.physical.
+
+P5 PASS: RSL rev4 094/328/345 plus unchanged344 rebuilt L751–754 in private
+NNH_R4_objects;17 owned Returns inputs and NNH_ReturnsBundle rebuilt L755–771.
+No Returns statement break. The own runner was changed only to direct new
+outputs/selected imports to this overlay, keeping old objects and all admission,
+resource, fingerprint and budget checks. Source hashes/provenance are in
+NNH_REV4_SOURCE_PINS.json; input order in NNH_REV4_RETURNS_INPUTS.json.
+NNH_Stage1PrepareDomainR4 (L780) discharges P1880 from decoder length,
+including the094 caller triple. The old Stage1PrepareDomain's pair is stale;
+it is not imported by the focused final host combination.
+
+Literal model codec ports: NNH_S1HostCodec validates/encodes the SAME mapped
+statement/afterstate using supplied NMT values, preserves outer fail/div and
+uses div on native Rust Err (per the approved weak Err class). m0.adapter now
+installs these op21/op24 ports. Exact Ok iff native-call Ok is proved L800;
+pointwise SDK slot/Ok lemmas PASS L795. This changes host instantiation DATA,
+not shipped code or trust. HostSeed/Ctx/Claims/physical/Headline/Exec/recorder/
+oracle/decomposition were rebuilt L786–794 after this concrete installation.
+L802 is the focused combined host import, with all consumed printed roots
+standard-only. It is NOT a final G0, export, raw audit or manifest replay.
+
+A1 exact blocker: current/op10 canonical VL/P returned-path transport and
+328/345 composition still unproved. NNH_HostA1Targets.ok/err are exact
+literal-host obligations (definitions only, never top hypotheses); the
+bad-route weak Err subcase is proved L802. Afterstate/common nominal
+association at the complete body also remains to be composed. No library
+leaf or row wait excuses these obligations.
+
+Additional compiled installation finding L798: current EnvRep permits
+clock=ok0 while selected j.slot=Ok1. NNH_HostClockFinding.admitted_environment
+proves Exhibited and EnvRep together with this disagreement. This is NOT a
+counterexample to A2 itself or to frozen code; it is a missing clock binding
+in the new literal signature. ModelRet2 uses child2 at env.clock but model2
+at j.slot. No new clock premise was added. Correct env clock selection and
+its recorder-independence accounting are required before claiming A2/NMF_B.
+S2's cap is already reached; the finding is reported, not silently hidden.
+
+S2 Split.rest remains open; S3 A2 remains open at recorded slots. Fresh run5
+used95/160 actual scopes (92 since the P2 resume);65 remain. S5 next.
+The16GiB S8 scope remains unused; no export, row credit, push or shipped edit.
