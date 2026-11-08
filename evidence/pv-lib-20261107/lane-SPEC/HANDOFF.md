@@ -1,3 +1,49 @@
+# Session13 checkpoint — native/physical bindings advanced; full task OPEN
+
+Continued f794c7fe857. Final runtime PrefixNative13; environment
+PrefixEnvironment13; history PrefixHistory13.original. Atomic loads127/129/528,
+no-drop TLS469 and forwarded Cell get18, Cell289/371 returns, physical ACTIVE
+replacement, native ThreadId COUNTER and Arc/Scope count mirrors are installed.
+Entry13/EntryPre13/InitializedWords13 prove the complete retained entry Pre on
+one world with initialized TLS/counter and live48/8 Thread backing, preserving
+all original capture bytes. Full Thread/native source validity remains open.
+
+SPEC-C11 CHECKED55161: the retained Arc360 value adapter resets physical memory
+to the pre-world. New ArcPhysical13 repairs its local physical count graph and
+is selected before that adapter in the final assembly. See FINDINGS.md and
+SESSION13_SPEC_CORRECTIONS.md for exact local quantifiers and before/after.
+No original reachability or complete joint negation follows from this finding.
+
+Builder269 binds the exact frozen None/None/no_hooks=false constructor. Thus
+source454 IS required on the original default path; session12's default-stack
+helper does not select it. Source295 stack-size and453/454 hooks are still
+pending. Values remains the retained VALUE-only parameter; actual v2 is still
+PARTIAL. Latest read-only lane A af4b9a069cc7 has the same20 reused source pins.
+
+No successful continuous original-entry history through cut92 and ThreadInit,
+original physical stack correspondence, nonvacuous exports THERE, complete
+OwnInit joint witness or complete-premise contradiction is proved. The18 old
+whole statements remain untouched, not silently rebound. No row/endpoint
+premise removed/added, no T change. SESSION13_ADEQUACY.md is the scope authority.
+
+Focused55148..55182:21 passes(including driver),14 retained failures changed
+before retry.55159 was an own missing-dependency pre-elaboration error; the
+unneeded import was removed. Pre-ID generator/scp input mistakes are recorded.
+ONE strict NEW-root55191 PASS128/128: exit0,wall1:05.56,peak6849136KiB,swap0,
+source6e9e766fb52c5e782f53d82d8aa2a4683406249e. Standard axioms only,zero
+unresolved/summary disagreements; unchanged walker/collector; exact graphs/
+hashes/receipts retained. All scopes6G/8G/swap0/Tasks64/-M7000,one at a time.
+No refusal/OOM,shared/provider/implementation/key change,full manifest,push or
+merge. No own live host scope remains.
+
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session13.py
+Next Lean55183..55189; raw55192..55199 only for changed/new inputs. Continue
+native295/454 and concrete Values/source bindings first, then derive the actual
+physical frame on one successful original prefix, cut92/registration113/14756,
+nonvacuous named exports, and the COMPLETE joint witness or checked negation.
+
+---
+
 # Session12 checkpoint — local C9/C10 repairs; full task OPEN
 
 Continued966c9281519. NativeMemory12/MemoryHistory12 are the last assembly.

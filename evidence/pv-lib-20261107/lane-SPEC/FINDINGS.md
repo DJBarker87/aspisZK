@@ -380,8 +380,16 @@ the Packet count. For an initially-one count, byte0 must become2, whereas
 byte_conflict proves the unchanged byte1 differs. The v2 SOURCE count action
 does not write OWNER physical memory. This is not a full-joint contradiction.
 
-Repair in progress: ArcPhysical13 resolves the same source Arc through its
+Repair checked55166 and integrated55169/55177: ArcPhysical13 resolves the same source Arc through its
 actual registered physical allocation, checks the source/physical pre-counts
 agree, and mirrors the8-byte increment. It accepts no Store/image/desired
-count callback. The lane-A source action remains unchanged. Full integration,
-actual original-entry correspondence and nonvacuous exports remain required.
+count callback. The lane-A source action remains unchanged. The new PrefixNative13 selects this adapter before the old world reset.
+Actual original-entry correspondence and nonvacuous exports remain required.
+
+
+Session13 scope limit: Builder269.fields (55176), mechanically projected from
+frozen assignments10000/10002/10003, has no_hooks=false. This is a source
+binding fact, not a new spec error: defaultHooks12 never proved original
+branch selection. The original default path must execute454 (empty-hook TLS
+is not yet bound); its physical frame, original history and complete joint
+existential remain open. See SESSION13_ADEQUACY.md.
