@@ -23,3 +23,5 @@ PV_LIB_SPEC_NativeChecks14 compiled 55411, cohort w3: exit0, wall 0:02.56, peak 
 PV_LIB_SPEC_VectorKinds14 compiled 55412, cohort w3: exit0, wall 0:02.31, peak 4780692KiB, swap 0; source 48b3b6db0e555486fc28c0bd0a97ac38e4fe840c; standard summary axioms only.
 
 PV_LIB_SPEC_PreludeValues14 compiled 55414, cohort w3: exit0, wall 0:02.45, peak 4804220KiB, swap 0; source 699d6f96b51bff12a51921f3145625b67adbf06f; standard summary axioms only.
+
+PV_LIB_SPEC_Assembly14 compiled 55416, cohort w3: exit0, wall 0:02.24, peak 4796432KiB, swap 0; source 0a518e16d350fbcbd5a4fb5248cd980ab4f58ea3; standard summary axioms only.
