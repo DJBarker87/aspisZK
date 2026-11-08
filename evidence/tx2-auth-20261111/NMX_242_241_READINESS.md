@@ -1,53 +1,45 @@
-# Current TX2 readiness (R4, 2026-11-08)
+# NMX delivery and 242/241 readiness
 
-TX2:217 and TX2:234 are CLOSED by ledger27 (587/0/12). No replay or new
-credit is claimed for either child.
+All three complete candidates exist, in the requested child-first order. The
+ledger alone decides credit; no global security/release target is established.
 
-TX2:233 now has the complete CANDIDATE `NMX_R4_Authentication.root`, committed
-immediately in `2f5787475aa`. Its exact conclusion is
-`RSL.TX2_233.RowSpec_233 LIBB_PoolLib.library LIBB_PoolLib.deployed (authenticate choices)`.
-Domain=True; no own-input clause, child-law, Ops/Handler, library, DeployedIds,
-representation or successful-allocation hypothesis. `Choices` universally
-quantifies primitive allocation statement data, following CLOSED234's accepted
-pattern. The four private owner labels are fixed, and all four typed Box
-payloads remain throughout the source program.
+| Row | Complete root | Candidate commit | Domain | Gate packet |
+| --- | --- | --- | --- | --- |
+| TX2:233 | `NMX_R4_Authentication.root` | `2f5787475aa` | True | `NMX_R4_VALIDATION.json` |
+| TX2:242 | `NMX_R6_Validation.root` | `3fb6853107a` | True | `NMX_R6_VALIDATION.json` |
+| TX2:241 | `NMX_R9_StageTwo.root` | `536c77b6e6b` | canonical D1/D2 | `NMX_R9_VALIDATION.json` |
 
-The formerly remaining source/Box and all-Args work is delivered:
+Every root fixes `LIBB_PoolLib.library` and `LIBB_PoolLib.deployed`; 241 also
+fixes `LIBB_V2Star.library`. No child RowSpec, Ops/Handler, library, allocation
+success, bounds, representation, scanner width or post-abort state is retained
+as a law/domain parameter. `Choices` is universally quantified primitive233
+allocation statement data, following the accepted CLOSED234 convention.
 
-- E008 freshly emits the actual master/checkpoint Box wrappers. Their opaque
-  raw children use the supplied CLOSED canonical owners at SAME bytes in
-  `NMX_R4_BoxBinding.master/checkpoint`. The std allocation actions are named
-  at their original sites; the old native-window approach is superseded by
-  this emitted route, not claimed solved by inventing physical windows.
-- `NMX_R4_SourceFold.source` joins all55 full-observation occurrence equalities
-  to the source interpreter. Every Result/error, allocating clone and stopped
-  PDA prefix is retained. `NMX_R4_Authentication.observed` is full observation
-  equality, independent of the old value-erasure theorem.
-- `NMX_R4_ProjectionRef.reference` proves equality of the ENTIRE canonical
-  reference under the representable account projection. `NMX_R4_AllArgs` and
-  `Authentication` handle every canonical Args; no bounds replace Domain=True.
+233's two former readiness items are discharged: E008 exposes the actual Box
+wrappers, their named std allocations and SAME-byte CLOSED decoder bindings;
+55 full-observation source equations retain all four typed owned payloads.
+ProjectionRef/ArgsPort handle every canonical Args without a bounds hypothesis.
+Ledger27 already closed217/234 (587/0/12); its CLOSED implementations and LIBB
+module8 are installed in the frozen233 folds and the complete source root.
 
-Candidate gates:119 new theorem declarations raw ax2 PASS, standard axioms
-only; focused combined import L1131 PASS; exact retained loaded closure L1140
-PASS. Packet: `NMX_R4_VALIDATION.json`, `NMX_R4_SOURCE_AUDIT.json`,
-`NMX_R4_BOX_SOURCE_CHECK.json`, `NMX_R4_EXPORT.json` and compressed closure pins.
-The next ledger decides233 credit. This is not a cold release replay.
+242 reuses the NMS full consumer, complete typed233 packet and fixed library
+scanner/reconstruction laws. `NMX_R5_Native242.full` covers every native source
+observation. `NMX_R6_SourceExact242.source` uses the EXACT original typed tuple,
+not a length-only representative. Nonrepresented mathematical Args use the
+explicit same-order port, including the library's oversized-proof panic.
 
-242 preparation is active. Namespace-only NMS consumer copy
-`NMX_R4_NMSFold242.fold` (provenance in `NMX_R4_NMS_PROVENANCE.json`) and its
-complete canonical233 substitution `NMX_R4_NMS242Instantiation.fold` pass
-L1141/L1142. `NMX_R4_NMSCarrier` and `NMX_R4_NMS233.packet` pass L1144/L1145:
-the full typed native233 packet is available at SAME original program/accounts/
-pool/lane/slot, retaining every error, all Box payloads and stopped prefixes.
-This is not yet a242 candidate. The remaining242 source/carrier assembly must
-use supplied LIBB request/nullifier/output-lane and scanner/reconstruction laws.
+241 reuses/generalizes the original NMS full-observation folds to relations.
+Its native242 call is the COMPLETE emitted meaning, not the single graph used
+for242's function-shaped row packet. `NMX_R9_Native241.full` covers every
+242/064 stop and prefix; `NMX_R9_StageTwo.source` supplies the exact original
+native tuple. D1/D2 are unchanged. Widths and entered064 Root0 are derived at
+the SAME actual getters/ranges. V0-star's gate is returned-value functionality;
+no observation-Functional inference is used. See `NMX_R9_SOURCE_ROUTE.md`.
 
-241 follows242. Its exact consumer is `NMS_R2Substitute241.fold`, then
-`NMS_R2Fold241.fold`; full064, source getters, exact1880 encoder, error-format
-allocation-before-log and return-data bindings remain assembly obligations.
-No unconditional242/241 readiness or Root0 strengthening is inferred from233.
-`LIBB_V2Star.gate` / `LIBB_Tx2AuthGate.returnFunctional` retain their returned-value
-strength, including coexistence of independently stopped prefixes.
+The small frozen233 targets remain available as historical/consumer support:
+`NMX_R2_NativeCanonical.fold`, `NMX_R2_RepresentedFold.fold`, instantiated by
+`NMX_R3_Instantiated233`. They no longer delimit the delivered candidate.
 
-No shipped source, ELF, trust row, key, wallet or security target changed.
-The headline security target is not established. No push.
+All RSL owners resolve to the private revision3 rebuild. Sources and receipts
+remain under this directory; host object exports/closure pins are named in each
+gate packet. No shipped Rust/lock/ELF, trust row, key or wallet was changed.

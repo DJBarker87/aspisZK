@@ -1,3 +1,10 @@
+# Current completion update
+
+All historical233 gaps below are discharged. Complete233/242/241 candidates,
+source laws, gates and exact source/Args associations are delivered. Current
+truth is `NMX_REMAINING.md`, `NMX_242_241_READINESS.md` and the three current
+validation packets. Remaining step: lead ledger review, no worker proof gap.
+
 # Current R4 update
 
 TX2:233 CANDIDATE `NMX_R4_Authentication.root` passed L1129. Full Box/source observation association and all-Args port now delivered under(bm)/retained std interpretation; see current NMX_CLOSED.json and NMX_HANDOFF.md. Native-window historical route is superseded by E008 actual wrapper emission, not claimed constructed. Candidate audits/import/export remain pending. Ledger27 alone credits217/234; next gate decides233. Historical open lists below are retained as provenance.

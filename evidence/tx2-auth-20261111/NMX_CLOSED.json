@@ -3,7 +3,7 @@
  "rows": [
   {
    "row": "TX2:233",
-   "status": "CANDIDATE_REVISION3_EMITTED",
+   "status": "CANDIDATE_GATES_PASS",
    "candidate": true,
    "root": "NMX_R4_Authentication.root",
    "fold": "NMX_R3_Instantiated233.native",
@@ -32,12 +32,12 @@
     "NMX_R2_NativeCanonical.fold",
     "NMX_R2_RepresentedFold.fold"
    ],
-   "remaining": "Next ledger review/credit only; downstream242/241 work remains separate",
+   "remaining": "Lead ledger review/credit only; no worker proof/native gap",
    "instantiated_targets": [
     "NMX_R3_Instantiated233.native",
     "NMX_R3_Instantiated233.represented"
    ],
-   "validation": "NMX_R4_VALIDATION.json: 119 own-root raw ax2 PASS; L1131 focused combined import PASS; L1140 retained closure PASS",
+   "validation": "NMX_R4_VALIDATION.json",
    "implementation": "NMX_R4_Authentication.authenticate",
    "domain": "True",
    "own_input_clauses": [],
@@ -49,7 +49,8 @@
     "NMX_R4_BoxBinding.checkpoint"
    ],
    "full_all_args_port": "NMX_R4_ProjectionRef.reference / NMX_R4_AllArgs.operational",
-   "fresh_box_extraction": "NMX_E008"
+   "fresh_box_extraction": "NMX_E008",
+   "candidate_commit": "2f5787475aa"
   },
   {
    "row": "TX2:217",
@@ -117,7 +118,7 @@
   },
   {
    "row": "TX2:242",
-   "status": "CANDIDATE_REVISION3_EMITTED",
+   "status": "CANDIDATE_GATES_PASS",
    "candidate": true,
    "root": "NMX_R6_Validation.root",
    "retained_parameters": [],
@@ -125,11 +126,11 @@
    "validation": "NMX_R6_VALIDATION.json",
    "candidate_commit": "3fb6853107a",
    "source": "NMX_R6_SourceExact242.source",
-   "remaining": "Next ledger review/credit only"
+   "remaining": "Lead ledger review/credit only; no worker proof/native gap"
   },
   {
    "row": "TX2:241",
-   "status": "CANDIDATE_REVISION3_EMITTED",
+   "status": "CANDIDATE_GATES_PASS",
    "candidate": true,
    "root": "NMX_R9_StageTwo.root",
    "retained_parameters": [],
@@ -145,10 +146,11 @@
      "verbatim": "\u2200 acc0 acc6 ck pr, a.accounts.length = 7 \u2192 a.accounts[0]? = some acc0 \u2192 a.accounts[6]? = some acc6 \u2192 acc6.bytes = .ok ck \u2192 acc0.bytes = .ok pr \u2192 pr.length = RSL.PROOF_ACCOUNT_BYTES \u2192 LIBB_V2Star.library.Root0 ck (RSL.slice pr RSL.AFTERSTATE_BYTES RSL.PROOF_ACCOUNT_BYTES)"
     }
    ],
-   "validation": "NMX_R9_CANDIDATE.json (own gates pending)",
+   "validation": "NMX_R9_VALIDATION.json",
    "full_source": "NMX_R9_Native241.full",
    "source": "NMX_R9_StageTwo.source",
-   "remaining": "Own audits/combined import/export, then next ledger review only"
+   "remaining": "Lead ledger review/credit only; no worker proof/native gap",
+   "candidate_commit": "536c77b6e6b"
   }
  ],
  "own_root_hypotheses": [],
@@ -199,5 +201,29 @@
  "readiness": "NMX_242_241_READINESS.md",
  "frozen_233_instantiation_validation": "NMX_233_VALIDATION.json",
  "resumption_counts": "NMX_RESUMPTION_COUNTS.json",
- "current_candidate_packet_complete": true
+ "current_candidate_packet_complete": true,
+ "self_credit": false,
+ "current_candidates": {
+  "TX2:233": {
+   "root": "NMX_R4_Authentication.root",
+   "candidate_commit": "2f5787475aa",
+   "validation": "NMX_R4_VALIDATION.json",
+   "retained_law_library_representation_parameters": [],
+   "status": "CANDIDATE_GATES_PASS"
+  },
+  "TX2:242": {
+   "root": "NMX_R6_Validation.root",
+   "candidate_commit": "3fb6853107a",
+   "validation": "NMX_R6_VALIDATION.json",
+   "retained_law_library_representation_parameters": [],
+   "status": "CANDIDATE_GATES_PASS"
+  },
+  "TX2:241": {
+   "root": "NMX_R9_StageTwo.root",
+   "candidate_commit": "536c77b6e6b",
+   "validation": "NMX_R9_VALIDATION.json",
+   "retained_law_library_representation_parameters": [],
+   "status": "CANDIDATE_GATES_PASS"
+  }
+ }
 }
