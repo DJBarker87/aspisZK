@@ -318,3 +318,13 @@ numeric encoding; that must be installed and source-bound. The result exposes
 an incompatible pair of current local interfaces, not an extra endpoint or
 callee premise. Session11 is implementing word support in a NEW site codec;
 no provider, old result or frozen statement is silently changed.
+
+Session11 C8 local repair: WordThreadArc.thread_word/scope_image_word and
+WordThreadRecheck.scope_handler/thread_shape (55109/55114) add canonical
+ELF64-word support and check the actual40-byte reply without any Shape or
+successful-decoder premise. Packet's complete sparse reply is unchanged.
+NativeModel integrates it, and its callback theorem preserves the initialized
+source-derived C7 branch. The old C8 theorem remains about old SiteArc only.
+This repairs a lane-local operational codec, not a frozen Pre/Post or provider.
+Native Thread source binding, actual valid pointers, continuous original-entry
+history and the complete joint existential remain open.

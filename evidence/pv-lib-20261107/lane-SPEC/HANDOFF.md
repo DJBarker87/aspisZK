@@ -1,3 +1,26 @@
+# Session11 checkpoint — callback stores installed; full task OPEN
+
+Continued aa8cfbe2f1b. NativeModel/NativeHistory are the current operational
+assembly. CallbackStores applies the adopted56-byte callback suffix, retains
+unknown copied bytes and every other allocation answer. CallbackBound derives
+r12/rcx/rax from source Packet and (&run,k), retaining missing bindings as None;
+physical rsp/stack pairing remains explicit and unproved. Rechecks include the
+exact local C7 byte8224, ownership/backing/pointer/all-answer frames and actual
+v2 origin history. C8 checks the old ScopeData decoder's conflict with the
+retained native numeric Thread facet; WordThreadArc repairs that local codec,
+WordThreadRecheck checks40-byte success and unchanged Packet replies.
+
+No successful original-entry history through cut92/ThreadInit, nonvacuous
+exports on that history, full OwnInit joint witness or full-joint contradiction
+is claimed. No row or endpoint premise closed;18 old statements retained.
+See SESSION11_ADEQUACY.md and FINDINGS.md for exact theorem limits and gaps.
+ONE strict110-new-root audit34993 is prepared, not yet credited at checkpoint.
+Next Lean55116..55189; next raw34994..34999 (55190..55199 reserved thereafter).
+Only a55100..55189 guard extension was made, in our private copied launcher;
+no shared/provider/implementation/key change, push or merge.
+
+---
+
 # Session10 checkpoint — site images repaired locally; callback suffix gap checked
 
 Base b98806b806c, branch codex/pv-lib-spec-20261107. AllocationImages44971
