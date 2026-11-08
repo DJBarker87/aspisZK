@@ -28,3 +28,15 @@ invocation parent978b74c16b8. Exact source hash is authoritative. This new
 capture fixture has initialized public n=1 (not the older n=0 fixture).
 All four capture regions coexist on one OWNER. Still a capture component;
 no full composition or reached allocation is claimed by this module.
+
+49787 ConcreteEntry passed after local binder/type corrections in failed49785
+and49786 (both sources/receipts retained, no credit). exit0,wall0:02.91,
+peak4777220KiB,swap0,source04f18b414bd; standard axioms only.
+`pre` satisfies the ENTIRE current Frozen.RootPre, including both OWNER
+bounds, RegisteredValidity, live numbering, recursive source References and
+the initialized captures, on one n=1 store/environment/runtime.
+`joint table` also satisfies the literal Frozen.MachineSpec of that runtime.
+This does not yet witness the newly reached-context runtime's COMPLETE
+source/ABI/native semantics conjunction, all18 universal row contracts, or
+AllocationBranch. External/resource replies in this model are pending.
+No such stronger claim is made by entry nonemptiness.
