@@ -18,7 +18,7 @@ theorem source (a : NNH_S1HostCodec.Afterstate) (out : Array U8 688#usize)
    rw [run] at called
    have same : bytes = out := core.result.Result.Ok.inj (Result.ok.inj called)
    cases same
-   exact run
+   rfl
 #print axioms source
 end AspisR1.NNV_EncodeReflects
 end

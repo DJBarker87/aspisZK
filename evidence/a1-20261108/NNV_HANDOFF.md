@@ -158,3 +158,31 @@ identifies the actual current query call. No whole dictionary congruence or
 whole-buffer normalization is used. L087's flush failure is the elaborated
 Vec/Slice rewrite shape; its replacement applies source congruence to the
 explicit Result equality instead. Global query/evaluator and A1 are OPEN.
+
+L095 finding: `NNV_CurrentBatchSource` is NOT accepted. Its direct polymorphic
+slot projection printed standard axioms, but that projection shape should not
+have been used under the retired-shape instruction. The full module used a
+VTop digest where Op5T_Install.body requires the stage2 digest, then hit the
+200000-heartbeat limit at the source rewrite. No credit, no limit increase,
+no unchanged rerun. Retire the draft. A replacement must first use the named
+abstract slot projection and an explicitly typed stage2 digest port, then
+transport the SAME roots/queries pointwise. This is an unresolved Lean-only
+batch association, not a Kani or cryptographic assumption.
+
+L096/L097 replace the failed rewrite shapes with Result congruence. The actual
+current flush agrees at the SAME pending/accumulator under its original
+LIBC_Finish.Domain; that domain is not yet derived at the full body caller.
+The current checkpoint writer agrees with LIBC_Checkpoint.output at the SAME
+Prepared/Acc/proof/public inputs and runtime digest replies. The input ports
+are closed; whole-body and global weak-Err composition remain open.
+
+Continuation stage 5: L091/L092 compose the actual query carrier inputs;
+L093 proves pointwise digest erasure congruence; L096/L097 pass current flush
+and checkpoint ports. L099 reflects host encoder Ok back to the SAME owned
+source encode call. L098's last goal was already reflexive after case analysis;
+the repair is explicit rfl, with no statement or limit change. No global Err
+implication is inferred. Unaccepted/unfinished drafts are now .lean.txt and
+excluded from the combined import. The 42 read-only Run5b object hashes are
+unchanged (NNV_CONTINUATION_PIN_RECHECK.json). The final authorized scope is
+NNV_L100, NNV_COMBINED_IMPORT2: original combined import plus 31 new accepted
+modules and 45 new printed roots. No A1 term or row credit is delivered.

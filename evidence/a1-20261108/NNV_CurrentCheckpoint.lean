@@ -26,7 +26,10 @@ theorem source {W Tx : Type} (c : Ctx W Tx) (a : LIBC_Checkpoint.Args) :
   (VTop_Checkpoint.digest (Tx1Q_Install.digest (NNV_PreparedAtHost.digest c))).digest () parts =
   (LIBC_Checkpoint.digest (envOf c)).digest () parts := fun parts => NNV_CheckpointDigest.source c parts
  rw [NNV_CheckpointEraseCongr.source _ _ () _ same]
- rw [NNV_CheckpointValue.source,bind_tc_ok]
+ have erased := NNV_CheckpointValue.source a (envOf c)
+ exact congrArg (fun out : Result (Slice U8) => do
+  let ck ← out
+  Result.ok (⟨ck.val,ck.property⟩ : alloc.vec.Vec U8)) erased
 #print axioms slot
 #print axioms source
 end AspisR1.NNV_CurrentCheckpoint
