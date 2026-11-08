@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysical13.lean:43:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+w : OWNER
+base count address : ℕ
+outside : address < base ∨ base + 8 ≤ address
+⊢ {
+            world :=
+              have __src := w.world;
+              { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+                deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+                successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+                memory := fun address =>
+                  if base ≤ address then (wordImage count (address - base)).getD (w.world.memory address)
+                  else w.world.memory address,
+                live := __src.live, frame := __src.frame },
+            next := w.next, places := w.places }.world.memory
+      address =
+    w.world.memory address
+'PV_LIB_SPEC_ArcPhysical13.operands' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysical13.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysical13.write_away' depends on axioms: [propext, sorryAx]
+'PV_LIB_SPEC_ArcPhysical13.one_to_two' depends on axioms: [propext, Classical.choice, Quot.sound]

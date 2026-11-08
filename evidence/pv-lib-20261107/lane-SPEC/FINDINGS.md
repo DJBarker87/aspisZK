@@ -363,3 +363,25 @@ source/native stack-frame map for &run, checked against the actual source
 reference and initialized pointee, while keeping heap resolution for Packet.
 Its original-history construction remains a proof obligation, never a new
 successful-decoder or source-validity premise in a row.
+
+
+## SPEC-C11 — clone's value adapter discards physical count writes (session13)
+
+CHECKED55161, ArcPhysicalGap13.drops_physical_write: at a decoded successful
+native360 branch, the retained CallbackRuntime adapter replaces the reply's
+world by the pre-world. Thus its output memory is exactly unchanged, even
+if the lower reply had changed it. Quantifiers include every register cut,
+parameter, config, fn/activation/argument list, pre-world and successful raw
+reply, conditional on the actual360 function-id, actual lower-native reply,
+source Arc/count projection, ordinary token and count≤maxRefcount. These
+are explicitly local branch conditions, not a claim of original reachability.
+The actual source12950 token is native360; adopted fc8808eb e05bc increments
+the Packet count. For an initially-one count, byte0 must become2, whereas
+byte_conflict proves the unchanged byte1 differs. The v2 SOURCE count action
+does not write OWNER physical memory. This is not a full-joint contradiction.
+
+Repair in progress: ArcPhysical13 resolves the same source Arc through its
+actual registered physical allocation, checks the source/physical pre-counts
+agree, and mirrors the8-byte increment. It accepts no Store/image/desired
+count callback. The lane-A source action remains unchanged. Full integration,
+actual original-entry correspondence and nonvacuous exports remain required.
