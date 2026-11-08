@@ -8,6 +8,6 @@ No premise, trust, adversary/hashv/H restriction or model change. No real host c
 
 Next integration obligations are outside this job: transport NNH_RecordedCharge.bound with O1 and O2, actual-run pointwise failure inclusion at the same probability space and charged event, and the remaining deployed headline/security gates. O1 archive correction was not recompiled here. Condition(4) is not proved. No NDT row or deployed headline bound is closed by this job.
 
-Final combined import/pins audit follows in the final stage. Stopping before80% is because every assigned member8,9,10 is proved, not because another member is blocked. No Kani or extraction was used.
+Final NNQ_COMBINED_IMPORT2 passed NNQ_L039 and pins/read-only host verification passed. Budget9/20 (8 pass,1 memory rejection). Stopping before80% is because every assigned member8,9,10 is proved, not because another member is blocked. No Kani or extraction was used.
 
 target not yet established
