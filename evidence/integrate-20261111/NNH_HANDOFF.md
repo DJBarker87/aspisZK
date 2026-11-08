@@ -778,3 +778,29 @@ T2 used six scopes L854–859: three passes. Failed attempts: selector's Bool
 parameter inference (L854); explicit Tx inference (L856); dependent Obs
 elimination (L857), replaced by projection congruence (L858). All passing
 roots print only propext, Classical.choice, Quot.sound. No trust change.
+
+### Run 5b T3 OPEN at cap (14/14 scopes L860–873)
+
+A2 is not delivered. Exact parent: NNH_ExactRemainingTypes.tx2Op11, followed
+by the corrected-host NND_A2. Remaining: outer geometry traversal at SAME
+queries; query-loop association at actual installed ports; same-resume Merkle
+parent transport; compact offsets/common converse; Stage2To064, op44/op53,
+241 Returns and AMN.viaReturns2 composition. These are Lean-only obligations.
+
+Compiled support (AspisR1 prefix): NNH_Run5bGeometrySlots (L862),
+GeometryUnits (L861), IndexLaw (L864), QuerySlots (L865), GeometryMap (L868),
+FinishEdge.selected (L869), GeometryReverse.selected (L870),
+QueryDomain.initial (L873). The last derives the query invariant from SAME
+resume canonical fields, SAME pending constructor and next=10, without a new
+canonicality premise. Reverse transport compares one arbitrary multiplication
+step, then transports the loop; no concrete buffer is evaluated. All passing
+roots print standard axioms only. Eight passes, six failures.
+
+L860's kernel memory error at concrete one-slot reduction was replaced by a
+named abstract installed-one law (L861–862). L863's concrete mapped callback
+reduction hit the kernel memory limit; abstract erase_index (L864) and generic
+callback composition (L868) replace that shape. Neither was rerun unchanged
+or with larger caps. Two offset tactic approaches (L866/L867) are retired;
+the failed source remains .lean.txt, excluded from imports. L871/L872 type
+errors in QueryDomain were corrected via explicit deref and unshadowed list
+membership (L873). No whole-dictionary congruence or buffer unfolding added.
