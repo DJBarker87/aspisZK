@@ -1,3 +1,9 @@
+import NNW_ProtectionOwner
+import NNW_ProtectionMarker
+import NNW_ProtectionPositive
+import NNW_ProtectionPreserves
+import NNW_ProtectionCells
+import NNW_ProtectionLamports
 import NNH_Run5bSplit
 import NNH_Run5bHeadline
 set_option autoImplicit false
@@ -19,11 +25,12 @@ theorem produce (c : Ctx W Tx) (n1 : S2W_ExtractionBoundary.First)
  (game : (S_host L copy std).Game c n1 n2)
  (queries : (S_host L copy std).Queries c n1) :
  CPH_Protection.Facts c.world.p c.world.t c.world.saved CPH_Program.verifier := by
- exact CPH_Protection.derive c.world.p c.world.t c.world.u c.i.entry c.j.entry c.world.saved
-    c.world.actions (FIp_Install.select c.fixed.reservation (base c))
-    (Rc5_Install.key c.fixed.indexError (FIp_Install.select c.fixed.reservation (base c)) c.fixed.reservation)
-    n1 n2 (hashv c) ext copy std NNE_AbortIndicator.allocator CPH_Program.verifier game.1
-    c.i.data true true (writeBracket c.i.entry.heap 2 0 0 (source (nativeBytes c.world.saved))) ac1
+ exact ⟨NNW_ProtectionOwner.produce L copy std c n1 n2 ext ac1 game queries,
+  NNW_ProtectionMarker.produce L copy std c n1 n2 ext ac1 game queries,
+  NNW_ProtectionPositive.produce L copy std c n1 n2 ext ac1 game queries,
+  NNW_ProtectionPreserves.produce L copy std c n1 n2 ext ac1 game queries,
+  NNW_ProtectionCells.produce L copy std c n1 n2 ext ac1 game queries,
+  NNW_ProtectionLamports.produce L copy std c n1 n2 ext ac1 game queries⟩
 #print axioms produce
 end AspisR1.NNW_Protection
 end
