@@ -84,3 +84,5 @@ are unproved, not because IDs or compute were exhausted. COMMITS.txt records
 all proof/replay/driver commits through901669d3323; final metadata commit follows.
 
 Session6 from9e72b836054: focused47417 supplies the import surface `PV_LIB_StoreActionTable.v2` in `PV_LIB_A_StoreActionTable`. It consolidates the22 supplied projections, with explicit bool/nonlast/unpark coverage tags. This is PARTIAL, not completed D984 adequacy. Attempt47416 repaired a namespace doc-comment syntax error; exact failed source retained. No caller closure claimed.
+
+Focused47418: `PV_LIB_A_StoreActionMachine` installs the supplied table directly on the OWNER-aware base. One symbolic agreement and neutral-trace transport compile; `native` exposes the exact all-answer graph and its undefined arm. No adequacy or caller closure follows from these graph identities.
