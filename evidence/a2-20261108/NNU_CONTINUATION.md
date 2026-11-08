@@ -45,3 +45,13 @@ returns the identical full scratch through reference.verify_owned, using only
 pointwise node values and totality, without a physical-length premise.
 L067 NNU_MerkleNative.batch exposes the actual native batch success from the
 source action. No enclosing batch transfer is claimed.
+
+Merkle caller support: L071 NNU_MerkleVerify.selected/sdk passes at the
+actual SDK digest and same complete arrays. L072 NNU_MerkleChildren fixes
+opening, key, sort, slot and reached leaf requests. L073 NNU_MerkleCount.source
+proves complete binary-count Result equality. L074 NNU_MerkleOpening.source
+derives width832 from successful bounded-index opening without a whole-proof
+length premise. L075 NNU_MerkleIteration.source composes ONE actual native
+active iteration on arbitrary scratch with the stated more/room/key/view/width/
+leaf observations. It is not a whole-loop/parent certificate; the caller must
+derive and propagate these local conditions.
