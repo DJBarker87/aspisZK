@@ -1,0 +1,767 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ContextSource16.lean:46:12: error: Tactic `rfl` failed: The left-hand side
+  have out := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] };
+  { state := out,
+    issued :=
+      PV_LIB_SPEC_ControlRuntime.recordIssue
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.state
+        out
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.issued,
+    consumed :=
+      {
+          state :=
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining :=
+                              PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                        callers := parents, store := s },
+                  world := w, events := es },
+              suspended := [] },
+          issued := issued, consumed := consumed }.consumed }
+is not definitionally equal to the right-hand side
+  match
+    (PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+        (Expr.aggregate kind args) with
+  | none =>
+    { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+      issued := issued, consumed := consumed }
+  | some t =>
+    {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+              world := w, events := es },
+          suspended := [] },
+      issued := issued, consumed := consumed }
+
+case h_1
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parents : List Frame
+rest : List PV_STX2_SliceSyntax.Node
+site : Site
+dest : PV_STX2_Syntax.Place
+kind : Data
+args : List Operand
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+first :
+  PV_THR2_IntrinsicState.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := [] } =
+    PV_THR2_IntrinsicFrameAggregate.after (runtime p).carrier s a parents [] rest site dest kind args w es []
+x✝ : Option (Store Data)
+heq✝ :
+  ((PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+        (Expr.aggregate kind args)) =
+    none
+⊢ (have out := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining :=
+                                  PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) ::
+                                    rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.state
+          out
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining :=
+                                  PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) ::
+                                    rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.issued,
+      consumed :=
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.consumed }) =
+    match
+      (PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+          (Expr.aggregate kind args) with
+    | none =>
+      { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+        issued := issued, consumed := consumed }
+    | some t =>
+      {
+        state :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+                world := w, events := es },
+            suspended := [] },
+        issued := issued, consumed := consumed }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ContextSource16.lean:46:12: error: Tactic `rfl` failed: The left-hand side
+  have out :=
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := rest }, callers := parents, store := t✝ },
+          world := w, events := es },
+      suspended := [] };
+  { state := out,
+    issued :=
+      PV_LIB_SPEC_ControlRuntime.recordIssue
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.state
+        out
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.issued,
+    consumed :=
+      {
+          state :=
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining :=
+                              PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                        callers := parents, store := s },
+                  world := w, events := es },
+              suspended := [] },
+          issued := issued, consumed := consumed }.consumed }
+is not definitionally equal to the right-hand side
+  match
+    (PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+        (Expr.aggregate kind args) with
+  | none =>
+    { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+      issued := issued, consumed := consumed }
+  | some t =>
+    {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+              world := w, events := es },
+          suspended := [] },
+      issued := issued, consumed := consumed }
+
+case h_2
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parents : List Frame
+rest : List PV_STX2_SliceSyntax.Node
+site : Site
+dest : PV_STX2_Syntax.Place
+kind : Data
+args : List Operand
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+first :
+  PV_THR2_IntrinsicState.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := [] } =
+    PV_THR2_IntrinsicFrameAggregate.after (runtime p).carrier s a parents [] rest site dest kind args w es []
+x✝ : Option (Store Data)
+t✝ : Store Data
+heq✝ :
+  ((PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+        (Expr.aggregate kind args)) =
+    some t✝
+⊢ (have out :=
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := a, remaining := rest }, callers := parents, store := t✝ },
+            world := w, events := es },
+        suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining :=
+                                  PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) ::
+                                    rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.state
+          out
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining :=
+                                  PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) ::
+                                    rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.issued,
+      consumed :=
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining :=
+                                PV_STX2_SliceSyntax.Node.leaf (Instruction.aggregateMove site dest kind args) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.consumed }) =
+    match
+      (PV_STX2_Store.bind (runtime p).carrier s w a dest (Expr.aggregate kind args)).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest
+          (Expr.aggregate kind args) with
+    | none =>
+      { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+        issued := issued, consumed := consumed }
+    | some t =>
+      {
+        state :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+                world := w, events := es },
+            suspended := [] },
+        issued := issued, consumed := consumed }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ContextSource16.lean:63:12: error: Tactic `rfl` failed: The left-hand side
+  have out := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] };
+  { state := out,
+    issued :=
+      PV_LIB_SPEC_ControlRuntime.recordIssue
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.state
+        out
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.issued,
+    consumed :=
+      {
+          state :=
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                        callers := parents, store := s },
+                  world := w, events := es },
+              suspended := [] },
+          issued := issued, consumed := consumed }.consumed }
+is not definitionally equal to the right-hand side
+  match
+    (PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr with
+  | none =>
+    { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+      issued := issued, consumed := consumed }
+  | some t =>
+    {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+              world := w, events := es },
+          suspended := [] },
+      issued := issued, consumed := consumed }
+
+case h_1
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parents : List Frame
+rest : List PV_STX2_SliceSyntax.Node
+site : Site
+dest : PV_STX2_Syntax.Place
+expr : Expr
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+first :
+  PV_THR2_IntrinsicState.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := [] } =
+    PV_THR2_IntrinsicFrameBind.after (runtime p).carrier s a parents [] rest site dest expr w es []
+x✝ : Option (Store Data)
+heq✝ :
+  ((PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr) =
+    none
+⊢ (have out := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.state
+          out
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.issued,
+      consumed :=
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.consumed }) =
+    match
+      (PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr with
+    | none =>
+      { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+        issued := issued, consumed := consumed }
+    | some t =>
+      {
+        state :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+                world := w, events := es },
+            suspended := [] },
+        issued := issued, consumed := consumed }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ContextSource16.lean:63:12: error: Tactic `rfl` failed: The left-hand side
+  have out :=
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := rest }, callers := parents, store := t✝ },
+          world := w, events := es },
+      suspended := [] };
+  { state := out,
+    issued :=
+      PV_LIB_SPEC_ControlRuntime.recordIssue
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.state
+        out
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.issued,
+    consumed :=
+      {
+          state :=
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                        callers := parents, store := s },
+                  world := w, events := es },
+              suspended := [] },
+          issued := issued, consumed := consumed }.consumed }
+is not definitionally equal to the right-hand side
+  match
+    (PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr with
+  | none =>
+    { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+      issued := issued, consumed := consumed }
+  | some t =>
+    {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+              world := w, events := es },
+          suspended := [] },
+      issued := issued, consumed := consumed }
+
+case h_2
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parents : List Frame
+rest : List PV_STX2_SliceSyntax.Node
+site : Site
+dest : PV_STX2_Syntax.Place
+expr : Expr
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+first :
+  PV_THR2_IntrinsicState.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := [] } =
+    PV_THR2_IntrinsicFrameBind.after (runtime p).carrier s a parents [] rest site dest expr w es []
+x✝ : Option (Store Data)
+t✝ : Store Data
+heq✝ :
+  ((PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+      PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr) =
+    some t✝
+⊢ (have out :=
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := a, remaining := rest }, callers := parents, store := t✝ },
+            world := w, events := es },
+        suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.state
+          out
+          {
+              state :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                            callers := parents, store := s },
+                      world := w, events := es },
+                  suspended := [] },
+              issued := issued, consumed := consumed }.issued,
+      consumed :=
+        {
+            state :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: rest },
+                          callers := parents, store := s },
+                    world := w, events := es },
+                suspended := [] },
+            issued := issued, consumed := consumed }.consumed }) =
+    match
+      (PV_STX2_Store.bind (runtime p).carrier s w a dest expr).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier (runtime p).carrier) s w a dest expr with
+    | none =>
+      { state := { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := [] },
+        issued := issued, consumed := consumed }
+    | some t =>
+      {
+        state :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := rest }, callers := parents, store := t },
+                world := w, events := es },
+            suspended := [] },
+        issued := issued, consumed := consumed }
+'PV_LIB_A_ContextSource16.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.source_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.bind_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.storage_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_ContextSource16.aggregate_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
