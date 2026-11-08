@@ -1,0 +1,42 @@
+{"attempt": "NNU_L032", "exit_status": 0, "wall_seconds": 30.275287793017924, "peak_rss_kib": "6878496", "swaps": "0", "print_axioms": []}
+def LIBB_PartitionEnv.digest : RSL.Env → VTop_Stages.aspis_core.digest.Digest32 Unit :=
+fun env =>
+  { coremarkerCopyInst := (LIBB_HashModel.digest env).coremarkerCopyInst,
+    digest := fun x parts => LIB_Env.hashv env parts }
+def LIBB_PartitionEnv.H : RSL.Env → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State :=
+fun env message => LIBB_HashModel.state (env.sha256 (LIBB_C04Partition.partition (LIBB_ProtocolBytes.host message)))
+LIBB_PartitionEnv.partition_value (env : RSL.Env) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8))
+  (partition :
+    LIBB_C04Partition.partition (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+      NNC_ResumeEv
+...
+ root physical s) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortFrozenOrder.verifyInPlace (AspisV8R19.SqueezeOracleBridge.decodeState root)
+                (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)
+                (AspisR1.MultiproofConePhysicalViews.remaining physical s.at))
+AspisR1.MultiproofConePhysicalVerify.verify.eq_1: ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConePhysicalVerify.verify root physical s =
+    if
+        AspisR1.OraclePortFrozenOrder.wellFormed
+            (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+          (↑physical).length % 32 = 0 then
+      AspisV8R19.OracleProgramOps.bind
+        (AspisR1.MultiproofConePhysicalTransport.transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+        fun result =>
+        AspisV8R19.MemoizedProgramLaw.Program.done (AspisR1.MultiproofConePhysicalVerify.finish root physical result)
+    else AspisV8R19.MemoizedProgramLaw.Program.done false
+NJS_Extract.aspis_core.digest.Digest32.mk.inj: ∀ {Self : Type} {coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self}
+  {digest :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)}
+  {coremarkerCopyInst_1 : Aeneas.Std.core.marker.Copy Self}
+  {digest_1 :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)},
+  { coremarkerCopyInst := coremarkerCopyInst, digest := digest } =
+      { coremarkerCopyInst := coremarkerCopyInst_1, digest := digest_1 } →
+    coremarkerCopyInst = coremarkerCopyInst_1 ∧ digest = digest_1
+
+Running as unit: run-r17663484ca094ba59db673495b21f9ee.scope; invocation ID: cf9520389e794a9c92c1ec92cab59351
