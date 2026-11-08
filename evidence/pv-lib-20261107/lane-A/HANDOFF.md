@@ -148,3 +148,7 @@ violation or original-entry reachability is inferred.
 47443 passed PV_LIB_A_Emitted168. Exact emitted syntax only; no native adequacy or row closure.
 
 47444 passed PV_LIB_A_Emitted122. Exact emitted syntax only; no native adequacy or row closure.
+47445 was refused BEFORE compilation because the read-only reservation scan
+raced disappearance of network-watchdog.service. No source job ran; no retry
+of a failed compile. The next fresh ID is47446 after the cooldown. Own body
+compile driver now skips verified accepted receipts on resume.
