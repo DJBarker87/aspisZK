@@ -163,3 +163,5 @@ PV_LIB_SPEC_ThreadSpecifications compiled49774, cohortw3: exit0, wall0:03.30, pe
 PV_LIB_SPEC_CohortImports compiled49776, cohortw3: exit0, wall0:01.09, peak2426596KiB, swap0; standard summary axioms only. Statement only.
 
 PV_LIB_SPEC_F316Callback compiled49777, cohortw3: exit0, wall0:02.23, peak4760376KiB, swap0; standard summary axioms only. Statement only.
+
+PV_LIB_SPEC_OwnInitComposition compiled49779, cohortw3: exit0, wall0:02.18, peak4756920KiB, swap0; standard summary axioms only. Statement only.
