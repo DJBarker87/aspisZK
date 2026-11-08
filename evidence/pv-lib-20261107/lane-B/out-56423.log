@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources/PV_LIB_B_F21Pending.lean:49:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  P fn
+in the target expression
+  match PV_STX2_Native.Request.child fn a args with
+  | PV_STX2_Native.Request.child fn activation captures => P fn = none
+  | x => True
+
+resources : Resources
+encode : Encode
+P : Data → Option PV_STX2_SliceSyntax.Program
+H : Handler
+c : Config
+w : OWNER
+wait : PV_STX2_Native.Waiting Data
+fn : Data
+a : ℕ
+args : List Data
+body : PV_STX2_SliceSyntax.Program
+waiting : c.frame.waiting = some wait
+request : wait.request = PV_STX2_Native.Request.child fn a args
+resolved : P fn = some body
+left✝ : c.frame.completed = none
+issued : c.frame.waiting = some wait
+nativeOnly :
+  match PV_STX2_Native.Request.child fn a args with
+  | PV_STX2_Native.Request.child fn activation captures => P fn = none
+  | x => True
+right✝ :
+  (PV_STX2_Source7IterationHandler.handler (fun {A} {A} => resources) (fun {A} {A} => encode) c H wait.request
+        w).answer =
+    Answer.pending
+⊢ False
+'PV_LIB_B_F21Pending.LegacyPoll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_B_F21Pending.NativePoll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_B_F21Pending.Pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_B_F21Pending.forget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_B_F21Pending.rejects_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_B_F21Pending.rejects_completed' depends on axioms: [propext, Classical.choice, Quot.sound]
