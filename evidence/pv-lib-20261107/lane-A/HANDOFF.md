@@ -89,3 +89,8 @@ Next focused47424–47489; raw47492–47499. Inherited463xx was already spent an
 was not reused. No live task scope. VALIDATION.json checks exact scope,
 source/receipt hashes, unchanged accepted inventory and unchanged slot records.
 Target not yet established.
+
+Session7 in progress from03c3c72b143:47424 passed CellSetBegin, deriving the
+replacement and retaining old T plus the exact emitted destructor metadata.
+This is not yet a complete arbitrary-T destructor/table repair. No caller
+history is promoted. Session7 receipts preserve the6G/8G/swap0/Tasks64 caps.
