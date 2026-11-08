@@ -177,3 +177,5 @@ Session5 46398: F6DeliveryTransportV2.prefix_identity passes (46397 ambiguous ru
 Session5 47400: AtomicBoolNewV2 passes after repairing46399 to the actual CLOSED123 API. Byte representation fact is named and lower; no arbitrary backend instance claimed.
 
 Session5 47402: PreActionTraceV2 passes after repairing47401 (zero/add and neutral tuple simplification). OWNER/operator/registration guards explicit; one trace induction only.
+
+Session5 47404: CellSourceV2 passes (47403 receiver qualification repaired). Transparent Cell take641 and bool-only set504 supersede wrapped-only drafts; arbitrary-T set includes Drop and remains unsupported.
