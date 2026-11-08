@@ -20,3 +20,5 @@ PV_LIB_SPEC_LaneA_A_ArcStoreV2 compiled 44945, cohort w3: exit0, wall 0:02.57, p
 PV_LIB_SPEC_LaneA_A_StoreAtomicV2 compiled 44946, cohort w3: exit0, wall 0:02.56, peak 4614652KiB, swap 0; source 0f2f10d09a78b09f2f25e849cf77328061c62990; standard summary axioms only.
 
 PV_LIB_SPEC_LaneA_A_StoreDispatchV2 compiled 44947, cohort w3: exit0, wall 0:02.73, peak 4627048KiB, swap 0; source a9a9bf2e2f462cb457fd078a2652a1765b4b3702; standard summary axioms only.
+
+PV_LIB_SPEC_LaneA_A_ScopeStoreV2 compiled 44948, cohort w3: exit0, wall 0:02.70, peak 4608192KiB, swap 0; source fffec18bc2098713a5eaab36d1892bcc9028d8bf; standard summary axioms only.
