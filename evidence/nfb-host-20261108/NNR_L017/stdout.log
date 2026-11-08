@@ -1,0 +1,113 @@
+NNR_generated/NNR_InvocationTransport.lean:31:2: error: unsolved goals
+case call_ok.refine_2
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+k : Except RSL.ProgramError UInt64
+r : NP6_StdModel.Reservation
+X A : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+p : Program Event A
+result✝ : Result A
+records✝ : List (Occurrence (part H pda k r) d hash)
+B✝ : Type
+codec : Codec Event B✝
+seed : Result B✝
+next : B✝ → Program Event A
+o : Occurrence (part H pda k r) d hash
+same : NLT_NativeWindows.question o.entered = NLT_NativeWindows.question (codec.encode seed)
+value : B✝
+decoded : codec.decode (actual o) = some (ok value)
+result : Result A
+records : List (Occurrence (part H pda k r) d hash)
+tail : Invocation (part H pda k r) d hash (next value) result records
+ih :
+  (∀ o ∈ records,
+      NLT_NativeWindows.window (part H pda k r) d hash o.entered o.input =
+        NLT_NativeWindows.window H d hash o.entered o.input) →
+    ∃ records', Invocation H d hash (next value) result records' ∧ List.map actual records' = List.map actual records
+equal :
+  ∀ o_1 ∈ o :: records,
+    NLT_NativeWindows.window (part H pda k r) d hash o_1.entered o_1.input =
+      NLT_NativeWindows.window H d hash o_1.entered o_1.input
+o' : Occurrence H d hash := NNR_RecordTransport.record H pda k r o ⋯
+eqo : actual (NNR_RecordTransport.record H pda k r o ⋯) = actual o
+rs : List (Occurrence H d hash)
+nt : Invocation H d hash (next value) result rs
+eq : List.map actual rs = List.map actual records
+⊢ actual o' :: List.map actual records = actual o :: List.map actual records
+NNR_generated/NNR_InvocationTransport.lean:37:2: error: unsolved goals
+case call_fail.refine_2
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+k : Except RSL.ProgramError UInt64
+r : NP6_StdModel.Reservation
+X A : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+p : Program Event A
+result : Result A
+records : List (Occurrence (part H pda k r) d hash)
+B✝ : Type
+codec : Codec Event B✝
+seed : Result B✝
+next : B✝ → Program Event A
+o : Occurrence (part H pda k r) d hash
+same : NLT_NativeWindows.question o.entered = NLT_NativeWindows.question (codec.encode seed)
+error : Error
+decoded : codec.decode (actual o) = some (fail error)
+equal :
+  ∀ o_1 ∈ [o],
+    NLT_NativeWindows.window (part H pda k r) d hash o_1.entered o_1.input =
+      NLT_NativeWindows.window H d hash o_1.entered o_1.input
+o' : Occurrence H d hash := NNR_RecordTransport.record H pda k r o ⋯
+eqo : actual (NNR_RecordTransport.record H pda k r o ⋯) = actual o
+⊢ [actual o'] = [actual o]
+NNR_generated/NNR_InvocationTransport.lean:43:2: error: unsolved goals
+case call_div.refine_2
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+k : Except RSL.ProgramError UInt64
+r : NP6_StdModel.Reservation
+X A : Type
+d : aspis_core.digest.Digest32 X
+hash : X
+p : Program Event A
+result : Result A
+records : List (Occurrence (part H pda k r) d hash)
+B✝ : Type
+codec : Codec Event B✝
+seed : Result B✝
+next : B✝ → Program Event A
+o : Occurrence (part H pda k r) d hash
+same : NLT_NativeWindows.question o.entered = NLT_NativeWindows.question (codec.encode seed)
+decoded : codec.decode (actual o) = some div
+equal :
+  ∀ o_1 ∈ [o],
+    NLT_NativeWindows.window (part H pda k r) d hash o_1.entered o_1.input =
+      NLT_NativeWindows.window H d hash o_1.entered o_1.input
+o' : Occurrence H d hash := NNR_RecordTransport.record H pda k r o ⋯
+eqo : actual (NNR_RecordTransport.record H pda k r o ⋯) = actual o
+⊢ [actual o'] = [actual o]
+NNR_generated/NNR_InvocationTransport.lean:31:29: warning: This simp argument is unused:
+  eqo
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, ̲eqo̵,̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNR_generated/NNR_InvocationTransport.lean:37:42: warning: This simp argument is unused:
+  eqo
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, ̲List.map_nil,̵e̵q̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNR_generated/NNR_InvocationTransport.lean:43:42: warning: This simp argument is unused:
+  eqo
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, ̲List.map_nil,̵e̵q̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNR_InvocationTransport.forward' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
