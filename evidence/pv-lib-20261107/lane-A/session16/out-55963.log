@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F5FullPush16.lean:48:2: error: Type mismatch: After simplification, term
+  congrArg Execution.state
+    (push (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a)) PV_LIB_SPEC_ReachedEnvironment14.parameters
+      PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation PV_LIB_A_F5History16.parents e.world [] issued
+      consumed)
+ has type
+  @Eq State
+    (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+        PV_LIB_SPEC_ReachedEnvironment14.parameters 1
+        {
+          state :=
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      (PV_THR2_ActiveRequest.pending PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation
+                        PV_LIB_A_F5History16.parents PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop),
+                  world := e.world, events := [] },
+              suspended := [] },
+          issued := issued, consumed := consumed }).state
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := PV_LIB_A_F5History16.store.nextActivation, remaining := PV_THR2_F17.live.body },
+                callers :=
+                  (PV_THR2_ActiveRequest.pending PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation
+                        PV_LIB_A_F5History16.parents PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop).frame ::
+                    PV_LIB_A_F5History16.parents,
+                store :=
+                  PV_THR2_ActiveRequest.issued PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation
+                    PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop },
+          world := e.world, events := [] },
+      suspended := [] }
+but is expected to have type
+  @Eq State
+    (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+        PV_LIB_SPEC_ReachedEnvironment14.parameters 1
+        { state := PV_LIB_A_F5Call16.at132 e, issued := issued, consumed := consumed }).state
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := PV_LIB_A_F5History16.store.nextActivation, remaining := PV_THR2_F17.live.body },
+                callers :=
+                  (PV_THR2_ActiveRequest.pending PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation
+                        PV_LIB_A_F5History16.parents PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop).frame ::
+                    PV_LIB_A_F5History16.parents,
+                store :=
+                  PV_THR2_ActiveRequest.issued PV_LIB_A_F5History16.store PV_LIB_A_F5History16.activation
+                    PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop },
+          world := e.world, events := [] },
+      suspended := [] }
+'PV_LIB_A_F5FullPush16.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F5FullPush16.original133' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
