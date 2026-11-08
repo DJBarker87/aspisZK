@@ -1,0 +1,55 @@
+NNX_generated/NNX_CommonEncode.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNH_S1HostCodec.afterCarrier
+    (AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1
+      (NFY_NBN_StatementResult.common
+            (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1
+              ?st)).lane_transition.candidate_afterstate)
+in the target expression
+  (match
+      NMT_345.encodeCall
+        (NNH_S1HostCodec.afterCarrier
+          (AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1
+                (NFY_NBN_StatementResult.common
+                  (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1
+                    st))).lane_transition.candidate_afterstate) with
+    | ok (core.result.Result.Ok out) => ok (core.result.Result.Ok out)
+    | ok (core.result.Result.Err a) => div
+    | fail e => fail e
+    | div => div) =
+    match NMT_345.encodeCall (NMT_345.commonValue (NNH_S1DecodeOk.carrier st)).lane_transition.candidate_afterstate with
+    | ok (core.result.Result.Ok out) => ok (core.result.Result.Ok out)
+    | ok (core.result.Result.Err a) => div
+    | fail e => fail e
+    | div => div
+
+W Tx : Type
+c : Ctx W Tx
+st : AspisS6CurrentCodecInstallation.Statement
+⊢ (match
+      NMT_345.encodeCall
+        (NNH_S1HostCodec.afterCarrier
+          (AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1
+                (NFY_NBN_StatementResult.common
+                  (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1
+                    st))).lane_transition.candidate_afterstate) with
+    | ok (core.result.Result.Ok out) => ok (core.result.Result.Ok out)
+    | ok (core.result.Result.Err a) => div
+    | fail e => fail e
+    | div => div) =
+    match NMT_345.encodeCall (NMT_345.commonValue (NNH_S1DecodeOk.carrier st)).lane_transition.candidate_afterstate with
+    | ok (core.result.Result.Ok out) => ok (core.result.Result.Ok out)
+    | ok (core.result.Result.Err a) => div
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (688 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNX_CommonEncode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

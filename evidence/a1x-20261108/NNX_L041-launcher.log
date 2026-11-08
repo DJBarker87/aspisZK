@@ -1,0 +1,47 @@
+{"attempt": "NNX_L041", "exit_status": 1, "wall_seconds": 26.556919106980786, "peak_rss_kib": "6814584", "swaps": "0", "print_axioms": ["'AspisR1.NNX_PreparedValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNX_generated/NNX_PreparedValue.lean:20:2: error: 'change' tactic failed, pattern
+  LIBC_PreparedLaw.value (LIB_Prepared.input (sem, v, g)) (envOf c) = (Except.ok p, after)
+is not definitionally equal to target
+  LIB_Prepared.value (sem, v, g) (envOf c) = (Except.ok p, after)
+NNX_generated/NNX_PreparedValue.lean:36:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+    (LIBC_PreparedCarriers.verified LIB_Prepared.types sem) v () g
+in the target expression
+  (do
+      let (reply, scratch) ←
+        NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+
+...
+E29
+p : LIB_VCarriers.Prepared
+called : LIB_Prepared.value (sem, v, g) (envOf c) = (Except.ok p, after)
+reflected :
+  NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+      (LIBC_PreparedCarriers.verified LIB_Prepared.types sem) v () g =
+    ok (core.result.Result.Ok p, after)
+⊢ (do
+      let (reply, scratch) ←
+        NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+            (InstalledPreparation.retainedSem (NNV_PreparedInputs.sem sem))
+            (InstalledPreparation.retainedView (NNV_PreparedInputs.view v)) ()
+            (AspisR1ClaimPreparedBridge.mapArray InstalledPreparation.retainedE (NNV_PreparedInputs.scratch g))
+      ok
+          (match reply with
+            | core.result.Result.Ok p => core.result.Result.Ok (InstalledPreparation.currentPrepared p)
+            | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+            AspisR1ClaimPreparedBridge.mapArray InstalledPreparation.currentE scratch)) =
+    ok (core.result.Result.Ok (InstalledPreparation.currentPrepared p), NNV_PreparedInputs.scratch after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNX_PreparedValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7e47e1f9a01747efa3112971544ace70.scope; invocation ID: d67136f95c8748cebb7d11e28fcda070

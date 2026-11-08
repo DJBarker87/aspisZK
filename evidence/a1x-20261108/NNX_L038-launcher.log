@@ -1,0 +1,43 @@
+{"attempt": "NNX_L038", "exit_status": 1, "wall_seconds": 25.77853855700232, "peak_rss_kib": "6778144", "swaps": "0", "print_axioms": ["'AspisR1.NNX_FinishSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNX_generated/NNX_FinishSource.lean:58:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIq_Terminal.terminal (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).1
+    (claimsRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.1)
+    (alphaRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.1)
+    (challengesRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.2)
+in the target expression
+  (let (running, alpha, transcript1) :=
+      (LIB_VScalarCarriers.toRaw head.rounds.1, alphaRaw head.rounds.2.1, head.rounds.2.2)
+    do
+    let r2 ← B.terminal a.public_ (c
+...
+ntrol_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Unit)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok (LIBC_PreparedCarriers.verified LIB_Prepared.types sem))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.public_
+  has type
+    V.Public
+  but is expected to have type
+    pool_v1.pair_forest_semantic_terminal.r0.Public
+  in the application
+    B.terminal a.public_
+NNX_generated/NNX_FinishSource.lean:57:23: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNX_FinishSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5e71841713924d12aa843e0d5ed52ca8.scope; invocation ID: 8a00ef51bb8840b38290340986e63b5d
