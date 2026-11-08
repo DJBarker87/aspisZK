@@ -189,3 +189,5 @@ Session5 47409: ClonePrologueV2 passes after47407/08 repairs. Uses named existin
 Session5 47410: ArcPollV3.actual_poll passes on the Cell-corrected candidate at actual12950; complete original reply retained. Full original-entry/source/native binding is not claimed.
 
 Session5 47411: DropStoreV2 passes. Nonlast Arc486/Weak683 branches derive decrement choice from actual source count; last/dangling/destructor/deallocation unsupported. OptionTake369 constructs None from source metadata, no Drop(old).
+
+Session5 47412: DropDispatchV2 passes, adds369 and nonlast486/683 on V3 with OWNER-aware away/trace agreement and full-reply effects. Last/dangling Drop and opaque/type dispatch stay OPEN.
