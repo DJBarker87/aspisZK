@@ -20,3 +20,12 @@ pushes Option.map through Result binds and branches, with a separate limbs
 lemma (L049); no Slice.index_usize, parser buffer, or concrete byte evaluation.
 L048/L050 needed explicit body/constant unfolding after structural mapping.
 The source-ordered common converse remains OPEN.
+
+Stage 6 independent support CLOSED at L061: NNU_Stage2Tail.emitPacket,
+tail and returnedCuts. The archived tail's adapter owners are explicitly
+qualified. L051 exposed the remaining SolanaDigest owner; L056 exposed the
+named Port4C_GeometryStd.mapError body. L061 compiles the module alone.
+returnedCuts derives the SAME packet/segment, original Dom064, source-code
+success, native stage2 continuation equation and emit success from the returned
+reference. tail remains a local continuation lemma; no op11 reply is claimed.
+The exact corrected-host NND_A2 remains OPEN, with no added top premise.

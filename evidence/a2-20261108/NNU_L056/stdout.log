@@ -1,0 +1,26 @@
+NNU_generated/NNU_Stage2Tail.lean:24:73: error: unsolved goals
+ops : AdapterRw.Ops
+statement : LIBB_PoolCarriers.Statement
+pub proof ck : Slice U8
+call :
+  ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof ck () none =
+    ok (core.result.Result.Ok ())
+emit : ops.op53 statement = ok (core.result.Result.Ok ())
+⊢ (do
+      let mapped ←
+        Port4C_GeometryStd.mapError
+            (BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error AdapterRw.solana_program_error.ProgramError)
+            (core.result.Result.Ok ()) ops.op44
+      let cf ←
+        match mapped with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.NNU_Stage2Tail.emitPacket' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNU_Stage2Tail.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNU_Stage2Tail.returnedCuts' depends on axioms: [propext, Classical.choice, Quot.sound]
