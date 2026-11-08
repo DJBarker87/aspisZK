@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_StructuredTrace12.lean:12:51: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_LIB_StoreActionTable.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_StructuredTrace12.lean:30:37: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.135 = ?m.135
+but is expected to have type
+  PV_THR2_OperatorAction.selected (PV_THR2_IntrinsicFrameEnter.pending s a parents loops rest fn vs dest) = none
+in the application
+  And.intro rfl
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_StructuredTrace12.lean:37:51: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_LIB_StoreActionTable.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_StructuredTrace12.lean:44:152: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+H : PV_LIB_StoreActionTable.Handler
+s : Store Data
+a : ℕ
+parents : List Frame
+loops : List LoopFrame
+rest : List PV_STX2_SliceSyntax.Node
+site : sorry
+kind generics : Data
+args : List Operand
+dest : ℕ
+body : PV_STX2_SliceSyntax.Program
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+stable : operands (PV_THR2_AggregateCompletion.carrier C) w a args s = operands C w a args s
+resolved : P (Data.object [("Regular", Data.object [("kind", kind), ("generics", generics)])]) = some body
+⊢ Trace C K P H
+    (match operands C w a args s with
+    | none => 0
+    | some val => 1)
+    (PV_THR2_IntrinsicState.advance C K P H 1
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf
+                            (Instruction.call sorry
+                              (Data.object [("Regular", Data.object [("kind", kind), ("generics", generics)])]) args
+                              (Place.local dest) []) ::
+                          rest,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack })
+'PV_LIB_A_StructuredTrace12.issue_quiet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_StructuredTrace12.enter_quiet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_StructuredTrace12.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
