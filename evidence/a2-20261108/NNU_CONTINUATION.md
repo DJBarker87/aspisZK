@@ -29,3 +29,19 @@ returnedCuts derives the SAME packet/segment, original Dom064, source-code
 success, native stage2 continuation equation and emit success from the returned
 reference. tail remains a local continuation lemma; no op11 reply is claimed.
 The exact corrected-host NND_A2 remains OPEN, with no added top premise.
+
+Source-ordered common support: L063 NNU_CommonCuts.source derives all local
+observations from one successful LIBB_Tx2EnvCode.common. It retains decoder
+Option and the subsequent ok_or separately. L066 NNU_CommonResume.occurrence
+identifies the deterministic SAME resume and derives its original canonical
+fields/next. L068 NNU_CommonSelected.source constructs the installed geometry
+and query replies for that SAME p,a,g,pending witness. No whole common equality
+or installed-common success is assumed or concluded. The common converse,
+tx2Op11 and corrected-host A2 are still OPEN.
+
+Merkle endpoint support: L064 NNU_MerkleWrapper.returned and L065
+NNU_MerkleEndpoint.selected prove the selected successful binary endpoint
+returns the identical full scratch through reference.verify_owned, using only
+pointwise node values and totality, without a physical-length premise.
+L067 NNU_MerkleNative.batch exposes the actual native batch success from the
+source action. No enclosing batch transfer is claimed.
