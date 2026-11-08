@@ -1,3 +1,4 @@
+import PV_LIB_A_Continue13
 import PV_LIB_A_SequenceFrontier13
 import PV_LIB_A_RangeInvariant12
 set_option autoImplicit false
@@ -59,13 +60,9 @@ theorem run (C : Carrier OWNER Data) (K : Control)
   rw [advance_add,first]
   simp only [PV_LIB_A_PrefixMachine11.advance]
   change PV_LIB_A_DeferredActions.step C K P resources encode H values _ = _
-  rw [PV_LIB_A_PrefixMachine11.step C K P resources encode H values _
-    (continue_quiet P (stored s a) a parents w es stack)]
-  congr 1
-  simp [PV_THR2_IntrinsicState.step,PV_THR2_Catch316Segment.select,
-    PV_THR2_Execution.step,PV_THR2_Dynamic.active,PV_THR2_GapCompletion.step,
-    PV_THR2_AggregateCompletion.complete,PV_STX2_SliceMachine.step,
-    PV_THR2_F15.node46,PV_LIB_A_RangeMatch12.loops,PV_THR2_Source15LoopEnter.after]
+  exact PV_LIB_A_Continue13.run C K P resources encode H values (stored s a) a parents
+    ⟨15,3530,.array [.atom "body",.atom "statements",.number 12,.atom "kind",.atom "Loop",.atom "statements",.number 31]⟩
+    PV_THR2_F15.block47 [] (PV_THR2_F15.live.body.drop 13) [] w es stack
 
 #print axioms shape
 #print axioms off
