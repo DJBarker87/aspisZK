@@ -21,6 +21,7 @@ for kind,num in [('tx1',1),('first',2)]:
  base='evidence/tx1-owned-20261111/NMT_extracted/'+kind
  p=J(base+'/NMT_PINS.json');rc=J(f'evidence/tx1-owned-20261111/NMT_E{num:03}/receipt.json')
  assert p['frozen_revision']==F and p['exit']==p['charon_exit']==p['aeneas_exit']==rc['exit_status']==0
+ assert p['root_features']==('private-leaf-salts,optimized-terminal,program-build'if kind=='tx1'else'pool-adapter,private-leaf-salts')
  assert p['lock_before']==p['lock_after']==lock
  assert p['candidate_sha256']==H(subprocess.check_output(['git','show',F+':crates/aspis-r1-cost-probe/src/candidate.rs']))
  for name,h in p['outputs'].items():assert H(raw(base+'/'+name))==h,(kind,name)
