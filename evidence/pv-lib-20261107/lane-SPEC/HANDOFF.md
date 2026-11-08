@@ -1,3 +1,51 @@
+# Session17 checkpoint — local stack/reply conflicts; full target OPEN
+
+Continued1fd872ee223; LOG D1006/thread-29. SAME original history remains85,
+five consumed replies. No original-to-f6 or f361-to14756 history was re-derived.
+
+SPEC-C13 CHECKED: OriginalStackGap17.original_pair_impossible and
+NativeObligations17.no_original_stack refute the retained run112 fixture's
+nonwrapping360-byte native scope/spawn stack target. Adopted f8eef/f8ef4 pins
+RSI=scopeEntryRsp+0x78. pairedFrame repairs the coordinate formula; relocating
+and granting the original physical capture is OPEN. This is NOT a complete
+joint-witness contradiction. Entry14 was not replaced. A user question about
+rebasing versus preserving the exact thread-29 fixture remains pending.
+
+SPEC-C14 CHECKED: FixedNativeGap17.no_reply_identity at ORIGINAL84 proves the
+fixed eighteen-contract runtime's Ok(null) differs from the operational
+source/physical TLS Ok(false). The old statements have not been rebound.
+The full runtime/source transport remains OPEN.
+
+SPEC-C15 CHECKED and locally repaired: UnitReserve17 separates stored ZERO_CAP
+from effective usize::MAX for retained F=Task=Unit append10. Its no-growth
+source-header graph, unchanged other-function branch, symbolic full-state
+neutral agreement and exact three-write VecAppend source graph compile.
+The new instance has NOT been substituted into the retained history; non-ZST
+growth, full actual layout/provenance and prefix transport remain OPEN.
+
+NativeObligations17 compiles exact OPEN actual8248/295/454 targets with lane
+A's n6/n361/callbackN indices, same origins/operands/worlds/full replies and
+consumption. SESSION17_ADEQUACY.md lists all remaining Values obligations.
+Latest read-only lane A still lacks the required original v2 joins;20 retained
+source pins are unchanged. No unavailable join was consumed.
+
+55574..55589:6 passing focused targets (including driver),10 retained changed
+failures. ONE strict55493 PASS24/24, exit0, wall0:12.70, peak6869496KiB,
+swap0, source d810318340b77d24bcef0642a4977a456c04e024; standard axioms only,
+zero unresolved/summary disagreements, unchanged strict walker/collector.
+No own scope remains. Capped6G/8G/swap0/Tasks64/-M7000 throughout; standalone
+turn before every attempt. Launcher adds557xx only;558xx untouched.
+
+Original stack grant, original8248/295/454 consumption, full Values and native
+adequacy, all18 universal contracts, same-history14756 ownership exports and
+the exact Cut92Composition.Witness conditional ONLY on LaneAJoins16.Joins
+are NOT established. No complete-premise contradiction is established either.
+No frozen contract/source/provider/ledger/shared-map/endpoint/T change.
+Next Lean55700; raw55494. No push/merge/key action.
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session17.py
+
+---
+
 # Session16 checkpoint — original85 / five consumed replies; full task OPEN
 
 Continued ad69c95986e; thread-29/LOG D1005 remains binding.

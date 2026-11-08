@@ -457,7 +457,7 @@ reached full-state transport remains required. This is NOT a joint contradiction
 Checked `UnitReserve17.old_rejects_unit` (55581). Values14.reserve rejects an
 initialized empty RawVec header on len0/extra1, even for Unit append10. Pinned
 Rust1.94.1 raw_vec/mod.rs (SHA256
-0c6b3d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965)
+0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965)
 lines43..47 and601..603 retain stored ZERO_CAP but return effective usize::MAX
 for element size0. SESSION17_RAWVEC_SOURCE.txt retains the exact source excerpts.
 

@@ -63,9 +63,32 @@ A theorem conditional ONLY on LaneAJoins16.Joins has NOT been established.
 In particular a proof of Joins cannot itself discharge the refuted fixed
 parameter reply-identity candidate at84 or relocate Entry14's captures.
 
-Read-only lane A retained at6949f9e0e2054553037f810fa91da5b571382500; its
+Read-only lane A retained atc02af648ce159b6586a0ba933d9703cbae9aed2e; its
 HANDOFF still marks original Entry14-to-f6, full v2/provider/context/physical
 transport, loop induction and14756 OPEN. No requested named join is available.
 Original8248 reach remains lane C's native-binding target; lane A's original
 history is not re-derived to obtain it. This lane has not closed a row or added,
 removed or changed an endpoint premise, trust item, source or frozen contract.
+
+## Validation and retained limits
+
+Five new semantic/target modules plus the strict driver compiled:55575,55579,
+55581,55584,55588,55589. Ten failed sources are retained compressed and each
+was changed before its retry; a nonzero result earns no pass. No OOM,
+recursion-limit increase, cap increase or unchanged full regression occurred.
+
+ONE strict new-root audit55493 passed24/24, exit0, wall0:12.70,
+peak6869496KiB, swap0, source d810318340b77d24bcef0642a4977a456c04e024.
+Only propext/Classical.choice/Quot.sound; zero unresolved/summary disagreements.
+The walker and collector are unchanged from session16; exact roots, graph
+archive, source/object provenance, admissions and receipts are retained.
+
+Every scope was6G/8G/swap0/Tasks64/-M7000, one own scope at a time, standalone
+STREAMB_SLOTS=3 turn before each ID. The launcher change adds only55700..55789;
+existing55500..55589 is retained. No558xx range or attempt was touched.
+No own scope remains. Next Lean55700; raw55494. No push/merge/key action.
+
+The entry-rebase question remains pending because thread-29 fixes the exact
+Entry14 input and a physical rebase changes that world. No dependent rebasing
+or shared interface edit was made while awaiting the answer. This is an
+explicit scope conflict, not evidence that the full Witness is false.

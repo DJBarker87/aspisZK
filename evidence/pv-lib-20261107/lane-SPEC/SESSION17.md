@@ -10,3 +10,11 @@ PV_LIB_SPEC_NativeObligations17 compiled 55584, cohort w3: exit0, wall 0:02.21, 
 PV_LIB_SPEC_UnitReserveTransport17 compiled 55588, cohort w3: exit0, wall 0:02.30, peak 4793460KiB, swap 0; source ea3d6c197439b4a20103ccd5c0138af1afdde96f; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession17 compiled 55589, cohort w3: exit0, wall 0:00.78, peak 1588732KiB, swap 0; source 927860610658b68a1f197f4c3dd3af5185da4b04; standard summary axioms only.
+
+One strict audit55493 PASS24/24: exit0, wall0:12.70, peak6869496KiB,
+swap0; source d810318340b77d24bcef0642a4977a456c04e024. Standard axioms
+only; zero unresolved/summary disagreements. No repeat strict audit.
+Offline validator initially rejected its own overly broad substring558 test
+(the authorized55589 contains that substring); corrected to a whole five-digit
+ID token test. This was metadata validation, not a Lean attempt or raw rerun.
+Final offline validation PASS. No own scope remains. Full task OPEN.
