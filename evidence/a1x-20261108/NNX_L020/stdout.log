@@ -1,0 +1,89 @@
+def AspisS1ExtractedRoundChildren.children : AspisR1PublicPreparation.RoundModel.Boundaries :=
+AspisS1ExtractedRoundChildren.generatedRoundBoundaries AspisS1ExtractedRoundChildren.decodeMain
+def AspisS1ExtractedRoundChildren.decodeMain : (n : Aeneas.Std.Usize) →
+  AspisS1ExtractedRoundChildren.MainRecord →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisS1ExtractedRoundChildren.MainQM n)
+          AspisS1ExtractedRoundChildren.MainError) :=
+fun n r offset =>
+  AspisS1ExtractedRoundChildren.decoderResultToMain n
+    (AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k n (AspisS1ExtractedRoundChildren.recordToDecoder r) offset)
+NNX_generated/NNX_FinishInventory.lean:5:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.RawActualDecodeKMainAdapter.decodeMain`
+structure AspisR1PublicPreparation.FinishModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.FinishModel.Boundaries.fromFn : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1PublicPreparation.FinishModel.Boundaries.mask : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        16#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.add : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.mul : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.terminal : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.r1_wire.Challenges →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error)
+  AspisR1PublicPreparation.FinishModel.Boundaries.circle : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      AspisR1PublicPreparation.FinishModel.CircleRow →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+  AspisR1PublicPreparation.FinishModel.Boundaries.unwrapRoot : Aeneas.Std.core.result.Result
+        (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.FinishModel.Boundaries.claims : AspisR1PublicPreparation.r1_wire.Prefix →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+          AspisR1PublicPreparation.r1_wire.Error)
+constructor:
+  AspisR1PublicPreparation.FinishModel.Boundaries.mk
+    (fromFn :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (mask :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 16#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.aspis_core.field.QM31 →
+            Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+              Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (add mul :
+      AspisR1PublicPreparation.aspis_core.field.QM31 →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (terminal :
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            AspisR1PublicPreparation.r1_wire.Challenges →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error))
+    (circle :
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        AspisR1PublicPreparation.FinishModel.CircleRow →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint)
+    (unwrapRoot :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (claims :
+      AspisR1PublicPreparation.r1_wire.Prefix →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+            AspisR1PublicPreparation.r1_wire.Error)) :
+    AspisR1PublicPreparation.FinishModel.Boundaries
+@[reducible] def AspisR1.NNH_Run5bCtx.configuration : {W Tx : Type} →
+  AspisR1.NNH_HostCtx.Ctx W Tx →
+    AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W NFN_NEW_GeometryDictionary.CE :=
+@AspisR1.NNH_HostCtx.configuration
+NNX_generated/NNX_FinishInventory.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.ClaimsUnrolledFinish.install`
