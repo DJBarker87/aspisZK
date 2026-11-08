@@ -31,3 +31,5 @@ PV_LIB_SPEC_AssemblyEnvironment14 compiled 55417, cohort w3: exit0, wall 0:02.21
 PV_LIB_SPEC_OriginalStart14 compiled 55419, cohort w3: exit0, wall 0:05.44, peak 4846664KiB, swap 0; source 3c9a2e23f8bddf31cb3709e572651a4bc53de4c5; standard summary axioms only.
 
 PV_LIB_SPEC_OriginalHistory14 compiled 55420, cohort w3: exit0, wall 0:06.34, peak 4851376KiB, swap 0; source 02ed0a29178ee67777a65558296699947760481c; standard summary axioms only.
+
+PV_LIB_SPEC_RawVec14 compiled 55421, cohort w3: exit0, wall 0:02.22, peak 4800692KiB, swap 0; source 054709d9349249f9ced9ea5f2f7564c6d0dee4ae; standard summary axioms only.
