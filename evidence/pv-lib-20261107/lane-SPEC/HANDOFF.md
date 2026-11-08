@@ -1,15 +1,59 @@
-# Session16 live — original64 on retained v2; full task OPEN
+# Session16 checkpoint — original85 / five consumed replies; full task OPEN
 
-Continued ad69c95986e; thread-29/LOG D1005 is binding.
-`PV_LIB_SPEC_TlsAt64.original64` consumes the original bound278 reply on the
-same Entry14 input and environment. Its actual context8074 is consumed and
-both child8/local0 and caller5/local5 contain the typed Result::Ok pointer.
-`PV_LIB_SPEC_NativeDelivery16.full` applies the existing FULL native-delivery
-contract by name and preserves every status, world and event. No callee body
-was unfolded for278. No endpoint premise, T field or frozen source changed.
-TLS279/forwarded18/replacement, original physical stack map/reached295/454,
-full Values binding and complete joint witness remain OPEN. No contradiction
-of the complete premise set is established. Final audit not yet run.
+Continued ad69c95986e; thread-29/LOG D1005 remains binding.
+`TlsAt64.original64`, `TlsAt68.original68` and `TlsAt85.original85` consume
+actual278/279/forwarded18 on the SAME Entry14 input and final retained v2.
+Result::Ok / ControlFlow::Continue preserve the source pointer; Cell::get18
+reads original source0/local20 and physical65520 as false. Both child/caller
+return cells and exact resource contexts8074/8091/8162 are proved. Total native
+replies consumed:469,277,278,279,18. The complete retained entry Pre is reused.
+NativeDelivery16.full reuses ExecutionBoundary.full_reply by name on v2.
+No fresh entry, parent, world, decoder-success or future-store premise is used.
+
+ActiveReplacement16 proves LOCAL source/physical289 write graphs; actual
+original8248 reach/consumption remains OPEN. BinaryStack16 proves the adopted
+fac90→fad90→e0450 prologue/argument-slot coordinate arithmetic. Original native
+rsp/RSI/source0-local12 pairing and stack grant are NOT proved. Native Frame
+remains arbitrary DATA in all original85 history theorems. Original reached
+295/454, full Values source/growth/layout coverage, fixed-runtime/context-bound
+transport, callback92/registration113/ThreadInit14756 and same-history ownership
+exports remain OPEN. No complete joint witness or complete-premise negation.
+SESSION16_ADEQUACY.md records exact established results and all limits.
+
+NEEDS-FROM-LANE-A.md + compiled LaneAJoins16 state exact original→f6,
+f6→range, range→f361 and f361→14756 source milestones on ONE original history.
+Its original85 theorem supplies this lane's prefix by name. Read-only lane A
+06e2b0233df retained the same20 source pins and still lacked those v2 joins.
+No successor projection or unavailable join is assumed or consumed.
+
+Callee unfolding inventory for this session: NO new callee BODY was entered
+or unfolded. Existing active f170's caller-local positions21..39 were inspected
+only for the control/neutrality certificates lifting existing segment theorems;
+there is no proved whole-f170 contract supplying successor existence.278/279/
+forwarded18 each use the existing full-delivery contract as ONE step.289 uses
+the named documented graph. No f6/range/f361 body was re-derived; no loop was
+unrolled. No new checked SPEC-C13 source/model mismatch. Elaboration failures
+were retained and repaired rather than classified as contradictions.
+
+Focused55526..55573:31 accepted (including driver),17 retained failures, each
+changed before retry. ONE strict NEW-root55492 PASS127/127:exit0,wall0:54.41,
+peak6966216KiB,swap0,sourceafcdf92e61164e45bb2eeaf334ae0c07de58bd0c.
+Only standard axioms;zero unresolved/summary disagreements. Unchanged strict
+walker/collector, exact roots/graphs/source provenance and receipts retained.
+All scopes6G/8G/swap0/Tasks64/-M7000,one own scope at a time,standalone
+STREAMB_SLOTS=3 turn before every ID. No OOM/refusal/cap or recursion increase.
+The generic read_nil lemma replaces a concrete-depth failure. No own scope
+remains. The inherited launcher already admits555xx; no other range changed.
+
+Offline verification PASS:
+`python3 evidence/pv-lib-20261107/lane-SPEC/validate_session16.py`.
+No row/frozen statement/provider/source/ledger/shared-map/T/endpoint change.
+No full manifest/runtime regression/extraction/Rust/SBF/push/merge/key action.
+Next unused Lean55574..55589,raw55493..55499 then55590..55599 (NOT exhausted).
+Next: consume lane A's named v2 joins when available; bind the original8248
+replacement and physical native stack, then reached295/454/full Values, then
+apply allBridged/SourceInitBoxOwnership/decodeBridged at14756 and establish or
+refute the COMPLETE joint witness. The target has not been lowered.
 
 ---
 

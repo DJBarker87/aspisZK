@@ -60,3 +60,5 @@ PV_LIB_SPEC_LaneAJoins16 compiled 55571, cohort w3: exit0, wall 0:02.16, peak 48
 PV_LIB_SPEC_BinaryStack16 compiled 55572, cohort w3: exit0, wall 0:02.36, peak 4831436KiB, swap 0; source 60e8a34466eb46751d24c5b69db39e372e2c7fd1; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession16 compiled 55573, cohort w3: exit0, wall 0:00.86, peak 1590896KiB, swap 0; source 710e0f3f04cbe83dfc12da07852ee19eee80c6a9; standard summary axioms only.
+
+Final strict55492: EXIT0;127/127;wall0:54.41;peak6966216KiB;swap0;revisionafcdf92e61164e45bb2eeaf334ae0c07de58bd0c;standard axioms only,zero unresolved/summary disagreements. Offline provenance/write-boundary validation PASS. Full task OPEN; no own live scope.
