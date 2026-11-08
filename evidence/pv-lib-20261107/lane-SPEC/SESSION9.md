@@ -12,3 +12,5 @@ PV_LIB_SPEC_LaneA_Observation compiled 44941, cohort w3: exit0, wall 0:01.32, pe
 PV_LIB_SPEC_LaneA_A_SourceWriters compiled 44942, cohort w3: exit0, wall 0:01.22, peak 2700260KiB, swap 0; source fe244b436cc78466d18fa21eeb6d91825ea0545a; standard summary axioms only.
 
 PV_LIB_SPEC_LaneA_A_OwnerStore compiled 44943, cohort w3: exit0, wall 0:02.48, peak 4608224KiB, swap 0; source 412028d87bacdc6522d71618a9bc32d2303d145a; standard summary axioms only.
+
+PV_LIB_SPEC_LaneA_A_StorePrimitiveV2 compiled 44944, cohort w3: exit0, wall 0:02.39, peak 4609156KiB, swap 0; source b01daea2327e23757c6960ed0c459a6de76240f5; standard summary axioms only.
