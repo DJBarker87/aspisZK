@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActivePure27717.lean:20:87: error: unsolved goals
+s : Store Data
+a : ℕ
+parents : List Frame
+p : Address
+w : OWNER
+lookup : PV_LIB_SPEC_Full.programs token = none
+table : PV_LIB_StoreActionTable.v2 token = none
+head : List.drop 17 PV_THR2_F170.live.body = PV_THR2_F170.node17 :: List.drop 18 PV_THR2_F170.live.body
+⊢ (match
+      PV_LIB_SPEC_Full.programs
+        (match PV_THR2_F170.node16 with
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+        | x => Data.null) with
+    | some val => none
+    | none =>
+      (PV_LIB_StoreActionTable.v2
+            (match PV_THR2_F170.node16 with
+            | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+            | x => Data.null)).bind
+        fun action =>
+        some
+          { action := action,
+            callee :=
+              match PV_THR2_F170.node16 with
+              | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+              | x => Data.null,
+            waiting :=
+              {
+                request :=
+                  PV_STX2_Native.Request.child
+                    (match PV_THR2_F170.node16 with
+                    | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+                    | x => Data.null)
+                    s.nextActivation [pointer p],
+                action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6), unwind := [] },
+            arguments := [pointer p] }) =
+    none
+'PV_LIB_A_ActivePure27717.quiet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_ActivePure27717.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_ActivePure27717.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
