@@ -957,3 +957,40 @@ The headline remains AspisR1.RPx_Deployed.deployed, frozen3, L154 parameter,
 narrowed D188 and100-bit PER-ATTEMPT with privacy/two transactions unchanged.
 
 target not yet established
+
+## Run 6 G0 conditional assembly
+
+top assembled CONDITIONAL on a1, a2, sp.rest; target not yet established.
+See TAS_G0_HANDOFF.md, TAS_G0_MISSING.json, TAS_G0_AUDIT.json and
+TAS_G0_EXPORT.json for the exact conditional claims, owner-visible wording,
+field-by-field installation, source/object hashes and remaining gate.
+
+L907-L929:23/40 scopes,17 pass,6 retained proof/type failures;0 Kani,
+0 extraction,0 swaps;maximum RSS6,987,544KiB. Literal S/R/X and all delivered
+row/library/host fields compose at a closed sixteen-slot implementation.
+NNH_Run6NMF adapts the run5b packet to canonical V0.tx2auth without asserting
+LawRefines into wEnv. NNH_G1aEnv.sig S_host=S_host and deployed IDs check by rfl.
+TAS_FinalB's two CONDITIONAL roots, the arbitrary-r/m NNH_DeployedOuter,
+SAME-recorder outer-envelope charge and failureModel<=total chain all pass
+with standard printed axioms. L928 focused conditional combined passes;
+L929 retains the original and conditional kernel types. No final raw/NFX,
+physical non-vacuity, manifest or16GiB gate was run; condition(4) NOT PROVED.
+
+Final audit finding F3: arbitrary alloc1 is retained, whereas ledger30's FIN
+entry fixes NNG_Candidate344.allocation. Literal FIN identities are checked
+only at that recorded specialization; no arbitrary-alloc1/native association
+or row credit is claimed. The task's three missing fields remain exactly
+A1 (NNV_), A2 (NNU_) and Split.rest (no delivered producer). Repeated research
+checks found neither sibling handoff. Seventeen unused scopes cannot be
+spent on the prohibited final gate, redundant green replays or out-of-scope
+producer jobs; TAS_G0_AUDIT.json gives the required member-by-member stop
+reason. This is not a claim of budget or Kani exhaustion.
+
+Direct dependency/Aeneas pins:274 paths,274 variants,zero changes;17 successful
+output hashes, including the superseded L916 object before replacement. Seeds
+remain read-only by reference, and own Run6_objects are retained. Frozen-source
+diff exits0;no shipped/ELF/key/trust/row/sibling-worktree change or push.
+Release blockers persist:extraction provenance(bk),source-to-ELF/final audit
+L188,cold replayL187,Pool boundary(aj)(a)(Pool B/D settlement not covered),and
+multi-attempt host gate. Closing probability does not establish source/native
+correspondence or full deployed soundness. Target not yet established.
