@@ -1,0 +1,55 @@
+NNH_generated/NNH_NativeOracleSlots.lean:18:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIBB_PartitionEnv.H (DGP_HostDigest.envInst ?H ?pda ?clock ?r)
+    (flatten (MultiproofConePhysicalDigest.parts ?left ?right))
+in the target expression
+  NJP_DigestCarrier.decode
+      (encodeState
+        (part H pda clock r
+          (flatten
+            (MultiproofConePhysicalDigest.parts (NJP_DigestCarrier.encode request.1)
+              (NJP_DigestCarrier.encode request.2))))) =
+    NJP_DigestCarrier.decode
+      (encodeState
+        (H
+          (flatten
+            (MultiproofConePhysicalDigest.parts (NJP_DigestCarrier.encode request.1)
+              (NJP_DigestCarrier.encode request.2)))))
+
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+clock : Except RSL.ProgramError UInt64
+r : NP6_StdModel.Reservation
+request : NJP_RowModel.Request
+⊢ NJP_DigestCarrier.decode
+      (encodeState
+        (part H pda clock r
+          (flatten
+            (MultiproofConePhysicalDigest.parts (NJP_DigestCarrier.encode request.1)
+              (NJP_DigestCarrier.encode request.2))))) =
+    NJP_DigestCarrier.decode
+      (encodeState
+        (H
+          (flatten
+            (MultiproofConePhysicalDigest.parts (NJP_DigestCarrier.encode request.1)
+              (NJP_DigestCarrier.encode request.2)))))
+NNH_generated/NNH_NativeOracleSlots.lean:38:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIBB_PartitionEnv.H (DGP_HostDigest.envInst ?H ?pda ?clock ?r) (flatten (Port4B_LeafCode.input ?kind ?opening))
+in the target expression
+  encodeState (part H pda clock r (flatten (Port4B_LeafCode.input kind (NLL.view H proof lo (NLL.key f))))) =
+    encodeState (H (flatten (Port4B_LeafCode.input kind (NLL.view H proof lo (NLL.key f)))))
+
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+clock : Except RSL.ProgramError UInt64
+r : NP6_StdModel.Reservation
+proof : Slice U8
+kind lo : Usize
+f : NLL.Frame
+⊢ encodeState (part H pda clock r (flatten (Port4B_LeafCode.input kind (NLL.view H proof lo (NLL.key f))))) =
+    encodeState (H (flatten (Port4B_LeafCode.input kind (NLL.view H proof lo (NLL.key f)))))
+'AspisR1.NNH_NativeOracleSlots.node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNH_NativeOracleSlots.view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_NativeOracleSlots.nodeView' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_NativeOracleSlots.entryKeys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_NativeOracleSlots.digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNH_NativeOracleSlots.event' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

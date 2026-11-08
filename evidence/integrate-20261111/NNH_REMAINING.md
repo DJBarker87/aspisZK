@@ -1,3 +1,16 @@
+# Current run5 disposition (2026-11-08)
+
+Target not yet established. S6 literal HeadlineB PASS. S2 Split.rest, S3 A2,
+S4 A1, S5 NMF_B and S7 host inclusion/averaging remain OPEN. The literal host
+has a compiled selected-slot/environment-clock binding gap. O2 is unproved,
+not demonstrated false; no premise added, no host RecordedCharge.bound use.
+S8 blocked by absent345/233 candidates and unconditional242/241 readiness.
+134/160 actual scopes used; exhausted per-step caps govern the26 unused scopes.
+See the latest boundary at the end and NNH_RUN5_BOUNDARY.json for exact counts,
+receipts, current source pins, completed roots and remaining proof slots.
+
+---
+
 # Final gate status
 
 L703 combined import failed on the old NND_AccountCarrier duplicate RSL
@@ -381,3 +394,51 @@ additional obstacles to the fully instantiated fail_sub_rec application.
 S6 is independently complete. S8 is not launched. Remaining independent S5
 oracle/record transport can still be attempted within its unused10 scopes;
 continue there without borrowing the exhausted S7 or S2/S3/S4 caps.
+
+## S5 final boundary and S8 gate (2026-11-08)
+
+Target not yet established. S5 used its remaining10 scopes L833–842, so its
+30-scope cap is now reached. NativeOracleSlots proves node-hash, leaf digest,
+view/nodeView/entry-key and leaf-event equality pointwise. NativeOracleLoop,
+Abort and Batch transport returning AND aborting loops/calls with exactly the
+same histories, mutable arrays and prefixes. NativeOracleDetail transports the
+same indexed detailed event. NativeOracleReply/Window prove a returning C04
+Result/window transport on the CLOSED child's original proof/canonical-query
+domain. These are helpers, not added final-headline premises. No Root0 is used
+by these new transport lemmas.
+
+Remaining oracle obligation is now precise: derive the returning C04 domain
+at the SAME outer064 occurrence without Root0, handle aborting dependent
+windows, and lift the transported details through the occurrence list,
+common/native parent and outer064 outcome. The full H-indexed packet is NOT
+constructed. Selected clock binding, rootImage/eventImage/Associated producer
+and final assemble remain OPEN; readerHeader at the headline H already passes.
+
+L842 NNH_S5FocusedHost combines the changed S5 roots with literal HeadlineB:
+exit0,3.138322012964636s,6653480KiB peak RSS,swap0,6G/8G/no-swap cgroup,
+source revision003c96f0e74 (dirty sources pinned in receipt), all12 printed
+roots standard-only. This is a focused dependency check, not S8/G0, an export,
+raw final audit or frozen manifest. Exact receipts and current source hashes
+are validated in NNH_RUN5_BOUNDARY.json. No source over20MB; diff --check PASS.
+
+S8 gate inspected at the current committed handoffs: NNG supplies complete094
+and328 candidates;345 has no candidate. NMX233 remains an instantiated support
+fold, with Box/source/all-Args obligations and no unrestricted native candidate;
+its242/241 readiness is explicitly unconditional-OPEN. Thus S8 must not launch.
+Future final assembly must use ledger27 CLOSED136/137/087/217/234, not their
+old candidate producers. No row credit is claimed here.
+
+Final run5 accounting:134/160 actual scopes (99 exit0,35 local proof/import
+failures),26 unused. Caps S2(16),S3(18),S4(55),S5(30),S7(4) are exhausted.
+S6 is complete in5/12 scopes and has no remaining independent field; its7
+unused scopes cannot be silently transferred to capped steps. S8's10 scopes
+and the16GiB final scope are gated by missing345/233(/242/241) roots. The other9
+unused planned preflight scopes cannot justify replaying unchanged green
+preflight. No further independent step remains within the literal minimal
+plan's caps. This is a step/gate stop, not total-allowance exhaustion. Next
+available attempt idL843; do not rerun L842 or apply RecordedCharge.bound until
+O1/O2 and host inclusion are actually discharged.
+
+No Kani/extraction, source/trust-row/ELF changes, push, wallet/key cleanup or
+sibling worktree edits. All new top roots have printed axioms; final raw audit,
+full physical non-vacuity and one manifest replay remain gated with S8.
