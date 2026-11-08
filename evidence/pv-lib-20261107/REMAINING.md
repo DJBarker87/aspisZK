@@ -1,3 +1,24 @@
+# Lane A session12 — PARTIAL; target not established
+
+Qualified corrected history now joins source3400 through270 BODY entry,
+including post93 Some/None, captures, closure,166 and full269. F6 BODY-entry
+history extends through FULL124. Native121/123 facts are applied at actual
+f6 requests, with lower facts still parameters. Full f6/callback-to3400,
+original-entry binding and361-through14756 are OPEN; the two histories remain
+separate. RangeInvariant12 is a per-iteration preparation/poll/delivery facet,
+NOT complete loop backedge induction. All historical statuses/counts retained.
+
+NEXT in D999 order: source/native/frame/numbering bindings and f6's actual
+f125/callback chain connecting to3400; complete the prefix iteration invariant
+without restarting deferred post-target cleanup;361 through14756; then lane C's
+OwnInit/source7 joint-witness table obligations. No complete joint witness or
+complete-premise contradiction, row closure, endpoint premise removal or T change.
+The full requested completion has NOT been achieved. See lane-A/session12/
+MODEL_FINDINGS.md and MAP_DELTA.json for exact theorem scope and remaining facts.
+
+All DEFERRED-POST-TARGET dispositions from D999/thread-5 remain unchanged.
+No final-manifest replay is authorized by these local support-only changes.
+
 # Lane A session11 — D999 target refocus (authoritative current order)
 
 OwnInit concerns the run up to the ThreadInit box at f361/14756. Work only on

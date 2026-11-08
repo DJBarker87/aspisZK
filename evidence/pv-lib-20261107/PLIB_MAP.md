@@ -1,3 +1,19 @@
+# Lane A session12 qualified prefix support — PARTIAL
+
+`PV_LIB_A_RangeTo270History12.history`: SAME corrected source/OWNER history
+3400 through270 entry; post93 both arms, captures/closure,166 and269 retained.
+`PV_LIB_A_F6History12.history`: f6 BODY entry through FULL124. Native121/123
+existing facts applied at actual requests; no native runtime instance claimed.
+`RangeInvariant12` is per-iteration preparation/poll/delivery only, not full
+backedge induction. Public import: `PV_LIB_A_StoreActionTable12`; old v2 unchanged.
+
+Full f6 callback-to3400, original entry,361-through14756 and both joint witnesses
+remain OPEN. All170 historical statuses/counts retained; no row/endpoint/T
+closure. D999/thread-5 deferred cleanup is unchanged. ZERO new byte images.
+Exact slot attachments and limits: lane-A/session12/MAP_DELTA.json and
+MODEL_FINDINGS.md. The new-root audit result is recorded separately in
+lane-A/session12/RAW_AUDIT.json; no full release replay is claimed.
+
 # Current scope: Lane A session11 (LOG D999)
 
 OwnInit ends at the ThreadInit box, f361/14756. Last-strong Arc cleanup and
