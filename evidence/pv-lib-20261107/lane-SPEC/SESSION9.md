@@ -52,3 +52,5 @@ PV_LIB_SPEC_V2Runtime compiled 44963, cohort w3: exit0, wall 0:02.62, peak 47681
 PV_LIB_SPEC_ScopeRuntimeGap compiled 44965, cohort w3: exit0, wall 0:02.65, peak 4768220KiB, swap 0; source df2b2c04b5986925048bd04d96e13c13976e7635; standard summary axioms only.
 
 PV_LIB_SPEC_OwnInitCut92Contract compiled 44966, cohort w3: exit0, wall 0:02.36, peak 4720144KiB, swap 0; source cf521ed9d07d2df2f4c9729ce17c3c81013cd90d; standard summary axioms only.
+
+PV_LIB_SPEC_Cut92Composition compiled 44967, cohort w3: exit0, wall 0:02.40, peak 4719732KiB, swap 0; source 6d22cdc95c04459b3878c5cb10ce1808f30b8ed4; standard summary axioms only.
