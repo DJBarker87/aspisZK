@@ -1,37 +1,9 @@
-# TX1:345 revision4 source-association stage
+# TX1:345 complete candidate
 
-This stage is SUPPORT, not a candidate. `NNG_Model345.reference` is a complete
-canonical reference interpretation, but it is not yet associated with the full
-emitted native parent. It must not be submitted as RowSpec345 closure.
+`AspisR1.NNG_ActualCandidate345.candidate` passed atL1109, exact canonical revision4 RowSpec_345 over LIB_Instances.VL/P/C and NNG_TotalProducer345.producer. DomainTrue is unchanged. No library/child/source-accuracy/representation/parent-success premise remains. Raw audit and ledger gate are pending; no row credit is self-awarded.
 
-The fresh NMT E003 source fold is reused unchanged. `NNG_Tree345.source` proves
-that the typed source call tree erases to that emitted parent, with every call
-field explicit. `NNG_Native345` fixes all fields to the delivered library and
-source/std supplements and retains the actual child chronology. It introduces
-no VLib instance or source-accuracy hypothesis.
+Full emitted-parent observation association L1084 is unconditional on every native parent. The strict total original-input port passes L1108: bad source routes/counts reject before reification; the reached branch internally derives all Rust bounds of a source-preserving account projection and evaluates the fresh emitted native parent. L1110 preserves the entire observation under that projection; large logical fields have their zero verdict, decoder/proof rejection and final checkpoint comparison preserved, including the same stopping prefixes and SAME328 events. Returned checkpoint length1768 is proved symbolically from1736+32 (L1091), without evaluating a generated buffer. Full Usize.max constructors replace the conservative32-bit cMax helper only inside the new source port; no VLib or shipped source is edited.
 
-The retained legacy observation helper `NMT_R2_EmittedData` imports a legacy
-RSL base and collides with canonical RSL. Failed L754 documents the collision.
-New NNG observation, length, owner, checkpoint equation, metadata and finish
-modules retarget those proofs to the canonical rev4 definitions. Foreign files
-are untouched. The new helper laws retain every ProgramError payload, including
-nonempty BorshIoError allocation aborts. They are emitted/std supplements, not
-an expansion of the historical bounded native checkpoint/zero packets.
+L1052 NNG_Candidate345.candidate is retained CONTROL-INTERPRETER SUPPORT and is not the final row root. No canonical fallback is used in the final TotalProducer345. All new accepted axioms are standard. Heartbeat shapes1034/1098 were isolated into explicit continuations and a generic reject rule; caps/timeouts/heartbeats were never raised.
 
-`NNG_NativeCaller345` connects actual decode/validate successful returns at the
-same immutable bytes and statement to both328 caller clauses. `NNG_SplitByte345`
-discharges the native Usize representation bound from the actual U8 cast.
-`NNG_FirstNative345.occurrence` installs the concrete328 candidate at that call
-with no child, library or extra parent-domain parameter.
-
-Exact remaining parent obligation: relate every reached native frame of
-NNG_Tree345.tree to the canonical NNG_Phases345 frame, preserving guard order,
-three selected accounts, clone/decoder allocation prefix, proof prefix/tag/range,
-and the same returned checkpoint. Then prove that NNG_Native345.producer equals
-the canonical interpretation on the projected parent arguments (and provide the
-logical-input adapter without strengthening Domain True). No native Kani gate
-is needed for these remaining Lean-only associations. 344/333/330 depend on the
-345 candidate; no wrapper candidate is claimed before it exists.
-
-The final root manifest selects only successful source-matched modules; failed
-and uncompiled drafts are retained as evidence and are excluded from closure.
+Next344 by NMV source-fission instantiation; then333/330 need both stage wrappers via NNF.

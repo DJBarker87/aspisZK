@@ -1,0 +1,53 @@
+{"attempt": "NNG_L1106", "exit_status": 1, "wall_seconds": 22.49148256587796, "peak_rss_kib": "6820096", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ModelProjection345.body' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_ModelProjection345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_ModelProjection345.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_ModelProjection345.lean:26:10: error: Tactic `rfl` failed: The left-hand side
+  match (NNG_ProjectAccounts345.args a).accounts with
+  | [p, pub, ck] =>
+    bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+      { original := NNG_ProjectAccounts345.args a, proofAccount := p, publicAccount := pub, checkpointAccount := ck }
+      env
+  | x => NNG_Pure345.stopped
+is not definitionally equal to the right-hand side
+  match [] with
+  | [p, pub, ck] =>
+    bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+      { original 
+...
+328.producer
+        { original := a, proofAccount := p, publicAccount := pub, checkpointAccount := ck } env
+    | x => NNG_Pure345.stopped
+NNG_generated/NNG_ModelProjection345.lean:36:26: error: Tactic `rfl` failed: The left-hand side
+  match (NNG_ProjectAccounts345.args a).accounts with
+  | [p, pub, ck] =>
+    bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+      { original := NNG_ProjectAccounts345.args a, proofAccount := p, publicAccount := pub, checkpointAccount := ck }
+      env
+  | x => NNG_Pure345.stopped
+is not definitionally equal to the right-hand side
+  match p :: pub :: ck :: fourth :: rest with
+  | [p, pub, ck] =>
+    bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+      { original := a, proofAccount := p, publicAccount := pub, checkpointAccount := ck } env
+  | x => NNG_Pure345.stopped
+
+case neg.cons.cons.cons.cons
+a : TX1_345.Args
+env : Env
+bad : ¬TX1_345.badRoute a = true
+p pub ck fourth : OwnedAccount
+rest : List OwnedAccount
+ha : a.accounts = p :: pub :: ck :: fourth :: rest
+⊢ (match (NNG_ProjectAccounts345.args a).accounts with
+    | [p, pub, ck] =>
+      bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+        { original := NNG_ProjectAccounts345.args a, proofAccount := p, publicAccount := pub, checkpointAccount := ck }
+        env
+    | x => NNG_Pure345.stopped) =
+    match p :: pub :: ck :: fourth :: rest with
+    | [p, pub, ck] =>
+      bodyRun LIB_Instances.VL LIB_Instances.C (fun x => true) NNG_Producer328.producer
+        { original := a, proofAccount := p, publicAccount := pub, checkpointAccount := ck } env
+    | x => NNG_Pure345.stopped
+'AspisR1.NNG_ModelProjection345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd0bbfd3229454d199aa3c7ffef6c8709.scope; invocation ID: 5bd4585f514f429c8a0128f929290535

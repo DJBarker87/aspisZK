@@ -38,9 +38,13 @@ theorem width (b : Bytes) (n : Nat) (positive : 1<n) (fits : n≤Usize.max) :
    have wrong : b.length≠n := by omega
    cases b.all (· == 0) <;> simp only [Bool.false_eq_true,if_false,if_true,List.length_nil,List.length_cons]
    · have small : 1≠n := by omega
-     simp [small,wrong]
+     apply Bool.eq_iff_iff.mpr
+     simp only [bne_iff_ne]
+     exact ⟨fun _=>wrong,fun _=>small⟩
    · have small : 0≠n := by omega
-     simp [small,wrong]
+     apply Bool.eq_iff_iff.mpr
+     simp only [bne_iff_ne]
+     exact ⟨fun _=>wrong,fun _=>small⟩
 #print axioms width
 
 theorem decode (b : Bytes) : LIBC_S1.decode (cut b)=LIBC_S1.decode b := by
@@ -50,9 +54,10 @@ theorem decode (b : Bytes) : LIBC_S1.decode (cut b)=LIBC_S1.decode b := by
    have original : b.length≠1880 := by omega
    have projected : (cut b).length≠1880 := by
     have h := width b 1880 (by decide) full
-    by_contra eq
-    rw [eq] at h
-    simp [original] at h
+    intro eq
+    have hn : (b.length !=1880)=true := bne_iff_ne.mpr original
+    rw [eq,bne_self_eq_false,hn] at h
+    cases h
    unfold LIBC_S1.decode
    rw [dif_neg projected,dif_neg original]
 #print axioms decode

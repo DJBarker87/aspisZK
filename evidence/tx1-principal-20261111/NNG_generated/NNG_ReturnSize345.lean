@@ -1,5 +1,6 @@
 import NNG_ReturnedRef094
 import NNG_Candidate328
+import NNG_Error328
 import LIBC_Checkpoint
 set_option autoImplicit false
 noncomputable section
@@ -70,10 +71,9 @@ theorem first (a : TX1_328.Args LIB_Instances.VL) (env : Env) (out : Bytes) (ev 
   rw [same]
   exact tx1 a env bytes e1 child.2
  | error e=>
-  unfold TX1_328.mapVErr at tail
-  obtain ⟨_,_,_,_,tail⟩:=NNG_ReturnedRef094.bind_ok tail
-  obtain ⟨_,_,_,_,tail⟩:=NNG_ReturnedRef094.bind_ok tail
-  cases congrArg Obs.exit tail
+  have errorLaw := NNG_Error328.target_iff (NNG_Carriers328.errorBack e) env ⟨.ret (.ok out),e2⟩
+  rw [NNG_Carriers328.error_back] at errorLaw
+  rcases errorLaw.mp tail with same|same <;> cases congrArg Obs.exit same
 #print axioms first
 
 theorem producer (a : TX1_328.Args LIB_Instances.VL) (env : Env)

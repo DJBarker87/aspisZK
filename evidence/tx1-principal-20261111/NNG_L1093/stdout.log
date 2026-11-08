@@ -1,0 +1,12 @@
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+def Aeneas.Std.UScalar.cMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => UScalar.rMax UScalarTy.U32
+  | x => UScalar.rMax ty
+@[irreducible] def Aeneas.Std.UScalar.max : UScalarTy → ℕ :=
+wrapped✝.1
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty :=
+fun {ty} x hInBounds => UScalar.ofNatCore x ⋯
