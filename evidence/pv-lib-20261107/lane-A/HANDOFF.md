@@ -100,3 +100,8 @@ trivial drops;477/602/762 explicitly do not. Generator --check passes.
 errors. It adds exact metadata-selected bool/tuple504 delivery on the OWNER
 machine, with a full-reply theorem and agreement against the OWNER base. The
 arbitrary-T, last-reference and wrapper gaps are not marked closed.
+47428 passed ActionPolling: an explicit applied phase prevents supported native
+source prefixes from being executed again on each pending poll. retry and
+pending_retry preserve the exact request/config/world/event suffix. This is a
+partial source model, with the same unimplemented typed Drop/wrapper coverage;
+it is not promoted as the completed v2 or as an OwnInit history.
