@@ -1,0 +1,1418 @@
+NNQ_generated/NNQ_Stage1.lean:13:61: error: unsolved goals
+case hk
+S : AdapterRw.Ops
+o : AdapterRw.SolanaDigest → Slice (Slice U8) → Result (Std.Array U8 32#usize)
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+x : Bool
+⊢ Sim
+    (if x = true then
+      if (accounts.len != 3#usize) = true then
+        pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      else do
+        let proof_account ← liftM (accounts.index_usize 0#usize)
+        let public_account ← liftM (accounts.index_usize 1#usize)
+        let checkpoint_account ← liftM (accounts.index_usize 2#usize)
+        let r ←
+          liftM
+              (AdapterRw.r1_pool_adapter.owned.require_distinct_accounts S
+                (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯))
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer proof_account)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer public_account)
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r3 ←
+                      liftM
+                          (AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint S checkpoint_account program
+                            true)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let r4 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S checkpoint_account)
+                        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val => do
+                            let r5 ← liftM (AdapterRw.r1_pool_adapter.owned.require_zero val)
+                            let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                let r6 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S public_account)
+                                let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                match cf6 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                    let r7 ← perform (Call.op47 val1)
+                                    let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf7 with
+                                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                        let r8 ← perform (Call.op21 val2)
+                                        let r9 ←
+                                          liftM
+                                              (AdapterRw.core.result.Result.map_err
+                                                AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                r8 ())
+                                        let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                        match cf8 with
+                                          | core.ops.control_flow.ControlFlow.Continue a => do
+                                            let pvpftcv ← liftM val2.common
+                                            let r10 ← perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                            let r11 ←
+                                              liftM
+                                                  (AdapterRw.core.result.Result.map_err
+                                                    AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                    r10 ())
+                                            let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                            match cf9 with
+                                              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                let r12 ←
+                                                  liftM
+                                                      (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S
+                                                        proof_account)
+                                                let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                match cf10 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                    let proof_length ←
+                                                      liftM AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                    let proof_start ←
+                                                      liftM
+                                                          (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                            { op0 := @AdapterRw.Ops.op0 S, op1 := @AdapterRw.Ops.op1 S,
+                                                              op2 := @AdapterRw.Ops.op2 S, op3 := @AdapterRw.Ops.op3 S,
+                                                              op4 := @AdapterRw.Ops.op4 S, op5 := @AdapterRw.Ops.op5 S,
+                                                              op6 := @AdapterRw.Ops.op6 S, op7 := @AdapterRw.Ops.op7 S,
+                                                              op8 := @AdapterRw.Ops.op8 S, op9 := @AdapterRw.Ops.op9 S,
+                                                              op10 := @AdapterRw.Ops.op10 S,
+                                                              op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+                                                              op13 := S.op13, op14 := S.op14, op15 := S.op15,
+                                                              op16 := S.op16, op17 := S.op17, op18 := S.op18,
+                                                              op19 := S.op19, op20 := S.op20, op21 := S.op21,
+                                                              op22 := S.op22, op23 := S.op23, op24 := S.op24,
+                                                              op25 := S.op25, op26 := S.op26, op27 := S.op27,
+                                                              op28 := S.op28, op29 := S.op29, op30 := S.op30,
+                                                              op31 := S.op31, op32 := S.op32, op33 := S.op33,
+                                                              op34 := S.op34, op35 := S.op35, op36 := S.op36,
+                                                              op37 := S.op37, op38 := S.op38, op39 := S.op39,
+                                                              op40 := S.op40, op41 := S.op41, op42 := S.op42, op43 := o,
+                                                              op44 := S.op44, op45 := S.op45, op46 := S.op46,
+                                                              op47 := S.op47, op48 := S.op48, op49 := S.op49,
+                                                              op50 := S.op50, op51 := S.op51, op52 := S.op52,
+                                                              op53 := S.op53 })
+                                                    let o_1 ← liftM (lift (proof_start.checked_add proof_length))
+                                                    let r13 ←
+                                                      liftM
+                                                          (AdapterRw.core.option.Option.ok_or o_1
+                                                            AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                    let cf11 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                    match cf11 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                        if (val4.len != val5) = true then
+                                                          pure
+                                                            (core.result.Result.Err
+                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let s ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice U8) val4
+                                                                  { «end» := proof_start })
+                                                          let b1 ← perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                          if b1 = true then
+                                                              pure
+                                                                (core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let i2 ← liftM (lift (proof_start.wrapping_add 8#usize))
+                                                              let i3 ← liftM (val4.index_usize i2)
+                                                              let i4 ←
+                                                                liftM
+                                                                    AdapterRw.aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                              if (i3 != i4) = true then
+                                                                  pure
+                                                                    (core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let p ← liftM val2.semantic_public
+                                                                  let s1 ←
+                                                                    liftM
+                                                                        (core.slice.index.Slice.index
+                                                                          (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                            U8)
+                                                                          val4 { start := proof_start, «end» := val5 })
+                                                                  let i5 ← liftM (data.index_usize 1#usize)
+                                                                  let i6 ←
+                                                                    liftM (lift (UScalar.cast UScalarTy.Usize i5))
+                                                                  let r14 ←
+                                                                    first_decoded
+                                                                        { op0 := @AdapterRw.Ops.op0 S,
+                                                                          op1 := @AdapterRw.Ops.op1 S,
+                                                                          op2 := @AdapterRw.Ops.op2 S,
+                                                                          op3 := @AdapterRw.Ops.op3 S,
+                                                                          op4 := @AdapterRw.Ops.op4 S,
+                                                                          op5 := @AdapterRw.Ops.op5 S,
+                                                                          op6 := @AdapterRw.Ops.op6 S,
+                                                                          op7 := @AdapterRw.Ops.op7 S,
+                                                                          op8 := @AdapterRw.Ops.op8 S,
+                                                                          op9 := @AdapterRw.Ops.op9 S,
+                                                                          op10 := @AdapterRw.Ops.op10 S,
+                                                                          op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+                                                                          op13 := S.op13, op14 := S.op14,
+                                                                          op15 := S.op15, op16 := S.op16,
+                                                                          op17 := S.op17, op18 := S.op18,
+                                                                          op19 := S.op19, op20 := S.op20,
+                                                                          op21 := S.op21, op22 := S.op22,
+                                                                          op23 := S.op23, op24 := S.op24,
+                                                                          op25 := S.op25, op26 := S.op26,
+                                                                          op27 := S.op27, op28 := S.op28,
+                                                                          op29 := S.op29, op30 := S.op30,
+                                                                          op31 := S.op31, op32 := S.op32,
+                                                                          op33 := S.op33, op34 := S.op34,
+                                                                          op35 := S.op35, op36 := S.op36,
+                                                                          op37 := S.op37, op38 := S.op38,
+                                                                          op39 := S.op39, op40 := S.op40,
+                                                                          op41 := S.op41, op42 := S.op42, op43 := o,
+                                                                          op44 := S.op44, op45 := S.op45,
+                                                                          op46 := S.op46, op47 := S.op47,
+                                                                          op48 := S.op48, op49 := S.op49,
+                                                                          op50 := S.op50, op51 := S.op51,
+                                                                          op52 := S.op52, op53 := S.op53 }
+                                                                        {
+                                                                          op0 := fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op0 cmpPartialEqInst a0 a1),
+                                                                          op1 := fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op1 cmpPartialEqInst a0 a1),
+                                                                          op2 := fun {T} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op2 cmpPartialEqInst a0 a1),
+                                                                          op3 := fun {T} a0 a1 =>
+                                                                            perform (Call.op3 a0 a1),
+                                                                          op4 := fun {T} a0 a1 =>
+                                                                            perform (Call.op4 a0 a1),
+                                                                          op5 := fun {T} a0 a1 =>
+                                                                            perform (Call.op5 a0 a1),
+                                                                          op6 := fun {T} a0 a1 =>
+                                                                            perform (Call.op6 a0 a1),
+                                                                          op7 := fun {T} a0 a1 =>
+                                                                            perform (Call.op7 a0 a1),
+                                                                          op8 := fun {T} a0 a1 =>
+                                                                            perform (Call.op8 a0 a1),
+                                                                          op9 := fun {T} a0 => perform (Call.op9 a0),
+                                                                          op10 :=
+                                                                            fun {H} aspis_coredigestDigest32Inst a0 a1
+                                                                              a2 a3 a4 a5 =>
+                                                                            perform
+                                                                              (Call.op10 aspis_coredigestDigest32Inst a0
+                                                                                a1 a2 a3 a4 a5),
+                                                                          op11 :=
+                                                                            fun {H} aspis_coredigestDigest32Inst a0 a1
+                                                                              a2 a3 a4 =>
+                                                                            perform
+                                                                              (Call.op11 aspis_coredigestDigest32Inst a0
+                                                                                a1 a2 a3 a4),
+                                                                          op12 := fun a0 => perform (Call.op12 a0),
+                                                                          op13 := perform Call.op13,
+                                                                          op14 := perform Call.op14,
+                                                                          op15 := fun a0 => perform (Call.op15 a0),
+                                                                          op16 := perform Call.op16,
+                                                                          op17 := fun a0 => perform (Call.op17 a0),
+                                                                          op18 := perform Call.op18,
+                                                                          op19 := perform Call.op19,
+                                                                          op20 := fun a0 => perform (Call.op20 a0),
+                                                                          op21 := fun a0 => perform (Call.op21 a0),
+                                                                          op22 := fun a0 => perform (Call.op22 a0),
+                                                                          op23 := fun a0 => perform (Call.op23 a0),
+                                                                          op24 := fun a0 => perform (Call.op24 a0),
+                                                                          op25 := fun a0 => perform (Call.op25 a0),
+                                                                          op26 := fun a0 => perform (Call.op26 a0),
+                                                                          op27 := fun a0 => perform (Call.op27 a0),
+                                                                          op28 := fun a0 => perform (Call.op28 a0),
+                                                                          op29 := fun a0 a1 =>
+                                                                            perform (Call.op29 a0 a1),
+                                                                          op30 := fun a0 a1 =>
+                                                                            perform (Call.op30 a0 a1),
+                                                                          op31 := fun a0 => perform (Call.op31 a0),
+                                                                          op32 := fun a0 => perform (Call.op32 a0),
+                                                                          op33 := fun a0 => perform (Call.op33 a0),
+                                                                          op34 := fun a0 => perform (Call.op34 a0),
+                                                                          op35 := fun a0 => perform (Call.op35 a0),
+                                                                          op36 := fun a0 a1 =>
+                                                                            perform (Call.op36 a0 a1),
+                                                                          op37 := fun a0 => perform (Call.op37 a0),
+                                                                          op38 := fun a0 a1 =>
+                                                                            perform (Call.op38 a0 a1),
+                                                                          op39 := fun a0 => perform (Call.op39 a0),
+                                                                          op40 := fun a0 => perform (Call.op40 a0),
+                                                                          op41 := perform Call.op41,
+                                                                          op42 := fun a0 => perform (Call.op42 a0),
+                                                                          op43 := fun a0 a1 =>
+                                                                            perform (Call.op43 a0 a1),
+                                                                          op44 := fun a0 => perform (Call.op44 a0),
+                                                                          op45 := perform Call.op45,
+                                                                          op46 := perform Call.op46,
+                                                                          op47 := fun a0 => perform (Call.op47 a0),
+                                                                          op48 := fun a0 => perform (Call.op48 a0),
+                                                                          op49 := fun a0 => perform (Call.op49 a0),
+                                                                          op50 := fun a0 => perform (Call.op50 a0),
+                                                                          op51 := fun a0 => perform (Call.op51 a0),
+                                                                          op52 := fun a0 a1 a2 =>
+                                                                            perform (Call.op52 a0 a1 a2),
+                                                                          op53 := fun a0 => perform (Call.op53 a0) }
+                                                                        p val1 s1 i6
+                                                                  let cf12 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r14)
+                                                                  match cf12 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                                      if (val6.len != val.len) = true then
+                                                                        pure
+                                                                          (core.result.Result.Err
+                                                                            AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                      else pure (core.result.Result.Ok val6)
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      liftM
+                                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (alloc.vec.Vec U8)
+                                                                          (core.convert.FromSame
+                                                                            AdapterRw.solana_program_error.ProgramError)
+                                                                          residual)
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame
+                                                              AdapterRw.solana_program_error.ProgramError)
+                                                            residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame
+                                                          AdapterRw.solana_program_error.ProgramError)
+                                                        residual)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                    residual)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8)
+                                            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8)
+                                        (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8)
+                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                            residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+    else do
+      let b1 ← perform (Call.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 11#u8] stage1_owned._proof_10))
+      if b1 = true then
+          if (accounts.len != 3#usize) = true then
+            pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          else do
+            let proof_account ← liftM (accounts.index_usize 0#usize)
+            let public_account ← liftM (accounts.index_usize 1#usize)
+            let checkpoint_account ← liftM (accounts.index_usize 2#usize)
+            let r ←
+              liftM
+                  (AdapterRw.r1_pool_adapter.owned.require_distinct_accounts S
+                    (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯))
+            let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer proof_account)
+                let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer public_account)
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let r3 ←
+                          liftM
+                              (AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint S checkpoint_account program
+                                true)
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let r4 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S checkpoint_account)
+                            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val => do
+                                let r5 ← liftM (AdapterRw.r1_pool_adapter.owned.require_zero val)
+                                let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                match cf5 with
+                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                    let r6 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S public_account)
+                                    let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                    match cf6 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                        let r7 ← perform (Call.op47 val1)
+                                        let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                        match cf7 with
+                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                            let r8 ← perform (Call.op21 val2)
+                                            let r9 ←
+                                              liftM
+                                                  (AdapterRw.core.result.Result.map_err
+                                                    AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                    r8 ())
+                                            let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                            match cf8 with
+                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                let pvpftcv ← liftM val2.common
+                                                let r10 ←
+                                                  perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                                let r11 ←
+                                                  liftM
+                                                      (AdapterRw.core.result.Result.map_err
+                                                        AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                        r10 ())
+                                                let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                                match cf9 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                    let r12 ←
+                                                      liftM
+                                                          (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S
+                                                            proof_account)
+                                                    let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                    match cf10 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                        let proof_length ←
+                                                          liftM AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                        let proof_start ←
+                                                          liftM
+                                                              (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                                { op0 := @AdapterRw.Ops.op0 S,
+                                                                  op1 := @AdapterRw.Ops.op1 S,
+                                                                  op2 := @AdapterRw.Ops.op2 S,
+                                                                  op3 := @AdapterRw.Ops.op3 S,
+                                                                  op4 := @AdapterRw.Ops.op4 S,
+                                                                  op5 := @AdapterRw.Ops.op5 S,
+                                                                  op6 := @AdapterRw.Ops.op6 S,
+                                                                  op7 := @AdapterRw.Ops.op7 S,
+                                                                  op8 := @AdapterRw.Ops.op8 S,
+                                                                  op9 := @AdapterRw.Ops.op9 S,
+                                                                  op10 := @AdapterRw.Ops.op10 S,
+                                                                  op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+                                                                  op13 := S.op13, op14 := S.op14, op15 := S.op15,
+                                                                  op16 := S.op16, op17 := S.op17, op18 := S.op18,
+                                                                  op19 := S.op19, op20 := S.op20, op21 := S.op21,
+                                                                  op22 := S.op22, op23 := S.op23, op24 := S.op24,
+                                                                  op25 := S.op25, op26 := S.op26, op27 := S.op27,
+                                                                  op28 := S.op28, op29 := S.op29, op30 := S.op30,
+                                                                  op31 := S.op31, op32 := S.op32, op33 := S.op33,
+                                                                  op34 := S.op34, op35 := S.op35, op36 := S.op36,
+                                                                  op37 := S.op37, op38 := S.op38, op39 := S.op39,
+                                                                  op40 := S.op40, op41 := S.op41, op42 := S.op42,
+                                                                  op43 := o, op44 := S.op44, op45 := S.op45,
+                                                                  op46 := S.op46, op47 := S.op47, op48 := S.op48,
+                                                                  op49 := S.op49, op50 := S.op50, op51 := S.op51,
+                                                                  op52 := S.op52, op53 := S.op53 })
+                                                        let o_1 ← liftM (lift (proof_start.checked_add proof_length))
+                                                        let r13 ←
+                                                          liftM
+                                                              (AdapterRw.core.option.Option.ok_or o_1
+                                                                AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        let cf11 ←
+                                                          liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                        match cf11 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                            if (val4.len != val5) = true then
+                                                              pure
+                                                                (core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let s ←
+                                                                liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      val4 { «end» := proof_start })
+                                                              let b1 ← perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                              if b1 = true then
+                                                                  pure
+                                                                    (core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let i2 ←
+                                                                    liftM (lift (proof_start.wrapping_add 8#usize))
+                                                                  let i3 ← liftM (val4.index_usize i2)
+                                                                  let i4 ←
+                                                                    liftM
+                                                                        AdapterRw.aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                  if (i3 != i4) = true then
+                                                                      pure
+                                                                        (core.result.Result.Err
+                                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let p ← liftM val2.semantic_public
+                                                                      let s1 ←
+                                                                        liftM
+                                                                            (core.slice.index.Slice.index
+                                                                              (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                U8)
+                                                                              val4
+                                                                              { start := proof_start, «end» := val5 })
+                                                                      let i5 ← liftM (data.index_usize 1#usize)
+                                                                      let i6 ←
+                                                                        liftM (lift (UScalar.cast UScalarTy.Usize i5))
+                                                                      let r14 ←
+                                                                        first_decoded
+                                                                            { op0 := @AdapterRw.Ops.op0 S,
+                                                                              op1 := @AdapterRw.Ops.op1 S,
+                                                                              op2 := @AdapterRw.Ops.op2 S,
+                                                                              op3 := @AdapterRw.Ops.op3 S,
+                                                                              op4 := @AdapterRw.Ops.op4 S,
+                                                                              op5 := @AdapterRw.Ops.op5 S,
+                                                                              op6 := @AdapterRw.Ops.op6 S,
+                                                                              op7 := @AdapterRw.Ops.op7 S,
+                                                                              op8 := @AdapterRw.Ops.op8 S,
+                                                                              op9 := @AdapterRw.Ops.op9 S,
+                                                                              op10 := @AdapterRw.Ops.op10 S,
+                                                                              op11 := @AdapterRw.Ops.op11 S,
+                                                                              op12 := S.op12, op13 := S.op13,
+                                                                              op14 := S.op14, op15 := S.op15,
+                                                                              op16 := S.op16, op17 := S.op17,
+                                                                              op18 := S.op18, op19 := S.op19,
+                                                                              op20 := S.op20, op21 := S.op21,
+                                                                              op22 := S.op22, op23 := S.op23,
+                                                                              op24 := S.op24, op25 := S.op25,
+                                                                              op26 := S.op26, op27 := S.op27,
+                                                                              op28 := S.op28, op29 := S.op29,
+                                                                              op30 := S.op30, op31 := S.op31,
+                                                                              op32 := S.op32, op33 := S.op33,
+                                                                              op34 := S.op34, op35 := S.op35,
+                                                                              op36 := S.op36, op37 := S.op37,
+                                                                              op38 := S.op38, op39 := S.op39,
+                                                                              op40 := S.op40, op41 := S.op41,
+                                                                              op42 := S.op42, op43 := o, op44 := S.op44,
+                                                                              op45 := S.op45, op46 := S.op46,
+                                                                              op47 := S.op47, op48 := S.op48,
+                                                                              op49 := S.op49, op50 := S.op50,
+                                                                              op51 := S.op51, op52 := S.op52,
+                                                                              op53 := S.op53 }
+                                                                            {
+                                                                              op0 :=
+                                                                                fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op0 cmpPartialEqInst a0 a1),
+                                                                              op1 :=
+                                                                                fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op1 cmpPartialEqInst a0 a1),
+                                                                              op2 := fun {T} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op2 cmpPartialEqInst a0 a1),
+                                                                              op3 := fun {T} a0 a1 =>
+                                                                                perform (Call.op3 a0 a1),
+                                                                              op4 := fun {T} a0 a1 =>
+                                                                                perform (Call.op4 a0 a1),
+                                                                              op5 := fun {T} a0 a1 =>
+                                                                                perform (Call.op5 a0 a1),
+                                                                              op6 := fun {T} a0 a1 =>
+                                                                                perform (Call.op6 a0 a1),
+                                                                              op7 := fun {T} a0 a1 =>
+                                                                                perform (Call.op7 a0 a1),
+                                                                              op8 := fun {T} a0 a1 =>
+                                                                                perform (Call.op8 a0 a1),
+                                                                              op9 := fun {T} a0 =>
+                                                                                perform (Call.op9 a0),
+                                                                              op10 :=
+                                                                                fun {H} aspis_coredigestDigest32Inst a0
+                                                                                  a1 a2 a3 a4 a5 =>
+                                                                                perform
+                                                                                  (Call.op10
+                                                                                    aspis_coredigestDigest32Inst a0 a1
+                                                                                    a2 a3 a4 a5),
+                                                                              op11 :=
+                                                                                fun {H} aspis_coredigestDigest32Inst a0
+                                                                                  a1 a2 a3 a4 =>
+                                                                                perform
+                                                                                  (Call.op11
+                                                                                    aspis_coredigestDigest32Inst a0 a1
+                                                                                    a2 a3 a4),
+                                                                              op12 := fun a0 => perform (Call.op12 a0),
+                                                                              op13 := perform Call.op13,
+                                                                              op14 := perform Call.op14,
+                                                                              op15 := fun a0 => perform (Call.op15 a0),
+                                                                              op16 := perform Call.op16,
+                                                                              op17 := fun a0 => perform (Call.op17 a0),
+                                                                              op18 := perform Call.op18,
+                                                                              op19 := perform Call.op19,
+                                                                              op20 := fun a0 => perform (Call.op20 a0),
+                                                                              op21 := fun a0 => perform (Call.op21 a0),
+                                                                              op22 := fun a0 => perform (Call.op22 a0),
+                                                                              op23 := fun a0 => perform (Call.op23 a0),
+                                                                              op24 := fun a0 => perform (Call.op24 a0),
+                                                                              op25 := fun a0 => perform (Call.op25 a0),
+                                                                              op26 := fun a0 => perform (Call.op26 a0),
+                                                                              op27 := fun a0 => perform (Call.op27 a0),
+                                                                              op28 := fun a0 => perform (Call.op28 a0),
+                                                                              op29 := fun a0 a1 =>
+                                                                                perform (Call.op29 a0 a1),
+                                                                              op30 := fun a0 a1 =>
+                                                                                perform (Call.op30 a0 a1),
+                                                                              op31 := fun a0 => perform (Call.op31 a0),
+                                                                              op32 := fun a0 => perform (Call.op32 a0),
+                                                                              op33 := fun a0 => perform (Call.op33 a0),
+                                                                              op34 := fun a0 => perform (Call.op34 a0),
+                                                                              op35 := fun a0 => perform (Call.op35 a0),
+                                                                              op36 := fun a0 a1 =>
+                                                                                perform (Call.op36 a0 a1),
+                                                                              op37 := fun a0 => perform (Call.op37 a0),
+                                                                              op38 := fun a0 a1 =>
+                                                                                perform (Call.op38 a0 a1),
+                                                                              op39 := fun a0 => perform (Call.op39 a0),
+                                                                              op40 := fun a0 => perform (Call.op40 a0),
+                                                                              op41 := perform Call.op41,
+                                                                              op42 := fun a0 => perform (Call.op42 a0),
+                                                                              op43 := fun a0 a1 =>
+                                                                                perform (Call.op43 a0 a1),
+                                                                              op44 := fun a0 => perform (Call.op44 a0),
+                                                                              op45 := perform Call.op45,
+                                                                              op46 := perform Call.op46,
+                                                                              op47 := fun a0 => perform (Call.op47 a0),
+                                                                              op48 := fun a0 => perform (Call.op48 a0),
+                                                                              op49 := fun a0 => perform (Call.op49 a0),
+                                                                              op50 := fun a0 => perform (Call.op50 a0),
+                                                                              op51 := fun a0 => perform (Call.op51 a0),
+                                                                              op52 := fun a0 a1 a2 =>
+                                                                                perform (Call.op52 a0 a1 a2),
+                                                                              op53 := fun a0 => perform (Call.op53 a0) }
+                                                                            p val1 s1 i6
+                                                                      let cf12 ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTry.branch
+                                                                              r14)
+                                                                      match cf12 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                            val6 =>
+                                                                          if (val6.len != val.len) = true then
+                                                                            pure
+                                                                              (core.result.Result.Err
+                                                                                AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                          else pure (core.result.Result.Ok val6)
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          liftM
+                                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              (alloc.vec.Vec U8)
+                                                                              (core.convert.FromSame
+                                                                                AdapterRw.solana_program_error.ProgramError)
+                                                                              residual)
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8)
+                                                                (core.convert.FromSame
+                                                                  AdapterRw.solana_program_error.ProgramError)
+                                                                residual)
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame
+                                                              AdapterRw.solana_program_error.ProgramError)
+                                                            residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame
+                                                          AdapterRw.solana_program_error.ProgramError)
+                                                        residual)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                    residual)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8)
+                                            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8)
+                                        (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8)
+                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                            residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+        else pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+    (if x = true then
+      if (accounts.len != 3#usize) = true then
+        pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      else do
+        let proof_account ← liftM (accounts.index_usize 0#usize)
+        let public_account ← liftM (accounts.index_usize 1#usize)
+        let checkpoint_account ← liftM (accounts.index_usize 2#usize)
+        let r ←
+          liftM
+              (AdapterRw.r1_pool_adapter.owned.require_distinct_accounts S
+                (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯))
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer proof_account)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer public_account)
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r3 ←
+                      liftM
+                          (AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint S checkpoint_account program
+                            true)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let r4 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S checkpoint_account)
+                        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val => do
+                            let r5 ← liftM (AdapterRw.r1_pool_adapter.owned.require_zero val)
+                            let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                let r6 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S public_account)
+                                let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                match cf6 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                    let r7 ← perform (Call.op47 val1)
+                                    let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf7 with
+                                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                        let r8 ← perform (Call.op21 val2)
+                                        let r9 ←
+                                          liftM
+                                              (AdapterRw.core.result.Result.map_err
+                                                AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                r8 ())
+                                        let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                        match cf8 with
+                                          | core.ops.control_flow.ControlFlow.Continue a => do
+                                            let pvpftcv ← liftM val2.common
+                                            let r10 ← perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                            let r11 ←
+                                              liftM
+                                                  (AdapterRw.core.result.Result.map_err
+                                                    AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                    r10 ())
+                                            let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                            match cf9 with
+                                              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                let r12 ←
+                                                  liftM
+                                                      (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S
+                                                        proof_account)
+                                                let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                match cf10 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                    let proof_length ←
+                                                      liftM AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                    let proof_start ←
+                                                      liftM
+                                                          (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                            S)
+                                                    let o ← liftM (lift (proof_start.checked_add proof_length))
+                                                    let r13 ←
+                                                      liftM
+                                                          (AdapterRw.core.option.Option.ok_or o
+                                                            AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                    let cf11 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                    match cf11 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                        if (val4.len != val5) = true then
+                                                          pure
+                                                            (core.result.Result.Err
+                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let s ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice U8) val4
+                                                                  { «end» := proof_start })
+                                                          let b1 ← perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                          if b1 = true then
+                                                              pure
+                                                                (core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let i2 ← liftM (lift (proof_start.wrapping_add 8#usize))
+                                                              let i3 ← liftM (val4.index_usize i2)
+                                                              let i4 ←
+                                                                liftM
+                                                                    AdapterRw.aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                              if (i3 != i4) = true then
+                                                                  pure
+                                                                    (core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let p ← liftM val2.semantic_public
+                                                                  let s1 ←
+                                                                    liftM
+                                                                        (core.slice.index.Slice.index
+                                                                          (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                            U8)
+                                                                          val4 { start := proof_start, «end» := val5 })
+                                                                  let i5 ← liftM (data.index_usize 1#usize)
+                                                                  let i6 ←
+                                                                    liftM (lift (UScalar.cast UScalarTy.Usize i5))
+                                                                  let r14 ←
+                                                                    first_decoded S
+                                                                        {
+                                                                          op0 := fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op0 cmpPartialEqInst a0 a1),
+                                                                          op1 := fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op1 cmpPartialEqInst a0 a1),
+                                                                          op2 := fun {T} cmpPartialEqInst a0 a1 =>
+                                                                            perform (Call.op2 cmpPartialEqInst a0 a1),
+                                                                          op3 := fun {T} a0 a1 =>
+                                                                            perform (Call.op3 a0 a1),
+                                                                          op4 := fun {T} a0 a1 =>
+                                                                            perform (Call.op4 a0 a1),
+                                                                          op5 := fun {T} a0 a1 =>
+                                                                            perform (Call.op5 a0 a1),
+                                                                          op6 := fun {T} a0 a1 =>
+                                                                            perform (Call.op6 a0 a1),
+                                                                          op7 := fun {T} a0 a1 =>
+                                                                            perform (Call.op7 a0 a1),
+                                                                          op8 := fun {T} a0 a1 =>
+                                                                            perform (Call.op8 a0 a1),
+                                                                          op9 := fun {T} a0 => perform (Call.op9 a0),
+                                                                          op10 :=
+                                                                            fun {H} aspis_coredigestDigest32Inst a0 a1
+                                                                              a2 a3 a4 a5 =>
+                                                                            perform
+                                                                              (Call.op10 aspis_coredigestDigest32Inst a0
+                                                                                a1 a2 a3 a4 a5),
+                                                                          op11 :=
+                                                                            fun {H} aspis_coredigestDigest32Inst a0 a1
+                                                                              a2 a3 a4 =>
+                                                                            perform
+                                                                              (Call.op11 aspis_coredigestDigest32Inst a0
+                                                                                a1 a2 a3 a4),
+                                                                          op12 := fun a0 => perform (Call.op12 a0),
+                                                                          op13 := perform Call.op13,
+                                                                          op14 := perform Call.op14,
+                                                                          op15 := fun a0 => perform (Call.op15 a0),
+                                                                          op16 := perform Call.op16,
+                                                                          op17 := fun a0 => perform (Call.op17 a0),
+                                                                          op18 := perform Call.op18,
+                                                                          op19 := perform Call.op19,
+                                                                          op20 := fun a0 => perform (Call.op20 a0),
+                                                                          op21 := fun a0 => perform (Call.op21 a0),
+                                                                          op22 := fun a0 => perform (Call.op22 a0),
+                                                                          op23 := fun a0 => perform (Call.op23 a0),
+                                                                          op24 := fun a0 => perform (Call.op24 a0),
+                                                                          op25 := fun a0 => perform (Call.op25 a0),
+                                                                          op26 := fun a0 => perform (Call.op26 a0),
+                                                                          op27 := fun a0 => perform (Call.op27 a0),
+                                                                          op28 := fun a0 => perform (Call.op28 a0),
+                                                                          op29 := fun a0 a1 =>
+                                                                            perform (Call.op29 a0 a1),
+                                                                          op30 := fun a0 a1 =>
+                                                                            perform (Call.op30 a0 a1),
+                                                                          op31 := fun a0 => perform (Call.op31 a0),
+                                                                          op32 := fun a0 => perform (Call.op32 a0),
+                                                                          op33 := fun a0 => perform (Call.op33 a0),
+                                                                          op34 := fun a0 => perform (Call.op34 a0),
+                                                                          op35 := fun a0 => perform (Call.op35 a0),
+                                                                          op36 := fun a0 a1 =>
+                                                                            perform (Call.op36 a0 a1),
+                                                                          op37 := fun a0 => perform (Call.op37 a0),
+                                                                          op38 := fun a0 a1 =>
+                                                                            perform (Call.op38 a0 a1),
+                                                                          op39 := fun a0 => perform (Call.op39 a0),
+                                                                          op40 := fun a0 => perform (Call.op40 a0),
+                                                                          op41 := perform Call.op41,
+                                                                          op42 := fun a0 => perform (Call.op42 a0),
+                                                                          op43 := fun a0 a1 =>
+                                                                            perform (Call.op43 a0 a1),
+                                                                          op44 := fun a0 => perform (Call.op44 a0),
+                                                                          op45 := perform Call.op45,
+                                                                          op46 := perform Call.op46,
+                                                                          op47 := fun a0 => perform (Call.op47 a0),
+                                                                          op48 := fun a0 => perform (Call.op48 a0),
+                                                                          op49 := fun a0 => perform (Call.op49 a0),
+                                                                          op50 := fun a0 => perform (Call.op50 a0),
+                                                                          op51 := fun a0 => perform (Call.op51 a0),
+                                                                          op52 := fun a0 a1 a2 =>
+                                                                            perform (Call.op52 a0 a1 a2),
+                                                                          op53 := fun a0 => perform (Call.op53 a0) }
+                                                                        p val1 s1 i6
+                                                                  let cf12 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r14)
+                                                                  match cf12 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                                      if (val6.len != val.len) = true then
+                                                                        pure
+                                                                          (core.result.Result.Err
+                                                                            AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                      else pure (core.result.Result.Ok val6)
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      liftM
+                                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (alloc.vec.Vec U8)
+                                                                          (core.convert.FromSame
+                                                                            AdapterRw.solana_program_error.ProgramError)
+                                                                          residual)
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame
+                                                              AdapterRw.solana_program_error.ProgramError)
+                                                            residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame
+                                                          AdapterRw.solana_program_error.ProgramError)
+                                                        residual)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                    residual)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8)
+                                            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8)
+                                        (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8)
+                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                            residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+    else do
+      let b1 ← perform (Call.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 11#u8] stage1_owned._proof_10))
+      if b1 = true then
+          if (accounts.len != 3#usize) = true then
+            pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          else do
+            let proof_account ← liftM (accounts.index_usize 0#usize)
+            let public_account ← liftM (accounts.index_usize 1#usize)
+            let checkpoint_account ← liftM (accounts.index_usize 2#usize)
+            let r ←
+              liftM
+                  (AdapterRw.r1_pool_adapter.owned.require_distinct_accounts S
+                    (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯))
+            let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer proof_account)
+                let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.require_readonly_buffer public_account)
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let r3 ←
+                          liftM
+                              (AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint S checkpoint_account program
+                                true)
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let r4 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S checkpoint_account)
+                            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val => do
+                                let r5 ← liftM (AdapterRw.r1_pool_adapter.owned.require_zero val)
+                                let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                match cf5 with
+                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                    let r6 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S public_account)
+                                    let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                    match cf6 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                        let r7 ← perform (Call.op47 val1)
+                                        let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                        match cf7 with
+                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                            let r8 ← perform (Call.op21 val2)
+                                            let r9 ←
+                                              liftM
+                                                  (AdapterRw.core.result.Result.map_err
+                                                    AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                    r8 ())
+                                            let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                            match cf8 with
+                                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                                let pvpftcv ← liftM val2.common
+                                                let r10 ←
+                                                  perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                                let r11 ←
+                                                  liftM
+                                                      (AdapterRw.core.result.Result.map_err
+                                                        AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                        r10 ())
+                                                let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                                match cf9 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                    let r12 ←
+                                                      liftM
+                                                          (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data S
+                                                            proof_account)
+                                                    let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                    match cf10 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                        let proof_length ←
+                                                          liftM AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                        let proof_start ←
+                                                          liftM
+                                                              (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                                S)
+                                                        let o ← liftM (lift (proof_start.checked_add proof_length))
+                                                        let r13 ←
+                                                          liftM
+                                                              (AdapterRw.core.option.Option.ok_or o
+                                                                AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        let cf11 ←
+                                                          liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                        match cf11 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                            if (val4.len != val5) = true then
+                                                              pure
+                                                                (core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let s ←
+                                                                liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      val4 { «end» := proof_start })
+                                                              let b1 ← perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                              if b1 = true then
+                                                                  pure
+                                                                    (core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let i2 ←
+                                                                    liftM (lift (proof_start.wrapping_add 8#usize))
+                                                                  let i3 ← liftM (val4.index_usize i2)
+                                                                  let i4 ←
+                                                                    liftM
+                                                                        AdapterRw.aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                  if (i3 != i4) = true then
+                                                                      pure
+                                                                        (core.result.Result.Err
+                                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let p ← liftM val2.semantic_public
+                                                                      let s1 ←
+                                                                        liftM
+                                                                            (core.slice.index.Slice.index
+                                                                              (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                U8)
+                                                                              val4
+                                                                              { start := proof_start, «end» := val5 })
+                                                                      let i5 ← liftM (data.index_usize 1#usize)
+                                                                      let i6 ←
+                                                                        liftM (lift (UScalar.cast UScalarTy.Usize i5))
+                                                                      let r14 ←
+                                                                        first_decoded S
+                                                                            {
+                                                                              op0 :=
+                                                                                fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op0 cmpPartialEqInst a0 a1),
+                                                                              op1 :=
+                                                                                fun {T U} {N} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op1 cmpPartialEqInst a0 a1),
+                                                                              op2 := fun {T} cmpPartialEqInst a0 a1 =>
+                                                                                perform
+                                                                                  (Call.op2 cmpPartialEqInst a0 a1),
+                                                                              op3 := fun {T} a0 a1 =>
+                                                                                perform (Call.op3 a0 a1),
+                                                                              op4 := fun {T} a0 a1 =>
+                                                                                perform (Call.op4 a0 a1),
+                                                                              op5 := fun {T} a0 a1 =>
+                                                                                perform (Call.op5 a0 a1),
+                                                                              op6 := fun {T} a0 a1 =>
+                                                                                perform (Call.op6 a0 a1),
+                                                                              op7 := fun {T} a0 a1 =>
+                                                                                perform (Call.op7 a0 a1),
+                                                                              op8 := fun {T} a0 a1 =>
+                                                                                perform (Call.op8 a0 a1),
+                                                                              op9 := fun {T} a0 =>
+                                                                                perform (Call.op9 a0),
+                                                                              op10 :=
+                                                                                fun {H} aspis_coredigestDigest32Inst a0
+                                                                                  a1 a2 a3 a4 a5 =>
+                                                                                perform
+                                                                                  (Call.op10
+                                                                                    aspis_coredigestDigest32Inst a0 a1
+                                                                                    a2 a3 a4 a5),
+                                                                              op11 :=
+                                                                                fun {H} aspis_coredigestDigest32Inst a0
+                                                                                  a1 a2 a3 a4 =>
+                                                                                perform
+                                                                                  (Call.op11
+                                                                                    aspis_coredigestDigest32Inst a0 a1
+                                                                                    a2 a3 a4),
+                                                                              op12 := fun a0 => perform (Call.op12 a0),
+                                                                              op13 := perform Call.op13,
+                                                                              op14 := perform Call.op14,
+                                                                              op15 := fun a0 => perform (Call.op15 a0),
+                                                                              op16 := perform Call.op16,
+                                                                              op17 := fun a0 => perform (Call.op17 a0),
+                                                                              op18 := perform Call.op18,
+                                                                              op19 := perform Call.op19,
+                                                                              op20 := fun a0 => perform (Call.op20 a0),
+                                                                              op21 := fun a0 => perform (Call.op21 a0),
+                                                                              op22 := fun a0 => perform (Call.op22 a0),
+                                                                              op23 := fun a0 => perform (Call.op23 a0),
+                                                                              op24 := fun a0 => perform (Call.op24 a0),
+                                                                              op25 := fun a0 => perform (Call.op25 a0),
+                                                                              op26 := fun a0 => perform (Call.op26 a0),
+                                                                              op27 := fun a0 => perform (Call.op27 a0),
+                                                                              op28 := fun a0 => perform (Call.op28 a0),
+                                                                              op29 := fun a0 a1 =>
+                                                                                perform (Call.op29 a0 a1),
+                                                                              op30 := fun a0 a1 =>
+                                                                                perform (Call.op30 a0 a1),
+                                                                              op31 := fun a0 => perform (Call.op31 a0),
+                                                                              op32 := fun a0 => perform (Call.op32 a0),
+                                                                              op33 := fun a0 => perform (Call.op33 a0),
+                                                                              op34 := fun a0 => perform (Call.op34 a0),
+                                                                              op35 := fun a0 => perform (Call.op35 a0),
+                                                                              op36 := fun a0 a1 =>
+                                                                                perform (Call.op36 a0 a1),
+                                                                              op37 := fun a0 => perform (Call.op37 a0),
+                                                                              op38 := fun a0 a1 =>
+                                                                                perform (Call.op38 a0 a1),
+                                                                              op39 := fun a0 => perform (Call.op39 a0),
+                                                                              op40 := fun a0 => perform (Call.op40 a0),
+                                                                              op41 := perform Call.op41,
+                                                                              op42 := fun a0 => perform (Call.op42 a0),
+                                                                              op43 := fun a0 a1 =>
+                                                                                perform (Call.op43 a0 a1),
+                                                                              op44 := fun a0 => perform (Call.op44 a0),
+                                                                              op45 := perform Call.op45,
+                                                                              op46 := perform Call.op46,
+                                                                              op47 := fun a0 => perform (Call.op47 a0),
+                                                                              op48 := fun a0 => perform (Call.op48 a0),
+                                                                              op49 := fun a0 => perform (Call.op49 a0),
+                                                                              op50 := fun a0 => perform (Call.op50 a0),
+                                                                              op51 := fun a0 => perform (Call.op51 a0),
+                                                                              op52 := fun a0 a1 a2 =>
+                                                                                perform (Call.op52 a0 a1 a2),
+                                                                              op53 := fun a0 => perform (Call.op53 a0) }
+                                                                            p val1 s1 i6
+                                                                      let cf12 ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTry.branch
+                                                                              r14)
+                                                                      match cf12 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                            val6 =>
+                                                                          if (val6.len != val.len) = true then
+                                                                            pure
+                                                                              (core.result.Result.Err
+                                                                                AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                          else pure (core.result.Result.Ok val6)
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          liftM
+                                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              (alloc.vec.Vec U8)
+                                                                              (core.convert.FromSame
+                                                                                AdapterRw.solana_program_error.ProgramError)
+                                                                              residual)
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8)
+                                                                (core.convert.FromSame
+                                                                  AdapterRw.solana_program_error.ProgramError)
+                                                                residual)
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame
+                                                              AdapterRw.solana_program_error.ProgramError)
+                                                            residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame
+                                                          AdapterRw.solana_program_error.ProgramError)
+                                                        residual)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                    residual)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8)
+                                            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                            residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8)
+                                        (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8)
+                                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                            residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+        else pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+'AspisR1.NNQ_HostDigest.stage1_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NNQ_generated/NNQ_Stage1.lean:34:66: error: unsolved goals
+case h_1.h
+S : AdapterRw.Ops
+o : AdapterRw.SolanaDigest → Slice (Slice U8) → Result (Std.Array U8 32#usize)
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+h✝¹ : ¬(accounts.len != 7#usize) = true
+x✝⁶ : Option (Slice U8)
+x✝⁵ : Slice U8
+x✝⁴ : Bool
+h✝ : ¬x✝⁴ = true
+x✝³ : core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError
+cf✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError)
+    AdapterRw.r1_pool_adapter.ValidatedAsqa
+val✝ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+x✝² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x✝¹ : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝¹ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝¹ : Slice U8
+x✝ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝ : Slice U8
+⊢ Sim
+    (liftM
+      (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+        { op0 := @AdapterRw.Ops.op0 S, op1 := @AdapterRw.Ops.op1 S, op2 := @AdapterRw.Ops.op2 S,
+          op3 := @AdapterRw.Ops.op3 S, op4 := @AdapterRw.Ops.op4 S, op5 := @AdapterRw.Ops.op5 S,
+          op6 := @AdapterRw.Ops.op6 S, op7 := @AdapterRw.Ops.op7 S, op8 := @AdapterRw.Ops.op8 S,
+          op9 := @AdapterRw.Ops.op9 S, op10 := @AdapterRw.Ops.op10 S, op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+          op13 := S.op13, op14 := S.op14, op15 := S.op15, op16 := S.op16, op17 := S.op17, op18 := S.op18,
+          op19 := S.op19, op20 := S.op20, op21 := S.op21, op22 := S.op22, op23 := S.op23, op24 := S.op24,
+          op25 := S.op25, op26 := S.op26, op27 := S.op27, op28 := S.op28, op29 := S.op29, op30 := S.op30,
+          op31 := S.op31, op32 := S.op32, op33 := S.op33, op34 := S.op34, op35 := S.op35, op36 := S.op36,
+          op37 := S.op37, op38 := S.op38, op39 := S.op39, op40 := S.op40, op41 := S.op41, op42 := S.op42, op43 := o,
+          op44 := S.op44, op45 := S.op45, op46 := S.op46, op47 := S.op47, op48 := S.op48, op49 := S.op49,
+          op50 := S.op50, op51 := S.op51, op52 := S.op52, op53 := S.op53 }))
+    (liftM (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES S))
+
+case h_1.hk.h
+S : AdapterRw.Ops
+o : AdapterRw.SolanaDigest → Slice (Slice U8) → Result (Std.Array U8 32#usize)
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+h✝² : ¬(accounts.len != 7#usize) = true
+x✝¹² : Option (Slice U8)
+x✝¹¹ : Slice U8
+x✝¹⁰ : Bool
+h✝¹ : ¬x✝¹⁰ = true
+x✝⁹ : core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError
+cf✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError)
+    AdapterRw.r1_pool_adapter.ValidatedAsqa
+val✝ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+x✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x✝⁷ : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝¹ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝² : Slice U8
+x✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+x✝⁵ : core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError
+cf10✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Slice U8)
+val4✝¹ : Slice U8
+x✝⁴ : Usize
+x✝³ : Option Usize
+x✝² : core.result.Result Usize AdapterRw.solana_program_error.ProgramError
+cf11✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) Usize
+val5✝ : Usize
+h✝ : ¬(val4✝².len != val5✝) = true
+x✝¹ :
+  core.result.Result (Std.Array U8 1880#usize)
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+x✝ : core.result.Result (Std.Array U8 1880#usize) AdapterRw.solana_program_error.ProgramError
+cf4✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Std.Array U8 1880#usize)
+val4✝ : Std.Array U8 1880#usize
+x : Slice U8
+⊢ Sim
+    (liftM
+      (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+        { op0 := @AdapterRw.Ops.op0 S, op1 := @AdapterRw.Ops.op1 S, op2 := @AdapterRw.Ops.op2 S,
+          op3 := @AdapterRw.Ops.op3 S, op4 := @AdapterRw.Ops.op4 S, op5 := @AdapterRw.Ops.op5 S,
+          op6 := @AdapterRw.Ops.op6 S, op7 := @AdapterRw.Ops.op7 S, op8 := @AdapterRw.Ops.op8 S,
+          op9 := @AdapterRw.Ops.op9 S, op10 := @AdapterRw.Ops.op10 S, op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+          op13 := S.op13, op14 := S.op14, op15 := S.op15, op16 := S.op16, op17 := S.op17, op18 := S.op18,
+          op19 := S.op19, op20 := S.op20, op21 := S.op21, op22 := S.op22, op23 := S.op23, op24 := S.op24,
+          op25 := S.op25, op26 := S.op26, op27 := S.op27, op28 := S.op28, op29 := S.op29, op30 := S.op30,
+          op31 := S.op31, op32 := S.op32, op33 := S.op33, op34 := S.op34, op35 := S.op35, op36 := S.op36,
+          op37 := S.op37, op38 := S.op38, op39 := S.op39, op40 := S.op40, op41 := S.op41, op42 := S.op42, op43 := o,
+          op44 := S.op44, op45 := S.op45, op46 := S.op46, op47 := S.op47, op48 := S.op48, op49 := S.op49,
+          op50 := S.op50, op51 := S.op51, op52 := S.op52, op53 := S.op53 }))
+    (liftM (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES S))
+'AspisR1.NNQ_HostDigest.stage2_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
