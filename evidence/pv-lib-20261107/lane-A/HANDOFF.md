@@ -187,3 +187,5 @@ Session5 47406: PreActionTraceV3 passes on the final Cell-corrected candidate. S
 Session5 47409: ClonePrologueV2 passes after47407/08 repairs. Uses named existing four-instruction chain plus local guard certificate and call primitive. Actual five-step OWNER-aware V3 history establishes17->24->issued360 receiver; original constructor-entry cut still open.
 
 Session5 47410: ArcPollV3.actual_poll passes on the Cell-corrected candidate at actual12950; complete original reply retained. Full original-entry/source/native binding is not claimed.
+
+Session5 47411: DropStoreV2 passes. Nonlast Arc486/Weak683 branches derive decrement choice from actual source count; last/dangling/destructor/deallocation unsupported. OptionTake369 constructs None from source metadata, no Drop(old).
