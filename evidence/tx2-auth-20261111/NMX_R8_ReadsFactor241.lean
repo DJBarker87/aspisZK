@@ -29,10 +29,19 @@ theorem factor (env : RSL.Env) (choices : NMX_R4_Authentication.Choices)
  change RSL.Spec.bind (RSL.Spec.pure (core.result.Result.Ok 58295#usize :
   core.result.Result Usize solana_program_error.ProgramError)) _ = _
  rw [RSL.Spec.bind_pure]
- change RSL.Spec.bind (RSL.Spec.pure (.Continue 58295#usize)) _ = _
+ change RSL.Spec.bind (RSL.Spec.pure (core.ops.control_flow.ControlFlow.Continue 58295#usize :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible solana_program_error.ProgramError) Usize)) _ = _
  rw [RSL.Spec.bind_pure]
  unfold source NMS_R2N_RawTry.literal
- rfl
+ dsimp only
+ cases guard : (Slice.len proof != 58295#usize) with
+ | true => rfl
+ | false =>
+   apply congrArg (RSL.Spec.bind _)
+   funext reply
+   apply congrArg (RSL.Spec.bind _)
+   funext flow
+   cases flow <;> rfl
 #print axioms factor
 end NMX_R8_ReadsFactor241
 end
