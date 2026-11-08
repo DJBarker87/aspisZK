@@ -193,3 +193,5 @@ Session5 47411: DropStoreV2 passes. Nonlast Arc486/Weak683 branches derive decre
 Session5 47412: DropDispatchV2 passes, adds369 and nonlast486/683 on V3 with OWNER-aware away/trace agreement and full-reply effects. Last/dangling Drop and opaque/type dispatch stay OPEN.
 
 Session5 47414: CloneCountV2.from124 passes (47413 explicit issued singleton repaired). SAME literal124 source store plus documented121 facts/prologue/issuance now derive an actual defined BoxNew count1->2 action, preserving weak and Packet. No count/root/alias/write-definedness premise. Original-entry and native-value binding still open.
+
+Session5 47415: unchanged strict audit walker driver RawAudit5 compiles,118 roots across28 new modules, standard axioms. Final raw47490 next; no audit rerun.
