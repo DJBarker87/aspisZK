@@ -299,3 +299,39 @@ S2's cap is already reached; the finding is reported, not silently hidden.
 S2 Split.rest remains open; S3 A2 remains open at recorded slots. Fresh run5
 used95/160 actual scopes (92 since the P2 resume);65 remain. S5 next.
 The16GiB S8 scope remains unused; no export, row credit, push or shipped edit.
+
+## S5 boundary (2026-11-08): selected native prefix, final packet blocked
+
+Target not yet established. L803–822:20 actual capped scopes; S5 stopped
+below its30 cap at two exact installation obligations. Fresh run5 now115/160
+actual scopes,45 remain. The one16GiB scope remains unused.
+
+PASS: HostFirstWriter derives f, writerRoot and writerHeader from Accepted1
+alone. Weak241Prefix/WeakTx2Inputs invert the weak Ref's SAME validation,
+encoding and reads without canonical authValue or Root0. WeakReaderCuts derives
+the exact688..58295 native range, suffix and origin. WeakReaderNative identifies
+the SAME weak-native slices with those getters/range/encoder by carrier
+roundtrips (two map-simplification attempts retired; explicit native-list
+roundtrip used). HostNativeCuts.produce combines these, writer facts and
+HostPersistence.persisted from the existing game/runtime law. HostNativeHeader
+proves readerHeader at the headline SHA and selection at the environment clock.
+All passing roots print standard axioms only. No NMF_GameRoot theorem is used.
+
+Finding: the originally requested Tx2ConcreteInputs.produce requires a guarded
+canonical value; its packet carries Dom064 V0, which already includes reader
+Root0. S5Root0Finding records the projection and carried domain. The new weak
+prefix avoids this circular route; it does not add a premise.
+
+Exact NMF_B blockers:
+1. HostNativeCuts.origin is at clock(envOf c); the actual recorder pair and
+physical model2 use c.j.slot. HostClockFinding already proves these may differ
+under Exhibited+EnvRep. No slot equality was added as a hypothesis. Correcting
+the literal host and accounting for clock independence is required.
+2. Packet.native is indexed by LIBB_PartitionEnv.H(envOf c), not c.sha256.
+Node/leaf pointwise equality is compiled, and the reader header is transported,
+but the SAME native invocation/records transport needed by NNH_NMFPrime.Packet
+at H remains unproved. Global oracle equality must not be asserted: arbitrary
+messages are repartitioned by C04Partition.
+Consequently no Associated/rootImage/eventImage producer or assemble application
+is claimed. These are final-field obligations, not new allowed own hypotheses.
+Next independent step: S6 HeadlineB; A1/A2 and Split.rest remain as recorded.
