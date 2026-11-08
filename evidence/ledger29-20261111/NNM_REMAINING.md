@@ -1,16 +1,13 @@
-Target not yet established. Ledger29 INCOMPLETE; inherited 589 CLOSED /0 QUALIFIED /10 OPEN. No promotions.
+Target not yet established. Ledger29 full-composition gate PASS:594 CLOSED /0 QUALIFIED /5 OPEN of599.
 
-| Row | Exact remaining gate/deliverable |
+| Row | Exact next obligation |
 |---|---|
-| TX1:330 | Needs shared333/221 and both wrapper packets. |
-| TX1:333 | Needs both344 and240 at SAME implementations; canonical wrapper candidates not credited by this incomplete gate. TGA G1 remains open where used. |
-| TX1:344 | Concrete Candidate344 at15 rev4 wrapper objects/source-fission and matched controls passes static checks; full raw gate incomplete. ReviewedTranscription344 unused. |
-| TX1:345 | Complete candidate ActualCandidate345 passes exact rev4/source checks; no credit until missing full-gate raw roots are audited. Provisional Candidate345 excluded. |
-| TX2:213 | Needs shared333/221 and both wrapper packets. |
-| TX2:221 | Same dual-route process as333; needs both wrapper packets. |
-| TX2:233 | Complete E008/Box/all-Args candidate with eight clause dispositions; full raw gate incomplete. |
-| TX2:240 | Needs separately gated canonical 241 and exact wrapper instantiation at SAME implementation; D1/D2 caller clauses explicitly registered. TGB-4 Clock Err registration remains lead/240-owned. |
-| TX2:241 | Complete V0-star candidate on verbatim D1/D2, S2/extent discharge reviewed; full raw gate incomplete. D1/D2 caller clauses at 240 remainOPEN. |
-| TX2:242 | Complete canonical native/port candidate, correct NMS_E003 validate_asq8 and TGB-2 carrier image; full raw gate incomplete. |
+| TX1:330 | Instantiate NNF entry after shared333/221 closes; needs both wrapper packets, same actual implementations. |
+| TX1:333 | Instantiate dual-route NNF process fold after complete canonical240 is gated.344 is now CLOSED; TGA G1 NoWrite/TasRoots repairs are separate and remain open where used. |
+| TX2:213 | Instantiate NNF entry after shared333/221 closes; needs both wrapper packets. |
+| TX2:221 | Shared dual-route process requires complete canonical240 plus CLOSED344 at SAME installed implementation. |
+| TX2:240 | Instantiate/gate actual wrapper at CLOSED241 and exact canonical library/PoolLaws. D1/D2 caller clauses are explicitly registered here; TGB-4 Clock error-allocation/registration remains lead/240-owned. No240 candidate is submitted in this gate. ReviewedTranscription-TX2:240 retained unused. |
 
-Immediate blocker: 63 exact current raw root results, NNM_MISSING_RAW_ROOTS.json. All 60 scopes used;0 Kani/0 extraction. Missing work is Lean/raw audit, not a Kani or source-refinement obstruction. See planned split; do not rerun completed targets. TOP:G1b and TOP:G0 remainOPEN; no top field is relabelled as a row blocker. Source-to-ELF, cold release replay, provenance/per-definition equality, actual Pool execution, K086 and other top fields remain.
+Initial60/60 scopes plus continuation raw walks completed; see NNM_RESOURCES.json for counts.0 Kani/0 extraction. The five assigned candidates are fully gated. No assigned Lean obligation is parked behind Kani. Remaining row deliverables belong to wrapper/entry owners and need new instantiated roots and their own coherent gate.
+
+TOP:G1b remains OPEN under TGB-1 (fixed-H weak-law registration). Canonical241 is V0-star and is not parametric in V; this is not a row blocker. TOP:G0 OPEN; headline not composed. TOP:PoolLaws CLOSED retained. D2/Root0 provenance at the selected top occurrence, G1c, A1-A5, source-to-ELF/L187/L188, cold release replay, extraction provenance/per-definition equalities, actual Pool execution, K086/(aj)(a), and other top records remain separate. Owner2026-11-08 condition(4) pointwise inclusion is RECORDED ONLY, not proved here. Frozen3,L154,narrowedD188,100-bit per-attempt,privacy and two transactions unchanged.

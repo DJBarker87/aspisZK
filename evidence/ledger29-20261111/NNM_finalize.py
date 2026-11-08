@@ -12,13 +12,16 @@ def put(n,x,compress=False):
  if compress or len(b)>20_000_000:Path(str(p)+'.xz').write_bytes(lzma.compress(b));Path(str(p)+'.sha256').write_text(H(b)+'\n')
  else:p.write_bytes(b)
 subprocess.run(['python3',str(E/'NNM_prepare.py'),'--check'],check=True)
+assert J(E/'NNM_CONTINUATION_RESULTS.json')['status']=='PASS'
 assert J(E/'NNM_GATE_INTEGRITY.json')['status']=='PASS'
 assert J(E/'NNM_PREDECESSOR_COMPARISON.json')['status']=='PASS'
 assert J(E/'NNM_CANDIDATE_COMMIT_PINS.json')['status']=='PASS'
 assert J(E/'NNM_RSL_REPLAY.json.xz')['standard_axioms_only']
 required=J(E/'NNM_AUDIT_ROOTS.json');results=[];disagreements=[]
 for i,g in enumerate(required['groups']):
- ps=list((E/'NNM_audit').glob('batch*/proof'+str(i)+'.json'));assert len(ps)==1,(i,ps)
+ ps=list((E/'NNM_audit').glob('batch*/proof'+str(i)+'.json'))
+ if not ps:continue
+ assert len(ps)==1,(i,ps)
  d=J(ps[0]);assert [r['root']for r in d['results']]==g
  assert d['exit_status']==0 or(d['exit_status']==1 and any(not r['equal']for r in d['results'])),(i,d['exit_status'])
  for r in d['results']:
@@ -28,13 +31,16 @@ for i,g in enumerate(required['groups']):
  results+=d['results']
 assert len(results)==len({r['root']for r in results})==len(required['roots'])
 assert {r['root']for r in results}==set(required['roots'])
+put('RAW_MERGED',dict(combined='NNM_COMBINED_IMPORT',required=len(required['roots']),completed=len(results),results=results),True)
+put('MISSING_RAW_ROOTS',dict(status='COMPLETE',count=0,roots=[]))
 fixtures=J(E/'NNM_audit/fixtures/fixtures.json');assert fixtures['exit_status']==0 and fixtures['results']==J(P/'NNL_audit/fixtures/fixtures.json')['results']
 assert J(E/'NNM_audit/scan/scan.json')['exit_status']==0
 loaded=[json.loads(l)for l in raw(E/'NNM_LOADED_scan.jsonl').decode().splitlines()];assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in loaded)
 put('SCAN',dict(status='PASS',exit_status=0,attempt='NNM_L031',combined='NNM_COMBINED_IMPORT',modules=len(loaded),dangling=0,canonical_duplicate_owners=0,import_mismatches=0,cached_replicas=sum(len(r['cached_replicas'])for r in loaded),retired_failed_scan='NNM_L030: fourteen own expected-source inventory mismatches; no credit; independent source-derived import repair',repair='NNM_IMPORT_REPAIR.json'))
 statements=J(E/'NNM_KERNEL_STATEMENTS.json');assert set(statements)==set(required['roots']);assert J(E/'NNM_STATEMENT_COMPARISON.json')['status']=='PASS'
 for n in ['EMISSION_REVIEW','SYNTAX_ASSOCIATION','WRAPPER_REVIEW','PARENT_COMPILE_PROVENANCE','FROZEN_SOURCE_CHECK']:assert J(E/('NNM_'+n+'.json'))['status']=='PASS'
-receipts=[J(p)for p in sorted(E.glob('NNM_L*/receipt.json'))];assert len(receipts)==60
+receipts=[J(p)for p in sorted(E.glob('NNM_L*/receipt.json'))];assert 62<=len(receipts)<=100
+assert [r['attempt']for r in receipts]==[f'NNM_L{i:03}'for i in range(1,len(receipts)+1)]
 entries=[json.loads(l)for l in(E/'NNM_ATTEMPTS.jsonl').read_text().splitlines()]
 for r in receipts:
  a=r['attempt'];ad=J(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed']is True
@@ -42,12 +48,14 @@ for r in receipts:
  assert str(r['swaps'])=='0';assert any(J(p)['free']>=40_000_000_000 for p in E.glob(a+'-disk*.json'))
  checks=[c for c in entries if c.get('attempt')==a and c.get('event')=='share_check'];assert checks and checks[-1]['host']['count']<6
  if r['exit_status']:
-  assert (a in['NNM_L023','NNM_L030']and r['exit_status']==1)or(a=='NNM_L052'and r['exit_status']==124),(a,r['exit_status'])
-resources=dict(scopes=60,budget=60,unused=0,kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),timeout_or_memory_kill=[dict(attempt='NNM_L052',kind='wall timeout on two-group batch; completed42 retained; unfinished43 isolated atL053',memory_kill=False,cap_or_timeout_increase=False)],failed_attempts={'NNM_L023':'Own Domain344 assertion missed SdkState; corrected inL024','NNM_L030':'Stale own expected-import inventory; source-derived correction passesL031','NNM_L052':'Batch42 completed;43 exceeded shared180s wall window, isolated43 only atL053 with unchanged limits'})
+  assert (a in['NNM_L023','NNM_L030']and r['exit_status']==1)or(a in ['NNM_L052','NNM_L057']and r['exit_status']==124)or(int(a[-3:])>=61 and r['kind']=='audit'and r['exit_status']==124),(a,r['exit_status'])
+resources=dict(scopes=len(receipts),budget=100,initial_budget=60,continuation_budget=40,continuation_scopes=len(receipts)-60,unused=100-len(receipts),kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),timeout_or_memory_kill=[dict(attempt='NNM_L052',kind='wall timeout on two-group batch; completed42 retained; unfinished43 isolated atL053',memory_kill=False,cap_or_timeout_increase=False)],failed_attempts={'NNM_L023':'Own Domain344 assertion missed SdkState; corrected inL024','NNM_L030':'Stale own expected-import inventory; source-derived correction passesL031','NNM_L052':'Batch42 completed;43 exceeded shared180s wall window, isolated43 only atL053 with unchanged limits'})
+resources['failed_attempts']=[dict(attempt=r['attempt'],target=r['module'],exit_status=r['exit_status'],wall_seconds=r['wall_seconds'])for r in receipts if r['exit_status']]
+resources['timeout_or_memory_kill']=[dict(attempt=r['attempt'],target=r['module'],exit_status=r['exit_status'],cap_or_timeout_increase=False)for r in receipts if r['exit_status']==124]
 put('RESOURCES',resources)
 assert J(E/'NNM_RAW_BINARY.json')['sha256']=='46ee271b392729449147b978830b474e3fa4ecba2b45e03ad13c02490ba6ca3c'
-put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNM_COMBINED_IMPORT',combined_attempt='NNM_L025',statement_attempt='NNM_L026',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),new_roots=len(required['roots'])-13308,all_required_raw_roots_present=True,raw_standard_axioms_only=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=J(E/'NNM_RAW_BINARY.json')['sha256'],fixtures=fixtures['results'],walker=J(P/'NNL_AUDIT.json')['walker'],scanner='NNM_SCAN.json',coherence='One fresh rev4 RSL object set; same complete predecessor root types/owners; fifteen NMV wrapper imports from private rev4 replay only',resources=resources,cold_release_replay=False,security_target_established=False))
-basis=J(P/'NNL_LEDGER.json.xz');ledger=copy.deepcopy(basis);by={r['row']:r for r in ledger['rows']};oldby={r['row']:r for r in basis['rows']};review=J(E/'NNM_CANDIDATE_REVIEW.json');clauses=J(E/'NNM_CLAUSE_REVIEW.json');newrows=[]
+put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNM_COMBINED_IMPORT',combined_attempt='NNM_L025',statement_attempt='NNM_L026',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),completed_roots=len(results),missing_roots=0,new_roots=len(required['roots'])-13308,all_required_raw_roots_present=True,raw_standard_axioms_only=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=J(E/'NNM_RAW_BINARY.json')['sha256'],fixtures=fixtures['results'],walker=J(P/'NNL_AUDIT.json')['walker'],scanner='NNM_SCAN.json',coherence='One fresh rev4 RSL object set; same complete predecessor root types/owners; fifteen NMV wrapper imports from private rev4 replay only',resources=resources,cold_release_replay=False,security_target_established=False))
+basis=J(P/'NNL_LEDGER.json.xz');ledger=copy.deepcopy(basis);by={r['row']:r for r in ledger['rows']};oldby={r['row']:r for r in basis['rows']};review=J(E/'NNM_CANDIDATE_REVIEW.json');assert [(c['row'],c['theorem'])for c in review['candidates']]==[('TX1:345','AspisR1.NNG_ActualCandidate345.candidate'),('TX1:344','AspisR1.NNG_Candidate344.candidate'),('TX2:233','NMX_R4_Authentication.root'),('TX2:242','NMX_R6_Validation.root'),('TX2:241','NMX_R9_StageTwo.root')];clauses=J(E/'NNM_CLAUSE_REVIEW.json');newrows=[]
 clause_by={c['id']:c for c in clauses['clauses']}
 def update_inherited(v):
  if isinstance(v,dict):
@@ -59,7 +67,7 @@ def update_inherited(v):
  elif isinstance(v,list):
   for z in v:update_inherited(z)
 for c in review['candidates']:
- assert c['gate_status']=='STATIC_PASS_REPLAY_PENDING';name=c['theorem'];r=by[c['row']];assert r['status']=='OPEN'and r['obligation_statement_hash']==c['basis_obligation_statement_hash']
+ assert c['gate_status']=='NOT_ADMITTED_FULL_GATE_INCOMPLETE';name=c['theorem'];assert c['current_raw_result']==next(z for z in results if z['root']==name);c.pop('exact_blocker',None);r=by[c['row']];assert r['status']=='OPEN'and r['obligation_statement_hash']==c['basis_obligation_statement_hash']
  assert statements[name]['owner_module']==name.split('.')[-2]
  for child in c['canonical_children']:
   if child.get('status')=='RECLASSIFIED_SPURIOUS_BY_NAME':continue
@@ -85,7 +93,7 @@ for row in ['TX2:240','TX2:221','TX2:213']:update_inherited(by[row]['obligation'
 for z in clauses['clauses']:z['status']='DISCHARGED'
 for z in clauses['registered_caller_clauses']:
  xs=by['TX2:240']['obligation']['caller_domain_obligations'];assert not any(q.get('id')==z['id']for q in xs);xs.append(z)
-review['gate']='PASS';put('CANDIDATE_REVIEW',review);put('CLAUSE_REVIEW',clauses)
+review['gate']='PASS';clauses['gate']='PASS';clauses['current_ledger_note']='Current complete raw gate admits241; internal dispositions and resume registrations discharged, D1/D2 retained upstream.';put('CANDIDATE_REVIEW',review);put('CLAUSE_REVIEW',clauses)
 ledger['top_composition_obligations']=J(E/'NNM_TOP_COMPOSITION.json')['top_composition_obligations']
 for n in ['SPECIFICATION','TOP_COMPOSITION','K086','PROVENANCE']:ledger['NNM_'+{'SPECIFICATION':'specification','TOP_COMPOSITION':'top_composition','K086':'K086','PROVENANCE':'extraction_provenance'}[n]]=J(E/('NNM_'+n+'.json'))
 for tr in ledger['trust_rows']:

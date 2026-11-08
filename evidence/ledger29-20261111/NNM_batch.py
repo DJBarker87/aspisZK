@@ -1,7 +1,9 @@
 """Sequential raw ax2 windows with independent resource receipts."""
 from pathlib import Path
-import subprocess,json,time,re,sys,os
+import subprocess,json,time,re,sys,os,hashlib
 B=Path.cwd();mode=sys.argv[1]
+assert hashlib.sha256((B/'NNM_native/NNM_ProofDriver').read_bytes()).hexdigest()=='46ee271b392729449147b978830b474e3fa4ecba2b45e03ad13c02490ba6ca3c'
+assert os.environ['LEAN_PATH'].split(':')[0]==str(B/'NNM_exports_final_20261111')
 for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:(B/('NLX_'+n)).write_bytes((B/('NNM_'+n)).read_bytes())
 E=B/'NNM_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 seal=mode.endswith('-pin')

@@ -16,12 +16,15 @@ initial=prior['groups'][:51]+[tail[i:i+120]for i in range(0,len(tail),120)]
 paired=initial[:44]+[initial[i]+initial[i+1]for i in range(44,58,2)]
 plan=J(E/'NNM_FINAL_SCOPE_PLAN.json');groups=paired[:47]+[J(E/'NNM_AUDIT_ROOTS.json')['groups'][i]for i in range(47,50)]+[plan['pending_roots']]
 assert set(r for g in groups[47:]for r in g)==set(r for g in paired[47:]for r in g)
-required=J(E/'NNM_AUDIT_ROOTS.json');assert required==dict(roots=sorted(set(prior['roots'])|extra|set(own)),groups=groups)
+required=J(E/'NNM_AUDIT_ROOTS.json');assert required['roots']==sorted(set(prior['roots'])|extra|set(own))
+assert required['groups'][:51]==groups
+assert set(r for g in required['groups'][51:]for r in g)<=set(groups[50])
 assert len(groups)==51 and len(required['roots'])==13715
 assert sum(map(len,groups))==len({r for g in groups for r in g})==13715
 for window in plan['scopes']:assert window['root_names']==groups[window['group']]
-assert J(E/'NNM_AUDIT_MODULES.json')==[['NNM_COMBINED_IMPORT']]*51
-assert J(E/'NNM_PATHS.json')[:5]==[B+'/'+n for n in ['NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']]
+assert J(E/'NNM_AUDIT_MODULES.json')==[['NNM_COMBINED_IMPORT']]*len(required['groups'])
+assert J(E/'NNM_PATHS.json')[0]==B+'/NNM_exports_final_20261111'
+assert J(E/'NNM_PATHS.json')[1:6]==[B+'/'+n for n in ['NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']]
 cfg=J(E/'NNM_SEED_CONFIG.json');assert len(cfg['wrapper_modules'])==15 and all(m.startswith('NMV_')for m in cfg['wrapper_modules'])
 assert all(r['module'].startswith(('NMX_','NMS_','LIBB_'))for r in cfg['tx2_objects'])
 plan=J(E/'NNM_COHERENCE_PLAN.json')
@@ -39,4 +42,4 @@ for row in loaded:
  if p is not None:
   imports=list(dict.fromkeys(['Init']+re.findall(r'^import\s+([\w.]+)',p.read_text(),re.M)))
   assert expected[m]==imports,(m,imports,expected[m])
-print('NNM amended preflight PASS:13715 roots,51 groups,single rev4 source set,15 refreshed NMV modules,current source-derived import inventory')
+print(f'NNM amended preflight PASS:13715 required roots,51 original groups,{len(required["groups"])-51} continuation groups,single rev4 source set,15 refreshed NMV modules,current source-derived import inventory')

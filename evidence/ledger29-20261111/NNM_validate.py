@@ -34,5 +34,5 @@ assert J(E/'NNM_FROZEN_SOURCE_CHECK.json')['status']=='PASS'
 log=raw(E/'NNM_L024/stdout.log').decode();lines=[l for l in log.splitlines()if 'depends on axioms'in l or 'does not depend on any axioms'in l];assert len(lines)==9
 for l in lines:
  if 'depends on axioms:'in l:assert set(re.findall(r'\b(?:propext|Classical.choice|Quot.sound)\b',l))==set(l.split('[',1)[1].rstrip(']').split(', '))
-report=dict(status='PASS_EVIDENCE_INTEGRITY'if not complete else'PASS',full_composition_pass=complete,compressed_sha_pairs=sha_pairs,source_snapshots=snapshots,receipts=60,new_top_print_axioms=lines,predecessor_statement_comparison='PASS all13308',edges_removed=[],shipped_changes=False,key_actions=False,no_committed_build_outputs=True,no_files_over20MB=True,security_target_established=False)
+report=dict(status='PASS_EVIDENCE_INTEGRITY'if not complete else'PASS',full_composition_pass=complete,compressed_sha_pairs=sha_pairs,source_snapshots=snapshots,receipts=len(list(E.glob('NNM_L*/receipt.json'))),new_top_print_axioms=lines,predecessor_statement_comparison='PASS all13308',edges_removed=[],shipped_changes=False,key_actions=False,no_committed_build_outputs=True,no_files_over20MB=True,security_target_established=False)
 (E/'NNM_VALIDATION.json').write_text(json.dumps(report,indent=1)+'\n');print(json.dumps(report))
