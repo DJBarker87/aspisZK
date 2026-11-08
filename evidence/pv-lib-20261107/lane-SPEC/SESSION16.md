@@ -18,3 +18,5 @@ PV_LIB_SPEC_Tls279Bound16 compiled 55537, cohort w3: exit0, wall 0:02.99, peak 4
 PV_LIB_SPEC_Tls279Request16 compiled 55538, cohort w3: exit0, wall 0:06.00, peak 4841896KiB, swap 0; source 09f098a8f03ab7d8a5d491900153344b0efbc439; standard summary axioms only.
 
 PV_LIB_SPEC_Tls279History16 compiled 55539, cohort w3: exit0, wall 0:03.75, peak 4865808KiB, swap 0; source 2df13e601f4d9ce301c232eee96b9da3c5d6dfb9; standard summary axioms only.
+
+PV_LIB_SPEC_TlsAt67 compiled 55540, cohort w3: exit0, wall 0:02.42, peak 4826760KiB, swap 0; source 5ca1eaf4b77e241758d3b2f4a305ce325cf951fb; standard summary axioms only.
