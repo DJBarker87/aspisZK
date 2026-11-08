@@ -1,4 +1,4 @@
-"""NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
+"""NNX-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
@@ -8,7 +8,7 @@ guard=E/'NNX_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);
 a,kind,target=sys.argv[1:];assert re.fullmatch('NNX_L[0-9]{3}',a) and 1<=int(a[-3:]) and not (E/a).exists()
 # S4 rev4: new outputs use a private overlay; historical objects remain read-only fallback.
 # Budget actual submissions, including unresolved ones, rather than ID suffixes.
-# Run 5 grants 160 fresh scopes after 700 terminal submissions.
+# NNX authorization: exactly fifty submitted scopes, L001-L050.
 used=set()
 for n in ['NNX_ATTEMPTS.jsonl','NNX_TRANSPORT.jsonl']:
  p=E/n
