@@ -44,7 +44,7 @@ original_data=ns['data'];arity=0
 used=set()
 def typed_data(x):
  x=normal(x)
- if isinstance(x,dict) and list(x)==['TypeVar']:
+ if isinstance(x,dict) and list(x)==['TypeVar'] and 'Free' in x['TypeVar']:
   v=x['TypeVar'];assert list(v)==['Free'];i=v['Free'];assert i<arity;used.add(i)
   return '(types['+str(i)+']?.getD .null)'
  if isinstance(x,list):return '.array ['+', '.join('('+typed_data(v)+')' for v in x)+']'

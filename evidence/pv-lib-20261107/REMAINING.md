@@ -1,3 +1,44 @@
+# Remaining obligations after Lane A session8 — PARTIAL
+
+`PV_LIB_StoreActionTable.v2` remains unchanged/importable. The additional
+`PV_LIB_A_StoreActionTable8` exports `v2TypedPrograms` and `v2TypedStep`, retaining
+the OWNER base/resources/deferred phases and the named cleanup carrier.
+All111 accepted inventory entries and all170 slot records remain unchanged.
+
+Typed248/trait-method selection, a saved-old-T Cell504 suffix, and typed emitted
+486/584/608/661/405/222 bodies now compile. Existing slice numbering lemmas prove
+both destructor and Cell suffix entry numbering. Cleanup Match now has a generic
+checked lowering without temporary writes; complete emitted644/454 control and
+cleanup syntax compile. `UnwindReplies.full_reply` preserves every pinned reply.
+These are qualified source-syntax/local graph results, not complete adequacy.
+
+FIRST, still required:
+
+1. Bind opaque generic Option drop glue157:608's ACTUAL nonempty suffix reaches
+   it (`SpawnHooksTailGap.actual_tail`), while the new supplied table has no157
+   body (`option_source_unbound`). Complete arbitrary-T Cell destruction and
+   nested dynamic callback/destructor source effects.
+2. Recover/preserve the actual allocator metadata needed by generic Arc glue:
+   the retained Arc type erases A, but405/486/584 require T AND A. The erased
+   allocator marker is not silently noop (`TypedBindingFacts`). Then finish
+   last-strong/Weak SOURCE-to-OWNER backing, registry and deallocation adequacy.
+3. Bind collect4 and the remaining opaque wrapper/callback/TLS/parker effects.
+   The old454/644 cleanup-conversion obstacle is repaired in NEW modules;
+   generated syntax alone does not discharge the wrappers' nested effects.
+
+THEN corrected-machine Range93, f6 and OwnInit histories in dependency order.
+None is promoted through unresolved actions. Endpoint premises removed0/added0,
+new T fields0, slot changes0, row closures0. Target not yet established.
+
+D991: session8 defines ZERO allocation byte images and invents no initialization
+for unwritten bytes. Inherited total-image results are not re-credited as source
+adequacy; no observational forgetting of stale bytes is assumed.
+
+See lane-A/session8/MODEL_FINDINGS.md, METADATA_PROVENANCE.json, SUPPORT.json,
+STORE_ACTIONS.json and RAW_AUDIT.json. Earlier sessions below are retained history.
+
+## Retained session7 and earlier obligations
+
 # Remaining obligations after Lane A session7 — PARTIAL
 
 The requested completion is NOT achieved. `PV_LIB_StoreActionTable.v2` remains
