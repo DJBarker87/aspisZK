@@ -13,3 +13,10 @@ L044 ambiguous opened rows name fixed by explicit physical owner.
 Neither failure was a timeout/memory kill. Parent bridge remains open.
 Receipts record exact targets, source revisions/hashes, dependencies, exit, wall,
 RSS, swap, caps and full printed axioms; these are focused cached compiles.
+
+Stage 4b inactive CLOSED at L052: NNU_Inactive.source and returned prove
+exactly NNH_Tx2OpenSlots.inactive for every symbolic byte slice. The proof
+pushes Option.map through Result binds and branches, with a separate limbs
+lemma (L049); no Slice.index_usize, parser buffer, or concrete byte evaluation.
+L048/L050 needed explicit body/constant unfolding after structural mapping.
+The source-ordered common converse remains OPEN.
