@@ -37,3 +37,18 @@ Frontier.observe, retaining exact source frames and Numbered clauses. Full
 SAME-machine history equality is unchanged. Old drafts are retained and no
 universal contract inhabitance is claimed. Draft55494 exit241 earns no pass;
 final55495 covers all532 roots with the unchanged strict walker/collector.
+
+## SPEC-C19 (session20): actual contracted Active origin
+
+Demonstrated error: NativeTargets18.ActiveBeforeF6's inner207:8248 consumed-origin
+clause mismatches the D877 contract-first machine at the actual original185 poll.
+ActiveOrigin18520.site proves source170:8162; ActiveTarget20.no_inner_origin proves
+no context bound to this actual poll can have statement8248.
+
+Before is preserved by ActiveTarget20.Before. The new ActiveTarget20.Delivered
+requires the actual8162 origin, its consumption at186, source ACTIVE=true and
+physical byte1; ActiveTarget20.delivered inhabits it for every Entry and activation.
+The named C18 callback computes the inner8248 reply and source effect. No invented
+origin, success/decoder premise, provider/frozen implementation, row, endpoint or
+T change is introduced. The relative ordering against A's later n6 remains for
+composition; no A join is re-derived and no complete joint contradiction claimed.

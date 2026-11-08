@@ -14,7 +14,12 @@ consumption at155→156. ActiveTrace20 and NativePoll20/LocalReturn20
 (56224/26/28) supply symbolic source transport and native administration.
 Active27720 (56231) and ActiveHistory16020 (56233) reuse the named277
 semantics at original159→160, retaining the same world, full stores and origins.
-56234 is in progress. Full native
+The named pure/source segments now establish original185 and actual delivery186
+(ActiveCallback20/ActiveFalse20/ActiveOrigin18520/ActiveHistory18620/ActiveTarget20;
+56245..56249). Source ACTIVE=true, physical byte1 and the enclosing source8162
+consumed context are derived on the same history. SPEC-C19 repairs the draft
+inner8248-origin requirement, preserving Before and full C18 computation.
+Next56250. Full native
 295/454, callback consumption/source activation/run, Values, ownership14756,
 universal contracts and final joint witness remain OPEN. No strict audit yet.
 

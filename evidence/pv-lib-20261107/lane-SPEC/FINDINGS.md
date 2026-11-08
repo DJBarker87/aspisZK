@@ -536,3 +536,24 @@ superseded drafts and the diagnostics, with unchanged walker/collector and
 fixed caps in three sequential partitions. Its receipt is the pass authority.
 This local repair does not inhabit any universal contract or establish the
 complete conditional joint witness. See SESSION18_SPEC_CORRECTIONS.md.
+
+## SPEC-C19 — contracted callback origin (session20)
+
+Checked at the actual original adopted history, not a fresh internal start:
+ActiveCallback20.original185/state185/issued185 and ActiveHistory18620.original186
+show that the second f170 callback is reached at185 and delivered at186.
+ActiveOrigin18520.context/site and ActiveTarget20.no_inner_origin establish that
+its actual origin is source170:8162. The inner207→289:8248 computation is the
+named D877 callback contract computation, not an additional source-issued poll.
+
+Before (retained): NativeTargets18.ActiveBeforeF6 asks for a consumed context
+with function207/statement8248. After (new): ActiveTarget20.Delivered names the
+actual outer8162 origin and proves its consumption, complete source ACTIVE=true
+and physical byte1 through the named ActiveConsumption19/ActiveSource19 delivery.
+ActiveTarget20.Before aliases the unchanged draft. This is a correction of the
+lane's diagnostic obligation, not a frozen row, endpoint, trust-list or Lane A
+join change; it is not a complete contradiction of the joint target. Credit
+belongs to the source8162 origin, never an invented inner8248 context.
+
+Focused56245/46/47/48/49 exit0; receipts retain exact sources and standard axioms.
+Continue with295/454 and source/native run bindings, then Values and ownership.
