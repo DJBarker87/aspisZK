@@ -67,7 +67,7 @@ elif kind=='rsl':
 elif kind=='lean':
  names=['NNS_generated/'+target+'.lean'];p=E/(target+'.lean');files[names[0]]=p.read_text();sources=names[:]
  if target=='NNS_Statements':names+=['NNS_AUDIT_ROOTS.json']
- command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNS_generated','-o','NNS_objects/'+target+'.olean',names[0]]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNS_generated','-o','NNS_objects_v2/'+target+'.olean',names[0]]
  if target=='NNS_Driver':command+=['-c','NNS_native/NNS_Driver.c']
 elif kind=='link':
  names=['NNS_native/NNS_Driver.c','NNS_native/NFA_WALKER.c','NNS_native/NFA_MemoryLimit.c'];sources=names[:]
@@ -80,14 +80,14 @@ else:raise ValueError(kind)
 for n in names:
  if n not in files and(E/Path(n).name).is_file():files[n]=(E/Path(n).name).read_text()
 sources=list(dict.fromkeys(sources+names))
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNS_tmp',CARGO_TARGET_DIR=B+'/NNS_target',LEAN_PATH=':'.join(dict.fromkeys([B+'/NNS_objects',B+'/NNS_seed']+json.loads((E/'NNS_PATHS.json').read_text())))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Pinned cache IO'if kind=='seed'else'Focused import elaboration'if kind=='lean'else'Optimized linker'if kind=='link'else'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNS_tmp',CARGO_TARGET_DIR=B+'/NNS_target',LEAN_PATH=':'.join(dict.fromkeys([B+'/NNS_objects_v2',B+'/NNS_primary']+json.loads((E/'NNS_PATHS.json').read_text())))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Pinned cache IO'if kind=='seed'else'Focused import elaboration'if kind=='lean'else'Optimized linker'if kind=='link'else'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
-for n in ['NNS_native','NNS_objects','NNS_rev4','NNS_tmp']: (b/n).mkdir(exist_ok=True)
+for n in ['NNS_native','NNS_objects_v2','NNS_rev4','NNS_tmp']: (b/n).mkdir(exist_ok=True)
 w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 for n in ['S2W_run_host.py','S2W_lean_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not(b/n).exists():shutil.copy2(w/n,b/n)

@@ -1,0 +1,11 @@
+def RSL.TAS.lib : (V0 : RSL.TX2_241.V2Lib) →
+  (RSL.Bytes → RSL.Bytes → Prop) →
+    (RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except V0.VErr Unit)) → RSL.TX2_241.V2Lib :=
+fun V0 R0 w => { VErr := V0.VErr, debug := V0.debug, Root0 := R0, tx2auth := w }
+def RSL.RS : Type → Type :=
+fun α => RSL.Spec (Except RSL.ProgramError α)
+'NNS_LibraryContext.map_error' depends on axioms: [propext]
+'NNS_LibraryContext.after_public' depends on axioms: [propext, Quot.sound]
+'NNS_LibraryContext.after_reads' depends on axioms: [propext, Quot.sound]
+'NNS_LibraryContext.after_validate' depends on axioms: [propext, Quot.sound]
+'NNS_LibraryContext.replay' depends on axioms: [propext, Quot.sound]
