@@ -1,0 +1,1 @@
+Target not yet established. Frozen source and ELF pins remain the inherited release targets. This proof-only gate changes no shipped file, key, account or live worktree. ELF rebuild is not triggered. Exact source/tree identity and inherited artifact pins will be recorded in the final audit.
