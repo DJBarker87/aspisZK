@@ -98,7 +98,7 @@ for i,f in fs.items():
    rawDrops.append(dict(caller='thread:f'+str(i),site=d['identity']['statement'],source_path=d['identity']['path'],native=drop,type_name=typename(drop['place']['ty']),affected_rows=ancestors(['thread:f'+str(i)])))
 # Additional composite/type-dependent writers: no no-write claim is made for these.
 extra={168:'JoinInner.packet.result.UnsafeCell.value is taken; Arc cleanup also writes counts',241:'copy_nonoverlapping destination may be a source-store pointee',248:'drop_in_place executes the selected destructor',308:'pointer-method write',322:'Drop::drop trait dispatch may execute Packet destructor and other captured destructors',325:'pointer-method drop_in_place',364:'pointer write',454:'spawn-hook TLS Cell::take/set and Arc clone/drop; provenance determines source/OWNER backing',549:'mem::drop executes the selected destructor',654:'Box::drop executes the pointee destructor before deallocation'}
-extra.update({214:'Thread::clone clones its Arc<Inner>; source count write if Inner is source-backed (OWNER operator path also exists)',
+extra.update({4:'Iterator::collect executes mutable iterator/captured callback, whose source effects need binding',14:'ordered_map_inner closure invokes the user callback; source effects need actual callback binding',214:'Thread::clone clones its Arc<Inner>; source count write if Inner is source-backed (OWNER operator path also exists)',
  122:'current_or_unnamed clones existing Thread or constructs TLS Thread; backing/provenance unresolved',
  128:'Thread::park delegates to Parker whose atomic state may be source-backed',
  225:'Parker::park changes the atomic parker state through Pin<&Parker>',
@@ -123,7 +123,7 @@ for i,f in fs.items():
  if any(part in name for part in ['drop_glue','::call_once','::catch_unwind','::unwrap_or_else','::and_then','::map_or','::clone']):
   if i not in {196,283,377,408,451,567,568}:
    extra.setdefault(i,'Type-dependent destructor/clone/callback effects may write through captured source references; no purity claim')
- if any(part in name for part in ['::write_fmt','::write_str','::fmt','::hash','::debug_struct','::finish']):
+ if name.endswith('::fmt') or any(part in name for part in ['::write_fmt','::write_str','::hash','::debug_struct','::finish']):
   extra.setdefault(i,'Formatter/hasher/output receiver or dispatched callback may mutate source storage; exact destination/type binding open')
 for i,foot in extra.items():
  if any(e['id']=='thread:f'+str(i)for e in entries):continue
