@@ -759,3 +759,22 @@ All names except NNH_RecordSig are in AspisR1. Existing context/seed/model
 functions are reused unchanged through NNH_Run5bCtx aliases, with the corrected
 missing-at-slot equality proved pointwise by the delivered clock-free law.
 No Realizes filter, slot-equality hypothesis or new trust item is introduced.
+
+### Run 5b T2 CLOSED
+
+Exact corrected Remaining: AspisR1.NNH_Run5bNMFRemaining.remaining (L859).
+Final term: AspisR1.NNH_Run5bNMF.nmfB (L858), via NNH_NMFPrime.assemble.
+Delivered source cuts: NNR_Producers.produce at atSlot c, composed by
+NNH_Run5bNMF.selected. Missing components are discharged concretely: M1a/M1c
+by NNR_Clock, M1b by NNR_Retime.missing; native M2 by NNR_Lift.M2;
+digest M2e by NNR_Oracle.M2e; root image by NNR_RootImage.M3. The packet
+constructor NNH_Run5bPacket.packet (L855) carries all fields. Associated is
+an existential equality to that constructor, constructed in selected; it is
+not a final premise. rootImage consumes the SAME cuts, eventImage is Iff.rfl.
+The corrected NFB Remaining is reindexed; the old signature's Remaining is
+not asserted. No Root0 or reader success is assumed to produce the packet.
+
+T2 used six scopes L854–859: three passes. Failed attempts: selector's Bool
+parameter inference (L854); explicit Tx inference (L856); dependent Obs
+elimination (L857), replaced by projection congruence (L858). All passing
+roots print only propext, Classical.choice, Quot.sound. No trust change.
