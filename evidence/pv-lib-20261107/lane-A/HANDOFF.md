@@ -1,169 +1,81 @@
-# Lane A session6 handoff — PARTIAL; requested completion not achieved
+# Lane A session7 handoff — PARTIAL; requested completion not achieved
 
 Branch `codex/pv-lib-20261107`, continued from
-`9e72b8360546e8e59c25101961856fad85d5c0e9`. No push/merge. Lane B files,
-package modules, frozen specs, row consumers, implementation and ledger are
-unchanged. Inherited handoff: session6/INHERITED_HANDOFF_SESSION5.md.
-The accepted D989 v2 inventory is retained byte-for-byte; no reinventory.
+`03c3c72b1436a3cd5677265b0682a9490a4f4878`. No push/merge. Only new Lane A
+modules, Lane A evidence, shared PLIB_MAP.json and REMAINING changed. The
+accepted D989 inventory, original v2 import, Lane B, frozen specs, packages,
+row consumers, implementation and ledgers are unchanged. SESSION_LOG.md and
+INHERITED_HANDOFF_SESSION6.md retain prior claims, failures and corrections.
 
-## Import surface and what is established
+## Established local support
 
-`import PV_LIB_A_StoreActionTable` exports the named definition
-`PV_LIB_StoreActionTable.v2`. It consolidates the22 supplied source-store
-projections and their named documented meanings. **This is a PARTIAL table,
-not the completed source-faithful table requested by the lead.** All111
-accepted inventory candidates, including89 unsupplied meanings, are retained
-in session6/STORE_ACTIONS.json. Missing entries never mean no-write.
+- Exact Cell504 metadata is checked at all six raw sites. Copy cases417/437/
+  477/629 have the documented replacement and whole-reply delivery; pinned
+  ThreadId derives Copy, supplying Option<ThreadId83>. The old value and its
+  actual type/Destruct witness are retained by CellSetBegin. Arbitrary T and
+  nonempty SpawnHooks destruction are NOT supplied.
+- Weak683 now has a SOURCE decrement/dangling/last-deallocation phase. Pending
+  neither decrements again nor frees the source block. Last-root success and
+  every fail/div/fault/pending branch have checked delivery graphs. This is
+  not complete OWNER allocator/registry/backing or last-strong adequacy.
+- Thread214 has its exact source-backed Thread/Pin/Arc count projection.
+  Eight exact emitted bodies486/584/608/214/168/122/128/14 compile with the
+  unchanged pinned converter.454 still has a cleanup Match conversion gap;
+  collect4 is opaque. No cleanup or callback meaning was invented.
+- Sized SpawnHooks glue608 can execute as a real source child, sharing the
+  store and retaining its dropping parent. EmittedDropBinding supplies its
+  exact program/resolver clause. Nested opaque operations and arbitrary
+  UntrackedDestruct/type substitution remain unbound.
 
-`import PV_LIB_A_StoreActionMachine` exports
-`PV_LIB_StoreActionTable.step`, directly extending the OWNER-aware
-`PV_THR2_OwnInitInterpreterBridged.step`. One symbolic `agreement` and
-`advance_agreement` retain the exact resource channel, registration, operator
-and bridged allocation actions away from supplied table entries. Inline
-bodies are not intercepted a second time. `native` exposes the entire partial
-model graph, including its undefined arm. This is not full source adequacy.
+## Import and machine qualifications
 
-`PV_LIB_A_ActionAnswers` proves whole-delivery equality for spurious weak
-CAS failure, plus both CAS variants' pending and fault branches. Strong/weak
-Result::Err performs no source write. The named Arc clone projection retains
-the increment before overflow abort; scope increment retains its overflow
-restoration branch. No success, no-write, non-spurious or overflow-free
-restriction was added to a row interface. Native value/order/backing bindings
-are still lower proof obligations, not new endpoint premises or T fields.
+`import PV_LIB_A_StoreActionTable` still exports the UNCHANGED
+`PV_LIB_StoreActionTable.v2` for Lane C. `PV_LIB_A_StoreActionTable7` additionally
+exports PARTIAL `v2Source`:23 supplied projections,88 missing candidate meanings,
+all111 accepted inventory entries retained in session7/STORE_ACTIONS.json.
 
-## Checked gaps preventing D984 credit
+The latest partial source-dispatch path is `PV_LIB_A_TypedDropSource.step`
+over `PV_LIB_A_DeferredActions.step`, with608 resolved by
+`PV_LIB_A_EmittedDropBinding.programs`. The OWNER base and resource environment
+are retained. The intermediate ActionPolling/Table7 retry graphs are NOT
+standalone faithful models for CAS530/555 or Vec167/10: their completion writes
+would be skipped after pending. DeferredActions corrects these four, proving
+that pending has no committed source write and eventual replies still execute
+the named operation. Historical graphs and the correction are retained.
+No caller supplies an arbitrary Store transformer or successful-answer premise.
 
-`PV_LIB_A_ActionAdequacyGap` and `PV_LIB_A_ReplyAdequacyGap` establish:
+## Still required, in the requested order
 
-- Every504 generic selects bool-only504. Aggregate replacements are rejected,
-  although their same valid transparent source replacement prefix is defined.
-- On that unsupported arm, pending and panic become undefined. The pinned
-  reply rule instead keeps pending running and maps client panic to abort.
-  World/events preservation alone therefore does NOT retain every answer.
-- Count1 rejects both nonlast Arc/Weak meanings. Last-strong payload Drop,
-  implicit Weak guard, dangling/last Weak and deallocation remain missing.
-- Installed wrappers214/168/122/128/454/4/14 have no table entry. Nested atomic
-  tokens do not supply their complete native source-store effects.
+1. Finish nontrivial old-T Cell destruction602/762, last-strong486/584 payload/
+   guard/deallocation and all opaque-wrapper source effects. The current
+   nontrivial Cell arm is CHECKED unsupported even with a defined replacement;
+   see SourceReplies7.nontrivial_still_unsupported and MODEL_FINDINGS.md.
+2. THEN corrected-machine Range93, f6 and OwnInit caller histories in dependency
+   order. None was attempted/promoted through these unresolved actions.
+3. Complete the table before any full source-adequacy or row-consumer credit.
 
-session6/CELL504_SPECIALIZATIONS.json retains the six raw504 calls and exact
-expanded T/destructor metadata: bool417; tuple437/629; Option477;
-SpawnHooks602; generic762. See session6/MODEL_FINDINGS.md for theorem names,
-actual raw sites and limits. These are checked local model counterexamples,
-not original-entry reachability or violations by the frozen Rust.
-
-## Remaining work in the requested order
-
-1. Complete the table with every v2 writer's exact named meaning;89 candidate
-   meanings remain unsupplied. Do not promote this partial import to complete.
-2. Implement typed old-T Drop AFTER504's source replacement; complete486/584/683
-   last-reference/guard/deallocation semantics and opaque wrapper effects,
-   retaining every answer. An arbitrary Store transformer or success/nonlast
-   premise does not discharge this obligation.
-3. Then corrected-machine Range93, f6 and OwnInit histories. This session
-   did not claim any such history or repeat their original-interpreter runs.
-   All detailed session5 history/numbering/resource/registry obligations remain.
-
-The work stops at the checked source/model adequacy gaps, not ID or compute
-exhaustion. The requested complete table and histories are unfinished.
-Endpoint premises removed0/added0; new T fields0; slot status changes0.
-PLIB_MAP and REMAINING record the partial import and exact gaps. All170
-statuses remain118 qualified INSTANTIATED,35 MISSING,12 WAITING,5 SPEC-ERROR.
-
-## Verification and IDs
-
-Five new proof/support modules and one driver compile accepted; eight focused
-attempts47416–47423, with two repaired syntax/elaboration failures47416/47421.
-Exact failed sources are compressed with hashes. COMPILES.json, SUPPORT.json
-and individual receipts record target, source revision/index blob, exit,
-wall, peak RSS, swap and summary-based #print axioms.
-
-ONE strict raw audit47491 of29 new roots passed: exit0,5.48s,
-peak6584260KiB,swap0, source revision
-`4c81e511a532f37b12d838158c0ae64f2d1f3bf3`. Only
-propext/Classical.choice/Quot.sound; unresolved0; summary mismatches0.
-Raw driver/walker unchanged except module/root arrays; graph archive, manifest
-and hash retained in session6. No repeated raw/full manifest/runtime gate.
-Every attempt used standalone STREAMB_SLOTS=3 admission and a single scope
-with6G/8G/swap0/Tasks64/-M7000. No launcher range or shared host changes.
-Next focused47424–47489; raw47492–47499. Inherited463xx was already spent and
-was not reused. No live task scope. VALIDATION.json checks exact scope,
-source/receipt hashes, unchanged accepted inventory and unchanged slot records.
+Next concrete work: bind typed drop_in_place248 and actual generic destructor
+resolution, finish the nonempty SpawnHooks/Arc source chain and OWNER lifetime
+correspondence, and provide454/4's exact effects without deleting cleanup.
+No slot or endpoint closure: all170 statuses remain118 qualified INSTANTIATED,
+35 MISSING,12 WAITING,5 SPEC-ERROR. Premises removed0/added0, new T fields0.
 Target not yet established.
 
-Session7 in progress from03c3c72b143:47424 passed CellSetBegin, deriving the
-replacement and retaining old T plus the exact emitted destructor metadata.
-This is not yet a complete arbitrary-T destructor/table repair. No caller
-history is promoted. Session7 receipts preserve the6G/8G/swap0/Tasks64 caps.
-47425 passed all six exact raw504 metadata checks. Only417/437/629 have
-trivial drops;477/602/762 explicitly do not. Generator --check passes.
-47427 passed CellSetPatch after retaining/fixing47426's two local reduction
-errors. It adds exact metadata-selected bool/tuple504 delivery on the OWNER
-machine, with a full-reply theorem and agreement against the OWNER base. The
-arbitrary-T, last-reference and wrapper gaps are not marked closed.
-47428 passed ActionPolling: an explicit applied phase prevents supported native
-source prefixes from being executed again on each pending poll. retry and
-pending_retry preserve the exact request/config/world/event suffix. This is a
-partial source model, with the same unimplemented typed Drop/wrapper coverage;
-it is not promoted as the completed v2 or as an OwnInit history.
-47430 passed the exact source-backed Thread214 field/count projection after
-retaining47429's match-reduction failure. This is source-backed only; native
-world/result and OWNER-only backing are not silently called closed.
-47431 passed the exact Option<ThreadId83> interpretation: pinned ThreadId is
-Copy, so its Option destructor has no callback/store effect. This adds477 to
-the recognized effect-free set without classifying SpawnHooks602 or generic762
-as trivial. Source archive/hash is session7/STD_THREADID.json.
-47433 passed WeakDropSource after two repaired elaboration issues at47432.
-The source prefix now distinguishes dangling/nonlast/last, and deallocation is
-a retained completion stage rather than a prefix incorrectly run on pending.
-This is source-only lifetime support, not complete allocator/OWNER adequacy.
-47434 passed StoreActionTable7, an explicitly PARTIAL extension preserving
-PV_LIB_StoreActionTable.v2 unchanged/importable. v2Source/sourceStep combine the
-new copy504/source-backed214/staged683 projections and retained pending phases.
-source_agreement uses the same OWNER base and resources. No full table or
-caller-history credit is claimed.
-47435 passed source count1/deallocation/root-frame lemmas. Polling review found
-that the simple ActionPolling/Table7 retry is NOT correct for reply-dependent
-CAS or Vec push/append: their pending projection is identity and completion
-must still apply the deferred operation. Those intermediate retry graphs earn
-no full-machine adequacy credit. A fixed deferred overlay follows; old models
-and all their results are retained unchanged.
-47436 passed DeferredActions.step: the recommended partial source machine.
-It re-evaluates only the four exact reply-dependent meanings CAS530/555 and
-Vec167/10; pending_start proves those have no committed source prefix. Every
-other staged operation retains its applied prefix. Original v2 stays importable.
-47438 passed SourceReplies7 after retaining47437's elaboration failure: complete
-copy504 delivery and last-Weak failure/div/fault/pending/success-source-root
-branches are checked. nontrivial_still_unsupported retains the latest model's
-602/762 gap even when the replacement itself is defined. No source/Rust
-violation or original-entry reachability is inferred.
+## Verification
 
-47439 passed PV_LIB_A_Emitted486. Exact emitted syntax only; no native adequacy or row closure.
+21 support modules and one strict driver compile accepted;26 focused receipts
+47424–47450, with repaired failures47426/47429/47432/47437 retained compressed.
+47445 was refused before Lean because a reservation scan raced disappearance
+of network-watchdog.service; fresh47446 followed the cooldown. No failed source
+was rerun unchanged. Both generators' --check passes;454's exact failed source
+instruction is retained in EMITTED_BODIES.json.
 
-47440 passed PV_LIB_A_Emitted584. Exact emitted syntax only; no native adequacy or row closure.
-
-47441 passed PV_LIB_A_Emitted608. Exact emitted syntax only; no native adequacy or row closure.
-
-47442 passed PV_LIB_A_Emitted214. Exact emitted syntax only; no native adequacy or row closure.
-
-47443 passed PV_LIB_A_Emitted168. Exact emitted syntax only; no native adequacy or row closure.
-
-47444 passed PV_LIB_A_Emitted122. Exact emitted syntax only; no native adequacy or row closure.
-47445 was refused BEFORE compilation because the read-only reservation scan
-raced disappearance of network-watchdog.service. No source job ran; no retry
-of a failed compile. The next fresh ID is47446 after the cooldown. Own body
-compile driver now skips verified accepted receipts on resume.
-
-47446 passed PV_LIB_A_Emitted128. Exact emitted syntax only; no native adequacy or row closure.
-
-47447 passed PV_LIB_A_Emitted14. Exact emitted syntax only; no native adequacy or row closure.
-47448 passed TypedDropSource, source execution specifically for the known sized
-SpawnHooks glue608. Raw FnPtr metadata is preserved, the actual source parent
-and fresh destructor frame are retained, and no Store transformer is supplied.
-Opaque/unsized/generic destructors remain explicitly unbound; this dispatch
-mechanism is not a whole SpawnHooks/Cell/last-strong adequacy result.
-47449 passed EmittedDropBinding: glue608's resolver clause and actual raw
-FnPtr normalization are discharged by the exact emitted program, rather than
-assumed at a native Drop boundary. Nested source/library adequacy remains open.
-47450 passed the unchanged strict-driver body with only module/root arrays
-changed:21 new support modules,99 new roots. One strict audit47492 follows.
-No full frozen manifest/runtime/source release replay is claimed.
+ONE strict raw audit47492 passed99 new roots: exit0,7.14s,
+peak6590872KiB,swap0, revision
+`a98a20a47493dc5cb5c49aba9788b9b40e9a52c2`. Only
+propext/Classical.choice/Quot.sound; unresolved0; summary mismatches0.
+Driver/walker unchanged except module/root arrays. Raw graph archive/hash,
+per-target revision/index blob/time/RSS/swap/axioms and validation are retained.
+No full manifest/runtime/release replay. Every scope used6G/8G/swap0/Tasks64/
+-M7000 and standalone STREAMB_SLOTS=3 admission. No live task scope.
+Next focused47451–47489; next raw47493–47499. No ID-budget exhaustion claim.
