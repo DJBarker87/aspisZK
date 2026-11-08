@@ -8,3 +8,5 @@ PV_LIB_SPEC_LaneA_Graph compiled 44939, cohort w3: exit0, wall 0:00.23, peak 483
 PV_LIB_SPEC_LaneA_View compiled 44940, cohort w3: exit0, wall 0:01.25, peak 2693648KiB, swap 0; source 548fcd261e1c597300a28e48cc5f4b2b95e5208c; standard summary axioms only.
 
 PV_LIB_SPEC_LaneA_Observation compiled 44941, cohort w3: exit0, wall 0:01.32, peak 2702460KiB, swap 0; source 9378bd2676ed3680d911caff066e25cfe6db407c; standard summary axioms only.
+
+PV_LIB_SPEC_LaneA_A_SourceWriters compiled 44942, cohort w3: exit0, wall 0:01.22, peak 2700260KiB, swap 0; source fe244b436cc78466d18fa21eeb6d91825ea0545a; standard summary axioms only.
