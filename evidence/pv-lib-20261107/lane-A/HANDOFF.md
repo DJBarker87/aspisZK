@@ -88,3 +88,5 @@ Session6 from9e72b836054: focused47417 supplies the import surface `PV_LIB_Store
 Focused47418: `PV_LIB_A_StoreActionMachine` installs the supplied table directly on the OWNER-aware base. One symbolic agreement and neutral-trace transport compile; `native` exposes the exact all-answer graph and its undefined arm. No adequacy or caller closure follows from these graph identities.
 
 Focused47419: checked `PV_LIB_A_ActionAdequacyGap` shows aggregate504 is unsupported although its same transparent source replacement prefix is defined; `aggregate_delivery_undefined` shows the candidate drops the reply status on that arm (including pending/fault). Count1 Arc/Weak is rejected; seven installed wrappers have no table entry. These are model/coverage counterexamples, not source failures. Full-answer/source adequacy remains open.
+
+Focused47420: `PV_LIB_A_ReplyAdequacyGap.pending_not_retained/panic_not_retained` compare the unsupported aggregate504 result directly with the pinned full-reply rule. Raw emitted specialization metadata for all six504 sites is in session6/CELL504_SPECIALIZATIONS.json. The supplied table is not ready for source-adequacy credit.
