@@ -22,5 +22,11 @@
   "error": "587 historical inventory-domain clauses use unit/domain rather than an id",
   "repair": "Compare named clauses by exact id and historical clauses by exact unit/domain tuple; preserve all original clause identities and counts",
   "validation": "same or stricter; no proof rerun or host scope; final local validation rerun after checker source change"
+ },
+ {
+  "stage": "final source snapshot hygiene",
+  "finding": "git diff --check reports the executed runner snapshot extra blank line at EOF",
+  "action": "Snapshot archived losslessly as .py.xz plus uncompressed SHA256; actual executed bytes/source_hashes unchanged",
+  "validation": "Read-only evidence validator raw() verifies archived source; no formal rerun or extra host scope"
  }
 ]
