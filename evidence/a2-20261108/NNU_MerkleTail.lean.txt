@@ -1,0 +1,49 @@
+import NNU_MerkleTerminal
+import NNU_MerkleVerify
+import NNU_MerkleCount
+import NNU_MerkleChildren
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNU_MerkleTail
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open NKV_StepErasure NKV_LoopTransport
+
+theorem source (env : RSL.Env) (proof : Slice U8) (root : Array U8 32#usize)
+ (tree lo n slot d : Usize) (keys : Array U64 16#usize)
+ (idx outIdx : Indices) (val outVal : Values) (slotBound : slot.val < 6)
+ (run : Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+  (Port3_BatchStd.install (NKV_ConcreteChildren.ops (LIBB_PartitionEnv.H env)))
+  (NKV_ConcreteChildren.digest (LIBB_PartitionEnv.H env)) proof root tree () lo n slot keys idx val d n=
+  .ok (.done (outIdx,outVal,some (.Ok ())))) :
+ Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+  (Port3_BatchStd.install Port4B_Install.leaves)
+  (VTop_Checkpoint.digest (LIBB_PartitionEnv.digest env)) proof root tree () lo n slot keys idx val d n=
+  .ok (.done (outIdx,outVal,some (.Ok ()))) := by
+ obtain ⟨front,count,cap,nodes,padding,supplied,ce,after,frontRead,countRead,nodeRead,
+   capRead,fit,paddingRead,chunksRead,scanRead,prefixRead,verifyRead⟩ :=
+   Port4B_TailReads.reads (NKV_ConcreteChildren.ops (LIBB_PartitionEnv.H env))
+    (NKV_ConcreteChildren.digest (LIBB_PartitionEnv.H env)) () proof root tree lo n slot d
+    keys idx outIdx val outVal run
+ have targetCount : Port4B_Install.leaves.op11 .Two front=.ok (some count) := by
+   change Port4B_CountInstall.nodeCount .Two front=.ok (some count)
+   rw [←NNU_MerkleCount.source]
+   exact countRead
+ have targetNode : Port4B_Install.leaves.op3 proof slot=.ok nodes := by
+   change Port4B_SlotInstall.nodeSlot proof slot=.ok nodes
+   rw [←NNU_MerkleChildren.slot proof slot slotBound]
+   exact nodeRead
+ have targetVerify : Port4B_Install.leaves.op10 (VTop_Checkpoint.digest (LIBB_PartitionEnv.digest env)) ()
+   .Two root idx val d supplied=.ok (true,outIdx,outVal) :=
+   NNU_MerkleVerify.selected env root idx outIdx val outVal d supplied verifyRead
+ have callback := NNU_MerkleTerminal.callback
+   (NKV_ConcreteChildren.ops (LIBB_PartitionEnv.H env)) Port4B_Install.leaves
+   (NKV_ConcreteChildren.digest (LIBB_PartitionEnv.H env))
+   (VTop_Checkpoint.digest (LIBB_PartitionEnv.digest env))
+ rw [callback] at scanRead
+ rw [NNU_MerkleTerminal.source Port4B_Install.leaves _ proof root () tree lo n slot d n keys idx val (by simp)]
+ exact NNU_MerkleTerminal.constructed Port4B_Install.leaves _ proof root slot d idx outIdx val outVal
+  front count cap nodes padding supplied ce after frontRead targetCount targetNode capRead fit
+  paddingRead chunksRead scanRead prefixRead targetVerify
+#print axioms source
+end AspisR1.NNU_MerkleTail
+end

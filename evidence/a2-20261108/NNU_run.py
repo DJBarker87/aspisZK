@@ -1,4 +1,4 @@
-"""NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
+"""NNU-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
@@ -6,9 +6,9 @@ B='/home/dombarker/project-offloads/codex-cx-a2-20261108';C='/home/dombarker/pro
 if (E/'NNU_HOLD').exists():sys.exit(75)
 guard=E/'NNU_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NNU_L[0-9]{3}',a) and 1<=int(a[-3:]) and not (E/a).exists()
-# S4 rev4: new outputs use a private overlay; historical objects remain read-only fallback.
+# New outputs use the private NNU overlay; NNH/run-5b inputs stay read-only.
 # Budget actual submissions, including unresolved ones, rather than ID suffixes.
-# Run 5 grants 160 fresh scopes after 700 terminal submissions.
+# Historical L001-L040 plus the separately authorized L041-L080 continuation.
 used=set()
 for n in ['NNU_ATTEMPTS.jsonl','NNU_TRANSPORT.jsonl']:
  p=E/n
@@ -16,7 +16,7 @@ for n in ['NNU_ATTEMPTS.jsonl','NNU_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<40, 'NNU allowance 40 actual scopes exhausted'
+assert 41<=int(a[-3:])<=80 and len(used)<80, 'NNU continuation allowance 40 scopes exhausted'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
