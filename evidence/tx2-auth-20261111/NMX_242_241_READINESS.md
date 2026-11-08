@@ -1,59 +1,53 @@
-# TX2 readiness handoff (NMX_, 2026-11-07 resumption)
+# Current TX2 readiness (R4, 2026-11-08)
 
-TX2:234 is proposed CANDIDATE, `NMX_R3_RegistryRoot.root`, exactly
-`RSL.TX2_234.RowSpec_234 LIBB_PoolLib.library LIBB_PoolLib.deployed`.
-Its implementation is `NMX_R3_RegistryRoot.authenticate allocations` for every
-pointwise allocation stream. Domain=True; no own-input clauses. E006 actual
-frozen registry body, all132 source-order calls, both registry branches, every
-PDA event prefix, and allocating BorshIoError clone aborts are retained.
-`NMX_234_VALIDATION.json`, `NMX_234_CUTMAP.json` and `NMX_234_EXPORT.json` are
-the ledger packet. Commit914a6dd26bf creates the candidate;08735b8e62f adds
-complete audits, combined import and retained closure. Ledger decides credit.
+TX2:217 and TX2:234 are CLOSED by ledger27 (587/0/12). No replay or new
+credit is claimed for either child.
 
-TX2:217 remains the proposed `NMX_R3_DecoderFold.root` candidate under(ah),
-ReviewedTranscription-TX2:217. It covers every lane length including non768,
-all Results, and boxed allocation aborts. Its segmented native contextual
-composition and matched controls are retained in `NMX_217_NATIVE_COMPOSITION.md`.
-NNI_/ledger26 review, and the lead's trust appendix entry, remain authoritative.
-No new native credit is claimed by this resumption.
+TX2:233 now has the complete CANDIDATE `NMX_R4_Authentication.root`, committed
+immediately in `2f5787475aa`. Its exact conclusion is
+`RSL.TX2_233.RowSpec_233 LIBB_PoolLib.library LIBB_PoolLib.deployed (authenticate choices)`.
+Domain=True; no own-input clause, child-law, Ops/Handler, library, DeployedIds,
+representation or successful-allocation hypothesis. `Choices` universally
+quantifies primitive allocation statement data, following CLOSED234's accepted
+pattern. The four private owner labels are fixed, and all four typed Box
+payloads remain throughout the source program.
 
-The requested frozen233 targets are now instantiated:
+The formerly remaining source/Box and all-Args work is delivered:
 
-- `NMX_R3_Instantiated233.native` specializes `NMX_R2_NativeCanonical.fold`.
-- `NMX_R3_Instantiated233.represented` specializes `NMX_R2_RepresentedFold.fold`.
-- Both fix LIBB module8's actual supplied PoolLib and DeployedIds, and discharge
-  BOTH full217/234 child schemas. `NMX_R3_Instantiated233.library` is the exact
-  instance equality. No fields were reconstructed locally.
-- `NMX_R3_LaneInstance.observation/raw/packet` transports the emitted217 reference
-  at every slice length and every Result. `NMX_R3_RegistryArguments.same`
-  proves equality of the complete original234 argument tuples across carriers.
-- Four typed Box payloads remain in the frozen source program. Owners and
-  independent allocation choices stay interpreter parameters, not caller clauses.
+- E008 freshly emits the actual master/checkpoint Box wrappers. Their opaque
+  raw children use the supplied CLOSED canonical owners at SAME bytes in
+  `NMX_R4_BoxBinding.master/checkpoint`. The std allocation actions are named
+  at their original sites; the old native-window approach is superseded by
+  this emitted route, not claimed solved by inventing physical windows.
+- `NMX_R4_SourceFold.source` joins all55 full-observation occurrence equalities
+  to the source interpreter. Every Result/error, allocating clone and stopped
+  PDA prefix is retained. `NMX_R4_Authentication.observed` is full observation
+  equality, independent of the old value-erasure theorem.
+- `NMX_R4_ProjectionRef.reference` proves equality of the ENTIRE canonical
+  reference under the representable account projection. `NMX_R4_AllArgs` and
+  `Authentication` handle every canonical Args; no bounds replace Domain=True.
 
-These are operational source-support instantiations, NOT an unrestricted
-actual-native `RSL.TX2_233.RowSpec_233` root. NMX_REV2_REMAINING items1–3
-remain: obtain actual master/checkpoint Box decode/owner/frame windows at233
-call sites; join full emitted ordered-effects interpretation with those native
-bindings; and complete the canonical all-Args implementation port. The represented
-fold's explicit Rust-representation bounds are support only, never Domain=True.
-Items4/5 (library identity and child schema instantiation) are discharged.
+Candidate gates:119 new theorem declarations raw ax2 PASS, standard axioms
+only; focused combined import L1131 PASS; exact retained loaded closure L1140
+PASS. Packet: `NMX_R4_VALIDATION.json`, `NMX_R4_SOURCE_AUDIT.json`,
+`NMX_R4_BOX_SOURCE_CHECK.json`, `NMX_R4_EXPORT.json` and compressed closure pins.
+The next ledger decides233 credit. This is not a cold release replay.
 
-For242, the exact downstream full canonical consumer is
-`NMS_R2Fold242.fold`, and typed relational consumer is
-`NMS_R2Parameterized242.fold` / `.RowSpec233`. Their full233 premise is NOT
-satisfied just by our instantiated operational folds. They require every actual
-observation at the same original program/accounts/pool/lane/slot, retaining
-full Authenticated/error payloads and all stop prefixes. No success-only adapter
-or child-return hypothesis is supplied. NMS's own242 native/canonical assembly
-also remains as recorded in its read-only committed NMS_REMAINING.md.
+242 preparation is active. Namespace-only NMS consumer copy
+`NMX_R4_NMSFold242.fold` (provenance in `NMX_R4_NMS_PROVENANCE.json`) and its
+complete canonical233 substitution `NMX_R4_NMS242Instantiation.fold` pass
+L1141/L1142. `NMX_R4_NMSCarrier` and `NMX_R4_NMS233.packet` pass L1144/L1145:
+the full typed native233 packet is available at SAME original program/accounts/
+pool/lane/slot, retaining every error, all Box payloads and stopped prefixes.
+This is not yet a242 candidate. The remaining242 source/carrier assembly must
+use supplied LIBB request/nullifier/output-lane and scanner/reconstruction laws.
 
-For241, `NMS_R2Substitute241.fold` consumes a complete242 packet; its CLOSED064
-occurrence, statement encoder/return-data and error formatting/log source laws
-remain the parent worker's assembly obligations. This handoff adds no Root0,
-D1/D2 strengthening or unconditional241/242 readiness. LIBB_V2Star.gate and
-LIBB_Tx2AuthGate.returnFunctional are loaded together in the focused import;
-returned-value functionality is used with its stated strength only.
+241 follows242. Its exact consumer is `NMS_R2Substitute241.fold`, then
+`NMS_R2Fold241.fold`; full064, source getters, exact1880 encoder, error-format
+allocation-before-log and return-data bindings remain assembly obligations.
+No unconditional242/241 readiness or Root0 strengthening is inferred from233.
+`LIBB_V2Star.gate` / `LIBB_Tx2AuthGate.returnFunctional` retain their returned-value
+strength, including coexistence of independently stopped prefixes.
 
-No shipped Rust, Cargo.lock, ELF, key, wallet, trust row, privacy/two-transaction
-condition or security metric changed. No push. The headline security target
-is not established. Only the next ledger gate assigns CLOSED status.
+No shipped source, ELF, trust row, key, wallet or security target changed.
+The headline security target is not established. No push.
