@@ -175,3 +175,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 Session5 46398: F6DeliveryTransportV2.prefix_identity passes (46397 ambiguous run repaired); literal f6 delivery-prefix type via existing single induction. Concrete agreement bindings remain open.
 
 Session5 47400: AtomicBoolNewV2 passes after repairing46399 to the actual CLOSED123 API. Byte representation fact is named and lower; no arbitrary backend instance claimed.
+
+Session5 47402: PreActionTraceV2 passes after repairing47401 (zero/add and neutral tuple simplification). OWNER/operator/registration guards explicit; one trace induction only.
