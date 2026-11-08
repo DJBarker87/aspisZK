@@ -18,3 +18,8 @@ reference, true replacement and both native and source-store channels.
 The old stall theorem is diagnostic ONLY. It is used to prove the corrected
 case cannot have occurred earlier than a retained fresh BodyEntry; it is not
 presented as a property of the binary, or as a global join negation.
+
+56002's broad composite-cell simp reached the unchanged recursion limit. The
+replacement splits the sparse source Cell frame into small named checkpoints
+(false55/59/64/68/75/85, then caller returns through154). No limit/cap increase
+and no unchanged retry. The failed source and full diagnostics are retained.
