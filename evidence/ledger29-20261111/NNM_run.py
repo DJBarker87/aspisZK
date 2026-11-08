@@ -4,7 +4,7 @@ import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NNM_20261111';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if(E/'NNM_HOLD').exists():sys.exit(75)
-a,kind,target=sys.argv[1:];assert re.fullmatch('NNM_L[0-9]{3}',a) and 1<=int(a[-3:])<=60 and not(E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NNM_L[0-9]{3}',a) and 61<=int(a[-3:])<=100 and kind=='audit' and re.fullmatch(r'batch[0-9]+',target) and not(E/a).exists()
 guard=E/'NNM_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def event(x):
  with(E/'NNM_ATTEMPTS.jsonl').open('a')as f:f.write(json.dumps(dict({"attempt":a},**x))+'\n')
@@ -80,7 +80,7 @@ else:raise ValueError(kind)
 for n in names:
  if n not in files and(E/Path(n).name).is_file():files[n]=(E/Path(n).name).read_text()
 sources=list(dict.fromkeys(sources+names))
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNM_tmp',CARGO_TARGET_DIR=B+'/NNM_target',LEAN_PATH=':'.join([B+'/NNM_objects']+json.loads((E/'NNM_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Pinned cache IO'if kind=='seed'else'Focused import elaboration'if kind=='lean'else'Optimized linker'if kind=='link'else'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNM_tmp',CARGO_TARGET_DIR=B+'/NNM_target',LEAN_PATH=':'.join(dict.fromkeys([B+'/NNM_exports_final_20261111',B+'/NNM_objects']+json.loads((E/'NNM_PATHS.json').read_text())))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Pinned cache IO'if kind=='seed'else'Focused import elaboration'if kind=='lean'else'Optimized linker'if kind=='link'else'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
