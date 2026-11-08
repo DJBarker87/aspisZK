@@ -53,3 +53,5 @@ PV_LIB_SPEC_AssembledChecks14 compiled 55438, cohort w3: exit0, wall 0:02.47, pe
 PV_LIB_SPEC_AssembledSize14 compiled 55442, cohort w3: exit0, wall 0:02.40, peak 4808800KiB, swap 0; source 5b5cddb98119251129df8f0a6f461ca9d388a796; standard summary axioms only.
 
 PV_LIB_SPEC_Worker14 compiled 55445, cohort w3: exit0, wall 0:05.54, peak 4848960KiB, swap 0; source 4b5dbbdc779beb19c79748f15ea72848c23a2534; standard summary axioms only.
+
+PV_LIB_SPEC_TlsEntry14 compiled 55447, cohort w3: exit0, wall 0:06.75, peak 4857520KiB, swap 0; source 4781afd102ed4c973a38f6df995879ebdc3c3d22; standard summary axioms only.
