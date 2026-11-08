@@ -1,0 +1,54 @@
+{"attempt": "NNH_L716", "exit_status": 1, "wall_seconds": 3.442179539008066, "peak_rss_kib": "6627596", "swaps": "0", "print_axioms": []}
+structure RSL.TAS.Sig : Type 1
+number of parameters: 0
+fields:
+  RSL.TAS.Sig.Ctx : Type
+  RSL.TAS.Sig.First : Type
+  RSL.TAS.Sig.Second : Type
+  RSL.TAS.Sig.model1 : self.Ctx → self.First
+  RSL.TAS.Sig.model2 : self.Ctx → self.Second
+  RSL.TAS.Sig.Exhibited : self.Ctx → Prop
+  RSL.TAS.Sig.Extraction : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Accepted1 : self.Ctx → self.First → Prop
+  RSL.TAS.Sig.Accepted2 : self.Ctx → self.Second → Prop
+  RSL.TAS.Sig.GameFrame : self.Ctx → Prop
+  RSL.TAS.Sig.Recorded1 : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Recorded2 : self.Ctx → self.First → self.Second → Prop
+  RSL.TAS.Sig.Game : self.Ctx → self.First → self.Second → Prop
+...
+ + Q1) :
+  F3T_RuntimeBound.failureModel (ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv a) ≤
+    F3T_Numeric.total (Q0 + Q1)
+AspisR1.FJv_GlobalTerminal.owners {C : Type} (missing : IDa_Deployed.Uninstalled C) (err : C)
+  (r : NP6_StdModel.Reservation) (B : AspisR1PublicPreparation.FinishModel.Boundaries) :
+  FJv_GlobalOwners.Owners (FJt_GlobalTerminal.configuration missing err r) B
+NNH_generated/NNH_HostBinderCheck.lean:13:7: error(lean.unknownIdentifier): Unknown identifier `NNE_PhysicalAccepted.err`
+NNE_EntryArgs.args (e : Entry) (count : ℕ) (program : S2W_ExtractionBoundary.Program) (data : Slice U8) :
+  RSL.TX2_240.Args
+NNE_Entry.state (e : Entry) (next : ℕ) : RSL.SdkState
+NNE_RecordSig.GameFrame (S : RSL.TAS.Sig) (d : NNE_AcceptanceSig.Data S) (r : NNE_RecordSig.Data S) (c : S.Ctx) : Prop
+structure RSL.EVB.RecSig (S : RSL.TAS.Sig) : Type
+number of parameters: 1
+fields:
+  RSL.EVB.RecSig.Realizes : S.Ctx → Prop
+  RSL.EVB.RecSig.EventRec : S.Ctx → Prop
+  RSL.EVB.RecSig.SelectsPair : S.Ctx → Prop
+constructor:
+  RSL.EVB.RecSig.mk {S : RSL.TAS.Sig} (Realizes EventRec SelectsPair : S.Ctx → Prop) : RSL.EVB.RecSig S
+structure RSL.EVB.RecSelect (S : RSL.TAS.Sig) (R : RSL.EVB.RecSig S) : Prop
+number of parameters: 2
+fields:
+  RSL.EVB.RecSelect.selects : ∀ (c : S.Ctx),
+      S.Exhibited c →
+        S.Extraction c (S.model1 c) (S.model2 c) →
+          S.Accepted1 c (S.model1 c) → S.Queries c (S.model1 c) → R.Realizes c → R.SelectsPair c
+constructor:
+  RSL.EVB.RecSelect.mk {S : RSL.TAS.Sig} {R : RSL.EVB.RecSig S}
+    (selects :
+      ∀ (c : S.Ctx),
+        S.Exhibited c →
+          S.Extraction c (S.model1 c) (S.model2 c) →
+            S.Accepted1 c (S.model1 c) → S.Queries c (S.model1 c) → R.Realizes c → R.SelectsPair c) :
+    RSL.EVB.RecSelect S R
+
+Running as unit: run-r76548b0de01941b283ad6321656f0fd1.scope; invocation ID: 3f9bfde579594301a1223d259d3473a3

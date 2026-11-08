@@ -1,0 +1,26 @@
+NNH_generated/NNH_HostA1Targets.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AdapterRw.r1_pool_adapter.owned.stage1_owned
+    (NNH_CorrectConfiguration.sdk NNH_HostSeed.m0 (envOf c) c.fixed.indexError c.fixed.reservation) p e.first data
+in the target expression
+  model1 c p e.first data = Result.ok (core.result.Result.Ok saved)
+
+W Tx : Type
+c : Ctx W Tx
+p : S2W_ExtractionBoundary.Program
+e : Entry
+data : Slice U8
+bad :
+  RSL.TX1_345.badRoute
+      { program_id := NND_Carrier.key p, accounts := NNH_ModelCarrier.accounts e.first,
+        data := NND_Carrier.bytes data } =
+    true
+saved : alloc.vec.Vec U8
+accepted : model1 c p e.first data = Result.ok (core.result.Result.Ok saved)
+rejected :
+  AdapterRw.r1_pool_adapter.owned.stage1_owned
+      (NNH_CorrectConfiguration.sdk NNH_HostSeed.m0 (envOf c) c.fixed.indexError c.fixed.reservation) p e.first data =
+    Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+⊢ False
+'AspisR1.NNH_HostA1Targets.ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_HostA1Targets.err' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_HostA1Targets.bad_route' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

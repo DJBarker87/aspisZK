@@ -10,6 +10,10 @@ obs = observer() = None from CLOSED TX1:329, which discharges (T1)); CLOSED
 lib.rs::error (TX1:NGB001: the `format!` allocation, one log line
 `r1:error:{:?}`, then InvalidInstructionData; the allocation site is Revision 2).
 Own-input domain ((bf)(2)), caller clause of TX1:345: V.publicDom public.
+Revision 4 (ruling (bs)): caller clause (P1880) public_bytes.length = 1880,
+recorded here because first_decoded passes public_bytes to tx1 unchanged and
+TX1:094's Domain requires it (RSL4-caller:TX1:328:TX1:094:P1880); itself a
+caller clause of TX1:345, discharged there by `TX1_345.p1880_of_decode`.
 Effects: tx1's ordered events; on Err one log line after them.
 -/
 import RSL_TX1_094
@@ -33,7 +37,8 @@ def Ref (V : VLib) (P : PreparedNew V) (a : Args V) : RS Bytes :=
   Spec.bind (Spec.call (fun x : Args V => TX1_094.Domain V x none x.public_) (TX1_094.Ref V P) a)
     (mapVErr V)
 
-def Domain (V : VLib) (a : Args V) : Prop := V.publicDom a.public_
+def Domain (V : VLib) (a : Args V) : Prop :=
+  V.publicDom a.public_ ∧ a.public_bytes.length = TX1_094.P1880_LEN
 
 def RowSpec_328 (V : VLib) (P : PreparedNew V)
     (first_decoded : Args V → Env → Obs (Except ProgramError Bytes)) : Prop :=

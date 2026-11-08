@@ -1,0 +1,174 @@
+def NJC_ClosedCalls.geometry : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+  Aeneas.Std.Usize →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result NFN_NEW_GeometryRawInterface.O.G VTop_Stages.verifier.Error) :=
+fun queries start finish =>
+  Port3_QueryInstall.result
+    (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap NFN_NEW_GeometryRawInterface.answer
+      (NEW_GeometryActual.verifier.QueryGeometry.for_range queries start finish))
+NNH_generated/NNH_CommonSlots.lean:7:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NNH_generated/NNH_CommonSlots.lean:7:13: error: unexpected identifier; expected ':'
+def NJJ_Common.install : VTop_Stages.Ops →
+  NP6_StdModel.Reservation → NP6_StdModel.Reservation → NJJ_Common.Merkle → NJJ_Common.Finish → VTop_Stages.Ops :=
+fun unused weightReservation rawReservation merkle finish =>
+  { op0 := @VTop_Stages.Ops.op0 unused, op1 := unused.op1, op2 := NJC_ClosedCalls.inactive, op3 := unused.op3,
+    op4 := unused.op4, op5 := fun {H} => merkle, op6 := NJJ_Common.query, op7 := @VTop_Stages.Ops.op7 unused,
+    op8 := @VTop_Stages.Ops.op8 unused, op9 := Port3_FlushInstall.flush, op10 := NJJ_Common.pending rawReservation,
+    op11 := NJC_ClosedCalls.geometry, op12 := unused.op12, op13 := NHV_ReleaseOps.mark, op14 := unused.op14,
+    op15 := unused.op15, op16 := unused.op16, op17 := NHT_PacketOps.powers,
+    op18 := fun {H} => NJJ_Common.resume weightReservation, op19 := finish, op20 := unused.op20, op21 := unused.op21,
+    op22 := unused.op22, op23 := unused.op23, unwrap32 := unused.unwrap32 }
+def NJJ_Common.run : NP6_StdModel.Reservation →
+  NP6_StdModel.Reservation →
+    NJJ_Common.Merkle →
+      NJJ_Common.Finish →
+        {H : Type} →
+          VTop_Stages.aspis_core.digest.Digest32 H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 →
+                  H →
+                    Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error) :=
+fun weightReservation rawReservation merkle finish {H} aspis_coredigestDigest32Inst public_bytes proof checkpoint hash
+    obs =>
+  do
+  let r ←
+    NJJ_Common.resume weightReservation aspis_coredigestDigest32Inst checkpoint proof public_bytes
+        AspisR1Stage2.transport.Variant.S2 hash
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      let (p, a) := val
+      if (a.next != NHT_Constants.compact.SPLIT) = true then
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+      else do
+        let g ← NHT_PacketOps.powers 29#usize p.gamma
+        NHV_ReleaseOps.mark obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+        let i ← NHT_Constants.compact.OFF_INACTIVE
+        let i1 ← NHT_Constants.compact.OFF_ROUND0
+        let s ←
+          Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+              proof { start := i, «end» := i1 }
+        let o ← NJC_ClosedCalls.inactive s
+        let r1 ← NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+        let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+            let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+            let i3 ← NHT_Constants.compact.OFF_ROUND1
+            let s1 ←
+              Aeneas.Std.core.slice.index.Slice.index
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                  { start := i2, «end» := i3 }
+            let r2 ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 s1
+            let folded_root ← Aeneas.Std.core.result.Result.unwrap Aeneas.Std.core.fmt.DebugTryFromSliceError r2
+            let r3 ← merkle aspis_coredigestDigest32Inst proof p folded_root 1#usize hash
+            let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf2 with
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_1 => do
+                NHV_ReleaseOps.mark obs
+                    (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                let r4 ← NJC_ClosedCalls.geometry p.queries a.next 22#usize
+                let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                match cf3 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 =>
+                    have s2 := a.weights.deref;
+                    do
+                    let r5 ← NJJ_Common.pending rawReservation s2
+                    let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                    match cf4 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                        let r6 ← NJJ_Common.query proof p a g obs val2 val3 22#usize
+                        let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                        match cf5 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 =>
+                            let (a1, pending) := val4
+                            do
+                            let (s3, deref_mut_back) ← Aeneas.Std.lift a1.weights.deref_mut
+                            let s4 ← Port3_FlushInstall.flush pending s3
+                            have weights : Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 :=
+                              deref_mut_back s4
+                            let s5 ← Aeneas.Std.lift (Aeneas.Std.Array.empty Aeneas.Std.U8).to_slice
+                            let s6 ← Aeneas.Std.lift (Aeneas.Std.Array.empty Aeneas.Std.U8).to_slice
+                            let s7 ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                                  { start := i1, «end» := i2 }
+                            let i4 ← NHT_Constants.compact.OFF_FINAL
+                            let s8 ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                                  { start := i3, «end» := i4 }
+                            let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                            let s9 ←
+                              Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                                  { start := i4, «end» := i5 }
+                            let s10 ← Aeneas.Std.lift (Aeneas.Std.Array.empty Aeneas.Std.U8).to_slice
+                            finish
+                                { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                  inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                  final_message := s9, query_bytes := s10 }
+                                p { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next } obs
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (Aeneas.Std.core.convert.FromSame VTop_Stages.verifier.Error) residual
+def NLB_Parent.finish : NP6_StdModel.Reservation → NJU_CommonObserved.Finish :=
+fun r v p a x =>
+  NHT_ResultPort.action (Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none)
+def NHT_PacketOps.query : NHT_PacketOps.QueryOps →
+  ℕ →
+    ℕ →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1Stage2.verifier.Prepared →
+          AspisR1Stage2.verifier.Accumulator →
+            Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize →
+              Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                AspisR1Stage2.verifier.QueryGeometry →
+                  AspisR1Stage2.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result (NFG_QueryLoopDefs.A × NFG_QueryLoopDefs.B)
+                          NHT_ResultPort.TargetError) :=
+fun base qPlace gPlace proof p a g _obs geometry pending finish =>
+  NHT_ResultPort.action
+    (NFG_QueryLoopDefs.run (NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) finish 12
+      (Aeneas.Std.core.result.Result.Ok (a, pending)))
+def AspisR1.Port3_QueryStage.query : Port3_NativeQueryBody.Ops →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    VTop_Stages.verifier.Prepared →
+      VTop_Stages.verifier.Accumulator →
+        Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+          Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+            VTop_Stages.verifier.QueryGeometry →
+              VTop_Stages.verifier.BatchedWeights →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result
+                      (AspisR1Stage2.verifier.Accumulator × AspisR1Stage2.verifier.BatchedWeights)
+                      VTop_Stages.verifier.Error) :=
+fun ops proof p a g obs geometry pending end1 =>
+  Port3_QueryInstall.result
+    (Port3_NativeQueryBody.verifier.candidate.query_loop (Port3_QueryStage.release ops) proof p a g
+      (Port3_QueryInstall.observer obs) geometry pending end1)
+AspisR1.Op5T_Concrete.stage_source {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize) (hash : Hash) :
+  Op5T_Install.stageBatch Port4B_Install.leaves D proof p folded batch hash =
+    Port4B_Install.batch D proof p folded batch hash

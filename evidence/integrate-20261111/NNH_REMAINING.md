@@ -1,3 +1,16 @@
+# Current run5 disposition (2026-11-08)
+
+Target not yet established. S6 literal HeadlineB PASS. S2 Split.rest, S3 A2,
+S4 A1, S5 NMF_B and S7 host inclusion/averaging remain OPEN. The literal host
+has a compiled selected-slot/environment-clock binding gap. O2 is unproved,
+not demonstrated false; no premise added, no host RecordedCharge.bound use.
+S8 blocked by absent345/233 candidates and unconditional242/241 readiness.
+134/160 actual scopes used; exhausted per-step caps govern the26 unused scopes.
+See the latest boundary at the end and NNH_RUN5_BOUNDARY.json for exact counts,
+receipts, current source pins, completed roots and remaining proof slots.
+
+---
+
 # Final gate status
 
 L703 combined import failed on the old NND_AccountCarrier duplicate RSL
@@ -162,3 +175,270 @@ S2–S8 NOT ATTEMPTED; no totality premise or op43 retargeting installed.
 Owner condition(4) remains unproved at the host. Used3/160 fresh scopes;
 157 remain unspent because of the explicit P2 stop, not budget exhaustion.
 No new export/final consumer/raw audit/manifest replay;16GiB reserved unused.
+
+
+## P2 resolution and S2 boundary, 2026-11-08
+
+Target not yet established. P2 resolution DGP(a) applied literally.
+L710/711 failed only on missing namespace openings in the delivered statement
+file; L712 PASS after opening S2Trust and S2W_D189Entry in the retained
+dependency copy. No DGP source or statement changed. All six discharge roots
+standard-only. Three resolution scopes used, leaving154 before S2.
+
+S2 used exactly16 actual scopes L713–729, excluding719. L719 was an owned
+dependency-fingerprint rejection before launch: I requested the dependent
+module before checking L718's prerequisite failure. No scope submitted and
+no credit. L720 repaired the missing namespace, then dependent launches were
+sequenced on successful predecessors.
+
+Concrete literal host: NNH_HostSeed.m0 (explicit divergent residual slots),
+NNH_HostCtx.Ctx/Fixed/World, missingLit, envOf and literal model1/2.
+NNH_LiteralHost.S_host installs NNH_HostEnv plus NNE Data/RecordSig.Data.
+A0 and R0Rep PASS L724; Headline PASS L726; RecSig/RecSelect and normalized
+ExecB PASS L728; literal conclusion decomposition PASS L729. All standard-only.
+No arbitrary Sbase or new G0 consumer. Full receipts pin exact source,
+dependency/Aeneas objects, revision, exit, time, RSS, swap and axioms.
+
+Representation choices: dictionaries (Type1) are substituted outside TAS's
+Type-valued Ctx. L/sdk/copy/std are host-family parameters. Entry-specific
+runtime admissions and original RuntimePersistence live in retained, carried
+by GameFrame and Game; total build has no admission premise on arbitrary i/j.
+Post1/post2 in the headline conclusion are NNE's exact physical writeBracket
+and e2.heap. Original World post fields are unused residual DATA. No new trust.
+Only the Env/Exhibited representation non-vacuity was checked (L728); full
+physical Frame/Trace non-vacuity remains required before final release.
+QueriesF collects the per-world L154 parameters as forall J K, issued(model1 J)
+(normalize a) K has length at mostQ0+Q1; queries_mk specializes at J=H. This
+is the forall-world family of original L154 bounds, not literally id under
+DGP's oracle-dependent model. No final averaging field is claimed.
+
+S2 cap blocker: Split.rest remains unproved. Exact target is forall c n1 n2,
+S_host.Extraction c n1 n2 -> S_host.Accepted1 c n1 ->
+S_host.Game c n1 n2 -> S_host.Queries c n1 ->
+NNH_HostSplit.rest L copy c n1 n2. It must be built from the Root0-free
+FJp_ARCore branch terms, especially FJp_Cost.source_cost/owners at the literal
+configuration. conclusion_iff is proved, not this field. No premise added.
+P3/P4/P5 from the old preflight remain not run; explicit newest instruction
+resumed S2 after P2. S3 starts next. Fresh run5 used22/160 actual scopes;138
+remain. S8's16GiB scope unused. No export, row credit, push or shipped edit.
+
+
+## S3 boundary (18/18 scopes L730–747)
+
+Target not yet established. A2 is NOT delivered. Pointwise finish transport
+is proved for every v/p/a in NNH_ResultPortTransport.finish (L738); its
+generic finite Result-port equality has no axioms. Model pending/flush/mark/
+powers and six literal offsets plus split are proved L742. P4 at the host
+PASS L743 (NNH_HostRecorderEvent.same, Iff.rfl). Host singleton-oracle equality,
+reader header and exact C04 node/leaf oracle equalities PASS L745. These are
+pointwise: no global equality is asserted for LIBB_PartitionEnv.H, which
+repartitions/truncates arbitrary messages and is justified only on actual
+C04 request shapes. All accepted roots standard-only.
+
+P3 correction: the expected geometry/query/Merkle/finish table was incomplete.
+DrvC_Implementation.release overwrites op2 with Port1_LibrarySource.decode
+and installs literal offsets. Canonical NJJ_Common uses NHV_InactivePacket
+(via NET_WideModel/actual FIo decoder) and irreducible NHT_Constants offsets.
+The additional inactive value transport is unproved; small constant evaluation
+also needs named unfolding lemmas (the rfl/with_unfolding_all shape is retired).
+No conclusion that these equalities are false. Failed source CommonOffsets is
+archived as .lean.txt and not imported.
+
+Geometry additionally passes through TWO SAQ_Constructor installations in the
+headline configuration before Port5Q1_GeometryTerminal.install; equating it
+directly to adopted (or one extra terminal installation) failed. Must transport
+those concrete primitive values on the returned path. Query likewise sees
+SAQ_Decoder plus FIp dots/circle/equality slots, not simply the raw concrete
+query dictionary. Merkle is Port4B_Install.batch against NLP_NativeMerkle.action
+with the just-proved node/leaf oracle agreement; no source-to-model parent
+transport is available yet. NNH_Tx2OpenSlots (L747) records exact unproved
+inactive/geometry/query/Merkle propositions. They are NOT hypotheses of any
+claimed field or final consumer. The parent goal remains
+NNH_ExactRemainingTypes.tx2Op11; then Stage2To064 + Returns + AMN.viaReturns2.
+
+S2 Split.rest remains open. S4 next: weak Err physical consumer copy and
+focused rev4 Returns dependency rebuild before any A1 credit. Current own
+NNH_dependency_inputs RSL TX1 files are still rev3 (no P1880); do not mistake
+cached focused elaboration for a rev4 coherent release replay. Fresh run5
+used40/160 actual scopes;120 remain;0 Kani/extraction,16GiB unused.
+
+
+## S4 boundary (55/55 scopes L748–802)
+
+Target not yet established; A1 is NOT delivered. The approved weak Err
+restatement is implemented in NNH_AcceptanceSig.physical, NNH_Stage1Error,
+NNH_Stage1View, NNH_InvocationView, NNH_RuntimeTrace and NNH_RecordSig.
+Before: returned RSL Err -> exists pe, model1 = ok(Err pe).
+After: returned RSL Err -> not exists saved, model1 = ok(Ok saved).
+A3/A4/A5 compile with that clause; no NNE merged module was edited.
+The complete physical host now uses NNH_RecordSig.physical.
+
+P5 PASS: RSL rev4 094/328/345 plus unchanged344 rebuilt L751–754 in private
+NNH_R4_objects;17 owned Returns inputs and NNH_ReturnsBundle rebuilt L755–771.
+No Returns statement break. The own runner was changed only to direct new
+outputs/selected imports to this overlay, keeping old objects and all admission,
+resource, fingerprint and budget checks. Source hashes/provenance are in
+NNH_REV4_SOURCE_PINS.json; input order in NNH_REV4_RETURNS_INPUTS.json.
+NNH_Stage1PrepareDomainR4 (L780) discharges P1880 from decoder length,
+including the094 caller triple. The old Stage1PrepareDomain's pair is stale;
+it is not imported by the focused final host combination.
+
+Literal model codec ports: NNH_S1HostCodec validates/encodes the SAME mapped
+statement/afterstate using supplied NMT values, preserves outer fail/div and
+uses div on native Rust Err (per the approved weak Err class). m0.adapter now
+installs these op21/op24 ports. Exact Ok iff native-call Ok is proved L800;
+pointwise SDK slot/Ok lemmas PASS L795. This changes host instantiation DATA,
+not shipped code or trust. HostSeed/Ctx/Claims/physical/Headline/Exec/recorder/
+oracle/decomposition were rebuilt L786–794 after this concrete installation.
+L802 is the focused combined host import, with all consumed printed roots
+standard-only. It is NOT a final G0, export, raw audit or manifest replay.
+
+A1 exact blocker: current/op10 canonical VL/P returned-path transport and
+328/345 composition still unproved. NNH_HostA1Targets.ok/err are exact
+literal-host obligations (definitions only, never top hypotheses); the
+bad-route weak Err subcase is proved L802. Afterstate/common nominal
+association at the complete body also remains to be composed. No library
+leaf or row wait excuses these obligations.
+
+Additional compiled installation finding L798: current EnvRep permits
+clock=ok0 while selected j.slot=Ok1. NNH_HostClockFinding.admitted_environment
+proves Exhibited and EnvRep together with this disagreement. This is NOT a
+counterexample to A2 itself or to frozen code; it is a missing clock binding
+in the new literal signature. ModelRet2 uses child2 at env.clock but model2
+at j.slot. No new clock premise was added. Correct env clock selection and
+its recorder-independence accounting are required before claiming A2/NMF_B.
+S2's cap is already reached; the finding is reported, not silently hidden.
+
+S2 Split.rest remains open; S3 A2 remains open at recorded slots. Fresh run5
+used95/160 actual scopes (92 since the P2 resume);65 remain. S5 next.
+The16GiB S8 scope remains unused; no export, row credit, push or shipped edit.
+
+## S5 boundary (2026-11-08): selected native prefix, final packet blocked
+
+Target not yet established. L803–822:20 actual capped scopes; S5 stopped
+below its30 cap at two exact installation obligations. Fresh run5 now115/160
+actual scopes,45 remain. The one16GiB scope remains unused.
+
+PASS: HostFirstWriter derives f, writerRoot and writerHeader from Accepted1
+alone. Weak241Prefix/WeakTx2Inputs invert the weak Ref's SAME validation,
+encoding and reads without canonical authValue or Root0. WeakReaderCuts derives
+the exact688..58295 native range, suffix and origin. WeakReaderNative identifies
+the SAME weak-native slices with those getters/range/encoder by carrier
+roundtrips (two map-simplification attempts retired; explicit native-list
+roundtrip used). HostNativeCuts.produce combines these, writer facts and
+HostPersistence.persisted from the existing game/runtime law. HostNativeHeader
+proves readerHeader at the headline SHA and selection at the environment clock.
+All passing roots print standard axioms only. No NMF_GameRoot theorem is used.
+
+Finding: the originally requested Tx2ConcreteInputs.produce requires a guarded
+canonical value; its packet carries Dom064 V0, which already includes reader
+Root0. S5Root0Finding records the projection and carried domain. The new weak
+prefix avoids this circular route; it does not add a premise.
+
+Exact NMF_B blockers:
+1. HostNativeCuts.origin is at clock(envOf c); the actual recorder pair and
+physical model2 use c.j.slot. HostClockFinding already proves these may differ
+under Exhibited+EnvRep. No slot equality was added as a hypothesis. Correcting
+the literal host and accounting for clock independence is required.
+2. Packet.native is indexed by LIBB_PartitionEnv.H(envOf c), not c.sha256.
+Node/leaf pointwise equality is compiled, and the reader header is transported,
+but the SAME native invocation/records transport needed by NNH_NMFPrime.Packet
+at H remains unproved. Global oracle equality must not be asserted: arbitrary
+messages are repartitioned by C04Partition.
+Consequently no Associated/rootImage/eventImage producer or assemble application
+is claimed. These are final-field obligations, not new allowed own hypotheses.
+Next independent step: S6 HeadlineB; A1/A2 and Split.rest remain as recorded.
+
+## S6 boundary (2026-11-08): HeadlineB instantiated
+
+NNH_OutcomeRecRelease.remove generalizes only the event selector, using its
+pointwise selected-output equality. NNH_OutcomeRecAccepted.accepted is the
+NNH copy of the native-accepted consumer at a supplied account/project/selector.
+NNH_HostHeadlineB.headlineB instantiates it at the actual bounded normalized
+account source, ARQ_Observer.project/select, ARX_LocalCharge.budget composed
+with firstReads_le_length, and the existing SelectsPair field. OutcomeRec is
+the full FJv_DResult.Outcome with inner bad := E_rec. PASS L828; standard axioms
+only. No accepted2/SelectsPair hypothesis is added to a final headline: these
+are precisely the HeadlineB interface's arguments, to be produced by the top.
+
+S6 used5 actual scopes L824–828 (L823 failed preflight, no launch). L824 reached
+an unavailable obsolete import closure; L825 replaces that import with the
+coherent RPx_FJv_DRelease already used by RPx_Deployed. No missing legacy
+closure was rebuilt and no source retargeting occurred. New roots import the
+coherent RPx source modules; original FJv/NNE files remain untouched.
+Fresh run5 used120/160 actual scopes;40 remain. Target not yet established.
+S7 next: O1/O2 must compile before any use of RecordedCharge.bound at the host.
+
+## S7 boundary (2026-11-08): four-scope cap, averaging NOT established
+
+L829–832:4 actual scopes, cap reached. Fresh run5 now124/160 actual;36 remain.
+DigestProgramStatus.total_status/adapter_fixed PASS L829; verifier pointwise
+syntax slots first/common/second PASS L831. L830 was a reserved-word parser
+error, corrected L831. L832 elaborated account/o1/child/first/second with
+standard axioms, but exited1 because an explicit child subgoal tactic followed
+an already closed goal (line33: No goals to be solved). No passing-module
+credit is claimed for O1. The corrected source is retained as
+NNH_DigestSyntaxTransport.lean.txt (delete the two redundant final child tactics),
+not imported or exported. S7 cap forbids another scope this step.
+
+O2 is unproved, not reported false: no counterexample has been established.
+Exact target remains DGP_HostDigest.O2. The installed helpers depend on env.pda,
+reservation and op43; the source/observer erasure of the latter needs pointwise
+slot transport through the actual source syntax. No O2 premise was added.
+RecordedCharge.bound was NOT applied at the host. No Expect on the failure
+indicator, world-determining joint program, conditioning or extra charge was
+introduced. deployed_outer/failure inclusion and its same-space bound link
+remain OPEN; owner condition(4) is NOT proved. Missing Split/A1/A2/NMF_B are
+additional obstacles to the fully instantiated fail_sub_rec application.
+
+S6 is independently complete. S8 is not launched. Remaining independent S5
+oracle/record transport can still be attempted within its unused10 scopes;
+continue there without borrowing the exhausted S7 or S2/S3/S4 caps.
+
+## S5 final boundary and S8 gate (2026-11-08)
+
+Target not yet established. S5 used its remaining10 scopes L833–842, so its
+30-scope cap is now reached. NativeOracleSlots proves node-hash, leaf digest,
+view/nodeView/entry-key and leaf-event equality pointwise. NativeOracleLoop,
+Abort and Batch transport returning AND aborting loops/calls with exactly the
+same histories, mutable arrays and prefixes. NativeOracleDetail transports the
+same indexed detailed event. NativeOracleReply/Window prove a returning C04
+Result/window transport on the CLOSED child's original proof/canonical-query
+domain. These are helpers, not added final-headline premises. No Root0 is used
+by these new transport lemmas.
+
+Remaining oracle obligation is now precise: derive the returning C04 domain
+at the SAME outer064 occurrence without Root0, handle aborting dependent
+windows, and lift the transported details through the occurrence list,
+common/native parent and outer064 outcome. The full H-indexed packet is NOT
+constructed. Selected clock binding, rootImage/eventImage/Associated producer
+and final assemble remain OPEN; readerHeader at the headline H already passes.
+
+L842 NNH_S5FocusedHost combines the changed S5 roots with literal HeadlineB:
+exit0,3.138322012964636s,6653480KiB peak RSS,swap0,6G/8G/no-swap cgroup,
+source revision003c96f0e74 (dirty sources pinned in receipt), all12 printed
+roots standard-only. This is a focused dependency check, not S8/G0, an export,
+raw final audit or frozen manifest. Exact receipts and current source hashes
+are validated in NNH_RUN5_BOUNDARY.json. No source over20MB; diff --check PASS.
+
+S8 gate inspected at the current committed handoffs: NNG supplies complete094
+and328 candidates;345 has no candidate. NMX233 remains an instantiated support
+fold, with Box/source/all-Args obligations and no unrestricted native candidate;
+its242/241 readiness is explicitly unconditional-OPEN. Thus S8 must not launch.
+Future final assembly must use ledger27 CLOSED136/137/087/217/234, not their
+old candidate producers. No row credit is claimed here.
+
+Final run5 accounting:134/160 actual scopes (99 exit0,35 local proof/import
+failures),26 unused. Caps S2(16),S3(18),S4(55),S5(30),S7(4) are exhausted.
+S6 is complete in5/12 scopes and has no remaining independent field; its7
+unused scopes cannot be silently transferred to capped steps. S8's10 scopes
+and the16GiB final scope are gated by missing345/233(/242/241) roots. The other9
+unused planned preflight scopes cannot justify replaying unchanged green
+preflight. No further independent step remains within the literal minimal
+plan's caps. This is a step/gate stop, not total-allowance exhaustion. Next
+available attempt idL843; do not rerun L842 or apply RecordedCharge.bound until
+O1/O2 and host inclusion are actually discharged.
+
+No Kani/extraction, source/trust-row/ELF changes, push, wallet/key cleanup or
+sibling worktree edits. All new top roots have printed axioms; final raw audit,
+full physical non-vacuity and one manifest replay remain gated with S8.

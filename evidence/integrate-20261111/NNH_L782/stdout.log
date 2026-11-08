@@ -1,0 +1,415 @@
+def AspisS6CurrentCodecInstallation.install : AdapterRw.Ops → AdapterRw.Ops :=
+fun ops =>
+  { op0 := @AdapterRw.Ops.op0 ops, op1 := @AdapterRw.Ops.op1 ops, op2 := @AdapterRw.Ops.op2 ops,
+    op3 := @AdapterRw.Ops.op3 ops, op4 := @AdapterRw.Ops.op4 ops, op5 := @AdapterRw.Ops.op5 ops,
+    op6 := @AdapterRw.Ops.op6 ops, op7 := @AdapterRw.Ops.op7 ops, op8 := @AdapterRw.Ops.op8 ops,
+    op9 := @AdapterRw.Ops.op9 ops, op10 := @AdapterRw.Ops.op10 ops, op11 := @AdapterRw.Ops.op11 ops, op12 := ops.op12,
+    op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := ops.op16, op17 := ops.op17, op18 := ops.op18,
+    op19 := ops.op19, op20 := ops.op20, op21 := ops.op21, op22 := AspisS6CurrentCodecInstallation.encode,
+    op23 := ops.op23, op24 := ops.op24, op25 := ops.op25, op26 := ops.op26, op27 := ops.op27, op28 := ops.op28,
+    op29 := ops.op29, op30 := ops.op30, op31 := ops.op31, op32 := ops.op32, op33 := ops.op33, op34 := ops.op34,
+    op35 := ops.op35, op36 := ops.op36, op37 := ops.op37, op38 := ops.op38, op39 := ops.op39, op40 := ops.op40,
+    op41 := ops.op41, op42 := ops.op42, op43 := ops.op43, op44 := ops.op44, op45 := ops.op45, op46 := ops.op46,
+    op47 := AspisS6CurrentCodecInstallation.decode, op48 := ops.op48, op49 := ops.op49, op50 := ops.op50,
+    op51 := ops.op51, op52 := ops.op52, op53 := ops.op53 }
+def NMT_345.validateCall : NMT_345.Statement → Result (core.result.Result Unit NMT_345.FormatError) :=
+fun s =>
+  NMT_345.mapOuter (NMT_345.mapCore id NMT_345Dec.fromT13)
+    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      (NMT_345Dec.toT8 s))
+def NMT_345.encodeCall : NMT_345.Afterstate →
+  Result (core.result.Result (Std.Array U8 688#usize) NMT_345.EncodeError) :=
+fun a =>
+  NMT_345.mapOuter (NMT_345.mapCore id NMT_345Dec.fromT11)
+    (AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 (NMT_345Dec.toT5 a))
+def NMT_345.commonValue : NMT_345.Statement → NMT_345.Common :=
+fun x =>
+  match x with
+  |
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+      a =>
+    c
+  | NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c a =>
+    c
+def AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 :=
+fun value =>
+  match value with
+  | AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer x0 x1 =>
+    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+      (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1 x0)
+      (AspisS6CurrentAdapterCarrier.toPoolV1PrivateTransferPublicV1 x1)
+  | AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal x0 x1 =>
+    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+      (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1 x0)
+      (AspisS6CurrentAdapterCarrier.toPoolV1WithdrawalPublicV1 x1)
+AdapterRw.Ops.op21 (self : AdapterRw.Ops) :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result Unit
+        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+AdapterRw.Ops.op24 (self : AdapterRw.Ops) :
+  AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+        AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalFormatErrorV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) →
+    (Unit →
+        motive
+          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength) →
+      (Unit →
+          motive
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic) →
+        (Unit →
+            motive
+              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonCanonicalDigest) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch) →
+                      (Unit →
+                          motive
+                            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch) →
+                        (Unit →
+                            motive
+                              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch) →
+                            (Unit →
+                                motive
+                                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch) →
+                              (Unit →
+                                  motive
+                                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.SelectedLaneBindingMismatch) →
+                                (Unit →
+                                    motive
+                                      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LiveSnapshotMismatch) →
+                                  (Unit →
+                                      motive
+                                        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CandidateAfterstateMismatch) →
+                                    (Unit →
+                                        motive
+                                          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch) →
+                                      (Unit →
+                                          motive
+                                            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WithdrawalDestinationMismatch) →
+                                        ((x0 :
+                                              AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) →
+                                            motive
+                                              (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment
+                                                x0)) →
+                                          ((x0 :
+                                                AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) →
+                                              motive
+                                                (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+                                                  x0)) →
+                                            ((x0 :
+                                                  AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) →
+                                                motive
+                                                  (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate
+                                                    x0)) →
+                                              ((x0 :
+                                                    AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) →
+                                                  motive
+                                                    (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+                                                      x0)) →
+                                                motive value
+AspisS6CurrentAdapterCarrier.toPoolV1WithdrawalPublicV1: AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+  AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLatePublicStatementV1: AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLatePublicStatementErrorV1: AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalFormatErrorV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLatePublicStatementErrorV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) →
+    (Unit →
+        motive AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongLength) →
+      (Unit →
+          motive AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongMagic) →
+        (Unit →
+            motive
+              AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongItemCount) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongHeaderLength) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongSnapshotLength) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongAfterstateLength) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongTotalLength) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.NonZeroReserved) →
+                      ((x0 : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) →
+                          motive
+                            (AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Snapshot
+                              x0)) →
+                        ((x0 : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) →
+                            motive
+                              (AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Afterstate
+                                x0)) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch) →
+                            motive value
+AspisS6CurrentAdapterCarrier.toPoolV1PrivateTransferPublicV1: AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
+  AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+AspisS6CurrentAdapterCarrier.toPoolV1TreeError: AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError →
+  AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1TreeError
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifierTransportErrorV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) →
+    (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongLength) →
+      (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongMagic) →
+        (Unit →
+            motive AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongStatementVersion) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongDigestEncoding) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidTransitionKind) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongSuccessCode) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.WrongPairFormat) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.ZeroRequiredBinding) →
+                      (Unit →
+                          motive
+                            AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidProofBodyLength) →
+                        (Unit →
+                            motive
+                              AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidStatementPayloadLength) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidLiveSnapshotPayloadLength) →
+                            (Unit →
+                                motive
+                                  AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalOutputPair) →
+                              (Unit →
+                                  motive
+                                    AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex) →
+                                (Unit →
+                                    motive
+                                      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate) →
+                                  motive value
+AspisS6CurrentAdapterCarrier.toPoolV1PaymentStatementFormatError: AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError →
+  AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1: AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+AspisS6CurrentAdapterCarrier.toPoolV1PaymentStatementFormatError.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) →
+    (Unit → motive AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongLength) →
+      (Unit → motive AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongMagic) →
+        (Unit →
+            motive AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongTransitionKind) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongDigestEncoding) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonZeroReserved) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.ZeroRequiredBinding) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidAnchorSequence) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest) →
+                      (Unit →
+                          motive
+                            AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId) →
+                        (Unit →
+                            motive
+                              AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidDestination) →
+                            (Unit →
+                                motive
+                                  AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidEnvelope) →
+                              (Unit →
+                                  motive
+                                    AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.EnvelopeMismatch) →
+                                motive value
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifierTransportErrorV1: AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestAccountErrorV1: AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLiveSnapshotErrorV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) →
+    (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongLength) →
+      (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongMagic) →
+        (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongFormatBinding) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.TreeFull) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest) →
+                      motive value
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1) →
+    ((x0 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) →
+        (x1 : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1) →
+          motive
+            (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+              x0 x1)) →
+      ((x0 : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1) →
+          (x1 : AdapterRw.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1) →
+            motive
+              (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal x0
+                x1)) →
+        motive value
+AspisS6CurrentAdapterCarrier.toPoolV1TreeError.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError) →
+    (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.TreeFull) →
+      (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.InsufficientCapacity) →
+        (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.IndexOutOfRange) →
+          (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.RootMismatch) →
+            (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.NonCanonicalFrontier) →
+              (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongLength) →
+                (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongMagic) →
+                  (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongVersion) →
+                    (Unit → motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongDepth) →
+                      (Unit →
+                          motive AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongTreeHash) →
+                        (Unit →
+                            motive
+                              AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.WrongDigestEncoding) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.NonCanonicalDigest) →
+                            (Unit →
+                                motive
+                                  AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.NonZeroReserved) →
+                              motive value
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLiveSnapshotErrorV1: AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairLiveSnapshotV1: AdapterRw.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestAccountErrorV1.match_1: (motive :
+    AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 → Sort u_1) →
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) →
+    (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLength) →
+      (Unit → motive AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongMagic) →
+        (Unit →
+            motive AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongVersion) →
+          (Unit →
+              motive
+                AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLaneCount) →
+            (Unit →
+                motive
+                  AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongDigestEncoding) →
+              (Unit →
+                  motive
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongDepth) →
+                (Unit →
+                    motive
+                      AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongFormatBinding) →
+                  (Unit →
+                      motive
+                        AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonZeroReserved) →
+                    (Unit →
+                        motive
+                          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding) →
+                      (Unit →
+                          motive
+                            AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidBoolean) →
+                        (Unit →
+                            motive
+                              AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState) →
+                          (Unit →
+                              motive
+                                AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidLane) →
+                            (Unit →
+                                motive
+                                  AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.LaneMasterMismatch) →
+                              (Unit →
+                                  motive
+                                    AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.LaneOrderMismatch) →
+                                (Unit →
+                                    motive
+                                      AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.LaneSequenceDecreased) →
+                                  (Unit →
+                                      motive
+                                        AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.DuplicateCheckpoint) →
+                                    (Unit →
+                                        motive
+                                          AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.CheckpointSequenceOverflow) →
+                                      (Unit →
+                                          motive
+                                            AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.NonCanonicalDigest) →
+                                        (Unit →
+                                            motive
+                                              AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Identity) →
+                                          (Unit →
+                                              motive
+                                                AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Policy) →
+                                            ((x0 :
+                                                  AdapterRw.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError) →
+                                                motive
+                                                  (AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Tree
+                                                    x0)) →
+                                              motive value
+NMT_345Dec.fromT5 (x : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) :
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1

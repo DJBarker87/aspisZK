@@ -1,0 +1,307 @@
+'AspisR1.NNH_Tx2SlotTransport.geometry_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2SlotTransport.finish_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+NLB_Parent.events_from_cuts: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event)
+  (p : NKE_Free.Program NLB_Parent.Event A) (before : List NLB_Parent.Event),
+  (∀ e ∈ (NKE_Free.eval p).events, window e = e) →
+    NLB_Parent.G window p before = NLB_Parent.State.done (NKE_Free.eval p).result (before ++ (NKE_Free.eval p).events)
+NLB_Parent.State.invalid.inj: ∀ {A : Type} {attempted attempted_1 : List NLB_Parent.Event},
+  NLB_Parent.State.invalid attempted = NLB_Parent.State.invalid attempted_1 → attempted = attempted_1
+NLB_Parent.State.live.sizeOf_spec: ∀ {A : Type} [inst : SizeOf A] (caller : NKE_Free.Program NLB_Parent.Event A)
+  (attempted : List NLB_Parent.Event),
+  sizeOf (NLB_Parent.State.live caller attempted) = 1 + sizeOf caller + sizeOf attempted
+NLB_Parent.C09_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (v : verifier.View) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (reply : NJU_CommonObserved.R Unit),
+  NJU_CommonObserved.Event.finish v p a reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.finish v p a reply) =
+      NJU_CommonObserved.Event.finish v p a reply
+NLB_Parent.State.live.inj: ∀ {A : Type} {caller : NKE_Free.Program NLB_Parent.Event A}
+  {attempted : List NLB_Parent.Event} {caller_1 : NKE_Free.Program NLB_Parent.Event A}
+  {attempted_1 : List NLB_Parent.Event},
+  NLB_Parent.State.live caller attempted = NLB_Parent.State.live caller_1 attempted_1 →
+    caller = caller_1 ∧ attempted = attempted_1
+NLB_Parent.State.invalid.sizeOf_spec: ∀ {A : Type} [inst : SizeOf A] (attempted : List NLB_Parent.Event),
+  sizeOf (NLB_Parent.State.invalid attempted) = 1 + sizeOf attempted
+NLB_Parent.Trace.brecOn: ∀ {A : Type} {window : NLB_Parent.Event → NLB_Parent.Event}
+  {motive : (a a_1 : NLB_Parent.State A) → NLB_Parent.Trace window a a_1 → Prop} {a a_1 : NLB_Parent.State A}
+  (t : NLB_Parent.Trace window a a_1),
+  (∀ (a a_2 : NLB_Parent.State A) (t : NLB_Parent.Trace window a a_2), NLB_Parent.Trace.below t → motive a a_2 t) →
+    motive a a_1 t
+NLB_Parent.C02_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H)
+  (gamma : aspis_core.field.wide_exact.WideExact)
+  (reply : Result (Std.Array aspis_core.field.wide_exact.WideExact 29#usize)),
+  NJU_CommonObserved.Event.powers gamma reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.powers gamma reply) =
+      NJU_CommonObserved.Event.powers gamma reply
+NLB_Parent.QueryObservation.mk.sizeOf_spec: ∀ (written heap : ℕ → U8) (logBase logSize proofBase : ℕ)
+  (args : NKE_QueryInput.Args),
+  sizeOf
+      { written := written, heap := heap, logBase := logBase, logSize := logSize, proofBase := proofBase,
+        args := args } =
+    1 + sizeOf logBase + sizeOf logSize + sizeOf proofBase + sizeOf args
+NLB_Parent.G.eq_1: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event) (before : List NLB_Parent.Event)
+  (value : A), NLB_Parent.G window (NKE_Free.Program.ret value) before = NLB_Parent.State.done (ok value) before
+NLB_Parent.C03_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (bytes : Slice U8)
+  (reply : Result (Option aspis_core.field.wide_exact.WideExact)),
+  NJU_CommonObserved.Event.inactive bytes reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.inactive bytes reply) =
+      NJU_CommonObserved.Event.inactive bytes reply
+NLB_Parent.G.eq_3: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event) (before : List NLB_Parent.Event)
+  (B : Type) (next : B → NKE_Free.Program NLB_Parent.Event A) (error : Error),
+  NLB_Parent.G window (NKE_Free.Program.prim (fail error) next) before = NLB_Parent.State.done (fail error) before
+NLB_Parent.State.done.inj: ∀ {A : Type} {result : Result A} {attempted : List NLB_Parent.Event} {result_1 : Result A}
+  {attempted_1 : List NLB_Parent.Event},
+  NLB_Parent.State.done result attempted = NLB_Parent.State.done result_1 attempted_1 →
+    result = result_1 ∧ attempted = attempted_1
+NLB_Parent.G.eq_4: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event) (before : List NLB_Parent.Event)
+  (B : Type) (next : B → NKE_Free.Program NLB_Parent.Event A),
+  NLB_Parent.G window (NKE_Free.Program.prim div next) before = NLB_Parent.State.done div before
+NLB_Parent.C07_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (proofArg : Slice U8) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (verifier.Accumulator × verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proofArg p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.query proofArg p a g geometry pending reply) =
+      NJU_CommonObserved.Event.query proofArg p a g geometry pending reply
+NLB_Parent.QueryObservation.mk.inj: ∀ {written heap : ℕ → U8} {logBase logSize proofBase : ℕ}
+  {args : NKE_QueryInput.Args} {written_1 heap_1 : ℕ → U8} {logBase_1 logSize_1 proofBase_1 : ℕ}
+  {args_1 : NKE_QueryInput.Args},
+  { written := written, heap := heap, logBase := logBase, logSize := logSize, proofBase := proofBase, args := args } =
+      { written := written_1, heap := heap_1, logBase := logBase_1, logSize := logSize_1, proofBase := proofBase_1,
+        args := args_1 } →
+    written = written_1 ∧
+      heap = heap_1 ∧ logBase = logBase_1 ∧ logSize = logSize_1 ∧ proofBase = proofBase_1 ∧ args = args_1
+NLB_Parent.C06_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (weights : Slice aspis_core.field.QM31)
+  (reply : NJU_CommonObserved.R verifier.BatchedWeights),
+  NJU_CommonObserved.Event.pending weights reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.pending weights reply) =
+      NJU_CommonObserved.Event.pending weights reply
+NLB_Parent.State.live.injEq: ∀ {A : Type} (caller : NKE_Free.Program NLB_Parent.Event A)
+  (attempted : List NLB_Parent.Event) (caller_1 : NKE_Free.Program NLB_Parent.Event A)
+  (attempted_1 : List NLB_Parent.Event),
+  (NLB_Parent.State.live caller attempted = NLB_Parent.State.live caller_1 attempted_1) =
+    (caller = caller_1 ∧ attempted = attempted_1)
+NLB_Parent.native_fold: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_ResumePacket.Native) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NLB_ResumePacket.At nativeResume wr d ck proof pub hash →
+    (∀ (proofArg : Slice U8) (p : verifier.Prepared) (root : Std.Array U8 32#usize),
+        NLB_ErrorTransport.MerkleDomain wr d ck proof pub hash proofArg p →
+          NLB_ErrorTransport.ReplyRel (nativeMerkle d proofArg p root 1#usize hash)
+            (modelMerkle d proofArg p root 1#usize hash)) →
+      (↑proof).length = 57607 →
+        ∀ (observe : NKE_QueryInput.Args → NLB_Parent.QueryObservation),
+          NLB_Parent.QueryCuts wr rr fr (fun {H} => nativeMerkle) d pub proof ck hash observe →
+            ∀ (before : List NLB_Parent.Event),
+              have w :=
+                NLB_Parent.flushWindow
+                  (NLB_Parent.queryWindow
+                    (NLB_Parent.window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr)
+                      (fun {H} => nativeMerkle) d hash)
+                    observe);
+              have p :=
+                NKE_CommonProgram.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash none;
+              NLB_Parent.G w p before =
+                  NLB_Parent.State.done
+                    (NJJ_Common.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash none)
+                    (before ++
+                      (NJU_CommonObserved.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                          none).events) ∧
+                NLB_ErrorTransport.observeCommon
+                    (NJU_CommonObserved.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                      none) =
+                  NLB_ErrorTransport.observeCommon
+                    (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                      none)
+NLB_Parent.QueryObservation.mk.injEq: ∀ (written heap : ℕ → U8) (logBase logSize proofBase : ℕ)
+  (args : NKE_QueryInput.Args) (written_1 heap_1 : ℕ → U8) (logBase_1 logSize_1 proofBase_1 : ℕ)
+  (args_1 : NKE_QueryInput.Args),
+  ({ written := written, heap := heap, logBase := logBase, logSize := logSize, proofBase := proofBase, args := args } =
+      { written := written_1, heap := heap_1, logBase := logBase_1, logSize := logSize_1, proofBase := proofBase_1,
+        args := args_1 }) =
+    (written = written_1 ∧
+      heap = heap_1 ∧ logBase = logBase_1 ∧ logSize = logSize_1 ∧ proofBase = proofBase_1 ∧ args = args_1)
+NLB_Parent.G.eq_2: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event) (before : List NLB_Parent.Event)
+  (B : Type) (next : B → NKE_Free.Program NLB_Parent.Event A) (value : B),
+  NLB_Parent.G window (NKE_Free.Program.prim (ok value) next) before = NLB_Parent.G window (next value) before
+NLB_Parent.observed_steps: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle),
+  (NLB_Parent.ResumeProjection wr fun {H} => nativeResume) →
+    (NLB_Parent.MerkleProjection (fun {H} => nativeMerkle) fun {H} => modelMerkle) →
+      ∀ {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+        (↑proof).length = 57607 →
+          ∀ (observe : NKE_QueryInput.Args → NLB_Parent.QueryObservation),
+            NLB_Parent.QueryCuts wr rr fr (fun {H} => modelMerkle) d pub proof ck hash observe →
+              ∀
+                e ∈
+                  (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                      none).events,
+                NLB_Parent.queryWindow
+                    (NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe e =
+                  e
+NLB_Parent.execution: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event)
+  (p : NKE_Free.Program NLB_Parent.Event A) (before : List NLB_Parent.Event),
+  NLB_Parent.Trace window (NLB_Parent.State.live p before) (NLB_Parent.G window p before)
+NLB_Parent.steps: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle),
+  (NLB_Parent.ResumeProjection wr fun {H} => nativeResume) →
+    (NLB_Parent.MerkleProjection (fun {H} => nativeMerkle) fun {H} => modelMerkle) →
+      ∀ {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+        ∀
+          e ∈
+            (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                none).events,
+          NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash e = e
+NLB_Parent.native_steps: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  nativeResume d ck proof pub hash = NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash →
+    (↑proof).length = 57607 →
+      ∀ (observe : NKE_QueryInput.Args → NLB_Parent.QueryObservation),
+        NLB_Parent.QueryCuts wr rr fr (fun {H} => nativeMerkle) d pub proof ck hash observe →
+          ∀
+            e ∈
+              (NJU_CommonObserved.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                  none).events,
+            NLB_Parent.flushWindow
+                (NLB_Parent.queryWindow
+                  (NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe)
+                e =
+              e
+NLB_Parent.G.eq_def: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event)
+  (p : NKE_Free.Program NLB_Parent.Event A) (before : List NLB_Parent.Event),
+  NLB_Parent.G window p before =
+    match p with
+    | NKE_Free.Program.ret value => NLB_Parent.State.done (ok value) before
+    | NKE_Free.Program.prim actual next =>
+      match actual with
+      | ok value => NLB_Parent.G window (next value) before
+      | fail error => NLB_Parent.State.done (fail error) before
+      | div => NLB_Parent.State.done div before
+    | NKE_Free.Program.call codec seed next =>
+      have event := window (codec.encode seed);
+      have attempted := before ++ [event];
+      match codec.decode event with
+      | none => NLB_Parent.State.invalid attempted
+      | some (ok value) => NLB_Parent.G window (next value) attempted
+      | some (fail error) => NLB_Parent.State.done (fail error) attempted
+      | some div => NLB_Parent.State.done div attempted
+NLB_Parent.C05_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (queries : Std.Array U32 22#usize)
+  (next : Usize) (reply : NJU_CommonObserved.R verifier.QueryGeometry),
+  NJU_CommonObserved.Event.geometry queries next reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.geometry queries next reply) =
+      NJU_CommonObserved.Event.geometry queries next reply
+NLB_Parent.State.done.injEq: ∀ {A : Type} (result : Result A) (attempted : List NLB_Parent.Event) (result_1 : Result A)
+  (attempted_1 : List NLB_Parent.Event),
+  (NLB_Parent.State.done result attempted = NLB_Parent.State.done result_1 attempted_1) =
+    (result = result_1 ∧ attempted = attempted_1)
+NLB_Parent.target_steps: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  nativeResume d ck proof pub hash = NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash →
+    (↑proof).length = 57607 →
+      ∀ (observe : NKE_QueryInput.Args → NLB_Parent.QueryObservation),
+        NLB_Parent.QueryCuts wr rr fr (fun {H} => nativeMerkle) d pub proof ck hash observe →
+          ∀
+            e ∈
+              (NJU_CommonObserved.run wr rr (fun {H} => nativeMerkle) (NLB_Parent.finish fr) d pub proof ck hash
+                  none).events,
+            NLB_Parent.queryWindow
+                (NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe e =
+              e
+NLB_Parent.C08_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (pending : verifier.BatchedWeights)
+  (weights : Slice aspis_core.field.QM31) (reply : Result (Slice aspis_core.field.QM31)),
+  NJU_CommonObserved.Event.flush pending weights reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+        (NJU_CommonObserved.Event.flush pending weights reply) =
+      NJU_CommonObserved.Event.flush pending weights reply
+NLB_Parent.G.eq_5: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event) (before : List NLB_Parent.Event)
+  (B : Type) (codec : NKE_Free.Codec NLB_Parent.Event B) (seed : Result B)
+  (next : B → NKE_Free.Program NLB_Parent.Event A),
+  NLB_Parent.G window (NKE_Free.Program.call codec seed next) before =
+    match codec.decode (window (codec.encode seed)) with
+    | none => NLB_Parent.State.invalid (before ++ [window (codec.encode seed)])
+    | some (ok value) => NLB_Parent.G window (next value) (before ++ [window (codec.encode seed)])
+    | some (fail error) => NLB_Parent.State.done (fail error) (before ++ [window (codec.encode seed)])
+    | some div => NLB_Parent.State.done div (before ++ [window (codec.encode seed)])
+NLB_Parent.C01_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (checkpoint proofArg publicArg : Slice U8)
+  (reply : NJU_CommonObserved.R (verifier.Prepared × verifier.Accumulator)),
+  NJU_CommonObserved.Event.resume checkpoint proofArg publicArg reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    nativeResume d checkpoint proofArg publicArg hash =
+        NJJ_Common.resume wr d checkpoint proofArg publicArg AspisR1Stage2.transport.Variant.S2 hash →
+      NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+          (NJU_CommonObserved.Event.resume checkpoint proofArg publicArg reply) =
+        NJU_CommonObserved.Event.resume checkpoint proofArg publicArg reply
+NLB_Parent.C04_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (proofArg : Slice U8) (p : verifier.Prepared)
+  (root : Std.Array U8 32#usize) (reply : NJU_CommonObserved.R Unit),
+  NJU_CommonObserved.Event.merkle proofArg p root reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    nativeMerkle d proofArg p root 1#usize hash = modelMerkle d proofArg p root 1#usize hash →
+      NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash
+          (NJU_CommonObserved.Event.merkle proofArg p root reply) =
+        NJU_CommonObserved.Event.merkle proofArg p root reply
+NLB_Parent.query_step: ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_Parent.Resume) (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (proofArg : Slice U8) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (verifier.Accumulator × verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proofArg p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) (NLB_Parent.finish fr) d pub proof ck hash none).events →
+    (↑proof).length = 57607 →
+      ∀ (observe : NKE_QueryInput.Args → NLB_Parent.QueryObservation),
+        NLB_Parent.QueryCut
+            { proof := proofArg, prepared := p, accumulator := a, powers := g, geometry := geometry,
+              pending := pending }
+            (observe
+              { proof := proofArg, prepared := p, accumulator := a, powers := g, geometry := geometry,
+                pending := pending }) →
+          NLB_Parent.queryWindow
+              (NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe
+              (NJU_CommonObserved.Event.query proofArg p a g geometry pending reply) =
+            NJU_CommonObserved.Event.query proofArg p a g geometry pending reply
+NLB_Parent.State.done.sizeOf_spec: ∀ {A : Type} [inst : SizeOf A] (result : Result A)
+  (attempted : List NLB_Parent.Event),
+  sizeOf (NLB_Parent.State.done result attempted) = 1 + sizeOf result + sizeOf attempted
+NLB_Parent.State.invalid.injEq: ∀ {A : Type} (attempted attempted_1 : List NLB_Parent.Event),
+  (NLB_Parent.State.invalid attempted = NLB_Parent.State.invalid attempted_1) = (attempted = attempted_1)
+def AspisR1.SAQ_GeometrySource.install : {C : Type} → Port3_NativeGeometryBody.Ops C → Port3_NativeGeometryBody.Ops C :=
+fun {C} ops =>
+  have __src := SAQ_Geometry.install ops;
+  { op0 := @Port3_NativeGeometryBody.Ops.op0 C __src, op1 := @Port3_NativeGeometryBody.Ops.op1 C __src,
+    op2 := @Port3_NativeGeometryBody.Ops.op2 C __src, op3 := @Port3_NativeGeometryBody.Ops.op3 C __src,
+    op4 := @Port3_NativeGeometryBody.Ops.op4 C __src, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7,
+    op8 := __src.op8, op9 := __src.op9, op10 := __src.op10, op11 := SAQ_Inverse.source, op12 := __src.op12,
+    op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+    mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator C __src }

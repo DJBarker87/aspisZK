@@ -1,0 +1,50 @@
+{"attempt": "NNH_L839", "exit_status": 1, "wall_seconds": 4.822241110960022, "peak_rss_kib": "6605664", "swaps": "0", "print_axioms": ["'AspisR1.NNH_NativeOracleReply.action' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_NativeOracleReply.lean:21:3: error(lean.unknownIdentifier): Unknown identifier `Port3_BatchStage.toPrepared`
+NNH_generated/NNH_NativeOracleReply.lean:25:3: error(lean.unknownIdentifier): Unknown identifier `Port3_BatchStage.toPrepared`
+NNH_generated/NNH_NativeOracleReply.lean:27:3: error(lean.unknownIdentifier): Unknown identifier `Port3_BatchStage.toPrepared`
+NNH_generated/NNH_NativeOracleReply.lean:29:3: error(lean.unknownIdentifier): Unknown identifier `Port3_BatchStage.toPrepared`
+NNH_generated/NNH_NativeOracleReply.lean:23:60: error: unsolved goals
+H : Bytes → State
+pda : List RSL.Bytes → RSL.B32 → Option RSL.B32
+clock : Except RSL.ProgramError UInt64
+r : NP6_StdModel.
+...
+4
+r : NP6_StdModel.Reservation
+X : Type
+d : VTop_Stages.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+p : VTop_Stages.verifier.Prepared
+folded : Std.Array U8 32#usize
+canonical : ∀ j < 22, ↑(↑p.queries)[j]! < 262144
+inside : NLL.History
+out : NLL.Reply
+native : NLL_BatchSource.Invocation (part H pda clock r) proof sorry folded 1#usize inside out
+old :
+  NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops (part H pda clock r))
+        (NKV_ConcreteChildren.digest (part H pda clock r)) proof sorry folded 1#usize () =
+      ok out ∧
+    NLL_Parent.plan (part H pda clock r) proof parsed sorry.queries 1#usize
+        (NLL_Parent.sites (NLL_BatchSource.roots sorry folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      inside
+changed : NLL_BatchSource.Invocation H proof sorry folded 1#usize inside out
+next :
+  NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof sorry
+        folded 1#usize () =
+      ok out ∧
+    NLL_Parent.plan H proof parsed sorry.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots sorry folded))
+        NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      inside
+⊢ NHT_ResultPort.action
+      (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops (part H pda clock r))
+        (NKV_ConcreteChildren.digest (part H pda clock r)) proof p folded 1#usize ()) =
+    NHT_ResultPort.action
+      (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+        folded 1#usize ())
+'AspisR1.NNH_NativeOracleReply.action' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd03cdafe5419455d89806e6478e886ac.scope; invocation ID: b0a3cba82a1d40fcb1360c0dcc4f54eb

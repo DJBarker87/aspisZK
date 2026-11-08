@@ -1,0 +1,41 @@
+{"attempt": "NNH_L736", "exit_status": 0, "wall_seconds": 7.000717123039067, "peak_rss_kib": "6666592", "swaps": "0", "print_axioms": []}
+NHT_FinishRelationModel.after_pair: ∀ {W : Type} (ops : AspisR1.Port3_NativeFinishBody.Ops W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)) (weights : Aeneas.Std.Slice NHE_DotBody.NQ),
+  (↑weights).length ≤ 64 →
+    a.weights.deref = AspisR1.SAG_DotAdapter.mapSlice NHE_DotRead.stageQ weights →
+      ops.op4 v.final_message a.weights.deref = AspisR1.SAG_DotClosed.source v.final_message a.weights.deref →
+        ∀ (claim : AspisR1.NGM_FinishControl.E) (reply : AspisR1.NGM_FinishControl.R AspisR1.NGM_FinishControl.E),
+          NHQ_FinishRelationModel.aft
+...
+.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)),
+  AspisR1.Port3_NativeFinishBody.verifier.finish_relation ops v p a obs = NHQ_FinishRelationModel.staged ops v p a obs
+NHT_FinishRelationModel.round_frame: ∀ {W : Type} (ops : AspisR1.Port3_NativeFinishBody.Ops W)
+  (r : AspisR1.NP6_StdModel.Reservation) (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (alpha claim : AspisR1.LPi_FieldValues.NE) (i : Aeneas.Std.Usize),
+  AspisR1.LPi_FieldValues.canonE alpha →
+    ↑i < 2 →
+      ops.op5 bytes (AspisR1.FIo_Install.fromE alpha) (AspisR1.FIo_Install.fromE claim) i =
+          AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps (AspisR1.IDa_Deployed.finish r) bytes
+            (AspisR1.FIo_Install.fromE alpha) (AspisR1.FIo_Install.fromE claim) i →
+        ∀
+          (next :
+            AspisR1.NGM_FinishControl.R AspisR1.NGM_FinishControl.E →
+              Aeneas.Std.Result (AspisR1.NGM_FinishControl.R Unit)),
+          (do
+              let reply ← ops.op5 bytes (AspisR1.FIo_Install.fromE alpha) (AspisR1.FIo_Install.fromE claim) i
+              next reply) =
+            do
+            let reply ← NHQ_PacketPorts.round bytes alpha claim
+            next reply
+def NLP_NativeMerkle.action : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  NJU_CommonObserved.Merkle :=
+fun H {X} x proof p folded batch x_1 =>
+  NHT_ResultPort.action
+    (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+      folded batch ())
+def NIG_Slots.installed : AspisR1.NP6_StdModel.Reservation → AspisR1.Port3_NativeFinishBody.Ops NIG_Slots.W :=
+fun r => AspisR1.Port4D_Round.native (AspisR1.IDa_Deployed.finish r)
+
+Running as unit: run-re264353ecdb849a995538e8cfc46a5c9.scope; invocation ID: e7fe608c50304c60a0daf57baa24e6b2
