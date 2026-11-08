@@ -23,3 +23,8 @@ PV_LIB_SPEC_LocalOwnership compiled 44933, cohort w3: exit0, wall 0:02.83, peak 
 PV_LIB_SPEC_LocalInitMemory compiled 44935, cohort w3: exit0, wall 0:02.51, peak 4765896KiB, swap 0; source e0c649810cb2a9b0c4ed0c7caae879b5f3099c91; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession8 compiled 44936, cohort w3: exit0, wall 0:00.88, peak 1590324KiB, swap 0; source 8a1842980add01ee9c3dfa9fbfe9cff8ad287d38; standard summary axioms only.
+
+ONE strict raw49798 PASS81/81 NEW roots;exit0,wall0:37.83,
+peak6808228KiB,swap0,sourcecbc99adf0cc;standard axioms only,zero unresolved/
+summary disagreements. Full graph archive/hash/manifest retained. No unchanged
+raw/full replay. Exact unresolved deliverables in SESSION8_ADEQUACY.md.

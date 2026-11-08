@@ -1,10 +1,43 @@
-# Session8 checkpoint
+# Session8 handoff — sparse Packet repaired locally, full task OPEN
 
-SparseArc compiled44919. Fixed adopted48/8 layout; four sparse qwords;
-all holes retain allocator memory. Named allocation/registration/header/OWNER
-facts reused by name. All non-success/null answers retained. Runtime install,
-source operand association, total-image result recheck and full joint witness
-remain in progress. See SESSION8.md. Next44920; one final new-root audit due.
+Continued37be8fd68f7. SparseArc44919, SparsePacketHandler44921,
+SparseRuntime44924, SparseHistory44929: fixed48/8 four-store image; holes
+frame allocator content; no ABI/ArcInner.Shape parameter in the new runtime;
+all-answer native ghost and actual-source-origin history rechecked.
+SESSION8_ADEQUACY.md records EVERY old total-image consumer's disposition
+and the source/binary limits. No old model is silently relabelled sparse.
+
+SPEC-C5 CHECKED44928: AllocationWitness selects callback drop94(call14113),
+but allocation13923 is drop92; the post-return counter selects a different
+backing. See FINDINGS.md. This is NOT a full-joint contradiction. Historical
+statement retained; corrected source-history statement and proof remain open.
+
+SuccessResources44930: concrete site-bound malloc replies4963/48->4096,
+13923/56->8192,14756/24->12288. No continuous original-entry native schedule.
+LocalOwnership44933 ACTUALLY applies allBridged and SourceInitBoxOwnership;
+FreshAllocationValidity' is proved at the concrete local state, no decode
+premise. LocalInitMemory44935 derives successful InitMemory at12288 and
+explicitly proves local39 has NO receiver: the local ownership implication
+is vacuous, so it earns no original-entry ownership credit. No row proved.
+
+ONE strict raw49798 PASS81/81 new roots;exit0,wall0:37.83,
+peak6808228KiB,swap0,sourcecbc99adf0cc;standard axioms only,zero unresolved/
+summary disagreement. Exact graphs/hashes/inputs retained.9 focused passes
+(including driver),11 retained changed-before-retry local errors;no OOM,
+admission refusal,transport failure,launcher edit,cap increase or unchanged
+regression. All scopes6G/8G/swap0/Tasks64/-M7000,one at a time.
+
+Full successful original-entry allocation history/full joint witness remain
+UNFINISHED; no contradiction of their full existential is claimed. Next:
+correct cut92 association in a new statement; bind successful native values,
+ScopeData allocation and callback byte copies; integrate actual partial v2 in
+one cohort; carry SAME original-entry run through13923/14320/14756 and apply
+the exports nonvacuously there. The18 old whole statements remain retained.
+No endpoint/T premise change,implementation/provider/package/ledger/key edit,
+push/merge or live own scope. NextLean44937..44998;next raw49799,then34990..34999
+only for new/changed inputs.3499x launcher extension NOT used or made.
+
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session8.py
 
 ---
 
