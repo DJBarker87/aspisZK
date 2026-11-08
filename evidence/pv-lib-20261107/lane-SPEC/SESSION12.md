@@ -16,3 +16,5 @@ PV_LIB_SPEC_SuccessSchedule12 compiled 55126, cohort w3: exit0, wall 0:03.00, pe
 PV_LIB_SPEC_NativeBindings12 compiled 55127, cohort w3: exit0, wall 0:02.34, peak 4771744KiB, swap 0; source 66c11f2072ebda3d919d8671844039caee412aee; standard summary axioms only.
 
 PV_LIB_SPEC_ThreadNewRecheck12 compiled 55128, cohort w3: exit0, wall 0:02.17, peak 4768836KiB, swap 0; source 273915416b1269f231b820e782e268d67cc1311d; standard summary axioms only.
+
+PV_LIB_SPEC_NativeRecheck12 compiled 55129, cohort w3: exit0, wall 0:03.71, peak 4746140KiB, swap 0; source 14ce3ebb94612c5c5432dceb8be4e58318bc3a34; standard summary axioms only.
