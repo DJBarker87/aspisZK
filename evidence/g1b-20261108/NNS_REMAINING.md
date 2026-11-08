@@ -18,9 +18,19 @@ TX2:241 remains the already-CLOSED canonical ledger29 row; no ledger change.
 | Stage3 weak_instance at wEnv and wAny | Blocked by the SAME literal stage2 source selection/trace association. NNP weak replay folds do not prove this missing association; duplicating them would not supply it. |
 | Stage3 exact TAS field | Required type and literal Impl fields checked. Constructing NNS_Field.r241 is blocked by parametric; no conditional field substituted. |
 | Raw walks of requested main/weak/field roots | Cannot run: those constants do not exist as proved theorems. Raw-audit only actual new support/checking roots; never fabricate missing root evidence. |
-| Combined import, pinning and support-root raw audit | Pending until final receipts; final handoff will state outcomes. |
+| Combined import, pinning and support-root raw audit | COMPLETE: L021 combined import; L022 eight unchanged fixtures; L023/L024 raw18/18 standard-only and collector agreement; L025 closure pinning. Three requested main roots remain nonexistent/un-audited. |
 
 No remaining mathematical item needs Kani or extraction. The two blocked
 associations are Lean obligations, not budget exhaustion. Continuing by editing
 credited NMX/NMS/NNH implementations, weakening specs, choosing a new stage2,
 adding canonical Root0, or importing unvalidated sibling work is prohibited.
+
+Final accounting:25/30 capped scopes conservatively counting2 cache-I/O scopes,
+19 Lean scopes and4 audit/retention scopes.18 passed,7 failed; no wall timeout,
+memory kill, cap/heartbeat increase or unchanged killed-shape rerun. The five
+unused scopes are not budget exhaustion. Every independent assigned member
+above was attempted/completed; the brief explicitly stops the canonical-Root0
+item. Main/weak/field and their nonexistent-root audits all depend on that
+same unresolved selection/trace association. Repeating NNP folds, restating a
+different implementation, or adding an unproved premise would not discharge
+any remaining member. No Kani or extraction is needed or authorized.
