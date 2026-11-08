@@ -413,3 +413,18 @@ compose A2, then A1 Ok/weakErr and literal-host/NMF_B/ExecB/averaging.
 Ledger26 refresh remains26980b13109f:136 CREDITED and plugged;
 217 REJECTED pending Kani controls,234 uncredited mathematical candidate.
 No new principal/native row is credited by this job.
+
+
+## Run 5 started 2026-11-08
+
+Binding plan: evidence/int-plan-20261107/INP_NNH_BRIEF.md; owner amendment
+condition (4) requires pointwise Failure inclusion at the actual recorder and
+a compiled link to its bound at the literal host. Target not yet established.
+Fresh allowance160 after700 prior actual scopes; S0 starts L707.
+Step caps2/10/16/18/55/30/12/4/10; no exports before S8.
+Only the owned runner budget guard changed700→860; validation unchanged.
+
+S0 PASS L707: corrected ContinuationCombined compiled exit0,11.528838s,
+peakRSS6517428KiB,swap0; no export. Own source import traversal found neither
+NNH_Stage1ZeroOk nor NNH_U64Bytes (516 visited modules; external source
+leaves reused, no fresh external-closure audit claimed).

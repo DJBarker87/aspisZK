@@ -7,7 +7,7 @@ if (E/'NNH_HOLD').exists():sys.exit(75)
 guard=E/'NNH_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NNH_L[0-9]{3}',a) and 1<=int(a[-3:]) and not (E/a).exists()
 # Budget actual submissions, including unresolved ones, rather than ID suffixes.
-# L048 never launched. Lead resume grants 300 additional scopes after the 400 completed.
+# Run 5 grants 160 fresh scopes after 700 terminal submissions.
 used=set()
 for n in ['NNH_ATTEMPTS.jsonl','NNH_TRANSPORT.jsonl']:
  p=E/n
@@ -15,7 +15,7 @@ for n in ['NNH_ATTEMPTS.jsonl','NNH_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<700, 'Authorized700 total actual Lean/link/audit scopes exhausted'
+assert len(used)<860, 'Authorized860 total actual Lean/link/audit scopes exhausted'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
