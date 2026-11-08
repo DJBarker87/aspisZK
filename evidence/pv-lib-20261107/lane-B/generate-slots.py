@@ -85,9 +85,19 @@ theorem actual_machine{i} {{E : Type}} (C : Carrier OWNER Data) (K : Control)
 #print axioms actual_machine{i}
 '''
  else:
-  s+='''
-abbrev model := @PV_LIB_A_SourceWriters.model
-abbrev law := @PV_LIB_A_SourceWriters.law
+  s+=f'''
+def model (C : Carrier OWNER Data)
+    (values : PV_THR2_SourceStoreLibrary.Values OWNER PV_RJ4IDB.NativeEvent)
+    (d : Entry) (w : OWNER) (es : List PV_RJ4IDB.NativeEvent)
+    (reply : Reply OWNER PV_RJ4IDB.NativeEvent Data) :=
+  PV_LIB_A_SourceWriters.model C values (pending d) w es d.suspended
+    (PV_LIB_A_WriterSites.site d .{meaning}) reply
+def law (C : Carrier OWNER Data)
+    (values : PV_THR2_SourceStoreLibrary.Values OWNER PV_RJ4IDB.NativeEvent)
+    (d : Entry) (w : OWNER) (es : List PV_RJ4IDB.NativeEvent)
+    (reply : Reply OWNER PV_RJ4IDB.NativeEvent Data)
+    (out : PV_LIB.MachineObservation OWNER PV_RJ4IDB.NativeEvent) : Prop :=
+  out = model C values d w es reply
 '''
   for i in range(len(nodes)):
    s+=f'''
@@ -103,7 +113,7 @@ theorem actual_machine{i} (C : Carrier OWNER Data) (K : Control)
     (w : OWNER) (es : List PV_RJ4IDB.NativeEvent)
     (leaf : P (PV_FN_W4_CallBoundary.token call{i}) = none) :
     let d := entry call{i} t a parents loops rest vs stack
-    law C values (pending d) w es stack (PV_LIB_A_WriterSites.site d .{meaning})
+    law C values d w es
       (H (PV_LIB_A_WriterSites.site d .{meaning}).waiting.request w)
       (PV_LIB.observe (PV_LIB_A_OwnerStore.step C K P resources encode H values
         ⟨⟨.running (pending d),w,es⟩,stack⟩)) := by
