@@ -1,54 +1,13 @@
-Target not yet established. Stop reason: the ONLY authorized budget, 30 Lean
-scopes, is exhausted (16 pass,14 rejected). This is not Kani exhaustion.
-All remaining work is Lean-only; it needs no Kani or extraction allowance.
+Items 8-10 are CLOSED in the continuation; no authorized proof member remains open.
 
-Item8 OPEN: prove the two dictionary equalities at GExq_FirstCode.code and
-GExq_SecondCode.code for arbitrary shared-carrier dictionaries (and hence for
-AspisS6CurrentFirstInstallation.toDigest D1/D2). The exact typed proposed
-statements are in NNQ_FirstCode.lean.txt, explicitly UNCOMPILED. Use the new
-DSim preparation law through SdkD_PrepareLower.lower and the compiled
-batch_eq/batch_stage_eq. No child result or acceptance premise is authorized.
-The proposal's import NNQ_Batch must be changed to NNQ_COMBINED_IMPORT, where
-item7 actually lives. Item8 was written but no scope remained to attempt it
-before the required final combined import. No claim it is impossible.
+8: AspisR1.NNQ_HostDigest.firstCode_eq and secondCode_eq (NNQ_L031), for arbitrary shared-carrier dictionaries. prepare_lower_eq uses DSim through SdkD_PrepareLower.lower; batch_eq and batch_stage_eq are inherited from NNQ_COMBINED_IMPORT. No child-result or acceptance premise.
+9: AspisR1.NNQ_HostDigest.child_sim (NNQ_L032), arbitrary Configuration, o, hashv and CallSim; stage field AuS1_Install.base c.stageBase. child_raw_sim (NNQ_L034) supplies the arbitrary raw stage variant for account composition.
+10: caller_first_eq/caller_second_eq (NNQ_L035), firstSyntax_eq/secondSyntax_eq/account_withDigest (NNQ_L036), observer_withDigest (NNQ_L037), o2 : AspisR1.DGP_HostDigest.O2 (NNQ_L038). All arguments remain arbitrary and all error/divergence prefixes and adaptive choices are retained by equality of the entire account program.
 
-Item9 OPEN: for arbitrary Configuration c, o, hashv, A and x y : S2W_Trace.Call A,
-CallSim x y must imply equality between GExq_ChildCode.execute at the fields of
-withDigest c o on x and at c on y (use AuS1_Install.base c.stageBase as the stage
-field). Same-call cases exclude op43 by NotDigest; op10/op11 consume item8.
-No item9 statement/proof was compiled. It depends on item8, not on Kani.
+No premise, trust, adversary/hashv/H restriction or model change. No real host counterexample was found. NNQ_L033 hit Lean's memory limit (exit134,19.716616s,7218868KiB RSS,swap0). Its combined raw-child/caller shape is retired. The replacement splits the raw child lemma and marks SDK/execute/stage definitions locally irreducible at composition; L034/L035 pass. No unchanged rerun or cap/timeout increase.
 
-Item10 OPEN: account_withDigest must prove
-  ART_PartialAccount.account (withDigest c o) hashv copy allocator id a =
-  ART_PartialAccount.account c hashv copy allocator id a
-for arbitrary c/o/hashv/copy/allocator/id/adversary, retaining all error and
-divergence prefixes and adaptive choices. Compose sdk_withDigest, the two
-outer-stage Sim laws, lowerN_sim and item9 through the installed wrappers.
-Then prove recorder independence using observe_op43 and split, yielding EXACTLY
-AspisR1.DGP_HostDigest.O2 with ONLY its existing three premises. No account or
-recorder theorem was compiled; no new trust or restricted adversary is proposed.
+Next integration obligations are outside this job: transport NNH_RecordedCharge.bound with O1 and O2, actual-run pointwise failure inclusion at the same probability space and charged event, and the remaining deployed headline/security gates. O1 archive correction was not recompiled here. Condition(4) is not proved. No NDT row or deployed headline bound is closed by this job.
 
-NNH_ consumer remains NNH_RecordedCharge.bound transported by O1 and O2.
-O1's archive correction was noted in NNH_'s handoff but NOT recompiled here.
-Condition(4)'s owner-approved pointwise-inclusion strategy is RECORDED, NOT
-proved. Actual-run inclusion, the same probability space and exact charged
-event association remain the integration job's obligations. This job closes
-no NDT row and proves no part of the deployed headline bound.
-
-No real host counterexample to O2 was found. Host differences encountered:
-coherent RPz7 import owner, a preserved observer Result step, and the nominal
-RPz7_PhaseIso.Phase observer type. None issues Call.op43 or branches on its
-reply. Mirror leaky_differs still identifies that forbidden trace as the
-load-bearing counterexample shape; absence in completed components does not
-replace the unproved items8-10.
-
-No permission request, cap/timeout increase, new premise, source/trust/model
-edit or stopped sibling scope. The numerical target remains unchanged.
-
-Continuation: item8 CLOSED by NNQ_L031 (firstCode_eq, secondCode_eq); items9-10 remain OPEN. New budget used1/20. Runner budget guard updated to count only L031 onward, keeping all admission/cap checks.
-
-target not yet established
-
-Continuation: item9 CLOSED by child_sim, NNQ_L032; arbitrary Configuration, hashv and CallSim calls. Stage field is AuS1_Install.base c.stageBase. New budget used2/20. Item10 OPEN.
+Final combined import/pins audit follows in the final stage. Stopping before80% is because every assigned member8,9,10 is proved, not because another member is blocked. No Kani or extraction was used.
 
 target not yet established

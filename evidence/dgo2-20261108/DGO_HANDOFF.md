@@ -1,5 +1,5 @@
 NNQ host O2 partial handoff. Branch codex/cx-dgo-host-20261107, base953e3af13bb.
-Target not yet established. This job delivers items1-7 only, not O2.
+Target not yet established. Continuation closes items8-10 and exactly DGP_HostDigest.O2. Historical items1-7 receipts remain unchanged.
 
 | Recipe item | Status and exact Lean name | Accepted receipt |
 |---|---|---|
@@ -10,11 +10,11 @@ Target not yet established. This job delivers items1-7 only, not O2.
 |5 outer stages|CLOSED AspisR1.NNQ_HostDigest.first_decoded_sim, stage1_sim, stage2_sim|NNQ_L016, NNQ_L020|
 |6 preparation|CLOSED AspisR1.NNQ_HostDigest.DSim, lowerP_dsim; AspisR1CurrentCaller.S1PrepareCode.NNQ_Port.dictionary_irrelevant|NNQ_L021,022,024,026,028|
 |7 batch|CLOSED AspisR1.NNQ_HostDigest.batch_eq, batch_stage_eq|NNQ_L030|
-|8 first/second child code|OPEN exact GExq_FirstCode.code/GExq_SecondCode.code dictionary equalities, uncompiled proposal NNQ_FirstCode.lean.txt|No launch|
-|9 child execution|OPEN CallSim transport through GExq_ChildCode.execute; depends on8|No launch|
-|10 account/O2|OPEN account_withDigest and exactly DGP_HostDigest.O2; depends on9|No launch|
+|8 first/second child code|CLOSED AspisR1.NNQ_HostDigest.firstCode_eq / secondCode_eq|NNQ_L031|
+|9 child execution|CLOSED AspisR1.NNQ_HostDigest.child_sim|NNQ_L032|
+|10 account/O2|CLOSED AspisR1.NNQ_HostDigest.account_withDigest / o2 : DGP_HostDigest.O2|NNQ_L036,038|
 
-The OPEN goals and dependency-by-dependency continuation are in
+The completed goals and remaining integration obligations are in
 ../dgo-host-20261108/NNQ_REMAINING.md. There are no Kani-dependent remaining members. Budget is
 30/30 actual scopes,16 exit0 and14 rejected;0 Kani/0 extraction. Limits on
 EVERY launch:6G high/8G max/swap0/tasks64,-j1 -M7000 async=false,timeout180.
@@ -58,7 +58,7 @@ No real host counterexample to O2 was established. Final read-only host
 check verified16 accepted modules and3846 dependency occurrences
 (NNQ_HOST_FINAL_CHECK.json).
 
-O2 statement, quoted verbatim from DGP_HostDigest.lean section3 (unproved):
+O2 statement, quoted verbatim from DGP_HostDigest.lean section3 (proved by NNQ_HostDigest.o2, NNQ_L038):
 
 ```lean
 def O2 : Prop :=
@@ -78,5 +78,7 @@ def O2 : Prop :=
         err r hashv a Q
 
 ```
+
+Continuation supplement: new budget used8/20 (7 pass,1 memory rejection),0 Kani/0 extraction; final combined import audit pending. The earlier 30/30 paragraph describes the prior job only. L033's combined shape was replaced by split L034/L035 with controlled unfolding. Exact receipts and source/object/dependency pins are in ../dgo-host-20261108/. O2 has only its existing three hypotheses; no restriction or trust change. For NNH run6 use the same NNQ_objects overlay above (read-only NNH run5 fallback); import NNQ_O2, final NNQ_COMBINED_IMPORT2 follows. No condition(4) or deployed headline bound is proved.
 
 target not yet established
