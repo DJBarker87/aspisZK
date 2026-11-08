@@ -74,7 +74,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNT_native/NNT_Driver',*names]
 elif kind=='audit':
  names=['NNT_batch.py','NNT_AUDIT_ROOTS.json','NNT_AUDIT_MODULES.json','NNT_EXPECTED_IMPORTS.jsonl']
- if target in ['retention','NNT_retention']or target.endswith('-pin'):names+=['NNT_pin.py','NNT_L021/stdout.log']
+ if target in ['retention','NNT_retention']or target.endswith('-pin'):names+=['NNT_pin.py','NNT_NNS_REFERENCE.json','NNT_L017/stdout.log']
  command=['python3','NNT_batch.py',target]
 else:raise ValueError(kind)
 for n in names:
