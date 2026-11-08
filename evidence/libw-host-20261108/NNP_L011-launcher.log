@@ -1,0 +1,45 @@
+{"attempt": "NNP_L011", "exit_status": 0, "wall_seconds": 23.58848816086538, "peak_rss_kib": "6734876", "swaps": "0", "print_axioms": []}
+def LIBW_WeakPerEnv.wEnv : {Ambient : Type} →
+  NLM_PacketTypes.World Ambient → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBW_WeakPerEnv.LibErr Unit) :=
+fun {Ambient} world pub proof ck env o =>
+  NNC_ObservedLaw.w (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world pub proof ck env o
+def LIBW_WeakPerEnv.wAny : Type → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBW_WeakPerEnv.LibErr Unit) :=
+fun Ambient pub proof ck env o => ∃ world, LIBW_WeakPerEnv.wEnv world pub proof ck env o
+theorem NNP_SeparateHeader.canonical_header : ∀ {Ambient : Type} (env : RSL.Env)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (world : NLM_PacketTypes.World Ambient),
+  LIBB_T
+...
+.frame_env : ∀ {Ambient : Type} (world : NLM_PacketTypes.World Ambient) (L : RSL.PoolLib)
+  (D : RSL.DeployedIds),
+  NMV_NoWrite.PoolLaws L →
+    ∀ (allocation : NMV_ConcreteWindows.Allocation)
+      (child : RSL.TX2_241.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit)),
+      RSL.TX2_241.RowSpec_241 L D (LIBW_WeakPerEnv.weakEnv world) child →
+        ∀ (a : RSL.TX2_240.Args) (s : RSL.SdkState) (env : RSL.Env),
+          RSL.TAS.Frame s (NMV_ConcreteWindows.stage2 allocation child a s env) :=
+fun {Ambient} world L D pl allocation child packet a s env =>
+  NMV_G2Reference.frame L D LIBB_V2Star.library pl (LIBW_WeakPerEnv.wEnv world) (LIBW_WeakPerEnv.writeFree world) a s
+    env (NMV_ConcreteWindows.stage2 allocation child a s env)
+    (NNP_G2.weak240_env world L D allocation child packet a s env)
+@[defeq] theorem NNP_HostIdentity.host_law : LIBW_WeakPerEnv.wEnv AspisR1.NNH_064Install.frame =
+  AspisR1.NNH_064WeakField.w :=
+rfl
+@[defeq] theorem NNP_InstallField.field_law : ∀ (S : RSL.TAS.Sig)
+  (I0 : RSL.TAS.Impl NNH_Libraries.L LIBB_V2Star.library NNH_Libraries.VL),
+  (NNP_InstallField.field S I0).w = LIBW_WeakPerEnv.wEnv AspisR1.NNH_064Install.frame :=
+fun S I0 => rfl
+theorem NNP_InstallField.any_host_law : LIBW_WeakPerEnv.wAny Unit = AspisR1.NNH_064WeakField.w :=
+Eq.mpr (id (congrArg (fun _a => LIBW_WeakPerEnv.wAny Unit = _a) (Eq.symm NNP_HostIdentity.host_law)))
+  (funext fun pub =>
+    funext fun proof =>
+      funext fun ck =>
+        funext fun env =>
+          funext fun o =>
+            propext
+              {
+                mp := fun a =>
+                  let ⟨world, h⟩ := a
+                  NNP_InstallField.transport world AspisR1.NNH_064Install.frame pub proof ck env o h,
+                mpr := fun h => Exists.intro AspisR1.NNH_064Install.frame h })
+
+Running as unit: run-r108e4752907e49708597d8cc028727ea.scope; invocation ID: bf65390b74204bd8864eb9dd8f085f3a

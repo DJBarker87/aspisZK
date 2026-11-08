@@ -1,0 +1,244 @@
+def LIBW_WeakPerEnv.wEnv : {Ambient : Type} →
+  NLM_PacketTypes.World Ambient → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBW_WeakPerEnv.LibErr Unit) :=
+fun {Ambient} world pub proof ck env o =>
+  NNC_ObservedLaw.w (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world pub proof ck env o
+def LIBW_WeakPerEnv.wAny : Type → RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except LIBW_WeakPerEnv.LibErr Unit) :=
+fun Ambient pub proof ck env o => ∃ world, LIBW_WeakPerEnv.wEnv world pub proof ck env o
+theorem NNP_SeparateHeader.canonical_header : ∀ {Ambient : Type} (env : RSL.Env)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (world : NLM_PacketTypes.World Ambient),
+  LIBB_Tx2Domain.domain (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) →
+    ∀
+      (outcome :
+        NLW_Full064.End (LIBB_PartitionEnv.H env)
+          { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () })
+      (events : List (NLW_Full064.Event Ambient Unit)),
+      NMN_064.Native (LIBB_PartitionEnv.H env)
+          {
+            args :=
+              { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                hash := () },
+            world := world }
+          outcome events →
+        LIBB_ObservationFold.Bound064 env pub proof ck outcome →
+          ∀ (trace : NNC_DigestTrace.Trace),
+            NNC_ObservedWeak.TraceOf outcome trace →
+              NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+                    { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                      hash := () }
+                    outcome =
+                  RSL.Exit.ret (Except.ok ()) →
+                NLW_ReaderHeader.decode (AspisR1.MultiproofConeCanonical.bytesOf ↑ck) =
+                  some
+                    (LIBB_HashModel.H env (AspisR1.MultiproofConeCanonical.bytesOf ↑proof),
+                      LIBB_HashModel.H env (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)) :=
+fun {Ambient} env pub proof ck world domain outcome events invocation _bound trace _source accepted =>
+  have own := (LIBB_Tx2Domain.native env pub proof ck).mp domain;
+  let ⟨records, h✝⟩ :=
+    NNC_WeakSpec.exit_ok (LIBB_PartitionEnv.H env)
+      { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck, hash := () }
+      outcome accepted
+  Eq.ndrec (motive := fun outcome =>
+    NMN_064.Native (LIBB_PartitionEnv.H env)
+        {
+          args :=
+            { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+              hash := () },
+          world := world }
+        outcome events →
+      LIBB_ObservationFold.Bound064 env pub proof ck outcome →
+        NNC_ObservedWeak.TraceOf outcome trace →
+          NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+                { digest := LIBB_PartitionEnv.digest env, publicBytes := pub, proof := proof, checkpoint := ck,
+                  hash := () }
+                outcome =
+              RSL.Exit.ret (Except.ok ()) →
+            NLW_ReaderHeader.decode (AspisR1.MultiproofConeCanonical.bytesOf ↑ck) =
+              some
+                (LIBB_HashModel.H env (AspisR1.MultiproofConeCanonical.bytesOf ↑proof),
+                  LIBB_HashModel.H env (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)))
+    (fun invocation _bound _source accepted =>
+      AspisR1.NNH_064EnvHeader.native env pub proof ck world
+        { proofExtent := own.proofExtent, checkpointExtent := own.checkpointExtent, publicBound := own.publicBound }
+        records events invocation)
+    (Eq.symm h✝) invocation _bound _source accepted
+theorem NNP_SeparateHeader.okHeader : ∀ {Ambient : Type} (world : NLM_PacketTypes.World Ambient)
+  (pub proof ck : RSL.Bytes) (env : RSL.Env) (o : RSL.Obs (Except LIBW_WeakPerEnv.LibErr Unit)),
+  RSL.TX2_241.Dom064 (LIBW_WeakPerEnv.weakEnv world) (pub, proof, ck) →
+    LIBW_WeakPerEnv.wEnv world pub proof ck env o →
+      o.exit = RSL.Exit.ret (Except.ok ()) → NNP_SeparateHeader.header env pub proof ck :=
+fun {Ambient} world pub proof ck env o domain observed ok =>
+  let ⟨hp, right✝⟩ := domain
+  let ⟨hc, right✝¹⟩ := right✝
+  let ⟨hu, right✝²⟩ := right✝¹
+  let ⟨pu, h✝⟩ := observed
+  let ⟨pr, h✝¹⟩ := h✝
+  let ⟨cp, h✝²⟩ := h✝¹
+  let ⟨hpu, right✝³⟩ := h✝²
+  let ⟨hpr, right✝⁴⟩ := right✝³
+  let ⟨hcp, right✝⁵⟩ := right✝⁴
+  let ⟨outcome, h✝³⟩ := right✝⁵
+  let ⟨events, h✝⁴⟩ := h✝³
+  let ⟨trace, h✝⁵⟩ := h✝⁴
+  let ⟨native, right✝⁶⟩ := h✝⁵
+  let ⟨source, same⟩ := right✝⁶
+  have accepted := Eq.mp (congrArg (fun _a => _a.exit = RSL.Exit.ret (Except.ok ())) same) ok;
+  let ⟨records, h✝⁶⟩ :=
+    NNC_WeakSpec.exit_ok (LIBB_PartitionEnv.H env)
+      {
+          args :=
+            { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := pr, checkpoint := cp, hash := () },
+          world := world }.args
+      outcome accepted
+  Eq.ndrec (motive := fun outcome =>
+    NMN_064.Native (LIBB_PartitionEnv.H env)
+        {
+          args :=
+            { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := pr, checkpoint := cp, hash := () },
+          world := world }
+        outcome events →
+      NNC_ObservedWeak.TraceOf outcome trace →
+        o =
+            {
+              exit :=
+                NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+                  {
+                      args :=
+                        { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := pr, checkpoint := cp,
+                          hash := () },
+                      world := world }.args
+                  outcome,
+              events := NNC_DigestTrace.render trace } →
+          NNC_WeakSpec.exit (LIBB_PartitionEnv.H env)
+                {
+                    args :=
+                      { digest := LIBB_PartitionEnv.digest env, publicBytes := pu, proof := pr, checkpoint := cp,
+                        hash := () },
+                    world := world }.args
+                outcome =
+              RSL.Exit.ret (Except.ok ()) →
+            NNP_SeparateHeader.header env pub proof ck)
+    (fun native source same accepted =>
+      have puLen :=
+        Eq.mp
+          (congrFun'
+            (congrArg LE.le (Eq.trans (congrArg List.length (Eq.symm hpu)) (List.length_map NNC_ByteCarriers.hostByte)))
+            1880)
+          hu;
+      have prLen :=
+        Eq.mp
+          (congrFun'
+            (congrArg Eq (Eq.trans (congrArg List.length (Eq.symm hpr)) (List.length_map NNC_ByteCarriers.hostByte)))
+            57607)
+          hp;
+      have cpLen :=
+        Eq.mp
+          (congrFun'
+            (congrArg Eq (Eq.trans (congrArg List.length (Eq.symm hcp)) (List.length_map NNC_ByteCarriers.hostByte)))
+            1768)
+          hc;
+      have h :=
+        AspisR1.NNH_064EnvHeader.native env pu pr cp world
+          { proofExtent := prLen, checkpointExtent := cpLen, publicBound := puLen } records events native;
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                NLW_ReaderHeader.decode (NNC_ByteCarriers.protocol _a) =
+                  some
+                    (LIBB_HashModel.H env (NNC_ByteCarriers.protocol proof),
+                      LIBB_HashModel.H env (NNC_ByteCarriers.protocol pub)))
+              (Eq.symm hcp)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NLW_ReaderHeader.decode (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑cp)) =
+                    some
+                      (LIBB_HashModel.H env (NNC_ByteCarriers.protocol _a),
+                        LIBB_HashModel.H env (NNC_ByteCarriers.protocol pub)))
+                (Eq.symm hpr)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    NLW_ReaderHeader.decode (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑cp)) =
+                      some
+                        (LIBB_HashModel.H env (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑pr)),
+                          LIBB_HashModel.H env (NNC_ByteCarriers.protocol _a)))
+                  (Eq.symm hpu)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NLW_ReaderHeader.decode _a =
+                        some
+                          (LIBB_HashModel.H env (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑pr)),
+                            LIBB_HashModel.H env (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑pu))))
+                    (NNC_ByteCarriers.protocol_host cp)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        NLW_ReaderHeader.decode (AspisR1.MultiproofConeCanonical.bytesOf ↑cp) =
+                          some
+                            (LIBB_HashModel.H env _a,
+                              LIBB_HashModel.H env (NNC_ByteCarriers.protocol (NNC_ByteCarriers.host ↑pu))))
+                      (NNC_ByteCarriers.protocol_host pr)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NLW_ReaderHeader.decode (AspisR1.MultiproofConeCanonical.bytesOf ↑cp) =
+                            some
+                              (LIBB_HashModel.H env (AspisR1.MultiproofConeCanonical.bytesOf ↑pr),
+                                LIBB_HashModel.H env _a))
+                        (NNC_ByteCarriers.protocol_host pu)))
+                    h)))))))
+    (Eq.symm h✝⁶) native source same accepted
+theorem NNP_Weak241.fold_env : ∀ {Ambient : Type} (world : NLM_PacketTypes.World Ambient) (L : RSL.PoolLib)
+  (D : RSL.DeployedIds)
+  (validate : RSL.TX2_242.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError (RSL.TX2_242.Validated L))),
+  RSL.TX2_242.RowSpec_242 L D validate →
+    NMS_R2Facts242.ScannerExtent L →
+      ∀ (verify : NMS_R2Replay241.VerifyNative (LIBW_WeakPerEnv.weakEnv world)),
+        NMS_R2Replay241.VerifyPacket (LIBW_WeakPerEnv.weakEnv world) verify →
+          ∀ (a : RSL.TX2_241.Args),
+            (∀ x ∈ a.accounts, RSL.TX2_241.Consistent x) →
+              NMS_R2Refine.Refines (NMS_R2Replay241.replay L (LIBW_WeakPerEnv.weakEnv world) validate verify a)
+                (RSL.TX2_241.Ref L D (LIBW_WeakPerEnv.weakEnv world) a) :=
+fun {Ambient} world L D validate child242 scan verify child064 a consistent =>
+  NMS_R2Weak241.fold L D LIBB_V2Star.library (LIBW_WeakPerEnv.wEnv world) validate child242 scan verify child064 a
+    consistent
+theorem NNP_G2.frame_env : ∀ {Ambient : Type} (world : NLM_PacketTypes.World Ambient) (L : RSL.PoolLib)
+  (D : RSL.DeployedIds),
+  NMV_NoWrite.PoolLaws L →
+    ∀ (allocation : NMV_ConcreteWindows.Allocation)
+      (child : RSL.TX2_241.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit)),
+      RSL.TX2_241.RowSpec_241 L D (LIBW_WeakPerEnv.weakEnv world) child →
+        ∀ (a : RSL.TX2_240.Args) (s : RSL.SdkState) (env : RSL.Env),
+          RSL.TAS.Frame s (NMV_ConcreteWindows.stage2 allocation child a s env) :=
+fun {Ambient} world L D pl allocation child packet a s env =>
+  NMV_G2Reference.frame L D LIBB_V2Star.library pl (LIBW_WeakPerEnv.wEnv world) (LIBW_WeakPerEnv.writeFree world) a s
+    env (NMV_ConcreteWindows.stage2 allocation child a s env)
+    (NNP_G2.weak240_env world L D allocation child packet a s env)
+@[defeq] theorem NNP_HostIdentity.host_law : LIBW_WeakPerEnv.wEnv AspisR1.NNH_064Install.frame =
+  AspisR1.NNH_064WeakField.w :=
+rfl
+@[defeq] theorem NNP_InstallField.field_law : ∀ (S : RSL.TAS.Sig)
+  (I0 : RSL.TAS.Impl NNH_Libraries.L LIBB_V2Star.library NNH_Libraries.VL),
+  (NNP_InstallField.field S I0).w = LIBW_WeakPerEnv.wEnv AspisR1.NNH_064Install.frame :=
+fun S I0 => rfl
+theorem NNP_InstallField.any_host_law : LIBW_WeakPerEnv.wAny Unit = AspisR1.NNH_064WeakField.w :=
+Eq.mpr (id (congrArg (fun _a => LIBW_WeakPerEnv.wAny Unit = _a) (Eq.symm NNP_HostIdentity.host_law)))
+  (funext fun pub =>
+    funext fun proof =>
+      funext fun ck =>
+        funext fun env =>
+          funext fun o =>
+            propext
+              {
+                mp := fun a =>
+                  let ⟨world, h⟩ := a
+                  NNP_InstallField.transport world AspisR1.NNH_064Install.frame pub proof ck env o h,
+                mpr := fun h => Exists.intro AspisR1.NNH_064Install.frame h })
