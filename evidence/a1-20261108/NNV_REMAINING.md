@@ -66,3 +66,25 @@ conversion supplies the current source indices.
 
 Budget exhausted: 50/50 scopes. Remaining members 1-7 are Lean-only; none is
 blocked on Kani. No fresh host scope or unchanged regression is authorized.
+
+## Continuation checkpoint through L085
+
+The separately authorized L051-L100 budget supersedes the historical budget
+exhaustion paragraph above. No A1 term or ledger closure is established.
+
+1. Finish now has a complete returned-tail packet (L070), derived record/decode
+   domains (L068/L069), native rounds/circle ports (L083), and the terminal
+   value port (L084). The fixed finish call still needs the two mask gathers,
+   gate/root conversion, and fixed installed boundary/digest composition.
+2. SAME front fields are derived by L065, with Filled L072, semantic output
+   L074, values output L075, and the exact current View port L077. The full
+   prepared-return caller and its semantic/Expanded domain remain open.
+3. Actual query/batch/flush/checkpoint associations are being checked next;
+   no canonical-evaluator/current-query equivalence has been established.
+4. The source getter (L079), getter/common carrier diagram (L085), and
+   afterstate encoder continuation (L078) pass. Enclosing body composition
+   remains open.
+5. 328/345 composition and same-decoder canonical cuts remain to be assembled.
+6. Global weak Err remains open; local encoder reflection is being checked.
+7. Assembly remains blocked by 1-6. None of these remaining obligations needs
+   Kani; this continuation has no Kani/extraction authorization or runs.

@@ -14,9 +14,10 @@ theorem returned (a : TX1_087.Args VL) (env : Env) (p : VL.Prepared) (g : VL.E29
  cases front : NNH_PrepareReturns.frontValue a env with
  | error e => rw [front] at called; cases called
  | ok pair =>
+  rcases pair with ⟨s,v⟩
   rw [front] at called
   dsimp only at called
-  cases prep : LIB_Prepared.value (pair.1,pair.2,a.g) env with
+  cases prep : LIB_Prepared.value (s,v,a.g) env with
   | mk reply scratch =>
    rw [prep] at called
    cases reply with
@@ -24,7 +25,7 @@ theorem returned (a : TX1_087.Args VL) (env : Env) (p : VL.Prepared) (g : VL.E29
    | ok out =>
     have same : (out,scratch)=(p,g) := Except.ok.inj called
     cases same
-    exact ⟨pair.1,pair.2,NNV_PrepareFrontCut.returned a env pair.1 pair.2 front,prep⟩
+    exact ⟨s,v,NNV_PrepareFrontCut.returned a env s v front,prep⟩
 #print axioms returned
 end AspisR1.NNV_PreparedFront
 end

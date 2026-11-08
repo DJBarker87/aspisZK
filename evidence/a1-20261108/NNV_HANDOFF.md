@@ -140,3 +140,21 @@ the canonical front match before rewriting; L073 needs only small natural
 reductions. L075 preflight caught a missing private dependency before submission;
 the unused import was removed and the same still-unsubmitted attempt admitted
 again, without counting that preflight as a Lean scope.
+
+Continuation erasure repair: L080/L081 retain the exact missing
+`(PreparedHashCode.run code).2 = PreparedHashCode.erase code` bridge.
+The replacement is `NNV_FinishNativePorts`, composing the named `run_value`
+law before rounds/circle erasure. The obsolete-import and direct-run/erase
+shapes are retired; neither is treated as accepted evidence. L082's terminal
+port needs explicit Rust Result constructor qualification in its `change` term.
+
+Continuation stage 4: L083 discharges the native rounds/circle result ports
+through named run_value and erasure laws; L084 discharges terminal value
+transport with the domain derived from the canonical returned terminal.
+L085/L086 pass the source getter/common diagram and exact host op24 encoder.
+L088 proves the canonical prepared-return caller yields the SAME semantic,
+View and scratch; L089 derives all three buffer lengths symbolically; L090
+identifies the actual current query call. No whole dictionary congruence or
+whole-buffer normalization is used. L087's flush failure is the elaborated
+Vec/Slice rewrite shape; its replacement applies source congruence to the
+explicit Result equality instead. Global query/evaluator and A1 are OPEN.

@@ -33,7 +33,7 @@ for mod,r in latest.items():
   source=r['sources'][0]
   assert hashlib.sha256(p.read_bytes()).hexdigest()==r['source_hashes'][source],mod
   modules[mod]={'attempt':r['attempt'],'source_sha256':r['source_hashes'][source],'axioms':r['print_axioms']}
-combined=latest.get('NNV_COMBINED_IMPORT')
+combined=latest.get('NNV_COMBINED_IMPORT2', latest.get('NNV_COMBINED_IMPORT'))
 result={'scope_count':len(receipts),'passes':sum(r['exit_status']==0 for r in receipts),'failures':failures,
  'accepted_current_modules':modules,'standard_only_on_all_passing_receipts':True,
  'combined':None if combined is None else {k:combined[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']},

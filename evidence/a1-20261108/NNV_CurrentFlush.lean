@@ -22,7 +22,10 @@ theorem returned {W Tx : Type} (c : Ctx W Tx) (a : LIBC_Finish.Args)
   (LIBC_VStateCarriers.toAcc a.2).weights.deref at round
  rw [slot]
  unfold Tx1Q_Install.flush
- rw [Tx1Q_Carriers.pending_roundtrip,round,NJJ_Flush.source a.1 _ d.progress.2.1 d.width,bind_tc_ok]
+ rw [Tx1Q_Carriers.pending_roundtrip,round]
+ have native := NJJ_Flush.source a.1 (LIBC_VStateCarriers.toAcc a.2).weights.deref d.progress.2.1 d.width
+ exact congrArg (fun out : Result (Slice AspisR1Stage2.aspis_core.field.QM31) =>
+  do let values ← out; Result.ok (Tx1Q_Carriers.slice Tx1Q_Carriers.unK values)) native
 #print axioms slot
 #print axioms returned
 end AspisR1.NNV_CurrentFlush

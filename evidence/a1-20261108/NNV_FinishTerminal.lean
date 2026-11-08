@@ -26,8 +26,8 @@ theorem returned (a : LIB_VTerminal.Args) (env : RSL.Env) (q : QM31)
   unfold FIq_Terminal.terminal
   change (do let out ← LIB_VTerminal.native a
              match out with
-             | .Ok x => .ok (.Ok (FIq_Carriers.fromQ x))
-             | .Err e => .ok (.Err (FIq_Terminal.fromError e))) = _
+             | .Ok x => .ok (core.result.Result.Ok (FIq_Carriers.fromQ x))
+             | .Err e => .ok (core.result.Result.Err (FIq_Terminal.fromError e))) = _
   rw [run,bind_tc_ok]
   rfl
 #print axioms returned
