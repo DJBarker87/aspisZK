@@ -152,8 +152,10 @@ The session6 `PV_THR2_PacketArcInnerBytes.initialized` instead writes a
 `some` byte at EVERY offset below `shape.layout.width`, including32.
 `PV_LIB_SPEC_ArcImageGap` checks a concrete memory mismatch at address4128,
 base4096, on the retained initialized entry world, for EVERY source field
-value and EVERY total shape of the correct48-byte width. Status: focused
-Lean check pending; do not yet credit the theorem. Source/binary metadata
+value and EVERY total shape of the correct48-byte width. CHECKED: focused
+Lean44913 exit0; `total_image_disagrees` and `no_exact_total_image`; standard
+axioms only. Failed parser/elaboration44911/44912 were changed before retry
+and are retained without credit. Source/binary metadata
 projection is retained in SESSION7_ABI_SOURCE.json; no arbitrary ABI fixture
 is credited as the actual native representation.
 

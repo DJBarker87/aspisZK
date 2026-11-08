@@ -1,8 +1,10 @@
 # Session7 live checkpoint
 
-FrozenABI concrete source descriptors compiled44910. Full joint witness remains
-open. SPEC-C4 byte-image mismatch is under focused check; no contradiction of
-full OwnInit premises is claimed. See SESSION7.md. Next44911/raw49797.
+Concrete source descriptors compiled44910; exact sparse native layout and
+SPEC-C4 checked44913. The old total-image adapter cannot equal the adopted
+binary memory initialization; no full-joint contradiction is claimed.
+Full successful OwnInit witness remains open. Pinned lane-A import next,
+then ONE strict new-root audit. See SESSION7.md/FINDINGS.md. Next44914/raw49797.
 
 ---
 

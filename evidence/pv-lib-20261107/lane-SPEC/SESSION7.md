@@ -10,3 +10,11 @@ residual. Source projection and adopted binary cut are retained. Metadata is
 not itself an ABI adequacy theorem. No arbitrary total byte image installed.
 SPEC-C4 records the discovered sparse-vs-total image question; Lean diagnostic
 is pending. Next44911; one strict new-root audit remains to run at the end.
+
+44913 ArcImageGap PASS: exit0, wall0:02.56, peak4765316KiB,
+swap0, revision1cd8b70cafa. SPEC-C4 is now checked:
+the total-image adapter cannot have exact full-memory agreement with the
+sparse adopted binary initialization on the concrete world. This blocks
+crediting an arbitrary48-byte Shape as the frozen ABI. No claim of full-joint
+unsatisfiability.44911/12 failed local syntax/proof terms, retained and changed.
+Next: pinned lane-A v2 import (read-only, partial), then ONE new-root audit.
