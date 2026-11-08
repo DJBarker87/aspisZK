@@ -59,3 +59,11 @@ source_site reuse those facts. No successful trace or full-joint contradiction
 follows just from this correction. Source/resource/native adequacy and the
 original-entry successful branch remain required; no success/decoder premise
 is introduced. No endpoint/T field, implementation or release pin changes.
+
+Propagation: `PV_LIB_SPEC_OwnInitCut92Contract.Post`/`Contract` replace the
+witness name inside the complete own-row statement; `PV_LIB_SPEC_Cut92Composition`
+replaces the OwnInit conjunct and the allocation-branch witness in the full
+18-contract conjunction and its existential Witness target. These are compiled
+statements, not inhabitants. Other row/domain/runtime clauses are retained.
+They do not silently equate the historical Runtime with the sparse/v2 runtime.
+The latter's source adequacy is blocked by checked SPEC-C6 in FINDINGS.md.
