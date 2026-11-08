@@ -248,3 +248,50 @@ Thus this is not merely a helper codec issue or an all-pending fixture. The
 same assembled answer is tested by the actual integrated V2Runtime.step before
 it invokes lane A's source-store step, so that table cannot repair the gap.
 The proof does not supply the still-missing original-entry prefix.
+
+## SPEC-C7 — installed callback allocation omits all byte stores (session10)
+
+CHECKED44983/44985. `PV_LIB_SPEC_CallbackImageGap.allocation_memory` checks
+that the successful local13923 allocation retained from session8 leaves
+address8192+32=8224 unknown (`none`). `binary_memory` derives `some byte` there
+from the adopted ELF's unconditional e061d qword store, for EVERY source stack
+snapshot, rsp, actual Packet pointer r12 and capture rcx/rax. Consequently
+`memory_disagrees` refutes equality of the complete memory functions; choosing
+zero for a byte still differs from leaving it unknown.
+
+`PV_LIB_SPEC_CallbackNativeGap.native` proves the ACTUAL new SiteRuntime native
+assembly, at the exact13923 token with the actual source closure kind132
+(F361.node88, body index76, source13129), installs precisely the ownership-only
+ClosureBoxAllocation reply. It quantifies every Environment, source store,
+OWNER world, issued activation and three capture values. `native_memory` and
+`native_disagrees` carry the counterexample through that assembled native
+handler on the successful local56-byte reply, for EVERY native Environment.
+Thus this missing image cannot be repaired by choosing different native replies
+or by the store-action table: that runtime has already selected its named
+allocation handler. Exact focused receipt44985: exit0, wall0:03.20,
+peak4799664KiB, swap0; source revision in receipt; standard summary axioms only.
+44984's parser/namespace/metadata-discrimination errors were retained and the
+source changed before44985. No source or provider body was changed.
+
+ELF fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558:
+e05e8 malloc56/8; e0614/e0619 copy the actual32 stack bytes into16/0;
+e061d/e0621/e0625 store qwords32/40/48. SESSION10_ABI_BINARY.txt retains the
+instructions and source/type inventory SESSION10_ABI_SOURCE.json. The new
+`AllocationImages.callback` is an exact local store-cut model: outer none is
+no store, some none copies an unknown byte. `unknown_copy` checks why a chosen
+Fin256 serializer cannot stand in for unknown stack padding.
+
+Required repair: bind the actual source/native snapshot and physical rsp, plus
+the source-associated Packet/capture words, then INSTALL that image on the
+successful13923 allocation. Do not assume initialized stack padding, a decoder
+success or a desired store/image function. The new local image is not yet that
+source binding. Existing local callback ownership/backing facts remain valid;
+they never claimed initialization. The old byte-free runtime is retained and
+not credited as the binary store cut.
+
+LIMIT: this is a CHECKED LOCAL interpretation contradiction, not proof that an
+original-entry run reaches13923 and not a negation of the COMPLETE OwnInit
+joint existential. No successful original-entry history through cut92, full
+joint witness, row closure or endpoint premise removal is claimed. The full
+requested task remains open. SPEC-C6's per-type repair is independent and is
+not withdrawn by this later missing callback suffix.

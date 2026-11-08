@@ -1,3 +1,31 @@
+# Session10 checkpoint — site images repaired locally; callback suffix gap checked
+
+Base b98806b806c, branch codex/pv-lib-spec-20261107. AllocationImages44971
+has separate ScopeData40/8, Packet48/8, callback56/8, ThreadInit24/8 and
+thread::Inner48/8 images from adopted fc8808eb... stores. Unknown copies and
+no-store holes are distinct. SiteArc44974/SiteRuntime44977 repair accepted
+SPEC-C6 type selection; source ScopeData/Packet tags, ownership and pointer
+laws rechecked. SiteArcRecheck44980 consumes the actual40-byte reply and
+proves all-answer Packet reply agreement. InitImageRecheck44976 equates the
+named ThreadInit initializer's full memory with its binary image.
+
+Actual unchanged lane-A v2 at757cd4318ea is reused via the session9 compatible
+replay: SiteV2Runtime44981 and SiteHistory44982 compile. Full native Values
+binding/table adequacy remain open. No successful original-entry history or
+full joint witness/negation is claimed. No row or endpoint premise is closed.
+
+SPEC-C7 checked44983/44985: actual assembled callback handler13923 still omits
+its byte stores. Exact local successful reply leaves8224 unknown; adopted e061d
+writes it on every operand. Native Environment selection cannot fix the named
+handler. FINDINGS.md states exact quantifiers and limits. Callback physical
+snapshot/operands and Thread::new native allocation bindings remain open.
+Historical18 whole statements/cut92 witness are retained, not silently rebound.
+
+Strict audit of NEW roots is pending; do not run multiple unchanged audits.
+Next focused ID44986; raw34992 (34991 was spent in session9). No own live scope.
+
+---
+
 # Session9 handoff — cut92 applied; checked ScopeData obstruction; full task OPEN
 
 Continued b13bfa283bd981cb979a680d97d0369c2a4ff33d on

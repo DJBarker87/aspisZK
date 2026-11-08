@@ -1,4 +1,4 @@
-# PLIB specification semantics, revision 2 (D981)
+# PLIB specification semantics, revision 3 (D981, D993)
 
 These are normative specifications, not row proofs. Privacy target not yet
 established. The files PSPEC_*.md and this file form one specification. The
@@ -147,6 +147,18 @@ ProgramError clone and decoder examples are TEMPLATE lessons, not extra
 calls inserted in these privacy functions. Leaf internals with no sufficiently
 strong CLOSED model remain MISSING-CHILD-LEMMA in the map; an arbitrary full
 reply closure is not evidence of an exact allocation schedule.
+
+
+Allocation images are selected PER SOURCE TYPE AND ALLOCATION SITE (thread-28,
+SPEC-C6 approved D993). A generic emitted BoxNew token is not a type layout.
+Only adopted-ELF stores define destination bytes; every no-store byte retains
+its previous content. Copies retain the actual source bytes, including padding
+and unknown bytes, and must distinguish a copy of an unknown byte from no
+store. ScopeData40/8, Packet48/8, callback56/8, ThreadInit24/8 and Thread::new
+ArcInner<Inner>48/8 have separate images. A local image formula does not prove
+its source operands, native frame correspondence or installation. Those remain
+explicit adequacy obligations until checked on the same original-entry history.
+SPEC_CORRECTIONS.md records the exact adapter change and retained definitions.
 
 ## Freeze
 

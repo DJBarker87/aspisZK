@@ -67,3 +67,46 @@ replaces the OwnInit conjunct and the allocation-branch witness in the full
 statements, not inhabitants. Other row/domain/runtime clauses are retained.
 They do not silently equate the historical Runtime with the sparse/v2 runtime.
 The latter's source adequacy is blocked by checked SPEC-C6 in FINDINGS.md.
+
+## SPEC-C6 — owner-approved D993/session10: allocation images per source type/site
+
+Before (verbatim, SparseRuntime.native allocation adapter):
+
+> `PV_LIB_SPEC_SparsePacketHandler.handler C K p.resources p.encode`
+
+After (verbatim, SiteRuntime.native allocation adapter):
+
+> `PV_LIB_SPEC_SiteArc.handler C K p.resources p.encode`
+
+Historical definitions are retained. This new adapter selects the actual
+ScopeData or Packet DATA operand's source type tag at the shared4963 token;
+the generic F124 body's own ArcInner tag is insufficient. ScopeData is40/8
+(qwords0/8/16/24 and byte32, holes33..39); Packet remains48/8 (qwords0/8/16/24,
+holes32..47). Source wrapper fields and physical pointer registration are
+checked by partial codecs; malformed source representations remain explicit
+None. No successful decoder, arbitrary image or return-success premise enters
+a MachineSpec. Failures, null/abort and pending retain the named allocation
+model for the selected layout before any successful-value decoding.
+
+Checked source-error witnesses are ScopeAllocationGap, ScopeAllocationPollGap
+and ScopeRuntimeGap (44960/44962/44965). New SiteArc.layout_distinct,
+scope_classified/packet_classified and returned_owned (44974), SiteArcRecheck
+scope_handler/packet_reply (44980), SiteRuntime (44977) and SiteV2Runtime
+(44981) are the replacement operational facts. SiteHistory.original (44982)
+rechecks issued-source origins against that actual v2 execution, not successful
+reachability. InitImageRecheck.initPost_memory (44976) rechecks ThreadInit's
+existing three-store initializer. AllocationImages (44971) keeps separate
+ScopeData, Packet, callback, ThreadInit and thread::Inner store images from
+ELF fc8808eb...; SESSION10_ABI_SOURCE.json records full hash, offsets and type
+fields. Callback copies preserve source bytes including padding/unknowns.
+
+Affected consumers: the18 historical thread statements and the corrected
+cut92 allocation witness retain their old machine definitions and still need
+rebinding/adequacy; no old model or full witness is silently relabelled repaired.
+The current operational replacement is SiteV2Runtime, using unchanged actual
+lane-A v2 in the same W3 cohort. Native Values binding and table completeness
+remain open. SPEC-C7 additionally checks that callback image installation is
+missing even in SiteRuntime; the separate image definition alone supplies no
+source/native binding. Thread::new's separate48/8 image is not Packet's image
+and is not silently installed at a native leaf. No endpoint/T field, security
+metric, provider or frozen implementation changes.
