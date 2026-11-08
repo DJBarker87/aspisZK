@@ -85,3 +85,11 @@ exit0,wall0:02.64,peak4766160KiB,swap0,sourcef453f07abce; standard axioms.
 The derived history invariant now covers ControlRuntime's corrected priority,
 including waiting/unwind requests. This supersedes use of HistoryInvariant
 for the current reference; both audited declarations remain retained.
+
+44908 ControlJoint compiled exit0,wall0:02.64,peak4760752KiB,swap0,
+source77a73b9564e; standard axioms. `ControlJoint.entryMachine/withTable`
+carry the concrete positive entry, machine/facets/resource/history conjunction
+on ControlRuntime. ABI data remains universally parameterized, actual binary
+association remains open, and the pending model does not satisfy the old
+successful AllocationBranch realization. This is the exact current witness
+limit; full composed source-adequate nonemptiness is NOT claimed.
