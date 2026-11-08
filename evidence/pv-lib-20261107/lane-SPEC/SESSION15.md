@@ -40,3 +40,5 @@ PV_LIB_SPEC_SourceTransport15 compiled 55509, cohort w3: exit0, wall 0:02.28, pe
 PV_LIB_SPEC_SourceProjection15 compiled 55510, cohort w3: exit0, wall 0:02.26, peak 4806740KiB, swap 0; source b7eba98c8c8f90bae6f2e78dbc759059c642b037; standard summary axioms only.
 
 PV_LIB_SPEC_Tls278Trace15 compiled 55511, cohort w3: exit0, wall 0:06.12, peak 4838652KiB, swap 0; source 09835b04b62d2b0f3772c6bf894a3e399620dd7b; standard summary axioms only.
+
+PV_LIB_SPEC_Tls278Lift15 compiled 55513, cohort w3: exit0, wall 0:03.59, peak 4838016KiB, swap 0; source f6adb65beb1bd97372dc13d2639a9ab43036c175; standard summary axioms only.
