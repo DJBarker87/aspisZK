@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangePoll11.lean:65:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_LibrarySemantics_RangeNext93 (PV_THR2_OwnInitExactReturnedCases.carrier C b)
+    [PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } Data.null] c.store w
+in the target expression
+  Option.map (fun t => { store := t, tail := PV_LIB_A_WeakDropSource.Tail.done })
+      (PV_THR2_LibrarySemantics_RangeNext93 B [PV_THR2_Source15Loop93Issue.ref a] c.store w) =
+    some { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done }
+
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+s : Store Data
+a : ℕ
+parents : List Frame
+b : Bool
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+start finish : ℕ
+cell :
+  (PV_THR2_Source15Loop93Issue.pending s a parents).store.cells { activation := a, localIndex := 7 } =
+    some (PV_LIB_A_Range165.sourceRange start finish)
+B : Carrier OWNER Data := PV_THR2_OwnInitExactReturnedCases.carrier C b
+c : Config := PV_THR2_Source15Loop93Issue.pending s a parents
+post : Store Data :=
+  if start < finish then
+    write c.store { activation := a, localIndex := 7 } (some (PV_LIB_A_Range165.sourceRange (start + 1) finish))
+  else c.store
+ordinary : PV_THR2_Catch316Segment.select c = none
+⊢ Option.map (fun t => { store := t, tail := PV_LIB_A_WeakDropSource.Tail.done })
+      (PV_THR2_LibrarySemantics_RangeNext93 B [PV_THR2_Source15Loop93Issue.ref a] c.store w) =
+    some { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done }
+'PV_LIB_A_RangePoll11.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_RangePoll11.poll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

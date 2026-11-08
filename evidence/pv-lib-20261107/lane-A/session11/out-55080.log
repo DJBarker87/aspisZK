@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_PrefixMachine11.lean:82:12: error: Tactic `rfl` failed: The left-hand side
+  advance C K P (fun {A} => resources) (fun {A} => encode) H values (0 + m) s
+is not definitionally equal to the right-hand side
+  advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+    (advance C K P (fun {A} => resources) (fun {A} => encode) H values 0 s)
+
+case zero
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+m : ℕ
+s : SourceState
+⊢ advance C K P (fun {A} => resources) (fun {A} => encode) H values (0 + m) s =
+    advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+      (advance C K P (fun {A} => resources) (fun {A} => encode) H values 0 s)
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_PrefixMachine11.lean:83:17: error: Type mismatch
+  ih ?m.28
+has type
+  advance C K P (fun {A} => resources) (fun {A} => encode) H values (n + m) ?m.28 =
+    advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+      (advance C K P (fun {A} => resources) (fun {A} => encode) H values n ?m.28)
+but is expected to have type
+  advance C K P (fun {A} => resources) (fun {A} => encode) H values (n + 1 + m) s =
+    advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+      (advance C K P (fun {A} => resources) (fun {A} => encode) H values (n + 1) s)
+'PV_LIB_A_PrefixMachine11.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_PrefixMachine11.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_PrefixMachine11.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_PrefixMachine11.advance_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
