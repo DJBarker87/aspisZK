@@ -1,0 +1,496 @@
+{
+ "method": "Complete source declaration headers including all explicit binders; comments/whitespace removed, only named namespace transport. Kernel checks and standard-axiom audits are separate. New combined module has no old analogue.",
+ "rows": [
+  {
+   "module": "NVR_NoWritePool",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_NoWritePool.lean",
+   "old_sha256": "eb12f8c79cbb4302e4e100ca987c2d2a77220246c727cc4939ff6f1cef40ed80",
+   "new_sha256": "e7051247174db29131d98651480ca1c9774bc3339eb7115323d6b807ad02448f",
+   "comparisons": [
+    {
+     "name": "ofCloned_free",
+     "status": "ADDED",
+     "new_header": "theorem ofCloned_free {A : Type} (x : Except ProgramError A) : Free (RS.ofCloned x)"
+    },
+    {
+     "name": "data_free",
+     "status": "ADDED",
+     "new_header": "theorem data_free (a : OwnedAccount) : Free a.data"
+    },
+    {
+     "name": "verifierCheckpoint_free",
+     "status": "ADDED",
+     "new_header": "theorem verifierCheckpoint_free (a : OwnedAccount) (p : B32) (w : Bool) : Free (verifierCheckpoint a p w)"
+    },
+    {
+     "name": "pda_free",
+     "status": "SAME",
+     "old_header": "theorem pda_free (seeds : List Bytes) (p : B32) : Free (pdaOrErr seeds p)",
+     "new_header": "theorem pda_free (seeds : List Bytes) (p : B32) : Free (pdaOrErr seeds p)"
+    },
+    {
+     "name": "master_free",
+     "status": "SAME",
+     "old_header": "theorem master_free (L : PoolLib) (b : Bytes) : Free (decodeMasterBox L b)",
+     "new_header": "theorem master_free (L : PoolLib) (b : Bytes) : Free (decodeMasterBox L b)"
+    },
+    {
+     "name": "checkpoint_free",
+     "status": "SAME",
+     "old_header": "theorem checkpoint_free (L : PoolLib) (b : Bytes) : Free (decodeCheckpointBox L b)",
+     "new_header": "theorem checkpoint_free (L : PoolLib) (b : Bytes) : Free (decodeCheckpointBox L b)"
+    },
+    {
+     "name": "lane_free",
+     "status": "SAME",
+     "old_header": "theorem lane_free (b : Bytes) : Free (TX2_217.Ref b)",
+     "new_header": "theorem lane_free (b : Bytes) : Free (TX2_217.Ref b)"
+    },
+    {
+     "name": "registry_immutable_free",
+     "status": "SAME",
+     "old_header": "theorem registry_immutable_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.immutableBranch L D a)",
+     "new_header": "theorem registry_immutable_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.immutableBranch L D a)"
+    },
+    {
+     "name": "registry_v1_free",
+     "status": "SAME",
+     "old_header": "theorem registry_v1_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.v1Branch L D a)",
+     "new_header": "theorem registry_v1_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.v1Branch L D a)"
+    },
+    {
+     "name": "registry_free",
+     "status": "SAME",
+     "old_header": "theorem registry_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.Ref L D a)",
+     "new_header": "theorem registry_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) : Free (TX2_234.Ref L D a)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_NoWriteOwned",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_NoWriteOwned.lean",
+   "old_sha256": "ce0792e7a798d38f8844550a571206c9ee4dac0ce00e5dd4f5e4532baf5c47ad",
+   "new_sha256": "c1e0f2f8409253ae35493d056ea4bb9ece170171ba129717fec7d0fd30e73359",
+   "comparisons": [
+    {
+     "name": "auth_body_free",
+     "status": "SAME",
+     "old_header": "theorem auth_body_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_233.Args) (p m c l r e v : OwnedAccount) : Free (TX2_233.body L D a p m c l r e v)",
+     "new_header": "theorem auth_body_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_233.Args) (p m c l r e v : OwnedAccount) : Free (TX2_233.body L D a p m c l r e v)"
+    },
+    {
+     "name": "auth_free",
+     "status": "SAME",
+     "old_header": "theorem auth_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_233.Args) : Free (TX2_233.Ref L D a)",
+     "new_header": "theorem auth_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_233.Args) : Free (TX2_233.Ref L D a)"
+    },
+    {
+     "name": "validate_free",
+     "status": "SAME",
+     "old_header": "theorem validate_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_242.Args) : Free (TX2_242.Ref L D a)",
+     "new_header": "theorem validate_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_242.Args) : Free (TX2_242.Ref L D a)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_NoWrite241",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_NoWrite241.lean",
+   "old_sha256": "51ee068eef86f5d36357348b81a78db892aaba7b1c98443fb144ef29a02bbb99",
+   "new_sha256": "5ebfd0c0691035c422db799cd08788bdfebbe994862555011c7a55ed3cb69d64",
+   "comparisons": [
+    {
+     "name": "error_free",
+     "status": "SAME",
+     "old_header": "theorem error_free (V : TX2_241.V2Lib) (r : Except V.VErr Unit) : Free (TX2_241.mapVErr V r)",
+     "new_header": "theorem error_free (V : TX2_241.V2Lib) (r : Except V.VErr Unit) : Free (TX2_241.mapVErr V r)"
+    },
+    {
+     "name": "owned241_free",
+     "status": "SAME",
+     "old_header": "theorem owned241_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r)) (a : TX2_241.Args) : Free (TX2_241.Ref L D V a)",
+     "new_header": "theorem owned241_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r)) (a : TX2_241.Args) : Free (TX2_241.Ref L D V a)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_G2Reference",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_G2Reference.lean",
+   "old_sha256": "b0c1f970373368906ba5117fed7eab3ce83f5f2fd902e60166b411d4c2936ee4",
+   "new_sha256": "db20bfe08ca17e938acc1000d16f4eac4f9be961ef0968b1a335fbdb8841687f",
+   "comparisons": [
+    {
+     "name": "reference_free",
+     "status": "SAME",
+     "old_header": "theorem reference_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r)) (a : TX2_240.Args) (s : SdkState) : Free (TX2_240.Ref L D V a s)",
+     "new_header": "theorem reference_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r)) (a : TX2_240.Args) (s : SdkState) : Free (TX2_240.Ref L D V a s)"
+    },
+    {
+     "name": "frame",
+     "status": "SAME",
+     "old_header": "theorem frame (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V.VErr Unit)) (hw : \u2200 p q r, Free (law p q r)) (a : TX2_240.Args) (s : SdkState) (env : Env) (o : Obs (Except ProgramError Unit \u00d7 SdkState)) (h : TX2_240.Ref L D (TCK.weaken V law) a s env o) : (\u2200 c b, Event.write c b \u2209 o.events) \u2227 (\u2200 r s', o.exit = .ret (r,s') \u2192 \u2200 i, (s'.cells i).payload=(s.cells i).payload)",
+     "new_header": "theorem frame (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (pl : PoolLaws L) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V.VErr Unit)) (hw : \u2200 p q r, Free (law p q r)) (a : TX2_240.Args) (s : SdkState) (env : Env) (o : Obs (Except ProgramError Unit \u00d7 SdkState)) (h : TX2_240.Ref L D (TCK.weaken V law) a s env o) : (\u2200 c b, Event.write c b \u2209 o.events) \u2227 (\u2200 r s', o.exit = .ret (r,s') \u2192 \u2200 i, (s'.cells i).payload=(s.cells i).payload)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_TasRoots",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_TasRoots.lean",
+   "old_sha256": "6595a2baf5d394d3c91f4a3b7b58803a4c26396c8330ff27d9c2928b6c4710d3",
+   "new_sha256": "58f581b811566fbd39373a2fbf36e7b35c853d2f75fb22f2efc3c8ead951ef5b",
+   "comparisons": [
+    {
+     "name": "implementation",
+     "status": "SAME",
+     "old_header": "def implementation {L : PoolLib} {V0 : TX2_241.V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : TAS.Impl L V0 VL",
+     "new_header": "def implementation {L : PoolLib} {V0 : TX2_241.V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : TAS.Impl L V0 VL"
+    },
+    {
+     "name": "children_same",
+     "status": "SAME",
+     "old_header": "theorem children_same {L : PoolLib} {V0 : TX2_241.V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : (implementation I a1 a2).f241=I.f241 \u2227 (implementation I a1 a2).f345=I.f345",
+     "new_header": "theorem children_same {L : PoolLib} {V0 : TX2_241.V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : (implementation I a1 a2).f241=I.f241 \u2227 (implementation I a1 a2).f345=I.f345"
+    },
+    {
+     "name": "field240",
+     "status": "SAME",
+     "old_header": "theorem field240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : \u2200 V : TX2_241.V2Lib, TX2_241.RowSpec_241 L D V (implementation I a1 a2).f241 \u2192 TX2_240.RowSpec_240 L D V (implementation I a1 a2).f240",
+     "new_header": "theorem field240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : \u2200 V : TX2_241.V2Lib, TX2_241.RowSpec_241 L D V (implementation I a1 a2).f241 \u2192 TX2_240.RowSpec_240 L D V (implementation I a1 a2).f240"
+    },
+    {
+     "name": "field344",
+     "status": "SAME",
+     "old_header": "theorem field344 (L : PoolLib) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : TX1_345.RowSpec_345 VL P C (implementation I a1 a2).f345 \u2192 TX1_344.RowSpec_344 VL P C (implementation I a1 a2).f344",
+     "new_header": "theorem field344 (L : PoolLib) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) : TX1_345.RowSpec_345 VL P C (implementation I a1 a2).f345 \u2192 TX1_344.RowSpec_344 VL P C (implementation I a1 a2).f344"
+    },
+    {
+     "name": "packet",
+     "status": "SAME",
+     "old_header": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) : TAS.NMV_Roots L D V0 VL P C (implementation I a1 a2) where r240",
+     "new_header": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) : TAS.NMV_Roots L D V0 VL P C (implementation I a1 a2) where r240"
+    },
+    {
+     "name": "weak240",
+     "status": "SAME",
+     "old_header": "theorem weak240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241) (a : TX2_240.Args) (s : SdkState) (env : Env) : TX2_240.Ref L D (TCK.weaken V0 law) a s env ((implementation I a1 a2).f240 a s env)",
+     "new_header": "theorem weak240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241) (a : TX2_240.Args) (s : SdkState) (env : Env) : TX2_240.Ref L D (TCK.weaken V0 law) a s env ((implementation I a1 a2).f240 a s env)"
+    },
+    {
+     "name": "weakFrame",
+     "status": "SAME",
+     "old_header": "theorem weakFrame (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (hw : \u2200 p q r, TAS.WriteFree (law p q r)) (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241) (a : TX2_240.Args) (s : SdkState) (env : Env) : TAS.Frame s ((implementation I a1 a2).f240 a s env)",
+     "new_header": "theorem weakFrame (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (hw : \u2200 p q r, TAS.WriteFree (law p q r)) (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241) (a : TX2_240.Args) (s : SdkState) (env : Env) : TAS.Frame s ((implementation I a1 a2).f240 a s env)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_CandidateRoots",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_CandidateRoots.lean",
+   "old_sha256": "94fe10f680bcc85e787a4eee314662f36499e36734bc18e880eab74a15841aa7",
+   "new_sha256": "69eb9b1cbd9bab25265fa8547e54fac4df78b38473167db5868a37be1d0aa78a",
+   "comparisons": [
+    {
+     "name": "root344",
+     "status": "SAME",
+     "old_header": "theorem root344 (V : VLib) (P : PreparedNew V) (C : TX1_345.S1Lib V) (allocation : NMV_ConcreteWindows.Allocation) (child : TX1_345.Args \u2192 Env \u2192 Obs (Except ProgramError Bytes)) (packet : TX1_345.RowSpec_345 V P C child) : TX1_344.RowSpec_344 V P C (NMV_ConcreteWindows.stage1 allocation child)",
+     "new_header": "theorem root344 (V : VLib) (P : PreparedNew V) (C : TX1_345.S1Lib V) (allocation : NMV_ConcreteWindows.Allocation) (child : TX1_345.Args \u2192 Env \u2192 Obs (Except ProgramError Bytes)) (packet : TX1_345.RowSpec_345 V P C child) : TX1_344.RowSpec_344 V P C (NMV_ConcreteWindows.stage1 allocation child)"
+    },
+    {
+     "name": "root240",
+     "status": "SAME",
+     "old_header": "theorem root240 (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D V child) : TX2_240.RowSpec_240 L D V (NMV_ConcreteWindows.stage2 allocation child)",
+     "new_header": "theorem root240 (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D V child) : TX2_240.RowSpec_240 L D V (NMV_ConcreteWindows.stage2 allocation child)"
+    },
+    {
+     "name": "packet",
+     "status": "SAME",
+     "old_header": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) : TAS.NMV_Roots L D V0 VL P C (NVR_TasRoots.implementation I a1 a2)",
+     "new_header": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib) (P : PreparedNew VL) (C : TX1_345.S1Lib VL) (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) : TAS.NMV_Roots L D V0 VL P C (NVR_TasRoots.implementation I a1 a2)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_NNCWeak",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/stage-wrap-20261111/NMV_NNCWeak.lean",
+   "old_sha256": "2c4477bd06454d0ff695ff86a06d6592799f436e2ac84806663a9da326783c48",
+   "new_sha256": "629b250899054a0dc088f5de73cbe35d36012963195c935e81c77d8ddc9fdd4c",
+   "comparisons": [
+    {
+     "name": "weak240",
+     "status": "SAME",
+     "old_header": "theorem weak240 {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s : SdkState) (env : Env) : TX2_240.Ref L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) a s env (NMV_ConcreteWindows.stage2 allocation child a s env)",
+     "new_header": "theorem weak240 {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s : SdkState) (env : Env) : TX2_240.Ref L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) a s env (NMV_ConcreteWindows.stage2 allocation child a s env)"
+    },
+    {
+     "name": "frame",
+     "status": "SAME",
+     "old_header": "theorem frame {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (pl : NMV_NoWrite.PoolLaws L) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s : SdkState) (env : Env) : TAS.Frame s (NMV_ConcreteWindows.stage2 allocation child a s env)",
+     "new_header": "theorem frame {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (pl : NMV_NoWrite.PoolLaws L) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s : SdkState) (env : Env) : TAS.Frame s (NMV_ConcreteWindows.stage2 allocation child a s env)"
+    },
+    {
+     "name": "sdk",
+     "status": "SAME",
+     "old_header": "theorem sdk {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s t : SdkState) (env : Env) (r : Except ProgramError Unit) (events : List Event) (returned : NMV_ConcreteWindows.stage2 allocation child a s env = \u27e8.ret (r,t),events\u27e9) : t.cells=s.cells \u2227 t.next=s.next+(if TX2_240.badRoute a then 0 else 7)",
+     "new_header": "theorem sdk {Ambient X : Type} (L : PoolLib) (D : DeployedIds) (debug : verifier.Error \u2192 String) (root0 : Bytes \u2192 Bytes \u2192 Prop) (auth : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except verifier.Error Unit)) (H : AspisV8R19.DuplexFrames.Bytes \u2192 State) (digest : aspis_core.digest.Digest32 X) (hash : X) (world : NLM_PacketTypes.World Ambient) (render : NNC_WriteFree.Renderer Ambient X H) (allocation : NMV_ConcreteWindows.Allocation) (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit)) (packet : TX2_241.RowSpec_241 L D (TCK.weaken (NNC_G1a.base debug root0 auth) (NNC_WriteFree.law H digest hash world render)) child) (a : TX2_240.Args) (s t : SdkState) (env : Env) (r : Except ProgramError Unit) (events : List Event) (returned : NMV_ConcreteWindows.stage2 allocation child a s env = \u27e8.ret (r,t),events\u27e9) : t.cells=s.cells \u2227 t.next=s.next+(if TX2_240.badRoute a then 0 else 7)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_Carrier",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_Carrier.lean",
+   "old_sha256": "a943befdae54d801942c7b577301f36e4d731307e1619954530a26363bb1add9",
+   "new_sha256": "8b4d16b93c86051ca5edf596eaec8a24e96e77a5a534409d5c34cefa502372e8",
+   "comparisons": [
+    {
+     "name": "byte",
+     "status": "SAME",
+     "old_header": "def byte (b : UInt8) : U8",
+     "new_header": "def byte (b : UInt8) : U8"
+    },
+    {
+     "name": "unbyte",
+     "status": "SAME",
+     "old_header": "def unbyte (b : U8) : UInt8",
+     "new_header": "def unbyte (b : U8) : UInt8"
+    },
+    {
+     "name": "byte_inverse",
+     "status": "SAME",
+     "old_header": "theorem byte_inverse (b : UInt8) : unbyte (byte b) = b",
+     "new_header": "theorem byte_inverse (b : UInt8) : unbyte (byte b) = b"
+    },
+    {
+     "name": "unbyte_inverse",
+     "status": "SAME",
+     "old_header": "theorem unbyte_inverse (b : U8) : byte (unbyte b) = b",
+     "new_header": "theorem unbyte_inverse (b : U8) : byte (unbyte b) = b"
+    },
+    {
+     "name": "bytes",
+     "status": "SAME",
+     "old_header": "def bytes (b : RSL.Bytes) : List U8",
+     "new_header": "def bytes (b : RSL.Bytes) : List U8"
+    },
+    {
+     "name": "unbytes",
+     "status": "SAME",
+     "old_header": "def unbytes (b : List U8) : RSL.Bytes",
+     "new_header": "def unbytes (b : List U8) : RSL.Bytes"
+    },
+    {
+     "name": "bytes_inverse",
+     "status": "SAME",
+     "old_header": "theorem bytes_inverse (b : RSL.Bytes) : unbytes (bytes b) = b",
+     "new_header": "theorem bytes_inverse (b : RSL.Bytes) : unbytes (bytes b) = b"
+    },
+    {
+     "name": "unbytes_inverse",
+     "status": "SAME",
+     "old_header": "theorem unbytes_inverse (b : List U8) : bytes (unbytes b) = b",
+     "new_header": "theorem unbytes_inverse (b : List U8) : bytes (unbytes b) = b"
+    },
+    {
+     "name": "args",
+     "status": "SAME",
+     "old_header": "def args (p : Hiq_DispatchSource.Key) (a : Slice RSL.AccountInfo) (d : Slice U8) : RSL.TX2_240.Args",
+     "new_header": "def args (p : Hiq_DispatchSource.Key) (a : Slice RSL.AccountInfo) (d : Slice U8) : RSL.TX2_240.Args"
+    },
+    {
+     "name": "ops",
+     "status": "SAME",
+     "old_header": "def ops (f1 f2 : RSL.TX2_240.Args \u2192 RSL.SdkState \u2192 RSL.Env \u2192 RSL.Obs (Except RSL.ProgramError Unit \u00d7 RSL.SdkState)) (s : RSL.SdkState) (env : RSL.Env) : NMW_Symbolic.Ops RSL.AccountInfo (RSL.Obs (Except RSL.ProgramError Unit \u00d7 RSL.SdkState)) where first",
+     "new_header": "def ops (f1 f2 : RSL.TX2_240.Args \u2192 RSL.SdkState \u2192 RSL.Env \u2192 RSL.Obs (Except RSL.ProgramError Unit \u00d7 RSL.SdkState)) (s : RSL.SdkState) (env : RSL.Env) : NMW_Symbolic.Ops RSL.AccountInfo (RSL.Obs (Except RSL.ProgramError Unit \u00d7 RSL.SdkState)) where first"
+    },
+    {
+     "name": "unbytes_eq_iff",
+     "status": "SAME",
+     "old_header": "theorem unbytes_eq_iff (x y : List U8) : unbytes x = unbytes y \u2194 x = y",
+     "new_header": "theorem unbytes_eq_iff (x y : List U8) : unbytes x = unbytes y \u2194 x = y"
+    },
+    {
+     "name": "stage1_iff",
+     "status": "SAME",
+     "old_header": "theorem stage1_iff (d : Slice U8) : RSL.TX2_221.stage1Route (unbytes d.val) = true \u2194 Hiq_ReleaseRoute.stage1 d",
+     "new_header": "theorem stage1_iff (d : Slice U8) : RSL.TX2_221.stage1Route (unbytes d.val) = true \u2194 Hiq_ReleaseRoute.stage1 d"
+    },
+    {
+     "name": "asq8_iff",
+     "status": "SAME",
+     "old_header": "theorem asq8_iff (d : Slice U8) : (unbytes d.val).take 4 = RSL.REQUEST_MAGIC \u2194 Hiq_ReleaseRoute.asq8 d",
+     "new_header": "theorem asq8_iff (d : Slice U8) : (unbytes d.val).take 4 = RSL.REQUEST_MAGIC \u2194 Hiq_ReleaseRoute.asq8 d"
+    }
+   ]
+  },
+  {
+   "module": "NVR_Dispatch",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_Dispatch.lean",
+   "old_sha256": "3e0e3ec4645c4ff3af217919e9ff1571241949945ce97fd8cef4b73003c07b0f",
+   "new_sha256": "9a1735d4283e99df1bade285a1b412490332ea59fba180798949a9d1c8277c99",
+   "comparisons": [
+    {
+     "name": "Child",
+     "status": "SAME",
+     "old_header": "abbrev Child",
+     "new_header": "abbrev Child"
+    },
+    {
+     "name": "process",
+     "status": "SAME",
+     "old_header": "def process (stage1 stage2 : Child) : Child",
+     "new_header": "def process (stage1 stage2 : Child) : Child"
+    },
+    {
+     "name": "entry",
+     "status": "SAME",
+     "old_header": "def entry (f : Child) : Child",
+     "new_header": "def entry (f : Child) : Child"
+    },
+    {
+     "name": "admitted_iff",
+     "status": "SAME",
+     "old_header": "theorem admitted_iff (d : Bytes) : TX2_221.admitted d = true \u2194 TX2_221.stage1Route d = true \u2228 d.take 4 = REQUEST_MAGIC",
+     "new_header": "theorem admitted_iff (d : Bytes) : TX2_221.admitted d = true \u2194 TX2_221.stage1Route d = true \u2228 d.take 4 = REQUEST_MAGIC"
+    }
+   ]
+  },
+  {
+   "module": "NVR_DispatchEmitted",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_Dispatch.lean",
+   "old_sha256": "3e0e3ec4645c4ff3af217919e9ff1571241949945ce97fd8cef4b73003c07b0f",
+   "new_sha256": "9be4f256f71a9d6939819e964dbf2627a210d56fc3c363cbc1394bcb402e1232",
+   "comparisons": [
+    {
+     "name": "process_emitted",
+     "status": "SAME",
+     "old_header": "theorem process_emitted (f1 f2 : Child) (s : SdkState) (env : Env) (p : Hiq_DispatchSource.Key) (a : Slice AccountInfo) (d : Slice U8) (admitted : TX2_221.admitted (unbytes d.val) = true) : NMW_Symbolic.process (ops f1 f2 s env) p a d = .ok (process f1 f2 (args p a d) s env)",
+     "new_header": "theorem process_emitted (f1 f2 : Child) (s : SdkState) (env : Env) (p : Hiq_DispatchSource.Key) (a : Slice AccountInfo) (d : Slice U8) (admitted : TX2_221.admitted (unbytes d.val) = true) : NMW_Symbolic.process (ops f1 f2 s env) p a d = .ok (process f1 f2 (args p a d) s env)"
+    },
+    {
+     "name": "entry_emitted",
+     "status": "SAME",
+     "old_header": "theorem entry_emitted (f1 f2 : Child) (s : SdkState) (env : Env) (p : Hiq_DispatchSource.Key) (a : Slice AccountInfo) (d : Slice U8) : NMW_Symbolic.entry (ops f1 f2 s env) \u27e8.ret (.error .invalidInstructionData, s), []\u27e9 p a d = .ok (entry (process f1 f2) (args p a d) s env)",
+     "new_header": "theorem entry_emitted (f1 f2 : Child) (s : SdkState) (env : Env) (p : Hiq_DispatchSource.Key) (a : Slice AccountInfo) (d : Slice U8) : NMW_Symbolic.entry (ops f1 f2 s env) \u27e8.ret (.error .invalidInstructionData, s), []\u27e9 p a d = .ok (entry (process f1 f2) (args p a d) s env)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_Reify",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_Reify.lean",
+   "old_sha256": "77594ff381c97eefa3950bf02720bce0b3c4c6033c6ee2ecc9f75c5efbf570d8",
+   "new_sha256": "e82e7ec012ed9d9ee046c7f2712c0cc2a6dfb3ea280c636a131001cb46b07f52",
+   "comparisons": [
+    {
+     "name": "program",
+     "status": "SAME",
+     "old_header": "def program (p : B32) : Hiq_DispatchSource.Key",
+     "new_header": "def program (p : B32) : Hiq_DispatchSource.Key"
+    },
+    {
+     "name": "data",
+     "status": "SAME",
+     "old_header": "def data (d : Bytes) (h : d.length \u2264 Usize.max) : Slice U8",
+     "new_header": "def data (d : Bytes) (h : d.length \u2264 Usize.max) : Slice U8"
+    },
+    {
+     "name": "args_inverse",
+     "status": "SAME",
+     "old_header": "theorem args_inverse (a : TX2_240.Args) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) : args (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = a",
+     "new_header": "theorem args_inverse (a : TX2_240.Args) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) : args (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = a"
+    },
+    {
+     "name": "process_source",
+     "status": "SAME",
+     "old_header": "theorem process_source (f1 f2 : Child) (a : TX2_240.Args) (s : SdkState) (env : Env) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) (admitted : TX2_221.admitted a.data = true) : NMW_Symbolic.process (ops f1 f2 s env) (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = .ok (process f1 f2 a s env)",
+     "new_header": "theorem process_source (f1 f2 : Child) (a : TX2_240.Args) (s : SdkState) (env : Env) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) (admitted : TX2_221.admitted a.data = true) : NMW_Symbolic.process (ops f1 f2 s env) (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = .ok (process f1 f2 a s env)"
+    },
+    {
+     "name": "entry_source",
+     "status": "SAME",
+     "old_header": "theorem entry_source (f1 f2 : Child) (a : TX2_240.Args) (s : SdkState) (env : Env) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) : NMW_Symbolic.entry (ops f1 f2 s env) \u27e8.ret (.error .invalidInstructionData, s), []\u27e9 (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = .ok (entry (process f1 f2) a s env)",
+     "new_header": "theorem entry_source (f1 f2 : Child) (a : TX2_240.Args) (s : SdkState) (env : Env) (ha : a.accounts.length \u2264 Usize.max) (hd : a.data.length \u2264 Usize.max) : NMW_Symbolic.entry (ops f1 f2 s env) \u27e8.ret (.error .invalidInstructionData, s), []\u27e9 (program a.program_id) \u27e8a.accounts, ha\u27e9 (data a.data hd) = .ok (entry (process f1 f2) a s env)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_Folds",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_Folds.lean",
+   "old_sha256": "52b1278f50887745697046d40366f97a00a72ec6ffee02f57e88ac8e48aa724f",
+   "new_sha256": "c1f00adf3c272140fcecd49e8cb3627a5f2d58303be5d961fe52276fd6a334b5",
+   "comparisons": [
+    {
+     "name": "process_ref",
+     "status": "SAME",
+     "old_header": "theorem process_ref (L : PoolLib) (D : DeployedIds) (V : V2Lib) (S1 : TX2_221.Stage1) (a : TX2_221.Args) (s : SdkState) (had : TX2_221.admitted a.data = true) : TX2_221.Ref L D V S1 a s = if TX2_221.stage1Route a.data then Spec.call (fun x : TX2_221.Args \u00d7 SdkState => S1.dom x.1 x.2) (fun x => S1.ref x.1 x.2) (a, s) else Spec.call (fun x : TX2_221.Args \u00d7 SdkState => TX2_240.Domain V x.1 x.2) (fun x => TX2_240.Ref L D V x.1 x.2) (a, s)",
+     "new_header": "theorem process_ref (L : PoolLib) (D : DeployedIds) (V : V2Lib) (S1 : TX2_221.Stage1) (a : TX2_221.Args) (s : SdkState) (had : TX2_221.admitted a.data = true) : TX2_221.Ref L D V S1 a s = if TX2_221.stage1Route a.data then Spec.call (fun x : TX2_221.Args \u00d7 SdkState => S1.dom x.1 x.2) (fun x => S1.ref x.1 x.2) (a, s) else Spec.call (fun x : TX2_221.Args \u00d7 SdkState => TX2_240.Domain V x.1 x.2) (fun x => TX2_240.Ref L D V x.1 x.2) (a, s)"
+    },
+    {
+     "name": "process_tx1",
+     "status": "SAME",
+     "old_header": "theorem process_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child) (stage1 : TX1_344.RowSpec_344 VL P C f1) (stage2 : TX2_240.RowSpec_240 L D V f2) : TX1_333.RowSpec_333 L D V VL P C (process f1 f2)",
+     "new_header": "theorem process_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child) (stage1 : TX1_344.RowSpec_344 VL P C f1) (stage2 : TX2_240.RowSpec_240 L D V f2) : TX1_333.RowSpec_333 L D V VL P C (process f1 f2)"
+    },
+    {
+     "name": "process_tx2",
+     "status": "SAME",
+     "old_header": "theorem process_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child) (stage1 : TX1_344.RowSpec_344 VL P C f1) (stage2 : TX2_240.RowSpec_240 L D V f2) : TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (process f1 f2)",
+     "new_header": "theorem process_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child) (stage1 : TX1_344.RowSpec_344 VL P C f1) (stage2 : TX2_240.RowSpec_240 L D V f2) : TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (process f1 f2)"
+    },
+    {
+     "name": "entry_tx2",
+     "status": "SAME",
+     "old_header": "theorem entry_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f : Child) (child : TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) f) : TX2_213.RowSpec_213 L D V (TX1_344.asStage1 VL P C) (entry f)",
+     "new_header": "theorem entry_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f : Child) (child : TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) f) : TX2_213.RowSpec_213 L D V (TX1_344.asStage1 VL P C) (entry f)"
+    },
+    {
+     "name": "entry_tx1",
+     "status": "SAME",
+     "old_header": "theorem entry_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f : Child) (child : TX1_333.RowSpec_333 L D V VL P C f) : TX1_330.RowSpec_330 L D V VL P C (entry f)",
+     "new_header": "theorem entry_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (f : Child) (child : TX1_333.RowSpec_333 L D V VL P C f) : TX1_330.RowSpec_330 L D V VL P C (entry f)"
+    }
+   ]
+  },
+  {
+   "module": "NVR_TAS",
+   "old_source": "/Users/dominic/ZK/.worktrees/cx-fin-host/evidence/entry-rsl-20261111/NNF_TAS.lean",
+   "old_sha256": "481072b94cb0e3d248df8d8cd9a0b75d53ae365416c2eab941d7402c6cbfc7c4",
+   "new_sha256": "576ec82935a5559b61d698385bfa416819a9ef5e5063523a92ffcbd3abd629fc",
+   "comparisons": [
+    {
+     "name": "install",
+     "status": "SAME",
+     "old_header": "def install {L : PoolLib} {V0 : V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) : TAS.Impl L V0 VL",
+     "new_header": "def install {L : PoolLib} {V0 : V2Lib} {VL : VLib} (I : TAS.Impl L V0 VL) : TAS.Impl L V0 VL"
+    },
+    {
+     "name": "r221",
+     "status": "SAME",
+     "old_header": "theorem r221 (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : \u2200 V : V2Lib, TX1_344.RowSpec_344 VL P C (install I).f344 \u2192 TX2_240.RowSpec_240 L D V (install I).f240 \u2192 TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (install I).process",
+     "new_header": "theorem r221 (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : \u2200 V : V2Lib, TX1_344.RowSpec_344 VL P C (install I).f344 \u2192 TX2_240.RowSpec_240 L D V (install I).f240 \u2192 TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (install I).process"
+    },
+    {
+     "name": "r213",
+     "status": "SAME",
+     "old_header": "theorem r213 (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : \u2200 V : V2Lib, TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (install I).process \u2192 TX2_213.RowSpec_213 L D V (TX1_344.asStage1 VL P C) (install I).entry",
+     "new_header": "theorem r213 (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : \u2200 V : V2Lib, TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (install I).process \u2192 TX2_213.RowSpec_213 L D V (TX1_344.asStage1 VL P C) (install I).entry"
+    },
+    {
+     "name": "roots",
+     "status": "SAME",
+     "old_header": "theorem roots (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : TAS.NMW_Roots (L",
+     "new_header": "theorem roots (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) : TAS.NMW_Roots (L"
+    },
+    {
+     "name": "weak_process",
+     "status": "SAME",
+     "old_header": "theorem weak_process (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) (w : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (h1 : TX1_344.RowSpec_344 VL P C I.f344) (h2 : TX2_240.RowSpec_240 L D (TCK.weaken V0 w) I.f240) : TX2_221.RowSpec_221 L D (TCK.weaken V0 w) (TX1_344.asStage1 VL P C) (install I).process",
+     "new_header": "theorem weak_process (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) (w : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (h1 : TX1_344.RowSpec_344 VL P C I.f344) (h2 : TX2_240.RowSpec_240 L D (TCK.weaken V0 w) I.f240) : TX2_221.RowSpec_221 L D (TCK.weaken V0 w) (TX1_344.asStage1 VL P C) (install I).process"
+    },
+    {
+     "name": "weak_entry",
+     "status": "SAME",
+     "old_header": "theorem weak_entry (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) (w : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (h1 : TX1_344.RowSpec_344 VL P C I.f344) (h2 : TX2_240.RowSpec_240 L D (TCK.weaken V0 w) I.f240) : \u2200 a s env, TX2_213.Ref L D (TCK.weaken V0 w) (TX1_344.asStage1 VL P C) a s env ((install I).entry a s env)",
+     "new_header": "theorem weak_entry (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib) (P : PreparedNew VL) (C : S1Lib VL) (I : TAS.Impl L V0 VL) (w : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit)) (h1 : TX1_344.RowSpec_344 VL P C I.f344) (h2 : TX2_240.RowSpec_240 L D (TCK.weaken V0 w) I.f240) : \u2200 a s env, TX2_213.Ref L D (TCK.weaken V0 w) (TX1_344.asStage1 VL P C) a s env ((install I).entry a s env)"
+    }
+   ]
+  }
+ ]
+}
