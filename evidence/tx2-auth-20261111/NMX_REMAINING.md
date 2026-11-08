@@ -1,3 +1,30 @@
+# Current completion status — lead renewal2026-11-08
+
+No remaining proof/native member within the assigned233→242→241 sequence.
+All three complete candidates have been committed and passed their own gates:
+
+- TX2:233: `NMX_R4_Authentication.root`, candidate `2f5787475aa`,
+ `NMX_R4_VALIDATION.json`; full Box/source association and all-Args port.
+- TX2:242: `NMX_R6_Validation.root`, candidate `3fb6853107a`,
+ `NMX_R6_VALIDATION.json`; exact native source/full observation/all-Args packet.
+- TX2:241: `NMX_R9_StageTwo.root`, candidate `536c77b6e6b`,
+ `NMX_R9_VALIDATION.json`; full native242 and064 observations, exact original
+ tuple, all-Args port, original D1/D2 only. No extra own-input clause.
+
+Ledger27 already closed217/234. Next ledger review/credit is the lead's step;
+no row is self-credited. No security/headline/release target is established.
+No additional Kani is required for these members: all own(bc) audits have zero
+flagged exits. No shipped source, trust row, ELF, key or wallet changed.
+
+The fresh allowance is NOT exhausted. There is no remaining authorized member
+proof to spend it on:233's two gaps are discharged;242/241 complete source
+laws and canonical roots exist;217/234 are already CLOSED. Unchanged regression
+reruns or unrelated rows would violate the stated cadence/scope. Exact final
+counts are `NMX_RESUMPTION_COUNTS.json`. No budget stop is asserted.
+
+See `NMX_242_241_READINESS.md` and the final stages of `NMX_HANDOFF.md`.
+All text below is historical and superseded wherever inconsistent.
+
 # Current resumption status
 
 Disk stop resolved. TX2:217 and234 both have candidate roots;234 source/effect
