@@ -108,3 +108,7 @@ it is not promoted as the completed v2 or as an OwnInit history.
 47430 passed the exact source-backed Thread214 field/count projection after
 retaining47429's match-reduction failure. This is source-backed only; native
 world/result and OWNER-only backing are not silently called closed.
+47431 passed the exact Option<ThreadId83> interpretation: pinned ThreadId is
+Copy, so its Option destructor has no callback/store effect. This adds477 to
+the recognized effect-free set without classifying SpawnHooks602 or generic762
+as trivial. Source archive/hash is session7/STD_THREADID.json.
