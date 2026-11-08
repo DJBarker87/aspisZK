@@ -1,3 +1,21 @@
+# Lane A session14 — PARTIAL; original-v2 joins remain OPEN
+
+Source-derived9196→316 callback linkage and Full-compatible INTERNAL v2
+f6→BODY124 / post124→125/219/316/220/208/15 routes are checked. CLOSED124
+entry/Pre/provider application and returned SOURCE frame/monotone numbering
+are applied by name. Original Entry14→f6, actual CLOSED124 return transport,
+full OWNER/callee/LoopInvariant initialization/preservation, range join and
+f361→14756 remain OPEN. These support theorems do not inhabit C LaneAJoins16.
+Earlier opaque124 prefix routes cannot instantiate C Full's BODY124 table;
+Full124TableGap14 checks this. Do not claim them as OwnInit histories.
+C read-only session16 reaches original85; its exact joins are pinned in
+lane-A/session14/NEEDS_FROM_LANE_A.md. No native/TLS/physical work duplicated.
+See session14/MODEL_FINDINGS.md, LANE_C_NEEDS.md and MAP_DELTA.json.
+No historical slot status, row, endpoint premise, T field, physical byte image
+or D999 DEFERRED-POST-TARGET disposition changed. Target not yet established.
+
+---
+
 # Lane A session13 qualified prefix attachments
 
 No historical slot status/count changed. Import PV_LIB_A_StoreActionTable13

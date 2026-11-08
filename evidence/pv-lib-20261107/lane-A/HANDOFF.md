@@ -1,3 +1,54 @@
+# Session14 final — PARTIAL; requested completion NOT achieved
+
+Continued74f750e69d7, LOG D1004, D1005 incorporated; no push/merge.
+Stable original-v2 exports: V2Callback14.run (actual source9196→316),
+V2TraceTransport14 (complete-State finite trace transport),
+V2F6To12414.history/certified (internal f6→actual BODY124 entry),
+V2Post124To15.history/certified (internal post124→125/219/316/220/208/15).
+Per-call V2ActualBindings14 lookups fit C Full; the earlier opaque124 table
+DOES NOT. Full124TableGap14.not_prefix_tables checks this incompatibility.
+Never consume opaque124 F6To15Fixed14/V2PrefixTables14 as a C Full witness.
+
+V2F124Entry14.numbered and F124EntryData14 derive actual entry/Pre and apply
+CLOSED124 by name. F124ReturnedFrame14 reuses its explicit returned SOURCE
+Post/foreign-cell frame and monotone complete saved-frame numbering. No
+counter equality across callee boundaries. These do not transport the
+provider model to Full/v2/context execution or frame arbitrary native OWNER.
+ScopeIncrementShape14/ScopePayloadIdentityGap14 check the local source457
+count write and failure of a blindly fixed original payload facet. This is
+NOT complete LoopInvariant contradiction, original reachability or joint
+witness negation. The prospective post125 snapshot remains to be proved.
+
+OPEN in user order: original Entry14→f6 and actual CLOSED124 return transport;
+full actual125/callback/callee preservation and complete LoopInvariant init /
+induction, actual268/handles→3400 and range join; range→361 then92/113/129/
+14756 source milestones; C's COMPLETE same-history OwnInit/source7 witness.
+No new361-through14756 theorem. C session16 original85 and exact LaneAJoins16
+needs are pinned read-only in session14/LANE_C_FINAL_INPUT.json and copies.
+Native/TLS/physical/Values and final conjunction remain C's work.
+
+ONE strict new-root55690 PASS221/221: exit0,wall0:17.08,peak6737688KiB,swap0,
+sourcea5a3ea255e4 (full revision in PROVENANCE.json). Zero unresolved/summary
+disagreements; only propext/Classical.choice/Quot.sound.74 focused scopes:
+47 accepted (46 support modules + driver),27 failed inputs retained and
+changed before retry. All scopes6G/8G/swap0/Tasks64/-M7000, standalone turn,
+no OOM/refusal/cap increase. No accepted source changed after strict audit.
+Graphs, source hashes/revisions, times/RSS/swaps/exits and printed axioms
+retained. No full manifest/runtime/Rust/Aeneas/SBF regression repeated.
+Offline validation: python3 evidence/pv-lib-20261107/lane-A/session14/validate.py.
+Next unused Lean55674–55689,raw55691–55699 (NOT exhausted; changed/new inputs).
+
+Shared map gains qualified attachments only: all170 historical statuses,
+D999 DEFERRED-POST-TARGET dispositions, endpoint premises and T unchanged.
+Zero rows closed;zero endpoint premises removed/added/changed;zero T fields;
+zero physical byte images. No provider/frozen implementation/spec/lane B/C
+edit or key action. Target not yet established. Detailed findings and exact
+reusable names: session14/MODEL_FINDINGS.md and LANE_C_NEEDS.md.
+
+Earlier live checkpoints below are superseded by this final checkpoint.
+
+---
+
 # Session14 D1005 live correction — Full BODY124 join; task OPEN
 
 `PV_LIB_A_V2F124Entry14.run` enters actual1916 BODY124 on retained original v2.
