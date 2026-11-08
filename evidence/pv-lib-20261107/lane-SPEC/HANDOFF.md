@@ -1,22 +1,59 @@
-# Session19 live — A-S16-2 repair ADOPTED; complete target OPEN
+# Session19 checkpoint — Active repair ADOPTED; complete target OPEN
 
-Base b2663b3dfc2; LOG D1010/D1011; thread-29 and thread-29′ retained.
-Decision/evidence: SESSION19_ADOPTION.md, SESSION19_LANEA_INPUT.json.
-ActiveAdoption19 (55783) imports A's checked repair read-only in the exact
-J-c18-s16 cohort. Complete Execution preserved through141, original85,
-original141, world/replies85 and Values absence before85 transported by name.
-No transport of later contracts/joins is claimed. SPEC-C18 records that the
-contracted f207 call has inner8248 but consumes the actual outer8162 origin;
-old separate-top-level8248 requirement remains a diagnostic Before statement.
-New joins interface being compiled: PV_LIB_SPEC_LaneAJoins19, same literal
-milestones/order, history changed ONLY to adopted ActivePrefix17.history.
-No join inhabitant, native suffix reachability, universal contracts, full
-Values, ownership14756 or complete witness/contradiction established yet.
-55781 infrastructure failure (no Lean);55782 parser failure retained;55783
-pass exit0, wall0:02.51, peak4848984KiB, swap0, standard summary axioms.
-Strict new-root audit NOT YET RUN. Next Lean55784; raw55496.
+Continued b2663b3dfc286de8cc05227232797156f74b6150; LOG D1010/D1011.
+Completion authority: SESSION19_ADEQUACY.md and SESSION19_STATUS.json.
+
+Order1 ADOPT: A-S16-2 is SPEC-C18. Read-only repair source pin and exact
+object cohort: SESSION19_LANEA_INPUT.json, SESSION19_REPAIR_COHORT.json,
+SESSION19_OBJECT_AUTHORITY.json.xz. ActiveAdoption19 uses A's preserved theorem
+by name for full Execution transport through141. original85/original141,
+world/replies85 and Values absence before85 carry over. ContextMachine19
+history_same identifies the new reference and repaired history at EVERY index.
+The existing boundary/frontier/counter observation is retained by name.
+
+Order2 PARTIAL: ActiveNative19/ActiveBoundary19 compute the contracted8248
+setter's full reply and named source effect. ActiveConsumption19.consume proves
+actual outer8162 context consumption and full delivery; ActiveSource19 proves
+source ACTIVE=true, physical=true via Consumption.physical, exact caller and
+source frame outside TLS/two return cells. ActiveCorrection19 before/after/
+nonstall checks the local defect and repaired progress. These are local facts:
+ACTUAL callback reachability on the original-entry history is still OPEN.
+295/454 original consumption, actual callback source activation and initialized
+run remain OPEN. No source callee BODY or loop was newly unfolded here.
+
+LaneAJoins19 (55784) publishes exactly the prior milestone/index/order interface
+on ActiveAdoption19.history. Old Joins18 remains unchanged Before on the old
+stalling machine; no post-repair transport or join inhabitant is invented.
+Newest read-only A input is in SESSION19_LANEA_FINAL_INPUT.json; its four joins
+still report OPEN. No A-owned original→f6/range/f361→14756 join was re-derived.
+
+Orders3–6 OPEN: full Values layout/reserve/growth/request binding/transport;
+same-history ownership14756; ContextFinalContracts18 universal inhabitants
+and their corrected successors as needed; complete joint witness conditional
+ONLY on joins, or complete checked contradiction. No witness is manufactured
+from the old pending machine, and no missing C proof becomes an A hypothesis.
+No row, endpoint premise, T field or complete source adequacy result closed.
+
+Validation:11 focused passes (9 logical modules, diagnostic printer, strict
+driver),5 changed elaboration failures retained,1 infrastructure failure55781
+with NO Lean invocation. No admission refusal. Receipts retain target/exit/
+wall/RSS/swap/source/hash/#print axioms; only standard axioms on passing roots.
+ONE strict55496 PASS55/55, exit0, wall1:33.24, peak6913796KiB, swap0,
+source 14ead36468edf71b6fbed3f9467df20e4c4b7346. Zero unresolved or summary mismatches,
+unchanged walker/collector. Complete raw inventories compressed and hashed.
+SESSION19_AUDIT_REVISION.json records the unambiguous full source revision;
+raw receipt abbreviation is retained unchanged. No unchanged raw replay.
+
+All scopes serial6G/8G/swap0/Tasks64/-M7000, standalone turn before each ID,
+reservation admission recorded. Launcher permits assigned557xx/562xx;558xx/
+561xx unused. No provider/frozen implementation/spec/shared map/ledger/checker
+edit, full manifest/Rust/SBF/Aeneas/runtime suite, push/merge or key action.
+No own scope remains. Next Lean56208;raw55497 (then55498/55499,55590..55599,
+56290..56299). Offline integrity gate:
+python3 evidence/pv-lib-20261107/lane-SPEC/validate_session19.py
 
 ---
+
 
 # Session18 checkpoint — rebased original85; complete target OPEN
 
