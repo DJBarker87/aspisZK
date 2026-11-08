@@ -79,3 +79,9 @@ source1274601d515; standard axioms. It preserves actual completed/waiting/
 catch priority, records unwind-issued calls, and tests native decoding only
 at real ordinary polls. BoundRuntime remains the retained predecessor;
 ControlRuntime is the current runtime reference for further statements.
+
+44907 ControlHistory passed after44906 qualified-name repair (retained).
+exit0,wall0:02.64,peak4766160KiB,swap0,sourcef453f07abce; standard axioms.
+The derived history invariant now covers ControlRuntime's corrected priority,
+including waiting/unwind requests. This supersedes use of HistoryInvariant
+for the current reference; both audited declarations remain retained.
