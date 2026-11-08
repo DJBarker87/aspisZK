@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:166:19: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:167:22: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:172:14: error: Dependent elimination failed: Failed to solve equation
+  some r =
+    match request with
+    | PV_STX2_Native.Request.child fn activation args =>
+      if PV_THR2_OffPath.functionId fn = some 360 then
+        match reply.answer with
+        | Answer.returned (Aeneas.Std.Result.ok v) => do
+          let __x ← PV_LIB_SPEC_BoundRuntime.arc (runtime p).carrier c.store w args
+          if __x.2 > PV_THR2_LibrarySemantics_ArcClone.maxRefcount then do
+              let r ← some { answer := Answer.fault Fault.abort, world := w, events := reply.events }
+              pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+            else do
+              let r ←
+                some { answer := Answer.returned (Aeneas.Std.Result.ok __x.1), world := w, events := reply.events }
+              pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+        | x => do
+          let r ← some reply
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+      else
+        if invalidPure p c w = true then do
+          let r ← none
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+        else do
+          let r ← some reply
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+    | x => do
+      let r ← some reply
+      pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:174:6: error: Dependent elimination failed: Failed to solve equation
+  some r =
+    match request with
+    | PV_STX2_Native.Request.child fn activation args =>
+      if PV_THR2_OffPath.functionId fn = some 360 then
+        match reply.answer with
+        | Answer.returned (Aeneas.Std.Result.ok v) => do
+          let __x ← PV_LIB_SPEC_BoundRuntime.arc (runtime p).carrier c.store w args
+          if __x.2 > PV_THR2_LibrarySemantics_ArcClone.maxRefcount then do
+              let r ← some { answer := Answer.fault Fault.abort, world := w, events := reply.events }
+              pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+            else do
+              let r ←
+                some { answer := Answer.returned (Aeneas.Std.Result.ok __x.1), world := w, events := reply.events }
+              pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+        | x => do
+          let r ← some reply
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+      else
+        if invalidPure p c w = true then do
+          let r ← none
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+        else do
+          let r ← some reply
+          pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+    | x => do
+      let r ← some reply
+      pure (PV_LIB_SPEC_BoundRuntime.frameReply request w r)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:156:26: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [nr,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵] at result
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SparseRuntime.lean:158:18: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [nr,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at result
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_SparseRuntime.pureValue' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseRuntime.values' depends on axioms: [propext]
+'PV_LIB_SPEC_SparseRuntime.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.invalidPure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.answer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.handler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.machineAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.controlStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SparseRuntime.ordinary_framed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
