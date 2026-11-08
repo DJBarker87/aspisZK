@@ -94,3 +94,5 @@ Session7 in progress from03c3c72b143:47424 passed CellSetBegin, deriving the
 replacement and retaining old T plus the exact emitted destructor metadata.
 This is not yet a complete arbitrary-T destructor/table repair. No caller
 history is promoted. Session7 receipts preserve the6G/8G/swap0/Tasks64 caps.
+47425 passed all six exact raw504 metadata checks. Only417/437/629 have
+trivial drops;477/602/762 explicitly do not. Generator --check passes.
