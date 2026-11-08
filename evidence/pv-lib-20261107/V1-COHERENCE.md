@@ -157,3 +157,37 @@ and independently compiled compatibility inputs; the combined root environment
 selects one canonical provider per duplicated namespace. It still audits every
 root in the 4,307-name union, and source-cohort type comparisons must pass.
 This is a changed import graph and will be replayed before any coherence claim.
+
+
+The canonical import repair is pinned to `27993341c495ea9107b742c011745b6ed725bebb`.
+`ACTIVE_INVENTORY.json` carries its file hashes; the original `INVENTORY.json`
+remains the 9a38706526c input inventory. The repair affects 353 module artifacts;
+only those descendants are replayed. Unchanged artifacts are reused read-only
+in `objects-canonical` within the same host workspace. The old failed cohort,
+its sources, objects and freeze are retained. The final combined environment
+selects 734 canonical modules while preserving all 4,307 root names.
+
+A staging-only compile 56539 stopped before elaboration because Lean resolves
+source symlinks outside its `-R` root:
+
+```
+input file '.../sources/PV_LIB_SPEC_SiteHistory.lean' must be contained in root directory (.../sources-canonical/)
+```
+
+Exit 1, wall 0:00.06, peak RSS 83948 KiB, swaps 0. The source symlinks were
+retained under `symlink-staging` and replaced with immutable hardlinks to this
+job's own source files. No host file was deleted and no source byte changed.
+The replacement `PV_LIB_SPEC_SiteHistory` passed 56540 (exit 0, wall 0:02.23,
+peak RSS 4841048 KiB, swaps 0). Tool staging skips writes of unchanged sources.
+
+
+The affected replay completed: 189 focused module recompiles passed and 164
+artifacts matched verified hashes after their rebuilt dependencies stabilized.
+All 834 v1 modules are again present under the single canonical LEAN_PATH.
+The 56549 exit 3 is a no-scope empty-queue completion marker.
+`PV_LIB_V1_RawAudit3` compiled 56550 (exit 0, wall 0:02.36, peak RSS
+1755192 KiB, swaps 0, standard axioms only); its module array chooses canonical
+providers and its root array retains all 4,307 roots. The collector/walker body
+comparison passed unchanged. Canonical object, companion and source hashes are
+frozen separately as `COHORT_CANONICAL_FREEZE`; the failed merge freeze remains
+retained. Root-type comparison and the sole final strict audit remain pending.

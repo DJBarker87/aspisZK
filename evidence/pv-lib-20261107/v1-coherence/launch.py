@@ -16,7 +16,7 @@ for p in V.parents[1].glob('codex-*'):
 assert not hits,hits
 (E/f'id-audit-{a}.json').write_text(json.dumps(dict(attempt=a,hits=hits)))
 subprocess.run(['python3',str(V/'reuse.py')],check=True)
-plan=json.load(open(V/'PLAN.json'));done={p.name.removesuffix('.olean') for p in (V/'objects-resolved').glob('*.olean')}
+plan=json.load(open(V/'PLAN.json'));done={p.name.removesuffix('.olean') for p in (V/'objects-canonical').glob('*.olean')}
 remaining=[m for m in plan['order'] if m not in done];batch=remaining[:20]
 if not batch:print('ALL_PLANNED_MODULES_COMPILED');sys.exit(3)
 (E/f'batch-{a}.json').write_text(json.dumps(batch));(E/f'turn-{a}.json').write_text(json.dumps(x['turn']))

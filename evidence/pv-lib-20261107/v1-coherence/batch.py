@@ -2,7 +2,7 @@
 Uses unchanged pinned run2.py for every target. No package build.
 """
 import json,pathlib,sys,subprocess,time,hashlib,re
-V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';S=V/'sources';O=V/'objects-resolved'
+V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';S=V/'sources-canonical';O=V/'objects-canonical'
 a=int(sys.argv[1]);assert 56500<=a<=56589
 plan=json.load(open(V/'PLAN.json'));batch=json.load(open(E/f'batch-{a}.json'))
 results=[]

@@ -5,19 +5,20 @@ assert 56500<=a<=56589 if mode!='audit' else 56590<=a<=56599
 assert not (E/f'turn-{a}.json').exists()
 cmd=['ssh',host,'STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh'];t=time.time();r=subprocess.run(cmd,capture_output=True,text=True);turn=dict(attempt=a,command=cmd,exit=r.returncode,wall=time.time()-t,stdout=r.stdout,stderr=r.stderr);(E/f'turn-{a}.json').write_text(json.dumps(turn,indent=2));assert r.returncode==0
 files={}
-for name in ['PV_LIB_V1_StatementSnapshot','PV_LIB_V1_RawAudit2']:files['sources/'+name+'.lean']=pathlib.Path('lean',name+'.lean').read_text()
+for name in ['PV_LIB_V1_StatementSnapshot','PV_LIB_V1_RawAudit3']:files['sources-canonical/'+name+'.lean']=pathlib.Path('lean',name+'.lean').read_text()
 for name in ['run-snapshots.py']:files[name]=(E/name).read_text()
 files['AUDIT_ROOTS.json']=(E/'AUDIT_ROOTS.json').read_text()
 files['INVENTORY.json']=(E/'INVENTORY.json').read_text()
+files['ACTIVE_INVENTORY.json']=(E/'ACTIVE_INVENTORY.json').read_text()
 files['run-thread-audit.py']=subprocess.check_output(['git','show','5e397cb3878:tools/pv-lib-20261107/run-thread-audit.py'],text=True)
 code=r'''
 import pathlib,json,sys,subprocess,time,hashlib,re,os
-x=json.load(sys.stdin);a=x['attempt'];mode=x['mode'];V=pathlib.Path('HOST');E=V/'evidence';O=V/'objects-resolved'
+x=json.load(sys.stdin);a=x['attempt'];mode=x['mode'];V=pathlib.Path('HOST');E=V/'evidence';O=V/'objects-canonical'
 assert not (E/f'receipt-{a}.json').exists()
 for name,s in x['files'].items():
  p=V/name
- if name.startswith('sources/') and (O/(p.stem+'.olean')).exists():assert p.read_text()==s
- p.write_text(s)
+ if name.startswith('sources-canonical/') and (O/(p.stem+'.olean')).exists():assert p.read_text()==s
+ if not p.exists() or p.read_text()!=s:p.write_text(s)
 (V/'SNAPSHOT_PLAN.json.xz').write_bytes(bytes.fromhex(x['snapshot_plan']))
 (E/f'turn-{a}.json').write_text(json.dumps(x['turn']))
 pat=re.compile(r'(^|[-_])'+str(a)+r'([-_.]|$)');hits=[]
@@ -32,20 +33,20 @@ admit=json.load(open(E/f'admission-{a}.json'))
 if r.returncode or admit.get('allowed') is not True:
  (E/f'receipt-{a}.json').write_text(json.dumps(dict(exit=r.returncode,accepted=False,refusal=True,epoch=time.time())));sys.exit(78)
 if mode in ['compile-snapshot','compile-audit']:
- m='PV_LIB_V1_StatementSnapshot' if mode=='compile-snapshot' else 'PV_LIB_V1_RawAudit2'
+ m='PV_LIB_V1_StatementSnapshot' if mode=='compile-snapshot' else 'PV_LIB_V1_RawAudit3'
  assert not (O/(m+'.olean')).exists()
- inner=['python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(V/'J.json'),str(O),str(V/'sources'),str(O/(m+'.olean')),str(V/'sources'/(m+'.lean')),'7000']
+ inner=['python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(V/'J.json'),str(O),str(V/'sources-canonical'),str(O/(m+'.olean')),str(V/'sources-canonical'/(m+'.lean')),'7000']
 elif mode=='cache-imports':
  plan=json.load(open(V/'PLAN.json'));paths=sorted(str(p) for p in O.glob('PV_*.olean'))
  (V/'cache-imports-request.json').write_text(json.dumps(paths))
  env=json.load(open(V/'J.json'))
  runner="import json,os,sys;v=json.load(open(sys.argv[1]));\nfor k,x in v.items():\n if x is None:os.environ.pop(k,None)\n else:os.environ[k]=x\nos.execv(v['LEAN'],[v['LEAN'],'-j1','-M7000','-DElab.async=false','--run',sys.argv[2],'imports',sys.argv[3]])\n"
  (V/'cache-imports-run.py').write_text(runner)
- inner=['python3',str(V/'cache-imports-run.py'),str(V/'J.json'),str(V/'sources/PV_LIB_V1_StatementSnapshot.lean'),str(V/'cache-imports-request.json')]
+ inner=['python3',str(V/'cache-imports-run.py'),str(V/'J.json'),str(V/'sources-canonical/PV_LIB_V1_StatementSnapshot.lean'),str(V/'cache-imports-request.json')]
 elif mode=='snapshots':inner=['python3',str(V/'run-snapshots.py'),str(a)]
 elif mode=='audit':
  plan=json.load(open(V/'PLAN.json'));assert all((O/(m+'.olean')).exists() for m in plan['order'])
- inner=['timeout','1800','python3',str(V/'run-thread-audit.py'),str(V/'J.json'),str(V/'sources/PV_LIB_V1_RawAudit2.lean')]
+ inner=['timeout','1800','python3',str(V/'run-thread-audit.py'),str(V/'J.json'),str(V/'sources-canonical/PV_LIB_V1_RawAudit3.lean')]
 else:raise RuntimeError(mode)
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-lib-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(E/f'time-{a}.log')]+inner
 with (E/f'out-{a}.log').open('w') as f:

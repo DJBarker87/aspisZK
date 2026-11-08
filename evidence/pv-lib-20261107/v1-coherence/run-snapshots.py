@@ -2,7 +2,7 @@
 Invoked inside one admitted capped scope; fresh process per original cohort.
 """
 import pathlib,json,lzma,hashlib,subprocess,os,sys
-V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';O=V/'objects-resolved';base=json.load(open(V/'J.json'));a=int(sys.argv[1]);assert 56500<=a<=56589
+V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';O=V/'objects-canonical';base=json.load(open(V/'J.json'));a=int(sys.argv[1]);assert 56500<=a<=56589
 sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()
 # Split the 95 MiB source-authority manifest in a short-lived preparation process.
 # Keep only one original cohort's authority in the parent beside a Lean child.
@@ -22,7 +22,7 @@ def snapshot(name,request,path):
   else:env[k]=v
  env['LEAN_PATH']=str(path)
  log=E/f'statements-{a}-{name}.jsonl';tim=E/f'statements-{a}-{name}.time'
- cmd=['/usr/bin/time','-v','-o',str(tim),'timeout','600',base['LEAN'],'-j1','-M7000','-DElab.async=false','--run',str(V/'sources/PV_LIB_V1_StatementSnapshot.lean'),str(request)]
+ cmd=['/usr/bin/time','-v','-o',str(tim),'timeout','600',base['LEAN'],'-j1','-M7000','-DElab.async=false','--run',str(V/'sources-canonical/PV_LIB_V1_StatementSnapshot.lean'),str(request)]
  with log.open('w') as f:r=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT,cwd=V)
  if r.returncode:
   print(name,'FAILED',log.read_text()[-4000:],flush=True);sys.exit(1)

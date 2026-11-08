@@ -2,7 +2,7 @@
 Run between batches, never concurrently with a compiler. This does not rebuild.
 """
 import pathlib,json,lzma,hashlib,re,collections
-R=pathlib.Path('/home/dombarker/project-offloads');V=R/'codex-pv-lib-slice-20261107/v1-coherence';O=V/'objects-resolved';E=V/'evidence';plan=json.load(open(V/'PLAN.json'))
+R=pathlib.Path('/home/dombarker/project-offloads');V=R/'codex-pv-lib-slice-20261107/v1-coherence';O=V/'objects-canonical';E=V/'evidence';plan=json.load(open(V/'PLAN.json'))
 sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()
 cs=json.load(open(V/'CACHE_SURVEY.json'));by=collections.defaultdict(list)
 for c in cs:
