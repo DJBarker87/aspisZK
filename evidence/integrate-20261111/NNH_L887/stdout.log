@@ -1,0 +1,8 @@
+'AspisR1.NNH_Run5bCurrentValues.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisS1ValuesOwnedInstallation.expandValues : Slice U8 →
+  Slice U8 → Result (core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Slice U8) :=
+fun input output => do
+  let (status, _, updated) ←
+    AspisS1ValuesOwned.values_owned_reference (AspisS1ValuesOwnedInstallation.toVec input)
+        (AspisS1ValuesOwnedInstallation.toVec output)
+  ok (status, AspisS1ValuesOwnedInstallation.toSlice updated)

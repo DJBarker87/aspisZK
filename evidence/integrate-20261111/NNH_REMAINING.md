@@ -1,3 +1,37 @@
+# Run 5b exact G0 remainder
+
+Target not yet established. CLOSED: corrected host/clock (T1), corrected NMF_B
+(T2), O1 (T6), SAME full-space recorder/charge association (part of T7).
+
+- `RSL.TAS.NND_A1.stage1` at `NNH_Run5bHost.S_host`: full current VL/P
+  returned-path transport, 328/345 composition, weak Err implication.
+- `RSL.TAS.NND_A2.stage2`: `NNH_ExactRemainingTypes.tx2Op11`, returned common
+  geometry/query/Merkle/offset continuations and Stage2/Returns/AMN fold.
+- `RSL.TFM.Split.rest`: physical six-conjunct group and named assembly.
+  Namespace-corrected drafts are uncompiled; Setup/Claims are checked.
+- G0 owns ledger30 Impl/row installation, G1b `NMS_Roots.r241`, `NMV_Roots.g2`
+  and the parent folds; final same-host `NNE_EntryRep.route1/route2` plus all
+  other TAS interfaces must be checked there. This run gives no ledger credit.
+- `TASB.fail_sub_rec` and `NNH_DeployedOuter`: actual same-world Failure inclusion,
+  then `EVB.no_second_charge` and the SAME-event adopted total-bound connection.
+  Condition (4) remains RECORDED; its verdict is reserved to G0 final.
+- G0 final statement/trust, physical non-vacuity, raw axioms and manifest gates.
+
+63/76 scopes used. T3/T4/T5 caps are exhausted; T1/T2/T6 finished. T7 inclusion
+needs the capped open fields and later G0 roots, so its spare scopes cannot
+legitimately close that member now. No cap transfer or G0/16GiB launch authorized.
+Next ID L907. Exact receipts/source pins and per-step goals: NNH_RUN5B_BOUNDARY.json.
+
+---
+
+# Run 5b current boundary
+
+T1 corrected host CLOSED; T2 corrected NMF_B CLOSED. T3 A2 OPEN at its 14-scope cap: NNH_ExactRemainingTypes.tx2Op11, then RSL.TAS.NND_A2 at NNH_Run5bHost.S_host. Blockers: returned outer geometry traversal transport at the SAME queries; query loop association at actual installed ports (invariant is now proved); Merkle parent call transport at same resume occurrence; compact offset arithmetic transport and common converse; Stage2To064 + op44/op53 + Returns + AMN.viaReturns2 composition.
+
+T4 A1 is OPEN at its 20-scope cap: full current returned-path transport, 328/345 composition and global weak Err implication. T5 Split.rest is OPEN at its six-scope cap: physical facts and named assembly; Setup and Claims passed. T6 O1 CLOSED at L901. T7 SAME-event host charge CLOSED (L903-905), but NNH_DeployedOuter / actual Failure inclusion OPEN; it requires T3/T4/T5 and the later G0 row/weak-library gates. Focused combined import L906 PASS;63/76 actual scopes. No remaining independent member is authorized inside its per-step cap. Condition (4) remains RECORDED, never marked proved here.
+
+---
+
 # Current run5 disposition (2026-11-08)
 
 Target not yet established. S6 literal HeadlineB PASS. S2 Split.rest, S3 A2,

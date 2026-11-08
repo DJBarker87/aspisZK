@@ -16,7 +16,7 @@ for n in ['NNH_ATTEMPTS.jsonl','NNH_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<860, 'Authorized860 total actual Lean/link/audit scopes exhausted'
+assert len(used)<910, 'Run5b authorized 76 scopes after 834 prior submissions exhausted'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
@@ -74,7 +74,7 @@ files={};sources=[]
 if kind=='lean':
  if target=='NNH_OwnerStatements':files['NNH_AUDIT_ROOTS.json']=(E/'NNH_AUDIT_ROOTS.json').read_text()
  n='NNH_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'NNH_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
- command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNH_generated','-o','NNH_R4_objects/'+target.replace('.','/')+'.olean',n]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNH_generated','-o','NNH_Run5b_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['NNH_Driver','NNH_ProofDriver','NNH_PoolProofDriver','NNH_PoolDriver']:command+=['-c','NNH_native/'+target+'.c']
 elif kind=='link':
  sources=['NNH_native/'+target+'.c','NNH_native/NFA_WALKER.c','NNH_native/NFA_MemoryLimit.c']
@@ -89,15 +89,16 @@ elif kind=='audit':
  command=['python3','NNH_finalize_host.py'] if target=='retention' else ['NNH_native/NNH_ProofDriver',target]
 
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join(([B+'/NNH_exports_continuation_20261111'] if target=='NNH_ContinuationExportCheck' else ([B+'/NNH_exports_resume_20261111',B+'/NNH_R4_objects',B+'/NNH_objects'] if target=='NNH_ExportCheck' else [B+'/NNH_R4_objects',B+'/NNH_objects']))+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+overlays=json.loads((E/'NNH_RUN5B_PATHS.json').read_text())
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join([B+'/NNH_Run5b_objects']+overlays+([B+'/NNH_exports_continuation_20261111'] if target=='NNH_ContinuationExportCheck' else ([B+'/NNH_exports_resume_20261111',B+'/NNH_R4_objects',B+'/NNH_objects'] if target=='NNH_ExportCheck' else [B+'/NNH_R4_objects',B+'/NNH_objects']))+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
-(b/'NNH_native').mkdir(exist_ok=True);(b/'NNH_R4_objects').mkdir(exist_ok=True);(b/'NNH_tmp').mkdir(exist_ok=True)
-(b/'NNH_R4_objects'/{target.replace('.', '/')!r}).parent.mkdir(parents=True,exist_ok=True)
+(b/'NNH_native').mkdir(exist_ok=True);(b/'NNH_R4_objects').mkdir(exist_ok=True);(b/'NNH_Run5b_objects').mkdir(exist_ok=True);(b/'NNH_tmp').mkdir(exist_ok=True)
+(b/'NNH_Run5b_objects'/{target.replace('.', '/')!r}).parent.mkdir(parents=True,exist_ok=True)
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  p=b/'NNH_native'/n
  if not p.exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/'+n,p)

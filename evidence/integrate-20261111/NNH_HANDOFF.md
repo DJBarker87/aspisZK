@@ -1,3 +1,9 @@
+# Run 5b current disposition
+
+T1/T2/T6 CLOSED; T3/T4/T5 OPEN at caps; T7 SAME host charge CLOSED but actual failure inclusion OPEN. Focused combined import L906 PASS. 63/76 actual scopes. See the Run 5b sections below and NNH_RUN5B_BOUNDARY.json. Target not yet established.
+
+---
+
 # Current run5 disposition (2026-11-08)
 
 Target not yet established. S6 literal HeadlineB PASS. S2 Split.rest, S3 A2,
@@ -723,3 +729,231 @@ O1/O2 and host inclusion are actually discharged.
 No Kani/extraction, source/trust-row/ELF changes, push, wallet/key cleanup or
 sibling worktree edits. All new top roots have printed axioms; final raw audit,
 full physical non-vacuity and one manifest replay remain gated with S8.
+
+## Run 5b started
+
+Fresh allowance: 76 actual scopes, T1–T7 caps 14/16/14/20/6/2/6,
+starting NNH_L843. No Kani, extraction, S8/G0 or 16 GiB launch is authorized.
+Own runner outputs now go to NNH_Run5b_objects, with the delivered read-only
+NNR/NNQ/NNP/NNO and ledger29 paths prepended; all admission, scope-share, disk,
+source/dependency/Aeneas hash validation and resource checks remain enabled.
+The budget guard is 910 total actual submissions (834 historical + 76 fresh).
+New NNH_Run5b restatements preserve every existing proved NNH source/object.
+
+OWNER modelling point: the corrected top represents the runtime clock reply
+as NND_Carrier.reply NND_Carrier.slot c.j.slot; decoding it is exactly the
+selected slot c.j.slot. RuntimeClockSlotBinding binds that recorded reply to
+the bank slot, so this representation excludes no deployed run. It is an
+explicit environment instantiation, not a slot-equality premise or a filter
+on Realizes. The context carrier, arbitrary adversary, selected pair and full
+probability space remain unchanged. The clock-independent dictionary is
+identified with the corrected installation by NNR_Retime.missing, rather than
+by a whole-dictionary congruence proof. Complete host integration is still in
+progress; this paragraph alone establishes no top-level closure.
+
+### Run 5b T1 CLOSED
+
+L843–853: 11 scopes, ten passes; L851's whole-structure reuse was rejected
+because the augmented GameFrame changes the Sig parameter. L852 replaces
+that attempt with componentwise A3/A4/A5 constructors at the corrected host;
+all pass with standard axioms. No failed source is credited. Exact roots:
+NNH_Run5bHost.S_host/a0/r0, NNH_Run5bExec.recSig/exec/recSelect,
+NNH_Run5bHeadline.headline, NNH_Run5bHeadlineB.headlineB,
+NNH_Run5bAcceptance.a3/a4/a5, NNH_Run5bBinder.host_shape and grouped terms,
+NNH_Run5bClock.environment/represented/no_disagreement/total_representation.
+All names except NNH_RecordSig are in AspisR1. Existing context/seed/model
+functions are reused unchanged through NNH_Run5bCtx aliases, with the corrected
+missing-at-slot equality proved pointwise by the delivered clock-free law.
+No Realizes filter, slot-equality hypothesis or new trust item is introduced.
+
+### Run 5b T2 CLOSED
+
+Exact corrected Remaining: AspisR1.NNH_Run5bNMFRemaining.remaining (L859).
+Final term: AspisR1.NNH_Run5bNMF.nmfB (L858), via NNH_NMFPrime.assemble.
+Delivered source cuts: NNR_Producers.produce at atSlot c, composed by
+NNH_Run5bNMF.selected. Missing components are discharged concretely: M1a/M1c
+by NNR_Clock, M1b by NNR_Retime.missing; native M2 by NNR_Lift.M2;
+digest M2e by NNR_Oracle.M2e; root image by NNR_RootImage.M3. The packet
+constructor NNH_Run5bPacket.packet (L855) carries all fields. Associated is
+an existential equality to that constructor, constructed in selected; it is
+not a final premise. rootImage consumes the SAME cuts, eventImage is Iff.rfl.
+The corrected NFB Remaining is reindexed; the old signature's Remaining is
+not asserted. No Root0 or reader success is assumed to produce the packet.
+
+T2 used six scopes L854–859: three passes. Failed attempts: selector's Bool
+parameter inference (L854); explicit Tx inference (L856); dependent Obs
+elimination (L857), replaced by projection congruence (L858). All passing
+roots print only propext, Classical.choice, Quot.sound. No trust change.
+
+### Run 5b T3 OPEN at cap (14/14 scopes L860–873)
+
+A2 is not delivered. Exact parent: NNH_ExactRemainingTypes.tx2Op11, followed
+by the corrected-host NND_A2. Remaining: outer geometry traversal at SAME
+queries; query-loop association at actual installed ports; same-resume Merkle
+parent transport; compact offsets/common converse; Stage2To064, op44/op53,
+241 Returns and AMN.viaReturns2 composition. These are Lean-only obligations.
+
+Compiled support (AspisR1 prefix): NNH_Run5bGeometrySlots (L862),
+GeometryUnits (L861), IndexLaw (L864), QuerySlots (L865), GeometryMap (L868),
+FinishEdge.selected (L869), GeometryReverse.selected (L870),
+QueryDomain.initial (L873). The last derives the query invariant from SAME
+resume canonical fields, SAME pending constructor and next=10, without a new
+canonicality premise. Reverse transport compares one arbitrary multiplication
+step, then transports the loop; no concrete buffer is evaluated. All passing
+roots print standard axioms only. Eight passes, six failures.
+
+L860's kernel memory error at concrete one-slot reduction was replaced by a
+named abstract installed-one law (L861–862). L863's concrete mapped callback
+reduction hit the kernel memory limit; abstract erase_index (L864) and generic
+callback composition (L868) replace that shape. Neither was rerun unchanged
+or with larger caps. Two offset tactic approaches (L866/L867) are retired;
+the failed source remains .lean.txt, excluded from imports. L871/L872 type
+errors in QueryDomain were corrected via explicit deref and unshadowed list
+membership (L873). No whole-dictionary congruence or buffer unfolding added.
+
+### Run 5b T4 OPEN at cap (20/20 scopes L874–893)
+
+Exact open goal: RSL.TAS.NND_A1 (NNH_Run5bHost.S_host L0 copy std) VL P C.
+The full canonical VL/P current returned-path association and 328/345 source
+composition remain unproved. Specifically: scan/semantic-Verified linkage,
+Prepared input/output ports, geometry/query/batch/checkpoint continuations,
+common/afterstate nominal association, and the global weak Err implication.
+No A1 field is installed and no conditional G0 consumer is introduced.
+
+Compiled support: CurrentShape.parse L875; adapter slot/current inventory L876;
+PreparedCore.installed L877; PreparedSlot.source L878; ReturnedGraph L879;
+CurrentExpand.semantic L881; PreparedDigest.digest L882; CurrentValues.slot
+L887; CurrentInitial.returned L886; PreparedModel.source L889 (FULL Result,
+errors and scratch writeback against NGN_Emitted.prepared actual);
+CurrentPending.source L891; CurrentView.returned L892; A1Domain.returned L893.
+All are NNH_Run5b names under AspisR1, and all passing printed axioms are
+standard only. The canonical caller-domain theorem carries the original R4
+and proves P1880 at the SAME decoded statement, without adding a clause.
+
+Weak Err restatement at the corrected physical signature, BEFORE:
+returned RSL Err -> exists pe, model1 = ok(Err pe).
+AFTER: returned RSL Err -> not exists saved, model1 = ok(Ok saved).
+The quantifiers, carriers and Ok arm are unchanged. This is the owner-approved
+NNH_AcceptanceSig/RecordSig restatement already used in T1; it does not claim
+exact error-payload agreement. Completing the global implication still needs
+the current/source composition; ReturnedGraph.not_ok is only a local lemma.
+
+Fourteen passes, six proof/type failures. L874 fixed an already-rewritten
+branch; L880 removed a nonexistent expansion function name (L881 semantic,
+L887 actual values-owned slot); L884/L885 nominal-variant rewrites retired
+and replaced by source congruence (L886); L888 replaced accumulator rewrite
+with explicit slice roundtrip (L891); L890 added the exact bytes-carrier length
+unfolding (L892). No memory/timeout/cap increase and no unchanged failed rerun.
+
+### Run 5b T5 OPEN at cap (6/6 scopes L894–899)
+
+Exact goal: forall c n1 n2, Extraction -> Accepted1 -> Game -> Queries ->
+NNH_Run5bSplit.rest L copy c n1 n2. CLOSED components:
+AspisR1.NNH_Run5bRestSetup.produce (L895) and RestClaims.produce (L896),
+standard axioms only. No accepted2 or Root0 is used. Physical copy/events/
+protection/trace/recorder/S6N and the final Rest/Split assembly remain OPEN.
+
+L894's monolithic proof hit the kernel memory limit. It was replaced with
+three independently typed groups. L897 exposed missing namespace openings;
+L898 still lacked S2W_EntryWriteHistory.payloadBytes and also hit kernel
+memory/recursion errors. L899 isolates the copy fact but repeats the missing
+opening and reaches default recursion depth. This input mistake was avoidable;
+no failed term is credited and no inference of mathematical falsehood is made.
+The exact failed source/logs are retained in the attempt directories. Namespace-
+corrected Physical/Copy drafts and the proposed named assembly are .lean.txt,
+explicitly uncompiled at the cap, excluded from imports. No heartbeat, recursion,
+-M or cgroup cap was raised. No unchanged killed/timed-out job was rerun.
+
+### Run 5b T6 CLOSED (2/2 scopes L900–901)
+
+AspisR1.NNH_DigestSyntaxTransport.o1 PASS L901: standard axioms, 26.167058s,
+6827320 KiB peak RSS, swap0. lower/child/first/second/account also audited
+standard-only. Source exactly matches the retained .lean.txt archive. The
+archive already omitted the TWO redundant final child tactics present in
+L832. L900 mistakenly also removed the still-required all_goals try exact rfl,
+leaving op10/op11 unsolved; L901 restores that line, and does not repeat the
+failed source. O1 and NNQ_HostDigest.o2 are now available for T7. No charge
+application or failure-inclusion claim is inferred merely from O1.
+
+### Run 5b T7 PARTIAL: SAME host charge closed, deployed inclusion OPEN
+
+L903 NNH_Run5bRecorderFixed.fixed uses the compiled O1 and NNQ_HostDigest.o2
+(owner module NNQ_O2, L038) to identify the H-indexed host recorder with ONE
+fixed program at an arbitrary fixed anchor. No hash/clock equality is assumed.
+L904 NNH_Run5bHostCharge.event_fixed identifies E_rec with that program's event
+for EVERY H; bound applies NNH_RecordedCharge.bound to that SAME program,
+charging accountLoss(Q0+Q1) once. L905 NNH_Run5bFullSpace.realizes/same_event
+specialize to ctxB with unrestricted wOf and arbitrary Fixed (including arbitrary
+adaptive a); Realizes is a conclusion by construction, never a filter/premise.
+No Expect on the failure indicator, conditioning, hidden loss or joint program
+that determines World is introduced. All five roots have standard axioms only.
+
+NNH_DeployedOuter / TASB.fail_sub_rec at this host is NOT delivered: the
+actual Failure -> E_rec inclusion still needs a1.stage1, a2.stage2, sp.rest,
+and the later ledger30/G1b final instantiation. A bound on E_rec is not yet a
+bound on actual deployed Failure. Owner condition (4) remains RECORDED, not
+proved; its verdict belongs to G0 final. No conditional G0 theorem was added.
+
+L902 was NOT LAUNCHED: own import used theorem namespace NNQ_HostDigest as a
+module name; NNQ_L038 names its actual owner NNQ_O2. The admission passed but
+the dependency fingerprint rejected the nonexistent object before systemd.
+Corrected import L903 passed. Exact rejected input is NNH_L902_input.lean.txt;
+this is an owned-input repair, not a host infrastructure fault or a scope.
+
+### Run 5b focused combined import and final boundary
+
+NNH_Run5bCombined PASS L906: exit0, 28.978669377975166s, peak RSS6915900KiB,
+swap0, 6G/8G/Swap0/Tasks64, Lean v4.32.0 -j1 -M7000 -DElab.async=false.
+Imports run-5 ContinuationCombined + S5FocusedHost, ledger29, NNR/NNQ/NNP/NNO
+read-only deliveries and every passing new semantic module. All printed new
+roots are standard-only. This is a focused cached import, NOT G0 final, a new
+retained export, a raw ax2 audit, physical non-vacuity or a manifest replay.
+
+Final stage table:
+| Step | Status | Exact delivery or open field |
+|---|---|---|
+| T1 | CLOSED (11/14) | NNH_Run5bHost, Exec, Headline/HeadlineB, Acceptance a3-a5, Binder, Clock; L843-853 |
+| T2 | CLOSED (6/16) | NNH_Run5bNMF.nmfB; NMFRemaining.remaining; L858-859 |
+| T3 | OPEN (14/14) | NND_A2.stage2; tx2Op11/common geometry/query/Merkle/finish parent composition |
+| T4 | OPEN (20/20) | NND_A1.stage1; full current VL/P path, 328/345 composition and global weak Err implication |
+| T5 | OPEN (6/6) | TFM.Split.rest; physical facts and named assembly; Setup/Claims L895-896 pass |
+| T6 | CLOSED (2/2) | NNH_DigestSyntaxTransport.o1; L901 |
+| T7 | PARTIAL (4/6) | host SAME-event single charge L903-905 pass; deployed_outer / fail_sub_rec application OPEN |
+
+63/76 actual scopes:42 pass,21 failed proof/type checks;0 Kani,0 extraction.
+Thirteen scopes remain globally. T1/T2/T6 have no unfinished assigned member;
+T3/T4/T5 exhausted their binding per-step caps; T7's remaining deployed-inclusion
+member requires those OPEN fields and later G0 roots. Its spare scopes cannot
+be used to bypass the other caps, to repeat unchanged green checks, or to launch
+the expressly excluded G0/16GiB job. This is a per-step/dependency stop, not total
+budget exhaustion. Next unused ID L907. Every actual scope had fresh exit0 AND
+allowed:true admission, host count<6 and disk>=40GB; no transport retry/host
+refusal or timeout required. Read-only input caches and sibling worktrees stayed untouched; the owned
+host workspace received NNH-prefixed outputs only.
+
+NNH_RUN5B_validate.py passes all63 receipts, source snapshots, source revision,
+wall/RSS/swap, admission/share/disk/caps and accepted #print axioms. The317
+selected direct/Aeneas object/sidecar hash pins have317 variants, retained in
+NNH_RUN5B_IMPORTED_PINS.json.xz plus its uncompressed .sha256. Existing coherent
+cache manifests are reused and fingerprinted; no full closure rebuild is claimed.
+NNH_RUN5B_COMPILE.tsv is the one-line transcript summary; exact commands and
+complete diagnostics remain in each receipt directory. No source exceeds20MB. The staged whitespace check reports trailing blank
+lines in captured barrier stdout logs only; raw diagnostic bytes are retained.
+
+G0 final still must fill sp.rest, a1.stage1, a2.stage2; install the ledger30
+Impl/row bundle and G1b NMS_Roots.r241 at the SAME weak library, NMV_Roots.g2,
+and its canonical parent folds; then instantiate all remaining TAS interfaces
+and NNE_EntryRep.route1/route2 coherently. Existing T1/T2 roots are candidates for
+those concrete fields, not a verdict on the full gate. Apply TASB.fail_sub_rec
+and EVB.no_second_charge at ctxB to obtain NNH_DeployedOuter, connect its SAME
+failure event to the already proved charge and failureModel<=total chain,
+and perform G0's final statement/trust/non-vacuity/raw-axiom/manifest checks.
+Do not mark condition (4) proved from these partial inputs.
+
+No shipped files, RSL specs, trust rows, release parameters or ELFs changed;
+no rebuild trigger. Inherited default f8c0ec72..., devnet63ad3e9c..., Pool
+e0e49c34... are recorded unchanged, not newly reproduced. No push or key cleanup.
+The headline remains AspisR1.RPx_Deployed.deployed, frozen3, L154 parameter,
+narrowed D188 and100-bit PER-ATTEMPT with privacy/two transactions unchanged.
+
+target not yet established
