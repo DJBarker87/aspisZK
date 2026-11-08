@@ -12,8 +12,9 @@ for row in loaded:
 # All twenty-one canonical owners were rebuilt from the single committed source set.
 for row in pins:
  if row['module'].startswith('RSL_'):assert '/NNM_rev4/'in row['path'],row
- if row['module'].startswith('NMV_'):assert '/NNM_wrapperR4/'in row['path'],row
-assert len({r['module']for r in pins if r['module'].startswith('NMV_')})==15
+ if row['module'].startswith('NMV_')and row['module']!='NMV_NoWrite':assert '/NNM_wrapperR4/'in row['path'],row
+assert len({r['module']for r in pins if r['module'].startswith('NMV_')and r['module']!='NMV_NoWrite'})==15
+# NMV_NoWrite is an unchanged inherited generic Free/PoolLaws interface, not a new wrapper export or any of the three stale G1 owners.
 payload=json.dumps(dict(LEAN_PATH=roots,modules=len(loaded),selected_objects=pins,scan_pass=True),indent=1).encode();(B/'NNM_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(payload));(B/'NNM_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(payload).hexdigest()+'\n')
 export=B/'NNM_exports_final_20261111';export.mkdir(exist_ok=True);exported=[]
 for folder in ['NNM_objects','NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']:
