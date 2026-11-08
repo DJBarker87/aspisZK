@@ -8,7 +8,13 @@ ActiveRead20 (56214) reuses the named TLS source preparation contract and
 existing no-trap transport to prove the original adopted history at154, and
 source/physical ACTIVE=false there. This is a native binding prefix, not an
 A-owned original→f6 join. Failed56208..56213 sources/receipts retained; changed
-before retry, no failed theorem accepted. Next56215 in progress. Full native
+before retry, no failed theorem accepted. ActiveRequest20/ActivePoll20/ActiveOrigin20/ActiveDelivery20/ActiveConsume20
+(56216/18/21/19/23) establish the actual original469 poll and complete
+consumption at155→156. ActiveTrace20 and NativePoll20/LocalReturn20
+(56224/26/28) supply symbolic source transport and native administration.
+Active27720 (56231) and ActiveHistory16020 (56233) reuse the named277
+semantics at original159→160, retaining the same world, full stores and origins.
+56234 is in progress. Full native
 295/454, callback consumption/source activation/run, Values, ownership14756,
 universal contracts and final joint witness remain OPEN. No strict audit yet.
 
