@@ -45,9 +45,11 @@ theorem loop (D : VTop_Stages.aspis_core.digest.Digest32 Unit) (H : Bytes → As
        rw [NNY_MerkleTerminalFrame.source _ _ proof root () tree lo n slot count n keys i v (by simp)]
        exact src.symm.trans read
      have target := terminal D H agree proof root tree lo n slot count keys i oi v ov slotBound atEnd
-     rw [NNY_MerkleTerminalFrame.source _ _ proof root () tree lo n slot count cursor keys i v more,
-      ←NNY_MerkleTerminalFrame.source _ _ proof root () tree lo n slot count n keys i v (by simp)]
-     exact target
+     have dst := NNY_MerkleTerminalFrame.source Port4B_Install.leaves
+      (VTop_Checkpoint.digest D) proof root () tree lo n slot count cursor keys i v more
+     have dstEnd := NNY_MerkleTerminalFrame.source Port4B_Install.leaves
+      (VTop_Checkpoint.digest D) proof root () tree lo n slot count n keys i v (by simp)
+     exact dst.trans (dstEnd.symm.trans target)
 #print axioms loop
 end AspisR1.NNY_MerkleShared
 end

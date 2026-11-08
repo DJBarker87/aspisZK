@@ -1,0 +1,47 @@
+{"attempt": "NNY_L023", "exit_status": 1, "wall_seconds": 27.447592802112922, "peak_rss_kib": "6817140", "swaps": "0", "print_axioms": ["'AspisR1.NNY_MerkleTreeFrame.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNY_MerkleTreeFrame.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNY_generated/NNY_MerkleTreeFrame.lean:25:11: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (lo, hi) ← if True then ok (0#usize, 10#usize) else ok (10#usize, 22#usize)
+    let a ← base.op4 queries lo (Usize.wrapping_sub hi lo) tree
+    let keys ← base.op5 a (Usize.wrapping_sub hi lo)
+    let (idx1, val1, pending_return) ←
+      verifier.candidate.batch_tree_loop
+          { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault, op1 := fun {T E} => Port3_BatchStd.okOr,
+            op2 := base.op2, op3 := base.op3, op4 := base.op4, op5 := base.op5, op6 := @Ops.op6 base,
+            op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+
+...
+9 := Array.index_usize,
+            op10 := @Ops.op10 base, op11 := base.op11,
+            op12 :=
+              ok
+                (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                  Port3_BatchStd.install._proof_6),
+            op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+          D proof root tree idx val () lo (Usize.wrapping_sub hi lo)
+          ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) keys 0#usize 0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    do
+    let a ← base.op4 queries 10#usize 12#usize tree
+    let keys ← base.op5 a 12#usize
+    let __x ←
+      verifier.candidate.batch_tree_loop
+          { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault, op1 := fun {T E} => Port3_BatchStd.okOr,
+            op2 := base.op2, op3 := base.op3, op4 := base.op4, op5 := base.op5, op6 := @Ops.op6 base,
+            op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+            op10 := @Ops.op10 base, op11 := base.op11,
+            op12 :=
+              ok
+                (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                  Port3_BatchStd.install._proof_6),
+            op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+          D proof root tree idx val () 10#usize 12#usize (Usize.wrapping_add 3#usize tree) keys 0#usize 0#usize
+    match __x.2.2 with
+      | none => fail Error.panic
+      | some r => ok (r, __x.1, __x.2.1)
+'AspisR1.NNY_MerkleTreeFrame.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleTreeFrame.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rce712aba2f44483d92d92a5d3047570d.scope; invocation ID: 6118d718135b46b5b35afa1e5578f281

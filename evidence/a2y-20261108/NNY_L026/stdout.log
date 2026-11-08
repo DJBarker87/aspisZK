@@ -1,0 +1,46 @@
+NNY_generated/NNY_MerkleTreeFrame.lean:29:1: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NNY_generated/NNY_MerkleTreeFrame.lean:39:28: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.36 = ?m.36
+but is expected to have type
+  Usize.wrapping_sub 10#usize 0#usize = 10#usize
+in the application
+  head base D proof queries root 0#usize tree 0#usize 10#usize 10#usize (Usize.wrapping_add 0#usize tree) idx val
+    (Eq.mpr (id (congrArg (fun _a => _a = ok (0#usize, 10#usize)) (if_pos rfl)))
+      (Eq.refl do
+        let i ← (Port3_BatchStd.install base).op13
+        ok (0#usize, i)))
+    rfl
+NNY_generated/NNY_MerkleTreeFrame.lean:48:67: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.39 = ?m.39
+but is expected to have type
+  (Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree = Usize.wrapping_add 3#usize tree
+in the application
+  head base D proof queries root 1#usize tree 10#usize 22#usize 12#usize (Usize.wrapping_add 3#usize tree) idx val
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok (10#usize, 22#usize))
+          (if_neg
+            (have this := of_decide_eq_true (id (Eq.refl true));
+            this))))
+      (Eq.refl do
+        let i ← (Port3_BatchStd.install base).op13
+        ok (i, 22#usize)))
+    ?m.37 rfl
+'AspisR1.NNY_MerkleTreeFrame.head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleTreeFrame.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleTreeFrame.one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
