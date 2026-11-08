@@ -1,0 +1,123 @@
+{"cohort": "w3", "attempt": 55480, "target": "PV_LIB_SPEC_TlsAt55", "source_revision": "3d877ab0fa196c77f485af0d1f12ce2b40f2f208", "source_sha256": "7185a47d04fda023bb6d1940921f984ca174ddf9930f91b5f4622379d4938bd8", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10966, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55480", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55480.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_TlsAt55.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean", "7000"], "exit": 1, "wall_seconds": 2.7587811946868896, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_TlsAt55.wait' depends on axioms: [propext]", "'PV_LIB_SPEC_TlsAt55.origin' depends on axioms: [propext]", "'PV_LIB_SPEC_TlsAt55.at55' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt55.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt55.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt55.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt55.original55' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.72", "peak_rss_kbytes": "4786756", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:15:90: error: unsolved goals
+lookup : PV_LIB_SPEC_Full.programs token = none
+⊢ PV_LIB_SPEC_TlsAt54.store53.nextActivation = 6
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:20:88: error: unsolved goals
+⊢ ((List.find? (fun x => decide (x.caller = 5) && decide (x.request = PV_STX2_Native.Request.child token 6 [initValue]))
+          ({ site := PV_LIB_SPEC_TlsRequest15.site, caller := 5,
+              request := PV_STX2_Native.Request.child token PV_LIB_SPEC_TlsAt54.store53.nextActivation [initValue] } ::
+            PV_LIB_SPEC_TlsOriginal15.issued)).bind
+      fun origin =>
+      some
+        { site := origin.site, occurrence := 0, arguments := [initValue], caller := 5,
+          request := PV_STX2_Native.Request.child token 6 [initValue] }) =
+    some
+      { site := PV_LIB_SPEC_TlsRequest15.site, occurrence := 0, arguments := [initValue], caller := 5,
+        request := PV_STX2_Native.Request.child token 6 [initValue] }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:28:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ResourceHistory.context at54 config wait
+in the target expression
+  (match some (config, wait) with
+    | none =>
+      have out :=
+        PV_LIB_SPEC_ReachedNative14.control (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters at54.state;
+      { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue at54.state out at54.issued,
+        consumed := at54.consumed }
+    | some (c, wait) =>
+      match PV_LIB_SPEC_ResourceHistory.context at54 c wait with
+      | none =>
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c.store, world := at54.state.current.world,
+                  events := at54.state.current.events },
+              suspended := at54.state.suspended },
+          issued := at54.issued, consumed := at54.consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match PV_LIB_SPEC_ReachedNative14.answer (cut stack) bound c wait.request at54.state.current.world with
+        | none =>
+          have r :=
+            PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+              wait.request at54.state.current.world;
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := r.world,
+                    events := at54.state.current.events ++ r.events },
+                suspended := at54.state.suspended },
+            issued := at54.issued, consumed := ctx :: at54.consumed }
+        | some val =>
+          have out := PV_LIB_SPEC_ReachedNative14.transition (cut stack) bound c at54.state;
+          { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue at54.state out at54.issued,
+            consumed := ctx :: at54.consumed }) =
+    at55
+
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+⊢ (match some (config, wait) with
+    | none =>
+      have out :=
+        PV_LIB_SPEC_ReachedNative14.control (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters at54.state;
+      { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue at54.state out at54.issued,
+        consumed := at54.consumed }
+    | some (c, wait) =>
+      match PV_LIB_SPEC_ResourceHistory.context at54 c wait with
+      | none =>
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c.store, world := at54.state.current.world,
+                  events := at54.state.current.events },
+              suspended := at54.state.suspended },
+          issued := at54.issued, consumed := at54.consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match PV_LIB_SPEC_ReachedNative14.answer (cut stack) bound c wait.request at54.state.current.world with
+        | none =>
+          have r :=
+            PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+              wait.request at54.state.current.world;
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := r.world,
+                    events := at54.state.current.events ++ r.events },
+                suspended := at54.state.suspended },
+            issued := at54.issued, consumed := ctx :: at54.consumed }
+        | some val =>
+          have out := PV_LIB_SPEC_ReachedNative14.transition (cut stack) bound c at54.state;
+          { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue at54.state out at54.issued,
+            consumed := ctx :: at54.consumed }) =
+    at55
+'PV_LIB_SPEC_TlsAt55.wait' depends on axioms: [propext]
+'PV_LIB_SPEC_TlsAt55.origin' depends on axioms: [propext]
+'PV_LIB_SPEC_TlsAt55.at55' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.original55' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

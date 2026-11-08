@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:33:19: error: don't know how to synthesize implicit argument `A`
+  @PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin ?m.8
+context:
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+⊢ Type
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:33:6: error: failed to infer `let` declaration type
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt55.lean:28:108: error: unsolved goals
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+⊢ (match
+      PV_LIB_SPEC_ReachedNative14.answer (cut stack)
+        { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+          control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+          needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+          resources := fun {A} =>
+            PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+              origin,
+          encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+          loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+          siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+          environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+        config wait.request at54.state.current.world with
+    | none =>
+      {
+        state :=
+          {
+            current :=
+              { status := Status.undefined none config.store,
+                world :=
+                  (PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+                      wait.request at54.state.current.world).world,
+                events :=
+                  at54.state.current.events ++
+                    (PV_THR2_OwnUniformResourceHandler.lift
+                        PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native wait.request
+                        at54.state.current.world).events },
+            suspended := at54.state.suspended },
+        issued := at54.issued, consumed := origin :: at54.consumed }
+    | some val =>
+      {
+        state :=
+          PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+            { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+              control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+              needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+              resources := fun {A} =>
+                PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                  origin,
+              encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+              loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+              siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+              environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+            config at54.state,
+        issued :=
+          PV_LIB_SPEC_ControlRuntime.recordIssue at54.state
+            (PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+              { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                resources := fun {A} =>
+                  PV_LIB_SPEC_ResourceHistory.allocationResources
+                    PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin,
+                encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+              config at54.state)
+            at54.issued,
+        consumed := origin :: at54.consumed }) =
+    at55
+'PV_LIB_SPEC_TlsAt55.wait' depends on axioms: [propext]
+'PV_LIB_SPEC_TlsAt55.origin' depends on axioms: [propext]
+'PV_LIB_SPEC_TlsAt55.at55' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.ordinary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.context' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt55.original55' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
