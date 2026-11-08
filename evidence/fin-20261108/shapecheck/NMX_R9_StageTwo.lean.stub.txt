@@ -1,0 +1,17 @@
+import LIBB_PoolLib
+import LIBB_V2Star
+-- SCRATCH SHAPE STUB: abbrevs verbatim from tx2-auth-20261111/NMX_R9_StageTwo.lean;
+-- stage2/root are opaque with the EXACT signature of the real declarations.
+namespace NMX_R4_Authentication
+axiom Choices : Type
+end NMX_R4_Authentication
+noncomputable section
+namespace NMX_R9_StageTwo
+open RSL
+abbrev L := LIBB_PoolLib.library
+abbrev D := LIBB_PoolLib.deployed
+abbrev V := LIBB_V2Star.library
+axiom stage2 (choices : NMX_R4_Authentication.Choices) (a : TX2_241.Args) (env : Env) :
+ Obs (Except ProgramError Unit)
+axiom root (choices : NMX_R4_Authentication.Choices) : TX2_241.RowSpec_241 L D V (stage2 choices)
+end NMX_R9_StageTwo

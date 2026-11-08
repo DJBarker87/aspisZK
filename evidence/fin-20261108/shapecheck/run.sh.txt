@@ -1,0 +1,16 @@
+#!/bin/sh
+set -u
+mkdir -p .lake/build/lib/lean
+: > COMPILE.tsv
+for m in $(cat order.txt); do
+  f=src/$m.lean
+  out=$( { /usr/bin/time -l lake env lean -o ".lake/build/lib/lean/$m.olean" "$f" ; } 2>&1 )
+  rc=$?
+  wall=$(printf '%s\n' "$out" | awk '/ real /{print $1}')
+  rss=$(printf '%s\n' "$out" | awk '/maximum resident set size/{print $1}')
+  swaps=$(printf '%s\n' "$out" | awk '/ swaps$/{print $1}')
+  src=$(shasum -a 256 "$f" | cut -c1-16)
+  printf '%s\texit=%s\twall_s=%s\tpeak_rss_bytes=%s\tswaps=%s\tsrc_sha256_16=%s\n' "$m" "$rc" "$wall" "$rss" "$swaps" "$src" >> COMPILE.tsv
+  case $m in FIN_*|NVR_Folds) printf '== %s\n%s\n' "$m" "$(printf '%s\n' "$out" | grep -v '^ *[0-9]\+  [a-z]' | grep -v ' real ')";; esac
+  if [ $rc -ne 0 ]; then printf '%s\n' "$out" | head -40; exit $rc; fi
+done

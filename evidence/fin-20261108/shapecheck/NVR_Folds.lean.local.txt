@@ -1,0 +1,81 @@
+import NVR_Dispatch
+import TAS_Interfaces
+set_option autoImplicit false
+namespace NVR_Folds
+open RSL
+open RSL.TX2_241 (V2Lib)
+open RSL.TX1_345 (S1Lib)
+open NVR_Dispatch
+/-- Exclude lifecycle branches using the parent's own admitted-input clause.
+This is a relation equality, not native=model for the stage2 child. -/
+theorem process_ref (L : PoolLib) (D : DeployedIds) (V : V2Lib)
+    (S1 : TX2_221.Stage1) (a : TX2_221.Args) (s : SdkState)
+    (had : TX2_221.admitted a.data = true) :
+    TX2_221.Ref L D V S1 a s =
+      if TX2_221.stage1Route a.data then
+        Spec.call (fun x : TX2_221.Args × SdkState => S1.dom x.1 x.2)
+          (fun x => S1.ref x.1 x.2) (a, s)
+      else
+        Spec.call (fun x : TX2_221.Args × SdkState => TX2_240.Domain V x.1 x.2)
+          (fun x => TX2_240.Ref L D V x.1 x.2) (a, s) := by
+  unfold TX2_221.Ref
+  rcases (admitted_iff _).mp had with h1 | hq
+  · rcases TAS.stage1_cons h1 with hd | hd <;> rw [hd] <;> rfl
+  · obtain ⟨t, hd⟩ := TAS.asq8_cons hq
+    rw [hd]
+    rfl
+
+/-- Full TX1:333 process fold; the SAME body covers both admitted routes.
+Both complete child RowSpecs are explicit parameters, at the original inputs.
+V is arbitrary, including the weak Root0-free library. -/
+theorem process_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib)
+    (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child)
+    (stage1 : TX1_344.RowSpec_344 VL P C f1)
+    (stage2 : TX2_240.RowSpec_240 L D V f2) :
+    TX1_333.RowSpec_333 L D V VL P C (process f1 f2) := by
+  intro a s env own
+  rw [process_ref L D V _ a s own.1]
+  by_cases hs : TX2_221.stage1Route a.data = true
+  · simp only [hs, if_true, process]
+    exact ⟨own.2.2 hs, stage1 a s env (own.2.2 hs)⟩
+  · have hf : TX2_221.stage1Route a.data = false := Bool.eq_false_iff.mpr hs
+    simp only [hf, Bool.false_eq_true, if_false, process]
+    exact ⟨own.2.1 hf, stage2 a s env (own.2.1 hf)⟩
+
+/-- TX2:221 is definitionally the same complete function obligation. -/
+theorem process_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib)
+    (P : PreparedNew VL) (C : S1Lib VL) (f1 f2 : Child)
+    (stage1 : TX1_344.RowSpec_344 VL P C f1)
+    (stage2 : TX2_240.RowSpec_240 L D V f2) :
+    TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) (process f1 f2) :=
+  process_tx1 L D V VL P C f1 f2 stage1 stage2
+
+/-- Entry discharges every process caller clause from its own original inputs.
+Non-admitted instructions return the exact silent error with unchanged state. -/
+theorem entry_tx2 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib)
+    (P : PreparedNew VL) (C : S1Lib VL) (f : Child)
+    (child : TX2_221.RowSpec_221 L D V (TX1_344.asStage1 VL P C) f) :
+    TX2_213.RowSpec_213 L D V (TX1_344.asStage1 VL P C) (entry f) := by
+  intro a s env own
+  unfold TX2_213.Ref
+  by_cases ha : TX2_221.admitted a.data = true
+  · simp only [ha, Bool.not_true, Bool.false_eq_true, if_false]
+    have dom : TX2_221.Domain V (TX1_344.asStage1 VL P C) a s :=
+      ⟨ha, own.1 ha, own.2 ha⟩
+    refine ⟨dom, ?_⟩
+    simpa only [entry, ha, if_true] using child a s env dom
+  · have hf : TX2_221.admitted a.data = false := Bool.eq_false_iff.mpr ha
+    simp [hf, entry, Spec.pure]
+
+/-- TX1:330 is definitionally the same complete entry obligation. -/
+theorem entry_tx1 (L : PoolLib) (D : DeployedIds) (V : V2Lib) (VL : VLib)
+    (P : PreparedNew VL) (C : S1Lib VL) (f : Child)
+    (child : TX1_333.RowSpec_333 L D V VL P C f) :
+    TX1_330.RowSpec_330 L D V VL P C (entry f) :=
+  entry_tx2 L D V VL P C f child
+#print axioms process_ref
+#print axioms process_tx1
+#print axioms process_tx2
+#print axioms entry_tx1
+#print axioms entry_tx2
+end NVR_Folds

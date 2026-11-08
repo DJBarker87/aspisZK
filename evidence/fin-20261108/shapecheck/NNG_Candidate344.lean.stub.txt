@@ -1,0 +1,13 @@
+import LIB_Instances
+import NMV_ConcreteWindows
+-- SCRATCH SHAPE STUB: allocation/producer/candidate shapes verbatim from
+-- tx1-principal-20261111/NNG_Candidate344.lean; the 345 producer is opaque.
+noncomputable section
+namespace AspisR1.NNG_TotalProducer345
+axiom producer : RSL.TX1_345.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError RSL.Bytes)
+end AspisR1.NNG_TotalProducer345
+namespace AspisR1.NNG_Candidate344
+def allocation : NMV_ConcreteWindows.Allocation := fun _ _ _ _=>true
+def producer := NMV_ConcreteWindows.stage1 allocation NNG_TotalProducer345.producer
+axiom candidate : RSL.TX1_344.RowSpec_344 LIB_Instances.VL LIB_Instances.P LIB_Instances.C producer
+end AspisR1.NNG_Candidate344
