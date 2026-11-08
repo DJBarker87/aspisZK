@@ -1,3 +1,28 @@
+# Lane A session11 — D999 target refocus (authoritative current order)
+
+OwnInit concerns the run up to the ThreadInit box at f361/14756. Work only on
+that prefix and the source7 closure, in dependency order: corrected Range93
+at f15/3447, f6 caller history, f361 through14756, then lane C joint-witness
+source-table needs. Historical session10/9/8 ordering below is superseded.
+
+DEFERRED-POST-TARGET (LOG D999, thread-5):
+
+- Last-strong Arc cleanup486/584/248 and implicit weak guard661/683/free when
+  reached after14756.
+- Every thread-end destructor, payload/SpawnHooks destructor, scope-end teardown,
+  handle/join/drop path and handles Vec destruction reached after14756.
+- All f361 child sites beyond14756; PLIB_MAP.json records exact per-slot sites.
+
+Reason for every deferral: its result/effects are downstream of the OwnInit
+ThreadInit-box target (thread-5). Existing audited modules and full-answer
+branches are retained. A destructor at a reached prefix site is NOT deferred
+by its function name, nor is a failure before14756 erased. Shared slots keep
+historical proof statuses; target disposition is a separate field.
+
+Range prefix assembly is in progress. f6/f361 continuous original-entry
+history, full source-value/resource/frame binding and lane C's complete joint
+witness remain open. No endpoint/T premise or row closure is claimed.
+
 # Remaining obligations after Lane A session10 — PARTIAL
 
 Import PV_LIB_A_StoreActionTable10 for the PARTIAL v2DestructionPrograms10 /

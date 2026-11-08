@@ -1,3 +1,17 @@
+# Current scope: Lane A session11 (LOG D999)
+
+OwnInit ends at the ThreadInit box, f361/14756. Last-strong Arc cleanup and
+all destructor occurrences after14756 (thread-end, scope-end, handles) are
+**DEFERRED-POST-TARGET**, because their effects occur downstream of this target
+(thread-5). This overrides the historical session10 destructor-first ordering.
+PLIB_MAP.json retains historical proof statuses and records separate target
+scope dispositions, including exact f361 sites. Mixed slots retain all prefix
+obligations; no pre-target failure or destructor is silently omitted.
+
+Work order: corrected Range93/f15 history, f6, f361 through14756, then lane C's
+remaining table requirements for its full OwnInit joint witness. Source7
+closure remains included. No endpoint premise or row is closed by a deferral.
+
 # PLIB child behavior map
 
 Target not yet established. Every edge in both root call closures is included, including transitive CLOSED-provider dependencies. Facets follow the edges. CLOSED ledger status is preserved; it does not certify that a graph/value/representation adapter exists.
