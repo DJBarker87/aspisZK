@@ -181,3 +181,5 @@ Session5 47402: PreActionTraceV2 passes after repairing47401 (zero/add and neutr
 Session5 47404: CellSourceV2 passes (47403 receiver qualification repaired). Transparent Cell take641 and bool-only set504 supersede wrapped-only drafts; arbitrary-T set includes Drop and remains unsupported.
 
 Session5 47405: OwnerStoreV3 passes; intercepts504/641 ahead of old wrapped meanings, exact transparent641 and only bool504. Arbitrary-T504 is unsupported, never silently full-call semantics. Agreement remains against OWNER-aware base; full destructor adequacy open.
+
+Session5 47406: PreActionTraceV3 passes on the final Cell-corrected candidate. Source/control neutrality remains explicit at every step.
