@@ -147,3 +147,18 @@ Final accounting:400/400 actual authorized scopes completed;164 after restart.
 L400 retention and L401 export-first focused import both pass. Every remaining
 item above is still mathematically open here; none is excused by a library
 wait or relabelled as delivered. No Kani/extraction or new trust is needed.
+
+
+## Run 5 authoritative stop (2026-11-08)
+
+Target not yet established. S0 PASS L707; P1 PASS L708; P2 FAIL with
+compiled counterexample L709. See NNH_RUN5_PREFLIGHT.md. Literal op43 is
+total LIB_Env.hashv env, whereas headline hashv may diverge under the
+existing P1/RuntimeSyscall assumptions. NNH_PreflightDigest proves the
+pointwise complete-reply equality equivalent to hashv parts=LIB_Env.hashv
+env parts, and refutes it with an always-diverging allowed syscall.
+The brief explicitly requires stopping at this mismatch. P3/P4/P5 NOT RUN;
+S2–S8 NOT ATTEMPTED; no totality premise or op43 retargeting installed.
+Owner condition(4) remains unproved at the host. Used3/160 fresh scopes;
+157 remain unspent because of the explicit P2 stop, not budget exhaustion.
+No new export/final consumer/raw audit/manifest replay;16GiB reserved unused.

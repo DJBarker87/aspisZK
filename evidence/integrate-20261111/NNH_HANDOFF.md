@@ -413,3 +413,33 @@ compose A2, then A1 Ok/weakErr and literal-host/NMF_B/ExecB/averaging.
 Ledger26 refresh remains26980b13109f:136 CREDITED and plugged;
 217 REJECTED pending Kani controls,234 uncredited mathematical candidate.
 No new principal/native row is credited by this job.
+
+
+## Run 5 started 2026-11-08
+
+Binding plan: evidence/int-plan-20261107/INP_NNH_BRIEF.md; owner amendment
+condition (4) requires pointwise Failure inclusion at the actual recorder and
+a compiled link to its bound at the literal host. Target not yet established.
+Fresh allowance160 after700 prior actual scopes; S0 starts L707.
+Step caps2/10/16/18/55/30/12/4/10; no exports before S8.
+Only the owned runner budget guard changed700→860; validation unchanged.
+
+S0 PASS L707: corrected ContinuationCombined compiled exit0,11.528838s,
+peakRSS6517428KiB,swap0; no export. Own source import traversal found neither
+NNH_Stage1ZeroOk nor NNH_U64Bytes (516 visited modules; external source
+leaves reused, no fresh external-closure audit claimed).
+
+
+## Run 5 authoritative stop (2026-11-08)
+
+Target not yet established. S0 PASS L707; P1 PASS L708; P2 FAIL with
+compiled counterexample L709. See NNH_RUN5_PREFLIGHT.md. Literal op43 is
+total LIB_Env.hashv env, whereas headline hashv may diverge under the
+existing P1/RuntimeSyscall assumptions. NNH_PreflightDigest proves the
+pointwise complete-reply equality equivalent to hashv parts=LIB_Env.hashv
+env parts, and refutes it with an always-diverging allowed syscall.
+The brief explicitly requires stopping at this mismatch. P3/P4/P5 NOT RUN;
+S2–S8 NOT ATTEMPTED; no totality premise or op43 retargeting installed.
+Owner condition(4) remains unproved at the host. Used3/160 fresh scopes;
+157 remain unspent because of the explicit P2 stop, not budget exhaustion.
+No new export/final consumer/raw audit/manifest replay;16GiB reserved unused.
