@@ -146,3 +146,5 @@ violation or original-entry reachability is inferred.
 47442 passed PV_LIB_A_Emitted214. Exact emitted syntax only; no native adequacy or row closure.
 
 47443 passed PV_LIB_A_Emitted168. Exact emitted syntax only; no native adequacy or row closure.
+
+47444 passed PV_LIB_A_Emitted122. Exact emitted syntax only; no native adequacy or row closure.
