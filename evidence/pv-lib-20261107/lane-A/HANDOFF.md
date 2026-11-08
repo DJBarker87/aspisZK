@@ -127,3 +127,7 @@ CAS or Vec push/append: their pending projection is identity and completion
 must still apply the deferred operation. Those intermediate retry graphs earn
 no full-machine adequacy credit. A fixed deferred overlay follows; old models
 and all their results are retained unchanged.
+47436 passed DeferredActions.step: the recommended partial source machine.
+It re-evaluates only the four exact reply-dependent meanings CAS530/555 and
+Vec167/10; pending_start proves those have no committed source prefix. Every
+other staged operation retains its applied prefix. Original v2 stays importable.
