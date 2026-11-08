@@ -1,0 +1,98 @@
+"""Conditional worker-branch syntax pending owner acceptance of the patch.
+Generate intermediate trees from the retained option-on emission. Never run the
+translator, fill opaque bodies, or claim whole-function erasure.
+"""
+from pathlib import Path
+import hashlib,json,sys
+def string(s): return json.dumps(s,ensure_ascii=False)
+def data(x):
+    if x is None:return '.null'
+    if isinstance(x,bool):return '.boolean '+str(x).lower()
+    if isinstance(x,int):return '.number '+str(x)
+    if isinstance(x,str):return '.atom '+string(x)
+    if isinstance(x,list):return '.array ['+', '.join('('+data(v)+')' for v in x)+']'
+    return '.object ['+', '.join('('+string(k)+', ('+data(v)+'))' for k,v in x.items())+']'
+def arg(x):return '('+x+')'
+def place(x):
+    k=x['kind']; tag=next(iter(k))
+    if tag=='Local':return '.local '+str(k[tag])
+    if tag=='Global':return '.global '+str(k[tag]['id'])
+    assert tag=='Projection',x
+    p,q=k[tag]
+    if q=='Deref':q='.deref'
+    elif q=='PtrMetadata':q='.metadata'
+    else:
+        assert list(q)==['Field'],q
+        q='.field '+str(q['Field'][1])
+    return '.project '+arg(place(p))+' '+arg(q)
+def operand(x):
+    tag=next(iter(x));assert len(x)==1
+    if tag in ['Copy','Move']:return '.'+tag.lower()+' '+arg(place(x[tag]))
+    assert tag=='Const',x
+    return '.constant '+arg(data(x[tag]))
+def operands(xs):return '['+', '.join(arg(operand(x)) for x in xs)+']'
+def expr(x):
+    tag=next(iter(x));v=x[tag]
+    if tag=='Use':return '.use '+arg(operand(v[0]))
+    if tag in ['Ref','RawPtr']:
+        return ('.reference ' if tag=='Ref' else '.rawPointer ')+arg(place(v['place']))+' '+arg(operand(v['ptr_metadata']))
+    if tag=='Aggregate':return '.aggregate '+arg(data(v[0]))+' '+operands(v[1])
+    if tag=='UnaryOp':return '.unary '+arg(data(v[0]))+' '+arg(operand(v[1]))
+    if tag=='BinaryOp':return '.binary '+string(v[0])+' '+arg(operand(v[1]))+' '+arg(operand(v[2]))
+    assert tag=='NullaryOp',x
+    return '.nullary '+arg(data(v))
+def site(s):
+    i=s['identity'];return '⟨'+str(i['function'])+', '+str(i['statement'])+', '+data(i['path'])+'⟩'
+def block(b):return '['+',\n'.join(instruction(s) for s in b['statements'])+']'
+def instruction(s):
+    n=s['native'];tag=next(iter(n)) if isinstance(n,dict) else n;v=n[tag] if isinstance(n,dict) else None
+    t=site(s)
+    if tag in ['StorageLive','StorageDead']:return '.storage '+t+' '+str(tag=='StorageLive').lower()+' '+str(v)
+    if tag=='Assign':
+        p,e=v
+        if 'Aggregate' in e:
+            a,os=e['Aggregate'];return '.aggregateMove '+t+' '+arg(place(p))+' '+arg(data(a))+' '+operands(os)
+        return '.bind '+t+' '+arg(place(p))+' '+arg(expr(e))
+    if tag=='Call':
+        c=v['call'];return '.call '+t+' '+arg(data(c['func']))+' '+operands(c['args'])+' '+arg(place(c['dest']))+' '+block(v['on_unwind'])
+    if tag=='CopyNonOverlapping':return '.copy '+t+' '+' '.join(arg(operand(v[k])) for k in ['src','dst','count'])
+    if tag=='Return':return '.ret '+t+' (.local 0)'
+    if tag=='UnwindResume':return '.unwind '+t
+    if tag=='Abort':return '.abort '+t+' '+arg(data(v))
+    if tag=='Drop':return '.drop '+t+' '+arg(place(v['place']))+' '+arg(data(v['fn_ptr']))+' '+str(v['kind']=='Conditional').lower()+' '+block(v['on_unwind'])
+    assert tag=='Switch',tag
+    if 'If' in v:
+        o,y,n=v['If'];return '.branch '+t+' '+arg(operand(o))+' '+block(y)+' '+block(n)
+    o,ty,arms,otherwise=v['SwitchInt']
+    return '.switch '+t+' '+arg(operand(o))+' ['+', '.join('(['+', '.join(arg(data(a)) for a in vals)+'], '+block(b)+')' for vals,b in arms)+'] '+block(otherwise)
+
+
+SOURCE=Path('evidence/pv-stx-20261104/D656/N91812/generated/NativeInstructions.json')
+raw=SOURCE.read_bytes(); emission=json.loads(raw)
+functions={f['function']:f for f in emission['functions']}
+for fid in [1,9]:
+    assert fid in functions and 'body' in functions[fid]['code'], ('MISSING REQUIRED FUNCTION',fid)
+parts=['import PV_STX2_Generated','set_option autoImplicit false','namespace PV_STX2_Intermediate','open PV_STX2_Syntax']
+rows=[]
+for fid in range(1,12):
+    f=functions[fid];code=f['code'];available='body' in code
+    doc='/-- Conditional worker-branch syntax pending owner acceptance of the unadopted patch.\nGenerated from retained N91812 option-on emission; opaque bodies stay absent. -/'
+    parts.append(doc)
+    if available:
+        parts.append('def function'+str(fid)+' : Program :=\n  ⟨'+str(fid)+', '+data(code['entry'])+', '+data(code['locals'])+', '+block(code['body'])+'⟩')
+    else:
+        parts.append('def function'+str(fid)+' : Option Program := none')
+    rows.append(dict(function=fid,body_present=available,code_sha256=hashlib.sha256(json.dumps(code,separators=(',',':')).encode()).hexdigest(),calls=[s['native']['Call']['call']['func'] for s in code.get('body',{}).get('statements',[]) if isinstance(s['native'],dict) and 'Call' in s['native']]))
+parts += [doc,'def program : Nat → Option Program', '  | 0 => some PV_STX2_Generated.function0']
+for r in rows:
+    fid=r['function'];parts.append('  | '+str(fid)+' => '+('some ' if r['body_present'] else '')+'function'+str(fid))
+parts += ['  | 12 => some PV_STX2_Generated.function12','  | _ => none', '#print axioms program','end PV_STX2_Intermediate','']
+output='\n'.join(parts)
+out=Path('lean/PV_STX2_Intermediate.lean');ev=Path('evidence/pv-stx-20261104/D685/intermediate-pins.json')
+pins=dict(qualification=__doc__,source=str(SOURCE),source_sha256=hashlib.sha256(raw).hexdigest(),source_bytes=len(raw),provenance='Only retained/host option-on NativeInstructions.json is N91812; D660 added default-off comparisons and did not create a second option-on emission.',functions=rows,output_sha256=hashlib.sha256(output.encode()).hexdigest())
+if '--check' in sys.argv:
+    assert out.read_text()==output
+    assert json.loads(ev.read_text())==pins
+else:
+    out.write_text(output);ev.write_text(json.dumps(pins,indent=2)+'\n')
+print('Checked required f1/f9; generated all available intermediate bodies; f3/4/7/8/11 remain opaque.')

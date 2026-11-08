@@ -131,3 +131,8 @@ and all their results are retained unchanged.
 It re-evaluates only the four exact reply-dependent meanings CAS530/555 and
 Vec167/10; pending_start proves those have no committed source prefix. Every
 other staged operation retains its applied prefix. Original v2 stays importable.
+47438 passed SourceReplies7 after retaining47437's elaboration failure: complete
+copy504 delivery and last-Weak failure/div/fault/pending/success-source-root
+branches are checked. nontrivial_still_unsupported retains the latest model's
+602/762 gap even when the replacement itself is defined. No source/Rust
+violation or original-entry reachability is inferred.
