@@ -319,3 +319,34 @@ source27993341c495ea9107b742c011745b6ed725bebb. This isolates the memory
 problem to the mixed import/collection shape, without a model or theorem change.
 The replacement182-selection aggregate starts again from the first root; no
 partial56592 result will be credited to its strict union result.
+
+
+Active replacement aggregate:56594, driver/config revision5c9b6b294da,
+proof source27993341c495ea9107b742c011745b6ed725bebb. It executes all182
+FAMILY_ROOT_BATCHES selections in one capped scope, starting from the first
+root. Its result remains pending until the aggregate exits and the retained
+coverage, axiom comparisons, frozen hashes and raw-graph integrity are checked.
+
+
+### COH-7: SSH-dependent controller output, not a proof failure
+
+56594 terminated with NONZERO120 after2,925 roots; it is NOT a pass.
+Finalized GNU time records wall43:36.73, peak7040000KiB, swaps0,
+source27993341c495ea9107b742c011745b6ed725bebb. Client transport exited255:
+`Read from remote host 100.108.41.90: Operation timed out` followed by
+`client_loop: send disconnect: Broken pipe`. The capped scope briefly continued
+but the controller's output pipe disappeared and the Python process ended120.
+No Lean batch failed. The partial union remains strict_pass=false. The original
+controller died before writing its receipt; recover-transport.py explicitly
+marks a FAILED reconstructed receipt based on the finalized time file and
+partial union report, and does not claim to recover a successful result.
+
+The replacement launcher persists its exact controller and payload and starts
+them in a new host session with stdin/stdout/stderr bound to host files. It
+asserts that stdout is a regular file before admission and launches the same
+capped scope. SSH only returns the background PID/ack; the job's actual
+receipt remains authoritative. This changes the failed transport environment,
+not the walker, collector, proof source or caps. FINAL_ROOT_BATCHES orders the
+remaining untested arrays first and then replays every earlier root. No partial
+result is reused as strict union coverage. The full retry is required because
+the interrupted aggregate did not pass; it is not an unchanged regression.

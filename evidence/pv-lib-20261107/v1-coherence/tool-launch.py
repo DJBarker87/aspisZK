@@ -18,6 +18,7 @@ files['compile-root-batches.py']=(E/'compile-root-batches.py').read_text()
 files['run-final-audit.py']=(E/'run-final-audit.py').read_text()
 files['NARROW_ROOT_BATCHES.json']=(E/'NARROW_ROOT_BATCHES.json').read_text()
 files['FAMILY_ROOT_BATCHES.json']=(E/'FAMILY_ROOT_BATCHES.json').read_text()
+files['FINAL_ROOT_BATCHES.json']=(E/'FINAL_ROOT_BATCHES.json').read_text()
 code=r'''
 import pathlib,json,sys,subprocess,time,hashlib,re,os
 x=json.load(sys.stdin);a=x['attempt'];mode=x['mode'];V=pathlib.Path('HOST');E=V/'evidence';O=V/'objects-canonical'
@@ -78,6 +79,22 @@ rec['axioms_summary_based']=[l for l in (E/f'out-{a}.log').read_text().splitline
 (E/f'receipt-{a}.json').write_text(json.dumps(rec,indent=2));print(json.dumps({k:v for k,v in rec.items() if k!='axioms_summary_based'}),flush=True);sys.exit(r.returncode)
 '''.replace('HOST',V)
 payload=dict(attempt=a,mode=mode,turn=turn,files=files,snapshot_plan=(E/'SNAPSHOT_PLAN.json.xz').read_bytes().hex(),tools_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+if len(sys.argv)>3 and sys.argv[3]=='detach':
+ stage=r"""
+import pathlib,json,sys,subprocess,hashlib
+x=json.load(sys.stdin);V=pathlib.Path('HOST');a=x['payload']['attempt'];E=V/'evidence'
+p=V/f'detached-launch-{a}.py';data=V/f'detached-payload-{a}.json';assert not p.exists() and not data.exists()
+p.write_text(x['code']);data.write_text(json.dumps(x['payload']))
+log=E/f'detached-transport-{a}.log'
+with data.open('r') as inp,log.open('w') as out:
+ child=subprocess.Popen(['python3',str(p)],stdin=inp,stdout=out,stderr=subprocess.STDOUT,start_new_session=True,close_fds=True,cwd=V)
+r=dict(attempt=a,detached=True,pid=child.pid,launcher_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),payload_sha256=hashlib.sha256(data.read_bytes()).hexdigest(),stdout_file=str(log),all_stdio_host_files=True)
+(E/f'detached-ack-{a}.json').write_text(json.dumps(r));print(json.dumps(r))
+""".replace('HOST',V)
+ # The detached controller must have a regular stdout file, never an SSH pipe.
+ code=code.replace("x=json.load(sys.stdin);", "import stat;assert stat.S_ISREG(os.fstat(1).st_mode);x=json.load(sys.stdin);")
+ r=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(stage)],input=json.dumps(dict(code=code,payload=payload)),text=True,capture_output=True)
+ (E/f'transport-{a}.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr,detached=True),indent=2));print(r.stdout,r.stderr);sys.exit(r.returncode)
 r=subprocess.Popen(['ssh',host,'python3 -c '+shlex.quote(code)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True);r.stdin.write(json.dumps(payload));r.stdin.close();lines=[]
 for line in r.stdout:lines.append(line);print(line,end='',flush=True)
 r.wait();(E/f'transport-{a}.json').write_text(json.dumps(dict(exit=r.returncode,stdout=''.join(lines),stderr=''),indent=2));sys.exit(r.returncode)
