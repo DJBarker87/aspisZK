@@ -8,7 +8,12 @@ PLIB_MAP.json retains historical proof statuses and records separate target
 scope dispositions, including exact f361 sites. Mixed slots retain all prefix
 obligations; no pre-target failure or destructor is silently omitted.
 
-Work order: corrected Range93/f15 history, f6, f361 through14756, then lane C's
+Checked: RangeFirst11.history from3400 through first3447 poll, with local7
+derived; RangeRetry11 retains its pending phase. F6EarlyHistory11.history
+from f6 body entry through123 or first121/122 stop. These histories are not
+yet connected; historical slot statuses are not promoted.
+
+Work order: complete Range93/f15 and f6 histories, f361 through14756, then lane C's
 remaining table requirements for its full OwnInit joint witness. Source7
 closure remains included. No endpoint premise or row is closed by a deferral.
 
