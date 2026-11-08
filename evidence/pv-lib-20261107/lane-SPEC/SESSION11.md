@@ -24,3 +24,5 @@ PV_LIB_SPEC_ThreadRepresentationGap compiled 55108, cohort w3: exit0, wall 0:02.
 PV_LIB_SPEC_WordThreadArc compiled 55109, cohort w3: exit0, wall 0:03.31, peak 4766004KiB, swap 0; source b26047c1a677222dc3d77938715fd6a1d13f97fd; standard summary axioms only.
 
 PV_LIB_SPEC_WordThreadRuntime compiled 55110, cohort w3: exit0, wall 0:02.71, peak 4741712KiB, swap 0; source 6944dc2fed7cc2def3b71fb3853fafd831aef67b; standard summary axioms only.
+
+PV_LIB_SPEC_NativeModel compiled 55111, cohort w3: exit0, wall 0:02.73, peak 4744760KiB, swap 0; source d909c3b43c393ac083f6a96c39cba7e1605c5788; standard summary axioms only.
