@@ -11,6 +11,10 @@ def check_admission(ad):assert ad['exit']==0 and ad['reservation']['allowed']is 
 def check_scan(sc):assert sc['exit_status']==0 and sc['dangling']==sc['canonical_duplicate_owners']==sc['import_mismatches']==0
 def check_clause_ids(actual,needed):assert set(needed)<=set(actual)
 def check_child(status):assert status=='CLOSED'
+def clause_key(z):
+ if 'id'in z:return('id',z['id'])
+ assert 'unit'in z and 'domain'in z,z
+ return('unit/domain',z['unit'],z['domain'])
 sha=0
 for p in E.rglob('*.xz'):
  q=Path(str(p)[:-3]+'.sha256');assert q.is_file(),p
@@ -30,7 +34,7 @@ for row,r in by.items():
  assert r['function']==old[row]['function']and r['canonical_callees']==old[row]['canonical_callees']
  assert len(r['obligation']['caller_domain_obligations'])>=len(old[row]['obligation']['caller_domain_obligations'])
  for kind in ['caller_domain_obligations','inventory_domain_obligations']:
-  ids={z['id']for z in r['obligation'][kind]};check_clause_ids(ids,[z['id']for z in old[row]['obligation'][kind]])
+  ids={clause_key(z)for z in r['obligation'][kind]};check_clause_ids(ids,[clause_key(z)for z in old[row]['obligation'][kind]])
  assert r.get('frozen_body_sha256')==old[row].get('frozen_body_sha256')
  if r['status']=='CLOSED':
   for c in r['canonical_callees']:
@@ -61,7 +65,8 @@ bad=copy.deepcopy(J(E/'NNL_SCAN.json'));bad['exit_status']=1
 reject('scan nonzero',lambda:check_scan(bad))
 bad2=copy.deepcopy(J(E/'NNL_SCAN.json'));bad2['dangling']=1
 reject('dangling owner',lambda:check_scan(bad2))
-reject('dropped caller clause',lambda:check_clause_ids([],['retained-clause']))
+required_keys={clause_key(z)for z in old['TX1:094']['obligation']['caller_domain_obligations']};assert required_keys
+reject('dropped caller clause',lambda:check_clause_ids([],required_keys))
 reject('open child',lambda:check_child('OPEN'))
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20_000_000,p

@@ -71,6 +71,7 @@ Final evidence commit is the revision containing this handoff. No push.
 (E/'NNL_HANDOFF.md').write_text('')
 for paragraph in handoff.split('\n\n'):
  with(E/'NNL_HANDOFF.md').open('a')as f:f.write(paragraph+'\n\n')
+(E/'NNL_HANDOFF.md').write_text((E/'NNL_HANDOFF.md').read_text().rstrip()+'\n')
 lines=['Preflight and failed shapes are retained; each scope summary below links to its complete receipt.']
 for q in sorted(E.glob('NNL_L*/receipt.json')):
  d=J(q);lines.append(f"{d['attempt']} {d['kind']} {d['module']}: exit={d['exit_status']} wall={d['wall_seconds']:.3f}s RSS={d['peak_rss_kib']}KiB swaps={d['swaps']} revision={d['source_revision']} receipt={q.parent.name}/receipt.json")
