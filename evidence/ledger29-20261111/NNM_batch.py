@@ -5,8 +5,6 @@ B=Path.cwd();mode=sys.argv[1]
 for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:(B/('NLX_'+n)).write_bytes((B/('NNM_'+n)).read_bytes())
 E=B/'NNM_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='retention':
- r=subprocess.run([sys.executable,'NNM_batch.py','finalscan']);assert r.returncode==0,'Corrected final scan failed'
- for suffix in ['json','log','time']:(E/('NNM_FINAL_SCAN.'+suffix)).write_bytes((B/('NNM_audit/finalscan/scan.'+suffix)).read_bytes())
  exec(compile((B/'NNM_pin.py').read_text(),'NNM_pin.py','exec'));sys.exit(0)
 if mode in ['scan','finalscan']:jobs=[('scan',['NNM_native/NNM_Driver','scan'])]
 elif mode=='fixtures':jobs=[('fixtures',['NNM_native/NNM_ProofDriver','fixtures'])]

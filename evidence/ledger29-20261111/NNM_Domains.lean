@@ -25,7 +25,7 @@ theorem exact241 (c : NMX_R4_Authentication.Choices) : RSL.TX2_241.RowSpec_241
  LIBB_PoolLib.library LIBB_PoolLib.deployed LIBB_V2Star.library (NMX_R9_StageTwo.stage2 c) := NMX_R9_StageTwo.root c
 
 theorem domain345 (a : RSL.TX1_345.Args) : RSL.TX1_345.Domain a = True := rfl
-theorem domain344 (a : RSL.TX1_344.Args) : RSL.TX1_344.Domain a = True := rfl
+theorem domain344 (a : RSL.TX1_344.Args) (s : RSL.SdkState) : RSL.TX1_344.Domain a s = True := rfl
 theorem domain233 (a : RSL.TX2_233.Args) : RSL.TX2_233.Domain a = True := rfl
 theorem domain242 (a : RSL.TX2_242.Args) : RSL.TX2_242.Domain a = True := rfl
 #print axioms exact345

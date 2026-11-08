@@ -1,0 +1,217 @@
+{
+ "status": "PASS",
+ "control_review": {
+  "status": "REQUIRED_PARENT_ARGUMENT_CONTROLS_FAIL",
+  "pairs": [
+   {
+    "row": "TX2:240",
+    "positive_reused": "NMV_K035",
+    "negative": "NMV_K063",
+    "negative_assertion": "l.count == 7",
+    "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+    "same_frozen_and_fission_sources": true,
+    "exact_archived_positive_harness_prefix": true,
+    "same_kani_command_and_rust_environment": true,
+    "lean_only_path_extension": "NNC seed prepended after original passes; not consumed by cargo-kani",
+    "same_all_crate_features": true,
+    "lock_unchanged": true,
+    "receiver": "unmodified Log<0>",
+    "mutation": "parent child call argument &owned -> &owned[1..]",
+    "credit": "required parent argument control; no unchanged passing rerun"
+   },
+   {
+    "row": "TX1:344",
+    "positive_reused": "NMV_K041",
+    "negative": "NMV_K064",
+    "negative_assertion": "l.count == 3",
+    "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+    "same_frozen_and_fission_sources": true,
+    "exact_archived_positive_harness_prefix": true,
+    "same_kani_command_and_rust_environment": true,
+    "lean_only_path_extension": "NNC seed prepended after original passes; not consumed by cargo-kani",
+    "same_all_crate_features": true,
+    "lock_unchanged": true,
+    "receiver": "unmodified Log<0>",
+    "mutation": "parent child call argument &owned -> &owned[1..]",
+    "credit": "required parent argument control; no unchanged passing rerun"
+   }
+  ],
+  "mutant_sha256": "8fc244d44e8dc57246848b0a564003b242aeb0be7f0856a0e8b5347181bb0bb3",
+  "kmx_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "excluded_receiver_controls": [
+   "NMV_K037",
+   "NMV_K043",
+   "NMV_K049",
+   "NMV_K053"
+  ],
+  "new_kani_used": 4,
+  "supplementary_controls": {
+   "NMV_K061": "FAIL later descriptor receiver; superseded for exact K035 match",
+   "NMV_K062": "FAIL later descriptor receiver; superseded for exact K041 match"
+  }
+ },
+ "fission_associations": [
+  {
+   "row": "TX2:240",
+   "frozen_sha256": "b594cc9ef9c0d28333e9dacdf06f1aefe4b98fe11710bbb58afa2f5baedeffda",
+   "fission_sha256": "af109d88eb3a68eba613277d2f7cda6ac1940349bb1ad5f1f04e682bc62a1fec",
+   "transforms": [
+    [
+     "W::clock_get(log)",
+     "Clock::get()"
+    ],
+    [
+     "W::set_return_data(log, ",
+     "program::set_return_data("
+    ],
+    [
+     "W::stage2_owned(log, ",
+     "stage2_owned("
+    ],
+    [
+     "W::snapshot(log, ",
+     "snapshot("
+    ]
+   ],
+   "exact_after_whitespace_and_optional_trailing_commas": true
+  },
+  {
+   "row": "TX1:344",
+   "frozen_sha256": "34414a1a05b8beca445d8e93a5e481aa0169a1b9ab545c154f9ce379487d8f53",
+   "fission_sha256": "d19df0874ebf6b4410daed7427ea34268f233175534a159ac26eb9a8c1525867",
+   "transforms": [
+    [
+     "W::try_borrow_mut_data(log, &accounts[2])?.copy_from_slice(log, &checkpoint)",
+     "accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint)"
+    ],
+    [
+     "W::stage1_owned(log, ",
+     "stage1_owned("
+    ],
+    [
+     "W::snapshot(log, ",
+     "snapshot("
+    ]
+   ],
+   "exact_after_whitespace_and_optional_trailing_commas": true
+  }
+ ],
+ "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+ "replayed_NMV": [
+  {
+   "module": "NMV_RslLaws",
+   "source": "evidence/stage-wrap-20261111/NMV_RslLaws.lean",
+   "sha256": "3a7ea9120491247a3ef2ca80073ea583d93dee2b07d31ffebdc8387b6e4b12d5",
+   "supplier_attempt": "NNG_L1060",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_RslSnapshots",
+   "source": "evidence/stage-wrap-20261111/NMV_RslSnapshots.lean",
+   "sha256": "455806abfdaf91100e9059fc453823e5eb81a80fd3c7f76b0ba7ac20278075a9",
+   "supplier_attempt": "NNG_L1061",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_RslDomain",
+   "source": "evidence/stage-wrap-20261111/NMV_RslDomain.lean",
+   "sha256": "c4a2790417fcda5986b53e914739febc1d99955f21446a53644d782926c83ff7",
+   "supplier_attempt": "NNG_L1062",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_RslFold",
+   "source": "evidence/stage-wrap-20261111/NMV_RslFold.lean",
+   "sha256": "b71143579ce64a5d0ff6bf711a1962ba2bc16755abe9f5241ee6db9f4cf83707",
+   "supplier_attempt": "NNG_L1063",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_WindowEval",
+   "source": "evidence/stage-wrap-20261111/NMV_WindowEval.lean",
+   "sha256": "f8755c1779621f8676465dd7da65b298325c7e6c0ca3ba78fe21dbed4fb26c03",
+   "supplier_attempt": "NNG_L1064",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_WindowClock",
+   "source": "evidence/stage-wrap-20261111/NMV_WindowClock.lean",
+   "sha256": "1244d570e315336b25cbfcc146e7801e2bf35fa1e5efc79928adefcb68d6e5c0",
+   "supplier_attempt": "NNG_L1065",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_WindowStage",
+   "source": "evidence/stage-wrap-20261111/NMV_WindowStage.lean",
+   "sha256": "967bee7c73415d9bd4b6a62e2abf9ebfee39914579cef0470cb66d68f83dda62",
+   "supplier_attempt": "NNG_L1066",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_G2",
+   "source": "evidence/stage-wrap-20261111/NMV_G2.lean",
+   "sha256": "88ab0cb45e4bb9e778e24aad82a0bb2057328835570c288a49e03e81fee7b0fd",
+   "supplier_attempt": "NNG_L1067",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_SdkFrame",
+   "source": "evidence/stage-wrap-20261111/NMV_SdkFrame.lean",
+   "sha256": "659f14a35549f14852780e1a6113f0ae74e48c3cfc6b8add8b8819048c1e2afb",
+   "supplier_attempt": "NNG_L1068",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_G2State",
+   "source": "evidence/stage-wrap-20261111/NMV_G2State.lean",
+   "sha256": "07bb01a7b7d29a31e6de8c088d9736339e5680a252dfa0c2987fd40ae7bca5ef",
+   "supplier_attempt": "NNG_L1069",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_WindowRoots",
+   "source": "evidence/stage-wrap-20261111/NMV_WindowRoots.lean",
+   "sha256": "795a0bf7a43fc23ab878c01cb89cbb00255c0449e8dcc10a8a723b778a97fec2",
+   "supplier_attempt": "NNG_L1070",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_SdkExec",
+   "source": "evidence/stage-wrap-20261111/NMV_SdkExec.lean",
+   "sha256": "afac813036138a123b36efb55e442f05310497d33087d079a361691a04d3e5a6",
+   "supplier_attempt": "NNG_L1071",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_SnapshotExec",
+   "source": "evidence/stage-wrap-20261111/NMV_SnapshotExec.lean",
+   "sha256": "0abf18f0d89f16af14d36f74200e46dc437ad76298495247497d4baf441e3e61",
+   "supplier_attempt": "NNG_L1072",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_CopyExec",
+   "source": "evidence/stage-wrap-20261111/NMV_CopyExec.lean",
+   "sha256": "03468d272265e41ca458913d505f552fb5705dd4c81afc2c662bde1f767db94b",
+   "supplier_attempt": "NNG_L1073",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  },
+  {
+   "module": "NMV_ConcreteWindows",
+   "source": "evidence/stage-wrap-20261111/NMV_ConcreteWindows.lean",
+   "sha256": "b1eb1afa8cbec15e53fd295a17b765edd20c44769a405929bb047b3dd15236fc",
+   "supplier_attempt": "NNG_L1074",
+   "selected_objects": "NNG_WrapperR4_objects -> NNM_wrapperR4"
+  }
+ ],
+ "excluded_modules": [
+  "NMV_NoWritePool",
+  "NMV_NoWriteOwned",
+  "NMV_NoWrite241",
+  "NMV_TasRoots",
+  "NMV_CandidateRoots"
+ ],
+ "TGA_G1": "OPEN for333/330; excluded from344 graph",
+ "trust": "ReviewedTranscription-TX1:344 will be USED if final gate passes; retained option-A reclassification, not removal",
+ "new_Kani": 0
+}
