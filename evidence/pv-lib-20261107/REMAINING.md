@@ -1,58 +1,75 @@
-# Remaining obligations after Lane A session4
+# Remaining obligations after Lane A session5
 
-PARTIAL library; target not yet established. PLIB_MAP.json has170 slots:
-118 qualified INSTANTIATED graphs,35 MISSING-CHILD-LEMMA,12 WAITING-ON-ROW,
-5 SPEC-ERROR. Lane B's lane-SLICE/MAP_DELTA.json has been folded in verbatim;
-no Lane B files were edited. lane-A/session4/MAP_DELTA.json records current changes.
-The old shared Markdown map and INSTANCES inventory remain historical.
-No row/endpoint closure or library consumption in row proofs. Endpoint premises
-removed0/added0; no new T field or documented-semantics fact this session.
+PARTIAL library. PLIB_MAP.json still has170 slots:118 qualified INSTANTIATED,
+35 MISSING-CHILD-LEMMA,12 WAITING-ON-ROW,5 SPEC-ERROR. All statuses and Lane B's
+folded delta are retained. No package/ledger/consumer changes; endpoint premises
+removed0/added0 and new T fields0. New lower documented source-value predicates
+are listed explicitly in lane-A/session5/MODEL_CORRECTION.md; their actual
+backend instances have not been proved.
 
-## Corrected thread machine (D981)
+## D984 source-store inventory and machine: FIRST priority remains incomplete
 
-Use PV_LIB_A_OwnerStore.step: OWNER-aware OwnInitInterpreterBridged plus W4's
-five source-store meanings at the eight native sites. The agreement and finite
-neutral-trace lift are against OwnInitInterpreterBridged. Source instructions
-retain registration14320, operators, bridged allocation and the same resource
-channel. The raw SourceStoreInterpreter is retained evidence for the writes,
-not the corrected thread-machine base. See lane-A/session4/MODEL_CORRECTION.md.
-Frozen prose files are unchanged; the lead-approved D981 correction is explicit
-in the map's thread-machine metadata and Lane A's before/after record.
+The new inventory is lane-A/store-write-leaves-v2.md and .json:75 installed
+LEAF boundaries,340 raw thread leaves, all three slice emissions,458 ledger
+Drop sites and raw destructor type metadata. It covers BoxNew/Arc source cells,
+Arc strong/weak, atomic loads/stores/CAS, boxed Cell/UnsafeCell, Option::take,
+parker/TLS and conservative callback/formatter/destructor candidates. No RefCell
+function is emitted. A potential writer is not a proved reachable write.
+Unreviewed wrappers are retained as open, never silently certified pure.
 
-## Lane A: writer bindings and actual callers remain partial
+The candidate PV_LIB_A_DropDispatchV2.step extends OWNER-aware
+OwnInitInterpreterBridged through the source layers. It contains the old five
+and17 additional function projections, including only nonlast486/683 and
+bool-only504. OwnerStoreV3 corrects transparent641/504; numeric-byte646
+supersedes the earlier boolean-data draft. The agreement and neutral trace
+lemmas retain the OWNER base. See lane-A/session5/STORE_ACTIONS.json for every
+candidate and its installed or unsupplied named meaning.
 
-1. All five source-writer edges9/10/93/167 remain MISSING. Exact emitted
-   tokens/operand lists (including289's eighth site), issued-poll graph,
-   token-derived catch exclusion, full-reply effects and actual native registry
-   frame are now compiled/audited on the corrected OWNER step. Range93's local7
-   source-aggregate write is derived without Values or write-definedness.
-   Continuous165/local7 history, reference paths/age, native returned-value laws
-   and IntoIter/Vec pointer/layout/reservation Values still require source
-   binding. No identity effect or desired-write MachineSpec premise is allowed.
-2. Existing277/278/279/280/612 graph adapters remain qualified. f361/f270's
-   occurrences retain their own emitted generic metadata. Full actual source/
-   binary adequacy, original-handler semantics, source/value invariants and
-   continuous caller composition are still missing. Historical raw-interpreter
-   poll support is not silently promoted to full corrected-machine adequacy.
-3. All seven actual-caller facets remain MISSING. Caller124 now derives the
-   literal provider Pre from the local caller Context and binds graph/count
-   fields using existing actual-entry DocumentedFacts and x.resources/x.encode.
-   The actual selected cut, specialized-machine transport and later ArcClone
-   Valid/value/frame still need proof. Both name constructors are covered,
-   but Builder270 must establish Some's opaque String decoding, ownership and
-   word validity. The finite-prefix transport helper requires only agreement
-   before its cutoff; f6 must still derive its real delivery cutoff and actual
-   resolver/handler agreement. Local numbering/source-write counter lemmas do
-   not prove complete OwnInit history. Native registry framing and unchanged
-   resource-channel dispatch do not supply allocation coherence or a source-
-   associated allocation/reservation schedule.
+Complete last-strong Arc payload Drop/implicit Weak guard, last/dangling Weak,
+Packet result/scoped decrement composition, typed builtin Drop dispatch,
+arbitrary-T Cell::set old-value Drop, join, parker/TLS and opaque callbacks
+before calling this a fully corrected machine. Primitive entries do not imply
+full effects of a native wrapper that hides them. Unsupported candidate arms
+may be undefined and are not faithful whole-call semantics. Old D981 graphs at
+new writers are not credited as D984 source adequacy. No row may consume these
+partial action candidates as complete source/binary transport.
 
-All100 focused IDs49100–49199 are spent (89 pass,11 repaired elaboration
-failures); historical49458–49479 were not reused. The122-module name/f124 cone
-is available in the private cache. The74-module f6 cone has6 available,68
-missing; next is PV_FN_THREAD_f6Reply121. Reuse cache and exact pinned sources;
-additional focused work needs a fresh assigned ID block. ONE raw audit49890
-passed31 new roots. Do not rerun it unchanged. Raw49891–49899 are unused.
+## Caller and source-history support, still qualified
+
+1. All source-writer slots remain MISSING. RangeHistoryV2/RangeTraceV2 bind
+   actual165's returned range, continuous ORIGINAL-interpreter predecessor,
+   source local7 and first93 write without a local7/root/write-definedness
+   premise. Corrected-owner prefix and subsequent loop invariant remain open.
+   IntoIter/Vec pointer/layout/reservation values and native result laws remain
+   unbound. Existing277/278/279/280/612 adapters retain their qualifications.
+2. ArcClone.Valid and the defined BoxNew count1->2 write now follow locally
+   from SAME literal CLOSED124 return plus existing actual4933/4945 documented
+   atomic facts. The five actual pre12950 steps are proved on V3, and the V3
+   full-reply poll dispatch is compiled. Selected original constructor entry,
+   prior corrected-machine prefix, native Arc return/value/frame, final-overlay
+   history and Builder270's separate10098 occurrence remain open. No fresh
+   count/root/alias/success restriction or desired-write premise is admitted.
+   Both name constructors retain previous support; Some's opaque String value,
+   ownership and word-validity binding remains open.
+3. The entire pinned74-module f6 cone is cached (68 serial replays46320–46387;
+   no source edits). F6DeliveryTransportV2 instantiates f6's literal delivery
+   prefix with the existing SINGLE induction; a finite delivery cutoff is no
+   longer required. Actual resolver/native agreement BEFORE each delivery or
+   pending transition, specialized/corrected-machine transport and complete
+   original-entry binding remain open. Local source-action numbering/counter
+   and native registry frames do not prove complete OwnInit history or an
+   allocation/reservation schedule associated with that source run.
+
+Session5 used116 focused IDs:97 accepted (28 new modules,68 pinned cache
+replays and one strict-driver compile),19 repaired elaboration failures.
+Every failed source is retained compressed with exact hash/receipt. ONE raw
+47490 passed118 new roots: exit0,9.60s,peak6705204KiB,swap0, source revision
+901669d3323d82be61520a58eae32979827f125e, standard axioms only. No rerun.
+46300–46399 and47400–47415 are spent;47416–47489 remain unused, as do
+raw47491–47499. This is not ID-budget exhaustion. Only own launcher ranges
+463xx/474xx were extended; every job retained6G/8G/swap0/Tasks64/-M7000 and
+standalone STREAMB_SLOTS=3 admission. No full frozen manifest or runtime gate
+was run or claimed.
 
 ## Lane B and remaining shared deliverables
 
