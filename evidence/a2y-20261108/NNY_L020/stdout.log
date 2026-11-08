@@ -1,0 +1,46 @@
+NNY_generated/NNY_MerkleLoop.lean:25:1: error: Tactic `apply` failed: could not unify the conclusion of `NNY_LoopTransport.accepted ?m.40 ?m.41
+  (fun out => ?m.44 = some ?m.46) ?m.51 ?m.52 ?m.55 ?m.56`
+  Std.loop ?m.41 ?m.52 = ok ?m.55
+with the goal
+  Std.loop
+      (fun x =>
+        match x with
+        | (idx1, val1, d1, key_position1) =>
+          Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install Port4B_Install.leaves)
+            (VTop_Checkpoint.digest D) proof root tree () lo n slot keys idx1 val1 d1 key_position1)
+      (idx, val, d, pos) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+
+Note: The full type of `NNY_LoopTransport.accepted ?m.40 ?m.41 (fun out => ?m.44 = some ?m.46) ?m.51 ?m.52 ?m.55
+  ?m.56` is
+  Std.loop ?m.40 ?m.52 = ok ?m.55 → Std.loop ?m.41 ?m.52 = ok ?m.55
+
+D : VTop_Stages.aspis_core.digest.Digest32 Unit
+H : Bytes → AspisV8R19.SourceDuplexStep.State
+agree : NodeLeaf D H
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx outIdx : Indices
+val outVal : Values
+slotBound : ↑slot < 6
+run :
+  Std.loop
+      (fun x =>
+        match x with
+        | (idx1, val1, d1, key_position1) =>
+          Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+            (Port3_BatchStd.install (NKV_ConcreteChildren.ops H)) (NKV_ConcreteChildren.digest H) proof root tree () lo
+            n slot keys idx1 val1 d1 key_position1)
+      (idx, val, d, pos) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+⊢ Std.loop
+      (fun x =>
+        match x with
+        | (idx1, val1, d1, key_position1) =>
+          Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install Port4B_Install.leaves)
+            (VTop_Checkpoint.digest D) proof root tree () lo n slot keys idx1 val1 d1 key_position1)
+      (idx, val, d, pos) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+'AspisR1.NNY_MerkleShared.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

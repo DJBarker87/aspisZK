@@ -152,4 +152,5 @@ for n,t in json.loads(r.stdout).items():
 assert (E/a/'receipt.json').exists(),'Missing receipt; never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NNY_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
+with (E/'NNY_COMPILE.tsv').open('a') as f:f.write('\t'.join(str(rc[k]) for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision'])+'\t'+a+'/receipt.json\n')
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));sys.exit(rc['exit_status'])

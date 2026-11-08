@@ -1,0 +1,44 @@
+{"attempt": "NNY_L009", "exit_status": 1, "wall_seconds": 27.550653273938224, "peak_rss_kib": "6815432", "swaps": "0", "print_axioms": ["'AspisR1.NNY_MerkleTerminalBuild.constructed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNY_generated/NNY_MerkleTerminalBuild.lean:38:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+    { start := Usize.wrapping_mul 32#usize count }
+in the target expression
+  (do
+      let r ← (Port3_BatchStd.install base).op1 (some count) verifier.Error.Merkle
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+     
+...
+(core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                      { «end» := Usize.wrapping_mul 32#usize val1 }
+                let (b1, idx1, val2) ←
+                  (Port3_BatchStd.install base).op10 D () Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                  else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))) =
+    ok (done (outIdx, outVal, some (core.result.Result.Ok ())))
+NNY_generated/NNY_MerkleTerminalBuild.lean:33:12: warning: This simp argument is unused:
+  Port3_BatchStd.okOr
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵o̵k̵O̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNY_generated/NNY_MerkleTerminalBuild.lean:37:39: warning: This simp argument is unused:
+  if_neg fit
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵a̵p̵S̵l̵o̵t̵,̵c̵a̵p̵R̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵n̵e̵g̵ ̵f̵i̵t̵,̵l̵i̵f̵t̵]̵[̲c̲a̲p̲S̲l̲o̲t̲,̲ ̲c̲a̲p̲R̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNY_MerkleTerminalBuild.constructed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5c27397771f346feac145e013fdefaaa.scope; invocation ID: c71a67e79c964e44b1d5b3a5bbccc6e6
