@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Values15.lean:24:62: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (runtime p).control.variant (PV_LIB_SPEC_Tls277Native15.value address)
+in the target expression
+  (match some 278, [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error] with
+    | some 121, [Data.number n] =>
+      some
+        (PV_FN_THREAD_f360Outcomes.atomicValue PV_LIB_SPEC_FrozenABI.atomicKind PV_LIB_SPEC_FrozenABI.unsafeCellKind n)
+    | some 277, [arg] =>
+      match (runtime p).carrier.dereference w arg with
+      | some p => some (PV_FN_THREAD_f170.SourceTlsValue.optionSome PV_LIB_SPEC_FrozenABI.optionType p).encode
+      | none => some (PV_FN_THREAD_f170.SourceTlsValue.optionNone PV_LIB_SPEC_FrozenABI.optionType).encode
+    | some 278, [arg, head] =>
+      match (runtime p).control.variant arg, (runtime p).carrier.field arg 0 with
+      | some 0, x => some (PV_FN_THREAD_f170.SourceTlsValue.resultErr PV_LIB_SPEC_FrozenABI.resultType).encode
+      | some 1, some value => do
+        let p ← (runtime p).carrier.dereference w value
+        some (PV_FN_THREAD_f170.SourceTlsValue.resultOk PV_LIB_SPEC_FrozenABI.resultType p).encode
+      | x, x_1 => none
+    | some 279, [arg] =>
+      match (runtime p).control.variant arg, (runtime p).carrier.field arg 0 with
+      | some 1, x =>
+        some
+          (PV_FN_THREAD_f170.SourceTlsValue.controlBreak PV_LIB_SPEC_FrozenABI.flowType
+              PV_LIB_SPEC_FrozenABI.residualType).encode
+      | some 0, some value => do
+        let p ← (runtime p).carrier.dereference w value
+        some (PV_FN_THREAD_f170.SourceTlsValue.controlContinue PV_LIB_SPEC_FrozenABI.flowType p).encode
+      | x, x_1 => none
+    | x, x_1 => none) =
+    some (value address)
+
+p : Parameters
+w : OWNER
+address : Address
+variant : (runtime p).control.variant (PV_LIB_SPEC_Tls277Native15.value address) = some 1
+field :
+  (runtime p).carrier.field (PV_LIB_SPEC_Tls277Native15.value address) 0 =
+    some (PV_LIB_SPEC_Tls277Native15.pointer address)
+deref : (runtime p).carrier.dereference w (PV_LIB_SPEC_Tls277Native15.pointer address) = some address
+⊢ (match some 278, [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error] with
+    | some 121, [Data.number n] =>
+      some
+        (PV_FN_THREAD_f360Outcomes.atomicValue PV_LIB_SPEC_FrozenABI.atomicKind PV_LIB_SPEC_FrozenABI.unsafeCellKind n)
+    | some 277, [arg] =>
+      match (runtime p).carrier.dereference w arg with
+      | some p => some (PV_FN_THREAD_f170.SourceTlsValue.optionSome PV_LIB_SPEC_FrozenABI.optionType p).encode
+      | none => some (PV_FN_THREAD_f170.SourceTlsValue.optionNone PV_LIB_SPEC_FrozenABI.optionType).encode
+    | some 278, [arg, head] =>
+      match (runtime p).control.variant arg, (runtime p).carrier.field arg 0 with
+      | some 0, x => some (PV_FN_THREAD_f170.SourceTlsValue.resultErr PV_LIB_SPEC_FrozenABI.resultType).encode
+      | some 1, some value => do
+        let p ← (runtime p).carrier.dereference w value
+        some (PV_FN_THREAD_f170.SourceTlsValue.resultOk PV_LIB_SPEC_FrozenABI.resultType p).encode
+      | x, x_1 => none
+    | some 279, [arg] =>
+      match (runtime p).control.variant arg, (runtime p).carrier.field arg 0 with
+      | some 1, x =>
+        some
+          (PV_FN_THREAD_f170.SourceTlsValue.controlBreak PV_LIB_SPEC_FrozenABI.flowType
+              PV_LIB_SPEC_FrozenABI.residualType).encode
+      | some 0, some value => do
+        let p ← (runtime p).carrier.dereference w value
+        some (PV_FN_THREAD_f170.SourceTlsValue.controlContinue PV_LIB_SPEC_FrozenABI.flowType p).encode
+      | x, x_1 => none
+    | x, x_1 => none) =
+    some (value address)
+'PV_LIB_SPEC_Tls278Values15.token' depends on axioms: [propext]
+'PV_LIB_SPEC_Tls278Values15.value' depends on axioms: [propext]
+'PV_LIB_SPEC_Tls278Values15.pure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Tls278Values15.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
