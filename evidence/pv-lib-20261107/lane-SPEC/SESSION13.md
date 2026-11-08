@@ -4,3 +4,5 @@ PV_LIB_SPEC_AtomicBindings13 compiled 55148, cohort w3: exit0, wall 0:02.31, pea
 PV_LIB_SPEC_ThreadId13 compiled 55150, cohort w3: exit0, wall 0:02.21, peak 4796036KiB, swap 0; source e84bef4ecd9654caf57192ab8c24e60cf5f76368; standard summary axioms only.
 
 PV_LIB_SPEC_TlsBindings13 compiled 55151, cohort w3: exit0, wall 0:02.21, peak 4801092KiB, swap 0; source a020fb998851e57f0fbdcd426b8ff351a68d7478; standard summary axioms only.
+
+PV_LIB_SPEC_Native13 compiled 55152, cohort w3: exit0, wall 0:02.21, peak 4796688KiB, swap 0; source aecf65cd1fdc912aba68d3a9285423056f0c625c; standard summary axioms only.
