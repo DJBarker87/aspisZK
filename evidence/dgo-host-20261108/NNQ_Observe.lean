@@ -1,4 +1,4 @@
-import NNQ_Sdk
+import NNQ_ObserverAuth
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNQ_HostDigest
@@ -9,7 +9,7 @@ theorem observe_op43 {A : Type} (S : AdapterRw.Ops)
     (id : S2W_ExtractionBoundary.Program) (out : GExq_AccountExperiment.Outcome A) :
     Hiq_ByteSelection.select {S with op43 := o} id out = Hiq_ByteSelection.select S id out := by
   unfold Hiq_ByteSelection.select Hiq_ByteSelection.account Hiq_ByteSelection.public2
-  rfl
+  simp only [helper_0, validate_op43]
 #print axioms observe_op43
 end AspisR1.NNQ_HostDigest
 end

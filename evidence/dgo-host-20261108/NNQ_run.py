@@ -82,7 +82,7 @@ b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=re.findall(r'^import ([\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+modules=re.findall(r'^import ([A-Za-z0-9_.]+)',(b/x['sources'][0]).read_text(),re.M)
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
