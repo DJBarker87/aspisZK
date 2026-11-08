@@ -1,4 +1,27 @@
-# NNU A2 work
+# NNU A2 handoff
+
+Final disposition: **A2 NOT DELIVERED; target not yet established.** All 40/40 authorized scopes are terminal: 27 exit0, 13 failed proof/import/type attempts; 0 Kani, 0 extraction. This job closes no ledger row.
+
+| Step | Final status / exact constant or open goal |
+|---|---|
+| 1 geometry | CLOSED: `AspisR1.NNU_Geometry.source`; `returned : AspisR1.NNH_Tx2OpenSlots.geometry` (L015) |
+| 2 query | CLOSED: `AspisR1.NNU_Query.source`; `returned : AspisR1.NNH_Tx2OpenSlots.query` (L029) |
+| 3 Merkle | OPEN: Port4B_Install.batch → NLP_NativeMerkle.action on SAME resume/arguments. Slot/query-bound/node/leaf laws pass (L031/L038). |
+| 4 offsets/common | All scalar offsets and SPLIT CLOSED (NNU_Offsets, L037); inactive slot and source-ordered common converse OPEN. |
+| 5 op11 | OPEN: `NNH_ExactRemainingTypes.tx2Op11`. |
+| 6 host field | OPEN: `RSL.TAS.NND_A2 (AspisR1.NNH_Run5bHost.S_host L0 copy std) NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0`. No delivered constant or type-equality example. |
+
+`NNU_COMBINED_IMPORT` (L040) imports NNH_Run5bCombined and EVERY accepted current NNU module in one scope: exit0, wall31.102162880823016s, peakRSS6950288KiB, swaps0. Limits6G/8G/Swap0/Tasks64, Lean v4.32.0 -j1 -M7000 -DElab.async=false. Source revision f9ce7766d0d (full revision and exact source/dependency hashes in L040 receipt). All printed exported roots have only propext/Classical.choice/Quot.sound. This is focused cached validation, not a release replay.
+
+G0 support overlay: `/home/dombarker/project-offloads/codex-cx-a2-20261108/NNU_objects`, prepended to the reference-only run-5b paths in NNU_RUN5B_PATHS.json. **Use only the accepted modules in NNU_OVERLAY.json/NNU_VALIDATION.json.** NNU_Stage2Tail is uncredited and must not be imported. NNU_OVERLAY.json pins accepted object/sidecar hashes; NNU_IMPORTED_PINS.json pins all selected direct/Aeneas objects; NNU_BASE_PINS.json pins the inherited run-5b boundary/manifest/source inputs. No shared or sibling source/object was overwritten, copied into this overlay, moved or deleted.
+
+Evidence: NNU_ATTEMPTS.jsonl plus each L001–040 receipt contain exact command, target, source revision/hash, dependency/Aeneas fingerprint, exit, wall, RSS, swaps, admission and printed axioms. NNU_COMPILE.tsv gives one-line summaries. NNU_validate.py checks all40 receipts, successful current source hashes, admission exit0 AND allowed:true, count<6, disk≥40GB, exact caps and standard axioms. All scopes used fresh admission, one owned scope at a time. No transport retry, scope-share wait, disk wait or unresolved submission occurred.
+
+No raw ax2 NND_A2 audit was run because no NND_A2 term was delivered; no audit of a substitute is claimed. No unchanged full regression/manifest, release/security/non-vacuity result or row closure is claimed. Frozen source, RSL, trust list, adversary, canonical domains, security metric and two-transaction design are unchanged. No shipped file changed, so no ELF rebuild trigger; inherited default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c34… are unchanged pins, not new builds. No key/wallet action. Stage commits are local; no push.
+
+Budget stop at40/40. Exact remaining member statements and the failed tail draft are in NNU_REMAINING.md; all are Lean-only, with no Kani/extraction blocker.
+
+---
 
 Target: `RSL.TAS.NND_A2 (AspisR1.NNH_Run5bHost.S_host L0 copy std) NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0`. Not delivered.
 
@@ -21,3 +44,5 @@ Stage 4 arithmetic CLOSED, common converse OPEN: NNU_OffsetArithmetic.add/mul (L
 Stage 3 digest support CLOSED: NNU_MerkleDigest.node/leaf (L038) identify the environment digest with rawOracle only on the exact node/leaf request shapes. This does not assert global invariance under repartitioning and does not close the Merkle parent.
 
 Stage 6 attempt L039 FAILED: NNU_Stage2Tail did not resolve the adapter namespace's Ops, Pubkey, OwnedAccount and ProgramError names inside its AspisR1-prefixed namespace. The draft is archived as NNU_Stage2Tail.lean.txt, excluded from the combined import and ALL credit; no failed term/axioms are accepted. No corrected draft is claimed compiled. The exact diagnostics and submitted bytes remain in L039. The independent Ref→packet/Stage2To064 and op44/op53/Returns/AMN composition is still open. The final remaining scope is reserved for the required combined import of already-checked modules.
+
+target not yet established
