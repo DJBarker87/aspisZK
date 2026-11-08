@@ -1,3 +1,35 @@
+# Session15 final — PARTIAL; requested completion NOT achieved
+
+Continued5894298db303b6c8a350da86f47e12b0d5431f42. Thread-29 and29′ binding.
+Target is NEW `PV_LIB_SPEC_LaneAJoins18` on C at5b49198e6a09c765db91e0ba344af15c3cf0c55e,
+pinned read-only with History18 and NEEDS in session15/LANE_C_FINAL_INPUT.json.
+C now supplies original85 PARAMETRIC in complete EntryWorld18.Entry and frame
+activation; its concrete physically valid entry is inhabited. No A theorem
+inhabits OriginalToF6, F6ToRange, RangeToF361 or F361ToInit. All four OPEN.
+See JOINS-STATUS.md for exact missing obligations and qualified stable exports.
+
+New support: F124LocalResolver15.fixed; F124CallResolvers15.actual (nine exact
+callee descriptors, named builtin Box dispatch); V2TableCongruence15.step/run
+(original-v2 FULL-state lookup transport); F170Tail15.run (nine local source
+nodes, including source gaps). No provider BODY unfolded. No claimed trace
+confinement, context-history/native transport, original-entry join or complete
+loop invariant. F170 source-tail unfolding reason is inventoried in findings.
+No native/TLS/stack/Values or final conjunction work. No image or key action.
+
+ONE strict55691 PASS10/10;exit0,wall0:04.11,peak6688524KiB,swap0,
+source d0885813346 (exact revision/commands/hashes in RAW_AUDIT.json).
+Only propext/Classical.choice/Quot.sound; zero unresolved/summary mismatches.
+Four support modules and driver passed focused. Three changed failures retained
+(55675,55676,55679). All nine scopes6G/8G/swap0/Tasks64/-M7000; no OOM/refusal,
+cap raise or unchanged regression. No accepted source changed after audit.
+Next Lean55682..55689 then55900..55989;raw55692..55699 then55990..55999.
+558xx untouched. No push/merge/provider/frozen spec/implementation/ledger/checker/
+lane B/C/shared-map change. Zero closures/endpoint-premise/T-field changes;
+all170 slot statuses and D999 DEFERRED-POST-TARGET dispositions unchanged.
+Offline validation: python3 evidence/pv-lib-20261107/lane-A/session15/validate.py.
+
+---
+
 # Session15 live — target OPEN
 
 Continued5894298db30. Read thread-29/D1005 and thread-29'/D1007.
