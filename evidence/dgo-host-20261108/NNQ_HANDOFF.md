@@ -1,61 +1,20 @@
-NNQ host O2 partial handoff. Branch codex/cx-dgo-host-20261107, base953e3af13bb.
-Target not yet established. This job delivers items1-7 only, not O2.
+NNQ host O2 continuation. Branch codex/cx-dgo-host-20261107.
 
-| Recipe item | Status and exact Lean name | Accepted receipt |
+Items1-7 retain the original accepted NNQ_L001-L030 receipts and NNQ_COMBINED_IMPORT. The continuation closes:
+
+| Item | Lean name in AspisR1.NNQ_HostDigest | Receipt |
 |---|---|---|
-|1 split|CLOSED AspisR1.NNQ_HostDigest.split|NNQ_L001|
-|2 SDK|CLOSED AspisR1.NNQ_HostDigest.sdk_withDigest|NNQ_L002|
-|3 observer|CLOSED AspisR1.NNQ_HostDigest.observe_op43|NNQ_L010|
-|4 trace simulation/lowering|CLOSED AspisR1.NNQ_HostDigest.CallSim, Sim, lowerN_sim|NNQ_L013|
-|5 outer stages|CLOSED AspisR1.NNQ_HostDigest.first_decoded_sim, stage1_sim, stage2_sim|NNQ_L016, NNQ_L020|
-|6 preparation|CLOSED AspisR1.NNQ_HostDigest.DSim, lowerP_dsim; AspisR1CurrentCaller.S1PrepareCode.NNQ_Port.dictionary_irrelevant|NNQ_L021,022,024,026,028|
-|7 batch|CLOSED AspisR1.NNQ_HostDigest.batch_eq, batch_stage_eq|NNQ_L030|
-|8 first/second child code|OPEN exact GExq_FirstCode.code/GExq_SecondCode.code dictionary equalities, uncompiled proposal NNQ_FirstCode.lean.txt|No launch|
-|9 child execution|OPEN CallSim transport through GExq_ChildCode.execute; depends on8|No launch|
-|10 account/O2|OPEN account_withDigest and exactly DGP_HostDigest.O2; depends on9|No launch|
+|8|firstCode_eq, secondCode_eq; prepare_lower_eq, secondCommon_eq|NNQ_L031|
+|9|child_sim; child_raw_sim for raw stage composition|NNQ_L032,034|
+|10 account|caller_first_eq, caller_second_eq; firstSyntax_eq, secondSyntax_eq, account_withDigest|NNQ_L035,036|
+|10 recorder/O2|observer_withDigest; o2 : AspisR1.DGP_HostDigest.O2|NNQ_L037,038|
 
-The OPEN goals and dependency-by-dependency continuation are in
-NNQ_REMAINING.md. There are no Kani-dependent remaining members. Budget is
-30/30 actual scopes,16 exit0 and14 rejected;0 Kani/0 extraction. Limits on
-EVERY launch:6G high/8G max/swap0/tasks64,-j1 -M7000 async=false,timeout180.
-Each admission allowed=true AND exit0; each preflight disk>=40GB and host share
-count<6. No memory kill, wall timeout, or raised cap/heartbeat/recursion option.
-Failed snapshots/diagnostics remain archived and receive no proof credit.
+O2 is proved with exactly the existing three hypotheses. Its statement is quoted verbatim in NNQ_O2.lean. No source/trust/model change, new premise or restriction of adversary/hashv/H. Standard axioms only: propext, Classical.choice, Quot.sound. No shipped files changed; inherited ELF pins are default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c34… (owner amendment); no rebuild trigger.
 
-All accepted new theorem audits are subsets of propext,Classical.choice,
-Quot.sound. The final NNQ_COMBINED_IMPORT includes NNH_ContinuationCombined,
-NNH_S5FocusedHost, unchanged DGP_HostDigest and every accepted NNQ module
-transitively. Item7's six declarations live IN that final module after the
-standalone wrapper's let-bound rewrite was corrected. L030 exit0,4.474146s,
-6707244KiB RSS,swap0,source revision2e05d7cb19c (dirty exact source hash in
-receipt);15 printed roots standard-only. Full AGENTS section6 fields are in
-NNQ_COMPILE.tsv and each NNQ_L*/receipt.json/time.log/stdout.log; no final
-release/manifest replay is claimed.
+NNQ_L033's memory-exhausted combined shape was split, then its replacement passed at L034/L035. No failed shape was rerun unchanged. Every launch used the unchanged 180s timeout, -j1 -M7000 async=false and a systemd scope (6G high,8G max,swap0,tasks64), fresh allowed:true/exit0 admission, whole-host scope count<6 and disk>=40GB. Exact target, source revision/hash, dependency fingerprint, exit, wall, peak RSS, swap and printed axioms are in NNQ_COMPILE.tsv and each receipt.json/stdout.log/time.log. NNQ_L038: exit0,4.271607455s,6703972KiB RSS,swap0; source revision fb3108aa636 with exact dirty source hash in receipt.
 
-Prepend for NNH_:
-/home/dombarker/project-offloads/codex-cx-dgo-host-20261108/NNQ_objects
-then the unchanged NNH run5 path:
-NNH_R4_objects:NNH_objects:NNH_seed:NNH_library_seed beneath
-/home/dombarker/project-offloads/codex-cx-integrate-20261111.
-Toolchain leanprover--lean4---v4.32.0. Do not import the .lean.txt proposals.
-Own generated sources/accepted objects are retained for the consumer; no shared
-NNH source or object was written. Redundant own scratch inputs are removed.
+For NNH run6, prepend /home/dombarker/project-offloads/codex-cx-dgo-host-20261108/NNQ_objects to NNH_R4_objects:NNH_objects:NNH_seed:NNH_library_seed under /home/dombarker/project-offloads/codex-cx-integrate-20261111. Toolchain v4.32.0. NNH run5 workspace and objects were read-only. Final NNQ_COMBINED_IMPORT2 passed NNQ_L039: exit0,3.929073355s,6667172KiB RSS,swap0; source revision cf6512bd6e5 with dirty exact source hash in receipt. It imports every accepted NNQ module and audits all14 new roots (standard axioms only). NNQ_PINS.json records accepted source/object hashes and all selected dependency pins, including the resolved Aeneas library. NNQ_HOST_FINAL_CHECK2.json verifies24 accepted overlay modules and271 unique object/dependency files read-only. NNQ_validate.py checks all39 historical/continuation receipts, admission, caps, scope share, disk, source hashes and accepted axioms. No full frozen-release manifest replay is claimed.
 
-Old/new SHA256s: NNQ_PINS.json records old=null for every new source and its
-accepted new source/object hash, selected dependency hashes including resolved
-Aeneas/AeneasMeta objects, and equal old/new hashes of DGO_HOST_RECIPE,
-DGO_O2 and DGP_HostDigest. Receipt source revisions remain historical exact
-launch revisions rather than this final documentation commit. No shipped
-source or ELF changed, so no three-ELF rebuild trigger. No trust change,
-axiom, sorry, native_decide, new premise, adversary/hashv/H restriction, ledger
-credit or headline-bound credit.
-
-Next consumer: NNH_RecordedCharge.bound transported by O1 and O2, followed by
-actual-experiment pointwise failure inclusion. O1 archive correction is noted
-but NOT recompiled. Condition(4) strategy is owner-approved and RECORDED,
-NOT proved. The three O2 hypotheses and its complete statement are unchanged.
-No real host counterexample to O2 was established. Final read-only host
-check verified16 accepted modules and3846 dependency occurrences
-(NNQ_HOST_FINAL_CHECK.json).
+Remaining integration: NNH_RecordedCharge.bound transported using O1/O2; same-world actual failure inclusion, condition(4), and the deployed headline. No NDT/headline credit. See NNQ_REMAINING.md. Continuation budget9/20 scopes (8 pass,1 memory rejection),0 Kani/0 extraction. Items8,9,10 are each CLOSED; no assigned member remains to attempt, so the job ends below80% with all requested proofs and final import complete. Old receipts remain historical; no repeated unchanged regression. Stage commits local; no push.
 
 target not yet established
