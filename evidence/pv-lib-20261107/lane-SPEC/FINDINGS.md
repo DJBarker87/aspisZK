@@ -138,3 +138,30 @@ transport. Determine the full native source-memory inventory (not just the
 five direct reference writers) before claiming f361's MachineSpec complete.
 The existing f361 contract component is not a full contract. Session4 does not
 start another row or add specification components beyond this diagnostic.
+
+## SPEC-C4 — ArcInner's total initialized image disagrees with the adopted binary
+
+Session7, discovered during the first ordered ABI task. `SESSION7_ABI_BINARY.txt`
+records adopted ELF SHA256 fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558,
+at spawn e0450's Packet allocation cut e057a..e05b7. malloc requests48 bytes,
+alignment8. Four qword stores initialize offsets0,8,16,24: strong1, weak1,
+scope r14, and the absent-result niche0x8000000000000002. Offsets32..47 have
+no initialization store. The sparse image must preserve their previous bytes.
+
+The session6 `PV_THR2_PacketArcInnerBytes.initialized` instead writes a
+`some` byte at EVERY offset below `shape.layout.width`, including32.
+`PV_LIB_SPEC_ArcImageGap` checks a concrete memory mismatch at address4128,
+base4096, on the retained initialized entry world, for EVERY source field
+value and EVERY total shape of the correct48-byte width. Status: focused
+Lean check pending; do not yet credit the theorem. Source/binary metadata
+projection is retained in SESSION7_ABI_SOURCE.json; no arbitrary ABI fixture
+is credited as the actual native representation.
+
+LIMIT: this is a local exact-world ABI/model obstruction. It is NOT a
+contradiction of the full OwnInit existential conjunction, not original-entry
+reachability, and not a failure of the frozen Rust. Exact memory equality
+cannot be obtained by inventing initialized payload bytes. An observational
+refinement could forget uninitialized payload; it would require an explicit
+proof and statement, not silent equality. A lane-local replacement should use
+a sparse byte image and frame unwritten bytes. The old provider is retained.
+No endpoint or T field is changed.

@@ -1,3 +1,11 @@
+# Session7 live checkpoint
+
+FrozenABI concrete source descriptors compiled44910. Full joint witness remains
+open. SPEC-C4 byte-image mismatch is under focused check; no contradiction of
+full OwnInit premises is claimed. See SESSION7.md. Next44911/raw49797.
+
+---
+
 # Session6 current handoff — partial, full joint witness still open
 
 Branch codex/pv-lib-spec-20261107; resumed745a4796ad6. No row proved;
