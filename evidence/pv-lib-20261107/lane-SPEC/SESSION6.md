@@ -40,3 +40,12 @@ This does not yet witness the newly reached-context runtime's COMPLETE
 source/ABI/native semantics conjunction, all18 universal row contracts, or
 AllocationBranch. External/resource replies in this model are pending.
 No such stronger claim is made by entry nonemptiness.
+
+49789 BoundRuntime passed after49788 layout/parser correction (retained).
+exit0,wall0:02.66,peak4769144KiB,swap0,sourcec0b21696342. Arc360 returned
+value/overflow is derived from the reached source store. Ordinary framing
+is enforced on every answer; only exact Packet/callback allocation tokens
+may change native ghost fields, with14756/14320 left to their named base
+OWNER actions. BoundRuntime is the current operational runtime extension.
+No row uses it in a proof. Full source/ABI adequacy and opaque native-resource
+internals are still not certified by defining this machine.
