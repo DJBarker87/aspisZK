@@ -857,3 +857,14 @@ The exact failed source/logs are retained in the attempt directories. Namespace-
 corrected Physical/Copy drafts and the proposed named assembly are .lean.txt,
 explicitly uncompiled at the cap, excluded from imports. No heartbeat, recursion,
 -M or cgroup cap was raised. No unchanged killed/timed-out job was rerun.
+
+### Run 5b T6 CLOSED (2/2 scopes L900–901)
+
+AspisR1.NNH_DigestSyntaxTransport.o1 PASS L901: standard axioms, 26.167058s,
+6827320 KiB peak RSS, swap0. lower/child/first/second/account also audited
+standard-only. Source exactly matches the retained .lean.txt archive. The
+archive already omitted the TWO redundant final child tactics present in
+L832. L900 mistakenly also removed the still-required all_goals try exact rfl,
+leaving op10/op11 unsolved; L901 restores that line, and does not repeat the
+failed source. O1 and NNQ_HostDigest.o2 are now available for T7. No charge
+application or failure-inclusion claim is inferred merely from O1.
