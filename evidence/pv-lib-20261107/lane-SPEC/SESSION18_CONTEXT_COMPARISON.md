@@ -1,3 +1,18 @@
+# Final authority after SPEC-C17
+
+The ContextFinal*18 statements supersede the preliminary ContextF*18 /
+ContextOwnInit18 statements below. ContextCounter18 uses the EXISTING
+Frontier.observe, including its nextActivation abstraction. Origin lists remain
+internal machine data and are not equated across contracted/expanded row
+implementations. Source cells/control/worlds/events and the exact Numbered
+frame clauses are retained. Complete Execution equality remains mandatory and
+proved in ContextReply18.history_same for SAME-machine prefix transport.
+See SESSION18_SPEC_CORRECTIONS.md, SPEC-C17, for the checked before/after.
+The preliminary paragraph below describing a stronger full-Execution boundary
+record is superseded; those modules remain unchanged as diagnostic history.
+
+---
+
 # SPEC-C14 successor statements — thread-29′ / D1007
 
 The BEFORE statements remain unchanged in ThreadSpecifications,
