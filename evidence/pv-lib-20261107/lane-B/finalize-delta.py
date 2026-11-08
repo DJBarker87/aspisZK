@@ -49,5 +49,13 @@ for s in old['slots']:
 assert len(slots)==60
 counts=dict(collections.Counter(s['status'] for s in slots));assert counts=={'INSTANTIATED':16,'WAITING-ON-ROW':39,'CORRECTED-STATEMENT':5},counts
 x=dict(schema=1,session=5,lane='B',branch='codex/pv-lib-slice-20261107',start_head='6db830678863f2d0baf4ee5b3182310f9f7a0206',single_start_merge=MERGE,assignment_snapshot=BASE,assignment_counts=old['counts'],merged_counts=merged['counts'],counts=counts,shared_map_edited=False,ledger_rows_closed=0,endpoint_premises_removed=0,endpoint_premises_added=0,new_trust_fields=0,owninit_joint_witness_work=False,qualification='Library graph/caller-domain/local-machine adapters only. INSTANTIATED has the same qualified meaning as existing map entries, not source/binary adequacy or parent-row closure. Historical support/evidence is retained. See NOTES.md for the typedDrop178 residual facet.',slots=slots)
+audit_path=E/'RAW_AUDIT.json'
+if audit_path.exists():
+ audit=json.loads(audit_path.read_text()); audited={r['root'] for r in audit['roots']}
+ for o in slots:
+  if o.get('module','') and o['module'].startswith('PV_LIB_B_'):
+   assert o['theorem'] in audited
+   o.update(raw_audited=True,audit_attempt=audit['attempt'])
+ x['audit']=dict(path=str(audit_path),attempt=audit['attempt'],root_count=audit['root_count'],exit=audit['receipt']['exit'])
 (E/'MAP-DELTA-S5.json').write_text(json.dumps(x,indent=2)+'\n')
 print(counts)
