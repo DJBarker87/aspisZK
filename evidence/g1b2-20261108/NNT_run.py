@@ -105,6 +105,8 @@ for root in roots:
   if p.is_dir():rels.update(str(z.relative_to(root))for z in p.rglob('*')if z.is_file()and any(str(z).endswith(s)for s in['.olean','.olean.private','.olean.server','.ir']))
   if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
 rels.update(n.replace('.','/')+'.olean'for n in modules)
+for root in roots:
+ rels.update(z.name for z in Path(root).glob('NNH_*.olean'))
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if(Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in[p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
