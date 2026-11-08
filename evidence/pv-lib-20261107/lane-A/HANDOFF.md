@@ -1,3 +1,92 @@
+# Session16 final — checked LOCAL obstruction; complete target NOT established
+
+Continued 2bfca12ab510d30816a0821ea28777d893b62e07. Target remains the newest
+parametric `PV_LIB_SPEC_LaneAJoins18` on read-only lane C, rechecked at start,
+before milestones and after audit. Exact revisions/hashes are in session16/
+LANE_C_START.json, LANE_C_BEFORE_AUDIT.json and LANE_C_FINAL_INPUT.json.
+History18 and LaneAJoins18 sources are unchanged across those pins.
+
+The SAME original85 history now has proved cuts94,96,104,112,116,123,131,132,
+133,141, all parametric in complete physical Entry and frame activation.
+Final stable export: `PV_LIB_A_F5FullEntry16.original141`. Actual source stores,
+worlds, events and saved callers are retained. `F170Tail15.run` is reused by
+name in an import-only C18-compatible replay; theorem names and proof bodies
+are unchanged. Source return, f17 success, is_worker return, Active prologue
+and native full delivery are also applied by their named contracts.
+
+A-S16-1 in FINDINGS: actual132 source1719 resolves to BODY17 in Full, CHILD in
+the D727 boundary. `F5BoundaryGap16.no_agreement/no_trace` refute the finite
+V2TableCongruence15 certificate at that actual cut. This unsuccessful approach
+was followed by the unchanged Full BODY push at133 and closure binding at141.
+A-S16-2: its actual Adt56 FnOnce closure is not forwarded/selected. The COMPLETE
+context-bound `answer_pending` returns pending for every resource/stack/store/
+world. `F5CallbackStall16.transition` is exact full-state v2 stutter, and
+`F5CallbackTrap16.trapped/no_body_entry` inductively exclude every later fresh
+body entry on that LOCAL callback continuation (waiting or retained undefined).
+
+This is the requested checked LOCAL obstruction/repair route, with IDs left;
+it is NOT a proof of the global negation of OriginalToF6. The callback cut's
+reachability after the additional TLS polls is NOT claimed. All four requested
+join inhabitants remain unpublished. JOINS-STATUS.md states these limits.
+Repair: bind f5's exact TLS-only instantiation/Adt56 callback to its existing
+stateful contract (F5Full requires actual reference, true write, CLOSED207/289),
+with complete replies/frames. Keep f2's FnDef18 forwarding separate. Any C
+resolver/environment/history correction must be in NEW modules. No repair,
+value/ready premise or frozen change was silently installed here.
+
+CLOSED124 and F124 resolver results are not consumed before this obstruction;
+actual124 return transport remains for after a valid f6 join. No F6ToRange,
+loop invariant, later361/14756 or final conjunction work was started. Native
+work here is diagnostic of the unchanged environment; physical/native/TLS/
+Values repairs and final joint witnesses remain C's work.
+
+ONE strict55692 PASS239/239; exit0, wall1:01.67, peak6909220KiB, swap0,
+source db3b25a3b754d3bde360410f02e527d15304fff8. Only propext/Classical.choice/
+Quot.sound; zero unresolved or constructor-summary mismatches. Exact commands,
+hashes, complete reachable inventories and receipts: session16/RAW_AUDIT.json,
+RAW_GRAPH_MANIFEST.json and RAW_GRAPH_ARCHIVE.json.xz. Strict walker/collector
+unchanged except module/root arrays. No accepted source changed after audit.
+
+59 focused passes =33 import-only compatibility replays +25 new support modules
++driver.23 compiler failures and1 pre-compiler cohort-preparation failure are
+retained with exact source blobs/logs. The broad nine-node simp and cyclic
+branch-tail simp were replaced symbolically; no heartbeat/cap increase.
+Each compile/audit used its own6G/8G/swap0/Tasks64/-M7000 scope and standalone
+STREAMB_SLOTS=3 turn plus reservation admission. No OOM, refusal, cold package
+build, full manifest, Rust/Aeneas/SBF/runtime regression or raw rerun occurred.
+C18's read-only import-renamed cohort was reused in an A-owned exact-object
+overlay; all20 earlier C renamed imports compare import-only to A sources.
+
+Next Lean55975..55989;raw55693..55699 then55990..55999. IDs NOT exhausted;
+558xx untouched. All170 historical slot statuses/D999 dispositions, endpoint
+premises and T fields unchanged; local MAP_DELTA attaches qualified findings
+only. No provider/frozen implementation/spec/ledger/checker/lane B/C/shared-map
+edit, key action, push or merge. Offline validation (NO replay):
+`python3 evidence/pv-lib-20261107/lane-A/session16/validate.py`.
+
+---
+
+# Session16 live — OriginalToF6 only; target OPEN
+
+Continued 2bfca12ab510d30816a0821ea28777d893b62e07. Newest C interface at
+start eb986db3dfb540425fca6995c4d1e1f90435a663 remains LaneAJoins18; exact
+source hashes in session16/LANE_C_START.json. Working from original85, not a
+fresh f6 entry. No join inhabitant or mathematical obstruction yet.
+
+C18 uses W3-compatible renamed lane-A imports; direct importing old A support
+with C duplicates PV_LIB declarations. Focused import-only compatibility
+replays preserve original theorem namespaces and proof bodies. Each module is
+compiled separately, in a private exact-object overlay under A's host directory;
+C's objects/sources remain read-only. 55682–55686 retain infrastructure/import
+failures;55687 retains the direct nine-node simp heartbeat failure. Replacement
+uses symbolic instruction-shape induction without raising heartbeats/caps.
+Current focused replay receipts are in session16. No strict audit yet.
+No F6ToRange work until OriginalToF6 is proved; no native/TLS/stack/Values or
+final conjunction work. No provider/implementation/frozen specification,
+ledger/checker/key actions, push/merge, or 558xx use.
+
+---
+
 # Session15 final — PARTIAL; requested completion NOT achieved
 
 Continued5894298db303b6c8a350da86f47e12b0d5431f42. Thread-29 and29′ binding.
