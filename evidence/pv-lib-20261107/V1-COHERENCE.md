@@ -1,8 +1,55 @@
 # Privacy library v1 coherence replay
 
-Status: in progress; detached aggregate56595 is active. Coherence is not yet established.
+Status: **PASS for the repaired v1 cohort**, proof source
+`27993341c495ea9107b742c011745b6ed725bebb`. The original merge required the
+COH-3 import repair; it is not credited as an unchanged passing tree.
 
-Source revision: `9a38706526c45bc0fac071869458400a07aaaba7` on
+All **834 original PV_LIB modules** are accounted for in one pinned workspace:
+384 freshly compiled artifacts and 450 verified cache reuses, with all 788
+recorded reuse dependency hashes matching the final freeze. The final inventory
+contains 877 PV_LIB modules including 43 compiled replay/audit helpers.
+
+The union contains **4,307 roots** from the v1 JSON and every retained A/B/C
+strict-audit list. All passed in **one capped aggregate scope**, using 182
+disjoint array selections, one immutable ModuleName→object mapping and the
+unchanged private importAll walker/collector. Namespace compatibility passed
+1,477 comparisons of repeated kernel declarations. All 47 source-type groups agree with their
+source cohorts: zero logical statement changes, including 55 direct Lean Expr
+equalities for serialized hygiene-label differences. No proved statement or
+proof body was changed; the repair canonicalizes imports in 59 files for 53
+identical mirrors.
+
+| Formal release field | Result |
+| --- | --- |
+| Target | Strict union audit 56595, all 4,307 roots |
+| Exit | 0 |
+| Wall | 1:00:20 |
+| Peak RSS | 7,133,420 KiB |
+| Swap | 0 |
+| Proof source | `27993341c495ea9107b742c011745b6ed725bebb` |
+| Executed driver/config revision | `9d02f25aa027963f6191437a9037cf7bb1ca2e6f` |
+| Limits | MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, Lean -M7000 |
+| `#print axioms` | Standard axioms only: `propext`, `Classical.choice`, `Quot.sound`; every raw/augmented summary agrees |
+
+The final freeze recheck passed for all 35,570 frozen object/companion files,
+1,786 staged sources, the environment and the exact Lean binary. Offline
+validation passed: full coverage, cache/source provenance, helper receipts,
+array-only collector changes, import-only repairs and both archive hashes.
+Failures 56590, 56592 and 56594 remain retained as non-passes.
+
+[FORMAL_RELEASE.json](v1-coherence/FORMAL_RELEASE.json) records exact toolchain,
+binary, environment and freeze hashes as well as the required release fields.
+[VALIDATION.json](v1-coherence/VALIDATION.json) records the final checks.
+[FINAL_MODULE_INVENTORY.json](v1-coherence/FINAL_MODULE_INVENTORY.json) enumerates
+every current module; the original inventory retains every root's provenance.
+[COLLECTED_MANIFEST.json](v1-coherence/COLLECTED_MANIFEST.json) and
+[RAW_GRAPH_MANIFEST.json](v1-coherence/RAW_GRAPH_MANIFEST.json) identify the
+ordered archive parts and hashes. All 4,307 actual raw walk files are retained.
+The archives use parts of at most 10 MiB; `validate.py` checks them offline.
+
+The remaining sections retain the input provenance and chronological findings.
+
+Original merge revision: `9a38706526c45bc0fac071869458400a07aaaba7` on
 `codex/pv-lib-v1-20261108`. Manifest inputs are lane B `43fa17cd4a5`
 (including lane A `fbc60bd811d`) and lane C `87e34a2b2af`.
 
@@ -41,7 +88,7 @@ first module under that changed environment. All failed records are retained.
 
 Merged source files match all 1,567 supplying A/B/C input-file comparisons
 (`v1-coherence/SOURCE_COHORTS.json`); no source-file difference was found.
-Kernel root-type comparisons and the sole strict union audit remain pending.
+Kernel root-type comparisons and the strict union outcome are completed above.
 
 
 ### COH-1: incomplete dependency ordering exposed by an opaque cached provider
@@ -67,7 +114,7 @@ edge. Its object hash is
 `474bb1c9d6242e0173a9718975ecc6ed5fa944c435fa34af008c0da84459e488`.
 The repair is dependency/import ordering, using the actual cached module headers
 for all 23 such provider objects. No proved statement is edited. The failing
-attempt is not a pass; replacement compilation remains pending.
+attempt is not a pass; the replacement result is recorded below.
 
 The first header repair missed cache-only intermediate modules. A shell
 orchestration error continued after its failed ordering assertion and repeated
@@ -119,12 +166,12 @@ input is archived as `failed-driver-56535.lean.xz`. Its successor is the new
 `PV_LIB_V1_RawAudit2` module, with named noinline array chunks of at most 128
 names. Collector/walker code remains byte-identical after removing the array
 definitions and array expression. No recursion-depth setting or cap was raised.
-Replacement compilation is pending. The sole strict raw audit has not run.
+The successor compilation result is recorded below; this failed compile is not a strict audit.
 
 
 COH-2 replacement passed 56536: `PV_LIB_V1_RawAudit2`, exit 0,
 wall 0:02.44, peak RSS 1757304 KiB, swaps 0, standard axioms only.
-The unchanged-body comparison passed. No strict raw audit has run yet.
+The unchanged-body comparison passed. This was a compile preflight.
 
 The dependency replay completed: all 834 v1 PV_LIB modules are compiled or
 matched to accepted cached source/object/dependency hashes in one LEAN_PATH.
@@ -133,7 +180,7 @@ no compiler or scope ran for that ID. It is not a Lean failure or a raw pass.
 The frozen workspace records 35,569 object/companion file hashes and 1,785
 retained staged source hashes (including inactive preflight sources, which
 are not credited as active proof modules). Toolchain Git hash and Lean binary
-SHA-256 are retained in COHORT_FREEZE. The library source pin remains 9a38706526c.
+SHA-256 are retained in COHORT_FREEZE. This initial replay stage used source pin 9a38706526c.
 
 
 ### COH-3: duplicate namespace declarations across lane mirror modules
@@ -190,7 +237,7 @@ The 56549 exit 3 is a no-scope empty-queue completion marker.
 providers and its root array retains all 4,307 roots. The collector/walker body
 comparison passed unchanged. Canonical object, companion and source hashes are
 frozen separately as `COHORT_CANONICAL_FREEZE`; the failed merge freeze remains
-retained. Root-type comparison and the sole final strict audit remain pending.
+retained. Root-type comparison and final strict audit results are recorded above.
 
 
 ### COH-4: full-root import exceeds the fixed Lean memory threshold
@@ -207,14 +254,13 @@ excessive memory consumption detected at 'interpreter' (potential solution: incr
 56556: exit 1, wall 0:19.09, peak RSS 7201248 KiB, swaps 0.
 Both use source revision 27993341c49. The second input removed 50 uncited
 library modules from the imported closure; no failed shape was retried with a
-higher cap. The full-import approach was then stopped. No strict union audit
-has run yet.
+higher cap. The full-import approach was then stopped. These full-import attempts are not strict union passes.
 
 The replacement uses one frozen ModuleName→object mapping and one canonical
 source revision, with disjoint root batches (35 batches, at most 125 roots).
 This is batching a single cohort, not combining input-cohort audit results.
-The graph-wide metadata gate 56558 compared 1,477 repeated actual kernel
-names. Every type and definition body matched exactly; theorem proof bodies
+The graph-wide metadata gate 56558 performed 1,477 comparisons of repeated kernel
+declarations. Every type and definition body matched exactly; theorem proof bodies
 are compared by their unchanged type under proof irrelevance. All comparisons
 passed (exit 0, wall 0:00.98, peak RSS 2213636 KiB, swaps 0). The repeated names
 are generated equation/auxiliary declarations; the conflicting nominal lane
@@ -223,8 +269,8 @@ root→owner mapping and 3,795-module dependency closure.
 
 The new array-only batch drivers all compiled in 56559 (35 passes; aggregate
 exit 0, wall 0:30.70, peak RSS 1593364 KiB, swaps 0, standard axioms). Collector
-and walker bodies are unchanged. The single final audit will run all these
-batches serially under ONE admitted capped aggregate scope and return nonzero
+and walker bodies are unchanged. The initial aggregate56590 used these batches serially under ONE admitted
+capped scope. The controller returns nonzero
 if any process, root, summary comparison or axiom check fails. It uses the
 same canonical objects for every batch and checks exact root-union coverage.
 
@@ -291,7 +337,7 @@ recorded. No source proof or cap changed. Compile56566 passed: exit0,
 wall0:00.96, peak1586816KiB, swaps0, standard axioms. Focused diagnostic56591
 passed75 roots across three selections including the earlier failing region:
 exit0, wall0:42.34, peak7064200KiB, swaps0. This diagnostic is not counted as a
-union audit. The replacement aggregate56592 is in progress, covering173
+union audit. The replacement aggregate56592 covered173
 disjoint selections in ONE capped scope using the same frozen canonical cohort.
 
 
@@ -317,15 +363,14 @@ Diagnostic56593 passed both refined inputs:13 slice roots and12 specification
 roots. Aggregate exit0, wall0:57.29, peak6955692KiB, swaps0, standard axioms,
 source27993341c495ea9107b742c011745b6ed725bebb. This isolates the memory
 problem to the mixed import/collection shape, without a model or theorem change.
-The replacement182-selection aggregate starts again from the first root; no
+The replacement182-selection aggregate56594 started again from the first root; no
 partial56592 result will be credited to its strict union result.
 
 
-Active replacement aggregate:56594, driver/config revision5c9b6b294da,
+Historical replacement aggregate:56594, driver/config revision5c9b6b294da,
 proof source27993341c495ea9107b742c011745b6ed725bebb. It executes all182
 FAMILY_ROOT_BATCHES selections in one capped scope, starting from the first
-root. Its result remains pending until the aggregate exits and the retained
-coverage, axiom comparisons, frozen hashes and raw-graph integrity are checked.
+root. It later terminated120 after the SSH transport loss described in COH-7.
 
 
 ### COH-7: SSH-dependent controller output, not a proof failure
@@ -357,3 +402,22 @@ with that one already-completed batch followed by previously untested batches;
 it still reruns every root. The detached56595 launch ack records the PID,
 controller/payload hashes and host stdout path. Live unit properties confirm
 MemoryHigh6442450944, MemoryMax8589934592, MemorySwapMax0, TasksMax64.
+
+
+## Final disposition
+
+56595 completed all182 selections and4307 roots with exit0. Its detached
+controller/payload are retained by hash and content. The final freeze and
+offline validation both passed; no additional Lean run followed the successful
+aggregate. All formal attempts retain their original target/exit/resource/source
+and axiom records in the metadata archive. The reconstructed56594 receipt is
+explicitly marked failed and recovered, using finalized GNU time and the partial
+2950-root report; it is never counted as a pass.
+
+One offline validator schema error (`KeyError: target`) was corrected to accept
+both per-target and batch `targets` receipt shapes. Cap, compilation, coverage,
+source/body, type, axiom and archive checks remain mandatory. The corrected
+validator passed; the formal audit was not repeated for this metadata fix.
+
+Premises removed/added:0/0. No OwnInit joint witness or ledger row closure is
+claimed. The final result establishes the repaired library's coherent replay.

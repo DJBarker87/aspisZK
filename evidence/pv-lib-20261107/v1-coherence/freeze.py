@@ -11,7 +11,9 @@ if mode=='freeze':
  p.write_bytes(lzma.compress(json.dumps(data).encode()));print('Frozen',len(files),'object and companion files;',len(sources),'sources')
 elif mode=='check':
  data=json.loads(lzma.decompress(p.read_bytes()));assert sha(V/'J.json')==data['env_sha256']
+ env=json.load(open(V/'J.json'));assert sha(env['LEAN'])==data['lean_binary_sha256']
+ assert subprocess.check_output([env['LEAN'],'--githash'],text=True).strip()==data['lean_githash']
  for name,v in data['files'].items():assert sha(O/name)==v['sha256'],('object changed',name)
  for name,h in data['sources'].items():assert sha(V/'sources-canonical'/name)==h,('source changed',name)
- (E/'COHORT_CANONICAL_FREEZE_CHECK.json').write_text(json.dumps(dict(unchanged=True,object_files=len(data['files']),sources=len(data['sources']),freeze_sha256=sha(p)),indent=2));print('All frozen object, companion and source hashes unchanged')
+ (E/'COHORT_CANONICAL_FREEZE_CHECK.json').write_text(json.dumps(dict(unchanged=True,lean_binary_sha256=data['lean_binary_sha256'],lean_githash=data['lean_githash'],env_sha256=data['env_sha256'],object_files=len(data['files']),sources=len(data['sources']),freeze_sha256=sha(p)),indent=2));print('All frozen object, companion and source hashes unchanged')
 else:raise RuntimeError(mode)
