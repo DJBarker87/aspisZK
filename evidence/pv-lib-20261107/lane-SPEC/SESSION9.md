@@ -44,3 +44,5 @@ PV_LIB_SPEC_LaneA_A_StoreActionTable compiled 44957, cohort w3: exit0, wall 0:02
 PV_LIB_SPEC_LaneA_A_StoreActionMachine compiled 44958, cohort w3: exit0, wall 0:02.89, peak 4594804KiB, swap 0; source 98fee58d12287e7a66877867b74ae4464ebe6545; standard summary axioms only.
 
 PV_LIB_SPEC_ScopeAllocationGap compiled 44960, cohort w3: exit0, wall 0:02.73, peak 4770472KiB, swap 0; source 49960a8266615497d49ee5179d97bea104bab22b; standard summary axioms only.
+
+PV_LIB_SPEC_ScopeAllocationPollGap compiled 44962, cohort w3: exit0, wall 0:03.03, peak 4794208KiB, swap 0; source b020a3c5008072f9f1093b4740012f4d1b43b19b; standard summary axioms only.

@@ -195,3 +195,38 @@ full-joint theorem is withdrawn: none was proved. This is a CHECKED LOCAL
 source/statement contradiction, NOT a theorem negating the complete OwnInit
 existential or all successful original-entry histories. It must not be used
 as credit for that stronger alternative deliverable.
+
+## SPEC-C6 — ScopeData's Arc reaches the Packet-only allocation model (session9)
+
+CHECKED44960, exit0, wall0:02.73, peak4770472KiB, swap0; standard
+axioms only. `PV_LIB_SPEC_ScopeAllocationGap.scope_body` proves the full
+resolver expands f6's actual scope constructor descriptor25 to F124.live.
+This is the SAME generic body used by the Packet constructor. It emits
+BoxNew4963 with the SAME syntactic allocation token/kind. The sparse handler
+selects by that token/kind, then always requests SparseArc.shape=48/8 and
+runs the Packet decoder. It has no ScopeData case or monomorphization context.
+
+`scope_decode` proves the Packet decoder returns NONE on the exact source
+ScopeData aggregate, counter AtomicUsize(0), for EVERY thread/panicked value
+and OWNER world under the concrete runtime carrier/control. `not_an_option`
+is the decisive symbolic fact: ScopeData's field0 is the counter, not an
+Option<Arc<ScopeData>>. No recurrence or whole-run normalization is used.
+`wrong_layout` checks48≠40. SESSION8_ABI_SCOPE.txt pins the adopted
+fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558 ELF:
+fa099 malloc40/8; qword stores fa0b3/fa0ba/fa0c2/fa0c6 at0/8/16/24;
+byte store fa0ce at32; holes33..39. The earlier ScopeData Arc cannot be
+represented by the Packet's48/8 four-qword image or its packet-only codec.
+
+This stops credit for a source-adequate successful original-entry history
+using the current sparse allocator. It is a checked LOCAL source/model
+contradiction, NOT original-entry reachability, NOT a theorem that no schedule
+reaches13923, and NOT a negation of the complete OwnInit joint existential.
+The cut92 correction remains valid. Lane A v2 does not fix this allocation
+image/type dispatch; no provider/table/source is modified to conceal it.
+
+Required repair: preserve the concrete generic instantiation (or dispatch on
+the actual source payload type) at f124; install a distinct40/8 sparse ScopeData
+allocation with its actual source-bound thread pointer/counter/panic values,
+retaining bytes33..39. Packet remains48/8, holes32..47. Then bind the native
+constructors and carry ONE original-entry trace through scope allocation,
+13923/cut92,113 registration and129/14756, before claiming a full witness.
