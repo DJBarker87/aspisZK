@@ -335,3 +335,23 @@ messages are repartitioned by C04Partition.
 Consequently no Associated/rootImage/eventImage producer or assemble application
 is claimed. These are final-field obligations, not new allowed own hypotheses.
 Next independent step: S6 HeadlineB; A1/A2 and Split.rest remain as recorded.
+
+## S6 boundary (2026-11-08): HeadlineB instantiated
+
+NNH_OutcomeRecRelease.remove generalizes only the event selector, using its
+pointwise selected-output equality. NNH_OutcomeRecAccepted.accepted is the
+NNH copy of the native-accepted consumer at a supplied account/project/selector.
+NNH_HostHeadlineB.headlineB instantiates it at the actual bounded normalized
+account source, ARQ_Observer.project/select, ARX_LocalCharge.budget composed
+with firstReads_le_length, and the existing SelectsPair field. OutcomeRec is
+the full FJv_DResult.Outcome with inner bad := E_rec. PASS L828; standard axioms
+only. No accepted2/SelectsPair hypothesis is added to a final headline: these
+are precisely the HeadlineB interface's arguments, to be produced by the top.
+
+S6 used5 actual scopes L824–828 (L823 failed preflight, no launch). L824 reached
+an unavailable obsolete import closure; L825 replaces that import with the
+coherent RPx_FJv_DRelease already used by RPx_Deployed. No missing legacy
+closure was rebuilt and no source retargeting occurred. New roots import the
+coherent RPx source modules; original FJv/NNE files remain untouched.
+Fresh run5 used120/160 actual scopes;40 remain. Target not yet established.
+S7 next: O1/O2 must compile before any use of RecordedCharge.bound at the host.
