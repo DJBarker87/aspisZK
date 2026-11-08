@@ -51,7 +51,7 @@ for c in review['candidates']:
  assert statements[name]['owner_module']==name.split('.')[-2]
  for child in c['canonical_children']:
   assert by[child['row']]['status']=='CLOSED',(r['row'],child['row']);child['status']='CLOSED';child['roots']=by[child['row']]['root_owners']
- c.update(gate_status='PASS_COMPLETE_ROOT_GATE_ADMITTED',gate_admitted=True,kernel_statement=statements[name])
+ c.update(status='PASS_COMPLETE_ROOT_GATE_ADMITTED',gate_status='PASS_COMPLETE_ROOT_GATE_ADMITTED',gate_admitted=True,kernel_statement=statements[name])
  old=copy.deepcopy(r['obligation']);o=r['obligation'];o['NNL_basis_obligation']=old;o['NNL_complete_candidate_review']=c;o['NNL_root_domain']=c['own_input'];o['kernel_roots']=[statements[name]]
  for kind in ['caller_domain_obligations','inventory_domain_obligations']:
   for z in o[kind]:z.update(status='INTERNAL_DISCHARGED_WITH_OWN_INPUT_PROVENANCE_RETAINED',discharged_by=name,NNL_evidence=c['source_chain'],NNL_note='SAME entered arguments and original domains derived internally; publicDom/P1880 own clauses remain upstream. Historical findings retained in NNL_basis_obligation, superseded in current context.')
@@ -69,7 +69,7 @@ for z in by['TX1:094']['obligation']['caller_domain_obligations']:
  if z.get('id')=='RSL3-caller:TX1:094:TX1:087:R4':z.update(status='DISCHARGED',discharged_by='AspisR1.NNG_Candidate094.candidate',proof_support='NNG_TotalParse094.prepare_domain / RSL.TX1_094.r4_of_scan at SAME canonicalScan proof',finding='Historical F9 finding resolved; preserved in NNL_basis_obligation')
 for z in clauses['clauses']:z['status']='DISCHARGED_IN_COMPLETE_SOURCE_FOLD'
 review['gate']='PASS';put('CANDIDATE_REVIEW',review);put('CLAUSE_REVIEW',clauses)
-ledger['NNL_specification']=J(E/'NNL_SPECIFICATION.json');ledger['NNL_top_composition']=J(E/'NNL_TOP_COMPOSITION.json');ledger['NNL_K086']=J(E/'NNL_K086.json');ledger['NNL_extraction_provenance']=J(E/'NNL_PROVENANCE.json')
+ledger['top_composition_obligations']=J(E/'NNL_TOP_COMPOSITION.json')['top_composition_obligations'];ledger['NNL_specification']=J(E/'NNL_SPECIFICATION.json');ledger['NNL_top_composition']=J(E/'NNL_TOP_COMPOSITION.json');ledger['NNL_K086']=J(E/'NNL_K086.json');ledger['NNL_extraction_provenance']=J(E/'NNL_PROVENANCE.json')
 for r in ledger['rows']:
  assert r['canonical_callees']==oldby[r['row']]['canonical_callees']
  if r['obligation']!=oldby[r['row']]['obligation']:r['obligation_statement_hash']=H(json.dumps(r['obligation'],sort_keys=True,separators=(',',':')).encode())

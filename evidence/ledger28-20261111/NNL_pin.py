@@ -19,7 +19,7 @@ assert J(B/'NNL_audit/fixtures/fixtures.json')['results']==J(B/'NNL_EXPECTED_FIX
 assert J(B/'NNL_audit/finalscan/scan.json')['exit_status']==0
 loaded=[json.loads(l)for l in(B/'NNL_LOADED_scan.jsonl').read_text().splitlines()]
 assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in loaded)
-assert not({r['module']for r in loaded}&{'NNG_Nonempty094','NNG_PropagatedFinding328'}),'Historical contradiction module entered current closure'
+assert not({r['module']for r in loaded}&{'NNG_Nonempty094','NNG_PropagatedFinding328','NNG_InstallRounds'}),'Historical contradiction module entered current closure'
 paths=os.environ['LEAN_PATH'].split(':');pins=[]
 for row in loaded:
  rel=row['module'].replace('.','/')+'.olean';p=next((Path(root)/rel for root in paths if(Path(root)/rel).is_file()),None);assert p,rel

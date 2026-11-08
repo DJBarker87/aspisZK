@@ -47,7 +47,7 @@ handoff=f'''Target not yet established. Twenty-first all-slices gate PASS: **589
 
 328: `AspisR1.NNG_Candidate328.candidate`, producer commit70c7bf7f7e9/L931, proves literal revision4 RowSpec_328 with SAME094 via `NNG_Child328.original` and total input lowering. No child/library/representation parameter remains. Full error formatter/log/abort relation retained. P1880 is a caller clause to345; canonical `p1880_of_decode` and concrete `NNG_P1880Discharge.decoder` discharge it there. This does not establish the missing345 parent association. NNG support is not another promoted row.
 
-Actual frozen bodies verified independently from NMT_E001/E002 pins, LLBCs, source spans, complete output hashes and(bc) checks; syntax-only parameterization reproduces compiled Funs exactly. Increased(bm) reliance on the existing(bc)-narrowed extraction item is recorded as reclassification, never removal. All child/library fields are CLOSED graphs including LIB F9. Standard library/runtime/compiler/allocator/source-to-ELF and child trust retained; no cryptographic assumption, metric or game changed.
+Actual frozen bodies verified independently from NMT_E001/E002 pins, LLBCs, source spans, complete output hashes and(bc) checks; syntax-only parameterization reproduces compiled Funs exactly. Increased(bm) reliance on the existing(bc)-narrowed extraction item is recorded as reclassification, never removal. All child/library fields are CLOSED graphs including LIB F9. Parent compile-source receipts and five selected object pins are checked in NNL_PARENT_COMPILE_PROVENANCE. Supplier source review resolves551 matching snapshots; one stale unused NNG_InstallRounds input is excluded, with no credit. Standard library/runtime/compiler/allocator/source-to-ELF and child trust retained; no cryptographic assumption, metric or game changed.
 
 All{a['required_roots']} required roots raw ax2 standard-only ({a['new_roots']} new), same optimized raw binary `{a['same_optimized_proof_binary_sha256']}` and eight unchanged fidelity fixtures. Four inherited collector disagreements retained under(ab')(3)/(ax2). Current NFX scan exit0 across{s['modules']} modules: zero dangling/canonical duplicate owners/import mismatches; {s['cached_replicas']} identical serialized replicas retained. Every prior canonical row-root complete type/owner is identical. One explicitly repaired library lemma, LIB_VLib.parseShape_exact, now names the F9 total child. {len(cmp['changed_files'])} pinned revision4/F9 object replacements recorded; no other predecessor drift. L020 captures all current statements. The disjoint LIB_ParseShape094 context extension changes no implementation; pre-extension raw receipts remain valid and every new root is walked after extension.
 
@@ -71,4 +71,8 @@ Final evidence commit is the revision containing this handoff. No push.
 (E/'NNL_HANDOFF.md').write_text('')
 for paragraph in handoff.split('\n\n'):
  with(E/'NNL_HANDOFF.md').open('a')as f:f.write(paragraph+'\n\n')
+lines=['Preflight and failed shapes are retained; each scope summary below links to its complete receipt.']
+for q in sorted(E.glob('NNL_L*/receipt.json')):
+ d=J(q);lines.append(f"{d['attempt']} {d['kind']} {d['module']}: exit={d['exit_status']} wall={d['wall_seconds']:.3f}s RSS={d['peak_rss_kib']}KiB swaps={d['swaps']} revision={d['source_revision']} receipt={q.parent.name}/receipt.json")
+(E/'NNL_TRANSCRIPT.txt').write_text('\n'.join(lines)+'\n')
 print('NNL handoff/physical/remaining written; target not yet established')
