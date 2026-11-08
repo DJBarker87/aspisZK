@@ -1,3 +1,25 @@
+# Session19 native delivery exports now checked
+
+C adoption PASS55783; newest join target LaneAJoins19 PASS55784. C host
+objects-active19 and J-active19.json retain the pinned A c18-s16 cohort read-only.
+Native helpers (new C modules; use by name at the actual reached continuation):
+- ActiveNative19.answer (55786): exact setter289 full answer from source/physical
+  ACTIVE=false and actual context-bound resources; computes old=false/byte=true.
+- ActiveBoundary19.full/successful (55787): named source289 graph plus native
+  reply delivered through saved outer child action, all reply branches retained.
+- ActiveConsumption19.consume (55789): exact outer8162 context consumption and
+  full Execution output; .physical/.events prove byte1 and empty native suffix.
+- ActiveSource19.status/cell/frame (56201): exact caller continuation, source
+  ACTIVE=true and full source-cell frame outside TLS and the two return cells.
+- ActiveCorrection19.before/after_status/nonstall (56204): checked local pending
+  defect and actual progressing successor, not original-entry reachability.
+- ConsumedHistory19 (56203): arbitrary-prefix context monotonicity and actual
+  poll consumption on the repaired machine, including malformed/undefined arms.
+
+All local lemmas still require their actual reached source/TLS/origin facts;
+none is a proof of a future source milestone or a join inhabitant. Original141
+is consumed by name. No new A-owned source prefix or loop is re-derived in C.
+
 # Session19: A-S16-2 repair adopted
 
 Focused55783 PASS. C successor history is ActiveAdoption19.history, definitionally
@@ -5,7 +27,7 @@ ActivePrefix17.history. A's ActiveEnvironment17.step/run adopted read-only;
 EntryWorld18.Entry/Full.programs/v2/resources retained. Exact read-only source
 pin: SESSION19_LANEA_INPUT.json. original85/original141 are reused by name.
 
-Newest join target: PV_LIB_SPEC_LaneAJoins19.Joins, now being compiled. This is
+Newest join target: PV_LIB_SPEC_LaneAJoins19.Joins, PASS55784. This is
 the literal LaneAJoins18 milestone/index/order interface on the adopted history.
 No values/native/representation/success assumption was added to any field.
 Old Joins18 remains the unchanged Before target on the stalling machine; its

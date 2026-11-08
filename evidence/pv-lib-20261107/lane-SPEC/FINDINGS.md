@@ -1,3 +1,22 @@
+# SPEC-C18 — A-S16-2 adopted callback model correction (session19)
+
+Lane A's exact Adt56 pending defect is accepted after read-only review.
+ActiveCorrection19.before retains the complete old pending statement;
+after_status/nonstall prove the corrected local caller continuation progresses.
+ActiveNative19, ActiveBoundary19, ActiveConsumption19 and ActiveSource19 derive
+the full native/source/caller effects, source ACTIVE=true and physical byte1.
+No child-result or desired Store transformer is supplied. The outer8162 origin
+is consumed; native8248 is inside the contracted CLOSED207 child, not a newly
+invented top-level source context. ContextMachine19.history_same identifies the
+successor row-reference machine with the adopted history at EVERY index.
+
+Before/after details and transport limits: SESSION19_ADOPTION.md. old universal
+contracts/Joins18 remain unchanged Before statements. LaneAJoins19 has exactly
+the same milestones/order on the adopted history. Complete contracts and joint
+witness remain OPEN; these local facts are not a complete-premise contradiction.
+
+---
+
 # SPEC findings
 
 Base 5e397cb38787124d8a4bce7d3ea54f2d38e6c7e7. Target not yet established.

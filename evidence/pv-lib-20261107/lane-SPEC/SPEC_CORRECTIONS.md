@@ -1,3 +1,20 @@
+# SPEC-C18 (session19): adopted A-S16-2 callback repair
+
+Before: ReachedNative14.answer always pending at f5 Adt56 FnOnce callback.
+After: ActiveEnvironment17.step uses exact ActiveDispatch17 resolution and
+complete stateful CLOSED207/289 boundary on that canonical continuation.
+Native8248 is interpreted inside the contracted child and the real outer8162
+origin is consumed. No synthetic top-level8248 issue is introduced.
+Checked comparisons: ActiveCorrection19.before/after_status/nonstall;
+ActiveAdoption19.preserved (full Execution through141); ContextMachine19
+history_same (full repaired reference/history equality at every index).
+Frame/Pre/source/table/resources preserved. No frozen module edited.
+Original18 universal contracts are not credited on a different machine.
+The eventual successor contracts must retain every old Pre/Post/frame clause
+and explicitly change the machine binding, as in the recorded SPEC-C14 repair.
+
+---
+
 
 ## Session18 — D1007 / thread-29′ implementation
 
