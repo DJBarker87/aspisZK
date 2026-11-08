@@ -1,0 +1,84 @@
+def NMT_345.commonValue : NMT_345.Statement → NMT_345.Common :=
+fun x =>
+  match x with
+  |
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+      a =>
+    c
+  | NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c a =>
+    c
+def NMT_345Dec.fromT5 : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
+fun x => { next_pair_index := x.next_pair_index, next_root := x.next_root, next_frontier := x.next_frontier }
+def NMT_345Dec.toT5 : NMT_stage1_owned.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
+fun x => { next_pair_index := x.next_pair_index, next_root := x.next_root, next_frontier := x.next_frontier }
+def NMT_345Dec.fromT7 : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 →
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 :=
+fun x =>
+  { master_account := x.master_account, checkpoint_account := x.checkpoint_account,
+    selected_lane_account := x.selected_lane_account, output_lane := x.output_lane,
+    checkpoint_sequence := x.checkpoint_sequence, historical_global_anchor := x.historical_global_anchor,
+    lane_transition := NMT_345Dec.fromT6 x.lane_transition }
+def AspisR1.S6N_Getters.commonValue : AspisR1.S6N_Getters.Statement → AspisR1.S6N_Getters.Common :=
+fun x =>
+  match x with
+  |
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer common a =>
+    common
+  | AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal common a =>
+    common
+AspisS6CurrentAdapterCarrier.from_toPoolV1PairForestTerminalCommonV1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1),
+  AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1
+      (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1 value) =
+    value
+AspisS6CurrentAdapterCarrier.equivPoolV1PairVerifiedAfterstateV1: AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 ≃
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+AspisS6CurrentAdapterCarrier.from_toPoolV1PairVerifiedAfterstateV1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1
+      (AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1 value) =
+    value
+AspisS6CurrentAdapterCarrier.to_fromPoolV1PairForestTerminalCommonV1: ∀
+  (value : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1
+      (AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1 value) =
+    value
+AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1: AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 →
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1.eq_1: ∀
+  (value : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 value =
+    { next_pair_index := value.next_pair_index, next_root := value.next_root, next_frontier := value.next_frontier }
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1: AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1: AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1.eq_1: ∀
+  (value : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1),
+  AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalCommonV1 value =
+    { master_account := value.master_account, checkpoint_account := value.checkpoint_account,
+      selected_lane_account := value.selected_lane_account, output_lane := value.output_lane,
+      checkpoint_sequence := value.checkpoint_sequence, historical_global_anchor := value.historical_global_anchor,
+      lane_transition := AspisS6CurrentAdapterCarrier.fromPoolV1PairLatePublicStatementV1 value.lane_transition }
+AspisS6CurrentAdapterCarrier.equivPoolV1PairForestTerminalCommonV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 ≃
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.to_fromPoolV1PairVerifiedAfterstateV1: ∀
+  (value : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1
+      (AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 value) =
+    value
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1.eq_1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1 value =
+    { master_account := value.master_account, checkpoint_account := value.checkpoint_account,
+      selected_lane_account := value.selected_lane_account, output_lane := value.output_lane,
+      checkpoint_sequence := value.checkpoint_sequence, historical_global_anchor := value.historical_global_anchor,
+      lane_transition := AspisS6CurrentAdapterCarrier.toPoolV1PairLatePublicStatementV1 value.lane_transition }
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1.eq_1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1 value =
+    { next_pair_index := value.next_pair_index, next_root := value.next_root, next_frontier := value.next_frontier }

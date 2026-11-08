@@ -26,6 +26,12 @@ theorem empty (T : Type) (a : alloc.vec.Vec T) :
  (NNV_GeometryInstallSlots.empty (base m env err r) T a).trans
   (NNV_GeometryInstallSlots.empty cbase T a).symm
 
+theorem any {T F : Type} (pred : core.ops.function.FnMut F T Bool)
+ (it : core.slice.iter.Iter T) (f : F) :
+ (ops m env err r).op3 pred it f = canonical.op3 pred it f :=
+ (NNV_GeometryInstallSlots.any (base m env err r) pred it f).trans
+  (NNV_GeometryInstallSlots.any cbase pred it f).symm
+
 theorem zero : (ops m env err r).op6 = canonical.op6 :=
  (NNV_GeometryInstallSlots.zero (base m env err r)).trans
   (NNV_GeometryInstallSlots.zero cbase).symm
@@ -33,6 +39,7 @@ theorem zero : (ops m env err r).op6 = canonical.op6 :=
 #print axioms iterator
 #print axioms mapped
 #print axioms empty
+#print axioms any
 #print axioms zero
 end AspisR1.NNV_GeometrySelectedStd
 end

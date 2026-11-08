@@ -1,0 +1,37 @@
+{"attempt": "NNV_L024", "exit_status": 0, "wall_seconds": 31.08824656996876, "peak_rss_kib": "6876908", "swaps": "0", "print_axioms": []}
+def NMT_345.commonValue : NMT_345.Statement → NMT_345.Common :=
+fun x =>
+  match x with
+  |
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+      a =>
+    c
+  | NMT_stage1_owned.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c a =>
+    c
+def NMT_345Dec.fromT5 : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  NMT_stage1_owned.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 :=
+fun x => { next_pair_index := x.next_pair_index, next_root := x.next_root, next_frontier := x.next_frontier }
+def NMT_345Dec.toT5 : NMT_stage1_owned.aspis
+...
+AdapterCarrier.equivPoolV1PairForestTerminalCommonV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 ≃
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.to_fromPoolV1PairVerifiedAfterstateV1: ∀
+  (value : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1
+      (AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 value) =
+    value
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1: AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 →
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1.eq_1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalCommonV1 value =
+    { master_account := value.master_account, checkpoint_account := value.checkpoint_account,
+      selected_lane_account := value.selected_lane_account, output_lane := value.output_lane,
+      checkpoint_sequence := value.checkpoint_sequence, historical_global_anchor := value.historical_global_anchor,
+      lane_transition := AspisS6CurrentAdapterCarrier.toPoolV1PairLatePublicStatementV1 value.lane_transition }
+AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1.eq_1: ∀
+  (value : AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  AspisS6CurrentAdapterCarrier.toPoolV1PairVerifiedAfterstateV1 value =
+    { next_pair_index := value.next_pair_index, next_root := value.next_root, next_frontier := value.next_frontier }
+
+Running as unit: run-r3835fb6c0d8c42598cdee92082bcccd6.scope; invocation ID: 83cca64b16a34406bb2f90a7823d8cb3
