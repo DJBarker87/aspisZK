@@ -328,3 +328,22 @@ source-derived C7 branch. The old C8 theorem remains about old SiteArc only.
 This repairs a lane-local operational codec, not a frozen Pre/Post or provider.
 Native Thread source binding, actual valid pointers, continuous original-entry
 history and the complete joint existential remain open.
+
+## SPEC-C9 — AtomicBool source u8 conflicts with ScopeData byte decoder (session12)
+
+The session11 WordThreadArc.scopeWord requires `.boolean false` at
+AtomicBool.v.UnsafeCell.value. The adopted lane-A v2 AtomicReadsV2.boolean
+requires `.number 0/1` at exactly that path and converts it to the returned
+boolean. Pinned Rust AtomicBool::new stores `v as u8`. AtomicBoolGap checks
+that the numeric-zero ScopeData is rejected for EVERY Thread value, before
+any Thread decode. This is local, not original-entry reachability or full
+OwnInit negation. Repair: accept canonical numeric zero in the ScopeData
+image, retaining the legacy bool case only for historical compatibility;
+bind f123 to its numeric-zero/one constructor, and recheck the actual v2 load.
+
+Session12 metadata correction: NativeKinds.boolCell (55116) was constructed
+as UnsafeCell<bool> even though N95807 makes AtomicBool opaque. It is NOT an
+extracted field declaration. That unused tag stays historical; the new
+constructor uses UnsafeCell<u8> from pinned Rust. The other three result tags
+are exact LLBC result types. No source/native adequacy is credited merely
+from projecting tags.
