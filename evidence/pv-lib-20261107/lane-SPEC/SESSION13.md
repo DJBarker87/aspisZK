@@ -22,3 +22,5 @@ PV_LIB_SPEC_CellPhysical13 compiled 55167, cohort w3: exit0, wall 0:02.21, peak 
 PV_LIB_SPEC_ScopePhysical13 compiled 55168, cohort w3: exit0, wall 0:02.17, peak 4790720KiB, swap 0; source bc8f46f2a5f44de9dba6caa60c117de682d92631; standard summary axioms only.
 
 PV_LIB_SPEC_BoundNative13 compiled 55169, cohort w3: exit0, wall 0:02.22, peak 4793664KiB, swap 0; source 41812acdab9de6e481967ce262b0d82c7b197131; standard summary axioms only.
+
+PV_LIB_SPEC_InitializedWords13 compiled 55171, cohort w3: exit0, wall 0:02.23, peak 4790480KiB, swap 0; source 76dff54ac8bd4cc0a54a8298100115c5dff589b2; standard summary axioms only.
