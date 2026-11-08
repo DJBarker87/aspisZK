@@ -1,3 +1,30 @@
+# Session14 D1005 live correction — Full BODY124 join; task OPEN
+
+`PV_LIB_A_V2F124Entry14.run` enters actual1916 BODY124 on retained original v2.
+`F124EntryData14.provenance/valid/bounded/pre/installed` bind that exact source
+push to CLOSED124's literal entry and apply its named all-branch graph. The
+slice `LiveNumbering.push` is reused. No callee return-counter equality.
+Full/v2/provider/context/physical transport and original Entry14-to-f6 remain
+OPEN; provider-model installation is not credited as the actual original run.
+
+CHECKED `PV_LIB_A_Full124TableGap14.not_prefix_tables`: C's frozen Full.programs
+executes124 BODY, so the earlier opaque124 prefix table and V2PrefixTables14
+bundle CANNOT instantiate it. Earlier F6To15Fixed14/F6To220History14 histories
+retain their support-only credit on their stated prefix tables; none is an
+OwnInit witness. Do not use `V2ActualBindings14.run124` on C's Full.programs.
+Other V2ActualBindings14 call APIs now require ONLY their exact per-call lookup.
+V2Callback14 directly proves source-selected9196/316 entry on ORIGINAL v2;
+V2TraceTransport14 proves the actual full-state trace-indexed transport, never
+an unconditional phase projection. No full LoopInvariant or14756 history yet.
+
+Lane C's latest Full table and live handoff are pinned in session14/
+LANE_C_LATEST_INPUT.json. D1005 method is copied in METHOD_D1005.md.
+No runtime/TLS/native/physical binding work from C is duplicated. No ledger,
+endpoint/T, frozen source/spec, key or DEFERRED-POST-TARGET status changed.
+Strict new-root audit has NOT run yet. Work continues contract-first on v2.
+
+---
+
 # Session14 live checkpoint — fixed-table f6-to15 checked; full task OPEN
 
 Continued74f750e69d7, LOG D1004. Latest accepted stable name:
