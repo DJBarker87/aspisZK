@@ -14,3 +14,5 @@ PV_LIB_SPEC_CallbackSource compiled 55103, cohort w3: exit0, wall 0:03.27, peak 
 PV_LIB_SPEC_CallbackOperands compiled 55104, cohort w3: exit0, wall 0:02.72, peak 4745888KiB, swap 0; source 5ca037d67ab722088124960235145541846f09c7; standard summary axioms only.
 
 PV_LIB_SPEC_CallbackBound compiled 55105, cohort w3: exit0, wall 0:02.97, peak 4759724KiB, swap 0; source 8e3969c501ed6d001a0c417d7c2505176ed63205; standard summary axioms only.
+
+PV_LIB_SPEC_CallbackModel compiled 55106, cohort w3: exit0, wall 0:02.67, peak 4740712KiB, swap 0; source 822ebff46502eba6e4437a02eb163c2dca34c63a; standard summary axioms only.
