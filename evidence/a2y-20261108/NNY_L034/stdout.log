@@ -1,0 +1,123 @@
+NNY_generated/NNY_MerkleShared.lean:29:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+    (VTop_Checkpoint.digest D) proof queries (rootAt roots 1) k 1#usize i1 v1 ()
+in the target expression
+  (do
+      let (r, idx1, val1) ← ok (core.result.Result.Ok (), i1, v1)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                (VTop_Checkpoint.digest D) proof queries (rootAt roots 1) k 1#usize idx1 val1 ()
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                    (VTop_Checkpoint.digest D) proof queries (rootAt roots 2) k 2#usize idx2 val2 ()
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+
+D : VTop_Stages.aspis_core.digest.Digest32 Unit
+H : Bytes → AspisV8R19.SourceDuplexStep.State
+agree : NodeLeaf D H
+proof : Slice U8
+queries : Std.Array U32 22#usize
+roots : Std.Array (Std.Array U8 32#usize) 3#usize
+k : Usize
+hk : ↑k < 2
+canonical : ∀ j < 22, ↑(↑queries)[j]! < 262144
+run :
+  Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+      (NKV_ConcreteChildren.digest H) proof queries roots k () =
+    ok (core.result.Result.Ok ())
+i1 i2 i3 : Port3_NativeBatchCalls.Indices
+v1 v2 v3 : Port3_NativeBatchCalls.Values
+c0 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      queries (rootAt roots 0) k 0#usize (Array.repeat 16#usize 0#u32)
+      (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) () =
+    ok (core.result.Result.Ok (), i1, v1)
+c1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      queries (rootAt roots 1) k 1#usize i1 v1 () =
+    ok (core.result.Result.Ok (), i2, v2)
+c2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      queries (rootAt roots 2) k 2#usize i2 v2 () =
+    ok (core.result.Result.Ok (), i3, v3)
+t0 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (VTop_Checkpoint.digest D) proof queries (rootAt roots 0) k 0#usize (Array.repeat 16#usize 0#u32)
+      (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) () =
+    ok (core.result.Result.Ok (), i1, v1)
+t1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (VTop_Checkpoint.digest D) proof queries (rootAt roots 1) k 1#usize i1 v1 () =
+    ok (core.result.Result.Ok (), i2, v2)
+t2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+      (VTop_Checkpoint.digest D) proof queries (rootAt roots 2) k 2#usize i2 v2 () =
+    ok (core.result.Result.Ok (), i3, v3)
+h0 : roots.index_usize 0#usize = ok (rootAt roots 0)
+h1 : roots.index_usize 1#usize = ok (rootAt roots 1)
+h2 : roots.index_usize 2#usize = ok (rootAt roots 2)
+⊢ (do
+      let (r, idx1, val1) ← ok (core.result.Result.Ok (), i1, v1)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                (VTop_Checkpoint.digest D) proof queries (rootAt roots 1) k 1#usize idx1 val1 ()
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                    (VTop_Checkpoint.digest D) proof queries (rootAt roots 2) k 2#usize idx2 val2 ()
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.NNY_MerkleShared.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleShared.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

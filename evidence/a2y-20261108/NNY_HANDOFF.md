@@ -1,3 +1,13 @@
+# NNY continuation P1 completed
+
+P1 CLOSED in 8/8 capped scopes: NNY_MerkleTrees (L033), NNY_MerkleShared.values/parent (L036), exact NNY_NNUParent.parent at k=1 (L037), and NNY_FinalCombined (L038). All successful audits use only propext, Classical.choice, Quot.sound; no failed module receives credit. L031/L032/L034/L035 preserve the exact failed sources and diagnostics. Source statements are unchanged from the repaired drafts.
+
+The SAME native three trees and returned arrays now compose into the installed batch. NodeLeaf agreement is discharged by NNY_MerkleShared.tx2 env; SAME-resume canonicality comes from NNU_MerkleSlots.same_resume. No global digest law, hash-injectivity or extra field premise was added.
+
+New allowance: 8/20 scopes used, 4 pass / 4 failed proof attempts, 0 Kani/extraction. P2 (cap 6), P3 (cap 2), P4 (cap 4) remain. No A2 field or ledger credit exists yet. All caps/admissions/share/disk checks passed; no timeout, memory kill, transport retry or host modification. Own client/validator changes only separate the new budget and enforce stage ordering. No shipped files changed; inherited ELF pins require no rebuild.
+
+## Historical handoff (superseded at Y1 only)
+
 # NNY A2 handoff
 
 **A2 NOT DELIVERED; target not yet established.** Branch `codex/cx-a2-20261107`; receipts `evidence/a2y-20261108/`. The full authorized allowance is exhausted: **30/30 scopes, 18 exit 0, 12 failed proof/type attempts; 0 Kani, 0 extraction**. No new NND_A2 field or ledger credit exists.

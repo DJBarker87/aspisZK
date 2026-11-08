@@ -8,7 +8,7 @@ guard=E/'NNY_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);
 a,kind,target=sys.argv[1:];assert re.fullmatch('NNY_L[0-9]{3}',a) and 1<=int(a[-3:]) and not (E/a).exists()
 # New outputs use the private NNY overlay; NNH/run-5b inputs stay read-only.
 # Budget actual submissions, including unresolved ones, rather than ID suffixes.
-# Historical L001-L040 plus the separately authorized L041-L080 continuation.
+# Historical L001-L030 plus the separately authorized twenty-scope continuation.
 used=set()
 for n in ['NNY_ATTEMPTS.jsonl','NNY_TRANSPORT.jsonl']:
  p=E/n
@@ -16,7 +16,12 @@ for n in ['NNY_ATTEMPTS.jsonl','NNY_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert 1<=int(a[-3:])<=30 and len(used)<30, 'NNY allowance 30 scopes exhausted'
+continuation={x for x in used if 31<=int(x[-3:])<=50}
+assert 31<=int(a[-3:])<=50 and len(continuation)<20, 'NNY continuation allowance 20 scopes exhausted'
+stage='P1' if int(a[-3:])<=38 else 'P2' if int(a[-3:])<=44 else 'P3' if int(a[-3:])<=46 else 'P4'
+assert stage=='P1' or (E/'NNY_P1_CLOSED.json').exists(), 'P1 must close within eight scopes before P2'
+assert stage in ['P1','P2'] or (E/'NNY_P2_CLOSED.json').exists(), 'P2 must close before P3'
+assert stage!='P4' or (E/'NNY_P3_CLOSED.json').exists(), 'P3 must close before P4'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
@@ -90,7 +95,7 @@ elif kind=='audit':
 
 else:raise ValueError(kind)
 overlays=json.loads((E/'NNY_RUN5B_PATHS.json').read_text())
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNY_tmp',CARGO_TARGET_DIR=B+'/NNY_target',LEAN_PATH=':'.join([B+'/NNY_objects']+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(continuation_stage=stage,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNY_tmp',CARGO_TARGET_DIR=B+'/NNY_target',LEAN_PATH=':'.join([B+'/NNY_objects']+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil

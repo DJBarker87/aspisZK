@@ -17,6 +17,9 @@ import NNY_MerkleActive
 import NNY_MerkleLoop
 import NNY_BatchArithmetic
 import NNY_MerkleTreeFrame
+import NNY_MerkleTrees
+import NNY_MerkleShared
+import NNY_NNUParent
 #print axioms NNY_JunkAudit.returned
 #print axioms NNY_JunkAudit.auth_domain
 #print axioms NNY_JunkAudit.scan_panic
@@ -53,3 +56,9 @@ import NNY_MerkleTreeFrame
 #print axioms AspisR1.NNY_MerkleTreeFrame.head
 #print axioms AspisR1.NNY_MerkleTreeFrame.zero
 #print axioms AspisR1.NNY_MerkleTreeFrame.one
+#print axioms AspisR1.NNY_MerkleShared.treeCode
+#print axioms AspisR1.NNY_MerkleShared.slotBound
+#print axioms AspisR1.NNY_MerkleShared.tree
+#print axioms AspisR1.NNY_MerkleShared.values
+#print axioms AspisR1.NNY_MerkleShared.parent
+#print axioms AspisR1.NNY_NNUParent.parent

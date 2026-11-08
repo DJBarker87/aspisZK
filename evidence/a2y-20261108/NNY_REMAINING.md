@@ -1,3 +1,7 @@
+# Continuation frontier after P1
+
+Y1 CLOSED: NNY_MerkleShared.parent (L036), exact SAME-resume TX2 instance NNY_NNUParent.parent (L037), combined import L038, standard axioms only. The old Y1 OPEN text below is historical and superseded. Y2/Y3/Y4 remain exactly as stated below. New allowance used 8/20; remaining stage caps 6/2/4.
+
 # Exact remaining A2 obligations
 
 No A2 field term is delivered. All remaining obligations are Lean-only; none requires Kani or extraction. The 30-scope allowance is the stopping boundary, not Kani exhaustion or an owner/interface decision.
