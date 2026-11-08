@@ -3,28 +3,28 @@ from NMX_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def _run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMX_L') and 1<=int(a[5:])<=1999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=6) or (a.startswith('NMX_K') and 1<=int(a[5:])<=1999)) and not (E/a).exists()
+    assert ((a.startswith('NMX_L') and 1<=int(a[5:])<=1999) or (a.startswith('NMX_E') and 1<=int(a[-3:])<=8) or (a.startswith('NMX_K') and 1<=int(a[5:])<=1999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<826,'Resume formal allowance exhausted (626 previous + 200)' 
+        assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<1066,'Resume formal allowance exhausted (766 previous + 300)' 
         combined=E/'NMX_COMBINED_IMPORT.lean'
         combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and x.get('axioms_accepted',True) and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
         # Revision2 has two new-root audits, its own combined import and retention.
         # Keep these slots even though the historical revision1 import is green.
         pending_final_slots=4
         if target not in ['NMX_COMBINED_IMPORT','NMX_R2_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention','retention_rev2','proof6','proof7']:
-            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<826-pending_final_slots,'Reserve every outstanding final import/retention slot'
+            assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<1066-pending_final_slots,'Reserve every outstanding final import/retention slot'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         excluded=set()
         flags=E/'NMX_BC_FLAGGED_EXITS.json'
         auth=json.loads((E/'NMX_FALLBACK_AUTH.json').read_text())
-        assert target in auth['authorized_kani_targets'] or (flags.exists() and target in json.loads(flags.read_text()).get('authorized_targets',[])), 'Kani target outside explicit 217 fallback authorization'
-        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<30,'Fallback hard Kani cap'
+        assert (flags.exists() and target in json.loads(flags.read_text()).get('authorized_targets',[])), 'Kani target outside explicit 217 fallback authorization'
+        assert sum(x['kind']=='kani' and x['attempt'] not in excluded for x in done)<35,'Fresh 10 Kani scopes, bc-flagged exits only'
     if kind=='extract':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x.get('kind')=='extract' for x in done)<6
+        assert sum(x.get('kind')=='extract' for x in done)<8
     env=json.loads((E/'NMX_R3_REGISTRY_ENV.json').read_text())
     env['TMPDIR']=B+'/NMX_tmp'
     env['CARGO_TARGET_DIR']=B+'/NMX_target'

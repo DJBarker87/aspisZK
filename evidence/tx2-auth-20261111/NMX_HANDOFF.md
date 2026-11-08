@@ -452,3 +452,10 @@ L1069 proof311 raw ax2 PASS: all12 new theorem roots, exact collectAxioms equali
 NMX_233_VALIDATION.json and NMX_RESUMPTION_COUNTS.json record exact accepted scopes, source revisions/hashes, resources and printed axioms. Current766 formal scopes (140 this resumption),6 total extraction/25 total Kani (zero new in this resumption),60 further formal scopes remain in the own runner. No budget stop: the latest requested234 candidate + frozen233 instantiation + readiness handoff are delivered. Remaining233 obligations are explicitly NOT claimed discharged by operational model membership.
 
 NMX_242_241_READINESS.md is the lead handoff:217 and234 proposed candidates; frozen233 native/represented instantiations with full child schemas and supplied module8; no unrestricted native233 candidate, hence no unconditional native242/241 readiness. It identifies exact downstream NMS full-schema consumers and retained Box/source/all-Args obligations. No source/trust/security-target promotion, no push. The ledger alone decides row credit. Local disk remains above49GB free; no cleanup or key changes performed.
+
+## Lead renewal 2026-11-08
+
+Ledger27 closes217/234 (587/0/12). Baseline766 formal,6 extraction,25 Kani; fresh authorization300 formal/2 extraction/10 Kani restricted to bc-flagged exits. Own runner updated to cumulative1066/8/35, with Kani fallback authorization retired.233 first, then242/241 in order. Current gaps remain native Box/source association and total canonical Args port; no new candidate yet.
+
+### R4 all-Args projection preflight
+L1072 ByteCut and L1074 AccountProjection PASS; L1077 RegistryProjection PASS. The proofs preserve the full reference relations, not just endpoints. Failed syntax/rewrite variants L1073/1075/1076 excluded. L1078 ReadDecode: boxed projection passed, lane relation needs explicit Spec.call pointwise transport (repair written, not accepted yet). E007 exposes actual master/checkpoint Box wrapper bodies, keeping CLOSED raw decoders opaque. No candidate or native association claimed at this stage.
