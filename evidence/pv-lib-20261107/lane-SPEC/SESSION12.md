@@ -32,3 +32,5 @@ PV_LIB_SPEC_StackRecheck12 compiled 55139, cohort w3: exit0, wall 0:02.33, peak 
 PV_LIB_SPEC_ThreadWords12 compiled 55140, cohort w3: exit0, wall 0:02.20, peak 4776440KiB, swap 0; source b526525ecc2ef0550988333280ae266e44a66dd0; standard summary axioms only.
 
 PV_LIB_SPEC_NativeMemory12 compiled 55141, cohort w3: exit0, wall 0:02.24, peak 4776904KiB, swap 0; source 2e66e05daa6e65982029bd4ff1e42d1e6eabe0a7; standard summary axioms only.
+
+PV_LIB_SPEC_ThreadWordRecheck12 compiled 55143, cohort w3: exit0, wall 0:02.33, peak 4774540KiB, swap 0; source ecbdfee4e5afe02a0a1ac871e8d2acd8011d5135; standard summary axioms only.
