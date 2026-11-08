@@ -1,0 +1,2894 @@
+{
+  "source_revision": "41e76d01fdead952101594b8b0f36a7561d180f2",
+  "source_path": "evidence/pv-evhB-20261103/thread-line/generated/N95807/OrderedFamilies.llbc.xz",
+  "llbc_sha256": "ac8e0f23d5790081206e8b3b5f1ef9a9485516a33eeff1ee0d59e60ce433cc1c",
+  "target": [
+    {
+      "key": "x86_64-unknown-linux-gnu",
+      "value": {
+        "target_pointer_size": 8,
+        "is_little_endian": true
+      }
+    }
+  ],
+  "types": {
+    "21": {
+      "def_id": 21,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "alloc",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "sync",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Arc",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 27,
+            "beg": {
+              "line": 269,
+              "col": 0
+            },
+            "end": {
+              "line": 272,
+              "col": 1
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " A thread-safe reference-counting pointer. 'Arc' stands for 'Atomically"
+            },
+            {
+              "DocComment": " Reference Counted'."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The type `Arc<T>` provides shared ownership of a value of type `T`,"
+            },
+            {
+              "DocComment": " allocated in the heap. Invoking [`clone`][clone] on `Arc` produces"
+            },
+            {
+              "DocComment": " a new `Arc` instance, which points to the same allocation on the heap as the"
+            },
+            {
+              "DocComment": " source `Arc`, while increasing a reference count. When the last `Arc`"
+            },
+            {
+              "DocComment": " pointer to a given allocation is destroyed, the value stored in that allocation (often"
+            },
+            {
+              "DocComment": " referred to as \"inner value\") is also dropped."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Shared references in Rust disallow mutation by default, and `Arc` is no"
+            },
+            {
+              "DocComment": " exception: you cannot generally obtain a mutable reference to something"
+            },
+            {
+              "DocComment": " inside an `Arc`. If you do need to mutate through an `Arc`, you have several options:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " 1. Use interior mutability with synchronization primitives like [`Mutex`][mutex],"
+            },
+            {
+              "DocComment": "    [`RwLock`][rwlock], or one of the [`Atomic`][atomic] types."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " 2. Use clone-on-write semantics with [`Arc::make_mut`] which provides efficient mutation"
+            },
+            {
+              "DocComment": "    without requiring interior mutability. This approach clones the data only when"
+            },
+            {
+              "DocComment": "    needed (when there are multiple references) and can be more efficient when mutations"
+            },
+            {
+              "DocComment": "    are infrequent."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " 3. Use [`Arc::get_mut`] when you know your `Arc` is not shared (has a reference count of 1),"
+            },
+            {
+              "DocComment": "    which provides direct mutable access to the inner value without any cloning."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let mut data = Arc::new(vec![1, 2, 3]);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // This will clone the vector only if there are other references to it"
+            },
+            {
+              "DocComment": " Arc::make_mut(&mut data).push(4);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " assert_eq!(*data, vec![1, 2, 3, 4]);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " **Note**: This type is only available on platforms that support atomic"
+            },
+            {
+              "DocComment": " loads and stores of pointers, which includes all platforms that support"
+            },
+            {
+              "DocComment": " the `std` crate but not all those which only support [`alloc`](crate)."
+            },
+            {
+              "DocComment": " This may be detected at compile time using `#[cfg(target_has_atomic = \"ptr\")]`."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ## Thread Safety"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Unlike [`Rc<T>`], `Arc<T>` uses atomic operations for its reference"
+            },
+            {
+              "DocComment": " counting. This means that it is thread-safe. The disadvantage is that"
+            },
+            {
+              "DocComment": " atomic operations are more expensive than ordinary memory accesses. If you"
+            },
+            {
+              "DocComment": " are not sharing reference-counted allocations between threads, consider using"
+            },
+            {
+              "DocComment": " [`Rc<T>`] for lower overhead. [`Rc<T>`] is a safe default, because the"
+            },
+            {
+              "DocComment": " compiler will catch any attempt to send an [`Rc<T>`] between threads."
+            },
+            {
+              "DocComment": " However, a library might choose `Arc<T>` in order to give library consumers"
+            },
+            {
+              "DocComment": " more flexibility."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " `Arc<T>` will implement [`Send`] and [`Sync`] as long as the `T` implements"
+            },
+            {
+              "DocComment": " [`Send`] and [`Sync`]. Why can't you put a non-thread-safe type `T` in an"
+            },
+            {
+              "DocComment": " `Arc<T>` to make it thread-safe? This may be a bit counter-intuitive at"
+            },
+            {
+              "DocComment": " first: after all, isn't the point of `Arc<T>` thread safety? The key is"
+            },
+            {
+              "DocComment": " this: `Arc<T>` makes it thread safe to have multiple ownership of the same"
+            },
+            {
+              "DocComment": " data, but it  doesn't add thread safety to its data. Consider"
+            },
+            {
+              "DocComment": " <code>Arc<[RefCell\\<T>]></code>. [`RefCell<T>`] isn't [`Sync`], and if `Arc<T>` was always"
+            },
+            {
+              "DocComment": " [`Send`], <code>Arc<[RefCell\\<T>]></code> would be as well. But then we'd have a problem:"
+            },
+            {
+              "DocComment": " [`RefCell<T>`] is not thread safe; it keeps track of the borrowing count using"
+            },
+            {
+              "DocComment": " non-atomic operations."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " In the end, this means that you may need to pair `Arc<T>` with some sort of"
+            },
+            {
+              "DocComment": " [`std::sync`] type, usually [`Mutex<T>`][mutex]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ## Breaking cycles with `Weak`"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The [`downgrade`][downgrade] method can be used to create a non-owning"
+            },
+            {
+              "DocComment": " [`Weak`] pointer. A [`Weak`] pointer can be [`upgrade`][upgrade]d"
+            },
+            {
+              "DocComment": " to an `Arc`, but this will return [`None`] if the value stored in the allocation has"
+            },
+            {
+              "DocComment": " already been dropped. In other words, `Weak` pointers do not keep the value"
+            },
+            {
+              "DocComment": " inside the allocation alive; however, they *do* keep the allocation"
+            },
+            {
+              "DocComment": " (the backing store for the value) alive."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " A cycle between `Arc` pointers will never be deallocated. For this reason,"
+            },
+            {
+              "DocComment": " [`Weak`] is used to break cycles. For example, a tree could have"
+            },
+            {
+              "DocComment": " strong `Arc` pointers from parent nodes to children, and [`Weak`]"
+            },
+            {
+              "DocComment": " pointers from children back to their parents."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " # Cloning references"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Creating a new reference from an existing reference-counted pointer is done using the"
+            },
+            {
+              "DocComment": " `Clone` trait implemented for [`Arc<T>`][Arc] and [`Weak<T>`][Weak]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": " let foo = Arc::new(vec![1.0, 2.0, 3.0]);"
+            },
+            {
+              "DocComment": " // The two syntaxes below are equivalent."
+            },
+            {
+              "DocComment": " let a = foo.clone();"
+            },
+            {
+              "DocComment": " let b = Arc::clone(&foo);"
+            },
+            {
+              "DocComment": " // a, b, and foo are all Arcs that point to the same memory location"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ## `Deref` behavior"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " `Arc<T>` automatically dereferences to `T` (via the [`Deref`] trait),"
+            },
+            {
+              "DocComment": " so you can call `T`'s methods on a value of type `Arc<T>`. To avoid name"
+            },
+            {
+              "DocComment": " clashes with `T`'s methods, the methods of `Arc<T>` itself are associated"
+            },
+            {
+              "DocComment": " functions, called using [fully qualified syntax]:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let my_arc = Arc::new(());"
+            },
+            {
+              "DocComment": " let my_weak = Arc::downgrade(&my_arc);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " `Arc<T>`'s implementations of traits like `Clone` may also be called using"
+            },
+            {
+              "DocComment": " fully qualified syntax. Some people prefer to use fully qualified syntax,"
+            },
+            {
+              "DocComment": " while others prefer using method-call syntax."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let arc = Arc::new(());"
+            },
+            {
+              "DocComment": " // Method-call syntax"
+            },
+            {
+              "DocComment": " let arc2 = arc.clone();"
+            },
+            {
+              "DocComment": " // Fully qualified syntax"
+            },
+            {
+              "DocComment": " let arc3 = Arc::clone(&arc);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`Weak<T>`][Weak] does not auto-dereference to `T`, because the inner value may have"
+            },
+            {
+              "DocComment": " already been dropped."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`Rc<T>`]: crate::rc::Rc"
+            },
+            {
+              "DocComment": " [clone]: Clone::clone"
+            },
+            {
+              "DocComment": " [mutex]: ../../std/sync/struct.Mutex.html"
+            },
+            {
+              "DocComment": " [rwlock]: ../../std/sync/struct.RwLock.html"
+            },
+            {
+              "DocComment": " [atomic]: core::sync::atomic"
+            },
+            {
+              "DocComment": " [downgrade]: Arc::downgrade"
+            },
+            {
+              "DocComment": " [upgrade]: Weak::upgrade"
+            },
+            {
+              "DocComment": " [RefCell\\<T>]: core::cell::RefCell"
+            },
+            {
+              "DocComment": " [`RefCell<T>`]: core::cell::RefCell"
+            },
+            {
+              "DocComment": " [`std::sync`]: ../../std/sync/index.html"
+            },
+            {
+              "DocComment": " [`Arc::clone(&from)`]: Arc::clone"
+            },
+            {
+              "DocComment": " [fully qualified syntax]: https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " # Examples"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Sharing some immutable data between threads:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": " use std::thread;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let five = Arc::new(5);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " for _ in 0..10 {"
+            },
+            {
+              "DocComment": "     let five = Arc::clone(&five);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": "     thread::spawn(move || {"
+            },
+            {
+              "DocComment": "         println!(\"{five:?}\");"
+            },
+            {
+              "DocComment": "     });"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Sharing a mutable [`AtomicUsize`]:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`AtomicUsize`]: core::sync::atomic::AtomicUsize \"sync::atomic::AtomicUsize\""
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::sync::Arc;"
+            },
+            {
+              "DocComment": " use std::sync::atomic::{AtomicUsize, Ordering};"
+            },
+            {
+              "DocComment": " use std::thread;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let val = Arc::new(AtomicUsize::new(5));"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " for _ in 0..10 {"
+            },
+            {
+              "DocComment": "     let val = Arc::clone(&val);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": "     thread::spawn(move || {"
+            },
+            {
+              "DocComment": "         let v = val.fetch_add(1, Ordering::Relaxed);"
+            },
+            {
+              "DocComment": "         println!(\"{v:?}\");"
+            },
+            {
+              "DocComment": "     });"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " See the [`rc` documentation][rc_examples] for more examples of reference"
+            },
+            {
+              "DocComment": " counting in general."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [rc_examples]: crate::rc#examples"
+            }
+          ],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": "Arc"
+      },
+      "generics": {
+        "regions": [],
+        "types": [
+          {
+            "index": 0,
+            "name": "T"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 273,
+                  "col": 4
+                },
+                "end": {
+                  "line": 273,
+                  "col": 29
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "ptr",
+            "ty": {
+              "HashConsedValue": [
+                38229,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 23
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "HashConsedValue": [
+                            38228,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 68
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "Deduplicated": 38184
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 274,
+                  "col": 4
+                },
+                "end": {
+                  "line": 274,
+                  "col": 37
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "phantom",
+            "ty": {
+              "HashConsedValue": [
+                38230,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 19
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 38228
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 275,
+                  "col": 4
+                },
+                "end": {
+                  "line": 275,
+                  "col": 12
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "alloc",
+            "ty": {
+              "Deduplicated": 35850
+            }
+          }
+        ]
+      },
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "22": {
+      "def_id": 22,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "scoped",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ScopeData",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 17,
+            "beg": {
+              "line": 41,
+              "col": 0
+            },
+            "end": {
+              "line": 41,
+              "col": 27
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [],
+        "types": [],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 17,
+                "beg": {
+                  "line": 42,
+                  "col": 4
+                },
+                "end": {
+                  "line": 42,
+                  "col": 38
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "num_running_threads",
+            "ty": {
+              "HashConsedValue": [
+                35009,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 57
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 435
+                        },
+                        {
+                          "HashConsedValue": [
+                            31424,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 77
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "Deduplicated": 435
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 17,
+                "beg": {
+                  "line": 43,
+                  "col": 4
+                },
+                "end": {
+                  "line": 43,
+                  "col": 35
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "a_thread_panicked",
+            "ty": {
+              "HashConsedValue": [
+                35010,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 57
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 556
+                        },
+                        {
+                          "HashConsedValue": [
+                            31426,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 81
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "Deduplicated": 6213
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 17,
+                "beg": {
+                  "line": 44,
+                  "col": 4
+                },
+                "end": {
+                  "line": 44,
+                  "col": 23
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "main_thread",
+            "ty": {
+              "Deduplicated": 5054
+            }
+          }
+        ]
+      },
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "size": 24,
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  8,
+                  16,
+                  0
+                ],
+                "uninhabited": false,
+                "tagger": []
+              }
+            ],
+            "repr": {
+              "repr_algo": "Rust",
+              "align_modif": null,
+              "transparent": false,
+              "explicit_discr_type": false
+            }
+          }
+        }
+      ],
+      "ptr_metadata": "None"
+    },
+    "23": {
+      "def_id": 23,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ptr",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "non_null",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "NonNull",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 28,
+            "beg": {
+              "line": 74,
+              "col": 0
+            },
+            "end": {
+              "line": 74,
+              "col": 35
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " `*mut T` but non-zero and [covariant]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " This is often the correct thing to use when building data structures using"
+            },
+            {
+              "DocComment": " raw pointers, but is ultimately more dangerous to use because of its additional"
+            },
+            {
+              "DocComment": " properties. If you're not sure if you should use `NonNull<T>`, just use `*mut T`!"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Unlike `*mut T`, the pointer must always be non-null, even if the pointer"
+            },
+            {
+              "DocComment": " is never dereferenced. This is so that enums may use this forbidden value"
+            },
+            {
+              "DocComment": " as a discriminant -- `Option<NonNull<T>>` has the same size as `*mut T`."
+            },
+            {
+              "DocComment": " However the pointer may still dangle if it isn't dereferenced."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Unlike `*mut T`, `NonNull<T>` is covariant over `T`. This is usually the correct"
+            },
+            {
+              "DocComment": " choice for most data structures and safe abstractions, such as `Box`, `Rc`, `Arc`, `Vec`,"
+            },
+            {
+              "DocComment": " and `LinkedList`."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " In rare cases, if your type exposes a way to mutate the value of `T` through a `NonNull<T>`,"
+            },
+            {
+              "DocComment": " and you need to prevent unsoundness from variance (for example, if `T` could be a reference"
+            },
+            {
+              "DocComment": " with a shorter lifetime), you should add a field to make your type invariant, such as"
+            },
+            {
+              "DocComment": " `PhantomData<Cell<T>>` or `PhantomData<&'a mut T>`."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Example of a type that must be invariant:"
+            },
+            {
+              "DocComment": " ```rust"
+            },
+            {
+              "DocComment": " use std::cell::Cell;"
+            },
+            {
+              "DocComment": " use std::marker::PhantomData;"
+            },
+            {
+              "DocComment": " struct Invariant<T> {"
+            },
+            {
+              "DocComment": "     ptr: std::ptr::NonNull<T>,"
+            },
+            {
+              "DocComment": "     _invariant: PhantomData<Cell<T>>,"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Notice that `NonNull<T>` has a `From` instance for `&T`. However, this does"
+            },
+            {
+              "DocComment": " not change the fact that mutating through a (pointer derived from a) shared"
+            },
+            {
+              "DocComment": " reference is undefined behavior unless the mutation happens inside an"
+            },
+            {
+              "DocComment": " [`UnsafeCell<T>`]. The same goes for creating a mutable reference from a shared"
+            },
+            {
+              "DocComment": " reference. When using this `From` instance without an `UnsafeCell<T>`,"
+            },
+            {
+              "DocComment": " it is your responsibility to ensure that `as_mut` is never called, and `as_ptr`"
+            },
+            {
+              "DocComment": " is never used for mutation."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " # Representation"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Thanks to the [null pointer optimization],"
+            },
+            {
+              "DocComment": " `NonNull<T>` and `Option<NonNull<T>>`"
+            },
+            {
+              "DocComment": " are guaranteed to have the same size and alignment:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::ptr::NonNull;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " assert_eq!(size_of::<NonNull<i16>>(), size_of::<Option<NonNull<i16>>>());"
+            },
+            {
+              "DocComment": " assert_eq!(align_of::<NonNull<i16>>(), align_of::<Option<NonNull<i16>>>());"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " assert_eq!(size_of::<NonNull<str>>(), size_of::<Option<NonNull<str>>>());"
+            },
+            {
+              "DocComment": " assert_eq!(align_of::<NonNull<str>>(), align_of::<Option<NonNull<str>>>());"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [covariant]: https://doc.rust-lang.org/reference/subtyping.html"
+            },
+            {
+              "DocComment": " [`PhantomData`]: crate::marker::PhantomData"
+            },
+            {
+              "DocComment": " [`UnsafeCell<T>`]: crate::cell::UnsafeCell"
+            },
+            {
+              "DocComment": " [null pointer optimization]: crate::option#representation"
+            }
+          ],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Foreign",
+        "lang_item": "NonNull"
+      },
+      "generics": {
+        "regions": [],
+        "types": [
+          {
+            "index": 0,
+            "name": "T"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": "Opaque",
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "58": {
+      "def_id": 58,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Thread",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 70,
+            "beg": {
+              "line": 85,
+              "col": 0
+            },
+            "end": {
+              "line": 85,
+              "col": 17
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " A handle to a thread."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Threads are represented via the `Thread` type, which you can get in one of"
+            },
+            {
+              "DocComment": " two ways:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " * By spawning a new thread, e.g., using the [`thread::spawn`]"
+            },
+            {
+              "DocComment": "   function, and calling [`thread`] on the [`JoinHandle`]."
+            },
+            {
+              "DocComment": " * By requesting the current thread, using the [`thread::current`] function."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The [`thread::current`] function is available even for threads not spawned"
+            },
+            {
+              "DocComment": " by the APIs of this module."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " There is usually no need to create a `Thread` struct yourself, one"
+            },
+            {
+              "DocComment": " should instead use a function like `spawn` to create new threads, see the"
+            },
+            {
+              "DocComment": " docs of [`Builder`] and [`spawn`] for more details."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`thread::spawn`]: super::spawn"
+            },
+            {
+              "DocComment": " [`thread`]: super::JoinHandle::thread"
+            },
+            {
+              "DocComment": " [`JoinHandle`]: super::JoinHandle"
+            },
+            {
+              "DocComment": " [`thread::current`]: super::current::current"
+            },
+            {
+              "DocComment": " [`Builder`]: super::Builder"
+            },
+            {
+              "DocComment": " [`spawn`]: super::spawn"
+            }
+          ],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [],
+        "types": [],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 70,
+                "beg": {
+                  "line": 89,
+                  "col": 4
+                },
+                "end": {
+                  "line": 89,
+                  "col": 34
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "inner",
+            "ty": {
+              "HashConsedValue": [
+                35884,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 78
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "HashConsedValue": [
+                            35883,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 21
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "Deduplicated": 8077
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "size": 8,
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  0
+                ],
+                "uninhabited": false,
+                "tagger": []
+              }
+            ],
+            "repr": {
+              "repr_algo": "Rust",
+              "align_modif": null,
+              "transparent": false,
+              "explicit_discr_type": false
+            }
+          }
+        }
+      ],
+      "ptr_metadata": "None"
+    },
+    "68": {
+      "def_id": 68,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "alloc",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "sync",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ArcInner",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 27,
+            "beg": {
+              "line": 388,
+              "col": 0
+            },
+            "end": {
+              "line": 388,
+              "col": 26
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [],
+        "types": [
+          {
+            "index": 0,
+            "name": "T"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 389,
+                  "col": 4
+                },
+                "end": {
+                  "line": 389,
+                  "col": 25
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "strong",
+            "ty": {
+              "Deduplicated": 35009
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 394,
+                  "col": 4
+                },
+                "end": {
+                  "line": 394,
+                  "col": 23
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "weak",
+            "ty": {
+              "Deduplicated": 35009
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 396,
+                  "col": 4
+                },
+                "end": {
+                  "line": 396,
+                  "col": 11
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "data",
+            "ty": {
+              "Deduplicated": 38184
+            }
+          }
+        ]
+      },
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "78": {
+      "def_id": 78,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "pin",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Pin",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 84,
+            "beg": {
+              "line": 1092,
+              "col": 0
+            },
+            "end": {
+              "line": 1092,
+              "col": 19
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " A pointer which pins its pointee in place."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`Pin`] is a wrapper around some kind of pointer `Ptr` which makes that pointer \"pin\" its"
+            },
+            {
+              "DocComment": " pointee value in place, thus preventing the value referenced by that pointer from being moved"
+            },
+            {
+              "DocComment": " or otherwise invalidated at that place in memory unless it implements [`Unpin`]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " *See the [`pin` module] documentation for a more thorough exploration of pinning.*"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ## Pinning values with [`Pin<Ptr>`]"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " In order to pin a value, we wrap a *pointer to that value* (of some type `Ptr`) in a"
+            },
+            {
+              "DocComment": " [`Pin<Ptr>`]. [`Pin<Ptr>`] can wrap any pointer type, forming a promise that the **pointee**"
+            },
+            {
+              "DocComment": " will not be *moved* or [otherwise invalidated][subtle-details]. If the pointee value's type"
+            },
+            {
+              "DocComment": " implements [`Unpin`], we are free to disregard these requirements entirely and can wrap any"
+            },
+            {
+              "DocComment": " pointer to that value in [`Pin`] directly via [`Pin::new`]. If the pointee value's type does"
+            },
+            {
+              "DocComment": " not implement [`Unpin`], then Rust will not let us use the [`Pin::new`] function directly and"
+            },
+            {
+              "DocComment": " we'll need to construct a [`Pin`]-wrapped pointer in one of the more specialized manners"
+            },
+            {
+              "DocComment": " discussed below."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " We call such a [`Pin`]-wrapped pointer a **pinning pointer** (or pinning ref, or pinning"
+            },
+            {
+              "DocComment": " [`Box`], etc.) because its existence is the thing that is pinning the underlying pointee in"
+            },
+            {
+              "DocComment": " place: it is the metaphorical \"pin\" securing the data in place on the pinboard (in memory)."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " It is important to stress that the thing in the [`Pin`] is not the value which we want to pin"
+            },
+            {
+              "DocComment": " itself, but rather a pointer to that value! A [`Pin<Ptr>`] does not pin the `Ptr` but rather"
+            },
+            {
+              "DocComment": " the pointer's ***pointee** value*."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The most common set of types which require pinning related guarantees for soundness are the"
+            },
+            {
+              "DocComment": " compiler-generated state machines that implement [`Future`] for the return value of"
+            },
+            {
+              "DocComment": " `async fn`s. These compiler-generated [`Future`]s may contain self-referential pointers, one"
+            },
+            {
+              "DocComment": " of the most common use cases for [`Pin`]. More details on this point are provided in the"
+            },
+            {
+              "DocComment": " [`pin` module] docs, but suffice it to say they require the guarantees provided by pinning to"
+            },
+            {
+              "DocComment": " be implemented soundly."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " This requirement for the implementation of `async fn`s means that the [`Future`] trait"
+            },
+            {
+              "DocComment": " requires all calls to [`poll`] to use a <code>self: [Pin]\\<&mut Self></code> parameter instead"
+            },
+            {
+              "DocComment": " of the usual `&mut self`. Therefore, when manually polling a future, you will need to pin it"
+            },
+            {
+              "DocComment": " first."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " You may notice that `async fn`-sourced [`Future`]s are only a small percentage of all"
+            },
+            {
+              "DocComment": " [`Future`]s that exist, yet we had to modify the signature of [`poll`] for all [`Future`]s"
+            },
+            {
+              "DocComment": " to accommodate them. This is unfortunate, but there is a way that the language attempts to"
+            },
+            {
+              "DocComment": " alleviate the extra friction that this API choice incurs: the [`Unpin`] trait."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The vast majority of Rust types have no reason to ever care about being pinned. These"
+            },
+            {
+              "DocComment": " types implement the [`Unpin`] trait, which entirely opts all values of that type out of"
+            },
+            {
+              "DocComment": " pinning-related guarantees. For values of these types, pinning a value by pointing to it with a"
+            },
+            {
+              "DocComment": " [`Pin<Ptr>`] will have no actual effect."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The reason this distinction exists is exactly to allow APIs like [`Future::poll`] to take a"
+            },
+            {
+              "DocComment": " [`Pin<Ptr>`] as an argument for all types while only forcing [`Future`] types that actually"
+            },
+            {
+              "DocComment": " care about pinning guarantees pay the ergonomics cost. For the majority of [`Future`] types"
+            },
+            {
+              "DocComment": " that don't have a reason to care about being pinned and therefore implement [`Unpin`], the"
+            },
+            {
+              "DocComment": " <code>[Pin]\\<&mut Self></code> will act exactly like a regular `&mut Self`, allowing direct"
+            },
+            {
+              "DocComment": " access to the underlying value. Only types that *don't* implement [`Unpin`] will be restricted."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ### Pinning a value of a type that implements [`Unpin`]"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " If the type of the value you need to \"pin\" implements [`Unpin`], you can trivially wrap any"
+            },
+            {
+              "DocComment": " pointer to that value in a [`Pin`] by calling [`Pin::new`]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::pin::Pin;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Create a value of a type that implements `Unpin`"
+            },
+            {
+              "DocComment": " let mut unpin_future = std::future::ready(5);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Pin it by creating a pinning mutable reference to it (ready to be `poll`ed!)"
+            },
+            {
+              "DocComment": " let my_pinned_unpin_future: Pin<&mut _> = Pin::new(&mut unpin_future);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ### Pinning a value inside a [`Box`]"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " The simplest and most flexible way to pin a value that does not implement [`Unpin`] is to put"
+            },
+            {
+              "DocComment": " that value inside a [`Box`] and then turn that [`Box`] into a \"pinning [`Box`]\" by wrapping it"
+            },
+            {
+              "DocComment": " in a [`Pin`]. You can do both of these in a single step using [`Box::pin`]. Let's see an"
+            },
+            {
+              "DocComment": " example of using this flow to pin a [`Future`] returned from calling an `async fn`, a common"
+            },
+            {
+              "DocComment": " use case as described above."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::pin::Pin;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " async fn add_one(x: u32) -> u32 {"
+            },
+            {
+              "DocComment": "     x + 1"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Call the async function to get a future back"
+            },
+            {
+              "DocComment": " let fut = add_one(42);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Pin the future inside a pinning box"
+            },
+            {
+              "DocComment": " let pinned_fut: Pin<Box<_>> = Box::pin(fut);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " If you have a value which is already boxed, for example a [`Box<dyn Future>`][Box], you can pin"
+            },
+            {
+              "DocComment": " that value in-place at its current memory address using [`Box::into_pin`]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": " use std::pin::Pin;"
+            },
+            {
+              "DocComment": " use std::future::Future;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " async fn add_one(x: u32) -> u32 {"
+            },
+            {
+              "DocComment": "     x + 1"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " fn boxed_add_one(x: u32) -> Box<dyn Future<Output = u32>> {"
+            },
+            {
+              "DocComment": "     Box::new(add_one(x))"
+            },
+            {
+              "DocComment": " }"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let boxed_fut = boxed_add_one(42);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Pin the future inside the existing box"
+            },
+            {
+              "DocComment": " let pinned_fut: Pin<Box<_>> = Box::into_pin(boxed_fut);"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " There are similar pinning methods offered on the other standard library smart pointer types"
+            },
+            {
+              "DocComment": " as well, like [`Rc`] and [`Arc`]."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ### Pinning a value on the stack using [`pin!`]"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " There are some situations where it is desirable or even required (for example, in a `#[no_std]`"
+            },
+            {
+              "DocComment": " context where you don't have access to the standard library or allocation in general) to"
+            },
+            {
+              "DocComment": " pin a value which does not implement [`Unpin`] to its location on the stack. Doing so is"
+            },
+            {
+              "DocComment": " possible using the [`pin!`] macro. See its documentation for more."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ## Layout and ABI"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`Pin<Ptr>`] is guaranteed to have the same memory layout and ABI[^noalias] as `Ptr`."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [^noalias]: There is a bit of nuance here that is still being decided about whether the"
+            },
+            {
+              "DocComment": " aliasing semantics of `Pin<&mut T>` should be different than `&mut T`, but this is true as of"
+            },
+            {
+              "DocComment": " today."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [`pin!`]: crate::pin::pin \"pin!\""
+            },
+            {
+              "DocComment": " [`Future`]: crate::future::Future \"Future\""
+            },
+            {
+              "DocComment": " [`poll`]: crate::future::Future::poll \"Future::poll\""
+            },
+            {
+              "DocComment": " [`Future::poll`]: crate::future::Future::poll \"Future::poll\""
+            },
+            {
+              "DocComment": " [`pin` module]: self \"pin module\""
+            },
+            {
+              "DocComment": " [`Rc`]: ../../std/rc/struct.Rc.html \"Rc\""
+            },
+            {
+              "DocComment": " [`Arc`]: ../../std/sync/struct.Arc.html \"Arc\""
+            },
+            {
+              "DocComment": " [Box]: ../../std/boxed/struct.Box.html \"Box\""
+            },
+            {
+              "DocComment": " [`Box`]: ../../std/boxed/struct.Box.html \"Box\""
+            },
+            {
+              "DocComment": " [`Box::pin`]: ../../std/boxed/struct.Box.html#method.pin \"Box::pin\""
+            },
+            {
+              "DocComment": " [`Box::into_pin`]: ../../std/boxed/struct.Box.html#method.into_pin \"Box::into_pin\""
+            },
+            {
+              "DocComment": " [subtle-details]: self#subtle-details-and-the-drop-guarantee \"pin subtle details\""
+            },
+            {
+              "DocComment": " [`unsafe`]: ../../std/keyword.unsafe.html \"keyword unsafe\""
+            }
+          ],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Foreign",
+        "lang_item": "pin"
+      },
+      "generics": {
+        "regions": [],
+        "types": [
+          {
+            "index": 0,
+            "name": "Ptr"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": "Opaque",
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "79": {
+      "def_id": 79,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Inner",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 70,
+            "beg": {
+              "line": 49,
+              "col": 0
+            },
+            "end": {
+              "line": 49,
+              "col": 12
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [],
+        "types": [],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 70,
+                "beg": {
+                  "line": 50,
+                  "col": 4
+                },
+                "end": {
+                  "line": 50,
+                  "col": 34
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "name",
+            "ty": {
+              "HashConsedValue": [
+                10218,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 17
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 10217
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 70,
+                "beg": {
+                  "line": 51,
+                  "col": 4
+                },
+                "end": {
+                  "line": 51,
+                  "col": 16
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "id",
+            "ty": {
+              "Deduplicated": 8202
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 70,
+                "beg": {
+                  "line": 52,
+                  "col": 4
+                },
+                "end": {
+                  "line": 52,
+                  "col": 18
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "parker",
+            "ty": {
+              "Deduplicated": 8474
+            }
+          }
+        ]
+      },
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "size": 32,
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  8,
+                  0,
+                  24
+                ],
+                "uninhabited": false,
+                "tagger": []
+              }
+            ],
+            "repr": {
+              "repr_algo": "Rust",
+              "align_modif": {
+                "Align": 8
+              },
+              "transparent": false,
+              "explicit_discr_type": false
+            }
+          }
+        }
+      ],
+      "ptr_metadata": "None"
+    },
+    "112": {
+      "def_id": 112,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "lifecycle",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Packet",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 102,
+            "beg": {
+              "line": 159,
+              "col": 0
+            },
+            "end": {
+              "line": 159,
+              "col": 24
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [
+          {
+            "index": 0,
+            "name": "'scope",
+            "mutability": "Shared"
+          }
+        ],
+        "types": [
+          {
+            "index": 0,
+            "name": "T"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 160,
+                  "col": 4
+                },
+                "end": {
+                  "line": 160,
+                  "col": 33
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "scope",
+            "ty": {
+              "HashConsedValue": [
+                35893,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 17
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 35878
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 161,
+                  "col": 4
+                },
+                "end": {
+                  "line": 161,
+                  "col": 41
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "result",
+            "ty": {
+              "HashConsedValue": [
+                38250,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 116
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "HashConsedValue": [
+                            38249,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 17
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "HashConsedValue": [
+                                        38248,
+                                        {
+                                          "Adt": {
+                                            "id": {
+                                              "Adt": 12
+                                            },
+                                            "generics": {
+                                              "regions": [],
+                                              "types": [
+                                                {
+                                                  "Deduplicated": 38184
+                                                },
+                                                {
+                                                  "Deduplicated": 35889
+                                                }
+                                              ],
+                                              "const_generics": [],
+                                              "trait_refs": []
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 162,
+                  "col": 4
+                },
+                "end": {
+                  "line": 162,
+                  "col": 51
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": "_marker",
+            "ty": {
+              "HashConsedValue": [
+                38253,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 19
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "HashConsedValue": [
+                            38252,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 17
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [
+                                    {
+                                      "HashConsedValue": [
+                                        38251,
+                                        {
+                                          "Ref": [
+                                            {
+                                              "Var": {
+                                                "Free": 0
+                                              }
+                                            },
+                                            {
+                                              "Deduplicated": 2212
+                                            },
+                                            "Shared"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "133": {
+      "def_id": 133,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "lifecycle",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ThreadInit",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 102,
+            "beg": {
+              "line": 126,
+              "col": 0
+            },
+            "end": {
+              "line": 126,
+              "col": 28
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [],
+        "types": [],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 127,
+                  "col": 4
+                },
+                "end": {
+                  "line": 127,
+                  "col": 22
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": true
+            },
+            "name": "handle",
+            "ty": {
+              "Deduplicated": 5054
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 128,
+                  "col": 4
+                },
+                "end": {
+                  "line": 128,
+                  "col": 44
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": true
+            },
+            "name": "rust_start",
+            "ty": {
+              "Deduplicated": 35899
+            }
+          }
+        ]
+      },
+      "layout": [
+        {
+          "key": "x86_64-unknown-linux-gnu",
+          "value": {
+            "size": 24,
+            "align": 8,
+            "discriminator": {
+              "Known": 0
+            },
+            "uninhabited": false,
+            "variant_layouts": [
+              {
+                "field_offsets": [
+                  0,
+                  8
+                ],
+                "uninhabited": false,
+                "tagger": []
+              }
+            ],
+            "repr": {
+              "repr_algo": "Rust",
+              "align_modif": null,
+              "transparent": false,
+              "explicit_discr_type": false
+            }
+          }
+        }
+      ],
+      "ptr_metadata": "None"
+    }
+  },
+  "binary_sha256": "fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558",
+  "evidence_class": "binary-structural (adopted binary), plus V370 compiler-cohort",
+  "sites": [
+    {
+      "allocation": "ScopeData ArcInner",
+      "width": 40,
+      "align": 8,
+      "call": "fa099",
+      "stores": {
+        "0:8": "fa0b3=1",
+        "8:16": "fa0ba=1",
+        "16:24": "fa0c2=current Thread pointer r14",
+        "24:32": "fa0c6=0",
+        "32:33": "fa0ce=0"
+      },
+      "holes": [
+        [
+          33,
+          40
+        ]
+      ]
+    },
+    {
+      "allocation": "Packet ArcInner",
+      "width": 48,
+      "align": 8,
+      "call": "e058a",
+      "stores": {
+        "0:8": "e059c=1",
+        "8:16": "e05a3=1",
+        "16:24": "e05ab=scope pointer r14",
+        "24:32": "e05b3=2^63+2"
+      },
+      "holes": [
+        [
+          32,
+          48
+        ]
+      ]
+    },
+    {
+      "allocation": "callback Box",
+      "width": 56,
+      "align": 8,
+      "call": "e05e8",
+      "stores": {
+        "0:16": "e0619=bytes rsp+0x38",
+        "16:32": "e0614=bytes rsp+0x48",
+        "32:40": "e061d=Packet pointer r12",
+        "40:48": "e0621=capture pointer rcx",
+        "48:56": "e0625=capture length rax"
+      },
+      "holes": [],
+      "copied_padding": "preserve actual source bytes, including unknowns; no serializer zeros"
+    },
+    {
+      "allocation": "ThreadInit Box",
+      "width": 24,
+      "align": 8,
+      "call": "e064b",
+      "stores": {
+        "0:8": "e065a=handle r13",
+        "8:16": "e065d=callback pointer r14",
+        "16:24": "e0668=relocated vtable"
+      },
+      "holes": []
+    },
+    {
+      "allocation": "thread::Thread::new ArcInner<Inner>",
+      "width": 48,
+      "align": 8,
+      "call": "17be96",
+      "source_caller": "e0541 -> GOT1b3758 ->17be40",
+      "layout_calculation": "17be67=8,17be6c=32; GOT1b41c0 ->1a6720 arcinner_layout_for_value_layout returns8/48",
+      "stores": {
+        "0:8": "17bedc=1",
+        "8:16": "17bee3=1",
+        "16:24": "17bef3=ThreadId r15",
+        "24:32": "17beeb=name pointer rbx",
+        "32:40": "17beef=name length r14 (unconstrained when name absent)",
+        "40:44": "17bef7=parker0"
+      },
+      "holes": [
+        [
+          44,
+          48
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "Does not assert original-entry reachability or full source/native adequacy.",
+    "Current-thread already-initialized TLS path17c49f/17c4a1 has no allocation; uninitialized path17c50a calls the same Thread::new site.",
+    "Nonempty name conversion, environment lookup when stack-size cache absent, hook allocation and native backend internals have not been shown absent in one continuous witness. No images or successful trace credit is supplied for them.",
+    "Vec buffers follow the requested ThreadInit cut and remain outside this prefix, not silently initialized."
+  ]
+}
