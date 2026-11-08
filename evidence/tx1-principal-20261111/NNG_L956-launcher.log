@@ -1,0 +1,56 @@
+{"attempt": "NNG_L956", "exit_status": 1, "wall_seconds": 18.75371320080012, "peak_rss_kib": "6816716", "swaps": "0", "print_axioms": ["'AspisR1.NNG_TreeTail345.erase_child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNG_TreeTail345.erase_tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNG_TreeTail345.erase_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_TreeTail345.lean:16:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let value ← invoke "TX1:328/first_decoded" args r
+      match value with
+        | core.result.Result.Ok a => next a
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    do
+    let value ← r
+    match value with
+      | core.result.Result.Ok a => (fun a => erase (next a)) a
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+
+args : ChildArgs
+r : Result Ret
+next : alloc.vec.Vec U8 → Code Ret
+⊢ (erase do
+      let value ← invoke "TX1:328/first_decoded" args r
+      m
+...
+t_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:43:55: warning: This simp argument is unused:
+  erase_child
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_TreeTail345.erase_tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NNG_generated/NNG_TreeTail345.lean:50:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  MonadLiftT Option Code
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NNG_generated/NNG_TreeTail345.lean:54:101: error: unsolved goals
+W : Type
+c : Calls
+s : ProofData W
+⊢ (Std.bind c.c4 fun a =>
+      Std.bind c.c8 fun a =>
+        Std.bind (erase sorry) fun a_1 =>
+          tryStep
+            (NMT_stage1_owned.core.option.Option.ok_or (some a_1)
+              NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            fun a_2 => tailFold c { toProofData := s, proofStart := a, proofEnd := a_2 }) =
+    Std.bind c.c4 fun length =>
+      Std.bind c.c8 fun start =>
+        Std.bind (lift (start.checked_add length)) fun sum =>
+          tryStep
+            (NMT_stage1_owned.core.option.Option.ok_or sum
+              NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            fun end_ => tailFold c { toProofData := s, proofStart := start, proofEnd := end_ }
+'AspisR1.NNG_TreeTail345.erase_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r32a0bf0843b8461db3464015f71fa0d3.scope; invocation ID: 61a213c4cba04ccfbb7baaed4aa17d7e

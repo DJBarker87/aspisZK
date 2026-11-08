@@ -1,0 +1,50 @@
+{"attempt": "NNG_L943", "exit_status": 1, "wall_seconds": 0.21044261497445405, "peak_rss_kib": "478320", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Phases345.stepDecode_valid' depends on axioms: [propext, sorryAx]"]}
+NNG_generated/NNG_DecodeStep345.lean:22:1: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : Option C.Statement),
+    (RS.ofOption x ProgramError.invalidAccountData).bind (fun st => (RS.lift Spec.alloc).seq (suffix st)) env
+      (match hd : x with
+      | none => silent (Except.error ProgramError.invalidAccountData)
+      | some st =>
+        tryObs (NNG_Pure345.allocation (allocation 4)) fun x =>
+          next { toPublicData := s, statement := st, decoded := hd })
+
+V : VLib
+C : TX1_345.S1Lib V
+allocation : Allocation
+s : PublicData
+next : Decoded V C → Obs (Except ProgramError Bytes)
+suffix : C.Statement → RS Bytes
+env : Env
+later :
+  ∀ (st : C.Statement) (decoded : C
+...
+NNG_generated/NNG_DecodeStep345.lean:22:1: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : Option C.Statement),
+    (RS.ofOption x ProgramError.invalidAccountData).bind (fun st => (RS.lift Spec.alloc).seq (suffix st)) env
+      (match hd : x with
+      | none => silent (Except.error ProgramError.invalidAccountData)
+      | some st =>
+        tryObs (NNG_Pure345.allocation (allocation 4)) fun x =>
+          next { toPublicData := s, statement := st, decoded := hd })
+
+V : VLib
+C : TX1_345.S1Lib V
+allocation : Allocation
+s : PublicData
+next : Decoded V C → Obs (Except ProgramError Bytes)
+suffix : C.Statement → RS Bytes
+env : Env
+later :
+  ∀ (st : C.Statement) (decoded : C.decodeStatement s.publicData = some st),
+    suffix st env (next { toPublicData := s, statement := st, decoded := decoded })
+a✝ : Unit
+⊢ (RS.ofOption (C.decodeStatement s.publicData) ProgramError.invalidAccountData).bind
+    (fun st => (RS.lift Spec.alloc).seq (suffix st)) env
+    (match hd : C.decodeStatement s.publicData with
+    | none => silent (Except.error ProgramError.invalidAccountData)
+    | some st =>
+      tryObs (NNG_Pure345.allocation (allocation 4)) fun x =>
+        next { toPublicData := s, statement := st, decoded := hd })
+'AspisR1.NNG_Phases345.stepDecode_valid' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-rbb079639c3ca492789d22774dc662cf7.scope; invocation ID: ca9e45aa773b46bba62825558f06f9da

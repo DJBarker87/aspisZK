@@ -15,3 +15,5 @@ Revision4 current work:094 source fold is partial. Passing QueryTail094 and Weig
 L919 supersedes the partial094 fold status: full concrete094 candidate now compiles. Remaining: own-new-root raw ax2 + focused combined import; instantiate094 at328's original call and error/log callback; then345 at SAME decoded/validated statement and snapshot with P1880Discharge. No094 input clause was added beyond canonical rev4. Ledger gate alone decides credit.
 
 L931:328 complete concrete candidate now exists; commit immediately. New328 root audit pending.345 remains, followed by344/333/330 instantiations.094 raw audit already complete and is not rerun unchanged.
+
+Current source-association stage: NNG_345_STAGE.md supersedes the older partial094/328 notes. 094 and328 candidates are complete;328 new-root audit is pending.345's concrete reference fold, typed source erasure, native producer and native child occurrence compile, but complete parent-frame/observation refinement is still OPEN. It requires Lean, not Kani.344/333/330 remain dependent on345. No candidate may be obtained by naming the reference-only interpretation as the emitted implementation.

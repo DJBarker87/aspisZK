@@ -1,0 +1,123 @@
+NNG_generated/NNG_TreeTail345.lean:16:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (NMT_CallTree.bind ?c ?k)
+in the target expression
+  (erase do
+      let value ← invoke "TX1:328/first_decoded" args r
+      match value with
+        | core.result.Result.Ok a => next a
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    do
+    let value ← r
+    match value with
+      | core.result.Result.Ok a => (fun a => erase (next a)) a
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+
+args : ChildArgs
+r : Result Ret
+next : alloc.vec.Vec U8 → Code Ret
+⊢ (erase do
+      let value ← invoke "TX1:328/first_decoded" args r
+      match value with
+        | core.result.Result.Ok a => next a
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    do
+    let value ← r
+    match value with
+      | core.result.Result.Ok a => (fun a => erase (next a)) a
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+'AspisR1.NNG_TreeTail345.erase_child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NNG_generated/NNG_TreeTail345.lean:36:19: error: Application type mismatch: The argument
+  UScalar.cast UScalarTy.Usize kbyte
+has type
+  UScalar UScalarTy.Usize
+but is expected to have type
+  ?m.245 proofPrefix __r✝⁷ mismatch __r✝⁶ offset __r✝⁵ tag __r✝⁴ expected __r✝³ pub __r✝² proof __r✝¹ kbyte __r✝ Usize
+in the application
+  liftM (UScalar.cast UScalarTy.Usize kbyte)
+NNG_generated/NNG_TreeTail345.lean:41:92: error: unsolved goals
+W : Type
+c : Calls
+s : Bounds W
+⊢ erase (sorry c s) =
+    if (s.proofData.len != s.proofEnd) = true then
+      ok (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      Std.bind
+        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) s.proofData
+          { «end» := s.proofStart })
+        fun proofPrefix =>
+        Std.bind (c.c0 core.cmp.PartialEqU8 proofPrefix s.candidate) fun mismatch =>
+          if mismatch = true then
+            ok (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            Std.bind (lift (s.proofStart.wrapping_add 8#usize)) fun offset =>
+              Std.bind (s.proofData.index_usize offset) fun tag =>
+                Std.bind (c.c3 NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.S2) fun expected =>
+                  if (tag != expected) = true then
+                    ok (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                  else
+                    Std.bind (c.c5 s.statement) fun pub =>
+                      Std.bind
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.proofData
+                          { start := s.proofStart, «end» := s.proofEnd })
+                        fun proof =>
+                        Std.bind (s.data.index_usize 1#usize) fun kbyte =>
+                          Std.bind (lift (UScalar.cast UScalarTy.Usize kbyte)) fun k =>
+                            tryStep (c.c11 pub s.publicData proof k) fun checkpoint =>
+                              if (checkpoint.len != s.checkpointData.len) = true then
+                                ok
+                                  (core.result.Result.Err
+                                    NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                              else ok (core.result.Result.Ok checkpoint)
+NNG_generated/NNG_TreeTail345.lean:43:22: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:43:33: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:43:44: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:43:55: warning: This simp argument is unused:
+  erase_child
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_TreeTail345.erase_tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NNG_generated/NNG_TreeTail345.lean:50:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  MonadLiftT Option Code
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NNG_generated/NNG_TreeTail345.lean:54:101: error: unsolved goals
+W : Type
+c : Calls
+s : ProofData W
+⊢ (Std.bind c.c4 fun a =>
+      Std.bind c.c8 fun a =>
+        Std.bind (erase sorry) fun a_1 =>
+          tryStep
+            (NMT_stage1_owned.core.option.Option.ok_or (some a_1)
+              NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            fun a_2 => tailFold c { toProofData := s, proofStart := a, proofEnd := a_2 }) =
+    Std.bind c.c4 fun length =>
+      Std.bind c.c8 fun start =>
+        Std.bind (lift (start.checked_add length)) fun sum =>
+          tryStep
+            (NMT_stage1_owned.core.option.Option.ok_or sum
+              NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            fun end_ => tailFold c { toProofData := s, proofStart := start, proofEnd := end_ }
+'AspisR1.NNG_TreeTail345.erase_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
