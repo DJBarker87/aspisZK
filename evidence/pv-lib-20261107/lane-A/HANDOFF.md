@@ -173,3 +173,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46396 AtomicReadsV2 passed: named value-only documented facts for127/129/528 and all-answer graph equality preserving complete replies. Bool reads decode the source u8. These facts are explicit lower source/native binding obligations, not proved arbitrary-backend instances, T fields or endpoint premises. Loads perform no source write.
 
 Session5 46398: F6DeliveryTransportV2.prefix_identity passes (46397 ambiguous run repaired); literal f6 delivery-prefix type via existing single induction. Concrete agreement bindings remain open.
+
+Session5 47400: AtomicBoolNewV2 passes after repairing46399 to the actual CLOSED123 API. Byte representation fact is named and lower; no arbitrary backend instance claimed.
