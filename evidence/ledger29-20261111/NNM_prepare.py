@@ -13,9 +13,13 @@ for name in ['NMX_R4','NMX_R6','NMX_R9']:
 own=['NNM_Domains.'+n for n in ['exact345','exact344','exact233','exact242','exact241','domain345','domain344','domain233','domain242']]
 new=sorted(extra-set(prior['roots']));tail=[r for g in prior['groups'][51:]for r in g]+new+own
 initial=prior['groups'][:51]+[tail[i:i+120]for i in range(0,len(tail),120)]
-groups=initial[:44]+[initial[i]+initial[i+1]for i in range(44,58,2)]
+paired=initial[:44]+[initial[i]+initial[i+1]for i in range(44,58,2)]
+plan=J(E/'NNM_FINAL_SCOPE_PLAN.json');groups=paired[:47]+[J(E/'NNM_AUDIT_ROOTS.json')['groups'][i]for i in range(47,50)]+[plan['pending_roots']]
+assert set(r for g in groups[47:]for r in g)==set(r for g in paired[47:]for r in g)
 required=J(E/'NNM_AUDIT_ROOTS.json');assert required==dict(roots=sorted(set(prior['roots'])|extra|set(own)),groups=groups)
 assert len(groups)==51 and len(required['roots'])==13715
+assert sum(map(len,groups))==len({r for g in groups for r in g})==13715
+for window in plan['scopes']:assert window['root_names']==groups[window['group']]
 assert J(E/'NNM_AUDIT_MODULES.json')==[['NNM_COMBINED_IMPORT']]*51
 assert J(E/'NNM_PATHS.json')[:5]==[B+'/'+n for n in ['NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']]
 cfg=J(E/'NNM_SEED_CONFIG.json');assert len(cfg['wrapper_modules'])==15 and all(m.startswith('NMV_')for m in cfg['wrapper_modules'])
