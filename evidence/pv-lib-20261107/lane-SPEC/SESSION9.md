@@ -4,3 +4,5 @@ PV_LIB_SPEC_OwnInitCut92 compiled 44937, cohort w3: exit0, wall 0:02.72, peak 47
 PV_LIB_SPEC_Cohort9Imports compiled 44938, cohort lanea: exit0, wall 0:00.92, peak 2419460KiB, swap 0; source 3c11d3d2e265eb1a62cda9cee9fca68d15fc6f51; standard summary axioms only.
 
 PV_LIB_SPEC_LaneA_Graph compiled 44939, cohort w3: exit0, wall 0:00.23, peak 483108KiB, swap 0; source 24cfd145f69b7e20c2e5213d669d9d469b9f7e1c; standard summary axioms only.
+
+PV_LIB_SPEC_LaneA_View compiled 44940, cohort w3: exit0, wall 0:01.25, peak 2693648KiB, swap 0; source 548fcd261e1c597300a28e48cc5f4b2b95e5208c; standard summary axioms only.
