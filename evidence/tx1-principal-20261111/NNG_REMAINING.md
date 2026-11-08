@@ -1,19 +1,13 @@
-# NNG remaining — revision4 continuation
+# NNG remaining at the scope limit
 
-Target not yet established. Start of continuation:556 actual Lean/link/audit scopes used;274 remain under the lead's current allowance. No Kani or extraction is planned. Child-first order is094→328→345.
+The deployed target is not established. Ledger gate decides credit.
 
-- TX1:136/137/087: previously complete audited candidates retained.137/087 merged in ledger27 per lead. Recompile only dependencies affected by revision4; no unchanged audit rerun.
-- TX1:094: COMPLETE audited candidate79c6fd713d3, root NNG_Candidate094.candidate at LIB_Instances.VL/P and corrected ProducerFull094. Full SAME-call domains discharged, including R4 via r4_of_scan and P1880 at checkpoint. L960 combined and L963–L974 raw audit pass; all134 new roots standard-only. Ledger gate decides credit.
-- TX1:328: instantiate completed094 and forward its new P1880 clause from328's Domain at unchanged public_bytes; then commit candidate.
-- TX1:345: instantiate completed328; P1880Discharge for concrete LIBC_S1 is checked in NNG_P1880Discharge.decoder (L801), standard axioms, raw audit PASS L963–L974. Discharge caller clause with p1880_of_decode at the SAME successful decode arm.345's Domain staysTrue.
-- TX1:344/333/330: follow345 through the existing NMV_/NNF_ folds, with no new caller clause.
+- TX1:136/137/087: prior complete audited candidates;137/087 merged in ledger27 per lead.
+- TX1:094: complete concrete candidate79c6fd713d3, auditedf785006c4b0. Corrected ProducerFull094; exact canonical rev4 Domain.
+- TX1:328: complete concrete candidate70c7bf7f7e9, now audited with the new source support. L975 combined and L978-L989 all119 new roots PASS, raw=collector, standard-only.
+- TX1:345: SUPPORT only. Concrete reference fold, complete fresh-parent tree erasure, fixed native producer, complete full-error getter/decoder/validator/encoder/checkpoint source laws and actual child occurrence all compile and are audited. Both328 clauses and native scalar bound are discharged internally; Domain remainsTrue. Still required: complete reached native-frame/observation association with canonical logical parent and total original-input adapter, preserving route guards, account selection, clone/decoder allocation prefix, proof range/prefix/tag and returned checkpoint. See NNG_345_STAGE.md. This needs Lean, not Kani.
+- TX1:344/333/330: depend on the345 candidate, then existing NMV_/NNF_ folds. No independent wrapper candidate can be instantiated while345 is open.
 
-NNG_REV4_REBUILD_PLAN.json records108 affected private dependencies with exact source hashes, refreshed by existing capped admission/launcher one module at a time. NNG_R4_objects takes precedence over retained F9 and historical objects. NNG_REV4_ORCHESTRATION.jsonl records pausing only the local sequential refresh driver while its current child finishes, to check new small lemmas; never two job scopes. No shared infrastructure/cache or source/spec/trust/shipped file change.
+830/830 Lean/link/audit scopes used, extraction1/2, Kani0/10; no unresolved submission. No extra extraction is needed because fresh emissions exist, and no bc-flagged exit authorizes a Kani run. All new roots have #print axioms and raw audits. No shipped source, trust row, ELF, key or foreign worker change; no push.
 
-Revision4 current work:094 source fold is partial. Passing QueryTail094 and WeightsTail094 are internal support, not RowSpec094. Remaining fold occurrences: geometry, batch0, checked folded-root copy, initializer, prepare and parsed marker/zero, scan, parse, guard, then exact Ref conversion. Original public Domain+P1880 is retained. New own roots still require raw audit.328 and345 follow child-first only after094 candidate;345 can use proved NNG_P1880Discharge.decoder. No independent new row is claimed closed.
-
-L919 supersedes the partial094 fold status: full concrete094 candidate now compiles. Remaining: own-new-root raw ax2 + focused combined import; instantiate094 at328's original call and error/log callback; then345 at SAME decoded/validated statement and snapshot with P1880Discharge. No094 input clause was added beyond canonical rev4. Ledger gate alone decides credit.
-
-L931:328 complete concrete candidate now exists; commit immediately. New328 root audit pending.345 remains, followed by344/333/330 instantiations.094 raw audit already complete and is not rerun unchanged.
-
-Current source-association stage: NNG_345_STAGE.md supersedes the older partial094/328 notes. 094 and328 candidates are complete;328 new-root audit is pending.345's concrete reference fold, typed source erasure, native producer and native child occurrence compile, but complete parent-frame/observation refinement is still OPEN. It requires Lean, not Kani.344/333/330 remain dependent on345. No candidate may be obtained by naming the reference-only interpretation as the emitted implementation.
+Own retained host workspace: /home/dombarker/project-offloads/codex-cx-tx1-principal-20261111. NNG_R4_objects precedes prior retained objects; do not delete this cache. RSL revision4 changed objects and canonical library objects are privately pinned. The legacy NMT_R2 observation collision is replaced by own canonical helpers, without editing foreign proved modules.
