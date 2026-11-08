@@ -1,6 +1,7 @@
 # 345 source interpretation and carrier boundary
 
-Status at creation: SUPPORT; the complete parent/candidate targets are pending.
+Current status: COMPLETE audited ActualCandidate345 at4d34fbfc294.
+The earlier L1052 control-interpreter certificate remains SUPPORT only.
 The ledger gate alone awards row credit.
 
 The reused source is the frozen `stage1_owned` body in NMT E003, with the
@@ -48,3 +49,14 @@ raising any limit. The dependent-list getElem rewrite drafts atL1035/L1059 are
 replaced by the standard nondependent Option lookup definition on the three
 selected list positions. All failed sources/receipts remain evidence, excluded
 from the final source-matched root manifest.
+
+The final all-Args source producer is NNG_TotalProducer345.producer: actual bad
+routes/counts reject before reification; every reached carrier bound is derived
+inside the source branch. Its zero-verdict-preserving byte cut and full-word
+length projection preserve the entire Model345 observation (L1110), including
+the final checkpoint guard using the proved1768 return size (L1091). L1108
+links that total source evaluation to the original arguments. L1109 is the
+complete actual row root, with no representation premise and no canonical
+fallback branch. The conditional reification lemmas are not used as new row
+domains. L1098 heartbeat reduction was isolated by StopProjection345.reject;
+replacement L1103 passes with unchanged limits.
