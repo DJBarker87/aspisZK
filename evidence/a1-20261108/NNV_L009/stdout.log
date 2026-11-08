@@ -1,0 +1,25 @@
+NNV_generated/NNV_PreparedPorts.lean:19:82: error: unsolved goals
+W Tx : Type
+c : Ctx W Tx
+s : RSL.Verified LIB_VLib.library
+v : LIB_VCarriers.View
+g : LIB_VCarriers.E29
+⊢ (do
+      let (reply, scratch) ←
+        NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+            (LIBC_PreparedCarriers.verified LIB_Prepared.types s) v () g
+      ok
+          (match reply with
+            | core.result.Result.Ok p => core.result.Result.Ok (InstalledPreparation.currentPrepared p)
+            | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+            AspisR1ClaimPreparedBridge.mapArray InstalledPreparation.currentE scratch)) =
+    do
+    let (reply, out) ←
+      NGN_Emitted.prepared NHL_PreparedScalars.actual (LIBC_PreparedLog.digest (envOf c))
+          (LIBC_PreparedCarriers.verified LIB_Prepared.types s) v () g
+    ok
+        (match reply with
+          | core.result.Result.Ok p => core.result.Result.Ok (InstalledPreparation.currentPrepared p)
+          | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+          AspisR1ClaimPreparedBridge.mapArray InstalledPreparation.currentE out)
+'AspisR1.NNV_PreparedPorts.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
