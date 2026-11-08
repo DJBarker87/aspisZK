@@ -31,4 +31,22 @@ All170 slot records/statuses unchanged:118 qualified INSTANTIATED,35 MISSING,
 D991: ZERO new allocation byte images; no total-image re-credit or forgetting.
 Target not yet established. Session9/MODEL_FINDINGS.md gives exact limits/provenance.
 
-Validation/audit measurements and next IDs are appended after the final audit.
+## Verification and next IDs
+
+20 support modules plus one strict driver accepted;33 focused scopes (21 accepted,
+12 repaired proof/elaboration failures, exact failed sources retained).55006 was
+a pre-elaboration dependency error;55004 was local staging only, never allocated.
+No infrastructure stop, refused admission, unchanged failed rerun or live scope.
+
+ONE strict raw audit47494 passed106 roots: exit0,8.86s,peak6558912KiB,swap0,
+revision6ed709c8fcdbcb85f6ec11458b4d1825a95dac8a. Standard axioms only;
+unresolved0;summary mismatches0. Driver/walker unchanged except root/module arrays.
+Source/index blobs, source revision, exact commands/caps/admission/axioms/time/RSS/
+swap receipts, raw graph archive/hash and VALIDATION.json are retained in session9.
+New generator/provenance --check and boundary/hash validations pass. No full
+manifest/runtime/release replay or release result is claimed. No keys were created
+or removed. All scopes6G/8G/swap0/Tasks64/-M7000 and standalone STREAMB_SLOTS=3 turn.
+
+Next focused55033–55089;raw47495–47499 then55090–55099.55004 remains locally
+unallocated but was not reused. Launcher wrapper range changes add550xx only.
+No ID-budget exhaustion claim. Requested full completion remains unachieved.
