@@ -1,8 +1,28 @@
-# Session5 in progress
+# Session5 current handoff
 
-D984 accepted. First complete operational statement module f361 compiled49739;
-Contract is an unproved Prop. Full table is a parameter to be completed by lane A.
-Next row270; no endpoint premise removed. See SESSION5.md.
+Branch codex/pv-lib-spec-20261107; resumed f2798a4fac4. D984/SPEC-C3 accepted.
+All18 whole operational statements compiled, f361 included; then OwnInit
+composition Witness as an unproved Prop. No row proof, no concrete full-joint
+witness or contradiction, no source-adequacy result, no premise removed.
+The requested full frozen source elaboration/nonemptiness work remains
+incomplete: see SESSION5_ADEQUACY.md and REMAINING.md for exact gaps.
+
+Authoritative final common refinements: PV_LIB_SPEC_ThreadSpecifications
+(49774) and PV_LIB_SPEC_F316Callback (49777; intrinsic callback can have no
+ordinary caller). OwnInitComposition compiled49779. Contract/index and map
+delta list all18 rows; earlier Whole/Full drafts remain historical. The full
+D984 action table is an explicit lane-A parameter; no writer inventory is
+silently truncated to the old five functions/eight sites. Each selected write
+extends the named OWNER-aware step. One strict raw49795 audits411 new roots
+in sequential W3-compatible/W4 partitions: PASS411/411, zero unresolved
+or summary disagreement, standard axioms only, wall4:39.23, peak7014208KiB,
+swap0, source e65410291be. Graph archive and exact manifest are retained.
+
+Next Lean49782; raw49796, for new/changed inputs only.49748/49749 unused.
+No full manifest, SBF, Rust/Kani, package/ledger/provider/shared-map change,
+wallet key operation, push or merge. Stage commits and exact receipts are in
+SESSION5_COMMITS.txt / SESSION5.md. Current statement completeness and actual
+source adequacy are deliberately reported separately.
 
 ---
 

@@ -169,3 +169,37 @@ PV_LIB_SPEC_OwnInitComposition compiled49779, cohortw3: exit0, wall0:02.18, peak
 PV_LIB_SPEC_RawAuditSession5W3 compiled49780, cohortw3: exit0, wall0:00.91, peak1598900KiB, swap0; standard summary axioms only. Statement only.
 
 PV_LIB_SPEC_RawAuditSession5W4 compiled49781, cohortw4: exit0, wall0:00.81, peak1588548KiB, swap0; standard summary axioms only. Statement only.
+
+## Final qualification and failures
+
+18/18 operational whole statements; full frozen source adequacy is not
+established. Authoritative common49774 supersedes the early pending/panic
+and stack-reference drafts; callback49777 supersedes ordinary-only f316.
+OwnInitComposition.Witness49779 is an unproved realization proposition,
+not a concrete full composed-premise witness. No row theorem is claimed.
+See SESSION5_ADEQUACY.md for exact native/ABI/resource/adapter gaps.
+
+Failed49737/38/40/45/51/54/75/78 are retained and uncredited.49775 was a
+runtime metadata-inspection helper: freeing compacted import regions early
+caused SIGSEGV139; retaining the regions changed the source and49776 passed.
+It was not an OOM, arithmetic gate or privacy theorem.49778 omitted an open
+namespace for Data; its failed source is retained, corrected49779 passed.
+49748/49 were never consumed. No unchanged failed source was relaunched;
+no cap was raised. The compatible W4 closure copied186 pinned project
+objects, with actual transitive import-graph comparison and zero selected
+shared-object conflicts. No provider workspace was mutated/rebuilt.
+
+The session5 strict audit leaves the walker and collectAxioms unchanged.
+Its summary union includes all reached kernel constructors (ctorInfo),
+rather than a hand-picked constructor list. Full raw reachable graphs and
+root/constructor/axiom manifests are retained. Metadata helper and audit main
+are excluded from logical roots; all new logical declarations are included,
+including the superseded operational drafts.
+
+Strict49795 PASS411/411 new declaration roots (W3 386, W4 25), exit0;
+zero unresolved/disagreements, standard axioms only; wall4:39.23,
+peak7014208KiB,swap0;source e65410291be. Exactly one new-root walk.
+Retained raw graphs/checksums and constructor-union manifest fetched.
+`python3 evidence/pv-lib-20261107/lane-SPEC/validate_session5.py` PASS:34
+accepted own-source receipts,411 raw roots, lane boundary/source hashes.
+No unchanged full regression or full manifest replay.
