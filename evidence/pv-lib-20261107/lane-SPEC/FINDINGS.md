@@ -469,3 +469,28 @@ Non-ZST growth remains explicitly partial. This new value instance is NOT
 silently substituted into ReachedNative14; original-history transport and
 all actual layout/provenance bindings remain required. No row or frozen
 contract changed, and this local header example is not original reachability.
+
+## SPEC-C16 (session18, D1007) — proposed static stack overlaps Packet malloc
+
+CHECKED by History18.rejected_overlap: [3584,4608) and [4096,4144) are not
+RangeDisjoint. The intermediate parent4096/run4208 capture Pre was satisfiable,
+but that proposed grant overlaps SuccessSchedule12's retained Packet4096.
+This is a local ENTRY-FIXTURE conflict, not a complete joint contradiction.
+
+REPAIRED with DisjointCaptures18/DisjointEntry18/DisjointPre18 and
+EntryWorld18.concrete: parent1024, scope entry1016, run1136, n1088, F1128,
+stack grant[512,1536). History18.scheduled_heap_away proves every selected
+successful scheduled pointer lies above the grant. Both old local proofs and
+failed/intermediate inputs are retained. The old112 fixture remains untouched.
+See SESSION18_SPEC_CORRECTIONS.md for before/after; no source/T/endpoint change.
+
+SPEC-C13's physical entry rebase is now inhabited (EntryWorld18, NativeTargets18
+.original_stack), and original85 is re-established parametrically (History18).
+This does not prove StackAtCallback or any actual8248/295/454 suffix binding.
+
+SPEC-C14 is repaired at the STATEMENT level in the eighteen Context*18 modules,
+with full before/after in SESSION18_CONTEXT_COMPARISON.md. ContextReply18
+rechecks fixed Ok(null) versus source/physical Ok(false) on EVERY rebased entry
+and proves full context-history identity and actual84→85 consumption. Universal
+contract/Values/source adequacy and the COMPLETE joint witness remain OPEN.
+This is the D1007 model-correction report, not a new endpoint or trust premise.
