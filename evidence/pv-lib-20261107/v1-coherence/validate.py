@@ -80,6 +80,14 @@ for n in final_modules['additional_replay_tools']:
   assert any(k.endswith('/'+n+'.lean') and v==h for k,v in r['inputs_sha256'].items())
  else:
   r=rbcomp[n];assert r['accepted'] and r['source_sha256']==h
+ack=json.loads(files['evidence/detached-ack-56595.json']);assert ack['detached'] and ack['all_stdio_host_files']
+assert hashlib.sha256(files['detached-launch-56595.py'].encode()).hexdigest()==ack['launcher_sha256']
+assert hashlib.sha256(files['detached-payload-56595.json'].encode()).hexdigest()==ack['payload_sha256']
+payload=json.loads(files['detached-payload-56595.json']);assert payload['attempt']==a and payload['mode']=='audit'
+assert {k:hashlib.sha256(v.encode()).hexdigest() for k,v in payload['files'].items()}==audits[0]['inputs_sha256']
+assert payload['files']['FINAL_ROOT_BATCHES.json']==(E/'FINAL_ROOT_BATCHES.json').read_text()
+live=json.loads((E/'LIVE_CAPS-56595.json').read_text());props=dict(l.split('=',1) for l in live['scope_properties'].splitlines())
+for k,v in dict(MemoryHigh='6442450944',MemoryMax='8589934592',MemorySwapMax='0',TasksMax='64').items():assert props[k]==v
 # Hash retained raw walks without materializing their entire decompressed JSON.
 import io
 rm=json.loads((E/'RAW_GRAPH_MANIFEST.json').read_text());rb=b''.join((E/p['name']).read_bytes() for p in rm['parts']);assert hashlib.sha256(rb).hexdigest()==rm['archive_sha256']

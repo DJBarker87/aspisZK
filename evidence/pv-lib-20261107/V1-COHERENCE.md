@@ -1,6 +1,6 @@
 # Privacy library v1 coherence replay
 
-Status: in progress; coherence is not established.
+Status: in progress; detached aggregate56595 is active. Coherence is not yet established.
 
 Source revision: `9a38706526c45bc0fac071869458400a07aaaba7` on
 `codex/pv-lib-v1-20261108`. Manifest inputs are lane B `43fa17cd4a5`
@@ -330,12 +330,12 @@ coverage, axiom comparisons, frozen hashes and raw-graph integrity are checked.
 
 ### COH-7: SSH-dependent controller output, not a proof failure
 
-56594 terminated with NONZERO120 after2,925 roots; it is NOT a pass.
+56594 terminated with NONZERO120 after2,950 retained root results; it is NOT a pass.
 Finalized GNU time records wall43:36.73, peak7040000KiB, swaps0,
 source27993341c495ea9107b742c011745b6ed725bebb. Client transport exited255:
 `Read from remote host 100.108.41.90: Operation timed out` followed by
 `client_loop: send disconnect: Broken pipe`. The capped scope briefly continued
-but the controller's output pipe disappeared and the Python process ended120.
+but the Python controller ended120 following the output-pipe loss; its final stderr was lost with that pipe.
 No Lean batch failed. The partial union remains strict_pass=false. The original
 controller died before writing its receipt; recover-transport.py explicitly
 marks a FAILED reconstructed receipt based on the finalized time file and
@@ -350,3 +350,10 @@ not the walker, collector, proof source or caps. FINAL_ROOT_BATCHES orders the
 remaining untested arrays first and then replays every earlier root. No partial
 result is reused as strict union coverage. The full retry is required because
 the interrupted aggregate did not pass; it is not an unchanged regression.
+
+The finalized partial2950-root report includes narrow117p0, which was written
+before its streamed progress line was lost. Thus the final ordering begins
+with that one already-completed batch followed by previously untested batches;
+it still reruns every root. The detached56595 launch ack records the PID,
+controller/payload hashes and host stdout path. Live unit properties confirm
+MemoryHigh6442450944, MemoryMax8589934592, MemorySwapMax0, TasksMax64.

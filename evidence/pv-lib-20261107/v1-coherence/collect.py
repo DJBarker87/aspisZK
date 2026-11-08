@@ -6,7 +6,7 @@ import pathlib,json,lzma,hashlib
 V=pathlib.Path('HOST');E=V/'evidence'
 files={str(p.relative_to(V)):p.read_text() for p in E.glob('*') if p.is_file() and p.suffix in ['.json','.log','.jsonl','.time']}
 for p in E.glob('*.xz'):files[str(p.relative_to(V))]={'binary_hex':p.read_bytes().hex()}
-for n in ['PLAN.json','INVENTORY.json','J.json']:
+for n in ['PLAN.json','INVENTORY.json','J.json','detached-launch-56595.py','detached-payload-56595.json','FINAL_ROOT_BATCHES.json']:
  files[n]=(V/n).read_text()
 raw=json.dumps(files,sort_keys=True).encode();blob=lzma.compress(raw);(V/'COLLECTED_EVIDENCE.json.xz').write_bytes(blob)
 print(json.dumps(dict(files=len(files),archive_sha256=hashlib.sha256(blob).hexdigest(),uncompressed_sha256=hashlib.sha256(raw).hexdigest(),archive_bytes=len(blob))))
