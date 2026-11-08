@@ -18,3 +18,5 @@ PV_LIB_SPEC_CellBindings13 compiled 55165, cohort w3: exit0, wall 0:02.24, peak 
 PV_LIB_SPEC_ArcPhysical13 compiled 55166, cohort w3: exit0, wall 0:02.28, peak 4793532KiB, swap 0; source 1890011ede36ae43cb9cfd09746bb305771a6707; standard summary axioms only.
 
 PV_LIB_SPEC_CellPhysical13 compiled 55167, cohort w3: exit0, wall 0:02.21, peak 4790756KiB, swap 0; source 0200262a8e9464533c3087585c0e091a84402ae0; standard summary axioms only.
+
+PV_LIB_SPEC_ScopePhysical13 compiled 55168, cohort w3: exit0, wall 0:02.17, peak 4790720KiB, swap 0; source bc8f46f2a5f44de9dba6caa60c117de682d92631; standard summary axioms only.
