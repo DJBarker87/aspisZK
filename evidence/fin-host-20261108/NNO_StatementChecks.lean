@@ -102,3 +102,16 @@ theorem tas330 (a2 : NMV_ConcreteWindows.Allocation) (ch : NMX_R4_Authentication
 #print axioms NVR_NoWritePool.verifierCheckpoint_free
 end NNO_StatementChecks
 end
+
+open Lean Elab Command
+set_option pp.all true
+run_cmd do
+ let env := (← getEnv).setExporting false
+ let roots : Array Name := #[`NVR_Folds.process_ref,`NVR_Folds.process_tx1,`NVR_Folds.process_tx2,`NVR_Folds.entry_tx2,`NVR_Folds.entry_tx1,`NVR_DispatchEmitted.process_emitted,`NVR_DispatchEmitted.entry_emitted,`NVR_TasRoots.children_same,`NVR_TasRoots.field240,`NVR_TasRoots.field344,`NVR_TasRoots.weak240,`NVR_TasRoots.weakFrame,`NVR_NoWrite241.error_free,`NVR_NoWrite241.owned241_free,`NVR_NNCWeak.weak240,`NVR_NNCWeak.frame,`NVR_NNCWeak.sdk,`NVR_NoWriteOwned.auth_body_free,`NVR_NoWriteOwned.auth_free,`NVR_NoWriteOwned.validate_free,`NVR_G2Reference.reference_free,`NVR_G2Reference.frame,`NVR_Carrier.byte_inverse,`NVR_Carrier.unbyte_inverse,`NVR_Carrier.bytes_inverse,`NVR_Carrier.unbytes_inverse,`NVR_Carrier.unbytes_eq_iff,`NVR_Carrier.stage1_iff,`NVR_Carrier.asq8_iff,`NVR_Combined.composed_nmw,`NVR_NoWritePool.ofCloned_free,`NVR_NoWritePool.data_free,`NVR_NoWritePool.verifierCheckpoint_free,`NVR_NoWritePool.pda_free,`NVR_NoWritePool.master_free,`NVR_NoWritePool.checkpoint_free,`NVR_NoWritePool.lane_free,`NVR_NoWritePool.registry_immutable_free,`NVR_NoWritePool.registry_v1_free,`NVR_NoWritePool.registry_free,`NVR_Reify.args_inverse,`NVR_Reify.process_source,`NVR_Reify.entry_source,`NVR_CandidateRoots.root344,`NVR_CandidateRoots.root240,`NVR_TAS.r221,`NVR_TAS.r213,`NVR_TAS.roots,`NVR_TAS.weak_process,`NVR_TAS.weak_entry,`NVR_Dispatch.admitted_iff]
+ for name in roots do
+  let some c := env.find? name | throwError "missing root {name}"
+  if true then
+   let some idx := env.getModuleIdxFor? name | throwError "missing owner {name}"
+   let statement ← liftTermElabM (PrettyPrinter.ppExpr c.type)
+   let row := Json.mkObj [("root",toJson name.toString),("owner_module",toJson env.header.moduleNames[idx]!.toString),("obligation_statement",toJson statement.pretty)]
+   logInfo m!"NNO_OWNER {row.compress}"

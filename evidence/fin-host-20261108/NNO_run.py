@@ -63,6 +63,8 @@ if kind=='lean':
  n='NNO_sources/'+target+'.lean';files[n]=p.read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNO_sources','-o','NNO_exports/'+target+'.olean',n]
  if target=='NNO_Scan':command+=['-c','NNO_native/NNO_Scan.c']
+ if target.startswith('FIN_'):
+  files['NNO_fin_guard.py']=(E/'NNO_fin_guard.py').read_text();sources+=['NNO_fin_guard.py'];command=['python3','NNO_fin_guard.py',a,*command]
 elif kind=='link':
  sources=['NNO_native/NNO_Scan.c','NNO_native/NFA_WALKER.c','NNO_native/NFA_MemoryLimit.c'];command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNO_native/NNO_Scan',*sources]
 else:
@@ -105,6 +107,8 @@ r=ssh('python3',f'''from pathlib import Path
 import json,base64,hashlib,lzma
 b=Path({B!r});a={a!r};names=[p for p in(b/a).rglob('*')if p.is_file()]+[b/(a+'.json')]
 if {kind!r}=='lean':
+ q=b/(a+'-memory-review.json')
+ if q.exists():names.append(q)
  p=b/'NNO_exports'/({target!r}+'.olean')
  if p.exists():
   q=b/(a+'-object.json');q.write_text(json.dumps(dict(module={target!r},path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)));names.append(q)
