@@ -63,6 +63,12 @@ Focused receipts47451–47486 (including repaired source failures and two
 pre-elaboration dependency/staging failures) are retained. All accepted objects
 have exact source/index/revision/hash/axioms/time/RSS/swap receipts. Both original
 and new generators pass --check; no failed source was rerun unchanged.
-Final strict audit is pending in the working session; do not infer its result.
+ONE strict raw audit47493 passed128 new roots: exit0,0:06.81 wall,
+peak6594492KiB,swap0,revisionf04c0d616ba5f82a043a580fb4fd6081acc1da1f.
+Only propext/Classical.choice/Quot.sound; unresolved0; summary mismatches0.
+Raw graph archive/hash and VALIDATION.json retained.25 support modules plus
+one strict driver compile accepted (35 focused scopes,9 repaired failures;
+47454/47475 failed before elaboration due to this job's missing dependency).
+No scope remains live. Next unused focus47488–47489, raw47494–47499.
 No full manifest/runtime/release replay. Every scope uses6G/8G/swap0/Tasks64/
 -M7000 and standalone STREAMB_SLOTS=3 turn admission. No ID-budget exhaustion claim.
