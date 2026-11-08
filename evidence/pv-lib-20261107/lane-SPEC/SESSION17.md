@@ -8,3 +8,5 @@ PV_LIB_SPEC_UnitReserve17 compiled 55581, cohort w3: exit0, wall 0:02.25, peak 4
 PV_LIB_SPEC_NativeObligations17 compiled 55584, cohort w3: exit0, wall 0:02.21, peak 4826644KiB, swap 0; source 152f55ed5975ffae07d1298498c7ff4055e79ae4; standard summary axioms only.
 
 PV_LIB_SPEC_UnitReserveTransport17 compiled 55588, cohort w3: exit0, wall 0:02.30, peak 4793460KiB, swap 0; source ea3d6c197439b4a20103ccd5c0138af1afdde96f; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession17 compiled 55589, cohort w3: exit0, wall 0:00.78, peak 1588732KiB, swap 0; source 927860610658b68a1f197f4c3dd3af5185da4b04; standard summary axioms only.
