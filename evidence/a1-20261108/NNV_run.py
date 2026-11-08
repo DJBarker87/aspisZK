@@ -16,7 +16,8 @@ for n in ['NNV_ATTEMPTS.jsonl','NNV_TRANSPORT.jsonl']:
   for line in p.read_text().splitlines():
    row=json.loads(line)
    if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<50, 'NNV 50 scope budget'
+assert 51 <= int(a[-3:]) <= 100
+assert len(used - {'NNV_L'+str(i).zfill(3) for i in range(1,51)}) < 50, 'NNV continuation 50 scope budget'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

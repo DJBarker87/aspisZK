@@ -110,3 +110,11 @@ excluded from the combined import. Final evidence validation passes; all
 read-only Run 5b object hashes are unchanged.
 
 target not yet established
+
+Continuation stage 1 (new authorization L051-L100): L051 passes
+`NNV_FinishCut.returned`, preserving the SAME rounds/claims and finish tail.
+No semantic/native association is claimed yet. Own runner budget now admits
+only L051-L100 and counts at most 50 new submissions; own receipt/validation
+scripts accept the cumulative 100 receipts. Admission, caps, timeout, source
+pinning and one-scope rules are unchanged. L052 failed on a missing Std
+namespace, corrected in L053; this is a source repair, not a retired heavy shape.

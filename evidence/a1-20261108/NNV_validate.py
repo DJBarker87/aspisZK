@@ -4,7 +4,7 @@ import json,hashlib,re,subprocess
 E=Path(__file__).resolve().parent
 allowed={'propext','Classical.choice','Quot.sound'}
 receipts=[json.loads(p.read_text()) for p in sorted(E.glob('NNV_L[0-9][0-9][0-9]/receipt.json'))]
-assert len(receipts)<=50
+assert len(receipts)<=100
 latest={};failures=[];roots={}
 for r in receipts:
  a=r['attempt'];latest[r['module']]=r
