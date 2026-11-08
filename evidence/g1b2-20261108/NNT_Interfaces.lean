@@ -30,18 +30,15 @@ structure NNC_G1aL (S : Sig) (L : PoolLib) (V0 : V2Lib) (VL : VLib)
   okHeader : ∀ pub pr ck env o, Dom064 (lib V0 (fun _ _ => True) w) (pub, pr, ck) →
     w pub pr ck env o → o.exit = .ret (.ok ()) → S.readerHeader env pub pr ck
 
-example {L : PoolLib} {D : DeployedIds} {V0 : V2Lib} {VL : VLib} {I : Impl L V0 VL} :
-    (TX2_233.RowSpec_233 L D I.f233 → TX2_242.RowSpec_242 L D I.f242) =
-    (TX2_233.RowSpec_233 L D I.f233 → TX2_242.RowSpec_242 L D I.f242) := rfl
+example {L : PoolLib} {D : DeployedIds} {V0 : V2Lib} {VL : VLib} {I : Impl L V0 VL}
+ (n : NMS_RootsL L D V0 VL I) (old : NMS_Roots L D V0 VL I) :
+ ({n with r242 := old.r242} : NMS_RootsL L D V0 VL I).r242 = old.r242 := rfl
 example {S : Sig} {L : PoolLib} {V0 : V2Lib} {VL : VLib} {I : Impl L V0 VL}
-    (g : NNC_G1aL S L V0 VL I) (old : NNC_G1a S L V0 VL I) (same : g.w = old.w) :
-    (∀ p q r, WriteFree (g.w p q r)) = (∀ p q r, WriteFree (old.w p q r)) := by rw [same]
+ (old : NNC_G1a S L V0 VL I) (h : LawRefines V0 (fun _ _ => True) old.w) :
+ (NNC_G1aL.mk old.w h old.writeFree old.okHeader : NNC_G1aL S L V0 VL I).writeFree = old.writeFree := rfl
 example {S : Sig} {L : PoolLib} {V0 : V2Lib} {VL : VLib} {I : Impl L V0 VL}
-    (w : Bytes → Bytes → Bytes → Spec (Except V0.VErr Unit)) :
-    (∀ pub pr ck env o, Dom064 (lib V0 (fun _ _ => True) w) (pub,pr,ck) →
-      w pub pr ck env o → o.exit = .ret (.ok ()) → S.readerHeader env pub pr ck) =
-    (∀ pub pr ck env o, Dom064 (lib V0 (fun _ _ => True) w) (pub,pr,ck) →
-      w pub pr ck env o → o.exit = .ret (.ok ()) → S.readerHeader env pub pr ck) := rfl
+ (old : NNC_G1a S L V0 VL I) (h : LawRefines V0 (fun _ _ => True) old.w) :
+ (NNC_G1aL.mk old.w h old.writeFree old.okHeader : NNC_G1aL S L V0 VL I).okHeader = old.okHeader := rfl
 #print axioms lawRefines_canonical
 #print axioms lawRefines_weak
 end RSL.NNT
