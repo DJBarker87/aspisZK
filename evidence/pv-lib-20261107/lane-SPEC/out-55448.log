@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_RawBinding14.lean:19:14: error: don't know how to synthesize placeholder
+context:
+s : Store Data
+a child : ℕ
+parents : List Frame
+⊢ Option PV_LIB_StoreActionTable.Site
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_RawBinding14.lean:15:60: error: unsolved goals
+s : Store Data
+a child : ℕ
+parents : List Frame
+⊢ (match
+      {
+            frame :=
+              { activation := a, remaining := List.drop 5 PV_THR2_F15.live.body,
+                waiting :=
+                  some
+                    { request := PV_STX2_Native.Request.child PV_LIB_SPEC_PreludeValues14.fn164 child [],
+                      action := PV_STX2_Native.ReturnAction.child child (Place.local 4), unwind := [] } },
+            callers := parents, store := s }.frame.completed with
+    | some val => none
+    | none => do
+      let wait ←
+        {
+                frame :=
+                  { activation := a, remaining := List.drop 5 PV_THR2_F15.live.body,
+                    waiting :=
+                      some
+                        { request := PV_STX2_Native.Request.child PV_LIB_SPEC_PreludeValues14.fn164 child [],
+                          action := PV_STX2_Native.ReturnAction.child child (Place.local 4), unwind := [] } },
+                callers := parents, store := s }.frame.waiting
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match PV_LIB_SPEC_Full.programs fn with
+          | some val => none
+          | none => do
+            let action ← PV_LIB_StoreActionTable.v2 fn
+            pure { action := action, callee := fn, waiting := wait, arguments := args }
+        | x => none) =
+    none
+'PV_LIB_SPEC_RawBinding14.inline164' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_RawBinding14.at268' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_RawBinding14.bound268' depends on axioms: [propext, Classical.choice, Quot.sound]

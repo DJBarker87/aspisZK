@@ -1,3 +1,18 @@
+# Session14 in progress — target OPEN; audit not yet run
+
+Continued453b405e622, LOG D1000. ReachedNative14/ReachedEnvironment14 are the
+current assembly, with concrete PARTIAL Values14; full growth/source adequacy
+is open.295 cached minimum and454 initialized-empty TLS adapters are installed
+and checked through the final handler; original reachability is NOT claimed.
+RawVec14 repairs dormant164/native268 dispatch (SPEC-C12); frozen statements
+and v2 are untouched. Source prefix through25 is checked continuously from
+the SAME complete Entry14.Pre world; TLS entry continuation is being composed.
+Physical original stack, cut92/ThreadInit history, SAME-HISTORY exports and the
+complete OwnInit witness/negation remain OPEN. One strict new-root audit still
+to run. See SESSION14.md for exact focused receipts.
+
+---
+
 # Session13 checkpoint — native/physical bindings advanced; full task OPEN
 
 Continued f794c7fe857. Final runtime PrefixNative13; environment
