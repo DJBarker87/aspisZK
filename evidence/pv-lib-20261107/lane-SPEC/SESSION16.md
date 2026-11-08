@@ -28,3 +28,5 @@ PV_LIB_SPEC_Tls279Delivery16 compiled 55542, cohort w3: exit0, wall 0:03.53, pea
 PV_LIB_SPEC_TlsAt68 compiled 55544, cohort w3: exit0, wall 0:02.40, peak 4835336KiB, swap 0; source 1c279aa8ba93f3992316f89a7708fec21970ea58; standard summary axioms only.
 
 PV_LIB_SPEC_TlsForward16 compiled 55545, cohort w3: exit0, wall 0:07.55, peak 4848492KiB, swap 0; source b68824ba9904e46c87c1698929103c9299f00347; standard summary axioms only.
+
+PV_LIB_SPEC_TlsForwardLift16 compiled 55546, cohort w3: exit0, wall 0:04.34, peak 4837280KiB, swap 0; source 5b6b99f742066468491d0c1d09f71e8a65708a38; standard summary axioms only.
