@@ -1,0 +1,158 @@
+def AspisR1.Tx1Q_Install.query : Port3_NativeQueryBody.Ops →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    Tx1Q_Carriers.C.P →
+      Tx1Q_Carriers.C.A →
+        Aeneas.Std.Array Tx1Q_Carriers.C.E 29#usize →
+          Option (verifier.Phase → Aeneas.Std.Result Unit) →
+            Tx1Q_Carriers.C.G →
+              Tx1Q_Carriers.C.B →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (Tx1Q_Carriers.C.A × Tx1Q_Carriers.C.B) verifier.Error) :=
+fun ops proof p a g obs geo b stop =>
+  Tx1Q_Install.result (fun x => (Tx1Q_Carriers.unAccumulator x.1, Tx1Q_Carriers.unPending x.2))
+    (Port3_NativeQueryBody.verifier.candidate.query_loop (Port3_QueryStage.release ops) proof (Tx1Q_Carriers.prepared p)
+      (Tx1Q_Carriers.accumulator a) (Tx1Q_Carriers.arr Tx1Q_Carriers.e g) (Tx1Q_Carriers.observer obs)
+      (Tx1Q_Carriers.geometry geo) (Tx1Q_Carriers.pending b) stop)
+def AspisR1.Tx1Q_QueryBridge.leaves : Port3_NativeQueryBody.Ops → Port3_NativeQueryBody.Ops :=
+fun ops => Port4C_RowStd.install (Port5Q1_QueryPorts.install (Port3_QueryStage.release ops))
+def LIBC_QueryOps.ops : Port3_NativeQueryBody.Ops :=
+NFS_CallerDomains.ops LIBC_QueryOps.seed
+def AspisR1.NFS_QueryOps.installed : Port3_NativeQueryBody.Ops → Port3_NativeQueryBody.Ops :=
+fun ops =>
+  NFP_ObserverErasure.erase
+    (NFP_DotInstall.cohort (NBO_AccumulateAssociation.sourceOps (NFS_NEV_TailModel.fields (NFS_QueryOps.base ops))))
+NNV_generated/NNV_ContinuationInventory.lean:9:7: error(lean.unknownIdentifier): Unknown constant `InstalledPreparation.currentSem`
+@[reducible] def AspisR1.NNH_Run5bCurrentShape.current : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE →
+  RSL.Env → NFN_NEW_GeometryDictionary.CE → NP6_StdModel.Reservation → Ops :=
+fun m env err r => DrvC_Installation.currentInstalled (NNH_CorrectConfiguration.configuration m env err r)
+theorem LIBC_Finish.source : ∀ (a : LIBC_Finish.Args) (env : RSL.Env),
+  LIBC_Finish.Domain a →
+    (do
+        let out ← Port3_FlushInstall.flush a.1 (LIBC_VStateCarriers.toAcc a.2).weights.deref
+        Aeneas.Std.Result.ok
+            (LIBC_VStateCarriers.fromAcc
+              (have __src := LIBC_VStateCarriers.toAcc a.2;
+              { weights := ⟨↑out, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next }))) =
+      Aeneas.Std.Result.ok (LIBC_Finish.value a env) :=
+fun a env domain =>
+  let ⟨p, h✝⟩ := domain
+  let ⟨start, h✝¹⟩ := h✝
+  let ⟨finish, d⟩ := h✝¹
+  have raw := d.progress.right.left;
+  have run := NJJ_Flush.source a.1 (LIBC_VStateCarriers.toAcc a.2).weights.deref raw d.width;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let out ← _a
+              Aeneas.Std.Result.ok
+                  (LIBC_VStateCarriers.fromAcc
+                    (let __src := LIBC_VStateCarriers.toAcc a.2;
+                    { weights := ⟨↑out, out.property⟩, rhs := __src.rhs, power := __src.power, next := __src.next }))) =
+            Aeneas.Std.Result.ok (LIBC_Finish.value a env))
+        run))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = Aeneas.Std.Result.ok (LIBC_Finish.value a env))
+          (Aeneas.Std.bind_tc_ok (NJJ_Flush.output a.1) fun out =>
+            Aeneas.Std.Result.ok
+              (LIBC_VStateCarriers.fromAcc
+                (let __src := LIBC_VStateCarriers.toAcc a.2;
+                { weights := ⟨↑out, out.property⟩, rhs := __src.rhs, power := __src.power, next := __src.next })))))
+      (Eq.refl
+        (Aeneas.Std.Result.ok
+          (LIBC_VStateCarriers.fromAcc
+            (let __src := LIBC_VStateCarriers.toAcc a.2;
+            { weights := ⟨↑(NJJ_Flush.output a.1), (NJJ_Flush.output a.1).property⟩, rhs := __src.rhs,
+              power := __src.power, next := __src.next })))))
+theorem AspisR1.NNH_Run5bCurrentPending.source : ∀ (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE)
+  (env : RSL.Env) (err : NFN_NEW_GeometryDictionary.CE) (r : NP6_StdModel.Reservation) (a : NNH_Libraries.VL.Acc)
+  (pending : NNH_Libraries.VL.Weights),
+  (↑a.weights).length = 64 →
+    LIB_VLib.weightsNewValue a env = Except.ok pending →
+      (NNH_Run5bCurrentShape.current m env err r).op18
+          (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)) :=
+fun m env err r a pending width called =>
+  id
+    (fun called =>
+      let ⟨reply, h✝⟩ :=
+        NNH_Run5bReturnedGraph.ok LIBC_WeightsNew.port AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation
+          (LIBC_WeightsNew.model a env) pending called
+      let ⟨model, image⟩ := h✝
+      Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+        reply = t →
+          (NNH_Run5bCurrentShape.current m env err r).op18
+              (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+        reply
+        (fun out h =>
+          Eq.ndrec (motive := fun reply =>
+            LIBC_WeightsNew.model a env = Aeneas.Std.Result.ok reply →
+              LIBC_WeightsNew.port reply = Except.ok pending →
+                (NNH_Run5bCurrentShape.current m env err r).op18
+                    (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+            (fun model image =>
+              have same := Except.ok.inj image;
+              Eq.ndrec (motive := fun out =>
+                LIBC_WeightsNew.model a env = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+                  LIBC_WeightsNew.port (Aeneas.Std.core.result.Result.Ok out) = Except.ok pending →
+                    (NNH_Run5bCurrentShape.current m env err r).op18
+                        (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+                (fun model image =>
+                  id
+                    (fun model =>
+                      have size := Eq.trans (LIBC_VStateCarriers.weights_length a) width;
+                      have native :=
+                        Eq.trans
+                          (Port3_NativePendingInstall.reference_eq env.reservation (LIBC_VStateCarriers.toAcc a).weights
+                            size)
+                          model;
+                      have round :=
+                        congrArg (fun s => s.weights.deref)
+                          (Tx1Q_Carriers.accumulator_roundtrip (LIBC_VStateCarriers.toAcc a));
+                      id
+                        (fun round =>
+                          id
+                            (id
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      Tx1Q_PrefixInstall.topResult Tx1Q_Carriers.unPending
+                                          (Port3_NativePendingInstall.source env.reservation _a) =
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+                                    round))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        Tx1Q_PrefixInstall.topResult Tx1Q_Carriers.unPending _a =
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+                                      native))
+                                  (Eq.refl
+                                    (Tx1Q_PrefixInstall.topResult Tx1Q_Carriers.unPending
+                                      (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending))))))))
+                        round)
+                    model)
+                (Eq.symm same) model image)
+            (Eq.symm h) model image)
+        (fun e h =>
+          Eq.ndrec (motive := fun reply =>
+            LIBC_WeightsNew.model a env = Aeneas.Std.Result.ok reply →
+              LIBC_WeightsNew.port reply = Except.ok pending →
+                (NNH_Run5bCurrentShape.current m env err r).op18
+                    (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (Tx1Q_Carriers.unPending pending)))
+            (fun model image =>
+              let ⟨⟩ := Except.ok pending
+              image)
+            (Eq.symm h) model image)
+        (Eq.refl reply))
+    called

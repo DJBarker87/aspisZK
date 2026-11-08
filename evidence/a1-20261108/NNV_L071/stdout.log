@@ -1,0 +1,33 @@
+NNV_generated/NNV_PreparedFront.lean:20:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_Prepared.value (pair.1, pair.2, a.g) env
+in the target expression
+  (have r :=
+      match Except.ok pair with
+      | Except.error e => (Except.error e, a.g)
+      | Except.ok (sem, v) => LIB_Prepared.value (sem, v, a.g) env;
+    match r.1 with
+    | Except.error e => Except.error e
+    | Except.ok p => Except.ok (p, r.2)) =
+    Except.ok (p, g)
+
+case ok.mk
+a : TX1_087.Args VL
+env : Env
+p : VL.Prepared
+g : VL.E29
+pair : Verified NNH_PrepareReturns.V × NNH_PrepareReturns.V.View
+called :
+  (have r :=
+      match Except.ok pair with
+      | Except.error e => (Except.error e, a.g)
+      | Except.ok (sem, v) => LIB_Prepared.value (sem, v, a.g) env;
+    match r.1 with
+    | Except.error e => Except.error e
+    | Except.ok p => Except.ok (p, r.2)) =
+    Except.ok (p, g)
+front : NNH_PrepareReturns.frontValue a env = Except.ok pair
+reply : Except LIB_VLib.library.VErr LIB_VLib.library.Prepared
+scratch : LIB_VLib.library.E29
+prep : LIB_Prepared.value (pair.1, pair.2, a.g) env = (reply, scratch)
+⊢ ∃ sem v, Nonempty (NNV_PrepareFrontCut.Packet a env sem v) ∧ LIB_Prepared.value (sem, v, a.g) env = (Except.ok p, g)
+'AspisR1.NNV_PreparedFront.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

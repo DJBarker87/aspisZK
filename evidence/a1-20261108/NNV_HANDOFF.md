@@ -1,3 +1,49 @@
+# A1 NNV continuation handoff
+
+**No A1 term or ledger closure. Target not yet established.** Exact parent:
+`RSL.TAS.NND_A1 (AspisR1.NNH_Run5bHost.S_host L0 copy std)
+ NNH_Libraries.VL NNH_Libraries.P NNH_Libraries.C`.
+
+The new authorization is exhausted: **50/50 scopes L051-L100**, 32 passes and
+18 failures; 0 Kani, 0 extraction. These counts are validation metadata, not
+security progress. The historical L001-L050 evidence is retained separately.
+
+Final NNV_COMBINED_IMPORT2 passes L100: exit 0, wall 28.54144829697907 s,
+peak RSS 6,952,244 KiB, swaps 0, source revision
+`df346686ae209d1786d5d0dc9cfe42d4b8dccf94`. It imports the original combined closure plus 31 accepted
+continuation modules and prints 45 new roots, standard axioms only. Exact
+source/dependency/Aeneas object hashes, command, limits, exit, timing, RSS,
+swap and axiom lines are in NNV_COMPILE.tsv and NNV_L100/receipt.json.
+
+Closed local support now includes the SAME finish-tail decomposition,
+derived decoder domains, native rounds/circle/terminal ports; canonical
+prepare-front and scratch provenance; exact current View/query input ports;
+source common/getter and host encoder ports; local current flush/checkpoint
+association; and encoder Ok reflection. Exact theorem statements are in the
+accepted NNV modules and NNV_ACCEPTED_ROOTS.json. Their original local domains
+remain visible; no full body or A1 correspondence follows from the import.
+
+NNV_REMAINING.md is the authoritative seven-item specification/disposition.
+The first unclosed semantic op9 goal remains open. Fixed finish composition,
+complete native prepare/domain, query/evaluator and batch associations, body
+continuations, owned 328/345 composition, global weak Err and A1 assembly
+remain Lean-only obligations. No remaining member needs Kani or extraction.
+No delivered-type rfl example or raw ax2 audit of an A1 term is claimed.
+
+All 42 read-only Run5b object hashes are unchanged. The own NNV_objects overlay
+is retained. NNV_CONTINUATION_VALIDATION.json records all 50 admitted scopes,
+share counts below six, disk above 40 GB and the required caps. L095's digest
+mismatch/heartbeat failure and inappropriate direct polymorphic projection
+are recorded below and retired; no cap/heartbeat/timeout was raised and no
+unchanged timed-out shape was retried. Unaccepted drafts are .lean.txt.
+
+No frozen Rust, RSL, shipped source, artifact, security target or trust boundary
+changed. No ELF rebuild, full release replay, push, other worktree edit or
+other job scope operation occurred. Stage commits are on
+`codex/cx-a1-20261107`; continuation base `40d0b7d0c20`.
+
+## Historical handoff and stage notes
+
 # A1 NNV final handoff
 
 Final validation: **50/50 scopes**, 37 passes and 13 failures (includes
@@ -108,5 +154,84 @@ remain in the NNV_objects overlay for G0 reuse. Failed sources and exact
 errors remain in attempt snapshots; retired drafts are .lean.txt and are
 excluded from the combined import. Final evidence validation passes; all
 read-only Run 5b object hashes are unchanged.
+
+target not yet established
+
+Continuation stage 1 (new authorization L051-L100): L051 passes
+`NNV_FinishCut.returned`, preserving the SAME rounds/claims and finish tail.
+No semantic/native association is claimed yet. Own runner budget now admits
+only L051-L100 and counts at most 50 new submissions; own receipt/validation
+scripts accept the cumulative 100 receipts. Admission, caps, timeout, source
+pinning and one-scope rules are unchanged. L052 failed on a missing Std
+namespace, corrected in L053; this is a source repair, not a retired heavy shape.
+
+Continuation stage 2: L053 result ports, L054 rounds, L057 record getter,
+L063 claims, L064 decoder and L065 prepare-front decomposition pass.
+`NNV_PrepareFrontCut.returned` extracts Filled, both expansion outputs, View
+and semantic evaluation from the SAME frontValue result. These are canonical
+returned-path cuts, not hypotheses about native success. Fixed finish/current
+op9 association and the composed A1 remain open. L055/L058/L056/L059/L060/
+L061/L062 preserve exact diagnostics; local namespace, abbreviation and Bool
+guard repairs are split into subsequent attempts. No cap or heartbeat changed.
+
+Continuation stage 3: L067/L070 close circle projection and the complete SAME
+finish-tail decomposition. L068/L069 derive both decode domains from parsed
+record provenance. L072/L074-L079 close Filled reservation/value, exact
+semantic/values expansion outputs, the current View port, the afterstate
+encoder continuation, and the adapter's common source getter. These do not
+establish full prepare/body continuation or A1. L066 exposed an obsolete
+unqualified S1Semantic import collision; the replacement removes that import
+and uses the coherent closure's existing declarations. L071 requires reducing
+the canonical front match before rewriting; L073 needs only small natural
+reductions. L075 preflight caught a missing private dependency before submission;
+the unused import was removed and the same still-unsubmitted attempt admitted
+again, without counting that preflight as a Lean scope.
+
+Continuation erasure repair: L080/L081 retain the exact missing
+`(PreparedHashCode.run code).2 = PreparedHashCode.erase code` bridge.
+The replacement is `NNV_FinishNativePorts`, composing the named `run_value`
+law before rounds/circle erasure. The obsolete-import and direct-run/erase
+shapes are retired; neither is treated as accepted evidence. L082's terminal
+port needs explicit Rust Result constructor qualification in its `change` term.
+
+Continuation stage 4: L083 discharges the native rounds/circle result ports
+through named run_value and erasure laws; L084 discharges terminal value
+transport with the domain derived from the canonical returned terminal.
+L085/L086 pass the source getter/common diagram and exact host op24 encoder.
+L088 proves the canonical prepared-return caller yields the SAME semantic,
+View and scratch; L089 derives all three buffer lengths symbolically; L090
+identifies the actual current query call. No whole dictionary congruence or
+whole-buffer normalization is used. L087's flush failure is the elaborated
+Vec/Slice rewrite shape; its replacement applies source congruence to the
+explicit Result equality instead. Global query/evaluator and A1 are OPEN.
+
+L095 finding: `NNV_CurrentBatchSource` is NOT accepted. Its direct polymorphic
+slot projection printed standard axioms, but that projection shape should not
+have been used under the retired-shape instruction. The full module used a
+VTop digest where Op5T_Install.body requires the stage2 digest, then hit the
+200000-heartbeat limit at the source rewrite. No credit, no limit increase,
+no unchanged rerun. Retire the draft. A replacement must first use the named
+abstract slot projection and an explicitly typed stage2 digest port, then
+transport the SAME roots/queries pointwise. This is an unresolved Lean-only
+batch association, not a Kani or cryptographic assumption.
+
+L096/L097 replace the failed rewrite shapes with Result congruence. The actual
+current flush agrees at the SAME pending/accumulator under its original
+LIBC_Finish.Domain; that domain is not yet derived at the full body caller.
+The current checkpoint writer agrees with LIBC_Checkpoint.output at the SAME
+Prepared/Acc/proof/public inputs and runtime digest replies. The input ports
+are closed; whole-body and global weak-Err composition remain open.
+
+Continuation stage 5: L091/L092 compose the actual query carrier inputs;
+L093 proves pointwise digest erasure congruence; L096/L097 pass current flush
+and checkpoint ports. L099 reflects host encoder Ok back to the SAME owned
+source encode call. L098's last goal was already reflexive after case analysis;
+the repair is explicit rfl, with no statement or limit change. No global Err
+implication is inferred. Unaccepted/unfinished drafts are now .lean.txt and
+excluded from the combined import. The 42 read-only Run5b object hashes are
+unchanged (NNV_CONTINUATION_PIN_RECHECK.json). The final authorized scope is
+NNV_L100, NNV_COMBINED_IMPORT2: original combined import plus 31 new accepted
+modules and 45 new printed roots. No A1 term or row credit is delivered.
+
 
 target not yet established
