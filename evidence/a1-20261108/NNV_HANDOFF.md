@@ -1,4 +1,35 @@
-# A1 NNV work in progress
+# A1 NNV final handoff
+
+Final validation: **50/50 scopes**, 37 passes and 13 failures (includes
+inspection/import scopes; these counts are not security progress). Kani 0,
+extraction 0. NNV_COMBINED_IMPORT passed L050: exit 0, wall 31.183832312 s,
+peak RSS 6,951,312 KiB, swaps 0, source revision 51fbb8b4279 (dirty evidence
+snapshot hashes retained in the receipt). It imports NNH_Run5bCombined and
+all 34 accepted NNV proof modules. Every printed root has only standard
+axioms. NNV_COMPILE.tsv and per-attempt receipts record exact targets,
+commands, source/dependency hashes, exit, wall, RSS, swap and axioms.
+
+No term of the requested `RSL.TAS.NND_A1` type is delivered. No ledger row is
+closed. This is local source correspondence support only. The 100-bit,
+privacy and two-transaction release targets and trust boundary are unchanged.
+
+The exact OPEN field is:
+```lean
+RSL.TAS.NND_A1 (AspisR1.NNH_Run5bHost.S_host L0 copy std)
+  NNH_Libraries.VL NNH_Libraries.P NNH_Libraries.C
+```
+There is therefore no delivered-constant `example : <type> = ... := rfl`, and
+no raw ax2 audit of an A1 term. `NNV_REMAINING.md` lists every open member.
+
+Reusable roots include `AspisR1.NNV_PreparedNative.returned` (P reply and
+scratch at canonical ports), `AspisR1.NNV_CurrentGeometry.source/returned`
+(full outer source loop and current geometry at canonical raw indices),
+`AspisR1.NNV_SemanticPrefix.returned` (through begin, finish still open),
+`AspisR1.NNV_CommonAssociation.common/afterstate`,
+`AspisR1.NNV_AfterstatePort.source`, `AspisR1.NNV_CheckpointDigest.source`,
+`AspisR1.NNV_CheckpointValue.source`, and `AspisR1.NNV_DecodeP1880.returned`.
+Their exact types are in the correspondingly named committed Lean modules;
+NNV_ACCEPTED_ROOTS.json contains each printed axiom line.
 
 Base 7f6c42c1ee5; 50 Lean scopes, no Kani or extraction. Target not yet established.
 Read-only Run 5b objects, reference-only LEAN_PATH; own overlay NNV_objects.
@@ -63,3 +94,19 @@ Ok/weak-Err interface; it normalizes the statement and does not prove A1.
 No NND_A1 term is delivered. No raw ax2 audit is claimed. The exact remaining
 parent and member goals are in NNV_REMAINING.md. The only remaining scope is
 NNV_COMBINED_IMPORT (NNH_Run5bCombined plus all accepted NNV proof modules).
+
+Fingerprint labeling note: the own client's inherited
+`deps_fingerprint.cache_imports_manifest_sha256` key hashes NNV_PATHS.json,
+not a copied cache corpus. Actual imported-object/sidecar hashes are in
+`selected_objects`; the Run 5b object pin/recheck manifests agree exactly
+(42 files). This job used reference-only seeding as required by the JOB.
+
+Final disposition: no A1 term, no row promotion, no G0/export/manifest replay,
+no raw ax2, no Rust/Kani/extraction/ELF job, no shipped-source or trust change.
+All work is on codex/cx-a1-20261107, committed by stage; no push. Own objects
+remain in the NNV_objects overlay for G0 reuse. Failed sources and exact
+errors remain in attempt snapshots; retired drafts are .lean.txt and are
+excluded from the combined import. Final evidence validation passes; all
+read-only Run 5b object hashes are unchanged.
+
+target not yet established

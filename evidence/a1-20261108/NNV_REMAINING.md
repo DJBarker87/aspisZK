@@ -23,8 +23,8 @@ Exact parent (all original binders and universal adversary retained):
    on the SAME queries and canonical raw indices. OPEN: actual query
    installation association at the SAME prepared/accumulator/g/geometry/pending;
    batch call at SAME roots and digest; flush and checkpoint association at
-   SAME accumulator. Prepared state transport passes L039. Checkpoint digest/erasure and decoder
-   ports are checked independently; their final disposition is in NNV_HANDOFF.md. These are Lean-only.
+   SAME accumulator. Prepared state transport passes L039. Checkpoint digest/erasure pass L046/L047;
+   decoder P1880 ports pass L048. Their full caller continuations remain open. These are Lean-only.
 4. Common/afterstate: NNV_CommonAssociation uses the existing source common
    theorem plus the decoder inverse; it proves the candidate-afterstate
    projection too. OPEN: complete adapter getter/common diagram at the body
@@ -63,3 +63,6 @@ L045 instead states equality at exactly LIBC_Usize.raw start/stop, matching
 LIBC_Geometry.model's natural-number arguments for ALL naturals. No bound or
 representation premise is added. At deployed 0/10 the ordinary small numeral
 conversion supplies the current source indices.
+
+Budget exhausted: 50/50 scopes. Remaining members 1-7 are Lean-only; none is
+blocked on Kani. No fresh host scope or unchanged regression is authorized.

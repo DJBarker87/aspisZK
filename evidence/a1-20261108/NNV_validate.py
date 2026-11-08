@@ -37,6 +37,6 @@ combined=latest.get('NNV_COMBINED_IMPORT')
 result={'scope_count':len(receipts),'passes':sum(r['exit_status']==0 for r in receipts),'failures':failures,
  'accepted_current_modules':modules,'standard_only_on_all_passing_receipts':True,
  'combined':None if combined is None else {k:combined[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']},
- 'new_axiom_roots':roots,'NND_A1_delivered':False,'ledger_rows_closed':0,'status':'target not yet established'}
+ 'audited_theorem_roots':roots,'NND_A1_delivered':False,'ledger_rows_closed':0,'status':'target not yet established'}
 (E/'NNV_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps({k:result[k] for k in ['scope_count','passes','standard_only_on_all_passing_receipts','combined','NND_A1_delivered']}))
