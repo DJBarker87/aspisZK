@@ -1,0 +1,42 @@
+NNS_generated/NNS_LibraryContext.lean:9:45: error: Type mismatch
+  rfl
+has type
+  ?m.3 = ?m.3
+but is expected to have type
+  mapVErr (TAS.lib V R0 w) r = mapVErr V r
+NNS_generated/NNS_LibraryContext.lean:13:91: error: unsolved goals
+L : PoolLib
+V : V2Lib
+R0 : Bytes → Bytes → Prop
+w : Bytes → Bytes → Bytes → Spec (Except V.VErr Unit)
+verify : VerifyArgs → Spec (Except V.VErr Unit)
+v : TX2_242.Validated L
+pr ck pub : Bytes
+⊢ (RS.check (List.length pub != STATEMENT_BYTES) ProgramError.invalidInstructionData).seq
+      ((RS.lift (verify (pub, slice pr AFTERSTATE_BYTES (AFTERSTATE_BYTES + v.proof_length), ck))).bind fun r =>
+        (mapVErr V r).seq (L.emitResult v.statement)) =
+    (RS.check (List.length pub != STATEMENT_BYTES) ProgramError.invalidInstructionData).seq
+      ((RS.lift (verify (pub, slice pr AFTERSTATE_BYTES (AFTERSTATE_BYTES + v.proof_length), ck))).bind fun r =>
+        (mapVErr V r).seq (L.emitResult v.statement))
+NNS_generated/NNS_LibraryContext.lean:34:1: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    NMS_R2Refine.observed validate
+      { verifier_program := a.program_id, accounts := a.accounts, instruction_data := a.data,
+        current_slot := a.current_slot }
+  has type
+    Spec (Except ProgramError (TX2_242.Validated L))
+  but is expected to have type
+    RS (TX2_242.Validated L)
+  in the application
+    RS.bind
+      (NMS_R2Refine.observed validate
+        { verifier_program := a.program_id, accounts := a.accounts, instruction_data := a.data,
+          current_slot := a.current_slot })
+'NNS_LibraryContext.map_error' depends on axioms: [propext, sorryAx]
+'NNS_LibraryContext.after_public' depends on axioms: [propext, sorryAx]
+'NNS_LibraryContext.after_reads' depends on axioms: [propext, sorryAx, Quot.sound]
+'NNS_LibraryContext.after_validate' depends on axioms: [propext, sorryAx, Quot.sound]
+'NNS_LibraryContext.replay' depends on axioms: [propext, sorryAx]
