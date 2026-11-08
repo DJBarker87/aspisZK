@@ -636,3 +636,29 @@ closure was rebuilt and no source retargeting occurred. New roots import the
 coherent RPx source modules; original FJv/NNE files remain untouched.
 Fresh run5 used120/160 actual scopes;40 remain. Target not yet established.
 S7 next: O1/O2 must compile before any use of RecordedCharge.bound at the host.
+
+## S7 boundary (2026-11-08): four-scope cap, averaging NOT established
+
+L829–832:4 actual scopes, cap reached. Fresh run5 now124/160 actual;36 remain.
+DigestProgramStatus.total_status/adapter_fixed PASS L829; verifier pointwise
+syntax slots first/common/second PASS L831. L830 was a reserved-word parser
+error, corrected L831. L832 elaborated account/o1/child/first/second with
+standard axioms, but exited1 because an explicit child subgoal tactic followed
+an already closed goal (line33: No goals to be solved). No passing-module
+credit is claimed for O1. The corrected source is retained as
+NNH_DigestSyntaxTransport.lean.txt (delete the two redundant final child tactics),
+not imported or exported. S7 cap forbids another scope this step.
+
+O2 is unproved, not reported false: no counterexample has been established.
+Exact target remains DGP_HostDigest.O2. The installed helpers depend on env.pda,
+reservation and op43; the source/observer erasure of the latter needs pointwise
+slot transport through the actual source syntax. No O2 premise was added.
+RecordedCharge.bound was NOT applied at the host. No Expect on the failure
+indicator, world-determining joint program, conditioning or extra charge was
+introduced. deployed_outer/failure inclusion and its same-space bound link
+remain OPEN; owner condition(4) is NOT proved. Missing Split/A1/A2/NMF_B are
+additional obstacles to the fully instantiated fail_sub_rec application.
+
+S6 is independently complete. S8 is not launched. Remaining independent S5
+oracle/record transport can still be attempted within its unused10 scopes;
+continue there without borrowing the exhausted S7 or S2/S3/S4 caps.
