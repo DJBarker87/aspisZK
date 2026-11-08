@@ -44,7 +44,7 @@ print(json.dumps(dict(scopes=found,count=len(found))))
   if disk['free']>=40_000_000_000:break
   record(dict(event='wait',reason='disk below40GB',disk=disk))
   if dr==6:raise RuntimeError('Disk exhausted')
-  
+
   for _ in range(10):time.sleep(60)
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys

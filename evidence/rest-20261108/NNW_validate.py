@@ -28,5 +28,5 @@ for p in sorted(E.glob('NNW_L[0-9][0-9][0-9]/receipt.json')):
    if 'depends on axioms:' in line:assert set(line.split('[')[1].rstrip(']').split(', '))<=standard,line
  rows.append([a,r['module'],r['exit_status'],r['wall_seconds'],r['peak_rss_kib'],r['swaps'],r['source_revision'],json.dumps(r['source_hashes']),hashlib.sha256(json.dumps(r['deps_fingerprint'],sort_keys=True).encode()).hexdigest(),' | '.join(axioms),json.dumps(r['command'])])
 with (E/'NNW_COMPILE.tsv').open('w') as f:
- w=csv.writer(f,delimiter='\t');w.writerow(['attempt','target','exit','wall_seconds','peak_RSS_KiB','swap','source_revision','source_sha256','deps_fingerprint_sha256','print_axioms','argv']);w.writerows(rows)
+ w=csv.writer(f,delimiter='\t',lineterminator='\n');w.writerow(['attempt','target','exit','wall_seconds','peak_RSS_KiB','swap','source_revision','source_sha256','deps_fingerprint_sha256','print_axioms','argv']);w.writerows(rows)
 print(json.dumps(dict(attempts=len(rows),passed=sum(r[2]==0 for r in rows),failed=sum(r[2]!=0 for r in rows),wall_seconds=sum(r[3] for r in rows),peak_rss_kib=max(int(r[4]) for r in rows))))
