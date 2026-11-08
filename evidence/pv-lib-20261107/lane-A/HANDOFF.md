@@ -116,3 +116,8 @@ as trivial. Source archive/hash is session7/STD_THREADID.json.
 The source prefix now distinguishes dangling/nonlast/last, and deallocation is
 a retained completion stage rather than a prefix incorrectly run on pending.
 This is source-only lifetime support, not complete allocator/OWNER adequacy.
+47434 passed StoreActionTable7, an explicitly PARTIAL extension preserving
+PV_LIB_StoreActionTable.v2 unchanged/importable. v2Source/sourceStep combine the
+new copy504/source-backed214/staged683 projections and retained pending phases.
+source_agreement uses the same OWNER base and resources. No full table or
+caller-history credit is claimed.
