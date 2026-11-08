@@ -29,3 +29,19 @@ coverage is preserved in limits. Full source-store adequacy remains open.
 44915 W3 new-root driver compiled exit0, wall0:00.79, peak1588552KiB, swap0; unchanged collector/walker suffix, only module/root arrays changed.
 
 44916 lane-A new-root driver compiled exit0, wall0:00.75, peak1587980KiB, swap0; same collector suffix. All27 new roots are ready for ONE audit, sequential isolated cohorts.
+
+ONE strict raw49797: PASS27/27 NEW roots, exit0, wall0:16.34,
+peak6758516KiB, swap0, sourced790b46aa15; standard
+axioms only; zero unresolved/summary disagreements. Sequential isolated W3(20)
+and lane-A(7), ONE scope, no combined cohort/release claim. Exact graph archive,
+root manifest, input hashes and wrapper retained. No raw/full replay rerun.
+
+The ABI task stops at the checked SPEC-C4 exact-memory obstruction, under
+r1p-common rule4 (stop a false item, report it, continue independent items).
+The independent pinned store-table import is complete. The successful
+original-entry schedule/full joint conjunction remain UNFINISHED; the local
+counterexample is not offered as their contradiction. No ID/budget exhaustion
+or global impossibility is claimed. SESSION7_ADEQUACY.md names the repair.
+No active own build scope, key operation, provider/package/ledger/frozen-spec/
+implementation edit, push or merge. Next44917; raw49798 only for changed/new
+inputs. Full task and privacy target not yet established.

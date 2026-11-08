@@ -1,10 +1,32 @@
-# Session7 live checkpoint
+# Session7 handoff — checked ABI obstruction, full joint witness still open
 
-Concrete source descriptors compiled44910; exact sparse native layout and
-SPEC-C4 checked44913. The old total-image adapter cannot equal the adopted
-binary memory initialization; no full-joint contradiction is claimed.
-Full successful OwnInit witness remains open. Pinned lane-A import next,
-then ONE strict new-root audit. See SESSION7.md/FINDINGS.md. Next44914/raw49797.
+Continued68ca35c7931. Concrete N95807 TLS/atomic descriptors compiled44910.
+SPEC-C4 checked44913: adopted ArcInner alloc48/align8 writes offsets0..31;
+current total-image handler also initializes32..47. The exact local world
+comparison fails for every total image of width48. See FINDINGS.md and
+SESSION7_ABI_SOURCE.json/BINARY.txt. This is NOT a contradiction of the full
+OwnInit existential premises and not original-entry reachability.
+
+No fabricated total Shape replaces ABI. No successful resource schedule or
+continuous13923/register14320/ThreadInit14756 history is claimed. No actual
+allBridged/SourceInitBoxOwnership applications. Full joint task remains open;
+SESSION7_ADEQUACY.md specifies sparse-handler repair and the remaining work.
+
+Actual lane-A v2/interpret/step imported read-only44914 at03c3c72b143.
+The table remains explicitly partial; no full-table/desired-write/decoder-
+success premise, no provider edit, no mixed coherent release claim.
+The18 prior whole statements remain retained, not silently rebound.
+
+Five focused passes(including2 drivers),2 changed-before-retry failures.
+ONE strict raw49797 PASS27/27 NEW roots; exit0, wall0:16.34,
+peak6758516KiB, swap0, sourced790b46aa15; standard
+axioms only, zero unresolved/summary disagreements. Sequential isolated
+W3/lane-A partitions in ONE6G/8G/swap0/Tasks64/-M7000 scope. No unchanged rerun,
+full manifest or runtime/Rust/Kani/SBF/extraction regression. No row proved,
+endpoint/T premise change, key action, push/merge, or live own scope.
+Next Lean44917..44998; raw49798..49799 for changed/new inputs only.
+
+Offline verification: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session7.py
 
 ---
 
