@@ -34,3 +34,19 @@ is retired after two failures, no theorem credit; its last source is .retired
 and failed snapshots remain in receipts. No failed shape was rerun unchanged.
 
 Target not yet established.
+
+## Compiled separate-hash follow-on (supersedes the earlier stop for this route)
+
+NNP_L009 compiles NNP_SeparateHeader.okHeader, okHeader_any,
+canonical_header and okHeader_field, standard axioms only. The header hash is
+LIBB_HashModel.H env (the actual singleton reply), while the law's C04 hash
+remains LIBB_PartitionEnv.H env. canonical_header retains exactly the canonical
+native domain/invocation/Bound064/TraceOf inputs and adds only the returned-Ok
+case condition needed for an accepted-header conclusion. No oracle premise,
+HostRep strengthening or trust item is added. The merged NNH_G1aEnv.header
+already uses this separate header interpretation.
+
+TGB-1b has a compiled separate-hash deliverable. The stronger original
+LIBW.okHeader_of_oracle conclusion with the C04 hash in the header still needs
+HeaderAgreement and is NOT claimed unconditionally. LIBW source and statements
+remain unchanged. Final raw-ax2 and closure checks are pending stage 4.
