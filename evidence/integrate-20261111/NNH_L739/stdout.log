@@ -1,0 +1,40 @@
+NNH_generated/NNH_Tx2LiteralSlots.lean:28:22: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.38 = ?m.38
+but is expected to have type
+  (stage missing env err r).op22 = NHT_Constants.compact.OFF_ROUND0
+in the application
+  ⟨?m.36, rfl⟩
+def AspisR1.Port1_Library.install : Ops → Ops :=
+fun ops =>
+  { op0 := @Ops.op0 ops, op1 := ok Port1_LibrarySource.zero, op2 := Port1_LibrarySource.decode, op3 := ops.op3,
+    op4 := ops.op4, op5 := @Ops.op5 ops, op6 := ops.op6, op7 := @Ops.op7 ops, op8 := @Ops.op8 ops, op9 := ops.op9,
+    op10 := ops.op10, op11 := ops.op11, op12 := ops.op12, op13 := Port1_LibrarySource.mark, op14 := ok 7783#usize,
+    op15 := ok 7751#usize, op16 := ok 10#usize, op17 := ops.op17, op18 := @Ops.op18 ops, op19 := ops.op19,
+    op20 := ok 10055#usize, op21 := ok 8007#usize, op22 := ok 7527#usize, op23 := ok 7495#usize,
+    unwrap32 := ops.unwrap32 }
+def NHV_InactivePacket.packet : Slice U8 → Result (Option NHV_InactivePacket.E) :=
+fun bytes => do
+  let decoded ← NET_WideModel.wide bytes
+  ok (Option.map FIo_Install.fromE decoded)
+@[irreducible] def NHT_Constants.compact.OFF_INACTIVE : Result Usize :=
+do
+  let i ← NHT_Constants.compact.OFF_Y1
+  let i1 ← NHT_Constants.compact.COMPACT_Y1
+  i + i1
+NHV_InactivePacket.source: ∀ (bytes : Slice U8), NHV_InactivePacket.packet bytes = NHV_InactivePacket.emitted bytes
+NHV_InactivePacket.reject: ∀ (bytes : Slice U8),
+  FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes bytes = ok none →
+    NHV_InactivePacket.packet bytes = ok none
+NHV_InactivePacket.exact_window: ∀ (proof : Slice U8),
+  7527 ≤ (↑proof).length →
+    ∃ (range : 7495 + 32 ≤ (↑proof).length),
+      have bytes := NEO_FixedWindow.window proof 7495 32#usize range;
+      ↑bytes = List.take 32 (List.drop 7495 ↑proof) ∧
+        NHV_InactivePacket.packet bytes.to_slice = NHV_InactivePacket.emitted bytes.to_slice
+'AspisR1.NNH_Tx2LiteralSlots.pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2LiteralSlots.flush' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2LiteralSlots.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2LiteralSlots.powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2LiteralSlots.constants' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

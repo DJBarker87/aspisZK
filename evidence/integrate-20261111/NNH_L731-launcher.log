@@ -1,0 +1,46 @@
+{"attempt": "NNH_L731", "exit_status": 0, "wall_seconds": 9.431669439887628, "peak_rss_kib": "6667460", "swaps": "0", "print_axioms": []}
+def NJC_ClosedCalls.geometry : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+  Aeneas.Std.Usize →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result NFN_NEW_GeometryRawInterface.O.G VTop_Stages.verifier.Error) :=
+fun queries start finish =>
+  Port3_QueryInstall.result
+    (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap NFN_NEW_GeometryRawInterface.answer
+      (NEW_GeometryActual.verifier.QueryGeometry.for_range queries start finish))
+NJC_ClosedCalls.geometry_clause: ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (start finish : Aeneas.Std.Usize),
+  NJC_ClosedCalls.geometry queries start finish =
+    Port3_GeometryStage.geometry NFN_NEW_Ge
+...
+
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result (NFG_QueryLoopDefs.A × NFG_QueryLoopDefs.B)
+                          NHT_ResultPort.TargetError) :=
+fun base qPlace gPlace proof p a g _obs geometry pending finish =>
+  NHT_ResultPort.action
+    (NFG_QueryLoopDefs.run (NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) finish 12
+      (Aeneas.Std.core.result.Result.Ok (a, pending)))
+def AspisR1.Port3_QueryStage.query : Port3_NativeQueryBody.Ops →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    VTop_Stages.verifier.Prepared →
+      VTop_Stages.verifier.Accumulator →
+        Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+          Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+            VTop_Stages.verifier.QueryGeometry →
+              VTop_Stages.verifier.BatchedWeights →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result
+                      (AspisR1Stage2.verifier.Accumulator × AspisR1Stage2.verifier.BatchedWeights)
+                      VTop_Stages.verifier.Error) :=
+fun ops proof p a g obs geometry pending end1 =>
+  Port3_QueryInstall.result
+    (Port3_NativeQueryBody.verifier.candidate.query_loop (Port3_QueryStage.release ops) proof p a g
+      (Port3_QueryInstall.observer obs) geometry pending end1)
+AspisR1.Op5T_Concrete.stage_source {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize) (hash : Hash) :
+  Op5T_Install.stageBatch Port4B_Install.leaves D proof p folded batch hash =
+    Port4B_Install.batch D proof p folded batch hash
+
+Running as unit: run-re9eee9eb77794fcea60a33dcbe928776.scope; invocation ID: 16cd192e1bb8448397e97e36d4d08cc0

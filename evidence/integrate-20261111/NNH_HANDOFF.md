@@ -489,3 +489,43 @@ configuration. conclusion_iff is proved, not this field. No premise added.
 P3/P4/P5 from the old preflight remain not run; explicit newest instruction
 resumed S2 after P2. S3 starts next. Fresh run5 used22/160 actual scopes;138
 remain. S8's16GiB scope unused. No export, row credit, push or shipped edit.
+
+
+## S3 boundary (18/18 scopes L730–747)
+
+Target not yet established. A2 is NOT delivered. Pointwise finish transport
+is proved for every v/p/a in NNH_ResultPortTransport.finish (L738); its
+generic finite Result-port equality has no axioms. Model pending/flush/mark/
+powers and six literal offsets plus split are proved L742. P4 at the host
+PASS L743 (NNH_HostRecorderEvent.same, Iff.rfl). Host singleton-oracle equality,
+reader header and exact C04 node/leaf oracle equalities PASS L745. These are
+pointwise: no global equality is asserted for LIBB_PartitionEnv.H, which
+repartitions/truncates arbitrary messages and is justified only on actual
+C04 request shapes. All accepted roots standard-only.
+
+P3 correction: the expected geometry/query/Merkle/finish table was incomplete.
+DrvC_Implementation.release overwrites op2 with Port1_LibrarySource.decode
+and installs literal offsets. Canonical NJJ_Common uses NHV_InactivePacket
+(via NET_WideModel/actual FIo decoder) and irreducible NHT_Constants offsets.
+The additional inactive value transport is unproved; small constant evaluation
+also needs named unfolding lemmas (the rfl/with_unfolding_all shape is retired).
+No conclusion that these equalities are false. Failed source CommonOffsets is
+archived as .lean.txt and not imported.
+
+Geometry additionally passes through TWO SAQ_Constructor installations in the
+headline configuration before Port5Q1_GeometryTerminal.install; equating it
+directly to adopted (or one extra terminal installation) failed. Must transport
+those concrete primitive values on the returned path. Query likewise sees
+SAQ_Decoder plus FIp dots/circle/equality slots, not simply the raw concrete
+query dictionary. Merkle is Port4B_Install.batch against NLP_NativeMerkle.action
+with the just-proved node/leaf oracle agreement; no source-to-model parent
+transport is available yet. NNH_Tx2OpenSlots (L747) records exact unproved
+inactive/geometry/query/Merkle propositions. They are NOT hypotheses of any
+claimed field or final consumer. The parent goal remains
+NNH_ExactRemainingTypes.tx2Op11; then Stage2To064 + Returns + AMN.viaReturns2.
+
+S2 Split.rest remains open. S4 next: weak Err physical consumer copy and
+focused rev4 Returns dependency rebuild before any A1 credit. Current own
+NNH_dependency_inputs RSL TX1 files are still rev3 (no P1880); do not mistake
+cached focused elaboration for a rev4 coherent release replay. Fresh run5
+used40/160 actual scopes;120 remain;0 Kani/extraction,16GiB unused.

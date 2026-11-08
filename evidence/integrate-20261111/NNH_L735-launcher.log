@@ -1,0 +1,37 @@
+{"attempt": "NNH_L735", "exit_status": 0, "wall_seconds": 7.3183841169811785, "peak_rss_kib": "6699980", "swaps": "0", "print_axioms": ["'AspisR1.NNH_Tx2SlotTransport.geometry_slot' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNH_Tx2SlotTransport.finish_slot' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NNH_Tx2SlotTransport.geometry_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_Tx2SlotTransport.finish_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+NLB_Parent.events_from_cuts: ∀ {A : Type} (window : NLB_Parent.Event → NLB_Parent.Event)
+  (p : NKE_Free.Program NLB_Parent.Event A) (before : List NLB_Parent.Event),
+  (∀ e ∈ (NKE_Free.eval p).events, window e = e) →
+    NLB_Parent.G window p before = NLB_Parent.State.done (NKE_Free.eval p).result (before ++ (NKE_Free.eval p).events)
+NLB_Parent.State.invalid.inj: ∀ {A : Type} {attempted attempted_1 : List NLB_Parent.Event},
+  NLB_Parent.State.invalid attempted = NLB_Parent.State.invalid a
+...
+vation),
+        NLB_Parent.QueryCut
+            { proof := proofArg, prepared := p, accumulator := a, powers := g, geometry := geometry,
+              pending := pending }
+            (observe
+              { proof := proofArg, prepared := p, accumulator := a, powers := g, geometry := geometry,
+                pending := pending }) →
+          NLB_Parent.queryWindow
+              (NLB_Parent.window rr fr loc (fun {H} => nativeResume) (fun {H} => nativeMerkle) d hash) observe
+              (NJU_CommonObserved.Event.query proofArg p a g geometry pending reply) =
+            NJU_CommonObserved.Event.query proofArg p a g geometry pending reply
+NLB_Parent.State.done.sizeOf_spec: ∀ {A : Type} [inst : SizeOf A] (result : Result A)
+  (attempted : List NLB_Parent.Event),
+  sizeOf (NLB_Parent.State.done result attempted) = 1 + sizeOf result + sizeOf attempted
+NLB_Parent.State.invalid.injEq: ∀ {A : Type} (attempted attempted_1 : List NLB_Parent.Event),
+  (NLB_Parent.State.invalid attempted = NLB_Parent.State.invalid attempted_1) = (attempted = attempted_1)
+def AspisR1.SAQ_GeometrySource.install : {C : Type} → Port3_NativeGeometryBody.Ops C → Port3_NativeGeometryBody.Ops C :=
+fun {C} ops =>
+  have __src := SAQ_Geometry.install ops;
+  { op0 := @Port3_NativeGeometryBody.Ops.op0 C __src, op1 := @Port3_NativeGeometryBody.Ops.op1 C __src,
+    op2 := @Port3_NativeGeometryBody.Ops.op2 C __src, op3 := @Port3_NativeGeometryBody.Ops.op3 C __src,
+    op4 := @Port3_NativeGeometryBody.Ops.op4 C __src, op5 := __src.op5, op6 := __src.op6, op7 := __src.op7,
+    op8 := __src.op8, op9 := __src.op9, op10 := __src.op10, op11 := SAQ_Inverse.source, op12 := __src.op12,
+    op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+    mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator C __src }
+
+Running as unit: run-rf767757321124638aa0e03d40eb2cf8c.scope; invocation ID: 5d23a25a84254e35bc45ee05ad127f97
