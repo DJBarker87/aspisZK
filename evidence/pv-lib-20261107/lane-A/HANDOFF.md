@@ -92,3 +92,5 @@ Focused47419: checked `PV_LIB_A_ActionAdequacyGap` shows aggregate504 is unsuppo
 Focused47420: `PV_LIB_A_ReplyAdequacyGap.pending_not_retained/panic_not_retained` compare the unsupported aggregate504 result directly with the pinned full-reply rule. Raw emitted specialization metadata for all six504 sites is in session6/CELL504_SPECIALIZATIONS.json. The supplied table is not ready for source-adequacy credit.
 
 Focused47422: `PV_LIB_A_ActionAnswers` proves exact whole delivery for weak spurious CAS failure and both CAS variants pending/fault branches, not just world/event frames. Strong/weak Result::Err leaves source cells unchanged. Attempt47421 repaired let/conjunction parenthesization; failed source retained. These branch facts do not fix unsupported Cell/Drop/wrappers.
+
+Focused47423 compiled RawAudit6: same strict driver/walker as session5, only the five runtime-module and29 root arrays changed. Final raw47491 is next; no raw rerun planned.
