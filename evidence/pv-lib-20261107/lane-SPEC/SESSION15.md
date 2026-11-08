@@ -56,3 +56,5 @@ PV_LIB_SPEC_Tls278Native15 compiled 55521, cohort w3: exit0, wall 0:02.59, peak 
 PV_LIB_SPEC_Tls278Bound15 compiled 55523, cohort w3: exit0, wall 0:03.12, peak 4831688KiB, swap 0; source 7ef5f66927df271ebfa47fa0e07d8f242b1a7589; standard summary axioms only.
 
 PV_LIB_SPEC_Tls278Reached15 compiled 55524, cohort w3: exit0, wall 0:02.21, peak 4814392KiB, swap 0; source 9496d378d0e5d65a646943ff42bee9fb438bf0db; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession15 compiled 55525, cohort w3: exit0, wall 0:00.85, peak 1591088KiB, swap 0; source aaeef55b9dd5ce68dfd285ae3055876007d51c3f; standard summary axioms only.
