@@ -1,3 +1,16 @@
+# Session15 live — target OPEN
+
+Continued5894298db30. Read thread-29/D1005 and thread-29'/D1007.
+C newest fa8b384c9f431f26a0664df8da56ff1259d69ae5 has EntryWorld18 but no new parametric join module yet.
+Fallback target LaneAJoins16 remains pinned read-only in session15.
+F124LocalResolver15.fixed compiles (55674, exit0, wall2.43s, RSS4659976KiB,swap0).
+It removes the LOCAL constructor-table overlay on a compatible full regular
+resolver; it is NOT PacketOriginalTable equality, handler/context transport,
+original entry reachability or a requested join. Strict audit not yet run.
+No native/TLS/stack/Values or final conjunction work. All four joins OPEN.
+
+---
+
 # Session14 final — PARTIAL; requested completion NOT achieved
 
 Continued74f750e69d7, LOG D1004, D1005 incorporated; no push/merge.
