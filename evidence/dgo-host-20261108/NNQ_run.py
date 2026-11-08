@@ -16,7 +16,7 @@ for n in ['NNQ_ATTEMPTS.jsonl','NNQ_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<30, 'Authorized30 total actual Lean/link/audit scopes exhausted'
+assert int(a[-3:]) >= 31 and len({n for n in used if int(n[-3:]) >= 31}) < 20, 'Continuation20 scopes exhausted'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
