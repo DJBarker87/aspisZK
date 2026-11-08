@@ -154,3 +154,5 @@ of a failed compile. The next fresh ID is47446 after the cooldown. Own body
 compile driver now skips verified accepted receipts on resume.
 
 47446 passed PV_LIB_A_Emitted128. Exact emitted syntax only; no native adequacy or row closure.
+
+47447 passed PV_LIB_A_Emitted14. Exact emitted syntax only; no native adequacy or row closure.
