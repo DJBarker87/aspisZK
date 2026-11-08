@@ -1,0 +1,81 @@
+--- a/NMV_NoWritePool.lean
++++ b/NMV_NoWritePool.lean
+@@ -3,6 +3,23 @@
+ namespace NMV_NoWritePool
+ open RSL NMV_NoWrite
+ 
++theorem ofCloned_free {A : Type} (x : Except ProgramError A) : Free (RS.ofCloned x) := by
++ unfold RS.ofCloned
++ split
++ · exact pure_free _
++ · split
++   · exact rs_bind_free _ _ (lift_free _ alloc_free) (fun _ => pure_free _)
++   · exact pure_free _
++
++theorem data_free (a : OwnedAccount) : Free a.data := ofCloned_free _
++
++theorem verifierCheckpoint_free (a : OwnedAccount) (p : B32) (w : Bool) :
++ Free (verifierCheckpoint a p w) := by
++ unfold verifierCheckpoint
++ split
++ · exact pure_free _
++ · exact rs_bind_free _ _ (ofCloned_free _) (fun _ => check_free _ _)
++
+ syntax "free_steps" : tactic
+ macro_rules
+  | `(tactic| free_steps) => `(tactic|
+@@ -15,6 +32,9 @@
+  | exact ofOption_free _ _
+  | exact check_free _ _
+  | exact index_free _ _
++ | exact data_free _
++ | exact verifierCheckpoint_free _ _ _
++ | exact ofCloned_free _
+  | apply lift_free; free_steps
+  | apply call_free; free_steps
+  | apply rs_seq_free <;> free_steps
+--- a/NMV_NoWriteOwned.lean
++++ b/NMV_NoWriteOwned.lean
+@@ -27,6 +27,9 @@
+  | exact ofOption_free _ _
+  | exact check_free _ _
+  | exact index_free _ _
++ | exact data_free _
++ | exact verifierCheckpoint_free _ _ _
++ | exact ofCloned_free _
+  | apply lift_free; owned_free ($pl, $hw)
+  | apply call_free; owned_free ($pl, $hw)
+  | apply rs_seq_free <;> owned_free ($pl, $hw)
+@@ -68,7 +71,7 @@
+  · intro auth
+    apply rs_bind_free _ _ (ofOption_free _ _)
+    intro acc
+-   apply rs_bind_free _ _ (ofExcept_free _)
++   apply rs_bind_free _ _ (ofCloned_free _)
+    intro pdata
+    apply rs_bind_free _ _ (pl.scan pdata)
+    intro scanned
+--- a/NMV_NoWrite241.lean
++++ b/NMV_NoWrite241.lean
+@@ -8,6 +8,7 @@
+  cases r with
+  | ok u => cases u; exact pure_free _
+  | error e =>
++   apply rs_seq_free _ _ (lift_free _ alloc_free)
+    apply rs_seq_free
+    · apply lift_free
+      apply emit_free; intro c b h; cases h
+@@ -23,11 +24,11 @@
+  · intro validated
+    apply rs_bind_free _ _ (index_free _ _)
+    intro acc0
+-   apply rs_bind_free _ _ (ofExcept_free _)
++   apply rs_bind_free _ _ (NMV_NoWritePool.data_free _)
+    intro proofData
+    apply rs_bind_free _ _ (index_free _ _)
+    intro acc6
+-   apply rs_bind_free _ _ (ofExcept_free _)
++   apply rs_bind_free _ _ (NMV_NoWritePool.data_free _)
+    intro checkpointData
+    apply rs_seq_free _ _ (check_free _ _)
+    apply rs_seq_free _ _ (check_free _ _)
