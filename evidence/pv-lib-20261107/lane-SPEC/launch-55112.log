@@ -1,0 +1,81 @@
+{"cohort": "w3", "attempt": 55112, "target": "PV_LIB_SPEC_WordThreadRecheck", "source_revision": "4a80023b182f120b23776da50350848efd1dda91", "source_sha256": "c27557bdb031c0667c51c9437f5acb482a8dace2b874ee424801f26762b6ef30", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10881, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55112", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55112.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_WordThreadRecheck.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_WordThreadRecheck.lean", "7000"], "exit": 1, "wall_seconds": 2.639936923980713, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_WordThreadRecheck.scope_handler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_WordThreadRecheck.packet_reply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_WordThreadRecheck.thread_shape' depends on axioms: [propext, Classical.choice, Quot.sound]"], "wall": "0:02.59", "peak_rss_kbytes": "4716108", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_WordThreadRecheck.lean:20:13: error: Ambiguous term
+  handler
+Possible interpretations:
+  PV_LIB_SPEC_WordThreadArc.handler : Carrier OWNER Data →
+    PV_STX2_SliceMachine.Control →
+      Resources →
+        Encode →
+          Store Data →
+            (PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data) →
+              PV_STX2_Native.Request Data → OWNER → Option (Reply OWNER PV_RJ4IDB.NativeEvent Data)
+  
+  PV_EVHB_OwnerHeap.handler : Resources → Encode → Handler PV_EVHB_OwnerReserve.Request OWNER PV_RJ4IDB.NativeEvent
+  
+  PV_EVHB_OwnerMachine.handler : Request ?m.20 → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent ?m.20
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_WordThreadRecheck.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  classify
+    (PV_THR2_ScopeData.value (atomic 0) (PV_THR2_OwnInitPointerCodec.encode word)
+      (PV_LIB_SPEC_SiteArcRecheck.panic atomicKind cellKind))
+in the target expression
+  PV_LIB_SPEC_WordThreadArc.handler C K (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources)
+      (fun {A} => encode) s H
+      (PV_STX2_Native.Request.child PV_THR2_Packet124BoxIssue17.fn s.nextActivation
+        [Data.object
+            [("thread-aggregate-kind", PV_THR2_Packet124Aggregate13.source.2.2.1),
+              ("thread-aggregate-slots",
+                Data.array
+                  [Data.array [atomic 1], Data.array [atomic 1],
+                    Data.array
+                      [PV_THR2_ScopeData.value (atomic 0) (PV_THR2_OwnInitPointerCodec.encode word)
+                          (PV_LIB_SPEC_SiteArcRecheck.panic atomicKind cellKind)]])]])
+      w =
+    some
+      (reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s w SiteType.scope
+        (PV_LIB_SPEC_AllocationImages.scope ↑word))
+
+encode : Encode
+s : Store Data
+H : PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data
+w : OWNER
+word : PV_OWN2_Codec.Pointer
+atomicKind cellKind : Data
+resource :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s
+        w (shape SiteType.scope) 8).answer =
+    Answer.returned (Aeneas.Std.Result.ok 16384)
+⊢ PV_LIB_SPEC_WordThreadArc.handler C K (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources)
+      (fun {A} => encode) s H
+      (PV_STX2_Native.Request.child PV_THR2_Packet124BoxIssue17.fn s.nextActivation
+        [Data.object
+            [("thread-aggregate-kind", PV_THR2_Packet124Aggregate13.source.2.2.1),
+              ("thread-aggregate-slots",
+                Data.array
+                  [Data.array [atomic 1], Data.array [atomic 1],
+                    Data.array
+                      [PV_THR2_ScopeData.value (atomic 0) (PV_THR2_OwnInitPointerCodec.encode word)
+                          (PV_LIB_SPEC_SiteArcRecheck.panic atomicKind cellKind)]])]])
+      w =
+    some
+      (reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s w SiteType.scope
+        (PV_LIB_SPEC_AllocationImages.scope ↑word))
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_WordThreadRecheck.lean:21:31: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [handler, ̲PV_LIB_SPEC_ScopeAllocationPollGap.request, ̲PV_THR2_KeyValues.pack,
+      List.map_cons, ̲List.map_nil,a̵n̵d̵_̵s̵e̵l̵f̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_WordThreadRecheck.lean:21:40: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [handler, ̲PV_LIB_SPEC_ScopeAllocationPollGap.request, ̲PV_THR2_KeyValues.pack,
+      List.map_cons, ̲List.map_nil, ̲and_self,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_WordThreadRecheck.scope_handler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_WordThreadRecheck.packet_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_WordThreadRecheck.thread_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+
