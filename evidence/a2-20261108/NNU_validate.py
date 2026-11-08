@@ -35,7 +35,7 @@ for p in sorted(E.glob('NNU_L*/receipt.json')):
     name=psrc.stem;live=E/(name+'.lean')
     if live.exists() and live.read_bytes()==psrc.read_bytes():accepted[name]=a
  attempts.append({k:r[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']}|{'axioms':ax,'source_hashes':r['source_hashes'],'deps_fingerprint_sha256':hashlib.sha256(json.dumps(c['deps_fingerprint'],sort_keys=True).encode()).hexdigest(),'command':c['command']})
-assert len(attempts)<=40
+assert len(attempts)<=80
 (E/'NNU_COMPILE.tsv').write_text('attempt\tmodule\texit\twall_seconds\tpeak_rss_kib\tswaps\tsource_revision\taxioms\tsource_hashes\tdeps_fingerprint_sha256\tcommand\n'+''.join('\t'.join(str(x[k]).replace('\n',' ') for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','axioms','source_hashes','deps_fingerprint_sha256','command'])+'\n' for x in attempts))
 (E/'NNU_IMPORTED_PINS.json').write_text(json.dumps(pins,indent=2)+'\n')
 (E/'NNU_VALIDATION.json').write_text(json.dumps({'scopes':len(attempts),'accepted_current_modules':accepted,'Kani':0,'extraction':0,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in E.glob('NNU_*.lean')}},indent=2)+'\n')

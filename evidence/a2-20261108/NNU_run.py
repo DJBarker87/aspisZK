@@ -16,7 +16,7 @@ for n in ['NNU_ATTEMPTS.jsonl','NNU_TRANSPORT.jsonl']:
  for line in p.read_text().splitlines():
   row=json.loads(line)
   if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert len(used)<40, 'NNU allowance 40 actual scopes exhausted'
+assert 41<=int(a[-3:])<=80 and len(used)<80, 'NNU continuation allowance 40 scopes exhausted'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

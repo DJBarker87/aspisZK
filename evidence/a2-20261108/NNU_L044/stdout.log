@@ -1,0 +1,171 @@
+NNU_generated/NNU_MerkleLevels.lean:18:15: error: Ambiguous term
+  rows
+Possible interpretations:
+  MultiproofConeNodeIteration.rows : Step → ℕ → reference.Scratch → Usize → Usize → Result reference.Level
+  
+  MultiproofConePhysicalLevels.rows : ℕ → reference.Scratch → Slice U8 → Usize → Usize → Run reference.Level
+NNU_generated/NNU_MerkleLevels.lean:20:4: error: unsolved goals
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Address → Digest
+total : HashTotal D hash
+law :
+  ∀ (left right : Std.Array U8 32#usize),
+    D.digest hash (MultiproofConePhysicalDigest.parts left right) =
+      ok (H (MultiproofConePhysicalDigest.parts left right))
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    (eval H (MultiproofConePhysicalLevels.rows fuel s physical i w)).2 =
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel s i w
+s : reference.Scratch
+i w : Usize
+halt : i ≥ s.n
+⊢ (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2 =
+    ok (reference.Level.Done { idx := s.idx, val := s.val, n := w, «at» := s.at })
+NNU_generated/NNU_MerkleLevels.lean:23:18: error: Tactic `rfl` failed: The left-hand side
+  (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2
+is not definitionally equal to the right-hand side
+  do
+    let out ← fail e
+    match out with
+      | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw =>
+        MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+
+case neg.fail
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Address → Digest
+total : HashTotal D hash
+law :
+  ∀ (left right : Std.Array U8 32#usize),
+    D.digest hash (MultiproofConePhysicalDigest.parts left right) =
+      ok (H (MultiproofConePhysicalDigest.parts left right))
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    (eval H (MultiproofConePhysicalLevels.rows fuel s physical i w)).2 =
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel s i w
+s : reference.Scratch
+i w : Usize
+halt : ¬i ≥ s.n
+e : Error
+eq : reference.binary_step D hash s physical i w = fail e
+⊢ (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2 = do
+    let out ← fail e
+    match out with
+      | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw =>
+        MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+NNU_generated/NNU_MerkleLevels.lean:24:15: error: Tactic `rfl` failed: The left-hand side
+  (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2
+is not definitionally equal to the right-hand side
+  do
+    let out ← div
+    match out with
+      | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw =>
+        MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+
+case neg.div
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Address → Digest
+total : HashTotal D hash
+law :
+  ∀ (left right : Std.Array U8 32#usize),
+    D.digest hash (MultiproofConePhysicalDigest.parts left right) =
+      ok (H (MultiproofConePhysicalDigest.parts left right))
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    (eval H (MultiproofConePhysicalLevels.rows fuel s physical i w)).2 =
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel s i w
+s : reference.Scratch
+i w : Usize
+halt : ¬i ≥ s.n
+eq : reference.binary_step D hash s physical i w = div
+⊢ (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2 = do
+    let out ← div
+    match out with
+      | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw =>
+        MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+NNU_generated/NNU_MerkleLevels.lean:28:26: error: Tactic `rfl` failed: The left-hand side
+  (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2
+is not definitionally equal to the right-hand side
+  match reference.Row.Stop stopped with
+  | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+  | reference.Row.Next next ni nw =>
+    MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+
+case neg.ok.Stop
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Address → Digest
+total : HashTotal D hash
+law :
+  ∀ (left right : Std.Array U8 32#usize),
+    D.digest hash (MultiproofConePhysicalDigest.parts left right) =
+      ok (H (MultiproofConePhysicalDigest.parts left right))
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    (eval H (MultiproofConePhysicalLevels.rows fuel s physical i w)).2 =
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel s i w
+s : reference.Scratch
+i w : Usize
+halt : ¬i ≥ s.n
+stopped : reference.Scratch
+eq : reference.binary_step D hash s physical i w = ok (reference.Row.Stop stopped)
+⊢ (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2 =
+    match reference.Row.Stop stopped with
+    | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+    | reference.Row.Next next ni nw =>
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+NNU_generated/NNU_MerkleLevels.lean:29:30: error: Type mismatch
+  ih after ni nw
+has type
+  (eval H (MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2 =
+    MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel after ni nw
+but is expected to have type
+  (eval H (MultiproofConePhysicalLevels.rows (fuel + 1) s physical i w)).2 =
+    match reference.Row.Next after ni nw with
+    | reference.Row.Stop stopped => ok (reference.Level.Stop stopped)
+    | reference.Row.Next next ni nw =>
+      MultiproofConeNodeIteration.rows (fun s i w => reference.binary_step D hash s physical i w) fuel next ni nw
+NNU_generated/NNU_MerkleLevels.lean:20:30: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵l̵t̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵a̵l̵]̵[̲h̲a̲l̲t̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNU_generated/NNU_MerkleLevels.lean:21:31: warning: This simp argument is unused:
+  bindRun_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵l̵t̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵R̵u̵n̵_̵r̵e̵s̵u̵l̵t̵,̵N̵N̵U̵_̵M̵e̵r̵k̵l̵e̵N̵o̵d̵e̵.̵n̵o̵d̵e̵[̲h̲a̲l̲t̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲N̲N̲U̲_̲M̲e̲r̲k̲l̲e̲N̲o̲d̲e̲.̲n̲o̲d̲e̲ D hash H law]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNU_generated/NNU_MerkleLevels.lean:21:46: warning: This simp argument is unused:
+  NNU_MerkleNode.node D hash H law
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵l̵t̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵R̵u̵n̵_̵r̵e̵s̵u̵l̵t̵,̵N̵N̵U̵_̵M̵e̵r̵k̵l̵e̵N̵o̵d̵e̵.̵n̵o̵d̵e̵ ̵D̵ ̵h̵a̵s̵h̵ ̵H̵ ̵l̵a̵w̵]̵[̲h̲a̲l̲t̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲R̲u̲n̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNU_MerkleLevels.rows_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNU_MerkleLevels.level_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNU_MerkleLevels.levels_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNU_MerkleLevels.eighteen_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
