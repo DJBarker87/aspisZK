@@ -1,0 +1,20 @@
+import RSL_TX1_330
+set_option autoImplicit false
+noncomputable section
+namespace NVR_Dispatch
+open RSL
+abbrev Child := TX2_240.Args → SdkState → Env → Obs (Except ProgramError Unit × SdkState)
+/-- Normal form of the emitted dispatcher on its admitted own-input domain.
+All child observations are retained verbatim, including abort/divergence. -/
+def process (stage1 stage2 : Child) : Child := fun a s env =>
+  if TX2_221.stage1Route a.data then stage1 a s env else stage2 a s env
+/-- Entry rejects before touching accounts, otherwise tail-calls process. -/
+def entry (f : Child) : Child := fun a s env =>
+  if TX2_221.admitted a.data then f a s env
+  else ⟨.ret (.error .invalidInstructionData, s), []⟩
+theorem admitted_iff (d : Bytes) : TX2_221.admitted d = true ↔
+    TX2_221.stage1Route d = true ∨ d.take 4 = REQUEST_MAGIC := by
+  simp only [TX2_221.admitted, TX2_221.stage1Route, Bool.or_eq_true, beq_iff_eq]
+
+end NVR_Dispatch
+end
