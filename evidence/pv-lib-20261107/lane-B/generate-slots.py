@@ -2,7 +2,7 @@
 from pathlib import Path
 slots=[(537,612,[4],None),(361,279,[175],None),(361,280,[182],None),(270,279,[42],None),(270,280,[49],None),(15,167,[38,68,122],'vecPush167'),(15,9,[84],'intoIterNext9'),(15,93,[17],'rangeNext93'),(1,10,[125],'vecAppend10'),(1,9,[88],'intoIterNext9')]
 for parent,child,nodes,meaning in slots:
- m=f'PV_LIB_B_F{parent}_F{child}'
+ m=f'PV_LIB_B_F{parent}_F{child}'+('Fixed' if meaning else '')
  s=f'''import PV_LIB_A_PurePoll
 import PV_LIB_A_WriterSites
 import PV_THR2_F{parent}
