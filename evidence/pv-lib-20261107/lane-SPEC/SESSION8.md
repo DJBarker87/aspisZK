@@ -7,3 +7,5 @@ replies identical to the previous named finish. Fixed layout 48/8; no Shape.
 Exit0 wall0:02.75 peak4769516KiB swap0; source37be8fd68f7;
 standard summary axioms only. 44917/44918 local proof errors retained; changed
 before retry. No row proof or original-entry allocation history yet.
+
+PV_LIB_SPEC_SparsePacketHandler compiled 44921, cohort w3: exit0, wall 0:03.18, peak 4795460KiB, swap 0; source 327413a0468609bb4d7cc75250c2ce7c81f3f25b; standard summary axioms only.
