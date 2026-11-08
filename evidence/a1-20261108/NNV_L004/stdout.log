@@ -1,0 +1,155 @@
+def AspisR1CurrentCaller.S1SemanticCarrier.currentSem : {H : Type} →
+  AspisR1PublicPreparation.r1_semantic.Verified H → AspisR1CurrentCaller.r1_semantic.Verified H :=
+fun {H} x =>
+  { roots := x.roots,
+    challenges :=
+      { lambda := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.lambda,
+        chi := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.chi,
+        theta := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.theta,
+        zc := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.zc,
+        mu := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.mu,
+        eta := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.eta },
+    alpha := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.alpha,
+    claims :=
+      AspisR1ClaimPreparedBridge.mapArray
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ) x.claims,
+    extra := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.extra,
+    before_z1 := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.before_z1,
+    state_before_z0 := x.state_before_z0,
+    z := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentPoint x.z,
+    transcript := { state := x.transcript.state, hash := x.transcript.hash, next_row := x.transcript.next_row } }
+def AspisR1CurrentCaller.InstalledPreparation.retainedView : AspisR1CurrentCaller.verifier.View →
+  AspisR1PublicPreparation.verifier.View :=
+fun x =>
+  { variant := AspisR1CurrentCaller.InstalledPreparation.retainedVariant x.variant, semantic := x.semantic, y1 := x.y1,
+    inactive := AspisR1CurrentCaller.InstalledPreparation.retainedE x.inactive, round0 := x.round0,
+    folded_root := x.folded_root, round1 := x.round1, final_message := x.final_message, query_bytes := x.query_bytes }
+NNV_generated/NNV_PreparedInventory.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.InstalledPreparation.currentView`
+def AspisR1CurrentCaller.InstalledPreparation.currentE : AspisR1PublicPreparation.aspis_core.field.WideExact →
+  AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact :=
+fun x =>
+  { c0 := AspisR1CurrentCaller.InstalledPreparation.currentQ x.c0,
+    c1 := AspisR1CurrentCaller.InstalledPreparation.currentQ x.c1 }
+def AspisR1CurrentCaller.InstalledPreparation.currentPrepared : AspisR1PublicPreparation.verifier.Prepared →
+  AspisR1CurrentCaller.verifier.Prepared :=
+fun x =>
+  { variant := AspisR1CurrentCaller.InstalledPreparation.currentVariant x.variant, roots := x.roots,
+    gamma := AspisR1CurrentCaller.InstalledPreparation.currentE x.gamma,
+    kappa := AspisR1CurrentCaller.InstalledPreparation.currentE x.kappa,
+    alpha := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentE x.alpha,
+    rho := AspisR1CurrentCaller.InstalledPreparation.currentQ x.rho, queries := x.queries,
+    semantic_alpha :=
+      AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.semantic_alpha,
+    z := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentPoint x.z,
+    claim := AspisR1CurrentCaller.InstalledPreparation.currentE x.claim, state := x.state }
+def AspisR1CurrentCaller.FirstComposition.toRetainedPublic : AspisR1CurrentCaller.FirstComposition.Public →
+  AspisR1CurrentCaller.FirstComposition.OldPublic :=
+fun x =>
+  match x with
+  | AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p t =>
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer
+      (AspisR1CurrentCaller.FirstComposition.toRetainedTransfer p)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedTransition t)
+  | AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p t =>
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal
+      (AspisR1CurrentCaller.FirstComposition.toRetainedWithdrawal p)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedTransition t)
+def AspisR1PublicPreparation.VerifyPrefix.verify : AspisR1PublicPreparation.VerifyPrefix.Finish →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          H →
+            Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit) →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_semantic.Verified H)
+                  AspisR1PublicPreparation.r1_wire.Error) :=
+fun F {H} aspis_coreDigest32Inst public1 bytes hash obs => do
+  let r ← AspisR1PublicPreparation.PrefixAdapter.parseAccepted bytes
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue p => do
+      AspisR1PublicPreparation.VerifyPrefix.mark obs 0#u8
+      let r1 ← AspisR1PublicPreparation.r1_semantic.public_transcript aspis_coreDigest32Inst public1 hash p.c1_root
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+          let (r2, val1) ← AspisR1PublicPreparation.r1_wire.begin aspis_coreDigest32Inst p val
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+              AspisR1PublicPreparation.VerifyPrefix.mark obs 1#u8
+              F aspis_coreDigest32Inst public1 p val1 val2 obs
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (AspisR1PublicPreparation.r1_semantic.Verified H)
+            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (AspisR1PublicPreparation.r1_semantic.Verified H)
+        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+def NNH_FinishReturns.value : RSL.TX1_136.Args NNH_FinishReturns.V →
+  RSL.Env → Except NNH_FinishReturns.V.WErr (RSL.Verified NNH_FinishReturns.V) :=
+fun a env =>
+  NNH_ReturnedRE.bindValue (LIB_VLib.semanticRoundsValue (a.prefix_, a.transcript) env) fun r =>
+    have running := r.1;
+    have alpha := r.2.1;
+    have t1 := r.2.2;
+    NNH_ReturnedRE.bindValue (LIB_VLib.claimsValue a.prefix_ env) fun claims =>
+      have orig := NNH_FinishReturns.V.origChallenges a.challenges;
+      NNH_ReturnedRE.bindValue
+        (RSL.RE.mapE (fun x => NNH_FinishReturns.V.wPublic)
+          (LIB_VLib.terminalQm31Value (a.public_, claims, alpha, orig) env))
+        fun terminal =>
+        have mask := NNH_FinishReturns.V.maskValue claims alpha;
+        NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.validatedRecord a.prefix_ 25) fun rec25 =>
+          NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.decodeK29 rec25 87) fun extra =>
+            have masked :=
+              NNH_FinishReturns.V.qadd
+                (NNH_FinishReturns.V.qadd mask
+                  (NNH_FinishReturns.V.qmul (NNH_FinishReturns.V.eta a.challenges) terminal))
+                (NNH_FinishReturns.V.at28 extra);
+            NNH_ReturnedRE.bindValue
+              (if decide (running ≠ masked) = true then Except.error NNH_FinishReturns.V.wTerminal else Except.ok ())
+              fun x =>
+              have stateBefore := NNH_FinishReturns.V.state t1;
+              NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.validatedRecord a.prefix_ 25) fun rec25' =>
+                NNH_ReturnedRE.bindValue (LIB_VLib.circleValue (t1, rec25') env) fun c0 =>
+                  have z0 := c0.1;
+                  have t2 := c0.2;
+                  NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.validatedRecord a.prefix_ 26) fun rec26 =>
+                    NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.decodeK29 rec26 0) fun beforeZ1 =>
+                      NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.validatedRecord a.prefix_ 26) fun rec26' =>
+                        NNH_ReturnedRE.bindValue (LIB_VLib.circleValue (t2, rec26') env) fun c1 =>
+                          have z1 := c1.1;
+                          have t3 := c1.2;
+                          NNH_ReturnedRE.bindValue
+                            (if decide (z0 = z1) = true then Except.error NNH_FinishReturns.V.wEqualCirclePoints
+                            else Except.ok ())
+                            fun x =>
+                            NNH_ReturnedRE.bindValue (NNH_FinishReturns.V.payload a.prefix_ 2) fun p2 =>
+                              match RSL.TX1_136.toB32 p2 with
+                              | none => Except.error NNH_FinishReturns.V.wPublic
+                              | some root1 =>
+                                Except.ok
+                                  { roots := (NNH_FinishReturns.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                    alpha := alpha, claims := claims, extra := extra, before_z1 := beforeZ1,
+                                    state_before_z0 := stateBefore, z := (z0, z1), transcript := t3 }
+AspisR1CurrentCaller.S1SemanticCarrier.wire_error_round: ∀ (e : AspisR1PublicPreparation.r1_wire.Error),
+  AspisR1CurrentCaller.S1SemanticCarrier.retainedWireError (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError e) =
+    e
+AspisR1CurrentCaller.S1SemanticCarrier.point_old_round: ∀
+  (x : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint),
+  AspisR1CurrentCaller.InstalledPreparation.retainedPoint (AspisR1CurrentCaller.InstalledPreparation.currentPoint x) = x
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_round: ∀ {H : Type}
+  (x : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisR1CurrentCaller.InstalledPreparation.retainedSem (AspisR1CurrentCaller.S1SemanticCarrier.currentSem x) = x
+AspisR1CurrentCaller.S1SemanticCarrier.wire_error_back: ∀ (e : AspisR1CurrentCaller.r1_wire.Error),
+  AspisR1CurrentCaller.S1SemanticCarrier.currentWireError (AspisR1CurrentCaller.S1SemanticCarrier.retainedWireError e) =
+    e
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_back: ∀ {H : Type} (x : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticCarrier.currentSem (AspisR1CurrentCaller.InstalledPreparation.retainedSem x) = x

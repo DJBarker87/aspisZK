@@ -1,0 +1,37 @@
+{"attempt": "NNV_L004", "exit_status": 1, "wall_seconds": 27.23988117906265, "peak_rss_kib": "6840212", "swaps": "0", "print_axioms": []}
+def AspisR1CurrentCaller.S1SemanticCarrier.currentSem : {H : Type} →
+  AspisR1PublicPreparation.r1_semantic.Verified H → AspisR1CurrentCaller.r1_semantic.Verified H :=
+fun {H} x =>
+  { roots := x.roots,
+    challenges :=
+      { lambda := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.lambda,
+        chi := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.chi,
+        theta := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.theta,
+        zc := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.zc,
+        mu := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.mu,
+        eta := As
+...
+dValue (NNH_FinishReturns.V.payload a.prefix_ 2) fun p2 =>
+                              match RSL.TX1_136.toB32 p2 with
+                              | none => Except.error NNH_FinishReturns.V.wPublic
+                              | some root1 =>
+                                Except.ok
+                                  { roots := (NNH_FinishReturns.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                    alpha := alpha, claims := claims, extra := extra, before_z1 := beforeZ1,
+                                    state_before_z0 := stateBefore, z := (z0, z1), transcript := t3 }
+AspisR1CurrentCaller.S1SemanticCarrier.wire_error_round: ∀ (e : AspisR1PublicPreparation.r1_wire.Error),
+  AspisR1CurrentCaller.S1SemanticCarrier.retainedWireError (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError e) =
+    e
+AspisR1CurrentCaller.S1SemanticCarrier.point_old_round: ∀
+  (x : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint),
+  AspisR1CurrentCaller.InstalledPreparation.retainedPoint (AspisR1CurrentCaller.InstalledPreparation.currentPoint x) = x
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_round: ∀ {H : Type}
+  (x : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisR1CurrentCaller.InstalledPreparation.retainedSem (AspisR1CurrentCaller.S1SemanticCarrier.currentSem x) = x
+AspisR1CurrentCaller.S1SemanticCarrier.wire_error_back: ∀ (e : AspisR1CurrentCaller.r1_wire.Error),
+  AspisR1CurrentCaller.S1SemanticCarrier.currentWireError (AspisR1CurrentCaller.S1SemanticCarrier.retainedWireError e) =
+    e
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_back: ∀ {H : Type} (x : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticCarrier.currentSem (AspisR1CurrentCaller.InstalledPreparation.retainedSem x) = x
+
+Running as unit: run-r32d195375b724b7dbe17b4913bca368d.scope; invocation ID: cc3f301951f746aabb6212a3b9e80b3b
