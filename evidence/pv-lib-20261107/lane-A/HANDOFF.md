@@ -136,3 +136,5 @@ copy504 delivery and last-Weak failure/div/fault/pending/success-source-root
 branches are checked. nontrivial_still_unsupported retains the latest model's
 602/762 gap even when the replacement itself is defined. No source/Rust
 violation or original-entry reachability is inferred.
+
+47439 passed PV_LIB_A_Emitted486. Exact emitted syntax only; no native adequacy or row closure.
