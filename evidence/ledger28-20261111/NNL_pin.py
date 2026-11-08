@@ -19,6 +19,7 @@ assert J(B/'NNL_audit/fixtures/fixtures.json')['results']==J(B/'NNL_EXPECTED_FIX
 assert J(B/'NNL_audit/finalscan/scan.json')['exit_status']==0
 loaded=[json.loads(l)for l in(B/'NNL_LOADED_scan.jsonl').read_text().splitlines()]
 assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in loaded)
+assert not({r['module']for r in loaded}&{'NNG_Nonempty094','NNG_PropagatedFinding328'}),'Historical contradiction module entered current closure'
 paths=os.environ['LEAN_PATH'].split(':');pins=[]
 for row in loaded:
  rel=row['module'].replace('.','/')+'.olean';p=next((Path(root)/rel for root in paths if(Path(root)/rel).is_file()),None);assert p,rel
@@ -26,6 +27,10 @@ for row in loaded:
   if q.is_file():pins.append(dict(module=row['module'],path=str(q),sha256=H(q),bytes=q.stat().st_size))
 raw=(json.dumps(dict(LEAN_PATH=paths,selected_objects=pins,modules=len(loaded),scan_pass=True),indent=1)+'\n').encode();(B/'NNL_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(raw));(B/'NNL_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
 def key(x):return(x['module'],next(s for s in['.olean.private','.olean.server','.olean','.ir']if x['path'].endswith(s)))
+new={key(x):x for x in pins}
+parent_pins=J(B/'NNL_PARENT_COMPILE_PROVENANCE.json')['expected_selected_parent_objects']
+for rel,expected in parent_pins.items():
+ k=(rel.removesuffix('.olean').replace('/','.'),'.olean');assert new[k]['sha256']==expected['sha256'],('parent compiled object mismatch',rel)
 prior=J(B/'NNL_PREDECESSOR_PINS.json');old={key(x):x for x in prior['selected_objects']};new={key(x):x for x in pins};missing=set(old)-set(new);assert not missing,missing
 wrong=[dict(module=k[0],suffix=k[1],old=x,new=new[k])for k,x in old.items()if new[k]['sha256']!=x['sha256']]
 expected=J(B/'NNL_EXPECTED_OBJECT_REPLACEMENTS.json')['changed_files']

@@ -71,7 +71,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNL_native/NNL_Driver',*names]
 elif kind=='audit':
  names=['NNL_batch.py','NNL_AUDIT_ROOTS.json','NNL_AUDIT_MODULES.json','NNL_EXPECTED_IMPORTS.jsonl']
- if target=='retention':names+=['NNL_pin.py','NNL_PREDECESSOR_PINS.json','NNL_EXPECTED_FIXTURES.json','NNL_EXPECTED_OBJECT_REPLACEMENTS.json']
+ if target=='retention':names+=['NNL_pin.py','NNL_PREDECESSOR_PINS.json','NNL_EXPECTED_FIXTURES.json','NNL_EXPECTED_OBJECT_REPLACEMENTS.json','NNL_PARENT_COMPILE_PROVENANCE.json']
  command=['python3','NNL_batch.py',target]
 else:raise ValueError(kind)
 for n in names:
