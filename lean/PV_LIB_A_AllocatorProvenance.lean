@@ -21,8 +21,13 @@ def globalValue : Data := PV_THR2_KeyValues.pack globalKind []
 
 /-- Only the retained source Global constructor is decoded here. Other
 allocator values remain missing; the erased Error marker never becomes Global. -/
-def allocatorType (value : Data) : Option Data :=
-  if value = globalValue then some globalType else none
+def allocatorType : Data → Option Data
+  | .object [("thread-aggregate-kind",.object [("Adt",.array
+      [.object [("id",.object [("Adt",.number 1)]),("generics",.object
+        [("regions",.array []),("types",.array []),("const_generics",.array []),
+         ("trait_refs",.array [])])],.null,.null])]),
+      ("thread-aggregate-slots",.array [])] => some globalType
+  | _ => none
 
 /-- A supplied Arc's actual field2 is required. Its pointer and phantom do not
 select an allocator. This decoder never modifies a value or allocation image. -/
@@ -61,8 +66,7 @@ theorem from_inner (payload : Data) :
       .leaf (.call site (.object [("Regular",fnPtr 315 ⟨[],[payload,globalType],[],[]⟩)])
         args (.local 0) unwind) := ⟨_,_,_,rfl⟩
 
-theorem global_decoded : allocatorType globalValue = some globalType := by
-  simp only [allocatorType,↓reduceIte]
+theorem global_decoded : allocatorType globalValue = some globalType := rfl
 
 theorem marker_not_default : allocatorType (.object [("Error",.atom "removed allocator parameter")]) = none := rfl
 
@@ -77,9 +81,10 @@ theorem source_glue {W : Type} (base : PV_STX2_Store.Carrier W Data)
     arcGlue (PV_THR2_KeyValues.carrier base) (PV_LIB_A_TypedBindingFacts.arcType payload)
       (constructed payload ptr phantom) =
         some (.call (fnPtr 405 ⟨[.atom "Erased"],[payload,globalType],[],[]⟩)) := by
-  change (arcAllocator (PV_THR2_KeyValues.carrier base) (constructed payload ptr phantom)).bind _ = _
-  rw [source_allocator]
-  rfl
+  simp [arcGlue,PV_LIB_A_TypedBindingFacts.arcType,member,generics,encode,
+    source_allocator,PV_LIB_A_ExactDestructMethods.concrete,
+    PV_LIB_A_ExactDestructMethods.implementation,PV_LIB_A_ExactDestructMethods.methodGenerics,
+    substitute,globalType]
 
 #print axioms globalKind
 #print axioms globalType

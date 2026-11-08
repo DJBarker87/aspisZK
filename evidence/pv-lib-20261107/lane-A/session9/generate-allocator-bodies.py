@@ -55,7 +55,7 @@ ns['data']=typed_data;conv['data']=typed_data
 raw=lzma.decompress((E.parent/'session7/NativeInstructions.json.xz').read_bytes());p=json.loads(raw)
 assert sha(raw)=='fe0cbaedf427d3fdd1cd5e3dc8171728e82282d2f98b000f5a15d1cd37210a03'
 rows=[]
-for fid in [218,315]:
+for fid in [218,315,228]:
  f=next(f for f in p['functions']if f['function']==fid);code=f['code'];arity=len(llbc['fun_decls'][fid]['generics']['types']);used.clear();r=dict(function=fid,code_sha256=sha(json.dumps(code,separators=(',',':')).encode()))
  if 'body'not in code:r.update(status='OPAQUE; no program invented');rows.append(r);continue
  conv['parts']=[];failures.clear()
