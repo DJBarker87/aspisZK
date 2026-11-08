@@ -1,6 +1,6 @@
 # Privacy library, version 1 (2026-11-08)
 
-Branch `codex/pv-lib-v1-20261108`, commit 9a38706526c. It merges library lane B at 43fa17cd4a5, which already contains lane A at fbc60bd811d, with specification lane C at 87e34a2b2af. The merge has no conflicts. The branch is local and has not been pushed or merged to research or main. Per-slot data is in PRIVACY-LIBRARY-V1-20261108.json.
+Branch `codex/pv-lib-v1-20261108`, commit a3fd1f13e15. This is the coherent version. It descends from the merge commit 9a38706526c, which joins library lane B at 43fa17cd4a5 (already containing lane A at fbc60bd811d) with specification lane C at 87e34a2b2af. The merge had no textual conflicts, but it needed an import repair before it would build as one environment (see below). The branch is local and has not been pushed or merged to research or main. Per-slot data is in PRIVACY-LIBRARY-V1-20261108.json.
 
 ## Contents
 
@@ -18,10 +18,17 @@ No slot is simply missing. The 39 waiting slots point at exactly the 29 ledger r
 
 Also included: the store-action table PV_LIB_StoreActionTable.v2, the native, TLS, allocation and Vec instance modules, and the parametric physical entry world EntryWorld18 with its concrete inhabitant.
 
+## Coherence
+
+The merged tree was replayed as one cohort from one proof source, 27993341c495ea9107b742c011745b6ed725bebb (LOG D1024; report V1-COHERENCE.md on the branch). Strict union audit 56595 passed: 834 library modules, 43 helpers, 4,307 roots, exit 0, wall 1 h 0 min 20 s, peak RSS 7,133,420 KiB, swap 0, standard axioms only (propext, Classical.choice, Quot.sound). Merged statements compared with their source cohorts showed zero logical differences.
+
+The merge as first assembled did not build as one environment, because lane mirror modules redeclared the same public names. The repair changed import lines only, in 59 files, pointing consumers at one canonical provider of each of 53 byte-identical mirrors. A direct diff of 9a38706526c against a3fd1f13e15 shows no changed Lean line other than imports. No theorem statement, definition or proof body changed. Earlier attempts that failed, including audit 56594 (exit 120 after an SSH transport loss), are retained and earn no credit.
+
+The coherence result covers exactly this tree. Later lane A and lane C sessions (after fbc60bd811d and 87e34a2b2af) are not in version 1.
+
 ## What version 1 does not establish
 
 - **Joint premise satisfiability (the OwnInit joint witness) is not proved.** The library's statements have not yet been shown to be jointly satisfiable on one real execution. Lanes A and C continue this at lower priority. The original history is proved to step 141 on the repaired v2 machine, and four join targets (LaneAJoins19) remain open.
-- **No combined coherent replay of the v1 tree has run.** Each input cohort passed its own strict audit with standard axioms only: lane B 56490 (141 roots), lane A 55692 (239), and lane C's audits through session 19. Separate compile passes do not establish coherence of the merge; a replay of the merged tree is the next gate.
 - **Library results are not row closures.** INSTANTIATED means the callee contract is usable at that slot. Actual caller invariants and the native, source and binary adequacy remain obligations of the consuming row. No ledger row, endpoint premise or T field changed. The privacy headline is unchanged.
 
 ## Model corrections for the owner
