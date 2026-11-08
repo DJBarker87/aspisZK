@@ -61,3 +61,5 @@ PV_LIB_SPEC_RawBinding14 compiled 55451, cohort w3: exit0, wall 0:02.25, peak 47
 PV_LIB_SPEC_F17Entry14 compiled 55452, cohort w3: exit0, wall 0:08.25, peak 4884904KiB, swap 0; source 67e4cd4636c13c1ea64dd20b67889979d248f1ad; standard summary axioms only.
 
 PV_LIB_SPEC_TlsOriginal14 compiled 55453, cohort w3: exit0, wall 0:02.38, peak 4804968KiB, swap 0; source 342c3eb39a146f3f20cb4d274b5d2c8e3bea4c11; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession14 compiled 55454, cohort w3: exit0, wall 0:00.84, peak 1594772KiB, swap 0; source 95d3975805ac4c2c87483da2b82991cf102e821c; standard summary axioms only.
