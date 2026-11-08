@@ -1,0 +1,35 @@
+{"attempt": "NNT_L018", "exit_status": 0, "wall_seconds": 27.65162438713014, "peak_rss_kib": "6880708", "swaps": "0", "print_axioms": []}
+RSL.NNT.LawRefines : (V0 : RSL.TX2_241.V2Lib) →
+  (RSL.Bytes → RSL.Bytes → Prop) → (RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except.{0, 0} V0.VErr Unit)) → Prop
+RSL.NNT.NMS_RootsL : (L : RSL.PoolLib) →
+  RSL.DeployedIds → (V0 : RSL.TX2_241.V2Lib) → (VL : RSL.VLib) → RSL.TAS.Impl L V0 VL → Prop
+RSL.NNT.NNC_G1aL : RSL.TAS.Sig →
+  (L : RSL.PoolLib) → (V0 : RSL.TX2_241.V2Lib) → (VL : RSL.VLib) → RSL.TAS.Impl L V0 VL → Type
+NNT_Root241.parametric : ∀ (choices : NMX_R4_Authentication.Choices) (R0 : RSL.Bytes → RSL.Bytes → Prop)
+  (w : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except.{0, 0} NMX_R9_StageTwo.V.VErr Unit)),
+  RSL.NNT.LawRefines NMX_R9_StageTwo.V R0 w →
+    RSL.TX2_242.RowSpec
+...
+  RSL.TAS.NNE_A4 S L D V0 →
+                                    RSL.TAS.NNE_A5 S L V0 VL P C I →
+                                      ∀ (c : S.Ctx),
+                                        S.Exhibited c →
+                                          S.Queries c (S.model1 c) →
+                                            S.GameFrame c →
+                                              S.TraceRep c I.entry →
+                                                (∃ s',
+                                                    Eq.{1} (I.entry (S.args1 c) (S.state1 c) (S.env1 c)).exit
+                                                      (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                  S.Out1 c (I.entry (S.args1 c) (S.state1 c) (S.env1 c)) →
+                                                    (∃ s',
+                                                        Eq.{1} (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit
+                                                          (RSL.Exit.ret (Prod.mk.{0, 0} (Except.ok.{0, 0} ()) s'))) →
+                                                      Eq.{1} (List.length.{0} (S.args1 c).accounts) 3 →
+                                                        Eq.{1} (List.length.{0} (S.args2 c).accounts) 7 →
+                                                          S.Out2 c (I.entry (S.args2 c) (S.state2 c) (S.env2 c)) →
+                                                            S.Bound c (S.model1 c) (S.model2 c) ∧
+                                                              sp.Rest c (S.model1 c) (S.model2 c) ∧
+                                                                (sp.Outcome c (S.model1 c) (S.model2 c) ∨
+                                                                  S.Event c (S.model1 c))
+
+Running as unit: run-r46a5c9810a344abfbd145fad647248ee.scope; invocation ID: 11cb29c083cb4a02ba24c13a213eacaa
