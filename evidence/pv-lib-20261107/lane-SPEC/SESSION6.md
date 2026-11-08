@@ -93,3 +93,9 @@ on ControlRuntime. ABI data remains universally parameterized, actual binary
 association remains open, and the pending model does not satisfy the old
 successful AllocationBranch realization. This is the exact current witness
 limit; full composed source-adequate nonemptiness is NOT claimed.
+
+44909 final new-root driver compiled exit0,wall0:00.85,peak1590408KiB,
+swap0,source1f058e45468; main prints standard axioms only. Its module/root
+arrays select115 NEW session6 roots. The private importAll walker,
+collectAxioms and reached-constructor-summary union are unchanged from the
+session5 audit. Next is the ONE strict raw49796 run; no old roots are rerun.

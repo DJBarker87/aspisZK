@@ -1,4 +1,4 @@
-"""One strict audit attempt, two sequential isolated cohort partitions.
+"""One strict audit attempt, one isolated W3-compatible cohort.
 No combined-cohort claim; unchanged importAll/private NEP collector in each.
 Run turn.sh separately before invoking this task-local launch wrapper.
 """
