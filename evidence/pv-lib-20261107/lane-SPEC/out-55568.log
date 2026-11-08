@@ -1,0 +1,115 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveReplacement16.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (runtime p).carrier.dereference w reference
+in the target expression
+  (match [reference, Data.boolean true] with
+    | [reference, Data.boolean b] => do
+      let address ← (runtime p).carrier.dereference w reference
+      if address = PV_LIB_SPEC_Entry13.slot.source then do
+          let old ← PV_LIB_SPEC_TlsBindings13.read PV_LIB_SPEC_Entry13.slot p c w
+          have changed : OWNER :=
+            have __src :=
+              { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.world;
+            {
+              world :=
+                have __src :=
+                  { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.world.world;
+                { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+                  deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+                  successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+                  memory := fun location =>
+                    if location = PV_LIB_SPEC_Entry13.slot.physical then some (if b = true then 1 else 0)
+                    else
+                      { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w,
+                                events := [] }.world.world.memory
+                        location,
+                  live := __src.live, frame := __src.frame },
+              next := __src.next, places := __src.places }
+          match { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.answer with
+            | Answer.returned (Aeneas.Std.Result.ok v) =>
+              pure
+                { answer := Answer.returned (Aeneas.Std.Result.ok (Data.boolean old)), world := changed,
+                  events :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.events }
+            | x =>
+              pure
+                {
+                  answer :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.answer,
+                  world := changed,
+                  events :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.events }
+        else none
+    | x => none) =
+    some
+      { answer := Answer.returned (Aeneas.Std.Result.ok (Data.boolean false)),
+        world := PV_LIB_SPEC_CellPhysical13.setByte PV_LIB_SPEC_Entry13.slot w true, events := [] }
+
+p : Parameters
+c : Config
+w : OWNER
+active : PV_LIB_SPEC_TlsBindings13.read PV_LIB_SPEC_Entry13.slot p c w = some false
+address : (runtime p).carrier.dereference w reference = some PV_LIB_SPEC_Entry13.slot.source
+⊢ (match [reference, Data.boolean true] with
+    | [reference, Data.boolean b] => do
+      let address ← (runtime p).carrier.dereference w reference
+      if address = PV_LIB_SPEC_Entry13.slot.source then do
+          let old ← PV_LIB_SPEC_TlsBindings13.read PV_LIB_SPEC_Entry13.slot p c w
+          have changed : OWNER :=
+            have __src :=
+              { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.world;
+            {
+              world :=
+                have __src :=
+                  { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.world.world;
+                { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+                  deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+                  successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+                  memory := fun location =>
+                    if location = PV_LIB_SPEC_Entry13.slot.physical then some (if b = true then 1 else 0)
+                    else
+                      { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w,
+                                events := [] }.world.world.memory
+                        location,
+                  live := __src.live, frame := __src.frame },
+              next := __src.next, places := __src.places }
+          match { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.answer with
+            | Answer.returned (Aeneas.Std.Result.ok v) =>
+              pure
+                { answer := Answer.returned (Aeneas.Std.Result.ok (Data.boolean old)), world := changed,
+                  events :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.events }
+            | x =>
+              pure
+                {
+                  answer :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.answer,
+                  world := changed,
+                  events :=
+                    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }.events }
+        else none
+    | x => none) =
+    some
+      { answer := Answer.returned (Aeneas.Std.Result.ok (Data.boolean false)),
+        world := PV_LIB_SPEC_CellPhysical13.setByte PV_LIB_SPEC_Entry13.slot w true, events := [] }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveReplacement16.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (runtime p).carrier.dereference w reference
+in the target expression
+  (match [reference, Data.boolean true] with
+    | [reference, value] => do
+      let p_1 ← (runtime p).carrier.dereference w reference
+      writeAddress (runtime p).carrier s p_1 (some value)
+    | x => none) =
+    some (write s PV_LIB_SPEC_Entry13.slot.source (some (Data.boolean true)))
+
+p : Parameters
+s : Store Data
+w : OWNER
+address : (runtime p).carrier.dereference w reference = some PV_LIB_SPEC_Entry13.slot.source
+⊢ (match [reference, Data.boolean true] with
+    | [reference, value] => do
+      let p_1 ← (runtime p).carrier.dereference w reference
+      writeAddress (runtime p).carrier s p_1 (some value)
+    | x => none) =
+    some (write s PV_LIB_SPEC_Entry13.slot.source (some (Data.boolean true)))
+'PV_LIB_SPEC_ActiveReplacement16.physical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveReplacement16.source_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

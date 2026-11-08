@@ -52,3 +52,5 @@ PV_LIB_SPEC_Tls85Data16 compiled 55565, cohort w3: exit0, wall 0:02.91, peak 484
 PV_LIB_SPEC_Tls18Delivery16 compiled 55566, cohort w3: exit0, wall 0:03.70, peak 4836220KiB, swap 0; source 260f49250c447d8b0f56de527d5e0c399ba1665e; standard summary axioms only.
 
 PV_LIB_SPEC_TlsAt85 compiled 55567, cohort w3: exit0, wall 0:02.54, peak 4856212KiB, swap 0; source dddd559e04d1dd1164288f82484dad91fe8965c8; standard summary axioms only.
+
+PV_LIB_SPEC_ActiveReplacement16 compiled 55569, cohort w3: exit0, wall 0:03.06, peak 4865768KiB, swap 0; source 6fe22fd6d48b1685feef89dc52b00a99cfb77b16; standard summary axioms only.
