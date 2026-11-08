@@ -42,3 +42,24 @@ with named callbacks and independently checked installed scalar/std slots.
 Prepared query carriers pass L039, including original Prepared roots, queries,
 gamma and scratch. These are source transports on arbitrary pre-states;
 no native/Kani bridge or ledger status is added by this Lean-only job.
+
+Stage 5: NNV_GeometryBody.source (L042), NNV_GeometryOuter.loop/source/stage
+(L043), and NNV_CurrentGeometry.slot/source/returned (L045) pass. The generic
+outer source loop is transported by equality of its arbitrary-state bodies,
+using the previously checked reverse-product loop; no concrete loop or buffer
+is normalized. The current port is at canonical natural-to-raw indices and the
+SAME Prepared queries, including full Result association and returned Ok.
+L044's unsupported arbitrary-Usize/cMax bound was replaced by that exact raw
+input port (no new precondition and no change to A1's target).
+
+Stage 6: NNV_CheckpointDigest.source L046 and NNV_CheckpointValue.source L047
+pass, linking the selected digest reply port and erasing the canonical exact
+three-query writer execution without evaluating its buffer. This is not the
+missing full current writer/flush continuation. NNV_DecodeP1880.native/returned
+L048 pass at the SAME decoded statement, retaining original R4 and the
+094/087 domains. NNV_WeakErrHost.modelRet1 L049 prints the exact corrected-host
+Ok/weak-Err interface; it normalizes the statement and does not prove A1.
+
+No NND_A1 term is delivered. No raw ax2 audit is claimed. The exact remaining
+parent and member goals are in NNV_REMAINING.md. The only remaining scope is
+NNV_COMBINED_IMPORT (NNH_Run5bCombined plus all accepted NNV proof modules).

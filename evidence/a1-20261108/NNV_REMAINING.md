@@ -18,12 +18,13 @@ Exact parent (all original binders and universal adversary retained):
    derive the SAME semantic/View/scratch from the prepare front, including
    Filled, both expansion outputs, View and semantic finish; no free native
    success or representation premise may replace this.
-3. Geometry/query/batch/checkpoint continuations: outer geometry is being
-   split along its emitted body (terminal/query/loop). OPEN: actual query
+3. Geometry/query/batch/checkpoint continuations: the local outer geometry
+   transport and current returned geometry port are CLOSED (L040-L043, L045),
+   on the SAME queries and canonical raw indices. OPEN: actual query
    installation association at the SAME prepared/accumulator/g/geometry/pending;
    batch call at SAME roots and digest; flush and checkpoint association at
-   SAME accumulator. Prepared state transport and checkpoint erasure are
-   attempted independently. These are Lean-only.
+   SAME accumulator. Prepared state transport passes L039. Checkpoint digest/erasure and decoder
+   ports are checked independently; their final disposition is in NNV_HANDOFF.md. These are Lean-only.
 4. Common/afterstate: NNV_CommonAssociation uses the existing source common
    theorem plus the decoder inverse; it proves the candidate-afterstate
    projection too. OPEN: complete adapter getter/common diagram at the body
@@ -40,3 +41,25 @@ Weak Err BEFORE: returned RSL Err -> exists pe, model1 = ok (Err pe).
 AFTER: returned RSL Err -> not exists saved, model1 = ok (Ok saved).
 The owner-approved NNH_AcceptanceSig/NNH_RecordSig restatement changes no Ok
 arm, carrier or quantifier, and requires no exact error payload or liveness.
+
+First unclosed semantic association (all variables universally quantified at
+the corrected context; this is an OPEN goal, not a new theorem hypothesis):
+
+```lean
+NNH_ObservedReturns.value ⟨pub, LIB_Carriers.bytes bytes⟩ (envOf c) = .ok sem →
+(DrvC_Installation.currentInstalled (configuration c)).op9
+  (NNV_PreparedAtHost.digest c)
+  (AspisR1CurrentCaller.FirstComposition.toCurrentPublic pub) bytes () none =
+.ok (.Ok (NNV_PreparedInputs.sem sem))
+```
+
+NNV_SemanticPrefix.returned proves the parse/public-transcript/begin prefix,
+but still carries NNH_FinishReturns.value at the same prefix/challenges/
+transcript. The missing continuation is the fixed FinishModel.finish result
+and its complete Verified fields, not hash injectivity or parser liveness.
+
+L044 exposed the overbroad arbitrary-Usize roundtrip to LIBC_Usize.raw.
+L045 instead states equality at exactly LIBC_Usize.raw start/stop, matching
+LIBC_Geometry.model's natural-number arguments for ALL naturals. No bound or
+representation premise is added. At deployed 0/10 the ordinary small numeral
+conversion supplies the current source indices.

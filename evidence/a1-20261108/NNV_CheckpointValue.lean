@@ -1,4 +1,4 @@
-import NNV_CheckpointDigest
+import LIBC_Checkpoint
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNV_CheckpointValue

@@ -13,22 +13,22 @@ theorem slot (queries : Array U32 22#usize) (start stop : Usize) :
  (current m env err r).op19 queries start stop =
  Tx1Q_PrefixInstall.geometryBody (NNH_CorrectConfiguration.configuration m env err r).geometry queries start stop := rfl
 
-theorem source (p : LIB_VCarriers.Prepared) (start stop : Usize) :
- (current m env err r).op19 p.queries start stop =
+theorem source (p : LIB_VCarriers.Prepared) (start stop : Nat) :
+ (current m env err r).op19 p.queries (LIBC_Usize.raw start) (LIBC_Usize.raw stop) =
  Tx1Q_PrefixInstall.topResult Tx1Q_PrefixInstall.unGeometry
-  (LIBC_Geometry.model (p,start.val,stop.val) env) := by
+  (LIBC_Geometry.model (p,start,stop) env) := by
  rw [slot]
  unfold Tx1Q_PrefixInstall.geometryBody
  rw [NNV_GeometryOuter.stage]
  unfold LIBC_Geometry.model
- rw [LIBC_Usize.from_native start (by scalar_tac),LIBC_Usize.from_native stop (by scalar_tac)]
+ all_goals rfl
 
-theorem returned (p : LIB_VCarriers.Prepared) (start stop : Usize) (geo : LIB_VCarriers.Geo)
- (called : LIB_VLib.geometryValue (p,start.val,stop.val) env = .ok geo) :
- (current m env err r).op19 p.queries start stop =
+theorem returned (p : LIB_VCarriers.Prepared) (start stop : Nat) (geo : LIB_VCarriers.Geo)
+ (called : LIB_VLib.geometryValue (p,start,stop) env = .ok geo) :
+ (current m env err r).op19 p.queries (LIBC_Usize.raw start) (LIBC_Usize.raw stop) =
  .ok (.Ok (Tx1Q_PrefixInstall.unGeometry geo)) := by
  change LIBC_ResultGraph.value LIBC_Geometry.port (.error .Query)
-  (LIBC_Geometry.model (p,start.val,stop.val) env) = .ok geo at called
+  (LIBC_Geometry.model (p,start,stop) env) = .ok geo at called
  obtain ⟨reply,model,image⟩ := NNH_Run5bReturnedGraph.ok _ _ _ geo called
  cases reply with
  | Err e => cases image
