@@ -48,3 +48,7 @@ edit or stopped sibling scope. The numerical target remains unchanged.
 Continuation: item8 CLOSED by NNQ_L031 (firstCode_eq, secondCode_eq); items9-10 remain OPEN. New budget used1/20. Runner budget guard updated to count only L031 onward, keeping all admission/cap checks.
 
 target not yet established
+
+Continuation: item9 CLOSED by child_sim, NNQ_L032; arbitrary Configuration, hashv and CallSim calls. Stage field is AuS1_Install.base c.stageBase. New budget used2/20. Item10 OPEN.
+
+target not yet established
