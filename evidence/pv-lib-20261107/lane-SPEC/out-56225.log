@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePoll20.lean:41:96: error: unsolved goals
+c : Config
+wait : PV_STX2_Native.Waiting Data
+w : OWNER
+es : List Event
+suspended : List Config
+out : State
+issued : List Issued
+saved : c.frame.waiting = some wait
+⊢ (match do
+      let c ← some c
+      if (c.frame.waiting.isSome || c.frame.completed.isSome) = true then none
+        else
+          match c.frame.remaining with
+          | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site callee captures returnPlace unwind) :: tail =>
+            some (site, c.frame.activation)
+          | PV_STX2_SliceSyntax.Node.leaf (Instruction.drop site place callee conditional unwind) :: tail =>
+            some (site, c.frame.activation)
+          | PV_STX2_SliceSyntax.Node.leaf (Instruction.copy site source destination count) :: tail =>
+            some (site, c.frame.activation)
+          | x => none,
+      out.current.status with
+    | some (site, caller), PV_STX2_SliceMachine.Status.running c =>
+      match c.frame.waiting with
+      | some wait => { site := site, caller := caller, request := wait.request } :: issued
+      | none => issued
+    | x, x_1 => issued) =
+    issued
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePoll20.lean:42:87: warning: This simp argument is unused:
+  saved
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing,s̵a̵v̵e̵d̵,̵
+      Option.isSome_some, ̲Bool.true_or, ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePoll20.lean:43:4: warning: This simp argument is unused:
+  Option.isSome_some
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵,̵Bool.true_or, ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePoll20.lean:43:23: warning: This simp argument is unused:
+  Bool.true_or
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      Option.isSome_some,B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵o̵r̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePoll20.lean:43:36: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      Option.isSome_some, ̲Bool.true_or,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_NativePoll20.consume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_NativePoll20.no_issue' depends on axioms: [propext, sorryAx]

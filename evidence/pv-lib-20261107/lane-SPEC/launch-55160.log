@@ -1,0 +1,57 @@
+{"cohort": "w3", "attempt": 55160, "target": "PV_LIB_SPEC_ArcPhysicalGap13", "source_revision": "d85df7de25a5cc8d1cd5411c67e05d4ea6ddafb7", "source_sha256": "750aa22430b4ce3f72ab26783d3760d108703a7e373efa8ce077be6e32db13a7", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10911, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55160", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55160.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_ArcPhysicalGap13.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean", "7000"], "exit": 1, "wall_seconds": 2.1913235187530518, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_ArcPhysicalGap13.drops_physical_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_ArcPhysicalGap13.byte_conflict' does not depend on any axioms"], "wall": "0:02.14", "peak_rss_kbytes": "4762080", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:24:51: error: unsolved goals
+regs : PV_LIB_SPEC_CallbackStores.Registers
+p : Parameters
+c : Config
+fn : Data
+a : ℕ
+args : List Data
+w : OWNER
+raw : Reply OWNER Event Data
+ignored value : Data
+count : ℕ
+function : PV_THR2_OffPath.functionId fn = some 360
+native : PV_LIB_SPEC_CallbackRuntime.native regs p c (PV_STX2_Native.Request.child fn a args) w = some raw
+returned : raw.answer = Answer.returned (Aeneas.Std.Result.ok ignored)
+source : PV_LIB_SPEC_BoundRuntime.arc (runtime p).carrier c.store w args = some (value, count)
+ordinary : PV_LIB_SPEC_BoundRuntime.allocationToken (PV_STX2_Native.Request.child fn a args) = false
+bounded : count ≤ PV_THR2_LibrarySemantics_ArcClone.maxRefcount
+⊢ (do
+      let __x ← some (value, count)
+      if __x.2 > PV_THR2_LibrarySemantics_ArcClone.maxRefcount then
+          some { answer := Answer.fault Fault.abort, world := w, events := raw.events }
+        else some { answer := Answer.returned (Aeneas.Std.Result.ok __x.1), world := w, events := raw.events }) =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok value), world := w, events := raw.events }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:22:49: error: unsolved goals
+regs : PV_LIB_SPEC_CallbackStores.Registers
+p : Parameters
+c : Config
+fn : Data
+a : ℕ
+args : List Data
+w : OWNER
+raw : Reply OWNER Event Data
+ignored value : Data
+count : ℕ
+function : PV_THR2_OffPath.functionId fn = some 360
+native : PV_LIB_SPEC_CallbackRuntime.native regs p c (PV_STX2_Native.Request.child fn a args) w = some raw
+returned : raw.answer = Answer.returned (Aeneas.Std.Result.ok ignored)
+source : PV_LIB_SPEC_BoundRuntime.arc (runtime p).carrier c.store w args = some (value, count)
+ordinary : PV_LIB_SPEC_BoundRuntime.allocationToken (PV_STX2_Native.Request.child fn a args) = false
+bounded : count ≤ PV_THR2_LibrarySemantics_ArcClone.maxRefcount
+branch :
+  PV_LIB_SPEC_CallbackRuntime.valueAnswer regs p c (PV_STX2_Native.Request.child fn a args) w =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok value), world := w, events := raw.events }
+⊢ ∃ out,
+    PV_LIB_SPEC_CallbackRuntime.answer regs p c (PV_STX2_Native.Request.child fn a args) w = some out ∧
+      out.world.world.memory = w.world.memory
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:36:49: warning: This simp argument is unused:
+  if_neg (Nat.not_lt.mpr bounded)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵u̵n̵c̵t̵i̵o̵n̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵r̵e̵t̵u̵r̵n̵e̵d̵,̵s̵o̵u̵r̵c̵e̵,̵i̵f̵_̵n̵e̵g̵ ̵(̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵b̵o̵u̵n̵d̵e̵d̵)̵]̵[̲f̲u̲n̲c̲t̲i̲o̲n̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲t̲u̲r̲n̲e̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_ArcPhysicalGap13.drops_physical_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysicalGap13.byte_conflict' does not depend on any axioms
+

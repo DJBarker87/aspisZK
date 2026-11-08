@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadNewNative.lean:51:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have raw := PV_THR2_PacketBoxResource.reply (fun {A} => p.resources) (fun {A} => p.encode) c.store w shape 8;
+    have __do_jp := fun out => pure (PV_LIB_SPEC_BoundRuntime.frameReply request w out);
+    match raw.answer with
+    | Answer.returned (Aeneas.Std.Result.ok base) =>
+      if base = 0 then do
+        let out ←
+          some
+              { answer := Answer.fault Fault.abort, world := raw.world,
+                events := raw.events ++ [PV_STX_World.side "client-allocator-abort" []] }
+        __do_jp out
+      else
+        if 2 ^ 64 ≤ base then do
+          let out ← none
+          __do_jp out
+        else do
+          let out ←
+            some
+                { answer := Answer.returned (Aeneas.Std.Result.ok (Data.number base)),
+                  world :=
+                    PV_LIB_SPEC_AllocationImages.initialized base (PV_LIB_SPEC_AllocationImages.threadInner id 0 length)
+                      raw.world,
+                  events := raw.events }
+          __do_jp out
+    | Answer.returned (Aeneas.Std.Result.fail error) => do
+      let out ←
+        some { answer := Answer.returned (Aeneas.Std.Result.fail error), world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.returned Aeneas.Std.Result.div => do
+      let out ← some { answer := Answer.returned Aeneas.Std.Result.div, world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.fault error => do
+      let out ← some { answer := Answer.fault error, world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.pending => do
+      let out ← some { answer := Answer.pending, world := raw.world, events := raw.events }
+      __do_jp out) =
+    some out
+of `result`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+p : Parameters
+c : Config
+request : PV_STX2_Native.Request Data
+w : OWNER
+id length : ℕ
+out : Reply OWNER Event Data
+ordinary : PV_LIB_SPEC_BoundRuntime.allocationToken request = false
+result :
+  (have raw := PV_THR2_PacketBoxResource.reply (fun {A} => p.resources) (fun {A} => p.encode) c.store w shape 8;
+    have __do_jp := fun out => pure (PV_LIB_SPEC_BoundRuntime.frameReply request w out);
+    match raw.answer with
+    | Answer.returned (Aeneas.Std.Result.ok base) =>
+      if base = 0 then do
+        let out ←
+          some
+              { answer := Answer.fault Fault.abort, world := raw.world,
+                events := raw.events ++ [PV_STX_World.side "client-allocator-abort" []] }
+        __do_jp out
+      else
+        if 2 ^ 64 ≤ base then do
+          let out ← none
+          __do_jp out
+        else do
+          let out ←
+            some
+                { answer := Answer.returned (Aeneas.Std.Result.ok (Data.number base)),
+                  world :=
+                    PV_LIB_SPEC_AllocationImages.initialized base (PV_LIB_SPEC_AllocationImages.threadInner id 0 length)
+                      raw.world,
+                  events := raw.events }
+          __do_jp out
+    | Answer.returned (Aeneas.Std.Result.fail error) => do
+      let out ←
+        some { answer := Answer.returned (Aeneas.Std.Result.fail error), world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.returned Aeneas.Std.Result.div => do
+      let out ← some { answer := Answer.returned Aeneas.Std.Result.div, world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.fault error => do
+      let out ← some { answer := Answer.fault error, world := raw.world, events := raw.events }
+      __do_jp out
+    | Answer.pending => do
+      let out ← some { answer := Answer.pending, world := raw.world, events := raw.events }
+      __do_jp out) =
+    some out
+⊢ PV_LIB_SPEC_NativeRuntime.GhostFrame w out.world
+'PV_LIB_SPEC_ThreadNewNative.operands' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadNewNative.shape' does not depend on any axioms
+'PV_LIB_SPEC_ThreadNewNative.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadNewNative.ghost_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

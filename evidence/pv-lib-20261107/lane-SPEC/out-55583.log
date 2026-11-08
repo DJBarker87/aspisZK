@@ -1,0 +1,98 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_UnitReserveTransport17.lean:49:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w reference
+in the target expression
+  (match { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := events }.answer with
+    | Answer.returned (Aeneas.Std.Result.ok v) =>
+      match [reference, other] with
+      | [reference, other] => do
+        let __x ← PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w reference
+        match __x with
+          | (p_1, value) => do
+            let __x ← PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w other
+            match __x with
+              | (q, source) => do
+                let buf ← (runtime p).carrier.field value 0
+                let __x ← (runtime p).carrier.field value 1
+                match __x with
+                  | Data.number len => do
+                    let __x ← (runtime p).carrier.field source 1
+                    match __x with
+                      | Data.number count => do
+                        let buf' ←
+                          (PV_LIB_SPEC_UnitReserve17.values p).reserve fn buf len count w
+                              { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w,
+                                events := events }
+                        let changed ←
+                          writeAddress (runtime p).carrier s (PV_THR2_SourceStoreLibrary.withField p_1 0) (some buf')
+                        let changed ←
+                          writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField p_1 1)
+                              (some (Data.number (len + count)))
+                        writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField q 1)
+                            (some (Data.number 0))
+                      | x => none
+                  | x => none
+      | x => none
+    | x => some s) =
+    do
+    let changed ← writeAddress (runtime p).carrier s (PV_THR2_SourceStoreLibrary.withField dest 0) (some buf)
+    let changed ←
+      writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField dest 1)
+          (some (Data.number (len + count)))
+    writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField origin 1) (some (Data.number 0))
+
+p : Parameters
+fn reference other buf inner value source : Data
+dest origin : Address
+s : Store Data
+w : OWNER
+events : List Event
+len count cap : ℕ
+unitAppend : PV_THR2_OffPath.functionId fn = some 10
+destination : PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w reference = some (dest, value)
+sourceValue : PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w other = some (origin, source)
+raw : (runtime p).carrier.field value 0 = some buf
+length : (runtime p).carrier.field value 1 = some (Data.number len)
+sourceLength : (runtime p).carrier.field source 1 = some (Data.number count)
+buffer : (runtime p).carrier.field buf 0 = some inner
+stored : (runtime p).carrier.field inner 1 = some (Data.number cap)
+bound : len + count < 2 ^ 64
+⊢ (match { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := events }.answer with
+    | Answer.returned (Aeneas.Std.Result.ok v) =>
+      match [reference, other] with
+      | [reference, other] => do
+        let __x ← PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w reference
+        match __x with
+          | (p_1, value) => do
+            let __x ← PV_THR2_SourceStoreLibrary.receiver (runtime p).carrier s w other
+            match __x with
+              | (q, source) => do
+                let buf ← (runtime p).carrier.field value 0
+                let __x ← (runtime p).carrier.field value 1
+                match __x with
+                  | Data.number len => do
+                    let __x ← (runtime p).carrier.field source 1
+                    match __x with
+                      | Data.number count => do
+                        let buf' ←
+                          (PV_LIB_SPEC_UnitReserve17.values p).reserve fn buf len count w
+                              { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w,
+                                events := events }
+                        let changed ←
+                          writeAddress (runtime p).carrier s (PV_THR2_SourceStoreLibrary.withField p_1 0) (some buf')
+                        let changed ←
+                          writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField p_1 1)
+                              (some (Data.number (len + count)))
+                        writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField q 1)
+                            (some (Data.number 0))
+                      | x => none
+                  | x => none
+      | x => none
+    | x => some s) =
+    do
+    let changed ← writeAddress (runtime p).carrier s (PV_THR2_SourceStoreLibrary.withField dest 0) (some buf)
+    let changed ←
+      writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField dest 1)
+          (some (Data.number (len + count)))
+    writeAddress (runtime p).carrier changed (PV_THR2_SourceStoreLibrary.withField origin 1) (some (Data.number 0))
+'PV_LIB_SPEC_UnitReserveTransport17.neutral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_UnitReserveTransport17.append_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

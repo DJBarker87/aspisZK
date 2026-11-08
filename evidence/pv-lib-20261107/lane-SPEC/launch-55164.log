@@ -1,0 +1,26 @@
+{"cohort": "w3", "attempt": 55164, "target": "PV_LIB_SPEC_ArcPhysical13", "source_revision": "be02718491fcab2d145a46254c8c8ea5aba231ca", "source_sha256": "3d3a4e1f93408aeae9602c14349fdf1d3c3282db02dcb3a368ded1a609a71c0b", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10912, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55164", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55164.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_ArcPhysical13.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysical13.lean", "7000"], "exit": 1, "wall_seconds": 2.1942789554595947, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_ArcPhysical13.operands' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_ArcPhysical13.reply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_ArcPhysical13.write_away' depends on axioms: [propext, sorryAx]", "'PV_LIB_SPEC_ArcPhysical13.one_to_two' depends on axioms: [propext, Classical.choice, Quot.sound]"], "wall": "0:02.14", "peak_rss_kbytes": "4761768", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysical13.lean:43:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+w : OWNER
+base count address : ℕ
+outside : address < base ∨ base + 8 ≤ address
+⊢ {
+            world :=
+              have __src := w.world;
+              { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+                deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+                successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+                memory := fun address =>
+                  if base ≤ address then (wordImage count (address - base)).getD (w.world.memory address)
+                  else w.world.memory address,
+                live := __src.live, frame := __src.frame },
+            next := w.next, places := w.places }.world.memory
+      address =
+    w.world.memory address
+'PV_LIB_SPEC_ArcPhysical13.operands' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysical13.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysical13.write_away' depends on axioms: [propext, sorryAx]
+'PV_LIB_SPEC_ArcPhysical13.one_to_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+

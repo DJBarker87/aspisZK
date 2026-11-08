@@ -1,0 +1,47 @@
+{"cohort": "w3", "attempt": 55520, "target": "PV_LIB_SPEC_Tls278Native15", "source_revision": "57a8d98b5af7ee4614da29eb22515c4d7a480a35", "source_sha256": "00281f9811ee332b65766d6753d4b7d8fd51448e148f8b6e7ff927a10ffa325b", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10983, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55520", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55520.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_Tls278Native15.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Native15.lean", "7000"], "exit": 1, "wall_seconds": 2.628828763961792, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_Tls278Native15.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.58", "peak_rss_kbytes": "4810844", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Native15.lean:16:53: error: unsolved goals
+regs : PV_LIB_SPEC_CallbackStores.Registers
+p : Parameters
+c : Config
+w : OWNER
+a : ℕ
+address : Address
+trigger :
+  PV_THR2_OwnUniformResourceHandler.lift p.environment.native
+      (PV_STX2_Native.Request.child token a [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error])
+      w =
+    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }
+⊢ (match
+      PV_STX2_Native.Request.child token a
+        [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error] with
+    |
+    PV_STX2_Native.Request.child fn a_1
+        [Data.object
+            [("thread-aggregate-kind", kind),
+              ("thread-aggregate-slots", Data.array [Data.array [strong], Data.array [weak], Data.array [payload]])]] =>
+      if fn = PV_THR2_Packet124BoxIssue17.fn ∧ a_1 = a ∧ kind = PV_THR2_Packet124Aggregate13.source.2.2.1 then
+        match PV_LIB_SPEC_SiteArc.classify payload with
+        | none => none
+        | some site =>
+          match
+            (PV_THR2_PacketBoxResource.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                { cells := c.store.cells, nextActivation := a } w (PV_LIB_SPEC_SiteArc.shape site) 8).answer with
+          | Answer.returned (Aeneas.Std.Result.ok p_1) =>
+            if p_1 = 0 then
+              some
+                (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                  { cells := c.store.cells, nextActivation := a } w site fun x => none)
+            else
+              Option.map
+                (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                  { cells := c.store.cells, nextActivation := a } w site)
+                (PV_LIB_SPEC_SiteArc.image (runtime p).carrier (runtime p).control w site strong weak payload)
+          | x =>
+            some
+              (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                { cells := c.store.cells, nextActivation := a } w site fun x => none)
+      else some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }
+    | x => some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }) =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }
+'PV_LIB_SPEC_Tls278Native15.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

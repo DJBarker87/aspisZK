@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveRead20.lean:59:58: error: unsolved goals
+case none
+e : Entry
+resources : PV_EVHB_OwnerHeap.Resources
+base : Carrier OWNER Data
+s : Store Data
+a i : ℕ
+h : s.cells { activation := a, localIndex := i } = none
+⊢ (do
+      let root ← none
+      some root) =
+    none
+
+case some
+e : Entry
+resources : PV_EVHB_OwnerHeap.Resources
+base : Carrier OWNER Data
+s : Store Data
+a i : ℕ
+val✝ : Data
+h : s.cells { activation := a, localIndex := i } = some val✝
+⊢ (do
+      let root ← some val✝
+      some root) =
+    some val✝
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveRead20.lean:61:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  readAddress ?base ?s { activation := ?a, localIndex := ?i }
+in the target expression
+  readAddress (runtime (PV_LIB_A_ActiveTlsNative17.parameters fun {A} => resources)).carrier store154
+      PV_LIB_SPEC_Entry13.slot.source =
+    some (Data.boolean false)
+
+e : Entry
+resources : PV_EVHB_OwnerHeap.Resources
+root :
+  ∀ (base : Carrier OWNER Data) (s : Store Data) (a i : ℕ),
+    readAddress base s { activation := a, localIndex := i } = s.cells { activation := a, localIndex := i }
+⊢ readAddress (runtime (PV_LIB_A_ActiveTlsNative17.parameters fun {A} => resources)).carrier store154
+      PV_LIB_SPEC_Entry13.slot.source =
+    some (Data.boolean false)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveRead20.lean:60:62: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵A̵d̵d̵r̵e̵s̵s̵,̵h̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵r̵e̵a̵d̵F̵i̵e̵l̵d̵s̵]̵[̲r̲e̲a̲d̲A̲d̲d̲r̲e̲s̲s̲,̲ ̲h̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲r̲e̲a̲d̲F̲i̲e̲l̲d̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveRead20.lean:60:79: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵A̵d̵d̵r̵e̵s̵s̵,̵h̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵r̵e̵a̵d̵F̵i̵e̵l̵d̵s̵]̵[̲r̲e̲a̲d̲A̲d̲d̲r̲e̲s̲s̲,̲ ̲h̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲,̲ ̲r̲e̲a̲d̲F̲i̲e̲l̲d̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_ActiveRead20.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveRead20.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveRead20.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

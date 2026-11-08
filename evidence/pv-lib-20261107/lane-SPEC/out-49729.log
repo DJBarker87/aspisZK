@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:76:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_STX_OriginalCopyTyped.bytesAt state.world.memory 112 16 0
+in the target expression
+  decodeFatPointer (PV_STX_OriginalCopyTyped.bytesAt state.world.memory runHeader.pointer 16 0) =
+    some { place := places.run, values := [runWords site zero zero] }.values[0]
+
+case right.refl
+bound : 0 < { place := places.run, values := [runWords site zero zero] }.values.length
+⊢ decodeFatPointer (PV_STX_OriginalCopyTyped.bytesAt state.world.memory runHeader.pointer 16 0) =
+    some { place := places.run, values := [runWords site zero zero] }.values[0]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:90:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_STX_OriginalCopyTyped.bytesAt state.world.memory 64 8 0
+in the target expression
+  decodeUsize (PV_STX_OriginalCopyTyped.bytesAt state.world.memory nHeader.pointer 8 0) =
+    some { place := places.n, values := [zero] }.values[0]
+
+case right.refl
+bound : 0 < { place := places.n, values := [zero] }.values.length
+⊢ decodeUsize (PV_STX_OriginalCopyTyped.bytesAt state.world.memory nHeader.pointer 8 0) =
+    some { place := places.n, values := [zero] }.values[0]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:96:4: error: Tactic `decide` failed for proposition
+  fHeader.len ≤ PV_EVHB_RawVecSource.capacity Usize.max fHeader
+because its `Decidable` instance
+  fHeader.len.decLe (PV_EVHB_RawVecSource.capacity Usize.max fHeader)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match fHeader.len.ble (PV_EVHB_RawVecSource.capacity Usize.max fHeader), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:124:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  receiver state places.run
+in the target expression
+  PV_EVHB_OwnerMachine.receiver state places.run = some (id, h)
+
+case refine_1
+id : ℕ
+h : Header
+selected : PV_EVHB_OwnerMachine.receiver state places.run = some (id, h)
+⊢ h.pointer = ↑(runAddress captures.site captures.parentStack)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:128:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  receiver state places.n
+in the target expression
+  PV_EVHB_OwnerMachine.receiver state places.n = some (id, h)
+
+case refine_2
+id : ℕ
+h : Header
+selected : PV_EVHB_OwnerMachine.receiver state places.n = some (id, h)
+⊢ h.pointer = ↑(runWords captures.site captures.parentStack captures.callerStack).1
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_OwnInitEntry.lean:132:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  receiver state places.f
+in the target expression
+  PV_EVHB_OwnerMachine.receiver state places.f = some (id, h)
+
+case refine_3
+id : ℕ
+h : Header
+selected : PV_EVHB_OwnerMachine.receiver state places.f = some (id, h)
+⊢ h.pointer = ↑(runWords captures.site captures.parentStack captures.callerStack).2
+'PV_LIB_SPEC_OwnInitEntry.site' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.zero' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.captures' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.places' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.runHeader' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.nHeader' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.fHeader' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.taskHeader' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.state' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.receivers' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.run_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.n_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.run_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.n_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.f_typed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.tasks_typed' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_OwnInitEntry.closure' does not depend on any axioms
+'PV_LIB_SPEC_OwnInitEntry.entry_nonempty' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,64 @@
+{"cohort": "w3", "attempt": 55131, "target": "PV_LIB_SPEC_PhysicalStack12", "source_revision": "23cf2fe5b88f715b1cdbd2794a0657075b91d784", "source_sha256": "6cfab02481cc28ce8f8432bb191cb747327d0607ef6efc8415b42236952e67a5", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10895, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55131", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55131.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_PhysicalStack12.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_PhysicalStack12.lean", "7000"], "exit": 1, "wall_seconds": 2.3626186847686768, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_PhysicalStack12.Frame' does not depend on any axioms", "'PV_LIB_SPEC_PhysicalStack12.physical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.captureWords' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.registers' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.defaultHooks' depends on axioms: [propext]", "'PV_LIB_SPEC_PhysicalStack12.installDefault' depends on axioms: [propext]", "'PV_LIB_SPEC_PhysicalStack12.default_mask' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.localFrame' does not depend on any axioms", "'PV_LIB_SPEC_PhysicalStack12.localConfig' does not depend on any axioms", "'PV_LIB_SPEC_PhysicalStack12.local_resolved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.local_capture' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.default_snapshot' depends on axioms: [propext, sorryAx, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.copies_default' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_PhysicalStack12.stack_ghost' depends on axioms: [propext]"], "wall": "0:02.32", "peak_rss_kbytes": "4761024", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_PhysicalStack12.lean:74:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let source ← some PV_LIB_SPEC_StackReferenceGap12.address
+    if source = PV_LIB_SPEC_StackReferenceGap12.address then do
+        let _ ← readAddress PV_LIB_SPEC_StackReferenceGap12.C PV_LIB_SPEC_StackReferenceGap12.store source
+        pure 112
+      else
+        PV_LIB_SPEC_SparsePacketHandler.physical PV_LIB_SPEC_StackReferenceGap12.C
+          PV_LIB_SPEC_StackReferenceGap12.before PV_LIB_SPEC_StackReferenceGap12.reference
+is not definitionally equal to the right-hand side
+  some 112
+
+⊢ (do
+      let source ← some PV_LIB_SPEC_StackReferenceGap12.address
+      if source = PV_LIB_SPEC_StackReferenceGap12.address then do
+          let _ ← readAddress PV_LIB_SPEC_StackReferenceGap12.C PV_LIB_SPEC_StackReferenceGap12.store source
+          pure 112
+        else
+          PV_LIB_SPEC_SparsePacketHandler.physical PV_LIB_SPEC_StackReferenceGap12.C
+            PV_LIB_SPEC_StackReferenceGap12.before PV_LIB_SPEC_StackReferenceGap12.reference) =
+    some 112
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_PhysicalStack12.lean:72:50: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [physical, ̲localConfig, ̲localFrame, ̲ne_eq, ̲not_true_eq_false, ̲if_false,
+      PV_LIB_SPEC_StackReferenceGap12.initialized.1,i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵  ̵ ̵ ̵PV_LIB_SPEC_StackReferenceGap12.initialized.2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_PhysicalStack12.lean:73:4: warning: This simp argument is unused:
+  PV_LIB_SPEC_StackReferenceGap12.initialized.2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵h̵y̵s̵i̵c̵a̵l̵,̵l̵o̵c̵a̵l̵C̵o̵n̵f̵i̵g̵,̵l̵o̵c̵a̵l̵F̵r̵a̵m̵e̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵S̵P̵E̵C̵_̵S̵t̵a̵c̵k̵R̵e̵f̵e̵r̵e̵n̵c̵e̵G̵a̵p̵1̵2̵.̵i̵n̵i̵t̵i̵a̵l̵i̵z̵e̵d̵.̵1̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵S̵P̵E̵C̵_̵S̵t̵a̵c̵k̵R̵e̵f̵e̵r̵e̵n̵c̵e̵G̵a̵p̵1̵2̵.̵i̵n̵i̵t̵i̵a̵l̵i̵z̵e̵d̵.̵2̵]̵[̲p̲h̲y̲s̲i̲c̲a̲l̲,̲ ̲l̲o̲c̲a̲l̲C̲o̲n̲f̲i̲g̲,̲ ̲l̲o̲c̲a̲l̲F̲r̲a̲m̲e̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲S̲P̲E̲C̲_̲S̲t̲a̲c̲k̲R̲e̲f̲e̲r̲e̲n̲c̲e̲G̲a̲p̲1̲2̲.̲i̲n̲i̲t̲i̲a̲l̲i̲z̲e̲d̲.̲1̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_PhysicalStack12.lean:96:31: error: Application type mismatch: The argument
+  h
+has type
+  defaultHooks i = some value
+but is expected to have type
+  some value = some value
+in the application
+  And.intro h
+'PV_LIB_SPEC_PhysicalStack12.Frame' does not depend on any axioms
+'PV_LIB_SPEC_PhysicalStack12.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.captureWords' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.registers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.defaultHooks' depends on axioms: [propext]
+'PV_LIB_SPEC_PhysicalStack12.installDefault' depends on axioms: [propext]
+'PV_LIB_SPEC_PhysicalStack12.default_mask' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.localFrame' does not depend on any axioms
+'PV_LIB_SPEC_PhysicalStack12.localConfig' does not depend on any axioms
+'PV_LIB_SPEC_PhysicalStack12.local_resolved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.local_capture' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.default_snapshot' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.copies_default' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_PhysicalStack12.stack_ghost' depends on axioms: [propext]
+

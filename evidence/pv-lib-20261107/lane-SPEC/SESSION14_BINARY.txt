@@ -1,0 +1,239 @@
+fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558  /home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client
+00000000001b3740  0000000000000008 R_X86_64_RELATIVE                         1b67c0
+00000000001b3760  0000000000000008 R_X86_64_RELATIVE                         17c780
+
+/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+000000000017c780 <std::thread::spawnhook::run_spawn_hooks>:
+  17c780:	55                   	push   %rbp
+  17c781:	48 89 e5             	mov    %rsp,%rbp
+  17c784:	41 57                	push   %r15
+  17c786:	41 56                	push   %r14
+  17c788:	41 55                	push   %r13
+  17c78a:	41 54                	push   %r12
+  17c78c:	53                   	push   %rbx
+  17c78d:	48 83 ec 38          	sub    $0x38,%rsp
+  17c791:	48 89 75 a8          	mov    %rsi,-0x58(%rbp)
+  17c795:	49 89 ff             	mov    %rdi,%r15
+  17c798:	64 48 8b 04 25 00 00 	mov    %fs:0x0,%rax
+  17c79f:	00 00 
+  17c7a1:	48 8d 80 e0 ff ff ff 	lea    -0x20(%rax),%rax
+  17c7a8:	0f b6 48 08          	movzbl 0x8(%rax),%ecx
+  17c7ac:	83 f9 01             	cmp    $0x1,%ecx
+  17c7af:	74 3b                	je     17c7ec <std::thread::spawnhook::run_spawn_hooks+0x6c>
+  17c7b1:	83 f9 02             	cmp    $0x2,%ecx
+  17c7b4:	75 1c                	jne    17c7d2 <std::thread::spawnhook::run_spawn_hooks+0x52>
+  17c7b6:	49 c7 07 00 00 00 00 	movq   $0x0,(%r15)
+  17c7bd:	49 c7 47 08 08 00 00 	movq   $0x8,0x8(%r15)
+  17c7c4:	00 
+  17c7c5:	0f 57 c0             	xorps  %xmm0,%xmm0
+  17c7c8:	41 0f 11 47 10       	movups %xmm0,0x10(%r15)
+  17c7cd:	e9 b3 01 00 00       	jmp    17c985 <std::thread::spawnhook::run_spawn_hooks+0x205>
+  17c7d2:	48 8d 35 07 9d ff ff 	lea    -0x62f9(%rip),%rsi        # 1764e0 <std::sys::thread_local::native::eager::destroy>
+  17c7d9:	48 89 c7             	mov    %rax,%rdi
+  17c7dc:	48 89 c3             	mov    %rax,%rbx
+  17c7df:	ff 15 fb 77 03 00    	call   *0x377fb(%rip)        # 1b3fe0 <_DYNAMIC+0x1168>
+  17c7e5:	48 89 d8             	mov    %rbx,%rax
+  17c7e8:	c6 43 08 01          	movb   $0x1,0x8(%rbx)
+  17c7ec:	48 8b 08             	mov    (%rax),%rcx
+  17c7ef:	48 89 4d d0          	mov    %rcx,-0x30(%rbp)
+  17c7f3:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
+  17c7fa:	48 85 c9             	test   %rcx,%rcx
+  17c7fd:	74 0f                	je     17c80e <std::thread::spawnhook::run_spawn_hooks+0x8e>
+  17c7ff:	f0 48 ff 01          	lock incq (%rcx)
+  17c803:	0f 8e 9e 01 00 00    	jle    17c9a7 <std::thread::spawnhook::run_spawn_hooks+0x227>
+  17c809:	48 8b 10             	mov    (%rax),%rdx
+  17c80c:	eb 02                	jmp    17c810 <std::thread::spawnhook::run_spawn_hooks+0x90>
+  17c80e:	31 d2                	xor    %edx,%edx
+  17c810:	48 89 55 b8          	mov    %rdx,-0x48(%rbp)
+  17c814:	48 89 08             	mov    %rcx,(%rax)
+  17c817:	48 8d 7d b8          	lea    -0x48(%rbp),%rdi
+  17c81b:	ff 15 57 6f 03 00    	call   *0x36f57(%rip)        # 1b3778 <_DYNAMIC+0x900>
+  17c821:	48 8b 45 b8          	mov    -0x48(%rbp),%rax
+  17c825:	48 85 c0             	test   %rax,%rax
+  17c828:	74 10                	je     17c83a <std::thread::spawnhook::run_spawn_hooks+0xba>
+  17c82a:	f0 48 ff 08          	lock decq (%rax)
+  17c82e:	75 0a                	jne    17c83a <std::thread::spawnhook::run_spawn_hooks+0xba>
+  17c830:	48 8d 7d b8          	lea    -0x48(%rbp),%rdi
+  17c834:	ff 15 46 6f 03 00    	call   *0x36f46(%rip)        # 1b3780 <_DYNAMIC+0x908>
+  17c83a:	4c 8b 6d d0          	mov    -0x30(%rbp),%r13
+  17c83e:	4c 89 6d d0          	mov    %r13,-0x30(%rbp)
+  17c842:	b8 08 00 00 00       	mov    $0x8,%eax
+  17c847:	4d 85 ed             	test   %r13,%r13
+  17c84a:	0f 84 f3 00 00 00    	je     17c943 <std::thread::spawnhook::run_spawn_hooks+0x1c3>
+  17c850:	49 8b 5d 20          	mov    0x20(%r13),%rbx
+  17c854:	49 8b 7d 10          	mov    0x10(%r13),%rdi
+  17c858:	49 8b 45 18          	mov    0x18(%r13),%rax
+  17c85c:	48 8b 75 a8          	mov    -0x58(%rbp),%rsi
+  17c860:	ff 50 28             	call   *0x28(%rax)
+  17c863:	49 89 c4             	mov    %rax,%r12
+  17c866:	48 85 c0             	test   %rax,%rax
+  17c869:	0f 84 de 00 00 00    	je     17c94d <std::thread::spawnhook::run_spawn_hooks+0x1cd>
+  17c86f:	49 89 d6             	mov    %rdx,%r14
+  17c872:	4c 89 7d b0          	mov    %r15,-0x50(%rbp)
+  17c876:	ff 15 44 68 03 00    	call   *0x36844(%rip)        # 1b30c0 <_DYNAMIC+0x248>
+  17c87c:	bf 40 00 00 00       	mov    $0x40,%edi
+  17c881:	be 08 00 00 00       	mov    $0x8,%esi
+  17c886:	ff 15 e4 67 03 00    	call   *0x367e4(%rip)        # 1b3070 <_DYNAMIC+0x1f8>
+  17c88c:	48 85 c0             	test   %rax,%rax
+  17c88f:	0f 84 02 01 00 00    	je     17c997 <std::thread::spawnhook::run_spawn_hooks+0x217>
+  17c895:	4c 89 20             	mov    %r12,(%rax)
+  17c898:	4c 89 70 08          	mov    %r14,0x8(%rax)
+  17c89c:	48 c7 45 b8 04 00 00 	movq   $0x4,-0x48(%rbp)
+  17c8a3:	00 
+  17c8a4:	48 89 45 c0          	mov    %rax,-0x40(%rbp)
+  17c8a8:	48 c7 45 c8 01 00 00 	movq   $0x1,-0x38(%rbp)
+  17c8af:	00 
+  17c8b0:	48 85 db             	test   %rbx,%rbx
+  17c8b3:	0f 84 a0 00 00 00    	je     17c959 <std::thread::spawnhook::run_spawn_hooks+0x1d9>
+  17c8b9:	41 bc 01 00 00 00    	mov    $0x1,%r12d
+  17c8bf:	41 bf 18 00 00 00    	mov    $0x18,%r15d
+  17c8c5:	eb 22                	jmp    17c8e9 <std::thread::spawnhook::run_spawn_hooks+0x169>
+  17c8c7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  17c8ce:	00 00 
+  17c8d0:	49 ff c4             	inc    %r12
+  17c8d3:	4e 89 74 38 f8       	mov    %r14,-0x8(%rax,%r15,1)
+  17c8d8:	4a 89 14 38          	mov    %rdx,(%rax,%r15,1)
+  17c8dc:	49 83 c7 10          	add    $0x10,%r15
+  17c8e0:	4c 89 65 c8          	mov    %r12,-0x38(%rbp)
+  17c8e4:	48 85 db             	test   %rbx,%rbx
+  17c8e7:	74 7d                	je     17c966 <std::thread::spawnhook::run_spawn_hooks+0x1e6>
+  17c8e9:	49 89 c5             	mov    %rax,%r13
+  17c8ec:	48 8b 7b 10          	mov    0x10(%rbx),%rdi
+  17c8f0:	48 8b 43 18          	mov    0x18(%rbx),%rax
+  17c8f4:	48 8b 5b 20          	mov    0x20(%rbx),%rbx
+  17c8f8:	48 8b 75 a8          	mov    -0x58(%rbp),%rsi
+  17c8fc:	ff 50 28             	call   *0x28(%rax)
+  17c8ff:	49 89 c6             	mov    %rax,%r14
+  17c902:	48 8b 4d b8          	mov    -0x48(%rbp),%rcx
+  17c906:	48 85 c0             	test   %rax,%rax
+  17c909:	74 5f                	je     17c96a <std::thread::spawnhook::run_spawn_hooks+0x1ea>
+  17c90b:	49 39 cc             	cmp    %rcx,%r12
+  17c90e:	4c 89 e8             	mov    %r13,%rax
+  17c911:	75 bd                	jne    17c8d0 <std::thread::spawnhook::run_spawn_hooks+0x150>
+  17c913:	49 89 d5             	mov    %rdx,%r13
+  17c916:	48 83 fb 01          	cmp    $0x1,%rbx
+  17c91a:	ba 02 00 00 00       	mov    $0x2,%edx
+  17c91f:	48 83 da 00          	sbb    $0x0,%rdx
+  17c923:	b9 08 00 00 00       	mov    $0x8,%ecx
+  17c928:	41 b8 10 00 00 00    	mov    $0x10,%r8d
+  17c92e:	48 8d 7d b8          	lea    -0x48(%rbp),%rdi
+  17c932:	4c 89 e6             	mov    %r12,%rsi
+  17c935:	e8 26 1b 01 00       	call   18e460 <alloc::raw_vec::RawVecInner<A>::reserve::do_reserve_and_handle>
+  17c93a:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
+  17c93e:	4c 89 ea             	mov    %r13,%rdx
+  17c941:	eb 8d                	jmp    17c8d0 <std::thread::spawnhook::run_spawn_hooks+0x150>
+  17c943:	45 31 ed             	xor    %r13d,%r13d
+  17c946:	45 31 e4             	xor    %r12d,%r12d
+  17c949:	31 c9                	xor    %ecx,%ecx
+  17c94b:	eb 29                	jmp    17c976 <std::thread::spawnhook::run_spawn_hooks+0x1f6>
+  17c94d:	45 31 e4             	xor    %r12d,%r12d
+  17c950:	31 c9                	xor    %ecx,%ecx
+  17c952:	b8 08 00 00 00       	mov    $0x8,%eax
+  17c957:	eb 1d                	jmp    17c976 <std::thread::spawnhook::run_spawn_hooks+0x1f6>
+  17c959:	b9 04 00 00 00       	mov    $0x4,%ecx
+  17c95e:	41 bc 01 00 00 00    	mov    $0x1,%r12d
+  17c964:	eb 0c                	jmp    17c972 <std::thread::spawnhook::run_spawn_hooks+0x1f2>
+  17c966:	48 8b 4d b8          	mov    -0x48(%rbp),%rcx
+  17c96a:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
+  17c96e:	4c 8b 6d d0          	mov    -0x30(%rbp),%r13
+  17c972:	4c 8b 7d b0          	mov    -0x50(%rbp),%r15
+  17c976:	4d 89 6f 18          	mov    %r13,0x18(%r15)
+  17c97a:	49 89 0f             	mov    %rcx,(%r15)
+  17c97d:	49 89 47 08          	mov    %rax,0x8(%r15)
+  17c981:	4d 89 67 10          	mov    %r12,0x10(%r15)
+  17c985:	4c 89 f8             	mov    %r15,%rax
+  17c988:	48 83 c4 38          	add    $0x38,%rsp
+  17c98c:	5b                   	pop    %rbx
+  17c98d:	41 5c                	pop    %r12
+  17c98f:	41 5d                	pop    %r13
+  17c991:	41 5e                	pop    %r14
+  17c993:	41 5f                	pop    %r15
+  17c995:	5d                   	pop    %rbp
+  17c996:	c3                   	ret
+
+/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000000e0450 <std::thread::lifecycle::spawn_unchecked>:
+   e0450:	55                   	push   %rbp
+   e0451:	41 57                	push   %r15
+   e0453:	41 56                	push   %r14
+   e0455:	41 55                	push   %r13
+   e0457:	41 54                	push   %r12
+   e0459:	53                   	push   %rbx
+   e045a:	48 83 ec 58          	sub    $0x58,%rsp
+   e045e:	4d 89 ce             	mov    %r9,%r14
+   e0461:	44 89 c5             	mov    %r8d,%ebp
+   e0464:	49 89 cf             	mov    %rcx,%r15
+   e0467:	49 89 f4             	mov    %rsi,%r12
+   e046a:	48 89 fb             	mov    %rdi,%rbx
+   e046d:	49 bd 00 00 00 00 00 	movabs $0x8000000000000000,%r13
+   e0474:	00 00 80 
+   e0477:	f6 c2 01             	test   $0x1,%dl
+   e047a:	0f 85 b5 00 00 00    	jne    e0535 <std::thread::lifecycle::spawn_unchecked+0xe5>
+   e0480:	48 8b 05 b9 32 0d 00 	mov    0xd32b9(%rip),%rax        # 1b3740 <_DYNAMIC+0x8c8>
+   e0487:	4c 8b 38             	mov    (%rax),%r15
+   e048a:	4d 85 ff             	test   %r15,%r15
+   e048d:	74 08                	je     e0497 <std::thread::lifecycle::spawn_unchecked+0x47>
+   e048f:	49 ff cf             	dec    %r15
+   e0492:	e9 9e 00 00 00       	jmp    e0535 <std::thread::lifecycle::spawn_unchecked+0xe5>
+   e0497:	48 8d 35 52 29 f3 ff 	lea    -0xcd6ae(%rip),%rsi        # 12df0 <anon.1692d321824d4abb5fef0b044e25bd26.0.llvm.13175087503581227892+0x3c>
+   e049e:	48 89 e7             	mov    %rsp,%rdi
+   e04a1:	ba 0e 00 00 00       	mov    $0xe,%edx
+   e04a6:	ff 15 9c 32 0d 00    	call   *0xd329c(%rip)        # 1b3748 <_DYNAMIC+0x8d0>
+   e04ac:	48 8b 04 24          	mov    (%rsp),%rax
+   e04b0:	41 bf 00 00 20 00    	mov    $0x200000,%r15d
+   e04b6:	4c 39 e8             	cmp    %r13,%rax
+   e04b9:	74 6c                	je     e0527 <std::thread::lifecycle::spawn_unchecked+0xd7>
+   e04bb:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+   e04c0:	4c 8b 7c 24 08       	mov    0x8(%rsp),%r15
+   e04c5:	48 8b 54 24 10       	mov    0x10(%rsp),%rdx
+   e04ca:	48 8d 7c 24 20       	lea    0x20(%rsp),%rdi
+   e04cf:	4c 89 fe             	mov    %r15,%rsi
+   e04d2:	ff 15 18 2f 0d 00    	call   *0xd2f18(%rip)        # 1b33f0 <_DYNAMIC+0x578>
+   e04d8:	83 7c 24 20 01       	cmpl   $0x1,0x20(%rsp)
+   e04dd:	74 2a                	je     e0509 <std::thread::lifecycle::spawn_unchecked+0xb9>
+   e04df:	48 8b 4c 24 30       	mov    0x30(%rsp),%rcx
+   e04e4:	48 85 c9             	test   %rcx,%rcx
+   e04e7:	74 20                	je     e0509 <std::thread::lifecycle::spawn_unchecked+0xb9>
+   e04e9:	48 8b 74 24 28       	mov    0x28(%rsp),%rsi
+   e04ee:	48 83 f9 01          	cmp    $0x1,%rcx
+   e04f2:	0f 85 d7 01 00 00    	jne    e06cf <std::thread::lifecycle::spawn_unchecked+0x27f>
+   e04f8:	0f b6 06             	movzbl (%rsi),%eax
+   e04fb:	83 f8 2b             	cmp    $0x2b,%eax
+   e04fe:	74 09                	je     e0509 <std::thread::lifecycle::spawn_unchecked+0xb9>
+   e0500:	83 f8 2d             	cmp    $0x2d,%eax
+   e0503:	0f 85 c9 01 00 00    	jne    e06d2 <std::thread::lifecycle::spawn_unchecked+0x282>
+   e0509:	4c 89 ff             	mov    %r15,%rdi
+   e050c:	41 bf 00 00 20 00    	mov    $0x200000,%r15d
+   e0512:	48 8b 74 24 18       	mov    0x18(%rsp),%rsi
+   e0517:	48 85 f6             	test   %rsi,%rsi
+   e051a:	74 0b                	je     e0527 <std::thread::lifecycle::spawn_unchecked+0xd7>
+   e051c:	ba 01 00 00 00       	mov    $0x1,%edx
+   e0521:	ff 15 51 2b 0d 00    	call   *0xd2b51(%rip)        # 1b3078 <_DYNAMIC+0x200>
+   e0527:	49 8d 47 01          	lea    0x1(%r15),%rax
+   e052b:	48 8b 0d 0e 32 0d 00 	mov    0xd320e(%rip),%rcx        # 1b3740 <_DYNAMIC+0x8c8>
+   e0532:	48 89 01             	mov    %rax,(%rcx)
+   e0535:	ff 15 15 32 0d 00    	call   *0xd3215(%rip)        # 1b3750 <_DYNAMIC+0x8d8>
+   e053b:	48 89 c7             	mov    %rax,%rdi
+   e053e:	4c 89 e6             	mov    %r12,%rsi
+   e0541:	ff 15 11 32 0d 00    	call   *0xd3211(%rip)        # 1b3758 <_DYNAMIC+0x8e0>
+   e0547:	48 89 04 24          	mov    %rax,(%rsp)
+   e054b:	40 84 ed             	test   %bpl,%bpl
+   e054e:	74 1c                	je     e056c <std::thread::lifecycle::spawn_unchecked+0x11c>
+   e0550:	48 c7 44 24 38 00 00 	movq   $0x0,0x38(%rsp)
+   e0557:	00 00 
+   e0559:	48 c7 44 24 40 08 00 	movq   $0x8,0x40(%rsp)
+   e0560:	00 00 
+   e0562:	0f 57 c0             	xorps  %xmm0,%xmm0
+   e0565:	0f 11 44 24 48       	movups %xmm0,0x48(%rsp)
+   e056a:	eb 0e                	jmp    e057a <std::thread::lifecycle::spawn_unchecked+0x12a>
+   e056c:	48 8d 7c 24 38       	lea    0x38(%rsp),%rdi
+   e0571:	48 89 e6             	mov    %rsp,%rsi
+   e0574:	ff 15 e6 31 0d 00    	call   *0xd31e6(%rip)        # 1b3760 <_DYNAMIC+0x8e8>

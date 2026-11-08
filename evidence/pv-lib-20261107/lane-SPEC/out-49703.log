@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ToVec.lean:137:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_STX2_ToVecCallSummary.execution (fun {A} => resources) (fun {A} => encode) m e 10
+in the target expression
+  execution (fun {A} {A} => resources) (fun {A} {A} => encode) m e 10 =
+    { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events }
+
+resources : Resources
+encode : Encode
+m : Machine
+e : Entry
+base : Carrier PV_STX_World.World Data
+ctrl : Control
+external : PV_W5_NoAllocShim.External
+backend : PV_W5_NativeFrame.Backend
+machine : MachineSpec m base ctrl external backend
+c : Config
+w : OWNER
+events : List PV_RJ4IDB.NativeEvent
+waiting : PV_STX2_Native.Waiting Data
+left✝¹ : c.frame.completed = none
+hw : c.frame.waiting = some waiting
+dispatch :
+  match waiting.request with
+  | PV_STX2_Native.Request.child callee activation captures => m.programs callee = none
+  | x => True
+left✝ :
+  (PV_STX2_Source7IterationHandler.handler (fun {A} {A} => resources) (fun {A} {A} => encode) c m.handler
+        waiting.request w).answer =
+    Answer.pending
+fuel : 11 = 10 + 1
+reached :
+  execution (fun {A} {A} => resources) (fun {A} {A} => encode) m e 10 =
+    { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events }
+right✝ :
+  execution (fun {A} => resources) (fun {A} => encode) m e 11 =
+    execution (fun {A} {A} => resources) (fun {A} {A} => encode) m e (10 + 1)
+actual :
+  PV_STX2_ToVecCallSummary.execution (fun {A} => resources) (fun {A} => encode) m e 10 =
+    { status := PV_STX2_SliceMachine.Status.running (PV_STX2_ToVecCallSummary.calledEntry e),
+      world := PV_STX2_ToVecCallRegister.registered e.owner (PV_STX2_ToVecCallSummary.start e).frame.activation,
+      events := e.prior }
+⊢ False
+'PV_LIB_SPEC_ToVec.Pre' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_ToVec.MachineSpec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.Post' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.Contract' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.pre_same' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_ToVec.pending_implies_old' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.no_false_pending11' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.first_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ToVec.abort_prefix' depends on axioms: [propext]

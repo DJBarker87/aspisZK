@@ -1,0 +1,71 @@
+def PV_STX2_Native.reply : {W E V : Type} →
+  PV_STX2_Store.Carrier W V →
+    PV_STX2_Native.Config V → PV_STX2_Native.Waiting V → PV_STX_Machine.Reply W E V → PV_STX2_Native.Prefix W E V :=
+fun {W E V} carrier c waiting r =>
+  have status :=
+    match r.answer with
+    | PV_STX_Machine.Answer.pending => PV_STX2_Native.Status.running c
+    | PV_STX_Machine.Answer.returned (Aeneas.Std.Result.ok value) =>
+      match PV_STX2_Native.storeResult carrier c r.world waiting.action value with
+      | some s =>
+        PV_STX2_Native.Status.running
+          { activation := c.activation, remaining := c.remaining, store := s, unwinding := c.unwinding }
+      | none => PV_STX2_Native.Status.undefined none
+    | PV_STX_Machine.Answer.returned (Aeneas.Std.Result.fail e) =>
+      PV_STX2_Native.Status.returned (Aeneas.Std.Result.fail e)
+    | PV_STX_Machine.Answer.returned Aeneas.Std.Result.div => PV_STX2_Native.Status.returned Aeneas.Std.Result.div
+    | PV_STX_Machine.Answer.fault PV_STX_Machine.Fault.panic =>
+      match waiting.unwind with
+      | [] => PV_STX2_Native.Status.fault PV_STX_Machine.Fault.panic
+      | head :: tail =>
+        PV_STX2_Native.Status.running
+          { activation := c.activation, remaining := waiting.unwind, store := c.store,
+            unwinding := some PV_STX_Machine.Fault.panic }
+    | PV_STX_Machine.Answer.fault f => PV_STX2_Native.Status.fault f;
+  { status := status, world := r.world, events := r.events }
+def PV_STX2_Native.storeResult : {W V : Type} →
+  PV_STX2_Store.Carrier W V →
+    PV_STX2_Native.Config V → W → PV_STX2_Native.ReturnAction → V → Option (PV_STX2_Store.Store V) :=
+fun {W V} carrier c w action value =>
+  match action with
+  | PV_STX2_Native.ReturnAction.copied => some c.store
+  | PV_STX2_Native.ReturnAction.dropped place => do
+    let address ← PV_STX2_Store.locate carrier c.store w c.activation place
+    PV_STX2_Store.writeAddress carrier c.store address none
+  | PV_STX2_Native.ReturnAction.child a destination =>
+    have s := PV_STX2_Store.write c.store { activation := a, localIndex := 0 } (some value);
+    do
+    let address ← PV_STX2_Store.locate carrier s w c.activation destination
+    PV_STX2_Store.writeAddress carrier s address (some value)
+def PV_STX2_Pinned.reply : {W E V : Type} →
+  PV_STX2_Store.Carrier W V →
+    PV_STX2_Native.Config V → PV_STX2_Native.Waiting V → PV_STX_Machine.Reply W E V → PV_STX2_Native.Prefix W E V :=
+fun {W E V} carrier c waiting r => PV_STX2_Native.reply carrier c waiting (PV_STX2_Pinned.eraseReply r)
+def PV_STX2_SliceMachine.adopt : {W E : Type} →
+  PV_STX2_SliceMachine.Config →
+    List PV_STX2_SliceSyntax.Node → PV_STX2_Native.Prefix W E PV_STX2_Syntax.Data → PV_STX2_SliceMachine.Prefix W E :=
+fun {W E} c rest p =>
+  have status :=
+    match p.status with
+    | PV_STX2_Native.Status.running d =>
+      PV_STX2_SliceMachine.Status.running
+        {
+          frame :=
+            have __src := c.frame;
+            { activation := __src.activation, remaining := rest, loops := __src.loops, waiting := d.waiting,
+              unwinding := d.unwinding, completed := __src.completed },
+          callers := c.callers, store := d.store }
+    | PV_STX2_Native.Status.returned r =>
+      match c.callers with
+      | [] => PV_STX2_SliceMachine.Status.returned r c.store
+      | head :: tail =>
+        PV_STX2_SliceMachine.Status.running
+          {
+            frame :=
+              have __src := c.frame;
+              { activation := __src.activation, remaining := __src.remaining, loops := __src.loops,
+                waiting := __src.waiting, unwinding := __src.unwinding, completed := some r },
+            callers := c.callers, store := c.store }
+    | PV_STX2_Native.Status.fault f => PV_STX2_SliceMachine.Status.fault f c.store
+    | PV_STX2_Native.Status.undefined site => PV_STX2_SliceMachine.Status.undefined site c.store;
+  { status := status, world := p.world, events := p.events }
