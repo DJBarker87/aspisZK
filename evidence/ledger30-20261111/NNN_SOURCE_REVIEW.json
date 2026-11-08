@@ -1,0 +1,1333 @@
+{
+ "status": "PASS",
+ "fission_associations": [
+  {
+   "row": "TX2:240",
+   "frozen_sha256": "b594cc9ef9c0d28333e9dacdf06f1aefe4b98fe11710bbb58afa2f5baedeffda",
+   "fission_sha256": "af109d88eb3a68eba613277d2f7cda6ac1940349bb1ad5f1f04e682bc62a1fec",
+   "transforms": [
+    [
+     "W::clock_get(log)",
+     "Clock::get()"
+    ],
+    [
+     "W::set_return_data(log, ",
+     "program::set_return_data("
+    ],
+    [
+     "W::stage2_owned(log, ",
+     "stage2_owned("
+    ],
+    [
+     "W::snapshot(log, ",
+     "snapshot("
+    ]
+   ],
+   "exact_after_whitespace_and_optional_trailing_commas": true
+  },
+  {
+   "row": "TX1:344",
+   "frozen_sha256": "34414a1a05b8beca445d8e93a5e481aa0169a1b9ab545c154f9ce379487d8f53",
+   "fission_sha256": "d19df0874ebf6b4410daed7427ea34268f233175534a159ac26eb9a8c1525867",
+   "transforms": [
+    [
+     "W::try_borrow_mut_data(log, &accounts[2])?.copy_from_slice(log, &checkpoint)",
+     "accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint)"
+    ],
+    [
+     "W::stage1_owned(log, ",
+     "stage1_owned("
+    ],
+    [
+     "W::snapshot(log, ",
+     "snapshot("
+    ]
+   ],
+   "exact_after_whitespace_and_optional_trailing_commas": true
+  }
+ ],
+ "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+ "fission_hash_linked": true,
+ "controls": {
+  "status": "REQUIRED_PARENT_ARGUMENT_CONTROLS_FAIL",
+  "pairs": [
+   {
+    "row": "TX2:240",
+    "positive_reused": "NMV_K035",
+    "negative": "NMV_K063",
+    "negative_assertion": "l.count == 7",
+    "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+    "same_frozen_and_fission_sources": true,
+    "exact_archived_positive_harness_prefix": true,
+    "same_kani_command_and_rust_environment": true,
+    "lean_only_path_extension": "NNC seed prepended after original passes; not consumed by cargo-kani",
+    "same_all_crate_features": true,
+    "lock_unchanged": true,
+    "receiver": "unmodified Log<0>",
+    "mutation": "parent child call argument &owned -> &owned[1..]",
+    "credit": "required parent argument control; no unchanged passing rerun"
+   },
+   {
+    "row": "TX1:344",
+    "positive_reused": "NMV_K041",
+    "negative": "NMV_K064",
+    "negative_assertion": "l.count == 3",
+    "fission_sha256": "9824c8ffc6be3668c642a83d3a899f8faff78506b514c595a2c57c9deb3aebbf",
+    "same_frozen_and_fission_sources": true,
+    "exact_archived_positive_harness_prefix": true,
+    "same_kani_command_and_rust_environment": true,
+    "lean_only_path_extension": "NNC seed prepended after original passes; not consumed by cargo-kani",
+    "same_all_crate_features": true,
+    "lock_unchanged": true,
+    "receiver": "unmodified Log<0>",
+    "mutation": "parent child call argument &owned -> &owned[1..]",
+    "credit": "required parent argument control; no unchanged passing rerun"
+   }
+  ],
+  "mutant_sha256": "8fc244d44e8dc57246848b0a564003b242aeb0be7f0856a0e8b5347181bb0bb3",
+  "kmx_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "excluded_receiver_controls": [
+   "NMV_K037",
+   "NMV_K043",
+   "NMV_K049",
+   "NMV_K053"
+  ],
+  "new_kani_used": 4,
+  "supplementary_controls": {
+   "NMV_K061": "FAIL later descriptor receiver; superseded for exact K035 match",
+   "NMV_K062": "FAIL later descriptor receiver; superseded for exact K041 match"
+  }
+ },
+ "emitted_audit": {
+  "status": "PASS",
+  "raw_parameterization": "exact normalized bodies after enumerated substitutions; no template axiom compiled",
+  "process_fresh_emissions_equal": true,
+  "extractions": [
+   {
+    "extraction": "entry",
+    "raw_sha256": "5b54ed0c779e07faf17ebd3ccc6af792dc1009caabc63d09cf7a40495c31a323",
+    "loop_audit": "PASS: neither body nor transparent primitive has a loop; all returned branch values preserved",
+    "pool_in_selected_closure": false,
+    "features": {
+     "sha2": [
+      "default",
+      "std"
+     ],
+     "crypto-common": [
+      "std"
+     ],
+     "indexmap": [
+      "default",
+      "std"
+     ],
+     "num-integer": [
+      "i128",
+      "std"
+     ],
+     "solana-cpi": [],
+     "unicode-ident": [],
+     "proc-macro2": [
+      "default",
+      "proc-macro"
+     ],
+     "solana-sdk-ids": [],
+     "rand": [
+      "alloc",
+      "default",
+      "getrandom",
+      "libc",
+      "rand_chacha",
+      "std",
+      "std_rng"
+     ],
+     "libsecp256k1": [
+      "hmac",
+      "hmac-drbg",
+      "sha2",
+      "static-context",
+      "std",
+      "typenum"
+     ],
+     "base64": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "rand_chacha": [
+      "std"
+     ],
+     "feature-probe": [],
+     "lock_api": [
+      "atomic_usize",
+      "default"
+     ],
+     "arrayvec": [],
+     "serde": [
+      "alloc",
+      "default",
+      "derive",
+      "serde_derive",
+      "std"
+     ],
+     "solana-blake3-hasher": [
+      "blake3"
+     ],
+     "solana-program-option": [],
+     "hmac": [],
+     "futures-core": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "once_cell": [
+      "alloc",
+      "default",
+      "race",
+      "std"
+     ],
+     "shlex": [
+      "default",
+      "std"
+     ],
+     "solana-fee-calculator": [
+      "serde"
+     ],
+     "wasm-bindgen-shared": [],
+     "bytemuck": [
+      "bytemuck_derive",
+      "derive"
+     ],
+     "typenum": [],
+     "solana-last-restart-slot": [
+      "serde",
+      "sysvar"
+     ],
+     "tinyvec_macros": [],
+     "libsecp256k1-gen-genmult": [],
+     "zeroize_derive": [],
+     "solana-loader-v4-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cfg_aliases": [],
+     "aspis-r0-block-writer-copies": [],
+     "solana-slot-hashes": [
+      "serde",
+      "sysvar"
+     ],
+     "thiserror-impl": [],
+     "quote": [
+      "default",
+      "proc-macro"
+     ],
+     "solana-stake-interface": [
+      "bincode",
+      "borsh",
+      "serde"
+     ],
+     "solana-sysvar-id": [],
+     "borsh-derive": [
+      "default",
+      "schema"
+     ],
+     "futures-util": [
+      "alloc",
+      "futures-io",
+      "futures-sink",
+      "io",
+      "memchr",
+      "sink",
+      "slab",
+      "std"
+     ],
+     "toml_edit": [
+      "default",
+      "display",
+      "parse"
+     ],
+     "thiserror": [
+      "default",
+      "std"
+     ],
+     "solana-loader-v3-interface": [
+      "bincode",
+      "serde"
+     ],
+     "aspis-core": [
+      "r0"
+     ],
+     "ahash": [
+      "default",
+      "getrandom",
+      "runtime-rng",
+      "std"
+     ],
+     "zeroize": [
+      "alloc",
+      "default",
+      "zeroize_derive"
+     ],
+     "aspis-r0-writer-copies": [],
+     "autocfg": [],
+     "num-derive": [],
+     "toml_write": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "solana-account-info": [
+      "bincode"
+     ],
+     "version_check": [],
+     "solana-pubkey": [
+      "borsh",
+      "bytemuck",
+      "curve25519",
+      "rand",
+      "serde",
+      "sha2",
+      "std"
+     ],
+     "aspis-statement": [
+      "pool-v1-kernel",
+      "pool-v1-pair-forest-active-mask-basis-audit",
+      "pool-v1-pair-forest-binary-copy-weights-audit",
+      "pool-v1-pair-forest-copy-finish-dot-basis-audit",
+      "pool-v1-pair-forest-copy-pattern-basis-audit",
+      "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+      "pool-v1-pair-forest-copy-tag-dot-basis-audit",
+      "pool-v1-pair-forest-endpoint-selector-cache-audit",
+      "pool-v1-pair-forest-packed-digest-audit",
+      "pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+      "pool-v1-pair-forest-packed-range-audit",
+      "pool-v1-pair-forest-pattern-window-audit",
+      "pool-v1-pair-forest-semantic-factor-audit",
+      "r0",
+      "spend-dynamic-rate512"
+     ],
+     "r-efi": [],
+     "futures-task": [
+      "alloc",
+      "std"
+     ],
+     "serde_core": [
+      "alloc",
+      "result",
+      "std"
+     ],
+     "console_log": [
+      "default"
+     ],
+     "bitflags": [
+      "serde",
+      "serde_core",
+      "std"
+     ],
+     "web-sys": [
+      "AbortController",
+      "AbortSignal",
+      "Blob",
+      "BlobPropertyBag",
+      "EventTarget",
+      "File",
+      "FormData",
+      "Headers",
+      "ReadableStream",
+      "Request",
+      "RequestCache",
+      "RequestCredentials",
+      "RequestInit",
+      "RequestMode",
+      "Response",
+      "ServiceWorkerGlobalScope",
+      "Window",
+      "WorkerGlobalScope",
+      "console",
+      "default",
+      "std"
+     ],
+     "solana-rent": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-atomic-u64": [],
+     "crunchy": [
+      "default",
+      "limit_128"
+     ],
+     "toml": [
+      "default"
+     ],
+     "aspis-r0-poseidon-copy": [],
+     "wasi": [
+      "default",
+      "std"
+     ],
+     "aspis-r1-cost-probe": [
+      "default",
+      "optimized-terminal",
+      "private-leaf-salts",
+      "program-build"
+     ],
+     "solana-address-lookup-table-interface": [
+      "bincode",
+      "bytemuck",
+      "serde"
+     ],
+     "rand_core": [
+      "alloc",
+      "getrandom",
+      "std"
+     ],
+     "smallvec": [
+      "const_generics",
+      "const_new"
+     ],
+     "solana-program-memory": [],
+     "redox_syscall": [
+      "default",
+      "userspace"
+     ],
+     "serde_derive": [
+      "default"
+     ],
+     "rustc_version": [],
+     "bytemuck_derive": [],
+     "serde_bytes": [
+      "default",
+      "std"
+     ],
+     "console_error_panic_hook": [],
+     "solana-bincode": [],
+     "wasm-bindgen-macro": [],
+     "winnow": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "solana-borsh": [],
+     "solana-serde-varint": [],
+     "solana-program-pack": [],
+     "lazy_static": [],
+     "scopeguard": [],
+     "solana-short-vec": [],
+     "wit-bindgen": [],
+     "memoffset": [
+      "default"
+     ],
+     "pin-project-lite": [],
+     "solana-program": [
+      "borsh",
+      "default"
+     ],
+     "bincode": [],
+     "five8_core": [],
+     "futures-sink": [],
+     "solana-serialize-utils": [],
+     "cpufeatures": [],
+     "libsecp256k1-core": [
+      "default",
+      "std"
+     ],
+     "borsh": [
+      "borsh-derive",
+      "default",
+      "derive",
+      "std",
+      "unstable__schema"
+     ],
+     "block-buffer": [],
+     "solana-secp256k1-recover": [
+      "borsh"
+     ],
+     "solana-program-error": [
+      "borsh",
+      "serde"
+     ],
+     "solana-decode-error": [],
+     "itoa": [],
+     "semver": [
+      "default",
+      "std"
+     ],
+     "solana-nonce": [
+      "serde"
+     ],
+     "five8_const": [],
+     "solana-instructions-sysvar": [],
+     "solana-native-token": [],
+     "solana-feature-gate-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cc": [],
+     "proc-macro-crate": [],
+     "parking_lot_core": [],
+     "hmac-drbg": [],
+     "solana-sha256-hasher": [
+      "sha2"
+     ],
+     "arrayref": [],
+     "solana-loader-v2-interface": [
+      "bincode",
+      "serde"
+     ],
+     "log": [
+      "std"
+     ],
+     "solana-clock": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-keccak-hasher": [
+      "sha3"
+     ],
+     "serde_json": [
+      "default",
+      "std"
+     ],
+     "blake3": [
+      "default",
+      "std",
+      "traits-preview"
+     ],
+     "toml_datetime": [],
+     "bumpalo": [
+      "default"
+     ],
+     "digest": [
+      "alloc",
+      "std"
+     ],
+     "wasm-bindgen-macro-support": [],
+     "tinyvec": [
+      "alloc",
+      "default",
+      "grab_spare_slice",
+      "tinyvec_macros"
+     ],
+     "constant_time_eq": [],
+     "curve25519-dalek": [
+      "alloc",
+      "default",
+      "digest",
+      "precomputed-tables",
+      "rand_core",
+      "zeroize"
+     ],
+     "five8": [],
+     "slab": [
+      "default",
+      "std"
+     ],
+     "aspis-r1-cost-probe-program": [
+      "custom-heap",
+      "default",
+      "pool-adapter",
+      "private-leaf-salts"
+     ],
+     "zerocopy": [
+      "simd"
+     ],
+     "num-bigint": [
+      "default",
+      "std"
+     ],
+     "solana-sdk-macro": [],
+     "solana-example-mocks": [],
+     "libc": [
+      "default",
+      "std"
+     ],
+     "wasip2": [],
+     "windows-link": [],
+     "memchr": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "find-msvc-tools": [],
+     "opaque-debug": [],
+     "curve25519-dalek-derive": [],
+     "solana-epoch-rewards": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-transaction-error": [
+      "serde"
+     ],
+     "solana-sysvar": [
+      "bincode",
+      "bytemuck",
+      "serde"
+     ],
+     "solana-slot-history": [
+      "serde",
+      "sysvar"
+     ],
+     "keccak": [],
+     "subtle": [
+      "std"
+     ],
+     "wasm-bindgen": [
+      "default",
+      "std"
+     ],
+     "syn": [
+      "clone-impls",
+      "default",
+      "derive",
+      "extra-traits",
+      "fold",
+      "full",
+      "parsing",
+      "printing",
+      "proc-macro",
+      "quote",
+      "visit"
+     ],
+     "fiat-crypto": [],
+     "solana-system-interface": [
+      "bincode",
+      "serde"
+     ],
+     "zmij": [],
+     "solana-hash": [
+      "borsh",
+      "bytemuck",
+      "serde",
+      "std"
+     ],
+     "solana-msg": [],
+     "borsh-schema-derive-internal": [],
+     "getrandom": [
+      "bindgen",
+      "js-sys",
+      "std",
+      "wasm-bindgen"
+     ],
+     "rand_hc": [],
+     "num-traits": [
+      "default",
+      "i128",
+      "std"
+     ],
+     "ppv-lite86": [
+      "simd",
+      "std"
+     ],
+     "bv": [
+      "serde"
+     ],
+     "zerocopy-derive": [],
+     "equivalent": [],
+     "hashbrown": [
+      "ahash",
+      "default",
+      "inline-more"
+     ],
+     "solana-instruction": [
+      "bincode",
+      "borsh",
+      "default",
+      "serde",
+      "std",
+      "syscalls"
+     ],
+     "generic-array": [
+      "more_lengths"
+     ],
+     "js-sys": [
+      "default",
+      "std",
+      "unsafe-eval"
+     ],
+     "rustversion": [],
+     "parking_lot": [
+      "default"
+     ],
+     "borsh-derive-internal": [],
+     "futures-io": [
+      "std"
+     ],
+     "solana-account": [
+      "bincode",
+      "serde"
+     ],
+     "solana-stable-layout": [],
+     "solana-sanitize": [],
+     "solana-epoch-schedule": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-define-syscall": [],
+     "crypto-mac": [],
+     "sha3": [
+      "default",
+      "std"
+     ],
+     "bs58": [
+      "alloc"
+     ],
+     "solana-vote-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cfg-if": [],
+     "solana-program-entrypoint": [],
+     "solana-big-mod-exp": [],
+     "solana-message": [
+      "bincode",
+      "blake3",
+      "serde"
+     ],
+     "libsecp256k1-gen-ecmult": []
+    }
+   },
+   {
+    "extraction": "process",
+    "raw_sha256": "ac3b478eb81370ffcf7411677697c04e2bb3b308f58690c0500989a2b3dfed79",
+    "loop_audit": "PASS: neither body nor transparent primitive has a loop; all returned branch values preserved",
+    "pool_in_selected_closure": false,
+    "features": {
+     "sha2": [
+      "default",
+      "std"
+     ],
+     "crypto-common": [
+      "std"
+     ],
+     "indexmap": [
+      "default",
+      "std"
+     ],
+     "num-integer": [
+      "i128",
+      "std"
+     ],
+     "solana-cpi": [],
+     "unicode-ident": [],
+     "proc-macro2": [
+      "default",
+      "proc-macro"
+     ],
+     "solana-sdk-ids": [],
+     "rand": [
+      "alloc",
+      "default",
+      "getrandom",
+      "libc",
+      "rand_chacha",
+      "std",
+      "std_rng"
+     ],
+     "libsecp256k1": [
+      "hmac",
+      "hmac-drbg",
+      "sha2",
+      "static-context",
+      "std",
+      "typenum"
+     ],
+     "base64": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "rand_chacha": [
+      "std"
+     ],
+     "feature-probe": [],
+     "lock_api": [
+      "atomic_usize",
+      "default"
+     ],
+     "arrayvec": [],
+     "serde": [
+      "alloc",
+      "default",
+      "derive",
+      "serde_derive",
+      "std"
+     ],
+     "solana-blake3-hasher": [
+      "blake3"
+     ],
+     "solana-program-option": [],
+     "hmac": [],
+     "futures-core": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "once_cell": [
+      "alloc",
+      "default",
+      "race",
+      "std"
+     ],
+     "shlex": [
+      "default",
+      "std"
+     ],
+     "solana-fee-calculator": [
+      "serde"
+     ],
+     "wasm-bindgen-shared": [],
+     "bytemuck": [
+      "bytemuck_derive",
+      "derive"
+     ],
+     "typenum": [],
+     "solana-last-restart-slot": [
+      "serde",
+      "sysvar"
+     ],
+     "tinyvec_macros": [],
+     "libsecp256k1-gen-genmult": [],
+     "zeroize_derive": [],
+     "solana-loader-v4-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cfg_aliases": [],
+     "aspis-r0-block-writer-copies": [],
+     "solana-slot-hashes": [
+      "serde",
+      "sysvar"
+     ],
+     "thiserror-impl": [],
+     "quote": [
+      "default",
+      "proc-macro"
+     ],
+     "solana-stake-interface": [
+      "bincode",
+      "borsh",
+      "serde"
+     ],
+     "solana-sysvar-id": [],
+     "borsh-derive": [
+      "default",
+      "schema"
+     ],
+     "futures-util": [
+      "alloc",
+      "futures-io",
+      "futures-sink",
+      "io",
+      "memchr",
+      "sink",
+      "slab",
+      "std"
+     ],
+     "toml_edit": [
+      "default",
+      "display",
+      "parse"
+     ],
+     "thiserror": [
+      "default",
+      "std"
+     ],
+     "solana-loader-v3-interface": [
+      "bincode",
+      "serde"
+     ],
+     "aspis-core": [
+      "r0"
+     ],
+     "ahash": [
+      "default",
+      "getrandom",
+      "runtime-rng",
+      "std"
+     ],
+     "zeroize": [
+      "alloc",
+      "default",
+      "zeroize_derive"
+     ],
+     "aspis-r0-writer-copies": [],
+     "autocfg": [],
+     "num-derive": [],
+     "toml_write": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "solana-account-info": [
+      "bincode"
+     ],
+     "version_check": [],
+     "solana-pubkey": [
+      "borsh",
+      "bytemuck",
+      "curve25519",
+      "rand",
+      "serde",
+      "sha2",
+      "std"
+     ],
+     "aspis-statement": [
+      "pool-v1-kernel",
+      "pool-v1-pair-forest-active-mask-basis-audit",
+      "pool-v1-pair-forest-binary-copy-weights-audit",
+      "pool-v1-pair-forest-copy-finish-dot-basis-audit",
+      "pool-v1-pair-forest-copy-pattern-basis-audit",
+      "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+      "pool-v1-pair-forest-copy-tag-dot-basis-audit",
+      "pool-v1-pair-forest-endpoint-selector-cache-audit",
+      "pool-v1-pair-forest-packed-digest-audit",
+      "pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+      "pool-v1-pair-forest-packed-range-audit",
+      "pool-v1-pair-forest-pattern-window-audit",
+      "pool-v1-pair-forest-semantic-factor-audit",
+      "r0",
+      "spend-dynamic-rate512"
+     ],
+     "r-efi": [],
+     "futures-task": [
+      "alloc",
+      "std"
+     ],
+     "serde_core": [
+      "alloc",
+      "result",
+      "std"
+     ],
+     "console_log": [
+      "default"
+     ],
+     "bitflags": [
+      "serde",
+      "serde_core",
+      "std"
+     ],
+     "web-sys": [
+      "AbortController",
+      "AbortSignal",
+      "Blob",
+      "BlobPropertyBag",
+      "EventTarget",
+      "File",
+      "FormData",
+      "Headers",
+      "ReadableStream",
+      "Request",
+      "RequestCache",
+      "RequestCredentials",
+      "RequestInit",
+      "RequestMode",
+      "Response",
+      "ServiceWorkerGlobalScope",
+      "Window",
+      "WorkerGlobalScope",
+      "console",
+      "default",
+      "std"
+     ],
+     "solana-rent": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-atomic-u64": [],
+     "crunchy": [
+      "default",
+      "limit_128"
+     ],
+     "toml": [
+      "default"
+     ],
+     "aspis-r0-poseidon-copy": [],
+     "wasi": [
+      "default",
+      "std"
+     ],
+     "aspis-r1-cost-probe": [
+      "default",
+      "optimized-terminal",
+      "private-leaf-salts",
+      "program-build"
+     ],
+     "solana-address-lookup-table-interface": [
+      "bincode",
+      "bytemuck",
+      "serde"
+     ],
+     "rand_core": [
+      "alloc",
+      "getrandom",
+      "std"
+     ],
+     "smallvec": [
+      "const_generics",
+      "const_new"
+     ],
+     "solana-program-memory": [],
+     "redox_syscall": [
+      "default",
+      "userspace"
+     ],
+     "serde_derive": [
+      "default"
+     ],
+     "rustc_version": [],
+     "bytemuck_derive": [],
+     "serde_bytes": [
+      "default",
+      "std"
+     ],
+     "console_error_panic_hook": [],
+     "solana-bincode": [],
+     "wasm-bindgen-macro": [],
+     "winnow": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "solana-borsh": [],
+     "solana-serde-varint": [],
+     "solana-program-pack": [],
+     "lazy_static": [],
+     "scopeguard": [],
+     "solana-short-vec": [],
+     "wit-bindgen": [],
+     "memoffset": [
+      "default"
+     ],
+     "pin-project-lite": [],
+     "solana-program": [
+      "borsh",
+      "default"
+     ],
+     "bincode": [],
+     "five8_core": [],
+     "futures-sink": [],
+     "solana-serialize-utils": [],
+     "cpufeatures": [],
+     "libsecp256k1-core": [
+      "default",
+      "std"
+     ],
+     "borsh": [
+      "borsh-derive",
+      "default",
+      "derive",
+      "std",
+      "unstable__schema"
+     ],
+     "block-buffer": [],
+     "solana-secp256k1-recover": [
+      "borsh"
+     ],
+     "solana-program-error": [
+      "borsh",
+      "serde"
+     ],
+     "solana-decode-error": [],
+     "itoa": [],
+     "semver": [
+      "default",
+      "std"
+     ],
+     "solana-nonce": [
+      "serde"
+     ],
+     "five8_const": [],
+     "solana-instructions-sysvar": [],
+     "solana-native-token": [],
+     "solana-feature-gate-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cc": [],
+     "proc-macro-crate": [],
+     "parking_lot_core": [],
+     "hmac-drbg": [],
+     "solana-sha256-hasher": [
+      "sha2"
+     ],
+     "arrayref": [],
+     "solana-loader-v2-interface": [
+      "bincode",
+      "serde"
+     ],
+     "log": [
+      "std"
+     ],
+     "solana-clock": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-keccak-hasher": [
+      "sha3"
+     ],
+     "serde_json": [
+      "default",
+      "std"
+     ],
+     "blake3": [
+      "default",
+      "std",
+      "traits-preview"
+     ],
+     "toml_datetime": [],
+     "bumpalo": [
+      "default"
+     ],
+     "digest": [
+      "alloc",
+      "std"
+     ],
+     "wasm-bindgen-macro-support": [],
+     "tinyvec": [
+      "alloc",
+      "default",
+      "grab_spare_slice",
+      "tinyvec_macros"
+     ],
+     "constant_time_eq": [],
+     "curve25519-dalek": [
+      "alloc",
+      "default",
+      "digest",
+      "precomputed-tables",
+      "rand_core",
+      "zeroize"
+     ],
+     "five8": [],
+     "slab": [
+      "default",
+      "std"
+     ],
+     "aspis-r1-cost-probe-program": [
+      "custom-heap",
+      "default",
+      "pool-adapter",
+      "private-leaf-salts"
+     ],
+     "zerocopy": [
+      "simd"
+     ],
+     "num-bigint": [
+      "default",
+      "std"
+     ],
+     "solana-sdk-macro": [],
+     "solana-example-mocks": [],
+     "libc": [
+      "default",
+      "std"
+     ],
+     "wasip2": [],
+     "windows-link": [],
+     "memchr": [
+      "alloc",
+      "default",
+      "std"
+     ],
+     "find-msvc-tools": [],
+     "opaque-debug": [],
+     "curve25519-dalek-derive": [],
+     "solana-epoch-rewards": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-transaction-error": [
+      "serde"
+     ],
+     "solana-sysvar": [
+      "bincode",
+      "bytemuck",
+      "serde"
+     ],
+     "solana-slot-history": [
+      "serde",
+      "sysvar"
+     ],
+     "keccak": [],
+     "subtle": [
+      "std"
+     ],
+     "wasm-bindgen": [
+      "default",
+      "std"
+     ],
+     "syn": [
+      "clone-impls",
+      "default",
+      "derive",
+      "extra-traits",
+      "fold",
+      "full",
+      "parsing",
+      "printing",
+      "proc-macro",
+      "quote",
+      "visit"
+     ],
+     "fiat-crypto": [],
+     "solana-system-interface": [
+      "bincode",
+      "serde"
+     ],
+     "zmij": [],
+     "solana-hash": [
+      "borsh",
+      "bytemuck",
+      "serde",
+      "std"
+     ],
+     "solana-msg": [],
+     "borsh-schema-derive-internal": [],
+     "getrandom": [
+      "bindgen",
+      "js-sys",
+      "std",
+      "wasm-bindgen"
+     ],
+     "rand_hc": [],
+     "num-traits": [
+      "default",
+      "i128",
+      "std"
+     ],
+     "ppv-lite86": [
+      "simd",
+      "std"
+     ],
+     "bv": [
+      "serde"
+     ],
+     "zerocopy-derive": [],
+     "equivalent": [],
+     "hashbrown": [
+      "ahash",
+      "default",
+      "inline-more"
+     ],
+     "solana-instruction": [
+      "bincode",
+      "borsh",
+      "default",
+      "serde",
+      "std",
+      "syscalls"
+     ],
+     "generic-array": [
+      "more_lengths"
+     ],
+     "js-sys": [
+      "default",
+      "std",
+      "unsafe-eval"
+     ],
+     "rustversion": [],
+     "parking_lot": [
+      "default"
+     ],
+     "borsh-derive-internal": [],
+     "futures-io": [
+      "std"
+     ],
+     "solana-account": [
+      "bincode",
+      "serde"
+     ],
+     "solana-stable-layout": [],
+     "solana-sanitize": [],
+     "solana-epoch-schedule": [
+      "serde",
+      "sysvar"
+     ],
+     "solana-define-syscall": [],
+     "crypto-mac": [],
+     "sha3": [
+      "default",
+      "std"
+     ],
+     "bs58": [
+      "alloc"
+     ],
+     "solana-vote-interface": [
+      "bincode",
+      "serde"
+     ],
+     "cfg-if": [],
+     "solana-program-entrypoint": [],
+     "solana-big-mod-exp": [],
+     "solana-message": [
+      "bincode",
+      "blake3",
+      "serde"
+     ],
+     "libsecp256k1-gen-ecmult": []
+    }
+   }
+  ],
+  "source_pins": {
+   "programs/r1-cost-probe/src/lib.rs": {
+    "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8"
+   },
+   "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+    "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3"
+   },
+   "Cargo.lock": {
+    "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+   }
+  },
+  "bc": "no post-loop return pattern",
+  "scope_overlap": "NMW_SCOPE_OVERLAP.json (explicit rule violation; no self-credit)"
+ },
+ "fresh_parent_provenance": [
+  {
+   "emission": "NMW_E002",
+   "label": "process",
+   "pins_sha256": "56e7422790b649f1295a0ee2059d4615cb904e7bc6009c39b7bd5e0a33770073",
+   "receipt_sha256": "eca23f2ed8308c033dc208ef86af7f3e7cd64480cfd86c24da97b8ca376933cb",
+   "raw_sha256": "ac3b478eb81370ffcf7411677697c04e2bb3b308f58690c0500989a2b3dfed79",
+   "llbc_sha256": "82021a167af07846af7c724e6e3f829215e591bc408ed9f9f59841cdb4293635",
+   "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+   "source_hashes": {
+    "NMW_stage.py": "045938ebc9d031c9a99486ad31a865f656cee7db831d45351a38c100b8f25781",
+    "NMW_STAGING_MANIFEST.json": "51a3fc659a2f353c98d58ddfee2b0b6d7dd88493513496159492ec79a8204259",
+    "NMW_OPACITY.json": "89559a1650ac27bacf084680261859a641646668b1688ca7cdd1ccd1a89e35ca",
+    "NMW_extract_host.py": "d91a5c939960f247f857118ad2439dd08274f99f34ccc10366f40d32ae6a4af8",
+    "NMW_POOL_AMENDMENT.json": "6a369c16da3c70f7ddb1209afc4c58ab9edd8d76b21bf31450bcbc910c73904e"
+   },
+   "fresh_parent_provenance": true,
+   "qualification": "Frozen source audit, candidate/LLBC/output/tool pin chain retained; child emission provenance remains unresolved under(bk)."
+  },
+  {
+   "emission": "NMW_E001",
+   "label": "entry",
+   "pins_sha256": "ea4085919c6ebd7c46a7a0bf7f4cb9c2a451f427e65784f8f5f0d3ccd24de568",
+   "receipt_sha256": "132e3bab5c8c97837fce6295fd0aca2e913a84cc798725e3df39680b12f0d19b",
+   "raw_sha256": "5b54ed0c779e07faf17ebd3ccc6af792dc1009caabc63d09cf7a40495c31a323",
+   "llbc_sha256": "79a6da1ecc2093dbf81f405de4d4332b213ccee4e593446096104f605dc1b534",
+   "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+   "source_hashes": {
+    "NMW_stage.py": "045938ebc9d031c9a99486ad31a865f656cee7db831d45351a38c100b8f25781",
+    "NMW_STAGING_MANIFEST.json": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+    "NMW_OPACITY.json": "89559a1650ac27bacf084680261859a641646668b1688ca7cdd1ccd1a89e35ca"
+   },
+   "fresh_parent_provenance": true,
+   "qualification": "Frozen source audit, candidate/LLBC/output/tool pin chain retained; child emission provenance remains unresolved under(bk)."
+  }
+ ],
+ "attempt_identity_correction": "Actual receipts: NMW_E001 is entry; NMW_E002 is process (task labels reversed). Hash links checked against each actual receipt.",
+ "KMX_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+ "new_Kani": 0,
+ "new_extraction": 0,
+ "window_laws": [
+  "S2TrustedSdkBorrow",
+  "TrustedStd",
+  "RuntimeClockSlotBinding (including deployed owned.rs:479 Err arm, TGB-4)",
+  "RuntimeReturnDataClear"
+ ],
+ "TGB4": "Reporting addition only, existing trust item; RowSpec_240 unchanged"
+}
