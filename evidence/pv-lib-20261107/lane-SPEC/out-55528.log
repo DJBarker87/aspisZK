@@ -1,0 +1,113 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Delivery16.lean:15:61: error: unsolved goals
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+resources : Resources
+⊢ (match PV_LIB_SPEC_Full.programs PV_THR2_RunTlsErrorCompleted.callee with
+      | some val => none
+      | none =>
+        (PV_LIB_StoreActionTable.v2 PV_THR2_RunTlsErrorCompleted.callee).bind fun action =>
+          some
+            { action := action, callee := PV_THR2_RunTlsErrorCompleted.callee,
+              waiting :=
+                {
+                  request :=
+                    PV_STX2_Native.Request.child PV_THR2_RunTlsErrorCompleted.callee
+                      PV_LIB_SPEC_Tls59Data15.store59.nextActivation
+                      [PV_LIB_SPEC_Tls59Data15.result, PV_LIB_SPEC_Tls278Lift15.error],
+                  action :=
+                    PV_STX2_Native.ReturnAction.child PV_LIB_SPEC_Tls59Data15.store59.nextActivation (Place.local 5),
+                  unwind := [] },
+              arguments := [PV_LIB_SPEC_Tls59Data15.result, PV_LIB_SPEC_Tls278Lift15.error] }) =
+      none ∧
+    (match none,
+          some
+            {
+              request :=
+                PV_STX2_Native.Request.child PV_THR2_RunTlsErrorCompleted.callee
+                  PV_LIB_SPEC_Tls59Data15.store59.nextActivation
+                  [PV_LIB_SPEC_Tls59Data15.result, PV_LIB_SPEC_Tls278Lift15.error],
+              action :=
+                PV_STX2_Native.ReturnAction.child PV_LIB_SPEC_Tls59Data15.store59.nextActivation (Place.local 5),
+              unwind := [] },
+          List.drop 21 PV_THR2_F170.live.body with
+        | none, none, PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) :: tail =>
+          decide (site.function = 361 ∧ site.statement = 14756 ∧ fn = PV_THR2_Source361InitChildren.fnAllocationFull)
+        | none, some wait, PV_STX2_SliceSyntax.Node.leaf (Instruction.storage site live localIndex) :: tail =>
+          match wait.request with
+          | PV_STX2_Native.Request.child fn activation [head] =>
+            decide (site.function = 361 ∧ site.statement = 14757 ∧ fn = PV_THR2_Source361InitChildren.fnAllocationFull)
+          | x => false
+        | x, x_1, x_2 => false) =
+        false ∧
+      (match none,
+          some
+            {
+              request :=
+                PV_STX2_Native.Request.child PV_THR2_RunTlsErrorCompleted.callee
+                  PV_LIB_SPEC_Tls59Data15.store59.nextActivation
+                  [PV_LIB_SPEC_Tls59Data15.result, PV_LIB_SPEC_Tls278Lift15.error],
+              action :=
+                PV_STX2_Native.ReturnAction.child PV_LIB_SPEC_Tls59Data15.store59.nextActivation (Place.local 5),
+              unwind := [] },
+          List.drop 21 PV_THR2_F170.live.body with
+        | none, none, PV_STX2_SliceSyntax.Node.leaf i :: tail =>
+          match i with
+          | Instruction.bind site destination (Expr.unary op operand) =>
+            if site.function = 361 ∧ site.statement = 14318 ∧ op = PV_THR2_OperatorSites.cast14318 then
+              some PV_THR2_OperatorAction.Kind.cast14318
+            else
+              if site.function = 361 ∧ site.statement = 14541 ∧ op = PV_THR2_OperatorSites.cast14541 then
+                some PV_THR2_OperatorAction.Kind.cast14541
+              else none
+          | Instruction.call site fn captures returnPlace unwind =>
+            if site.function = 361 ∧ site.statement = 14535 ∧ fn = PV_THR2_OperatorSites.clone214 then
+              some PV_THR2_OperatorAction.Kind.clone214
+            else none
+          | x => none
+        | none, some wait, PV_STX2_SliceSyntax.Node.leaf (Instruction.storage site live localIndex) :: tail =>
+          match wait.request with
+          | PV_STX2_Native.Request.child fn activation [head] =>
+            if site.function = 361 ∧ site.statement = 14536 ∧ fn = PV_THR2_OperatorSites.clone214 then
+              some PV_THR2_OperatorAction.Kind.clone214
+            else none
+          | x => none
+        | x, x_1, x_2 => none) =
+        none
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Delivery16.lean:21:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ReachedNative14.transition (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+    {
+      current :=
+        { status := PV_STX2_SliceMachine.Status.running config, world := PV_LIB_SPEC_Entry14.state, events := [] },
+      suspended := [] }
+in the target expression
+  PV_LIB_SPEC_ReachedNative14.transition (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                (PV_LIB_SPEC_Tls278Lift15.config PV_LIB_SPEC_Tls59Data15.store59 5 PV_LIB_SPEC_TlsOriginal15.parents
+                  PV_LIB_SPEC_Tls59Data15.result),
+            world := PV_LIB_SPEC_Entry14.state, events := [] },
+        suspended := [] } =
+    after
+
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+resources : Resources
+quiet :
+  PV_LIB_SPEC_SourceTransport15.Quiet
+    {
+      current :=
+        { status := PV_STX2_SliceMachine.Status.running config, world := PV_LIB_SPEC_Entry14.state, events := [] },
+      suspended := [] }
+⊢ PV_LIB_SPEC_ReachedNative14.transition (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                (PV_LIB_SPEC_Tls278Lift15.config PV_LIB_SPEC_Tls59Data15.store59 5 PV_LIB_SPEC_TlsOriginal15.parents
+                  PV_LIB_SPEC_Tls59Data15.result),
+            world := PV_LIB_SPEC_Entry14.state, events := [] },
+        suspended := [] } =
+    after
+'PV_LIB_SPEC_Tls278Delivery16.transition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
