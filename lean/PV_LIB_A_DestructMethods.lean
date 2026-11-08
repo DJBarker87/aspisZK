@@ -122,8 +122,12 @@ theorem concrete_shape (id : Nat) (g : Generics) (fid types regions : Nat)
     (typeArity : g.types.length = types) (regionArity : g.regions.length = regions)
     (constants : g.constants = []) (traits : g.traits = []) :
     concrete id g = some (.call (fnPtr fid {g with regions := g.regions ++ [.atom "Erased"]})) := by
-  simp only [concrete,method,Option.bind_some,typeArity,regionArity,constants,traits,
-    and_self,↓reduceIte,pure,Option.pure]
+  unfold concrete
+  rw [method]
+  change (if g.types.length = types ∧ g.regions.length = regions ∧
+    g.constants = [] ∧ g.traits = [] then _ else _) = _
+  rw [if_pos ⟨typeArity,regionArity,constants,traits⟩]
+  rfl
 
 #print axioms implementation
 #print axioms adtImpl
