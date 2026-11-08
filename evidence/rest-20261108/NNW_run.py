@@ -115,4 +115,4 @@ for n,t in json.loads(r.stdout).items():
  else:p.write_text(t)
 rc=json.loads((E/a/'receipt.json').read_text());record({k:v for k,v in rc.items() if k!='deps_fingerprint'})
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}))
-print((E/a/'stdout.log').read_text()[-5000:]);sys.exit(rc['exit_status'])
+sys.exit(rc['exit_status'])
