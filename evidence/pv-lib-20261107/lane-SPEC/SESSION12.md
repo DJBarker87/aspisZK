@@ -22,3 +22,5 @@ PV_LIB_SPEC_NativeRecheck12 compiled 55129, cohort w3: exit0, wall 0:03.71, peak
 PV_LIB_SPEC_StackReferenceGap12 compiled 55130, cohort w3: exit0, wall 0:02.22, peak 4771120KiB, swap 0; source 898263cd97ed8338e578dd6d5680cd2d3a516d17; standard summary axioms only.
 
 PV_LIB_SPEC_PhysicalStack12 compiled 55133, cohort w3: exit0, wall 0:02.47, peak 4778888KiB, swap 0; source 23cf2fe5b88f715b1cdbd2794a0657075b91d784; standard summary axioms only.
+
+PV_LIB_SPEC_StackCallback12 compiled 55134, cohort w3: exit0, wall 0:02.58, peak 4789780KiB, swap 0; source 1670fc5e7d55e0c3026bdff659ad3245c2520cfb; standard summary axioms only.
