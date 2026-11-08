@@ -169,3 +169,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46393 StoreCounterV2 passed after46392 match-reduction/name repair: all14 new action projections preserve nextActivation, and the existing slice Numbered invariant transfers through a local source action by name. No cross-callee counter equality or whole OwnInit invariant is asserted.
 
 46395 WriterRegistryV2 passed after46394 namespace-shadow repair. New primitive, scope and641 stages preserve the registry through every full answer; actual12950 is bound on the final candidate. This is local registry framing, not complete OwnInit/allocation history.
+
+46396 AtomicReadsV2 passed: named value-only documented facts for127/129/528 and all-answer graph equality preserving complete replies. Bool reads decode the source u8. These facts are explicit lower source/native binding obligations, not proved arbitrary-backend instances, T fields or endpoint premises. Loads perform no source write.
