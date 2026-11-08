@@ -1,3 +1,4 @@
+import NMX_R4_FreeCongruence
 import NMX_R4_CallContext
 import NMX_R4_PdaObservation
 import NMX_R4_CallScript00
@@ -12,33 +13,51 @@ theorem e010 (c : Context) (verifier : solana_pubkey.Pubkey) (pool : solana_pubk
  observe c (NMX_R4_CallScript00.t010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) =
  NMX_R2_NativeExecution.run c.owners c.allocations c.failure c.lane c.registry c.env
   (NMX_Fold00.p010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) := by
- unfold NMX_R4_CallScript00.t010 NMX_Fold00.p010
- change observe c (NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.readonlyAccount masterAccount pool)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript01.t011 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint))) = _
- apply NMX_R4_ObservedStep.child
- intro _unit
- exact NMX_R4_Observed01.e011 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint
+ unfold NMX_Fold00.p010
+ have same : NMX_R4_CallScript00.t010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint = NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.readonlyAccount masterAccount pool)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript01.t011 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)) := by
+  unfold NMX_R4_CallScript00.t010 NMX_R4_TryObservation.after
+  apply NMX_R4_FreeCongruence.step
+  intro reply
+  apply NMX_R4_FreeCongruence.step
+  intro response
+  cases response <;> rfl
+ rw [same]
+ have h := NMX_R4_ObservedStep.child c (.readonlyAccount masterAccount pool) (fun _unit => NMX_R4_CallScript01.t011 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_Fold01.p011 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_R4_Observed01.e011 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)
+ exact h
 #print axioms e010
 
 theorem e009 (c : Context) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (verifierCheckpoint : r1_pool_adapter.owned.OwnedAccount) :
  observe c (NMX_R4_CallScript00.t009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) =
  NMX_R2_NativeExecution.run c.owners c.allocations c.failure c.lane c.registry c.env
   (NMX_Fold00.p009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) := by
- unfold NMX_R4_CallScript00.t009 NMX_Fold00.p009
- change observe c (NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.checkpointGuard verifierCheckpoint verifier false)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript00.t010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint))) = _
- apply NMX_R4_ObservedStep.child
- intro _unit
- exact NMX_R4_Observed00.e010 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint
+ unfold NMX_Fold00.p009
+ have same : NMX_R4_CallScript00.t009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint = NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.checkpointGuard verifierCheckpoint verifier false)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript00.t010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)) := by
+  unfold NMX_R4_CallScript00.t009 NMX_R4_TryObservation.after
+  apply NMX_R4_FreeCongruence.step
+  intro reply
+  apply NMX_R4_FreeCongruence.step
+  intro response
+  cases response <;> rfl
+ rw [same]
+ have h := NMX_R4_ObservedStep.child c (.checkpointGuard verifierCheckpoint verifier false) (fun _unit => NMX_R4_CallScript00.t010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_Fold00.p010 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_R4_Observed00.e010 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)
+ exact h
 #print axioms e009
 
 theorem e008 (c : Context) (verifier : solana_pubkey.Pubkey) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) (verifierCheckpoint : r1_pool_adapter.owned.OwnedAccount) :
  observe c (NMX_R4_CallScript00.t008 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) =
  NMX_R2_NativeExecution.run c.owners c.allocations c.failure c.lane c.registry c.env
   (NMX_Fold00.p008 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) := by
- unfold NMX_R4_CallScript00.t008 NMX_Fold00.p008
- change observe c (NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.readonlyBuffer proof)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript00.t009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint))) = _
- apply NMX_R4_ObservedStep.child
- intro _unit
- exact NMX_R4_Observed00.e009 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint
+ unfold NMX_Fold00.p008
+ have same : NMX_R4_CallScript00.t008 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint = NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.readonlyBuffer proof)) (fun reply => NMX_R4_TryObservation.after reply (fun _unit => NMX_R4_CallScript00.t009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)) := by
+  unfold NMX_R4_CallScript00.t008 NMX_R4_TryObservation.after
+  apply NMX_R4_FreeCongruence.step
+  intro reply
+  apply NMX_R4_FreeCongruence.step
+  intro response
+  cases response <;> rfl
+ rw [same]
+ have h := NMX_R4_ObservedStep.child c (.readonlyBuffer proof) (fun _unit => NMX_R4_CallScript00.t009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_Fold00.p009 c.owners (ops c) verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint) (fun _unit => NMX_R4_Observed00.e009 c verifier pool outputLane slot proof masterAccount checkpointAccount laneAccount registryAccount entryAccount verifierCheckpoint)
+ exact h
 #print axioms e008
 
 theorem e007 (c : Context) (verifier : solana_pubkey.Pubkey) (accounts : Slice r1_pool_adapter.owned.OwnedAccount) (pool : solana_pubkey.Pubkey) (outputLane : U8) (slot : U64) (proof : r1_pool_adapter.owned.OwnedAccount) (masterAccount : r1_pool_adapter.owned.OwnedAccount) (checkpointAccount : r1_pool_adapter.owned.OwnedAccount) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (registryAccount : r1_pool_adapter.owned.OwnedAccount) (entryAccount : r1_pool_adapter.owned.OwnedAccount) :

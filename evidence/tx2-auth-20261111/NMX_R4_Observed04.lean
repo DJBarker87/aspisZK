@@ -1,3 +1,4 @@
+import NMX_R4_FreeCongruence
 import NMX_R4_CallContext
 import NMX_R4_PdaObservation
 import NMX_R4_CallScript04
@@ -42,12 +43,19 @@ theorem e047 (c : Context) (pool : solana_pubkey.Pubkey) (laneAccount : r1_pool_
  observe c (NMX_R4_CallScript04.t047 c.owners (ops c) pool laneAccount master masterKey checkpoint checkpointKey lane laneSeeds) =
  NMX_R2_NativeExecution.run c.owners c.allocations c.failure c.lane c.registry c.env
   (NMX_Fold04.p047 c.owners (ops c) pool laneAccount master masterKey checkpoint checkpointKey lane laneSeeds) := by
- unfold NMX_R4_CallScript04.t047 NMX_Fold04.p047
- change observe c (NMX_R4_CallProgram.bind (NMX_R4_CallProgram.pda laneSeeds pool) (fun reply => NMX_R4_PdaObservation.after r1_pool_adapter.owned.authenticate_asq8_accounts.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError reply (fun derivedLane => NMX_R4_CallScript04.t048 c.owners (ops c) laneAccount master masterKey checkpoint checkpointKey lane derivedLane))) = _
- apply NMX_R4_PdaObservation.step
- · rfl
- intro derivedLane
- exact NMX_R4_Observed04.e048 c laneAccount master masterKey checkpoint checkpointKey lane derivedLane
+ unfold NMX_Fold04.p047
+ have same : NMX_R4_CallScript04.t047 c.owners (ops c) pool laneAccount master masterKey checkpoint checkpointKey lane laneSeeds = NMX_R4_CallProgram.bind (NMX_R4_CallProgram.pda laneSeeds pool) (fun reply => NMX_R4_PdaObservation.after r1_pool_adapter.owned.authenticate_asq8_accounts.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError reply (fun derivedLane => NMX_R4_CallScript04.t048 c.owners (ops c) laneAccount master masterKey checkpoint checkpointKey lane derivedLane)) := by
+  unfold NMX_R4_CallScript04.t047 NMX_R4_PdaObservation.after NMX_R4_TryObservation.after
+  apply NMX_R4_FreeCongruence.step
+  intro reply
+  apply NMX_R4_FreeCongruence.step
+  intro response
+  apply NMX_R4_FreeCongruence.step
+  intro control
+  cases control <;> rfl
+ rw [same]
+ have h := NMX_R4_PdaObservation.step c laneSeeds pool r1_pool_adapter.owned.authenticate_asq8_accounts.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError (by rfl) (fun derivedLane => NMX_R4_CallScript04.t048 c.owners (ops c) laneAccount master masterKey checkpoint checkpointKey lane derivedLane) (fun derivedLane => NMX_Fold04.p048 c.owners (ops c) laneAccount master masterKey checkpoint checkpointKey lane derivedLane) (fun derivedLane => NMX_R4_Observed04.e048 c laneAccount master masterKey checkpoint checkpointKey lane derivedLane)
+ exact h
 #print axioms e047
 
 theorem e046 (c : Context) (pool : solana_pubkey.Pubkey) (outputLane : U8) (laneAccount : r1_pool_adapter.owned.OwnedAccount) (master : Box Master) (masterKey : solana_pubkey.Pubkey) (checkpoint : Box Checkpoint) (checkpointKey : solana_pubkey.Pubkey) (lane : Box Lane) :
@@ -109,11 +117,17 @@ theorem e041 (c : Context) (pool : solana_pubkey.Pubkey) (outputLane : U8) (lane
  observe c (NMX_R4_CallScript04.t041 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey laneBytes) =
  NMX_R2_NativeExecution.run c.owners c.allocations c.failure c.lane c.registry c.env
   (NMX_Fold04.p041 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey laneBytes) := by
- unfold NMX_R4_CallScript04.t041 NMX_Fold04.p041
- change observe c (NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.lane laneBytes)) (fun reply => NMX_R4_TryObservation.after reply (fun lane => NMX_R4_CallScript04.t042 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey lane))) = _
- apply NMX_R4_ObservedStep.child
- intro lane
- exact NMX_R4_Observed04.e042 c pool outputLane laneAccount master masterKey checkpoint checkpointKey lane
+ unfold NMX_Fold04.p041
+ have same : NMX_R4_CallScript04.t041 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey laneBytes = NMX_R4_CallProgram.bind (NMX_R4_CallProgram.child (.lane laneBytes)) (fun reply => NMX_R4_TryObservation.after reply (fun lane => NMX_R4_CallScript04.t042 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey lane)) := by
+  unfold NMX_R4_CallScript04.t041 NMX_R4_TryObservation.after
+  apply NMX_R4_FreeCongruence.step
+  intro reply
+  apply NMX_R4_FreeCongruence.step
+  intro response
+  cases response <;> rfl
+ rw [same]
+ have h := NMX_R4_ObservedStep.child c (.lane laneBytes) (fun lane => NMX_R4_CallScript04.t042 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey lane) (fun lane => NMX_Fold04.p042 c.owners (ops c) pool outputLane laneAccount master masterKey checkpoint checkpointKey lane) (fun lane => NMX_R4_Observed04.e042 c pool outputLane laneAccount master masterKey checkpoint checkpointKey lane)
+ exact h
 #print axioms e041
 end NMX_R4_Observed04
 end

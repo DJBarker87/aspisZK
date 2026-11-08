@@ -1,3 +1,7 @@
+# Current R4 update
+
+TX2:233 CANDIDATE `NMX_R4_Authentication.root` passed L1129. Full Box/source observation association and all-Args port now delivered under(bm)/retained std interpretation; see current NMX_CLOSED.json and NMX_HANDOFF.md. Native-window historical route is superseded by E008 actual wrapper emission, not claimed constructed. Candidate audits/import/export remain pending. Ledger27 alone credits217/234; next gate decides233. Historical open lists below are retained as provenance.
+
 # Current update after child/library completion
 
 TX2:234 candidate and both frozen233 instantiations now exist. Exact named

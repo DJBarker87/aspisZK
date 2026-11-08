@@ -21,13 +21,13 @@ theorem complete {A S : Type} (a : S2W_D189Wrappers.Allocator S) (s : S)
    · cases reservation with
      | Err e =>
        refine ⟨true,?_⟩
-       simp only [NKY_BoxAction.run,NKY_BoxAction.newBox,returned,bind_tc_ok,
-        NMX_R2_BoxActionObservation.view,NMX_R2_NativeExecution.box]
+       simp only [NKY_BoxAction.run,NKY_BoxAction.newBox,returned,bind_tc_ok,bind_tc_fail,
+        NMX_R2_BoxActionObservation.view,NMX_R2_NativeExecution.box] <;> rfl
      | Ok unit =>
        cases unit
        refine ⟨false,?_⟩
-       simp only [NKY_BoxAction.run,NKY_BoxAction.newBox,returned,bind_tc_ok,
-        NMX_R2_BoxActionObservation.view,NMX_R2_NativeExecution.box]
+       simp only [NKY_BoxAction.run,NKY_BoxAction.newBox,returned,bind_tc_ok,bind_tc_fail,
+        NMX_R2_BoxActionObservation.view,NMX_R2_NativeExecution.box] <;> rfl
    · refine ⟨true,?_⟩
      rw [NKY_BoxAction.allocator_failure _ _ _ _ _ _ _ stopped]
      rfl
