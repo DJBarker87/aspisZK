@@ -1,3 +1,25 @@
+# Remaining obligations after Lane A session9 — PARTIAL
+
+Option157 and the actual source Global allocator provenance are now bound.
+StoreActionTable9 exports v2ProvenancePrograms/v2ProvenanceStep; the legacy
+PV_LIB_StoreActionTable.v2 remains unchanged/importable. WeakOwnerFree9.step
+adds resource-aware last-Weak free, with exact source delivery and producer-backed
+registry/pointer/lifetime lemmas. These are local support, not full adequacy.
+
+FIRST: compose actual486/584/248/661 with the new free step, including arbitrary-T
+payload destruction, implicit weak guard, both reference-count branches, source/
+OWNER frames and every outcome. Derive actual call facts, never assume allocator
+or source backing. Unknown/custom allocator and dynamic cases remain explicit.
+Generic layout and source/byte association are not completed.
+
+THEN dynamic callback/collect4/remaining wrapper effects; THEN corrected-machine
+Range93, f6 and OwnInit histories in dependency order. No row/premise/slot promoted.
+All170 statuses unchanged; endpoint premises removed0/added0, new T fields0.
+D991: ZERO new byte images; no unwritten-byte initialization or total-image credit.
+See lane-A/session9/MODEL_FINDINGS.md, PROVENANCE.json and SUPPORT.json.
+
+## Retained session8 and earlier obligations (historical)
+
 # Remaining obligations after Lane A session8 — PARTIAL
 
 `PV_LIB_StoreActionTable.v2` remains unchanged/importable. The additional

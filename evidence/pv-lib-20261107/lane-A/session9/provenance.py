@@ -1,7 +1,7 @@
 """Source and typed-metadata provenance. No default allocator inference."""
 from pathlib import Path
 import hashlib,json,lzma,runpy,sys
-E=Path(__file__).parent
+E=Path('evidence/pv-lib-20261107/lane-A/session9')
 ns=runpy.run_path(str(E/'inspect-metadata.py'));p,n=ns['p'],ns['normal'];p=n(p)
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def statement(fid,sid):
