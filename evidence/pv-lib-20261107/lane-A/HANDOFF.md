@@ -183,3 +183,5 @@ Session5 47404: CellSourceV2 passes (47403 receiver qualification repaired). Tra
 Session5 47405: OwnerStoreV3 passes; intercepts504/641 ahead of old wrapped meanings, exact transparent641 and only bool504. Arbitrary-T504 is unsupported, never silently full-call semantics. Agreement remains against OWNER-aware base; full destructor adequacy open.
 
 Session5 47406: PreActionTraceV3 passes on the final Cell-corrected candidate. Source/control neutrality remains explicit at every step.
+
+Session5 47409: ClonePrologueV2 passes after47407/08 repairs. Uses named existing four-instruction chain plus local guard certificate and call primitive. Actual five-step OWNER-aware V3 history establishes17->24->issued360 receiver; original constructor-entry cut still open.
