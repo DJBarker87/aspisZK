@@ -57,3 +57,19 @@ Site/caller/request/operand association at EVERY finite prefix of BoundRuntime.
 The context's dynamic occurrence is computed by prior consumed Site entries.
 This closes that instrumentation invariant, not a row or full source adequacy.
 Only the wrapper's ID assertion was extended, by44900–44999; exact diff retained.
+
+44904 JointPremises passed after44903 let-binder correction (retained).
+exit0,wall0:02.54,peak4763836KiB,swap0,source6e3558985df; standard axioms.
+The complete current entry, named native facets, source-history invariant
+and allocation/reservation equations coexist in ONE pending model. The ABI
+DATA and writer table remain parameters. This is deliberately NOT reported
+as the requested fully concrete source/ABI/OwnInit realization. Conditional
+returned-value facets hold vacuously in this environment; no actual allocation
+branch, universal row contract or physical ABI association is supplied.
+
+Control review found two overly restrictive prefilters in the new drafts:
+waiting requests during unwinding were skipped by instrumentation, although
+the pinned interpreter processes waiting before unwind; and the nonpolling
+branch could evaluate invalidPure on a completed frame's stale slot.
+ControlRuntime repairs this toward the actual interpreter. Earlier drafts
+are retained and are not the final runtime reference.
