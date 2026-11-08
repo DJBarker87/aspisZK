@@ -1,0 +1,381 @@
+NNX_generated/NNX_FinishSource.lean:58:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIq_Terminal.terminal (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).1
+    (claimsRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.1)
+    (alphaRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.1)
+    (challengesRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.2)
+in the target expression
+  (let (running, alpha, transcript1) :=
+      (LIB_VScalarCarriers.toRaw head.rounds.1, alphaRaw head.rounds.2.1, head.rounds.2.2)
+    do
+    let r2 ← B.terminal a.public_ (claimsRaw head.claims) alpha (challengesRaw a.challenges)
+    let r3 ← AspisR1PublicPreparation.core.result.Result.map_err (FinishModel.closureFn11 (LIB_VCode.digest env)) r2 ()
+    let cf2 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => do
+        let a_1 ← B.fromFn 16#usize (FinishModel.closureFn9 (LIB_VCode.digest env)) (claimsRaw head.claims)
+        let a1 ← B.fromFn 10#usize (FinishModel.closureFn5 (LIB_VCode.digest env)) (claimsRaw head.claims)
+        let a2 ← (claimsRaw head.claims).index_usize 0#usize
+        let q ← a2.index_usize 27#usize
+        let mask ← B.mask a_1 a1 q alpha
+        let r4 ← (prefixRaw a.prefix_).validated_record 25#u8
+        let cf3 ←
+          match r4 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue vr => do
+            let r5 ← NJM_RoundJoin.R.decode 29#usize vr 87#usize
+            let cf4 ←
+              match r5 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf4 with
+              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                let q1 ← B.mul (challengesRaw a.challenges).eta val2
+                let q2 ← B.add mask q1
+                let q3 ← val3.index_usize 28#usize
+                let masked_terminal ← B.add q2 q3
+                let b ←
+                  core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                      masked_terminal
+                if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal)
+                  else do
+                    let state_before_z0 ← r1_wire.SemanticTranscript.impl.state (LIB_VCode.digest env) transcript1
+                    let cf5 ←
+                      match r4 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                        let (r6, transcript2) ← FinishModel.circle_validated B (LIB_VCode.digest env) transcript1 vr1
+                        let cf6 ←
+                          match r6 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf6 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                            let r7 ← (prefixRaw a.prefix_).validated_record 26#u8
+                            let cf7 ←
+                              match r7 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf7 with
+                              | core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                let r8 ← NJM_RoundJoin.R.decode 29#usize vr2 0#usize
+                                let cf8 ←
+                                  match r8 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                match cf8 with
+                                  | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                    let cf9 ←
+                                      match r7 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                    match cf9 with
+                                      | core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                        let (r9, transcript3) ←
+                                          FinishModel.circle_validated B (LIB_VCode.digest env) transcript2 vr3
+                                        let cf10 ←
+                                          match r9 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf10 with
+                                          | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                            let b1 ← FinishModel.pointEq val4 val6
+                                            if b1 = true then
+                                                ok (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+                                              else do
+                                                let r10 ← FinishModel.payload (prefixRaw a.prefix_) 2#u8
+                                                let cf11 ←
+                                                  match r10 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf11 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                    let r11 ←
+                                                      core.array.TryFromArrayCopySlice.try_from 32#usize
+                                                          core.marker.CopyU8 val7
+                                                    let a3 ← B.unwrapRoot r11
+                                                    ok
+                                                        (core.result.Result.Ok
+                                                          {
+                                                            roots :=
+                                                              Array.make 2#usize [(prefixRaw a.prefix_).c1_root, a3] ⋯,
+                                                            challenges := challengesRaw a.challenges, alpha := alpha,
+                                                            claims := claimsRaw head.claims, extra := val3,
+                                                            before_z1 := val5, state_before_z0 := state_before_z0,
+                                                            z := Array.make 2#usize [val4, val6] ⋯,
+                                                            transcript := transcript3 })
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error)
+                                                      residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Unit)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok (LIBC_PreparedCarriers.verified LIB_Prepared.types sem))
+
+a : TX1_136.Args V
+env : Env
+sem : Verified V
+called : NNH_FinishReturns.value a env = Except.ok sem
+head : NNV_FinishCut.Packet a env sem
+tail : NNV_FinishTail.Packet a env sem head
+rounds :
+  RoundModel.rounds NJM_RoundJoin.R (LIB_VCode.digest env) (prefixRaw a.prefix_) a.transcript =
+    ok (core.result.Result.Ok (LIB_VScalarCarriers.toRaw head.rounds.1, alphaRaw head.rounds.2.1, head.rounds.2.2))
+claims :
+  ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) (prefixRaw a.prefix_) =
+    ok (core.result.Result.Ok (claimsRaw head.claims))
+terminalOriginal :
+  LIB_VLib.terminalQm31Value (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges) env =
+    Except.ok tail.terminal
+claimsAt : B.claims (prefixRaw a.prefix_) = ok (core.result.Result.Ok (claimsRaw head.claims))
+terminal :
+  FIq_Terminal.terminal (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).1
+      (claimsRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.1)
+      (alphaRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.1)
+      (challengesRaw (a.public_, head.claims, head.rounds.2.1, V.origChallenges a.challenges).2.2.2) =
+    ok (core.result.Result.Ok (LIB_VScalarCarriers.toRaw tail.terminal))
+record25 : (prefixRaw a.prefix_).validated_record 25#u8 = ok (core.result.Result.Ok tail.rec25)
+extra :
+  AspisS1ExtractedRoundChildren.decodeMain 29#usize tail.rec25 87#usize = ok (core.result.Result.Ok (k29Raw tail.extra))
+same25 : tail.rec25' = tail.rec25
+circle0 :
+  FinishModel.circle_validated (F3M_CircleSource.install B) (LIB_VCode.digest env) head.rounds.2.2 tail.rec25 =
+    ok (core.result.Result.Ok tail.c0.1, tail.c0.2)
+record26 : (prefixRaw a.prefix_).validated_record 26#u8 = ok (core.result.Result.Ok tail.rec26)
+before :
+  AspisS1ExtractedRoundChildren.decodeMain 29#usize tail.rec26 0#usize =
+    ok (core.result.Result.Ok (k29Raw tail.beforeZ1))
+same26 : tail.rec26' = tail.rec26
+circle1 :
+  FinishModel.circle_validated (F3M_CircleSource.install B) (LIB_VCode.digest env) tail.c0.2 tail.rec26 =
+    ok (core.result.Result.Ok tail.c1.1, tail.c1.2)
+payload : Slice U8
+payloadCall : FinishModel.payload (prefixRaw a.prefix_) 2#u8 = ok (core.result.Result.Ok payload)
+payloadBytes : LIB_Carriers.bytes payload = tail.payload
+converted : TX1_136.toB32 (LIB_Carriers.bytes payload) = some tail.root1
+rootCall :
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 payload =
+    ok (core.result.Result.Ok (LIB_Env.nativeKey tail.root1))
+gate :
+  LIB_VScalarCarriers.toRaw head.rounds.1 =
+    LIB_VScalarCarriers.toRaw
+      (NNV_FinishTail.V.qadd
+        (NNV_FinishTail.V.qadd (NNV_FinishTail.V.maskValue head.claims head.rounds.2.1)
+          (NNV_FinishTail.V.qmul (NNV_FinishTail.V.eta a.challenges) tail.terminal))
+        (NNV_FinishTail.V.at28 tail.extra))
+g16 :
+  OraclePortStdBuilder.fromFn 16#usize (FinishModel.closureFn9 (LIB_VCode.digest env)) (claimsRaw head.claims) =
+    ok (LIB_VField.c1 head.claims)
+g10 :
+  OraclePortStdBuilder.fromFn 10#usize (FinishModel.closureFn5 (LIB_VCode.digest env)) (claimsRaw head.claims) =
+    ok (LIB_VField.maskOnly head.claims)
+⊢ (let (running, alpha, transcript1) :=
+      (LIB_VScalarCarriers.toRaw head.rounds.1, alphaRaw head.rounds.2.1, head.rounds.2.2)
+    do
+    let r2 ← B.terminal a.public_ (claimsRaw head.claims) alpha (challengesRaw a.challenges)
+    let r3 ← AspisR1PublicPreparation.core.result.Result.map_err (FinishModel.closureFn11 (LIB_VCode.digest env)) r2 ()
+    let cf2 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => do
+        let a_1 ← B.fromFn 16#usize (FinishModel.closureFn9 (LIB_VCode.digest env)) (claimsRaw head.claims)
+        let a1 ← B.fromFn 10#usize (FinishModel.closureFn5 (LIB_VCode.digest env)) (claimsRaw head.claims)
+        let a2 ← (claimsRaw head.claims).index_usize 0#usize
+        let q ← a2.index_usize 27#usize
+        let mask ← B.mask a_1 a1 q alpha
+        let r4 ← (prefixRaw a.prefix_).validated_record 25#u8
+        let cf3 ←
+          match r4 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue vr => do
+            let r5 ← NJM_RoundJoin.R.decode 29#usize vr 87#usize
+            let cf4 ←
+              match r5 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf4 with
+              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                let q1 ← B.mul (challengesRaw a.challenges).eta val2
+                let q2 ← B.add mask q1
+                let q3 ← val3.index_usize 28#usize
+                let masked_terminal ← B.add q2 q3
+                let b ←
+                  core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                      masked_terminal
+                if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal)
+                  else do
+                    let state_before_z0 ← r1_wire.SemanticTranscript.impl.state (LIB_VCode.digest env) transcript1
+                    let cf5 ←
+                      match r4 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                        let (r6, transcript2) ← FinishModel.circle_validated B (LIB_VCode.digest env) transcript1 vr1
+                        let cf6 ←
+                          match r6 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf6 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                            let r7 ← (prefixRaw a.prefix_).validated_record 26#u8
+                            let cf7 ←
+                              match r7 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf7 with
+                              | core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                let r8 ← NJM_RoundJoin.R.decode 29#usize vr2 0#usize
+                                let cf8 ←
+                                  match r8 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                match cf8 with
+                                  | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                    let cf9 ←
+                                      match r7 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                    match cf9 with
+                                      | core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                        let (r9, transcript3) ←
+                                          FinishModel.circle_validated B (LIB_VCode.digest env) transcript2 vr3
+                                        let cf10 ←
+                                          match r9 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf10 with
+                                          | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                            let b1 ← FinishModel.pointEq val4 val6
+                                            if b1 = true then
+                                                ok (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+                                              else do
+                                                let r10 ← FinishModel.payload (prefixRaw a.prefix_) 2#u8
+                                                let cf11 ←
+                                                  match r10 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf11 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                    let r11 ←
+                                                      core.array.TryFromArrayCopySlice.try_from 32#usize
+                                                          core.marker.CopyU8 val7
+                                                    let a3 ← B.unwrapRoot r11
+                                                    ok
+                                                        (core.result.Result.Ok
+                                                          {
+                                                            roots :=
+                                                              Array.make 2#usize [(prefixRaw a.prefix_).c1_root, a3] ⋯,
+                                                            challenges := challengesRaw a.challenges, alpha := alpha,
+                                                            claims := claimsRaw head.claims, extra := val3,
+                                                            before_z1 := val5, state_before_z0 := state_before_z0,
+                                                            z := Array.make 2#usize [val4, val6] ⋯,
+                                                            transcript := transcript3 })
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error)
+                                                      residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (r1_semantic.Verified Unit) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Unit)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok (core.result.Result.Ok (LIBC_PreparedCarriers.verified LIB_Prepared.types sem))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.public_
+  has type
+    V.Public
+  but is expected to have type
+    pool_v1.pair_forest_semantic_terminal.r0.Public
+  in the application
+    B.terminal a.public_
+NNX_generated/NNX_FinishSource.lean:57:23: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNX_FinishSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

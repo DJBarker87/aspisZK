@@ -1,0 +1,18 @@
+NNX_generated/NNX_ClaimRead.lean:20:1: error: Tactic `rfl` failed: The left-hand side
+  match Option.map LIB_VScalarCarriers.toRaw (↑(↑claims)[0])[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+is not definitionally equal to the right-hand side
+  ok (LIB_VScalarCarriers.toRaw (↑(↑claims)[0])[↑i])
+
+claims : Claims
+i : Usize
+bound : ↑i < 29
+rowBound : 0 < (↑claims).length
+row : Std.Array QM31 29#usize := (↑claims)[0]
+columnBound : ↑i < (↑row).length
+⊢ (match Option.map LIB_VScalarCarriers.toRaw (↑(↑claims)[0])[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (LIB_VScalarCarriers.toRaw (↑(↑claims)[0])[↑i])
+'AspisR1.NNX_ClaimRead.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,17 @@
+import NNX_PartitionFinding
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNX_PartitionSeparation
+open Aeneas Aeneas.Std
+/-- Even a partition-insensitive host oracle can distinguish the malformed
+request: the split duplicates the short header when length is below 32. -/
+theorem empty_leaf_flat :
+ let opening : Slice U8 := ⟨[],by simp⟩
+ let input := Port4B_LeafCode.input 0#usize opening
+ (LIBC_HashPartitions.split (LIBC_CohortHash.host
+  (AspisV8R19.SqueezeOracleBridge.flatten input))).flatten ≠
+ (NNC_ResumeEvents.parts input).flatten := by
+ decide
+#print axioms empty_leaf_flat
+end AspisR1.NNX_PartitionSeparation
+end
