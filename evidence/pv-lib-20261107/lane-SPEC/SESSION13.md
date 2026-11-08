@@ -24,3 +24,5 @@ PV_LIB_SPEC_ScopePhysical13 compiled 55168, cohort w3: exit0, wall 0:02.17, peak
 PV_LIB_SPEC_BoundNative13 compiled 55169, cohort w3: exit0, wall 0:02.22, peak 4793664KiB, swap 0; source 41812acdab9de6e481967ce262b0d82c7b197131; standard summary axioms only.
 
 PV_LIB_SPEC_InitializedWords13 compiled 55171, cohort w3: exit0, wall 0:02.23, peak 4790480KiB, swap 0; source 76dff54ac8bd4cc0a54a8298100115c5dff589b2; standard summary axioms only.
+
+PV_LIB_SPEC_Success13 compiled 55173, cohort w3: exit0, wall 0:02.25, peak 4791648KiB, swap 0; source 2c5db93f73bc8024fe2c3bc2aac855a34f86a6ed; standard summary axioms only.
