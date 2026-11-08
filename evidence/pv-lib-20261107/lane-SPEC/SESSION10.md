@@ -14,3 +14,5 @@ PV_LIB_SPEC_SiteV2Runtime compiled 44981, cohort w3: exit0, wall 0:02.42, peak 4
 PV_LIB_SPEC_SiteHistory compiled 44982, cohort w3: exit0, wall 0:02.67, peak 4770736KiB, swap 0; source 24286b49b56f0818e744d2b74a0a61002f7acc35; standard summary axioms only.
 
 PV_LIB_SPEC_CallbackImageGap compiled 44983, cohort w3: exit0, wall 0:02.59, peak 4764780KiB, swap 0; source d6cda8439fd08f24c6890b92637c6c03fe1943eb; standard summary axioms only.
+
+PV_LIB_SPEC_CallbackNativeGap compiled 44985, cohort w3: exit0, wall 0:03.20, peak 4799664KiB, swap 0; source 0ca777c8256e3b7e0d36da02a98e16608a51f33a; standard summary axioms only.

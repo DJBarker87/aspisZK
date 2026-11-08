@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:10:10: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.leaf`
+  ?m.11
+is not of the form `C ...` or `... → C ...` where C is a constant
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:10:2: error: Invalid pattern(s): `kind` is an explicit pattern variable, but it only occurs in positions that are inaccessible to pattern matching:
+  some ?m.12
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:16:2: error: Dependent elimination failed: Failed to solve equation
+  "Deduplicated" = "HashConsedValue"
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:20:59: error(lean.unknownIdentifier): Unknown identifier `Event`
+
+Note: It is not possible to treat `Event` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:38:6: error(lean.unknownIdentifier): Unknown identifier `arc_away`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:36:49: error: unsolved goals
+p : Parameters
+c : Config
+w : OWNER
+a : ℕ
+f hooks packet : Data
+⊢ (have C := (runtime p).carrier;
+    have K := (runtime p).control;
+    have H :=
+      PV_THR2_FnOnceDispatch.handler
+        (PV_LIB_SPEC_SparseRuntime.values C K (PV_THR2_OwnUniformResourceHandler.lift p.environment.native));
+    have H := PV_THR2_ManuallyDropHandler.handler H;
+    have H := PV_THR2_IntrinsicSemantics_NonNullAsRef.handler C c.store H;
+    have H := PV_THR2_PacketPointerSemantics.handler H;
+    have H := PV_THR2_ClosureBoxActivationHandler.handler (fun {A} => p.resources) (fun {A} => p.encode) H;
+    match PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a [payload f hooks packet] with
+    | PV_STX2_Native.Request.child callee a_1 captures =>
+      PV_LIB_SPEC_SiteArc.handler C K (fun {A} => p.resources) (fun {A} => p.encode)
+        (have __src := c.store;
+        { cells := __src.cells, nextActivation := a_1 })
+        H (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a [payload f hooks packet]) w
+    | x =>
+      some (H (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a [payload f hooks packet]) w)) =
+    some
+      (PV_THR2_ClosureBoxAllocation.reply (fun {A} => p.resources) (fun {A} => p.encode)
+        (let __src := c.store;
+        { cells := __src.cells, nextActivation := a })
+        w)
+'PV_LIB_SPEC_CallbackNativeGap.kind' depends on axioms: [sorryAx]
+'PV_LIB_SPEC_CallbackNativeGap.payload' depends on axioms: [sorryAx]
+'PV_LIB_SPEC_CallbackNativeGap.distinct' depends on axioms: [propext, sorryAx]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackNativeGap.lean:73:14: error(lean.unknownIdentifier): Unknown constant `arc_away`
+'PV_LIB_SPEC_CallbackNativeGap.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackNativeGap.parameters' depends on axioms: [propext]
+'PV_LIB_SPEC_CallbackNativeGap.config' does not depend on any axioms
+'PV_LIB_SPEC_CallbackNativeGap.native_memory' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackNativeGap.native_disagrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
