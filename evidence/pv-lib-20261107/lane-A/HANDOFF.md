@@ -112,3 +112,7 @@ world/result and OWNER-only backing are not silently called closed.
 Copy, so its Option destructor has no callback/store effect. This adds477 to
 the recognized effect-free set without classifying SpawnHooks602 or generic762
 as trivial. Source archive/hash is session7/STD_THREADID.json.
+47433 passed WeakDropSource after two repaired elaboration issues at47432.
+The source prefix now distinguishes dangling/nonlast/last, and deallocation is
+a retained completion stage rather than a prefix incorrectly run on pending.
+This is source-only lifetime support, not complete allocator/OWNER adequacy.
