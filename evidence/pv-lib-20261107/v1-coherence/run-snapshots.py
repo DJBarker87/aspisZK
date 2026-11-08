@@ -27,14 +27,35 @@ def snapshot(name,request,path):
  if r.returncode:
   print(name,'FAILED',log.read_text()[-4000:],flush=True);sys.exit(1)
  return dict(exit=r.returncode,sha256=sha(log),log=str(log),time=str(tim),command=cmd,types={x['root']:{k:v for k,v in x.items() if k!='root'} for x in (json.loads(l) for l in log.read_text().splitlines() if l.startswith('{'))})
-# ONE common merged environment, with exactly the final strict audit's import array.
-merged_request=V/'merged-snapshot.json';union=json.load(open(V/'AUDIT_ROOTS.json'));merged_request.write_text(json.dumps({k:union[k] for k in ['modules','roots']}))
-merged=snapshot('MERGED-UNION',merged_request,O)
-print('Unified merged root types retained:',len(merged['types']),flush=True)
-results=[]
+# Reuse completed, hash-checked merged results from 56560; only the baseline
+# framework overlay changed. No unchanged merged scan or completed comparison rerun.
+union=json.load(open(V/'AUDIT_ROOTS.json'));merged_types={}
+merged_parts=json.load(open(E/'MERGED_TYPE_BATCHES-56560.json'))
+for part in merged_parts:
+ assert part['exit']==0 and sha(part['log'])==part['sha256']
+ for line in pathlib.Path(part['log']).read_text().splitlines():
+  if line.startswith('{'):
+   q=json.loads(line);assert q['root'] not in merged_types;merged_types[q['root']]={k:v for k,v in q.items() if k!='root'}
+assert set(merged_types)==set(union['roots'])
+merged=dict(exit=0,types=merged_types,parts=merged_parts,one_frozen_object_mapping=True,reused_attempt=56560)
+print('Reused exact merged-cohort types:',len(merged_types),flush=True)
+(E/f'MERGED_TYPE_BATCHES-{a}.json').write_text(json.dumps(merged_parts,indent=2))
+results=json.load(open(E/'STATEMENT_COMPARISONS-56561.json'));completed={r['group'] for r in results}
+# A fallback PV dependency is admissible only when all retained verified
+# authorities agree on its exact historical object hash. Cohort entries win.
+survey=json.load(open(V/'CACHE_SURVEY.json'));candidates={}
+for c in survey:
+ if c['module'].startswith('PV_'):candidates.setdefault(c['module'],[]).append(c)
+shared_unique={m:vs[0] for m,vs in candidates.items() if len({v['sha256'] for v in vs})==1}
+framework=[]
+for q in O.rglob('*.olean'):
+ rel=q.relative_to(O)
+ if not rel.parts[0].startswith('PV_'):framework.append((rel,q))
 for group_path in group_paths:
  g=json.loads(lzma.decompress(pathlib.Path(group_path).read_bytes()))
- name=g['driver'];dest=V/'snapshot-authorities'/name;dest.mkdir(parents=True,exist_ok=True)
+ name=g['driver']
+ if name in completed:continue
+ dest=V/'snapshot-authorities'/name;dest.mkdir(parents=True,exist_ok=True)
  if 'host_resolution' in g:
   p=pathlib.Path(g['host_resolution']);z=json.loads(lzma.decompress(p.read_bytes()));authority=z.get('modules',z)
  else:authority=g['resolution']
@@ -47,6 +68,46 @@ for group_path in group_paths:
   for ext in ['.olean.private','.olean.server','.ilean','.ir']:
    src=pathlib.Path(str(p).removesuffix('.olean')+ext);link=pathlib.Path(str(q).removesuffix('.olean')+ext)
    if src.exists() and not link.exists():link.symlink_to(src)
+ # Early compiler resolutions omitted the base environment's transitive
+ # entries. Complete them from that cohort's retained named hash authority.
+ shared_kind={'PV_LIB_SPEC_RawAuditBase':'BASE','PV_LIB_SPEC_RawAuditStx':'STX','PV_LIB_SPEC_RawAuditSession2':'BASE','PV_LIB_SPEC_RawAuditSession19':'ACTIVE19'}.get(name)
+ shared_used={}
+ if shared_kind:
+  source_authority=V.parents[0]/'codex-pv-lib-spec-20261107'/(shared_kind+'_OBJECT_AUTHORITY.json.xz')
+  # V.parent is the slice job, V.parents[1] is project-offloads.
+  source_authority=V.parents[1]/'codex-pv-lib-spec-20261107'/(shared_kind+'_OBJECT_AUTHORITY.json.xz')
+  shared=json.loads(lzma.decompress(source_authority.read_bytes()))['modules']
+  for m,v in shared.items():
+   q=dest/(m.replace('.','/')+'.olean')
+   if q.exists():continue
+   src=pathlib.Path(v['path']);assert sha(src)==v['sha256'],('source baseline authority changed',name,m)
+   q.parent.mkdir(parents=True,exist_ok=True);q.symlink_to(src);shared_used[m]=v
+   for ext in ['.olean.private','.olean.server','.ilean','.ir']:
+    part=pathlib.Path(str(src).removesuffix('.olean')+ext);link=pathlib.Path(str(q).removesuffix('.olean')+ext)
+    if part.exists() and not link.exists():link.symlink_to(part)
+  (E/('BASELINE_SHARED_AUTHORITY-'+name+'.json.xz')).write_bytes(lzma.compress(json.dumps(shared_used).encode()))
+ unique_used={}
+ for m,v in shared_unique.items():
+  q=dest/(m.replace('.','/')+'.olean')
+  if q.exists():continue
+  src=pathlib.Path(v['path']);assert sha(src)==v['sha256'],('shared historical cache changed',m)
+  q.parent.mkdir(parents=True,exist_ok=True);q.symlink_to(src);unique_used[m]=v
+  for ext in ['.olean.private','.olean.server','.ilean','.ir']:
+   part=pathlib.Path(str(src).removesuffix('.olean')+ext);link=pathlib.Path(str(q).removesuffix('.olean')+ext)
+   if part.exists() and not link.exists():link.symlink_to(part)
+ (E/('BASELINE_UNIQUE_SHARED-'+name+'.json.xz')).write_bytes(lzma.compress(json.dumps(unique_used).encode()))
+ # Complete the standard/toolchain framework from the SAME hash-frozen cache.
+ # No PV proof module is supplied by this fallback, and authority entries win.
+ fallback={}
+ for rel,src in framework:
+  q=dest/rel
+  if q.exists():continue
+  q.parent.mkdir(parents=True,exist_ok=True);q.symlink_to(src)
+  fallback[str(rel)]=dict(path=str(src),sha256=sha(src))
+  for ext in ['.olean.private','.olean.server','.ilean','.ir']:
+   part=pathlib.Path(str(src).removesuffix('.olean')+ext);link=pathlib.Path(str(q).removesuffix('.olean')+ext)
+   if part.exists() and not link.exists():link.symlink_to(part)
+ (E/('BASELINE_FRAMEWORK-'+name+'.json.xz')).write_bytes(lzma.compress(json.dumps(fallback).encode()))
  # Only requested roots are compared; historical drivers also contain eight extra roots.
  roots=[r for r in g['roots'] if r in merged['types']]
  request=V/(name+'-snapshot.json');request.write_text(json.dumps(dict(modules=g['modules'],roots=roots)))

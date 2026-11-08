@@ -191,3 +191,84 @@ providers and its root array retains all 4,307 roots. The collector/walker body
 comparison passed unchanged. Canonical object, companion and source hashes are
 frozen separately as `COHORT_CANONICAL_FREEZE`; the failed merge freeze remains
 retained. Root-type comparison and the sole final strict audit remain pending.
+
+
+### COH-4: full-root import exceeds the fixed Lean memory threshold
+
+56551 (734 module heads) and 56556 (708 exact root-owner heads; 684 library
+modules in their closure) both stopped during import, before printing a root
+type, with:
+
+```
+excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)
+```
+
+56551: exit 1, wall 0:19.48, peak RSS 7174820 KiB, swaps 0.
+56556: exit 1, wall 0:19.09, peak RSS 7201248 KiB, swaps 0.
+Both use source revision 27993341c49. The second input removed 50 uncited
+library modules from the imported closure; no failed shape was retried with a
+higher cap. The full-import approach was then stopped. No strict union audit
+has run yet.
+
+The replacement uses one frozen ModuleName→object mapping and one canonical
+source revision, with disjoint root batches (35 batches, at most 125 roots).
+This is batching a single cohort, not combining input-cohort audit results.
+The graph-wide metadata gate 56558 compared 1,477 repeated actual kernel
+names. Every type and definition body matched exactly; theorem proof bodies
+are compared by their unchanged type under proof irrelevance. All comparisons
+passed (exit 0, wall 0:00.98, peak RSS 2213636 KiB, swaps 0). The repeated names
+are generated equation/auxiliary declarations; the conflicting nominal lane
+mirrors were already canonicalized. ROOT_IMPORT_PREFLIGHT records the complete
+root→owner mapping and 3,795-module dependency closure.
+
+The new array-only batch drivers all compiled in 56559 (35 passes; aggregate
+exit 0, wall 0:30.70, peak RSS 1593364 KiB, swaps 0, standard axioms). Collector
+and walker bodies are unchanged. The single final audit will run all these
+batches serially under ONE admitted capped aggregate scope and return nonzero
+if any process, root, summary comparison or axiom check fails. It uses the
+same canonical objects for every batch and checks exact root-union coverage.
+
+A new metadata helper candidate 56552 failed on an unavailable Inhabited
+instance for ModuleData×CompactedRegion (exit 1, wall 0:00.64, peak RSS
+1560392 KiB, swaps 0). Its diagnostic-generated sorryAx is not a pass or an
+active placeholder. The failed input is archived. Its successor
+PV_LIB_V1_ModuleDeclarations2 uses an explicit optional lookup and passed56553
+(exit 0, wall0:00.73, peak1570380 KiB, swaps0, standard axioms). Header scan56554
+also passed (exit0, wall0:01.14, peak2165220 KiB, swaps0). No library statement
+or resource cap changed during this isolation.
+
+
+### COH-5: serialized hygiene labels, checked against actual kernel expressions
+
+The complete 35-batch merged type scan passed in56560. The original-cohort
+comparison resumed from retained hashes rather than re-running it. Older source
+resolutions lacked common framework/transitive entries:56560 stopped at missing
+Init.Prelude,56561/56562 at missingPV_STX2_LiveNumbering. Exact diagnostics and
+resource fields are retained. Missing framework entries were supplied from the
+pinned shared toolchain cache; missing PV entries were supplied only from the
+specific historical cohort authority or where ALL retained verified authorities
+agree on one historical object hash. Existing cohort entries always win. No
+current repaired PV proof is used to invent an old reference type.
+
+56563 completed all47 source groups but returned1 because raw `reprStr` differed
+for34 A/session16 and21 SPEC/session9 roots. TYPE_SERIALIZATION_DIFFERENCES
+retains exact pairs. Inspection showed module names embedded in synthetic
+lambda/let binder labels (for example abort_state_free's source binder label
+contains SPEC_LaneA_Graph and the canonical label contains Graph). Bound-variable
+indices, constants, quantifier kinds and universes were unchanged.
+
+The new StatementAlpha verifier loads the exact type expressions directly from
+both pinned module files, first checks each against its captured representation,
+then compares Lean Expr values and universe parameters.56565 passed ALL55 pairs:
+55/55 raw Expr equalities TRUE,55/55 same universe parameters,55/55 annotation-only
+checks TRUE. The custom annotation erasure was redundant: the original Lean
+expressions already compare equal. No theorem statement was edited, weakened,
+unfolded or repaired on this account. STATEMENT_COHERENCE records4307 merged roots,
+47 source groups and ZERO logical statement differences.
+
+56563: exit1,wall6:29.22,peak6847956KiB,swaps0 (representation differences, not a pass).
+56564 helper compile: exit0,wall0:00.78,peak1575424KiB,swaps0,standard axioms.
+56565 exact type check: exit0,wall0:00.82,peak1599012KiB,swaps0,standard axioms.
+The failed/cohort-specific checkpoints remain retained and are not promoted to
+successful aggregate audit evidence. The canonical object/source freeze check
+passed unchanged after these comparisons.
