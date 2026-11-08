@@ -40,3 +40,19 @@ PV_LIB_SPEC_AtomicRecheck12 compiled 55144, cohort w3: exit0, wall 0:02.30, peak
 PV_LIB_SPEC_MemoryHistory12 compiled 55146, cohort w3: exit0, wall 0:02.23, peak 4774924KiB, swap 0; source deb7156449f4db51ef55b4343e9a0e29233ad994; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession12 compiled 55147, cohort w3: exit0, wall 0:00.85, peak 1572480KiB, swap 0; source 55af5e57ed79a4c2daf54b3483cfc3bcfc364c47; standard summary axioms only.
+
+Final scope:20 semantic modules plus one driver compiled successfully;11
+elaboration failures retained and source-changed before retry. Compile-free
+metadata preflight initially treated an opaque type as a Struct; no attempt
+ID/turn/build was consumed by that local script failure. The later unused
+UnsafeCell<bool> tag mistake is explicitly recorded under C9; the installed
+constructor uses u8 and its actual-v2 read is checked.
+
+ONE strict raw55190 passed159/159 NEW roots, exit0,wall0:58.66,
+peak6878744KiB,swap0,source29388f0fde7. Only standard axioms;zero unresolved
+or summary disagreements, unchanged private walker/collector. No unchanged
+regression. Scope final: no own live build scope. Offline validation PASS.
+No row/endpoint premise closed, no implementation/provider/shared-launcher/
+package/ledger/key change, push or merge. Full original-entry physical history,
+nonvacuous same-run exports and full joint witness/negation remain OPEN.
+Next55148;raw55191 only for changed/new roots. See SESSION12_ADEQUACY.md.

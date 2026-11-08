@@ -127,6 +127,8 @@ local codec interface; full physical/source adequacy is still OPEN.
 Focused compilation receipts carry exact source revisions, hashes, target,
 exit, wall,RSS,swap and printed axioms. Failed elaborations are retained and
 changed before retry. No full manifest, Rust/Kani/SBF/extraction suite or
-unchanged old audit was rerun. One strict NEW-root audit is the final gate;
-its exact result is in SESSION12_RAW_AUDIT.json after completion. No shared
+unchanged old audit was rerun. ONE strict NEW-root55190 audit PASSED159/159, exit0, wall0:58.66,
+peak6878744KiB,swap0,source29388f0fde7;standard axioms only,zero unresolved
+or summary disagreements. Exact result/graphs are in SESSION12_RAW_AUDIT.json
+and SESSION12_RAW_GRAPH_ARCHIVE.json.xz. No unchanged audit was repeated. No shared
 launcher/provider/package/ledger/implementation/key edits, push or merge.

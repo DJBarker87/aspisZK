@@ -17,9 +17,12 @@ TLS/Thread validity/counter/hooks and Values/full-table adequacy remain open.
 Latest lane A797dff893c3f has identical20 reused source pins; v2 stays PARTIAL.
 
 Focused55116..55147:21 passes(including driver),11 retained changed-before-retry
-failures. All6G/8G/swap0/Tasks64/-M7000. The single strict NEW-root55190 audit
-is next;159 roots frozen. No shared/provider/implementation/key changes,
-full manifest, push or merge. Next Lean55148; raw55191 only for changed inputs.
+failures. All6G/8G/swap0/Tasks64/-M7000. ONE strict NEW-root55190 PASS159/159: exit0,wall0:58.66,
+peak6878744KiB,swap0,source29388f0fde7. Standard axioms only;zero unresolved
+or summary disagreements; unchanged walker/collector. Exact graphs/hashes retained. No shared/provider/implementation/key changes,
+full manifest, push or merge. No own live scope remains.
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session12.py
+Next Lean55148;raw55191 only for changed inputs.
 
 ---
 

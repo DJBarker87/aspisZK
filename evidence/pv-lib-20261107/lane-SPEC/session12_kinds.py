@@ -33,8 +33,8 @@ assert x['type_decls'][a]['kind']=='Opaque'
 cell={'id':{'Adt':116},'generics':{'regions':[],'types':[{'Literal':'Bool'}],'const_generics':[],'trait_refs':[]}}
 kinds['boolCell']={'Adt':[cell,None,None]}
 text='\n'.join(['import PV_LIB_SPEC_NativeModel','set_option autoImplicit false','namespace PV_LIB_SPEC_NativeKinds','open PV_STX2_Syntax']+['def '+k+' : Data := '+data(v) for k,v in kinds.items()]+['#print axioms '+k for k in kinds]+['end PV_LIB_SPEC_NativeKinds',''])
-report={'source_revision':rev,'source_path':path,'llbc_sha256':hashlib.sha256(raw).hexdigest(),'metadata':kinds,'functions':{str(i):x['fun_decls'][i]['item_meta']['name'] for i in [123,455,456]},'limits':'Constructor value metadata only; no successful original history or physical correspondence.'}
+report={'source_revision':rev,'source_path':path,'llbc_sha256':hashlib.sha256(raw).hexdigest(),'metadata':kinds,'functions':{str(i):x['fun_decls'][i]['item_meta']['name'] for i in [123,455,456]},'limits':'Three result tags are exact LLBC. boolCell is an UNUSED historical incorrect UnsafeCell<bool> tag, not an extracted opaque field. NativeConstructors.boolCell supplies u8. No successful original history or physical correspondence.'}
 for p,s in [(pathlib.Path('lean/PV_LIB_SPEC_NativeKinds.lean'),text),(L/'SESSION12_NATIVE_SOURCE.json',json.dumps(report,indent=2)+'\n')]:
  if '--check' in sys.argv:assert p.read_text()==s
  else:p.write_text(s)
-print('PASS exact N95807 constructor metadata')
+print('PASS retained LLBC result tags; unused historical boolCell mistake explicitly recorded (SPEC-C9)')
