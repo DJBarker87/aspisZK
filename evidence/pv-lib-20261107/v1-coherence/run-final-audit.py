@@ -4,7 +4,7 @@ private importAll walker/collector and the existing runner are unchanged.
 """
 import pathlib,json,sys,hashlib,subprocess,re
 V=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence');E=V/'evidence';O=V/'objects-canonical';S=V/'sources-canonical';a=int(sys.argv[1]);focus=len(sys.argv)>2 and sys.argv[2]=='focus';assert 56590<=a<=56599
-sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest();cfg=json.load(open(V/'NARROW_ROOT_BATCHES.json'));expected=json.load(open(V/'AUDIT_ROOTS.json'))['roots'];assert [r for b in cfg['batches'] for r in b['roots']]==expected
+sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest();cfg=json.load(open(V/'FAMILY_ROOT_BATCHES.json'));expected=json.load(open(V/'AUDIT_ROOTS.json'))['roots'];assert [r for b in cfg['batches'] for r in b['roots']]==expected
 statement=json.load(open(E/'STATEMENT_COHERENCE.json'));assert statement['statement_differences']==0 and statement['source_groups']==47 and statement['expr_equal_count']==55
 compat=[json.loads(l) for l in (E/'out-56558.log').read_text().splitlines() if l.startswith('{')][-1];assert compat['compatible'] is True
 assert sha(V/'run-thread-audit.py')=='463b79c3c3b0b198563684fea65e14cdbe58ac833bc3f24aad93f6268751930a'
@@ -18,7 +18,14 @@ if not archive.exists():
  files={p.name:p.read_text() for p in (E/'raw-audit').glob('NEP_pv-thread_*') if p.is_file()}
  with lzma.open(archive,'wt') as f:json.dump(files,f)
  (E/'FAILED_GRAPH_ARCHIVE-56590.json').write_text(json.dumps(dict(files=len(files),sha256=sha(archive))))
-selected=[cfg['batches'][0],cfg['batches'][3],cfg['batches'][4]] if focus else cfg['batches']
+# Preserve failed attempt56592 walks before any filename is reused.
+archive=E/'failed-56592-graphs.json.xz'
+if not archive.exists():
+ import lzma
+ files={p.name:p.read_text() for p in (E/'raw-audit').glob('NEP_pv-thread_*') if p.is_file()}
+ with lzma.open(archive,'wt') as f:json.dump(files,f)
+ (E/'FAILED_GRAPH_ARCHIVE-56592.json').write_text(json.dumps(dict(files=len(files),sha256=sha(archive))))
+selected=[b for b in cfg['batches'] if b['name'] in cfg['focus_batches']] if focus else cfg['batches']
 expected=[r for b in selected for r in b['roots']]
 selection_dir=V/'root-selections';selection_dir.mkdir(exist_ok=True)
 all_results=[];batches=[]

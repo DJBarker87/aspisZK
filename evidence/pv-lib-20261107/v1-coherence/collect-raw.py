@@ -22,3 +22,8 @@ print(json.dumps(dict(files=files,archive_bytes=dest.stat().st_size,archive_sha2
 '''.replace('HOST',V)
 r=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(code)],input=json.dumps(roots),text=True,capture_output=True);assert r.returncode==0,r.stderr
 m=json.loads(r.stdout);(E/'RAW_GRAPH_MANIFEST.json').write_text(json.dumps(m,indent=2)+'\n');subprocess.run(['scp',host+':'+V+'/RAW_GRAPH_ARCHIVE.json.xz',str(E/'RAW_GRAPH_ARCHIVE.json.xz')],check=True);blob=(E/'RAW_GRAPH_ARCHIVE.json.xz').read_bytes();assert hashlib.sha256(blob).hexdigest()==m['archive_sha256'];(E/'RAW_GRAPH_ARCHIVE.json.sha256').write_text(m['uncompressed_sha256']+'\n');print(len(m['files']),'actual graph files; compressed bytes',len(blob))
+
+parts=[]
+for j in range(0,len(blob),10*1024*1024):
+ name=f'RAW_GRAPH_ARCHIVE.json.xz.part{j//(10*1024*1024):02d}';piece=blob[j:j+10*1024*1024];(E/name).write_bytes(piece);parts.append(dict(name=name,bytes=len(piece),sha256=hashlib.sha256(piece).hexdigest()))
+m['parts']=parts;(E/'RAW_GRAPH_MANIFEST.json').write_text(json.dumps(m,indent=2)+'\n');(E/'RAW_GRAPH_ARCHIVE.json.xz').unlink()

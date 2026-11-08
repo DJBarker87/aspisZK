@@ -293,3 +293,29 @@ passed75 roots across three selections including the earlier failing region:
 exit0, wall0:42.34, peak7064200KiB, swaps0. This diagnostic is not counted as a
 union audit. The replacement aggregate56592 is in progress, covering173
 disjoint selections in ONE capped scope using the same frozen canonical cohort.
+
+
+The changed25-root aggregate56592 also FAILED; it is not a union pass.
+It completed1,600 roots before narrow064 failed with the same exact interpreter
+memory diagnostic quoted above. Aggregate exit1, wall18:49.44,
+peak7169596KiB, swaps0, source27993341c495ea9107b742c011745b6ed725bebb.
+The failed batch combined lane-B slice statement/typedDrop providers with
+lane-C ActiveAdoption19/ActiveBoundary19 providers. Its module/root arrays are
+retained in NARROW_ROOT_BATCHES, and every completed result remains retained
+without being credited as successful union evidence. Failed raw graph files
+are preserved separately before reuse.
+
+The next input shape splits every mixed source-family batch at its family
+transitions, yielding182 disjoint selections, still at most25 roots each.
+The failing25-root batch becomes13 slice roots and12 specification roots.
+FAMILY_ROOT_BATCHES records the exact refinement and parent batch names.
+The driver, collector, walker, source revision and resource caps are unchanged.
+Diagnostic56593 tests the two affected imports before any replacement union
+attempt. No failed memory shape is rerun unchanged or given a larger cap.
+
+Diagnostic56593 passed both refined inputs:13 slice roots and12 specification
+roots. Aggregate exit0, wall0:57.29, peak6955692KiB, swaps0, standard axioms,
+source27993341c495ea9107b742c011745b6ed725bebb. This isolates the memory
+problem to the mixed import/collection shape, without a model or theorem change.
+The replacement182-selection aggregate starts again from the first root; no
+partial56592 result will be credited to its strict union result.

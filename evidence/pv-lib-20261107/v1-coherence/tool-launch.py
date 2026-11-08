@@ -17,6 +17,7 @@ for b in json.loads(files['ROOT_BATCHES.json'])['batches']:
 files['compile-root-batches.py']=(E/'compile-root-batches.py').read_text()
 files['run-final-audit.py']=(E/'run-final-audit.py').read_text()
 files['NARROW_ROOT_BATCHES.json']=(E/'NARROW_ROOT_BATCHES.json').read_text()
+files['FAMILY_ROOT_BATCHES.json']=(E/'FAMILY_ROOT_BATCHES.json').read_text()
 code=r'''
 import pathlib,json,sys,subprocess,time,hashlib,re,os
 x=json.load(sys.stdin);a=x['attempt'];mode=x['mode'];V=pathlib.Path('HOST');E=V/'evidence';O=V/'objects-canonical'
