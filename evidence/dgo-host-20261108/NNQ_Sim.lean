@@ -1,5 +1,5 @@
 import NNQ_Observe
-import GExq_OuterLower
+import RPz7_GExq_OuterLower
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNQ_HostDigest
@@ -9,16 +9,16 @@ def NotDigest {B : Type} (c : Call B) : Prop := S2W_Trace.operationId c ≠ 43
 
 inductive CallSim : {B : Type} → Call B → Call B → Prop where
   | same {B : Type} (c : Call B) (h : NotDigest c) : CallSim c c
-  | op10 {H : Type} (D1 D2 : aspis_core.digest.Digest32 H)
+  | op10 {H : Type} (D1 D2 : AdapterRw.aspis_core.digest.Digest32 H)
       (hc : D1.coremarkerCopyInst = D2.coremarkerCopyInst)
-      (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (semantic : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
       (pub proof : Slice U8) (split : Usize) (hash : H)
-      (obs : Option (aspis_r1_cost_probe.verifier.Phase → Result Unit)) :
+      (obs : Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Result Unit)) :
       CallSim (.op10 D1 semantic pub proof split hash obs) (.op10 D2 semantic pub proof split hash obs)
-  | op11 {H : Type} (D1 D2 : aspis_core.digest.Digest32 H)
+  | op11 {H : Type} (D1 D2 : AdapterRw.aspis_core.digest.Digest32 H)
       (hc : D1.coremarkerCopyInst = D2.coremarkerCopyInst)
       (pub proof ck : Slice U8) (hash : H)
-      (obs : Option (aspis_r1_cost_probe.verifier.Phase → Result Unit)) :
+      (obs : Option (AdapterRw.aspis_r1_cost_probe.verifier.Phase → Result Unit)) :
       CallSim (.op11 D1 pub proof ck hash obs) (.op11 D2 pub proof ck hash obs)
 inductive Sim {A : Type} : Code A → Code A → Prop where
   | done (a : A) : Sim (.done a) (.done a)

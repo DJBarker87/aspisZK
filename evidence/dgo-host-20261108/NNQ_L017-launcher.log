@@ -1,0 +1,44 @@
+{"attempt": "NNQ_L017", "exit_status": 1, "wall_seconds": 6.678947874810547, "peak_rss_kib": "6622108", "swaps": "0", "print_axioms": ["'AspisR1.NNQ_HostDigest.stage1_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNQ_HostDigest.stage2_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNQ_generated/NNQ_Stage1.lean:13:61: error: unsolved goals
+case hk
+S : AdapterRw.Ops
+o : AdapterRw.SolanaDigest → Slice (Slice U8) → Result (Std.Array U8 32#usize)
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+x : Bool
+⊢ Sim
+    (if x = true then
+      if (accounts.len != 3#usize) = true then
+        pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      else do
+        let proof_account ← liftM (accounts.index_usize 0#usize)
+        let public_account ← liftM (accounts.index_usize 1#usize)
+        let checkpoint_account ← liftM (accounts.index_usize 2#usize)
+        let r
+...
+tTerminalFormatErrorV1
+x✝ : core.result.Result (Std.Array U8 1880#usize) AdapterRw.solana_program_error.ProgramError
+cf4✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.solana_program_error.ProgramError) (Std.Array U8 1880#usize)
+val4✝ : Std.Array U8 1880#usize
+x : Slice U8
+⊢ Sim
+    (liftM
+      (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+        { op0 := @AdapterRw.Ops.op0 S, op1 := @AdapterRw.Ops.op1 S, op2 := @AdapterRw.Ops.op2 S,
+          op3 := @AdapterRw.Ops.op3 S, op4 := @AdapterRw.Ops.op4 S, op5 := @AdapterRw.Ops.op5 S,
+          op6 := @AdapterRw.Ops.op6 S, op7 := @AdapterRw.Ops.op7 S, op8 := @AdapterRw.Ops.op8 S,
+          op9 := @AdapterRw.Ops.op9 S, op10 := @AdapterRw.Ops.op10 S, op11 := @AdapterRw.Ops.op11 S, op12 := S.op12,
+          op13 := S.op13, op14 := S.op14, op15 := S.op15, op16 := S.op16, op17 := S.op17, op18 := S.op18,
+          op19 := S.op19, op20 := S.op20, op21 := S.op21, op22 := S.op22, op23 := S.op23, op24 := S.op24,
+          op25 := S.op25, op26 := S.op26, op27 := S.op27, op28 := S.op28, op29 := S.op29, op30 := S.op30,
+          op31 := S.op31, op32 := S.op32, op33 := S.op33, op34 := S.op34, op35 := S.op35, op36 := S.op36,
+          op37 := S.op37, op38 := S.op38, op39 := S.op39, op40 := S.op40, op41 := S.op41, op42 := S.op42, op43 := o,
+          op44 := S.op44, op45 := S.op45, op46 := S.op46, op47 := S.op47, op48 := S.op48, op49 := S.op49,
+          op50 := S.op50, op51 := S.op51, op52 := S.op52, op53 := S.op53 }))
+    (liftM (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES S))
+'AspisR1.NNQ_HostDigest.stage2_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8f546304ae694f218ca51737c057e157.scope; invocation ID: 2ed00fecbf924637b09b9d523be4d453
