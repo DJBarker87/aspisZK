@@ -1,5 +1,5 @@
-import PV_LIB_A_C18_A_PrefixMachine11
-import PV_LIB_A_C18_A_RangePoll11
+import PV_LIB_A_PrefixMachine11
+import PV_LIB_A_RangePoll11
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_A_RangeQuiet11

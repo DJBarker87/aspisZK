@@ -1,4 +1,4 @@
-import PV_LIB_SPEC_LaneA_A_OwnerStore
+import PV_LIB_A_OwnerStore
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_A_StorePrimitiveV2

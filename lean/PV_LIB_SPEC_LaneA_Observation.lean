@@ -1,4 +1,4 @@
-import PV_LIB_SPEC_LaneA_View
+import PV_LIB_View
 set_option autoImplicit false
 namespace PV_LIB
 open PV_STX_Machine PV_STX2_Syntax PV_STX2_Store PV_STX2_SliceMachine

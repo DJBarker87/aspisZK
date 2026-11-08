@@ -1,4 +1,4 @@
-import PV_LIB_SPEC_LaneA_A_StoreActionTable
+import PV_LIB_A_StoreActionTable
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_StoreActionTable

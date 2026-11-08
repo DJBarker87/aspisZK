@@ -1,5 +1,5 @@
-import PV_LIB_SPEC_LaneA_A_ArcStoreV2
-import PV_LIB_SPEC_LaneA_A_StoreAtomicV2
+import PV_LIB_A_ArcStoreV2
+import PV_LIB_A_StoreAtomicV2
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_A_StoreDispatchV2

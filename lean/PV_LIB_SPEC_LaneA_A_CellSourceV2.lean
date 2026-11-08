@@ -1,5 +1,5 @@
-import PV_LIB_SPEC_LaneA_A_CellTakeV2
-import PV_LIB_SPEC_LaneA_A_AtomicReadsV2
+import PV_LIB_A_CellTakeV2
+import PV_LIB_A_AtomicReadsV2
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_A_CellSourceV2

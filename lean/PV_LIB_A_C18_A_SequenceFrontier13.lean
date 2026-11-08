@@ -1,5 +1,5 @@
-import PV_LIB_A_C18_A_SourceSequence13
-import PV_LIB_A_C18_A_Continuation12
+import PV_LIB_A_SourceSequence13
+import PV_LIB_A_Continuation12
 set_option autoImplicit false
 noncomputable section
 namespace PV_LIB_A_SequenceFrontier13

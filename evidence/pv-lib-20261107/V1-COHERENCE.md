@@ -134,3 +134,26 @@ The frozen workspace records 35,569 object/companion file hashes and 1,785
 retained staged source hashes (including inactive preflight sources, which
 are not credited as active proof modules). Toolchain Git hash and Lean binary
 SHA-256 are retained in COHORT_FREEZE. The library source pin remains 9a38706526c.
+
+
+### COH-3: duplicate namespace declarations across lane mirror modules
+
+The first combined environment failed in 56537, before any strict raw audit:
+
+```
+uncaught exception: import PV_LIB_SPEC_LaneA_Graph failed, environment already contains 'PV_LIB.Observation.abort.elim' from PV_LIB_Graph
+```
+
+Exit 1, wall 0:18.65, peak RSS 6317488 KiB, swaps 0; source revision
+`9a38706526c45bc0fac071869458400a07aaaba7`. The import-only lane-C `LaneA`
+and lane-A `C18` source mirrors redeclare the same public namespace under
+different module identities. Individually compiling them did not expose this.
+
+`IMPORT_CANONICALIZATION.json` identifies 53 mirrors whose complete declaration
+bodies are byte-identical to their canonical source after removing imports.
+The import repair redirects 59 consumer files to canonical modules. No theorem
+statement, definition body, or proof body changes. Mirror files remain retained
+and independently compiled compatibility inputs; the combined root environment
+selects one canonical provider per duplicated namespace. It still audits every
+root in the 4,307-name union, and source-cohort type comparisons must pass.
+This is a changed import graph and will be replayed before any coherence claim.
