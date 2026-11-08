@@ -24,3 +24,5 @@ PV_LIB_SPEC_Tls277Request15 compiled 55483, cohort w3: exit0, wall 0:04.96, peak
 PV_LIB_SPEC_TlsAt58 compiled 55484, cohort w3: exit0, wall 0:02.22, peak 4805224KiB, swap 0; source 5798d718d7f7926aa283b188b663aa68109c6f09; standard summary axioms only.
 
 PV_LIB_SPEC_Tls277Route15 compiled 55485, cohort w3: exit0, wall 0:02.59, peak 4823124KiB, swap 0; source 2d2267680890fb529022fdc491599ebad04abdb2; standard summary axioms only.
+
+PV_LIB_SPEC_Tls277Native15 compiled 55486, cohort w3: exit0, wall 0:03.38, peak 4843816KiB, swap 0; source 64f939e135dc57ec3dcfd2b51ecdf0c97a6e97fd; standard summary axioms only.
