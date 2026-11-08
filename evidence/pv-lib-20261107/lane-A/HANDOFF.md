@@ -138,3 +138,5 @@ branches are checked. nontrivial_still_unsupported retains the latest model's
 violation or original-entry reachability is inferred.
 
 47439 passed PV_LIB_A_Emitted486. Exact emitted syntax only; no native adequacy or row closure.
+
+47440 passed PV_LIB_A_Emitted584. Exact emitted syntax only; no native adequacy or row closure.
