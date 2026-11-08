@@ -1,3 +1,17 @@
+# Lane A session12 in progress — PARTIAL
+
+Continued8abdcb48c52. Post93 match/captures, exact closure aggregate, structured
+166/270 entry,166 prologue/captures and Builder269 boundary are focused-checked.
+RangeHistory12.history now joins3400 through3471 on the corrected phase-bearing
+machine. RangeInvariant12 is a per-iteration iterator facet through preparation,
+poll and returned delivery; it is NOT the complete loop backedge invariant.
+Continuous166 composition is being checked. Full f6,361-through14756 and the
+OwnInit/source7 joint witnesses remain OPEN. No row/endpoint premise closed.
+No post-target cleanup restarted. Final strict new-root audit still PENDING.
+Next focused55337; raw47497. See session12 receipts for exact accepted inputs.
+
+Historical session11 handoff follows.
+
 # Lane A session11 handoff — PARTIAL; full requested completion not achieved
 
 Base280cd5669b0fb283ea4ba6ffd364db2c9de2d1e4, branch codex/pv-lib-20261107.
