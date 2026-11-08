@@ -1,5 +1,4 @@
 import NNH_Tx2OpenSlots
-import Op5T_Concrete
 import NLL_Tx2Caller
 set_option autoImplicit false
 noncomputable section

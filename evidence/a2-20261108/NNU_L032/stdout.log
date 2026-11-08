@@ -1,0 +1,232 @@
+def LIBB_PartitionEnv.digest : RSL.Env → VTop_Stages.aspis_core.digest.Digest32 Unit :=
+fun env =>
+  { coremarkerCopyInst := (LIBB_HashModel.digest env).coremarkerCopyInst,
+    digest := fun x parts => LIB_Env.hashv env parts }
+def LIBB_PartitionEnv.H : RSL.Env → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State :=
+fun env message => LIBB_HashModel.state (env.sha256 (LIBB_C04Partition.partition (LIBB_ProtocolBytes.host message)))
+LIBB_PartitionEnv.partition_value (env : RSL.Env) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8))
+  (partition :
+    LIBB_C04Partition.partition (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+      NNC_ResumeEvents.parts parts) :
+  AspisV8R19.SqueezeOracleBridge.encodeState (LIBB_PartitionEnv.H env (AspisV8R19.SqueezeOracleBridge.flatten parts)) =
+    LIB_Env.nativeKey (env.sha256 (NNC_ResumeEvents.parts parts))
+LIBB_FlattenBytes.node (left right : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  LIBB_C04Partition.partition
+      (LIBB_ProtocolBytes.host
+        (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.MultiproofConePhysicalDigest.parts left right))) =
+    NNC_ResumeEvents.parts (AspisR1.MultiproofConePhysicalDigest.parts left right)
+LIBB_C04InputPartition.input (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8) :
+  LIBB_C04Partition.partition
+      (LIBB_ProtocolBytes.host (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o))) =
+    NNC_ResumeEvents.parts (AspisR1.Port4B_LeafCode.input kind o)
+def NJS_RuntimeDigest.backend : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  NJS_Extract.aspis_core.digest.Digest32 Unit :=
+fun H =>
+  { coremarkerCopyInst := { cloneInst := { clone := fun x => Aeneas.Std.Result.ok x } },
+    digest := fun x parts => Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H parts) }
+def NJS_BatchLeaf.modelDigest : {H : Type} →
+  NJS_Extract.aspis_core.digest.Digest32 H → AspisR1Stage2.aspis_core.digest.Digest32 H :=
+fun {H} d => { coremarkerCopyInst := d.coremarkerCopyInst, digest := d.digest }
+AspisR1.MultiproofConeP6Verify.verifyState_eq: ∀ {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (source : AspisR1.MultiproofConeP6Composition.Node),
+      AspisR1.MultiproofConeP6Composition.NodeGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) source →
+        ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+          (↑physical).length ≤ 5504 →
+            ∀ (s : MultiproofConeRef.reference.Scratch),
+              ↑s.at = 0 →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.MultiproofConeP6Verify.verifyState source root physical s) =
+                  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)
+NJS_Slot.source._proof_4: ∀ (s : Aeneas.Std.Usize), ↑s < 6 → ↑(s.wrapping_add 1#usize) = ↑s + 1 → ¬↑s ≤ 6 → False
+AspisR1.MultiproofConeVerifyState.verifyState.eq_1: ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConeVerifyState.verifyState root physical s =
+    if
+        AspisR1.OraclePortFrozenOrder.wellFormed
+            (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+          (↑physical).length % 32 = 0 then
+      AspisV8R19.OracleProgramOps.bind
+        (AspisR1.MultiproofConePhysicalTransport.transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+        fun result =>
+        AspisV8R19.MemoizedProgramLaw.Program.done
+          (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+    else AspisV8R19.MemoizedProgramLaw.Program.done (false, s)
+AspisR1.MultiproofConeP6Verify.verifyState_eq._proof_2: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = ↑s.n →
+    0 < ↑s.n → (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length ≤ 16 → ¬↑s.n ≤ 16 → False
+AspisR1.MultiproofConePhysicalVerify.accepted_verify._proof_1: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.at = 0 →
+    AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+        (↑physical).length % 32 = 0 →
+      ¬↑s.at ≤ (↑physical).length → False
+NJS_Extract.aspis_core.digest.Digest32.mk.injEq: ∀ {Self : Type} (coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self)
+  (digest :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (coremarkerCopyInst_1 : Aeneas.Std.core.marker.Copy Self)
+  (digest_1 :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)),
+  ({ coremarkerCopyInst := coremarkerCopyInst, digest := digest } =
+      { coremarkerCopyInst := coremarkerCopyInst_1, digest := digest_1 }) =
+    (coremarkerCopyInst = coremarkerCopyInst_1 ∧ digest = digest_1)
+AspisR1.MultiproofConePhysicalVerify.accepted_verify._proof_2: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = ↑s.n →
+    ¬0 < ↑s.n → ¬(List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = 0 → False
+AspisR1.MultiproofConeVerifyState.verify_projection: ∀
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (root : AspisR1.MultiproofConePhysicalProgram.Digest) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2.1) =
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConePhysicalVerify.verify root physical s)
+AspisR1.MultiproofConeP6Verify.verify_in_place_owned._proof_6: ∀ (s : MultiproofConeRef.reference.Scratch)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8), 0 < ↑s.n → ¬↑s.n > 16 → ¬↑s.n ≤ 16 → False
+NJS_Parse.source: ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  NJS_Parse.map NJS_Parse.reply
+      (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+        (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof) =
+    Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof
+AspisR1.MultiproofConeP6Verify.verifyState_eq._proof_3: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑physical).length ≤ 5504 →
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      ↑s.at = 0 →
+        AspisR1.OraclePortFrozenOrder.wellFormed
+              (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+            (↑physical).length % 32 = 0 →
+          ¬↑s.at ≤ (↑physical).length → False
+AspisR1.MultiproofConeP6Verify.verifyState_eq._proof_1: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = ↑s.n →
+    ¬0 < ↑s.n → ¬(List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = 0 → False
+NJS_Slot.source._proof_2: ∀ (s : Aeneas.Std.Usize),
+  ↑s < 6 → ↑(s.wrapping_add 1#usize) = ↑s + 1 → ¬↑(s.wrapping_add 1#usize) ≤ 6 → False
+AspisR1.MultiproofConeP6Callbacks.conditional_eval: ∀ {α : Type}
+  (H : AspisR1.MultiproofConePhysicalProgram.Address → AspisR1.MultiproofConePhysicalProgram.Digest) (test : Prop)
+  [inst : Decidable test] (yes no : AspisR1.MultiproofConePhysicalProgram.Run α),
+  AspisV8R19.MemoizedProgramLaw.eval H (if test then yes else no) =
+    if test then AspisV8R19.MemoizedProgramLaw.eval H yes else AspisV8R19.MemoizedProgramLaw.eval H no
+NJS_Sort.source: ∀ (keys : NJS_Sort.Keys) (n : Aeneas.Std.Usize),
+  0 < ↑n →
+    ↑n ≤ 16 →
+      NJS_Extract.verifier.candidate.sort_batch_keys keys n = MultiproofSortRef.sort_reference.sort_rows keys 1#usize n
+NJS_Sort.source._proof_1: ∀ (n : Aeneas.Std.Usize), 0 < ↑n → ↑n ≤ 16 → ↑1#usize + (↑n - 1) = ↑n
+AspisR1.MultiproofConeP6Verify.verifyState.eq_1: ∀ (source : AspisR1.MultiproofConeP6Composition.Node)
+  (root : AspisR1.MultiproofConePhysicalProgram.Digest) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConeP6Verify.verifyState source root physical s =
+    if
+        AspisR1.OraclePortFrozenOrder.wellFormed
+            (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+          (↑physical).length % 32 = 0 then
+      AspisV8R19.OracleProgramOps.bind
+        (AspisR1.MultiproofConePhysicalTransport.transport
+          (AspisR1.MultiproofConeP6Composition.levels source 18 s physical))
+        fun result =>
+        AspisV8R19.MemoizedProgramLaw.Program.done
+          (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+    else AspisV8R19.MemoizedProgramLaw.Program.done (false, s)
+AspisR1.MultiproofConeP6Verify.verify_in_place_owned: ∀ {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisR1.MultiproofConePhysicalProgram.Address → AspisR1.MultiproofConePhysicalProgram.Digest),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (H input)) →
+    ∀ (source : AspisR1.MultiproofConeP6Composition.Node),
+      AspisR1.MultiproofConeP6Composition.NodeGate H source →
+        ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest) (s : MultiproofConeRef.reference.Scratch)
+          (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+          (↑physical).length ≤ 5504 →
+            AspisR1.MultiproofConeP6Verify.wrapper
+                (fun state =>
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.MultiproofConeP6Composition.levels source 18 state physical)).2)
+                root s physical =
+              MultiproofConeRef.reference.verify_owned D hash root s physical
+NJS_Keys.source: ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (lo n tree : Aeneas.Std.Usize),
+  lo = 0#usize ∧ n = 10#usize ∨ lo = 10#usize ∧ n = 12#usize →
+    ↑tree < 3 →
+      (∀ k < 22, ↑(↑raw)[k]! < 262144) →
+        NJS_Extract.verifier.candidate.batch_keys raw lo n tree = AspisR1.Port4B_KeyInstall.build raw lo n tree
+AspisR1.MultiproofConePhysicalVerify.accepted_verify._proof_3: ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length = ↑s.n →
+    (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)).length ≤ 16 → ¬↑s.n ≤ 16 → False
+NJS_BatchLeaf.source._proof_3: ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (b : Aeneas.Std.Usize), ↑b ≤ 832 → ¬↑b ≤ (↑q).length → False
+NJS_Slot.source._proof_1: ∀ (s : Aeneas.Std.Usize), ↑s < 6 → ¬↑s < 256 → False
+AspisR1.MultiproofConeVerifyState.eval_map: ∀ {α β : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State α)
+  (f : α → β),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisV8R19.OracleProgramOps.bind p fun x => AspisV8R19.MemoizedProgramLaw.Program.done (f x)) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H p).1, f (AspisV8R19.MemoizedProgramLaw.eval H p).2)
+NJS_BatchLeaf.source: ∀ {H : Type} (d : NJS_Extract.aspis_core.digest.Digest32 H) (hash : H) (kind : Aeneas.Std.Usize)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    NJS_Extract.verifier.candidate.batch_leaf (Aeneas.Std.Result.ok 113#u8) (Aeneas.Std.Result.ok 241#u8)
+        (fun {H} => NJS_BatchLeaf.privateLeaf) d hash kind q =
+      AspisR1.Port4B_LeafCode.native (NJS_BatchLeaf.modelDigest d) hash kind q
+AspisR1.MultiproofConeP6Callbacks.checked_eval: ∀ {α β : Type}
+  (H : AspisR1.MultiproofConePhysicalProgram.Address → AspisR1.MultiproofConePhysicalProgram.Digest)
+  (r : Aeneas.Std.Result α) (f : α → AspisR1.MultiproofConePhysicalProgram.Run β),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConePhysicalProgram.checked r f) =
+    match r with
+    | Aeneas.Std.Result.ok x => AspisV8R19.MemoizedProgramLaw.eval H (f x)
+    | Aeneas.Std.Result.fail e => ([], Aeneas.Std.Result.fail e)
+    | Aeneas.Std.Result.div => ([], Aeneas.Std.Result.div)
+NJS_Slot.source: ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  ↑s < 6 →
+    NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof s = AspisR1.Port4B_SlotInstall.nodeSlot proof s
+AspisR1.MultiproofConeP6Verify.verify_in_place_owned._proof_5: ∀ (s : MultiproofConeRef.reference.Scratch)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8), ¬0 < ↑s.n → ¬↑s.n = 0 → False
+NJS_Extract.aspis_core.digest.Digest32.mk.sizeOf_spec: ∀ {Self : Type} [inst : SizeOf Self]
+  (coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self)
+  (digest :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)),
+  sizeOf { coremarkerCopyInst := coremarkerCopyInst, digest := digest } = 1 + sizeOf coremarkerCopyInst
+NJS_BatchLeaf.source._proof_2: ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (a b : Aeneas.Std.Usize), ↑b ≤ 832 → ¬↑b ≤ (↑q).length → False
+NJS_Slot.source._proof_3: ∀ (s : Aeneas.Std.Usize), ↑s < 6 → ↑(s.wrapping_add 1#usize) = ↑s + 1 → ¬↑s + 1 ≤ 6 → False
+AspisR1.MultiproofConePhysicalVerify.accepted_verify: ∀ {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+      (s : MultiproofConeRef.reference.Scratch),
+      ↑s.at = 0 →
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConePhysicalVerify.verify root physical s)).2 = true →
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConePhysicalVerify.verify root physical s) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortFrozenOrder.verifyInPlace (AspisV8R19.SqueezeOracleBridge.decodeState root)
+                (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)
+                (AspisR1.MultiproofConePhysicalViews.remaining physical s.at))
+AspisR1.MultiproofConePhysicalVerify.verify.eq_1: ∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConePhysicalVerify.verify root physical s =
+    if
+        AspisR1.OraclePortFrozenOrder.wellFormed
+            (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) ∧
+          (↑physical).length % 32 = 0 then
+      AspisV8R19.OracleProgramOps.bind
+        (AspisR1.MultiproofConePhysicalTransport.transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+        fun result =>
+        AspisV8R19.MemoizedProgramLaw.Program.done (AspisR1.MultiproofConePhysicalVerify.finish root physical result)
+    else AspisV8R19.MemoizedProgramLaw.Program.done false
+NJS_Extract.aspis_core.digest.Digest32.mk.inj: ∀ {Self : Type} {coremarkerCopyInst : Aeneas.Std.core.marker.Copy Self}
+  {digest :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)}
+  {coremarkerCopyInst_1 : Aeneas.Std.core.marker.Copy Self}
+  {digest_1 :
+    Self →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)},
+  { coremarkerCopyInst := coremarkerCopyInst, digest := digest } =
+      { coremarkerCopyInst := coremarkerCopyInst_1, digest := digest_1 } →
+    coremarkerCopyInst = coremarkerCopyInst_1 ∧ digest = digest_1

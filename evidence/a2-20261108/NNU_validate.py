@@ -11,6 +11,14 @@ for p in sorted(E.glob('NNU_L*/receipt.json')):
  assert json.loads((E/(a+'-disk-0.json')).read_text())['free']>=40_000_000_000
  for key in ['exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']:assert key in r,(a,key)
  assert int(r['swaps'])==0
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},a
+ checks=[json.loads(x) for x in (E/'NNU_ATTEMPTS.jsonl').read_text().splitlines()]
+ share=[x for x in checks if x.get('attempt')==a and x.get('event')=='share_check']
+ assert share and share[-1]['host']['count']<6,a
+ for src in c['sources']:
+  f=p.parent/'sources'/src
+  assert hashlib.sha256(f.read_bytes()).hexdigest()==r['source_hashes'][src],(a,src)
+
  for n,v in c['deps_fingerprint']['selected_objects'].items():
   if n in pins:assert pins[n]==v
   pins[n]=v
@@ -26,9 +34,9 @@ for p in sorted(E.glob('NNU_L*/receipt.json')):
     assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b|set_option\s+(maxHeartbeats|maxRecDepth)',psrc.read_text())
     name=psrc.stem;live=E/(name+'.lean')
     if live.exists() and live.read_bytes()==psrc.read_bytes():accepted[name]=a
- attempts.append({k:r[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']}|{'axioms':ax})
+ attempts.append({k:r[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']}|{'axioms':ax,'source_hashes':r['source_hashes'],'deps_fingerprint_sha256':hashlib.sha256(json.dumps(c['deps_fingerprint'],sort_keys=True).encode()).hexdigest(),'command':c['command']})
 assert len(attempts)<=40
-(E/'NNU_COMPILE.tsv').write_text('attempt\tmodule\texit\twall_seconds\tpeak_rss_kib\tswaps\tsource_revision\taxioms\n'+''.join('\t'.join(str(x[k]).replace('\n',' ') for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','axioms'])+'\n' for x in attempts))
+(E/'NNU_COMPILE.tsv').write_text('attempt\tmodule\texit\twall_seconds\tpeak_rss_kib\tswaps\tsource_revision\taxioms\tsource_hashes\tdeps_fingerprint_sha256\tcommand\n'+''.join('\t'.join(str(x[k]).replace('\n',' ') for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','axioms','source_hashes','deps_fingerprint_sha256','command'])+'\n' for x in attempts))
 (E/'NNU_IMPORTED_PINS.json').write_text(json.dumps(pins,indent=2)+'\n')
 (E/'NNU_VALIDATION.json').write_text(json.dumps({'scopes':len(attempts),'accepted_current_modules':accepted,'Kani':0,'extraction':0,'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in E.glob('NNU_*.lean')}},indent=2)+'\n')
 print(json.dumps({'scopes':len(attempts),'accepted_current_modules':accepted}))
