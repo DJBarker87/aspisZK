@@ -1,0 +1,95 @@
+{"cohort": "w3", "attempt": 55100, "target": "PV_LIB_SPEC_CallbackSource", "source_revision": "ce697ccee3adfa17a01ea88ca0cd000503bd2c6c", "source_sha256": "b7035c4a77500942eb6351acb119a675a86ecf5818a52d5b011ee271064d4a1f", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10872, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55100", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55100.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_CallbackSource.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackSource.lean", "7000"], "exit": 1, "wall_seconds": 2.864013433456421, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_CallbackSource.Registers' does not depend on any axioms", "'PV_LIB_SPEC_CallbackSource.packetWord' does not depend on any axioms", "'PV_LIB_SPEC_CallbackSource.packet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackSource.registers' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackSource.native' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackSource.packet_capture' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackSource.at_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackSource.other_answer' depends on axioms: [propext, Classical.choice, Quot.sound]"], "wall": "0:02.81", "peak_rss_kbytes": "4771476", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackSource.lean:65:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let actual ←
+      do
+        let value ← some value
+        let base ← packetWord (runtime p).carrier w value
+        pure { rsp := regs.rsp, r12 := base, rcx := regs.rcx, rax := regs.rax }
+    PV_LIB_SPEC_CallbackRuntime.native actual p c
+        (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a
+          [PV_LIB_SPEC_CallbackNativeGap.payload f hooks value])
+        w
+is not definitionally equal to the right-hand side
+  Option.map
+    (fun physical =>
+      PV_LIB_SPEC_CallbackStores.reply (fun {A} => p.resources) (fun {A} => p.encode)
+        { cells := c.store.cells, nextActivation := a }
+        { rsp := regs.rsp, r12 := physical, rcx := regs.rcx, rax := regs.rax } w)
+    none
+
+case none
+regs : Registers
+p : Parameters
+c : Config
+w : OWNER
+a : ℕ
+f hooks value : Data
+base : ℕ
+allocation :
+  (p.resources (PV_EVHB_GlobalSystem.Primitive.malloc PV_OWN2_ClientLayout.layout.callbackSize) (world w)).answer =
+    Answer.returned (Aeneas.Std.Result.ok base)
+nonnull : base ≠ 0
+pointer : packetWord (runtime p).carrier w value = none
+⊢ (do
+      let actual ←
+        do
+          let value ← some value
+          let base ← packetWord (runtime p).carrier w value
+          pure { rsp := regs.rsp, r12 := base, rcx := regs.rcx, rax := regs.rax }
+      PV_LIB_SPEC_CallbackRuntime.native actual p c
+          (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a
+            [PV_LIB_SPEC_CallbackNativeGap.payload f hooks value])
+          w) =
+    Option.map
+      (fun physical =>
+        PV_LIB_SPEC_CallbackStores.reply (fun {A} => p.resources) (fun {A} => p.encode)
+          { cells := c.store.cells, nextActivation := a }
+          { rsp := regs.rsp, r12 := physical, rcx := regs.rcx, rax := regs.rax } w)
+      none
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackSource.lean:66:20: error: Type mismatch
+  PV_LIB_SPEC_CallbackRuntime.native_at_call ?m.60 ?m.61 ?m.62 ?m.63 ?m.64 ?m.65 ?m.66 ?m.67
+has type
+  PV_LIB_SPEC_CallbackRuntime.native ?m.60 ?m.61 ?m.62
+      (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull ?m.64
+        [PV_LIB_SPEC_CallbackNativeGap.payload ?m.65 ?m.66 ?m.67])
+      ?m.63 =
+    some
+      (PV_LIB_SPEC_CallbackStores.reply (fun {A} => Parameters.resources ?m.61) (fun {A} => Parameters.encode ?m.61)
+        (have __src := Config.store ?m.62;
+        { cells := __src.cells, nextActivation := ?m.64 })
+        ?m.60 ?m.63)
+but is expected to have type
+  (do
+      let actual ←
+        do
+          let value ← some value
+          let base ← packetWord (runtime p).carrier w value
+          pure { rsp := regs.rsp, r12 := base, rcx := regs.rcx, rax := regs.rax }
+      PV_LIB_SPEC_CallbackRuntime.native actual p c
+          (PV_STX2_Native.Request.child PV_THR2_Source361BoxTable.fnClosureBoxFull a
+            [PV_LIB_SPEC_CallbackNativeGap.payload f hooks value])
+          w) =
+    Option.map
+      (fun physical =>
+        PV_LIB_SPEC_CallbackStores.reply (fun {A} => p.resources) (fun {A} => p.encode)
+          { cells := c.store.cells, nextActivation := a }
+          { rsp := regs.rsp, r12 := physical, rcx := regs.rcx, rax := regs.rax } w)
+      (some address)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackSource.lean:63:80: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵a̵t̵i̵v̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵a̵l̵l̵o̵c̵a̵t̵i̵o̵n̵,̵i̵f̵_̵n̵e̵g̵ ̵n̵o̵n̵n̵u̵l̵l̵,̵r̵e̵g̵i̵s̵t̵e̵r̵s̵,̵p̵a̵c̵k̵e̵t̵_̵c̵a̵p̵t̵u̵r̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲n̲a̲t̲i̲v̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲a̲l̲l̲o̲c̲a̲t̲i̲o̲n̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲n̲o̲n̲n̲u̲l̲l̲,̲ ̲r̲e̲g̲i̲s̲t̲e̲r̲s̲,̲ ̲p̲a̲c̲k̲e̲t̲_̲c̲a̲p̲t̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackSource.lean:77:2: error: No goals to be solved
+'PV_LIB_SPEC_CallbackSource.Registers' does not depend on any axioms
+'PV_LIB_SPEC_CallbackSource.packetWord' does not depend on any axioms
+'PV_LIB_SPEC_CallbackSource.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackSource.registers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackSource.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackSource.packet_capture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackSource.at_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackSource.other_answer' depends on axioms: [propext, Classical.choice, Quot.sound]
+
