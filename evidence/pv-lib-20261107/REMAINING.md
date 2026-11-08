@@ -19,9 +19,17 @@ branches are retained. A destructor at a reached prefix site is NOT deferred
 by its function name, nor is a failure before14756 erased. Shared slots keep
 historical proof statuses; target disposition is a separate field.
 
-Range prefix assembly is in progress. f6/f361 continuous original-entry
-history, full source-value/resource/frame binding and lane C's complete joint
-witness remain open. No endpoint/T premise or row closure is claimed.
+Range3400..3447 first-poll history is checked (RangeFirst11.history), with
+actual local7 derived and pending retries staged once. Early f6 body-entry
+history through123 is checked (F6EarlyHistory11.history), including the first
+121/122 stop. These two prefixes are NOT connected yet.
+
+NEXT: f15 post93 Some/None/capture/f166 continuation and later-loop iterator
+invariant; f6 Arc124/f125/callback chain to3400 with named value/frame/numbering
+bindings; then continuous f361 through14756 and lane C's remaining table needs.
+Full original-entry resource/source/binary frame binding, source7 closure and
+both full joint witnesses remain open. No endpoint/T premise or row closure
+is claimed.
 
 # Remaining obligations after Lane A session10 — PARTIAL
 
