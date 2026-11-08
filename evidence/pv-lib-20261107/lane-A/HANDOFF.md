@@ -82,3 +82,5 @@ runtime/Kani/Rust/SBF/Aeneas/full-manifest replay or endpoint result claimed.
 The task remains PARTIAL because the semantic/composition obligations above
 are unproved, not because IDs or compute were exhausted. COMMITS.txt records
 all proof/replay/driver commits through901669d3323; final metadata commit follows.
+
+Session6 from9e72b836054: focused47417 supplies the import surface `PV_LIB_StoreActionTable.v2` in `PV_LIB_A_StoreActionTable`. It consolidates the22 supplied projections, with explicit bool/nonlast/unpark coverage tags. This is PARTIAL, not completed D984 adequacy. Attempt47416 repaired a namespace doc-comment syntax error; exact failed source retained. No caller closure claimed.
