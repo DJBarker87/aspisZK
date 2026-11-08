@@ -8,12 +8,18 @@ history. `LaneAJoins16.original85` supplies original85 by name, for every finite
 native stack frame; no fresh internal input may start the suffix.
 
 ```lean
-OriginalToF6 (stack : PhysicalStack12.Frame) : Prop :=
-  ∃ n6, 85 ≤ n6 ∧ BodyEntry (history stack n6) F6.live.body
-F6ToRange (stack : PhysicalStack12.Frame) (n6 : Nat) : Prop :=
+def OriginalToF6 (stack : PV_LIB_SPEC_PhysicalStack12.Frame) : Prop :=
+  ∃ n6, 85 ≤ n6 ∧ BodyEntry (history stack n6) PV_THR2_F6.live.body
+
+def RangeEntry (q : Execution) : Prop :=
+  ∃ (s : Store Data) (a : Nat) (parents : List Frame),
+    q.state.current.status = .running (PV_THR2_Source15LoopEnter.after s a parents)
+
+def F6ToRange (stack : PV_LIB_SPEC_PhysicalStack12.Frame) (n6 : Nat) : Prop :=
   ∃ delta, RangeEntry (history stack (n6+delta))
-RangeToF361 (stack : PhysicalStack12.Frame) (nr : Nat) : Prop :=
-  ∃ delta, BodyEntry (history stack (nr+delta)) F361.live.body
+
+def RangeToF361 (stack : PV_LIB_SPEC_PhysicalStack12.Frame) (nr : Nat) : Prop :=
+  ∃ delta, BodyEntry (history stack (nr+delta)) PV_THR2_F361.live.body
 ```
 
 `BodyEntry` quantifies the actual Config, requires its emitted remaining body

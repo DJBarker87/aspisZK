@@ -58,3 +58,5 @@ PV_LIB_SPEC_ActiveReplacement16 compiled 55569, cohort w3: exit0, wall 0:03.06, 
 PV_LIB_SPEC_LaneAJoins16 compiled 55571, cohort w3: exit0, wall 0:02.16, peak 4824708KiB, swap 0; source a6ef3a42390bb2b675692ed463788e7bd1a54b21; standard summary axioms only.
 
 PV_LIB_SPEC_BinaryStack16 compiled 55572, cohort w3: exit0, wall 0:02.36, peak 4831436KiB, swap 0; source 60e8a34466eb46751d24c5b69db39e372e2c7fd1; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession16 compiled 55573, cohort w3: exit0, wall 0:00.86, peak 1590896KiB, swap 0; source 710e0f3f04cbe83dfc12da07852ee19eee80c6a9; standard summary axioms only.
