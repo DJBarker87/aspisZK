@@ -59,16 +59,20 @@ files={};sources=[]
 if kind=='lean':
  if target.startswith('NVR_'):p=E.parent/'nvr-20261108'/(target+'.lean')
  elif target.startswith('FIN_'):p=E.parent/'fin-20261108'/(target+'.lean')
+ elif target=='TAS_Top':p=E/'NNO_inputs/TAS_Top.lean'
  else:p=E/(target+'.lean')
  n='NNO_sources/'+target+'.lean';files[n]=p.read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNO_sources','-o','NNO_exports/'+target+'.olean',n]
- if target=='NNO_Scan':command+=['-c','NNO_native/NNO_Scan.c']
+ if target=='NNO_StatementChecks':
+  command+=['-c','NNO_native/NNO_Scan.c']
+  for extra in ['NNO_compile_link.py','NNO_NVR_ROOTS.json']:files[extra]=(E/extra).read_text();sources.append(extra)
+  command=['python3','NNO_compile_link.py',*command]
  if target.startswith('FIN_'):
   files['NNO_fin_guard.py']=(E/'NNO_fin_guard.py').read_text();sources+=['NNO_fin_guard.py'];command=['python3','NNO_fin_guard.py',a,*command]
 elif kind=='link':
  sources=['NNO_native/NNO_Scan.c','NNO_native/NFA_WALKER.c','NNO_native/NFA_MemoryLimit.c'];command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNO_native/NNO_Scan',*sources]
 else:
- sources=['NNO_audit.py','NNO_AUDIT_ROOTS.json','NNO_AUDIT_MODULES.json','NNO_EXPECTED_IMPORTS.jsonl'];command=['python3','NNO_audit.py',target]
+ sources=['NNO_audit.py','NNO_AUDIT_ROOTS.json','NNO_AUDIT_MODULES.json','NNO_EXPECTED_IMPORTS.jsonl','NNO_RuntimeScan.lean'];command=['python3','NNO_audit.py',target]
  for n in sources:files[n]=(E/n).read_text()
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNO_tmp',LEAN_PATH=':'.join(json.loads((E/'NNO_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'],text=True)),deps_fingerprint={},expected_time='Focused import elaboration'if kind=='lean'else'Optimized linker'if kind=='link'else'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
