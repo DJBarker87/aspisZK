@@ -19,3 +19,5 @@ PV_LIB_SPEC_EntryPre14 compiled 55408, cohort w3: exit0, wall 0:02.77, peak 4802
 PV_LIB_SPEC_PrefixEnvironment14 compiled 55409, cohort w3: exit0, wall 0:02.31, peak 4794764KiB, swap 0; source 5bbee123395eea250433f8bb52a855bf72586360; standard summary axioms only.
 
 PV_LIB_SPEC_NativeChecks14 compiled 55411, cohort w3: exit0, wall 0:02.56, peak 4805448KiB, swap 0; source 2577e327d75fd65e93a6ffa56a67afe93bc55578; standard summary axioms only.
+
+PV_LIB_SPEC_VectorKinds14 compiled 55412, cohort w3: exit0, wall 0:02.31, peak 4780692KiB, swap 0; source 48b3b6db0e555486fc28c0bd0a97ac38e4fe840c; standard summary axioms only.
