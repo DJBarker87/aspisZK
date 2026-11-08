@@ -230,3 +230,12 @@ allocation with its actual source-bound thread pointer/counter/panic values,
 retaining bytes33..39. Packet remains48/8, holes32..47. Then bind the native
 constructors and carry ONE original-entry trace through scope allocation,
 13923/cut92,113 registration and129/14756, before claiming a full witness.
+
+Stronger native-poll check44962: ScopeAllocationPollGap.rejects proves the
+ACTUAL sparse handler returns `none` at the shared4963 token with this
+ScopeData operand, for EVERY source store, thread/panicked values, OWNER world,
+fallback and non-null successful48-byte allocation reply. No malformed native
+answer or pending fallback is used. `correct40`/`unbound48` separately check a
+40-byte successful schedule leaves the incorrect48-byte request pending.
+This strengthens the local obstruction; it still does not prove original-entry
+reachability or a contradiction of the complete joint existential.
