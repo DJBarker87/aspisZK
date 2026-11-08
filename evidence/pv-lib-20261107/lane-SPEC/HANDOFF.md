@@ -1,3 +1,19 @@
+# Session20 live — target not yet established
+
+Base eaf6c8d269a77d60fb62581bb75e029070251607; LOG D1012. Uses only56208..56289,
+raw55497..55499 then55590..55599 then56290..56299. Active19 cohort is retained
+read-only. No launcher change needed:562xx was already accepted.
+
+ActiveRead20 (56214) reuses the named TLS source preparation contract and
+existing no-trap transport to prove the original adopted history at154, and
+source/physical ACTIVE=false there. This is a native binding prefix, not an
+A-owned original→f6 join. Failed56208..56213 sources/receipts retained; changed
+before retry, no failed theorem accepted. Next56215 in progress. Full native
+295/454, callback consumption/source activation/run, Values, ownership14756,
+universal contracts and final joint witness remain OPEN. No strict audit yet.
+
+---
+
 # Session19 checkpoint — Active repair ADOPTED; complete target OPEN
 
 Continued b2663b3dfc286de8cc05227232797156f74b6150; LOG D1010/D1011.
