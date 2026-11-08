@@ -156,3 +156,8 @@ compile driver now skips verified accepted receipts on resume.
 47446 passed PV_LIB_A_Emitted128. Exact emitted syntax only; no native adequacy or row closure.
 
 47447 passed PV_LIB_A_Emitted14. Exact emitted syntax only; no native adequacy or row closure.
+47448 passed TypedDropSource, source execution specifically for the known sized
+SpawnHooks glue608. Raw FnPtr metadata is preserved, the actual source parent
+and fresh destructor frame are retained, and no Store transformer is supplied.
+Opaque/unsized/generic destructors remain explicitly unbound; this dispatch
+mechanism is not a whole SpawnHooks/Cell/last-strong adequacy result.
