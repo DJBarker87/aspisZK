@@ -1,3 +1,9 @@
+# Run 5b current disposition
+
+T1/T2/T6 CLOSED; T3/T4/T5 OPEN at caps; T7 SAME host charge CLOSED but actual failure inclusion OPEN. Focused combined import L906 PASS. 63/76 actual scopes. See the Run 5b sections below and NNH_RUN5B_BOUNDARY.json. Target not yet established.
+
+---
+
 # Current run5 disposition (2026-11-08)
 
 Target not yet established. S6 literal HeadlineB PASS. S2 Split.rest, S3 A2,
@@ -868,3 +874,86 @@ L832. L900 mistakenly also removed the still-required all_goals try exact rfl,
 leaving op10/op11 unsolved; L901 restores that line, and does not repeat the
 failed source. O1 and NNQ_HostDigest.o2 are now available for T7. No charge
 application or failure-inclusion claim is inferred merely from O1.
+
+### Run 5b T7 PARTIAL: SAME host charge closed, deployed inclusion OPEN
+
+L903 NNH_Run5bRecorderFixed.fixed uses the compiled O1 and NNQ_HostDigest.o2
+(owner module NNQ_O2, L038) to identify the H-indexed host recorder with ONE
+fixed program at an arbitrary fixed anchor. No hash/clock equality is assumed.
+L904 NNH_Run5bHostCharge.event_fixed identifies E_rec with that program's event
+for EVERY H; bound applies NNH_RecordedCharge.bound to that SAME program,
+charging accountLoss(Q0+Q1) once. L905 NNH_Run5bFullSpace.realizes/same_event
+specialize to ctxB with unrestricted wOf and arbitrary Fixed (including arbitrary
+adaptive a); Realizes is a conclusion by construction, never a filter/premise.
+No Expect on the failure indicator, conditioning, hidden loss or joint program
+that determines World is introduced. All five roots have standard axioms only.
+
+NNH_DeployedOuter / TASB.fail_sub_rec at this host is NOT delivered: the
+actual Failure -> E_rec inclusion still needs a1.stage1, a2.stage2, sp.rest,
+and the later ledger30/G1b final instantiation. A bound on E_rec is not yet a
+bound on actual deployed Failure. Owner condition (4) remains RECORDED, not
+proved; its verdict belongs to G0 final. No conditional G0 theorem was added.
+
+L902 was NOT LAUNCHED: own import used theorem namespace NNQ_HostDigest as a
+module name; NNQ_L038 names its actual owner NNQ_O2. The admission passed but
+the dependency fingerprint rejected the nonexistent object before systemd.
+Corrected import L903 passed. Exact rejected input is NNH_L902_input.lean.txt;
+this is an owned-input repair, not a host infrastructure fault or a scope.
+
+### Run 5b focused combined import and final boundary
+
+NNH_Run5bCombined PASS L906: exit0, 28.978669377975166s, peak RSS6915900KiB,
+swap0, 6G/8G/Swap0/Tasks64, Lean v4.32.0 -j1 -M7000 -DElab.async=false.
+Imports run-5 ContinuationCombined + S5FocusedHost, ledger29, NNR/NNQ/NNP/NNO
+read-only deliveries and every passing new semantic module. All printed new
+roots are standard-only. This is a focused cached import, NOT G0 final, a new
+retained export, a raw ax2 audit, physical non-vacuity or a manifest replay.
+
+Final stage table:
+| Step | Status | Exact delivery or open field |
+|---|---|---|
+| T1 | CLOSED (11/14) | NNH_Run5bHost, Exec, Headline/HeadlineB, Acceptance a3-a5, Binder, Clock; L843-853 |
+| T2 | CLOSED (6/16) | NNH_Run5bNMF.nmfB; NMFRemaining.remaining; L858-859 |
+| T3 | OPEN (14/14) | NND_A2.stage2; tx2Op11/common geometry/query/Merkle/finish parent composition |
+| T4 | OPEN (20/20) | NND_A1.stage1; full current VL/P path, 328/345 composition and global weak Err implication |
+| T5 | OPEN (6/6) | TFM.Split.rest; physical facts and named assembly; Setup/Claims L895-896 pass |
+| T6 | CLOSED (2/2) | NNH_DigestSyntaxTransport.o1; L901 |
+| T7 | PARTIAL (4/6) | host SAME-event single charge L903-905 pass; deployed_outer / fail_sub_rec application OPEN |
+
+63/76 actual scopes:42 pass,21 failed proof/type checks;0 Kani,0 extraction.
+Thirteen scopes remain globally. T1/T2/T6 have no unfinished assigned member;
+T3/T4/T5 exhausted their binding per-step caps; T7's remaining deployed-inclusion
+member requires those OPEN fields and later G0 roots. Its spare scopes cannot
+be used to bypass the other caps, to repeat unchanged green checks, or to launch
+the expressly excluded G0/16GiB job. This is a per-step/dependency stop, not total
+budget exhaustion. Next unused ID L907. Every actual scope had fresh exit0 AND
+allowed:true admission, host count<6 and disk>=40GB; no transport retry/host
+refusal or timeout required. Read-only input caches and sibling worktrees stayed untouched; the owned
+host workspace received NNH-prefixed outputs only.
+
+NNH_RUN5B_validate.py passes all63 receipts, source snapshots, source revision,
+wall/RSS/swap, admission/share/disk/caps and accepted #print axioms. The317
+selected direct/Aeneas object/sidecar hash pins have317 variants, retained in
+NNH_RUN5B_IMPORTED_PINS.json.xz plus its uncompressed .sha256. Existing coherent
+cache manifests are reused and fingerprinted; no full closure rebuild is claimed.
+NNH_RUN5B_COMPILE.tsv is the one-line transcript summary; exact commands and
+complete diagnostics remain in each receipt directory. No source exceeds20MB. The staged whitespace check reports trailing blank
+lines in captured barrier stdout logs only; raw diagnostic bytes are retained.
+
+G0 final still must fill sp.rest, a1.stage1, a2.stage2; install the ledger30
+Impl/row bundle and G1b NMS_Roots.r241 at the SAME weak library, NMV_Roots.g2,
+and its canonical parent folds; then instantiate all remaining TAS interfaces
+and NNE_EntryRep.route1/route2 coherently. Existing T1/T2 roots are candidates for
+those concrete fields, not a verdict on the full gate. Apply TASB.fail_sub_rec
+and EVB.no_second_charge at ctxB to obtain NNH_DeployedOuter, connect its SAME
+failure event to the already proved charge and failureModel<=total chain,
+and perform G0's final statement/trust/non-vacuity/raw-axiom/manifest checks.
+Do not mark condition (4) proved from these partial inputs.
+
+No shipped files, RSL specs, trust rows, release parameters or ELFs changed;
+no rebuild trigger. Inherited default f8c0ec72..., devnet63ad3e9c..., Pool
+e0e49c34... are recorded unchanged, not newly reproduced. No push or key cleanup.
+The headline remains AspisR1.RPx_Deployed.deployed, frozen3, L154 parameter,
+narrowed D188 and100-bit PER-ATTEMPT with privacy/two transactions unchanged.
+
+target not yet established

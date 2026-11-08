@@ -1,0 +1,52 @@
+import NNH_Run5bExec
+import NNH_DigestSyntaxTransport
+import NNQ_HostDigest
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNH_Run5bRecorderFixed
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open NNH_Run5bCtx
+
+def env (fx : Fixed) (H : Bytes → State) :=
+ DGP_HostDigest.envInst H fx.pda fx.clock fx.reservation
+
+def base (fx : Fixed) (H : Bytes → State) :=
+ IDa_Deployed.deployedConfiguration
+  (NNH_Tx2Configuration.select (NNH_CorrectConfiguration.residual NNH_HostSeed.m0 (env fx H)) (env fx H))
+  fx.indexError fx.reservation
+
+def program
+ (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+ (fx : Fixed) (H : Bytes → State) :=
+ NNH_RecordedCharge.recorder copy (base fx H) fx.indexError fx.reservation
+  (DGP_HostDigest.hashvInst H) fx.a (fx.Q0+fx.Q1)
+
+/-- One fixed program for the complete oracle/randomness experiment. Anchor
+is arbitrary fixed DATA, not an assumption about the sampled oracle. -/
+def fixedProgram
+ (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+ (fx : Fixed) (anchor : Bytes → State) := program copy fx anchor
+
+def digest0 : S2Z.Oracle.Digest := Array.repeat 32#usize 0#u8
+
+theorem fixed
+ (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+ (fx : Fixed) (H anchor : Bytes → State) : program copy fx H = fixedProgram copy fx anchor := by
+ unfold program fixedProgram
+ calc
+  NNH_RecordedCharge.recorder copy (base fx H) fx.indexError fx.reservation
+   (DGP_HostDigest.hashvInst H) fx.a (fx.Q0+fx.Q1) =
+   NNH_RecordedCharge.recorder copy (base fx H) fx.indexError fx.reservation
+    (fun _ => .ok digest0) fx.a (fx.Q0+fx.Q1) :=
+    NNH_DigestSyntaxTransport.o1 copy _ _ _ H digest0 fx.a _
+  _ = NNH_RecordedCharge.recorder copy (base fx anchor) fx.indexError fx.reservation
+    (fun _ => .ok digest0) fx.a (fx.Q0+fx.Q1) :=
+    NNQ_HostDigest.o2 NNH_HostSeed.m0 copy fx.indexError fx.reservation
+     (env fx H) (env fx anchor) (fun _ => .ok digest0) fx.a _ rfl rfl rfl
+  _ = _ := (NNH_DigestSyntaxTransport.o1 copy _ _ _ anchor digest0 fx.a _).symm
+
+#print axioms fixed
+end AspisR1.NNH_Run5bRecorderFixed
+end
