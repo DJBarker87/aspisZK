@@ -73,3 +73,9 @@ the pinned interpreter processes waiting before unwind; and the nonpolling
 branch could evaluate invalidPure on a completed frame's stale slot.
 ControlRuntime repairs this toward the actual interpreter. Earlier drafts
 are retained and are not the final runtime reference.
+
+44905 ControlRuntime compiled exit0,wall0:02.59,peak4768968KiB,swap0,
+source1274601d515; standard axioms. It preserves actual completed/waiting/
+catch priority, records unwind-issued calls, and tests native decoding only
+at real ordinary polls. BoundRuntime remains the retained predecessor;
+ControlRuntime is the current runtime reference for further statements.
