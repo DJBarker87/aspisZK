@@ -167,3 +167,5 @@ PV_LIB_SPEC_F316Callback compiled49777, cohortw3: exit0, wall0:02.23, peak476037
 PV_LIB_SPEC_OwnInitComposition compiled49779, cohortw3: exit0, wall0:02.18, peak4756920KiB, swap0; standard summary axioms only. Statement only.
 
 PV_LIB_SPEC_RawAuditSession5W3 compiled49780, cohortw3: exit0, wall0:00.91, peak1598900KiB, swap0; standard summary axioms only. Statement only.
+
+PV_LIB_SPEC_RawAuditSession5W4 compiled49781, cohortw4: exit0, wall0:00.81, peak1588548KiB, swap0; standard summary axioms only. Statement only.
