@@ -21,3 +21,10 @@ and reservation channel equations are definitional; HistoryAdequacy remains
 an explicit target, not presumed from the two equations. The installed
 allocation models use the allocation channel; reservation models not yet
 installed must use the separate reservation channel.
+
+49784 ConcreteCaptures compiled exit0,wall0:02.92,peak4736068KiB,swap0.
+The receipt's revision25de79e0457 is an older source-stage label; actual
+invocation parent978b74c16b8. Exact source hash is authoritative. This new
+capture fixture has initialized public n=1 (not the older n=0 fixture).
+All four capture regions coexist on one OWNER. Still a capture component;
+no full composition or reached allocation is claimed by this module.
