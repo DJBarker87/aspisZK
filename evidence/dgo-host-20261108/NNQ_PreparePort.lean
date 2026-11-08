@@ -91,7 +91,7 @@ theorem dictionary_irrelevant (base : Ops)
   repeat' first
     | (solve | with_reducible apply semantic_dictionary)
     | (solve | with_reducible apply closedPreparation_dictionary_irrelevant)
-    | (solve | simp only [allocation_error_dictionary first second, semantic_error_dictionary first second]; exact dsim_refl _)
+    | (solve | simp only [allocation_error_dictionary first second, semantic_error_dictionary first second ]; with_reducible exact dsim_refl _)
     | (solve | with_reducible exact dsim_refl _)
     | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
