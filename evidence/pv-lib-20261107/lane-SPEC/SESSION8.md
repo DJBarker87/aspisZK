@@ -17,3 +17,5 @@ PV_LIB_SPEC_CallbackCutCheck compiled 44928, cohort w3: exit0, wall 0:02.67, pea
 PV_LIB_SPEC_SparseHistory compiled 44929, cohort w3: exit0, wall 0:02.57, peak 4765568KiB, swap 0; source ed237c46f2f25298339550a21d6bb92297608eb4; standard summary axioms only.
 
 PV_LIB_SPEC_SuccessResources compiled 44930, cohort w3: exit0, wall 0:02.63, peak 4769740KiB, swap 0; source 61f6771a7e415e88a2b651435e145ebd4451186c; standard summary axioms only.
+
+PV_LIB_SPEC_LocalOwnership compiled 44933, cohort w3: exit0, wall 0:02.83, peak 4773328KiB, swap 0; source 71506ca73eec85138c25da074d02597e5fdaa2cc; standard summary axioms only.
