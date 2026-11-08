@@ -18,3 +18,10 @@ sparse adopted binary initialization on the concrete world. This blocks
 crediting an arbitrary48-byte Shape as the frozen ABI. No claim of full-joint
 unsatisfiability.44911/12 failed local syntax/proof terms, retained and changed.
 Next: pinned lane-A v2 import (read-only, partial), then ONE new-root audit.
+
+44914 LaneAStoreInput PASS: exit0, wall0:02.20, peak4623364KiB,
+swap0, revision0fb83893cca. Imports the actual v2/actions/
+interpret/step/advance, not a FullStoreActionTable parameter or invented delta.
+All10 provider sources byte-match03c3c72b143. Isolated lane-A cohort, no object
+or source edits to laneA; no combined coherent release claim. Exact partial
+coverage is preserved in limits. Full source-store adequacy remains open.
