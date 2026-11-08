@@ -1,5 +1,15 @@
 import NNQ_DSim
 noncomputable section
+namespace AspisR1.NNQ_HostDigest
+open Aeneas Aeneas.Std AspisR1PublicPreparation.PreparedHashCode
+theorem dsim_if (p : Prop) [Decidable p] {A : Type} (l1 l2 r1 r2 : Code A)
+    (ht : p → DSim l1 l2) (hf : ¬ p → DSim r1 r2) :
+    DSim (if p then l1 else r1) (if p then l2 else r2) := by
+  by_cases h : p
+  · simpa only [if_pos h] using ht h
+  · simpa only [if_neg h] using hf h
+#print axioms dsim_if
+end AspisR1.NNQ_HostDigest
 set_option autoImplicit false
 open AspisR1.NNQ_HostDigest
 namespace AspisR1PublicPreparation.PreparedHashCode.NNQ_Port
@@ -12,6 +22,7 @@ theorem new_oracle_dictionary_irrelevant {H : Type} (first second : aspis_core.D
   repeat' first
     | (solve | with_reducible exact dsim_refl _)
     | (solve | with_reducible exact dsim_digest _ _ _ _)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
@@ -23,6 +34,7 @@ theorem absorb_oracle_dictionary_irrelevant {H : Type} (first second : aspis_cor
   repeat' first
     | (solve | with_reducible exact dsim_refl _)
     | (solve | with_reducible exact dsim_digest _ _ _ _)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
@@ -35,6 +47,7 @@ theorem block_oracle_dictionary_irrelevant {H : Type} (first second : aspis_core
     | (solve | with_reducible exact dsim_refl _)
     | (solve | with_reducible apply absorb_oracle_dictionary_irrelevant)
     | (solve | with_reducible exact dsim_digest _ _ _ _)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
@@ -60,7 +73,7 @@ private theorem query_error_program_irrelevant {H : Type} (first second : aspis_
       (transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError second) x ()) :
         Code (core.result.Result (Array U32 22#usize × Array U8 32#usize) verifier.Error)) := by
   have same : transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError first =
-      transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError second := dsim_digest _ _ _ _
+      transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError second := rfl
   rw [same]
   exact dsim_refl _
 
@@ -72,6 +85,7 @@ theorem scalar_oracle_dictionary_irrelevant (B : PreparedModel.Boundaries) {H : 
   repeat' first
     | (solve | with_reducible exact dsim_refl _)
     | (solve | with_reducible apply block_oracle_dictionary_irrelevant)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
@@ -84,6 +98,7 @@ theorem scalar_k_oracle_dictionary_irrelevant (B : PreparedModel.Boundaries) {H 
   repeat' first
     | (solve | with_reducible exact dsim_refl _)
     | (solve | with_reducible apply block_oracle_dictionary_irrelevant)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
@@ -98,11 +113,13 @@ theorem queries_oracle_dictionary_irrelevant (Q : QueriesModel.Boundaries) {H : 
     | (solve | with_reducible apply absorb_oracle_dictionary_irrelevant)
     | (solve | with_reducible apply digest_oracle_dictionary_irrelevant)
     | (solve | with_reducible apply query_error_program_irrelevant)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
 
 #print axioms digest_oracle_dictionary_irrelevant
+#print axioms query_error_program_irrelevant
 #print axioms scalar_oracle_dictionary_irrelevant
 #print axioms scalar_k_oracle_dictionary_irrelevant
 #print axioms queries_oracle_dictionary_irrelevant
@@ -132,10 +149,12 @@ theorem preparation_oracle_dictionary_irrelevant
     | (solve | with_reducible apply queries_oracle_dictionary_irrelevant)
     | (solve | with_reducible apply lift_oracle_congr
                first | exact claimLaw _ _ _ _ _ | rfl)
+    | with_reducible apply dsim_if
     | with_reducible apply dsim_bind
     | intro x
     | split
 
+#print axioms lift_oracle_congr
 #print axioms preparation_oracle_dictionary_irrelevant
 end AspisR1PublicPreparation.PreparedHashCode.NNQ_Port
 end
