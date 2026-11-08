@@ -1,3 +1,29 @@
+# Session14 live checkpoint — callback linkage checked; full task OPEN
+
+Continued74f750e69d7, LOG D1004. New accepted stable names:
+`PV_LIB_A_F6CallbackHistory14.history` joins the actual f6 BODY entry through
+f125/219/FULL134 and source-derived9196 selection into316, retaining the full
+suspended parent and every earlier stop/source phase. No selector, callback
+readback or successful-native-value premise is supplied.
+`PV_LIB_A_F6To220History14.history` continues the SAME history through FULL410
+and actual metadata-selected220 BODY entry. One fixed complete resolver is
+used throughout each theorem. These are corrected phase-bearing prefix-machine
+histories; they do not replace lane C's retained v2 or establish source/binary
+adequacy, full LoopInvariant initialization/preservation or original entry.
+F220Prefix14, F220Enter20814 and F208Prefix14 are accepted local continuations.
+
+Live work: fixed-table transport past actual8269 (old FnOnce guard intercepts
+it), full callee/loop preservation, actual15/handles268; then361 through14756,
+then exactly lane C's joint-witness needs. Strict new-root audit NOT run yet.
+No row, endpoint premise, T field, frozen spec/provider/implementation or
+DEFERRED-POST-TARGET status changed. No keys touched.
+Lane C read-only59176f4e104 session15 now reaches original TLS prefix59 with
+actual469/277 replies; its native frame is still arbitrary DATA, and original
+physical stack/reached295/454/14756/full conjunction remain OPEN. Its original
+prefix work is not duplicated here.
+
+---
+
 # Lane A session13 handoff — PARTIAL; requested completion NOT achieved
 
 Continued6dbfb38c6d1102dd828a716e9412043febf6c0da on codex/pv-lib-20261107.
