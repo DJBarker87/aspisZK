@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F170Tail15.lean:13:17: error(lean.unknownIdentifier): Unknown identifier `prepend`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F170Tail15.lean:16:38: error: Type mismatch
+  rfl
+has type
+  ?m.13 = ?m.13
+but is expected to have type
+  nodes seq ++ List.drop 49 PV_THR2_F170.live.body = List.drop 40 PV_THR2_F170.live.body
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F170Tail15.lean:15:8: error: Not a definitional equality: the left-hand side
+  nodes seq ++ List.drop 49 PV_THR2_F170.live.body
+is not definitionally equal to the right-hand side
+  List.drop 40 PV_THR2_F170.live.body
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F170Tail15.lean:18:30: error: failed to synthesize
+  Decidable (sites seq)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F170Tail15.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_StoreActionTable.advance C K P (fun {A} => resources) (fun {A} => encode) H values (steps C a w seq s)
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := nodes seq ++ ?m.32 }, callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack }
+in the target expression
+  let q :=
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := nodes seq ++ List.drop 49 PV_THR2_F170.live.body },
+                callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack };
+  PV_LIB_StoreActionTable.advance C K P (fun {A} => resources) (fun {A} => encode) H values (steps C a w seq s) q =
+    {
+      current :=
+        { status := result C a parents [] (List.drop 49 PV_THR2_F170.live.body) w seq s, world := w, events := es },
+      suspended := stack }
+
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+s : Store Data
+a : ℕ
+parents : List Frame
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+⊢ let q :=
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := nodes seq ++ List.drop 49 PV_THR2_F170.live.body },
+                callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack };
+  PV_LIB_StoreActionTable.advance C K P (fun {A} => resources) (fun {A} => encode) H values (steps C a w seq s) q =
+    {
+      current :=
+        { status := result C a parents [] (List.drop 49 PV_THR2_F170.live.body) w seq s, world := w, events := es },
+      suspended := stack }
+'PV_LIB_A_F170Tail15.shape' depends on axioms: [sorryAx]
+'PV_LIB_A_F170Tail15.off' depends on axioms: [sorryAx]
+'PV_LIB_A_F170Tail15.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
