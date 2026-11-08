@@ -1,0 +1,314 @@
+NNV_generated/NNV_FinishTail.lean:52:31: error: Application type mismatch: The argument
+  good
+has type
+  ¬decide
+        (head.rounds.1 ≠
+          NNV_FinishCut.V.qadd
+            (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+              (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+            (NNV_FinishCut.V.at28 extra)) =
+      true
+but is expected to have type
+  ¬¬head.rounds.1 =
+        V.qadd (V.qadd (V.maskValue head.claims head.rounds.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra)
+in the application
+  not_not.mp good
+NNV_generated/NNV_FinishTail.lean:63:4: error: Tactic `assumption` failed
+
+case isFalse
+a : TX1_136.Args V
+env : Env
+sem : Verified V
+head : NNV_FinishCut.Packet a env sem
+called✝¹⁰ :
+  (bindValue
+      (RE.mapE (fun x => NNV_FinishCut.V.wPublic)
+        (LIB_VLib.terminalQm31Value
+          (a.public_, head.claims, head.rounds.2.1, NNV_FinishCut.V.origChallenges a.challenges) env))
+      fun terminal =>
+      bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25 =>
+        bindValue (NNV_FinishCut.V.decodeK29 rec25 87) fun extra =>
+          let masked :=
+            NNV_FinishCut.V.qadd
+              (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+                (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+              (NNV_FinishCut.V.at28 extra);
+          bindValue
+            (if decide (head.rounds.1 ≠ masked) = true then Except.error NNV_FinishCut.V.wTerminal else Except.ok ())
+            fun x =>
+            bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25' =>
+              bindValue (LIB_VLib.circleValue (head.rounds.2.2, rec25') env) fun c0 =>
+                bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+                  bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+                    bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+                      bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+                        bindValue
+                          (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints
+                          else Except.ok ())
+                          fun x =>
+                          bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                            match TX1_136.toB32 p2 with
+                            | none => Except.error NNV_FinishCut.V.wPublic
+                            | some root1 =>
+                              Except.ok
+                                { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                  alpha := head.rounds.2.1, claims := head.claims, extra := extra,
+                                  before_z1 := beforeZ1, state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2,
+                                  z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+terminal : LIB_VCarriers.QM31
+ht :
+  RE.mapE (fun x => NNV_FinishCut.V.wPublic)
+      (LIB_VLib.terminalQm31Value (a.public_, head.claims, head.rounds.2.1, NNV_FinishCut.V.origChallenges a.challenges)
+        env) =
+    Except.ok terminal
+called✝⁹ :
+  (bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25 =>
+      bindValue (NNV_FinishCut.V.decodeK29 rec25 87) fun extra =>
+        let masked :=
+          NNV_FinishCut.V.qadd
+            (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+              (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+            (NNV_FinishCut.V.at28 extra);
+        bindValue
+          (if decide (head.rounds.1 ≠ masked) = true then Except.error NNV_FinishCut.V.wTerminal else Except.ok ())
+          fun x =>
+          bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25' =>
+            bindValue (LIB_VLib.circleValue (head.rounds.2.2, rec25') env) fun c0 =>
+              bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+                bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+                  bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+                    bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+                      bindValue
+                        (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints
+                        else Except.ok ())
+                        fun x =>
+                        bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                          match TX1_136.toB32 p2 with
+                          | none => Except.error NNV_FinishCut.V.wPublic
+                          | some root1 =>
+                            Except.ok
+                              { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                                alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                                state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                                transcript := c1.2 }) =
+    Except.ok sem
+r25 : NNV_FinishCut.V.Record
+hr25 : NNV_FinishCut.V.validatedRecord a.prefix_ 25 = Except.ok r25
+called✝⁸ :
+  (bindValue (NNV_FinishCut.V.decodeK29 r25 87) fun extra =>
+      let masked :=
+        NNV_FinishCut.V.qadd
+          (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+            (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+          (NNV_FinishCut.V.at28 extra);
+      bindValue
+        (if decide (head.rounds.1 ≠ masked) = true then Except.error NNV_FinishCut.V.wTerminal else Except.ok ())
+        fun x =>
+        bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25' =>
+          bindValue (LIB_VLib.circleValue (head.rounds.2.2, rec25') env) fun c0 =>
+            bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+              bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+                bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+                  bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+                    bindValue
+                      (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints
+                      else Except.ok ())
+                      fun x =>
+                      bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                        match TX1_136.toB32 p2 with
+                        | none => Except.error NNV_FinishCut.V.wPublic
+                        | some root1 =>
+                          Except.ok
+                            { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                              alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                              state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                              transcript := c1.2 }) =
+    Except.ok sem
+extra : NNV_FinishCut.V.K29
+he : NNV_FinishCut.V.decodeK29 r25 87 = Except.ok extra
+called✝⁷ :
+  (let masked :=
+      NNV_FinishCut.V.qadd
+        (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+          (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+        (NNV_FinishCut.V.at28 extra);
+    bindValue (if decide (head.rounds.1 ≠ masked) = true then Except.error NNV_FinishCut.V.wTerminal else Except.ok ())
+      fun x =>
+      bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25' =>
+        bindValue (LIB_VLib.circleValue (head.rounds.2.2, rec25') env) fun c0 =>
+          bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+            bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+              bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+                bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+                  bindValue
+                    (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints
+                    else Except.ok ())
+                    fun x =>
+                    bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => Except.error NNV_FinishCut.V.wPublic
+                      | some root1 =>
+                        Except.ok
+                          { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                            alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                            state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                            transcript := c1.2 }) =
+    Except.ok sem
+u : Unit
+hgate :
+  (if
+        decide
+            (head.rounds.1 ≠
+              NNV_FinishCut.V.qadd
+                (NNV_FinishCut.V.qadd (NNV_FinishCut.V.maskValue head.claims head.rounds.2.1)
+                  (NNV_FinishCut.V.qmul (NNV_FinishCut.V.eta a.challenges) terminal))
+                (NNV_FinishCut.V.at28 extra)) =
+          true then
+      Except.error NNV_FinishCut.V.wTerminal
+    else Except.ok ()) =
+    Except.ok u
+called✝⁶ :
+  (bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 25) fun rec25' =>
+      bindValue (LIB_VLib.circleValue (head.rounds.2.2, rec25') env) fun c0 =>
+        bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+          bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+            bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+              bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+                bindValue
+                  (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints
+                  else Except.ok ())
+                  fun x =>
+                  bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                    match TX1_136.toB32 p2 with
+                    | none => Except.error NNV_FinishCut.V.wPublic
+                    | some root1 =>
+                      Except.ok
+                        { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                          alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                          state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                          transcript := c1.2 }) =
+    Except.ok sem
+gate :
+  head.rounds.1 =
+    V.qadd (V.qadd (V.maskValue head.claims head.rounds.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra)
+r25' : NNV_FinishCut.V.Record
+hr25' : NNV_FinishCut.V.validatedRecord a.prefix_ 25 = Except.ok r25'
+called✝⁵ :
+  (bindValue (LIB_VLib.circleValue (head.rounds.2.2, r25') env) fun c0 =>
+      bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+        bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+          bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+            bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+              bindValue
+                (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+                fun x =>
+                bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                  match TX1_136.toB32 p2 with
+                  | none => Except.error NNV_FinishCut.V.wPublic
+                  | some root1 =>
+                    Except.ok
+                      { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                        alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                        state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                        transcript := c1.2 }) =
+    Except.ok sem
+c0 : LIB_VCarriers.Point × LIB_VCarriers.Transcript
+hc0 : LIB_VLib.circleValue (head.rounds.2.2, r25') env = Except.ok c0
+called✝⁴ :
+  (bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26 =>
+      bindValue (NNV_FinishCut.V.decodeK29 rec26 0) fun beforeZ1 =>
+        bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+          bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+            bindValue
+              (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+              fun x =>
+              bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+                match TX1_136.toB32 p2 with
+                | none => Except.error NNV_FinishCut.V.wPublic
+                | some root1 =>
+                  Except.ok
+                    { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                      alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                      state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1),
+                      transcript := c1.2 }) =
+    Except.ok sem
+r26 : NNV_FinishCut.V.Record
+hr26 : NNV_FinishCut.V.validatedRecord a.prefix_ 26 = Except.ok r26
+called✝³ :
+  (bindValue (NNV_FinishCut.V.decodeK29 r26 0) fun beforeZ1 =>
+      bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+        bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+          bindValue
+            (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+            fun x =>
+            bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+              match TX1_136.toB32 p2 with
+              | none => Except.error NNV_FinishCut.V.wPublic
+              | some root1 =>
+                Except.ok
+                  { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                    alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := beforeZ1,
+                    state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+before : NNV_FinishCut.V.K29
+hb : NNV_FinishCut.V.decodeK29 r26 0 = Except.ok before
+called✝² :
+  (bindValue (NNV_FinishCut.V.validatedRecord a.prefix_ 26) fun rec26' =>
+      bindValue (LIB_VLib.circleValue (c0.2, rec26') env) fun c1 =>
+        bindValue
+          (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+          fun x =>
+          bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+            match TX1_136.toB32 p2 with
+            | none => Except.error NNV_FinishCut.V.wPublic
+            | some root1 =>
+              Except.ok
+                { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                  alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := before,
+                  state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+r26' : NNV_FinishCut.V.Record
+hr26' : NNV_FinishCut.V.validatedRecord a.prefix_ 26 = Except.ok r26'
+called✝¹ :
+  (bindValue (LIB_VLib.circleValue (c0.2, r26') env) fun c1 =>
+      bindValue (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+        fun x =>
+        bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+          match TX1_136.toB32 p2 with
+          | none => Except.error NNV_FinishCut.V.wPublic
+          | some root1 =>
+            Except.ok
+              { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges,
+                alpha := head.rounds.2.1, claims := head.claims, extra := extra, before_z1 := before,
+                state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+c1 : LIB_VCarriers.Point × LIB_VCarriers.Transcript
+hc1 : LIB_VLib.circleValue (c0.2, r26') env = Except.ok c1
+called✝ :
+  (bindValue (if decide (c0.1 = c1.1) = true then Except.error NNV_FinishCut.V.wEqualCirclePoints else Except.ok ())
+      fun x =>
+      bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+        match TX1_136.toB32 p2 with
+        | none => Except.error NNV_FinishCut.V.wPublic
+        | some root1 =>
+          Except.ok
+            { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := head.rounds.2.1,
+              claims := head.claims, extra := extra, before_z1 := before,
+              state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+u' : Unit
+called :
+  (bindValue (NNV_FinishCut.V.payload a.prefix_ 2) fun p2 =>
+      match TX1_136.toB32 p2 with
+      | none => Except.error NNV_FinishCut.V.wPublic
+      | some root1 =>
+        Except.ok
+          { roots := (NNV_FinishCut.V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := head.rounds.2.1,
+            claims := head.claims, extra := extra, before_z1 := before,
+            state_before_z0 := NNV_FinishCut.V.state head.rounds.2.2, z := (c0.1, c1.1), transcript := c1.2 }) =
+    Except.ok sem
+h✝ : ¬decide (c0.1 = c1.1) = true
+hd : Except.ok () = Except.ok u'
+⊢ c0.1 ≠ c1.1
+'AspisR1.NNV_FinishTail.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

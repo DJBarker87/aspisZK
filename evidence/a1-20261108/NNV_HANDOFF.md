@@ -118,3 +118,12 @@ only L051-L100 and counts at most 50 new submissions; own receipt/validation
 scripts accept the cumulative 100 receipts. Admission, caps, timeout, source
 pinning and one-scope rules are unchanged. L052 failed on a missing Std
 namespace, corrected in L053; this is a source repair, not a retired heavy shape.
+
+Continuation stage 2: L053 result ports, L054 rounds, L057 record getter,
+L063 claims, L064 decoder and L065 prepare-front decomposition pass.
+`NNV_PrepareFrontCut.returned` extracts Filled, both expansion outputs, View
+and semantic evaluation from the SAME frontValue result. These are canonical
+returned-path cuts, not hypotheses about native success. Fixed finish/current
+op9 association and the composed A1 remain open. L055/L058/L056/L059/L060/
+L061/L062 preserve exact diagnostics; local namespace, abbreviation and Bool
+guard repairs are split into subsequent attempts. No cap or heartbeat changed.

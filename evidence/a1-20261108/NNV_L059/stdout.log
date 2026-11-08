@@ -1,0 +1,23 @@
+NNV_generated/NNV_FinishDecode.lean:12:59: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_VDecode.decodeK29 r ↑off
+in the target expression
+  ok (LIB_VRecords.raw (Except.map k29Raw (LIB_VRecordsAll.decodeK29 r ↑off))) = ok (core.result.Result.Ok (k29Raw out))
+
+r : Record
+off : Usize
+out : K29
+domain : LIB_VDecode.Domain r ↑off
+called : LIB_VDecode.decodeK29 r ↑off = Except.ok out
+⊢ ok (LIB_VRecords.raw (Except.map k29Raw (LIB_VRecordsAll.decodeK29 r ↑off))) = ok (core.result.Result.Ok (k29Raw out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNV_FinishDecode.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
