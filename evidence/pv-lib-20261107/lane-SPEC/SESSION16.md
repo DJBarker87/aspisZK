@@ -34,3 +34,5 @@ PV_LIB_SPEC_TlsForwardLift16 compiled 55546, cohort w3: exit0, wall 0:04.34, pea
 PV_LIB_SPEC_TlsAt75 compiled 55547, cohort w3: exit0, wall 0:02.32, peak 4829896KiB, swap 0; source 071f35f84fc10f58036ca469c7a901a9547b4cec; standard summary axioms only.
 
 PV_LIB_SPEC_TlsCallable16 compiled 55549, cohort w3: exit0, wall 0:09.83, peak 4869552KiB, swap 0; source 4078fdd8f9a90675ea1e7515f08eef283bb88a2e; standard summary axioms only.
+
+PV_LIB_SPEC_Tls75Cells16 compiled 55550, cohort w3: exit0, wall 0:03.29, peak 4836524KiB, swap 0; source 74631f632fc308f4fb4e4cd0aeb5cc657d7f2bbd; standard summary axioms only.
