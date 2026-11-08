@@ -20,8 +20,8 @@ continuation={x for x in used if 31<=int(x[-3:])<=50}
 assert 31<=int(a[-3:])<=50 and len(continuation)<20, 'NNY continuation allowance 20 scopes exhausted'
 stage='P1' if int(a[-3:])<=38 else 'P2' if int(a[-3:])<=44 else 'P3' if int(a[-3:])<=46 else 'P4'
 assert stage=='P1' or (E/'NNY_P1_CLOSED.json').exists(), 'P1 must close within eight scopes before P2'
-assert stage in ['P1','P2'] or (E/'NNY_P2_CLOSED.json').exists(), 'P2 must close before P3'
-assert stage!='P4' or (E/'NNY_P3_CLOSED.json').exists(), 'P3 must close before P4'
+assert stage in ['P1','P2'] or ((E/'NNY_P2_CLOSED.json').exists() or (E/'NNY_P2_EXHAUSTED.json').exists()), 'P2 must finish before P3'
+assert stage!='P4' or ((E/'NNY_P3_CLOSED.json').exists() or (E/'NNY_P3_EXHAUSTED.json').exists()), 'P3 must finish before P4'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

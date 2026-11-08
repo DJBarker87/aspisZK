@@ -1,3 +1,9 @@
+# Continuation frontier after P2
+
+Y1 CLOSED at L036/L037 (combined L038). P2 used 6/6 scopes: no new mathematical root, source-ordered common remains OPEN. NNY_PowersAssociation.lean.txt is unelaborated; importing FIp_PowersValue reaches incomplete historical modules. Exact last import failure is in NNY_P2_EXHAUSTED.json. No mathematical counterexample is claimed.
+
+P3 still needs the common converse plus parser association. Independent parser association will be attempted within its two-scope cap. P4 cannot deliver the field without actual op11; existing SAME-cut/emit support remains valid, and only independent terminal support/audit work may proceed. No whole-common, success or representation premise is added to a replacement field.
+
 # Continuation frontier after P1
 
 Y1 CLOSED: NNY_MerkleShared.parent (L036), exact SAME-resume TX2 instance NNY_NNUParent.parent (L037), combined import L038, standard axioms only. The old Y1 OPEN text below is historical and superseded. Y2/Y3/Y4 remain exactly as stated below. New allowance used 8/20; remaining stage caps 6/2/4.
