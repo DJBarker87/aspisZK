@@ -25,15 +25,15 @@ Fix the frozen verifier implementation (crates/, programs/r1-cost-probe and Carg
 
 For each H, let the deployed pair be what `a⊤` actually outputs at H: `⟨e1, data1, true⟩ := (eval H a⊤.first).2` and `⟨e2, data2, slot, true⟩ := (eval H (a⊤.second ⟨e1, data1, true⟩ saved post1 true)).2`. Suppose further that these two entries are executed by the Solana runtime as the approved two-transaction game: consecutive executions on one bank lineage, the same physical checkpoint account named by both with no intervening touch, TX1's parent status success, and the recorded checkpoint actions equal to the physical runtime actions (`Runs`: `frame`, `trace`, `ok1`, `out1`, `ok2`, `out2`), under the retained runtime, SDK and standard-library hypotheses.
 
-Then, at every H, three things hold:
+Then three things hold (the first is H-free; the second and third hold at every H):
 
-1. the numeric conjunct C5num of the adopted headline: `failureModel runtime ≤ total(Q)`; if Q ≤ maxQueries then `failureModel runtime ≤ (Q+1)·2^-100`; and if Q = 0 then `failureModel runtime < 2^-100` with the exact margin;
+1. the numeric conjunct C5num of the adopted headline: `failureModel runtime ≤ total(Q)`, where `failureModel` is an average over H (bound-audit finding 3: it is not a per-H statement); if Q ≤ maxQueries then `failureModel runtime ≤ (Q+1)·2^-100`; and if Q = 0 then `failureModel runtime < 2^-100` with the exact margin;
 2. the other conjuncts of `AspisR1.RPx_Deployed.deployed` except conjunct 4, unchanged (`Rest`: P6 boundary, driver and SDK equalities, the three Claims, copy facts, Rc2 events, CPH protection, trace and recorder facts, S6N installation);
 3. either conjunct 4 holds with its internal bad event re-targeted to E_rec (`OutcomeRec`), or E_rec holds at H.
 
 E_rec is the collision event already charged inside `failureModel`: `BinRawByteCollisionTargets.event` at Q + 2965 recorded reads on the adversary's own capped account run with the output-dependent selector `ARQ_Observer.select`.
 
-Averaged over all H, with no conditioning and no H excluded, the per-attempt failure indicator `max r 1_{Runs ∧ ¬OutcomeRec}` has mean at most total(Q), with E_rec charged once. Here `r` is the per-world loss whose mean is `failureModel`, namely the extractor-failure mass of the accepted run (`RawRecordedOracleExtractionMassBin.failureMass`: the run is accepted and `RawRecordedPublicSpendExtractorBin.extract` returns `none`) plus the query-scan term.
+Averaged over all H, with no conditioning and no H excluded, the per-attempt failure indicator `max r 1_{Runs ∧ ¬OutcomeRec}` has mean at most total(Q), with E_rec charged once. [Bound audit, 2026-11-08, finding 4: "charged once" is established in compiled Lean only for `failureModel`; for this per-attempt event including OutcomeRec it rests on the stand-in `RSL.EVB.no_second_charge` and a host theorem that is not yet compiled (section 1.2.2, G0 final). It is stated here as the target, not as a fact.] Here `r` is the per-world loss whose mean is `failureModel`, namely the extractor-failure mass of the accepted run (`RawRecordedOracleExtractionMassBin.failureMass`: the run is accepted and `RawRecordedPublicSpendExtractorBin.extract` returns `none`) plus the query-scan term.
 
 ### 1.2 Lean form
 
@@ -230,9 +230,9 @@ Q is the number of digest queries issued by the adversary across both phases, co
 |---|---|---|
 | (Q+34)·B | Start charge. Every fresh transcript start, among the adversary's Q queries plus the 34 starts the submitted transcript reads in the prover/sampler prefix before terminal authentication, succeeds with probability at most B. | START-CHARGE-20261021.md; F3T bounds (Q+34 starts) |
 | collisionLoss(Q) | Collision mass over at most Q+1161 distinct first reads (verifier envelope 1161, unchanged under frozen3). | frozen3 F3T bounds |
-| accountLoss(Q) | E_rec: collision among the recorded reads of the adversary's capped account run, at most Q+1921 first reads plus 1040+4 audit reads = Q+2965. Charged once (`no_second_charge`). | `P2P_Charge.binding_or_collision`, `FJp_Mass.bounded` |
-| 2^-126 | Extractor abort allowance. | contract 2026-10-21 |
-| 2^-454 | Query-scan exhaustion, `QueryScanModelFailure.failureProbability (2^18)`. | contract 2026-10-21 |
+| accountLoss(Q) | E_rec: collision among the recorded reads of the adversary's capped account run, at most Q+1921 first reads plus 1040+4 audit reads = Q+2965. Charged once inside `failureModel` (compiled: `FJp_Residual.numeric`, `le_refl accountLoss`); for the per-attempt event including OutcomeRec the single charge is `no_second_charge` at stand-in level, host theorem pending (finding 4). | `P2P_Charge.binding_or_collision`, `FJp_Mass.bounded` |
+| 2^-126 | Extractor abort allowance (accepted, no hit, extractor still returns none). | Lean: `RawRecordedOracleExtractionMassBin.shared_oracle_failure_le_hit_add_abort`, `bankAbortMass_le`; recorded in the contract 2026-10-21 table |
+| 2^-454 | Query-scan exhaustion, `QueryScanModelFailure.failureProbability (2^18)`. | Lean: `QueryScanModelFailure.exhaustion_bound`; recorded in the contract 2026-10-21 table |
 
 ### 3.2 Per-attempt corollary and its valid range
 
@@ -247,7 +247,7 @@ maxQueries = `F3U_RangeEdges.maxQueries` = 7388980242446479800895501321004157112
 - **(A), whole experiment with no adversary queries.** `F3T_Numeric.margin_exact`:
   2^-100 − total(0) = 2^-108 − 6·(1161² + 2965²)/2^256 − 2^-126 − 2^-454 > 0.
   Numerically, total(0) = 510/2^109 + 60834876/2^256 + 2^-126 + 2^-454 ≈ 0.99609·2^-100 ≈ 2^-100.0056. The margin is ≈ 0.999996·2^-108. The 2^-100 target is met at Q = 0 with about 2^-108 to spare, and almost all of total(0) is the 34 transcript starts.
-- **(B), Q-dependence kept.** For 0 ≤ Q ≤ maxQueries, the failure probability is at most total(Q), which is approximately (Q+34)·2^-105.093 for every Q below about 2^100. The (Q+1)·2^-100 figure is looser than total(Q) by a factor of about 2^4.9 in that region.
+- **(B), Q-dependence kept.** For 0 ≤ Q ≤ maxQueries, the failure probability is at most total(Q), which is approximately (Q+34)·2^-105.093 for every Q below about 2^100. The (Q+1)·2^-100 figure is looser than total(Q) by a factor of 2^5.093 (= log2(512/15)) for Q above about 10^4; the factor is about 2^4.9 only near Q ≈ 233 (bound audit, finding 1).
 
 No proof-of-work or grinding credit is used. No probability is divided by adversarial work, and this draft states no work-normalised figure.
 
@@ -277,7 +277,7 @@ The inclusion is proved, not assumed (owner condition (2)), and it concerns the 
 1. For k submitted attempts against the same oracle, attempt i is an instance of the theorem with the adversary a_i that runs everything up to and including attempt i.
 2. The world binders are arbitrary, so earlier chain state is covered.
 3. a_i must reproduce the verifier's digest calls of earlier attempts as its own queries, at most 2322 per attempt.
-4. A union bound then gives Pr[some attempt accepted with failure] ≤ Σ_{i=1..k} total(Q_adv + (i−1)·2322), where Q_adv counts the adversary's own queries over the whole campaign.
+4. A union bound then gives Pr[some attempt accepted with failure] ≤ Σ_{i=1..k} total(Q_i). MAT_ (evidence/multi-attempt-20261108, stand-in theorem `RSL.MAT.campaign_charge`/`campaign_bound`, compiled, standard axioms) corrects this sketch: Q_i is the CUMULATIVE issued-call count of the reduction adversary a_i, Q_i ≤ c·(Q_adv,≤i + 2322·(i−1)), with phase factor c = 2 for the current two-phase adversary type (the second phase recomputes the first, `SCE_Experiment.Adversary` carries no private state); c = 1 would need a host argument. Its host obligations H-MA1 (construction of a_i with the submitted inputs as its outputs at every H), H-MA2 (its cost) and H-MA3 (whatever the campaign adversary sees between attempts is a function of H and oracle-free data fixed before H, so a_i can recompute it with charged queries) are not discharged. LEAD READING, 2026-11-08, for the owner: H-MA3 does not restrict what the attacker may observe or adapt to; it is a cost-accounting rule that charges the verifier's digest calls of earlier attempts (2322 each) to the reduction adversary's query count. That is exactly the "work performed through verifier interactions" item the security contract must state explicitly (AGENTS.md section 1); whether the campaign corollary is published in these units, or campaign security stays stated per attempt only, is an owner decision on contract scope, not a proof question.
 
 This sum is not to be replaced by setting a single-experiment bound to 1 (AGENTS.md section 2). If the lead does not accept the reduction, the published claim must say that campaign security is stated per attempt only.
 
@@ -409,9 +409,9 @@ These are stated so that the published version does not inherit them silently.
 3. **Q is counted on a⊤.** Under RZ-STATE, `queries` bounds the issued list of `a⊤`, not of `a`. Where `a` would output state `false`, the wrapper fails before the native call, so `a⊤` can issue more verifier calls than `a`. The published Q must be described as `a⊤`'s count. This draft does not see a soundness problem in that, but the wording matters.
 4. **`missing`.** `NND_Missing.instance`, the term TAS names, was never delivered. The intended instance is INP's `missingLit`, which depends on the per-world env. NNH_ run 5 preflight P1 (RSL.Env has exactly four fields) passed according to the merge message. The literal instance is still to be built.
 5. **The failure event's witness side.** `failureModel`'s per-run failure is "accepted and the extractor returns `none`". This draft did not re-audit how the extracted witness is tied to the spend relation (the Claims conjuncts, `F3X_ModelClaims`). The final statement audit must confirm it before the claim is described as "acceptance implies a valid spend witness except with probability total(Q)".
-6. **Campaign accounting is informal** (section 3.5).
+6. **Campaign accounting.** Stand-in theorem compiled (MAT_); host obligations H-MA1-3 open; phase factor c = 2; owner decision on publishing the campaign corollary in verifier-call-charged units (section 3.5).
 7. **Pool enters through `TraceRep`.** Even on the verifier side, the theorem assumes the recorded non-verifier actions are what Pool and runtime did. Until (aj)(a) is decided, the honest wording is "conditional on the recorded Pool and runtime actions in the lineage".
-8. **Ledger inconsistency.** NNK_LEDGER.json `open_findings` lists NKB-F1 against TX1:083 and TX2:055 with status OPEN, and the (bc) extraction reclassification record says "NKT-F1 batch_tree: TX1:083/TX2:055 remain OPEN". Both rows have status CLOSED in the same ledger, via NKL-RT-batch_tree. This is probably a stale carried text, but it must be reconciled before the gate.
+8. **Ledger inconsistency (RESOLVED in ledger30, NNN_: NKB-F1 marked RESOLVED by NKL-RT-batch_tree).** NNK_LEDGER.json `open_findings` listed NKB-F1 against TX1:083 and TX2:055 with status OPEN, and the (bc) extraction reclassification record says "NKT-F1 batch_tree: TX1:083/TX2:055 remain OPEN". Both rows have status CLOSED in the same ledger, via NKL-RT-batch_tree. This is probably a stale carried text, but it must be reconciled before the gate.
 9. **D188-P2.** The 2026-10-27 caveat qualifies deployed attribution at five retired-preparation interfaces (dot_type, prepared_claim, query_geometry, tx1, tx1_finish). Later work replaced much of that route with direct native bridges (amendment 2026-10-27 third) and ReviewedTranscription-prepared_claim. This draft did not confirm that every one of the five is now covered by a CLOSED bridge row. The final audit must.
 10. **Missing removal conditions.** S2TrustedSdkBorrow, TrustedStd, RuntimeEntrypointAdmission, RuntimePersistence, RuntimeSha256Value, NativeContractSemanticTransport and 36 reviewed-transcription items have no recorded removal condition.
 
