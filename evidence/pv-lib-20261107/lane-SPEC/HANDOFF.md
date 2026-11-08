@@ -1,3 +1,53 @@
+# Session9 handoff — cut92 applied; checked ScopeData obstruction; full task OPEN
+
+Continued b13bfa283bd981cb979a680d97d0369c2a4ff33d on
+codex/pv-lib-spec-20261107. Approved SPEC-C5 applied through
+SPEC_CORRECTIONS.md with exact before/after. OwnInitCut92.AllocationWitness,
+OwnInitCut92Contract.Post/Contract, Cut92Composition.Contracts/AllocationBranch/
+Witness compile; historical cut94 definitions are retained. No row is proved.
+
+Latest read-only lane A input1451aa2e0c9 has the SAME actual v2 surface as
+session7, still PARTIAL. Cached import closure8597 had330 object-hash conflicts
+with W3; no cached mixing/provider write. Replayed20 missing library modules
+in lane-owned copies with import names ONLY changed, all declaration bodies
+unchanged. V2Runtime directly uses that actual v2 step plus sparse native
+assembly and source-origin resource contexts in the same W3 cohort. Existing
+VALUE-only Values remains a parameter; full source adequacy is NOT proved.
+
+SPEC-C6 CHECKED44960/44962/44965: f6's actual ScopeData Arc resolves to the
+same F124.live body/BoxNew4963 token as Packet. The Packet-only sparse decoder
+returns None for source ScopeData (counter AtomicUsize0, ANY thread/panic
+values); the installed48/8 image is wrong for adopted ScopeData40/8. The
+actual assembled sparse native answer is None for EVERY native Environment,
+store/world/issued activation, even with a successful non-null48-byte reply.
+A source-correct40-byte reply leaves its incorrect48-byte request pending.
+See FINDINGS.md and SESSION9_ADEQUACY.md. This is LOCAL, not original-entry
+reachability, not a negation of the full joint existential. No source-adequate
+successful continuous history or full joint witness is claimed. No C6 frozen
+spec correction is silently adopted.
+
+ONE strict raw34991 PASS123/123, exit0, wall0:58.91, peak6856084KiB, swap0,
+sourceeab969b5b85e3532a0aa770d8573f4188ade2cfe; standard axioms only,
+zero unresolved/summary disagreement; unchanged private walker/collector.
+Exact graphs/hashes/input manifest retained.29 focused passes(including
+metadata inspection and driver),3 changed-before-retry failures44959/44961/
+44964 retained. No OOM/admission refusal/transport failure, cap increase,
+shared-launcher edit or unchanged regression. All scopes6G/8G/swap0/Tasks64/
+-M7000, one at a time with standalone STREAMB_SLOTS=3 turn.
+
+Next: source-bound40/8 sparse ScopeData model, actual current-Thread pointer,
+counter0/panicfalse, holes33..39, preserving Packet48/8 and holes32..47;
+bind constructors and callback copied source bytes, then ONE original-entry
+trace through13923/cut92,113,129/14756, nonvacuous exports, full joint witness
+or a contradiction of its COMPLETE premises. NextLean44969..44998;
+raw34992..34999 only for new/changed inputs. No endpoint/T premise change,
+ledger/package/provider/implementation/key edit, push/merge or own live scope.
+
+Offline verification:
+python3 evidence/pv-lib-20261107/lane-SPEC/validate_session9.py — PASS.
+
+---
+
 # Session8 handoff — sparse Packet repaired locally, full task OPEN
 
 Continued37be8fd68f7. SparseArc44919, SparsePacketHandler44921,

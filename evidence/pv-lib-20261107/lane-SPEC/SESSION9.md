@@ -56,3 +56,14 @@ PV_LIB_SPEC_OwnInitCut92Contract compiled 44966, cohort w3: exit0, wall 0:02.36,
 PV_LIB_SPEC_Cut92Composition compiled 44967, cohort w3: exit0, wall 0:02.40, peak 4719732KiB, swap 0; source 6d22cdc95c04459b3878c5cb10ce1808f30b8ed4; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession9 compiled 44968, cohort w3: exit0, wall 0:00.84, peak 1590920KiB, swap 0; source 9d2e968b27855b3e1f1c1083e75c38161f45c0f2; standard summary axioms only.
+
+Final strict audit34991: target SPEC session9 new logical roots in one W3
+cohort; sourceeab969b5b85e3532a0aa770d8573f4188ade2cfe; exit0;
+wall0:58.91; peak6856084KiB; swaps0;123/123 equal; standard axioms only;
+zero unresolved or summary disagreement. Raw walker/collector unchanged;
+constructor-summary union retains every reached ctorInfo. Full source joint
+witness/history remain OPEN; SPEC-C6 is a local checked source/runtime error.
+No full manifest, Rust/Kani/Aeneas/SBF/runtime regression. No unchanged rerun.
+No active own scope; no keys, provider files, ledgers, packages or release
+implementation changed. No push/merge. Wrapper34991 uses the assigned raw
+ID directly: no shared launcher accepted-range edit was needed or made.
