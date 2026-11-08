@@ -1,0 +1,48 @@
+from pathlib import Path
+import json,lzma,subprocess
+E=Path(__file__).resolve().parent
+J=lambda p:json.loads(lzma.decompress(p.read_bytes())if p.suffix=='.xz'else p.read_bytes())
+x=J(E/'NNM_LEDGER.json.xz');a=J(E/'NNM_AUDIT.json');assert not a['full_composition_pass'];res=J(E/'NNM_RESOURCES.json');v=J(E/'NNM_VALIDATION.json');p=J(E/'NNM_PROVENANCE.json');exp=J(E/'NNM_EXPORT.json');c=J(E/'NNM_CANDIDATE_REVIEW.json');missing=J(E/'NNM_MISSING_RAW_ROOTS.json')
+assert len([r for r in x['rows']if r['status']=='OPEN'])==10
+roots_pass=[z['row']for z in c['candidates']if z['current_raw_result']is not None]
+text=f'''Target not yet established. Ledger29 full composition gate INCOMPLETE. **No promotions: 589 CLOSED / 0 QUALIFIED / 10 OPEN of 599**, inherited from the ledger28 PASS. The current refresh is not reported as PASS.
+
+All 21 RSL owners rebuilt once from canonical RSL_REVISION4 sources, L002–022. Five literal concrete RowSpec checks pass L024, combined import L025, complete statements/owners L026: all 13,308 predecessor types/owners identical. Exact nominated immutable candidate commits verified; provisional NNG_Candidate345 never credited. Fresh E003 NMT_stage1_owned syntax/Types and Tree345/TotalProducer association, NMS_E003 BOTH validate_asq8 and stage2_owned with separate exact definitions, E008 Box wrappers and source-preserving all-Args ports independently reviewed. Failed E002 validate-only emission excluded. TGB-2 is internal to 242 via NMX_R4_NMSCarrier.auth; canonical 241 is V0-star, not parametric in V. All eight 233 NKW/NLG dispositions and the exact S2 scanner chain are recorded. D1/D2 registered at 240 as caller clauses. NLG extents remain OPEN in the authoritative ledger until 241 closes in a complete gate. TOP:G1b remains OPEN, not a row blocker.
+
+NFX L031 PASS across 19,189 modules: zero dangling/duplicate owners/import mismatches. Eight unchanged fidelity fixtures PASS, same optimized raw binary. Current raw results complete for **{a['completed_roots']}/{a['required_roots']} required roots**, standard axioms only; **{a['missing_roots']} missing** in NNM_MISSING_RAW_ROOTS.json, each with its owner. Candidate current raw passes: {', '.join(roots_pass)}. These source/type/raw candidate facts do not waive the full all-roots gate; all five rows stay OPEN. No historical supplier result substitutes for a missing current walk.
+
+60/60 serial capped scopes used, 0 Kani / 0 extraction; optional 16 GiB unused. Every admission exit 0 AND allowed:true, ALL codex-* count<6, disk>=40GB,6G high/8G max/swap0/tasks64/Lean-M7000. Total wall {res['wall_seconds']:.3f}s; recorded peak RSS {res['peak_rss_kib']}KiB,swap0. L023 own Domain344 check missed SdkState, repaired in L024. L030 stale own expected-import inventory repaired from independent canonical sources in L031. L052 batch42–43 hit 180 seconds after completed group 42; unfinished group 43 isolated successfully in L053. L057’s 185-root aggregate hit 180 seconds without a completed result. Its parent time statistics cannot establish idle child CPU. Host read-only snapshot found no specific infrastructure fault. Remaining work was split by retained graph-size estimates; same roots/binary, no cap or timeout increase. Missing roots remain explicit. Exact targets/revisions/hashes/print-axioms/resources and failed artifacts retained. No unchanged timed-out aggregate rerun or shared infrastructure edit.
+
+L053 pins rehashed 35,782 selected files and 1,192 copied inputs; 8 reviewed object replacements, zero unexpected. Fifteen refreshed NMV wrapper modules come only from NNG_WrapperR4_objects; unchanged inherited generic NMV_NoWrite interface retained, stale NoWritePool/Owned/241/TasRoots/CandidateRoots excluded. TGA G1 remains open where needed for 333/330. ReviewedTranscription-TX1:344 and TX2:240 remain UNUSED by CLOSED rows because this gate did not promote 344. Fixed-success TX1 allocation interpretations follow the ledger28 precedent; 233 Choices is universal statement data, not a success hypothesis.
+
+Retained flat export `{exp['export']}`; prepend to NNM_PATHS (full list NNM_EXPORT.LEAN_PATH), import NNM_COMBINED_IMPORT. Cache retained, no deletions. Evidence validation:{v['compressed_sha_pairs']} verified compressed SHA pairs,{v['source_snapshots']} source snapshots,60 receipts. No file>20MB or committed object/binary/ELF. No shipped/key/wallet/account/sibling-worktree/push action; inherited default f8c0ec72…,devnet63ad3e9c…,Pool e0e49c34… pins, no rebuild trigger.
+
+{p['historical_verbatim']}
+
+Current CLOSED-set conservative impact remains 568/589; candidate potential impact is separate and earns no promotion. PRV accurate 532–538 assessment and TGA/TGB/(bt)/(bk) retained. Owner condition(4) pointwise-inclusion strategy is RECORDED ONLY, not proved. RSL rev4/(bs),rev3/(bq) clarification,(bm)(bn)(bo)(bp)(br), split-B/Realizes/five conditions/RZ-STATE carried. Frozen3,L154,narrowedD188,100-bit PER-ATTEMPT,privacy,two transactions unchanged. TOP:G0 OPEN; headline not composed. K086/(aj)(a) PENDING.
+
+Next: current-context raw walks of the exact missing declarations, split before launch using NNM_CONTINUATION_PLAN.json; then rerun metadata-only finalization with a separately authorized budget. Do not repeat completed raw windows or the unchanged full import/scan. This job has no budget left. Source-to-ELF/cold release replay/provenance and top obligations remain. Read NNM_AUDIT,SCAN,LEDGER,DELTA,CANDIDATE_REVIEW,CLAUSE_REVIEW,EMISSION_REVIEW,SYNTAX_ASSOCIATION,WRAPPER_REVIEW,PHYSICAL,REMAINING,VALIDATION and ATTEMPTS.
+
+Final evidence commit contains this handoff; no push.
+'''
+(E/'NNM_HANDOFF.md').write_text(text)
+remaining={
+'TX1:345':'Complete candidate ActualCandidate345 passes exact rev4/source checks; no credit until missing full-gate raw roots are audited. Provisional Candidate345 excluded.',
+'TX1:344':'Concrete Candidate344 at15 rev4 wrapper objects/source-fission and matched controls passes static checks; full raw gate incomplete. ReviewedTranscription344 unused.',
+'TX2:233':'Complete E008/Box/all-Args candidate with eight clause dispositions; full raw gate incomplete.',
+'TX2:242':'Complete canonical native/port candidate, correct NMS_E003 validate_asq8 and TGB-2 carrier image; full raw gate incomplete.',
+'TX2:241':'Complete V0-star candidate on verbatim D1/D2, S2/extent discharge reviewed; full raw gate incomplete. D1/D2 caller clauses at 240 remainOPEN.',
+'TX2:240':'Needs separately gated canonical 241 and exact wrapper instantiation at SAME implementation; D1/D2 caller clauses explicitly registered. TGB-4 Clock Err registration remains lead/240-owned.',
+'TX1:333':'Needs both344 and240 at SAME implementations; canonical wrapper candidates not credited by this incomplete gate. TGA G1 remains open where used.',
+'TX2:221':'Same dual-route process as333; needs both wrapper packets.',
+'TX1:330':'Needs shared333/221 and both wrapper packets.',
+'TX2:213':'Needs shared333/221 and both wrapper packets.'}
+(E/'NNM_REMAINING.md').write_text('Target not yet established. Ledger29 INCOMPLETE; inherited 589 CLOSED /0 QUALIFIED /10 OPEN. No promotions.\n\n| Row | Exact remaining gate/deliverable |\n|---|---|\n'+''.join(f'| {k} | {remaining[k]} |\n'for k in sorted(remaining))+f"\nImmediate blocker: {a['missing_roots']} exact current raw root results, NNM_MISSING_RAW_ROOTS.json. All 60 scopes used;0 Kani/0 extraction. Missing work is Lean/raw audit, not a Kani or source-refinement obstruction. See planned split; do not rerun completed targets. TOP:G1b and TOP:G0 remainOPEN; no top field is relabelled as a row blocker. Source-to-ELF, cold release replay, provenance/per-definition equality, actual Pool execution, K086 and other top fields remain.\n")
+(E/'NNM_PHYSICAL.md').write_text('Target not yet established. Ledger29 full gate INCOMPLETE: no promotions; inherited 589 CLOSED / 0 QUALIFIED / 10 OPEN of 599.\n\nFive concrete candidate statements, source/control links, same rev4 RSL owner selection and zero-dangling/duplicate-owner scan pass. The required all-root raw replay is incomplete. Counts are not security bits and no headline composition is claimed. ReviewedTranscription344/240 remain unused by CLOSED rows. D1/D2, G1b and provenance distinctions are retained.\n\nFrozen verifier4bb3b3f51e16 and Poolb936275465 unchanged. Inherited default f8c0ec72…/devnet63ad3e9c…/Pool e0e49c34… pins, not rebuilt. RuntimePersistence data-only, digest/error43/44, PDA38 quantified, SDK/std/runtime/compiler/source-to-ELF boundaries retained. Frozen3,L154,narrowedD188,100-bit PER-ATTEMPT,privacy and two transactions unchanged.\n')
+# Planning only: never launch beyond the exhausted60-scope budget.
+w=J(E/'NNM_WEIGHT_PREFLIGHT.json')['stats'];import math
+window_count=max(1,math.ceil(sum(w[z['root']]['edges_scanned']for z in missing['roots'])/45_000_000));bins=[[]for _ in range(window_count)];loads=[0]*window_count
+for z in sorted(missing['roots'],key=lambda z:-w[z['root']]['edges_scanned']):
+ i=min(range(window_count),key=lambda i:loads[i]);bins[i].append(z);loads[i]+=w[z['root']]['edges_scanned']
+(E/'NNM_CONTINUATION_PLAN.json').write_text(json.dumps(dict(status='PLANNED_ONLY_REQUIRES_SEPARATE_BUDGET',missing=len(missing['roots']),windows=[dict(roots=b,estimated_edges=loads[i],expected='Focused raw traversal, no Lean compilation/extraction/Kani')for i,b in enumerate(bins)],caps='6G/8G/no swap/tasks64; unchanged180s',do_not_repeat='Completed current raw results, exact statement audit and unchanged whole-import NFX scan',retained_export=exp['export']),indent=1)+'\n')
+print('NNM incomplete handoff: no promotions; exact continuation roots retained')
