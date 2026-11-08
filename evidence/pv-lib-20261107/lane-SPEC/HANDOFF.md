@@ -1,3 +1,10 @@
+# Session6 in progress
+
+See SESSION6.md. NativeRuntime49782 compiled; next49783. No joint witness
+or final strict audit yet. No row or endpoint closure claimed.
+
+---
+
 # Session5 current handoff
 
 Branch codex/pv-lib-spec-20261107; resumed f2798a4fac4. D984/SPEC-C3 accepted.
