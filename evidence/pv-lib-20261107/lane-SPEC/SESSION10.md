@@ -8,3 +8,5 @@ PV_LIB_SPEC_InitImageRecheck compiled 44976, cohort w3: exit0, wall 0:02.88, pea
 PV_LIB_SPEC_SiteRuntime compiled 44977, cohort w3: exit0, wall 0:02.63, peak 4765924KiB, swap 0; source 361e24d2ee0ffbbcba4c3602742ad027ceb114ca; standard summary axioms only.
 
 PV_LIB_SPEC_SiteArcRecheck compiled 44980, cohort w3: exit0, wall 0:03.52, peak 4797812KiB, swap 0; source 9cb17796b755b5603594822435bb65bca88dc85f; standard summary axioms only.
+
+PV_LIB_SPEC_SiteV2Runtime compiled 44981, cohort w3: exit0, wall 0:02.42, peak 4769360KiB, swap 0; source c4c72c69166b538b37271902ccb5a6374cf64b35; standard summary axioms only.
