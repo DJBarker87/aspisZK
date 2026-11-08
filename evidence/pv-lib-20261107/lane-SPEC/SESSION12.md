@@ -38,3 +38,5 @@ PV_LIB_SPEC_ThreadWordRecheck12 compiled 55143, cohort w3: exit0, wall 0:02.33, 
 PV_LIB_SPEC_AtomicRecheck12 compiled 55144, cohort w3: exit0, wall 0:02.30, peak 4779092KiB, swap 0; source d1be8d616701b17889df9e61a4584d39cdac0f13; standard summary axioms only.
 
 PV_LIB_SPEC_MemoryHistory12 compiled 55146, cohort w3: exit0, wall 0:02.23, peak 4774924KiB, swap 0; source deb7156449f4db51ef55b4343e9a0e29233ad994; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession12 compiled 55147, cohort w3: exit0, wall 0:00.85, peak 1572480KiB, swap 0; source 55af5e57ed79a4c2daf54b3483cfc3bcfc364c47; standard summary axioms only.
