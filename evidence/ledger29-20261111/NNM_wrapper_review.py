@@ -14,4 +14,5 @@ for r in json.loads((E/'NNM_COHERENCE_PLAN.json').read_text())['wrapper_selectio
  rows.append(dict(module=r['module'],source=r['path'],sha256=H(src),supplier_attempt=r['attempt'],selected_objects='NNG_WrapperR4_objects -> NNM_wrapperR4'))
 assert len(rows)==15
 report=dict(status='PASS',control_review=controls,fission_associations=ns['results'],fission_sha256=H((S/'NMV_Fission.rs').read_bytes()),replayed_NMV=rows,excluded_modules=['NMV_NoWritePool','NMV_NoWriteOwned','NMV_NoWrite241','NMV_TasRoots','NMV_CandidateRoots'],TGA_G1='OPEN for333/330; excluded from344 graph',trust='ReviewedTranscription-TX1:344 will be USED if final gate passes; retained option-A reclassification, not removal',new_Kani=0)
+kmx=subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch']);assert H(kmx)==controls['kmx_patch_sha256'];report['KMX_patch']=dict(path='evidence/kani-mitig-20261028/KMX_copy_stubs.patch',sha256=H(kmx),status='PASS matches required reused parent-control configuration')
 (E/'NNM_WRAPPER_REVIEW.json').write_text(json.dumps(report,indent=1)+'\n');print('NNM wrapper source fission, exact parent mutants and 15 rev4 source pins PASS')

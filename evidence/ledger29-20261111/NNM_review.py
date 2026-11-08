@@ -41,6 +41,9 @@ exec(compile(program[program.index('extern='):program.index("(dest/'Funs.lean').
 compiled=raw('evidence/tx1-owned-20261111/NMT_lean/NMT_stage1_owned/Funs.lean');assert compiled==ns['funs'].encode()
 em.append(dict(row='TX1:345',attempt='NMT_E003',pins=p,receipt={k:rc[k]for k in ['exit_status','wall_seconds','peak_rss_kib','swaps']},bc=spans))
 syntax.append(dict(row='TX1:345',status='PASS exact bytes',parameterized_sha256=H(compiled),generator_sha256=H(program.encode()),source_chain=['AspisR1.NMT_345.source_fold','AspisR1.NNG_Tree345.source','AspisR1.NNG_ParentAssociation345.source','AspisR1.NNG_TotalProducer345.interpretation','AspisR1.NNG_TotalProducer345.native'],only_credited_root='AspisR1.NNG_ActualCandidate345.candidate',provisional_candidate_credited=False))
+type_raw=Path('evidence/tx1-owned-20261111/NMT_extracted/stage1_owned/raw/NMT_stage1_owned/Types.lean');type_compiled=Path('evidence/tx1-owned-20261111/NMT_lean/NMT_stage1_owned/Types.lean')
+adapted=re.sub(r'\bdiscriminant isize,?\s*','',raw(type_raw).decode());adapted=re.sub(r'@\[\]\s*\n','',adapted);assert raw(type_compiled).decode()==adapted
+syntax[0]['type_parameterization']=dict(status='PASS exact bytes',raw=str(type_raw),raw_sha256=H(raw(type_raw)),compiled=str(type_compiled),compiled_sha256=H(raw(type_compiled)),change='Only global discriminant isize duplicate metadata registration stripped, matching original NMT_parameterize.py')
 base=Path('evidence/tx2-owned-20261111/NMS_extract_stage2');p=J(base/'NMS_PINS.json');rc=J('evidence/tx2-owned-20261111/NMS_E003/receipt.json')
 assert p['exit']==p['charon_exit']==p['aeneas_exit']==rc['exit_status']==0 and p['frozen_revision']==F and p['lock_before']==p['lock_after']==lock
 for name,h in p['outputs'].items():assert H(raw(base/name))==h

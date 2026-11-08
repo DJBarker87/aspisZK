@@ -11,11 +11,16 @@ def put(n,x,compress=False):
  b=(json.dumps(x,sort_keys=True,indent=1)+'\n').encode();p=E/('NNM_'+n+'.json')
  if compress or len(b)>20_000_000:Path(str(p)+'.xz').write_bytes(lzma.compress(b));Path(str(p)+'.sha256').write_text(H(b)+'\n')
  else:p.write_bytes(b)
+subprocess.run(['python3',str(E/'NNM_prepare.py'),'--check'],check=True)
 assert J(E/'NNM_GATE_INTEGRITY.json')['status']=='PASS'
+assert J(E/'NNM_PREDECESSOR_COMPARISON.json')['status']=='PASS'
+assert J(E/'NNM_CANDIDATE_COMMIT_PINS.json')['status']=='PASS'
+assert J(E/'NNM_RSL_REPLAY.json.xz')['standard_axioms_only']
 required=J(E/'NNM_AUDIT_ROOTS.json');results=[];disagreements=[]
 for i,g in enumerate(required['groups']):
  ps=list((E/'NNM_audit').glob('batch*/proof'+str(i)+'.json'));assert len(ps)==1,(i,ps)
  d=J(ps[0]);assert [r['root']for r in d['results']]==g
+ assert d['exit_status']==0 or(d['exit_status']==1 and any(not r['equal']for r in d['results'])),(i,d['exit_status'])
  for r in d['results']:
   assert set(r['walked_axioms'])<={'propext','Quot.sound','Classical.choice'}
   if not r['equal']:
@@ -36,8 +41,9 @@ for r in receipts:
  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  assert str(r['swaps'])=='0';assert any(J(p)['free']>=40_000_000_000 for p in E.glob(a+'-disk*.json'))
  checks=[c for c in entries if c.get('attempt')==a and c.get('event')=='share_check'];assert checks and checks[-1]['host']['count']<6
- if r['exit_status']:assert a in['NNM_L023','NNM_L030']and r['exit_status']==1,(a,r['exit_status'])
-resources=dict(scopes=60,budget=60,unused=0,kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),timeout_or_memory_kill=[],failed_attempts={'NNM_L023':'Own Domain344 assertion missed SdkState; corrected inL024','NNM_L030':'Stale own expected-import inventory; source-derived correction passesL031'})
+ if r['exit_status']:
+  assert (a in['NNM_L023','NNM_L030']and r['exit_status']==1)or(a=='NNM_L052'and r['exit_status']==124),(a,r['exit_status'])
+resources=dict(scopes=60,budget=60,unused=0,kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),timeout_or_memory_kill=[dict(attempt='NNM_L052',kind='wall timeout on two-group batch; completed42 retained; unfinished43 isolated atL053',memory_kill=False,cap_or_timeout_increase=False)],failed_attempts={'NNM_L023':'Own Domain344 assertion missed SdkState; corrected inL024','NNM_L030':'Stale own expected-import inventory; source-derived correction passesL031','NNM_L052':'Batch42 completed;43 exceeded shared180s wall window, isolated43 only atL053 with unchanged limits'})
 put('RESOURCES',resources)
 assert J(E/'NNM_RAW_BINARY.json')['sha256']=='46ee271b392729449147b978830b474e3fa4ecba2b45e03ad13c02490ba6ca3c'
 put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNM_COMBINED_IMPORT',combined_attempt='NNM_L025',statement_attempt='NNM_L026',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),new_roots=len(required['roots'])-13308,all_required_raw_roots_present=True,raw_standard_axioms_only=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=J(E/'NNM_RAW_BINARY.json')['sha256'],fixtures=fixtures['results'],walker=J(P/'NNL_AUDIT.json')['walker'],scanner='NNM_SCAN.json',coherence='One fresh rev4 RSL object set; same complete predecessor root types/owners; fifteen NMV wrapper imports from private rev4 replay only',resources=resources,cold_release_replay=False,security_target_established=False))
@@ -46,7 +52,7 @@ clause_by={c['id']:c for c in clauses['clauses']}
 def update_inherited(v):
  if isinstance(v,dict):
   key=v.get('id')
-  if key in clause_by:
+  if isinstance(key,str)and key in clause_by:
    z=clause_by[key];v.update(status='DISCHARGED',discharged_by=z['discharged_by'],NNM_evidence=z)
   for z in list(v.values()):
    if z is not v.get('NNM_evidence'):update_inherited(z)

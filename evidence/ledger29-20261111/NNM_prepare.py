@@ -1,34 +1,38 @@
+"""Check-only preflight for the amended immutable gate inputs; never overwrite them.
+The earlier WIP generator selected stale source snapshots and omitted the shared
+rev4 owners. This replacement enforces the final pins and pre-split root plan.
+"""
 from pathlib import Path
-import json,lzma,re,hashlib
-E=Path(__file__).resolve().parent;P=E.parent/'ledger28-20261111';N=E.parent/'tx1-principal-20261111';X=E.parent/'tx2-auth-20261111'
-B='/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NNM_20261111'
+import json,lzma,re,hashlib,sys
+assert sys.argv[1:]==['--check'],'Only --check is supported; gate inputs must be reviewed before replacement'
+E=Path(__file__).resolve().parent;P=E.parent/'ledger28-20261111';N=E.parent/'tx1-principal-20261111';X=E.parent/'tx2-auth-20261111';B='/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NNM_20261111'
 def J(p):return json.loads(lzma.decompress(p.read_bytes())if p.suffix=='.xz'else p.read_bytes())
-def put(n,x):(E/('NNM_'+n+'.json')).write_text(json.dumps(x,indent=1)+'\n')
-prior=J(P/'NNL_AUDIT_ROOTS.json');extra={r for g in J(N/'NNG_Resume_AUDIT_ROOTS.json')['groups'] for r in g}
-for n in ['NMX_R4','NMX_R6','NMX_R9']:
- f=X/(n+'_AUDIT_ROOTS.json');x=J(f);extra.update(x.get('roots',[]));extra.update(r for g in x['groups']for r in g)
+prior=J(P/'NNL_AUDIT_ROOTS.json');extra={r for g in J(N/'NNG_Resume_AUDIT_ROOTS.json')['groups']for r in g}
+for name in ['NMX_R4','NMX_R6','NMX_R9']:
+ x=J(X/(name+'_AUDIT_ROOTS.json'));extra.update(x.get('roots',[]));extra.update(r for g in x['groups']for r in g)
 own=['NNM_Domains.'+n for n in ['exact345','exact344','exact233','exact242','exact241','domain345','domain344','domain233','domain242']]
-new=sorted(extra-set(prior['roots']));groups=prior['groups']+[new[i:i+14]for i in range(0,len(new),14)]+[own]
-put('AUDIT_ROOTS',dict(roots=sorted(set(prior['roots'])|extra|set(own)),groups=groups));put('AUDIT_MODULES',[['NNM_COMBINED_IMPORT']]*len(groups));put('NEW_ROOTS',new)
-paths=[B+'/NNM_tx1',B+'/NNM_wrapperR4',B+'/NNM_tx2',B+'/NNM_previous']+J(P/'NNL_PATHS.json');put('PATHS',list(dict.fromkeys(paths)))
-put('SEED_CONFIG',dict(previous_export=J(P/'NNL_EXPORT.json'),previous_pins=J(P/'NNL_CLOSURE_PINS.json.xz'),tx1_paths=J(N/'NNG_L1111/receipt.json')['env']['LEAN_PATH'].split(':')[:6],tx2=J(X/'NMX_R9_CLOSURE_PINS.json.xz'),tx2_export=J(X/'NMX_R9_EXPORT.json')))
-combined='import NNL_COMBINED_IMPORT\nimport NNG_ActualCandidate345\nimport NNG_Candidate344\nimport NMX_R4_Authentication\nimport NMX_R6_SourceExact242\nimport NMX_R9_StageTwo\nimport NNM_Domains\nimport LIB_FullInstances\nimport LIBB_V2Star\nimport LIBC_COMBINED_IMPORT\nimport RPx_Deployed\n'
-# All new supplier roots must be loaded, including support declarations not on a candidate's transitive path.
-for r in new:
- # Source module ownership is reconstructed from current print manifests below.
- pass
-mods=set()
-for r in new:
- ns=r.removeprefix('AspisR1.').split('.')[0]
- if ns.startswith(('NNG_','NMX_')):mods.add(ns)
-combined+=''.join('import '+m+'\n'for m in sorted(mods))
-(E/'NNM_COMBINED_IMPORT.lean').write_text(combined)
-for n in ['Driver.lean','batch.py']:(E/('NNM_'+n)).write_text((P/('NNL_'+n)).read_text().replace('NNL_','NNM_'))
-expected={json.loads(l)['module']:json.loads(l)['imports']for l in(P/'NNL_EXPECTED_IMPORTS.jsonl').read_text().splitlines()}
-for folder in [N,X,E]:
- for p in folder.rglob('*.lean'):
-  if '/sources/'in str(p):continue
-  expected[p.stem]=list(dict.fromkeys(['Init']+re.findall(r'^import\s+([\w.]+)',p.read_text(),re.M)))
-(E/'NNM_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=k,imports=v))+'\n'for k,v in sorted(expected.items())))
-put('ROOT_PLAN',dict(previous_roots=len(prior['roots']),new_roots=len(new)+len(own),groups=len(groups),previous_groups=len(prior['groups']),group_sizes=[len(g)for g in groups]))
-print(J(E/'NNM_ROOT_PLAN.json'))
+new=sorted(extra-set(prior['roots']));tail=[r for g in prior['groups'][51:]for r in g]+new+own
+initial=prior['groups'][:51]+[tail[i:i+120]for i in range(0,len(tail),120)]
+groups=initial[:44]+[initial[i]+initial[i+1]for i in range(44,58,2)]
+required=J(E/'NNM_AUDIT_ROOTS.json');assert required==dict(roots=sorted(set(prior['roots'])|extra|set(own)),groups=groups)
+assert len(groups)==51 and len(required['roots'])==13715
+assert J(E/'NNM_AUDIT_MODULES.json')==[['NNM_COMBINED_IMPORT']]*51
+assert J(E/'NNM_PATHS.json')[:5]==[B+'/'+n for n in ['NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']]
+cfg=J(E/'NNM_SEED_CONFIG.json');assert len(cfg['wrapper_modules'])==15 and all(m.startswith('NMV_')for m in cfg['wrapper_modules'])
+assert all(r['module'].startswith(('NMX_','NMS_','LIBB_'))for r in cfg['tx2_objects'])
+plan=J(E/'NNM_COHERENCE_PLAN.json')
+for p in(E/'NNM_rev4_sources').glob('*.lean'):
+ assert p.read_bytes()==(E.parent/'rowspec-lead-20261107'/p.name).read_bytes()
+ assert hashlib.sha256(p.read_bytes()).hexdigest()==plan['modules'][p.stem]
+expected={x['module']:x['imports']for l in(E/'NNM_EXPECTED_IMPORTS.jsonl').read_text().splitlines()if(x:=json.loads(l))}
+loaded=[json.loads(l)for l in(E/'NNM_LOADED_scan.jsonl').read_text().splitlines()]
+for row in loaded:
+ assert row['imports_match']and not row['dangling']and not row['duplicate_owners']
+ assert expected[row['module']]==row['imports']
+ # Independent current source imports for the changed supplier families.
+ m=row['module'];paths=[folder/(m+'.lean')for folder in [E,E/'NNM_rev4_sources',N,X,E.parent/'tx2-owned-20261111']]
+ p=next((p for p in paths if p.exists()),None)
+ if p is not None:
+  imports=list(dict.fromkeys(['Init']+re.findall(r'^import\s+([\w.]+)',p.read_text(),re.M)))
+  assert expected[m]==imports,(m,imports,expected[m])
+print('NNM amended preflight PASS:13715 roots,51 groups,single rev4 source set,15 refreshed NMV modules,current source-derived import inventory')

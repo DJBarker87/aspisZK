@@ -14,9 +14,9 @@ normalization, full source-fission equality, K063/K064 exact failing controls,
 
 NNM_gate_queue.py is running serially on the host throughNNM_run.py. Do not
 resubmit any completed or submitted attempt. Read ATTEMPTS/TRANSCRIPT and recover
-host receipts read-only if transport is interrupted. L032–059 are fixed raw
-windows over58 pre-split groups;L060 pins/retains the closure without repeating
-an unchanged scan. Budget60/60 will be used,0 Kani/0 extraction. One8GiB scope at
+host receipts read-only if transport is interrupted. L052 completed group42 then hit180s during43; only completed42 is retained.
+The unfinished43 is isolated atL053 (same limits), with closure pinning in that
+scope. L054–060 cover44–57 read-only. No repeated42 or unchanged timed-out shape. Budget60/60 will be used,0 Kani/0 extraction. One8GiB scope at
 a time,6G high/swap0/tasks64/Lean-M7000; optional16GiB unused. Every submission has
 share/disk/admission receipts. No host infrastructure changed.
 

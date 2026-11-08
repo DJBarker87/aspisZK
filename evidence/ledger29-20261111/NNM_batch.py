@@ -4,6 +4,8 @@ import subprocess,json,time,re,sys,os
 B=Path.cwd();mode=sys.argv[1]
 for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:(B/('NLX_'+n)).write_bytes((B/('NNM_'+n)).read_bytes())
 E=B/'NNM_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+seal=mode.endswith('-pin')
+if seal:mode=mode[:-4]
 if mode=='retention':
  exec(compile((B/'NNM_pin.py').read_text(),'NNM_pin.py','exec'));sys.exit(0)
 if mode in ['scan','finalscan']:jobs=[('scan',['NNM_native/NNM_Driver','scan'])]
@@ -28,3 +30,5 @@ for name,cmd in jobs:
   if not collector_only:print(raw,flush=True);sys.exit(r.returncode)
   print('Retained known collector disagreement; complete raw ax2 walk authoritative under(ab\')(3)/(ax2)',flush=True)
 
+
+if seal:exec(compile((B/'NNM_pin.py').read_text(),'NNM_pin.py','exec'))

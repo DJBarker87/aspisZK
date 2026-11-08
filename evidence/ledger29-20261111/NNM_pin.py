@@ -9,6 +9,19 @@ for row in loaded:
  rel=row['module'].replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if(Path(root)/rel).is_file()),None);assert p,rel
  for q in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
   if q.exists():pins.append(dict(module=row['module'],path=str(q),sha256=H(q),bytes=q.stat().st_size))
+imports=json.loads(lzma.decompress((B/'NNM_CACHE_IMPORTS.json.xz').read_bytes()))
+for r in imports['files']:assert H(Path(r['destination']))==r['sha256'],r['destination']
+prior=json.loads(lzma.decompress((B.parent/'NNL_20261111/NNL_CLOSURE_PINS.json.xz').read_bytes()))
+old={(r['module'],Path(r['path']).name):r for r in prior['selected_objects']}
+changes=[]
+for r in pins:
+ before=old.get((r['module'],Path(r['path']).name))
+ if before is not None and before['sha256']!=r['sha256']:
+  changes.append(dict(module=r['module'],previous=before,current=r))
+allowed_prefixes=('RSL_','NNG_','NMX_','NMS_','NMV_','LIBB_')
+unexpected=[r for r in changes if not r['module'].startswith(allowed_prefixes)]
+(B/'NNM_PREDECESSOR_COMPARISON.json').write_text(json.dumps(dict(status='PASS'if not unexpected else'FAIL',changed_objects=changes,unexpected=unexpected,allowed_changed_families=allowed_prefixes,copied_inputs_rehashed=len(imports['files'])),indent=1)+'\n')
+assert not unexpected,unexpected
 # All twenty-one canonical owners were rebuilt from the single committed source set.
 for row in pins:
  if row['module'].startswith('RSL_'):assert '/NNM_rev4/'in row['path'],row
@@ -20,10 +33,10 @@ export=B/'NNM_exports_final_20261111';export.mkdir(exist_ok=True);exported=[]
 for folder in ['NNM_objects','NNM_rev4','NNM_tx1','NNM_wrapperR4','NNM_tx2','NNM_previous']:
  for p in(B/folder).rglob('*'):
   if not p.is_file():continue
-  rel=p.relative_to(B/folder);q=export/folder/rel;q.parent.mkdir(parents=True,exist_ok=True)
+  rel=p.relative_to(B/folder);q=export/rel;q.parent.mkdir(parents=True,exist_ok=True)
   if q.exists():assert H(q)==H(p)
   else:shutil.copy2(p,q)
   exported.append(dict(path=str(q),sha256=H(q),bytes=q.stat().st_size))
-(B/'NNM_EXPORT.json').write_text(json.dumps(dict(export=str(export),files=exported,cache_retained=True,deletions=0,disk=shutil.disk_usage(B)._asdict()),indent=1)+'\n')
+(B/'NNM_EXPORT.json').write_text(json.dumps(dict(export=str(export),LEAN_PATH=[str(export)]+roots,files=exported,cache_retained=True,deletions=0,disk=shutil.disk_usage(B)._asdict()),indent=1)+'\n')
 (B/'NNM_GATE_INTEGRITY.json').write_text(json.dumps(dict(status='PASS',rsl_single_rev4_owner=True,NMV_only15_rev4=True,modules=len(loaded),selected_files=len(pins),retained_files=len(exported)),indent=1)+'\n')
 print(json.dumps(dict(status='PASS',selected_files=len(pins),retained_files=len(exported))))
