@@ -50,3 +50,5 @@ PV_LIB_SPEC_ScopeAllocationPollGap compiled 44962, cohort w3: exit0, wall 0:03.0
 PV_LIB_SPEC_V2Runtime compiled 44963, cohort w3: exit0, wall 0:02.62, peak 4768140KiB, swap 0; source 11db01a063826696a4de8d00aac7d8bd73af1601; standard summary axioms only.
 
 PV_LIB_SPEC_ScopeRuntimeGap compiled 44965, cohort w3: exit0, wall 0:02.65, peak 4768220KiB, swap 0; source df2b2c04b5986925048bd04d96e13c13976e7635; standard summary axioms only.
+
+PV_LIB_SPEC_OwnInitCut92Contract compiled 44966, cohort w3: exit0, wall 0:02.36, peak 4720144KiB, swap 0; source cf521ed9d07d2df2f4c9729ce17c3c81013cd90d; standard summary axioms only.

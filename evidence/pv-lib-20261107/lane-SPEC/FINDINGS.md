@@ -239,3 +239,12 @@ answer or pending fallback is used. `correct40`/`unbound48` separately check a
 40-byte successful schedule leaves the incorrect48-byte request pending.
 This strengthens the local obstruction; it still does not prove original-entry
 reachability or a contradiction of the complete joint existential.
+
+Runtime check44965 (44964's missing Config namespace was fixed before retry):
+ScopeRuntimeGap.native_none and answer_none propagate the rejection through
+the actual assembled SparseRuntime, for EVERY Environment/native schedule,
+source store and issued activation, with the concrete source carrier/control.
+Thus this is not merely a helper codec issue or an all-pending fixture. The
+same assembled answer is tested by the actual integrated V2Runtime.step before
+it invokes lane A's source-store step, so that table cannot repair the gap.
+The proof does not supply the still-missing original-entry prefix.
