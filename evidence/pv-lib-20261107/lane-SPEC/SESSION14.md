@@ -47,3 +47,5 @@ PV_LIB_SPEC_F1Prefix14 compiled 55429, cohort w3: exit0, wall 0:05.69, peak 4819
 PV_LIB_SPEC_F1Arithmetic14 compiled 55431, cohort w3: exit0, wall 0:04.67, peak 4817428KiB, swap 0; source 1409f70ad19e978b389113451a37cbbfeed82a88; standard summary axioms only.
 
 PV_LIB_SPEC_F1Force14 compiled 55433, cohort w3: exit0, wall 0:05.79, peak 4824724KiB, swap 0; source a5755a310dae328a34013325b9b819c8d7c656df; standard summary axioms only.
+
+PV_LIB_SPEC_AssembledChecks14 compiled 55438, cohort w3: exit0, wall 0:02.47, peak 4806344KiB, swap 0; source 9bac10f59ffe11c305b2ea9a58814932440ae20c; standard summary axioms only.
