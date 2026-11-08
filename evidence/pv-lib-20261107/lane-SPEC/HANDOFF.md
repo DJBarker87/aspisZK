@@ -21,8 +21,17 @@ handler. FINDINGS.md states exact quantifiers and limits. Callback physical
 snapshot/operands and Thread::new native allocation bindings remain open.
 Historical18 whole statements/cut92 witness are retained, not silently rebound.
 
-Strict audit of NEW roots is pending; do not run multiple unchanged audits.
-Next focused ID44986; raw34992 (34991 was spent in session9). No own live scope.
+AllocationSites44987 attaches all five separate site layouts to exact byte
+support; stores_within_layout and retains_tail check every operand/address.
+ONE strict raw34992 PASS89/89 NEW roots, exit0, wall0:31.27,
+peak6800040KiB, swap0, source5155eeb18b6; standard axioms only, zero unresolved
+or summary disagreement; unchanged private walker/collector and exact retained
+root/graph/hash manifests.11 focused passes including driver44988,9 retained
+changed-before-retry elaboration failures. No OOM, refusal, cap increase,
+shared/provider/implementation/key edit, full replay, push or merge.
+Next Lean44989..44998; raw34993..34999 for changed/new inputs only.
+The full history/joint task is OPEN; see SESSION10_ADEQUACY.md and FINDINGS.md.
+No own live build scope. Offline check: validate_session10.py.
 
 ---
 

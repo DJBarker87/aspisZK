@@ -20,3 +20,24 @@ PV_LIB_SPEC_CallbackNativeGap compiled 44985, cohort w3: exit0, wall 0:03.20, pe
 PV_LIB_SPEC_AllocationSites compiled 44987, cohort w3: exit0, wall 0:03.17, peak 4775736KiB, swap 0; source 41a99d48ab6a906a16b0f42970578afe931ebcaf; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession10 compiled 44988, cohort w3: exit0, wall 0:00.81, peak 1590592KiB, swap 0; source 64a5a8cf10e3ac6a24fc1ca280e74c19a11254be; standard summary axioms only.
+
+
+Session10 final evidence: ONE strict raw34992,89/89 NEW roots, exit0,
+wall0:31.27, peak6800040KiB, swap0, source5155eeb18b6d6a975fe0ffb0a8471445ed79f0d5.
+Only propext/Classical.choice/Quot.sound; zero unresolved/summary disagreements.
+Full input/root/graph/hash manifests retained. No traversal/collector change.
+All focused and audit scopes6G/8G/swap0/Tasks64, Lean-M7000, one at a time;
+standalone STREAMB_SLOTS=3 turn before each ID. turn.sh printed transient
+/proc/.../cmdline disappearance warnings but always exited0; admissions all
+allowed:true/exit0. No admission refusal, OOM, transport failure, cap increase,
+launcher change or unchanged regression. Read-only objdump/readelf of the
+same adopted ELF is binary-structural evidence, not execution of a fixture.
+
+Accepted focused IDs:44971,44974,44976,44977,44980,44981,44982,44983,44985,
+44987,44988. Failed44969,44970,44972,44973,44975,44978,44979,44984,44986
+are retained with exact sources/logs and changed before retry. No failure is
+credited as an accepted theorem. No new row proof or endpoint/T discharge.
+Historical full statements and local ownership examples are retained.
+Full successful original history, full joint witness and negation of its
+complete existential are all OPEN. SPEC-C7 is a checked LOCAL native handler
+contradiction, not a substitute claim. Next resource IDs44989/34993.

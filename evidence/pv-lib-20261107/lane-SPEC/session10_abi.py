@@ -5,7 +5,7 @@ REV='41e76d01fdead952101594b8b0f36a7561d180f2'
 PATH='evidence/pv-evhB-20261103/thread-line/generated/N95807/OrderedFamilies.llbc.xz'
 raw=lzma.decompress(subprocess.check_output(['git','show',REV+':'+PATH])); r=json.loads(raw)['translated']
 assert r['target_information']==[{'key':'x86_64-unknown-linux-gnu','value':{'target_pointer_size':8,'is_little_endian':True}}]
-types={str(i):r['type_decls'][i] for i in [21,22,23,58,68,78,79,112,133]}
+types={str(i):r['type_decls'][i] for i in [21,22,23,58,68,78,79,112,131,132,133]}
 expected={22:['num_running_threads','a_thread_panicked','main_thread'],68:['strong','weak','data'],79:['name','id','parker'],112:['scope','result','_marker'],133:['handle','rust_start']}
 for i,fields in expected.items():assert [f['name'] for f in types[str(i)]['kind']['Struct']]==fields
 binary='/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client'
@@ -22,6 +22,7 @@ if '--check' not in sys.argv:
 b=(L/'SESSION10_ABI_BINARY.txt').read_text()
 for site in ['fa099:','fa0ce:','e058a:','e05e8:','e064b:','17be96:','17bedc:','17bef7:','1a6720','17c4a1:']:assert site in b,site
 report={'source_revision':REV,'source_path':PATH,'llbc_sha256':hashlib.sha256(raw).hexdigest(),'target':r['target_information'],'types':types,'binary_sha256':b.split()[0],
+ 'functions':{str(i):{'name':r['fun_decls'][i]['item_meta']['name'],'signature':r['fun_decls'][i]['signature']} for i in [122,123,213]},
  'evidence_class':'binary-structural (adopted binary), plus V370 compiler-cohort',
  'sites':[
  {'allocation':'ScopeData ArcInner','width':40,'align':8,'call':'fa099','stores':{'0:8':'fa0b3=1','8:16':'fa0ba=1','16:24':'fa0c2=current Thread pointer r14','24:32':'fa0c6=0','32:33':'fa0ce=0'},'holes':[[33,40]]},

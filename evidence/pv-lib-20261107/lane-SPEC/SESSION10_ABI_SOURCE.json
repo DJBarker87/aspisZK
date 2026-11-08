@@ -2643,6 +2643,567 @@
       "layout": [],
       "ptr_metadata": "None"
     },
+    "131": {
+      "def_id": 131,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "mem",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "maybe_dangling",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "MaybeDangling",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 129,
+            "beg": {
+              "line": 74,
+              "col": 0
+            },
+            "end": {
+              "line": 74,
+              "col": 35
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [
+            {
+              "DocComment": " Allows wrapped [references] and [boxes] to dangle."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " That is, if a reference (or a `Box`) is wrapped in `MaybeDangling` (including when in a"
+            },
+            {
+              "DocComment": " (nested) field of a compound type wrapped in `MaybeDangling`), it does not have to follow"
+            },
+            {
+              "DocComment": " pointer aliasing rules or be dereferenceable."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " This can be useful when the value can become dangling while the function holding it is still"
+            },
+            {
+              "DocComment": " executing (particularly in concurrent code). As a somewhat absurd example, consider this code:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```rust,no_run"
+            },
+            {
+              "DocComment": " #![feature(box_as_ptr)]"
+            },
+            {
+              "DocComment": " # use std::alloc::{dealloc, Layout};"
+            },
+            {
+              "DocComment": " # use std::mem;"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let mut boxed = Box::new(0_u32);"
+            },
+            {
+              "DocComment": " let ptr = Box::as_mut_ptr(&mut boxed);"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards"
+            },
+            {
+              "DocComment": " unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " mem::forget(boxed); // <-- this is UB!"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Even though the `Box`'s destructor is not run (and thus we don't have a double free bug), this"
+            },
+            {
+              "DocComment": " code is still UB. This is because when moving `boxed` into `forget`, its validity invariants"
+            },
+            {
+              "DocComment": " are asserted, causing UB since the `Box` is dangling. The safety comment is as such wrong, as"
+            },
+            {
+              "DocComment": " moving the `boxed` variable as part of the `forget` call *is* a use."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " To fix this we could use `MaybeDangling`:"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " ```rust,no_run"
+            },
+            {
+              "DocComment": " #![feature(maybe_dangling, box_as_ptr)]"
+            },
+            {
+              "DocComment": " # use std::alloc::{dealloc, Layout};"
+            },
+            {
+              "DocComment": " # use std::mem::{self, MaybeDangling};"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " let mut boxed = MaybeDangling::new(Box::new(0_u32));"
+            },
+            {
+              "DocComment": " let ptr = Box::as_mut_ptr(boxed.as_mut());"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards"
+            },
+            {
+              "DocComment": " unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " mem::forget(boxed); // <-- this is OK!"
+            },
+            {
+              "DocComment": " ```"
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Note that the bit pattern must still be valid for the wrapped type. That is, [references]"
+            },
+            {
+              "DocComment": " (and [boxes]) still must be aligned and non-null."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Additionally note that safe code can still assume that the inner value in a `MaybeDangling` is"
+            },
+            {
+              "DocComment": " **not** dangling -- functions like [`as_ref`] and [`into_inner`] are safe. It is not sound to"
+            },
+            {
+              "DocComment": " return a dangling reference in a `MaybeDangling` to safe code. However, it *is* sound"
+            },
+            {
+              "DocComment": " to hold such values internally inside your code -- and there's no way to do that without"
+            },
+            {
+              "DocComment": " this type. Note that other types can use this type and thus get the same effect; in particular,"
+            },
+            {
+              "DocComment": " [`ManuallyDrop`] will use `MaybeDangling`."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " Note that `MaybeDangling` doesn't prevent drops from being run, which can lead to UB if the"
+            },
+            {
+              "DocComment": " drop observes a dangling value. If you need to prevent drops from being run use [`ManuallyDrop`]"
+            },
+            {
+              "DocComment": " instead."
+            },
+            {
+              "DocComment": ""
+            },
+            {
+              "DocComment": " [references]: prim@reference"
+            },
+            {
+              "DocComment": " [boxes]: ../../std/boxed/struct.Box.html"
+            },
+            {
+              "DocComment": " [`into_inner`]: MaybeDangling::into_inner"
+            },
+            {
+              "DocComment": " [`as_ref`]: MaybeDangling::as_ref"
+            },
+            {
+              "DocComment": " [`ManuallyDrop`]: crate::mem::ManuallyDrop"
+            }
+          ],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Foreign",
+        "lang_item": "maybe_dangling"
+      },
+      "generics": {
+        "regions": [],
+        "types": [
+          {
+            "index": 0,
+            "name": "P"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": "TopLevel",
+      "kind": "Opaque",
+      "layout": [],
+      "ptr_metadata": "None"
+    },
+    "132": {
+      "def_id": 132,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "std",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "thread",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "lifecycle",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "spawn_unchecked",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "closure",
+              1
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 102,
+            "beg": {
+              "line": 66,
+              "col": 21
+            },
+            "end": {
+              "line": 66,
+              "col": 28
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": false
+        },
+        "is_local": false,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [
+          {
+            "index": 0,
+            "name": "'scope",
+            "mutability": "Unknown"
+          },
+          {
+            "index": 1,
+            "name": null,
+            "mutability": "Unknown"
+          }
+        ],
+        "types": [
+          {
+            "index": 0,
+            "name": "F"
+          },
+          {
+            "index": 1,
+            "name": "T"
+          }
+        ],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "src": {
+        "Closure": {
+          "info": {
+            "kind": "FnOnce",
+            "fn_once_impl": {
+              "regions": [],
+              "skip_binder": {
+                "id": 115,
+                "generics": {
+                  "regions": [
+                    {
+                      "Var": {
+                        "Free": 0
+                      }
+                    },
+                    {
+                      "Var": {
+                        "Free": 1
+                      }
+                    }
+                  ],
+                  "types": [
+                    {
+                      "Deduplicated": 38184
+                    },
+                    {
+                      "Deduplicated": 38186
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": [
+                    {
+                      "Deduplicated": 38255
+                    },
+                    {
+                      "Deduplicated": 38206
+                    },
+                    {
+                      "Deduplicated": 38256
+                    }
+                  ]
+                }
+              }
+            },
+            "fn_mut_impl": null,
+            "fn_impl": null,
+            "signature": {
+              "regions": [],
+              "skip_binder": {
+                "is_unsafe": false,
+                "abi": "Rust",
+                "is_variadic": false,
+                "inputs": [],
+                "output": {
+                  "Deduplicated": 646
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": {
+        "Struct": [
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 66,
+                  "col": 21
+                },
+                "end": {
+                  "line": 66,
+                  "col": 28
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": null,
+            "ty": {
+              "HashConsedValue": [
+                38258,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 131
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 38184
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 66,
+                  "col": 21
+                },
+                "end": {
+                  "line": 66,
+                  "col": 28
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": null,
+            "ty": {
+              "Deduplicated": 13319
+            }
+          },
+          {
+            "span": {
+              "data": {
+                "file_id": 102,
+                "beg": {
+                  "line": 66,
+                  "col": 21
+                },
+                "end": {
+                  "line": 66,
+                  "col": 28
+                }
+              },
+              "generated_from_span": null
+            },
+            "attr_info": {
+              "attributes": [],
+              "inline": null,
+              "rename": null,
+              "public": false
+            },
+            "name": null,
+            "ty": {
+              "HashConsedValue": [
+                38260,
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 21
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "HashConsedValue": [
+                            38259,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 112
+                                },
+                                "generics": {
+                                  "regions": [
+                                    {
+                                      "Var": {
+                                        "Free": 1
+                                      }
+                                    }
+                                  ],
+                                  "types": [
+                                    {
+                                      "Deduplicated": 38186
+                                    }
+                                  ],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "layout": [],
+      "ptr_metadata": "None"
+    },
     "133": {
       "def_id": 133,
       "item_meta": {
@@ -2796,6 +3357,168 @@
     }
   },
   "binary_sha256": "fc8808eb454f3156dba550140398cc3a74af4c88ee5b3491d2d04d33ee904558",
+  "functions": {
+    "122": {
+      "name": [
+        {
+          "Ident": [
+            "std",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "thread",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "current",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "current_or_unnamed",
+            0
+          ]
+        }
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [],
+        "output": {
+          "Deduplicated": 5054
+        }
+      }
+    },
+    "123": {
+      "name": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "sync",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "atomic",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 35010
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "new",
+            0
+          ]
+        }
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Deduplicated": 556
+          }
+        ],
+        "output": {
+          "Deduplicated": 35010
+        }
+      }
+    },
+    "213": {
+      "name": [
+        {
+          "Ident": [
+            "std",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "thread",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "thread",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 5054
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "new",
+            0
+          ]
+        }
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Deduplicated": 8202
+          },
+          {
+            "Deduplicated": 8230
+          }
+        ],
+        "output": {
+          "Deduplicated": 5054
+        }
+      }
+    }
+  },
   "evidence_class": "binary-structural (adopted binary), plus V370 compiler-cohort",
   "sites": [
     {
