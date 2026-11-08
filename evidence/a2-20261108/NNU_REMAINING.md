@@ -1,7 +1,7 @@
 # Exact remaining A2 obligations
 
 1. CLOSED: SAME-query full Result geometry equality, NNU_Geometry.source / returned (L015).
-2. Installed query-loop association using NNH_Run5bQueryDomain.initial.
+2. CLOSED: installed query-loop association, NNU_Query.source / returned (L029), using NNH_Run5bQueryDomain.initial and SAME powers.
 3. SAME-resume Merkle parent using Op5T_Concrete.stage_source.
 4. Abstract compact offsets and Tx2N_Execution.common converse.
 5. NNH_ExactRemainingTypes.tx2Op11.

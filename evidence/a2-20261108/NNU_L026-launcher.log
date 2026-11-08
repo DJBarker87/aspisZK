@@ -1,0 +1,47 @@
+{"attempt": "NNU_L026", "exit_status": 1, "wall_seconds": 9.246640555094928, "peak_rss_kib": "5451032", "swaps": "0", "print_axioms": ["'AspisR1.NNU_QueryInduction.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNU_generated/NNU_QueryInduction.lean:30:17: error: Tactic `rfl` failed: The left-hand side
+  run q1 finish fuel (core.result.Result.Err e)
+is not definitionally equal to the right-hand side
+  run q2 finish fuel (core.result.Result.Err e)
+
+case neg.ok.Err
+q1 q2 : Query
+Valid : State → Prop
+finish : Usize
+same : ∀ (a : A) (b : B), Valid (core.result.Result.Ok (a, b)) → q1 a b = q2 a b
+preserve :
+  ∀ (a : A) (b : B) (after : A) (pending : B),
+    Valid (core.result.Result.Ok (a, b)) →
+      ↑a.next < ↑finish →
+        q2 a b = ok (core.result.Result.Ok (after, pending)) → Valid (core.result.Result.Ok (after, pending))
+fuel : ℕ
+ih : ∀ (state : State), Valid state → run q1 finish fuel state = ru
+...
+NNU_generated/NNU_QueryInduction.lean:30:17: error: Tactic `rfl` failed: The left-hand side
+  run q1 finish fuel (core.result.Result.Err e)
+is not definitionally equal to the right-hand side
+  run q2 finish fuel (core.result.Result.Err e)
+
+case neg.ok.Err
+q1 q2 : Query
+Valid : State → Prop
+finish : Usize
+same : ∀ (a : A) (b : B), Valid (core.result.Result.Ok (a, b)) → q1 a b = q2 a b
+preserve :
+  ∀ (a : A) (b : B) (after : A) (pending : B),
+    Valid (core.result.Result.Ok (a, b)) →
+      ↑a.next < ↑finish →
+        q2 a b = ok (core.result.Result.Ok (after, pending)) → Valid (core.result.Result.Ok (after, pending))
+fuel : ℕ
+ih : ∀ (state : State), Valid state → run q1 finish fuel state = run q2 finish fuel state
+a : A
+b : B
+valid : Valid (core.result.Result.Ok (a, b))
+stopped : ¬a.next ≥ finish
+inside : ↑a.next < ↑finish
+e : verifier.Error
+step : q2 a b = ok (core.result.Result.Err e)
+⊢ run q1 finish fuel (core.result.Result.Err e) = run q2 finish fuel (core.result.Result.Err e)
+'AspisR1.NNU_QueryInduction.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5716aeb533e7416f8003001c6e39c757.scope; invocation ID: 9f4740c0f8f34dcabacc75930a1a46d6

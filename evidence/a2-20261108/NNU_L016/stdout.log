@@ -1,0 +1,93 @@
+AspisR1.NFS_QueryLoopRoot.tx2 (base : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize) (geometry : AspisR1Stage2.verifier.QueryGeometry)
+  (b : AspisR1Stage2.verifier.BatchedWeights) (qPlace gPlace : ℕ)
+  (canonical : NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g))
+  (domain : AspisR1.NFS_QueryInvariant.Domain p 10 22 a b) (start : ↑a.next = 10) :
+  AspisR1.NFG_QueryLoopDefs.run (AspisR1.NFS_QueryLoopRoot.child base proof p g geometry qPlace gPlace) 22#usize 12
+      (Aeneas.Std.core.result.Result.Ok (a, b)) =
+    AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (AspisR1.NFS_QueryOps.installed base) proof p a g none
+      geometry b 22#usize
+AspisR1.NFS_QueryInvariant.step (base : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize)
+  (geometry : AspisR1Stage2.verifier.QueryGeometry) (start finish : ℕ) (a after : AspisR1Stage2.verifier.Accumulator)
+  (b pending : AspisR1Stage2.verifier.BatchedWeights) (d : AspisR1.NFS_QueryInvariant.Domain p start finish a b)
+  (limit : finish ≤ 22) (inside : ↑a.next < finish)
+  (run :
+    AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values (AspisR1.NFS_QueryOps.installed base) proof p a g none
+        geometry b =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (after, pending))) :
+  AspisR1.NFS_QueryInvariant.Domain p start finish after pending
+AspisR1.NFS_QueryValuesPacket.result (base : AspisR1.Port3_NativeQueryBody.Ops) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (g : Aeneas.Std.Array AspisR1.NFP_QueryCuts.E 29#usize) (geometry : AspisR1Stage2.verifier.QueryGeometry)
+  (pending : AspisR1Stage2.verifier.BatchedWeights) (qPlace gPlace : ℕ)
+  (canonical : NEV_DotInputs.Canonical (AspisR1.FIp_DotsAdapter.toArray g))
+  (input : AspisR1.NFS_AccumDomain.Input p a pending) :
+  (AspisR1.NFS_QueryValuesPacket.run base proof p a g geometry pending qPlace gPlace).result =
+    AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values (AspisR1.NFS_QueryOps.installed base) proof p a g none
+      geometry pending
+def NBF_RowInstall.install : AspisR1.Port3_NativeQueryBody.Ops → AspisR1.Port3_NativeQueryBody.Ops :=
+fun ops =>
+  { op0 := @AspisR1.Port3_NativeQueryBody.Ops.op0 ops, op1 := fun q => Aeneas.Std.Result.ok (NBF_RowInstall.embedQ q),
+    op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5, op6 := ops.op6, op7 := ops.op7, op8 := ops.op8,
+    op9 := ops.op9, op10 := fun m => Aeneas.Std.Result.ok (NBF_RowInstall.embedM m), op11 := ops.op11,
+    op12 := fun s j =>
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice NBF_RowInstall.Q) s j,
+    op13 := fun basis j => basis.index_usize j, op14 := AspisR1.Port3_NativeRowFrame.push,
+    op15 := fun x x_1 x_2 => Aeneas.Std.Result.ok (), op16 := ops.op16, op17 := ops.op17, op18 := ops.op18,
+    op19 := ops.op19, op20 := ops.op20, op21 := ops.op21, widePartialEq := ops.widePartialEq }
+def NBF_BasisInstall.install : AspisR1.Port3_NativeQueryBody.Ops → AspisR1.Port3_NativeQueryBody.Ops :=
+fun ops =>
+  { op0 := @AspisR1.Port3_NativeQueryBody.Ops.op0 ops, op1 := ops.op1, op2 := ops.op2, op3 := ops.op3,
+    op4 := Aeneas.Std.Result.ok 0#u32, op5 := Aeneas.Std.Result.ok 1#u32,
+    op6 := AspisR1Qm31ArithmeticProbe.field.M31.sub, op7 := AspisR1Qm31ArithmeticProbe.field.M31.mul,
+    op8 := fun x => AspisR1Qm31ArithmeticProbe.field.M31.add x x, op9 := ops.op9, op10 := ops.op10, op11 := ops.op11,
+    op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := ops.op16, op17 := ops.op17,
+    op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21, widePartialEq := ops.widePartialEq }
+def AspisR1.SAQ_WideABI.toQ : AspisR1.SAQ_WideABI.K → AspisR1.SAQ_WideABI.Q :=
+fun x => { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }
+def AspisR1.SAQ_WideABI.fromQ : AspisR1.SAQ_WideABI.Q → AspisR1.SAQ_WideABI.K :=
+fun x => { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }
+def NBO_FieldPorts.toQ : NBO_FieldPorts.Q → NBO_FieldPorts.NQ :=
+fun x => { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }
+def NBO_FieldPorts.fromQ : NBO_FieldPorts.NQ → NBO_FieldPorts.Q :=
+fun x => { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }
+AspisR1CurrentWide.Proof.wide_sub_total_exact: ∀ (x y : AspisR1CurrentWide.Proof.E),
+  AspisR1CurrentWide.Proof.CanonicalWide x →
+    AspisR1CurrentWide.Proof.CanonicalWide y →
+      ∃ z,
+        AspisR1CurrentWide.field.wide_exact.WideExact.sub x y = Aeneas.Std.Result.ok z ∧
+          AspisR1CurrentWide.Proof.CanonicalWide z ∧
+            AspisR1CurrentWide.Proof.decodeWide z =
+              AspisR1CurrentWide.Proof.decodeWide x - AspisR1CurrentWide.Proof.decodeWide y
+AspisR1CurrentWide.Proof.qm_add_total_canonical: ∀ (x y : AspisR1CurrentWide.field.QM31),
+  AspisR1CurrentWide.Proof.CanonicalQM x →
+    AspisR1CurrentWide.Proof.CanonicalQM y →
+      ∃ z, x.add y = Aeneas.Std.Result.ok z ∧ AspisR1CurrentWide.Proof.CanonicalQM z
+AspisR1CurrentWide.Proof.qm_sub_total_canonical: ∀ (x y : AspisR1CurrentWide.field.QM31),
+  AspisR1CurrentWide.Proof.CanonicalQM x →
+    AspisR1CurrentWide.Proof.CanonicalQM y →
+      ∃ z, x.sub y = Aeneas.Std.Result.ok z ∧ AspisR1CurrentWide.Proof.CanonicalQM z
+AspisR1CurrentWide.Proof.wide_mul_total_exact: ∀ (x y : AspisR1CurrentWide.Proof.E),
+  AspisR1CurrentWide.Proof.CanonicalWide x →
+    AspisR1CurrentWide.Proof.CanonicalWide y →
+      ∃ z,
+        AspisR1CurrentWide.field.wide_exact.WideExact.mul x y = Aeneas.Std.Result.ok z ∧
+          AspisR1CurrentWide.Proof.CanonicalWide z ∧
+            AspisR1CurrentWide.Proof.decodeWide z =
+              AspisR1CurrentWide.Proof.decodeWide x * AspisR1CurrentWide.Proof.decodeWide y
+AspisR1CurrentWide.Proof.wide_add_total_exact: ∀ (x y : AspisR1CurrentWide.Proof.E),
+  AspisR1CurrentWide.Proof.CanonicalWide x →
+    AspisR1CurrentWide.Proof.CanonicalWide y →
+      ∃ z,
+        AspisR1CurrentWide.field.wide_exact.WideExact.add x y = Aeneas.Std.Result.ok z ∧
+          AspisR1CurrentWide.Proof.CanonicalWide z ∧
+            AspisR1CurrentWide.Proof.decodeWide z =
+              AspisR1CurrentWide.Proof.decodeWide x + AspisR1CurrentWide.Proof.decodeWide y
+AspisR1CurrentWide.Proof.wide_mul_source_total_canonical: ∀ (x y : AspisR1CurrentWide.Proof.E),
+  AspisR1CurrentWide.Proof.CanonicalWide x →
+    AspisR1CurrentWide.Proof.CanonicalWide y →
+      ∃ z,
+        AspisR1CurrentWide.field.wide_exact.WideExact.mul x y = Aeneas.Std.Result.ok z ∧
+          AspisR1CurrentWide.Proof.CanonicalWide z
