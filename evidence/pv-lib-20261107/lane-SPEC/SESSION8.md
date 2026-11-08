@@ -15,3 +15,5 @@ PV_LIB_SPEC_SparseRuntime compiled 44924, cohort w3: exit0, wall 0:02.77, peak 4
 PV_LIB_SPEC_CallbackCutCheck compiled 44928, cohort w3: exit0, wall 0:02.67, peak 4742816KiB, swap 0; source f166e988bd532e2d8ef2a7f81c52eebd2a7358c8; standard summary axioms only.
 
 PV_LIB_SPEC_SparseHistory compiled 44929, cohort w3: exit0, wall 0:02.57, peak 4765568KiB, swap 0; source ed237c46f2f25298339550a21d6bb92297608eb4; standard summary axioms only.
+
+PV_LIB_SPEC_SuccessResources compiled 44930, cohort w3: exit0, wall 0:02.63, peak 4769740KiB, swap 0; source 61f6771a7e415e88a2b651435e145ebd4451186c; standard summary axioms only.
