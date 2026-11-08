@@ -25,3 +25,5 @@ interpret/step/advance, not a FullStoreActionTable parameter or invented delta.
 All10 provider sources byte-match03c3c72b143. Isolated lane-A cohort, no object
 or source edits to laneA; no combined coherent release claim. Exact partial
 coverage is preserved in limits. Full source-store adequacy remains open.
+
+44915 W3 new-root driver compiled exit0, wall0:00.79, peak1588552KiB, swap0; unchanged collector/walker suffix, only module/root arrays changed.
