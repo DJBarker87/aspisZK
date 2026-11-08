@@ -1,3 +1,28 @@
+# Session12 checkpoint — local C9/C10 repairs; full task OPEN
+
+Continued966c9281519. NativeMemory12/MemoryHistory12 are the last assembly.
+NativeConstructors binds123/455/456; NativeBoolArc repairs the u8/boolean
+ScopeData conflict(C9), with actual v2-load and Packet rechecks. ThreadNewNative
+installs absent-name213's48/8 resource/stores, deriving its retained-r14 word
+from source local4. PhysicalStack12/StackCallback12 repair the heap-only &run
+resolver(C10) with finite source/native frame DATA; exact default-stack stores
+and a local initialized callback poll are checked. ThreadWords12 binds physical
+initialized-TLS/current and Thread-clone qword effects; local count1->2 checked.
+
+No successful original-entry history, original physical frame, nonvacuous
+exports THERE, full OwnInit joint witness or full-joint negation is proved.
+No row/endpoint premise is closed;18 old statements retained, not silently
+rebound. See SESSION12_ADEQUACY.md and FINDINGS.md for exact limits. Source
+TLS/Thread validity/counter/hooks and Values/full-table adequacy remain open.
+Latest lane A797dff893c3f has identical20 reused source pins; v2 stays PARTIAL.
+
+Focused55116..55147:21 passes(including driver),11 retained changed-before-retry
+failures. All6G/8G/swap0/Tasks64/-M7000. The single strict NEW-root55190 audit
+is next;159 roots frozen. No shared/provider/implementation/key changes,
+full manifest, push or merge. Next Lean55148; raw55191 only for changed inputs.
+
+---
+
 # Session11 handoff — callback stores installed; full task OPEN
 
 Continued aa8cfbe2f1b. NativeModel/NativeHistory are the current operational
