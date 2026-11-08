@@ -1,3 +1,20 @@
+# Session18 in progress — parametric original85 established
+
+D1007/thread-29′ rebase is implemented. EntryWorld18.Entry has complete entry
+Pre, paired run coordinate and finite nonwrapping stack grant; concrete uses
+parent1024, scope1016, run1136, grant[512,1536). SPEC-C16 records/rejects the
+intermediate parent4096 grant's overlap with the scheduled Packet4096.
+History18.original85/concrete85/replies85 compile; all five replies are consumed
+on the SAME chosen world. Named generic segment/full-delivery lemmas are reused;
+no lane A join or loop is re-derived. Original fixed modules are unchanged.
+
+LaneAJoins18/NEEDS-FROM-LANE-A.md are being published as the parametric join
+interface. Eighteen corrected successor statements, original8248/295/454,
+full Values coverage and complete conditional joint witness remain to do.
+Target not yet established. No strict session18 audit has run yet.
+
+---
+
 # Session17 checkpoint — local stack/reply conflicts; full target OPEN
 
 Continued1fd872ee223; LOG D1006/thread-29. SAME original history remains85,

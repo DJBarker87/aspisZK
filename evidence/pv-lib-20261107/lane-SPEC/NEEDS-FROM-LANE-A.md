@@ -1,3 +1,42 @@
+# Thread-29′ interface, session18 (LOG D1007)
+
+Use NEW `lean/PV_LIB_SPEC_LaneAJoins18.lean`. The old LaneAJoins16 module is
+retained, and its fixed Entry14 history is historical evidence only for this
+witness. `SESSION18_JOIN_COMPARISON.md` records the exact before/after.
+
+All joins now take `(entry : EntryWorld18.Entry)` and `(activation : Nat)`;
+`history entry activation n` is the original v2 ReachedNative14.run with
+Full.programs, StoreActionTable.v2, ReachedEnvironment14.parameters and the
+native cut derived from that entry's paired native frame. The input is
+`EntryWorld18.input entry.world`. The entry includes the COMPLETE OwnInit.Pre,
+registered run coordinate, finite stack grant and nonwrapping bounds.
+
+`History18.original85 entry activation` and `LaneAJoins18.original85` supply
+the prefix BY NAME. It has five consumed native replies (469/277/278/279/18),
+the same world and actual child/caller source cells. `History18.concrete85`
+instantiates the physically valid parent1024/scope1016/run1136 entry with
+initial stack grant[512,1536), disjoint from all scheduled heap allocations.
+
+The four join targets and Joins have EXACTLY the old source milestones and
+index orderings; only the entry/frame parameters changed. Prove them for the
+chosen entry (preferably parametrically), exhibit the indices/configurations,
+and preserve full stores, worlds, replies, events and suspended frames.
+No internal restart, different program table, native desired-success value,
+physical-register map, Store transformer or ownership conclusion is supplied.
+Native frame activation pairing at actual f361 remains lane C's binding work.
+
+Calls use CLOSED/library contracts by name when they supply the successor.
+A missing successor-existence contract must be inventoried before unfolding;
+loops use initialized/preserved invariant induction. No successor-machine
+projection without proved full-state transport is accepted. Lane C does not
+re-derive these joins. All four targets remain OPEN until a named inhabitant
+is available. No new endpoint or T premise is introduced.
+
+Read-only lane A at1403e8d070953cb37a9d6b1feb85a5ff9a963bce still reports all
+four joins OPEN (session15 live). Its local F124 resolver result is not a join.
+
+---
+
 # Thread-29 interface, session16 (LOG D1005)
 
 The exact elaborated statements are in `lean/PV_LIB_SPEC_LaneAJoins16.lean`.
