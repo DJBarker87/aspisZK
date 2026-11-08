@@ -38,3 +38,24 @@ this library. No endpoint premise, source, provider, trust field or metric is
 changed. Source/machine and runtime Values adequacy remain named obligations.
 FREEZE.json remains the historical revision-1 hash authority; this explicit
 correction supersedes only the quoted common clause and revision heading.
+
+## SPEC-C5 — owner-approved session9: callback allocation is at cut92
+
+Before (verbatim, PV_LIB_SPEC_OwnInitFull.AllocationWitness):
+
+> `callback.frame.remaining = PV_THR2_F361.live.body.drop 94`
+
+After (verbatim, PV_LIB_SPEC_OwnInitCut92.AllocationWitness):
+
+> `callback.frame.remaining = PV_THR2_F361.live.body.drop 92`
+
+The replacement retains every other conjunct verbatim. The historical module
+is retained. Consumers must use the new name; no historical result is silently
+rebound. The pre-issue callback.store.nextActivation now selects the backing
+for13923; cut94 is14113, after the allocation returned. Registration113 and
+ready129 are unchanged. Checked witness: CallbackCutCheck.actual_allocation,
+actual_site, retained_site, backing_after_return (44928). New source_cut and
+source_site reuse those facts. No successful trace or full-joint contradiction
+follows just from this correction. Source/resource/native adequacy and the
+original-entry successful branch remain required; no success/decoder premise
+is introduced. No endpoint/T field, implementation or release pin changes.
