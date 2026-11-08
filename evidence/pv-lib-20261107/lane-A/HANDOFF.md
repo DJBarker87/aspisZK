@@ -185,3 +185,5 @@ Session5 47405: OwnerStoreV3 passes; intercepts504/641 ahead of old wrapped mean
 Session5 47406: PreActionTraceV3 passes on the final Cell-corrected candidate. Source/control neutrality remains explicit at every step.
 
 Session5 47409: ClonePrologueV2 passes after47407/08 repairs. Uses named existing four-instruction chain plus local guard certificate and call primitive. Actual five-step OWNER-aware V3 history establishes17->24->issued360 receiver; original constructor-entry cut still open.
+
+Session5 47410: ArcPollV3.actual_poll passes on the Cell-corrected candidate at actual12950; complete original reply retained. Full original-entry/source/native binding is not claimed.
