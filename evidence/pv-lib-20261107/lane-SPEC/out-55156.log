@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:74:4: error: Tactic `decide` failed for proposition
+  PV_LIB_SPEC_ConcreteCaptures.fHeader.len ≤
+    PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader
+because its `Decidable` instance
+  PV_LIB_SPEC_ConcreteCaptures.fHeader.len.decLe
+    (PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match
+    PV_LIB_SPEC_ConcreteCaptures.fHeader.len.ble
+      (PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader),
+    true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'PV_LIB_SPEC_EntryPre13.memory_before' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.receivers' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.f_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.tasks_typed' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.owner' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.captured' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

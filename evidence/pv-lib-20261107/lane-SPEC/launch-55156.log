@@ -1,0 +1,30 @@
+{"cohort": "w3", "attempt": 55156, "target": "PV_LIB_SPEC_EntryPre13", "source_revision": "971b9a209275a8d41cdea4f2792e387d3c67e227", "source_sha256": "c48c54b57b82cba927fa85035853484b47c1c17b1fa1678724fbd3ea2aea29d3", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10910, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55156", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55156.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_EntryPre13.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean", "7000"], "exit": 1, "wall_seconds": 2.368601083755493, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_EntryPre13.memory_before' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.receivers' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.run_bytes' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.n_bytes' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.run_typed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.n_typed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.f_typed' depends on axioms: [propext, sorryAx, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.tasks_typed' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.owner' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.captured' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.32", "peak_rss_kbytes": "4768104", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:74:4: error: Tactic `decide` failed for proposition
+  PV_LIB_SPEC_ConcreteCaptures.fHeader.len ≤
+    PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader
+because its `Decidable` instance
+  PV_LIB_SPEC_ConcreteCaptures.fHeader.len.decLe
+    (PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match
+    PV_LIB_SPEC_ConcreteCaptures.fHeader.len.ble
+      (PV_EVHB_RawVecSource.capacity Aeneas.Std.Usize.max PV_LIB_SPEC_ConcreteCaptures.fHeader),
+    true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'PV_LIB_SPEC_EntryPre13.memory_before' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.receivers' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.f_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.tasks_typed' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.owner' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.captured' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
