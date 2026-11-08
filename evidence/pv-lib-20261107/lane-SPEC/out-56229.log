@@ -1,0 +1,277 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Active27720.lean:36:58: error: unsolved goals
+s : Store Data
+a : ℕ
+parents : List Frame
+address : Address
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+lookup : PV_LIB_SPEC_Full.programs token = none
+⊢ PV_LIB_SPEC_Full.programs
+        (match PV_THR2_F170.node16 with
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+        | x => Data.null) =
+      none ∧
+    (match PV_THR2_F170.node16 with
+      | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+      | x => Data.null) =
+      token
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Active27720.lean:45:92: error: unsolved goals
+s : Store Data
+a : ℕ
+parents : List Frame
+address : Address
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+⊢ ((List.find?
+          (fun x =>
+            decide (x.caller = a) &&
+              decide (x.request = PV_STX2_Native.Request.child token s.nextActivation [pointer address]))
+          ({ site := PV_LIB_SPEC_Tls277Request15.site, caller := a,
+              request :=
+                PV_STX2_Native.Request.child
+                  (match PV_THR2_F170.node16 with
+                  | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+                  | x => Data.null)
+                  s.nextActivation [pointer address] } ::
+            issued)).bind
+      fun origin =>
+      some
+        { site := origin.site, occurrence := (List.filter (fun old => decide (old.site = origin.site)) consumed).length,
+          arguments := [pointer address], caller := a,
+          request := PV_STX2_Native.Request.child token s.nextActivation [pointer address] }) =
+    some
+      { site := PV_LIB_SPEC_Tls277Request15.site,
+        occurrence := (List.filter (fun old => decide (old.site = PV_LIB_SPEC_Tls277Request15.site)) consumed).length,
+        arguments := [pointer address], caller := a,
+        request := PV_STX2_Native.Request.child token s.nextActivation [pointer address] }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Active27720.lean:69:59: error: unsolved goals
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+resources : Resources
+s : Store Data
+a : ℕ
+parents : List Frame
+address : Address
+w : OWNER
+es : List Event
+lookup : PV_LIB_SPEC_Full.programs token = none
+table : PV_LIB_StoreActionTable.v2 token = none
+⊢ (match
+      PV_LIB_SPEC_Full.programs
+        (match PV_THR2_F170.node16 with
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+        | x => Data.null) with
+    | some val => none
+    | none =>
+      (PV_LIB_StoreActionTable.v2
+            (match PV_THR2_F170.node16 with
+            | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+            | x => Data.null)).bind
+        fun action =>
+        some
+          { action := action,
+            callee :=
+              match PV_THR2_F170.node16 with
+              | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+              | x => Data.null,
+            waiting :=
+              {
+                request :=
+                  PV_STX2_Native.Request.child
+                    (match PV_THR2_F170.node16 with
+                    | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site fn captures returnPlace unwind) => fn
+                    | x => Data.null)
+                    s.nextActivation [pointer address],
+                action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6), unwind := [] },
+            arguments := [pointer address] }) =
+    none
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Active27720.lean:83:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_ChildBoundary.delivered ?base
+    {
+      frame :=
+        { activation := ?a, remaining := ?body,
+          waiting :=
+            some
+              { request := ?req, action := PV_STX2_Native.ReturnAction.child ?child (Place.local ?dest),
+                unwind := [] } },
+      callers := ?parents, store := ?s }
+    { request := ?req, action := PV_STX2_Native.ReturnAction.child ?child (Place.local ?dest), unwind := [] }
+    { answer := Answer.returned (Aeneas.Std.Result.ok ?value), world := ?w, events := ?events }
+in the target expression
+  {
+      current :=
+        {
+          status :=
+            (PV_THR2_ChildBoundary.delivered (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                {
+                  frame :=
+                    { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                      waiting :=
+                        some
+                          {
+                            request :=
+                              PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation [pointer address],
+                            action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                            unwind := [] } },
+                  callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                (wait s address)
+                { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }).status,
+          world :=
+            (PV_THR2_ChildBoundary.delivered (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                {
+                  frame :=
+                    { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                      waiting :=
+                        some
+                          {
+                            request :=
+                              PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation [pointer address],
+                            action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                            unwind := [] } },
+                  callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                (wait s address)
+                { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }).world,
+          events :=
+            es ++
+              (PV_THR2_ChildBoundary.delivered
+                  (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                  {
+                    frame :=
+                      { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                        waiting :=
+                          some
+                            {
+                              request :=
+                                PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation
+                                  [pointer address],
+                              action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                              unwind := [] } },
+                    callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                  (wait s address)
+                  { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w,
+                    events := [] }).events },
+      suspended := [] } =
+    out s a parents address w es
+
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+resources : Resources
+s : Store Data
+a : ℕ
+parents : List Frame
+address : Address
+w : OWNER
+es : List Event
+lookup : PV_LIB_SPEC_Full.programs token = none
+table : PV_LIB_StoreActionTable.v2 token = none
+quiet :
+  PV_LIB_SPEC_SourceTransport15.Quiet
+    {
+      current :=
+        { status := PV_STX2_SliceMachine.Status.running (config s a parents address), world := w, events := es },
+      suspended := [] }
+answer :
+  PV_LIB_SPEC_ReachedNative14.answer cut (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)
+      (config s a parents address) (PV_STX2_Native.Request.child token s.nextActivation [pointer address]) w =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }
+⊢ {
+      current :=
+        {
+          status :=
+            (PV_THR2_ChildBoundary.delivered (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                {
+                  frame :=
+                    { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                      waiting :=
+                        some
+                          {
+                            request :=
+                              PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation [pointer address],
+                            action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                            unwind := [] } },
+                  callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                (wait s address)
+                { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }).status,
+          world :=
+            (PV_THR2_ChildBoundary.delivered (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                {
+                  frame :=
+                    { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                      waiting :=
+                        some
+                          {
+                            request :=
+                              PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation [pointer address],
+                            action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                            unwind := [] } },
+                  callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                (wait s address)
+                { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }).world,
+          events :=
+            es ++
+              (PV_THR2_ChildBoundary.delivered
+                  (runtime (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources)).carrier
+                  {
+                    frame :=
+                      { activation := a, remaining := List.drop 17 PV_THR2_F170.live.body,
+                        waiting :=
+                          some
+                            {
+                              request :=
+                                PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee s.nextActivation
+                                  [pointer address],
+                              action := PV_STX2_Native.ReturnAction.child s.nextActivation (Place.local 6),
+                              unwind := [] } },
+                    callers := parents, store := PV_THR2_RunTlsNext.issued s a (pointer address) }
+                  (wait s address)
+                  { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w,
+                    events := [] }).events },
+      suspended := [] } =
+    out s a parents address w es
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Active27720.lean:102:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ControlRuntime.recordIssue
+    { current := { status := PV_STX2_SliceMachine.Status.running ?m.24, world := w, events := es }, suspended := [] }
+    ?m.26 ?m.27
+in the target expression
+  { state := out s a parents address w es,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue (before s a parents address w es issued consumed).state
+          (out s a parents address w es) (before s a parents address w es issued consumed).issued,
+      consumed := origin s a address consumed :: (before s a parents address w es issued consumed).consumed } =
+    { state := out s a parents address w es, issued := (before s a parents address w es issued consumed).issued,
+      consumed := origin s a address consumed :: consumed }
+
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+s : Store Data
+a : ℕ
+parents : List Frame
+address : Address
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+resources : Resources :=
+  fun {A} =>
+    PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+      (origin s a address consumed)
+⊢ { state := out s a parents address w es,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue (before s a parents address w es issued consumed).state
+          (out s a parents address w es) (before s a parents address w es issued consumed).issued,
+      consumed := origin s a address consumed :: (before s a parents address w es issued consumed).consumed } =
+    { state := out s a parents address w es, issued := (before s a parents address w es issued consumed).issued,
+      consumed := origin s a address consumed :: consumed }
+'PV_LIB_SPEC_Active27720.request' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.wait' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.config' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Active27720.before' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.stored' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.out' depends on axioms: [propext]
+'PV_LIB_SPEC_Active27720.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Active27720.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Active27720.away' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Active27720.transition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_Active27720.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
