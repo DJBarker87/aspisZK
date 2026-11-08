@@ -1,0 +1,95 @@
+PV_LIB_StoreActionTable.v2 (fn : Data) : Option Action
+PV_LIB_A_RangeTo270History12.history (C : Carrier PV_EVHB_OwnerMachine.OWNER Data)
+  (D : PV_FN_W4_NativeFootprint.Effects) (H : PV_W1_OwnerNativeFrame.Backend PV_RJ4IDB.NativeEvent)
+  (semantics : PV_LIB_A_Range165.PV_THR2_LibrarySemantics_RangeIntoIter165 C D H) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (b : Bool) (w : PV_EVHB_OwnerMachine.OWNER) (es : List PV_RJ4IDB.NativeEvent)
+  (stack : List Config) (value : Data)
+  (returned :
+    (PV_THR2_Source15RangeToLoop.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).answer =
+      Answer.returned (Aeneas.Std.Result.ok value)) :
+  have B := PV_THR2_OwnInitExactReturnedCases.carrier C b;
+  have handler := PV_THR2_OwnUniformResourceHandler.lift H;
+  have first := PV_THR2_Source15RangeToLoop.reply handler s w;
+  have iterator := PV_LIB_A_RangeHistoryV2.iteratorStore s a value;
+  have t := (PV_LIB_A_RangeFirst11.afterWrite s a parents value).store;
+  have site := PV_LIB_A_RangePoll11.site iterator a;
+  have r := handler site.waiting.request first.world;
+  have q := PV_LIB_A_RangeReply12.after B K iterator t a parents (es ++ first.events) stack r;
+  PV_LIB_A_PrefixMachine11.advance B K (PV_LIB_A_SpawnEnter12.enter270Programs P) (fun {A} => resources)
+      (fun {A} => encode) handler values
+      (PV_THR2_Source15RangeToLoop.steps handler s w + 7 + 1 + PV_LIB_A_RangeReply12.steps B K iterator t a parents r +
+        PV_LIB_A_Post93Prefix12.steps B handler q)
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := List.drop 5 PV_THR2_F15.live.body }, callers := parents,
+                      store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    PV_LIB_A_Post93Prefix12.after B handler q
+PV_LIB_A_Post93Prefix12.retained (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (H : Handler) (q : State)
+  (site : SourceSite) (tail : PV_LIB_A_WeakDropSource.Tail) :
+  PV_LIB_A_Post93Prefix12.steps C H { base := q, applied := some (site, tail) } = 0 ∧
+    PV_LIB_A_Post93Prefix12.after C H { base := q, applied := some (site, tail) } =
+      { base := q, applied := some (site, tail) }
+PV_LIB_A_RangeInvariant12.delivered (s : Store Data) (a : ℕ) (parents : List Frame) (start finish : ℕ) (v : Data)
+  (before : PV_LIB_A_RangeInvariant12.Iterator s a start finish) :
+  PV_LIB_A_RangeInvariant12.Iterator
+    (PV_LIB_A_RangeReply12.deliveredStore s (PV_LIB_A_RangeInvariant12.post s a parents start finish) a parents v) a
+    (PV_LIB_A_RangeInvariant12.next start finish) finish
+PV_LIB_A_F6History12.history (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode) (H : Handler)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (b : Bool) (w : PV_EVHB_OwnerMachine.OWNER) (es : List PV_RJ4IDB.NativeEvent)
+  (stack : List Config) :
+  have t := PV_THR2_ScopePrologue.prepared s a;
+  have r := PV_THR2_ScopeReply121.reply H t w;
+  have B := PV_LIB_A_F6Counter11.carrier C b;
+  have q := PV_LIB_A_F6EarlyHistory11.after B H t a parents r es stack;
+  PV_LIB_A_PrefixMachine11.advance B K (PV_THR2_ScopeChildren.table P) (fun {A} => resources) (fun {A} => encode) H
+      values (18 + PV_LIB_A_F6EarlyHistory11.steps H t a r + PV_LIB_A_F6History12.steps B q)
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := PV_THR2_F6.live.body }, callers := parents, store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    PV_LIB_A_F6History12.after B H q
+PV_LIB_A_F6Constructors12.counter (C : Carrier PV_EVHB_OwnerMachine.OWNER Data)
+  (H : PV_W1_OwnerNativeFrame.Backend PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ) (parents : List Frame)
+  (stack : List Config) (w : PV_EVHB_OwnerMachine.OWNER) (changes : Address → Option Data)
+  (fact :
+    PV_THR2_LibrarySemantics_AtomicUsizeNew.Fact C (PV_LIB_A_F6Constructors12.entry121 s a parents stack) H w changes 0)
+  (v : Data)
+  (returned :
+    (PV_THR2_ScopeReply121.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).answer =
+      Answer.returned (Aeneas.Std.Result.ok v)) :
+  PV_THR2_LibrarySemantics_AtomicUsizeNew.Holds v 0 ∧
+    (PV_THR2_ScopeReply121.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).world = w
+PV_LIB_A_F6Constructors12.panicked (H : PV_W1_OwnerNativeFrame.Backend PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (stack : List Config) (w : PV_EVHB_OwnerMachine.OWNER)
+  (fact :
+    PV_LIB_A_AtomicBoolNewV2.PV_THR2_LibrarySemantics_AtomicBoolNew123
+      (PV_LIB_A_F6Constructors12.entry123 s a parents stack) H w false)
+  (v : Data)
+  (returned :
+    (PV_THR2_ScopeReply123.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).answer =
+      Answer.returned (Aeneas.Std.Result.ok v)) :
+  PV_LIB_A_AtomicBoolNewV2.Holds v false ∧
+    (PV_THR2_ScopeReply123.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).world = w
+'PV_LIB_StoreActionTable.v2PrefixStep12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_StoreActionTable.v2PrefixAdvance12' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_StoreActionTable.v2PrefixEntry12' does not depend on any axioms
+'PV_LIB_StoreActionTable.prefix_step12' depends on axioms: [propext, Classical.choice, Quot.sound]
