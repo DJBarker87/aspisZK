@@ -1,3 +1,23 @@
+# Session17 live — repair under verification; OriginalToF6 OPEN
+
+Continued11454b6abfe under LOG D1010. Lane C pinned read-only at
+6e16f5c9a1d (session17/LANE_C_START.json); newest target remains LaneAJoins18.
+ActiveDispatch17 is checked55981: exact Adt56 FnOnce resolution, old pending
+statement by name, named289 Cell reference/true stateful boundary, and complete
+answer equality at every other resolution. Repaired step, prefix141 transport
+and CLOSED207 stateful frame wrappers are being compiled next. No joint-witness
+credit before C adoption. REPAIR-FOR-LANE-C.md names the proposed adoption.
+
+55975/76/77 compiler failures are retained; replaced by symbolic tuple/reference
+roundtrip.55978/79/80 were reservation refusals with NO compiler started;180s
+cooldowns respected, next IDs used. Scopes remain serial6G/8G/swap0/Tasks64/
+-M7000 with standalone STREAMB_SLOTS=3 turn. No cap/heartbeat increase.
+No strict audit yet; no requested join inhabitant or further obstruction yet.
+558xx untouched. No provider, frozen spec, implementation, C branch, ledger,
+checker, key, push or merge action.
+
+---
+
 # Session16 final — checked LOCAL obstruction; complete target NOT established
 
 Continued 2bfca12ab510d30816a0821ea28777d893b62e07. Target remains the newest
