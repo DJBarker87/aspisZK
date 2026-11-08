@@ -347,3 +347,19 @@ extracted field declaration. That unused tag stays historical; the new
 constructor uses UnsafeCell<u8> from pinned Rust. The other three result tags
 are exact LLBC result types. No source/native adequacy is credited merely
 from projecting tags.
+
+## SPEC-C10 — callback capture uses a heap-only physical-reference codec (session12)
+
+Frozen.References explicitly admits initialized source STACK locals without
+OWNER heap registration. CallbackOperands.captureWords nevertheless resolves
+&run only through SparsePacketHandler.physical, which requires a receiver.
+StackReferenceGap12 supplies an exact local initialized typed stack reference
+(activation7/local50), proves its dereference/read succeed, its receiver is
+None, and the old callback capture projection is None for EVERY k. This is
+not a reached original-entry &run, and not full-joint negation. The general
+missing physical stack binding was already reported in session11; this test
+isolates the concrete codec requirement causing it. Repair: a separate finite
+source/native stack-frame map for &run, checked against the actual source
+reference and initialized pointee, while keeping heap resolution for Packet.
+Its original-history construction remains a proof obligation, never a new
+successful-decoder or source-validity premise in a row.

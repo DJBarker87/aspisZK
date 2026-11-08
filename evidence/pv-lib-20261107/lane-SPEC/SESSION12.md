@@ -18,3 +18,5 @@ PV_LIB_SPEC_NativeBindings12 compiled 55127, cohort w3: exit0, wall 0:02.34, pea
 PV_LIB_SPEC_ThreadNewRecheck12 compiled 55128, cohort w3: exit0, wall 0:02.17, peak 4768836KiB, swap 0; source 273915416b1269f231b820e782e268d67cc1311d; standard summary axioms only.
 
 PV_LIB_SPEC_NativeRecheck12 compiled 55129, cohort w3: exit0, wall 0:03.71, peak 4746140KiB, swap 0; source 14ce3ebb94612c5c5432dceb8be4e58318bc3a34; standard summary axioms only.
+
+PV_LIB_SPEC_StackReferenceGap12 compiled 55130, cohort w3: exit0, wall 0:02.22, peak 4771120KiB, swap 0; source 898263cd97ed8338e578dd6d5680cd2d3a516d17; standard summary axioms only.
