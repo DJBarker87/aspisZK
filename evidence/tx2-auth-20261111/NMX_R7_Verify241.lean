@@ -5,6 +5,7 @@ set_option autoImplicit false
 noncomputable section
 namespace NMX_R7_Verify241
 open RSL
+attribute [local instance] Classical.propDecidable
 abbrev V := LIBB_V2Star.library
 
 /-- Source observation at the original three byte slices. Independent C04
