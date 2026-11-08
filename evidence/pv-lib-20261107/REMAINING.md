@@ -1,4 +1,32 @@
-# Remaining obligations after Lane A session5
+# Remaining obligations after Lane A session6
+
+Session6 is PARTIAL. The accepted D989 v2 inventory is unchanged. Import
+`PV_LIB_A_StoreActionTable` for `PV_LIB_StoreActionTable.v2`, and
+`PV_LIB_A_StoreActionMachine` for its OWNER-based `step`. This is an importable
+partial table of22 supplied projections, not the completed v2 table. All111
+accepted inventory candidates are retained in lane-A/session6/STORE_ACTIONS.json;
+89 have no supplied meaning. `coverage` records bool-only504, nonlast486/683
+and611's unpark gap. The single symbolic agreement/neutral-trace lemma uses
+the identical OWNER-aware base and resource environment. CAS branch proofs
+retain exact delivery on spurious failure, pending and faults.
+
+FIRST: finish the table and D984 adequacy. Checked
+`PV_LIB_A_ActionAdequacyGap` and `PV_LIB_A_ReplyAdequacyGap` establish that
+aggregate504 can become undefined despite a defined transparent replacement
+prefix; pending and panic status are then NOT retained. This affects the raw
+aggregate specializations437/477/602/629 and generic762. Count1 last drops and
+seven installed opaque wrappers are also explicitly unsupported. See
+lane-A/session6/MODEL_FINDINGS.md and CELL504_SPECIALIZATIONS.json. Keeping
+world/events is not full-answer/source adequacy. Implement actual typed
+old-T destructor/callback composition, last-strong/Weak/deallocation and
+wrapper source effects; never replace them with a Store-transformer premise.
+
+THEN: corrected-machine Range93, f6, OwnInit histories, in that order. No
+session6 caller history, slot closure, endpoint premise removal or T change
+is claimed. Lane B files and all170 inherited slot statuses are retained.
+The inherited detailed obligations below remain open.
+
+## Inherited session5 obligations
 
 PARTIAL library. PLIB_MAP.json still has170 slots:118 qualified INSTANTIATED,
 35 MISSING-CHILD-LEMMA,12 WAITING-ON-ROW,5 SPEC-ERROR. All statuses and Lane B's
