@@ -1,4 +1,4 @@
-# Session11 checkpoint — callback stores installed; full task OPEN
+# Session11 handoff — callback stores installed; full task OPEN
 
 Continued aa8cfbe2f1b. NativeModel/NativeHistory are the current operational
 assembly. CallbackStores applies the adopted56-byte callback suffix, retains
@@ -14,7 +14,11 @@ No successful original-entry history through cut92/ThreadInit, nonvacuous
 exports on that history, full OwnInit joint witness or full-joint contradiction
 is claimed. No row or endpoint premise closed;18 old statements retained.
 See SESSION11_ADEQUACY.md and FINDINGS.md for exact theorem limits and gaps.
-ONE strict110-new-root audit34993 is prepared, not yet credited at checkpoint.
+ONE strict raw34993 PASS110/110 NEW roots; exit0, wall0:51.32,
+peak6833576KiB, swap0, sourceaf1243442b5. Standard axioms only, zero
+unresolved/summary disagreements; unchanged walker/collector.17 focused passes
+and9 retained changed-before-retry elaboration failures. No own live scope.
+Offline verification: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session11.py
 Next Lean55116..55189; next raw34994..34999 (55190..55199 reserved thereafter).
 Only a55100..55189 guard extension was made, in our private copied launcher;
 no shared/provider/implementation/key change, push or merge.

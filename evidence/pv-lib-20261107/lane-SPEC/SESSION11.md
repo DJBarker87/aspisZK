@@ -32,3 +32,27 @@ PV_LIB_SPEC_NativeHistory compiled 55113, cohort w3: exit0, wall 0:02.65, peak 4
 PV_LIB_SPEC_WordThreadRecheck compiled 55114, cohort w3: exit0, wall 0:03.24, peak 4770812KiB, swap 0; source 4a80023b182f120b23776da50350848efd1dda91; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession11 compiled 55115, cohort w3: exit0, wall 0:00.85, peak 1587688KiB, swap 0; source 9c2990c7bc3ba07561ace8fbd88132be67622ade; standard summary axioms only.
+
+ONE final strict raw34993: PASS110/110 NEW roots, exit0, wall0:51.32,
+peak6833576KiB, swap0, sourceaf1243442b536f9f60535315862a5df8ba9aeff0.
+No unresolved constants or summary disagreement; only propext/Classical.choice/
+Quot.sound. Exact input/root/graph/hash manifests retained. No walker or
+collector change. Source revisions on focused receipts are pre-launch parents;
+SESSION11_PROVENANCE.json additionally identifies each exact committed body.
+
+17 focused passes (16 semantic modules plus driver),9 failed elaborations,
+all retained and source-changed before retry. No OOM/refusal/transport failure,
+cap increase, shared/provider object write, package/ledger/implementation/key
+edit, push or merge. No full manifest, runtime, Kani, Rust, SBF or extraction
+regression was run. All host build/audit scopes6G/8G/swap0/Tasks64, Lean-M7000,
+one at a time and a standalone STREAMB_SLOTS=3 turn before each ID. Transient
+/proc cmdline disappearance warnings from turn.sh did not change its exit0;
+admission JSONs all allowed:true. Only a private55100..55189 guard extension
+was made.34991/34992 were prior sessions; this session uses34993 exactly once.
+
+The full requested task remains INCOMPLETE. The successful original-entry
+history and full joint witness/contradiction are not established. C8 is a
+LOCAL old-codec incompatibility (now repaired in the new codec), not a global
+counterexample. Native stack/source pairing and remaining concrete native/
+resource/value bindings are the next actual work; no success/decoder/Store-
+transformer premise is inserted to bypass them. No endpoint/T premise changes.
