@@ -3,7 +3,7 @@ rows=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
 selected={}
 for r in rows:
  a=r.get('attempt','')
- if not a.startswith('NMX_L') or int(a[5:])<1072 or not r.get('module','').startswith('NMX_R4_') or r.get('module')=='NMX_R4_BindDiagnostic' or r.get('kind')!='lean' or r.get('exit_status')!=0 or not r.get('axioms_accepted',True):continue
+ if not a.startswith('NMX_L') or int(a[5:])<1072 or not r.get('module','').startswith('NMX_R4_') or r.get('module') in ['NMX_R4_BindDiagnostic','NMX_R4_CandidateCombined'] or r.get('kind')!='lean' or r.get('exit_status')!=0 or not r.get('axioms_accepted',True):continue
  m=r['module'];p=E/(m+'.lean')
  if not p.exists() or sha(p.read_bytes()) not in r.get('source_hashes',{}).values():continue
  selected[m]=r
