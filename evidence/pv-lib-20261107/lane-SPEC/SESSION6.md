@@ -49,3 +49,11 @@ may change native ghost fields, with14756/14320 left to their named base
 OWNER actions. BoundRuntime is the current operational runtime extension.
 No row uses it in a proof. Full source/ABI adequacy and opaque native-resource
 internals are still not certified by defining this machine.
+
+44902 HistoryInvariant passed after44900/44901 local match-reduction fixes;
+all failed inputs/receipts retained. exit0,wall0:02.51,peak4766072KiB,swap0,
+source8f985c87dad; standard axioms only. `original` derives actual emitted
+Site/caller/request/operand association at EVERY finite prefix of BoundRuntime.
+The context's dynamic occurrence is computed by prior consumed Site entries.
+This closes that instrumentation invariant, not a row or full source adequacy.
+Only the wrapper's ID assertion was extended, by44900–44999; exact diff retained.
