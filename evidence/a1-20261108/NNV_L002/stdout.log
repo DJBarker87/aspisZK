@@ -1,0 +1,369 @@
+def AspisR1.Uni_Install.current : {C : Type} →
+  AspisR1CurrentCaller.Ops →
+    Bool → AspisR1.Port3_NativeQueryBody.Ops → AspisR1.Port3_NativeGeometryBody.Ops C → AspisR1CurrentCaller.Ops :=
+fun {C} ops reserved query geo =>
+  AspisR1.Op3I_Install.install (AspisR1.Op5T_Concrete.current (AspisR1.Uni_Install.base ops reserved query geo))
+def NNH_Tx2Configuration.configuration : {E : Type} →
+  AspisR1.IDa_Deployed.Uninstalled E →
+    RSL.Env → E → AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W E :=
+fun {E} missing env err r =>
+  AspisR1.FIp_Install.configuration err
+    (AspisR1.IDa_Deployed.deployedConfiguration (NNH_Tx2Configuration.select missing env) err r) r
+def AspisR1CurrentCaller.InstalledPreparation.retainedSem : {H : Type} →
+  AspisR1CurrentCaller.r1_semantic.Verified H → AspisR1PublicPreparation.r1_semantic.Verified H :=
+fun {H} x =>
+  { roots := x.roots,
+    challenges :=
+      { lambda := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.lambda,
+        chi := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.chi,
+        theta := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.theta,
+        zc := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.zc,
+        mu := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.mu,
+        eta := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.eta },
+    alpha := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.alpha,
+    claims :=
+      AspisR1ClaimPreparedBridge.mapArray
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ) x.claims,
+    extra := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.extra,
+    before_z1 := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.before_z1,
+    state_before_z0 := x.state_before_z0,
+    z := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedPoint x.z,
+    transcript := { state := x.transcript.state, hash := x.transcript.hash, next_row := x.transcript.next_row } }
+def AspisR1CurrentCaller.S1SemanticInstallation.verify : AspisR1PublicPreparation.RoundModel.Boundaries →
+  AspisR1PublicPreparation.FinishModel.Boundaries →
+    {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                  AspisR1CurrentCaller.r1_wire.Error) :=
+fun R B {H} D pub bytes hash => do
+  let result ←
+    AspisR1PublicPreparation.VerifyPrefix.verify
+        (fun {H} =>
+          AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+        (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) bytes hash none
+  Aeneas.Std.Result.ok
+      (match result with
+      | Aeneas.Std.core.result.Result.Ok sem =>
+        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+      | Aeneas.Std.core.result.Result.Err error =>
+        Aeneas.Std.core.result.Result.Err (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))
+def AspisR1CurrentCaller.S1SemanticInstallation.install : AspisR1CurrentCaller.Ops →
+  AspisR1PublicPreparation.RoundModel.Boundaries →
+    AspisR1PublicPreparation.FinishModel.Boundaries → AspisR1CurrentCaller.Ops :=
+fun ops R B =>
+  { op0 := ops.op0, op1 := @AspisR1CurrentCaller.Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4,
+    op5 := ops.op5, op6 := @AspisR1CurrentCaller.Ops.op6 ops, op7 := ops.op7, op8 := @AspisR1CurrentCaller.Ops.op8 ops,
+    op9 := fun {H} D pub bytes hash obs =>
+      match obs with
+      | none => AspisR1CurrentCaller.S1SemanticInstallation.verify R B D pub bytes hash
+      | some observe => ops.op9 D pub bytes hash (some observe),
+    op10 := ops.op10, op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+    op16 := @AspisR1CurrentCaller.Ops.op16 ops, op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20,
+    op21 := ops.op21 }
+def AspisR1.IDa_Deployed.deployedConfiguration : {CoreError : Type} →
+  AspisR1.IDa_Deployed.Uninstalled CoreError →
+    CoreError →
+      AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError :=
+fun {CoreError} missing indexError reservation =>
+  AspisR1.FIq_Install.configuration indexError (AspisR1.IDa_Deployed.seed missing reservation) reservation
+def AspisR1.Uni_Install.base : {C : Type} →
+  AspisR1CurrentCaller.Ops →
+    Bool → AspisR1.Port3_NativeQueryBody.Ops → AspisR1.Port3_NativeGeometryBody.Ops C → AspisR1CurrentCaller.Ops :=
+fun {C} ops reserved query geo => AspisR1.Op4P_Install.install (AspisR1.Tx1Q_Execution.base ops reserved query geo)
+def AspisR1CurrentCaller.S1SemanticCarrier.currentSem : {H : Type} →
+  AspisR1PublicPreparation.r1_semantic.Verified H → AspisR1CurrentCaller.r1_semantic.Verified H :=
+fun {H} x =>
+  { roots := x.roots,
+    challenges :=
+      { lambda := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.lambda,
+        chi := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.chi,
+        theta := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.theta,
+        zc := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.zc,
+        mu := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.mu,
+        eta := AspisR1CurrentCaller.InstalledPreparation.currentQ x.challenges.eta },
+    alpha := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.alpha,
+    claims :=
+      AspisR1ClaimPreparedBridge.mapArray
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ) x.claims,
+    extra := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.extra,
+    before_z1 := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentQ x.before_z1,
+    state_before_z0 := x.state_before_z0,
+    z := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentPoint x.z,
+    transcript := { state := x.transcript.state, hash := x.transcript.hash, next_row := x.transcript.next_row } }
+AspisR1CurrentCaller.S1PrepareCode.semantic_bounded._proof_1: ¬82 ≤ 82 → False
+AspisR1CurrentCaller.InstalledPreparation.retainedSem._proof_4: 2 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+LIBC_PreparedCarriers.verified._proof_1: 32 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+LIBC_PreparedCarriers.verified._proof_2: 2 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+AspisR1CurrentCaller.r1_semantic.Verified.mk.injEq: ∀ {H : Type}
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize)
+  (challenges : AspisR1CurrentCaller.aspis_core.state_only_prefix.r0.Challenges)
+  (alpha : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 10#usize)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize) 3#usize)
+  (extra before_z1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize)
+  (state_before_z0 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (z : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint 2#usize)
+  (transcript : AspisR1CurrentCaller.r1_wire.SemanticTranscript H)
+  (roots_1 : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize)
+  (challenges_1 : AspisR1CurrentCaller.aspis_core.state_only_prefix.r0.Challenges)
+  (alpha_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 10#usize)
+  (claims_1 : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize) 3#usize)
+  (extra_1 before_z1_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize)
+  (state_before_z0_1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (z_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint 2#usize)
+  (transcript_1 : AspisR1CurrentCaller.r1_wire.SemanticTranscript H),
+  ({ roots := roots, challenges := challenges, alpha := alpha, claims := claims, extra := extra, before_z1 := before_z1,
+        state_before_z0 := state_before_z0, z := z, transcript := transcript } =
+      { roots := roots_1, challenges := challenges_1, alpha := alpha_1, claims := claims_1, extra := extra_1,
+        before_z1 := before_z1_1, state_before_z0 := state_before_z0_1, z := z_1, transcript := transcript_1 }) =
+    (roots = roots_1 ∧
+      challenges = challenges_1 ∧
+        alpha = alpha_1 ∧
+          claims = claims_1 ∧
+            extra = extra_1 ∧
+              before_z1 = before_z1_1 ∧ state_before_z0 = state_before_z0_1 ∧ z = z_1 ∧ transcript = transcript_1)
+LIBC_S1.semantic_value: ∀ (s : NMT_345.Statement),
+  NMT_345Prep.toT5 (NMT_345.semanticValue s) = AspisR1.NJB_SemanticPublic.value (NMT_345Prep.toT7 s)
+AspisR1CurrentCaller.InstalledPreparation.retainedSem._proof_2: 29 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+LIBC_PreparedDomain.semantic: ∀ (a : LIBC_PreparedLaw.Args),
+  LIBC_PreparedDomain.Domain a → LIBC_PreparedDomain.Semantic a.1
+AspisR1CurrentCaller.InstalledPreparation.retainedSem._proof_3: 3 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+LIBC_WideView.semantic_bytes: ∀ (v : AspisR1SelectedWideViewV1.verifier.View),
+  LIB_VCarriers.viewSemantic (AspisR1SelectedWideViewV1.preparedView v) = LIB_Carriers.bytes v.semantic
+AspisR1CurrentCaller.InstalledPreparation.sourceView_semantic: ∀ (proof semantic y1 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (view : AspisR1CurrentCaller.verifier.View),
+  AspisR1CurrentCaller.InstalledPreparation.sourceView proof semantic y1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) →
+    view.semantic = semantic
+AspisR1CurrentCaller.InstalledPreparation.retainedSem.eq_1: ∀ {H : Type}
+  (x : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.InstalledPreparation.retainedSem x =
+    { roots := x.roots,
+      challenges :=
+        { lambda := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.lambda,
+          chi := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.chi,
+          theta := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.theta,
+          zc := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.zc,
+          mu := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.mu,
+          eta := AspisR1CurrentCaller.InstalledPreparation.retainedQ x.challenges.eta },
+      alpha := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.alpha,
+      claims :=
+        AspisR1ClaimPreparedBridge.mapArray
+          (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ) x.claims,
+      extra := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.extra,
+      before_z1 := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedQ x.before_z1,
+      state_before_z0 := x.state_before_z0,
+      z := AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedPoint x.z,
+      transcript := { state := x.transcript.state, hash := x.transcript.hash, next_row := x.transcript.next_row } }
+LIB_VLib.semanticRounds_exact: LIB_VLib.library.semanticRounds = LIB_VSemantic.semanticRounds
+AspisR1CurrentCaller.r1_semantic.Verified.mk.inj: ∀ {H : Type}
+  {roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize}
+  {challenges : AspisR1CurrentCaller.aspis_core.state_only_prefix.r0.Challenges}
+  {alpha : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 10#usize}
+  {claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize) 3#usize}
+  {extra before_z1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize}
+  {state_before_z0 : Aeneas.Std.Array Aeneas.Std.U8 32#usize}
+  {z : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint 2#usize}
+  {transcript : AspisR1CurrentCaller.r1_wire.SemanticTranscript H}
+  {roots_1 : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize}
+  {challenges_1 : AspisR1CurrentCaller.aspis_core.state_only_prefix.r0.Challenges}
+  {alpha_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 10#usize}
+  {claims_1 : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize) 3#usize}
+  {extra_1 before_z1_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize}
+  {state_before_z0_1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize}
+  {z_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint 2#usize}
+  {transcript_1 : AspisR1CurrentCaller.r1_wire.SemanticTranscript H},
+  { roots := roots, challenges := challenges, alpha := alpha, claims := claims, extra := extra, before_z1 := before_z1,
+        state_before_z0 := state_before_z0, z := z, transcript := transcript } =
+      { roots := roots_1, challenges := challenges_1, alpha := alpha_1, claims := claims_1, extra := extra_1,
+        before_z1 := before_z1_1, state_before_z0 := state_before_z0_1, z := z_1, transcript := transcript_1 } →
+    roots = roots_1 ∧
+      challenges = challenges_1 ∧
+        alpha = alpha_1 ∧
+          claims = claims_1 ∧
+            extra = extra_1 ∧
+              before_z1 = before_z1_1 ∧ state_before_z0 = state_before_z0_1 ∧ z = z_1 ∧ transcript = transcript_1
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer.sizeOf_spec: ∀
+  (a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  sizeOf (AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a a_1) =
+    1 + sizeOf a + sizeOf a_1
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.mk.inj: ∀
+  {next_pair_index : Aeneas.Std.U64} {next_root : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize}
+  {next_frontier : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize) 20#usize}
+  {next_pair_index_1 : Aeneas.Std.U64}
+  {next_root_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize}
+  {next_frontier_1 : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize) 20#usize},
+  { next_pair_index := next_pair_index, next_root := next_root, next_frontier := next_frontier } =
+      { next_pair_index := next_pair_index_1, next_root := next_root_1, next_frontier := next_frontier_1 } →
+    next_pair_index = next_pair_index_1 ∧ next_root = next_root_1 ∧ next_frontier = next_frontier_1
+AspisR1CurrentCaller.OriginalPreparedSource.semanticState.eq_1: ∀ {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (t : AspisR1CurrentCaller.r1_wire.SemanticTranscript H),
+  AspisR1CurrentCaller.OriginalPreparedSource.semanticState D t =
+    AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      { state := t.state, hash := t.hash, next_row := t.next_row }
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal.inj: ∀
+  {a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1}
+  {a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1}
+  {a_2 : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1}
+  {a_3 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1},
+  AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a a_1 =
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a_2 a_3 →
+    a = a_2 ∧ a_1 = a_3
+LIBC_S1.semantic: ∀ (V : RSL.VLib) (tyPublic : V.Public = LIB_VCarriers.Public) (s : NMT_345.Statement),
+  tyPublic.mp ((LIBC_S1.library V tyPublic).semanticPublic s) = AspisR1.NJB_SemanticPublic.value (NMT_345Prep.toT7 s)
+LIB_VLib.semanticBytesDom_exact: LIB_VLib.library.semanticBytesDom = LIB_VParse.semanticBytesDom
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.mk.sizeOf_spec: ∀
+  (next_pair_index : Aeneas.Std.U64) (next_root : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize)
+  (next_frontier : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize) 20#usize),
+  sizeOf { next_pair_index := next_pair_index, next_root := next_root, next_frontier := next_frontier } =
+    1 + sizeOf next_pair_index + sizeOf next_root + sizeOf next_frontier
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer.injEq: ∀
+  (a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1)
+  (a_2 : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (a_3 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  (AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a a_1 =
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a_2 a_3) =
+    (a = a_2 ∧ a_1 = a_3)
+LIBC_PreparedCarriers.verified._proof_4: ∀ {V : RSL.VLib} (t : LIBC_PreparedCarriers.Types V) (s : RSL.Verified V),
+  [⋯.mp s.z.1, ⋯.mp s.z.2].length = ↑2#usize
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer.inj: ∀
+  {a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1}
+  {a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1}
+  {a_2 : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1}
+  {a_3 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1},
+  AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a a_1 =
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a_2 a_3 →
+    a = a_2 ∧ a_1 = a_3
+LIBC_PreparedCarriers.verified._proof_3: ∀ {V : RSL.VLib} (s : RSL.Verified V),
+  [LIB_Env.nativeKey s.roots.1, LIB_Env.nativeKey s.roots.2].length = ↑2#usize
+LIB_VLib.semanticRounds_returns: ∀ (a : LIB_VCarriers.Prefix × LIB_VCarriers.Transcript) (env : RSL.Env),
+  NND_Returned.Returns (LIB_VLib.library.semanticRounds.law a) env (LIB_VLib.semanticRoundsValue a env)
+AspisR1CurrentCaller.S1PrepareCode.semantic_bounded: ∀ (R : AspisR1PublicPreparation.RoundModel.Boundaries)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  AspisR1PublicPreparation.PreparedBudget.bounded 82
+    (AspisR1CurrentCaller.S1SemanticCodeInstallation.code R B D pub bytes hash)
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.mk.injEq: ∀
+  (next_pair_index : Aeneas.Std.U64) (next_root : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize)
+  (next_frontier : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize) 20#usize)
+  (next_pair_index_1 : Aeneas.Std.U64)
+  (next_root_1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize)
+  (next_frontier_1 : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.M31 8#usize) 20#usize),
+  ({ next_pair_index := next_pair_index, next_root := next_root, next_frontier := next_frontier } =
+      { next_pair_index := next_pair_index_1, next_root := next_root_1, next_frontier := next_frontier_1 }) =
+    (next_pair_index = next_pair_index_1 ∧ next_root = next_root_1 ∧ next_frontier = next_frontier_1)
+AspisR1CurrentCaller.OriginalSerializerInstallation.exactRankTrace_query_scanner: ∀ {H M Cv : Type} {L : ℕ}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (p : FS2.Duplex.Params M Cv L)
+  (pubInput : Aeneas.Std.Slice Aeneas.Std.U8) (root : AspisR1PublicPreparation.TranscriptStep.Bytes32)
+  (length : Aeneas.Std.U32) (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (v : AspisR1PublicPreparation.verifier.View) (hash : H) (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize),
+  AspisR1CurrentCaller.OriginalSerializerInstallation.ExactSerializedRankTrace D p pubInput root length sem v hash out
+      scratch →
+    AspisR1CurrentCaller.OriginalSerializerInstallation.QueryScannerMeaning D v out
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_round: ∀ {H : Type}
+  (x : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisR1CurrentCaller.InstalledPreparation.retainedSem (AspisR1CurrentCaller.S1SemanticCarrier.currentSem x) = x
+AspisR1CurrentCaller.BorrowedClaimPrepared.prepare_semantic_roots: ∀ (ops : AspisR1CurrentCaller.Ops)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (prepared : AspisR1CurrentCaller.verifier.Prepared)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize),
+  AspisR1CurrentCaller.verifier.candidate.prepare
+        (AspisR1CurrentCaller.BorrowedClaimPrepared.closedInstall
+          (AspisR1CurrentCaller.S1SemanticInstallation.install ops R B))
+        D pub proof hash none input =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok prepared, scratch) →
+    prepared.variant = AspisR1CurrentCaller.transport.Variant.S2 ∧
+      ∃ semantic y1 view sem pre initial after challenges payload root2,
+        AspisR1CurrentCaller.InstalledPreparation.sourceView proof semantic y1 =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+          AspisR1CurrentCaller.S1SemanticInstallation.verify R B D pub view.semantic hash =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+            AspisR1CurrentCaller.BorrowedClaimPrepared.originalNew
+                  (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+                    AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+                  AspisS1M31Embedding.Total.embed D sem view hash input =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok prepared, scratch) ∧
+              AspisR1PublicPreparation.PrefixAdapter.parseAccepted view.semantic =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+                AspisR1PublicPreparation.r1_semantic.public_transcript
+                      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+                      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) hash pre.c1_root =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) ∧
+                  AspisR1PublicPreparation.r1_wire.begin (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+                        pre initial =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok challenges, after) ∧
+                    AspisR1PublicPreparation.FinishModel.finish R
+                          (AspisR1PublicPreparation.S1SemanticRootCopy.install B)
+                          (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+                          (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre after challenges none =
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                            (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem)) ∧
+                      AspisR1PublicPreparation.FinishModel.payload pre 2#u8 =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok payload) ∧
+                        Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8
+                              payload =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root2) ∧
+                          ↑root2 = ↑payload ∧
+                            prepared.roots = Aeneas.Std.Array.make 2#usize [pre.c1_root, root2] ⋯ ∧
+                              prepared.semantic_alpha = sem.alpha ∧
+                                prepared.z = sem.z ∧
+                                  ∀ (i : Fin 10),
+                                    AspisR1CurrentCaller.S1SemanticInstallation.CanonicalQ
+                                      (↑prepared.semantic_alpha)[↑i]
+AspisR1CurrentCaller.OriginalSerializerInstallation.queryRhoFacts_scanner_meaning: ∀ {H M Cv : Type} {L : ℕ}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (p : FS2.Duplex.Params M Cv L)
+  (pubInput : Aeneas.Std.Slice Aeneas.Std.U8) (root : AspisR1PublicPreparation.TranscriptStep.Bytes32)
+  (length : Aeneas.Std.U32) (v : AspisR1PublicPreparation.verifier.View)
+  (out : AspisR1PublicPreparation.verifier.Prepared) (row : Aeneas.Std.U8)
+  (before : AspisR1PublicPreparation.transcript.Transcript H),
+  row = 30#u8 ∨ row = 31#u8 →
+    AspisR1ClaimPreparedBridge.InstalledMeaning.ConcreteQueryRhoFacts AspisS1M31Embedding.Total.embed D p pubInput root
+        length v out row before →
+      AspisR1CurrentCaller.OriginalSerializerInstallation.QueryScannerMeaning D v out
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal.sizeOf_spec: ∀
+  (a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  sizeOf (AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a a_1) =
+    1 + sizeOf a + sizeOf a_1
+AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal.injEq: ∀
+  (a : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (a_1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1)
+  (a_2 : AspisR1CurrentCaller.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (a_3 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  (AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a a_1 =
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a_2 a_3) =
+    (a = a_2 ∧ a_1 = a_3)
+AspisR1CurrentCaller.r1_semantic.Verified.mk.sizeOf_spec: ∀ {H : Type} [inst : SizeOf H]
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize)
+  (challenges : AspisR1CurrentCaller.aspis_core.state_only_prefix.r0.Challenges)
+  (alpha : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 10#usize)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize) 3#usize)
+  (extra before_z1 : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.QM31 29#usize)
+  (state_before_z0 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (z : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint 2#usize)
+  (transcript : AspisR1CurrentCaller.r1_wire.SemanticTranscript H),
+  sizeOf
+      { roots := roots, challenges := challenges, alpha := alpha, claims := claims, extra := extra,
+        before_z1 := before_z1, state_before_z0 := state_before_z0, z := z, transcript := transcript } =
+    1 + sizeOf roots + sizeOf challenges + sizeOf alpha + sizeOf claims + sizeOf extra + sizeOf before_z1 +
+          sizeOf state_before_z0 +
+        sizeOf z +
+      sizeOf transcript
+LIB_S1.semantic: ∀ (s : LIB_S1.library.Statement),
+  LIB_S1.library.semanticPublic s = AspisR1.NJB_SemanticPublic.value (NMT_345Prep.toT7 s)
+AspisR1CurrentCaller.InstalledPreparation.retainedSem._proof_1: 10 ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize
+AspisR1CurrentCaller.S1SemanticCarrier.semantic_back: ∀ {H : Type} (x : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticCarrier.currentSem (AspisR1CurrentCaller.InstalledPreparation.retainedSem x) = x
