@@ -1,0 +1,29 @@
+NNG_generated/NNG_ParentAssociation345.lean:13:1: error: Type mismatch
+  NNG_Compare345.projected ?m.23 ?m.24
+has type
+  @Eq (List UInt8) (List.map byte ?m.23) (List.map byte ?m.24) ↔ ?m.23 = ?m.24
+but is expected to have type
+  @Eq RSL.Bytes (List.map byte ↑s) [byte a, byte b] ↔ ↑s = [a, b]
+'AspisR1.NNG_ParentAssociation345.byteRoute' depends on axioms: [propext, sorryAx, Quot.sound]
+NNG_generated/NNG_ParentAssociation345.lean:42:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_Carriers.bytes s.data == [byte 3#u8, byte 10#u8]
+in the target expression
+  (!(LIB_Carriers.bytes s.data == [3, 10] || LIB_Carriers.bytes s.data == [3, 11]) ||
+      (NNG_ProjectFrames345.original s).accounts.length != 3) =
+    true
+
+W : Type
+s : Parent W
+env : RSL.Env
+eq10 :
+  (NNG_Calls345.calls env).c1 core.cmp.PartialEqU8 s.data (Array.make 2#usize [3#u8, 10#u8] ⋯) =
+    ok (decide (↑s.data = [3#u8, 10#u8]))
+eq11 :
+  (NNG_Calls345.calls env).c1 core.cmp.PartialEqU8 s.data (Array.make 2#usize [3#u8, 11#u8] ⋯) =
+    ok (decide (↑s.data = [3#u8, 11#u8]))
+h10 : ¬↑s.data = [3#u8, 10#u8]
+h11 : ¬↑s.data = [3#u8, 11#u8]
+⊢ (!(LIB_Carriers.bytes s.data == [3, 10] || LIB_Carriers.bytes s.data == [3, 11]) ||
+      (NNG_ProjectFrames345.original s).accounts.length != 3) =
+    true
+'AspisR1.NNG_ParentAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -16,17 +16,11 @@ theorem source {W : Type} (s : Parent W) (env : RSL.Env) (p pub ck : Account)
  (NNG_Tree345.select (NNG_Calls345.calls env) s)=
  NNG_Phases345.bodyRun LIB_Instances.VL LIB_Instances.C (fun _=>true) NNG_Producer328.producer
  (NNG_ProjectFrames345.selected ⟨s,p,pub,ck⟩) env := by
- have a0 : Slice.index_usize s.accounts 0#usize=ok p := by
-  rw [index s.accounts 0#usize (by rw [accounts];decide)]
-  simp only [accounts,List.getElem_cons_zero]
- have a1 : Slice.index_usize s.accounts 1#usize=ok pub := by
-  rw [index s.accounts 1#usize (by rw [accounts];decide)]
-  simp only [accounts,List.getElem_cons_succ,List.getElem_cons_zero]
- have a2 : Slice.index_usize s.accounts 2#usize=ok ck := by
-  rw [index s.accounts 2#usize (by rw [accounts];decide)]
-  simp only [accounts,List.getElem_cons_succ,List.getElem_cons_zero]
- unfold NNG_Tree345.select
- rw [a0,a1,a2]
- exact NNG_SelectedAssociation345.source ⟨s,p,pub,ck⟩ env route
+ rcases s with ⟨program,accts,data,world,events⟩
+ rcases accts with ⟨xs,bound⟩
+ change xs=[p,pub,ck] at accounts
+ subst xs
+ exact NNG_SelectedAssociation345.source
+  ⟨⟨program,⟨[p,pub,ck],bound⟩,data,world,events⟩,p,pub,ck⟩ env route
 #print axioms source
 end AspisR1.NNG_SelectAssociation345

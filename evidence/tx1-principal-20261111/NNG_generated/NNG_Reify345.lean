@@ -28,8 +28,6 @@ theorem inverse (a : RSL.TX1_345.Args) (h : representable a) :
  unfold NNG_ProjectFrames345.original input
  dsimp only
  rw [NNG_ReifyAccounts345.key_source,accounts,LIBC_Bytes.to_native a.data h.2.1]
- cases a
- rfl
 #print axioms inverse
 
 theorem source (a : RSL.TX1_345.Args) (h : representable a) (env : RSL.Env) :

@@ -1,0 +1,104 @@
+'AspisR1.NNG_SelectAssociation345.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_SelectAssociation345.lean:21:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok _a[↑0#usize] = ok p
+Error: Application type mismatch: The argument
+  accounts
+has type
+  ↑s.accounts = [p, pub, ck]
+but is expected to have type
+  _a = [p, pub, ck]
+in the application
+  congrArg (fun _a => ↑0#usize < _a.length) accounts
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+W : Type
+s : Parent W
+env : RSL.Env
+p pub ck : Account
+accounts : ↑s.accounts = [p, pub, ck]
+route : (↑s.data).length = 2
+⊢ ok (↑s.accounts)[↑0#usize] = ok p
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.accounts
+  has type
+    Slice Account
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.accounts
+NNG_generated/NNG_SelectAssociation345.lean:25:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok _a[↑1#usize] = ok pub
+Error: Application type mismatch: The argument
+  accounts
+has type
+  ↑s.accounts = [p, pub, ck]
+but is expected to have type
+  _a = [p, pub, ck]
+in the application
+  congrArg (fun _a => ↑1#usize < _a.length) accounts
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+W : Type
+s : Parent W
+env : RSL.Env
+p pub ck : Account
+accounts : ↑s.accounts = [p, pub, ck]
+route : (↑s.data).length = 2
+a0 : s.accounts.index_usize 0#usize = ok p
+⊢ ok (↑s.accounts)[↑1#usize] = ok pub
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.accounts
+  has type
+    Slice Account
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.accounts
+NNG_generated/NNG_SelectAssociation345.lean:29:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok _a[↑2#usize] = ok ck
+Error: Application type mismatch: The argument
+  accounts
+has type
+  ↑s.accounts = [p, pub, ck]
+but is expected to have type
+  _a = [p, pub, ck]
+in the application
+  congrArg (fun _a => ↑2#usize < _a.length) accounts
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+W : Type
+s : Parent W
+env : RSL.Env
+p pub ck : Account
+accounts : ↑s.accounts = [p, pub, ck]
+route : (↑s.data).length = 2
+a0 : s.accounts.index_usize 0#usize = ok p
+a1 : s.accounts.index_usize 1#usize = ok pub
+⊢ ok (↑s.accounts)[↑2#usize] = ok ck
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.accounts
+  has type
+    Slice Account
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.accounts
+'AspisR1.NNG_SelectAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

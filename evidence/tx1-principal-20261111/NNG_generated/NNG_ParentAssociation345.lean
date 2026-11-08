@@ -10,7 +10,7 @@ theorem byteRoute (s : Slice U8) (a b : U8) :
  rw [← NNG_DecoderGraph345.bytes]
  apply Bool.eq_iff_iff.mpr
  simp only [beq_iff_eq,decide_eq_true_eq]
- exact NNG_Compare345.projected _ _
+ exact NNG_Compare345.projected s.val [a,b]
 #print axioms byteRoute
 
 /-- Full emitted-parent association, including route guards, account count
@@ -39,7 +39,11 @@ theorem source {W : Type} (s : Parent W) (env : RSL.Env) :
      have bad : RSL.TX1_345.badRoute (NNG_ProjectFrames345.original s)=true := by
       unfold RSL.TX1_345.badRoute
       change (!((LIB_Carriers.bytes s.data)==[3,10] || (LIB_Carriers.bytes s.data)==[3,11]) || _)=true
-      rw [byteRoute s.data 3#u8 10#u8,byteRoute s.data 3#u8 11#u8]
+      have r10 : (LIB_Carriers.bytes s.data ==[3,10])=decide (s.data.val=[3#u8,10#u8]) :=
+       byteRoute s.data 3#u8 10#u8
+      have r11 : (LIB_Carriers.bytes s.data ==[3,11])=decide (s.data.val=[3#u8,11#u8]) :=
+       byteRoute s.data 3#u8 11#u8
+      rw [r10,r11]
       simp only [h10,h11,decide_false,Bool.false_or,Bool.not_false,Bool.true_or]
      unfold NNG_Model345.interpretation NNG_Phases345.run
      rw [bad]
