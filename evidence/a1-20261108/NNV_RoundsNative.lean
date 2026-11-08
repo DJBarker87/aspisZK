@@ -1,5 +1,4 @@
 import NNV_FinishRounds
-import S1SemanticCodeRoundsExactV1
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNV_RoundsNative

@@ -1,5 +1,4 @@
 import NNV_FinishCircle
-import S1SemanticCodeCircleValidatedExactV1
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNV_FinishCircleNative

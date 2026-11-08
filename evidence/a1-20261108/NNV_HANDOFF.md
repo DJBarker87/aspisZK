@@ -127,3 +127,16 @@ returned-path cuts, not hypotheses about native success. Fixed finish/current
 op9 association and the composed A1 remain open. L055/L058/L056/L059/L060/
 L061/L062 preserve exact diagnostics; local namespace, abbreviation and Bool
 guard repairs are split into subsequent attempts. No cap or heartbeat changed.
+
+Continuation stage 3: L067/L070 close circle projection and the complete SAME
+finish-tail decomposition. L068/L069 derive both decode domains from parsed
+record provenance. L072/L074-L079 close Filled reservation/value, exact
+semantic/values expansion outputs, the current View port, the afterstate
+encoder continuation, and the adapter's common source getter. These do not
+establish full prepare/body continuation or A1. L066 exposed an obsolete
+unqualified S1Semantic import collision; the replacement removes that import
+and uses the coherent closure's existing declarations. L071 requires reducing
+the canonical front match before rewriting; L073 needs only small natural
+reductions. L075 preflight caught a missing private dependency before submission;
+the unused import was removed and the same still-unsubmitted attempt admitted
+again, without counting that preflight as a Lean scope.

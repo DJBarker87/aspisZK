@@ -1,4 +1,4 @@
-import NNV_PrepareBufferLengths
+import NNV_PrepareFrontCut
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NNV_PrepareValuesOutput

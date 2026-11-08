@@ -14,7 +14,9 @@ theorem returned (a : TX1_087.Args VL) (env : Env) (sem : Verified VL) (v : VL.V
  · exact len
  constructor
  · rw [List.length_take,len]
+   rfl
  · rw [List.length_drop,len]
+   rfl
 #print axioms returned
 end AspisR1.NNV_PrepareBufferLengths
 end

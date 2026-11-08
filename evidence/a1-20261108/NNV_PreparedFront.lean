@@ -15,6 +15,7 @@ theorem returned (a : TX1_087.Args VL) (env : Env) (p : VL.Prepared) (g : VL.E29
  | error e => rw [front] at called; cases called
  | ok pair =>
   rw [front] at called
+  dsimp only at called
   cases prep : LIB_Prepared.value (pair.1,pair.2,a.g) env with
   | mk reply scratch =>
    rw [prep] at called
