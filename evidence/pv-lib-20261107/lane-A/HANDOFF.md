@@ -161,3 +161,6 @@ SpawnHooks glue608. Raw FnPtr metadata is preserved, the actual source parent
 and fresh destructor frame are retained, and no Store transformer is supplied.
 Opaque/unsized/generic destructors remain explicitly unbound; this dispatch
 mechanism is not a whole SpawnHooks/Cell/last-strong adequacy result.
+47449 passed EmittedDropBinding: glue608's resolver clause and actual raw
+FnPtr normalization are discharged by the exact emitted program, rather than
+assumed at a native Drop boundary. Nested source/library adequacy remains open.

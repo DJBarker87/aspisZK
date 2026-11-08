@@ -15,6 +15,14 @@ for n in ['generate-intermediate-d685.py','generate-slice.py']:
  else:q.write_bytes(b)
  sources[n]=b.decode();helpers.append(dict(revision=R,path=p,retained=str(q),sha256=sha(b)))
 ns=dict(json=json);exec(compile(functions(sources['generate-intermediate-d685.py']),'pinned-helper-functions','exec'),ns)
+failures=[]
+original_instruction=ns['instruction']
+def checked_instruction(statement):
+ try:return original_instruction(statement)
+ except (KeyError,AssertionError) as error:
+  failures.append(dict(identity=statement.get('identity'),native_opcode=statement.get('native_opcode'),native=statement.get('native'),error=repr(error)))
+  raise
+ns['instruction']=checked_instruction
 conv=dict(ns=ns,parts=[],json=json);conv.update({n:ns[n]for n in ['data','arg','place','operand','site']});exec(compile(functions(sources['generate-slice.py']),'pinned-node-functions','exec'),conv)
 raw=lzma.decompress((E/'NativeInstructions.json.xz').read_bytes());p=json.loads(raw)
 assert sha(raw)=='fe0cbaedf427d3fdd1cd5e3dc8171728e82282d2f98b000f5a15d1cd37210a03'
@@ -22,9 +30,9 @@ rows=[]
 for fid in [486,584,608,214,168,122,128,454,14,4]:
  f=next(f for f in p['functions']if f['function']==fid);code=f['code'];r=dict(function=fid,code_sha256=sha(json.dumps(code,separators=(',',':')).encode()))
  if 'body'not in code:r.update(status='OPAQUE; no program invented');rows.append(r);continue
- conv['parts']=[]
+ conv['parts']=[];failures.clear()
  try:body=conv['block'](code['body'])
- except (KeyError,AssertionError)as err:r.update(status='CONVERSION GAP; no cleanup omitted',error=repr(err));rows.append(r);continue
+ except (KeyError,AssertionError)as err:r.update(status='CONVERSION GAP; no cleanup omitted',error=repr(err),failed_instructions=list(failures));rows.append(r);continue
  module='PV_LIB_A_Emitted'+str(fid);decls=['def '+n+' : '+t+' :=\n  '+v for n,t,v in conv['parts']]
  text='\n'.join(['import PV_STX2_SliceSyntax','set_option autoImplicit false','namespace '+module,'open PV_STX2_Syntax PV_STX2_SliceSyntax','/- Exact retained N95808 syntax, converted with unchanged pinned helpers. Syntax only. -/',*decls,'def program : PV_STX2_SliceSyntax.Program :=\n  ⟨'+str(fid)+', '+conv['data'](code['entry'])+', '+conv['data'](code['locals'])+', '+body+'⟩','#print axioms program','end '+module,''])
  q=Path('lean',module+'.lean')
