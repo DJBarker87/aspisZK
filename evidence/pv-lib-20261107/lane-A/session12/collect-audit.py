@@ -5,9 +5,11 @@ E=Path(__file__).parent;H='/home/dombarker/project-offloads/codex-pv-lib-2026110
 expected=json.loads((E/'AUDIT_ROOTS.json').read_text())['roots'];out=(E/f'out-{a}.log').read_text()
 results=[json.loads(l.split('NEP62_RESULT ',1)[1]) for l in out.splitlines() if l.startswith('NEP62_RESULT ')]
 assert len(results)==len(expected) and {r['root'] for r in results}==set(expected)
-assert all(r['equal'] and set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} for r in results)
-receipt=json.loads((E/f'receipt-{a}.json').read_text());assert receipt['accepted']
-(E/'RAW_AUDIT.json').write_text(json.dumps(dict(attempt=a,strict_raw=True,root_count=len(results),unresolved=0,summary_mismatches=0,roots=results,receipt=receipt),indent=2)+'\n')
+assert all(set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} for r in results)
+mismatches=[r['root'] for r in results if not r['equal']]
+assert mismatches==['PV_LIB_A_F6Constructors12.counter']
+receipt=json.loads((E/f'receipt-{a}.json').read_text());assert not receipt['accepted'] and receipt['exit']=='1'
+(E/'RAW_AUDIT.json').write_text(json.dumps(dict(attempt=a,strict_raw=True,root_count=len(results),unresolved=0,summary_mismatches=len(mismatches),strict_pass=False,roots=results,receipt=receipt),indent=2)+'\n')
 code='''import pathlib,hashlib,json,lzma
 p=pathlib.Path(%r)/'evidence/raw-audit';roots=%r
 files=[q for q in p.iterdir() if q.is_file() and any(q.name.startswith('NEP_pv-thread_'+r+'_') for r in roots)]
@@ -20,4 +22,4 @@ manifest=json.loads(r.stdout);(E/'RAW_GRAPH_MANIFEST.json').write_text(json.dump
 subprocess.run(['scp','dombarker@100.108.41.90:'+H+'/evidence/RAW_GRAPH_ARCHIVE_S12.json.xz',str(E/'RAW_GRAPH_ARCHIVE.json.xz')],check=True)
 assert hashlib.sha256((E/'RAW_GRAPH_ARCHIVE.json.xz').read_bytes()).hexdigest()==manifest['archive_sha256']
 (E/'RAW_GRAPH_ARCHIVE.json.sha256').write_text(manifest['uncompressed_sha256']+'\n')
-print(len(results),'strict roots passed')
+print(len(results),'strict roots retained; original EXIT1 preserved')

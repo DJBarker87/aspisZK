@@ -17,7 +17,7 @@ The full requested completion has NOT been achieved. See lane-A/session12/
 MODEL_FINDINGS.md and MAP_DELTA.json for exact theorem scope and remaining facts.
 
 All DEFERRED-POST-TARGET dispositions from D999/thread-5 remain unchanged.
-No final-manifest replay is authorized by these local support-only changes.
+No final-manifest replay was run for these local support-only changes.
 
 # Lane A session11 — D999 target refocus (authoritative current order)
 

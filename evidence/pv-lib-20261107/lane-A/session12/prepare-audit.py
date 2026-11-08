@@ -5,7 +5,7 @@ E=Path(__file__).parent
 accepted={}
 for p in sorted(E.glob('receipt-*.json')):
     r=json.loads(p.read_text())
-    if r['accepted'] and not r['runtime_audit'] and 'RawAudit' not in r['target']:
+    if r['accepted'] and not r['runtime_audit'] and 'RawAudit' not in r['target'] and r['target'] != 'PV_LIB_A_ConstructorSummary12':
         accepted[r['target']]=r
 support=[];roots=[]
 for module,r in accepted.items():
