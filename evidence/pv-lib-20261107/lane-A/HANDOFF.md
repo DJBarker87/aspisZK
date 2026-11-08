@@ -121,3 +121,9 @@ PV_LIB_StoreActionTable.v2 unchanged/importable. v2Source/sourceStep combine the
 new copy504/source-backed214/staged683 projections and retained pending phases.
 source_agreement uses the same OWNER base and resources. No full table or
 caller-history credit is claimed.
+47435 passed source count1/deallocation/root-frame lemmas. Polling review found
+that the simple ActionPolling/Table7 retry is NOT correct for reply-dependent
+CAS or Vec push/append: their pending projection is identity and completion
+must still apply the deferred operation. Those intermediate retry graphs earn
+no full-machine adequacy credit. A fixed deferred overlay follows; old models
+and all their results are retained unchanged.
