@@ -1,0 +1,50 @@
+{"attempt": "NNU_L076", "exit_status": 1, "wall_seconds": 27.423426253022626, "peak_rss_kib": "6817128", "swaps": "0", "print_axioms": ["'AspisR1.NNU_MerkleTerminal.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNU_MerkleTerminal.callback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNU_MerkleTerminal.constructed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNU_generated/NNU_MerkleTerminal.lean:99:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  base.op11 Port3_NativeBatchBody.multiproof.Arity.Two front
+in the target expression
+  (have ops := Port3_BatchStd.install base;
+    do
+    let s1 ← ok front
+    let o ← ops.op11 Port3_NativeBatchBody.multiproof.Arity.Two s1
+    let r ← ops.op1 o verifier.Error.Merkle
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let nodes ← ops.op3 proof slot
+        let a ← ops.op12
+        let i ← a.index_usize slot
+        if val1 > i then ok (done (idx, val, none))
+          else do
+    
+...
+f slot
+        let a ← ops.op12
+        let i ← a.index_usize slot
+        if val1 > i then ok (done (idx, val, none))
+          else do
+            let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+            let s2 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+            let ce ← core.slice.Slice.chunks_exact s2 8#usize
+            let (b, _) ←
+              ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                  (verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool ops D) ce ()
+            if b = true then ok (done (idx, val, none))
+              else do
+                let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                let s3 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                let (b1, idx1, val2) ← ops.op10 D () Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                  else ok (done (idx1, val2, none))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let _ ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (done (idx, val, none))) =
+    ok (done (outIdx, outVal, some (core.result.Result.Ok ())))
+'AspisR1.NNU_MerkleTerminal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNU_MerkleTerminal.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNU_MerkleTerminal.constructed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb2705b288d57451092a13d3bb0445752.scope; invocation ID: fab7d27c267a4a849477ad751c2e669b

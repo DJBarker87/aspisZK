@@ -55,3 +55,24 @@ length premise. L075 NNU_MerkleIteration.source composes ONE actual native
 active iteration on arbitrary scratch with the stated more/room/key/view/width/
 leaf observations. It is not a whole-loop/parent certificate; the caller must
 derive and propagate these local conditions.
+
+Terminal construction OPEN. L076/L077 could not rewrite the installed count
+projection to base.op11 inside the symbolic expression. That rewrite shape is
+retired. The split frame draft L078 did not elaborate its polymorphic op10
+projection (missing explicit implicit H); no theorem from this failed module
+receives credit. NNU_MerkleTerminal.lean.txt and
+NNU_MerkleTerminalFrame.lean.txt preserve exact rejected/current drafts;
+NNU_MerkleTail.lean.txt is an UNCOMPILED downstream draft and was never submitted.
+No failed terminal/frame module is imported in the accepted combined import.
+The next source repair is a standalone explicit-H projection law, followed by
+terminal reconstruction, invariant propagation and three-tree batch composition.
+No cap, timeout, heartbeat or recursion limit was raised.
+
+L079 NNU_MerkleKeys.source passes: SAME resume supplies canonical queries,
+and one sorted key array supplies BOTH the native/installed key-sort paths and
+KeyStream at batch1/each bounded tree. L080 NNU_COMBINED_IMPORT2 passes, with
+41 new-root audits, standard axioms only,wall30.836868458s,RSS6952768KiB,swap0.
+Continuation budget exhausted:40/40 scopes,23 pass,17 failed proof/type
+attempts,0 Kani,0 extraction. Historical total80/50pass/30failed. No final A2
+term or ledger row; raw ax2 NND_A2 audit not applicable to an undelivered term.
+Final member-by-member obligations are in NNU_REMAINING.md.

@@ -1,48 +1,96 @@
-# NNU A2 handoff
+# NNU A2 continuation handoff
 
-Final disposition: **A2 NOT DELIVERED; target not yet established.** All 40/40 authorized scopes are terminal: 27 exit0, 13 failed proof/import/type attempts; 0 Kani, 0 extraction. This job closes no ledger row.
+**A2 NOT DELIVERED; target not yet established.** Branch
+`codex/cx-a2-20261107`; receipts `evidence/a2-20261108/`.
+This replaces the previous40-scope disposition. Historical L001–L040 remain
+unchanged. The separately authorized continuation L041–L080 is now terminal:
+**40/40 scopes,23 exit0,17 failed proof/type attempts;0 Kani,0 extraction**.
+Total retained history:80 scopes,50 exit0,30 failed. No continuation timeout, memory kill,
+cap increase, heartbeat/depth increase or unchanged full replay occurred.
+No ledger row or final field is claimed.
 
-| Step | Final status / exact constant or open goal |
-|---|---|
-| 1 geometry | CLOSED: `AspisR1.NNU_Geometry.source`; `returned : AspisR1.NNH_Tx2OpenSlots.geometry` (L015) |
-| 2 query | CLOSED: `AspisR1.NNU_Query.source`; `returned : AspisR1.NNH_Tx2OpenSlots.query` (L029) |
-| 3 Merkle | OPEN: Port4B_Install.batch → NLP_NativeMerkle.action on SAME resume/arguments. Slot/query-bound/node/leaf laws pass (L031/L038). |
-| 4 offsets/common | All scalar offsets and SPLIT CLOSED (NNU_Offsets, L037); inactive slot and source-ordered common converse OPEN. |
-| 5 op11 | OPEN: `NNH_ExactRemainingTypes.tx2Op11`. |
-| 6 host field | OPEN: `RSL.TAS.NND_A2 (AspisR1.NNH_Run5bHost.S_host L0 copy std) NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0`. No delivered constant or type-equality example. |
+## Exact target and progress
 
-`NNU_COMBINED_IMPORT` (L040) imports NNH_Run5bCombined and EVERY accepted current NNU module in one scope: exit0, wall31.102162880823016s, peakRSS6950288KiB, swaps0. Limits6G/8G/Swap0/Tasks64, Lean v4.32.0 -j1 -M7000 -DElab.async=false. Source revision f9ce7766d0d (full revision and exact source/dependency hashes in L040 receipt). All printed exported roots have only propext/Classical.choice/Quot.sound. This is focused cached validation, not a release replay.
+The unchanged target is
+`RSL.TAS.NND_A2 (AspisR1.NNH_Run5bHost.S_host L0 copy std) NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0`.
+No term of that type or delivered-type `rfl` example exists.
 
-G0 support overlay: `/home/dombarker/project-offloads/codex-cx-a2-20261108/NNU_objects`, prepended to the reference-only run-5b paths in NNU_RUN5B_PATHS.json. **Use only the accepted modules in NNU_OVERLAY.json/NNU_VALIDATION.json.** NNU_Stage2Tail is uncredited and must not be imported. NNU_OVERLAY.json pins accepted object/sidecar hashes; NNU_IMPORTED_PINS.json pins all selected direct/Aeneas objects; NNU_BASE_PINS.json pins the inherited run-5b boundary/manifest/source inputs. No shared or sibling source/object was overwritten, copied into this overlay, moved or deleted.
+1. Geometry remains CLOSED: NNU_Geometry.source/returned (L015).
+2. Query remains CLOSED: NNU_Query.source/returned (L029).
+3. SAME-resume Merkle parent remains OPEN. New pointwise node/leaf laws,
+   row/height induction and actual binary SDK verifier transport pass without
+   all-partitions value equality or a physical-length cap:
+   NNU_MerkleLeaf/Node/Levels/Environment, MerkleValidity/Head/Root/Wrapper,
+   MerkleEndpoint.selected (L065), MerkleVerify.selected/sdk (L071).
+   MerkleNative.batch exposes SAME native batch success (L067).
+   MerkleChildren (L072), MerkleCount (L073), MerkleOpening (L074),
+   MerkleIteration (L075) and MerkleKeys (L079) establish the reached local
+   children, one actual native active iteration and SAME-resume sorted keys.
+   Still required: terminal reconstruction from SAME reads, propagation of
+   KeyStream/position/room/opening invariants, and ordered three-tree composition.
+4. Inactive is CLOSED: `NNU_Inactive.source / returned` (L052), exactly
+   `∀ bs : Slice U8, Port1_LibrarySource.decode bs = NJC_ClosedCalls.inactive bs`.
+   Structural Result/Option mapping evaluates no byte or parser buffer.
+   Offsets remain CLOSED (L037). NNU_CommonCuts.source (L063),
+   CommonResume.occurrence (L066), and CommonSelected.source (L068) derive
+   source-ordered SAME witnesses and installed geometry/query replies.
+   The full source-ordered common converse is OPEN.
+5. `NNH_ExactRemainingTypes.tx2Op11` remains OPEN, with its original reservation
+   equality/Dom064 and ACTUAL installed SDK reply. No substitute constant exists.
+6. Independent SAME-cut Stage2 support is CLOSED by NNU_Stage2Tail (L061),
+   compiled ALONE after fully qualifying adapter owners. emitPacket, tail and
+   returnedCuts derive packet/segment, Dom064, source success, native continuation
+   and emission from the SAME returned reference. Actual op11, guarded Returns,
+   corrected-host EnvRep and AMN.viaReturns2 still need enclosing composition.
 
-Evidence: NNU_ATTEMPTS.jsonl plus each L001–040 receipt contain exact command, target, source revision/hash, dependency/Aeneas fingerprint, exit, wall, RSS, swaps, admission and printed axioms. NNU_COMPILE.tsv gives one-line summaries. NNU_validate.py checks all40 receipts, successful current source hashes, admission exit0 AND allowed:true, count<6, disk≥40GB, exact caps and standard axioms. All scopes used fresh admission, one owned scope at a time. No transport retry, scope-share wait, disk wait or unresolved submission occurred.
+The exact parent/remaining statements and next deliverable are in
+NNU_REMAINING.md. All remaining members are Lean-only; none needs Kani or
+extraction. The stop is the full continuation budget. No new Root0, Realizes,
+hash-injectivity, success, representation or selector premise was added to a
+replacement headline. Adversary, RSL, trust list, soundness metric, privacy and
+two-transaction design are unchanged.
 
-No raw ax2 NND_A2 audit was run because no NND_A2 term was delivered; no audit of a substitute is claimed. No unchanged full regression/manifest, release/security/non-vacuity result or row closure is claimed. Frozen source, RSL, trust list, adversary, canonical domains, security metric and two-transaction design are unchanged. No shipped file changed, so no ELF rebuild trigger; inherited default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c34… are unchanged pins, not new builds. No key/wallet action. Stage commits are local; no push.
+## Failed terminal work and validation
 
-Budget stop at40/40. Exact remaining member statements and the failed tail draft are in NNU_REMAINING.md; all are Lean-only, with no Kani/extraction blocker.
+L076/L077 failed the same installed-count rewrite shape; it is retired.
+The split L078 frame draft failed its polymorphic op10 projection header
+(missing explicit implicit H). No theorem from a failed module is credited.
+These are archived as NNU_MerkleTerminal.lean.txt and
+NNU_MerkleTerminalFrame.lean.txt. NNU_MerkleTail.lean.txt is an UNCOMPILED
+and unsubmitted downstream draft. The next repair is a separately checked
+explicit-H projection lemma, then terminal reconstruction and loop induction.
+All failed sources and diagnostics remain in their attempt snapshots.
 
----
+`NNU_COMBINED_IMPORT2` (L080) imports NNH_Run5bCombined and every accepted
+current NNU module in ONE scope: exit0,wall30.836868458s,
+peakRSS6952768KiB,swaps0. It prints41 additional new-root audits alongside
+inherited roots; only propext/Classical.choice/Quot.sound or no axioms occur.
+This is focused cached validation, not a frozen-release replay.
+No raw ax2 NND_A2 audit/walker fixture run occurred because no NND_A2 term
+was delivered; no audit of a substitute is claimed.
 
-Target: `RSL.TAS.NND_A2 (AspisR1.NNH_Run5bHost.S_host L0 copy std) NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0`. Not delivered.
+Every scope used v4.32.0, lake env lean -j1 -M7000 -DElab.async=false,
+180s,MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64, fresh admission
+exit0 AND allowed:true, host scope count<6 and disk≥40GB. No share/admission
+wait, transport retry or unresolved submission occurred. Receipts/COMPILE.tsv
+record exact target, command, revision/source hash, selected dependency/Aeneas
+fingerprint, exit, wall, peak RSS, swap, limits and full axioms/errors.
+NNU_validate.py verifies all80 receipts, accepted current source hashes, caps,
+admissions, share/disk checks and standard axioms. NNU_OVERLAY.json pins the
+50 accepted objects, including unchanged historical pins; NNU_IMPORTED_PINS.json
+pins actual selected dependencies. No reference workspace/object was overwritten.
 
-Base 7f6c42c1ee5b146581362634ccce7da0295650b7. Budget 40 scopes, 0 Kani, 0 extraction. Read-only NNH run-5b selection by reference; own overlay `/home/dombarker/project-offloads/codex-cx-a2-20261108/NNU_objects`. No shipped sources or merged modules changed.
+The own runner allowance now admits only L041–L080 with80 total actual scopes;
+the validator ceiling matches. Other admission/cap/pinning checks remain.
+NNU_pin_overlay.py is read-only and records accepted object hashes/sizes without
+copying binaries. The private cache/overlay is retained at
+`/home/dombarker/project-offloads/codex-cx-a2-20261108/NNU_objects`.
+NNH/run-5b/run-6 inputs remain reference-only, with imported/base pins retained.
 
-Own serial client is adapted from NNH_run.py, preserving admission, host count, disk, caps, timeout, transport and dependency/Aeneas pin checks. Only output prefix, workspace, allowance and reference-only path selection change.
-
-Geometry progress: generic callback transport, standard terminal slots, index-error erasure, explicit terminal expression, and abstract advancing-step comparison are checked. L001 concrete callback reduction is retired after kernel-memory errors. L006/L007 simplification under the compiled outer match is retired; L010/L011 use an explicit terminal expression. L009 had owned transcription/name errors (core.ops was accidentally rewritten); L010 repairs them. No failed declaration receives credit.
-
-Stage 1 CLOSED: `AspisR1.NNU_Geometry.source` proves the full Result equality of the actual installed geometry op11 and `NJC_ClosedCalls.geometry`, at identical queries/start/finish, universally over residual missing data/environment/error/reservation. `AspisR1.NNU_Geometry.returned : AspisR1.NNH_Tx2OpenSlots.geometry`. Accepted L015; standard axioms only. No successful geometry precondition is needed for source. L014 omitted the direct owner import for the target Prop; L015 fixes that input mistake.
-
-Stage 2 CLOSED: `AspisR1.NNU_Query.source` proves full Result equality of the actual installed op6 and `NJJ_Common.query`, on SAME resume fields/next=10, returned powers, and SAME canonical pending initialization. `AspisR1.NNU_Query.returned : AspisR1.NNH_Tx2OpenSlots.query` (L029). Canonical gamma comes from the SAME resume; powers establish the dot-coefficient domain. Native field/carrier equalities, arbitrary accumulation and query iteration feed finite induction with NFS_QueryInvariant.step. L025 concrete base-case elaboration hit the default heartbeat limit; abstract action induction L027 replaces it. L026 needed a split of symbolic fuel for an Err state. No heartbeat/cap increase.
-
-Nominal arithmetic provenance: NNU_QueryFieldBase/QM follow the algebraic structure of the merged CurrentWideBaseBridge/CurrentWideQMBridge (session-b-current-wide-arithmetic-20261020), with the distinct SelectedMaskProbe target required by NBO_FieldSemantics. These new target equalities were compiled L017/L018, not credited from the old Qm31ArithmeticProbe target.
-
-Stage 3 partial: NNU_MerkleSlots.installed/same_resume (L031) pass. NNU_MerkleInventory (L032) prints the exact existing candidate interfaces. The actual Port4B_Install.batch → NLP_NativeMerkle.action parent bridge is absent; its exact selected-Ok statement and the unsuitable stronger-domain generic theorem are recorded in NNU_REMAINING.md. L030's obsolete direct import collided with the coherent RPz7 owner; L031 removed only that redundant import. No shared module was changed or rebuilt.
-
-Stage 4 arithmetic CLOSED, common converse OPEN: NNU_OffsetArithmetic.add/mul (L035), NNU_OffsetSubtract.sub (L036), NNU_Offsets (L037) derive all six compact offsets and SPLIT from symbolic checked-arithmetic laws. No full buffer is evaluated; concrete leaf checks are tiny numeral equalities only. L033 corrected explicit/implicit Aeneas spec arguments and Result annotations; L034 revealed subtraction's postcondition is a conjunction. The module was split by operation, retaining subtraction's bound conjunct and compiling both pieces independently. Retired run-5b scalar_tac/simp arithmetic on concrete constant graphs was not retried.
-
-Stage 3 digest support CLOSED: NNU_MerkleDigest.node/leaf (L038) identify the environment digest with rawOracle only on the exact node/leaf request shapes. This does not assert global invariance under repartitioning and does not close the Merkle parent.
-
-Stage 6 attempt L039 FAILED: NNU_Stage2Tail did not resolve the adapter namespace's Ops, Pubkey, OwnedAccount and ProgramError names inside its AspisR1-prefixed namespace. The draft is archived as NNU_Stage2Tail.lean.txt, excluded from the combined import and ALL credit; no failed term/axioms are accepted. No corrected draft is claimed compiled. The exact diagnostics and submitted bytes remain in L039. The independent Ref→packet/Stage2To064 and op44/op53/Returns/AMN composition is still open. The final remaining scope is reserved for the required combined import of already-checked modules.
+Only NNU evidence/source files changed. No shipped source, merged module,
+sibling worktree, ELF or key/wallet changed. Thus no ELF rebuild trigger fired;
+default f8c0ec72…,devnet63ad3e9c…,Pool e0e49c34… remain inherited pins,
+not new builds. No binary/object is committed; no file exceeds20MB.
+Stage commits are local, with plain messages; no push.
 
 target not yet established
