@@ -61,6 +61,9 @@ files={};sources=[]
 if kind=='seed':
  names=['NNM_seed_host.py','NNM_SEED_CONFIG.json']
  command=['python3','NNM_seed_host.py']
+elif kind=='rsl':
+ names=['NNM_rev4_sources/'+target+'.lean'];files[names[0]]=(E/'NNM_rev4_sources'/(target+'.lean')).read_text();sources=names[:]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNM_rev4_sources','-o','NNM_rev4/'+target+'.olean',names[0]]
 elif kind=='lean':
  names=['NNM_generated/'+target+'.lean'];p=E/(target+'.lean');files[names[0]]=p.read_text();sources=names[:]
  if target=='NNM_Statements':names+=['NNM_AUDIT_ROOTS.json']
@@ -84,7 +87,7 @@ import json,hashlib,re,shutil
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
-for n in ['NNM_native','NNM_objects','NNM_tmp']: (b/n).mkdir(exist_ok=True)
+for n in ['NNM_native','NNM_objects','NNM_rev4','NNM_tmp']: (b/n).mkdir(exist_ok=True)
 w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 for n in ['S2W_run_host.py','S2W_lean_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not(b/n).exists():shutil.copy2(w/n,b/n)
@@ -93,7 +96,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  if not p.exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGJ_native_seed/'+n,p)
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
-if x['kind']=='lean':modules+=re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+if x['kind'] in ['lean','rsl']:modules+=re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 elif x['kind']=='audit':modules+=['NNM_COMBINED_IMPORT']
 rels=set()
 for root in roots:
