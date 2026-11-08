@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SourceTransport15.lean:75:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+in the target expression
+  {
+      state :=
+        match PV_STX2_SliceMachine.Status.running c with
+        | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+        | x_1 =>
+          PV_LIB_SPEC_ReachedNative14.transition cut p
+            { frame := { activation := 0, remaining := [] }, callers := [],
+              store := { cells := fun x => none, nextActivation := 0 } }
+            x.state,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue x.state
+          (match PV_STX2_SliceMachine.Status.running c with
+          | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+          | x_1 =>
+            PV_LIB_SPEC_ReachedNative14.transition cut p
+              { frame := { activation := 0, remaining := [] }, callers := [],
+                store := { cells := fun x => none, nextActivation := 0 } }
+              x.state)
+          x.issued,
+      consumed := x.consumed } =
+    sourceStep p H x
+
+case running
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+n : ℕ
+ih : ∀ (x : Execution), Trace cut p H n x → PV_LIB_SPEC_ReachedNative14.run cut p n x = advance p H n x
+x : Execution
+trace : Trace cut p H (n + 1) x
+c : Config
+hs : x.state.current.status = PV_STX2_SliceMachine.Status.running c
+⊢ {
+      state :=
+        match PV_STX2_SliceMachine.Status.running c with
+        | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+        | x_1 =>
+          PV_LIB_SPEC_ReachedNative14.transition cut p
+            { frame := { activation := 0, remaining := [] }, callers := [],
+              store := { cells := fun x => none, nextActivation := 0 } }
+            x.state,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue x.state
+          (match PV_STX2_SliceMachine.Status.running c with
+          | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+          | x_1 =>
+            PV_LIB_SPEC_ReachedNative14.transition cut p
+              { frame := { activation := 0, remaining := [] }, callers := [],
+                store := { cells := fun x => none, nextActivation := 0 } }
+              x.state)
+          x.issued,
+      consumed := x.consumed } =
+    sourceStep p H x
+'PV_LIB_SPEC_SourceTransport15.Quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.transition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.sourceStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.Trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

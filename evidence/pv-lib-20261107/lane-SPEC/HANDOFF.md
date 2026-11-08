@@ -1,3 +1,27 @@
+# Session15 live checkpoint — original TLS prefix extended; task OPEN
+
+Continued27fa457421791364e945ac744b1c8c70cbdfde72, LOG D1003.
+TlsAt59.original59 extends the SAME original Entry14 input through the first
+TLS native getter469 at8039 and pointer-as_ref277 at8056. Both actual replies
+are consumed, their origins retained, and source return/destination bindings
+are computed. Source/physical ACTIVE agrees; world remains the entry world.
+The frame in TlsNative15.cut is STILL arbitrary native stack DATA: no original
+physical stack correspondence, reached295/454, full Values binding,
+cut92/registration113/ThreadInit14756, same-history ownership exports, full
+OwnInit joint witness or complete-premise contradiction is claimed.
+
+Lane A latest read-only source review is SESSION15_LANEA_INPUT.json (bfb474e2de8).
+All20 retained source pins match session14. Its later internal-entry histories
+use a corrected source-phase machine and do not give the original TLS prefix
+or an original f6-to-range join. No successor is silently substituted into v2.
+No model mismatch has yet been established in session15; type/elaboration
+failures are retained and changed before retry, never called contradictions.
+
+Current next Lean55509..55589; strict NEW-root audit has NOT run yet.
+No endpoint premise, T field, row status, frozen implementation or key changed.
+
+---
+
 # Session14 checkpoint — local bindings and prefix40; full task OPEN
 
 Continued453b405e622, LOG D1000. Final runtime ReachedNative14 and environment
