@@ -1,0 +1,55 @@
+{"attempt": "NNG_L925", "exit_status": 1, "wall_seconds": 18.243655138881877, "peak_rss_kib": "6805104", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Error328.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_Error328.target_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNG_Error328.target' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_Error328.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_Error328.lean:25:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (RS.lift Spec.alloc).seq ?k ?env ?o
+in the target expression
+  (match Except.error (error e) with
+      | Except.ok b => RS.pure b
+      | Except.error e =>
+        (RS.lift Spec.alloc).seq
+          ((RS.lift (Spec.emit (Event.log ("r1:error:" ++ LIB_Instances.VL.debugV e)))).seq
+            (RS.throw ProgramError.invalidInstructionData)))
+      env o ↔
+    o = { exit := Exit.ret (Except.error ProgramError.invalidInstructionData), events := events e } ∨
+      o = { exit := Exit.abort, events
+...
+c `rewrite` failed: Did not find an occurrence of the pattern
+  (RS.lift Spec.alloc).seq ?k ?env ?o
+in the target expression
+  (match Except.error (error e) with
+      | Except.ok b => RS.pure b
+      | Except.error e =>
+        (RS.lift Spec.alloc).seq
+          ((RS.lift (Spec.emit (Event.log ("r1:error:" ++ LIB_Instances.VL.debugV e)))).seq
+            (RS.throw ProgramError.invalidInstructionData)))
+      env o ↔
+    o = { exit := Exit.ret (Except.error ProgramError.invalidInstructionData), events := events e } ∨
+      o = { exit := Exit.abort, events := [] }
+
+e : NNG_Carriers328.Error
+env : Env
+o : Obs (Except ProgramError Bytes)
+⊢ (match Except.error (error e) with
+      | Except.ok b => RS.pure b
+      | Except.error e =>
+        (RS.lift Spec.alloc).seq
+          ((RS.lift (Spec.emit (Event.log ("r1:error:" ++ LIB_Instances.VL.debugV e)))).seq
+            (RS.throw ProgramError.invalidInstructionData)))
+      env o ↔
+    o = { exit := Exit.ret (Except.error ProgramError.invalidInstructionData), events := events e } ∨
+      o = { exit := Exit.abort, events := [] }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    error e
+  has type
+    LIB_VCarriers.VErr
+  but is expected to have type
+    LIB_Instances.VL.VErr
+  in the application
+    Except.error (error e)
+'AspisR1.NNG_Error328.target_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_Error328.target' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1e256f6d4cd4b39a5388303d62c160b.scope; invocation ID: 44e5547355a44f3a9b44b7329a20a91a

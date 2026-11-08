@@ -1,0 +1,28 @@
+'AspisR1.NNG_PendingDomain094.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_PendingDomain094.lean:52:67: error: unsolved goals
+env : RSL.Env
+b : LIB_VCarriers.Weights
+ea eb : List RSL.Event
+p : verifier.Prepared
+rho : NBF_PowerStep.Canonical p.rho
+raw : VTop_Stages.verifier.Accumulator
+run : LIBC_AccNew.model env = ok (core.result.Result.Ok raw)
+newA : LIBC_AccNew.child.run () env { exit := RSL.Exit.ret (Except.ok (LIBC_VStateCarriers.fromAcc raw)), events := ea }
+newB :
+  LIBC_WeightsNew.child.run (LIBC_VStateCarriers.fromAcc raw) env { exit := RSL.Exit.ret (Except.ok b), events := eb }
+fields :
+  env.reservation = true ∧
+    ↑raw.weights = List.replicate 64 Port2_Initial.zeroK ∧
+      raw.rhs = Port2_Initial.zeroE ∧ raw.power = Port2_Initial.oneK ∧ raw.next = 0#usize
+ae : raw = NFW_QueryEntry.initial
+pending :
+  Port3_PendingInstall.pending env.reservation NFW_QueryEntry.initial.weights.deref = ok (core.result.Result.Ok b)
+⊢ (↑(alloc.vec.Vec.deref ⟨List.replicate 64 NFW_QueryEntry.zeroQ, NFW_QueryEntry.weights._proof_2⟩)).length = 64
+NNG_generated/NNG_PendingDomain094.lean:53:59: warning: This simp argument is unused:
+  List.length_replicate
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵F̵W̵_̵Q̵u̵e̵r̵y̵E̵n̵t̵r̵y̵.̵i̵n̵i̵t̵i̵a̵l̵,̵N̵F̵W̵_̵Q̵u̵e̵r̵y̵E̵n̵t̵r̵y̵.̵w̵e̵i̵g̵h̵t̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵[̲N̲F̲W̲_̲Q̲u̲e̲r̲y̲E̲n̲t̲r̲y̲.̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲N̲F̲W̲_̲Q̲u̲e̲r̲y̲E̲n̲t̲r̲y̲.̲w̲e̲i̲g̲h̲t̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_PendingDomain094.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

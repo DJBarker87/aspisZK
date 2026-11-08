@@ -1,0 +1,39 @@
+{"attempt": "NNG_L859", "exit_status": 1, "wall_seconds": 20.001332660904154, "peak_rss_kib": "6797576", "swaps": "0", "print_axioms": ["'AspisR1.NNG_PrepareGraph094.observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_PrepareGraph094.occurrence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_PrepareGraph094.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_PrepareGraph094.lean:43:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNG_Observed136.observation NNG_PrepareTransport094.port (NNG_Events094.events ?env)
+    (invoke "TX1:087/prepare"
+      (NNG_PrepareTransport094.digest ?env, fromT9 (RSL.TX1_087.Args.public_ ?a),
+        NNG_Data137.bytes (RSL.TX1_087.Args.proof ?a), (), none, arr fromT3 (RSL.TX1_087.Args.g ?a))
+      (NNG_PrepareAdapter094.call ?env (NNG_PrepareTransport094.digest ?env) (fromT9 (RSL.TX1_087.Args.public_ ?a))
+        (NNG_Data137.bytes (RSL.TX1_087.Args.proof ?a)) () none 
+...
+r fromT3 (RSL.TX1_087.Args.g ?a))))
+in the target expression
+  RSL.Spec.call (fun x => RSL.TX1_087.Domain LIB_Instances.VL x none) (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+    a env
+    (NNG_Observed136.observation NNG_PrepareTransport094.port (NNG_Events094.events env)
+      (invoke "TX1:087/prepare"
+        (NNG_PrepareTransport094.digest env, fromT9 a.public_, NNG_Data137.bytes a.proof, (), none, arr fromT3 a.g)
+        (NNG_PrepareAdapter094.call env (NNG_PrepareTransport094.digest env) (fromT9 a.public_)
+          (NNG_Data137.bytes a.proof) () none (arr fromT3 a.g))))
+
+a : NNG_PrepareInput087.Args
+env : RSL.Env
+domain : RSL.TX1_087.Domain LIB_Instances.VL a none
+⊢ RSL.Spec.call (fun x => RSL.TX1_087.Domain LIB_Instances.VL x none) (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+    a env
+    (NNG_Observed136.observation NNG_PrepareTransport094.port (NNG_Events094.events env)
+      (invoke "TX1:087/prepare"
+        (NNG_PrepareTransport094.digest env, fromT9 a.public_, NNG_Data137.bytes a.proof, (), none, arr fromT3 a.g)
+        (NNG_PrepareAdapter094.call env (NNG_PrepareTransport094.digest env) (fromT9 a.public_)
+          (NNG_Data137.bytes a.proof) () none (arr fromT3 a.g))))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    RSL.Spec.call (fun x => RSL.TX1_087.Domain LIB_Instances.VL x none)
+      (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P) a env
+'AspisR1.NNG_PrepareGraph094.occurrence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb13f63d8da87462cb5abc0b40805644f.scope; invocation ID: 0871d3ebc9e6467b8724fd056072c1af

@@ -1,0 +1,45 @@
+{"attempt": "NNG_L892", "exit_status": 1, "wall_seconds": 19.48752325004898, "peak_rss_kib": "6794940", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ReferenceMatch094.normalize' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNG_ReferenceMatch094.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_ReferenceMatch094.normalize' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_ReferenceMatch094.lean:55:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Spec.map NNG_Reference094.normalized ?m
+in the target expression
+  (RE.bind
+      (Spec.map NNG_Reference094.normalized
+        (Spec.call (fun a => TX1_087.Domain NNG_Reference094.V a none)
+          (TX1_087.Ref NNG_Reference094.V NNG_Reference094.P)
+          { public_ := a.public_, proof := a.proof, g := NNG_Reference094.V.zeroE29 }))
+      fun pg =>
+      RE.bind (NNG_Reference094.V.accNew.run ()) fun a_1 =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT
+...
+t.error e))
+      fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      RE.bind (LIB_Instances.VL.accNew.run ()) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => RE.lift Spec.panic
+        | some folded =>
+          RE.seq (LIB_Instances.VL.batchMerkle.run (a.proof, p, folded, 0))
+            (RE.bind (LIB_Instances.VL.geometry.run (p, 0, 10)) fun geo =>
+              RE.bind (LIB_Instances.VL.weightsNew.run acc) fun pending =>
+                RE.bind (LIB_Instances.VL.queryLoop.run (a.proof, p, acc, g, geo, pending, 10)) fun r =>
+                  (RE.lift (LIB_Instances.VL.finish.run (r.2, r.1))).bind fun acc2 =>
+                    (RE.lift (LIB_Instances.VL.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind fun bytes =>
+                      RE.pure bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    NNG_Reference094.normalized
+  has type
+    Except NNG_Reference094.V.VErr NNG_Reference094.V.Prepared × NNG_Reference094.V.E29 →
+      Except NNG_Reference094.V.VErr (NNG_Reference094.V.Prepared × NNG_Reference094.V.E29)
+  but is expected to have type
+    Except NNG_Reference094.V.VErr NNG_Reference094.V.Prepared × NNG_Reference094.V.E29 →
+      Except NNG_Reference094.E (NNG_Reference094.V.Prepared × NNG_Reference094.V.E29)
+  in the application
+    Spec.map NNG_Reference094.normalized
+'AspisR1.NNG_ReferenceMatch094.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rea4b07ccb7564209ad768cc18123d0f1.scope; invocation ID: e83fc2dc3cc6403baf99680bd817f676

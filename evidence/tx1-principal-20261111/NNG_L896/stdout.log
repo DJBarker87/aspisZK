@@ -1,0 +1,33 @@
+NNG_generated/NNG_Candidate094.lean:22:3: error: 'change' tactic failed, pattern
+  NNG_ParseTail094.reference a obs env env
+    (observation NNG_Producer094.port (NNG_Events094.events env)
+      (NNG_PrepareTree094.f_guard (NNG_InstalledCalls094.calls env) (NNG_Input094.input a obs env)))
+is not definitionally equal to target
+  RSL.RE.seq (LIB_Instances.VL.parseShape.run a.proof)
+    (RSL.RE.seq (LIB_Instances.VL.canonicalScan.run a.proof)
+      (RSL.RE.bind
+        ((RSL.Spec.call (fun x => RSL.TX1_087.Domain LIB_Instances.VL x none)
+              (RSL.TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+              { public_ := a.public_, proof := a.proof, g := LIB_Instances.VL.zeroE29 }).bind
+          fun r =>
+          match r.1 with
+          | Except.ok p => RSL.Spec.pure (Except.ok (p, r.2))
+          | Except.error e => RSL.Spec.pure (Except.error e))
+        fun pg =>
+        have p := pg.1;
+        have g := pg.2;
+        RSL.RE.bind (LIB_Instances.VL.accNew.run ()) fun acc =>
+          match RSL.TX1_136.toB32 (RSL.slice a.proof RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1) with
+          | none => RSL.RE.lift RSL.Spec.panic
+          | some folded =>
+            RSL.RE.seq (LIB_Instances.VL.batchMerkle.run (a.proof, p, folded, 0))
+              (RSL.RE.bind (LIB_Instances.VL.geometry.run (p, 0, a.k)) fun geo =>
+                RSL.RE.bind (LIB_Instances.VL.weightsNew.run acc) fun pending =>
+                  RSL.RE.bind (LIB_Instances.VL.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                    (RSL.RE.lift (LIB_Instances.VL.finish.run (r.2, r.1))).bind fun acc2 =>
+                      (RSL.RE.lift (LIB_Instances.VL.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind
+                        fun bytes => RSL.RE.pure bytes)))
+    env
+    (observation NNG_ProducerFull094.port (NNG_Events094.events env)
+      (NNG_PrepareTree094.f_guard (NNG_InstalledCalls094.calls env) (NNG_Input094.input a obs env)))
+'AspisR1.NNG_Candidate094.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

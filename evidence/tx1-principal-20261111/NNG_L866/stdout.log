@@ -1,0 +1,15 @@
+NNG_generated/NNG_MapObservation094.lean:21:54: error: unsolved goals
+A B C : Type
+decode : A → B
+f : B → C
+events : Event → List RSL.Event
+code : Code A
+env : RSL.Env
+m : RSL.Spec B
+same : observation (fun a => f (decode a)) events code = mapObs f (observation decode events code)
+ev : List RSL.Event
+value : B
+he : observation decode events code = { exit := RSL.Exit.ret value, events := ev }
+law : m env { exit := RSL.Exit.ret value, events := ev }
+⊢ { exit := mapExit f (RSL.Exit.ret value), events := ev } = { exit := RSL.Exit.ret (f value), events := ev }
+'AspisR1.NNG_MapObservation094.mapped' depends on axioms: [propext, sorryAx]

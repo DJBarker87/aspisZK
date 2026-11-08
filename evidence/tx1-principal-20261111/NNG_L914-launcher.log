@@ -1,0 +1,41 @@
+{"attempt": "NNG_L914", "exit_status": 0, "wall_seconds": 18.403032517060637, "peak_rss_kib": "6805120", "swaps": "0", "print_axioms": []}
+def RSL.TX1_094.Ref : (V : RSL.VLib) → RSL.PreparedNew V → RSL.TX1_094.Args V → RSL.RE V.VErr RSL.Bytes :=
+fun V P a =>
+  @RSL.RE.seq V.VErr RSL.Bytes
+    (@RSL.RE.check V.VErr (@bne Nat (@instBEqOfDecidableEq Nat instDecidableEqNat) (@RSL.TX1_094.Args.k V a) RSL.SPLIT)
+      V.vParse)
+    (@RSL.RE.seq V.VErr RSL.Bytes
+      (@RSL.Child.run RSL.Bytes (Except V.VErr Unit) V.parseShape (@RSL.TX1_094.Args.proof V a))
+      (@RSL.RE.seq V.VErr RSL.Bytes
+        (@RSL.Child.run RSL.Bytes (Except V.VErr Unit) V.canonicalScan (@RSL.TX1_094.Args.proof V a))
+        (@RSL.RE.bind V.VErr (Prod V.Prepared V.E29) RSL.Bytes
+          (@RSL.Spec.bind (Prod (Except V.VErr V.Prepared) V.E29) (Except V.VErr 
+...
+stances.VL.Weights LIB_Instances.VL.Acc) LIB_Instances.VL.Acc
+                      LIB_Instances.VL.finish
+                      (@Prod.mk LIB_Instances.VL.Weights LIB_Instances.VL.Acc
+                        (@Prod.snd LIB_Instances.VL.Acc LIB_Instances.VL.Weights r)
+                        (@Prod.fst LIB_Instances.VL.Acc LIB_Instances.VL.Weights r))))
+                  fun acc2 =>
+                  @RSL.RE.bind LIB_VCarriers.VErr RSL.Bytes RSL.Bytes
+                    (@RSL.RE.lift LIB_VCarriers.VErr RSL.Bytes
+                      (@RSL.Child.run
+                        (Prod LIB_Instances.VL.Prepared (Prod LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes)))
+                        RSL.Bytes LIB_Instances.VL.checkpoint
+                        (@Prod.mk LIB_Instances.VL.Prepared (Prod LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes)) p
+                          (@Prod.mk LIB_Instances.VL.Acc (Prod RSL.Bytes RSL.Bytes) acc2
+                            (@Prod.mk RSL.Bytes RSL.Bytes (@RSL.TX1_094.Args.proof LIB_Instances.VL a)
+                              (@RSL.TX1_094.Args.public_bytes LIB_Instances.VL a))))))
+                    fun bytes => @RSL.RE.pure LIB_VCarriers.VErr RSL.Bytes bytes)
+def AspisR1.NNG_ParseTail094.reference : AspisR1.NNG_Input094.Args →
+  RSL.Observer → RSL.Env → RSL.RE LIB_VCarriers.VErr RSL.Bytes :=
+fun a obs env =>
+  @RSL.RE.seq LIB_VCarriers.VErr RSL.Bytes
+    (@RSL.Child.run RSL.Bytes (Except LIB_Instances.VL.VErr Unit) LIB_Instances.VL.parseShape
+      (@RSL.TX1_094.Args.proof LIB_Instances.VL a))
+    (@RSL.RE.seq LIB_VCarriers.VErr RSL.Bytes
+      (@RSL.Child.run RSL.Bytes (Except LIB_Instances.VL.VErr Unit) LIB_Instances.VL.canonicalScan
+        (@RSL.TX1_094.Args.proof LIB_Instances.VL a))
+      (AspisR1.NNG_ReferenceMatch094.original a))
+
+Running as unit: run-rb0d3b57b1ace4e6db71958ad265fb4ff.scope; invocation ID: 1f46d405f5b94b86b38551cd71971427

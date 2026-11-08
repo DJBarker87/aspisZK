@@ -1,0 +1,101 @@
+'AspisR1.NNG_TreeTail345.erase_child' depends on axioms: [propext, Classical.choice, Quot.sound]
+NNG_generated/NNG_TreeTail345.lean:42:92: error: unsolved goals
+case isFalse
+W : Type
+c : Calls
+s : Bounds W
+h✝ : ¬(s.proofData.len != s.proofEnd) = true
+⊢ (Std.bind
+      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) s.proofData
+        { «end» := s.proofStart })
+      fun a =>
+      Std.bind (c.c0 core.cmp.PartialEqU8 a s.candidate) fun a =>
+        erase
+          (if a = true then
+            pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            NMT_CallTree.bind (liftM (lift (s.proofStart.wrapping_add 8#usize))) fun offset =>
+              NMT_CallTree.bind (liftM (s.proofData.index_usize offset)) fun tag =>
+                NMT_CallTree.bind (liftM (c.c3 NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.S2))
+                  fun expected =>
+                  if (tag != expected) = true then
+                    pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                  else
+                    NMT_CallTree.bind (liftM (c.c5 s.statement)) fun pub =>
+                      NMT_CallTree.bind
+                        (liftM
+                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.proofData
+                            { start := s.proofStart, «end» := s.proofEnd }))
+                        fun proof =>
+                        NMT_CallTree.bind (liftM (s.data.index_usize 1#usize)) fun kbyte =>
+                          NMT_CallTree.bind (liftM (lift (UScalar.cast UScalarTy.Usize kbyte))) fun k =>
+                            tryChild (pub, s.publicData, proof, k) (c.c11 pub s.publicData proof k) fun checkpoint =>
+                              if (checkpoint.len != s.checkpointData.len) = true then
+                                pure
+                                  (core.result.Result.Err
+                                    NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                              else pure (core.result.Result.Ok checkpoint))) =
+    Std.bind
+      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) s.proofData
+        { «end» := s.proofStart })
+      fun proofPrefix =>
+      Std.bind (c.c0 core.cmp.PartialEqU8 proofPrefix s.candidate) fun mismatch =>
+        if mismatch = true then
+          ok (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          Std.bind (lift (s.proofStart.wrapping_add 8#usize)) fun offset =>
+            Std.bind (s.proofData.index_usize offset) fun tag =>
+              Std.bind (c.c3 NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.S2) fun expected =>
+                if (tag != expected) = true then
+                  ok (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                else
+                  Std.bind (c.c5 s.statement) fun pub =>
+                    Std.bind
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.proofData
+                        { start := s.proofStart, «end» := s.proofEnd })
+                      fun proof =>
+                      Std.bind (s.data.index_usize 1#usize) fun kbyte =>
+                        Std.bind (lift (UScalar.cast UScalarTy.Usize kbyte)) fun k =>
+                          tryStep (c.c11 pub s.publicData proof k) fun checkpoint =>
+                            if (checkpoint.len != s.checkpointData.len) = true then
+                              ok
+                                (core.result.Result.Err
+                                  NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                            else ok (core.result.Result.Ok checkpoint)
+NNG_generated/NNG_TreeTail345.lean:44:22: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:44:33: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:44:44: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲h̲i̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:44:55: warning: This simp argument is unused:
+  erase_child
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_TreeTail345.lean:47:68: warning: This simp argument is unused:
+  erase_child
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵c̵h̵i̵l̵d̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_TreeTail345.erase_tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNG_TreeTail345.erase_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

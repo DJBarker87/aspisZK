@@ -1,0 +1,44 @@
+{"attempt": "NNG_L913", "exit_status": 1, "wall_seconds": 18.471896852832288, "peak_rss_kib": "6801732", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ReferenceHead094.port' depends on axioms: [propext]", "'AspisR1.NNG_ReferenceHead094.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.NNG_ReferenceHead094.port' depends on axioms: [propext]
+NNG_generated/NNG_ReferenceHead094.lean:15:1: error: Tactic `rfl` failed: The left-hand side
+  (RE.check (a.k != SPLIT) LIB_Instances.VL.vParse).seq
+    (RE.seq (LIB_Instances.VL.parseShape.run a.proof)
+      (RE.seq (LIB_Instances.VL.canonicalScan.run a.proof)
+        (RE.bind
+          ((Spec.call (fun x => TX1_087.Domain LIB_Instances.VL x none) (TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+                { public_ := a.public_, proof := a.proof, g := LIB_Instances.VL.zeroE29 }).bind
+            fun r =>
+            match r.1 with
+            | Except.ok p => Spec.pure (Except.ok (p, r.2))
+            | Except.error e => S
+...
+nd fun acc2 =>
+                          (RE.lift (LIB_Instances.VL.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind
+                            fun bytes => RE.pure bytes)))) =
+    (RE.check (a.k != SPLIT) LIB_Instances.VL.vParse).seq
+      (RE.seq (LIB_Instances.VL.parseShape.run a.proof)
+        (RE.seq (LIB_Instances.VL.canonicalScan.run a.proof)
+          (RE.bind
+            ((Spec.call (fun x => TX1_087.Domain LIB_Instances.VL x none) (TX1_087.Ref LIB_Instances.VL LIB_Instances.P)
+                  { public_ := a.public_, proof := a.proof, g := LIB_Instances.VL.zeroE29 }).bind
+              fun r =>
+              match r.1 with
+              | Except.ok p => Spec.pure (Except.ok (p, r.2))
+              | Except.error e => Spec.pure (Except.error e))
+            fun pg =>
+            have p := pg.1;
+            have g := pg.2;
+            RE.bind (LIB_Instances.VL.accNew.run ()) fun acc =>
+              match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+              | none => RE.lift Spec.panic
+              | some folded =>
+                RE.seq (LIB_Instances.VL.batchMerkle.run (a.proof, p, folded, 0))
+                  (RE.bind (LIB_Instances.VL.geometry.run (p, 0, a.k)) fun geo =>
+                    RE.bind (LIB_Instances.VL.weightsNew.run acc) fun pending =>
+                      RE.bind (LIB_Instances.VL.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                        (RE.lift (LIB_Instances.VL.finish.run (r.2, r.1))).bind fun acc2 =>
+                          (RE.lift (LIB_Instances.VL.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind
+                            fun bytes => RE.pure bytes))))
+'AspisR1.NNG_ReferenceHead094.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3b5e8794bf034649838b312b225ec7c5.scope; invocation ID: 299ee103974e4fc19c7802555344cb58
