@@ -1,3 +1,23 @@
+# Session19 live — A-S16-2 repair ADOPTED; complete target OPEN
+
+Base b2663b3dfc2; LOG D1010/D1011; thread-29 and thread-29′ retained.
+Decision/evidence: SESSION19_ADOPTION.md, SESSION19_LANEA_INPUT.json.
+ActiveAdoption19 (55783) imports A's checked repair read-only in the exact
+J-c18-s16 cohort. Complete Execution preserved through141, original85,
+original141, world/replies85 and Values absence before85 transported by name.
+No transport of later contracts/joins is claimed. SPEC-C18 records that the
+contracted f207 call has inner8248 but consumes the actual outer8162 origin;
+old separate-top-level8248 requirement remains a diagnostic Before statement.
+New joins interface being compiled: PV_LIB_SPEC_LaneAJoins19, same literal
+milestones/order, history changed ONLY to adopted ActivePrefix17.history.
+No join inhabitant, native suffix reachability, universal contracts, full
+Values, ownership14756 or complete witness/contradiction established yet.
+55781 infrastructure failure (no Lean);55782 parser failure retained;55783
+pass exit0, wall0:02.51, peak4848984KiB, swap0, standard summary axioms.
+Strict new-root audit NOT YET RUN. Next Lean55784; raw55496.
+
+---
+
 # Session18 checkpoint — rebased original85; complete target OPEN
 
 Continued68795ef34cb758c72f9c544dd64bd581cc19fa68; D1007/thread-29′.

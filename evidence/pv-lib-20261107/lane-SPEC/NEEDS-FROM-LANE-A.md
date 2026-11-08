@@ -1,3 +1,18 @@
+# Session19: A-S16-2 repair adopted
+
+Focused55783 PASS. C successor history is ActiveAdoption19.history, definitionally
+ActivePrefix17.history. A's ActiveEnvironment17.step/run adopted read-only;
+EntryWorld18.Entry/Full.programs/v2/resources retained. Exact read-only source
+pin: SESSION19_LANEA_INPUT.json. original85/original141 are reused by name.
+
+Newest join target: PV_LIB_SPEC_LaneAJoins19.Joins, now being compiled. This is
+the literal LaneAJoins18 milestone/index/order interface on the adopted history.
+No values/native/representation/success assumption was added to any field.
+Old Joins18 remains the unchanged Before target on the stalling machine; its
+unproved later milestones cannot be silently transported through the repair.
+Do not rederive C native/Values/stack/ownership proofs. C will derive the
+inner8248 setter effect and outer8162 origin consumption on this history.
+
 # Thread-29′ interface, session18 (LOG D1007)
 
 Use NEW `lean/PV_LIB_SPEC_LaneAJoins18.lean`. The old LaneAJoins16 module is
