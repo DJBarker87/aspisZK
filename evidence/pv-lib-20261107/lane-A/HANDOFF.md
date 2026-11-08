@@ -1,66 +1,61 @@
-# Lane A session12 handoff — PARTIAL; full requested completion NOT achieved
+# Lane A session13 handoff — PARTIAL; requested completion NOT achieved
 
-Continued8abdcb48c52faeeb43f3f6144aed586a6a2569f4 on codex/pv-lib-20261107.
+Continued6dbfb38c6d1102dd828a716e9412043febf6c0da on codex/pv-lib-20261107.
 No push/merge/provider/implementation/frozen-spec/ledger/checker/Lane B/C edit.
 No row or endpoint premise closed. Target not yet established.
 
-D999/thread-5: OwnInit ends at ThreadInit14756. All inherited last-strong Arc,
-thread-end,scope-end,handles destructor dispositions remain DEFERRED-POST-TARGET
-in REMAINING and PLIB_MAP. No deferred cleanup was advanced. Prefix storage-dead
-of already-moved f6 temporaries is source administration, not destructor cleanup.
+FIRST fresh strict47498 PASS90/90 inherited roots with the CHANGED reached
+Returned.mk constructor-summary union. Original47497 stays EXIT1/no credit.
+Fresh exit0,wall0:08.47,peak6649640KiB,swap0,
+source561a2b93451e0bccd1473f9599eff15028e64e50. Reaudit graphs/roots/results use REAUDIT12_ names.
 
-Import PV_LIB_A_StoreActionTable12 for SAME PARTIAL phase-bearing prefix machine.
-Legacy PV_LIB_StoreActionTable.v2 and underlying DeferredActions.step unchanged.
-Carry the retained phase: Post93Prefix12.retained proves pending93's SAME store,
-wait token,world/events/frames cannot be reset by a later source-frontier segment.
+Import PV_LIB_A_StoreActionTable13 for SAME PARTIAL phase-bearing prefix
+machine. Legacy v2, DeferredActions and underlying OWNER step unchanged.
 
-RangeTo270History12.history is ONE corrected3400-to270 BODY-entry history:
-actual165 move and93 write/full reply; both3460 arms; Some captures3461..3471,
-closure3472,spawn3490;166 prologue,FULL269,captures and actual7934 entry. Unknown
-tags/failed reads and native failure/pending/divergence/abort frontiers retained.
-Existing165 semantics and its named returned branch are retained; no local-cell,
-read/decoder/desired-write premise. Starts AFTER handles,not original entry.
-RangeInvariant12 proves the ANY-iteration preparation/poll/delivery iterator
-facet and saturated successor; first2..16 derives from165/93. It is NOT a full
-loop backedge invariant; prior-iteration/callee framing remains open. No native93
-returned-value correspondence,full166/270 Post or14756 reachability claimed.
+F6IssuedHistory13.history is ONE f6 BODY-entry corrected history through
+FULL121/122/123/124, actual captures/1989 into125/5017 into219/FULL134 and9196
+issuance, or the first earlier stop. No captured-value/readback/decoder/desired-
+write premise. IntrinsicInvoke13.actual locally invokes316 from the exact
+emitted request; separate F316History13.run covers316 BODY-entry/FULL410 and
+metadata-selected11187 entry220. The linkage between those histories remains
+OPEN, as do220/208/15/actual handles268-to3400, native values/physical bindings,
+original-entry-to-f6 and complete f6 Post.
 
-F6History12.history continuously extends f6 BODY-entry through FULL124, or first
-121/122/123/source/124 stop, with actual operands,destinations,activations,
-stores/worlds/events/parent and suspended frames. F6Constructors12 applies
-EXISTING121/123 named facts at ACTUAL requests to derive held0/world frame;
-the lower facts remain parameters,not native runtime instances. Native122,
-Arc124 value/sparse physical binding,numbering/source resource environment,
-f125/callback chain-to3400,original-entry-to-f6 and full f6 Post remain OPEN.
-The f6 and range histories are still separate. F361 through14756 and lane C's
-OwnInit/source7 joint witnesses remain UNFINISHED. Latest read-only lane C
-handoff/revision pinned in session12/LANE_C_INPUT.json; no cohort mixing.
+RangeIteration13.history covers ANY iterator-bearing loop entry through actual
+93 source write/full reply and270 BODY entry on Some, None exit or earlier stop.
+CallFrame13 derives fresh-argument/return administrative frames only, not callee
+internal/native preservation. LoopBackedge13 proves seven source storage nodes
+AFTER3519 and actual3530 continue; NextIteration13 joins that explicit post3519
+input to the next target-prefix iteration. Whole-loop/callee induction remains
+OPEN. No3519 call or deferred destructor was executed to obtain this result.
+All D999/thread-5 DEFERRED-POST-TARGET dispositions remain unchanged.
 
-Verification:20 support modules,one driver and one existing-summary diagnostic
-accepted;11 changed-before-retry failed sources retained.33 focused scopes.
-ONE strict NEW-root audit47497 EXIT1:89/90 summaries agree;all walked axioms
-standard;unresolved0. wall0:08.49,peak6649708KiB,swap0,
-source8ffb2e3e9d70265c4a8a7512b980652738832958. Existing provider Returned.mk is
-reached at counter and has the missing standard constructor summary(55350).
-OFFLINE union reconciles90/90; original EXIT1/strict_pass=false retained. No
-raw rerun. See AUDIT_FINDING.md,RAW_AUDIT.json and RAW_RECONCILIATION.json;
-exact graphs/hashes/receipts retained. Diagnostic55350 adds NO declarations.
-Driver/walker unchanged except module/root arrays; launcher unchanged.
-All scopes6G/8G/swap0/Tasks64/-M7000 with standalone STREAMB_SLOTS=3 turn and
-admission. No memory kill,cap raise,host refusal,transport failure or ID exhaustion.
+No new361-through14756 history or complete OwnInit/source7 joint witness.
+Lane C read-only837de1e4872a70f54da24164b647a8df22cd959d/session14 is pinned.
+Cached295/empty454/concrete PARTIAL Values and original prefix40 are now bound
+locally there; physical original stack, reached native/resource contexts, growth/
+full Values and fixed-runtime/context-machine transport remain OPEN. Actual
+handles leaf268 supersedes dormant164 in this expanded path (SPEC-C12).
+Do not silently replace C's retained v2 by a source-phase projection. See
+session13/LANE_C_NEEDS.md and MODEL_FINDINGS.md for the full dependency order.
 
-All170 historical slot statuses/counts unchanged;qualified prefix attachments
-only. Endpoint premises removed0/added0/changed0,T fields0,closures0. D991:ZERO
-new byte images,total-image re-credit or unwritten-byte forgetting. No keys touched.
-No full manifest,Rust/runtime/Aeneas/SBF/release replay claimed. No live own scope.
+ONE final NEW-root47499 PASS113/113;exit0,wall0:08.69,
+peak6652028KiB,swap0,sourcec9a64ce807eb52b0c790605bc3af315632967699.
+Zero unresolved/summary disagreements; standard axioms only. Walker unchanged;
+final driver differs from the corrected reaudit only in module/root arrays.
+39 focused IDs55351..55389 spent:27 support passes,2 driver passes,10 retained
+changed-before-retry failures. No cap/heartbeat raise/OOM/refusal/transport
+failure. All scopes6G/8G/swap0/Tasks64/-M7000 with standalone STREAMB_SLOTS=3
+turn/admission. Exact receipts, hashes, graphs and failed inputs retained.
+Concrete-backedge reduction was replaced by symbolic Continue13. One staging
+mistake is explicitly recorded in MODEL_FINDINGS; only accepted final sources
+are credited. No own live matching scope remains.
 
-NEXT: full prefix iteration/callee framing and f6's actual f125/callback chain to
-connect the histories,including native122/Arc/frame/numbering/channel bindings;
-then361 through14756;then remaining lane C joint-witness/source7 table needs.
-Do NOT restart deferred post-target cleanup. Next focused55351–55389;
-raw47498–47499,then55090–55099,then55390–55399 for changed/new inputs only.
-For future strict audit of these roots,include the CHANGED reached Returned.mk
-summary union; do not repeat unchanged47497 or call its offline check strict PASS.
-
-Offline check:python3 evidence/pv-lib-20261107/lane-A/session12/validate.py
-MODEL_FINDINGS.md gives exact qualifications. Target not yet established.
+All170 historical slot statuses/counts unchanged; qualified attachments only.
+Endpoint premises removed0/added0/changed0,T fields0,row closures0. D991:ZERO
+new byte images,total-image re-credit or unwritten-byte forgetting. No keys
+were touched. No full-manifest,Rust/runtime/Aeneas/SBF/release replay claimed.
+Allocated Lean IDs are exhausted; further focused work needs newly assigned
+IDs. Next raw55090–55099,then55390–55399 for NEW/CHANGED inputs only; do not
+repeat either passing strict audit. Offline validation:
+python3 evidence/pv-lib-20261107/lane-A/session13/validate.py

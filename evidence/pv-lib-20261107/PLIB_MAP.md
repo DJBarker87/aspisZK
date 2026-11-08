@@ -1,3 +1,15 @@
+# Lane A session13 qualified prefix attachments
+
+No historical slot status/count changed. Import PV_LIB_A_StoreActionTable13
+for SAME partial phase-bearing machine. Continuous f6 BODY-entry now reaches
+actual125/219/FULL134/issued9196; separate316 source segment reaches220.
+The linkage, full loop/callee invariant,361-through14756 and complete joint
+witness remain OPEN. Any-iteration target prefix and exact local backedge are
+checked, without post-target handles/destructor replay. Full qualifications:
+lane-A/session13/MODEL_FINDINGS.md, MAP_DELTA.json and LANE_C_NEEDS.md.
+Original47497 remains failed; fresh inherited audit47498 uses changed union.
+No endpoint premise/T field/row closure or allocation image was added.
+
 # Lane A session12 qualified prefix support — PARTIAL
 
 `PV_LIB_A_RangeTo270History12.history`: SAME corrected source/OWNER history

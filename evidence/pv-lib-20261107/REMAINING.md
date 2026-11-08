@@ -1,3 +1,32 @@
+# Lane A session13 — PARTIAL; requested completion NOT achieved
+
+FIRST fresh strict47498 passed90 inherited roots with the corrected reached
+Returned.mk summary union. Original47497 remains EXIT1/no credit.
+
+F6IssuedHistory13.history continuously reaches actual9196 issuance from f6
+BODY entry through125/219/FULL134. IntrinsicInvoke13.actual and the separate
+F316History13.run cover exact callback invocation and316 entry-through220.
+Their linkage is OPEN. RangeIteration13 covers any iterator-bearing loop
+entry through270; NextIteration13 joins post3519 source administration/backedge
+to the next prefix. Prior-callee internal iterator framing remains OPEN.
+
+NEXT: derive actual callback/native source representations on that same f6
+history; connect318/316/220/208/15 and actual handles268 to3400; derive full
+callee/loop/registry/resource/numbering invariants; connect270/361 through14756;
+then lane C's COMPLETE OwnInit/source7 conjunction. No new361 history or joint
+witness was proved. See lane-A/session13/MODEL_FINDINGS.md and LANE_C_NEEDS.md.
+Lane C session14 now has cached295/empty454/concrete PARTIAL Values and prefix40;
+physical original stack, reached bindings and full table/transport remain open.
+No stale claim that those are wholly unbound is intended.
+
+Import PV_LIB_A_StoreActionTable13 for qualified source-phase exports. SAME
+partial machine; legacy v2 unchanged. All historical statuses, endpoint/T
+premises and DEFERRED-POST-TARGET dispositions remain unchanged. No deferred
+callee/destructor was advanced. The requested backedge proof is only source
+storage/continue administration from an explicit post3519 input.
+Lean55351–55389 are spent; raw47498 is the fresh inherited-root gate and47499
+is the ONE new-root gate. No full manifest/runtime replay.
+
 # Lane A session12 — PARTIAL; target not established
 
 Qualified corrected history now joins source3400 through270 BODY entry,
