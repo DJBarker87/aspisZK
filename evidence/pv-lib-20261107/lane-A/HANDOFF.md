@@ -1,6 +1,13 @@
-# Session14 live checkpoint — callback linkage checked; full task OPEN
+# Session14 live checkpoint — fixed-table f6-to15 checked; full task OPEN
 
-Continued74f750e69d7, LOG D1004. New accepted stable names:
+Continued74f750e69d7, LOG D1004. Latest accepted stable name:
+`PV_LIB_A_F6To15Fixed14.history` / `certified` uses ONE preinstalled
+`PV_LIB_A_SpawnEnter12.enter270Programs` resolver through actual
+f6/125/219/FULL134/318/316/FULL410/220/208/15 BODY entry, or the first earlier
+stop/source phase. No phase-specific table change or selector/readback/success
+premise. Six native boundaries retain ALL replies. Native values/physical
+source bindings, full callee/LoopInvariant and original entry remain OPEN.
+Earlier accepted stable names:
 `PV_LIB_A_F6CallbackHistory14.history` joins the actual f6 BODY entry through
 f125/219/FULL134 and source-derived9196 selection into316, retaining the full
 suspended parent and every earlier stop/source phase. No selector, callback

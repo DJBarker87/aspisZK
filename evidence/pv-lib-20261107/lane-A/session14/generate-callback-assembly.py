@@ -38,7 +38,7 @@ for i,(m,n,h,p) in enumerate(segs):
  else:cost=f'{m}.steps{n} C';finish=f'{m}.after{n} C'+(' H' if h else '')
  s+=f'    lift ({cost}) ({finish})'+(',' if i<len(segs)-1 else '')+'\n'
 s+='''  ]
-def prefix (C : Carrier OWNER Data) (H : Handler) := chain (segments C H)
+def route (C : Carrier OWNER Data) (H : Handler) := chain (segments C H)
 
 /-- SAME fixed resolver from f6 entry through actual125/219/318/316/220/208
 and15 BODY entry. Every native answer and every source gap stays at its actual
@@ -48,11 +48,11 @@ theorem certified (base : Carrier OWNER Data) (b : Bool) (K : Control)
     (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : Resources) (encode : Encode)
     (H : Handler) (values : Values OWNER PV_RJ4IDB.NativeEvent) :
     let C := PV_THR2_EntryDynamic.carrier base b
-    Certified C K (programs P) resources encode H values (prefix C H) := by
+    Certified C K (programs P) resources encode H values (route C H) := by
   intro C
   apply chained
   intro x hx
-  simp only [segments,List.mem_cons,List.mem_singleton] at hx
+  simp [segments] at hx
   rcases hx with '''+' | '.join(['h'+str(i) for i in range(len(segs))])+ '\n'
 for i,(m,n,h,p) in enumerate(segs):
  s+='  · subst x\n    apply lifted\n'
@@ -70,11 +70,11 @@ theorem history (C : Carrier OWNER Data) (b : Bool) (K : Control)
     (es : List PV_RJ4IDB.NativeEvent) (stack : List Config) :
     let B := PV_LIB_A_F6Counter11.carrier C b
     let q : SourceState := ⟨⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F6.live.body},parents,s⟩,w,es⟩,stack⟩,none⟩
-    advance B K (programs P) resources encode H values ((prefix B H).steps q) q = (prefix B H).after q :=
+    advance B K (programs P) resources encode H values ((route B H).steps q) q = (route B H).after q :=
   certified (PV_THR2_ThreadFields.carrier (PV_THR2_ScopeLiterals.carrier C)) b K P resources encode H values _
 
 #print axioms segments
-#print axioms prefix
+#print axioms route
 #print axioms certified
 #print axioms history
 end PV_LIB_A_F6To15Fixed14
