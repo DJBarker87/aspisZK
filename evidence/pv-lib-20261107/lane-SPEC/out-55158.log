@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:34:17: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:35:20: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ArcPhysicalGap13.lean:22:49: error: unsolved goals
+regs : PV_LIB_SPEC_CallbackStores.Registers
+p : Parameters
+c : Config
+fn : Data
+a : ℕ
+args : List Data
+w : OWNER
+raw : Reply OWNER Event Data
+ignored value : Data
+count : ℕ
+function : PV_THR2_OffPath.functionId fn = some 360
+native : PV_LIB_SPEC_CallbackRuntime.native regs p c (PV_STX2_Native.Request.child fn a args) w = some raw
+returned : raw.answer = Answer.returned (Aeneas.Std.Result.ok ignored)
+source : PV_LIB_SPEC_BoundRuntime.arc (runtime p).carrier c.store w args = some (value, count)
+ordinary : PV_LIB_SPEC_BoundRuntime.allocationToken (PV_STX2_Native.Request.child fn a args) = false
+bounded : count ≤ PV_THR2_LibrarySemantics_ArcClone.maxRefcount
+branch :
+  PV_LIB_SPEC_CallbackRuntime.valueAnswer regs p c (PV_STX2_Native.Request.child fn a args) w =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok value), world := w, events := raw.events }
+⊢ ∃ out,
+    PV_LIB_SPEC_CallbackRuntime.answer regs p c (PV_STX2_Native.Request.child fn a args) w = some out ∧
+      out.world.world.memory = w.world.memory
+'PV_LIB_SPEC_ArcPhysicalGap13.drops_physical_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ArcPhysicalGap13.byte_conflict' does not depend on any axioms
