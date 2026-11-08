@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ScopePayloadIdentityGap14.lean:36:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (stored s a slot atomicKind cellKind strong weak thread panicked 1).cells
+    { activation := (root a slot).activation, localIndex := (root a slot).localIndex }
+in the target expression
+  (((stored s a slot atomicKind cellKind strong weak thread panicked 1).cells (root a slot)).bind fun root =>
+      readFields (carrier C b) { activation := a, localIndex := slot, fields := [2, 0, 0, 0] }.fields root) =
+    some (Data.number 0)
+
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+a slot : ℕ
+atomicKind cellKind strong weak thread panicked sv wv : Data
+cell :
+  (stored s a slot atomicKind cellKind strong weak thread panicked 1).cells
+      { activation := (root a slot).activation, localIndex := (root a slot).localIndex } =
+    some
+      (PV_THR2_KeyValues.pack PV_THR2_Packet124Aggregate13.source.2.2.1
+        [sv, wv, payload atomicKind cellKind thread panicked 0])
+fields :
+  some
+      (PV_THR2_KeyValues.pack PV_THR2_Packet124Aggregate13.source.2.2.1
+        [sv, wv, payload atomicKind cellKind thread panicked 0]) =
+    some
+      (PV_THR2_KeyValues.pack PV_THR2_Packet124Aggregate13.source.2.2.1
+        [sv, wv, payload atomicKind cellKind thread panicked 0])
+⊢ (((stored s a slot atomicKind cellKind strong weak thread panicked 1).cells (root a slot)).bind fun root =>
+      readFields (carrier C b) { activation := a, localIndex := slot, fields := [2, 0, 0, 0] }.fields root) =
+    some (Data.number 0)
+'PV_LIB_A_ScopePayloadIdentityGap14.initial' depends on axioms: [propext]
+'PV_LIB_A_ScopePayloadIdentityGap14.not_fixed_payload' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ScopePayloadIdentityGap14.checked' depends on axioms: [propext, sorryAx, Quot.sound]
