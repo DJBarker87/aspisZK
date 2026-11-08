@@ -5,8 +5,10 @@ B=Path.cwd();mode=sys.argv[1]
 for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:(B/('NLX_'+n)).write_bytes((B/('NNL_'+n)).read_bytes())
 E=B/'NNL_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='retention':
+ r=subprocess.run([sys.executable,'NNL_batch.py','finalscan']);assert r.returncode==0,'Corrected final scan failed'
+ for suffix in ['json','log','time']:(E/('NNL_FINAL_SCAN.'+suffix)).write_bytes((B/('NNL_audit/finalscan/scan.'+suffix)).read_bytes())
  exec(compile((B/'NNL_pin.py').read_text(),'NNL_pin.py','exec'));sys.exit(0)
-if mode=='scan':jobs=[('scan',['NNL_native/NNL_Driver','scan'])]
+if mode in ['scan','finalscan']:jobs=[('scan',['NNL_native/NNL_Driver','scan'])]
 elif mode=='fixtures':jobs=[('fixtures',['NNL_native/NNL_ProofDriver','fixtures'])]
 else:
  parts=mode.removeprefix('batch').split('-');start=int(parts[0]);end=int(parts[-1]);jobs=[('proof'+str(i),['NNL_native/NNL_ProofDriver','proof'+str(i)])for i in range(start,end+1)]

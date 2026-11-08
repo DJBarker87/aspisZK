@@ -24,6 +24,41 @@ open AspisR1
 #print axioms LIB_ParseShapeTotal.source
 
 open AspisR1
+#print axioms LIB_FullInstances.canonical
+#print axioms LIB_FullInstances.deployed_exact
+#print axioms LIB_FullInstances.pool_exact
+#print axioms LIB_FullInstances.prepared_exact
+#print axioms LIB_FullInstances.statement_exact
+#print axioms LIB_FullInstances.tas064
+#print axioms LIB_FullInstances.tas213
+#print axioms LIB_FullInstances.tas217
+#print axioms LIB_FullInstances.tas221
+#print axioms LIB_FullInstances.tas233
+#print axioms LIB_FullInstances.tas234
+#print axioms LIB_FullInstances.tas240
+#print axioms LIB_FullInstances.tas241
+#print axioms LIB_FullInstances.tas242
+#print axioms LIB_FullInstances.v0_exact
+#print axioms LIB_FullInstances.vl_exact
+#print axioms LIB_ParseShape094.empty_reference
+#print axioms LIB_ParseShape094.rejected
+#print axioms LIB_ParseShape094.width_not_required
+#print axioms LIB_ParseShapeTotal.closed086
+#print axioms LIB_ParseShapeTotal.domain
+#print axioms LIB_ParseShapeTotal.frozen_wrong_length
+#print axioms LIB_ParseShapeTotal.functional
+#print axioms LIB_ParseShapeTotal.graph
+#print axioms LIB_ParseShapeTotal.rejected
+#print axioms LIB_ParseShapeTotal.returns
+#print axioms LIB_ParseShapeTotal.source
+#print axioms LIB_ParseShapeTotal.wrong_length
+#print axioms LIB_ParseShapeTotal.wrong_length_native
+#print axioms LIB_VTx1A.parseShape_domain
+#print axioms LIB_VTx1A.parseShape_functional
+#print axioms RSL.TX1_094.domain_needs_P1880
+#print axioms RSL.TX1_094.rejects_constErr
+#print axioms RSL.TX1_328.ref_admits_abort
+#print axioms RSL.TX1_328.rejects_silentRet
 open Lean Elab Command
 set_option pp.all true
 run_cmd do

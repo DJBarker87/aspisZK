@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NNL_20261111';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+if(E/'NNL_HOLD').exists():sys.exit(75)
 a,kind,target=sys.argv[1:];assert re.fullmatch('NNL_L[0-9]{3}',a) and 1<=int(a[-3:])<=60 and not(E/a).exists()
 guard=E/'NNL_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def event(x):
@@ -70,7 +71,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNL_native/NNL_Driver',*names]
 elif kind=='audit':
  names=['NNL_batch.py','NNL_AUDIT_ROOTS.json','NNL_AUDIT_MODULES.json','NNL_EXPECTED_IMPORTS.jsonl']
- if target=='retention':names+=['NNL_pin.py','NNL_PREDECESSOR_PINS.json']
+ if target=='retention':names+=['NNL_pin.py','NNL_PREDECESSOR_PINS.json','NNL_EXPECTED_FIXTURES.json','NNL_EXPECTED_OBJECT_REPLACEMENTS.json']
  command=['python3','NNL_batch.py',target]
 else:raise ValueError(kind)
 for n in names:
@@ -120,7 +121,7 @@ if {kind!r}=='audit':
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
    if q.exists():
     raw=q.read_bytes();d=b/'NNL_raw';d.mkdir(exist_ok=True);z=d/(q.name+'.xz');z.write_bytes(lzma.compress(raw,preset=1));s=d/(q.name+'.sha256');s.write_text(hashlib.sha256(raw).hexdigest()+'\\n');names+=[z,s]
- for n in ['NNL_LOADED_scan.jsonl','NNL_TOOL_PINS.json','NNL_CLOSURE_PINS.json.xz','NNL_CLOSURE_PINS.json.sha256','NNL_EXPORT.json','NNL_PREDECESSOR_COMPARISON.json']:
+ for n in ['NNL_LOADED_scan.jsonl','NNL_TOOL_PINS.json','NNL_CLOSURE_PINS.json.xz','NNL_CLOSURE_PINS.json.sha256','NNL_EXPORT.json','NNL_PREDECESSOR_COMPARISON.json','NNL_GATE_INTEGRITY.json']:
   if(b/n).is_file():names.append(b/n)
 if {kind!r}=='seed':
  names += [b/n for n in ['NNL_CACHE_IMPORTS.json.xz','NNL_CACHE_IMPORTS.json.sha256','NNL_SOURCE_PINS.json','NNL_RAW_BINARY.json']if(b/n).is_file()]
