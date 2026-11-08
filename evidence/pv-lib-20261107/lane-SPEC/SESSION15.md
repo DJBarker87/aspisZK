@@ -58,3 +58,7 @@ PV_LIB_SPEC_Tls278Bound15 compiled 55523, cohort w3: exit0, wall 0:03.12, peak 4
 PV_LIB_SPEC_Tls278Reached15 compiled 55524, cohort w3: exit0, wall 0:02.21, peak 4814392KiB, swap 0; source 9496d378d0e5d65a646943ff42bee9fb438bf0db; standard summary axioms only.
 
 PV_LIB_SPEC_RawAuditSession15 compiled 55525, cohort w3: exit0, wall 0:00.85, peak 1591088KiB, swap 0; source aaeef55b9dd5ce68dfd285ae3055876007d51c3f; standard summary axioms only.
+
+Metadata collection input mistake: executing the retained projection helper in the collector namespace overwrote its lane variable and temporarily wrote own SESSION15_TLS_SOURCE.json at the worktree root. Moved that own metadata file into lane-SPEC immediately; no compile/host action or other file changed. Collection resumed with distinct variable names. Final write-boundary check includes every pending file.
+
+Final strict audit55491: exit0,128/128 roots,wall0:51.18,peak6939284KiB,swap0,revisione673a783054b848756841d6630a488e164cfdf25. Only standard axioms,zero unresolved or disagreements; no raw rerun. Final host inventory has only init.scope. Full requested task OPEN; no complete witness or complete-premise contradiction.

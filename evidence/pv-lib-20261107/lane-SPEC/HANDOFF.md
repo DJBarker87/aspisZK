@@ -1,24 +1,43 @@
-# Session15 live checkpoint — original TLS prefix extended; task OPEN
+# Session15 checkpoint — original63/2 native replies; full task OPEN
 
 Continued27fa457421791364e945ac744b1c8c70cbdfde72, LOG D1003.
-TlsAt59.original59 extends the SAME original Entry14 input through the first
-TLS native getter469 at8039 and pointer-as_ref277 at8056. Both actual replies
-are consumed, their origins retained, and source return/destination bindings
-are computed. Source/physical ACTIVE agrees; world remains the entry world.
-The frame in TlsNative15.cut is STILL arbitrary native stack DATA: no original
-physical stack correspondence, reached295/454, full Values binding,
-cut92/registration113/ThreadInit14756, same-history ownership exports, full
-OwnInit joint witness or complete-premise contradiction is claimed.
+TlsAt63.original63 extends the SAME original Entry14 input from40 through
+actual469 getter8039 and raw-pointer as_ref277/8056; both native replies are
+consumed with exact origins and full child/caller return bindings. The complete
+entry Pre holds on the SAME entry world. Source/physical ACTIVE false agrees.
+Tls278Reached15.reached applies the typed Result::Ok answer at the ORIGINAL
+8074/function278 poll at63. That answer is NOT yet consumed into original64.
+SourceTransport15/SourceProjection15 provide one trace-indexed lift;
+Tls278Lift15 reuses the named provider source4-step theorem BY NAME.
 
-Lane A latest read-only source review is SESSION15_LANEA_INPUT.json (bfb474e2de8).
-All20 retained source pins match session14. Its later internal-entry histories
-use a corrected source-phase machine and do not give the original TLS prefix
-or an original f6-to-range join. No successor is silently substituted into v2.
-No model mismatch has yet been established in session15; type/elaboration
-failures are retained and changed before retry, never called contradictions.
+Physical stack Frame is STILL arbitrary DATA; original rsp/&run/stack grant
+correspondence, reached295/454, FULL Values/source/growth/layout binding,
+cut92/registration113/ThreadInit14756 history, same-history ownership exports,
+full OwnInit witness and COMPLETE-premise contradiction all remain OPEN.
+No rows, endpoint premises, T fields, frozen contracts/implementation changed.
+No new checked SPEC-C13 model mismatch; local elaboration errors were repaired
+and work continued. SESSION15_ADEQUACY.md is the detailed scope authority.
 
-Current next Lean55509..55589; strict NEW-root audit has NOT run yet.
-No endpoint premise, T field, row status, frozen implementation or key changed.
+Lane A bfb474e2de8 reviewed read-only;20 reused source pins identical to14.
+Its internal-entry phase-bearing histories do not supply original TLS/stack or
+the missing f6-to-range join; no successor silently substituted into v2.
+
+Focused55455..55489/55500..55525:30 passes(including driver),31 retained
+changed-before-retry failures. ONE strict NEW-root55491 PASS128/128:exit0,
+wall0:51.18,peak6939284KiB,swap0,sourcee673a783054b848756841d6630a488e164cfdf25.
+Standard axioms only;zero unresolved/summary disagreements. Unchanged walker
+and collector;exact graphs/hashes/receipts/provenance retained. All scopes
+6G/8G/swap0/Tasks64/-M7000,one at a time. No OOM/refusal/cap increase;
+turn.sh printed transient disappeared-/proc warnings but exited0 throughout.
+No own live scope. Metadata helper's transient own-file path mistake and repair
+are recorded in SESSION15.md; final write-boundary check PASS.
+
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session15.py
+Next Lean55526..55589; raw55492..55499 only for changed/new inputs; ranges are
+NOT exhausted. Next consume the bound278, bind279 and forwarded18/replacement,
+construct ORIGINAL physical stack map/reached295/454/full Values, then92/113/
+14756, apply allBridged/SourceInitBoxOwnership/decodeBridged THERE and establish
+or refute the COMPLETE joint witness. No full manifest/push/merge/key action.
 
 ---
 
