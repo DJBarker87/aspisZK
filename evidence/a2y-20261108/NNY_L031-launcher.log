@@ -1,0 +1,44 @@
+{"attempt": "NNY_L031", "exit_status": 1, "wall_seconds": 28.100787277100608, "peak_rss_kib": "6835616", "swaps": "0", "print_axioms": ["'AspisR1.NNY_MerkleShared.treeCode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNY_MerkleShared.slotBound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNY_MerkleShared.tree' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NNY_MerkleShared.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNY_MerkleShared.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNY_generated/NNY_MerkleShared.lean:102:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  roots.index_usize (↑0)#usize
+in the target expression
+  (have idx := Array.repeat 16#usize 0#u32;
+    have a := Array.repeat 32#usize 0#u8;
+    have val := Array.repeat 16#usize a;
+    do
+    let root0 ← roots.index_usize 0#usize
+    let root1 ← roots.index_usize 1#usize
+    let root2 ← roots.index_usize 2#usize
+    let (r, idx1, val1) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+          (VTop_Checkpoint.digest D) proof queries root0 k 0#usize idx val ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+
+...
+ root1 k 1#usize idx1 val1 ()
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let (r2, _, _) ←
+              Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install Port4B_Install.leaves)
+                  (VTop_Checkpoint.digest D) proof queries root2 k 2#usize idx2 val2 ()
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.NNY_MerkleShared.treeCode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleShared.slotBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleShared.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleShared.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNY_MerkleShared.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1be98bb97664d0d8850f27b22929cd2.scope; invocation ID: 43d8956879ed4ecebd8f3d760cb397e4
