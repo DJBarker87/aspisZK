@@ -21,12 +21,13 @@ for r in receipts:
   if 'systemd-run' in cmd:
    for cap in ['MemoryHigh=6G','MemoryMax=8G','MemorySwapMax=0','TasksMax=64']:assert cap in cmd,(r['attempt'],cap)
  if r.get('accepted') and 'swaps' in r:assert str(r['swaps'])=='0',r['attempt']
-assert {r['attempt'] for r in receipts if not r.get('accepted')}=={56500,56516,56520,56535,56537,56539,56551,56552,56556,56560,56561,56562,56563}
+assert {r['attempt'] for r in receipts if not r.get('accepted')}=={56500,56516,56520,56535,56537,56539,56551,56552,56556,56560,56561,56562,56563,56590}
 statement=json.loads(files['evidence/STATEMENT_COHERENCE.json']);assert statement['statement_differences']==0 and statement['source_groups']==47 and statement['expr_equal_count']==55
 comp=statement['comparisons'];assert len(comp)==47
 alpha=[json.loads(l) for l in files['evidence/out-56565.log'].splitlines() if l.startswith('{')];assert len(alpha)==55 and all(r['compatible'] and r['expr_equal'] and r['same_levels'] for r in alpha)
 expected=set(i['root_provenance']);groups=json.loads(lzma.decompress((E/'SNAPSHOT_PLAN.json.xz').read_bytes()));assert expected<={r for g in groups for r in g['roots']}
-audits=[r for r in receipts if r['target']=='audit'];assert len(audits)==1 and audits[0]['accepted'] and audits[0]['exit']==0
+audits=[r for r in receipts if r['target']=='audit' and r['accepted']];assert len(audits)==1 and audits[0]['exit']==0
+assert [r['attempt'] for r in receipts if r['target']=='audit' and not r['accepted']]==[56590]
 a=audits[0]['attempt'];union=json.loads(files[f'evidence/UNION_AUDIT-{a}.json']);assert union['strict_pass'] and union['same_frozen_object_mapping'];results=union['roots'];assert len(results)==len(expected) and {r['root'] for r in results}==expected
 assert all(r['equal'] and set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} for r in results)
 source=pathlib.Path('lean/PV_LIB_V1_RawAudit4.lean').read_text();base=pathlib.Path('lean/PV_LIB_SPEC_RawAuditSession19.lean').read_text()
@@ -37,8 +38,24 @@ def strip_arrays(s):
  a=s.index('    (',s.index('let (modules, roots) :='));b=s.index('\n  let env ←',a)
  return s[:a]+s[b:]
 assert strip_arrays(source)==strip_arrays(base)
+narrow=pathlib.Path('lean/PV_LIB_V1_RawAuditNarrow.lean').read_text()
+def erase_selection(s):
+ a=s.index('  let (modules, roots)');b=s.index('  let env ←',a)
+ return s[:a]+s[b:]
+assert erase_selection(narrow)==erase_selection(base)
+cfg=json.loads((E/'NARROW_ROOT_BATCHES.json').read_text());assert {r for b in cfg['batches'] for r in b['roots']}==expected
+assert len([r for b in cfg['batches'] for r in b['roots']])==len(expected)
+assert len(union['batches'])==len(cfg['batches'])
+assert len({b['driver_object_sha256'] for b in union['batches']})==1
+for b,c in zip(union['batches'],cfg['batches']):
+ payload=json.dumps(dict(modules=c['modules'],roots=c['roots']),sort_keys=True)+'\n'
+ assert b['selection_sha256']==hashlib.sha256(payload.encode()).hexdigest()
+ assert b['exit']==0 and b['accepted'] and int(b['swaps'])==0
+assert json.loads(files['evidence/COHORT_CANONICAL_FREEZE_CHECK.json'])['unchanged']
+compat=[json.loads(l) for l in files['evidence/out-56558.log'].splitlines() if l.startswith('{')][-1];assert compat['compatible']
+
 changed=subprocess.check_output(['git','diff','--name-only',i['source_revision']],text=True).splitlines();repairs=json.loads((E/'IMPORT_CANONICALIZATION.json').read_text())['changes']
-allowed={v['path'] for v in repairs.values()}|{'lean/PV_LIB_V1_StatementSnapshot.lean','lean/PV_LIB_V1_RawAudit2.lean','lean/PV_LIB_V1_RawAudit3.lean','lean/PV_LIB_V1_RawAudit4.lean','lean/PV_LIB_V1_ModuleDeclarations2.lean','lean/PV_LIB_V1_DeclarationCohort.lean','lean/PV_LIB_V1_StatementAlpha.lean'}|{str(p) for p in pathlib.Path('lean').glob('PV_LIB_V1_RawAuditBatch*.lean')}
+allowed={v['path'] for v in repairs.values()}|{'lean/PV_LIB_V1_StatementSnapshot.lean','lean/PV_LIB_V1_RawAudit2.lean','lean/PV_LIB_V1_RawAudit3.lean','lean/PV_LIB_V1_RawAudit4.lean','lean/PV_LIB_V1_ModuleDeclarations2.lean','lean/PV_LIB_V1_DeclarationCohort.lean','lean/PV_LIB_V1_StatementAlpha.lean','lean/PV_LIB_V1_RawAuditNarrow.lean'}|{str(p) for p in pathlib.Path('lean').glob('PV_LIB_V1_RawAuditBatch*.lean')}
 assert all(p.startswith('evidence/pv-lib-20261107/') or p in allowed for p in changed)
 for v in repairs.values():
  before=subprocess.check_output(['git','show',i['source_revision']+':'+v['path']],text=True);after=pathlib.Path(v['path']).read_text()

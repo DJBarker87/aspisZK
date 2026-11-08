@@ -1,11 +1,11 @@
 """Admitted serial tool compile, statement comparison, or sole final raw audit."""
 import pathlib,json,subprocess,shlex,sys,time
 E=pathlib.Path('evidence/pv-lib-20261107/v1-coherence');V='/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/v1-coherence';host='dombarker@100.108.41.90';a=int(sys.argv[1]);mode=sys.argv[2]
-assert 56500<=a<=56589 if mode!='audit' else 56590<=a<=56599
+assert 56500<=a<=56589 if not mode.startswith('audit') else 56590<=a<=56599
 assert not (E/f'turn-{a}.json').exists()
 cmd=['ssh',host,'STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh'];t=time.time();r=subprocess.run(cmd,capture_output=True,text=True);turn=dict(attempt=a,command=cmd,exit=r.returncode,wall=time.time()-t,stdout=r.stdout,stderr=r.stderr);(E/f'turn-{a}.json').write_text(json.dumps(turn,indent=2));assert r.returncode==0
 files={}
-for name in ['PV_LIB_V1_StatementSnapshot','PV_LIB_V1_RawAudit4','PV_LIB_V1_ModuleDeclarations2','PV_LIB_V1_DeclarationCohort','PV_LIB_V1_StatementAlpha']:files['sources-canonical/'+name+'.lean']=pathlib.Path('lean',name+'.lean').read_text()
+for name in ['PV_LIB_V1_StatementSnapshot','PV_LIB_V1_RawAudit4','PV_LIB_V1_ModuleDeclarations2','PV_LIB_V1_DeclarationCohort','PV_LIB_V1_StatementAlpha','PV_LIB_V1_RawAuditNarrow']:files['sources-canonical/'+name+'.lean']=pathlib.Path('lean',name+'.lean').read_text()
 for name in ['run-snapshots.py']:files[name]=(E/name).read_text()
 files['AUDIT_ROOTS.json']=(E/'AUDIT_ROOTS.json').read_text()
 files['INVENTORY.json']=(E/'INVENTORY.json').read_text()
@@ -16,6 +16,7 @@ for b in json.loads(files['ROOT_BATCHES.json'])['batches']:
  files['sources-canonical/'+b['name']+'.lean']=pathlib.Path('lean',b['name']+'.lean').read_text()
 files['compile-root-batches.py']=(E/'compile-root-batches.py').read_text()
 files['run-final-audit.py']=(E/'run-final-audit.py').read_text()
+files['NARROW_ROOT_BATCHES.json']=(E/'NARROW_ROOT_BATCHES.json').read_text()
 code=r'''
 import pathlib,json,sys,subprocess,time,hashlib,re,os
 x=json.load(sys.stdin);a=x['attempt'];mode=x['mode'];V=pathlib.Path('HOST');E=V/'evidence';O=V/'objects-canonical'
@@ -37,8 +38,8 @@ with (E/f'admission-{a}.log').open('w') as f:r=subprocess.run(['python3',str(sca
 admit=json.load(open(E/f'admission-{a}.json'))
 if r.returncode or admit.get('allowed') is not True:
  (E/f'receipt-{a}.json').write_text(json.dumps(dict(exit=r.returncode,accepted=False,refusal=True,epoch=time.time())));sys.exit(78)
-if mode in ['compile-snapshot','compile-audit','compile-declarations','compile-compatibility','compile-alpha']:
- m={'compile-snapshot':'PV_LIB_V1_StatementSnapshot','compile-audit':'PV_LIB_V1_RawAudit4','compile-declarations':'PV_LIB_V1_ModuleDeclarations2','compile-compatibility':'PV_LIB_V1_DeclarationCohort','compile-alpha':'PV_LIB_V1_StatementAlpha'}[mode]
+if mode in ['compile-snapshot','compile-audit','compile-declarations','compile-compatibility','compile-alpha','compile-narrow']:
+ m={'compile-snapshot':'PV_LIB_V1_StatementSnapshot','compile-audit':'PV_LIB_V1_RawAudit4','compile-declarations':'PV_LIB_V1_ModuleDeclarations2','compile-compatibility':'PV_LIB_V1_DeclarationCohort','compile-alpha':'PV_LIB_V1_StatementAlpha','compile-narrow':'PV_LIB_V1_RawAuditNarrow'}[mode]
  assert not (O/(m+'.olean')).exists()
  inner=['python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(V/'J.json'),str(O),str(V/'sources-canonical'),str(O/(m+'.olean')),str(V/'sources-canonical'/(m+'.lean')),'7000']
 elif mode in ['cache-imports','declarations','compatibility','alpha']:
@@ -57,9 +58,9 @@ elif mode in ['cache-imports','declarations','compatibility','alpha']:
  inner=['python3',str(V/'cache-imports-run.py'),str(V/'J.json'),str(V/('sources-canonical/PV_LIB_V1_ModuleDeclarations2.lean' if mode=='declarations' else 'sources-canonical/PV_LIB_V1_DeclarationCohort.lean' if mode=='compatibility' else 'sources-canonical/PV_LIB_V1_StatementAlpha.lean' if mode=='alpha' else 'sources-canonical/PV_LIB_V1_StatementSnapshot.lean')),str(V/'cache-imports-request.json')]
 elif mode=='compile-batches':inner=['python3',str(V/'compile-root-batches.py'),str(a)]
 elif mode=='snapshots':inner=['python3',str(V/'run-snapshots.py'),str(a)]
-elif mode=='audit':
+elif mode in ['audit','audit-focus']:
  plan=json.load(open(V/'PLAN.json'));assert all((O/(m+'.olean')).exists() for m in plan['order'])
- inner=['timeout','7200','python3',str(V/'run-final-audit.py'),str(a)]
+ inner=['timeout','7200','python3',str(V/'run-final-audit.py'),str(a)]+(['focus'] if mode=='audit-focus' else [])
 else:raise RuntimeError(mode)
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-lib-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(E/f'time-{a}.log')]+inner
 with (E/f'out-{a}.log').open('w') as f:

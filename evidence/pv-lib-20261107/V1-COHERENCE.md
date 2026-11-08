@@ -272,3 +272,24 @@ unfolded or repaired on this account. STATEMENT_COHERENCE records4307 merged roo
 The failed/cohort-specific checkpoints remain retained and are not promoted to
 successful aggregate audit evidence. The canonical object/source freeze check
 passed unchanged after these comparisons.
+
+
+### COH-6: buffered strict-audit memory, changed root-array shape
+
+The first aggregate strict union attempt 56590 FAILED in its first 125-root
+batch with `excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)` under Lean -M7000. Aggregate
+exit1, wall0:37.97, peak7168780KiB, swaps0, source27993341c495ea9107b742c011745b6ed725bebb.
+It emitted no buffered result records; 99 partial raw graph files were retained
+in failed-56590-graphs.json.xz before their filenames were reused. This is not
+a pass and does not establish any union coverage.
+
+The replacement changes only the module/root array acquisition to immutable
+JSON selections of at most25 roots. The collector and private importAll walker
+are byte-identical to Session19 outside array selection. One driver object is
+used for every selection; per-selection hashes and the driver object hash are
+recorded. No source proof or cap changed. Compile56566 passed: exit0,
+wall0:00.96, peak1586816KiB, swaps0, standard axioms. Focused diagnostic56591
+passed75 roots across three selections including the earlier failing region:
+exit0, wall0:42.34, peak7064200KiB, swaps0. This diagnostic is not counted as a
+union audit. The replacement aggregate56592 is in progress, covering173
+disjoint selections in ONE capped scope using the same frozen canonical cohort.
