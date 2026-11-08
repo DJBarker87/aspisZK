@@ -13,3 +13,5 @@ PV_LIB_SPEC_SparsePacketHandler compiled 44921, cohort w3: exit0, wall 0:03.18, 
 PV_LIB_SPEC_SparseRuntime compiled 44924, cohort w3: exit0, wall 0:02.77, peak 4770036KiB, swap 0; source a19d776821678926f39b6d464a1b9221a2591ce6; standard summary axioms only.
 
 PV_LIB_SPEC_CallbackCutCheck compiled 44928, cohort w3: exit0, wall 0:02.67, peak 4742816KiB, swap 0; source f166e988bd532e2d8ef2a7f81c52eebd2a7358c8; standard summary axioms only.
+
+PV_LIB_SPEC_SparseHistory compiled 44929, cohort w3: exit0, wall 0:02.57, peak 4765568KiB, swap 0; source ed237c46f2f25298339550a21d6bb92297608eb4; standard summary axioms only.

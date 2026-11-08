@@ -167,3 +167,31 @@ refinement could forget uninitialized payload; it would require an explicit
 proof and statement, not silent equality. A lane-local replacement should use
 a sparse byte image and frame unwritten bytes. The old provider is retained.
 No endpoint or T field is changed.
+
+## SPEC-C5 — callback allocation cut uses the post-allocation store (session8)
+
+CHECKED by PV_LIB_SPEC_CallbackCutCheck, attempt44928, exit0, wall0:02.67,
+peak4742816KiB, swap0; source prior HEAD recorded in receipt44928; standard
+summary axioms only. Frozen N95807 source: F361.live.body[92]=node125,
+source13923 BoxNew; [93]=node126 storage-dead13924;
+[94]=node127 call14113 (ManuallyDrop constructor). The existing lane-owned
+PV_LIB_SPEC_OwnInitFull.AllocationWitness requires
+`callback.frame.remaining = PV_THR2_F361.live.body.drop 94`, then uses
+`callback.store` as the PRE13923 store in ClosureBoxAllocation.reply and
+PacketBoxBacking.root. `backing_after_return` proves that the backing selected
+by the singleton call's returnedStore differs from the pre-call backing,
+for every input store/activation/payload/result. Thus the asserted association
+of that94 cut with the actual13923 allocation is false. The correct source
+allocation cut is92, before issuance, with the actual issued activation and
+site-bound resources; registration remains113 and ready remains129.
+
+Before (verbatim):
+`callback.frame.remaining = PV_THR2_F361.live.body.drop 94`
+After (source correction for the new sparse witness statement):
+`callback.frame.remaining = PV_THR2_F361.live.body.drop 92`
+The compiled historical module is retained, never edited. New correction is
+lane-local; no shared COMMON/ledger/package or provider change. No existing
+full-joint theorem is withdrawn: none was proved. This is a CHECKED LOCAL
+source/statement contradiction, NOT a theorem negating the complete OwnInit
+existential or all successful original-entry histories. It must not be used
+as credit for that stronger alternative deliverable.
