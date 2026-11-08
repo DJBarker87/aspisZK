@@ -1,15 +1,35 @@
-# Session14 in progress — target OPEN; audit not yet run
+# Session14 checkpoint — local bindings and prefix40; full task OPEN
 
-Continued453b405e622, LOG D1000. ReachedNative14/ReachedEnvironment14 are the
-current assembly, with concrete PARTIAL Values14; full growth/source adequacy
-is open.295 cached minimum and454 initialized-empty TLS adapters are installed
-and checked through the final handler; original reachability is NOT claimed.
-RawVec14 repairs dormant164/native268 dispatch (SPEC-C12); frozen statements
-and v2 are untouched. Source prefix through25 is checked continuously from
-the SAME complete Entry14.Pre world; TLS entry continuation is being composed.
-Physical original stack, cut92/ThreadInit history, SAME-HISTORY exports and the
-complete OwnInit witness/negation remain OPEN. One strict new-root audit still
-to run. See SESSION14.md for exact focused receipts.
+Continued453b405e622, LOG D1000. Final runtime ReachedNative14 and environment
+ReachedEnvironment14 install cached native295, initialized-empty native454,
+and concrete PARTIAL Values14. The assembled295/454 local checks pass;
+original reachability and full Values growth/layout/source adequacy remain OPEN.
+SPEC-C12 repairs dormant164 versus actual native268 dispatch; frozen v2 and
+all eighteen historical contract statements remain unchanged.
+
+The SAME Entry14 world satisfies the complete retained entry Pre. A continuous
+original-entry model prefix reaches step40 (F170 entry); no native answer has
+been consumed there. This does NOT establish original physical stack pairing,
+cut92/ThreadInit14756 history, nonvacuous SAME-HISTORY exports, the complete
+OwnInit joint witness, or a complete-premise contradiction. All remain OPEN.
+SESSION14_ADEQUACY.md is the detailed scope authority. No rows or endpoint
+premises changed; no T change. Latest read-only lane A8817604 retains the same
+20 reused source pins; no successor machine substituted into v2.
+
+Focused55400..55454:31 passes including driver,24 retained failures changed
+before retry. ONE strict NEW-root55490 PASS205/205: exit0,wall1:32.72,
+peak6986412KiB,swap0,source7733bf963b07a94698597ec6bcdbc76af414a347.
+Standard axioms only; zero unresolved/collector disagreements; unchanged
+walker/collector; exact graphs, hashes, receipts and failed sources retained.
+All scopes6G/8G/swap0/Tasks64/-M7000,one at a time. No refusal/OOM or cap
+increase. No own matching live scope remains. No shared/provider/implementation,
+key, full-manifest, push or merge action.
+
+Offline check: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session14.py
+Next unused Lean55455..55489; raw55491..55499 only for changed/new inputs.
+Next derive the first original TLS native prefix and original physical stack
+map/reached295/454 bindings, then cut92/registration113/14756, named ownership
+exports there, and the COMPLETE joint witness or checked negation.
 
 ---
 
