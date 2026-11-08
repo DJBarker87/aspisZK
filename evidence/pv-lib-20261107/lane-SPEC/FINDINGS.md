@@ -295,3 +295,26 @@ joint existential. No successful original-entry history through cut92, full
 joint witness, row closure or endpoint premise removal is claimed. The full
 requested task remains open. SPEC-C6's per-type repair is independent and is
 not withdrawn by this later missing callback suffix.
+
+## SPEC-C8 — Thread native-word facet and site ScopeData decoder disagree (session11)
+
+CHECKED LOCAL interface incompatibility, Lean55108,
+`PV_LIB_SPEC_ThreadRepresentationGap.incompatible` (and thread_word,
+shaped_thread, scope_handler). For ALL worlds, fallback handlers, encoders,
+stores and initial atomic/panic metadata, there is no pair(thread,reply)
+satisfying BOTH the retained `PV_THR2_TypedRepresentation_Thread.Shape thread`
+and a `some reply` from SiteArc's actual source-correct40-byte successful
+ScopeData handler. Shape is an existing named Recount14 obligation: Thread
+is encoded by OwnInitPointerCodec.encode of an ELF64 word. SiteArc.threadWord
+instead asks for fields Thread/Pin/Arc/NonNull and returns None for EVERY
+such numeric word, including nonnull registered physical pointers. Failure
+is independent of allocator choice, initialization padding and callback stores.
+
+This is NOT a counterexample to Rust Thread::current, not original-entry
+reachability and NOT a negation of Cut92Composition.Witness. The native-value
+Shape's source/binary discharge is still open. In particular, source type58's
+one-word native layout does not itself prove that an opaque Data result has
+numeric encoding; that must be installed and source-bound. The result exposes
+an incompatible pair of current local interfaces, not an extra endpoint or
+callee premise. Session11 is implementing word support in a NEW site codec;
+no provider, old result or frozen statement is silently changed.

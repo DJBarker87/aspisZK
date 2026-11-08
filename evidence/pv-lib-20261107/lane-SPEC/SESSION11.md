@@ -20,3 +20,5 @@ PV_LIB_SPEC_CallbackModel compiled 55106, cohort w3: exit0, wall 0:02.67, peak 4
 PV_LIB_SPEC_CallbackModelHistory compiled 55107, cohort w3: exit0, wall 0:02.56, peak 4740084KiB, swap 0; source 8c50b62a7d94f5b247d2de1c6eac81f5990b0003; standard summary axioms only.
 
 PV_LIB_SPEC_ThreadRepresentationGap compiled 55108, cohort w3: exit0, wall 0:02.56, peak 4737740KiB, swap 0; source e29e421aebcac67e2e9fcd3c2ac33a29a879c740; standard summary axioms only.
+
+PV_LIB_SPEC_WordThreadArc compiled 55109, cohort w3: exit0, wall 0:03.31, peak 4766004KiB, swap 0; source b26047c1a677222dc3d77938715fd6a1d13f97fd; standard summary axioms only.
