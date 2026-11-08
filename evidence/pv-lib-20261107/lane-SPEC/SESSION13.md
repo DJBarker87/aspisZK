@@ -38,3 +38,5 @@ PV_LIB_SPEC_PrefixEnvironment13 compiled 55179, cohort w3: exit0, wall 0:02.32, 
 PV_LIB_SPEC_TlsRecheck13 compiled 55180, cohort w3: exit0, wall 0:02.41, peak 4802692KiB, swap 0; source a6d6e16179cbf68377b9c4fb7e3e676fe79dc213; standard summary axioms only.
 
 PV_LIB_SPEC_PrefixHistory13 compiled 55181, cohort w3: exit0, wall 0:02.25, peak 4795780KiB, swap 0; source 65393fd69fa5b2b078defc04b708a667914661c2; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession13 compiled 55182, cohort w3: exit0, wall 0:00.82, peak 1591120KiB, swap 0; source f84eee20c5545abaf7f7855d9bcdbbf02a5543d3; standard summary axioms only.
