@@ -30,3 +30,5 @@ PV_LIB_SPEC_NativeModel compiled 55111, cohort w3: exit0, wall 0:02.73, peak 474
 PV_LIB_SPEC_NativeHistory compiled 55113, cohort w3: exit0, wall 0:02.65, peak 4741888KiB, swap 0; source 4a80023b182f120b23776da50350848efd1dda91; standard summary axioms only.
 
 PV_LIB_SPEC_WordThreadRecheck compiled 55114, cohort w3: exit0, wall 0:03.24, peak 4770812KiB, swap 0; source 4a80023b182f120b23776da50350848efd1dda91; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession11 compiled 55115, cohort w3: exit0, wall 0:00.85, peak 1587688KiB, swap 0; source 9c2990c7bc3ba07561ace8fbd88132be67622ade; standard summary axioms only.
