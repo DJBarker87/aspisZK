@@ -723,3 +723,39 @@ O1/O2 and host inclusion are actually discharged.
 No Kani/extraction, source/trust-row/ELF changes, push, wallet/key cleanup or
 sibling worktree edits. All new top roots have printed axioms; final raw audit,
 full physical non-vacuity and one manifest replay remain gated with S8.
+
+## Run 5b started
+
+Fresh allowance: 76 actual scopes, T1–T7 caps 14/16/14/20/6/2/6,
+starting NNH_L843. No Kani, extraction, S8/G0 or 16 GiB launch is authorized.
+Own runner outputs now go to NNH_Run5b_objects, with the delivered read-only
+NNR/NNQ/NNP/NNO and ledger29 paths prepended; all admission, scope-share, disk,
+source/dependency/Aeneas hash validation and resource checks remain enabled.
+The budget guard is 910 total actual submissions (834 historical + 76 fresh).
+New NNH_Run5b restatements preserve every existing proved NNH source/object.
+
+OWNER modelling point: the corrected top represents the runtime clock reply
+as NND_Carrier.reply NND_Carrier.slot c.j.slot; decoding it is exactly the
+selected slot c.j.slot. RuntimeClockSlotBinding binds that recorded reply to
+the bank slot, so this representation excludes no deployed run. It is an
+explicit environment instantiation, not a slot-equality premise or a filter
+on Realizes. The context carrier, arbitrary adversary, selected pair and full
+probability space remain unchanged. The clock-independent dictionary is
+identified with the corrected installation by NNR_Retime.missing, rather than
+by a whole-dictionary congruence proof. Complete host integration is still in
+progress; this paragraph alone establishes no top-level closure.
+
+### Run 5b T1 CLOSED
+
+L843–853: 11 scopes, ten passes; L851's whole-structure reuse was rejected
+because the augmented GameFrame changes the Sig parameter. L852 replaces
+that attempt with componentwise A3/A4/A5 constructors at the corrected host;
+all pass with standard axioms. No failed source is credited. Exact roots:
+NNH_Run5bHost.S_host/a0/r0, NNH_Run5bExec.recSig/exec/recSelect,
+NNH_Run5bHeadline.headline, NNH_Run5bHeadlineB.headlineB,
+NNH_Run5bAcceptance.a3/a4/a5, NNH_Run5bBinder.host_shape and grouped terms,
+NNH_Run5bClock.environment/represented/no_disagreement/total_representation.
+All names except NNH_RecordSig are in AspisR1. Existing context/seed/model
+functions are reused unchanged through NNH_Run5bCtx aliases, with the corrected
+missing-at-slot equality proved pointwise by the delivered clock-free law.
+No Realizes filter, slot-equality hypothesis or new trust item is introduced.
