@@ -1,0 +1,21 @@
+"""Sequential raw ax2 windows with independent resource receipts."""
+from pathlib import Path
+import subprocess,json,time,re,sys,os
+B=Path.cwd();mode=sys.argv[1]
+for n in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:(B/('NLX_'+n)).write_bytes((B/('NNL_'+n)).read_bytes())
+E=B/'NNL_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+if mode=='retention':
+ exec(compile((B/'NNL_pin.py').read_text(),'NNL_pin.py','exec'));sys.exit(0)
+if mode=='scan':jobs=[('scan',['NNL_native/NNL_Driver','scan'])]
+elif mode=='fixtures':jobs=[('fixtures',['NNL_native/NNL_ProofDriver','fixtures'])]
+else:
+ parts=mode.removeprefix('batch').split('-');start=int(parts[0]);end=int(parts[-1]);jobs=[('proof'+str(i),['NNL_native/NNL_ProofDriver','proof'+str(i)])for i in range(start,end+1)]
+for name,cmd in jobs:
+ start=time.monotonic()
+ with(E/(name+'.log')).open('w')as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*cmd],stdout=out,stderr=subprocess.STDOUT)
+ raw=(E/(name+'.log')).read_text();timing=(E/(name+'.time')).read_text()
+ def metric(k):
+  m=re.search(re.escape(k)+r':\s*(.*)',timing);return m[1]if m else None
+ x=dict(target=name,command=cmd,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms=[l for l in raw.splitlines()if'depends on axioms'in l or'does not depend on any axioms'in l],results=[json.loads(l[11:])for l in raw.splitlines()if l.startswith('NEP_RESULT ')])
+ (E/(name+'.json')).write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(x),flush=True)
+ if r.returncode:print(raw,flush=True);sys.exit(r.returncode)
