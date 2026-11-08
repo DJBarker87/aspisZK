@@ -36,3 +36,9 @@ Setup note: the unchanged launcher was copied into the own workspace and
 LEAN_PATH metadata uploaded before the first admission. All Lean source
 uploads and scope submissions have allowed:true plus exit-0 admission, share
 checks and disk receipts. No shared launcher/reservation script was edited.
+
+Stage 4: replacement geometry source branches pass (L028/L031/L040/L041),
+with named callbacks and independently checked installed scalar/std slots.
+Prepared query carriers pass L039, including original Prepared roots, queries,
+gamma and scratch. These are source transports on arbitrary pre-states;
+no native/Kani bridge or ledger status is added by this Lean-only job.
