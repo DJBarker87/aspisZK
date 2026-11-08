@@ -1,3 +1,47 @@
+# Remaining obligations after Lane A session7 — PARTIAL
+
+The requested completion is NOT achieved. `PV_LIB_StoreActionTable.v2` remains
+byte-for-byte unchanged/importable for Lane C. `PV_LIB_A_StoreActionTable7`
+exports the qualified `v2Source` extension (23 supplied projections,88 missing
+candidate meanings). Its latest partial source path is
+`PV_LIB_A_TypedDropSource.step` over `PV_LIB_A_DeferredActions.step`, with608
+bound by `PV_LIB_A_EmittedDropBinding.programs`. This is NOT full D984 adequacy.
+All111 accepted D989 candidates and every source/answer qualification remain
+in lane-A/session7/STORE_ACTIONS.json; the inventory itself is unchanged.
+
+FIRST, still close the three requested gaps:
+
+1. Cell504 now has exact metadata-selected copy cases417/437/477/629, with
+   whole-reply delivery. Pinned ThreadId is Copy, which supplies477's Option
+   destructor.602 SpawnHooks and762 generic T remain nontrivial/unsupported.
+   The old T/type/witness snapshot and exact sized glue608 source dispatch are
+   available, but full nonempty hooks/typed callback/source writes are not.
+2. Weak683 has staged SOURCE count/dangling/last/deallocation support and
+   complete reply-branch graphs. OWNER allocator/registry/backing adequacy,
+   last-strong486 payload Drop and584's implicit weak guard remain unbound.
+   Exact emitted486/584/608 bodies now compile; syntax is not adequacy.
+3. Thread214 has a named SOURCE-backed count projection. Eight exact emitted
+   bodies486/584/608/214/168/122/128/14 compile. The unchanged converter cannot
+   render454's cleanup Match;4 is opaque. Nested Pin311, join/TLS/parker,
+   collect and callback source effects still need exact semantics/bindings.
+
+THEN Range93, f6 and OwnInit corrected-machine histories in dependency order.
+No new caller history was attempted/promoted through an unresolved action.
+All170 slot records remain118 qualified INSTANTIATED,35 MISSING,12 WAITING,
+5 SPEC-ERROR. Endpoint premises removed0/added0, new T fields0, row closures0.
+
+Pending control matters: the intermediate ActionPolling/Table7 retry graphs
+are unsuitable as standalone models for CAS530/555 and Vec167/10. Their
+writes depend on completion. DeferredActions.step fixes these four, proving
+that pending commits no write and eventual replies still execute the named
+operation. Applied unconditional prefixes and last-Weak deallocation retain
+separate phases. No Store transformer or successful-answer interface is added.
+
+See lane-A/session7/MODEL_FINDINGS.md, SUPPORT.json and the final RAW_AUDIT.json.
+These are local mathematical/source-syntax results, not a privacy release.
+
+## Retained session6 and earlier obligations
+
 # Remaining obligations after Lane A session6
 
 Session6 is PARTIAL. The accepted D989 v2 inventory is unchanged. Import
