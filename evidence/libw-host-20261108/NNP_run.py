@@ -59,6 +59,7 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
 source=(E/(target+'.lean')) if target.startswith('NNP_') else E.parent/'libw-20261108'/(target+'.lean')
 files={'NNP_generated/'+target+'.lean':source.read_text()}
 LP=json.loads((E.parent/'libb-20261111/LIBB_L344.json').read_text())['env']['LEAN_PATH']
+LP += ':'+B+'/NNP_seedNNH_R4:'+B+'/NNP_seedNNH:'+ '/home/dombarker/project-offloads/codex-cx-integrate-20261111/NNH_seed:/home/dombarker/project-offloads/codex-cx-integrate-20261111/NNH_library_seed'
 LP=LP.replace('/home/dombarker/project-offloads/codex-cx-libb-20261111/LIBB_objects',B+'/NNP_seedLIBB')
 cfg=dict(attempt=a,kind='lean',module=target,sources=list(files),command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNP_generated','-o','NNP_objects/'+target+'.olean',next(iter(files))],env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNP_tmp',LEAN_PATH=B+'/NNP_objects:'+LP),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),deps_fingerprint={})
 files[a+'.json']=json.dumps(cfg)
@@ -67,6 +68,8 @@ import json,hashlib,shutil,re
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for d in ['NNP_generated','NNP_objects','NNP_tmp']: (b/d).mkdir(exist_ok=True)
 if not (b/'NNP_seedLIBB').exists():shutil.copytree('/home/dombarker/project-offloads/codex-cx-libb-20261111/LIBB_objects',b/'NNP_seedLIBB')
+for name,origin in [('NNP_seedNNH_R4','NNH_R4_objects'),('NNP_seedNNH','NNH_objects')]:
+ if not (b/name).exists():shutil.copytree('/home/dombarker/project-offloads/codex-cx-integrate-20261111/'+origin,b/name)
 for n in ['S2W_run_host.py','S2W_lean_host.py']:
  if not (b/n).exists():shutil.copy2('/home/dombarker/project-offloads/codex-cx-libb-20261111/'+n,b/n)
 (b/'lakefile.toml').write_text('name = "nnp"\\nversion = "0.1.0"\\n');(b/'lean-toolchain').write_text('leanprover/lean4:v4.32.0\\n')
