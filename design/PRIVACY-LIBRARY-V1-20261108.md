@@ -38,3 +38,4 @@ These model corrections were found while building the library. Each is checked i
 - **SPEC-C13.** The Entry14 fixture cannot exist physically: its run pointer contradicts the binary's stack layout.
 - **SPEC-C14.** The fixed runtime of the eighteen frozen contracts replies Ok(null) where the real TLS gives Ok(false).
 - **A-S16-2 / SPEC-C18.** The context-bound environment stalled forever at the f5 Active::enter callback.
+- **SPEC-W4-2 / SPEC-C22** (D1032, after v1). The row frame for f170 and its callers (f17, f5, f6, f1, f0, OwnInit) fixed every older cell outside the entry-argument footprint, but the source route through f207 and native 289 writes the thread-local ACTIVE cell (Active::enter). Corrected by ruling thread-33: the frame also excludes the row's named static-effect set, for f170 exactly slot (0,20,[]). The old clause implies the new one. Frozen v1 files are unchanged; the WAITING slots consume the corrected successor on codex/pv-w4-20261108.
