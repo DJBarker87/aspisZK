@@ -1,0 +1,66 @@
+NVR_COMBINED_IMPORT.lean	exit=0	wall_s=0.46	peak_rss_bytes=413401088	swaps=0	src_sha256=19136eb460fde52e4085ef940d21214409f5f3cdf5b6451ade66814fe1fa8245	olean_sha256=b61d746cdc927c854f61b3d2896e073a04a36f7ff16ba4faef10fed3f97fafb8
+NMV_RslFold.fold344 : ∀ (V : RSL.VLib) (P : RSL.PreparedNew V) (C : RSL.TX1_345.S1Lib V)
+  (child : RSL.TX1_345.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError RSL.Bytes)),
+  RSL.TX1_345.RowSpec_345 V P C child →
+    ∀ (a : RSL.TX1_344.Args) (s : RSL.SdkState) (env : RSL.Env)
+      (o : RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState)),
+      NMV_RslFold.stage1 child a s env o → RSL.TX1_344.Ref V P C a s env o
+NMV_RslFold.fold240 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib)
+  (child : RSL.TX2_241.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit)),
+  RSL.TX2_241.RowSpec_241 L D V child →
+    ∀ (a : RSL.TX2_240.Args) (s : RSL.SdkState) (env : RSL.Env),
+      RSL.TX2_240.Domain V a s →
+        ∀ (o : RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState)),
+          NMV_RslFold.stage2 child a s env o → RSL.TX2_240.Ref L D V a s env o
+NMV_WeakFold.fold240 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib)
+  (w : RSL.Bytes → RSL.Bytes → RSL.Bytes → RSL.Spec (Except V.VErr Unit))
+  (child : RSL.TX2_241.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit)),
+  RSL.TX2_241.RowSpec_241 L D (RSL.TCK.weaken V w) child →
+    ∀ (a : RSL.TX2_240.Args) (s : RSL.SdkState) (env : RSL.Env)
+      (o : RSL.Obs (Except RSL.ProgramError Unit × RSL.SdkState)),
+      NMV_RslFold.stage2 child a s env o → RSL.TX2_240.Ref L D (RSL.TCK.weaken V w) a s env o
+NVR_CandidateRoots.root344 : ∀ (V : RSL.VLib) (P : RSL.PreparedNew V) (C : RSL.TX1_345.S1Lib V)
+  (allocation : NMV_ConcreteWindows.Allocation)
+  (child : RSL.TX1_345.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError RSL.Bytes)),
+  RSL.TX1_345.RowSpec_345 V P C child → RSL.TX1_344.RowSpec_344 V P C (NMV_ConcreteWindows.stage1 allocation child)
+NVR_CandidateRoots.root240 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib)
+  (allocation : NMV_ConcreteWindows.Allocation)
+  (child : RSL.TX2_241.Args → RSL.Env → RSL.Obs (Except RSL.ProgramError Unit)),
+  RSL.TX2_241.RowSpec_241 L D V child → RSL.TX2_240.RowSpec_240 L D V (NMV_ConcreteWindows.stage2 allocation child)
+NVR_TasRoots.field344 : ∀ (L : RSL.PoolLib) (V0 : RSL.TX2_241.V2Lib) (VL : RSL.VLib) (P : RSL.PreparedNew VL)
+  (C : RSL.TX1_345.S1Lib VL) (I : RSL.TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation),
+  RSL.TX1_345.RowSpec_345 VL P C (NVR_TasRoots.implementation I a1 a2).f345 →
+    RSL.TX1_344.RowSpec_344 VL P C (NVR_TasRoots.implementation I a1 a2).f344
+NVR_Folds.process_tx1 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib) (VL : RSL.VLib)
+  (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (f1 f2 : NVR_Dispatch.Child),
+  RSL.TX1_344.RowSpec_344 VL P C f1 →
+    RSL.TX2_240.RowSpec_240 L D V f2 → RSL.TX1_333.RowSpec_333 L D V VL P C (NVR_Dispatch.process f1 f2)
+NVR_Folds.process_tx2 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib) (VL : RSL.VLib)
+  (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (f1 f2 : NVR_Dispatch.Child),
+  RSL.TX1_344.RowSpec_344 VL P C f1 →
+    RSL.TX2_240.RowSpec_240 L D V f2 →
+      RSL.TX2_221.RowSpec_221 L D V (RSL.TX1_344.asStage1 VL P C) (NVR_Dispatch.process f1 f2)
+NVR_Folds.entry_tx1 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib) (VL : RSL.VLib)
+  (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (f : NVR_Dispatch.Child),
+  RSL.TX1_333.RowSpec_333 L D V VL P C f → RSL.TX1_330.RowSpec_330 L D V VL P C (NVR_Dispatch.entry f)
+NVR_Folds.entry_tx2 : ∀ (L : RSL.PoolLib) (D : RSL.DeployedIds) (V : RSL.TX2_241.V2Lib) (VL : RSL.VLib)
+  (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL) (f : NVR_Dispatch.Child),
+  RSL.TX2_221.RowSpec_221 L D V (RSL.TX1_344.asStage1 VL P C) f →
+    RSL.TX2_213.RowSpec_213 L D V (RSL.TX1_344.asStage1 VL P C) (NVR_Dispatch.entry f)
+'NMV_RslFold.fold344' depends on axioms: [propext]
+'NMV_RslFold.fold240' depends on axioms: [propext, Quot.sound]
+'NMV_WeakFold.fold240' depends on axioms: [propext, Quot.sound]
+'NVR_TasRoots.field344' depends on axioms: [propext]
+'NVR_TasRoots.field240' depends on axioms: [propext, Quot.sound]
+'NVR_TasRoots.packet' depends on axioms: [propext, Quot.sound]
+'NVR_CandidateRoots.root344' depends on axioms: [propext]
+'NVR_CandidateRoots.root240' depends on axioms: [propext, Quot.sound]
+'NVR_CandidateRoots.packet' depends on axioms: [propext, Quot.sound]
+'NVR_Folds.process_tx1' depends on axioms: [propext, Quot.sound]
+'NVR_Folds.process_tx2' depends on axioms: [propext, Quot.sound]
+'NVR_Folds.entry_tx1' depends on axioms: [propext, Quot.sound]
+'NVR_Folds.entry_tx2' depends on axioms: [propext, Quot.sound]
+'NVR_TAS.roots' depends on axioms: [propext, Quot.sound]
+'NVR_TAS.weak_entry' depends on axioms: [propext, Quot.sound]
+'NVR_Combined.composed_nmv' depends on axioms: [propext, Quot.sound]
+'NVR_Combined.composed_nmw' depends on axioms: [propext, Quot.sound]

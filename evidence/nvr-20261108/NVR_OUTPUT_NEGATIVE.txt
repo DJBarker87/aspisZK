@@ -1,0 +1,81 @@
+../stage-wrap-20261111/NMV_NoWritePool.lean	exit=1	wall_s=4.35	peak_rss_bytes=558874624	swaps=0	src_sha256=eb12f8c79cbb4302e4e100ca987c2d2a77220246c727cc4939ff6f1cef40ed80	olean_sha256=-
+.lake/stage/NMV_NoWritePool.lean:50:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+L : PoolLib
+D : DeployedIds
+a : TX2_234.Args
+hp : ∀ (seeds : List Bytes) (p : B32), Free (pdaOrErr seeds p)
+⊢ Free
+    (have reg := D.registry;
+    have mk := a.master_account.key.bytes;
+    a.registry_account.data.bind fun rdata =>
+      (RS.ofOption (L.decodeRegistryV2 rdata) ProgramError.invalidAccountData).bind fun r =>
+        (pdaOrErr [SEED_REGISTRY_V2, mk, TX2_234.mk1 r.bump] reg).bind fun expected =>
+          (RS.check (decide (a.registry_account.key ≠ expected)) ProgramError.invalidAccountData).seq
+            ((pdaOrErr [reg.bytes, TX2_234.mk1 r.programdata_bump] LOADER_ID).bind fun rpd =>
+              (RS.check (TX2_234.registryV2Bad D a r rpd) ProgramError.invalidAccountData).seq
+                ((RS.ofExcept (readonlyAccount a.entry_account reg)).seq
+                  (a.entry_account.data.bind fun edata =>
+                    (RS.ofOption (L.decodeEntryV2 edata) ProgramError.invalidAccountData).bind fun e =>
+                      (pdaOrErr [SEED_ENTRY_V2, mk, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes, TX2_234.mk1 e.bump]
+                            reg).bind
+                        fun expectedE =>
+                        (RS.check (decide (a.entry_account.key ≠ expectedE)) ProgramError.invalidAccountData).seq
+                          ((pdaOrErr [a.verifier_program.bytes, TX2_234.mk1 e.programdata_bump] LOADER_ID).bind
+                            fun vpd =>
+                            (RS.check (TX2_234.entryV2Bad a e vpd) ProgramError.invalidAccountData).seq
+                              (RS.pure ()))))))
+.lake/stage/NMV_NoWritePool.lean:55:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+L : PoolLib
+D : DeployedIds
+a : TX2_234.Args
+⊢ Free
+    (have reg := D.registry;
+    have mk := a.master_account.key.bytes;
+    a.registry_account.data.bind fun rdata =>
+      (RS.ofOption (L.decodeRegistryV1 rdata) ProgramError.invalidAccountData).bind fun r =>
+        (pdaOrErr [SEED_REGISTRY, mk, TX2_234.mk1 r.bump] reg).bind fun expected =>
+          (RS.check (decide (a.registry_account.key ≠ expected)) ProgramError.invalidAccountData).seq
+            ((RS.check (TX2_234.registryV1Bad a r) ProgramError.invalidAccountData).seq
+              ((RS.ofExcept (readonlyAccount a.entry_account reg)).seq
+                (a.entry_account.data.bind fun edata =>
+                  (RS.ofOption (L.decodeEntryV1 edata) ProgramError.invalidAccountData).bind fun e =>
+                    (pdaOrErr [SEED_ENTRY, mk, PROFILE_BINDING.bytes, RELEASE_BINDING.bytes, TX2_234.mk1 e.bump]
+                          reg).bind
+                      fun expectedE =>
+                      (RS.check (decide (a.entry_account.key ≠ expectedE)) ProgramError.invalidAccountData).seq
+                        ((RS.check (TX2_234.entryV1Bad a e) ProgramError.invalidAccountData).seq (RS.pure ()))))))
+.lake/stage/NMV_NoWritePool.lean:60:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue
+L : PoolLib
+D : DeployedIds
+a : TX2_234.Args
+h✝ : (a.master.verifier_policy.flags &&& POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0) = true
+⊢ Free
+    ((RS.check (TX2_234.policyBad D a) ProgramError.invalidAccountData).seq
+      ((RS.check (!L.validatePolicy a.master.verifier_policy) ProgramError.invalidAccountData).seq
+        ((RS.ofExcept (readonlyAccount a.registry_account D.registry)).seq (TX2_234.immutableBranch L D a))))
+.lake/stage/NMV_NoWritePool.lean:60:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse
+L : PoolLib
+D : DeployedIds
+a : TX2_234.Args
+h✝ : ¬(a.master.verifier_policy.flags &&& POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0) = true
+⊢ Free
+    ((RS.check (TX2_234.policyBad D a) ProgramError.invalidAccountData).seq
+      ((RS.check (!L.validatePolicy a.master.verifier_policy) ProgramError.invalidAccountData).seq
+        ((RS.ofExcept (readonlyAccount a.registry_account D.registry)).seq (TX2_234.v1Branch L D a))))
+'NMV_NoWritePool.pda_free' depends on axioms: [propext]
+'NMV_NoWritePool.master_free' depends on axioms: [propext]
+'NMV_NoWritePool.checkpoint_free' depends on axioms: [propext]
