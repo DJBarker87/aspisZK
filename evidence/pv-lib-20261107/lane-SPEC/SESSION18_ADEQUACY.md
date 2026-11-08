@@ -49,14 +49,23 @@ joins and are not used as such. No A-owned prefix or loop is re-derived here.
 
 ## Order4 — SPEC-C14 eighteen corrected successors: COMPILED, not inhabited
 
-ContextF36118, ContextF27018, ContextF16618, ContextF1518, ContextF20818,
-ContextF22018, ContextF31618, ContextF31818, ContextF21918, ContextF12518,
-ContextF618, ContextF17018, ContextF1718, ContextF518, ContextF218,
-ContextF118, ContextF018, ContextOwnInit18 each compile MachineSpec/Pre/Post/
+ContextFinalF36118, ContextFinalF27018, ContextFinalF16618, ContextFinalF1518,
+ContextFinalF20818, ContextFinalF22018, ContextFinalF31618, ContextFinalF31818,
+ContextFinalF21918, ContextFinalF12518, ContextFinalF618, ContextFinalF17018,
+ContextFinalF1718, ContextFinalF518, ContextFinalF218, ContextFinalF118,
+ContextFinalF018, ContextFinalOwnInit18 each compile MachineSpec/Pre/Post/
 Contract and the literal Pre comparison. Before aliases retain exact old
-statements. ContextContracts18.Contracts conjoins all eighteen explicitly.
+statements. ContextFinalContracts18.Contracts conjoins all eighteen final statements explicitly.
 SESSION18_CONTEXT_COMPARISON.md records every machine/frontier/type change.
 The old eighteen statements and original Cut92Composition.Witness are untouched.
+The earlier ContextF*18/ContextOwnInit18 drafts are retained and superseded by
+SPEC-C17: their boundary observation incorrectly retained nextActivation and
+internal origin lists. ContextCounter18 diagnoses counters4/5 and restores the
+EXISTING Frontier.observe by name. Every final row keeps the exact Frame and
+Numbered clauses and exports CounterBefore. Full histories remain internal
+machine data; ContextReply18.history_same is still full Execution equality.
+Audit55494 was stopped on this review, exit241/no pass; the final changed-root
+audit is55495, with532 roots in three sequential178/178/176 partitions.
 
 The new machine pins the full current-context ReachedNative14.step, including
 v2/Full.programs, actual native adapter, history and source-origin resource
@@ -107,3 +116,14 @@ finite D984.Writer-list specification interface.
 No row was closed; no endpoint premise or T field changed. No frozen source,
 provider, package branch, ledger, checker or shared map was edited. No full
 manifest/runtime/Rust/SBF/Aeneas replay, push/merge or key action occurred.
+
+## Final evidence gate
+
+Strict55495 PASS532/532, exit0, wall13:44.47, peak7036492KiB, swap0, source
+6e16f5c9a1d25c4050d2557cef1084f067a0d168. Three sequential partitions178/178/176
+share one fixed-cap scope. Every walked/summary axioms set agrees, no unresolved
+constant, standard axioms only. Exact target/root arrays and hashes are in
+SESSION18_RAW_ROOTS.json; all raw graphs are retained in the compressed archive.
+The walker and collector are unchanged. Draft55494 exit241 earns no pass.
+This audit verifies declarations and their dependencies; it does not turn open
+propositions into inhabited contracts or establish orders5–6.

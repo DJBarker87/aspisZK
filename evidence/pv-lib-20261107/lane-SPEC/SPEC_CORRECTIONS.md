@@ -9,7 +9,14 @@ retained allocator schedule. Exact before/after and checked roots are in
 SESSION18_SPEC_CORRECTIONS.md; no frozen definition is edited.
 
 SPEC-C14: all eighteen corrected context-native/resource statements are NEW
-modules, aggregated by ContextContracts18. Old statements and joint target are
+modules, finally aggregated by ContextFinalContracts18 after SPEC-C17. Old statements and joint target are
 retained. SESSION18_CONTEXT_COMPARISON.md records native/resources, execution
 histories, exact Pre equality, full frame/frontier and OwnInit resource changes.
 The statements have not been promoted to proved universal contracts.
+
+SPEC-C17: preliminary full-Execution row observations exposed abstracted counters
+and origin lists. New ContextFinal*18 rows use ContextCounter18 and the existing
+Frontier.observe, retaining exact source frames and Numbered clauses. Full
+SAME-machine history equality is unchanged. Old drafts are retained and no
+universal contract inhabitance is claimed. Draft55494 exit241 earns no pass;
+final55495 covers all532 roots with the unchanged strict walker/collector.

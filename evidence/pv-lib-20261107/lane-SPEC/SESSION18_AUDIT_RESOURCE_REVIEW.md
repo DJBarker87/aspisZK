@@ -26,3 +26,8 @@ Focused driver admission55778 was refused at2026-11-08T07:51:53.875240Z:
 allowed=false/exit78, bounded51405389824B plus requested8589934592B would exceed
 safe59055800320B. Lean did not run; the ID is spent. No source failure, cap
 change or bypass. Resume driver2 at a fresh ID after the180s cooldown.
+
+Recorded review at594s:346 fresh root graphs, first partition exit0, cgroup
+peak3325083648B, continued new-root progress. No memory or timeout change.
+Final exit0 at13:44.47, process peak7036492KiB, swap0; all three partitions
+exit0. review-55495-10min.json retains the contemporaneous measurement.

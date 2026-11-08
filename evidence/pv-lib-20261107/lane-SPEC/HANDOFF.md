@@ -1,17 +1,60 @@
-# Session18 in progress — parametric original85 established
+# Session18 checkpoint — rebased original85; complete target OPEN
 
-D1007/thread-29′ rebase is implemented. EntryWorld18.Entry has complete entry
-Pre, paired run coordinate and finite nonwrapping stack grant; concrete uses
-parent1024, scope1016, run1136, grant[512,1536). SPEC-C16 records/rejects the
-intermediate parent4096 grant's overlap with the scheduled Packet4096.
-History18.original85/concrete85/replies85 compile; all five replies are consumed
-on the SAME chosen world. Named generic segment/full-delivery lemmas are reused;
-no lane A join or loop is re-derived. Original fixed modules are unchanged.
+Continued68795ef34cb758c72f9c544dd64bd581cc19fa68; D1007/thread-29′.
+Completion authority: SESSION18_ADEQUACY.md and SESSION18_STATUS.json.
 
-LaneAJoins18/NEEDS-FROM-LANE-A.md are being published as the parametric join
-interface. Eighteen corrected successor statements, original8248/295/454,
-full Values coverage and complete conditional joint witness remain to do.
-Target not yet established. No strict session18 audit has run yet.
+Order1: EntryWorld18.Entry includes COMPLETE OwnInit.Pre, paired physical
+native run coordinate and finite nonwrapping stack grant. Concrete: parent1024,
+scope1016, run1136, n1088, F1128, grant[512,1536). SPEC-C16 checked/repaired the
+intermediate4096 grant's collision with scheduled Packet4096; old fixture retained.
+Order2: History18.original85/concrete85/replies85 re-establish original85 for
+arbitrary Entry and activation, using existing generic segment/full-delivery
+lemmas by name. Exactly469/277/278/279/18 are consumed. No A prefix/loop rederived.
+Order3: LaneAJoins18 and NEEDS-FROM-LANE-A.md publish parametric joins with exact
+old milestones/order retained; SESSION18_JOIN_COMPARISON.md records before/after.
+Latest read-only A f0baeb4cc44c593682b098b6159f716f840fd47a adopted the interface;
+all four joins remain OPEN and20 retained source pins unchanged.
+Order4: eighteen ContextFinal*18 successor statements compile with literal
+Pre equality, exact Frame/Numbered/frontier and context-bound native/resources.
+Current aggregate: ContextFinalContracts18.Contracts. Original statements untouched.
+ContextReply18.history_same proves full SAME-machine history transport at every
+prefix; delivery84 consumes false. Universal contracts are NOT inhabited.
+
+SPEC-C17 checked/repaired the preliminary context observation's inclusion of
+nextActivation/internal origin lists. New ContextCounter18 uses EXISTING
+Frontier.observe by name, while full internal histories remain unchanged.
+CounterBefore and original Before are retained per row. The earlier ContextF*18
+and ContextOwnInit18/ContextContracts18 are superseded diagnostic drafts.
+
+Order5 PARTIAL: NativeTargets18 states actual8248/295/454 on this history and
+proves original_stack from Entry. ValuesPrefix18 proves no Values writer poll
+or consumed origin before85, parametrically. ConsumedHistory18 and NativeContext18
+prove history monotonicity and actual context/Waiting binding. Actual native
+suffix consumption, callback activation/run initialization, full Values layout/
+reserve/growth/transport and complete ownership exports remain OPEN.
+Order6 NOT ESTABLISHED: no complete joint witness conditional ONLY on
+LaneAJoins18.Joins, and no complete checked contradiction. C's missing native,
+Values, representation and universal-contract proofs are not extra A hypotheses.
+No row closed; no endpoint premise/T/source/provider/ledger/shared-map change.
+
+Focused IDs55700..55780:67 passing (63 logical modules,4 audit drivers),13
+retained changed elaboration failures,1 admission refusal55778/exit78 with no
+Lean invocation. Failed sources/receipts retained. Receipt55733's wrong parent
+label is corrected explicitly without altering its raw receipt/source hash.
+Draft audit55494 deliberately stopped on SPEC-C17 review: exit241, wall4:54.55,
+peak7002088KiB, swap0;167 partial graphs archived and NO PASS.
+FINAL strict55495 PASS532/532: exit0, wall13:44.47, peak7036492KiB, swap0,
+source6e16f5c9a1d25c4050d2557cef1084f067a0d168. Three sequential178/178/176
+partitions, unchanged raw walker/private collector, zero unresolved/summary
+mismatches, standard axioms only. All preliminary and final roots included.
+The 10-minute review recorded continued graph progress and no cap increase.
+No task-owned scope remains. SESSION18_RAW_AUDIT.json and retained graph archive
+are audit authority; SESSION18_PROVENANCE.json maps every source to its commit.
+All jobs use fixed6G/8G/swap0/Tasks64/-M7000, standalone turn before attempt;
+launcher range557xx only;558xx untouched. No full manifest/runtime/Rust/SBF/
+Aeneas replay, push/merge or key action. Next Lean55781; raw55496.
+Offline integrity gate: python3 evidence/pv-lib-20261107/lane-SPEC/validate_session18.py
+
 
 ---
 

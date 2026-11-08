@@ -488,9 +488,32 @@ SPEC-C13's physical entry rebase is now inhabited (EntryWorld18, NativeTargets18
 .original_stack), and original85 is re-established parametrically (History18).
 This does not prove StackAtCallback or any actual8248/295/454 suffix binding.
 
-SPEC-C14 is repaired at the STATEMENT level in the eighteen Context*18 modules,
+SPEC-C14 is repaired at the STATEMENT level in the eighteen ContextFinal*18 modules,
 with full before/after in SESSION18_CONTEXT_COMPARISON.md. ContextReply18
 rechecks fixed Ok(null) versus source/physical Ok(false) on EVERY rebased entry
 and proves full context-history identity and actual84→85 consumption. Universal
 contract/Values/source adequacy and the COMPLETE joint witness remain OPEN.
 This is the D1007 model-correction report, not a new endpoint or trust premise.
+
+## SPEC-C17 (session18) — boundary observations retained abstracted counters
+
+The preliminary ContextMachine18.Observation compared the entire Execution,
+including nextActivation and internal origin lists. This conflicts with the
+thread-27/D877 boundary abstraction. ContextCounter18.old_distinguishes checks
+the counter4/5 diagnostic. The old declarations are retained as superseded;
+they are not the current contract interface.
+
+REPAIRED in new ContextCounter18/ContextCounterPost18 and eighteen
+ContextFinal*18 modules. The boundary uses EXISTING Frontier.observe by name,
+including the prescribed panic/abort event observation. Frame and Numbered
+remain explicit. The full underlying Execution and context-bound machine are
+unchanged; ContextReply18.history_same still proves full SAME-history equality.
+Each new row retains the original Before, preliminary CounterBefore and
+literal pre_same. Current aggregate: ContextFinalContracts18.Contracts.
+
+Draft audit55494 was stopped during review, exit241, with167 partial root
+graphs archived and NO PASS. Final audit55495 checks all532 roots, including
+superseded drafts and the diagnostics, with unchanged walker/collector and
+fixed caps in three sequential partitions. Its receipt is the pass authority.
+This local repair does not inhabit any universal contract or establish the
+complete conditional joint witness. See SESSION18_SPEC_CORRECTIONS.md.

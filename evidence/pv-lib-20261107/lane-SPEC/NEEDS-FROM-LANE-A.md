@@ -32,8 +32,10 @@ projection without proved full-state transport is accepted. Lane C does not
 re-derive these joins. All four targets remain OPEN until a named inhabitant
 is available. No new endpoint or T premise is introduced.
 
-Read-only lane A at1403e8d070953cb37a9d6b1feb85a5ff9a963bce still reports all
-four joins OPEN (session15 live). Its local F124 resolver result is not a join.
+Read-only lane A atf0baeb4cc44c593682b098b6159f716f840fd47a adopted this
+interface and still reports all four joins OPEN (session15 handoff). Its local
+F124 resolver and F170Tail15 support are not joins. SESSION18_LANEA_INPUT.json
+retains the read-only comparison: all20 source pins unchanged, no join consumed.
 
 ---
 
