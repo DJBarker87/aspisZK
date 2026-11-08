@@ -1,0 +1,135 @@
+{"cohort": "w3", "attempt": 55505, "target": "PV_LIB_SPEC_TlsAt59", "source_revision": "9a6231135bfacf9b3f2b061f09981885f83b4814", "source_sha256": "6c2f92e92976c3ed27cf4a8da2adcf106f2b92c5c2056c17e0ad4553a6db6de4", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10974, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55505", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55505.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_TlsAt59.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt59.lean", "7000"], "exit": 1, "wall_seconds": 2.5073728561401367, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_TlsAt59.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt59.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt59.original59' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.46", "peak_rss_kbytes": "4788856", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt59.lean:12:88: error: unsolved goals
+⊢ ¬(match PV_THR2_F170.node13 with
+      | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site callee captures returnPlace unwind) => site
+      | x => { function := 0, statement := 0, path := Data.null }) =
+      match PV_THR2_F170.node16 with
+      | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site callee captures returnPlace unwind) => site
+      | x => { function := 0, statement := 0, path := Data.null }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt59.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ReachedNative14.answer (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+    (PV_STX2_Native.Request.child PV_LIB_SPEC_Tls277Native15.token 7
+      [PV_LIB_SPEC_Tls277Native15.pointer PV_LIB_SPEC_Entry13.slot.source])
+    PV_LIB_SPEC_Entry14.state
+in the target expression
+  (match
+      PV_LIB_SPEC_ReachedNative14.answer (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+        request PV_LIB_SPEC_Entry14.state with
+    | none =>
+      {
+        state :=
+          {
+            current :=
+              { status := Status.undefined none config.store,
+                world :=
+                  (PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+                      wait.request at58.state.current.world).world,
+                events :=
+                  at58.state.current.events ++
+                    (PV_THR2_OwnUniformResourceHandler.lift
+                        PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native wait.request
+                        at58.state.current.world).events },
+            suspended := at58.state.suspended },
+        issued := at58.issued, consumed := origin :: at58.consumed }
+    | some val =>
+      {
+        state :=
+          PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+            { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+              control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+              needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+              resources := fun {A} =>
+                PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                  origin,
+              encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+              loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+              siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+              environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+            config at58.state,
+        issued :=
+          PV_LIB_SPEC_ControlRuntime.recordIssue at58.state
+            (PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+              { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                resources := fun {A} =>
+                  PV_LIB_SPEC_ResourceHistory.allocationResources
+                    PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin,
+                encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+              config at58.state)
+            at58.issued,
+        consumed := origin :: at58.consumed }) =
+    at59
+
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+resources : PV_EVHB_OwnerHeap.Resources :=
+  fun {A} =>
+    PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin
+result :
+  PV_LIB_SPEC_ReachedNative14.answer (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+      (PV_STX2_Native.Request.child PV_LIB_SPEC_Tls277Native15.token 7
+        [PV_LIB_SPEC_Tls277Native15.pointer PV_LIB_SPEC_Entry13.slot.source])
+      PV_LIB_SPEC_Entry14.state =
+    some
+      {
+        answer :=
+          Answer.returned (Aeneas.Std.Result.ok (PV_LIB_SPEC_Tls277Native15.value PV_LIB_SPEC_Entry13.slot.source)),
+        world := PV_LIB_SPEC_Entry14.state, events := [] }
+⊢ (match
+      PV_LIB_SPEC_ReachedNative14.answer (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config
+        request PV_LIB_SPEC_Entry14.state with
+    | none =>
+      {
+        state :=
+          {
+            current :=
+              { status := Status.undefined none config.store,
+                world :=
+                  (PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+                      wait.request at58.state.current.world).world,
+                events :=
+                  at58.state.current.events ++
+                    (PV_THR2_OwnUniformResourceHandler.lift
+                        PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native wait.request
+                        at58.state.current.world).events },
+            suspended := at58.state.suspended },
+        issued := at58.issued, consumed := origin :: at58.consumed }
+    | some val =>
+      {
+        state :=
+          PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+            { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+              control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+              needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+              resources := fun {A} =>
+                PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                  origin,
+              encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+              loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+              siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+              environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+            config at58.state,
+        issued :=
+          PV_LIB_SPEC_ControlRuntime.recordIssue at58.state
+            (PV_LIB_SPEC_ReachedNative14.transition (cut stack)
+              { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                resources := fun {A} =>
+                  PV_LIB_SPEC_ResourceHistory.allocationResources
+                    PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin,
+                encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+              config at58.state)
+            at58.issued,
+        consumed := origin :: at58.consumed }) =
+    at59
+'PV_LIB_SPEC_TlsAt59.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt59.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt59.original59' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
