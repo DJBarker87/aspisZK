@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackStores.lean:72:62: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if p = 0 then ?m.42 else ?m.43
+in the target expression
+  (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w
+      else
+        { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+          world :=
+            initialized p (image regs w)
+              (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+          events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+    | x => PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w) =
+    { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+      world :=
+        initialized p (image regs w)
+          (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+      events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+
+resources : Resources
+encode : Encode
+s : Store Data
+regs : Registers
+w : OWNER
+p : ℕ
+allocation :
+  (resources (PV_EVHB_GlobalSystem.Primitive.malloc PV_OWN2_ClientLayout.layout.callbackSize) (world w)).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+nonnull : p ≠ 0
+⊢ (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w
+      else
+        { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+          world :=
+            initialized p (image regs w)
+              (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+          events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+    | x => PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w) =
+    { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+      world :=
+        initialized p (image regs w)
+          (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+      events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+'PV_LIB_SPEC_CallbackStores.Registers' does not depend on any axioms
+'PV_LIB_SPEC_CallbackStores.image' depends on axioms: [propext]
+'PV_LIB_SPEC_CallbackStores.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.handler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.resource_answer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.framed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.packet_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
