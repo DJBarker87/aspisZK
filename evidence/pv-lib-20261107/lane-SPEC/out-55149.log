@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadId13.lean:59:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let last ← some last
+      if ↑last + 1 < 2 ^ 64 then pure (↑last + 1, write w (bias + counterOffset) (↑last + 1)) else none) =
+    some (id, changed)
+of `result`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+bias : ℕ
+w : OWNER
+id : ℕ
+changed : OWNER
+last : Pointer
+loaded : PV_LIB_SPEC_ThreadWords12.read w (bias + counterOffset) = some last
+result :
+  (do
+      let last ← some last
+      if ↑last + 1 < 2 ^ 64 then pure (↑last + 1, write w (bias + counterOffset) (↑last + 1)) else none) =
+    some (id, changed)
+⊢ PV_LIB_SPEC_NativeRuntime.GhostFrame w changed
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadId13.lean:56:30: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [loaded,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵] at result
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadId13.lean:58:22: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [loaded,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at result
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SPEC_ThreadId13.counterOffset' does not depend on any axioms
+'PV_LIB_SPEC_ThreadId13.value' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_ThreadId13.reply' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_ThreadId13.stored_counter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadId13.other' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_ThreadId13.successful_ghost' depends on axioms: [propext, sorryAx, Quot.sound]
