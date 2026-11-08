@@ -18,3 +18,5 @@ PV_LIB_SPEC_CallbackImageGap compiled 44983, cohort w3: exit0, wall 0:02.59, pea
 PV_LIB_SPEC_CallbackNativeGap compiled 44985, cohort w3: exit0, wall 0:03.20, peak 4799664KiB, swap 0; source 0ca777c8256e3b7e0d36da02a98e16608a51f33a; standard summary axioms only.
 
 PV_LIB_SPEC_AllocationSites compiled 44987, cohort w3: exit0, wall 0:03.17, peak 4775736KiB, swap 0; source 41a99d48ab6a906a16b0f42970578afe931ebcaf; standard summary axioms only.
+
+PV_LIB_SPEC_RawAuditSession10 compiled 44988, cohort w3: exit0, wall 0:00.81, peak 1590592KiB, swap 0; source 64a5a8cf10e3ac6a24fc1ca280e74c19a11254be; standard summary axioms only.
