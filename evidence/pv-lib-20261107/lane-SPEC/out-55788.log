@@ -1,0 +1,210 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveConsumption19.lean:49:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ResourceHistory.context
+    { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es, issued := issued,
+      consumed := consumed }
+    (config s a parents PV_LIB_SPEC_Entry13.slot.source) (wait s PV_LIB_SPEC_Entry13.slot.source)
+in the target expression
+  (match some (config s a parents PV_LIB_SPEC_Entry13.slot.source, wait s PV_LIB_SPEC_Entry13.slot.source) with
+    | none =>
+      PV_LIB_SPEC_ReachedNative14.step (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+        { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es, issued := issued,
+          consumed := consumed }
+    | some (c, wait) =>
+      match
+        PV_LIB_SPEC_ResourceHistory.context
+          { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+            issued := issued, consumed := consumed }
+          c wait with
+      | none =>
+        PV_LIB_SPEC_ReachedNative14.step (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+          { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+            issued := issued, consumed := consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match
+          PV_LIB_A_ActiveDispatch17.boundary (cut stack) bound c wait
+            { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.state.current.world with
+        | none =>
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store,
+                    world :=
+                      { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.world,
+                    events :=
+                      { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.events },
+                suspended :=
+                  { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                        issued := issued, consumed := consumed }.state.suspended },
+            issued :=
+              { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                  issued := issued, consumed := consumed }.issued,
+            consumed :=
+              ctx ::
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.consumed }
+        | some reply =>
+          have out :=
+            {
+              current :=
+                { status := reply.status, world := reply.world,
+                  events :=
+                    { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.events ++
+                      reply.events },
+              suspended :=
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                      issued := issued, consumed := consumed }.state.suspended };
+          { state := out,
+            issued :=
+              PV_LIB_SPEC_ControlRuntime.recordIssue
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.state
+                out
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.issued,
+            consumed :=
+              ctx ::
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.consumed }) =
+    let out :=
+      {
+        current :=
+          { status := (delivered ctx s a parents w).status, world := (delivered ctx s a parents w).world,
+            events := es ++ (delivered ctx s a parents w).events },
+        suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          (PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es) out issued,
+      consumed := ctx :: consumed }
+
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+s : Store Data
+a : ℕ
+parents : List Frame
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+ctx : Context
+origin :
+  PV_LIB_SPEC_ResourceHistory.context
+      { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es, issued := issued,
+        consumed := consumed }
+      (config s a parents PV_LIB_SPEC_Entry13.slot.source) (wait s PV_LIB_SPEC_Entry13.slot.source) =
+    some ctx
+active :
+  PV_LIB_SPEC_TlsBindings13.read PV_LIB_SPEC_Entry13.slot (bound ctx)
+      (config s a parents PV_LIB_SPEC_Entry13.slot.source) w =
+    some false
+corrected :
+  PV_LIB_A_ActiveEnvironment17.Corrected
+    (PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es)
+⊢ (match some (config s a parents PV_LIB_SPEC_Entry13.slot.source, wait s PV_LIB_SPEC_Entry13.slot.source) with
+    | none =>
+      PV_LIB_SPEC_ReachedNative14.step (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+        { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es, issued := issued,
+          consumed := consumed }
+    | some (c, wait) =>
+      match
+        PV_LIB_SPEC_ResourceHistory.context
+          { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+            issued := issued, consumed := consumed }
+          c wait with
+      | none =>
+        PV_LIB_SPEC_ReachedNative14.step (cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+          { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+            issued := issued, consumed := consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match
+          PV_LIB_A_ActiveDispatch17.boundary (cut stack) bound c wait
+            { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.state.current.world with
+        | none =>
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store,
+                    world :=
+                      { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.world,
+                    events :=
+                      { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.events },
+                suspended :=
+                  { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                        issued := issued, consumed := consumed }.state.suspended },
+            issued :=
+              { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                  issued := issued, consumed := consumed }.issued,
+            consumed :=
+              ctx ::
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.consumed }
+        | some reply =>
+          have out :=
+            {
+              current :=
+                { status := reply.status, world := reply.world,
+                  events :=
+                    { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                              issued := issued, consumed := consumed }.state.current.events ++
+                      reply.events },
+              suspended :=
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                      issued := issued, consumed := consumed }.state.suspended };
+          { state := out,
+            issued :=
+              PV_LIB_SPEC_ControlRuntime.recordIssue
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.state
+                out
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.issued,
+            consumed :=
+              ctx ::
+                { state := PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es,
+                    issued := issued, consumed := consumed }.consumed }) =
+    let out :=
+      {
+        current :=
+          { status := (delivered ctx s a parents w).status, world := (delivered ctx s a parents w).world,
+            events := es ++ (delivered ctx s a parents w).events },
+        suspended := [] };
+    { state := out,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          (PV_LIB_A_F5CallbackTrap16.waiting s a parents PV_LIB_SPEC_Entry13.slot.source w es) out issued,
+      consumed := ctx :: consumed }
+'PV_LIB_SPEC_ActiveConsumption19.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsumption19.delivered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsumption19.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsumption19.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsumption19.events' depends on axioms: [propext, Classical.choice, Quot.sound]
