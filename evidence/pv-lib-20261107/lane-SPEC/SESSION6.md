@@ -99,3 +99,16 @@ swap0,source1f058e45468; main prints standard axioms only. Its module/root
 arrays select115 NEW session6 roots. The private importAll walker,
 collectAxioms and reached-constructor-summary union are unchanged from the
 session5 audit. Next is the ONE strict raw49796 run; no old roots are rerun.
+
+ONE strict raw49796 PASS115/115 new roots;exit0;wall1:11.54;
+peak6824236KiB;swap0;sourcec36a25d9706. Zero unresolved and summary
+mismatches; standard axioms only. Exact graph archive, hashes, roots,
+input/wrapper hashes and summaries retained. No unchanged rerun, full
+manifest, package/ELF/native/Rust/Kani/Aeneas regression or release claim.
+
+Final read-only lane-A recheck discovered its new partial table surface
+PV_LIB_StoreActionTable.v2, companion machine and checked aggregate504 /
+full-reply gaps. SESSION6_LANEA_INPUT.json pins that revision and source
+archive. It is NOT the completed D984 table, so the independent full-table
+parameter is retained. This is not used as an excuse for the still-unfinished
+ABI and original-entry allocation witness work.

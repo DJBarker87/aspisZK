@@ -1,7 +1,61 @@
-# Session6 in progress
+# Session6 current handoff — partial, full joint witness still open
 
-See SESSION6.md. NativeRuntime49782 compiled; next49783. No joint witness
-or final strict audit yet. No row or endpoint closure claimed.
+Branch codex/pv-lib-spec-20261107; resumed745a4796ad6. No row proved;
+no endpoint/T premise added or removed. Full task NOT complete.
+
+Current operational extension: ControlRuntime (44905), source-history
+invariant ControlHistory.original (44907), concrete positive-entry/model
+conjunction ControlJoint.entryMachine/withTable (44908). NativeRuntime,
+ResourceHistory, BoundRuntime and their history/joint versions are retained
+predecessors. The current control reference preserves completion, actual
+waiting polls (including unwind) and intrinsic/BODY priority.
+
+Named Packet/callback/bridged allocation, heap/image/pointer/ManuallyDrop,
+Atomic/TLS value and Arc360 returned/overflow assembly is explicit. Ordinary
+native ghost fields are framed on EVERY answer; named allocation/base OWNER
+actions are the exceptions. Actual source Site/caller/request/arguments are
+derived at every finite prefix, occurrence is counted from consumed history,
+and operation/pre-world are supplied by the named primitive handler. No
+Store-transformer, desired-write, future-read or decoder-success premise.
+The allocation channels are installed for the three named Box sites; the
+reservation equation alone does not install the remaining opaque models.
+
+ConcreteEntry.pre proves the WHOLE current Frozen.RootPre on ONE initialized
+n=1 state/store/environment, both OWNER bounds, header validity, numbering,
+recursive source references and capture entry. ControlJoint combines it with
+the current machine/native facets/history/channel equations. This model has
+pending external/resource answers; conditional return facets are vacuous.
+ABI DATA remains a parameter. It is NOT the requested fully concrete
+source-adequate OwnInit witness, not AllocationBranch, and not all18 universal
+Contracts. SESSION6_ADEQUACY.md names every remaining binding precisely.
+The old18 statement modules/Frozen.runtime are retained, not silently rebound.
+
+Final lane-A read-only input is pinned by SESSION6_LANEA_INPUT.json and its
+source archive. New PV_LIB_StoreActionTable.v2 is explicitly partial, with
+checked aggregate504/full-answer, nonlast Drop and wrapper gaps. No partial
+candidate is credited as the completed D984 table. The independent full-table
+parameter remains; no write-definedness or desired-result requirement is used.
+
+11 focused passes (10 semantic modules + driver),7 changed-before-retry local
+elaboration failures retained; no OOM/refusal/transport failure or cap increase.
+Only accepted-ID guard extension44900–44999; exact diff retained. All runs
+6G/8G/swap0/Tasks64/Lean-M7000, one own scope, standalone turn before EACH ID.
+ONE strict raw49796 PASS115/115 NEW roots;exit0,wall1:11.54,
+peak6824236KiB,swap0,sourcec36a25d9706;zero unresolved/summary disagreements;
+standard axioms only. Exact raw graph archive/manifest/hashes retained.
+No unchanged audit/full manifest or runtime/Rust/Kani/SBF/extraction regression.
+No own scope remains active. No key, shared/provider/package/ledger/implementation
+change, push or merge. Next Lean44910; raw49797 only for changed/new inputs.
+
+Next concrete deliverable: instantiate the actual frozen ABI and remaining
+opaque native/resource models, rebind the18 full statements, and build ONE
+original-entry callback13923/register14320/bridged14756 allocation history
+with actual allBridged/SourceInitBoxOwnership applications. Do not credit
+this session's pending model as that history or as full-joint satisfiability.
+No budget-exhaustion or full-joint contradiction is claimed.
+
+Offline evidence validation (no Lean/raw rerun):
+python3 evidence/pv-lib-20261107/lane-SPEC/validate_session6.py — PASS.
 
 ---
 
