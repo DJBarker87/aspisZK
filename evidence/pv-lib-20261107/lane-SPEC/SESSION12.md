@@ -6,3 +6,5 @@ PV_LIB_SPEC_AtomicBoolGap compiled 55117, cohort w3: exit0, wall 0:02.64, peak 4
 PV_LIB_SPEC_NativeBoolArc compiled 55118, cohort w3: exit0, wall 0:03.34, peak 4791196KiB, swap 0; source e547640975fb419761967059c522af3dfbe14eb4; standard summary axioms only.
 
 PV_LIB_SPEC_NativeConstructors compiled 55120, cohort w3: exit0, wall 0:02.47, peak 4773964KiB, swap 0; source 52b92a8ec7be51cb02ea246e687b80362f83ca82; standard summary axioms only.
+
+PV_LIB_SPEC_ThreadNewNative compiled 55122, cohort w3: exit0, wall 0:02.38, peak 4767256KiB, swap 0; source 453e238936486f79203505f8c293c14c36c89ff2; standard summary axioms only.
