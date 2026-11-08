@@ -1,0 +1,37 @@
+import NNH_Run5bRestSetup
+import NNH_Run5bRestClaims
+import NNH_Run5bRestPhysical
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNH_Run5bRest
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open S2W_ReturnedCheckpoint S2W_CommittedCheckpoint S2W_WrapperLaws S2W_D189Consolidation
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open NNH_Run5bCtx NNH_Run5bHost
+variable {W Tx : Type} (L : Library W (Nat → Record))
+ (borrow : S2TrustedSdkBorrow L)
+ (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+ (std : S2W_TrustedStd.TrustedStd copy)
+include borrow
+
+theorem rest (c : Ctx W Tx) (n1 : S2W_ExtractionBoundary.First)
+ (n2 : S2W_ExtractionBoundary.Second)
+ (ext : (S_host L copy std).Extraction c n1 n2)
+ (ac1 : (S_host L copy std).Accepted1 c n1)
+ (game : (S_host L copy std).Game c n1 n2)
+ (queries : (S_host L copy std).Queries c n1) :
+ NNH_Run5bSplit.rest L copy c n1 n2 := by
+ obtain ⟨p6,driver,sdk⟩ := NNH_Run5bRestSetup.produce L borrow copy std c n1 n2 ext ac1 game queries
+ obtain ⟨model,sourceClaims,mass,numeric⟩ := NNH_Run5bRestClaims.produce L borrow copy std c n1 n2 ext ac1 game queries
+ obtain ⟨copyFacts,events,protection,trace,recorder,s6⟩ := NNH_Run5bRestPhysical.produce L borrow copy std c n1 n2 ext ac1 game queries
+ exact ⟨p6,driver,sdk,⟨model,sourceClaims,mass,numeric⟩,copyFacts,events,protection,trace,recorder,s6⟩
+def split : RSL.TFM.Split (S_host (Tx := Tx) L copy std) where
+ Rest := NNH_Run5bSplit.rest L copy
+ Outcome := NNH_Run5bSplit.outcome L copy
+ concl_iff := NNH_Run5bSplit.conclusion_iff L copy
+ rest := rest L borrow copy std
+#print axioms rest
+#print axioms split
+end AspisR1.NNH_Run5bRest
+end

@@ -838,3 +838,22 @@ L887 actual values-owned slot); L884/L885 nominal-variant rewrites retired
 and replaced by source congruence (L886); L888 replaced accumulator rewrite
 with explicit slice roundtrip (L891); L890 added the exact bytes-carrier length
 unfolding (L892). No memory/timeout/cap increase and no unchanged failed rerun.
+
+### Run 5b T5 OPEN at cap (6/6 scopes L894–899)
+
+Exact goal: forall c n1 n2, Extraction -> Accepted1 -> Game -> Queries ->
+NNH_Run5bSplit.rest L copy c n1 n2. CLOSED components:
+AspisR1.NNH_Run5bRestSetup.produce (L895) and RestClaims.produce (L896),
+standard axioms only. No accepted2 or Root0 is used. Physical copy/events/
+protection/trace/recorder/S6N and the final Rest/Split assembly remain OPEN.
+
+L894's monolithic proof hit the kernel memory limit. It was replaced with
+three independently typed groups. L897 exposed missing namespace openings;
+L898 still lacked S2W_EntryWriteHistory.payloadBytes and also hit kernel
+memory/recursion errors. L899 isolates the copy fact but repeats the missing
+opening and reaches default recursion depth. This input mistake was avoidable;
+no failed term is credited and no inference of mathematical falsehood is made.
+The exact failed source/logs are retained in the attempt directories. Namespace-
+corrected Physical/Copy drafts and the proposed named assembly are .lean.txt,
+explicitly uncompiled at the cap, excluded from imports. No heartbeat, recursion,
+-M or cgroup cap was raised. No unchanged killed/timed-out job was rerun.
