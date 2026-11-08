@@ -11,3 +11,5 @@ PV_LIB_SPEC_SpawnHooks14 compiled 55402, cohort w3: exit0, wall 0:02.31, peak 48
 PV_LIB_SPEC_PrefixNative14 compiled 55404, cohort w3: exit0, wall 0:02.20, peak 4798628KiB, swap 0; source 79c2932072943f2125da7395f4bd619114b74e15; standard summary axioms only.
 
 PV_LIB_SPEC_Values14 compiled 55405, cohort w3: exit0, wall 0:02.37, peak 4800452KiB, swap 0; source 0bf21d569b2dde5eb4358dde6bb348825229a608; standard summary axioms only.
+
+PV_LIB_SPEC_Entry14 compiled 55407, cohort w3: exit0, wall 0:02.18, peak 4793012KiB, swap 0; source 40f23b4574c7586884a073a015762eeafd42c62a; standard summary axioms only.
