@@ -1,0 +1,313 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:43:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  c.frame.completed
+in the target expression
+  (do
+      let c ← some c
+      if c.frame.completed.isSome = true then none
+        else
+          match PV_THR2_Catch316Segment.select c with
+          | some val => none
+          | none => do
+            let wait ← c.frame.waiting
+            match wait.request with
+              | PV_STX2_Native.Request.child fn activation captures =>
+                if (PV_LIB_SPEC_Full.programs fn).isSome = true then none else some (c, wait)
+              | x => some (c, wait)) =
+    some (c, wait)
+
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+c : Config
+wait : PV_STX2_Native.Waiting Data
+site : Site
+w : OWNER
+events : List Event
+issued : List Issued
+consumed : List Context
+fn : Data
+a dest : ℕ
+args : List Data
+r : Reply OWNER Event Data
+quiet :
+  PV_LIB_SPEC_SourceTransport15.Quiet
+    { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events }, suspended := [] }
+intrinsic : PV_THR2_Catch316Segment.select c = none
+action : wait.action = PV_STX2_Native.ReturnAction.child a (Place.local dest)
+done : c.frame.completed = none
+unwind : c.frame.unwinding = none
+saved : c.frame.waiting = some wait
+requested : wait.request = PV_STX2_Native.Request.child fn a args
+lookup : PV_LIB_SPEC_Full.programs fn = none
+answer :
+  ∀ (resources : Resources),
+    PV_LIB_SPEC_ReachedNative14.answer cut (PV_LIB_SPEC_TlsBound15.parameters resources) c wait.request w = some r
+⊢ (do
+      let c ← some c
+      if c.frame.completed.isSome = true then none
+        else
+          match PV_THR2_Catch316Segment.select c with
+          | some val => none
+          | none => do
+            let wait ← c.frame.waiting
+            match wait.request with
+              | PV_STX2_Native.Request.child fn activation captures =>
+                if (PV_LIB_SPEC_Full.programs fn).isSome = true then none else some (c, wait)
+              | x => some (c, wait)) =
+    some (c, wait)
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:38:77: error: unsolved goals
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+c : Config
+wait : PV_STX2_Native.Waiting Data
+site : Site
+w : OWNER
+events : List Event
+issued : List Issued
+consumed : List Context
+fn : Data
+a dest : ℕ
+args : List Data
+r : Reply OWNER Event Data
+quiet :
+  PV_LIB_SPEC_SourceTransport15.Quiet
+    { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events }, suspended := [] }
+intrinsic : PV_THR2_Catch316Segment.select c = none
+action : wait.action = PV_STX2_Native.ReturnAction.child a (Place.local dest)
+done : c.frame.completed = none
+unwind : c.frame.unwinding = none
+saved : c.frame.waiting = some wait
+requested : wait.request = PV_STX2_Native.Request.child fn a args
+lookup : PV_LIB_SPEC_Full.programs fn = none
+answer :
+  ∀ (resources : Resources),
+    PV_LIB_SPEC_ReachedNative14.answer cut (PV_LIB_SPEC_TlsBound15.parameters resources) c wait.request w = some r
+ordinary :
+  PV_LIB_SPEC_ControlRuntime.ordinary
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events },
+        suspended := [] } =
+    some (c, wait)
+x : Execution :=
+  {
+    state :=
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events }, suspended := [] },
+    issued := { site := site, caller := c.frame.activation, request := wait.request } :: issued, consumed := consumed }
+context : PV_LIB_SPEC_ResourceHistory.context x c wait = some (origin site c.frame.activation wait.request consumed)
+resources : Resources :=
+  fun {A} =>
+    PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+      (origin site c.frame.activation wait.request consumed)
+result :
+  PV_LIB_SPEC_ReachedNative14.answer cut
+      { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+        control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+        needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop, resources := fun {A} => resources,
+        encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+        loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+        siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+        environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+      c wait.request w =
+    some r
+delivery :
+  PV_LIB_SPEC_ReachedNative14.transition cut
+      { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+        control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+        needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+        resources := fun {A} =>
+          PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+            (origin site c.frame.activation wait.request consumed),
+        encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+        loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+        siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+        environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }
+      c
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := events },
+        suspended := [] } =
+    {
+      current :=
+        {
+          status :=
+            (PV_THR2_ChildBoundary.delivered
+                (runtime
+                    { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                      control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                      needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                      resources := fun {A} =>
+                        PV_LIB_SPEC_ResourceHistory.allocationResources
+                          PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                          (origin site c.frame.activation wait.request consumed),
+                      encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                      loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                      siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                      environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                c wait r).status,
+          world :=
+            (PV_THR2_ChildBoundary.delivered
+                (runtime
+                    { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                      control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                      needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                      resources := fun {A} =>
+                        PV_LIB_SPEC_ResourceHistory.allocationResources
+                          PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                          (origin site c.frame.activation wait.request consumed),
+                      encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                      loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                      siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                      environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                c wait r).world,
+          events :=
+            events ++
+              (PV_THR2_ChildBoundary.delivered
+                  (runtime
+                      { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                        control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                        needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                        resources := fun {A} =>
+                          PV_LIB_SPEC_ResourceHistory.allocationResources
+                            PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                            (origin site c.frame.activation wait.request consumed),
+                        encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                        loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                        siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                        environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                  c wait r).events },
+      suspended := [] }
+handler :
+  PV_LIB_SPEC_ReachedNative14.handler cut (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) c wait.request w = r
+⊢ {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                (PV_THR2_ChildBoundary.delivered
+                    (runtime
+                        { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                          control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                          needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                          resources := fun {A} =>
+                            PV_LIB_SPEC_ResourceHistory.allocationResources
+                              PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                              (origin site c.frame.activation wait.request consumed),
+                          encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                          loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                          siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                          environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                    c wait r).status,
+              world :=
+                (PV_THR2_ChildBoundary.delivered
+                    (runtime
+                        { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                          control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                          needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                          resources := fun {A} =>
+                            PV_LIB_SPEC_ResourceHistory.allocationResources
+                              PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                              (origin site c.frame.activation wait.request consumed),
+                          encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                          loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                          siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                          environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                    c wait r).world,
+              events :=
+                events ++
+                  (PV_THR2_ChildBoundary.delivered
+                      (runtime
+                          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                            resources := fun {A} =>
+                              PV_LIB_SPEC_ResourceHistory.allocationResources
+                                PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                                (origin site c.frame.activation wait.request consumed),
+                            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+                      c wait r).events },
+          suspended := [] },
+      issued :=
+        match do
+          let c ← some c
+          if (c.frame.waiting.isSome || c.frame.completed.isSome) = true then none
+            else
+              match c.frame.remaining with
+              | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site callee captures returnPlace unwind) :: tail =>
+                some (site, c.frame.activation)
+              | PV_STX2_SliceSyntax.Node.leaf (Instruction.drop site place callee conditional unwind) :: tail =>
+                some (site, c.frame.activation)
+              | PV_STX2_SliceSyntax.Node.leaf (Instruction.copy site source destination count) :: tail =>
+                some (site, c.frame.activation)
+              | x => none,
+          (PV_THR2_ChildBoundary.delivered
+              (runtime
+                  { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+                    control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+                    needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+                    resources := fun {A} =>
+                      PV_LIB_SPEC_ResourceHistory.allocationResources
+                        PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                        (origin site c.frame.activation wait.request consumed),
+                    encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+                    loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+                    siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+                    environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment }).carrier
+              c wait r).status with
+        | some (site_1, caller), PV_STX2_SliceMachine.Status.running c_1 =>
+          match c_1.frame.waiting with
+          | some wait_1 =>
+            { site := site_1, caller := caller, request := wait_1.request } ::
+              { site := site, caller := c.frame.activation, request := wait.request } :: issued
+          | none => { site := site, caller := c.frame.activation, request := wait.request } :: issued
+        | x, x_1 => { site := site, caller := c.frame.activation, request := wait.request } :: issued,
+      consumed := origin site c.frame.activation wait.request consumed :: consumed } =
+    {
+      state :=
+        {
+          current :=
+            {
+              status :=
+                (PV_THR2_ChildBoundary.delivered (runtime PV_LIB_SPEC_ReachedEnvironment14.parameters).carrier c wait
+                    r).status,
+              world :=
+                (PV_THR2_ChildBoundary.delivered (runtime PV_LIB_SPEC_ReachedEnvironment14.parameters).carrier c wait
+                    r).world,
+              events :=
+                events ++
+                  (PV_THR2_ChildBoundary.delivered (runtime PV_LIB_SPEC_ReachedEnvironment14.parameters).carrier c wait
+                      r).events },
+          suspended := [] },
+      issued := { site := site, caller := c.frame.activation, request := wait.request } :: issued,
+      consumed := origin site c.frame.activation wait.request consumed :: consumed }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:73:87: warning: This simp argument is unused:
+  saved
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing,s̵a̵v̵e̵d̵,̵
+      Option.isSome_some, ̲Bool.true_or, ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:74:4: warning: This simp argument is unused:
+  Option.isSome_some
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵,̵Bool.true_or, ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:74:23: warning: This simp argument is unused:
+  Bool.true_or
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      Option.isSome_some,B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵o̵r̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ActiveDelivery17.lean:74:36: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_LIB_SPEC_ControlRuntime.recordIssue, ̲PV_LIB_SPEC_ControlRuntime.issuing, ̲saved,
+      Option.isSome_some, ̲Bool.true_or,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_ActiveDelivery17.origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_ActiveDelivery17.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

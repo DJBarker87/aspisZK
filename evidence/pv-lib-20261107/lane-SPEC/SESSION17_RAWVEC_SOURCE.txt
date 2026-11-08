@@ -1,0 +1,55 @@
+0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965  /home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs
+
+type Cap = core::num::niche_types::UsizeNoHighBit;
+
+const ZERO_CAP: Cap = unsafe { Cap::new_unchecked(0) };
+
+/// `Cap(cap)`, except if `T` is a ZST then `Cap::ZERO`.
+///
+/// # Safety: cap must be <= `isize::MAX`.
+unsafe fn new_cap<T>(cap: usize) -> Cap {
+    if T::IS_ZST { ZERO_CAP } else { unsafe { Cap::new_unchecked(cap) } }
+}
+
+    #[inline]
+    pub(crate) const fn non_null(&self) -> NonNull<T> {
+        self.inner.non_null()
+    }
+
+    /// Gets the capacity of the allocation.
+    ///
+    /// This will always be `usize::MAX` if `T` is zero-sized.
+    #[inline]
+    pub(crate) const fn capacity(&self) -> usize {
+        self.inner.capacity(size_of::<T>())
+    }
+
+    #[inline]
+    const fn capacity(&self, elem_size: usize) -> usize {
+        if elem_size == 0 { usize::MAX } else { self.cap.as_inner() }
+    }
+    unsafe fn reserve(&mut self, len: usize, additional: usize, elem_layout: Layout) {
+        // Callers expect this function to be very cheap when there is already sufficient capacity.
+        // Therefore, we move all the resizing and error-handling logic from grow_amortized and
+        // handle_reserve behind a call, while making sure that this function is likely to be
+        // inlined as just a comparison and a call if the comparison fails.
+        #[cold]
+        unsafe fn do_reserve_and_handle<A: Allocator>(
+            slf: &mut RawVecInner<A>,
+            len: usize,
+            additional: usize,
+            elem_layout: Layout,
+        ) {
+            // SAFETY: Precondition passed to caller
+            if let Err(err) = unsafe { slf.grow_amortized(len, additional, elem_layout) } {
+                handle_error(err);
+            }
+        }
+
+        if self.needs_to_grow(len, additional, elem_layout) {
+            unsafe {
+                do_reserve_and_handle(self, len, additional, elem_layout);
+            }
+        }
+    }
+

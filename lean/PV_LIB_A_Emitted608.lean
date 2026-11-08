@@ -1,0 +1,43 @@
+import PV_STX2_SliceSyntax
+set_option autoImplicit false
+namespace PV_LIB_A_Emitted608
+open PV_STX2_Syntax PV_STX2_SliceSyntax
+/- Exact retained N95808 syntax, converted with unchanged pinned helpers. Syntax only. -/
+def node0 : Node :=
+  .leaf (.storage ⟨608, 23384, .array [(.atom "body"), (.atom "statements"), (.number 0)]⟩ true 0)
+def node1 : Node :=
+  .leaf (.storage ⟨608, 23385, .array [(.atom "body"), (.atom "statements"), (.number 1)]⟩ true 2)
+def node2 : Node :=
+  .leaf (.storage ⟨608, 23386, .array [(.atom "body"), (.atom "statements"), (.number 2)]⟩ true 3)
+def node3 : Node :=
+  .leaf (.aggregateMove ⟨608, 23387, .array [(.atom "body"), (.atom "statements"), (.number 3)]⟩ (.local 0) (.object [("Adt", (.array [(.object [("id", (.atom "Tuple")), ("generics", (.object [("regions", (.array [])), ("types", (.array [])), ("const_generics", (.array [])), ("trait_refs", (.array []))]))]), (.null), (.null)]))]) [])
+def node4 : Node :=
+  .leaf (.bind ⟨608, 23388, .array [(.atom "body"), (.atom "statements"), (.number 4)]⟩ (.local 2) (.reference (.project (.local 1) (.deref)) (.constant (.object [("kind", (.object [("Adt", (.array [(.null), (.array [])]))])), ("ty", (.object [("Deduplicated", (.number 646))]))]))))
+def node5 : Node :=
+  .leaf (.call ⟨608, 23398, .array [(.atom "body"), (.atom "statements"), (.number 5)]⟩ (.object [("Regular", (.object [("kind", (.object [("Fun", (.object [("Regular", (.number 644))]))])), ("generics", (.object [("regions", (.array [(.object [("Body", (.number 4))])])), ("types", (.array [])), ("const_generics", (.array [])), ("trait_refs", (.array []))]))]))]) [(.move (.local 2))] (.local 3) [.drop ⟨608, 23393, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 0)]⟩ (.project (.project (.local 1) (.deref)) (.field 0)) (.object [("kind", (.object [("Fun", (.object [("Regular", (.number 157))]))])), ("generics", (.object [("regions", (.array [(.object [("Body", (.number 5))])])), ("types", (.array [(.object [("Deduplicated", (.number 35905))])])), ("const_generics", (.array [])), ("trait_refs", (.array []))]))]) false [.storage ⟨608, 23389, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 0), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 0)]⟩ false 3,
+.storage ⟨608, 23390, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 0), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 1)]⟩ false 2,
+.storage ⟨608, 23391, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 0), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 2)]⟩ false 1,
+.abort ⟨608, 23392, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 0), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 3)]⟩ (.atom "UnwindTerminate")],
+.storage ⟨608, 23394, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 1)]⟩ false 3,
+.storage ⟨608, 23395, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 2)]⟩ false 2,
+.storage ⟨608, 23396, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 3)]⟩ false 1,
+.unwind ⟨608, 23397, .array [(.atom "body"), (.atom "statements"), (.number 5), (.atom "kind"), (.atom "Call"), (.atom "on_unwind"), (.atom "statements"), (.number 4)]⟩])
+def node6 : Node :=
+  .leaf (.drop ⟨608, 23403, .array [(.atom "body"), (.atom "statements"), (.number 6)]⟩ (.project (.project (.local 1) (.deref)) (.field 0)) (.object [("kind", (.object [("Fun", (.object [("Regular", (.number 157))]))])), ("generics", (.object [("regions", (.array [(.object [("Body", (.number 6))])])), ("types", (.array [(.object [("Deduplicated", (.number 35905))])])), ("const_generics", (.array [])), ("trait_refs", (.array []))]))]) false [.storage ⟨608, 23399, .array [(.atom "body"), (.atom "statements"), (.number 6), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 0)]⟩ false 3,
+.storage ⟨608, 23400, .array [(.atom "body"), (.atom "statements"), (.number 6), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 1)]⟩ false 2,
+.storage ⟨608, 23401, .array [(.atom "body"), (.atom "statements"), (.number 6), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 2)]⟩ false 1,
+.unwind ⟨608, 23402, .array [(.atom "body"), (.atom "statements"), (.number 6), (.atom "kind"), (.atom "Drop"), (.atom "on_unwind"), (.atom "statements"), (.number 3)]⟩])
+def node7 : Node :=
+  .leaf (.storage ⟨608, 23404, .array [(.atom "body"), (.atom "statements"), (.number 7)]⟩ false 3)
+def node8 : Node :=
+  .leaf (.storage ⟨608, 23405, .array [(.atom "body"), (.atom "statements"), (.number 8)]⟩ false 2)
+def node9 : Node :=
+  .leaf (.storage ⟨608, 23406, .array [(.atom "body"), (.atom "statements"), (.number 9)]⟩ false 1)
+def node10 : Node :=
+  .leaf (.ret ⟨608, 23407, .array [(.atom "body"), (.atom "statements"), (.number 10)]⟩ (.local 0))
+def block11 : List Node :=
+  [node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10]
+def program : PV_STX2_SliceSyntax.Program :=
+  ⟨608, .object [("opcode", (.atom "CallEntry")), ("function", (.number 608)), ("signature", (.object [("is_unsafe", (.boolean true)), ("abi", (.atom "Rust")), ("is_variadic", (.boolean false)), ("inputs", (.array [(.object [("HashConsedValue", (.array [(.number 39586), (.object [("Ref", (.array [(.object [("Var", (.object [("Free", (.number 0))]))]), (.object [("Deduplicated", (.number 20954))]), (.atom "Mut")]))])]))])])), ("output", (.object [("Deduplicated", (.number 646))]))])), ("argument_count", (.number 1))], .array [(.object [("opcode", (.atom "LocalDeclaration")), ("function", (.number 608)), ("local", (.number 0)), ("role", (.atom "return")), ("declaration", (.object [("index", (.number 0)), ("name", (.null)), ("span", (.object [("data", (.object [("file_id", (.number 29)), ("beg", (.object [("line", (.number 825)), ("col", (.number 0))])), ("end", (.object [("line", (.number 827)), ("col", (.number 24))]))])), ("generated_from_span", (.null))])), ("ty", (.object [("Deduplicated", (.number 646))]))]))]), (.object [("opcode", (.atom "LocalDeclaration")), ("function", (.number 608)), ("local", (.number 1)), ("role", (.atom "argument")), ("declaration", (.object [("index", (.number 1)), ("name", (.null)), ("span", (.object [("data", (.object [("file_id", (.number 29)), ("beg", (.object [("line", (.number 825)), ("col", (.number 0))])), ("end", (.object [("line", (.number 827)), ("col", (.number 24))]))])), ("generated_from_span", (.null))])), ("ty", (.object [("HashConsedValue", (.array [(.number 24714), (.object [("Ref", (.array [(.object [("Body", (.number 1))]), (.object [("Deduplicated", (.number 20954))]), (.atom "Mut")]))])]))]))]))]), (.object [("opcode", (.atom "LocalDeclaration")), ("function", (.number 608)), ("local", (.number 2)), ("role", (.atom "temporary")), ("declaration", (.object [("index", (.number 2)), ("name", (.null)), ("span", (.object [("data", (.object [("file_id", (.number 29)), ("beg", (.object [("line", (.number 825)), ("col", (.number 0))])), ("end", (.object [("line", (.number 827)), ("col", (.number 24))]))])), ("generated_from_span", (.null))])), ("ty", (.object [("HashConsedValue", (.array [(.number 24715), (.object [("Ref", (.array [(.object [("Body", (.number 2))]), (.object [("Deduplicated", (.number 20954))]), (.atom "Mut")]))])]))]))]))]), (.object [("opcode", (.atom "LocalDeclaration")), ("function", (.number 608)), ("local", (.number 3)), ("role", (.atom "temporary")), ("declaration", (.object [("index", (.number 3)), ("name", (.null)), ("span", (.object [("data", (.object [("file_id", (.number 29)), ("beg", (.object [("line", (.number 825)), ("col", (.number 0))])), ("end", (.object [("line", (.number 827)), ("col", (.number 24))]))])), ("generated_from_span", (.null))])), ("ty", (.object [("Deduplicated", (.number 646))]))]))])], block11⟩
+#print axioms program
+end PV_LIB_A_Emitted608

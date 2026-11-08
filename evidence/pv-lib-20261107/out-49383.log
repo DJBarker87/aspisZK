@@ -1,0 +1,14 @@
+theorem PV_FN_THREAD_f121.contract_value : ∀ {E : Type} (C : Carrier OWNER Data) (e : PV_W1_LeafBoundary.Entry)
+  (H : PV_W1_OwnerNativeFrame.Backend E) (w : OWNER) (events : List E) (changes : Address → Option Data) (n : ℕ)
+  (pre : PV_W1_ClosedLeaves.Pre e w) (atomicUsizeNew : PV_THR2_LibrarySemantics_AtomicUsizeNew.Fact C e H w changes n),
+  PostValue C e H w events changes n :=
+fun {E} C e H w events changes n pre atomicUsizeNew =>
+  ⟨PV_W1_ClosedLeaves.f121 C e H w [Data.number n] events pre,
+    ⟨PV_W1_ArgumentEffects.full_reply C (entry e n) H w events changes pre, atomicUsizeNew⟩⟩
+theorem PV_FN_THREAD_f121.implies_W1 : ∀ {E : Type} (C : Carrier OWNER Data) (e : PV_W1_LeafBoundary.Entry)
+  (H : PV_W1_OwnerNativeFrame.Backend E) (w : OWNER) (events : List E) (changes : Address → Option Data) (n : ℕ)
+  (post : PostValue C e H w events changes n), PV_W1_ClosedLeaves.Post121 C e H w [Data.number n] events :=
+fun {E} C e H w events changes n post => post.left
+'PV_FN_THREAD_f121.contract_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f121.implies_W1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f121.provider_descriptors' depends on axioms: [propext]

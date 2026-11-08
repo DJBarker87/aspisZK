@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  C.dereference w reference
+in the target expression
+  (match [reference] with
+    | [reference] => do
+      let __x ←
+        do
+          let p ← C.dereference w reference
+          let value ← readAddress C s p
+          pure (p, value)
+      match __x with
+        | (fst, arc) => do
+          let nonNull ← C.field arc 0
+          let pointer ← C.field nonNull 0
+          C.dereference w pointer
+    | x => none) =
+    some p
+
+W : Type
+C : Carrier W Data
+s : Store Data
+w : W
+reference : Data
+arcAddress p : Address
+arc nonNull pointer : Data
+ref : C.dereference w reference = some arcAddress
+cell : readAddress C s arcAddress = some arc
+field : C.field arc 0 = some nonNull
+ptr : C.field nonNull 0 = some pointer
+deref : C.dereference w pointer = some p
+⊢ (match [reference] with
+    | [reference] => do
+      let __x ←
+        do
+          let p ← C.dereference w reference
+          let value ← readAddress C s p
+          pure (p, value)
+      match __x with
+        | (fst, arc) => do
+          let nonNull ← C.field arc 0
+          let pointer ← C.field nonNull 0
+          C.dereference w pointer
+    | x => none) =
+    some p
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:78:4: error: Tactic `rfl` failed: The left-hand side
+  (PV_THR2_OwnInitExactReturnedCases.carrier C b).dereference w (PV_STX2_TypedReferences.reference v.arc Data.null)
+is not definitionally equal to the right-hand side
+  some v.arc
+
+case ref
+C : Carrier PV_EVHB_OwnerMachine.OWNER Data
+b : Bool
+e : PV_W1_LeafBoundary.Entry
+w : PV_EVHB_OwnerMachine.OWNER
+v : PV_THR2_LibrarySemantics_ArcClone.Valid (PV_THR2_OwnInitExactReturnedCases.carrier C b) e w
+⊢ (PV_THR2_OwnInitExactReturnedCases.carrier C b).dereference w (PV_STX2_TypedReferences.reference v.arc Data.null) =
+    some v.arc
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:82:4: error: Tactic `rfl` failed: The left-hand side
+  (PV_THR2_OwnInitExactReturnedCases.carrier C b).dereference w (PV_STX2_TypedReferences.reference v.inner Data.null)
+is not definitionally equal to the right-hand side
+  some v.inner
+
+case deref
+C : Carrier PV_EVHB_OwnerMachine.OWNER Data
+b : Bool
+e : PV_W1_LeafBoundary.Entry
+w : PV_EVHB_OwnerMachine.OWNER
+v : PV_THR2_LibrarySemantics_ArcClone.Valid (PV_THR2_OwnInitExactReturnedCases.carrier C b) e w
+⊢ (PV_THR2_OwnInitExactReturnedCases.carrier C b).dereference w (PV_STX2_TypedReferences.reference v.inner Data.null) =
+    some v.inner
+'PV_LIB_A_ArcStoreV2.PV_THR2_LibrarySemantics_ArcClone360' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.inner_from_source' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ArcStoreV2.clone_count' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.valid_inner' depends on axioms: [propext, sorryAx]

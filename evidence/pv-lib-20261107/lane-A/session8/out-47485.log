@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:12:22: error: unsolved goals
+case cons
+W : Type
+C : Carrier W Data
+K : Control
+head : ℕ
+tail : List ℕ
+ih : ∀ (value : Data), readFields (carrier C K) tail value = readFields C tail value
+value : Data
+⊢ (do
+      let child ← (carrier C K).field value head
+      readFields C tail child) =
+    do
+    let child ← C.field value head
+    readFields C tail child
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:22:23: error: unsolved goals
+case cons.cons
+W : Type
+C : Carrier W Data
+K : Control
+replacement : Option Data
+head : ℕ
+value : Data
+second : ℕ
+rest : List ℕ
+ih :
+  ∀ (value : Data),
+    replaceFields (carrier C K) (second :: rest) replacement value = replaceFields C (second :: rest) replacement value
+⊢ (do
+      let child ← (carrier C K).field value head
+      let child' ← replaceFields C (second :: rest) replacement child
+      (carrier C K).replaceField value head (some child')) =
+    do
+    let child ← C.field value head
+    let child' ← replaceFields C (second :: rest) replacement child
+    C.replaceField value head (some child')
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:36: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Carrier x_0 x_1 → Store x_1 → x_0 → ℕ → Place → Option x_1
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:25: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:36: error: Ambiguous term
+  read
+Possible interpretations:
+  PV_STX2_Store.read : Carrier ?m.62 ?m.63 → Store ?m.63 → ?m.62 → ℕ → Place → Option ?m.63
+  
+  MonadReader.read : ?m.63 ?m.62
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:25: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:36: error: Ambiguous term
+  read
+Possible interpretations:
+  PV_STX2_Store.read : Carrier ?m.62 ?m.63 → Store ?m.63 → ?m.62 → ℕ → Place → Option ?m.63
+  
+  MonadReader.read : ?m.63 ?m.62
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:41:25: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_UnwindReplies.lean:49:28: error: unsolved goals
+case project.deref
+W : Type
+C : Carrier W Data
+K : Control
+s : Store Data
+w : W
+a : ℕ
+p : Place
+ih : locate (carrier C K) s w a p = locate C s w a p
+⊢ (do
+      let v ← PV_STX2_Store.read C s w a p
+      (carrier C K).dereference w v) =
+    do
+    let v ← PV_STX2_Store.read C s w a p
+    C.dereference w v
+'PV_LIB_A_UnwindReplies.read_fields' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_UnwindReplies.replace_fields' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_UnwindReplies.read_address' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_A_UnwindReplies.write_address' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_A_UnwindReplies.read_place' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_UnwindReplies.locate_place' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_UnwindReplies.store_result' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_A_UnwindReplies.full_reply' depends on axioms: [propext, sorryAx, Quot.sound]

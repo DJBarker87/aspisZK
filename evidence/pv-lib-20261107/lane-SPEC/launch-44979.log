@@ -1,0 +1,65 @@
+{"cohort": "w3", "attempt": 44979, "target": "PV_LIB_SPEC_SiteArcRecheck", "source_revision": "9cb17796b755b5603594822435bb65bca88dc85f", "source_sha256": "e2abcacdce350de52fd811507f8c1dbbc4de7546ff0d0c11b757e5b21733da3d", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10860, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-44979", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-44979.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_SiteArcRecheck.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean", "7000"], "exit": 1, "wall_seconds": 3.078481674194336, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_SiteArcRecheck.panic' does not depend on any axioms", "'PV_LIB_SPEC_SiteArcRecheck.scope_image' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SiteArcRecheck.scope_handler' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SiteArcRecheck.packet_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:03.02", "peak_rss_kbytes": "4763572", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:51:71: error: unsolved goals
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer : ℕ
+⊢ (match
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+          8).answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).answer,
+          world :=
+            PV_LIB_SPEC_SparseArc.initialized p scopePointer
+              (PV_THR2_PacketBoxReply.finish s w.next
+                  (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                    PV_LIB_SPEC_SparseArc.shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+          8)) =
+    match
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+          8).answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).answer,
+          world :=
+            PV_LIB_SPEC_SparseArc.initialized p scopePointer
+              (PV_THR2_PacketBoxReply.finish s w.next
+                  (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                    PV_LIB_SPEC_SparseArc.shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+'PV_LIB_SPEC_SiteArcRecheck.panic' does not depend on any axioms
+'PV_LIB_SPEC_SiteArcRecheck.scope_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SiteArcRecheck.scope_handler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SiteArcRecheck.packet_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

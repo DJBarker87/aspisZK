@@ -1,0 +1,128 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ConsumedHistory18.lean:19:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+p : Parameters
+x : Execution
+probe : Context
+member : probe ∈ x.consumed
+x✝¹ : Option (Config × PV_STX2_Native.Waiting Data)
+c✝ : Config
+wait✝ : PV_STX2_Native.Waiting Data
+heq✝¹ : PV_LIB_SPEC_ControlRuntime.ordinary x.state = some (c✝, wait✝)
+x✝ : Option Context
+ctx✝ : Context
+heq✝ : PV_LIB_SPEC_ResourceHistory.context x c✝ wait✝ = some ctx✝
+⊢ probe ∈
+    (have bound :=
+        { primitives := p.primitives, control := p.control, needsDrop := p.needsDrop,
+          resources := fun {A} => PV_LIB_SPEC_ResourceHistory.allocationResources p.environment ctx✝,
+          encode := @Parameters.encode p, loadBias := p.loadBias, siteIndex := p.siteIndex,
+          environment := p.environment };
+      match PV_LIB_SPEC_ReachedNative14.answer cut bound c✝ wait✝.request x.state.current.world with
+      | none =>
+        have r := PV_THR2_OwnUniformResourceHandler.lift p.environment.native wait✝.request x.state.current.world;
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c✝.store, world := r.world,
+                  events := x.state.current.events ++ r.events },
+              suspended := x.state.suspended },
+          issued := x.issued, consumed := ctx✝ :: x.consumed }
+      | some val =>
+        have out := PV_LIB_SPEC_ReachedNative14.transition cut bound c✝ x.state;
+        { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued,
+          consumed := ctx✝ :: x.consumed }).consumed
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ConsumedHistory18.lean:46:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ResourceHistory.context x c wait
+in the target expression
+  ctx ∈
+    (match some (c, wait) with
+      | none =>
+        have out := PV_LIB_SPEC_ReachedNative14.control cut p x.state;
+        { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued, consumed := x.consumed }
+      | some (c, wait) =>
+        match PV_LIB_SPEC_ResourceHistory.context x c wait with
+        | none =>
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := x.state.current.world,
+                    events := x.state.current.events },
+                suspended := x.state.suspended },
+            issued := x.issued, consumed := x.consumed }
+        | some ctx =>
+          have bound :=
+            { primitives := p.primitives, control := p.control, needsDrop := p.needsDrop,
+              resources := fun {A} => PV_LIB_SPEC_ResourceHistory.allocationResources p.environment ctx,
+              encode := @Parameters.encode p, loadBias := p.loadBias, siteIndex := p.siteIndex,
+              environment := p.environment };
+          match PV_LIB_SPEC_ReachedNative14.answer cut bound c wait.request x.state.current.world with
+          | none =>
+            have r := PV_THR2_OwnUniformResourceHandler.lift p.environment.native wait.request x.state.current.world;
+            {
+              state :=
+                {
+                  current :=
+                    { status := Status.undefined none c.store, world := r.world,
+                      events := x.state.current.events ++ r.events },
+                  suspended := x.state.suspended },
+              issued := x.issued, consumed := ctx :: x.consumed }
+          | some val =>
+            have out := PV_LIB_SPEC_ReachedNative14.transition cut bound c x.state;
+            { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued,
+              consumed := ctx :: x.consumed }).consumed
+
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+p : Parameters
+x : Execution
+c : Config
+wait : PV_STX2_Native.Waiting Data
+ctx : Context
+ordinary : PV_LIB_SPEC_ControlRuntime.ordinary x.state = some (c, wait)
+origin : PV_LIB_SPEC_ResourceHistory.context x c wait = some ctx
+⊢ ctx ∈
+    (match some (c, wait) with
+      | none =>
+        have out := PV_LIB_SPEC_ReachedNative14.control cut p x.state;
+        { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued, consumed := x.consumed }
+      | some (c, wait) =>
+        match PV_LIB_SPEC_ResourceHistory.context x c wait with
+        | none =>
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := x.state.current.world,
+                    events := x.state.current.events },
+                suspended := x.state.suspended },
+            issued := x.issued, consumed := x.consumed }
+        | some ctx =>
+          have bound :=
+            { primitives := p.primitives, control := p.control, needsDrop := p.needsDrop,
+              resources := fun {A} => PV_LIB_SPEC_ResourceHistory.allocationResources p.environment ctx,
+              encode := @Parameters.encode p, loadBias := p.loadBias, siteIndex := p.siteIndex,
+              environment := p.environment };
+          match PV_LIB_SPEC_ReachedNative14.answer cut bound c wait.request x.state.current.world with
+          | none =>
+            have r := PV_THR2_OwnUniformResourceHandler.lift p.environment.native wait.request x.state.current.world;
+            {
+              state :=
+                {
+                  current :=
+                    { status := Status.undefined none c.store, world := r.world,
+                      events := x.state.current.events ++ r.events },
+                  suspended := x.state.suspended },
+              issued := x.issued, consumed := ctx :: x.consumed }
+          | some val =>
+            have out := PV_LIB_SPEC_ReachedNative14.transition cut bound c x.state;
+            { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued,
+              consumed := ctx :: x.consumed }).consumed
+'PV_LIB_SPEC_ConsumedHistory18.step_member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ConsumedHistory18.run_member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ConsumedHistory18.prefix_member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ConsumedHistory18.poll_consumed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

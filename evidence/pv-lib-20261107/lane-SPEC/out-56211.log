@@ -1,0 +1,45 @@
+def PV_STX2_Store.readAddress : {W V : Type} →
+  PV_STX2_Store.Carrier W V → PV_STX2_Store.Store V → PV_STX2_Store.Address → Option V :=
+fun {W V} c s p => do
+  let root ← s.cells { activation := p.activation, localIndex := p.localIndex }
+  PV_STX2_Store.readFields c p.fields root
+def PV_STX2_Store.read : {W V : Type} →
+  PV_STX2_Store.Carrier W V → PV_STX2_Store.Store V → W → ℕ → PV_STX2_Syntax.Place → Option V :=
+fun {W V} c s w activation x => PV_STX2_Syntax.Place.brecOn x (PV_STX2_Store.read._f c s w activation)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePrint20.lean:6:7: error(lean.unknownIdentifier): Unknown constant `PV_STX2_Store.readPath`
+def PV_LIB_SPEC_ResourceHistory.context : PV_LIB_SPEC_ResourceHistory.Execution →
+  PV_STX2_SliceMachine.Config →
+    PV_STX2_Native.Waiting PV_STX2_Syntax.Data → Option PV_LIB_SPEC_ResourceHistory.Context :=
+fun x c wait => do
+  let origin ←
+    List.find? (fun issued => decide (issued.caller = c.frame.activation ∧ issued.request = wait.request)) x.issued
+  pure
+      { site := origin.site, occurrence := (List.filter (fun old => decide (old.site = origin.site)) x.consumed).length,
+        arguments := PV_LIB_SPEC_ResourceHistory.arguments wait.request, caller := c.frame.activation,
+        request := wait.request }
+def PV_STX2_Native.reply : {W E V : Type} →
+  PV_STX2_Store.Carrier W V →
+    PV_STX2_Native.Config V → PV_STX2_Native.Waiting V → PV_STX_Machine.Reply W E V → PV_STX2_Native.Prefix W E V :=
+fun {W E V} carrier c waiting r =>
+  have status :=
+    match r.answer with
+    | PV_STX_Machine.Answer.pending => PV_STX2_Native.Status.running c
+    | PV_STX_Machine.Answer.returned (Aeneas.Std.Result.ok value) =>
+      match PV_STX2_Native.storeResult carrier c r.world waiting.action value with
+      | some s =>
+        PV_STX2_Native.Status.running
+          { activation := c.activation, remaining := c.remaining, store := s, unwinding := c.unwinding }
+      | none => PV_STX2_Native.Status.undefined none
+    | PV_STX_Machine.Answer.returned (Aeneas.Std.Result.fail e) =>
+      PV_STX2_Native.Status.returned (Aeneas.Std.Result.fail e)
+    | PV_STX_Machine.Answer.returned Aeneas.Std.Result.div => PV_STX2_Native.Status.returned Aeneas.Std.Result.div
+    | PV_STX_Machine.Answer.fault PV_STX_Machine.Fault.panic =>
+      match waiting.unwind with
+      | [] => PV_STX2_Native.Status.fault PV_STX_Machine.Fault.panic
+      | head :: tail =>
+        PV_STX2_Native.Status.running
+          { activation := c.activation, remaining := waiting.unwind, store := c.store,
+            unwinding := some PV_STX_Machine.Fault.panic }
+    | PV_STX_Machine.Answer.fault f => PV_STX2_Native.Status.fault f;
+  { status := status, world := r.world, events := r.events }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_NativePrint20.lean:9:7: error(lean.unknownIdentifier): Unknown constant `PV_THR2_KeyValues.field`

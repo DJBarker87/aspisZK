@@ -1,0 +1,80 @@
+import Lean
+import PV_EVHB_OwnerRawWalker
+open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+unsafe def main (args : List String) : IO UInt32 := do
+  enableInitializersExecution
+  let mode := args.headD "small"
+  let (modules, roots) :=
+    (#[`PV_LIB_A_C18_A_CellSetBegin, `PV_LIB_A_C18_A_CellSetPatch, `PV_LIB_A_C18_A_ActionPolling, `PV_LIB_A_C18_A_CellSetMetadata, `PV_LIB_A_C18_A_CellSetThreadId, `PV_LIB_A_C18_A_WeakDropSource, `PV_LIB_A_C18_A_ThreadCloneStore, `PV_LIB_A_C18_A_StoreActionTable7, `PV_LIB_A_C18_A_DeferredActions, `PV_LIB_A_C18_A_PrefixMachine11, `PV_LIB_A_C18_A_V2Neutral14, `PV_LIB_A_C18_A_V2TraceTransport14, `PV_LIB_A_C18_NativeGraph, `PV_LIB_A_C18_A_NativeLeaves, `PV_LIB_A_C18_A_PureCalls, `PV_LIB_A_C18_A_Range165, `PV_LIB_A_C18_A_RangeWriter, `PV_LIB_A_C18_A_RangeHistoryV2, `PV_LIB_A_C18_A_RangeTraceV2, `PV_LIB_A_C18_A_RangePoll11, `PV_LIB_A_C18_A_RangeQuiet11, `PV_LIB_A_C18_A_RangeStartTrace11, `PV_LIB_A_C18_A_ChainTrace11, `PV_LIB_A_C18_A_SourceSequence13, `PV_LIB_A_C18_A_Continuation12, `PV_LIB_A_C18_A_SequenceFrontier13, `PV_LIB_A_C18_A_StructuredTrace12, `PV_LIB_A_C18_A_StructuredFrontier13, `PV_LIB_A_C18_A_CallIssue13, `PV_LIB_A_C18_A_V2Frontiers14, `PV_LIB_A_C18_A_F170Tail15, `PV_LIB_A_C18_A_OwnerTableCongruence14, `PV_LIB_A_C18_A_V2TableCongruence15, `PV_LIB_A_ContextSource16, `PV_LIB_A_F170Result16, `PV_LIB_A_F170History16, `PV_LIB_A_Return16, `PV_LIB_A_F170Return16, `PV_LIB_A_F17Value16, `PV_LIB_A_F17ValueLift16, `PV_LIB_A_F17History16, `PV_LIB_A_F17Finish16, `PV_LIB_A_F17Return16, `PV_LIB_A_F2Finish16, `PV_LIB_A_HistoryExtend16, `PV_LIB_A_F2History16, `PV_LIB_A_F5Entry16, `PV_LIB_A_F5Prefix16, `PV_LIB_A_F5History16, `PV_LIB_A_F5Call16, `PV_LIB_A_F5BoundaryGap16, `PV_LIB_A_HistoryAny16, `PV_LIB_A_F5FullPush16, `PV_LIB_A_F5FullEntry16, `PV_LIB_A_F5ClosurePending16, `PV_LIB_A_F5CallbackObstruction16, `PV_LIB_A_F5CallbackStall16, `PV_LIB_A_F5CallbackTrap16],
+     #[`PV_LIB_A_CellSetBegin.member, `PV_LIB_A_CellSetBegin.destructor, `PV_LIB_A_CellSetBegin.trivial, `PV_LIB_A_CellSetBegin.PV_THR2_LibrarySemantics_CellSetBegin504, `PV_LIB_A_CellSetBegin.PV_THR2_LibrarySemantics_CellSetTrivial504, `PV_LIB_A_CellSetBegin.begin_from_source, `PV_LIB_A_CellSetBegin.old_retained, `PV_LIB_A_CellSetPatch.select, `PV_LIB_A_CellSetPatch.deliver, `PV_LIB_A_CellSetPatch.step, `PV_LIB_A_CellSetPatch.agreement, `PV_LIB_A_CellSetPatch.full_reply, `PV_LIB_A_ActionPolling.projection, `PV_LIB_A_ActionPolling.receive, `PV_LIB_A_ActionPolling.begin, `PV_LIB_A_ActionPolling.step, `PV_LIB_A_ActionPolling.retry, `PV_LIB_A_ActionPolling.pending, `PV_LIB_A_ActionPolling.pending_retry, `PV_LIB_A_ActionPolling.agreement, `PV_LIB_A_CellSetMetadata.metadata417, `PV_LIB_A_CellSetMetadata.trivial417, `PV_LIB_A_CellSetMetadata.metadata437, `PV_LIB_A_CellSetMetadata.trivial437, `PV_LIB_A_CellSetMetadata.metadata477, `PV_LIB_A_CellSetMetadata.trivial477, `PV_LIB_A_CellSetMetadata.metadata602, `PV_LIB_A_CellSetMetadata.trivial602, `PV_LIB_A_CellSetMetadata.metadata629, `PV_LIB_A_CellSetMetadata.trivial629, `PV_LIB_A_CellSetMetadata.metadata762, `PV_LIB_A_CellSetMetadata.trivial762, `PV_LIB_A_CellSetThreadId.optionThreadId, `PV_LIB_A_CellSetThreadId.effectFree, `PV_LIB_A_CellSetThreadId.PV_THR2_LibrarySemantics_CellSetCopy504, `PV_LIB_A_CellSetThreadId.emitted477, `PV_LIB_A_CellSetThreadId.emitted_copy_cases, `PV_LIB_A_CellSetThreadId.emitted_nontrivial_cases, `PV_LIB_A_CellSetThreadId.copy_from_source, `PV_LIB_A_WeakDropSource.pointer, `PV_LIB_A_WeakDropSource.PV_THR2_LibrarySemantics_WeakDropBegin683, `PV_LIB_A_WeakDropSource.finish, `PV_LIB_A_WeakDropSource.pending, `PV_LIB_A_WeakDropSource.failure, `PV_LIB_A_WeakDropSource.fault, `PV_LIB_A_WeakDropSource.last_deallocate, `PV_LIB_A_WeakDropSource.dangling, `PV_LIB_A_ThreadCloneStore.pointer, `PV_LIB_A_ThreadCloneStore.PV_THR2_LibrarySemantics_ThreadCloneSource214, `PV_LIB_A_ThreadCloneStore.pointer_from_source, `PV_LIB_A_ThreadCloneStore.source_count, `PV_LIB_StoreActionTable.v2Source, `PV_LIB_StoreActionTable.sourceCoverage, `PV_LIB_StoreActionTable.start, `PV_LIB_StoreActionTable.sourceSelect, `PV_LIB_StoreActionTable.sourceReceive, `PV_LIB_StoreActionTable.sourceBegin, `PV_LIB_StoreActionTable.sourceStep, `PV_LIB_StoreActionTable.source_agreement, `PV_LIB_StoreActionTable.source_native, `PV_LIB_StoreActionTable.source_pending, `PV_LIB_StoreActionTable.source_done_reply, `PV_LIB_A_DeferredActions.action, `PV_LIB_A_DeferredActions.deferred, `PV_LIB_A_DeferredActions.classified, `PV_LIB_A_DeferredActions.pending_start, `PV_LIB_A_DeferredActions.step, `PV_LIB_A_DeferredActions.deferred_retry, `PV_LIB_A_DeferredActions.deferred_pending, `PV_LIB_A_DeferredActions.agreement, `PV_LIB_A_PrefixMachine11.step, `PV_LIB_A_PrefixMachine11.run, `PV_LIB_A_PrefixMachine11.append, `PV_LIB_A_PrefixMachine11.advance_add, `PV_LIB_A_V2Neutral14.table_none, `PV_LIB_A_V2Neutral14.select_none, `PV_LIB_A_V2Neutral14.neutral, `PV_LIB_A_V2Neutral14.successor_step, `PV_LIB_A_V2TraceTransport14.step, `PV_LIB_A_V2TraceTransport14.run, `PV_LIB_A_V2TraceTransport14.successor, `PV_LIB_NativeGraph.certified, `PV_LIB_A_NativeLeaves.certified277, `PV_LIB_A_NativeLeaves.certified278, `PV_LIB_A_NativeLeaves.certified279, `PV_LIB_A_NativeLeaves.certified280, `PV_LIB_A_NativeLeaves.certified612, `PV_LIB_A_PureCalls.certified277, `PV_LIB_A_PureCalls.certified278, `PV_LIB_A_PureCalls.certified279, `PV_LIB_A_PureCalls.certified280, `PV_LIB_A_PureCalls.worlds, `PV_LIB_A_PureCalls.delivered_value, `PV_LIB_A_PureCalls.asRef_source_local, `PV_LIB_A_Range165.old_contract_allows_range, `PV_LIB_A_Range165.sourceRange_distinct, `PV_LIB_A_Range165.sourceRange_not_null, `PV_LIB_A_Range165.reply_exact, `PV_LIB_A_Range165.certified, `PV_LIB_A_Range165.old_contract_allows_null, `PV_LIB_A_RangeWriter.range93, `PV_LIB_A_RangeHistoryV2.returned165, `PV_LIB_A_RangeHistoryV2.local7, `PV_LIB_A_RangeHistoryV2.poll_local7, `PV_LIB_A_RangeHistoryV2.first93_write, `PV_LIB_A_RangeHistoryV2.original_prefix, `PV_LIB_A_RangeTraceV2.after165_returned, `PV_LIB_A_RangeTraceV2.original_poll, `PV_LIB_A_RangePoll11.selected, `PV_LIB_A_RangePoll11.poll, `PV_LIB_A_RangeQuiet11.main5, `PV_LIB_A_RangeQuiet11.main6, `PV_LIB_A_RangeQuiet11.main7, `PV_LIB_A_RangeQuiet11.main8, `PV_LIB_A_RangeQuiet11.main9, `PV_LIB_A_RangeQuiet11.main10, `PV_LIB_A_RangeQuiet11.main11, `PV_LIB_A_RangeQuiet11.main12, `PV_LIB_A_RangeQuiet11.loop0, `PV_LIB_A_RangeQuiet11.loop1, `PV_LIB_A_RangeQuiet11.loop2, `PV_LIB_A_RangeQuiet11.loop3, `PV_LIB_A_RangeQuiet11.loop4, `PV_LIB_A_RangeQuiet11.loop5, `PV_LIB_A_RangeStartTrace11.cons_run, `PV_LIB_A_RangeStartTrace11.wait165, `PV_LIB_A_RangeStartTrace11.storage2, `PV_LIB_A_RangeStartTrace11.call2, `PV_LIB_A_RangeStartTrace11.prefix5, `PV_LIB_A_ChainTrace11.storage_quiet, `PV_LIB_A_ChainTrace11.bind_quiet, `PV_LIB_A_ChainTrace11.trace, `PV_LIB_A_ChainTrace11.corrected_run, `PV_LIB_A_SourceSequence13.aggregate_quiet, `PV_LIB_A_SourceSequence13.certified, `PV_LIB_A_SourceSequence13.run, `PV_LIB_A_Continuation12.trace, `PV_LIB_A_Continuation12.run, `PV_LIB_A_SequenceFrontier13.prepend, `PV_LIB_A_SequenceFrontier13.cost, `PV_LIB_A_SequenceFrontier13.finish, `PV_LIB_A_SequenceFrontier13.steps, `PV_LIB_A_SequenceFrontier13.after, `PV_LIB_A_SequenceFrontier13.run, `PV_LIB_A_StructuredTrace12.issue_quiet, `PV_LIB_A_StructuredTrace12.enter_quiet, `PV_LIB_A_StructuredTrace12.trace, `PV_LIB_A_StructuredFrontier13.source, `PV_LIB_A_StructuredFrontier13.fn, `PV_LIB_A_StructuredFrontier13.node, `PV_LIB_A_StructuredFrontier13.cost, `PV_LIB_A_StructuredFrontier13.finish, `PV_LIB_A_StructuredFrontier13.steps, `PV_LIB_A_StructuredFrontier13.after, `PV_LIB_A_StructuredFrontier13.run, `PV_LIB_A_CallIssue13.steps, `PV_LIB_A_CallIssue13.finish, `PV_LIB_A_CallIssue13.after, `PV_LIB_A_CallIssue13.run, `PV_LIB_A_V2Frontiers14.run, `PV_LIB_A_V2Frontiers14.sequence, `PV_LIB_A_V2Frontiers14.issue, `PV_LIB_A_V2Frontiers14.structured, `PV_LIB_A_F170Tail15.shape, `PV_LIB_A_F170Tail15.off, `PV_LIB_A_F170Tail15.run, `PV_LIB_A_OwnerTableCongruence14.uniform, `PV_LIB_A_OwnerTableCongruence14.operator, `PV_LIB_A_OwnerTableCongruence14.owner, `PV_LIB_A_V2TableCongruence15.select, `PV_LIB_A_V2TableCongruence15.step, `PV_LIB_A_V2TableCongruence15.Trace, `PV_LIB_A_V2TableCongruence15.run, `PV_LIB_A_ContextSource16.finish, `PV_LIB_A_ContextSource16.source_result, `PV_LIB_A_ContextSource16.bind_source, `PV_LIB_A_ContextSource16.trace, `PV_LIB_A_ContextSource16.quiet, `PV_LIB_A_ContextSource16.storage_source, `PV_LIB_A_ContextSource16.aggregate_source, `PV_LIB_A_F170Result16.computed, `PV_LIB_A_F170History16.original94, `PV_LIB_A_Return16.source, `PV_LIB_A_Return16.parent, `PV_LIB_A_Return16.run, `PV_LIB_A_F170Return16.execution_ext, `PV_LIB_A_F170Return16.cell, `PV_LIB_A_F170Return16.original96, `PV_LIB_A_F17Value16.trace, `PV_LIB_A_F17ValueLift16.carrier, `PV_LIB_A_F17ValueLift16.clear, `PV_LIB_A_F17ValueLift16.source, `PV_LIB_A_F17History16.cell, `PV_LIB_A_F17History16.original104, `PV_LIB_A_F17Finish16.trace, `PV_LIB_A_F17Finish16.clear, `PV_LIB_A_F17Finish16.run, `PV_LIB_A_F17Return16.cell, `PV_LIB_A_F17Return16.original112, `PV_LIB_A_F2Finish16.trace, `PV_LIB_A_F2Finish16.clear, `PV_LIB_A_F2Finish16.run, `PV_LIB_A_HistoryExtend16.extend, `PV_LIB_A_F2History16.cell, `PV_LIB_A_F2History16.original116, `PV_LIB_A_F5Entry16.lookup, `PV_LIB_A_F5Entry16.run, `PV_LIB_A_F5Prefix16.trace, `PV_LIB_A_F5Prefix16.clear, `PV_LIB_A_F5Prefix16.source, `PV_LIB_A_F5Prefix16.run, `PV_LIB_A_F5History16.original123, `PV_LIB_A_F5History16.original131, `PV_LIB_A_F5Call16.shape, `PV_LIB_A_F5Call16.run, `PV_LIB_A_F5Call16.original132, `PV_LIB_A_F5BoundaryGap16.full_lookup, `PV_LIB_A_F5BoundaryGap16.boundary_lookup, `PV_LIB_A_F5BoundaryGap16.no_agreement, `PV_LIB_A_F5BoundaryGap16.no_trace, `PV_LIB_A_HistoryAny16.extend, `PV_LIB_A_F5FullPush16.push, `PV_LIB_A_F5FullPush16.original133, `PV_LIB_A_F5FullEntry16.key_bound, `PV_LIB_A_F5FullEntry16.closure_bound, `PV_LIB_A_F5FullEntry16.original141, `PV_LIB_A_F5ClosurePending16.unforwarded, `PV_LIB_A_F5ClosurePending16.unselected, `PV_LIB_A_F5ClosurePending16.backend_pending, `PV_LIB_A_F5CallbackObstruction16.not_arc, `PV_LIB_A_F5CallbackObstruction16.answer_pending, `PV_LIB_A_F5CallbackStall16.quiet, `PV_LIB_A_F5CallbackStall16.transition, `PV_LIB_A_F5CallbackTrap16.ordinary, `PV_LIB_A_F5CallbackTrap16.step, `PV_LIB_A_F5CallbackTrap16.undefined_step, `PV_LIB_A_F5CallbackTrap16.undefined_run, `PV_LIB_A_F5CallbackTrap16.trapped, `PV_LIB_A_F5CallbackTrap16.no_body_entry])
+  let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+    {} (loadExts := true) (level := .private)
+  let ctx : Command.Context := {
+    fileName := "NEP_Driver"
+    fileMap := FileMap.ofString ""
+    snap? := none
+    cancelTk? := none
+  }
+  let action : CommandElabM Bool := do
+    let mut failed := false
+    for root in roots do
+      try
+        elabCommand (← `(command| #print axioms $(mkIdent root)))
+        let stem := "NEP_" ++ mode ++ "_" ++ root.toString
+        let mut legacyError := false
+        try
+          NEP.audit root stem
+        catch e =>
+          if (← e.toMessageData.toString) != "raw graph disagrees with collectAxioms" then
+            throw e
+          legacyError := true
+        let reached := (← liftIO <| IO.FS.readFile (stem ++ "_REACHABLE.txt")).splitOn "\n"
+        let mut reported := (← collectAxioms root).toList
+        let mut auxiliaries : Array String := #[]
+        for aux in #[`PV_THR2_OwnInitExactReturnedCases.Cases.mk,
+          `PV_THR2_LibrarySemantics_AtomicUsizeNew.Returned.mk] do
+          if reached.contains aux.toString then
+            elabCommand (← `(command| #print axioms $(mkIdent aux)))
+            reported := reported ++ (← collectAxioms aux).toList
+            auxiliaries := auxiliaries.push aux.toString
+        let summary := (reported.eraseDups.map Name.toString).toArray.qsort (· < ·)
+        let env := (← getEnv).setExporting false
+        -- Read only the already retained leaf names. No traversal or edge rule changes.
+        let mut raw : Array String := #[]
+        for n in reached do
+          if !n.isEmpty then
+            let info ← match env.checked.get.find? n.toName with
+              | some info => pure info
+              | none =>
+                -- Name.toString is not inverted by String.toName for hygienic
+                -- numeric components. Resolve uniquely against actual kernel names.
+                match env.constants.toList.filter (fun pair => pair.1.toString == n) with
+                | [(actual, _)] =>
+                  let some found := env.checked.get.find? actual |
+                    throwError "unresolved retained constant {n} after unique-name resolution"
+                  logInfo m!"NEP63_NAME_RESOLVED {n}"
+                  pure found
+                | _ => throwError "unresolved or ambiguous retained constant {n}"
+            if info.isAxiom then raw := raw.push n
+        let rawSorted := raw.qsort (· < ·)
+        let equal := rawSorted == summary
+        logInfo m!"NEP62_RESULT {(Json.mkObj [("root",toJson root.toString),
+          ("auxiliaries",toJson auxiliaries),("summary_axioms",toJson summary),
+          ("walked_axioms",toJson rawSorted),("equal",toJson equal),
+          ("legacy_root_only_mismatch",toJson legacyError)]).compress}"
+        unless equal do throwError "augmented summary disagrees with raw graph"
+      catch e =>
+        logError e.toMessageData
+        failed := true
+    return failed
+  let result ← ((action.run ctx).run (Command.mkState env)).toBaseIO
+  match result with
+  | .error e =>
+    IO.eprintln (← e.toMessageData.toString)
+    return 2
+  | .ok (failed, state) =>
+    for msg in state.messages.toList do IO.println (← msg.data.toString)
+    return if failed then 1 else 0
+
+#print axioms main

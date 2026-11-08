@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangePoll11.lean:60:2: error: 'change' tactic failed, pattern
+  (match PV_THR2_LibrarySemantics_RangeNext93 B [PV_THR2_Source15Loop93Issue.ref a] c.store w with
+    | none => ?m.74
+    | some begun =>
+      sourceReceive B { frame := c.frame, callers := c.callers, store := begun } es stack (site s a)
+        PV_LIB_A_WeakDropSource.Tail.done (H (site s a).waiting.request w)) =
+    ?m.70
+is not definitionally equal to target
+  (match
+      match (site s a).action with
+      | SourceAction.inherited action =>
+        Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done })
+          (PV_LIB_StoreActionTable.interpret B values action (site s a).callee (site s a).arguments c.store w
+            (H (site s a).waiting.request w))
+      | SourceAction.cellSet504 =>
+        Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done })
+          (PV_LIB_A_CellSetThreadId.PV_THR2_LibrarySemantics_CellSetCopy504 B (site s a).callee (site s a).arguments
+            c.store w)
+      | SourceAction.weakDrop683 =>
+        PV_LIB_A_WeakDropSource.PV_THR2_LibrarySemantics_WeakDropBegin683 B (site s a).arguments c.store w
+      | SourceAction.threadClone214 =>
+        Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done })
+          (PV_LIB_A_ThreadCloneStore.PV_THR2_LibrarySemantics_ThreadCloneSource214 B (site s a).arguments c.store
+            w) with
+    | none =>
+      {
+        base :=
+          {
+            current :=
+              { status := Status.undefined none c.store, world := (H (site s a).waiting.request w).world,
+                events := es ++ (H (site s a).waiting.request w).events },
+            suspended := stack } }
+    | some begun =>
+      sourceReceive B { frame := c.frame, callers := c.callers, store := begun.store } es stack (site s a) begun.tail
+        (H (site s a).waiting.request w)) =
+    sourceReceive B { frame := c.frame, callers := c.callers, store := post } es stack (site s a)
+      PV_LIB_A_WeakDropSource.Tail.done (H (site s a).waiting.request w)
+'PV_LIB_A_RangePoll11.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_RangePoll11.poll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

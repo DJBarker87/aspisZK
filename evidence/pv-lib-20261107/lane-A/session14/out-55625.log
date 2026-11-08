@@ -1,0 +1,99 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_NativeFull14.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_IntrinsicState.advance C K P H 1
+    {
+      current :=
+        {
+          status :=
+            Status.running
+              {
+                frame :=
+                  { activation := a,
+                    remaining :=
+                      PV_STX2_SliceSyntax.Node.leaf
+                          (Instruction.call src.1
+                            (Data.object [("Regular", Data.object [("kind", src.2.1), ("generics", src.2.2.1)])])
+                            src.2.2.2.1 (Place.local src.2.2.2.2) []) ::
+                        rest,
+                    loops := loops },
+                callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack }
+in the target expression
+  Trace C K P H
+    (match operands C w a src.2.2.2.1 s with
+    | none => 0
+    | some val => 1)
+    (PV_THR2_IntrinsicState.advance C K P H 1
+      {
+        current :=
+          {
+            status :=
+              Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf
+                            (Instruction.call src.1 (fn src) src.2.2.2.1 (Place.local src.2.2.2.2) []) ::
+                          rest,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack })
+
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+src : Source
+rest : List PV_STX2_SliceSyntax.Node
+s : Store Data
+a : ℕ
+parents : List Frame
+loops : List LoopFrame
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+off : src.1.function ≠ 361
+stable : operands (PV_THR2_AggregateCompletion.carrier C) w a src.2.2.2.1 s = operands C w a src.2.2.2.1 s
+waiting :
+  ∀ (t : Store Data) (vs : List Data),
+    Quiet P
+      {
+        current :=
+          {
+            status :=
+              Status.running (PV_THR2_IntrinsicFrameEnter.pending t a parents loops rest (fn src) vs src.2.2.2.2),
+            world := w, events := es },
+        suspended := stack }
+ordinary :
+  ∀ (t : Store Data) (vs : List Data),
+    PV_THR2_Catch316Segment.select
+        (PV_THR2_IntrinsicFrameEnter.pending t a parents loops rest (fn src) vs src.2.2.2.2) =
+      none
+child : P (fn src) = none
+⊢ Trace C K P H
+    (match operands C w a src.2.2.2.1 s with
+    | none => 0
+    | some val => 1)
+    (PV_THR2_IntrinsicState.advance C K P H 1
+      {
+        current :=
+          {
+            status :=
+              Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf
+                            (Instruction.call src.1 (fn src) src.2.2.2.1 (Place.local src.2.2.2.2) []) ::
+                          rest,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack })
+'PV_LIB_A_NativeFull14.exact_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

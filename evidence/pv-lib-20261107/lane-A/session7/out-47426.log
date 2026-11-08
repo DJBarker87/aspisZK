@@ -1,0 +1,120 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:52:72: error: unsolved goals
+case running.none
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+s : State
+away : PV_LIB_StoreActionTable.Neutral P s
+c : Config
+hs : s.current.status = PV_STX2_SliceMachine.Status.running c
+hc : PV_THR2_Catch316Segment.select c = none
+⊢ (match do
+      let site ← none
+      match site.action with
+        | PV_LIB_StoreActionTable.Action.cellBoolSet504 => do
+          let d ← destructor site.callee
+          if PV_LIB_A_CellSetBegin.trivial d = true then some site else none
+        | x => none with
+    | none => PV_LIB_StoreActionTable.step C K P (fun {A} => resources) (fun {A} => encode) H values s
+    | some site =>
+      deliver C c s.current.world s.current.events s.suspended site (H site.waiting.request s.current.world)) =
+    PV_LIB_StoreActionTable.step C K P (fun {A} => resources) (fun {A} => encode) H values s
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:57:37: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵,̵s̵e̵l̵e̵c̵t̵,̵a̵w̵a̵y̵[̲h̲c̲,̲ ̲s̲e̲l̲e̲c̲t̲,̲ ̲a̲w̲a̲y̲ c h̵s̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]̵h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:73:51: error: unsolved goals
+C : Carrier OWNER Data
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : Site
+r : Reply OWNER PV_RJ4IDB.NativeEvent Data
+post : Store Data
+old reference value : Data
+d : Destructor
+p : Address
+args : site.arguments = [reference, value]
+metadata : destructor site.callee = some d
+received : PV_THR2_SourceStoreLibrary.receiver C c.store w reference = some (p, old)
+replaced : writeAddress C c.store p (some value) = some post
+typed : PV_LIB_A_CellSetBegin.trivial d = true
+start :
+  PV_THR2_LibrarySemantics_CellSetBegin504 C site.callee [reference, value] c.store w =
+    some { store := post, old := old, destructor := d }
+⊢ (match do
+      let prepared ← some { store := post, old := old, destructor := d }
+      if PV_LIB_A_CellSetBegin.trivial prepared.destructor = true then some prepared.store else none with
+    | none =>
+      { current := { status := Status.undefined none c.store, world := r.world, events := es ++ r.events },
+        suspended := stack }
+    | some store =>
+      {
+        current :=
+          {
+            status :=
+              (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store } site.waiting
+                  r).status,
+            world :=
+              (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store } site.waiting
+                  r).world,
+            events :=
+              es ++
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                    site.waiting r).events },
+        suspended := stack }) =
+    {
+      current :=
+        {
+          status :=
+            (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := post } site.waiting
+                r).status,
+          world :=
+            (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := post } site.waiting
+                r).world,
+          events :=
+            es ++
+              (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := post } site.waiting
+                  r).events },
+      suspended := stack }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:78:13: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵y̵p̵e̵d̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲t̲y̲p̲e̲d̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:78:30: warning: This simp argument is unused:
+  typed
+
+Hint: Omit it from the simp argument list.
+  simp only [Option.bind_some,t̵y̵p̵e̵d̵,̵ ̲Bool.true_eq, ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:78:36: warning: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵y̵p̵e̵d̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲t̲y̲p̲e̲d̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CellSetPatch.lean:78:49: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵y̵p̵e̵d̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲t̲y̲p̲e̲d̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_CellSetPatch.select' depends on axioms: [propext]
+'PV_LIB_A_CellSetPatch.deliver' depends on axioms: [propext]
+'PV_LIB_A_CellSetPatch.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_CellSetPatch.agreement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_CellSetPatch.full_reply' depends on axioms: [propext, sorryAx]

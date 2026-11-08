@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/sources/PV_LIB_ArcClone360.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_FN_THREAD_f360Outcomes.sourceAnswer v.count
+    (PV_THR2_OwnUniformResourceHandler.lift H (PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments)
+        w).answer
+in the target expression
+  PV_LIB.leafObserve
+      (PV_W1_ArgumentEffects.finalStore C e w (effects e w),
+        PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments) w) =
+    PV_LIB.leafObserve
+      (have r :=
+        PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments) w;
+      (PV_W1_ArgumentEffects.finalStore C e w (effects e w),
+        { answer := PV_FN_THREAD_f360Outcomes.sourceAnswer v.count r.answer, world := r.world, events := r.events }))
+
+E : Type
+C : Carrier OWNER Data
+e : Entry
+H : Backend E
+w : OWNER
+events : List E
+effects : Entry → OWNER → Address → Option Data
+pre : PV_W1_ClosedLeaves.Pre e w
+semantics : PV_THR2_LibrarySemantics_ArcClone.Fact C e H w (effects e w)
+v : Valid C e w
+⊢ PV_LIB.leafObserve
+      (PV_W1_ArgumentEffects.finalStore C e w (effects e w),
+        PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments) w) =
+    PV_LIB.leafObserve
+      (have r :=
+        PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child e.callee e.store.nextActivation e.arguments) w;
+      (PV_W1_ArgumentEffects.finalStore C e w (effects e w),
+        { answer := PV_FN_THREAD_f360Outcomes.sourceAnswer v.count r.answer, world := r.world, events := r.events }))
+'PV_LIB_ArcClone360.certified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

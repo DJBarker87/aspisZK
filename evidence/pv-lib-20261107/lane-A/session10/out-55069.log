@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_GuardWeakBegin10.lean:23:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_LIB_A_DestructorValues10.carrier C b).dereference w
+    (PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null)
+in the target expression
+  (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null] with
+    | [reference] => do
+      let __x ←
+        do
+          let p ← (PV_LIB_A_DestructorValues10.carrier C b).dereference w reference
+          let value ← readAddress (PV_LIB_A_DestructorValues10.carrier C b) s p
+          pure (p, value)
+      match __x with
+        | (fst, weak) => do
+          let nonNull ← (PV_LIB_A_DestructorValues10.carrier C b).field weak 0
+          (PV_LIB_A_DestructorValues10.carrier C b).field nonNull 0
+    | x => none) =
+    some (PV_STX2_TypedReferences.reference { activation := heap, localIndex := localIndex } Data.null)
+
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+types : List Data
+a i root slot heap localIndex : ℕ
+nonNull : Data
+guard : s.cells { activation := a, localIndex := i } = some (PV_LIB_A_WeakGuardBuild10.guard types nonNull root slot)
+nonNullPointer :
+  (PV_LIB_A_DestructorValues10.carrier C b).field nonNull 0 =
+    some (PV_STX2_TypedReferences.reference { activation := heap, localIndex := localIndex } Data.null)
+ref :
+  (PV_LIB_A_DestructorValues10.carrier C b).dereference w
+      (PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null) =
+    some { activation := a, localIndex := i }
+⊢ (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null] with
+    | [reference] => do
+      let __x ←
+        do
+          let p ← (PV_LIB_A_DestructorValues10.carrier C b).dereference w reference
+          let value ← readAddress (PV_LIB_A_DestructorValues10.carrier C b) s p
+          pure (p, value)
+      match __x with
+        | (fst, weak) => do
+          let nonNull ← (PV_LIB_A_DestructorValues10.carrier C b).field weak 0
+          (PV_LIB_A_DestructorValues10.carrier C b).field nonNull 0
+    | x => none) =
+    some (PV_STX2_TypedReferences.reference { activation := heap, localIndex := localIndex } Data.null)
+'PV_LIB_A_GuardWeakBegin10.pointer' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_GuardWeakBegin10.begin' depends on axioms: [propext, sorryAx]

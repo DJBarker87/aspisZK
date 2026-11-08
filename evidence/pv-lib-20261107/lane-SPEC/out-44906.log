@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ControlHistory.lean:19:29: error: Ambiguous term
+  recordIssue
+Possible interpretations:
+  PV_LIB_SPEC_ControlRuntime.recordIssue before after old : List Issued
+  
+  PV_LIB_SPEC_ResourceHistory.recordIssue before after old : List Issued
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ControlHistory.lean:21:9: error: ambiguous term, use fully qualified name, possible interpretations [PV_LIB_SPEC_ControlRuntime.recordIssue,
+ PV_LIB_SPEC_ResourceHistory.recordIssue]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ControlHistory.lean:58:19: error: Ambiguous term
+  recordIssue
+Possible interpretations:
+  PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued : List Issued
+  
+  PV_LIB_SPEC_ResourceHistory.recordIssue x.state out x.issued : List Issued
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ControlHistory.lean:70:17: error: Ambiguous term
+  ordinary
+Possible interpretations:
+  PV_LIB_SPEC_ControlRuntime.ordinary x.state : Option (Config × PV_STX2_Native.Waiting Data)
+  
+  PV_LIB_SPEC_ResourceHistory.ordinary x.state : Option (Config × PV_STX2_Native.Waiting Data)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ControlHistory.lean:70:2: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.3
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+table : FullStoreActionTable
+p : Parameters
+abi : ABI
+x : Execution
+valid : Invariant x
+x✝ : ?m.3
+native : sorry = x✝
+⊢ Invariant
+    (match PV_LIB_SPEC_ControlRuntime.ordinary x.state with
+    | none =>
+      have out := PV_LIB_SPEC_ControlRuntime.controlStep table p abi x.state;
+      { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued, consumed := x.consumed }
+    | some (c, wait) =>
+      match context x c wait with
+      | none =>
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c.store, world := x.state.current.world,
+                  events := x.state.current.events },
+              suspended := x.state.suspended },
+          issued := x.issued, consumed := x.consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := p.primitives, control := p.control, needsDrop := p.needsDrop,
+            resources := fun {A} => allocationResources p.environment ctx, encode := @Parameters.encode p,
+            loadBias := p.loadBias, siteIndex := p.siteIndex, environment := p.environment };
+        match PV_LIB_SPEC_BoundRuntime.answer bound abi c wait.request x.state.current.world with
+        | none =>
+          have r := PV_THR2_OwnUniformResourceHandler.lift p.environment.native wait.request x.state.current.world;
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := r.world,
+                    events := x.state.current.events ++ r.events },
+                suspended := x.state.suspended },
+            issued := x.issued, consumed := ctx :: x.consumed }
+        | some val =>
+          have m :=
+            have __src := source table bound;
+            { carrier := __src.carrier, control := __src.control, programs := __src.programs,
+              handler := PV_LIB_SPEC_BoundRuntime.handler bound abi c, resources := @Machine.resources __src,
+              encode := @Machine.encode __src, storeActions := __src.storeActions };
+          have out := PV_LIB_SPEC_D984.step m x.state;
+          { state := out, issued := PV_LIB_SPEC_ControlRuntime.recordIssue x.state out x.issued,
+            consumed := ctx :: x.consumed })
+'PV_LIB_SPEC_ControlHistory.Invariant' does not depend on any axioms
+'PV_LIB_SPEC_ControlHistory.record_mono' depends on axioms: [sorryAx]
+'PV_LIB_SPEC_ControlHistory.context_origin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ControlHistory.append_record' depends on axioms: [propext, sorryAx]
+'PV_LIB_SPEC_ControlHistory.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ControlHistory.initial' does not depend on any axioms
+'PV_LIB_SPEC_ControlHistory.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ControlHistory.original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources/PV_FN_SLICE_f7_Statements.lean:91:50: warning: Variable name `d` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+structure PV_FN_SLICE_f7.Pre {E : Type} (x : PV_FN_SLICE_f7.Input E) : Prop
+number of parameters: 2
+parents:
+  PV_FN_SLICE_f7.Pre.toPre : PV_FN_SLICE_f7_Prefix.Pre x
+fields:
+  PV_FN_SLICE_f7_Prefix.Pre.capture : x.s.cells { activation := x.a, localIndex := 1 } = Option.some x.ptr
+  PV_FN_SLICE_f7_Prefix.Pre.tuple : x.s.cells { activation := x.a, localIndex := 2 } =
+      Option.some (PV_STX2_Aggregates.pack x.tupleKind [PV_STX2_Syntax.Data.number x.index])
+  PV_FN_SLICE_f7_Prefix.Pre.fresh : x.a < x.s.nextActivation
+  PV_FN_SLICE_f7_Prefix.Pre.owner : PV_W1_OwnerWellFormed.OwnerWellFormed x.w x.s.nextActivation
+  PV_FN_SLICE_f7.Pre.saved : x.parent.waiting = Option.some x.wait
+  PV_FN_SLICE_f7.Pre.action : x.wait.action = PV_STX2_Native.ReturnAction.child x.a (PV_STX2_Syntax.Place.local x.dest)
+  PV_FN_SLICE_f7.Pre.source8 : x.P PV_FN_SLICE_f7_Prefix.source.2.1 = Option.some PV_STX2_SliceF8.program
+  PV_FN_SLICE_f7.Pre.source6 : x.P PV_FN_SLICE_f8_PrefixData.source.2.1 = Option.some PV_STX2_SliceF6.program
+constructor:
+  PV_FN_SLICE_f7.Pre.mk {E : Type} {x : PV_FN_SLICE_f7.Input E} (toPre : PV_FN_SLICE_f7_Prefix.Pre x)
+    (saved : x.parent.waiting = Option.some x.wait)
+    (action : x.wait.action = PV_STX2_Native.ReturnAction.child x.a (PV_STX2_Syntax.Place.local x.dest))
+    (source8 : x.P PV_FN_SLICE_f7_Prefix.source.2.1 = Option.some PV_STX2_SliceF8.program)
+    (source6 : x.P PV_FN_SLICE_f8_PrefixData.source.2.1 = Option.some PV_STX2_SliceF6.program) : PV_FN_SLICE_f7.Pre x
+field notation resolution order:
+  PV_FN_SLICE_f7.Pre, PV_FN_SLICE_f7_Prefix.Pre
+def PV_FN_SLICE_f7.Post : {E : Type} → PV_FN_SLICE_f7.Input E → Prop :=
+fun {E} x =>
+  ∃ o,
+    PV_FN_SLICE_f8_FullReplies.Executed6 (PV_FN_SLICE_f7_Prefix.input8 x) o ∧
+      PV_FN_SLICE_f8.Post (PV_FN_SLICE_f7_Prefix.input8 x) ∧
+        PV_FN_SLICE_f8.PendingNative (PV_FN_SLICE_f7_Prefix.input8 x) o ∧
+          PV_FN_SLICE_f8.FirstOutcome (PV_FN_SLICE_f7_Prefix.input8 x) o ∧
+            ∃ q,
+              (∃ n,
+                  PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H n
+                      (PV_FN_SLICE_f7.entry x) =
+                    q) ∧
+                PV_FN_SLICE_f7.Frame x q ∧
+                  PV_W1_OwnerWellFormed.OwnerWellFormed q.current.world (PV_FN_SLICE_f8.store q).nextActivation ∧
+                    x.s.nextActivation ≤ (PV_FN_SLICE_f8.store q).nextActivation ∧
+                      (∃ suffix, q.current.events = x.es ++ suffix) ∧
+                        match o with
+                        | PV_FN_SLICE_f8_FullReplies.Outcome.success v d =>
+                          ∃ capture t r,
+                            (PV_FN_SLICE_f7.successStore x v d).cells { activation := x.a, localIndex := 1 } =
+                                Option.some capture ∧
+                              r = x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) d.world ∧
+                                (match r.answer with
+                                  | PV_STX_Machine.Answer.returned (Aeneas.Std.Result.ok v_1) =>
+                                    PV_FN_SLICE_f7.DropLive x v d t
+                                  | x => True) ∧
+                                  (∃ n,
+                                      PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H
+                                          n (PV_FN_SLICE_f7.after8 x o) =
+                                        PV_FN_SLICE_f7_AfterDrop.received
+                                          (have __src := PV_FN_SLICE_f7.successInput x v d;
+                                          { C := __src.C, b := __src.b, K := __src.K, P := __src.P, H := __src.H,
+                                            s := t, a := __src.a, dest := __src.dest, parent := __src.parent,
+                                            parents := __src.parents, wait := __src.wait, ptr := __src.ptr,
+                                            allocator := __src.allocator, w := __src.w, es := __src.es,
+                                            stack := __src.stack })
+                                          capture r) ∧
+                                    q =
+                                      PV_FN_SLICE_f7_AfterDrop.finish
+                                        (have __src := PV_FN_SLICE_f7.successInput x v d;
+                                        { C := __src.C, b := __src.b, K := __src.K, P := __src.P, H := __src.H, s := t,
+                                          a := __src.a, dest := __src.dest, parent := __src.parent,
+                                          parents := __src.parents, wait := __src.wait, ptr := __src.ptr,
+                                          allocator := __src.allocator, w := __src.w, es := __src.es,
+                                          stack := __src.stack })
+                                        capture r
+                        | x_1 => q = PV_FN_SLICE_f7.otherFinish x o
+PV_FN_SLICE_f7.Contract : Prop
+PV_FN_SLICE_f7.SuccessBoundary : Prop
+PV_FN_SLICE_f7.SuccessValue : Prop
+PV_FN_SLICE_f7.Callee8From6 : Prop
+PV_FN_SLICE_f7.Callee8 {E : Type} (x : Input E) : Prop
+PV_FN_SLICE_f7.Through8 : Prop
+PV_FN_SLICE_f7.OtherComposition : Prop
+PV_FN_SLICE_f7.IssueDrop : Prop
+PV_FN_SLICE_f7.ReceiveDrop : Prop
+PV_FN_SLICE_f7.OtherJoin : Prop
+PV_FN_SLICE_f7.DropLive {E : Type} (x : Input E) (v : Data) (d : Effects E) (t : Store Data) : Prop
+PV_FN_SLICE_f7.DropJoin : Prop
+PV_FN_SLICE_f7.DropComposition : Prop

@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/sources/PV_LIB_SourceStoreComparison.lean:70:12: error: don't know how to synthesize placeholder for argument `w`
+context:
+E : Type
+C : Carrier OWNER Data
+e : Entry
+w : OWNER
+reference : Data
+events : List E
+p : Address
+address : C.dereference w reference = some { activation := p.activation, localIndex := p.localIndex }
+before : e.store.cells { activation := p.activation, localIndex := p.localIndex } = some (Data.boolean false)
+outside : p.activation ≠ e.store.nextActivation
+destination :
+  { activation := p.activation, localIndex := p.localIndex } ≠ { activation := e.caller, localIndex := e.destination }
+r : Reply OWNER E Data := ⋯
+gap :
+  corrected C e w reference r events =
+      some
+        (deliver C
+          (have __src := selected e reference;
+          {
+            store :=
+              write e.store { activation := p.activation, localIndex := p.localIndex } (some (Data.boolean true)),
+            caller := __src.caller, parents := __src.parents, loops := __src.loops, rest := __src.rest,
+            callee := __src.callee, arguments := __src.arguments, destination := __src.destination,
+            suspended := __src.suspended })
+          r events) ∧
+    (statusStore (original C e reference r events).current.status).cells
+          { activation := p.activation, localIndex := p.localIndex } =
+        some (Data.boolean false) ∧
+      (statusStore
+              (deliver C
+                    (have __src := selected e reference;
+                    {
+                      store :=
+                        write e.store { activation := p.activation, localIndex := p.localIndex }
+                          (some (Data.boolean true)),
+                      caller := __src.caller, parents := __src.parents, loops := __src.loops, rest := __src.rest,
+                      callee := __src.callee, arguments := __src.arguments, destination := __src.destination,
+                      suspended := __src.suspended })
+                    r events).current.status).cells
+          { activation := p.activation, localIndex := p.localIndex } =
+        some (Data.boolean true)
+⊢ Config
+'PV_LIB_SourceStoreComparison.cell_gap' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SourceStoreComparison.running_cell' depends on axioms: [propext]
+'PV_LIB_SourceStoreComparison.public_gap' depends on axioms: [propext, sorryAx, Quot.sound]

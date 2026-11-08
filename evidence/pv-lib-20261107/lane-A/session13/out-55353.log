@@ -1,0 +1,156 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceSequence13.lean:88:18: error: Type mismatch
+  (ih t off.right).left
+has type
+  Trace C K P H (steps C a w tail t)
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                store := t },
+          world := w, events := es },
+      suspended := stack }
+but is expected to have type
+  Trace C K P H
+    (match some t with
+    | none => 0
+    | some t => steps C a w tail t)
+    (match
+      (PV_STX2_Store.bind C s w a dest expr).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier C) s w a dest expr with
+    | none => { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+    | some t =>
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                  store := t },
+            world := w, events := es },
+        suspended := stack })
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceSequence13.lean:92:39: error: Tactic `rfl` failed: The left-hand side
+  PV_THR2_IntrinsicState.advance C K P H 0
+    (match
+      (PV_STX2_Store.bind C s w a dest expr).orElse fun x =>
+        PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier C) s w a dest expr with
+    | none => { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+    | some t =>
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                  store := t },
+            world := w, events := es },
+        suspended := stack })
+is not definitionally equal to the right-hand side
+  { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+
+case bind.right.none
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+H : PV_LIB_StoreActionTable.Handler
+a : ℕ
+parents : List Frame
+loops : List LoopFrame
+rest : List PV_STX2_SliceSyntax.Node
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : PV_STX2_Syntax.Site
+dest : PV_STX2_Syntax.Place
+expr : Expr
+tail : Seq
+ih :
+  ∀ (s : Store Data),
+    sites tail →
+      let q :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                    store := s },
+              world := w, events := es },
+          suspended := stack };
+      Trace C K P H (steps C a w tail s) q ∧
+        PV_THR2_IntrinsicState.advance C K P H (steps C a w tail s) q =
+          { current := { status := result C a parents loops rest w tail s, world := w, events := es },
+            suspended := stack }
+s : Store Data
+off : sites (Seq.bind site dest expr tail)
+first :
+  PV_THR2_IntrinsicState.advance C K P H 1
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf (Instruction.bind site dest expr) :: (nodes tail ++ rest),
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack } =
+    PV_THR2_IntrinsicFrameBind.after C s a parents loops (nodes tail ++ rest) site dest expr w es stack
+hb : bound C s a dest expr w = none
+⊢ PV_THR2_IntrinsicState.advance C K P H 0
+      (match
+        (PV_STX2_Store.bind C s w a dest expr).orElse fun x =>
+          PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier C) s w a dest expr with
+      | none =>
+        { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+      | some t =>
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                    store := t },
+              world := w, events := es },
+          suspended := stack }) =
+    { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceSequence13.lean:93:18: error: Type mismatch: After simplification, term
+  (ih t off.right).right
+ has type
+  PV_THR2_IntrinsicState.advance C K P H (steps C a w tail t)
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                  store := t },
+            world := w, events := es },
+        suspended := stack } =
+    { current := { status := result C a parents loops rest w tail t, world := w, events := es }, suspended := stack }
+but is expected to have type
+  PV_THR2_IntrinsicState.advance C K P H (steps C a w tail t)
+      (match
+        (PV_STX2_Store.bind C s w a dest expr).orElse fun x =>
+          PV_STX2_Store.bind (PV_THR2_AggregateCompletion.carrier C) s w a dest expr with
+      | none =>
+        { current := { status := Status.undefined (some site) s, world := w, events := es }, suspended := stack }
+      | some t =>
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := nodes tail ++ rest, loops := loops }, callers := parents,
+                    store := t },
+              world := w, events := es },
+          suspended := stack }) =
+    { current := { status := result C a parents loops rest w tail t, world := w, events := es }, suspended := stack }
+'PV_LIB_A_SourceSequence13.aggregate_quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_SourceSequence13.certified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_SourceSequence13.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

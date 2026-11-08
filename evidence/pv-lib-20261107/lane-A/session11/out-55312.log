@@ -1,0 +1,109 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F6Thread11.lean:82:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_A_PrefixMachine11.advance C K P (fun {A} => resources) (fun {A} => encode) H values 1
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  {
+                    frame :=
+                      { activation := a,
+                        remaining :=
+                          PV_STX2_SliceSyntax.Node.leaf
+                              (Instruction.storage
+                                { function := 6, statement := 1783,
+                                  path := Data.array [Data.atom "body", Data.atom "statements", Data.number 17] }
+                                true 6) ::
+                            List.drop 18 PV_THR2_F6.live.body },
+                    callers := parents, store := s },
+              world := w, events := es },
+          suspended := stack } }
+in the target expression
+  PV_LIB_A_PrefixMachine11.advance C K P (fun {A} => resources) (fun {A} => encode) H values 1
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := List.drop 17 PV_THR2_F6.live.body }, callers := parents,
+                      store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := List.drop 18 PV_THR2_F6.live.body }, callers := parents,
+                    store := write s { activation := a, localIndex := 6 } none },
+              world := w, events := es },
+          suspended := stack } }
+
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+s : Store Data
+a : ℕ
+parents : List Frame
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+quiet :
+  Quiet P
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := a,
+                    remaining :=
+                      PV_STX2_SliceSyntax.Node.leaf
+                          (Instruction.storage
+                            { function := 6, statement := 1783,
+                              path := Data.array [Data.atom "body", Data.atom "statements", Data.number 17] }
+                            true 6) ::
+                        List.drop 18 PV_THR2_F6.live.body },
+                callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack }
+⊢ PV_LIB_A_PrefixMachine11.advance C K P (fun {A} => resources) (fun {A} => encode) H values 1
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := List.drop 17 PV_THR2_F6.live.body }, callers := parents,
+                      store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := a, remaining := List.drop 18 PV_THR2_F6.live.body }, callers := parents,
+                    store := write s { activation := a, localIndex := 6 } none },
+              world := w, events := es },
+          suspended := stack } }
+'PV_LIB_A_F6Thread11.call_quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Thread11.wait_quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Thread11.issue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Thread11.poll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Thread11.storage' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Thread11.segment3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

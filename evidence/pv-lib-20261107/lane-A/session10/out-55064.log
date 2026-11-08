@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_WeakCount10.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_LIB_A_DestructorValues10.carrier ?C ?b).dereference ?w
+    ((PV_LIB_A_DestructorValues10.carrier ?C ?b).reference ?p ?m)
+in the target expression
+  (do
+      let p ←
+        (PV_LIB_A_DestructorValues10.carrier C b).dereference w
+            (PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null)
+      have count : Address :=
+        { activation := p.activation, localIndex := p.localIndex, fields := p.fields ++ [1, 0, 0] }
+      let n ← numberAt (PV_LIB_A_DestructorValues10.carrier C b) s count
+      let post ←
+        writeAddress (PV_LIB_A_DestructorValues10.carrier C b) s count
+            (some (Data.number ((n + modulus - 1) % modulus)))
+      pure
+          { store := post,
+            tail := if n = 1 then PV_LIB_A_WeakDropSource.Tail.deallocate p else PV_LIB_A_WeakDropSource.Tail.done }) =
+    some
+      {
+        store :=
+          write s { activation := a, localIndex := i }
+            (some (inner strong payload atomicKind unsafeKind ((n + modulus - 1) % modulus))),
+        tail :=
+          if n = 1 then PV_LIB_A_WeakDropSource.Tail.deallocate { activation := a, localIndex := i }
+          else PV_LIB_A_WeakDropSource.Tail.done }
+
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a i n : ℕ
+strong payload atomicKind unsafeKind : Data
+source : s.cells { activation := a, localIndex := i } = some (inner strong payload atomicKind unsafeKind n)
+⊢ (do
+      let p ←
+        (PV_LIB_A_DestructorValues10.carrier C b).dereference w
+            (PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null)
+      have count : Address :=
+        { activation := p.activation, localIndex := p.localIndex, fields := p.fields ++ [1, 0, 0] }
+      let n ← numberAt (PV_LIB_A_DestructorValues10.carrier C b) s count
+      let post ←
+        writeAddress (PV_LIB_A_DestructorValues10.carrier C b) s count
+            (some (Data.number ((n + modulus - 1) % modulus)))
+      pure
+          { store := post,
+            tail := if n = 1 then PV_LIB_A_WeakDropSource.Tail.deallocate p else PV_LIB_A_WeakDropSource.Tail.done }) =
+    some
+      {
+        store :=
+          write s { activation := a, localIndex := i }
+            (some (inner strong payload atomicKind unsafeKind ((n + modulus - 1) % modulus))),
+        tail :=
+          if n = 1 then PV_LIB_A_WeakDropSource.Tail.deallocate { activation := a, localIndex := i }
+          else PV_LIB_A_WeakDropSource.Tail.done }
+'PV_LIB_A_WeakCount10.inner' depends on axioms: [propext]
+'PV_LIB_A_WeakCount10.read_count' depends on axioms: [propext]
+'PV_LIB_A_WeakCount10.write_count' depends on axioms: [propext]
+'PV_LIB_A_WeakCount10.allocated' depends on axioms: [propext, sorryAx]

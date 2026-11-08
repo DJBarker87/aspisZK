@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreTransport.lean:25:17: error: Type mismatch: After simplification, term
+  ih
+ has type
+  ∀ (s : State),
+    PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values (n + m) s =
+      PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+        (PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values n s)
+but is expected to have type
+  PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values (n + m)
+      (PV_LIB_A_OwnerStore.step C K P (fun {A} => resources) (fun {A} => encode) H values s) =
+    PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values m
+      (PV_LIB_A_OwnerStore.advance C K P (fun {A} => resources) (fun {A} => encode) H values n
+        (PV_LIB_A_OwnerStore.step C K P (fun {A} => resources) (fun {A} => encode) H values s))
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreTransport.lean:26:9: error: unexpected token '('; expected command
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreTransport.lean:54:9: error(lean.unknownIdentifier): Unknown identifier `PV_W1_OwnerNativeFrame.Backend`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_OwnerStoreTransport.lean:63:100: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : sorry
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+site : PV_THR2_SourceStoreNative.Site
+ordinary : PV_THR2_Catch316Segment.select c = none
+selected : PV_THR2_SourceStoreNative.select P c = some site
+out : State :=
+  PV_LIB_A_OwnerStore.step C K P (fun {A} => resources) (fun {A} => encode)
+    (PV_THR2_OwnUniformResourceHandler.lift sorry) values
+    { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack }
+framed :
+  out.current.world = (PV_THR2_OwnUniformResourceHandler.lift sorry site.waiting.request w).world ∧
+    (PV_LIB_A_OwnerStore.step C K P (fun {A} => resources) (fun {A} => encode)
+              (PV_THR2_OwnUniformResourceHandler.lift sorry) values
+              { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                suspended := stack }).current.events =
+        es ++ (PV_THR2_OwnUniformResourceHandler.lift sorry site.waiting.request w).events ∧
+      (PV_LIB_A_OwnerStore.step C K P (fun {A} => resources) (fun {A} => encode)
+            (PV_THR2_OwnUniformResourceHandler.lift sorry) values
+            { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+              suspended := stack }).suspended =
+        stack
+⊢ out.current.world.next = w.next ∧
+    out.current.world.places = w.places ∧
+      ∀ (p : PV_EVHB_OwnerMachine.Place),
+        PV_EVHB_OwnerMachine.receiver out.current.world p = PV_EVHB_OwnerMachine.receiver w p
+'PV_LIB_A_OwnerStoreTransport.advance_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_OwnerStoreTransport.advance_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_OwnerStoreTransport.segment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_OwnerStoreTransport.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

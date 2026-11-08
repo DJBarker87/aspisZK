@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources/PV_FN_SLICE_f8_FullReplies.lean:36:13: warning: Variable name `v` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'PV_FN_SLICE_f8_FullReplies.after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f8_FullReplies.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_SLICE_f8_FullReplies.run : ∀ {E : Type} (x : PV_FN_SLICE_f8_FullReplies.Input E)
+  (pre : PV_FN_SLICE_f8_FullReplies.Pre x) (o : PV_FN_SLICE_f8_FullReplies.Outcome E)
+  (callee6 : PV_FN_SLICE_f8_FullReplies.Executed6 x o),
+  ∃ n,
+    PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H n
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := x.a, remaining := PV_STX2_SliceF8.program.body },
+                    callers := x.parent :: x.parents, store := x.s },
+              world := x.w, events := x.es },
+          suspended := x.stack } =
+      PV_FN_SLICE_f8_FullReplies.finish x o :=
+⋯

@@ -1,0 +1,11 @@
+--- evidence/pv-lib-20261107/lane-A/focused-host-s9.py	2026-11-08 02:26:38
++++ evidence/pv-lib-20261107/lane-A/focused-host-s11.py	2026-11-08 03:51:06
+@@ -2,7 +2,7 @@
+ import pathlib,json,sys,hashlib,subprocess,time,re,os,lzma
+ B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-int-20261106');Q=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-20261107');P=Q/'lane-A';P.mkdir(exist_ok=True);E=P/'evidence';E.mkdir(exist_ok=True);(P/'sources').mkdir(exist_ok=True);(P/'objects').mkdir(exist_ok=True)
+ x=json.load(sys.stdin);a=x['attempt'];m=x['module'];audit=x['audit']
+-assert ((49458<=a<=49479 or 49800<=a<=49889 or 49100<=a<=49199 or 46300<=a<=46399 or 47400<=a<=47489 or 55000<=a<=55089) and not audit) or (49482<=a<=49499 or 49890<=a<=49899 or (47490<=a<=47499 or 55090<=a<=55099) and audit)
++assert ((49458<=a<=49479 or 49800<=a<=49889 or 49100<=a<=49199 or 46300<=a<=46399 or 47400<=a<=47489 or 55000<=a<=55089 or 55300<=a<=55389) and not audit) or (49482<=a<=49499 or 49890<=a<=49899 or (47490<=a<=47499 or 55090<=a<=55099 or 55390<=a<=55399) and audit)
+ assert x['turn']['exit']==0 and x['turn']['attempt']==a
+ sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()
+ for p in E.glob('refusal-*.json'):assert time.time()-json.load(open(p))['epoch']>=180

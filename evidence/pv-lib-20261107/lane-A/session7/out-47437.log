@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceReplies7.lean:81:2: error: 'change' tactic failed, pattern
+  (match
+      Option.map (fun s => { store := s, tail := PV_LIB_A_WeakDropSource.Tail.done })
+        (if effectFree d = true then some post else none) with
+    | none => ?m.51
+    | some begun => ?m.56 begun) =
+    ?m.47
+is not definitionally equal to target
+  (match
+            match
+              { action := SourceAction.cellSet504, callee := fn, waiting := wait,
+                  arguments := [reference, value] }.action with
+            | SourceAction.inherited action =>
+              Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done })
+                (PV_LIB_StoreActionTable.interpret C values action
+                  { action := SourceAction.cellSet504, callee := fn, waiting := wait,
+                      arguments := [reference, value] }.callee
+                  { action := SourceAction.cellSet504, callee := fn, waiting := wait,
+                      arguments := [reference, value] }.arguments
+                  c.store w r)
+            | SourceAction.cellSet504 =>
+              Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done }) do
+                let prepared ← some { store := post, old := old, destructor := d }
+                if effectFree prepared.destructor = true then some prepared.store else none
+            | SourceAction.weakDrop683 =>
+              PV_LIB_A_WeakDropSource.PV_THR2_LibrarySemantics_WeakDropBegin683 C
+                { action := SourceAction.cellSet504, callee := fn, waiting := wait,
+                    arguments := [reference, value] }.arguments
+                c.store w
+            | SourceAction.threadClone214 =>
+              Option.map (fun post => { store := post, tail := PV_LIB_A_WeakDropSource.Tail.done })
+                (PV_LIB_A_ThreadCloneStore.PV_THR2_LibrarySemantics_ThreadCloneSource214 C
+                  { action := SourceAction.cellSet504, callee := fn, waiting := wait,
+                      arguments := [reference, value] }.arguments
+                  c.store w) with
+          | none =>
+            {
+              base :=
+                { current := { status := Status.undefined none c.store, world := r.world, events := es ++ r.events },
+                  suspended := stack } }
+          | some begun =>
+            sourceReceive C { frame := c.frame, callers := c.callers, store := begun.store } es stack
+              { action := SourceAction.cellSet504, callee := fn, waiting := wait, arguments := [reference, value] }
+              begun.tail r).base.current.status =
+    Status.undefined none c.store
+'PV_LIB_A_SourceReplies7.copy_all_replies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_SourceReplies7.weak_success' depends on axioms: [propext]
+'PV_LIB_A_SourceReplies7.weak_failure' depends on axioms: [propext]
+'PV_LIB_A_SourceReplies7.weak_divergence' depends on axioms: [propext]
+'PV_LIB_A_SourceReplies7.weak_fault' depends on axioms: [propext]
+'PV_LIB_A_SourceReplies7.nontrivial_still_unsupported' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

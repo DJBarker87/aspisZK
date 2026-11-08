@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcMemoryV2.lean:58:6: error: Type mismatch
+  PV_STX2_TypedReferences.dereference ?m.61 ?m.62 ?m.63 ?m.64
+has type
+  (PV_STX2_TypedReferences.carrier ?m.61).dereference ?m.62 (PV_STX2_TypedReferences.reference ?m.63 ?m.64) = some ?m.63
+but is expected to have type
+  B.dereference w (PV_STX2_TypedReferences.reference { activation := a, localIndex := i } Data.null) =
+    some { activation := a, localIndex := i }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcMemoryV2.lean:59:6: error: Type mismatch
+  arcCell
+has type
+  s.cells { activation := a, localIndex := i } =
+    some
+      (PV_THR2_Packet315SourceReturn.value
+        (PV_THR2_KeyValues.pack nk
+          [PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null])
+        allocator)
+but is expected to have type
+  readAddress B s { activation := a, localIndex := i } = some ?m.50
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcMemoryV2.lean:60:6: error: Tactic `rfl` failed: The left-hand side
+  B.field ?m.50 0
+is not definitionally equal to the right-hand side
+  some
+    (PV_THR2_KeyValues.pack nk [PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null])
+
+case field
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a i owner j n : ℕ
+ik ak uk nk allocator weak packet : Data
+arcCell :
+  s.cells { activation := a, localIndex := i } =
+    some
+      (PV_THR2_Packet315SourceReturn.value
+        (PV_THR2_KeyValues.pack nk
+          [PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null])
+        allocator)
+innerCell : s.cells { activation := owner, localIndex := j } = some (block ik ak uk n weak packet)
+B : Carrier OWNER Data := ⋯
+⊢ B.field ?m.50 0 =
+    some
+      (PV_THR2_KeyValues.pack nk [PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null])
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcMemoryV2.lean:62:6: error: Type mismatch
+  PV_STX2_TypedReferences.dereference ?m.66 ?m.67 ?m.68 ?m.69
+has type
+  (PV_STX2_TypedReferences.carrier ?m.66).dereference ?m.67 (PV_STX2_TypedReferences.reference ?m.68 ?m.69) = some ?m.68
+but is expected to have type
+  B.dereference w (PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null) =
+    some { activation := owner, localIndex := j }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcMemoryV2.lean:54:27: error: unsolved goals
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a i owner j n : ℕ
+ik ak uk nk allocator weak packet : Data
+arcCell :
+  s.cells { activation := a, localIndex := i } =
+    some
+      (PV_THR2_Packet315SourceReturn.value
+        (PV_THR2_KeyValues.pack nk
+          [PV_STX2_TypedReferences.reference { activation := owner, localIndex := j } Data.null])
+        allocator)
+innerCell : s.cells { activation := owner, localIndex := j } = some (block ik ak uk n weak packet)
+B : Carrier OWNER Data := ⋯
+⊢ Data
+'PV_LIB_A_ArcMemoryV2.write_count' depends on axioms: [propext]
+'PV_LIB_A_ArcMemoryV2.read_count' depends on axioms: [propext]
+'PV_LIB_A_ArcMemoryV2.clone_from_cells' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ArcMemoryV2.actual12950' depends on axioms: [propext]

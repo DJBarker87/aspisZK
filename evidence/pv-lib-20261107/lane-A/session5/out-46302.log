@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:43:2: error: 'change' tactic failed, pattern
+  (C.dereference w reference).bind ?m.37 = ?m.39
+is not definitionally equal to target
+  (match [reference] with
+    | [reference] => do
+      let __x ←
+        do
+          let p ← C.dereference w reference
+          let value ← readAddress C s p
+          pure (p, value)
+      match __x with
+        | (fst, arc) => do
+          let nonNull ← C.field arc 0
+          let pointer ← C.field nonNull 0
+          C.dereference w pointer
+    | x => none) =
+    some p
+'PV_LIB_A_ArcStoreV2.PV_THR2_LibrarySemantics_ArcClone360' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.inner_from_source' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ArcStoreV2.clone_count' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.valid_inner' depends on axioms: [propext, sorryAx]

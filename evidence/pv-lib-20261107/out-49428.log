@@ -1,0 +1,47 @@
+structure PV_FN_SLICE_f31.Pre (s : Store Data) (parents : List PV_STX2_SliceMachine.Frame) (a n : ℕ) (w : OWNER) : Prop
+number of parameters: 5
+fields:
+  PV_FN_SLICE_f31.Pre.wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation
+  PV_FN_SLICE_f31.Pre.live : a < s.nextActivation
+  PV_FN_SLICE_f31.Pre.usize : n < PV_STX2_Source7CapacityScalars.modulus
+  PV_FN_SLICE_f31.Pre.length : s.cells { activation := a, localIndex := 1 } = some (Data.number n)
+  PV_FN_SLICE_f31.Pre.allocator : s.cells { activation := a, localIndex := 2 } = some PV_STX2_Source7GlobalClone.value
+  PV_FN_SLICE_f31.Pre.layout : s.cells { activation := a, localIndex := 3 } =
+      some PV_STX2_Source7LayoutConstructor.value
+  PV_FN_SLICE_f31.Pre.registered : ∃ id h,
+      (PV_STX2_Source7QUniformBindings.target parents).bind w.places = some id ∧
+        lookup w.world id = some h ∧ h.shape.width = 4 ∧ PV_EVHB_OwnerReserve.alignment h.shape.align = 4
+constructor:
+  PV_FN_SLICE_f31.Pre.mk {s : Store Data} {parents : List PV_STX2_SliceMachine.Frame} {a n : ℕ} {w : OWNER}
+    (wellFormed : PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation) (live : a < s.nextActivation)
+    (usize : n < PV_STX2_Source7CapacityScalars.modulus)
+    (length : s.cells { activation := a, localIndex := 1 } = some (Data.number n))
+    (allocator : s.cells { activation := a, localIndex := 2 } = some PV_STX2_Source7GlobalClone.value)
+    (layout : s.cells { activation := a, localIndex := 3 } = some PV_STX2_Source7LayoutConstructor.value)
+    (registered :
+      ∃ id h,
+        (PV_STX2_Source7QUniformBindings.target parents).bind w.places = some id ∧
+          lookup w.world id = some h ∧ h.shape.width = 4 ∧ PV_EVHB_OwnerReserve.alignment h.shape.align = 4) :
+    Pre s parents a n w
+def PV_FN_SLICE_f31.Post : Resources →
+  Encode →
+    Carrier PV_STX_World.World Data →
+      Control →
+        Store Data →
+          PV_STX2_SliceMachine.Frame →
+            List PV_STX2_SliceMachine.Frame →
+              ℕ →
+                ℕ →
+                  OWNER → List PV_RJ4IDB.NativeEvent → PV_W5_NoAllocShim.External → PV_W5_NativeFrame.Backend → Prop :=
+fun resources encode base ctrl s parent parents a n w prior external backend =>
+  have out :=
+    outcome (fun {A} => resources) (fun {A} => encode) base ctrl s (parent :: parents) a n w prior external backend;
+  fuel (fun {A} => resources) (fun {A} => encode) base ctrl s (parent :: parents) a n w external backend ≤ 43 ∧
+    Boundary (fun {A} => resources) (fun {A} => encode) base ctrl s parent parents a n w external backend out ∧
+      PV_W5_F59Frame.Post s a w out ∧
+        (∃ suffix, out.events = prior ++ suffix) ∧
+          PV_FN_SLICE_f35.Post (fun {A} => resources) (fun {A} => encode) base (L ctrl)
+            (PV_W5_F31Child.entered s (parent :: parents) a n).store (PV_W5_F31Child.parent s (parent :: parents) a n)
+            (parent :: parents) s.nextActivation n false PV_STX2_Source7GlobalClone.value w [] external backend
+'PV_FN_SLICE_f31.fuel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f31.outcome' depends on axioms: [propext, Classical.choice, Quot.sound]

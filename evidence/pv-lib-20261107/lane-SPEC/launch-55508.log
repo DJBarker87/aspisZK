@@ -1,0 +1,64 @@
+{"cohort": "w3", "attempt": 55508, "target": "PV_LIB_SPEC_SourceTransport15", "source_revision": "743d04f07dbef4fb582f6f854efda6e45fe1139f", "source_sha256": "8cff03fc21b95e6460cd8457786565b7e5d5b045f036a69858d15f90ddcd8d02", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10975, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55508", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55508.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_SourceTransport15.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SourceTransport15.lean", "7000"], "exit": 1, "wall_seconds": 2.207242012023926, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_SourceTransport15.Quiet' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SourceTransport15.transition' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SourceTransport15.sourceStep' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SourceTransport15.advance' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SourceTransport15.Trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SourceTransport15.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.16", "peak_rss_kbytes": "4782988", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SourceTransport15.lean:75:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+in the target expression
+  {
+      state :=
+        match PV_STX2_SliceMachine.Status.running c with
+        | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+        | x_1 =>
+          PV_LIB_SPEC_ReachedNative14.transition cut p
+            { frame := { activation := 0, remaining := [] }, callers := [],
+              store := { cells := fun x => none, nextActivation := 0 } }
+            x.state,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue x.state
+          (match PV_STX2_SliceMachine.Status.running c with
+          | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+          | x_1 =>
+            PV_LIB_SPEC_ReachedNative14.transition cut p
+              { frame := { activation := 0, remaining := [] }, callers := [],
+                store := { cells := fun x => none, nextActivation := 0 } }
+              x.state)
+          x.issued,
+      consumed := x.consumed } =
+    sourceStep p H x
+
+case running
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+n : ℕ
+ih : ∀ (x : Execution), Trace cut p H n x → PV_LIB_SPEC_ReachedNative14.run cut p n x = advance p H n x
+x : Execution
+trace : Trace cut p H (n + 1) x
+c : Config
+hs : x.state.current.status = PV_STX2_SliceMachine.Status.running c
+⊢ {
+      state :=
+        match PV_STX2_SliceMachine.Status.running c with
+        | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+        | x_1 =>
+          PV_LIB_SPEC_ReachedNative14.transition cut p
+            { frame := { activation := 0, remaining := [] }, callers := [],
+              store := { cells := fun x => none, nextActivation := 0 } }
+            x.state,
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue x.state
+          (match PV_STX2_SliceMachine.Status.running c with
+          | PV_STX2_SliceMachine.Status.running c => PV_LIB_SPEC_ReachedNative14.transition cut p c x.state
+          | x_1 =>
+            PV_LIB_SPEC_ReachedNative14.transition cut p
+              { frame := { activation := 0, remaining := [] }, callers := [],
+                store := { cells := fun x => none, nextActivation := 0 } }
+              x.state)
+          x.issued,
+      consumed := x.consumed } =
+    sourceStep p H x
+'PV_LIB_SPEC_SourceTransport15.Quiet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.transition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.sourceStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.Trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SourceTransport15.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

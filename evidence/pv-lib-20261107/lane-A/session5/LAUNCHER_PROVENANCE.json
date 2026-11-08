@@ -1,0 +1,7 @@
+{
+  "original_sha256": "216ed06b676768db0d9fef8b081723d40d4e38aeeb44c3e1bd41867280325218",
+  "executed_sha256": "a521e64577ca12ec8df7e0f80d9914c654c862161a4e91f7b39a0f8782405960",
+  "only_host_guard_change": "accept46300-46399,47400-47489; raw47490-47499; previous ranges unchanged",
+  "shared_launcher_edited": false,
+  "diff": "--- focused-host-s4.py\n+++ focused-host-s5.py\n@@ -2,7 +2,7 @@\n import pathlib,json,sys,hashlib,subprocess,time,re,os,lzma\n B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-int-20261106');Q=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-20261107');P=Q/'lane-A';P.mkdir(exist_ok=True);E=P/'evidence';E.mkdir(exist_ok=True);(P/'sources').mkdir(exist_ok=True);(P/'objects').mkdir(exist_ok=True)\n x=json.load(sys.stdin);a=x['attempt'];m=x['module'];audit=x['audit']\n-assert ((49458<=a<=49479 or 49800<=a<=49889 or 49100<=a<=49199) and not audit) or (49482<=a<=49499 or 49890<=a<=49899 and audit)\n+assert ((49458<=a<=49479 or 49800<=a<=49889 or 49100<=a<=49199 or 46300<=a<=46399 or 47400<=a<=47489) and not audit) or (49482<=a<=49499 or 49890<=a<=49899 or 47490<=a<=47499 and audit)\n assert x['turn']['exit']==0 and x['turn']['attempt']==a\n sha=lambda p:hashlib.file_digest(open(p,'rb'),'sha256').hexdigest()\n for p in E.glob('refusal-*.json'):assert time.time()-json.load(open(p))['epoch']>=180\n"
+}

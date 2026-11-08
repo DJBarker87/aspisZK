@@ -1,0 +1,13 @@
+theorem PV_W5_F35CallContext.f31_entry : ∀ (s : Store Data) (parents : List PV_STX2_SliceMachine.Frame) (a n : ℕ)
+  (w : OWNER),
+  PV_STX2_OwnerActivationWellFormed.OwnerWellFormed w s.nextActivation →
+    n < PV_STX2_Source7CapacityScalars.modulus →
+      (∃ id h,
+          (PV_STX2_Source7QUniformBindings.target parents).bind w.places = some id ∧
+            lookup w.world id = some h ∧ h.shape.width = 4 ∧ PV_EVHB_OwnerReserve.alignment h.shape.align = 4) →
+        have c :=
+          PV_STX2_ToVecConstructorDispatch.entered s parents a (Data.number n) PV_STX2_Source7GlobalClone.value
+            PV_STX2_Source7LayoutConstructor.value;
+        PV_FN_SLICE_f35.Pre c.store c.callers s.nextActivation n false PV_STX2_Source7GlobalClone.value w :=
+⋯
+'PV_W5_F35CallContext.f31_entry' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,519 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:36:87: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+completed : c.frame.completed = none
+waiting : c.frame.waiting = none
+allocation : PV_THR2_OwnInitAction.selected c = false
+operator : PV_THR2_OperatorAction.selected c = none
+registration : PV_THR2_OwnUniformNeutral.configuration c
+dynamic : PV_THR2_Dynamic.active c = none
+interpreted :
+  ∀ (site : Option PV_STX2_Syntax.Site) (s : Store Data),
+    (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+          (v2ProvenancePrograms P) H c w).status ≠
+      Status.undefined site s
+⊢ (match do
+      let wait ← none
+      match wait.request with
+        | PV_STX2_Native.Request.child fn activation args =>
+          match v2ProvenancePrograms P fn with
+          | some val => none
+          | none => do
+            let action ← v2Source fn
+            pure { action := action, callee := fn, waiting := wait, arguments := args }
+        | x => none with
+    | some site =>
+      match site.action with
+      | SourceAction.weakDrop683 =>
+        match
+          PV_LIB_A_WeakDropSource.PV_THR2_LibrarySemantics_WeakDropBegin683
+            (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) site.arguments c.store w with
+        | some { store := post, tail := PV_LIB_A_WeakDropSource.Tail.deallocate p } =>
+          PV_LIB_A_WeakOwnerFree9.poll (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+            (fun {A} => resources) (fun {A} => encode) { frame := c.frame, callers := c.callers, store := post } w es
+            stack site p
+        | x =>
+          match do
+            let wait ← none
+            match wait.request with
+              | PV_STX2_Native.Request.child fn activation [reference] => do
+                let d ←
+                  PV_LIB_A_GenericDropMachine9.resolution248
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn reference
+                pure { waiting := wait, reference := reference, destructor := d }
+              | x => none with
+          | some site =>
+            match site.destructor with
+            | PV_LIB_A_TypedDestruct.Resolution.noop =>
+              PV_LIB_A_GenericDropMachine.noop (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                c w es stack site.waiting
+            | PV_LIB_A_TypedDestruct.Resolution.call fn =>
+              {
+                base :=
+                  {
+                    current :=
+                      {
+                        status :=
+                          PV_STX2_SliceMachine.Status.running
+                            (PV_LIB_A_DropInPlace248.PV_THR2_LibrarySemantics_DropInPlace248 c site),
+                        world := w, events := es },
+                    suspended := stack } }
+          | none =>
+            match do
+              let wait ← none
+              match wait.request with
+                | PV_STX2_Native.Request.child fn a args =>
+                  if PV_THR2_OffPath.functionId fn = some 504 ∧ (v2ProvenancePrograms P fn).isNone = true then do
+                    let normalized ← PV_LIB_A_TypedDestruct.normalize 64 fn
+                    let prepared ←
+                      PV_LIB_A_CellSetBegin.PV_THR2_LibrarySemantics_CellSetBegin504
+                          (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) normalized args
+                          c.store w
+                    let d ←
+                      PV_LIB_A_ValueDestruct9.resolve
+                          (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                          prepared.destructor.type prepared.destructor.witness prepared.old
+                    pure { waiting := wait, activation := a, prepared := prepared, destructor := d }
+                  else none
+                | x => none with
+            | some site =>
+              match
+                (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K).aggregate
+                  PV_LIB_A_GenericDropMachine.unitTag [] with
+              | none =>
+                {
+                  base :=
+                    { current := { status := Status.undefined none c.store, world := w, events := es },
+                      suspended := stack } }
+              | some unit => PV_LIB_A_CellDestruct504.enter c w es stack site unit
+            | none =>
+              match do
+                let wait ← none
+                match wait.request, wait.action with
+                  | PV_STX2_Native.Request.drop fn value, PV_STX2_Native.ReturnAction.dropped place => do
+                    let d ←
+                      PV_LIB_A_GenericDropMachine9.resolution
+                          (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn place
+                    match d with
+                      | PV_LIB_A_TypedDestruct.Resolution.noop => pure (PV_LIB_A_GenericDropMachine.DropSite.noop wait)
+                      | PV_LIB_A_TypedDestruct.Resolution.call fn => do
+                        let program ← v2ProvenancePrograms P (Data.object [("Regular", fn)])
+                        let address ←
+                          locate (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c.store w
+                              c.frame.activation place
+                        pure
+                            (PV_LIB_A_GenericDropMachine.DropSite.body
+                              { waiting := wait, program := program, address := address })
+                  | x, x_1 => none with
+              | some (PV_LIB_A_GenericDropMachine.DropSite.noop wait) =>
+                PV_LIB_A_GenericDropMachine.noop
+                  (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w es stack wait
+              | some (PV_LIB_A_GenericDropMachine.DropSite.body site) =>
+                PV_LIB_A_TypedDropSource.enter (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                  c w es stack site
+              | none =>
+                match do
+                  let wait ← none
+                  match wait.request with
+                    | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+                      if
+                          callee = PV_THR2_Catch219Call318.fn ∧
+                            tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                        some (PV_THR2_CallbackSegment.enter c PV_THR2_F316.live [address])
+                      else none
+                    | x => none with
+                | some val =>
+                  {
+                    base :=
+                      PV_THR2_OwnInitInterpreterBridged.step
+                        (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                        (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+                        { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                          suspended := stack } }
+                | none =>
+                  match do
+                    let wait ← none
+                    match wait.request with
+                      | PV_STX2_Native.Request.child fn activation args =>
+                        match v2ProvenancePrograms P fn with
+                        | some val => none
+                        | none => do
+                          let action ← v2Source fn
+                          pure { action := action, callee := fn, waiting := wait, arguments := args }
+                      | x => none with
+                  | none =>
+                    {
+                      base :=
+                        PV_THR2_OwnInitInterpreterBridged.step
+                          (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                          (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+                          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                            suspended := stack } }
+                  | some site =>
+                    sourceBegin (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) values c w es
+                      stack site (H site.waiting.request w)
+      | x =>
+        match do
+          let wait ← none
+          match wait.request with
+            | PV_STX2_Native.Request.child fn activation [reference] => do
+              let d ←
+                PV_LIB_A_GenericDropMachine9.resolution248
+                    (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn reference
+              pure { waiting := wait, reference := reference, destructor := d }
+            | x => none with
+        | some site =>
+          match site.destructor with
+          | PV_LIB_A_TypedDestruct.Resolution.noop =>
+            PV_LIB_A_GenericDropMachine.noop (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c
+              w es stack site.waiting
+          | PV_LIB_A_TypedDestruct.Resolution.call fn =>
+            {
+              base :=
+                {
+                  current :=
+                    {
+                      status :=
+                        PV_STX2_SliceMachine.Status.running
+                          (PV_LIB_A_DropInPlace248.PV_THR2_LibrarySemantics_DropInPlace248 c site),
+                      world := w, events := es },
+                  suspended := stack } }
+        | none =>
+          match do
+            let wait ← none
+            match wait.request with
+              | PV_STX2_Native.Request.child fn a args =>
+                if PV_THR2_OffPath.functionId fn = some 504 ∧ (v2ProvenancePrograms P fn).isNone = true then do
+                  let normalized ← PV_LIB_A_TypedDestruct.normalize 64 fn
+                  let prepared ←
+                    PV_LIB_A_CellSetBegin.PV_THR2_LibrarySemantics_CellSetBegin504
+                        (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) normalized args c.store
+                        w
+                  let d ←
+                    PV_LIB_A_ValueDestruct9.resolve
+                        (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                        prepared.destructor.type prepared.destructor.witness prepared.old
+                  pure { waiting := wait, activation := a, prepared := prepared, destructor := d }
+                else none
+              | x => none with
+          | some site =>
+            match
+              (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K).aggregate
+                PV_LIB_A_GenericDropMachine.unitTag [] with
+            | none =>
+              {
+                base :=
+                  { current := { status := Status.undefined none c.store, world := w, events := es },
+                    suspended := stack } }
+            | some unit => PV_LIB_A_CellDestruct504.enter c w es stack site unit
+          | none =>
+            match do
+              let wait ← none
+              match wait.request, wait.action with
+                | PV_STX2_Native.Request.drop fn value, PV_STX2_Native.ReturnAction.dropped place => do
+                  let d ←
+                    PV_LIB_A_GenericDropMachine9.resolution
+                        (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn place
+                  match d with
+                    | PV_LIB_A_TypedDestruct.Resolution.noop => pure (PV_LIB_A_GenericDropMachine.DropSite.noop wait)
+                    | PV_LIB_A_TypedDestruct.Resolution.call fn => do
+                      let program ← v2ProvenancePrograms P (Data.object [("Regular", fn)])
+                      let address ←
+                        locate (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c.store w
+                            c.frame.activation place
+                      pure
+                          (PV_LIB_A_GenericDropMachine.DropSite.body
+                            { waiting := wait, program := program, address := address })
+                | x, x_1 => none with
+            | some (PV_LIB_A_GenericDropMachine.DropSite.noop wait) =>
+              PV_LIB_A_GenericDropMachine.noop (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                c w es stack wait
+            | some (PV_LIB_A_GenericDropMachine.DropSite.body site) =>
+              PV_LIB_A_TypedDropSource.enter (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c
+                w es stack site
+            | none =>
+              match do
+                let wait ← none
+                match wait.request with
+                  | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+                    if
+                        callee = PV_THR2_Catch219Call318.fn ∧
+                          tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                      some (PV_THR2_CallbackSegment.enter c PV_THR2_F316.live [address])
+                    else none
+                  | x => none with
+              | some val =>
+                {
+                  base :=
+                    PV_THR2_OwnInitInterpreterBridged.step
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+                      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                        suspended := stack } }
+              | none =>
+                match do
+                  let wait ← none
+                  match wait.request with
+                    | PV_STX2_Native.Request.child fn activation args =>
+                      match v2ProvenancePrograms P fn with
+                      | some val => none
+                      | none => do
+                        let action ← v2Source fn
+                        pure { action := action, callee := fn, waiting := wait, arguments := args }
+                    | x => none with
+                | none =>
+                  {
+                    base :=
+                      PV_THR2_OwnInitInterpreterBridged.step
+                        (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                        (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+                        { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                          suspended := stack } }
+                | some site =>
+                  sourceBegin (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) values c w es
+                    stack site (H site.waiting.request w)
+    | none =>
+      match do
+        let wait ← none
+        match wait.request with
+          | PV_STX2_Native.Request.child fn activation [reference] => do
+            let d ←
+              PV_LIB_A_GenericDropMachine9.resolution248
+                  (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn reference
+            pure { waiting := wait, reference := reference, destructor := d }
+          | x => none with
+      | some site =>
+        match site.destructor with
+        | PV_LIB_A_TypedDestruct.Resolution.noop =>
+          PV_LIB_A_GenericDropMachine.noop (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w
+            es stack site.waiting
+        | PV_LIB_A_TypedDestruct.Resolution.call fn =>
+          {
+            base :=
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        (PV_LIB_A_DropInPlace248.PV_THR2_LibrarySemantics_DropInPlace248 c site),
+                    world := w, events := es },
+                suspended := stack } }
+      | none =>
+        match do
+          let wait ← none
+          match wait.request with
+            | PV_STX2_Native.Request.child fn a args =>
+              if PV_THR2_OffPath.functionId fn = some 504 ∧ (v2ProvenancePrograms P fn).isNone = true then do
+                let normalized ← PV_LIB_A_TypedDestruct.normalize 64 fn
+                let prepared ←
+                  PV_LIB_A_CellSetBegin.PV_THR2_LibrarySemantics_CellSetBegin504
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) normalized args c.store w
+                let d ←
+                  PV_LIB_A_ValueDestruct9.resolve
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) prepared.destructor.type
+                      prepared.destructor.witness prepared.old
+                pure { waiting := wait, activation := a, prepared := prepared, destructor := d }
+              else none
+            | x => none with
+        | some site =>
+          match
+            (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K).aggregate
+              PV_LIB_A_GenericDropMachine.unitTag [] with
+          | none =>
+            {
+              base :=
+                { current := { status := Status.undefined none c.store, world := w, events := es },
+                  suspended := stack } }
+          | some unit => PV_LIB_A_CellDestruct504.enter c w es stack site unit
+        | none =>
+          match do
+            let wait ← none
+            match wait.request, wait.action with
+              | PV_STX2_Native.Request.drop fn value, PV_STX2_Native.ReturnAction.dropped place => do
+                let d ←
+                  PV_LIB_A_GenericDropMachine9.resolution
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w fn place
+                match d with
+                  | PV_LIB_A_TypedDestruct.Resolution.noop => pure (PV_LIB_A_GenericDropMachine.DropSite.noop wait)
+                  | PV_LIB_A_TypedDestruct.Resolution.call fn => do
+                    let program ← v2ProvenancePrograms P (Data.object [("Regular", fn)])
+                    let address ←
+                      locate (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c.store w
+                          c.frame.activation place
+                    pure
+                        (PV_LIB_A_GenericDropMachine.DropSite.body
+                          { waiting := wait, program := program, address := address })
+              | x, x_1 => none with
+          | some (PV_LIB_A_GenericDropMachine.DropSite.noop wait) =>
+            PV_LIB_A_GenericDropMachine.noop (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c
+              w es stack wait
+          | some (PV_LIB_A_GenericDropMachine.DropSite.body site) =>
+            PV_LIB_A_TypedDropSource.enter (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) c w
+              es stack site
+          | none =>
+            match do
+              let wait ← none
+              match wait.request with
+                | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+                  if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                    some (PV_THR2_CallbackSegment.enter c PV_THR2_F316.live [address])
+                  else none
+                | x => none with
+            | some val =>
+              {
+                base :=
+                  PV_THR2_OwnInitInterpreterBridged.step
+                    (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K (v2ProvenancePrograms P)
+                    (fun {A} => resources) (fun {A} => encode) H
+                    { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                      suspended := stack } }
+            | none =>
+              match do
+                let wait ← none
+                match wait.request with
+                  | PV_STX2_Native.Request.child fn activation args =>
+                    match v2ProvenancePrograms P fn with
+                    | some val => none
+                    | none => do
+                      let action ← v2Source fn
+                      pure { action := action, callee := fn, waiting := wait, arguments := args }
+                  | x => none with
+              | none =>
+                {
+                  base :=
+                    PV_THR2_OwnInitInterpreterBridged.step
+                      (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+                      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+                        suspended := stack } }
+              | some site =>
+                sourceBegin (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) values c w es stack
+                  site (H site.waiting.request w)) =
+    {
+      base :=
+        PV_THR2_OwnInitInterpreterBridged.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+          K (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:52:4: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+completed : c.frame.completed = none
+waiting : c.frame.waiting = none
+allocation : PV_THR2_OwnInitAction.selected c = false
+operator : PV_THR2_OperatorAction.selected c = none
+registration : PV_THR2_OwnUniformNeutral.configuration c
+dynamic : PV_THR2_Dynamic.active c = none
+interpreted :
+  ∀ (site : Option PV_STX2_Syntax.Site) (s : Store Data),
+    (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+          (v2ProvenancePrograms P) H c w).status ≠
+      Status.undefined site s
+base :
+  PV_LIB_A_WeakOwnerFree10.step C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } } =
+    {
+      base :=
+        PV_THR2_OwnInitInterpreterBridged.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+          K (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } }
+operators :
+  PV_THR2_OperatorInterpreter.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+      (v2ProvenancePrograms P) H
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack } =
+    PV_THR2_OwnUniformBindings.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+      (v2ProvenancePrograms P) H
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack }
+⊢ {
+      base :=
+        match do
+          let wait ← none
+          match wait.request with
+            | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+              if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                some (PV_THR2_CallbackSegment.enter c PV_THR2_F316.live [address])
+              else none
+            | x => none with
+        | some segment =>
+          PV_THR2_IntrinsicState.invoke
+            { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+              suspended := stack }
+            segment
+        | none =>
+          {
+            current :=
+              {
+                status :=
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).status,
+                world :=
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).world,
+                events :=
+                  es ++
+                    (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                        K (v2ProvenancePrograms P) H c w).events },
+            suspended := stack } } =
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                    (v2ProvenancePrograms P) H c w).status,
+              world :=
+                (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                    (v2ProvenancePrograms P) H c w).world,
+              events :=
+                es ++
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).events },
+          suspended := stack } }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:42:6: warning: This simp argument is unused:
+  Option.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵1̵0̵.̵s̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵W̵e̵a̵k̵O̵w̵n̵e̵r̵F̵r̵e̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵v̵2̵P̵r̵o̵v̵e̵n̵a̵n̵c̵e̵S̵t̵e̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵e̵l̵e̵c̵t̵2̵4̵8̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵e̵l̵e̵c̵t̵C̵e̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵I̵B̵_̵A̵_̵G̵e̵n̵e̵r̵i̵c̵D̵r̵o̵p̵M̵a̵c̵h̵i̵n̵e̵9̵.̵s̵e̵l̵e̵c̵t̵D̵r̵o̵p̵,̵P̵V̵_̵L̵I̵B̵_̵A̵_̵D̵e̵f̵e̵r̵r̵e̵d̵A̵c̵t̵i̵o̵n̵s̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵o̵u̵r̵c̵e̵S̵t̵e̵p̵,̵s̵o̵u̵r̵c̵e̵S̵e̵l̵e̵c̵t̵,̵P̵V̵_̵T̵H̵R̵2̵_̵C̵a̵t̵c̵h̵3̵1̵6̵S̵e̵g̵m̵e̵n̵t̵.̵s̵e̵l̵e̵c̵t̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵w̵a̵i̵t̵i̵n̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵]̵[̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲1̲0̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲W̲e̲a̲k̲O̲w̲n̲e̲r̲F̲r̲e̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲v̲2̲P̲r̲o̲v̲e̲n̲a̲n̲c̲e̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲e̲l̲e̲c̲t̲2̲4̲8̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲e̲l̲e̲c̲t̲C̲e̲l̲l̲,̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲G̲e̲n̲e̲r̲i̲c̲D̲r̲o̲p̲M̲a̲c̲h̲i̲n̲e̲9̲.̲s̲e̲l̲e̲c̲t̲D̲r̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲I̲B̲_̲A̲_̲D̲e̲f̲e̲r̲r̲e̲d̲A̲c̲t̲i̲o̲n̲s̲.̲s̲t̲e̲p̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲t̲e̲p̲,̲ ̲s̲o̲u̲r̲c̲e̲S̲e̲l̲e̲c̲t̲,̲ ̲P̲V̲_̲T̲H̲R̲2̲_̲C̲a̲t̲c̲h̲3̲1̲6̲S̲e̲g̲m̲e̲n̲t̲.̲s̲e̲l̲e̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:53:8: warning: This simp argument is unused:
+  Option.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵T̵H̵R̵2̵_̵I̵n̵t̵r̵i̵n̵s̵i̵c̵S̵t̵a̵t̵e̵.̵s̵t̵e̵p̵,̵P̵V̵_̵T̵H̵R̵2̵_̵C̵a̵t̵c̵h̵3̵1̵6̵S̵e̵g̵m̵e̵n̵t̵.̵s̵e̵l̵e̵c̵t̵,̵w̵a̵i̵t̵i̵n̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵]̵[̲P̲V̲_̲T̲H̲R̲2̲_̲I̲n̲t̲r̲i̲n̲s̲i̲c̲S̲t̲a̲t̲e̲.̲s̲t̲e̲p̲,̲ ̲P̲V̲_̲T̲H̲R̲2̲_̲C̲a̲t̲c̲h̲3̲1̲6̲S̲e̲g̲m̲e̲n̲t̲.̲s̲e̲l̲e̲c̲t̲,̲ ̲w̲a̲i̲t̲i̲n̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_DestructorStep10.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

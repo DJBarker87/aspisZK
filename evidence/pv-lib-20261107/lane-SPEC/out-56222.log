@@ -1,0 +1,133 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ActiveConsume20.lean:26:40: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_LIB_SPEC_ResourceHistory.context (PV_LIB_SPEC_ActiveRequest20.after ?e ?issued ?consumed) config wait
+in the target expression
+  (match some (config, wait) with
+    | none =>
+      have out :=
+        PV_LIB_SPEC_ReachedNative14.control (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+          PV_LIB_SPEC_ReachedEnvironment14.parameters (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state;
+      { state := out,
+        issued :=
+          PV_LIB_SPEC_ControlRuntime.recordIssue (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state out
+            (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+        consumed := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+    | some (c, wait) =>
+      match PV_LIB_SPEC_ResourceHistory.context (PV_LIB_SPEC_ActiveRequest20.after e issued consumed) c wait with
+      | none =>
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c.store,
+                  world := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world,
+                  events := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.events },
+              suspended := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.suspended },
+          issued := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+          consumed := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match
+          PV_LIB_SPEC_ReachedNative14.answer (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a)) bound c
+            wait.request (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world with
+        | none =>
+          have r :=
+            PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+              wait.request (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world;
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := r.world,
+                    events := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.events ++ r.events },
+                suspended := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.suspended },
+            issued := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+            consumed := ctx :: (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+        | some val =>
+          have out :=
+            PV_LIB_SPEC_ReachedNative14.transition (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+              bound c (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state;
+          { state := out,
+            issued :=
+              PV_LIB_SPEC_ControlRuntime.recordIssue (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state out
+                (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+            consumed := ctx :: (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }) =
+    after e issued consumed
+
+e : Entry
+a : ℕ
+issued : List Issued
+consumed : List Context
+⊢ (match some (config, wait) with
+    | none =>
+      have out :=
+        PV_LIB_SPEC_ReachedNative14.control (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+          PV_LIB_SPEC_ReachedEnvironment14.parameters (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state;
+      { state := out,
+        issued :=
+          PV_LIB_SPEC_ControlRuntime.recordIssue (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state out
+            (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+        consumed := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+    | some (c, wait) =>
+      match PV_LIB_SPEC_ResourceHistory.context (PV_LIB_SPEC_ActiveRequest20.after e issued consumed) c wait with
+      | none =>
+        {
+          state :=
+            {
+              current :=
+                { status := Status.undefined none c.store,
+                  world := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world,
+                  events := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.events },
+              suspended := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.suspended },
+          issued := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+          consumed := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+      | some ctx =>
+        have bound :=
+          { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+            control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+            needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+            resources := fun {A} =>
+              PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                ctx,
+            encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+            loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+            siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+            environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+        match
+          PV_LIB_SPEC_ReachedNative14.answer (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a)) bound c
+            wait.request (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world with
+        | none =>
+          have r :=
+            PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+              wait.request (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.world;
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store, world := r.world,
+                    events := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.current.events ++ r.events },
+                suspended := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state.suspended },
+            issued := (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+            consumed := ctx :: (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }
+        | some val =>
+          have out :=
+            PV_LIB_SPEC_ReachedNative14.transition (PV_LIB_SPEC_TlsNative15.cut (PV_LIB_SPEC_EntryWorld18.frame e a))
+              bound c (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state;
+          { state := out,
+            issued :=
+              PV_LIB_SPEC_ControlRuntime.recordIssue (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).state out
+                (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).issued,
+            consumed := ctx :: (PV_LIB_SPEC_ActiveRequest20.after e issued consumed).consumed }) =
+    after e issued consumed
+'PV_LIB_SPEC_ActiveConsume20.after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsume20.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ActiveConsume20.original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

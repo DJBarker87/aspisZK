@@ -1,0 +1,446 @@
+'PV_FN_THREAD_f170_Row.keyRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.native277Shape' depends on axioms: [propext]
+'PV_FN_THREAD_f170_Row.native277Run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.native278Shape' depends on axioms: [propext]
+'PV_FN_THREAD_f170_Row.native278Run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.native279Shape' depends on axioms: [propext]
+'PV_FN_THREAD_f170_Row.native279Run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.native280Shape' depends on axioms: [propext]
+'PV_FN_THREAD_f170_Row.native280Run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.callbackShape' depends on axioms: [propext]
+'PV_FN_THREAD_f170_Row.callbackRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.matchedRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.droppedRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.errorFinishRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_THREAD_f170_Row.successFinishRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_FN_THREAD_f170_Row.lean:178:51: warning: Variable name `ctl` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_FN_THREAD_f170_Row.lean:179:5: warning: Variable name `programs` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_FN_THREAD_f170_Row.lean:180:5: warning: Variable name `H` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'PV_FN_THREAD_f170_Row.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_THREAD_f170_Row.row : ∀ {W E : Type} (C : Carrier W Data) (ctl : Control)
+  (programs : Data → Option PV_STX2_SliceSyntax.Program) (H : PV_STX2_Native.Request Data → W → Reply W E Data)
+  (q : PV_THR2_IntrinsicState.State W E) (nKey n277 n278 n279 n280 nDrop nCallback : ℕ)
+  (outKey out277 out278 out279 out280 outDrop outCallback : PV_THR2_IntrinsicState.State W E)
+  (calleeKey : PV_THR2_IntrinsicState.advance C ctl programs H nKey (keyAfter C ctl programs H q) = outKey)
+  (callee277 : PV_THR2_IntrinsicState.advance C ctl programs H n277 (native277At C outKey) = out277)
+  (callee278 : PV_THR2_IntrinsicState.advance C ctl programs H n278 (native278At C out277) = out278)
+  (callee279 : PV_THR2_IntrinsicState.advance C ctl programs H n279 (native279At C out278) = out279)
+  (callee280 :
+    isError (matchedAfter C ctl programs H out279) →
+      PV_THR2_IntrinsicState.advance C ctl programs H n280 (native280At C (matchedAfter C ctl programs H out279)) =
+        out280)
+  (calleeDrop :
+    isError (matchedAfter C ctl programs H out279) →
+      PV_THR2_IntrinsicState.advance C ctl programs H nDrop (droppedAfter C ctl programs H out280) = outDrop)
+  (calleeCallback :
+    ¬isError (matchedAfter C ctl programs H out279) →
+      PV_THR2_IntrinsicState.advance C ctl programs H nCallback (callbackAt C (matchedAfter C ctl programs H out279)) =
+        outCallback),
+  PV_THR2_IntrinsicState.advance C ctl programs H
+      (keySteps C q +
+        (nKey +
+          (native277Steps C outKey +
+            (n277 +
+              (native278Steps C out277 +
+                (n278 +
+                  (native279Steps C out278 +
+                    (n279 +
+                      (matchedSteps C out279 +
+                        branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback out280
+                          outDrop outCallback)))))))))
+      q =
+    branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback :=
+fun {W E} C ctl programs H q nKey n277 n278 n279 n280 nDrop nCallback outKey out277 out278 out279 out280 outDrop
+    outCallback calleeKey callee277 callee278 callee279 callee280 calleeDrop calleeCallback =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+        (PV_THR2_IntrinsicComposition.advance_add C ctl programs H (keySteps C q)
+          (nKey +
+            (native277Steps C outKey +
+              (n277 +
+                (native278Steps C out277 +
+                  (n278 +
+                    (native279Steps C out278 +
+                      (n279 +
+                        (matchedSteps C out279 +
+                          branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback
+                            out280 outDrop outCallback))))))))
+          q)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            PV_THR2_IntrinsicState.advance C ctl programs H
+                (nKey +
+                  (native277Steps C outKey +
+                    (n277 +
+                      (native278Steps C out277 +
+                        (n278 +
+                          (native279Steps C out278 +
+                            (n279 +
+                              (matchedSteps C out279 +
+                                branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback
+                                  out280 outDrop outCallback))))))))
+                _a =
+              branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+          (keyRun C ctl programs H q)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+            (PV_THR2_IntrinsicComposition.advance_add C ctl programs H nKey
+              (native277Steps C outKey +
+                (n277 +
+                  (native278Steps C out277 +
+                    (n278 +
+                      (native279Steps C out278 +
+                        (n279 +
+                          (matchedSteps C out279 +
+                            branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback
+                              out280 outDrop outCallback)))))))
+              (keyAfter C ctl programs H q))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                PV_THR2_IntrinsicState.advance C ctl programs H
+                    (native277Steps C outKey +
+                      (n277 +
+                        (native278Steps C out277 +
+                          (n278 +
+                            (native279Steps C out278 +
+                              (n279 +
+                                (matchedSteps C out279 +
+                                  branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                    nCallback out280 outDrop outCallback)))))))
+                    _a =
+                  branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+              calleeKey))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                (PV_THR2_IntrinsicComposition.advance_add C ctl programs H (native277Steps C outKey)
+                  (n277 +
+                    (native278Steps C out277 +
+                      (n278 +
+                        (native279Steps C out278 +
+                          (n279 +
+                            (matchedSteps C out279 +
+                              branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback
+                                out280 outDrop outCallback))))))
+                  outKey)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    PV_THR2_IntrinsicState.advance C ctl programs H
+                        (n277 +
+                          (native278Steps C out277 +
+                            (n278 +
+                              (native279Steps C out278 +
+                                (n279 +
+                                  (matchedSteps C out279 +
+                                    branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                      nCallback out280 outDrop outCallback))))))
+                        _a =
+                      branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                  (native277Run C ctl programs H outKey)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                    (PV_THR2_IntrinsicComposition.advance_add C ctl programs H n277
+                      (native278Steps C out277 +
+                        (n278 +
+                          (native279Steps C out278 +
+                            (n279 +
+                              (matchedSteps C out279 +
+                                branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop nCallback
+                                  out280 outDrop outCallback)))))
+                      (native277At C outKey))))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        PV_THR2_IntrinsicState.advance C ctl programs H
+                            (native278Steps C out277 +
+                              (n278 +
+                                (native279Steps C out278 +
+                                  (n279 +
+                                    (matchedSteps C out279 +
+                                      branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                        nCallback out280 outDrop outCallback)))))
+                            _a =
+                          branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                      callee277))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                        (PV_THR2_IntrinsicComposition.advance_add C ctl programs H (native278Steps C out277)
+                          (n278 +
+                            (native279Steps C out278 +
+                              (n279 +
+                                (matchedSteps C out279 +
+                                  branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                    nCallback out280 outDrop outCallback))))
+                          out277)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            PV_THR2_IntrinsicState.advance C ctl programs H
+                                (n278 +
+                                  (native279Steps C out278 +
+                                    (n279 +
+                                      (matchedSteps C out279 +
+                                        branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                          nCallback out280 outDrop outCallback))))
+                                _a =
+                              branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                          (native278Run C ctl programs H out277)))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a => _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                            (PV_THR2_IntrinsicComposition.advance_add C ctl programs H n278
+                              (native279Steps C out278 +
+                                (n279 +
+                                  (matchedSteps C out279 +
+                                    branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                      nCallback out280 outDrop outCallback)))
+                              (native278At C out277))))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                PV_THR2_IntrinsicState.advance C ctl programs H
+                                    (native279Steps C out278 +
+                                      (n279 +
+                                        (matchedSteps C out279 +
+                                          branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                            nCallback out280 outDrop outCallback)))
+                                    _a =
+                                  branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                              callee278))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                (PV_THR2_IntrinsicComposition.advance_add C ctl programs H (native279Steps C out278)
+                                  (n279 +
+                                    (matchedSteps C out279 +
+                                      branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                        nCallback out280 outDrop outCallback))
+                                  out278)))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    PV_THR2_IntrinsicState.advance C ctl programs H
+                                        (n279 +
+                                          (matchedSteps C out279 +
+                                            branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280
+                                              nDrop nCallback out280 outDrop outCallback))
+                                        _a =
+                                      branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                  (native279Run C ctl programs H out278)))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                    (PV_THR2_IntrinsicComposition.advance_add C ctl programs H n279
+                                      (matchedSteps C out279 +
+                                        branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280 nDrop
+                                          nCallback out280 outDrop outCallback)
+                                      (native279At C out278))))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        PV_THR2_IntrinsicState.advance C ctl programs H
+                                            (matchedSteps C out279 +
+                                              branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280
+                                                nDrop nCallback out280 outDrop outCallback)
+                                            _a =
+                                          branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                      callee279))
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          _a = branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                        (PV_THR2_IntrinsicComposition.advance_add C ctl programs H
+                                          (matchedSteps C out279)
+                                          (branchSteps C ctl programs H (matchedAfter C ctl programs H out279) n280
+                                            nDrop nCallback out280 outDrop outCallback)
+                                          out279)))
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            PV_THR2_IntrinsicState.advance C ctl programs H
+                                                (branchSteps C ctl programs H (matchedAfter C ctl programs H out279)
+                                                  n280 nDrop nCallback out280 outDrop outCallback)
+                                                _a =
+                                              branchAfter C (matchedAfter C ctl programs H out279) outDrop outCallback)
+                                          (matchedRun C ctl programs H out279)))
+                                      (if h : isError (matchedAfter C ctl programs H out279) then
+                                        Eq.mpr
+                                          (id
+                                            (congr
+                                              (congrArg Eq
+                                                (congrFun'
+                                                  (congrArg (PV_THR2_IntrinsicState.advance C ctl programs H)
+                                                    ((fun x_0 x_1 x_2 x_3 =>
+                                                        (fun x_0 x_1 x_2 x_3 => if_pos h) x_0 x_1 x_2 x_3)
+                                                      (Classical.propDecidable
+                                                        (isError (matchedAfter C ctl programs H out279)))
+                                                      ℕ
+                                                      (native280Steps C (matchedAfter C ctl programs H out279) +
+                                                        (n280 +
+                                                          (droppedSteps C out280 +
+                                                            (nDrop + errorFinishSteps C outDrop))))
+                                                      (callbackSteps C (matchedAfter C ctl programs H out279) +
+                                                        (nCallback + successFinishSteps C outCallback))))
+                                                  (matchedAfter C ctl programs H out279)))
+                                              ((fun x_0 x_1 x_2 x_3 =>
+                                                  (fun x_0 x_1 x_2 x_3 => if_pos h) x_0 x_1 x_2 x_3)
+                                                (Classical.propDecidable
+                                                  (isError (matchedAfter C ctl programs H out279)))
+                                                (PV_THR2_IntrinsicState.State W E) (errorFinishAfter C outDrop)
+                                                (successFinishAfter C outCallback))))
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg (fun _a => _a = errorFinishAfter C outDrop)
+                                                (PV_THR2_IntrinsicComposition.advance_add C ctl programs H
+                                                  (native280Steps C (matchedAfter C ctl programs H out279))
+                                                  (n280 +
+                                                    (droppedSteps C out280 + (nDrop + errorFinishSteps C outDrop)))
+                                                  (matchedAfter C ctl programs H out279))))
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    PV_THR2_IntrinsicState.advance C ctl programs H
+                                                        (n280 +
+                                                          (droppedSteps C out280 +
+                                                            (nDrop + errorFinishSteps C outDrop)))
+                                                        _a =
+                                                      errorFinishAfter C outDrop)
+                                                  (native280Run C ctl programs H
+                                                    (matchedAfter C ctl programs H out279))))
+                                              (Eq.mpr
+                                                (id
+                                                  (congrArg (fun _a => _a = errorFinishAfter C outDrop)
+                                                    (PV_THR2_IntrinsicComposition.advance_add C ctl programs H n280
+                                                      (droppedSteps C out280 + (nDrop + errorFinishSteps C outDrop))
+                                                      (native280At C (matchedAfter C ctl programs H out279)))))
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        PV_THR2_IntrinsicState.advance C ctl programs H
+                                                            (droppedSteps C out280 +
+                                                              (nDrop + errorFinishSteps C outDrop))
+                                                            _a =
+                                                          errorFinishAfter C outDrop)
+                                                      (callee280 h)))
+                                                  (Eq.mpr
+                                                    (id
+                                                      (congrArg (fun _a => _a = errorFinishAfter C outDrop)
+                                                        (PV_THR2_IntrinsicComposition.advance_add C ctl programs H
+                                                          (droppedSteps C out280) (nDrop + errorFinishSteps C outDrop)
+                                                          out280)))
+                                                    (Eq.mpr
+                                                      (id
+                                                        (congrArg
+                                                          (fun _a =>
+                                                            PV_THR2_IntrinsicState.advance C ctl programs H
+                                                                (nDrop + errorFinishSteps C outDrop) _a =
+                                                              errorFinishAfter C outDrop)
+                                                          (droppedRun C ctl programs H out280)))
+                                                      (Eq.mpr
+                                                        (id
+                                                          (congrArg (fun _a => _a = errorFinishAfter C outDrop)
+                                                            (PV_THR2_IntrinsicComposition.advance_add C ctl programs H
+                                                              nDrop (errorFinishSteps C outDrop)
+                                                              (droppedAfter C ctl programs H out280))))
+                                                        (Eq.mpr
+                                                          (id
+                                                            (congrArg
+                                                              (fun _a =>
+                                                                PV_THR2_IntrinsicState.advance C ctl programs H
+                                                                    (errorFinishSteps C outDrop) _a =
+                                                                  errorFinishAfter C outDrop)
+                                                              (calleeDrop h)))
+                                                          (errorFinishRun C ctl programs H outDrop)))))))))
+                                      else
+                                        Eq.mpr
+                                          (id
+                                            (congr
+                                              (congrArg Eq
+                                                (congrFun'
+                                                  (congrArg (PV_THR2_IntrinsicState.advance C ctl programs H)
+                                                    ((fun x_0 x_1 x_2 x_3 =>
+                                                        (fun x_0 x_1 x_2 x_3 => if_neg h) x_0 x_1 x_2 x_3)
+                                                      (Classical.propDecidable
+                                                        (isError (matchedAfter C ctl programs H out279)))
+                                                      ℕ
+                                                      (native280Steps C (matchedAfter C ctl programs H out279) +
+                                                        (n280 +
+                                                          (droppedSteps C out280 +
+                                                            (nDrop + errorFinishSteps C outDrop))))
+                                                      (callbackSteps C (matchedAfter C ctl programs H out279) +
+                                                        (nCallback + successFinishSteps C outCallback))))
+                                                  (matchedAfter C ctl programs H out279)))
+                                              ((fun x_0 x_1 x_2 x_3 =>
+                                                  (fun x_0 x_1 x_2 x_3 => if_neg h) x_0 x_1 x_2 x_3)
+                                                (Classical.propDecidable
+                                                  (isError (matchedAfter C ctl programs H out279)))
+                                                (PV_THR2_IntrinsicState.State W E) (errorFinishAfter C outDrop)
+                                                (successFinishAfter C outCallback))))
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg (fun _a => _a = successFinishAfter C outCallback)
+                                                (PV_THR2_IntrinsicComposition.advance_add C ctl programs H
+                                                  (callbackSteps C (matchedAfter C ctl programs H out279))
+                                                  (nCallback + successFinishSteps C outCallback)
+                                                  (matchedAfter C ctl programs H out279))))
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    PV_THR2_IntrinsicState.advance C ctl programs H
+                                                        (nCallback + successFinishSteps C outCallback) _a =
+                                                      successFinishAfter C outCallback)
+                                                  (callbackRun C ctl programs H
+                                                    (matchedAfter C ctl programs H out279))))
+                                              (Eq.mpr
+                                                (id
+                                                  (congrArg (fun _a => _a = successFinishAfter C outCallback)
+                                                    (PV_THR2_IntrinsicComposition.advance_add C ctl programs H nCallback
+                                                      (successFinishSteps C outCallback)
+                                                      (callbackAt C (matchedAfter C ctl programs H out279)))))
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        PV_THR2_IntrinsicState.advance C ctl programs H
+                                                            (successFinishSteps C outCallback) _a =
+                                                          successFinishAfter C outCallback)
+                                                      (calleeCallback h)))
+                                                  (successFinishRun C ctl programs H outCallback)))))))))))))))))))))))

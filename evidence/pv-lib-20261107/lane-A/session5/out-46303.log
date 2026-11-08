@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:41:40: error: unsolved goals
+W : Type
+C : Carrier W Data
+s : Store Data
+w : W
+reference : Data
+arcAddress p : Address
+arc nonNull pointer : Data
+ref : C.dereference w reference = some arcAddress
+cell : readAddress C s arcAddress = some arc
+field : C.field arc 0 = some nonNull
+ptr : C.field nonNull 0 = some pointer
+deref : C.dereference w pointer = some p
+⊢ (do
+      let __x ←
+        do
+          let p ← some arcAddress
+          let value ← readAddress C s p
+          pure (p, value)
+      let nonNull ← C.field __x.2 0
+      let pointer ← C.field nonNull 0
+      C.dereference w pointer) =
+    some p
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:42:35: warning: This simp argument is unused:
+  cell
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, receiver, ref, c̵e̵l̵l̵,̵ ̵field, ptr, deref, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:42:41: warning: This simp argument is unused:
+  field
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, receiver, ref, cell, f̵i̵e̵l̵d̵,̵ ̵ptr, deref, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:42:48: warning: This simp argument is unused:
+  ptr
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, receiver, ref, cell, field, p̵t̵r̵,̵ ̵deref, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:42:53: warning: This simp argument is unused:
+  deref
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, receiver, ref, cell, field, ptr, d̵e̵r̵e̵f̵,̵ ̵Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ArcStoreV2.lean:42:60: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [inner, receiver, ref, cell, field, ptr, deref,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_ArcStoreV2.PV_THR2_LibrarySemantics_ArcClone360' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.inner_from_source' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ArcStoreV2.clone_count' depends on axioms: [propext]
+'PV_LIB_A_ArcStoreV2.valid_inner' depends on axioms: [propext, sorryAx]

@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FrontierRun14.lean:29:102: error: Ambiguous term
+  advance
+Possible interpretations:
+  PV_LIB_A_PrefixMachine11.advance : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources → Encode → Handler → Values OWNER PV_RJ4IDB.NativeEvent → ℕ → SourceState → SourceState
+  
+  PV_LIB_StoreActionTable.advance : Carrier OWNER Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        Resources → Encode → Handler → Values OWNER PV_RJ4IDB.NativeEvent → ℕ → State → State
+  
+  PV_STX2_SliceMachine.advance : Carrier ?m.78 Data →
+    Control →
+      (Data → Option PV_STX2_SliceSyntax.Program) →
+        (PV_STX2_Native.Request Data → ?m.78 → PV_STX_Machine.Reply ?m.78 ?m.79 Data) →
+          ℕ → Prefix ?m.78 ?m.79 → Prefix ?m.78 ?m.79
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_FrontierRun14.lean:29:4: error: unsolved goals
+case neg
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+nodes : List PV_STX2_SliceSyntax.Node
+cost : Config → OWNER → ℕ
+finish : Config → OWNER → List PV_RJ4IDB.NativeEvent → List Config → State
+certificate :
+  ∀ (c : Config) (w : OWNER) (es : List PV_RJ4IDB.NativeEvent) (stack : List Config),
+    PV_THR2_IntrinsicAtContinuation.Ready nodes c →
+      PV_LIB_A_PrefixMachine11.advance C K P (fun {A} => resources) (fun {A} => encode) H values (cost c w)
+          { base := { current := { status := Status.running c, world := w, events := es }, suspended := stack } } =
+        { base := finish c w es stack }
+stack : List Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+c : Config
+h : ¬PV_THR2_IntrinsicAtContinuation.Ready nodes c
+⊢ PV_LIB_A_PrefixMachine11.advance C K P (fun {A} => resources) (fun {A} => encode) H values 0
+      { base := { current := { status := Status.running c, world := w, events := es }, suspended := stack } } =
+    { base := { current := { status := Status.running c, world := w, events := es }, suspended := stack } }
+'PV_LIB_A_FrontierRun14.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

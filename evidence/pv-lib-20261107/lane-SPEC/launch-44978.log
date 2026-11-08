@@ -1,0 +1,523 @@
+{"cohort": "w3", "attempt": 44978, "target": "PV_LIB_SPEC_SiteArcRecheck", "source_revision": "9cb17796b755b5603594822435bb65bca88dc85f", "source_sha256": "64b2ea624655ca2f857c1a8a80c72e3c0600debd2d52b0a6aac69156b0c9ec46", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10860, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-44978", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-44978.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_SiteArcRecheck.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean", "7000"], "exit": 1, "wall_seconds": 2.700697183609009, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_SiteArcRecheck.panic' does not depend on any axioms", "'PV_LIB_SPEC_SiteArcRecheck.scope_image' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SiteArcRecheck.scope_handler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_SiteArcRecheck.packet_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.65", "peak_rss_kbytes": "4743004", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:20:72: error: Type mismatch
+  rfl
+has type
+  ?m.11 = ?m.11
+but is expected to have type
+  image C K w SiteType.scope (atomic 1) (atomic 1)
+      (PV_THR2_ScopeData.value (atomic 0) thread (panic atomicKind cellKind)) =
+    Option.map PV_LIB_SPEC_AllocationImages.scope (threadWord C w thread)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:36:13: error: Ambiguous term
+  handler
+Possible interpretations:
+  PV_LIB_SPEC_SiteArc.handler : Carrier OWNER Data →
+    PV_STX2_SliceMachine.Control →
+      Resources →
+        Encode →
+          Store Data →
+            (PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data) →
+              PV_STX2_Native.Request Data → OWNER → Option (Reply OWNER PV_RJ4IDB.NativeEvent Data)
+  
+  PV_EVHB_OwnerHeap.handler : Resources → Encode → Handler PV_EVHB_OwnerReserve.Request OWNER PV_RJ4IDB.NativeEvent
+  
+  PV_EVHB_OwnerMachine.handler : Request ?m.21 → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent ?m.21
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:38:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  classify (PV_THR2_ScopeData.value (atomic 0) thread (panic atomicKind cellKind))
+in the target expression
+  PV_LIB_SPEC_SiteArc.handler C K (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s H
+      (PV_STX2_Native.Request.child PV_THR2_Packet124BoxIssue17.fn s.nextActivation
+        [Data.object
+            [("thread-aggregate-kind", PV_THR2_Packet124Aggregate13.source.2.2.1),
+              ("thread-aggregate-slots",
+                Data.array
+                  [Data.array [atomic 1], Data.array [atomic 1],
+                    Data.array [PV_THR2_ScopeData.value (atomic 0) thread (panic atomicKind cellKind)]])]])
+      w =
+    Option.map
+      (fun pointer =>
+        reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s w SiteType.scope
+          (PV_LIB_SPEC_AllocationImages.scope pointer))
+      (threadWord C w thread)
+
+encode : Encode
+s : Store Data
+H : PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data
+w : OWNER
+thread atomicKind cellKind : Data
+resource :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s
+        w (shape SiteType.scope) 8).answer =
+    Answer.returned (Aeneas.Std.Result.ok 16384)
+⊢ PV_LIB_SPEC_SiteArc.handler C K (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s H
+      (PV_STX2_Native.Request.child PV_THR2_Packet124BoxIssue17.fn s.nextActivation
+        [Data.object
+            [("thread-aggregate-kind", PV_THR2_Packet124Aggregate13.source.2.2.1),
+              ("thread-aggregate-slots",
+                Data.array
+                  [Data.array [atomic 1], Data.array [atomic 1],
+                    Data.array [PV_THR2_ScopeData.value (atomic 0) thread (panic atomicKind cellKind)]])]])
+      w =
+    Option.map
+      (fun pointer =>
+        reply (fun {A} => PV_LIB_SPEC_ScopeAllocationPollGap.scopeResources) (fun {A} => encode) s w SiteType.scope
+          (PV_LIB_SPEC_AllocationImages.scope pointer))
+      (threadWord C w thread)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:37:31: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [handler, ̲PV_LIB_SPEC_ScopeAllocationPollGap.request, ̲PV_THR2_KeyValues.pack,
+      List.map_cons, ̲List.map_nil,a̵n̵d̵_̵s̵e̵l̵f̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:37:40: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [handler, ̲PV_LIB_SPEC_ScopeAllocationPollGap.request, ̲PV_THR2_KeyValues.pack,
+      List.map_cons, ̲List.map_nil, ̲and_self,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:58:6: error: unsolved goals
+case pos
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer p : ℕ
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+zero : p = 0
+⊢ PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w (shape SiteType.packet) 8) =
+    match
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+          8).answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).answer,
+          world :=
+            PV_LIB_SPEC_SparseArc.initialized p scopePointer
+              (PV_THR2_PacketBoxReply.finish s w.next
+                  (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                    PV_LIB_SPEC_SparseArc.shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:59:6: error: unsolved goals
+case neg
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer p : ℕ
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+zero : ¬p = 0
+⊢ {
+      answer :=
+        (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+            (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w (shape SiteType.packet)
+              8)).answer,
+      world :=
+        PV_LIB_SPEC_SparseArc.initialized p scopePointer
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w (shape SiteType.packet)
+                8)).world,
+      events :=
+        (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+            (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w (shape SiteType.packet)
+              8)).events } =
+    match
+      (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+          8).answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).answer,
+          world :=
+            PV_LIB_SPEC_SparseArc.initialized p scopePointer
+              (PV_THR2_PacketBoxReply.finish s w.next
+                  (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                    PV_LIB_SPEC_SparseArc.shape 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w
+                  PV_LIB_SPEC_SparseArc.shape 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape 8)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:60:16: error: Tactic `rfl` failed: The left-hand side
+  match Answer.returned (Aeneas.Std.Result.fail e) with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)
+    else
+      {
+        answer :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).answer,
+        world :=
+          PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).world,
+        events :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).events }
+  | x =>
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet) 8)
+is not definitionally equal to the right-hand side
+  have r :=
+    PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+      8;
+  have out :=
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out
+    else
+      { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+        events := out.events }
+  | x => out
+
+case returned.fail
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer : ℕ
+e : Aeneas.Std.Error
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.returned (Aeneas.Std.Result.fail e)
+⊢ (match Answer.returned (Aeneas.Std.Result.fail e) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+            (shape SiteType.packet) 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).answer,
+          world :=
+            PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                    (shape SiteType.packet) 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)) =
+    have r :=
+      PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8;
+    have out :=
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out
+      else
+        { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+          events := out.events }
+    | x => out
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:61:13: error: Tactic `rfl` failed: The left-hand side
+  match Answer.returned Aeneas.Std.Result.div with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)
+    else
+      {
+        answer :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).answer,
+        world :=
+          PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).world,
+        events :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).events }
+  | x =>
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet) 8)
+is not definitionally equal to the right-hand side
+  have r :=
+    PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+      8;
+  have out :=
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out
+    else
+      { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+        events := out.events }
+  | x => out
+
+case returned.div
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer : ℕ
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.returned Aeneas.Std.Result.div
+⊢ (match Answer.returned Aeneas.Std.Result.div with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+            (shape SiteType.packet) 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).answer,
+          world :=
+            PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                    (shape SiteType.packet) 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)) =
+    have r :=
+      PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8;
+    have out :=
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out
+      else
+        { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+          events := out.events }
+    | x => out
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:62:15: error: Tactic `rfl` failed: The left-hand side
+  match Answer.fault f with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)
+    else
+      {
+        answer :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).answer,
+        world :=
+          PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).world,
+        events :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).events }
+  | x =>
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet) 8)
+is not definitionally equal to the right-hand side
+  have r :=
+    PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+      8;
+  have out :=
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out
+    else
+      { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+        events := out.events }
+  | x => out
+
+case fault
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer : ℕ
+f : Fault
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.fault f
+⊢ (match Answer.fault f with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+            (shape SiteType.packet) 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).answer,
+          world :=
+            PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                    (shape SiteType.packet) 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)) =
+    have r :=
+      PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8;
+    have out :=
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out
+      else
+        { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+          events := out.events }
+    | x => out
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_SiteArcRecheck.lean:63:15: error: Tactic `rfl` failed: The left-hand side
+  match Answer.pending with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)
+    else
+      {
+        answer :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).answer,
+        world :=
+          PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).world,
+        events :=
+          (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+              (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                (shape SiteType.packet) 8)).events }
+  | x =>
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+      (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet) 8)
+is not definitionally equal to the right-hand side
+  have r :=
+    PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+      8;
+  have out :=
+    PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+  match r.answer with
+  | Answer.returned (Aeneas.Std.Result.ok p) =>
+    if p = 0 then out
+    else
+      { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+        events := out.events }
+  | x => out
+
+case pending
+resources : Resources
+encode : Encode
+s : Store Data
+w : OWNER
+scopePointer : ℕ
+h :
+  (PV_THR2_PacketBoxResource.reply (fun {A} => resources) (fun {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8).answer =
+    Answer.pending
+⊢ (match Answer.pending with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then
+        PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+          (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+            (shape SiteType.packet) 8)
+      else
+        {
+          answer :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).answer,
+          world :=
+            PV_LIB_SPEC_AllocationImages.initialized p (PV_LIB_SPEC_AllocationImages.packet scopePointer)
+              (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                  (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                    (shape SiteType.packet) 8)).world,
+          events :=
+            (PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+                (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w
+                  (shape SiteType.packet) 8)).events }
+    | x =>
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader (shape SiteType.packet) 8)
+        (PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w (shape SiteType.packet)
+          8)) =
+    have r :=
+      PV_THR2_PacketBoxResource.reply (fun {A} {A} => resources) (fun {A} {A} => encode) s w PV_LIB_SPEC_SparseArc.shape
+        8;
+    have out :=
+      PV_THR2_PacketBoxReply.finish s w.next (PV_EVHB_SourceLifetimes.emptyHeader PV_LIB_SPEC_SparseArc.shape 8) r;
+    match r.answer with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then out
+      else
+        { answer := out.answer, world := PV_LIB_SPEC_SparseArc.initialized p scopePointer out.world,
+          events := out.events }
+    | x => out
+'PV_LIB_SPEC_SiteArcRecheck.panic' does not depend on any axioms
+'PV_LIB_SPEC_SiteArcRecheck.scope_image' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SiteArcRecheck.scope_handler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_SiteArcRecheck.packet_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

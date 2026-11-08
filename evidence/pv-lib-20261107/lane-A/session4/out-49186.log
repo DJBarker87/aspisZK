@@ -1,0 +1,108 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:23:4: error: Type mismatch
+  PV_STX2_TypedReferences.dereference ?m.47 ?m.48 ?m.49 ?m.50
+has type
+  (PV_STX2_TypedReferences.carrier ?m.47).dereference ?m.48 (PV_STX2_TypedReferences.reference ?m.49 ?m.50) = some ?m.49
+but is expected to have type
+  B.dereference w (PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata) =
+    some { activation := a, localIndex := 7 }
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:26:70: error: unsolved goals
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a start finish : ℕ
+metadata : Data
+cell : s.cells { activation := a, localIndex := 7 } = some (PV_LIB_A_Range165.sourceRange start finish)
+B : Carrier OWNER Data := PV_THR2_OwnInitExactReturnedCases.carrier C b
+address :
+  B.dereference w (PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata) =
+    some { activation := a, localIndex := 7 }
+⊢ (do
+      let p ← some { activation := a, localIndex := 7 }
+      let value ←
+        do
+          let root ← s.cells { activation := p.activation, localIndex := p.localIndex }
+          readFields B p.fields root
+      pure (p, value)) =
+    some ({ activation := a, localIndex := 7 }, PV_LIB_A_Range165.sourceRange start finish)
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_SourceStoreLibrary.receiver B s w
+    (PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata)
+in the target expression
+  (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata] with
+    | [reference] => do
+      let __x ← PV_THR2_SourceStoreLibrary.receiver B s w reference
+      match __x with
+        | (p, value) => do
+          let __x ← B.field value 0
+          match __x with
+            | Data.number start => do
+              let __x ← B.field value 1
+              match __x with
+                | Data.number finish =>
+                  if start < finish then writeAddress B s (withField p 0) (some (Data.number (start + 1))) else pure s
+                | x => none
+            | x => none
+    | x => none) =
+    some
+      (if start < finish then
+        write s { activation := a, localIndex := 7 } (some (PV_LIB_A_Range165.sourceRange (start + 1) finish))
+      else s)
+
+C : Carrier OWNER Data
+b : Bool
+s : Store Data
+w : OWNER
+a start finish : ℕ
+metadata : Data
+cell : s.cells { activation := a, localIndex := 7 } = some (PV_LIB_A_Range165.sourceRange start finish)
+B : Carrier OWNER Data := PV_THR2_OwnInitExactReturnedCases.carrier C b
+address :
+  B.dereference w (PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata) =
+    some { activation := a, localIndex := 7 }
+received :
+  PV_THR2_SourceStoreLibrary.receiver B s w
+      (PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata) =
+    some ({ activation := a, localIndex := 7 }, PV_LIB_A_Range165.sourceRange start finish)
+⊢ (match [PV_STX2_TypedReferences.reference { activation := a, localIndex := 7 } metadata] with
+    | [reference] => do
+      let __x ← PV_THR2_SourceStoreLibrary.receiver B s w reference
+      match __x with
+        | (p, value) => do
+          let __x ← B.field value 0
+          match __x with
+            | Data.number start => do
+              let __x ← B.field value 1
+              match __x with
+                | Data.number finish =>
+                  if start < finish then writeAddress B s (withField p 0) (some (Data.number (start + 1))) else pure s
+                | x => none
+            | x => none
+    | x => none) =
+    some
+      (if start < finish then
+        write s { activation := a, localIndex := 7 } (some (PV_LIB_A_Range165.sourceRange (start + 1) finish))
+      else s)
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:27:71: warning: This simp argument is unused:
+  cell
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_THR2_SourceStoreLibrary.receiver, ̲address, ̲readAddress,c̵e̵l̵l̵,̵ ̲readFields,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:27:76: warning: This simp argument is unused:
+  readFields
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_THR2_SourceStoreLibrary.receiver, ̲address, ̲readAddress, ̲cell,r̵e̵a̵d̵F̵i̵e̵l̵d̵s̵,̵ ̲Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_RangeWriter.lean:27:87: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵T̵H̵R̵2̵_̵S̵o̵u̵r̵c̵e̵S̵t̵o̵r̵e̵L̵i̵b̵r̵a̵r̵y̵.̵r̵e̵c̵e̵i̵v̵e̵r̵,̵a̵d̵d̵r̵e̵s̵s̵,̵r̵e̵a̵d̵A̵d̵d̵r̵e̵s̵s̵,̵c̵e̵l̵l̵,̵r̵e̵a̵d̵F̵i̵e̵l̵d̵s̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲P̲V̲_̲T̲H̲R̲2̲_̲S̲o̲u̲r̲c̲e̲S̲t̲o̲r̲e̲L̲i̲b̲r̲a̲r̲y̲.̲r̲e̲c̲e̲i̲v̲e̲r̲,̲ ̲a̲d̲d̲r̲e̲s̲s̲,̲ ̲r̲e̲a̲d̲A̲d̲d̲r̲e̲s̲s̲,̲ ̲c̲e̲l̲l̲,̲ ̲r̲e̲a̲d̲F̲i̲e̲l̲d̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_A_RangeWriter.range93' depends on axioms: [propext, sorryAx]

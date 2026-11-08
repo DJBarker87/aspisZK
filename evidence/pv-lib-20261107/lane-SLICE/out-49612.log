@@ -1,0 +1,11 @@
+'PV_W5_StringLiterals.uniform_scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_W5_StringLiterals.uniform_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]
+def PV_FN_SLICE_f32.LiteralContract : Prop :=
+∀ (D : Carrier OWNER Data) (K : Control) (programs : Data → Option PV_STX2_SliceSyntax.Program)
+  (H : PV_W5_UbCheckPrimitives.Handler) (base : Carrier OWNER Data) (ctrl : Control) (word : Data → ℕ)
+  (addresses : Data → Address) (backend : PV_W5_NativeFrame.Backend) (s : Store Data) (parent : Frame)
+  (parents : List Frame) (a : ℕ) (source destination : Data) (size alignment count : ℕ) (w : OWNER)
+  (prior : List PV_RJ4IDB.NativeEvent),
+  Pre s a source destination size alignment count w →
+    LiteralMachineSpec D K programs H base ctrl word addresses backend → Post D K programs H s parent parents a w prior
+'PV_FN_SLICE_f32.OriginalMachineSpec.toLiteral' depends on axioms: [propext, Classical.choice, Quot.sound]

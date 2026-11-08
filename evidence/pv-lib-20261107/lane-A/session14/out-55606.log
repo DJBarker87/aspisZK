@@ -1,0 +1,189 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:21:39: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Carrier x_0 x_1 → Store x_1 → x_0 → ℕ → PV_STX2_Syntax.Place → Option x_1
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:19:79: error: unsolved goals
+C : Carrier OWNER Data
+s : Store Data
+a : ℕ
+w : OWNER
+c6 :
+  (PV_LIB_A_CallbackTail14.stored s a).cells { activation := a, localIndex := 6 } =
+    some (PV_THR2_Catch219Callbacks.token false).2
+c7 :
+  (PV_LIB_A_CallbackTail14.stored s a).cells { activation := a, localIndex := 7 } =
+    some (PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null)
+c8 :
+  (PV_LIB_A_CallbackTail14.stored s a).cells { activation := a, localIndex := 8 } =
+    some (PV_THR2_Catch219Callbacks.token true).2
+⊢ (((PV_STX2_Store.read C (PV_LIB_A_CallbackTail14.stored s a) w a (Place.local 6)).bind fun v =>
+          some
+            (v,
+              {
+                cells := fun q =>
+                  if q = { activation := a, localIndex := 6 } then none
+                  else (PV_LIB_A_CallbackTail14.stored s a).cells q,
+                nextActivation := (PV_LIB_A_CallbackTail14.stored s a).nextActivation })).bind
+      fun __x =>
+      (((PV_STX2_Store.read C __x.2 w a (Place.local 7)).bind fun v =>
+                some
+                  (v,
+                    { cells := fun q => if q = { activation := a, localIndex := 7 } then none else __x.2.cells q,
+                      nextActivation := __x.2.nextActivation })).bind
+            fun __x =>
+            (((PV_STX2_Store.read C __x.2 w a (Place.local 8)).bind fun v =>
+                      some
+                        (v,
+                          { cells := fun q => if q = { activation := a, localIndex := 8 } then none else __x.2.cells q,
+                            nextActivation := __x.2.nextActivation })).bind
+                  fun __x => some ([__x.1], __x.2)).bind
+              fun __x_1 => some (__x.1 :: __x_1.1, __x_1.2)).bind
+        fun __x_1 => some (__x.1 :: __x_1.1, __x_1.2)) =
+    some
+      ([(PV_THR2_Catch219Callbacks.token false).2,
+          PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+          (PV_THR2_Catch219Callbacks.token true).2],
+        {
+          cells := fun q =>
+            if q = { activation := a, localIndex := 8 } then none
+            else
+              if q = { activation := a, localIndex := 7 } then none
+              else
+                if q = { activation := a, localIndex := 6 } then none else (PV_LIB_A_CallbackTail14.stored s a).cells q,
+          nextActivation := (PV_LIB_A_CallbackTail14.stored s a).nextActivation })
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:21:70: warning: This simp argument is unused:
+  c6
+
+Hint: Omit it from the simp argument list.
+  simp [PV_STX2_Store.operands, ̲operand, ̲read, ̲locate, ̲writeAddress, ̲write, ̲c6̵,̵c̵7, ̲c8,
+      PV_THR2_Catch219Call318.args, ̲PV_THR2_Catch219Call318.moved]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:21:73: warning: This simp argument is unused:
+  c7
+
+Hint: Omit it from the simp argument list.
+  simp [PV_STX2_Store.operands, ̲operand, ̲read, ̲locate, ̲writeAddress, ̲write, ̲c6, ̲c7̵,̵c̵8,
+      PV_THR2_Catch219Call318.args, ̲PV_THR2_Catch219Call318.moved]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:21:76: warning: This simp argument is unused:
+  c8
+
+Hint: Omit it from the simp argument list.
+  simp [PV_STX2_Store.operands, ̲operand, ̲read, ̲locate, ̲writeAddress, ̲write, ̲c6, ̲c7,c̵8̵,̵
+      PV_THR2_Catch219Call318.args, ̲PV_THR2_Catch219Call318.moved]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:29:63: error: unsolved goals
+s : Store Data
+a : ℕ
+parents : List Frame
+loops : List LoopFrame
+⊢ (match
+      (PV_THR2_StaticReply.wait (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a)
+          PV_THR2_Catch219Call318.fn
+          [(PV_THR2_Catch219Callbacks.token false).2,
+            PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+            (PV_THR2_Catch219Callbacks.token true).2]
+          5).request with
+    | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+      if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+        some
+          (PV_THR2_CallbackSegment.enter
+            {
+              frame :=
+                { activation := a, remaining := List.drop 17 PV_THR2_F219.live.body, loops := loops,
+                  waiting :=
+                    some
+                      (PV_THR2_StaticReply.wait (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a)
+                        PV_THR2_Catch219Call318.fn
+                        [(PV_THR2_Catch219Callbacks.token false).2,
+                          PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+                          (PV_THR2_Catch219Callbacks.token true).2]
+                        5) },
+              callers := parents,
+              store :=
+                PV_THR2_StaticCall.issued (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a)
+                  [(PV_THR2_Catch219Callbacks.token false).2,
+                    PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+                    (PV_THR2_Catch219Callbacks.token true).2] }
+            PV_THR2_F316.live [address])
+      else none
+    | x => none) =
+    some
+      (PV_THR2_CallbackSegment.enter
+        {
+          frame :=
+            { activation := a, remaining := List.drop 17 PV_THR2_F219.live.body, loops := loops,
+              waiting :=
+                some
+                  (PV_THR2_StaticReply.wait (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a)
+                    PV_THR2_Catch219Call318.fn
+                    [(PV_THR2_Catch219Callbacks.token false).2,
+                      PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+                      (PV_THR2_Catch219Callbacks.token true).2]
+                    5) },
+          callers := parents,
+          store :=
+            PV_THR2_StaticCall.issued (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a)
+              [(PV_THR2_Catch219Callbacks.token false).2,
+                PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null,
+                (PV_THR2_Catch219Callbacks.token true).2] }
+        PV_THR2_F316.live [PV_STX2_TypedReferences.reference { activation := a, localIndex := 2 } Data.null])
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F219Selected14.lean:49:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq SourceState
+    (PV_LIB_A_PrefixMachine11.advance C K (PV_LIB_A_F219Issue31813.programs P) (fun {A} => resources)
+      (fun {A} => encode) H values 1
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  Status.running
+                    { frame := { activation := a, remaining := List.drop 16 PV_THR2_F219.live.body, loops := loops },
+                      callers := parents, store := PV_LIB_A_CallbackTail14.stored s a },
+                world := w, events := es },
+            suspended := stack } })
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                Status.running
+                  (PV_THR2_IntrinsicFrameEnter.pending
+                    (PV_THR2_Catch219Call318.moved (PV_LIB_A_CallbackTail14.stored s a) a) a parents loops
+                    PV_LIB_A_F219Issue31813.rest
+                    (Data.object
+                      [("Regular",
+                          Data.object
+                            [("kind", PV_LIB_A_F219Issue31813.src.2.1),
+                              ("generics", PV_LIB_A_F219Issue31813.src.2.2.1)])])
+                    (PV_THR2_Catch219Call318.args a) PV_LIB_A_F219Issue31813.src.2.2.2.2),
+              world := w, events := es },
+          suspended := stack } }
+but is expected to have type
+  @Eq SourceState
+    (PV_LIB_A_PrefixMachine11.advance C K (PV_THR2_CatchChildren.table P) (fun {A} => resources) (fun {A} => encode) H
+      values 1
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  Status.running
+                    { frame := { activation := a, remaining := List.drop 16 PV_THR2_F219.live.body, loops := loops },
+                      callers := parents, store := PV_LIB_A_CallbackTail14.stored s a },
+                world := w, events := es },
+            suspended := stack } })
+    {
+      base :=
+        { current := { status := Status.running (parent s a parents loops), world := w, events := es },
+          suspended := stack } }
+'PV_LIB_A_F219Selected14.operands' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_A_F219Selected14.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F219Selected14.issue' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F219Selected14.invoke' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

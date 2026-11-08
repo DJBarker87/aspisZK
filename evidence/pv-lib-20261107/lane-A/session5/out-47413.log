@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_CloneCountV2.lean:47:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_THR2_StaticCall.issued e.store [?m.137]).cells p
+in the target expression
+  issued.cells p = some (PV_THR2_KeyValues.pack PV_THR2_Packet124Aggregate13.source.2.2.1 [sv, wv, x.ptr])
+
+x : Input PV_RJ4IDB.NativeEvent
+H : Backend PV_RJ4IDB.NativeEvent
+resources : Resources
+encode : Encode
+shape : PV_THR2_TypedRepresentation_ArcInner.Shape
+sv wv : Data
+heap : ℕ
+w : OWNER
+pre : PV_FN_THREAD_f124.Pre x
+facts : PV_FN_THREAD_f361Provider124Counts.DocumentedFacts x H
+destination : x.dest = 17
+sa : (strong x H).answer = Answer.returned (Aeneas.Std.Result.ok sv)
+wa : (weak x H).answer = Answer.returned (Aeneas.Std.Result.ok wv)
+post : PV_FN_THREAD_f124.Successful x H (fun {A} => resources) (fun {A} => encode) shape sv wv heap
+e : PV_W1_LeafBoundary.Entry := PV_LIB_A_CloneValidityV2.cloneEntry x sv wv
+issued : Store Data := PV_THR2_StaticCall.issued e.store e.arguments
+B : Carrier OWNER Data := PV_THR2_OwnInitExactReturnedCases.carrier x.C x.b
+p : Address := PV_FN_THREAD_f124_StorePost.backing x sv wv
+v : have e := PV_LIB_A_CloneValidityV2.cloneEntry x sv wv;
+PV_THR2_LibrarySemantics_ArcClone.Valid (PV_THR2_OwnInitExactReturnedCases.carrier x.C x.b)
+  { store := PV_THR2_StaticCall.issued e.store e.arguments, caller := e.caller, parents := e.parents, loops := e.loops,
+    rest := e.rest, callee := e.callee, arguments := e.arguments, destination := e.destination,
+    suspended := e.suspended }
+  w :=
+  PV_LIB_A_CloneIssuedV2.from124 x H (fun {A} => resources) (fun {A} => encode) shape sv wv heap w pre facts destination
+    sa wa post
+age : x.parent.activation < x.s.nextActivation
+older : p.activation ≠ e.store.nextActivation
+foreign : p.activation ≠ x.parent.activation
+⊢ issued.cells p = some (PV_THR2_KeyValues.pack PV_THR2_Packet124Aggregate13.source.2.2.1 [sv, wv, x.ptr])
+'PV_LIB_A_CloneCountV2.from124' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

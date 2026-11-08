@@ -1,0 +1,57 @@
+{"cohort": "w3", "attempt": 44992, "target": "PV_LIB_SPEC_CallbackStores", "source_revision": "aa8cfbe2f1b44a6324c5b1cda0cbacbf607629ff", "source_sha256": "eb7c7077517c4d8479b0d1e6c3984ad9f5e794df0e86ee410e3aadec1778c061", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10867, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-44992", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-44992.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_CallbackStores.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackStores.lean", "7000"], "exit": 1, "wall_seconds": 2.6388425827026367, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_CallbackStores.Registers' does not depend on any axioms", "'PV_LIB_SPEC_CallbackStores.image' depends on axioms: [propext]", "'PV_LIB_SPEC_CallbackStores.reply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.handler' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.resource_answer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.framed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.packet_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_CallbackStores.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.59", "peak_rss_kbytes": "4762500", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_CallbackStores.lean:72:62: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if p = 0 then ?m.42 else ?m.43
+in the target expression
+  (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w
+      else
+        { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+          world :=
+            initialized p (image regs w)
+              (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+          events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+    | x => PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w) =
+    { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+      world :=
+        initialized p (image regs w)
+          (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+      events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+
+resources : Resources
+encode : Encode
+s : Store Data
+regs : Registers
+w : OWNER
+p : ℕ
+allocation :
+  (resources (PV_EVHB_GlobalSystem.Primitive.malloc PV_OWN2_ClientLayout.layout.callbackSize) (world w)).answer =
+    Answer.returned (Aeneas.Std.Result.ok p)
+nonnull : p ≠ 0
+⊢ (match Answer.returned (Aeneas.Std.Result.ok p) with
+    | Answer.returned (Aeneas.Std.Result.ok p) =>
+      if p = 0 then PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w
+      else
+        { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+          world :=
+            initialized p (image regs w)
+              (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+          events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+    | x => PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w) =
+    { answer := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).answer,
+      world :=
+        initialized p (image regs w)
+          (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).world,
+      events := (PV_THR2_ClosureBoxAllocation.reply (fun {A} => resources) (fun {A} => encode) s w).events }
+'PV_LIB_SPEC_CallbackStores.Registers' does not depend on any axioms
+'PV_LIB_SPEC_CallbackStores.image' depends on axioms: [propext]
+'PV_LIB_SPEC_CallbackStores.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.handler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.resource_answer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.framed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.copied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.packet_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_CallbackStores.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

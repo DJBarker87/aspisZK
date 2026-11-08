@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_ThreadCloneStore.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_SourceStoreLibrary.receiver C s w reference
+in the target expression
+  (match [reference] with
+    | [reference] => do
+      let __x ← PV_THR2_SourceStoreLibrary.receiver C s w reference
+      match __x with
+        | (fst, thread) => do
+          let pin ← C.field thread 0
+          let arc ← C.field pin 0
+          let nonNull ← C.field arc 0
+          C.field nonNull 0
+    | x => none) =
+    some ptr
+
+W : Type
+C : Carrier W Data
+s : Store Data
+w : W
+reference thread pin arc nonNull ptr : Data
+q : Address
+received : PV_THR2_SourceStoreLibrary.receiver C s w reference = some (q, thread)
+threadField : C.field thread 0 = some pin
+pinField : C.field pin 0 = some arc
+arcField : C.field arc 0 = some nonNull
+pointerField : C.field nonNull 0 = some ptr
+⊢ (match [reference] with
+    | [reference] => do
+      let __x ← PV_THR2_SourceStoreLibrary.receiver C s w reference
+      match __x with
+        | (fst, thread) => do
+          let pin ← C.field thread 0
+          let arc ← C.field pin 0
+          let nonNull ← C.field arc 0
+          C.field nonNull 0
+    | x => none) =
+    some ptr
+'PV_LIB_A_ThreadCloneStore.pointer' depends on axioms: [propext]
+'PV_LIB_A_ThreadCloneStore.PV_THR2_LibrarySemantics_ThreadCloneSource214' depends on axioms: [propext]
+'PV_LIB_A_ThreadCloneStore.pointer_from_source' depends on axioms: [propext, sorryAx]
+'PV_LIB_A_ThreadCloneStore.source_count' depends on axioms: [propext]

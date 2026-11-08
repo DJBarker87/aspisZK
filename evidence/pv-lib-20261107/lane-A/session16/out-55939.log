@@ -1,0 +1,198 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:14:76: error: unexpected identifier; expected '}'
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:23:69: error: unsolved goals
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parent : Frame
+parents : List Frame
+site : Site
+value : Data
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+cell : s.cells { activation := a, localIndex := 0 } = some value
+⊢ False
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:27:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:44:6: error: Function expected at
+  PV_THR2_SourceReturn.parent ?m.15 ?m.16 ?m.17 ?m.18 ?m.19 ?m.20 ?m.21 ?m.22 ?m.23 ?m.24 ?m.25 ?m.26 ?m.27 ?m.28 ?m.29
+but this term has type
+  PV_THR2_Execution.step ?m.15 ?m.16 ?m.17 ?m.18
+      { frame := { activation := ?m.20, remaining := ?m.22, completed := some (Aeneas.Std.Result.ok ?m.26) },
+        callers := ?m.23 :: ?m.24, store := ?m.19 }
+      ?m.27 =
+    {
+      status :=
+        PV_STX2_SliceMachine.Status.running
+          {
+            frame :=
+              { activation := Frame.activation ?m.23, remaining := Frame.remaining ?m.23, loops := Frame.loops ?m.23,
+                unwinding := Frame.unwinding ?m.23, completed := Frame.completed ?m.23 },
+            callers := ?m.24,
+            store :=
+              write (write ?m.19 { activation := ?m.20, localIndex := 0 } (some ?m.26))
+                { activation := Frame.activation ?m.23, localIndex := ?m.21 } (some ?m.26) },
+      world := ?m.27, events := [] }
+
+Note: Expected a function because this term is being applied to the argument
+  action
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:41:69: error: unsolved goals
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a dest : ℕ
+saved : Frame
+parents : List Frame
+site : Site
+wait : PV_STX2_Native.Waiting Data
+value : Data
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+waiting : saved.waiting = some wait
+action : wait.action = PV_STX2_Native.ReturnAction.child a (Place.local dest)
+⊢ {
+      state :=
+        match do
+          let wait ← none
+          match wait.request with
+            | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+              if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                some
+                  (PV_THR2_CallbackSegment.enter
+                    {
+                      frame :=
+                        { activation := a,
+                          remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                      callers := sorry, store := sorry }
+                    PV_THR2_F316.live [address])
+              else none
+            | x => none with
+        | some segment =>
+          PV_THR2_IntrinsicState.invoke
+            {
+              current :=
+                {
+                  status :=
+                    PV_STX2_SliceMachine.Status.running
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                        callers := sorry, store := sorry },
+                  world := sorry, events := sorry },
+              suspended := sorry }
+            segment
+        | none =>
+          {
+            current :=
+              {
+                status :=
+                  (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                        callers := sorry, store := sorry }
+                      sorry).status,
+                world :=
+                  (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                        callers := sorry, store := sorry }
+                      sorry).world,
+                events :=
+                  sorry ++
+                    (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                          callers := sorry, store := sorry }
+                        sorry).events },
+            suspended := sorry },
+      issued :=
+        PV_LIB_SPEC_ControlRuntime.recordIssue
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    {
+                      frame :=
+                        { activation := a,
+                          remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                      callers := sorry, store := sorry },
+                world := sorry, events := sorry },
+            suspended := sorry }
+          (match do
+            let wait ← none
+            match wait.request with
+              | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+                if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                  some
+                    (PV_THR2_CallbackSegment.enter
+                      {
+                        frame :=
+                          { activation := a,
+                            remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                        callers := sorry, store := sorry }
+                      PV_THR2_F316.live [address])
+                else none
+              | x => none with
+          | some segment =>
+            PV_THR2_IntrinsicState.invoke
+              {
+                current :=
+                  {
+                    status :=
+                      PV_STX2_SliceMachine.Status.running
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                          callers := sorry, store := sorry },
+                    world := sorry, events := sorry },
+                suspended := sorry }
+              segment
+          | none =>
+            {
+              current :=
+                {
+                  status :=
+                    (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                          callers := sorry, store := sorry }
+                        sorry).status,
+                  world :=
+                    (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                        {
+                          frame :=
+                            { activation := a,
+                              remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                          callers := sorry, store := sorry }
+                        sorry).world,
+                  events :=
+                    sorry ++
+                      (PV_THR2_Execution.step (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H
+                          {
+                            frame :=
+                              { activation := a,
+                                remaining := [PV_STX2_SliceSyntax.Node.leaf (Instruction.ret site (Place.local 0))] },
+                            callers := sorry, store := sorry }
+                          sorry).events },
+              suspended := sorry })
+          sorry,
+      consumed := sorry } =
+    delivered s a dest saved parents value w es issued consumed
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Return16.lean:47:8: warning: declaration uses `sorry`
+'PV_LIB_A_Return16.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_Return16.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_Return16.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_Tls278Native15.lean:16:53: error: unsolved goals
+regs : PV_LIB_SPEC_CallbackStores.Registers
+p : Parameters
+c : Config
+w : OWNER
+a : ℕ
+address : Address
+trigger :
+  PV_THR2_OwnUniformResourceHandler.lift p.environment.native
+      (PV_STX2_Native.Request.child token a [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error])
+      w =
+    { answer := Answer.returned (Aeneas.Std.Result.ok Data.null), world := w, events := [] }
+⊢ (match
+      PV_STX2_Native.Request.child token a
+        [PV_LIB_SPEC_Tls277Native15.value address, PV_LIB_SPEC_Tls278Lift15.error] with
+    |
+    PV_STX2_Native.Request.child fn a_1
+        [Data.object
+            [("thread-aggregate-kind", kind),
+              ("thread-aggregate-slots", Data.array [Data.array [strong], Data.array [weak], Data.array [payload]])]] =>
+      if fn = PV_THR2_Packet124BoxIssue17.fn ∧ a_1 = a ∧ kind = PV_THR2_Packet124Aggregate13.source.2.2.1 then
+        match PV_LIB_SPEC_SiteArc.classify payload with
+        | none => none
+        | some site =>
+          match
+            (PV_THR2_PacketBoxResource.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                { cells := c.store.cells, nextActivation := a } w (PV_LIB_SPEC_SiteArc.shape site) 8).answer with
+          | Answer.returned (Aeneas.Std.Result.ok p_1) =>
+            if p_1 = 0 then
+              some
+                (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                  { cells := c.store.cells, nextActivation := a } w site fun x => none)
+            else
+              Option.map
+                (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                  { cells := c.store.cells, nextActivation := a } w site)
+                (PV_LIB_SPEC_SiteArc.image (runtime p).carrier (runtime p).control w site strong weak payload)
+          | x =>
+            some
+              (PV_LIB_SPEC_SiteArc.reply (fun {A} => p.resources) (fun {A} => p.encode)
+                { cells := c.store.cells, nextActivation := a } w site fun x => none)
+      else some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }
+    | x => some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }) =
+    some { answer := Answer.returned (Aeneas.Std.Result.ok (value address)), world := w, events := [] }
+'PV_LIB_SPEC_Tls278Native15.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

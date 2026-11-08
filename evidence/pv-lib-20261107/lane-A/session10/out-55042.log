@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:42:6: error(lean.unknownIdentifier): Unknown constant `Option.none_bind`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:53:8: error(lean.unknownIdentifier): Unknown constant `Option.none_bind`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_DestructorStep10.lean:52:4: error: unsolved goals
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+resources : Resources
+encode : Encode
+H : PV_LIB_StoreActionTable.Handler
+values : Values OWNER PV_RJ4IDB.NativeEvent
+c : Config
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+completed : c.frame.completed = none
+waiting : c.frame.waiting = none
+allocation : PV_THR2_OwnInitAction.selected c = false
+operator : PV_THR2_OperatorAction.selected c = none
+registration : PV_THR2_OwnUniformNeutral.configuration c
+dynamic : PV_THR2_Dynamic.active c = none
+interpreted :
+  ∀ (site : Option PV_STX2_Syntax.Site) (s : Store Data),
+    (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+          (v2ProvenancePrograms P) H c w).status ≠
+      Status.undefined site s
+base :
+  PV_LIB_A_WeakOwnerFree10.step C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } } =
+    {
+      base :=
+        PV_THR2_OwnInitInterpreterBridged.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+          K (v2ProvenancePrograms P) (fun {A} => resources) (fun {A} => encode) H
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack } }
+operators :
+  PV_THR2_OperatorInterpreter.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+      (v2ProvenancePrograms P) H
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack } =
+    PV_THR2_OwnUniformBindings.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+      (v2ProvenancePrograms P) H
+      { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack }
+⊢ {
+      base :=
+        match do
+          let wait ← none
+          match wait.request with
+            | PV_STX2_Native.Request.child callee activation [tryCallback, address, head] =>
+              if callee = PV_THR2_Catch219Call318.fn ∧ tryCallback = (PV_THR2_Catch219Callbacks.token false).2 then
+                some (PV_THR2_CallbackSegment.enter c PV_THR2_F316.live [address])
+              else none
+            | x => none with
+        | some segment =>
+          PV_THR2_IntrinsicState.invoke
+            { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+              suspended := stack }
+            segment
+        | none =>
+          {
+            current :=
+              {
+                status :=
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).status,
+                world :=
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).world,
+                events :=
+                  es ++
+                    (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K)
+                        K (v2ProvenancePrograms P) H c w).events },
+            suspended := stack } } =
+    {
+      base :=
+        {
+          current :=
+            {
+              status :=
+                (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                    (v2ProvenancePrograms P) H c w).status,
+              world :=
+                (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                    (v2ProvenancePrograms P) H c w).world,
+              events :=
+                es ++
+                  (PV_STX2_SliceMachine.step (PV_LIB_A_UnwindMatch.carrier (PV_THR2_AggregateCompletion.carrier C) K) K
+                      (v2ProvenancePrograms P) H c w).events },
+          suspended := stack } }
+'PV_LIB_A_DestructorStep10.ordinary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

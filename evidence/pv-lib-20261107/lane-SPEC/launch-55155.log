@@ -1,0 +1,93 @@
+{"cohort": "w3", "attempt": 55155, "target": "PV_LIB_SPEC_EntryPre13", "source_revision": "971b9a209275a8d41cdea4f2792e387d3c67e227", "source_sha256": "6f663611ddec879c95770ff69726f29293f9eee100bbb07983f8aac300d47785", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10910, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55155", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55155.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_EntryPre13.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean", "7000"], "exit": 1, "wall_seconds": 2.374440908432007, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_EntryPre13.memory_before' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.receivers' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.run_bytes' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.n_bytes' depends on axioms: [propext, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.run_typed' depends on axioms: [propext, sorryAx, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.n_typed' depends on axioms: [propext, sorryAx, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.captured' depends on axioms: [propext, sorryAx, Quot.sound]", "'PV_LIB_SPEC_EntryPre13.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.32", "peak_rss_kbytes": "4767352", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:40:4: error: Type mismatch
+  PV_LIB_SPEC_ConcreteCaptures.run_typed.left
+has type
+  PV_EVHB_OWNER.Valid PV_LIB_SPEC_ConcreteCaptures.state
+    { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }
+but is expected to have type
+  PV_EVHB_OWNER.Valid state { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:42:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  receiver state places.run
+in the target expression
+  PV_EVHB_OWNER.receiver state
+      { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }.place =
+    some (id, h)
+
+case right
+id : ℕ
+h : Header
+selected :
+  PV_EVHB_OWNER.receiver state
+      { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }.place =
+    some (id, h)
+⊢ h.shape.width = 16 ∧
+    ∀ (i : ℕ)
+      (hi : i < { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }.values.length),
+      decodeFatPointer (PV_STX_OriginalCopyTyped.bytesAt state.world.memory h.pointer 16 i) =
+        some { place := places.run, values := [PV_OWN2_RunBorrowAddress.runWords site zero zero] }.values[i]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:54:4: error: Type mismatch
+  PV_LIB_SPEC_ConcreteCaptures.n_typed.left
+has type
+  PV_EVHB_OWNER.Valid PV_LIB_SPEC_ConcreteCaptures.state { place := places.n, values := [one] }
+but is expected to have type
+  PV_EVHB_OWNER.Valid state { place := places.n, values := [one] }
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:56:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  receiver state places.n
+in the target expression
+  PV_EVHB_OWNER.receiver state { place := places.n, values := [one] }.place = some (id, h)
+
+case right
+id : ℕ
+h : Header
+selected : PV_EVHB_OWNER.receiver state { place := places.n, values := [one] }.place = some (id, h)
+⊢ h.shape.width = 8 ∧
+    ∀ (i : ℕ) (hi : i < { place := places.n, values := [one] }.values.length),
+      decodeUsize (PV_STX_OriginalCopyTyped.bytesAt state.world.memory h.pointer 8 i) =
+        some { place := places.n, values := [one] }.values[i]
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:68:36: error: Application type mismatch: The argument
+  PV_LIB_SPEC_ConcreteCaptures.f_typed
+has type
+  TypedMemory 0 (fun x => some ()) PV_LIB_SPEC_ConcreteCaptures.state { place := places.f, values := [()] }
+but is expected to have type
+  TypedMemory captures.fWidth captures.fDecode state { place := places.f, values := [captures.f] }
+in the application
+  And.intro PV_LIB_SPEC_ConcreteCaptures.f_typed
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:69:4: error: Application type mismatch: The argument
+  PV_LIB_SPEC_ConcreteCaptures.tasks_typed
+has type
+  TypedMemory 0 (fun x => some ()) PV_LIB_SPEC_ConcreteCaptures.state { place := places.handles, values := [] }
+but is expected to have type
+  TypedMemory captures.taskWidth captures.taskDecode state { place := places.handles, values := captures.handles }
+in the application
+  And.intro PV_LIB_SPEC_ConcreteCaptures.tasks_typed
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:88:18: error: Application type mismatch: The argument
+  PV_LIB_SPEC_ConcreteEntry.owner 2 ?m.14
+has type
+  PV_FN_THREAD_OwnerWellFormed.OwnerWellFormed PV_LIB_SPEC_ConcreteCaptures.state 2
+but is expected to have type
+  PV_FN_THREAD_OwnerWellFormed.OwnerWellFormed input.world input.store.nextActivation
+in the application
+  And.intro (PV_LIB_SPEC_ConcreteEntry.owner 2 ?m.14)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:89:4: error: Application type mismatch: The argument
+  PV_LIB_SPEC_ConcreteEntry.owner 1 ?m.19
+has type
+  PV_FN_THREAD_OwnerWellFormed.OwnerWellFormed PV_LIB_SPEC_ConcreteCaptures.state 1
+but is expected to have type
+  PV_FN_THREAD_OwnerWellFormed.OwnerWellFormed input.world input.activation
+in the application
+  And.intro (PV_LIB_SPEC_ConcreteEntry.owner 1 ?m.19)
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_EntryPre13.lean:101:30: error: Ambiguous term
+  closure
+Possible interpretations:
+  _root_.closure : Set ?m.151 → Set ?m.151
+  
+  PV_LIB_SPEC_ConcreteCaptures.closure : Data
+'PV_LIB_SPEC_EntryPre13.memory_before' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.receivers' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_bytes' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.run_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.n_typed' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.captured' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_LIB_SPEC_EntryPre13.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

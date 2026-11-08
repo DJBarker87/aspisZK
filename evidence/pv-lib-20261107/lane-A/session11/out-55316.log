@@ -1,0 +1,91 @@
+PV_LIB_StoreActionTable.v2 (fn : Data) : Option Action
+PV_LIB_A_RangeFirst11.history (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (D : PV_FN_W4_NativeFootprint.Effects)
+  (H : PV_W1_OwnerNativeFrame.Backend PV_RJ4IDB.NativeEvent)
+  (semantics : PV_LIB_A_Range165.PV_THR2_LibrarySemantics_RangeIntoIter165 C D H) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (b : Bool) (w : PV_EVHB_OwnerMachine.OWNER) (es : List PV_RJ4IDB.NativeEvent)
+  (stack : List Config) (value : Data)
+  (returned :
+    (PV_THR2_Source15RangeToLoop.reply (PV_THR2_OwnUniformResourceHandler.lift H) s w).answer =
+      Answer.returned (Aeneas.Std.Result.ok value)) :
+  have B := PV_THR2_OwnInitExactReturnedCases.carrier C b;
+  have handler := PV_THR2_OwnUniformResourceHandler.lift H;
+  have first := PV_THR2_Source15RangeToLoop.reply handler s w;
+  have iterator := PV_LIB_A_RangeHistoryV2.iteratorStore s a value;
+  have site := PV_LIB_A_RangePoll11.site iterator a;
+  PV_LIB_A_PrefixMachine11.advance B K (PV_LIB_A_RangePoll11.programs P) (fun {A} => resources) (fun {A} => encode)
+      handler values (PV_THR2_Source15RangeToLoop.steps handler s w + 7 + 1)
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := List.drop 5 PV_THR2_F15.live.body }, callers := parents,
+                      store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    sourceReceive B (PV_LIB_A_RangeFirst11.afterWrite s a parents value) (es ++ first.events) stack site
+      PV_LIB_A_WeakDropSource.Tail.done (handler site.waiting.request first.world)
+PV_LIB_A_RangeRetry11.pending_retry (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode) (H : Handler)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (value : Data) (w post : PV_EVHB_OwnerMachine.OWNER) (es events : List PV_RJ4IDB.NativeEvent)
+  (stack : List Config)
+  (answer :
+    H (PV_LIB_A_RangePoll11.site (PV_LIB_A_RangeHistoryV2.iteratorStore s a value) a).waiting.request w =
+      { answer := Answer.pending, world := post, events := events }) :
+  have c := PV_LIB_A_RangeFirst11.afterWrite s a parents value;
+  have site := PV_LIB_A_RangePoll11.site (PV_LIB_A_RangeHistoryV2.iteratorStore s a value) a;
+  PV_LIB_A_DeferredActions.step C K P (fun {A} => resources) (fun {A} => encode) H values
+      {
+        base :=
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack },
+        applied := some (site, PV_LIB_A_WeakDropSource.Tail.done) } =
+    {
+      base :=
+        { current := { status := PV_STX2_SliceMachine.Status.running c, world := post, events := es ++ events },
+          suspended := stack },
+      applied := some (site, PV_LIB_A_WeakDropSource.Tail.done) }
+PV_LIB_A_RangeLegacy11.initial_poll (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode) (H : Handler)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_RJ4IDB.NativeEvent) (s : Store Data) (a : ℕ)
+  (parents : List Frame) (w : PV_EVHB_OwnerMachine.OWNER) (es : List PV_RJ4IDB.NativeEvent) (stack : List Config) :
+  have c := PV_THR2_Source15Loop93Issue.pending s a parents;
+  have q :=
+    { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es }, suspended := stack };
+  (PV_LIB_A_DeferredActions.step C K (PV_LIB_A_RangePoll11.programs P) (fun {A} => resources) (fun {A} => encode) H
+        values { base := q }).base =
+    step C K (PV_LIB_A_RangePoll11.programs P) (fun {A} => resources) (fun {A} => encode) H values q
+PV_LIB_A_F6EarlyHistory11.history (C : Carrier PV_EVHB_OwnerMachine.OWNER Data) (K : Control)
+  (P : Data → Option PV_STX2_SliceSyntax.Program) (resources : PV_EVHB_OwnerHeap.Resources)
+  (encode : PV_EVHB_OwnerHeap.Encode) (H : PV_LIB_A_F6EarlyHistory11.Handler)
+  (values : PV_THR2_SourceStoreLibrary.Values PV_EVHB_OwnerMachine.OWNER PV_LIB_A_F6EarlyHistory11.Event)
+  (s : Store Data) (a : ℕ) (parents : List Frame) (b : Bool) (w : PV_EVHB_OwnerMachine.OWNER)
+  (es : List PV_LIB_A_F6EarlyHistory11.Event) (stack : List Config) :
+  have t := PV_THR2_ScopePrologue.prepared s a;
+  have r := PV_THR2_ScopeReply121.reply H t w;
+  have B := PV_LIB_A_F6Counter11.carrier C b;
+  PV_LIB_A_PrefixMachine11.advance B K (PV_THR2_ScopeChildren.table P) (fun {A} => resources) (fun {A} => encode) H
+      values (18 + PV_LIB_A_F6EarlyHistory11.steps H t a r)
+      {
+        base :=
+          {
+            current :=
+              {
+                status :=
+                  PV_STX2_SliceMachine.Status.running
+                    { frame := { activation := a, remaining := PV_THR2_F6.live.body }, callers := parents, store := s },
+                world := w, events := es },
+            suspended := stack } } =
+    PV_LIB_A_F6EarlyHistory11.after B H t a parents r es stack
+'PV_LIB_StoreActionTable.v2PrefixStep11' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_StoreActionTable.v2PrefixAdvance11' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_StoreActionTable.v2PrefixEntry11' does not depend on any axioms
+'PV_LIB_StoreActionTable.prefix_step11' depends on axioms: [propext, Classical.choice, Quot.sound]

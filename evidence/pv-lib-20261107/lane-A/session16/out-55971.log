@@ -1,0 +1,186 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F5CallbackTrap16.lean:36:25: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.39 = ?m.39
+but is expected to have type
+  (match some (config s a parents p, wait s p) with
+      | none =>
+        have out :=
+          PV_LIB_SPEC_ReachedNative14.control (PV_LIB_SPEC_TlsNative15.cut stack)
+            PV_LIB_SPEC_ReachedEnvironment14.parameters
+            { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state;
+        { state := out,
+          issued :=
+            PV_LIB_SPEC_ControlRuntime.recordIssue
+              { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state out
+              { state := waiting s a parents p w es, issued := issued, consumed := consumed }.issued,
+          consumed := { state := waiting s a parents p w es, issued := issued, consumed := consumed }.consumed }
+      | some (c, wait) =>
+        match
+          PV_LIB_SPEC_ResourceHistory.context
+            { state := waiting s a parents p w es, issued := issued, consumed := consumed } c wait with
+        | none =>
+          {
+            state :=
+              {
+                current :=
+                  { status := Status.undefined none c.store,
+                    world :=
+                      { state := waiting s a parents p w es, issued := issued,
+                              consumed := consumed }.state.current.world,
+                    events :=
+                      { state := waiting s a parents p w es, issued := issued,
+                              consumed := consumed }.state.current.events },
+                suspended :=
+                  { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state.suspended },
+            issued := { state := waiting s a parents p w es, issued := issued, consumed := consumed }.issued,
+            consumed := { state := waiting s a parents p w es, issued := issued, consumed := consumed }.consumed }
+        | some ctx =>
+          have bound :=
+            { primitives := PV_LIB_SPEC_ReachedEnvironment14.parameters.primitives,
+              control := PV_LIB_SPEC_ReachedEnvironment14.parameters.control,
+              needsDrop := PV_LIB_SPEC_ReachedEnvironment14.parameters.needsDrop,
+              resources := fun {A} =>
+                PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment
+                  ctx,
+              encode := @Parameters.encode PV_LIB_SPEC_ReachedEnvironment14.parameters,
+              loadBias := PV_LIB_SPEC_ReachedEnvironment14.parameters.loadBias,
+              siteIndex := PV_LIB_SPEC_ReachedEnvironment14.parameters.siteIndex,
+              environment := PV_LIB_SPEC_ReachedEnvironment14.parameters.environment };
+          match
+            PV_LIB_SPEC_ReachedNative14.answer (PV_LIB_SPEC_TlsNative15.cut stack) bound c wait.request
+              { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state.current.world with
+          | none =>
+            have r :=
+              PV_THR2_OwnUniformResourceHandler.lift PV_LIB_SPEC_ReachedEnvironment14.parameters.environment.native
+                wait.request
+                { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state.current.world;
+            {
+              state :=
+                {
+                  current :=
+                    { status := Status.undefined none c.store, world := r.world,
+                      events :=
+                        { state := waiting s a parents p w es, issued := issued,
+                                  consumed := consumed }.state.current.events ++
+                          r.events },
+                  suspended :=
+                    { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state.suspended },
+              issued := { state := waiting s a parents p w es, issued := issued, consumed := consumed }.issued,
+              consumed :=
+                ctx :: { state := waiting s a parents p w es, issued := issued, consumed := consumed }.consumed }
+          | some val =>
+            have out :=
+              PV_LIB_SPEC_ReachedNative14.transition (PV_LIB_SPEC_TlsNative15.cut stack) bound c
+                { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state;
+            { state := out,
+              issued :=
+                PV_LIB_SPEC_ControlRuntime.recordIssue
+                  { state := waiting s a parents p w es, issued := issued, consumed := consumed }.state out
+                  { state := waiting s a parents p w es, issued := issued, consumed := consumed }.issued,
+              consumed :=
+                ctx ::
+                  { state := waiting s a parents p w es, issued := issued, consumed := consumed }.consumed }).state =
+    undefined s a parents p w es
+in the application
+  Or.inr rfl
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F5CallbackTrap16.lean:44:11: error(lean.invalidField): Invalid field notation: Type of
+  match
+    PV_LIB_SPEC_ReachedNative14.answer (PV_LIB_SPEC_TlsNative15.cut stack)
+      (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) (config s a parents p) (wait s p).request w with
+  | none => ?m.86
+  | some val => ?m.91 val
+is not known; cannot resolve field `state`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `PV_FN_THREAD_f361OwnEntry.state`
+  • `PV_LIB_SPEC_ConcreteCaptures.state`
+  • `PV_LIB_SPEC_DisjointCaptures18.state`
+  • `PV_LIB_SPEC_DisjointEntry18.state`
+  • `PV_LIB_SPEC_Entry13.state`
+  • `PV_LIB_SPEC_Entry14.state`
+  • `PV_LIB_SPEC_SourceProjection15.state`
+  • `Aesop.Goal.state`
+  • `Aesop.GoalData.state`
+  • `Aesop.MVarCluster.state`
+  • `Aesop.MVarClusterData.state`
+  • `Aesop.Rapp.state`
+  • `Aesop.RappData.state`
+  • `Array.Matcher.state`
+  • `AspisR1EffectCallers27.SemanticTranscript.state`
+  • `AspisR1EffectCallers27.Transcript.state`
+  • `Lean.PersistentEnvExtensionState.state`
+  • `PV_DIAG3.Execution.state`
+  • `PV_EVHB_SourceLifetimes.Run.state`
+  • `PV_EVH_Runtime.Run.state`
+  • `PV_LIB.MachineObservation.state`
+  • `Execution.state`
+  • `PV_LIB_SPEC_ThreadContract.Observation.state`
+  • `ProofWidgets.RefreshToken.state`
+  • `R1Z.PV_RunJoin_WeightCarrier46.state`
+  • `R1Z.PhaseSamplerParserBin.state`
+  • `R1Z.ProverCommitWeightsStorage53.state`
+  • `ST.Out.state`
+  • `Std.CancellationContext.state`
+  • `Std.CancellationToken.state`
+  • `Std.Notify.state`
+  • `Aeneas.ScalarTac.PreprocessResult.state`
+  • `Array.Matcher.Iterator.state`
+  • `AspisR1.WireBindingRecordCodec.CheckpointBody.state`
+  • `AspisR1CircleCaller25.r1_wire.SemanticTranscript.state`
+  • `AspisR1PublicPreparation.r1_wire.SemanticTranscript.state`
+  • `AspisR1PublicPreparation.transcript.Transcript.state`
+  • `AspisR1SemanticInit28.r1_wire.SemanticTranscript.state`
+  • `AspisR1SimSemantic20.r1_wire.SemanticTranscript.state`
+  • `AspisR72Sampler.transcript.Transcript.state`
+  • `AspisV8R19.QM31SamplerProgram.Cursor.state`
+  • `Lean.Elab.BodyProcessedSnapshot.state`
+  • `Lean.Elab.HeaderProcessedSnapshot.state`
+  • `Lean.ScopedEnvExtension.State.state`
+  • `ProofWidgets.RefreshComponent.AwaitRefreshParams.state`
+  • `ProofWidgets.RefreshComponent.Props.state`
+  • `ProverRwFull.host_transcript.Transcript.state`
+  • `ProverRwFull.host_wire.SemanticTranscript.state`
+  • `R1Z.PV_V263_World.Run.state`
+  • `R1Z.ProverCommitCoinSequence27.Run.state`
+  • `R1Z.ProverCommitCoinTape27.Execution.state`
+  • `AspisR1SimControl21.transcript.control21.Transcript.state`
+  • `Lean.Elab.Tactic.EvalTacticFailure.state`
+  • `Lean.Server.Watchdog.FileWorker.state`
+  • `PDict_CryptoTypes.sha2.core_api.Sha256VarCore.state`
+  • `ProverRwFull.host_wire.SemanticTranscript.impl.state`
+  • `Lean.Elab.Tactic.Grind.EvalTacticFailure.state`
+  • `Std.Http.Protocol.H1.Reader.state`
+  • `Std.Http.Protocol.H1.Writer.state`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F5CallbackTrap16.lean:84:6: error: Type mismatch
+  ih y.issued y.consumed
+has type
+  (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters n
+          { state := waiting s a parents p w es, issued := y.issued, consumed := y.consumed }).state =
+      waiting s a parents p w es ∨
+    (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters n
+          { state := waiting s a parents p w es, issued := y.issued, consumed := y.consumed }).state =
+      undefined s a parents p w es
+but is expected to have type
+  (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters n
+          { state := waiting s a parents p w es, issued := y.issued, consumed := y.consumed }).state =
+      waiting s a parents p w es ∨
+    (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+          (n + 1) { state := waiting s a parents p w es, issued := issued, consumed := consumed }).state =
+      undefined s a parents p w es
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F5CallbackTrap16.lean:88:19: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.85 = ?m.85
+but is expected to have type
+  (PV_LIB_SPEC_ReachedNative14.run (PV_LIB_SPEC_TlsNative15.cut stack) PV_LIB_SPEC_ReachedEnvironment14.parameters
+        (n + 1) { state := waiting s a parents p w es, issued := issued, consumed := consumed }).state =
+    undefined s a parents p w es
+in the application
+  Or.inr rfl
+'PV_LIB_A_F5CallbackTrap16.ordinary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F5CallbackTrap16.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F5CallbackTrap16.undefined_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F5CallbackTrap16.undefined_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F5CallbackTrap16.trapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F5CallbackTrap16.no_body_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

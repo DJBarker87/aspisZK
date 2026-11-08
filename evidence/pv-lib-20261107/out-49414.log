@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/sources/PV_LIB_SliceAlloc47.lean:46:79: error: unsolved goals
+resources : Resources
+encode : Encode
+base : Carrier OWNER Data
+K : Control
+s : Store Data
+parents : List PV_STX2_SliceMachine.Frame
+a bytes : ℕ
+w : OWNER
+prior : List PV_RJ4IDB.NativeEvent
+external : PV_W5_NoAllocShim.External
+backend : PV_W5_NativeFrame.Backend
+stack : List Config
+pre : Pre s parents a bytes w
+malloc_semantics : PV_STX2_IntrinsicSemantics_Malloc fun {A} => resources
+calloc_semantics : PV_STX2_IntrinsicSemantics_AllocZeroed fun {A} => resources
+h : Post (fun {A} => resources) (fun {A} => encode) base K s parents a bytes w prior external backend
+⊢ PV_LIB.observe
+      {
+        current :=
+          (outcome s parents a (PV_STX2_Source7AllocationRuntimeEntry.layout bytes 4) prior
+              (reply (fun {A} {A} => resources) (fun {A} {A} => encode) base K s parents a bytes w external backend)).2,
+        suspended := stack } =
+    model (fun {A} {A} => resources) (fun {A} {A} => encode) base K s parents a bytes w prior external backend stack
+'PV_LIB_SliceAlloc47.certified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

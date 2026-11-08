@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadMachine.lean:57:2: error: unsolved goals
+case running.none
+m : Machine
+q : State
+neutral :
+  ∀ (c : Config),
+    q.current.status = PV_STX2_SliceMachine.Status.running c → PV_THR2_SourceStoreNative.select m.programs c = none
+c : Config
+status : q.current.status = PV_STX2_SliceMachine.Status.running c
+caught : PV_THR2_Catch316Segment.select c = none
+⊢ (match PV_THR2_Catch316Segment.select c with
+    | some val =>
+      PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+        (fun {A} => m.encode) m.handler q
+    | none =>
+      PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+        (fun {A} => m.encode) m.handler q) =
+    PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources) (fun {A} => m.encode)
+      m.handler q
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_ThreadMachine.lean:58:4: error: Tactic `rfl` failed: The left-hand side
+  match PV_STX2_SliceMachine.Status.running c with
+  | PV_STX2_SliceMachine.Status.running c =>
+    match PV_THR2_Catch316Segment.select c with
+    | some val =>
+      PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+        (fun {A} => m.encode) m.handler q
+    | none =>
+      match PV_THR2_SourceStoreNative.select m.programs c with
+      | some val => PV_THR2_SourceStoreInterpreter.step m.carrier m.control m.programs m.handler m.values q
+      | none =>
+        PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+          (fun {A} => m.encode) m.handler q
+  | x =>
+    PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources) (fun {A} => m.encode)
+      m.handler q
+is not definitionally equal to the right-hand side
+  PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources) (fun {A} => m.encode)
+    m.handler q
+
+case running.some
+m : Machine
+q : State
+neutral :
+  ∀ (c : Config),
+    q.current.status = PV_STX2_SliceMachine.Status.running c → PV_THR2_SourceStoreNative.select m.programs c = none
+c : Config
+status : q.current.status = PV_STX2_SliceMachine.Status.running c
+val✝ : PV_THR2_CallbackSegment.Segment
+caught : PV_THR2_Catch316Segment.select c = some val✝
+⊢ (match PV_STX2_SliceMachine.Status.running c with
+    | PV_STX2_SliceMachine.Status.running c =>
+      match PV_THR2_Catch316Segment.select c with
+      | some val =>
+        PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+          (fun {A} => m.encode) m.handler q
+      | none =>
+        match PV_THR2_SourceStoreNative.select m.programs c with
+        | some val => PV_THR2_SourceStoreInterpreter.step m.carrier m.control m.programs m.handler m.values q
+        | none =>
+          PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+            (fun {A} => m.encode) m.handler q
+    | x =>
+      PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources)
+        (fun {A} => m.encode) m.handler q) =
+    PV_THR2_OwnInitInterpreterBridged.step m.carrier m.control m.programs (fun {A} => m.resources) (fun {A} => m.encode)
+      m.handler q
+'PV_LIB_SPEC_ThreadMachine.Machine' does not depend on any axioms
+'PV_LIB_SPEC_ThreadMachine.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.SourceAdequacy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.ReachedAgreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.away' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_ThreadMachine.registration' depends on axioms: [propext, Classical.choice, Quot.sound]

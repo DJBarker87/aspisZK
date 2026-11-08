@@ -1,0 +1,72 @@
+{"cohort": "w3", "attempt": 55506, "target": "PV_LIB_SPEC_TlsAt59", "source_revision": "9a6231135bfacf9b3f2b061f09981885f83b4814", "source_sha256": "024dfd6c0e7f506e0c08f75833407076dd1f15a2ea598f58c80adf1a2778b5ca", "caps": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64, "Lean_M": 7000}, "resolution_modules": 10974, "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-lib-spec-55506", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/evidence/time-55506.log", "timeout", "600", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/J-w3.json", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/objects-w3/PV_LIB_SPEC_TlsAt59.olean", "/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt59.lean", "7000"], "exit": 1, "wall_seconds": 2.8220269680023193, "accepted": false, "class": "elaboration", "axioms_summary_based": ["'PV_LIB_SPEC_TlsAt59.context' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt59.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PV_LIB_SPEC_TlsAt59.original59' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"], "wall": "0:02.77", "peak_rss_kbytes": "4786964", "swaps": "0"}
+/home/dombarker/project-offloads/codex-pv-lib-spec-20261107/sources/PV_LIB_SPEC_TlsAt59.lean:23:108: error: unsolved goals
+stack : PV_LIB_SPEC_PhysicalStack12.Frame
+resources : PV_EVHB_OwnerHeap.Resources :=
+  fun {A} =>
+    PV_LIB_SPEC_ResourceHistory.allocationResources PV_LIB_SPEC_ReachedEnvironment14.parameters.environment origin
+result :
+  PV_LIB_SPEC_ReachedNative14.answer (cut stack) (PV_LIB_SPEC_TlsBound15.parameters fun {A} => resources) config request
+      PV_LIB_SPEC_Entry14.state =
+    some
+      { answer := Answer.returned (Aeneas.Std.Result.ok PV_LIB_SPEC_Tls59Data15.result),
+        world := PV_LIB_SPEC_Entry14.state, events := [] }
+⊢ (match
+      if
+          (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                      reference).frame.waiting.isSome =
+              true ∨
+            (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                      reference).frame.completed.isSome =
+              true then
+        none
+      else
+        match
+          (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                reference).frame.remaining with
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.call site callee captures returnPlace unwind) :: tail =>
+          some
+            (site,
+              (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                    reference).frame.activation)
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.drop site place callee conditional unwind) :: tail =>
+          some
+            (site,
+              (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                    reference).frame.activation)
+        | PV_STX2_SliceSyntax.Node.leaf (Instruction.copy site source destination count) :: tail =>
+          some
+            (site,
+              (PV_THR2_RunTlsNext.pending PV_LIB_SPEC_TlsDelivery15.store55 5 PV_LIB_SPEC_TlsOriginal15.parents
+                    reference).frame.activation)
+        | x => none,
+      PV_LIB_SPEC_Tls59Data15.after.current.status with
+    | some (site, caller), PV_STX2_SliceMachine.Status.running c =>
+      match c.frame.waiting with
+      | some wait =>
+        { site := site, caller := caller, request := wait.request } ::
+          { site := PV_LIB_SPEC_Tls277Request15.site, caller := 5,
+              request :=
+                PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee PV_LIB_SPEC_TlsDelivery15.store55.nextActivation
+                  [reference] } ::
+            PV_LIB_SPEC_TlsAt54.at54.issued
+      | none =>
+        { site := PV_LIB_SPEC_Tls277Request15.site, caller := 5,
+            request :=
+              PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee PV_LIB_SPEC_TlsDelivery15.store55.nextActivation
+                [reference] } ::
+          PV_LIB_SPEC_TlsAt54.at54.issued
+    | x, x_1 =>
+      { site := PV_LIB_SPEC_Tls277Request15.site, caller := 5,
+          request :=
+            PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee PV_LIB_SPEC_TlsDelivery15.store55.nextActivation
+              [reference] } ::
+        PV_LIB_SPEC_TlsAt54.at54.issued) =
+    { site := PV_LIB_SPEC_Tls277Request15.site, caller := 5,
+        request :=
+          PV_STX2_Native.Request.child PV_THR2_RunTlsNext.callee PV_LIB_SPEC_TlsDelivery15.store55.nextActivation
+            [reference] } ::
+      PV_LIB_SPEC_TlsAt54.at54.issued
+'PV_LIB_SPEC_TlsAt59.context' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt59.consume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SPEC_TlsAt59.original59' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

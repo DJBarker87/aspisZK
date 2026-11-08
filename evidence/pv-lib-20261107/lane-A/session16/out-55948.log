@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F17Finish16.lean:73:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_IntrinsicState.advance (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H 8
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := List.drop 15 PV_THR2_F17.live.body },
+                callers := parent :: parents, store := s },
+          world := w, events := es },
+      suspended := ?m.54 }
+in the target expression
+  PV_THR2_IntrinsicState.advance (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H 8
+      (stage s a (parent :: parents) (List.drop 15 PV_THR2_F17.live.body) w es issued consumed).state =
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := parent.activation, remaining := parent.remaining, loops := parent.loops,
+                    unwinding := parent.unwinding, completed := parent.completed },
+                callers := parents,
+                store :=
+                  write (write (PV_THR2_RunWithReturn.prepared s a) { activation := a, localIndex := 0 } (some v))
+                    { activation := parent.activation, localIndex := 0 } (some v) },
+          world := w, events := es },
+      suspended := [] }
+
+cut : PV_LIB_SPEC_ReachedNative14.Cut
+p : Parameters
+H : PV_LIB_SPEC_D984.Handler
+s : Store Data
+a : ℕ
+parent : Frame
+parents : List Frame
+wait : PV_STX2_Native.Waiting Data
+v : Data
+w : OWNER
+es : List Event
+issued : List Issued
+consumed : List Context
+cell : s.cells { activation := a, localIndex := 0 } = some v
+saved : parent.waiting = some wait
+action : wait.action = PV_STX2_Native.ReturnAction.child a (Place.local 0)
+⊢ PV_THR2_IntrinsicState.advance (runtime p).carrier (runtime p).control PV_LIB_SPEC_Full.programs H 8
+      (stage s a (parent :: parents) (List.drop 15 PV_THR2_F17.live.body) w es issued consumed).state =
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := parent.activation, remaining := parent.remaining, loops := parent.loops,
+                    unwinding := parent.unwinding, completed := parent.completed },
+                callers := parents,
+                store :=
+                  write (write (PV_THR2_RunWithReturn.prepared s a) { activation := a, localIndex := 0 } (some v))
+                    { activation := parent.activation, localIndex := 0 } (some v) },
+          world := w, events := es },
+      suspended := [] }
+'PV_LIB_A_F17Finish16.trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F17Finish16.clear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F17Finish16.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

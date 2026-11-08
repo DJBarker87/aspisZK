@@ -1,0 +1,54 @@
+"""Conditional on owner acceptance of the translator patch. Generate every
+structured function, including array loops; retain all other body kinds in pins.
+No bodies, caller captures, or world replies are supplied by this generator.
+"""
+from pathlib import Path
+import hashlib,json,sys
+helpers=Path('tools/pv-stx-20261104/generate-intermediate-d685.py').read_text().split('SOURCE=')[0]
+ns={};exec(helpers,ns)
+data,arg,place,operand,site=[ns[n] for n in ['data','arg','place','operand','site']]
+parts=[]
+def block(b):
+ names=[node(s) for s in b['statements']]
+ name='block'+str(len(parts))
+ parts.append((name,'List Node','['+', '.join(names)+']'))
+ return name
+def node(s):
+ text=rawnode(s)
+ name='node'+str(len(parts))
+ parts.append((name,'Node',text))
+ return name
+def rawnode(s):
+ n=s['native'];tag=next(iter(n)) if isinstance(n,dict) else n;v=n[tag] if isinstance(n,dict) else None;t=site(s)
+ if tag=='Loop':return '.loop '+t+' '+block(v)
+ if tag in ['Break','Continue']:return ('.breakLoop ' if tag=='Break' else '.continueLoop ')+t+' '+str(v)
+ if tag=='Assert':return '.assertion '+t+' '+arg(operand(v['assert']['cond']))+' '+str(v['assert']['expected']).lower()+' '+arg(data(v['on_failure']))+' '+block(v['on_unwind'])
+ if tag=='Assign' and 'BinaryOp' in v[1] and isinstance(v[1]['BinaryOp'][0],dict):
+  op,l,r=v[1]['BinaryOp'];return '.binary '+t+' '+arg(place(v[0]))+' '+arg(data(op))+' '+arg(operand(l))+' '+arg(operand(r))
+ if tag=='Assign' and 'Discriminant' in v[1]:
+  src=v[1]['Discriminant'];return '.discriminant '+t+' '+arg(place(v[0]))+' '+arg(place(src))+' '+arg(data(src['ty']))
+ if tag=='Switch':
+  if 'If' in v:
+   o,y,n=v['If'];return '.branch '+t+' '+arg(operand(o))+' '+block(y)+' '+block(n)
+  if 'SwitchInt' in v:
+   o,ty,arms,otherwise=v['SwitchInt'];return '.switch '+t+' '+arg(operand(o))+' ['+', '.join('(['+', '.join(arg(data(a)) for a in vals)+'], '+block(b)+')' for vals,b in arms)+'] '+block(otherwise)
+  p,arms,otherwise=v['Match'];return '.matchAdt '+t+' '+arg(place(p))+' ['+', '.join('(['+', '.join(map(str,vals))+'], '+block(b)+')' for vals,b in arms)+'] '+('none' if otherwise is None else '(some '+block(otherwise)+')')
+ return '.leaf '+arg(ns['instruction'](s))
+SOURCE=Path('evidence/pv-stx-20261104/SLICE/N94906/generated/NativeInstructions.json')
+raw=SOURCE.read_bytes();emission=json.loads(raw);rows=[]
+doc='/-- Conditional on owner acceptance of the translator patch. Generated verbatim\nfrom option-on N94906, including branch and unwind payloads. -/'
+for f in emission['functions']:
+ fid=f['function'];code=f['code'];r=dict(function=fid,kind=code.get('opcode','Structured'),name=f['item_meta']['name'],code_sha256=hashlib.sha256(json.dumps(code,separators=(',',':')).encode()).hexdigest())
+ if 'body' in code:
+  parts=[];body=block(code['body'])
+  definitions=[doc+'\ndef '+name+' : '+typ+' :=\n  '+value for name,typ,value in parts]
+  text='\n'.join(['import PV_STX2_SliceSyntax','set_option autoImplicit false','namespace PV_STX2_SliceF'+str(fid),'open PV_STX2_Syntax PV_STX2_SliceSyntax',*definitions,doc,'def program : PV_STX2_SliceSyntax.Program :=\n  ⟨'+str(fid)+', '+data(code['entry'])+', '+data(code['locals'])+', '+body+'⟩','#print axioms program','end PV_STX2_SliceF'+str(fid),''])
+  out=Path('lean/PV_STX2_SliceF'+str(fid)+'.lean');r.update(path=str(out),sha256=hashlib.sha256(text.encode()).hexdigest())
+  if '--check' in sys.argv:assert out.read_text()==text
+  else:out.write_text(text)
+ rows.append(r)
+pins=dict(qualification=__doc__,source=str(SOURCE),source_sha256=hashlib.sha256(raw).hexdigest(),llbc_sha256=hashlib.sha256(Path('evidence/pv-stx-20261104/SLICE/N94902/Source7.llbc').read_bytes()).hexdigest(),functions=rows)
+p=Path('evidence/pv-stx-20261104/SLICE/generated-pins.json')
+if '--check' in sys.argv:assert json.loads(p.read_text())==pins
+else:p.write_text(json.dumps(pins,indent=2)+'\n')
+print('Generated',sum(r['kind']=='Structured' for r in rows),'structured functions; all other kinds explicitly retained in pins')

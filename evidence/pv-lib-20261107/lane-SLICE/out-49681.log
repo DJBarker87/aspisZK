@@ -1,0 +1,19 @@
+'PV_FN_SLICE_f7_DropRuntime.effects_eq_w1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_DropRuntime.drop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f7_DropRuntime.at_source178' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_FN_SLICE_f7_DropRuntime.at_source178 : ∀ (resources : PV_EVHB_OWNER.Resources)
+  (encode : PV_EVHB_OWNER.Encode) {s : PV_EVHB_OwnerMachine.OWNER} {value : PV_STX2_Source7EntryOwned.Foundation}
+  (entry : PV_STX2_Source7EntryOwned.Source7EntryOwned s value)
+  (external : ℕ → PV_STX_World.World → PV_STX_Machine.Reply PV_STX_World.World PV_RJ4IDB.NativeEvent Unit)
+  (fallback : PV_W5_NativeFrame.Backend) (x : PV_FN_SLICE_f7_Drop.Cut)
+  (changes : PV_STX2_Store.Address → Option PV_STX2_Syntax.Data)
+  (pre : PV_W1_OwnerWellFormed.OwnerWellFormed x.w x.s.nextActivation),
+  PV_FN_SLICE_f7_Drop.Summary x fallback changes ∧
+    PV_STX2_Source7QUniformResourceHandler.handler (fun {A} => resources) (fun {A} => encode) entry external fallback
+          (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture) x.w =
+        PV_FN_SLICE_f7_Drop.reply x fallback ∧
+      PV_W1_OwnerWellFormed.OwnerWellFormed
+        (PV_STX2_Source7QUniformResourceHandler.handler (fun {A} => resources) (fun {A} => encode) entry external
+            fallback (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_Drop.source x.capture) x.w).world
+        (PV_FN_SLICE_f7_Drop.effects x changes).nextActivation :=
+⋯

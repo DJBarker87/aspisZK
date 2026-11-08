@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_F6Arc12.lean:109:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_IntrinsicState.advance C K (PV_THR2_ScopeChildren.table P) H 1
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  { activation := a, remaining := PV_THR2_F6.node25 :: List.drop 26 PV_THR2_F6.live.body,
+                    loops := loops },
+                callers := parents, store := s },
+          world := w, events := es },
+      suspended := stack }
+in the target expression
+  Trace C K (PV_THR2_ScopeChildren.table P) H
+    (match operands C w a source.2.2.2.1 s with
+    | none => 0
+    | some val => 1)
+    (PV_THR2_IntrinsicState.advance C K (PV_THR2_ScopeChildren.table P) H 1
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf
+                            (Instruction.call source.1
+                              (Data.object
+                                [("Regular",
+                                    Data.object
+                                      [("kind", Data.object [("Fun", Data.object [("Regular", Data.number 124)])]),
+                                        ("generics",
+                                          Data.object
+                                            [("regions", Data.array []),
+                                              ("types", Data.array [Data.object [("Deduplicated", Data.number 2212)]]),
+                                              ("const_generics", Data.array []), ("trait_refs", Data.array [])])])])
+                              source.2.2.2.1 (Place.local source.2.2.2.2) []) ::
+                          List.drop 26 PV_THR2_F6.live.body,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack })
+
+C : Carrier OWNER Data
+K : Control
+P : Data → Option PV_STX2_SliceSyntax.Program
+H : PV_LIB_StoreActionTable.Handler
+q : State
+w : OWNER
+es : List PV_RJ4IDB.NativeEvent
+stack : List Config
+parents : List Frame
+s : Store Data
+a : ℕ
+loops : List LoopFrame
+issued :
+  PV_THR2_IntrinsicState.advance C K (PV_THR2_ScopeChildren.table P) H 1
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a, remaining := PV_THR2_F6.node25 :: List.drop 26 PV_THR2_F6.live.body,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack } =
+    PV_THR2_IntrinsicFrameCall.after C s a parents loops (List.drop 26 PV_THR2_F6.live.body) source.1 source.2.1
+      source.2.2.1 source.2.2.2.1 source.2.2.2.2 w es stack
+⊢ Trace C K (PV_THR2_ScopeChildren.table P) H
+    (match operands C w a source.2.2.2.1 s with
+    | none => 0
+    | some val => 1)
+    (PV_THR2_IntrinsicState.advance C K (PV_THR2_ScopeChildren.table P) H 1
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                {
+                  frame :=
+                    { activation := a,
+                      remaining :=
+                        PV_STX2_SliceSyntax.Node.leaf
+                            (Instruction.call source.1
+                              (Data.object
+                                [("Regular",
+                                    Data.object
+                                      [("kind", Data.object [("Fun", Data.object [("Regular", Data.number 124)])]),
+                                        ("generics",
+                                          Data.object
+                                            [("regions", Data.array []),
+                                              ("types", Data.array [Data.object [("Deduplicated", Data.number 2212)]]),
+                                              ("const_generics", Data.array []), ("trait_refs", Data.array [])])])])
+                              source.2.2.2.1 (Place.local source.2.2.2.2) []) ::
+                          List.drop 26 PV_THR2_F6.live.body,
+                      loops := loops },
+                  callers := parents, store := s },
+            world := w, events := es },
+        suspended := stack })
+'PV_LIB_A_F6Arc12.shape' depends on axioms: [propext]
+'PV_LIB_A_F6Arc12.sites' depends on axioms: [propext]
+'PV_LIB_A_F6Arc12.storage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Arc12.waiting' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Arc12.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_F6Arc12.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
