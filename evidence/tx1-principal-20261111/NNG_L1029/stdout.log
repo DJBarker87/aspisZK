@@ -1,0 +1,61 @@
+NNG_generated/NNG_EncodeAssociation345.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNG_Pure345.cloned true (account s.proofAccount).bytes
+in the target expression
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode
+        (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10 s.proofAccount)
+        fun proof => next { toDecoded := s, candidate := candidate, proofData := proof }) =
+    match
+      match ok (core.result.Result.Ok candidate) with
+      | ok (core.result.Result.Ok candidate) => some (List.map byte ↑candidate)
+      | x => none with
+    | none => NNG_Pure345.silent (Except.error RSL.ProgramError.invalidAccountData)
+    | some bytes =>
+      (fun c =>
+          NNG_Obs345.tryObs (NNG_Pure345.cloned ((fun x => true) 5) c.proofAccount.bytes) fun bytes =>
+            tail { toCandidate := c, proofData := bytes })
+        { toValidated := NNG_ProjectFrames345.validated s hd hv, candidate := bytes }
+
+case Ok
+W : Type
+s : Decoded W
+env : RSL.Env
+hd : decodeCall s.publicData = ok (core.result.Result.Ok s.statement)
+hv : validateCall s.statement = ok (core.result.Result.Ok ())
+next : ProofData W → Code Ret
+tail : LogicalProof → RSL.Obs (Except RSL.ProgramError RSL.Bytes)
+later :
+  ∀ (candidate : Std.Array U8 688#usize) (proof : Slice U8),
+    observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (next { toDecoded := s, candidate := candidate, proofData := proof }) =
+      tail (NNG_ProjectFrames345.proofData { toDecoded := s, candidate := candidate, proofData := proof } hd hv)
+candidate : Std.Array U8 688#usize
+he :
+  NMT_R2_EncoderTotal.value (commonValue s.statement).lane_transition.candidate_afterstate =
+    core.result.Result.Ok candidate
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode
+        (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10 s.proofAccount)
+        fun proof => next { toDecoded := s, candidate := candidate, proofData := proof }) =
+    match
+      match ok (core.result.Result.Ok candidate) with
+      | ok (core.result.Result.Ok candidate) => some (List.map byte ↑candidate)
+      | x => none with
+    | none => NNG_Pure345.silent (Except.error RSL.ProgramError.invalidAccountData)
+    | some bytes =>
+      (fun c =>
+          NNG_Obs345.tryObs (NNG_Pure345.cloned ((fun x => true) 5) c.proofAccount.bytes) fun bytes =>
+            tail { toCandidate := c, proofData := bytes })
+        { toValidated := NNG_ProjectFrames345.validated s hd hv, candidate := bytes }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (688 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NNG_EncodeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

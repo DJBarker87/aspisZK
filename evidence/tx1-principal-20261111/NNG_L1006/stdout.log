@@ -1,0 +1,21 @@
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+theorem Aeneas.Std.Slice.index_usize_spec.{u} : ∀ {α : Type u} (v : Slice α) (i : Usize) (hbound : ↑i < v.length),
+  v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄ :=
+fun {α} v i hbound => Slice.index_usize_spec._proof_1_5 v i hbound
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then Result.ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.Usize.checked_add : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_add_UScalar x y

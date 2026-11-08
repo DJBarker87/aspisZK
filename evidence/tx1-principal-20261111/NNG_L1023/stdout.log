@@ -1,0 +1,79 @@
+NNG_generated/NNG_DecodeAssociation345.lean:25:10: error: Tactic `rfl` failed: The left-hand side
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+    (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply none)) fun st =>
+      next { toPublicData := s, statement := st })
+is not definitionally equal to the right-hand side
+  NNG_Obs345.tryObs (NNG_Pure345.allocationIf false true) fun x =>
+    NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s) tail
+      (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+
+case false.none
+W : Type
+s : PublicData W
+env : RSL.Env
+next : Decoded W → Code Ret
+tail : NNG_Phases345.Decoded LIB_Instances.VL LIB_Instances.C → RSL.Obs (Except RSL.ProgramError RSL.Bytes)
+later :
+  ∀ (st : Statement) (hd : decodeCall s.publicData = ok (core.result.Result.Ok st)),
+    observation NNG_ChildSource345.port (NNG_Events345.events env) (next { toPublicData := s, statement := st }) =
+      tail (NNG_ProjectFrames345.decoded { toPublicData := s, statement := st } hd)
+reached : LIBC_S1.reaches (LIB_Carriers.bytes s.publicData) = false
+decoded : LIBC_S1.decode (LIB_Carriers.bytes s.publicData) = none
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply none)) fun st =>
+        next { toPublicData := s, statement := st }) =
+    NNG_Obs345.tryObs (NNG_Pure345.allocationIf false true) fun x =>
+      NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s)
+        tail (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+NNG_generated/NNG_DecodeAssociation345.lean:29:3: error: Type mismatch
+  later st hd
+has type
+  observation NNG_ChildSource345.port (NNG_Events345.events env) (next { toPublicData := s, statement := st }) =
+    tail (NNG_ProjectFrames345.decoded { toPublicData := s, statement := st } hd)
+but is expected to have type
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply (some st))) fun st =>
+        next { toPublicData := s, statement := st }) =
+    NNG_Obs345.tryObs (NNG_Pure345.allocationIf false true) fun x =>
+      NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s)
+        tail (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+NNG_generated/NNG_DecodeAssociation345.lean:25:10: error: Tactic `rfl` failed: The left-hand side
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+    (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply none)) fun st =>
+      next { toPublicData := s, statement := st })
+is not definitionally equal to the right-hand side
+  NNG_Obs345.tryObs (NNG_Pure345.allocationIf true true) fun x =>
+    NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s) tail
+      (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+
+case true.none
+W : Type
+s : PublicData W
+env : RSL.Env
+next : Decoded W → Code Ret
+tail : NNG_Phases345.Decoded LIB_Instances.VL LIB_Instances.C → RSL.Obs (Except RSL.ProgramError RSL.Bytes)
+later :
+  ∀ (st : Statement) (hd : decodeCall s.publicData = ok (core.result.Result.Ok st)),
+    observation NNG_ChildSource345.port (NNG_Events345.events env) (next { toPublicData := s, statement := st }) =
+      tail (NNG_ProjectFrames345.decoded { toPublicData := s, statement := st } hd)
+reached : LIBC_S1.reaches (LIB_Carriers.bytes s.publicData) = true
+decoded : LIBC_S1.decode (LIB_Carriers.bytes s.publicData) = none
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply none)) fun st =>
+        next { toPublicData := s, statement := st }) =
+    NNG_Obs345.tryObs (NNG_Pure345.allocationIf true true) fun x =>
+      NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s)
+        tail (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+NNG_generated/NNG_DecodeAssociation345.lean:29:3: error: Type mismatch
+  later st hd
+has type
+  observation NNG_ChildSource345.port (NNG_Events345.events env) (next { toPublicData := s, statement := st }) =
+    tail (NNG_ProjectFrames345.decoded { toPublicData := s, statement := st } hd)
+but is expected to have type
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply (some st))) fun st =>
+        next { toPublicData := s, statement := st }) =
+    NNG_Obs345.tryObs (NNG_Pure345.allocationIf true true) fun x =>
+      NNG_Phases345.afterDecode LIB_Instances.VL LIB_Instances.C (fun x => true) (NNG_ProjectFrames345.publicData s)
+        tail (LIB_Instances.C.decodeStatement (NNG_ProjectFrames345.publicData s).publicData) ⋯
+'AspisR1.NNG_DecodeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

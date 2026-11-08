@@ -1,0 +1,42 @@
+{"attempt": "NNG_L1022", "exit_status": 1, "wall_seconds": 25.453102001920342, "peak_rss_kib": "6709928", "swaps": "0", "print_axioms": ["'AspisR1.NNG_PreludeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_PreludeAssociation345.lean:29:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNG_Pure345.silent
+    (RSL.requireDistinct [account s.proofAccount, account s.publicAccount, account s.checkpointAccount])
+in the target expression
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c15 (selectedArray s)) fun x =>
+        NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c13 s.proofAccount) fun x =>
+          NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c13 s.publicAccount) fun x =>
+            NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c14 s.checkpointAccount s.progr
+...
+ls345.calls env).c13 s.publicAccount) fun x =>
+            NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c14 s.checkpointAccount s.program true) fun x =>
+              NNG_TreeBase345.tryCode
+                (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10
+                  s.checkpointAccount)
+                fun ck =>
+                NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c16 ck) fun x =>
+                  NNG_TreeBase345.tryCode
+                    (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10
+                      s.publicAccount)
+                    fun pub =>
+                    NNG_TreeBase345.tryCode ((NNG_Calls345.calls env).c12 pub) fun statement =>
+                      next { toSelected := s, checkpointData := ck, publicData := pub, statement := statement }) =
+    NNG_Obs345.tryObs
+      (NNG_Pure345.silent
+        (RSL.requireDistinct
+          [(NNG_ProjectFrames345.selected s).proofAccount, (NNG_ProjectFrames345.selected s).publicAccount,
+            (NNG_ProjectFrames345.selected s).checkpointAccount]))
+      fun x =>
+      (fun s =>
+          NNG_Phases345.stepReadonlyProof s fun s =>
+            NNG_Phases345.stepReadonlyPublic s fun s =>
+              NNG_Phases345.stepCheckpoint (fun x => true) s fun s =>
+                NNG_Phases345.stepCheckpointData (fun x => true) s fun s =>
+                  NNG_Phases345.stepZero s fun s =>
+                    NNG_Phases345.stepPublicData (fun x => true) s fun s =>
+                      NNG_Phases345.stepDecode LIB_Instances.VL LIB_Instances.C (fun x => true) s tail)
+        (NNG_ProjectFrames345.selected s)
+'AspisR1.NNG_PreludeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rca2dbcb9541943ec804da2c667bc7f3c.scope; invocation ID: 42ab76fcfce041f9897a972a1b119766

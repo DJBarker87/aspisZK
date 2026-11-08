@@ -1,50 +1,54 @@
-"""Read-only validation of this continuation's own receipts and focused audits."""
+"""Validate only this continuation's receipts, source snapshots and new roots."""
 from pathlib import Path
-import json,hashlib,lzma,subprocess
-E=Path(__file__).resolve().parent
-standard={'propext','Classical.choice','Quot.sound'}
-receipts=[];snapshot_count=0
-for f in sorted(E.glob('NNG_L[0-9][0-9][0-9]/receipt.json')):
- if int(f.parent.name[-3:])<476:continue
- d=json.loads(f.read_text());a=d['attempt'];receipts.append(d)
- assert all(k in d for k in ['source_revision','exit_status','wall_seconds','peak_rss_kib','swaps','source_hashes']),a
- assert str(d['swaps'])=='0',a
- assert d['exit_status'] not in [124,137,143],a
- assert d['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},a
- admission=json.loads((E/(a+'-admission.json')).read_text())
- assert admission['exit']==0 and admission['reservation']['allowed'] is True,a
- for name,expected in d['source_hashes'].items():
-  q=f.parent/'sources'/name
-  if q.exists():data=q.read_bytes()
-  else:data=lzma.decompress(q.with_suffix(q.suffix+'.xz').read_bytes())
-  assert hashlib.sha256(data).hexdigest()==expected,(a,name)
-  snapshot_count+=1
-for label in ['C137','C087','S094']:
- d=json.loads((E/('NNG_'+label+'_AUDIT_SUMMARY.json')).read_text())
- assert d['status']=='PASS' and d['raw_matches_collector'] and d['standard_axioms_only']
- assert all(r['equal'] and set(r['collect_axioms'])<=standard and set(r['walked_axioms'])<=standard for r in d['results'])
-latest=json.loads((E/'NNG_S094_AUDIT_ROOTS.json').read_text())['selected_receipts']
-for mod,receipt in latest.items():
- f=E/receipt;d=json.loads(f.read_text());rel='NNG_generated/'+mod.replace('.','/')+'.lean'
- assert d['exit_status']==0
- assert (E/rel).read_bytes()==(f.parent/'sources'/rel).read_bytes(),mod
- assert not any('sorryAx' in line for line in d['print_axioms']),mod
-all_ids=set()
-for f in E.glob('NNG_ATTEMPTS*.jsonl'):
- for line in f.open():
-  d=json.loads(line)
-  if d.get('kind')!='wait':all_ids.add(d['attempt'])
-submitted={d['attempt'] for line in (E/'NNG_TRANSPORT.jsonl').read_text().splitlines() if (d:=json.loads(line)).get('submitted')}
-assert not submitted-all_ids,submitted-all_ids
-used={g:0 for g in ['lean_link_audit','extract','kani']}
-for a in all_ids:
- d=json.loads((E/(a+'.json')).read_text());k=d['kind']
- g='lean_link_audit' if k in ['lean','link','audit'] else k
- if g in used:used[g]+=1
-assert used['lean_link_audit']<=550 and used['extract']<=2 and used['kani']<=10
-assert not [str(f)for f in E.rglob('*')if f.is_file()and f.stat().st_size>20_000_000]
-frozen=subprocess.check_output(['git','rev-parse','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:crates/aspis-r1-cost-probe/src/candidate.rs'],text=True).strip()
-actual=subprocess.check_output(['git','hash-object','crates/aspis-r1-cost-probe/src/candidate.rs'],text=True).strip();assert frozen==actual
-out=dict(status='PASS',scope_usage=used,prior_scopes=359,continuation_scopes=used['lean_link_audit']-359,client_scope_limit=550,remaining_scopes=550-used['lean_link_audit'],continuation_receipts=len(receipts),snapshots_checked=snapshot_count,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,latest_checked_modules=len(latest),unresolved_submissions=[],no_timeout_or_memory_kill=True,standard_axioms_only=True,shipped_candidate_blob=frozen,scope_summary=[{k:d[k]for k in ['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']}for d in receipts])
-(E/'NNG_RESUME_VALIDATION.json').write_text(json.dumps(out,indent=1)+'\n')
-print(json.dumps({k:v for k,v in out.items()if k!='scope_summary'}))
+import json,hashlib,re,lzma,sys
+B=Path.cwd();given=json.loads((B/'NNG_RESUME_VALIDATION_INPUTS.json').read_text());allowed={'propext','Classical.choice','Quot.sound'}
+limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+rows=[];snapshots=0;heartbeats=[]
+for a,admission in sorted(given['admissions'].items()):
+ r=json.loads((B/a/'receipt.json').read_text());assert r['attempt']==a
+ assert r['limits']==limits,(a,r['limits']);assert int(r['swaps'])==0
+ assert r['source_revision'] and r['wall_seconds']>=0 and int(r['peak_rss_kib'])>0
+ assert admission['exit']==0 and admission['reservation']['allowed'] is True
+ host=json.loads((B/(a+'-reservation.json')).read_text());assert host==admission['reservation'],a
+ assert given['final_disk'][a]>=40_000_000_000 and given['final_share'][a]<6
+ for name,sha in r['source_hashes'].items():
+  source=B/a/'sources'/name;assert source.is_file(),(a,source)
+  assert hashlib.sha256(source.read_bytes()).hexdigest()==sha,(a,name);snapshots+=1
+ if r['kind']=='lean':assert '-M7000' in r['command'] and '-j1' in r['command']
+ stdout=(B/a/'stdout.log').read_text()
+ assert r['exit_status'] not in [124,137,-9],a
+ assert 'excessive memory consumption' not in stdout.lower() and 'memory limit exceeded' not in stdout.lower(),a
+ if 'maximum number of heartbeats' in stdout:heartbeats.append(a)
+ rows.append({k:r[k]for k in ['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']})
+for module,item in given['selected'].items():
+ r=json.loads((B/item['attempt']/'receipt.json').read_text());assert r['exit_status']==0
+ path='NNG_generated/'+item['source'];assert r['source_hashes'][path]==item['sha256']
+ assert hashlib.sha256((B/path).read_bytes()).hexdigest()==item['sha256'],module
+ for line in r['print_axioms']:
+  assert 'sorryAx' not in line,line
+  m=re.search(r'depends on axioms: \[([^]]*)\]',line)
+  if m:assert set(filter(None,(x.strip() for x in m[1].split(','))))<=allowed,line
+retained=json.loads((B/'NNG_RESUME_RETAINED_OBJECTS.json').read_text())
+for module in retained['modules']:
+ for f in module['files']:
+  p=Path(f['path']);assert p.is_file() and p.stat().st_size==f['bytes']
+  assert hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256'],p
+manifest=json.loads((B/'NNG_Resume_AUDIT_ROOTS.json').read_text());expected=[r for g in manifest['groups']for r in g];results=[];pairs=0
+for i,group in enumerate(manifest['groups']):
+ mode='proof'+str(i);folder=B/'NNG_Resume_audit'/mode;raw=json.loads((folder/(mode+'.json')).read_text())
+ assert raw['exit_status']==0 and {r['root']for r in raw['results']}==set(group)
+ for r in raw['results']:
+  assert r['equal'] and set(r['collect_axioms'])==set(r['walked_axioms'])<=allowed,r
+  results.append(r)
+ for p in folder.glob('*.xz'):
+  digest=hashlib.sha256()
+  with lzma.open(p,'rb')as source:
+   for block in iter(lambda:source.read(1024*1024),b''):digest.update(block)
+  assert digest.hexdigest()==Path(str(p)[:-3]+'.sha256').read_text().strip(),p;pairs+=1
+assert len(results)==len(expected)==len(set(expected))
+assert set(heartbeats)=={'NNG_L1034','NNG_L1098'},heartbeats
+formal=sum(r['kind']in['lean','link','audit']for r in rows);assert formal<=300
+result=dict(status='PASS',validation_scope=sys.argv[1],actual_completed_scopes=len(rows),fresh_lean_link_audit_scopes=formal,baseline_lean_link_audit_scopes=830,lifetime_lean_link_audit_scopes=830+formal,fresh_allowance=300,remaining_formal_scopes=300-formal,source_snapshots=snapshots,source_matched_modules=len(given['selected']),retained_modules=len(retained['modules']),audited_roots=len(results),verified_archive_sha_pairs=pairs,heartbeats_retired_and_split=heartbeats,wall_timeouts_or_OOM=0,swap=0,standard_axioms=sorted(allowed),unresolved_other_submissions=given['unresolved_other_submissions'],frozen_source_check=given['frozen_source_check'],scope_rows=rows)
+assert not result['unresolved_other_submissions']
+(B/'NNG_RESUME_FINAL_VALIDATION.json').write_text(json.dumps(result,indent=2))
+print(json.dumps({k:result[k]for k in ['status','fresh_lean_link_audit_scopes','remaining_formal_scopes','source_snapshots','source_matched_modules','retained_modules','audited_roots','verified_archive_sha_pairs','heartbeats_retired_and_split']}))
