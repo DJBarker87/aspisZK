@@ -1,0 +1,55 @@
+{"attempt": "NNG_L1008", "exit_status": 1, "wall_seconds": 22.00466121081263, "peak_rss_kib": "6620864", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_ChildAssociation345.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+    (NMT_CallTree.bind
+      (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+        (NNG_ChildSource345.call env pub publicBytes proof k))
+      fun r =>
+      match r with
+      | core.result.Result.Ok b => finish bytes b
+      | core.result.Result.Err e => pure (core.result.Result.Err e))
+in the target expression
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSo
+...
+.Result.Err e)) =
+    NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+      (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+
+pub : Public
+publicBytes proof bytes : Slice U8
+k : Usize
+env : RSL.Env
+bound : ↑k ≤ UScalar.cMax UScalarTy.Usize
+step :
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k))
+        fun r =>
+        match r with
+        | core.result.Result.Ok b => finish bytes b
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    NNG_Obs345.bindObs
+      (observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k)))
+      fun r =>
+      match r with
+      | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b
+      | Except.error e => NNG_Pure345.silent (Except.error e)
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k))
+        fun value =>
+        match value with
+        | core.result.Result.Ok a => finish bytes a
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+      (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rce368aa09fd94a398c1823c116f16948.scope; invocation ID: cbe4754153a94581ab57950d4bb092be

@@ -1,0 +1,97 @@
+NNG_generated/NNG_GuardAssociation345.lean:33:38: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (_a != 58295 || List.take 688 (LIB_Carriers.bytes s.proofData) != List.map byte ↑s.candidate ||
+        List.getD (LIB_Carriers.bytes s.proofData) 696 0 != 2) =
+      (!decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate) || (↑s.proofData)[696] != 2#u8)
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬696 < _a
+but is expected to have type
+  ¬696 < (↑s.proofData).length
+in the application
+  source._proof_1 s length a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+W : Type
+s : ProofData W
+env : RSL.Env
+hd : decodeCall s.publicData = ok (core.result.Result.Ok s.statement)
+hv : validateCall s.statement = ok (core.result.Result.Ok ())
+length : (↑s.proofData).length = 58295
+route : (↑s.data).length = 2
+prefixBytes :
+  LIB_Carriers.bytes (NNG_Windows345.window s.proofData 0 688) = List.take 688 (LIB_Carriers.bytes s.proofData)
+prefixCompare :
+  (List.take 688 (LIB_Carriers.bytes s.proofData) != List.map byte ↑s.candidate) =
+    !decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate)
+tagByte : List.getD (LIB_Carriers.bytes s.proofData) 696 0 = byte (↑s.proofData)[696]
+⊢ ((↑s.proofData).length != 58295 || List.take 688 (LIB_Carriers.bytes s.proofData) != List.map byte ↑s.candidate ||
+      List.getD (LIB_Carriers.bytes s.proofData) 696 0 != 2) =
+    (!decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate) || (↑s.proofData)[696] != 2#u8)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.proofData
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.proofData
+NNG_generated/NNG_GuardAssociation345.lean:38:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NNG_Phases345.firstArgs LIB_Instances.VL LIB_Instances.C (NNG_ProjectFrames345.proofData s hd hv)
+in the target expression
+  NNG_TailReady345.guarded s (↑s.proofData)[696] (↑s.data)[1] env =
+    NNG_Obs345.tryObs
+      (NNG_Pure345.check
+        (!decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate) || (↑s.proofData)[696] != 2#u8)
+        RSL.ProgramError.invalidAccountData)
+      fun x =>
+      (fun p =>
+          NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_Phases345.firstArgs LIB_Instances.VL LIB_Instances.C p) env)
+            (NNG_Phases345.stepReturn (List.length p.checkpointData)))
+        (NNG_ProjectFrames345.proofData s hd hv)
+
+W : Type
+s : ProofData W
+env : RSL.Env
+hd : decodeCall s.publicData = ok (core.result.Result.Ok s.statement)
+hv : validateCall s.statement = ok (core.result.Result.Ok ())
+length : (↑s.proofData).length = 58295
+route : (↑s.data).length = 2
+prefixBytes :
+  LIB_Carriers.bytes (NNG_Windows345.window s.proofData 0 688) = List.take 688 (LIB_Carriers.bytes s.proofData)
+prefixCompare :
+  (List.take 688 (LIB_Carriers.bytes s.proofData) != List.map byte ↑s.candidate) =
+    !decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate)
+tagByte : List.getD (LIB_Carriers.bytes s.proofData) 696 0 = byte (↑s.proofData)[696]
+guard :
+  NNG_Phases345.proofBad LIB_Instances.VL LIB_Instances.C (NNG_ProjectFrames345.proofData s hd hv) =
+    (!decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate) || (↑s.proofData)[696] != 2#u8)
+⊢ NNG_TailReady345.guarded s (↑s.proofData)[696] (↑s.data)[1] env =
+    NNG_Obs345.tryObs
+      (NNG_Pure345.check
+        (!decide (↑(NNG_Windows345.window s.proofData 0 688) = ↑s.candidate) || (↑s.proofData)[696] != 2#u8)
+        RSL.ProgramError.invalidAccountData)
+      fun x =>
+      (fun p =>
+          NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_Phases345.firstArgs LIB_Instances.VL LIB_Instances.C p) env)
+            (NNG_Phases345.stepReturn (List.length p.checkpointData)))
+        (NNG_ProjectFrames345.proofData s hd hv)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.proofData
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.proofData
+'AspisR1.NNG_GuardAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

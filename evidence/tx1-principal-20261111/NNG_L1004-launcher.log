@@ -1,0 +1,50 @@
+{"attempt": "NNG_L1004", "exit_status": 1, "wall_seconds": 21.868564781965688, "peak_rss_kib": "6617000", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_ChildAssociation345.lean:25:92: error: unexpected token '|'; expected ')', ',' or ':'
+NNG_generated/NNG_ChildAssociation345.lean:25:10: error: Missing cases:
+(Except.error (RSL.ProgramError.custom (UInt32.ofBitVec (BitVec.ofFin (Fin.mk _ _)))))
+(Except.error RSL.ProgramError.invalidArgument)
+(Except.error RSL.ProgramError.invalidInstructionData)
+(Except.error RSL.ProgramError.invalidAccountData)
+(Except.error RSL.ProgramError.accountDataTooSmall)
+(further cases omitted, increase `set_option match.maxCounterExamples 5` to see more)
+NNG_generated/NNG_ChildAssociation345.lean:18:66: error: unsolved goals
+pub : Public
+publicBytes proof bytes : Slice U8
+k : Usize
+env : RSL.Env
+b
+...
+ion NNG_ChildSource345.port (NNG_Events345.events env)
+          (match a with
+          | core.result.Result.Ok b => finish bytes b
+          | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+        match NNG_ChildSource345.port a with
+        | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b) →
+    observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (NMT_CallTree.bind
+          (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+            (NNG_ChildSource345.call env pub publicBytes proof k))
+          fun r =>
+          match r with
+          | core.result.Result.Ok b => finish bytes b
+          | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+      NNG_Obs345.bindObs
+        (observation NNG_ChildSource345.port (NNG_Events345.events env)
+          (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+            (NNG_ChildSource345.call env pub publicBytes proof k)))
+        fun r =>
+        match r with
+        | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k))
+        fun value =>
+        match value with
+        | core.result.Result.Ok a => finish bytes a
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+      (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rad0a32a211c640129401d4b41271b112.scope; invocation ID: 8c94d5a4c00249668a23b373d6674039

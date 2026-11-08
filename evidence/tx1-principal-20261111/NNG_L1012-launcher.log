@@ -1,0 +1,53 @@
+{"attempt": "NNG_L1012", "exit_status": 1, "wall_seconds": 22.58552585192956, "peak_rss_kib": "6728800", "swaps": "0", "print_axioms": ["'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_ChildAssociation345.lean:34:1: error: Tactic `rfl` failed: The left-hand side
+  NNG_Obs345.bindObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env) fun r =>
+    match r with
+    | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b
+    | Except.error e => NNG_Pure345.silent (Except.error e)
+is not definitionally equal to the right-hand side
+  NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+    (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+
+pub : Public
+publicBytes proof bytes : Slice U8
+k : Usize
+env : RSL.Env
+bound : ↑k ≤ UScalar.cMax USca
+...
+rs.bytes bytes)) b
+    | Except.error e => NNG_Pure345.silent (Except.error e)
+is not definitionally equal to the right-hand side
+  NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+    (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+
+pub : Public
+publicBytes proof bytes : Slice U8
+k : Usize
+env : RSL.Env
+bound : ↑k ≤ UScalar.cMax UScalarTy.Usize
+step :
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k))
+        fun r =>
+        match r with
+        | core.result.Result.Ok b => finish bytes b
+        | core.result.Result.Err e => pure (core.result.Result.Err e)) =
+    NNG_Obs345.bindObs
+      (observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (invoke "TX1:328/first_decoded" (pub, publicBytes, proof, k)
+          (NNG_ChildSource345.call env pub publicBytes proof k)))
+      fun r =>
+      match r with
+      | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b
+      | Except.error e => NNG_Pure345.silent (Except.error e)
+⊢ (NNG_Obs345.bindObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env) fun r =>
+      match r with
+      | Except.ok b => NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)) b
+      | Except.error e => NNG_Pure345.silent (Except.error e)) =
+    NNG_Obs345.tryObs (NNG_Producer328.producer (NNG_ChildSource345.args pub publicBytes proof k) env)
+      (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes bytes)))
+'AspisR1.NNG_ChildAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r88f078d02c2443e5bd2b209d36619a82.scope; invocation ID: 769768f0f2494988a445c79fda13e7a2

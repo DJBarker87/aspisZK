@@ -4,10 +4,31 @@ import json, subprocess, sys, time, hashlib, shlex, re, os, atexit, lzma
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx1-principal-20261111'
-a=sys.argv[1]; assert re.fullmatch(r'NNG_[LKE][0-9]{3}',a)
+def record_attempt(entry):
+ payload=(json.dumps(entry)+'\n').encode()
+ active=E/'NNG_ATTEMPTS.jsonl'
+ # Rotate before the next append can reach20MB; leave2MB of margin.
+ if active.exists() and active.stat().st_size+len(payload)>=18_000_000:
+  raw=active.read_bytes()
+  stem='NNG_ATTEMPTS_BEFORE_'+entry['attempt']+'.jsonl'
+  archive=E/(stem+'.xz');digest=E/(stem+'.sha256')
+  assert not archive.exists() and not digest.exists(),'Never overwrite an attempt shard'
+  archive.write_bytes(lzma.compress(raw,preset=6))
+  digest.write_text(hashlib.sha256(raw).hexdigest()+'\n')
+  assert lzma.decompress(archive.read_bytes())==raw
+  shards_path=E/'NNG_ATTEMPTS_SHARDS.json'
+  shards=json.loads(shards_path.read_text())
+  shards['shards'].append(archive.name)
+  shards.setdefault('rotations',[]).append({'archive':archive.name,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'before_attempt':entry['attempt']})
+  shards_path.write_text(json.dumps(shards,indent=2)+'\n')
+  active.write_bytes(b'')
+ assert len(payload)<2_000_000,'One receipt exceeds the reserved log margin'
+ with active.open('ab') as out:out.write(payload)
+
+a=sys.argv[1]; assert re.fullmatch(r'NNG_[LKE][0-9]{3,4}',a)
 x=json.loads((E/(a+'.json')).read_text()); assert x['attempt']==a
 x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NNG_target')
-assert int(a[-3:])>=1
+assert int(a.split('_')[-1][1:])>=1
 # Count actual scopes, including conservative unresolved submissions, not id gaps.
 submitted=set()
 for line in (E/'NNG_TRANSPORT.jsonl').read_text().splitlines():
@@ -32,7 +53,7 @@ for attempt in completed|submitted:
  assert config.exists(), 'Missing submitted-attempt budget configuration: '+attempt
  group=budget_group(json.loads(config.read_text())['kind'])
  if group:used[group].add(attempt)
-limits={'lean_link_audit':830,'kani':10,'extract':2};group=budget_group(x['kind'])
+limits={'lean_link_audit':1130,'kani':10,'extract':2};group=budget_group(x['kind'])
 if group:assert len(used[group])<limits[group], 'Actual scope budget exhausted: '+group
 with (E/'NNG_BUDGET_ADMISSIONS.jsonl').open('a') as out:out.write(json.dumps({'attempt':a,'kind':x['kind'],'used':{g:len(s)for g,s in used.items()},'limits':limits,'unresolved_submissions':sorted(submitted-completed)})+'\n')
 if x['command'][:2]==['python3','NNG_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
@@ -74,7 +95,7 @@ print(json.dumps({'scopes':scopes,'count':len(scopes)}))""")
  share=json.loads(r.stdout)
  with (E/'NNG_SHARE.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,**share))+'\n')
  if share['count']<6:break
- with (E/'NNG_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='whole-host saturation under bm',**share))+'\n')
+ record_attempt(dict(attempt=a,kind='wait',reason='whole-host saturation under bm',**share))
  print('whole-host wait: '+str(share['count'])+' scopes',flush=True)
  for _ in range(3):time.sleep(60)
 for retry in range(11):
@@ -135,7 +156,7 @@ while True:
  if final_disk['free']<40_000_000_000:
   final_disk_waits=locals().get('final_disk_waits',0)+1
   if final_disk_waits>6:raise RuntimeError('STOP final disk below40GB after six waits')
-  with (E/'NNG_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final disk below40GB',**final_disk))+'\n')
+  record_attempt(dict(attempt=a,kind='wait',reason='final disk below40GB',**final_disk))
   for _ in range(10):time.sleep(60)
   continue
  r=ssh('python3',"""import subprocess,pathlib,os,json
@@ -157,7 +178,7 @@ while True:
  final_share=json.loads(r.stdout)
  with (E/'NNG_FINAL_ADMISSION.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='share',**final_share))+'\n')
  if final_share['count']>=6:
-  with (E/'NNG_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason='final whole-host saturation under bm',**final_share))+'\n')
+  record_attempt(dict(attempt=a,kind='wait',reason='final whole-host saturation under bm',**final_share))
   print('Final whole-host wait: '+str(final_share['count'])+' scopes',flush=True)
   for _ in range(3):time.sleep(60)
   continue
@@ -193,5 +214,5 @@ for n,t in json.loads(r.stdout).items():
  else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
-with (E/'NNG_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
+record_attempt(entry)
 summary={k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']};summary['axiom_lines']=len(rc['print_axioms']) if isinstance(rc['print_axioms'],list) else 0;print(json.dumps(summary));sys.exit(rc['exit_status'])

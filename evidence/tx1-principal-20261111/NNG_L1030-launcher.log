@@ -1,0 +1,45 @@
+{"attempt": "NNG_L1030", "exit_status": 1, "wall_seconds": 25.959819053066894, "peak_rss_kib": "6705468", "swaps": "0", "print_axioms": ["'AspisR1.NNG_DecodeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_DecodeAssociation345.lean:25:2: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : Option Statement),
+    observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply x)) fun st =>
+          next { toPublicData := s, statement := st }) =
+      NNG_Obs345.tryObs (NNG_Pure345.allocationIf false true) fun x_1 =>
+        NNG_Phases345.afterDecode LIB_Instances.VL
+          { Statement := Statement, decodeStatement := LIBC_S1.decode, decodeReachesAlloc := LIBC_S1.reaches,
+            validateStatement := LIBC_S1.valid, encodeCandidate := LIBC_S1.encode,
+            semanticPublic := fun s => ⋯.
+...
+1.encode,
+            semanticPublic := fun s => ⋯.mp (NMT_345Prep.toT5 (semanticValue s)) }
+          (fun x => true)
+          { toCheckpointData := NNG_ProjectFrames345.checkpoint s.toCheckpointData,
+            publicData := LIB_Carriers.bytes s.publicData }
+          tail x ⋯
+
+case true
+W : Type
+s : PublicData W
+env : RSL.Env
+next : Decoded W → Code Ret
+tail : NNG_Phases345.Decoded LIB_Instances.VL LIB_Instances.C → RSL.Obs (Except RSL.ProgramError RSL.Bytes)
+later :
+  ∀ (st : Statement) (hd : decodeCall s.publicData = ok (core.result.Result.Ok st)),
+    observation NNG_ChildSource345.port (NNG_Events345.events env) (next { toPublicData := s, statement := st }) =
+      tail (NNG_ProjectFrames345.decoded { toPublicData := s, statement := st } hd)
+reached : LIBC_S1.reaches (LIB_Carriers.bytes s.publicData) = true
+⊢ observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeBase345.tryCode (ok (NNG_DecoderGraph345.reply (LIBC_S1.decode (LIB_Carriers.bytes s.publicData))))
+        fun st => next { toPublicData := s, statement := st }) =
+    NNG_Obs345.tryObs (NNG_Pure345.allocationIf true true) fun x =>
+      NNG_Phases345.afterDecode LIB_Instances.VL
+        { Statement := Statement, decodeStatement := LIBC_S1.decode, decodeReachesAlloc := LIBC_S1.reaches,
+          validateStatement := LIBC_S1.valid, encodeCandidate := LIBC_S1.encode,
+          semanticPublic := fun s => ⋯.mp (NMT_345Prep.toT5 (semanticValue s)) }
+        (fun x => true)
+        { toCheckpointData := NNG_ProjectFrames345.checkpoint s.toCheckpointData,
+          publicData := LIB_Carriers.bytes s.publicData }
+        tail (LIBC_S1.decode (LIB_Carriers.bytes s.publicData)) ⋯
+'AspisR1.NNG_DecodeAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra0fbc22842e94a588dc9005e08aa825c.scope; invocation ID: b35986258d2a42fb90b9456c58030edd

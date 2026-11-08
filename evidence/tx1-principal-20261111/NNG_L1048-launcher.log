@@ -1,0 +1,43 @@
+{"attempt": "NNG_L1048", "exit_status": 1, "wall_seconds": 23.597043893067166, "peak_rss_kib": "6731504", "swaps": "0", "print_axioms": ["'AspisR1.NNG_TailReady345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_TailReady345.lean:53:5: error: Type mismatch
+  NNG_ChildAssociation345.source (semanticValue s.statement) s.publicData (NNG_Windows345.window s.proofData 688 58295)
+    s.checkpointData (UScalar.cast UScalarTy.Usize (↑s.data)[1]) env (NNG_SplitByte345.bound (↑s.data)[1])
+has type
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (NNG_TreeTail345.tryChild
+        (semanticValue s.statement, s.publicData, NNG_Windows345.window s.proofData 688 58295,
+          UScalar.cast UScalarTy.Usize (↑s.data)[1])
+        (NNG_ChildSource345.call env (semanticValue s.statement) s.publicData
+          (NNG_Windows345.window s.proofData 688 58295) (UScalar.cast UScalarT
+...
+ s.statement) s.publicData (NNG_Windows345.window s.proofData 688 58295)
+          (UScalar.cast UScalarTy.Usize (↑s.data)[1]))
+        env)
+      (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes s.checkpointData)))
+but is expected to have type
+  observation NNG_ChildSource345.port (NNG_Events345.events env)
+      (if false = true then
+        pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+      else do
+        let pub ← liftM ((NNG_Calls345.calls env).c5 s.statement)
+        let proof ← liftM (ok (NNG_Windows345.window s.proofData ↑688#usize ↑58295#usize))
+        let kbyte ← liftM (ok (↑s.data)[↑1#usize])
+        let k ← liftM (lift (UScalar.cast UScalarTy.Usize kbyte))
+        NNG_TreeTail345.tryChild (pub, s.publicData, proof, k) ((NNG_Calls345.calls env).c11 pub s.publicData proof k)
+            fun checkpoint =>
+            if (checkpoint.len != s.checkpointData.len) = true then
+              pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            else pure (core.result.Result.Ok checkpoint)) =
+    if false = true then NNG_Pure345.silent (Except.error RSL.ProgramError.invalidAccountData)
+    else
+      if false = true then NNG_Pure345.silent (Except.error RSL.ProgramError.invalidAccountData)
+      else
+        NNG_Obs345.tryObs
+          (NNG_Producer328.producer
+            (NNG_ChildSource345.args (semanticValue s.statement) s.publicData
+              (NNG_Windows345.window s.proofData 688 58295) (UScalar.cast UScalarTy.Usize (↑s.data)[1]))
+            env)
+          (NNG_Phases345.stepReturn (List.length (LIB_Carriers.bytes s.checkpointData)))
+'AspisR1.NNG_TailReady345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r066a4c31038447e2989216910661fbf7.scope; invocation ID: 61317cc229d04f8fa53fc7a45d11163e

@@ -1,0 +1,42 @@
+NNG_generated/NNG_TailReady345.lean:32:25: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply] `NIJ_EntryStatus.Err`
+  [apply] `NIX_CircleLogLaw.Err`
+  [apply] `NIL_Carriers.Cohort.Err`
+  [apply] `NIL_Carriers.Fresh.Err`
+  [apply] `core.result.Result.Err`
+NNG_generated/NNG_TailReady345.lean:29:1: error: 'change' tactic failed, pattern
+  (observation ?m.116 ?m.117 do
+      let mismatch ←
+        liftM (NNG_Calls345.neArray core.cmp.PartialEqU8 (NNG_Windows345.window s.proofData 0 688) s.candidate)
+      if mismatch = true then pure (?m.150 mismatch ()) else ?m.151 mismatch ()) =
+    ?m.154
+is not definitionally equal to target
+  (observation NNG_ChildSource345.port (NNG_Events345.events env) do
+      let proofPrefix ← liftM (ok (NNG_Windows345.window s.proofData 0 ↑688#usize))
+      let mismatch ← liftM ((NNG_Calls345.calls env).c0 core.cmp.PartialEqU8 proofPrefix s.candidate)
+      if mismatch = true then
+          pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+        else do
+          let offset ← liftM (lift (Usize.wrapping_add 688#usize 8#usize))
+          let tag ← liftM (s.proofData.index_usize offset)
+          let expected ← liftM ((NNG_Calls345.calls env).c3 NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.S2)
+          if (tag != expected) = true then
+              pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+            else do
+              let pub ← liftM ((NNG_Calls345.calls env).c5 s.statement)
+              let proof ←
+                liftM
+                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.proofData
+                      { start := 688#usize, «end» := 58295#usize })
+              let kbyte ← liftM (s.data.index_usize 1#usize)
+              let k ← liftM (lift (UScalar.cast UScalarTy.Usize kbyte))
+              NNG_TreeTail345.tryChild (pub, s.publicData, proof, k)
+                  ((NNG_Calls345.calls env).c11 pub s.publicData proof k) fun checkpoint =>
+                  if (checkpoint.len != s.checkpointData.len) = true then
+                    pure (core.result.Result.Err NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData)
+                  else pure (core.result.Result.Ok checkpoint)) =
+    guarded s (↑s.proofData)[696] (↑s.data)[1] env
+'AspisR1.NNG_TailReady345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

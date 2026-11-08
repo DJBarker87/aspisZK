@@ -1,0 +1,48 @@
+{"attempt": "NNG_L1033", "exit_status": 1, "wall_seconds": 25.388878213008866, "peak_rss_kib": "6757796", "swaps": "0", "print_axioms": ["'AspisR1.NNG_MiddleAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_MiddleAssociation345.lean:25:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    observation NNG_ChildSource345.port (NNG_Events345.events env)
+        (NNG_TreeBase345.tryCode
+          (mapOuter (mapCore id fun x => NMT_stage1_owned.solana_program_error.ProgramError.InvalidAccountData) _a)
+          fun x =>
+          NNG_TreeBase345.tryCode (NNG_EncoderGraph345.native s.statement) fun candidate =>
+            NNG_TreeBase345.tryCode
+              (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10 s.proofAccount)
+              fun proof => next { toDecoded := s, candidate := candidate, proofData := proof }) =
+
+...
+lana_program_error.ProgramError.InvalidAccountData)
+          (validateCall s.statement))
+        fun x =>
+        NNG_TreeBase345.tryCode (NNG_EncoderGraph345.native s.statement) fun candidate =>
+          NNG_TreeBase345.tryCode
+            (NMT_stage1_owned.r1_pool_adapter.owned.OwnedAccount.data (NNG_Calls345.calls env).c10 s.proofAccount)
+            fun proof => next { toDecoded := s, candidate := candidate, proofData := proof }) =
+    if h :
+        (match validateCall s.statement with
+          | ok (core.result.Result.Ok PUnit.unit) => true
+          | x => false) =
+          true then
+      (fun v =>
+          NNG_Phases345.stepEncode LIB_Instances.VL LIB_Instances.C v fun c =>
+            NNG_Phases345.stepProofData LIB_Instances.VL LIB_Instances.C (fun x => true) c tail)
+        { toDecoded := NNG_ProjectFrames345.decoded s hd, validated := h }
+    else NNG_Pure345.silent (Except.error RSL.ProgramError.invalidAccountData)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    h
+  has type
+    @Eq Bool
+      (match validateCall s.statement with
+      | ok (core.result.Result.Ok PUnit.unit) => true
+      | x => false)
+      true
+  but is expected to have type
+    @Eq Bool (LIB_Instances.C.validateStatement (NNG_ProjectFrames345.decoded s hd).statement) true
+  in the application
+    { toDecoded := NNG_ProjectFrames345.decoded s hd, validated := h }
+'AspisR1.NNG_MiddleAssociation345.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5713ee464b9a4fe58ffb5eed61b17ce1.scope; invocation ID: 31faaf9312e0494faa07db5a78b7945b
