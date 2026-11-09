@@ -1,0 +1,72 @@
+use crate::aspis_core::field::QM31;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Error {
+    Allocation,
+    RowOrder { expected: u8, actual: u8 },
+    InvalidRow,
+    Tag { row: u8 },
+    Length { row: u8 },
+    NonCanonical { row: u8, value: usize },
+    Boundary { round: usize },
+    Terminal,
+    EqualCirclePoints,
+    TrailingBytes,
+    Public,
+}
+
+#[derive(Clone, Copy)]
+pub(crate) struct ValidatedRecord<'a> {
+    row: u8,
+    framed: &'a [u8],
+}
+
+impl<'a> ValidatedRecord<'a> {
+    pub(crate) fn row(&self) -> u8 {
+        self.row
+    }
+
+    pub(crate) fn framed(&self) -> &'a [u8] {
+        self.framed
+    }
+
+    pub(crate) fn payload(&self) -> &'a [u8] {
+        &self.framed[5..]
+    }
+
+    /// Decode checked base-field limbs from a semantic record. The
+    /// validation token proves the 16-byte high half is zero and the
+    /// low QM31 encoding canonical, while this method still checks the
+    /// requested range and record class.
+    pub(crate) fn decode_k<const N: usize>(
+        &self,
+        offset_values: usize,
+    ) -> Result<[QM31; N], Error> {
+        if self.row < 14 {
+            return Err(Error::InvalidRow);
+        }
+        let byte_offset = offset_values
+            .checked_mul(32)
+            .ok_or(Error::Length { row: self.row })?;
+        let byte_len = N.checked_mul(32).ok_or(Error::Length { row: self.row })?;
+        let end = byte_offset
+            .checked_add(byte_len)
+            .ok_or(Error::Length { row: self.row })?;
+        let bytes = self
+            .payload()
+            .get(byte_offset..end)
+            .ok_or(Error::Length { row: self.row })?;
+        let mut out = [QM31::ZERO; N];
+        for (value, part) in bytes.chunks_exact(32).enumerate() {
+            out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
+                row: self.row,
+                value: offset_values + value,
+            })?;
+        }
+        Ok(out)
+    }
+}
+
+pub fn decode_k_entry<const N: usize>(row: u8, framed: &[u8], offset_values: usize) -> Result<[QM31; N], Error> {
+    ValidatedRecord { row, framed }.decode_k(offset_values)
+}

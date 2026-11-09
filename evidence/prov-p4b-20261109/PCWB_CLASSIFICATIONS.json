@@ -1,0 +1,56 @@
+[
+ {
+  "id": "C1",
+  "case": "Reference extraction uses a new controller (PCWB_refx.py) instead of PCO_extract.py",
+  "principle": "PCO_extract.py hard-wires the frozen cost-probe tree; the recovered crates are not part of it.",
+  "classification": "tool addition, not a metric change; every tool hash, command, source hash, lock hash and output hash is pinned in PCWB_E###_PINS.json; the frozen stager is reused unchanged only when aspis-core is needed (multiproof)."
+ },
+ {
+  "id": "C2",
+  "case": "Aeneas binary substitution",
+  "principle": "Reproduce the live module on re-extraction; a different tool build counts only if its output matches.",
+  "classification": "NEO/NEB used the recorded XRa_bin pair unchanged. Multiproof and the cut packets recorded r18 charon (daad69be, identical hash on host) and a static Aeneas 4632746d / 959659a6 that is NOT on the host; the host binary aeneas-b59d5188-extended c0cf4fcc (same revision) was substituted. For the multiproof set the output equals the live module, so the substitution is validated there; for E008-E010 the substitute crashes (see C5)."
+ },
+ {
+  "id": "C3",
+  "case": "Multiproof sources at two commits",
+  "principle": "Use the recorded source hash of the extraction receipt, not the later Kani hash.",
+  "classification": "ConeRef/ParserRef extracted from tree d28944b2a05 (reference.rs 32548b0d, per host/extraction/charon-5 and host/parser-extraction); SortRef from 8c029994865 (reference.rs e812aae3, sort_reference.rs a7841dd4, per host/receipts/sort-charon-2). Extra run E007 (cone from e812aae3) answers the Kani-hash question."
+ },
+ {
+  "id": "C4",
+  "case": "Types modules differ from the fresh emission",
+  "principle": "Never normalise away a difference; classify it.",
+  "classification": "MultiproofConeRef.Types and MultiproofSortRef.Types differ from the fresh emission only by (a) the added line import ImportUnionNamedDiscriminant, (b) @[discriminant isize] vs @[import_union_discriminant isize] (post-processing 317a687e \"Qualify generated discriminant instances for import unions\"), (c) for the cone Types, the absolute workspace path in one Source comment. No Lean statement over these Types modules is claimed beyond types_identity of the structures; MultiproofParserRef.Types is byte-identical. NEO/NEB Types are identical after removing import lines."
+ },
+ {
+  "id": "C5",
+  "case": "Aeneas extended build crashes on archived cut packets (E008, E009, E010)",
+  "principle": "A killed/failed scope is never rerun unchanged; two failures retire the shape.",
+  "classification": "E008 (Not_found in InterpReduceCollapse.collapse_ctx_following_sequence), E009 (same Not_found), E010 (Internal error, batched_weights.rs 11:8-11:83) are three failures of the shape \"re-run the retained LLBC through aeneas-b59d5188-extended\". Shape retired. Charon half of each chain succeeded and was compared with the retained LLBC (PCWB_LLBC_COMPARE.json: all fields equal, short_names equal up to list order). The Aeneas half is carried by the archived generated Lean being byte-identical to the live module. Next shape needs the original unpatched Aeneas (sha 959659a6) rebuilt; not attempted (tool build is not an extraction scope). E010 was started after E009 failed with the same exit code before its stderr was inspected; recorded as a procedure slip, no cap was raised."
+ },
+ {
+  "id": "C6",
+  "case": "P3 obligations: partial_fixpoint definitions",
+  "principle": "A definition without a proof becomes a commented obligation, never sorry.",
+  "classification": "Four commented obligations: MultiproofConeRef.reference.level_rows, reference.levels (both fail: the two sides unfold to distinct X.mutual constants built by Lean.Order.fix), reference.verify_owned (blocked by levels), and MultiproofSortRef.sort_reference.sort_rows (same shape). PCWB_L004 shows both sides expose X.mutual built by Lean.Order.fix and X.fixpoint_induct (motive over functions, admissibility premise); the equality needs fixpoint induction (two admissible ordering arguments plus antisymmetry), not rfl. Not attempted beyond the probe."
+ },
+ {
+  "id": "C7",
+  "case": "FIn_ExtractFuns (b1, hash-linked per NML) and NHI_FilledTypes/NHI_FilledExtracted (b1)",
+  "principle": "Scope text names b2/b3 modules.",
+  "classification": "Not processed; b1 modules with NML hash links. NHI_* is also in P4a list."
+ },
+ {
+  "id": "C8",
+  "case": "Generator file naming",
+  "principle": "Follow PCO conventions.",
+  "classification": "PRVEq output names use dots replaced by underscores; two dotted-name files were generated first and deleted before any compile (the bundle offsets key requires underscores)."
+ },
+ {
+  "id": "C9",
+  "case": "Equality bundle compile for a final result",
+  "principle": "A bundle compile that exits 0 with no sorryAx is final; trace stage pinning is optional.",
+  "classification": "L001 (NEO/NEB, 18 theorems) and L003 (multiproof, 29 theorems, 4 obligations commented) kept the first-then-second stage `first | rfl | delta ...` chain; the pinned-stage regeneration was not run."
+ }
+]
