@@ -173,3 +173,61 @@ compute on the 14759-element buffer (recursion depth); L015 uses symbolic replic
 ## Paused before X2 (no scope spent on it) — reason and recommendation in NOC_REMAINING.md
 
 target not yet established
+
+# Second continuation (lead reallocation: X2 cap 8, converse cap 15, X7-X9 ≥ 10)
+
+Research merged at 5e64710e835 (fast-forward). Whole job: 23 of 50 scopes (13 pass, 10 fail).
+
+## X2 closed (7 of 8 scopes, L016-L022)
+- `NOC_ReadTransport.read` (L017): `SAQ_Decoder.read bytes i = NFS_ReadCanonical.read bytes i` for every
+  byte slice and i < 4, a full Result equality. The checked `32*i`/`+32` and wrapping `i*32`/`(i+1)*32`
+  windows are compared only on i < 4 (`start`, `finish`, `wmul`, `wadd`); the two extracted
+  `from_le_bytes`/`from_limbs` bind chains are normalized jointly. L016 left only the `ofOption` leaves.
+- `NOC_QueryLink` (L019): `call_eq`, `loop_eq`, `closure_eq` (the op21 calls are exactly those of the
+  `fromFn 4` opening closure, indices i < 4), `values_eq` (one query iteration, library dictionary
+  `LIBC_QueryOps.ops` vs installed model `NJJ_QueryOps.concrete`, which differ only in op21), `loop`
+  (whole tx1 query loop, via NFS_QueryLoopRoot.tx1/finite for both bases), `link` (LIBC_QueryLoop.value
+  ok on its Domain ⇒ installed model query loop returns the SAME pair), `current` (the same at
+  `NNX_CurrentQuery.actual`). L018 failed on a reduced closure term and an abbrev pattern.
+- `NOC_QueryDomain.domain` (L022): `LIBC_QueryLoop.Domain (proof,p,a,g,geo,pending,10)` (its third clause
+  is NFS_PacketRoot.Domain) from the SAME returned LIBC prepare law value, accumulator, geometry and pending
+  values plus the 57607-byte proof, via NNG_QueryDomain094.reached with the child domains derived by
+  NNG_GeometryDomain094/NNG_AccumulatorDomain094. L020/L021 fixed names and `Child.run = dom ∧ law`.
+
+## Converse lane (1 of 15 scopes so far, L023) — stopped, see table and open goals
+
+| child | forward root | converse root | status |
+|---|---|---|---|
+| filled (current op1) | NOC_PrepareFront.filled | NOC_ConvLeaves.filled, .filled_value | closed |
+| expand_semantic (op10) | NNH_Run5bCurrentExpand.semantic | NOC_ConvLeaves.expand_semantic (library total) | closed |
+| expand_values (op11) | NOC_PrepareFront.values | NOC_ConvLeaves.expand_values (Good from fixed windows) | closed |
+| parse_shape (op3) | NNH_Run5bCurrentShape.parse | NOC_ConvLeaves.parse | closed |
+| wide view (op5) | NNV_PrepareView.returned | NOC_ConvLeaves.view | closed |
+| Prepared::new (op8) | NNX_PreparedValue.source | NOC_ConvLeaves.prepared | closed |
+| query loop (op7) | NOC_QueryLink.link/current | full equality `NOC_QueryLink.loop` on the Domain | closed given Domain |
+| terminal (finish) | NNV_FinishTerminal.returned | — | OPEN: needs a new model lemma (below) |
+| batch Merkle (op6) | NOC_MerkleBounded.model0 | — | OPEN: needs the reverse NNY chain (below) |
+| semantic verify (op9), prepare front (087) | NOC_Op9.op9, NOC_PrepareFront.source | — | blocked by terminal |
+| parse prefix, transcript, begin, rounds, circle, records, decode, payload, claims, geometry, accNew, weightsNew, flush, checkpoint, canonical scan, 345 codec/guards | accepted NNV/NNX/NNH forward roots | — | not started (budget held back; most library values are defined from the same native code, so these converses look direct) |
+
+Open converse goals that need a NEW model lemma (no exact library equation), reported per the lead's rule:
+1. Terminal. The library `LIB_VTerminal.model a` is `.fail` unless
+   `LIB_VPublicDomain.publicDom a.1 = publicDigestDom ∧ publicAssetDom` holds. publicAssetDom follows from the
+   returned public transcript (`LIB_VDomains.eval_asset`). publicDigestDom
+   (`NKR_DigestChildren.Domain (NKR_TermPublic.value (FIq_Carriers.toPublic pub))`) is not implied by any
+   accepted native-success lemma. The open goal is: on the reached 345 path (public decoded and validated by
+   op47/op21), `LIB_VPublicDomain.publicDigestDom pub`. Without it, the converse
+   "native finish Ok ⇒ NNH_FinishReturns.value ok" cannot be proved. If the native terminal can return Ok
+   off that domain, the weak-Err clause is false there.
+2. Batch Merkle. The NNY/NOC_MerkleBounded chain transports NKV acceptance to the installed batch
+   (one direction: `loop`, `terminal`, `verify`, `endpoint` are accepted-run transports). The converse
+   `Port4B_Install.batch D proof p folded 0 () = ok (.Ok ()) ⇒ NHT_ResultPort.action (NKV_FRef...batch_merkle
+   (ops H) (digest H) proof p folded 0 ()) = ok (.Ok ())` needs the symmetric chain. `active` is already an
+   equality; the others are new lemmas.
+
+## X7-X9: not started
+The field's weak-Err clause (`AMN.viaReturns1.errT`) is the converse of the whole 345 → 094 chain. It is
+blocked by open goals 1 and 2. The Ok clause (`okT`) could be composed from the forward roots now available
+(X1, X2, X3, X4 plus the existing NNV/NNX ports), but okT alone is not the field. 27 scopes remain.
+
+target not yet established
