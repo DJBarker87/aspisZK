@@ -26,6 +26,32 @@ def skip_dependants(m):
     d=stack.pop()
     if st['status'][d] in ('pending',):
       st['status'][d]='SKIPPED_DEP_FAILED:'+m; stack+=rev[d]
+
+def apply_fix(m,newpath,newsha,why,attempt):
+  """Swap module m's source for the recovered exact source and requeue m with its skipped/built dependants."""
+  old=P[m]['source']
+  data=subprocess.run(['git','-C',str(REPO),'show','HEAD:'+newpath],capture_output=True).stdout
+  assert hashlib.sha256(data).hexdigest()==newsha,(m,newpath)
+  r=ssh(f"cat > {W}/src/{P[m]['src_rel']}",inp=data.decode('utf8'))
+  if r.returncode!=0: raise RuntimeError('upload '+m)
+  P[m]['source']=dict(path=newpath,sha256=newsha); P[m]['label']='SOURCE_PATH_DIFFERS'; P[m]['producing_attempt']=attempt
+  (S/'l187_plan.json').write_text(json.dumps(plan))
+  with open(E/'L187_SOURCE_FIXES.jsonl','a') as f: f.write(json.dumps(dict(module=m,why=why,old_source=old,new_source=P[m]['source'],producing_attempt=attempt,utc=time.time()))+'\n')
+  # requeue m and every transitive dependant that was skipped for it or built on the old object
+  st['status'][m]='pending'; stack=list(rev[m]); seen=set()
+  while stack:
+    d=stack.pop()
+    if d in seen: continue
+    seen.add(d)
+    v=st['status'][d]
+    if v.startswith('SKIPPED_DEP_FAILED') or v.startswith('PASS'): st['status'][d]='pending'
+    stack+=rev[d]
+  st.setdefault('fixed',[]).append(m); save(); log('source fix',m,why,old['path'],'->',newpath)
+def recover(m):
+  out=S/('recover_'+m+'.json')
+  r=subprocess.run([sys.executable,str(E/'L187_recover.py'),str(out),m],capture_output=True,text=True,timeout=3000)
+  res=json.loads(out.read_text())[m] if out.exists() else dict(status='UNRECOVERED',error=r.stderr[-500:])
+  return res
 def host_state():
   r=ssh("""python3 - <<'PY'
 import json,subprocess,shutil,pathlib,glob
@@ -59,7 +85,11 @@ def collect(b):
       if row.get('sorry_warnings'): alert('SORRY',f"{m} in {b}: sorry warning(s)")
     elif s=='FAIL':
       st['status'][m]='FAIL'; skip_dependants(m)
-      alert('FAILURE',f"{m} ({row.get('label')}) failed in {b}, exit {row.get('exit')}: "+(row.get('diagnostics_tail') or '')[-1500:])
+      if m not in st.get('fixed',[]):
+        st.setdefault('to_recover',[]).append(dict(module=m,batch=b,diag=(row.get('diagnostics_tail') or '')[-1500:]))
+        log('FAIL queued for source recovery',m,b)
+      else:
+        alert('FAILURE',f"{m} ({row.get('label')}) failed in {b} AFTER source recovery, exit {row.get('exit')}: "+(row.get('diagnostics_tail') or '')[-1500:])
     else: st['status'][m]='pending'
   ident=sum(1 for r in rows if r.get('object_identical_to_overlay')); diff=sum(1 for r in rows if r['status']=='PASS' and not r.get('object_identical_to_overlay'))
   rec=dict(batch=b,done=done,counts=dict(summ),identical=ident,differs=diff,
@@ -102,11 +132,25 @@ while True:
       if b in hs['done']:
         try: collect(b)
         except Exception as e: log('collect error',b,repr(e))
+    for item in list(st.get('to_recover',[])):
+      m=item['module']; st['to_recover'].remove(item); save()
+      try: res=recover(m)
+      except Exception as e: res=dict(status='UNRECOVERED',error=repr(e))
+      if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
+        apply_fix(m,res['path'],res['sha256'],'compile failure with the committed copy at module path; exact source recovered by object identity and receipt hash',res['producing_attempt'])
+      else:
+        alert('FAILURE',f"{m} ({P[m]['label']}) failed in {item['batch']}; no different exact source recoverable ({res.get('status')}): "+item['diag'])
+    for f in sorted(E.glob('PREFIX_*.json')):
+      fx=json.loads(f.read_text())
+      for m,res in fx.items():
+        if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
+          apply_fix(m,res['path'],res['sha256'],'source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash',res['producing_attempt'])
+      f.rename(f.with_suffix('.applied'))
     if hs['free']<40_000_000_000:
       if not (E/'ALERT_DISK').exists(): alert('DISK',f"host free {hs['free']} < 40 GB; launches paused")
     else:
       if (E/'ALERT_DISK').exists(): (E/'ALERT_DISK').unlink()
-      while len(st['inflight'])<(1 if hs['lean']>=5 else 2) and hs['lean']+1<6 and hs['scopes']+1<6:
+      while not (E/'HOLD').exists() and len(st['inflight'])<(1 if hs['lean']>=5 else 2) and hs['lean']+1<6 and hs['scopes']+1<6:
         mods=pick()
         if not mods: break
         try: ok=launch(mods,hs)
