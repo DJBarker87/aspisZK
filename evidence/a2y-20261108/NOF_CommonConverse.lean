@@ -28,11 +28,11 @@ elab "nof_head_reduce " h:ident : tactic => do
 
 elab "nof_goal_reduce" : tactic =>
   Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do
-    let type ← goal.getType
-    unless type.isAppOfArity ``Eq 3 do throwError "not equality"
+    let type := (← Lean.instantiateMVars (← goal.getType)).cleanupAnnotations
+    unless type.isAppOfArity ``Eq 3 do throwError "goal not equality: {type}"
     let args := type.getAppArgs
     let lhs ← Lean.Meta.whnfHeadPred args[1]! (fun e => pure (!e.isAppOf ``ite && !e.isAppOf ``dite))
-    if lhs == args[1]! then throwError "head unchanged"
+    if lhs == args[1]! then throwError "goal head unchanged"
     return [← goal.replaceTargetDefEq (← Lean.Meta.mkEq lhs args[2]!)]
 
 /-- Close a branch whose source hypothesis can no longer be a success. -/
@@ -140,7 +140,7 @@ theorem common (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE)
  rw [h18]
  simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at hY ⊢
  try nof_head_reduce hY
- try nof_goal_reduce
+ nof_goal_reduce
  simp only [next,bne_self_eq_false,Bool.false_eq_true,↓reduceIte] at hY ⊢
  -- powers
  obtain ⟨g,hg,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY

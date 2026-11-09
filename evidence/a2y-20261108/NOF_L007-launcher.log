@@ -1,0 +1,44 @@
+{"attempt": "NOF_L007", "exit_status": 1, "wall_seconds": 25.64505418180488, "peak_rss_kib": "6836620", "swaps": "0", "print_axioms": ["'AspisR1.NOF_CommonConverse.source_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOF_CommonConverse.tail_transport' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOF_CommonConverse.common' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NOF_generated/NOF_CommonConverse.lean:151:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NNH_Tx2SlotTransport.stage m env err r).op17 29#usize p.gamma
+in the target expression
+  (let (p, a) := (p, a)
+    if (a.next != 10#usize) = true then
+      ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+    else do
+      let g ← (NNH_Tx2SlotTransport.stage m env err r).op17 29#usize p.gamma
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7495#usize, «end» := 7527#usize }
+      let o ← (NNH_Tx2SlotTransport.stage m env err r).op2 s
+      let r1 ← (NNH_Tx2Sl
+...
+ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NOF_CommonConverse.source_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOF_CommonConverse.tail_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOF_CommonConverse.common' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0aa6a40c007d478b8c514c64e4ed3ecd.scope; invocation ID: b629a6c5af4a45f6b43622b0fd421429
