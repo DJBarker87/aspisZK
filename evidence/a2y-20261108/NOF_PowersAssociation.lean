@@ -1,39 +1,37 @@
 import NNU_CommonSelected
-import FIp_PowersValue
 import Tx2N_Powers
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NOF_PowersAssociation
 open Aeneas Aeneas.Std Result VTop_Stages
 
-/-- Canonical U32 representatives are determined by their M31 value
-(same proof as SAQ_Inverse.canonical_injective; restated to avoid its
-fixture import closure). -/
-theorem scalar (x y : U32) (hx : x.val<AspisCircleGroupOrder.P)
- (hy : y.val<AspisCircleGroupOrder.P)
- (same : S7JoinBasisMachine.decode x=S7JoinBasisMachine.decode y) : x=y := by
- have values := congrArg ZMod.val same
- change x.val % AspisCircleGroupOrder.P=y.val % AspisCircleGroupOrder.P at values
- rw [Nat.mod_eq_of_lt hx,Nat.mod_eq_of_lt hy] at values
- exact UScalar.eq_of_val_eq values
-
-/-- Canonical native wide values are determined by their decoded value
-(proof pattern of the compiled JFw_TX2_ValueUnique.native, JFw_TX2_003). -/
+/-- Canonical native wide values are determined by their decoded value.
+Coordinatewise use of the compiled SAQ_Inverse.canonical_injective (present in
+the NNU closure); the native records are destructured explicitly because this
+generation of FIo_NativeTypes has no ext lemmas. -/
 theorem identify (x y : FIo_Install.NE) (hx : FIo_WideValues.Canon x)
  (hy : FIo_WideValues.Canon y)
  (same : AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide x)=
    AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide y)) : x=y := by
- apply FIo_Native.aspis_core.field.wide_exact.WideExact.ext
- all_goals apply FIo_Native.aspis_core.field.QM31.ext
- all_goals apply FIo_Native.aspis_core.field.CM31.ext
- · exact scalar _ _ hx.1.1.1 hy.1.1.1 (congrArg (fun z => z.re.re.re) same)
- · exact scalar _ _ hx.1.1.2 hy.1.1.2 (congrArg (fun z => z.re.re.im) same)
- · exact scalar _ _ hx.1.2.1 hy.1.2.1 (congrArg (fun z => z.re.im.re) same)
- · exact scalar _ _ hx.1.2.2 hy.1.2.2 (congrArg (fun z => z.re.im.im) same)
- · exact scalar _ _ hx.2.1.1 hy.2.1.1 (congrArg (fun z => z.im.re.re) same)
- · exact scalar _ _ hx.2.1.2 hy.2.1.2 (congrArg (fun z => z.im.re.im) same)
- · exact scalar _ _ hx.2.2.1 hy.2.2.1 (congrArg (fun z => z.im.im.re) same)
- · exact scalar _ _ hx.2.2.2 hy.2.2.2 (congrArg (fun z => z.im.im.im) same)
+ rcases x with ⟨⟨⟨x0,x1⟩,⟨x2,x3⟩⟩,⟨⟨x4,x5⟩,⟨x6,x7⟩⟩⟩
+ rcases y with ⟨⟨⟨y0,y1⟩,⟨y2,y3⟩⟩,⟨⟨y4,y5⟩,⟨y6,y7⟩⟩⟩
+ obtain rfl : x0=y0 := SAQ_Inverse.canonical_injective x0 y0 hx.1.1.1 hy.1.1.1
+  (congrArg (fun z => z.re.re.re) same)
+ obtain rfl : x1=y1 := SAQ_Inverse.canonical_injective x1 y1 hx.1.1.2 hy.1.1.2
+  (congrArg (fun z => z.re.re.im) same)
+ obtain rfl : x2=y2 := SAQ_Inverse.canonical_injective x2 y2 hx.1.2.1 hy.1.2.1
+  (congrArg (fun z => z.re.im.re) same)
+ obtain rfl : x3=y3 := SAQ_Inverse.canonical_injective x3 y3 hx.1.2.2 hy.1.2.2
+  (congrArg (fun z => z.re.im.im) same)
+ obtain rfl : x4=y4 := SAQ_Inverse.canonical_injective x4 y4 hx.2.1.1 hy.2.1.1
+  (congrArg (fun z => z.im.re.re) same)
+ obtain rfl : x5=y5 := SAQ_Inverse.canonical_injective x5 y5 hx.2.1.2 hy.2.1.2
+  (congrArg (fun z => z.im.re.im) same)
+ obtain rfl : x6=y6 := SAQ_Inverse.canonical_injective x6 y6 hx.2.2.1 hy.2.2.1
+  (congrArg (fun z => z.im.im.re) same)
+ obtain rfl : x7=y7 := SAQ_Inverse.canonical_injective x7 y7 hx.2.2.2 hy.2.2.2
+  (congrArg (fun z => z.im.im.im) same)
+ rfl
 
 /-- The resumed gamma is canonical in the native carrier. -/
 theorem canonical_gamma (p : verifier.Prepared) (a : verifier.Accumulator)
@@ -88,23 +86,27 @@ theorem source (p : verifier.Prepared) (a : verifier.Accumulator)
     have nv' : AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide native.val[j]) =
       AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (FIo_Install.toE p.gamma))^j := by
      have h := nv
-     simp only [FIp_ArrayValue.value,List.getElem?_eq_getElem nb] at h
-     exact h
+     first
+     | (simp only [FIp_ArrayValue.value,List.getElem?_eq_getElem nb] at h; exact h)
+     | (rw [FIp_ArrayValue.value,List.getElem?_eq_getElem nb] at h; exact h)
     have decoded :
       AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (FIo_Install.toE early.val[j])) =
       AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide native.val[j]) := by
-     rw [nv',decode_link,decode_link]
-     exact ev.2
+     rw [nv']
+     first
+     | exact ev.2
+     | (rw [decode_link,decode_link]; exact ev.2)
     have eqn := identify _ _ ec nc decoded
     have back := congrArg FIo_Install.fromE eqn
     simp only [FIo_Install.from_to] at back
     rw [back]
-    simp only [FIp_DotsAdapter.fromArray,List.getElem_map]
+    first
+    | simp only [FIp_DotsAdapter.fromArray,List.getElem_map]
+    | simp [FIp_DotsAdapter.fromArray]
  rw [sameOut] at same
  rw [← same]
  exact earlyCall
 
-#print axioms scalar
 #print axioms identify
 #print axioms canonical_gamma
 #print axioms canonical_early
