@@ -120,7 +120,7 @@ theorem well (s : reference.Scratch) (nonzero : s.n ≠ 0#usize) (bounded : ¬ s
      MultiproofConePhysicalViews.decodeEntry, MultiproofConePhysicalLive.cell, Nat.zero_add]
    exact canon j (by simp) hj'
 
-theorem aligned (nodes : Slice U8) (multiple : Slice.len nodes % 32#usize = .ok 0#usize) :
+theorem aligned (nodes : Slice U8) (multiple : Slice.len nodes % 32#usize = ok 0#usize) :
  nodes.val.length % 32 = 0 := by
  obtain ⟨rem, rem_run, rem_value⟩ := WP.spec_imp_exists
    (UScalar.rem_spec (x:=Slice.len nodes) (y:=32#usize) (by decide))
