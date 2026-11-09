@@ -1,0 +1,50 @@
+{"attempt": "PCVA_L033", "exit_status": 1, "wall_seconds": 3.285060060210526, "peak_rss_kib": "2640584", "swaps": "0", "print_axioms": ["'PRVEq.MultiproofConeRef.Funs.reference.write_parent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.read32' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.binary_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.valid_indices' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.leaf_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.canonical_word' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.canonical_qm' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.expand_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.row_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.read16' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.check_values' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofConeRef.Funs.reference.expand_rows' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent
+PCVA_sources/t4.lean:489:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.write_parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32
+PCVA_sources/t4.lean:493:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.read32' depends on axioms: [pro
+...
+eRef_Funs.reference.verify_owned : {H : Type} →
+  MultiproofConeRef.aspis_core.digest.Digest32 H →
+    H →
+      Std.Array U8 32#usize →
+        MultiproofConeRef.reference.Scratch → Slice U8 → Result (Bool × MultiproofConeRef.reference.Scratch) :=
+fun {H} aspis_coredigestDigest32Inst hash root s nodes =>
+  if s.n = 0#usize then ok (false, s)
+  else
+    if s.n > 16#usize then ok (false, s)
+    else do
+      let b ← PRVFresh_MultiproofConeRef_Funs.reference.valid_indices s.idx s.n 0#usize
+      if b = true then
+          have i := nodes.len;
+          do
+          let i1 ← i % 32#usize
+          if (i1 != 0#usize) = true then ok (false, s)
+            else do
+              let l ←
+                PRVFresh_MultiproofConeRef_Funs.reference.levels aspis_coredigestDigest32Inst hash
+                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+              match l with
+                | MultiproofConeRef.reference.Level.Stop out => ok (false, out)
+                | MultiproofConeRef.reference.Level.Done out =>
+                  if out.n = 1#usize then do
+                    let i2 ← out.idx.index_usize 0#usize
+                    if i2 = 0#u32 then do
+                        let a ← out.val.index_usize 0#usize
+                        let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+                        if b1 = true then
+                            have i3 := nodes.len;
+                            ok (decide (out.at = i3), out)
+                          else ok (false, out)
+                      else ok (false, out)
+                  else ok (false, out)
+        else ok (false, s)
+PCVA_sources/t4.lean:555:7: error(lean.unknownIdentifier): Unknown constant `PRVFresh_MultiproofConeRef_Funs.reference.verify_owned.mutual`
+
+Running as unit: run-rcd302edf703f4fa7b911fd279f188c80.scope; invocation ID: 20e69663b3774005aa4e1bb4b1b00269
