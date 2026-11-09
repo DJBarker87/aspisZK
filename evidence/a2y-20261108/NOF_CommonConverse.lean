@@ -175,10 +175,10 @@ theorem common (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE)
  rw [hs1,bind_tc_ok]
  obtain ⟨r2,hr2,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
  rw [hr2,bind_tc_ok]
- obtain ⟨fr,hfr,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
  rcases r2 with arr | e2
  swap
- · first | cases hfr | (nof_head_reduce hfr; cases hfr)
+ · nof_kill hY
+ obtain ⟨fr,hfr,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
  have hfa : (ok arr : Result (Array U8 32#usize)) = ok fr := hfr
  have h32 : (NNH_Tx2SlotTransport.stage m env err r).unwrap32 (.Ok arr) = ok fr := hfa
  rw [h32,bind_tc_ok]
