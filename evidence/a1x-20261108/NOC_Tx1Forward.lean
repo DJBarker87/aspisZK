@@ -7,7 +7,6 @@ import NOC_Conv094
 import NNX_Flush
 import NNX_RootCopy
 import NNV_CurrentCheckpoint
-import Op3I_ParseLaws
 import Op5T_Concrete
 set_option autoImplicit false
 noncomputable section
@@ -16,27 +15,6 @@ open Aeneas Aeneas.Std Result AspisR1CurrentCaller NOC_FinishSource
 
 abbrev cur {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) := NOC_PrepareFront.cur c
 abbrev M {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) := NOC_HostSeed.m0 (NNH_HostCtx.envOf c).reservation
-
-/-- op3 forward with the 57607-byte width read off the SAME parse_shape success. -/
-theorem parse {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (proof : Slice U8)
- (success : LIB_VLib.parseShapeValue (LIB_Carriers.bytes proof) (NOC_Run5bCtx.envOf c) = .ok ()) :
- ∃ variant, (cur c).op3 proof = .ok (.Ok variant) ∧ proof.val.length = 57607 := by
- change LIBC_ResultGraph.value LIBC_ParseShape.port (.error .Parse)
-  (LIBC_ParseShape.model (LIB_Carriers.bytes proof) (NOC_Run5bCtx.envOf c)) = .ok () at success
- unfold LIBC_ParseShape.model at success
- rw [LIBC_Bytes.from_native] at success
- have slot : (cur c).op3 proof = Op3I_Install.sourceBody proof := rfl
- rw [slot]
- unfold Op3I_Install.sourceBody
- cases hp : Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof with
- | fail e => simp only [hp,LIBC_ResultGraph.value] at success; cases success
- | div => simp only [hp,LIBC_ResultGraph.value] at success; cases success
- | ok reply => cases reply with
-  | Err e =>
-   simp only [hp,LIBC_ResultGraph.value,LIBC_ParseShape.port] at success
-   cases success
-  | Ok variant =>
-   exact ⟨Op3I_Install.currentVariant variant,by rfl,(Op3I_ParseLaws.source_success proof variant hp).2.1⟩
 
 /-- The ZERO scratch of the native body is the library's zeroE29 scratch. -/
 theorem zero {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
@@ -181,11 +159,12 @@ theorem lawOf (x : RSL.Verified LIB_VLib.library × LIB_VCarriers.View × LIB_VC
 /-- 094 forward at the corrected host: a returned library 094 value is the
 installed current tx1's Ok result, with the SAME output bytes. No domain,
 width, success or representation premise beyond the carrier identifications
-of the arguments. -/
+of the arguments and the 57607-byte proof width, which the 345 caller
+discharges from its own proof guard (NNH_Stage1ProofDomain.extent). -/
 theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NNH_Tx1Returns.V)
  (pubBytes proof : Slice U8) (k : Usize)
  (hpub : a.public_bytes = LIB_Carriers.bytes pubBytes) (hproof : a.proof = LIB_Carriers.bytes proof)
- (hk : a.k = k.val) (out : RSL.Bytes)
+ (hk : a.k = k.val) (width : proof.val.length = 57607) (out : RSL.Bytes)
  (called : NNH_Tx1Returns.value a (NOC_Run5bCtx.envOf c) = .ok out) :
  ∃ v : alloc.vec.Vec U8,
   verifier.candidate.tx1 (cur c) (NNV_PreparedAtHost.digest c)
@@ -210,7 +189,8 @@ theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NN
    (LIBC_Checkpoint.output (p,LIBC_Finish.value (r.2,r.1) (NOC_Run5bCtx.envOf c),
      LIB_Carriers.bytes proof,LIB_Carriers.bytes pubBytes) (NOC_Run5bCtx.envOf c)).property⟩,?_,out_eq.symm⟩
  -- children
- obtain ⟨variant,op3,width⟩ := parse c proof hparse
+ obtain ⟨variant,op3⟩ := NNH_Run5bCurrentShape.parse (M c) (NNH_HostCtx.envOf c) c.fixed.indexError
+  c.fixed.reservation proof hparse
  have op4 := NNV_CurrentScan.returned (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation
   proof width hscan
  obtain ⟨we,zr,zs⟩ := zero c
@@ -297,7 +277,6 @@ theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NN
  noc_stp ck'
  noc_stp rfl
  rfl
-#print axioms parse
 #print axioms zero
 #print axioms off_folded
 #print axioms off_round1
