@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+E=Path(__file__).resolve().parent
+rc={}
+for r in sorted(E.glob('PCQC_E0??/receipt.json')):
+    d=json.loads(r.read_text());rc[d['attempt']]=dict(exit=d['exit_status'],wall=round(d['wall_seconds'],1),rss_kib=d['peak_rss_kib'],swaps=d['swaps'],spec=d['module'])
+(E/'PCQC_RECEIPT_SUMMARY.json').write_text(json.dumps(dict(scopes_used=len(rc),budget=45,lean_scopes=0,caps='MemoryHigh=3G MemoryMax=4G MemorySwapMax=0 TasksMax=64 timeout 180 s, never raised',runs=rc),indent=1)+'\n')
+F=[
+ dict(spec='S004',selection='aspis-core r0::transport::order',earlier_runs=['PCQ_E003','PCQ_E006'],p1c_run='PCQC_E014',shape='E006 shape (roots order + core::option::_::ok_or) with overflow checks on',error='Aeneas uncaught Not_found, Stdlib Map.find from InterpReduceCollapse.collapse_ctx_following_sequence (InterpReduceCollapse.ml line 1991)',outcome='FAILED with overflow checks on; same error as PCQ_E006. Second failure of the shape; listed, not retried again.',gate_definition='FIo_Native.aspis_core.r0.transport.order'),
+ dict(spec='S005b',selection='atomic_statement::encode_digest_canonical solo',earlier_runs=['PCQ_E015','PCQ_E025'],p1c_run='PCQC_E015',shape='E015 solo shape with overflow checks on',error='Aeneas uncaught Not_found, Map.find from InterpReduceCollapse.collapse_ctx_following_sequence (line 1991)',outcome='FAILED; same error as PCQ_E015/E025. encode_digest_canonical (+_loop, _loop.body) stays an opaque axiom in every fresh emission that reaches it.',gate_definition='encode_digest_canonical, encode_digest_canonical_loop, encode_digest_canonical_loop.body'),
+ dict(spec='S010',selection='pair_forest_terminal decoders (7 roots + 6 opaque, PCQ_E031 shape)',earlier_runs=['PCQ_E010','PCQ_E017','PCQ_E020','PCQ_E027','PCQ_E031','PCQ_E035'],p1c_run='PCQC_E016',shape='E031 shape with overflow checks on',error='Aeneas Name clash: "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition" (pair_forest_terminal.rs 179:0-202:1); Aeneas exit 2',outcome='FAILED; same error as PCQ_E031. 12 gate definitions MISSING.',gate_definition='see PCQC_COVERAGE.json S010'),
+ dict(spec='S012',selection='pair_tree_profile decoders/encoders',earlier_runs=['PCQ_E012','PCQ_E022','PCQ_E024','PCQ_E029','PCQ_E033','PCQ_E034'],p1c_runs=['PCQC_E017','PCQC_E024'],shape='E033 shape (7 roots, 6 opaque) with overflow checks on (E017); then 3 boxed-decoder roots only, same opacity (E024, changed shape after the first timeout)',error='E017 and E024: killed by the fixed 180 s scope timeout (exit 124). Charon finished (80.7 s and 76.6 s, LLBC imported), Aeneas had not finished and wrote no receipt. The same shape without overflow checks (PCQ_E033) ended in 42 s with a Name clash, so the overflow-checks LLBC makes Aeneas run past the budget here.',outcome='FAILED twice (shape class retired, timeout never raised). 13 gate definitions MISSING.',gate_definition='see PCQC_COVERAGE.json S012'),
+ dict(spec='S016',selection='fast_pairing Dot::push (roots EbyKDot push + canonical Dot push, PCQ_E401 shape)',earlier_runs=['PCQ_E401','PCQ_E411'],p1c_run='PCQC_E018',shape='E401 shape with overflow checks on',error="Aeneas Internal error, fast_pairing.rs lines 118:12-121:13, interp/InterpBorrows.ml line 2731",outcome='FAILED; same error as PCQ_E401/E411. Dot::push, push_loop, push_loop.body stay an opaque axiom (PCQC_E007 has EbyKDot.push).',gate_definition='FIo_Native.fast_pairing.canonical.Dot.push{,_loop,_loop.body}'),
+ dict(spec='S022',selection='weights Weights::raw (roots raw + scalar_factor, PCQ_E413 shape)',earlier_runs=['PCQ_E413'],p1c_run='PCQC_E019',shape='E413 shape with overflow checks on',error='Aeneas "Nested borrows are not supported yet", weights.rs 229:47-229:130, interp/InterpAbs.ml line 168',outcome='FAILED; same as PCQ_E413. Weights.raw.closure, closure_1 MISSING (PCQC_E012 covers Weights, scalar_factor.closure).',gate_definition='FIo_Native.weights.Weights.raw.closure, closure_1'),
+ dict(spec='S019',selection='r1_wire ValidatedRecord::decode_k via monomorphic caller r1_semantic::claims (PCQ_E409 shape)',earlier_runs=['PCQ_E403','PCQ_E409'],p1c_run='PCQC_E020',shape='E409 shape with overflow checks on',error='Aeneas Internal error, r1_semantic.rs lines 47:8-55:1, interp/InterpReduceCollapse.ml line 1880',outcome='FAILED; same as PCQ_E409. 5 ValidatedRecord gate definitions MISSING. PCQ_E403 (Charon exit 101 on the const-generic root) not retried: shape class retired.',gate_definition='AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.*'),
+ dict(spec='S1 (lead addendum 2026-11-09)',selection='compact.rs::expand_values (line 127 at 4bb3b3f), root crate::compact::expand_values, cost-probe manifest and features',earlier_runs=[],p1c_runs=['PCQC_E021','PCQC_E025'],shape='E021: no opacity. E025: core::slice::_::copy_from_slice and core::slice::_::fill opaque (loop body callees; both selectors matched and are opaque per PCQC_OPAQUE_CHECK.json)',error='both: Aeneas "Markers remain after collapsing a context" (ended regions { ... }), source compact.rs lines 131:4-134:5, the `for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32))` loop; Aeneas exit 2',outcome='FAILED twice. The failure is in the zip/chunks_exact_mut borrow loop itself, not in its callees. No fresh Aeneas emission of expand_values exists; ExpandValuesFrozenEq (PCWC_S1_OBLIGATION.lean) cannot use one. Next shape not tried (needs a source restructure or a P4c reference-style hand model, which this job may not decide).',gate_definition='S1ValuesOwnedModelV1.expand_values'),
+ dict(spec='S903 (pilot AdapterOwned, P0 PCO_E004)',selection='r1_pool_adapter owned (4 roots, 28 opaque)',earlier_runs=['PCO_E004'],p1c_run='PCQC_E013',shape='original shape, overflow checks on',error='killed by the 180 s scope timeout (exit 124): the cold cargo build of the program crate with the overflow-checks flags took 2m54s, Charon was still finishing',outcome='Replaced by the changed shape PCQC_E022 + PCQC_E023 (roots split into two halves, same opacity): both succeeded. Not a failure of the selection.',gate_definition='AdapterRwTypes (types-only pilot)'),
+ dict(spec='S006',selection='asq8_payment_reference::encode_common',earlier_runs=['PCQ_E005'],p1c_run=None,error='cfg(any(test, kani, aeneas_ref)) module absent from the frozen build',outcome='NOT retried (brief).'),
+ dict(spec='S018',selection='NJT_claims_ref',earlier_runs=[],p1c_run=None,error='no frozen counterpart; handled by P4c as a reference crate',outcome='NOT retried (brief).'),
+]
+(E/'PCQC_FAILURES.json').write_text(json.dumps(dict(schema=1,target_established=False,note='Every selection that failed in P1a/P1b was retried once with overflow checks on; exact error texts below, from the xz stdout logs of the PCQC runs.',failures=F),indent=1)+'\n')
+S={
+ 'PCO_E001':dict(replacement='PCQC_E006',note='S900 wide_exact to_le_bytes; text identical modulo prefix'),
+ 'PCO_E002':dict(replacement='PCQ_E037',note='already superseded by P1a overflow-on S901 run; not redone'),
+ 'PCO_E003':dict(replacement=None,note='S902 retired in P0; no replacement'),
+ 'PCO_E004':dict(replacement=['PCQC_E022','PCQC_E023'],note='S903 changed shape (roots split in two) after PCQC_E013 timed out; same opacity list'),
+ 'PCQ_E001':dict(replacement='PCQ_E038',note='S001 already redone with overflow checks in P1a'),
+ 'PCQ_E002':dict(replacement='PCQC_E001',note='S002'),
+ 'PCQ_E003':dict(replacement='STILL_FAILING',retry='PCQC_E014',note='S004 order, Not_found'),
+ 'PCQ_E004':dict(replacement='PCQC_E002',note='wrong-shape empty Funs in P1a; S005a redo covers its purpose'),
+ 'PCQ_E005':dict(replacement=None,note='S006 cfg-gated module; not retried'),
+ 'PCQ_E006':dict(replacement='STILL_FAILING',retry='PCQC_E014',note='S004 order, Not_found'),
+ 'PCQ_E007':dict(replacement='PCQC_E003',note='wrong-shape empty Funs in P1a; S009 redo covers it'),
+ 'PCQ_E008':dict(replacement='PCQC_E002',note='S005 failed shape; S005a covers decode/unwrap'),
+ 'PCQ_E009':dict(replacement='PCQC_E003',note='S009 failed shape'),
+ 'PCQ_E010':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010 (cfg-gated root)'),
+ 'PCQ_E011':dict(replacement='PCQ_E040',note='S011 failed shape; overflow-on partial run'),
+ 'PCQ_E012':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012'),
+ 'PCQ_E013':dict(replacement='PCQ_E039',note='S013 failed shape'),
+ 'PCQ_E014':dict(replacement='PCQC_E002',note='S005a'),
+ 'PCQ_E015':dict(replacement='STILL_FAILING',retry='PCQC_E015',note='encode_digest_canonical solo'),
+ 'PCQ_E016':dict(replacement='PCQC_E005',note='S009a failed shape'),
+ 'PCQ_E017':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010'),
+ 'PCQ_E018':dict(replacement='PCQC_E005',note='S009a'),
+ 'PCQ_E019':dict(replacement='PCQC_E003',note='S009 failed shape'),
+ 'PCQ_E020':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010'),
+ 'PCQ_E021':dict(replacement='PCQ_E040',note='S011 failed shape'),
+ 'PCQ_E022':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012'),
+ 'PCQ_E023':dict(replacement='PCQ_E039',note='S013 failed shape'),
+ 'PCQ_E024':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012 solo validate (Unreachable); solo shape not retried, S012 shape class retired by two timeouts'),
+ 'PCQ_E025':dict(replacement='STILL_FAILING',retry='PCQC_E015',note='encode_digest_canonical'),
+ 'PCQ_E026':dict(replacement='PCQC_E003',note='S009'),
+ 'PCQ_E027':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010'),
+ 'PCQ_E028':dict(replacement='PCQ_E040',note='S011 failed shape'),
+ 'PCQ_E029':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012'),
+ 'PCQ_E030':dict(replacement='PCQ_E039',note='S013 redone with overflow checks in P1a'),
+ 'PCQ_E031':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010 name clash'),
+ 'PCQ_E032':dict(replacement='PCQ_E040',note='S011 redone with overflow checks in P1a'),
+ 'PCQ_E033':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012'),
+ 'PCQ_E034':dict(replacement='STILL_FAILING',retry=['PCQC_E017','PCQC_E024'],note='S012'),
+ 'PCQ_E035':dict(replacement='STILL_FAILING',retry='PCQC_E016',note='S010 opaque-enum crash'),
+ 'PCQ_E036':dict(replacement='PCQC_E004',note='S014'),
+ 'PCQ_E037':dict(replacement='PCQ_E037',note='already overflow-on; retained'),
+ 'PCQ_E038':dict(replacement='PCQ_E038',note='already overflow-on; retained'),
+ 'PCQ_E039':dict(replacement='PCQ_E039',note='already overflow-on; retained'),
+ 'PCQ_E040':dict(replacement='PCQ_E040',note='already overflow-on; retained (collected read-only after ssh drop)'),
+ 'PCQ_E401':dict(replacement='STILL_FAILING',retry='PCQC_E018',note='Dot::push'),
+ 'PCQ_E402':dict(replacement='PCQC_E007',note='S016 EbyKDot.push, Dot::push opaque'),
+ 'PCQ_E403':dict(replacement='STILL_FAILING',retry='PCQC_E020',note='S019 const-generic root (Charon 101); the E409 shape was the one retried'),
+ 'PCQ_E409':dict(replacement='STILL_FAILING',retry='PCQC_E020',note='S019'),
+ 'PCQ_E410':dict(replacement='PCQC_E008',note='S020'),
+ 'PCQ_E411':dict(replacement='PCQC_E011',note='S015 failed shape; E415 redo covers it'),
+ 'PCQ_E412':dict(replacement='PCQC_E009',note='S017'),
+ 'PCQ_E413':dict(replacement='STILL_FAILING',retry='PCQC_E019',note='Weights::raw'),
+ 'PCQ_E414':dict(replacement='PCQC_E010',note='S021'),
+ 'PCQ_E415':dict(replacement='PCQC_E011',note='S015, Dot::push opaque'),
+ 'PCQ_E416':dict(replacement='PCQC_E012',note='S022 with raw dropped from the roots'),
+}
+(E/'PCQC_SUPERSEDES.json').write_text(json.dumps(dict(schema=1,target_established=False,note='Maps every earlier run id to its overflow-checks-on replacement, or to STILL_FAILING with the P1c retry run. Earlier runs are kept, not deleted. New P1c selection: PCQC_E021/E025 (compact expand_values, failed twice).',map=S),indent=1)+'\n')
+C=[
+ dict(id='C1',case='Reuse of LLBC per crate per configuration',decision='One LLBC per run (per spec); not shared',reason='Specs differ in --start-from roots and --opaque lists, which are Charon inputs; the brief says reuse only where the spec allows. The spec is copied verbatim from the earlier run (PCQC_make_spec.py).'),
+ dict(id='C2',case='Which shape of a multi-run failed selection is retried',decision='S004: PCQ_E006 shape; encode_digest_canonical: PCQ_E015 solo; S010: PCQ_E031; S012: PCQ_E033; Dot::push: PCQ_E401; Weights::raw: PCQ_E413; S019: PCQ_E409',reason='Latest shape that reached Aeneas (or the solo shape for the named function); the brief retries each selection once.'),
+ dict(id='C3',case='Extra redo PCQ_E018 (S009a)',decision='redone as PCQC_E005',reason='Used for S009 coverage in P1a (13 coverage hits).'),
+ dict(id='C4',case='Extra redo of P0 PCO_E004 (S903 types-only pilot)',decision='redone; timed out once (PCQC_E013), redone as two root halves (PCQC_E022, E023)',reason='"any other used for coverage": AdapterRwTypes pilot (PCO_L006). Types are not affected by overflow checks, but function bodies of the owned adapter are; recorded for completeness. Timeout is not a determined failure of the selection.'),
+ dict(id='C5',case='Namespace / workspace prefix',decision='PCQ_ and PCO_ renamed PCQC_ in run ids, workspace and Aeneas namespaces',reason='Separate P1c outputs from earlier ones; no semantic change (PCQC_ON_OFF_DIFF.json compares text modulo prefix).'),
+ dict(id='C6',case='Timeout of PCQC_E013 and PCQC_E017',decision='never rerun unchanged; shape changed (S903 roots split; S012 roots reduced)',reason='AGENTS/brief: a scope killed by timeout is not rerun unchanged. PCQC_E017 retried once more as PCQC_E024 (changed shape); both timed out so the S012 shape class is retired.'),
+ dict(id='C7',case='S1 expand_values lead addendum',decision='new spec S1V, template PCQC_E008 (cost-probe manifest and features), root crate::compact::expand_values; one retry with copy_from_slice and fill opaque; then failure list',reason='Lead addendum 2026-11-09. Covers entry S1ValuesOwnedModelV1 / expand_values.'),
+ dict(id='C8',case='Coverage uses P1a overflow-on runs',decision='PCQ_E037-E040 (carried, not redone) are listed in PCQC_COVERAGE.json as usable runs',reason='They were already made with the ruling configuration.'),
+ dict(id='C9',case='Sibling-run coverage',decision='a definition not in the spec own run but emitted by an overflow-on run of the same crate is marked via=sibling_run',reason='Same rule as P1b coverage and P1a types-only specs.'),
+ dict(id='C10',case='Deployed-binary wrapping',decision='out of scope',reason='Owned by R22 per the ruling.'),
+]
+(E/'PCQC_CLASSIFICATIONS.json').write_text(json.dumps(dict(schema=1,classifications=C),indent=1)+'\n')

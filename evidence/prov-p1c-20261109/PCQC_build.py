@@ -23,12 +23,14 @@ good=[r for r in runs if r['exit']==0 and r['has_emit'] and r['on']]
 cat={}
 for f in (OP/'PCO_extract_specs.json',RP/'PCQ_extract_specs.json',BP/'PCQ_extract_specs.json'):
     for s in J(f)['specs']:
-        if s.get('covers'):cat[s['spec_id']]=s   # later file wins (P1b catalog for S015-S022)
+        if (s.get('covers') or {}).get('definitions') is not None:cat[s['spec_id']]=s   # later file wins (P1b catalog for S015-S022)
 for f in (RP/'PCQ_extract_specs.json',):
     for s in J(f)['specs']:
         if s['spec_id'] in('S001','S002','S003','S004','S005','S006','S007','S008','S009','S010','S011','S012','S013','S014','S901') and s.get('covers'):cat[s['spec_id']]=s
 for s in J(BP/'PCQ_extract_specs.json')['specs']:
     if s['spec_id'] in [f'S0{n}' for n in range(15,23)] and s.get('covers'):cat[s['spec_id']]=s
+for r in runs:
+    cat.setdefault(re.sub(r'[a-z]$','',r['spec_id']),r['spec'])
 def fresh_defs(r):
     DEF=re.compile(r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+)?(def|structure|inductive|axiom|opaque|abbrev|theorem)\s+([^\s:(\[{]+)",re.M)
     out={}
@@ -47,19 +49,22 @@ cov=dict(schema=1,target_established=False,note='name-level presence only; equal
 p2={}
 for sid in sorted(cat):
     sp=cat[sid]
+    if re.search(r'[a-z]$',sid):continue
     if sid in('S902','S018','S006') and False:continue
     own=[r for r in runs if base(r['spec_id'])==sid]
     cand=[r for r in good if r in own]
-    sib=[r for r in good if r['crate']==sp['configuration']['crate'] and r not in cand] if sp.get('covers') else []
+    sib=[r for r in good if r['crate']==(sp.get('crate') or sp['configuration']['crate']) and r not in cand] if sp.get('covers') else []
     if sid not in TYPES_ONLY and not cand and not [r for r in own]:
         # spec never run in P1c and not carried: listed only if a sibling run might cover its names
         pass
     e=dict(attempts=[dict(run=r['run'],spec=r['spec_id'],exit=r['exit'],kind=r['kind'],earlier_run=r['earlier']) for r in own],
         successful_runs=[r['run'] for r in cand],definitions={},modules=sp['covers']['modules'],overflow_checks_runs=[r['run'] for r in cand],runs_without_overflow_checks=[])
-    for g in sp['covers']['definitions']:
+    for g in [x for x in sp['covers']['definitions'] if ' ' not in x]:
         n=norm(g);hit=None;via='own'
         for r in cand+sib:
-            if n in FD[r['run']]:hit=(r,FD[r['run']][n]);via='own' if r in cand else 'sibling_run';break
+            for nn in (n,g):
+                if nn in FD[r['run']]:hit=(r,FD[r['run']][nn]);n=nn;via='own' if r in cand else 'sibling_run';break
+            if hit:break
         if hit:
             body=[h for h in hit[1] if h['kind'] not in('axiom','opaque')]
             e['definitions'][g]=dict(status='FRESH_PRESENT' if body else 'FRESH_EXTERNAL_AXIOM_ONLY',fresh=n,run=hit[0]['run'],via=via,where=hit[1])
@@ -73,6 +78,7 @@ for sid in sorted(cat):
         r=next(x for x in good if x['run']==d['run']);dd=rel(r['dir']/(r['run']+'_emitted/raw'))+'/'+r['ns']
         for m in sp['covers']['modules']:
             p2.setdefault(m,{}).setdefault(dd,dict(run=r['run'],dir=dd,definitions=[]))['definitions'].append(g)
+cov['pilot_emissions']={r['run']:dict(spec=r['spec_id'],dir=rel(r['dir']/(r['run']+'_emitted/raw'))+'/'+r['ns'],note='S903 types-only pilot (AdapterRwTypes); covers is free text in the spec, so no per-name table') for r in good if base(r['spec_id'])=='S903'}
 cov['p2_emission_dirs_per_gate_module']={m:sorted(v.values(),key=lambda x:x['run']) for m,v in sorted(p2.items())}
 c={}
 for e in cov['specs'].values():
