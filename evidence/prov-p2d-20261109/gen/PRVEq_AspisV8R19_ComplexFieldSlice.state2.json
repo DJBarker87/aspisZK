@@ -1,0 +1,231 @@
+{
+ "module": "AspisV8R19.ComplexFieldSlice",
+ "kind": "funs",
+ "fresh_lines": {
+  "field.P": [
+   15,
+   19
+  ],
+  "field.reduce_u64": [
+   21,
+   35
+  ],
+  "field.M31.mul": [
+   37,
+   45
+  ],
+  "field.square_n_loop.body": [
+   47,
+   60
+  ],
+  "field.square_n_loop": [
+   62,
+   70
+  ],
+  "field.square_n": [
+   72,
+   77
+  ],
+  "field.M31.add": [
+   79,
+   87
+  ],
+  "field.M31.sub": [
+   89,
+   98
+  ],
+  "field.M31.neg": [
+   100,
+   107
+  ],
+  "field.M31.reduce_u64": [
+   109,
+   114
+  ],
+  "field.M31.double": [
+   116,
+   120
+  ],
+  "field.M31.inv": [
+   122,
+   143
+  ],
+  "field.M31.is_zero": [
+   145,
+   149
+  ],
+  "field.CM31.add": [
+   151,
+   158
+  ],
+  "field.CM31.sub": [
+   160,
+   167
+  ],
+  "field.CM31.neg": [
+   169,
+   175
+  ],
+  "field.CM31.mul": [
+   177,
+   199
+  ],
+  "field.CM31.square": [
+   201,
+   219
+  ],
+  "field.CM31.double": [
+   221,
+   225
+  ],
+  "field.CM31.inv_with": [
+   227,
+   241
+  ],
+  "field.CM31.inv": [
+   243,
+   247
+  ],
+  "field.CM31.is_zero": [
+   249,
+   256
+  ],
+  "field.mul_by_r": [
+   258,
+   265
+  ]
+ },
+ "dropped": [
+  "field.QM31.inv",
+  "field.QM31.is_zero",
+  "field.QM31.square",
+  "field.QM31.try_inv"
+ ],
+ "defs": {
+  "field.P": {
+   "lines": [
+    323,
+    324
+   ],
+   "reached": true,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.reduce_u64": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.M31.mul": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.reduce_u64"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.square_n_loop.body": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.M31.mul"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.M31.mul",
+   "class": "semantic"
+  },
+  "field.square_n_loop": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.square_n_loop.body"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.square_n_loop.body",
+   "class": "semantic"
+  },
+  "field.square_n": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.square_n_loop"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.square_n_loop",
+   "class": "semantic"
+  },
+  "field.M31.add": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.M31.neg": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.M31.inv": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.M31.mul",
+    "field.square_n"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.M31.mul,field.square_n",
+   "class": "semantic"
+  },
+  "field.CM31.inv_with": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "field.M31.mul",
+    "field.M31.add",
+    "field.M31.neg"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.M31.mul,field.M31.add,field.M31.neg",
+   "class": "semantic"
+  },
+  "field.CM31.inv": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "field.M31.inv",
+    "field.CM31.inv_with"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: field.M31.inv,field.CM31.inv_with",
+   "class": "semantic"
+  }
+ },
+ "probe": false
+}

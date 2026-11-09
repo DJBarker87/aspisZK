@@ -1,0 +1,50 @@
+[
+ {
+  "id": "PCUD-C1",
+  "topic": "plan and coverage measure",
+  "finding": "Cluster = 73 c1/c2 modules outside P2a/b/c plus the 9 P5-reclassified modules (82). PCUD_prepare.py chooses (frozen fresh file, gate candidate) passes by presence of the same Rust symbol, not text identity; 3 modules (S8Kani2MutableSource, Op4P_Extract.Types, NDH_Reference.Funs and others with no frozen same-symbol declaration) get NO_FRESH_EMISSION.",
+  "action": "gen_prepared.json"
+ },
+ {
+  "id": "PCUD-C2",
+  "topic": "CONFIG_PENDING_OVERFLOW_CHECKS",
+  "finding": "Per lead rulings (two messages): bodies differing in checked/wrapping/overflowing/saturating operations are never classified SEMANTIC; they and their blocked callers are CONFIG_PENDING_OVERFLOW_CHECKS with the exact diff. No Lean scope was spent beyond the already scheduled bundles on them. P1a branch codex/pc-prov-p1a-20261109 held no overflow-checks-on emission when checked (git ls-tree), so they stay pending.",
+  "action": "PCUD_EQ_STATUS.json, PCUD_FOR_P3.json"
+ },
+ {
+  "id": "PCUD-C3",
+  "topic": "memory kills (AGENTS resource policy 5)",
+  "finding": "L003 (12-module probe bundle, 2.1 MB, exit 134 lean memory_exception at 7.4 GB) and L006 (two XRn_Join modules, 134) and L014 (9-module verify bundle, 134). Shape changes, not reruns: L003 split into HA/HB/HC (log of the first 7 modules was complete before the crash and was ingested); L006 modules had zero common declarations (NGT/NGN, no compile needed) and the other XRn_Join modules were re-generated with --prune-fresh (callee-closure pruning, PCUD patch 3); L014 split into V5/V6/V7. Cause: cumulative environment memory plus error cascades from retained fresh files that do not elaborate against the gate (XRn_Join_Funs needs hand-written XRn_Join_Types/TerminalModel).",
+  "action": "PCUD_ATTEMPTS.jsonl"
+ },
+ {
+  "id": "PCUD-C4",
+  "topic": "generator patch 4",
+  "finding": "Callee/closure detection missed references of the form _root_.<fresh ns>.x, which let pruning omit CurrentCompactCallerModelV1.compact.OFF_FOLDED_ROOT and made verify L017 fail (unknown identifier). Fixed (names normalised for closure only); the three affected modules re-probed (L018) and verified (L019, exit 0). L017 is a failed verify of an obsolete file and is not evidence.",
+  "action": "PCUD_gen_equalities.py"
+ },
+ {
+  "id": "PCUD-C5",
+  "topic": "transport loss after submission",
+  "finding": "L013 and L014 collection ssh calls dropped after submission; no resubmission; receipts recovered read-only with recover.sh from the host workspace (L013: exit 0 on the host).",
+  "action": "PCUD_ATTEMPTS.jsonl"
+ },
+ {
+  "id": "PCUD-C6",
+  "topic": "NO_COMMON_LEAN_NAME",
+  "finding": "88 reached definitions are covered by Rust symbol but share no Lean name between fresh and gate (crate-prefixed aspis_core.* names in retained NEW_GeometryActual / NHR Types files vs unprefixed gate names; file-level pseudo-directories whose Types file is not available). Not forced; a rename substitution in the generator is a P3-side option.",
+  "action": "PCUD_FOR_P3.json"
+ },
+ {
+  "id": "PCUD-C7",
+  "topic": "retained files as fresh",
+  "finding": "Fresh candidates include retained files whose sha equals a frozen-pin-listed emission (partition fresh_symbol_files). XRn_Join_Funs, inherited-stage2 Funs and NEW_GeometryActual are not raw Aeneas directories; their sibling Types are not in the compare environment. They are used as the partition used them; results reflect that.",
+  "action": "open"
+ },
+ {
+  "id": "PCUD-C8",
+  "topic": "not done",
+  "finding": "The compiled-source self-copy control (PCO_HANDOFF s4 step 1) was not run for the compiled_source_ambiguous modules in this cluster (no budget left for controls after the focused rounds); equality statements are against compiled gate constants so a wrong candidate gives a Lean error, never a false equality, but candidate choice per module (n_gate_candidates in gen_prepared.json) is unverified. FIn_WeightsFuns shape (L019 timeout in P5) not repeated.",
+  "action": "open"
+ }
+]
