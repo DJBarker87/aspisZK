@@ -14,7 +14,7 @@ someone drew of it afterwards.
 
 ## What we have built
 
-**A verifier that works, on a public chain.** The current verifier, R1, is live
+**A verifier that works, on a public chain.** The latest Aspis verifier is live
 on Solana devnet as an immutable program, and on 29 October 2026 it did exactly
 what it was built to do: it verified a private transfer and then a private
 withdrawal, each spread over two transactions, the first running the opening
@@ -75,7 +75,7 @@ about 2^152, and for any budget an attacker could actually spend is in effect
 on the attacker and no dividing a probability by attack work to make it look
 better. The derivation is in section 3 of
 [`docs/r1/SOUNDNESS-STATUS.md`](docs/r1/SOUNDNESS-STATUS.md), and both
-theorems are printed in full, with a reading of every binder, in
+theorems are printed in full, with a plain reading of every part of each statement, in
 [`docs/r1/TOP-THEOREM.md`](docs/r1/TOP-THEOREM.md).
 
 ## What is left
@@ -93,7 +93,7 @@ Privacy has its own contract and its own theorems and is a separate story.
 
 ## On Solana
 
-The R1 verifier on devnet is program `CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ`;
+The verifier on devnet is program `CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ`;
 its 1,563,728-byte ELF, SHA-256 `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
 was rebuilt bit for bit from the frozen source, and it has no upgrade authority.
 The private transfer is
@@ -117,15 +117,15 @@ pool and marked the nullifier spent, all in one finalized transaction of
 [`EJviPgF…R3vJ2fE`](https://explorer.solana.com/tx/EJviPgF12i9iK2CveVaQSMeFQqDMFPQ1iPRUYEwNQE3zGquTUZNJXPZEENorcQtsnQj1orFmH1TPsgdbR3vJ2fE?cluster=mainnet-beta).
 Its record is under [`docs/v5-mainnet-demo.md`](docs/v5-mainnet-demo.md) and
 [`release/`](release/); V7, the one-transaction design that came between V5
-and R1, is kept under [`docs/v7/`](docs/v7/).
+and the current version, is kept under [`docs/v7/`](docs/v7/).
 
 ## The repository
 
 | Path | What is there |
 | --- | --- |
-| `crates/`, `programs/` | The frozen R1 source: the verifier in `programs/r1-cost-probe` and `crates/aspis-r1-cost-probe`, the pool in `programs/aspis-pool` |
-| `docs/r1/` | The R1 proof package: the security contract, the status document, the two theorems in full, the 599-row ledger, the trust inventory, the devnet record, the open items |
-| `AspisFormal/`, `aeneas-verif/`, `kani-verif/` | The Lean and Kani work for V5 and V7; the R1 Lean development lives on the `research` branch |
+| `crates/`, `programs/` | The frozen source of the current version: the verifier in `programs/r1-cost-probe` and `crates/aspis-r1-cost-probe`, the pool in `programs/aspis-pool` |
+| `docs/r1/` | The proof package for the current version: the security contract, the status document, the two theorems in full, the 599-row ledger, the trust inventory, the devnet record, the open items |
+| `AspisFormal/`, `aeneas-verif/`, `kani-verif/` | The Lean and Kani work for V5 and V7; the Lean development for the current version lives on the `research` branch |
 | `docs/` | Design notes and the V5 and V7 records ([index](docs/README.md)) |
 | `release/`, `results/` | The V5 release bundles, the mainnet transaction, and runtime measurements |
 | `paper/` | The formalization report and construction paper from the V5 era |
