@@ -7,7 +7,6 @@ import NOC_Conv094
 import NNX_Flush
 import NNX_RootCopy
 import NNV_CurrentCheckpoint
-import Op5T_Concrete
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NOC_Tx1Forward
@@ -53,16 +52,15 @@ theorem foldedRoot (proof : Slice U8) (width : proof.val.length = 57607) (folded
  have e : LIB_Carriers.bytes s = RSL.slice (LIB_Carriers.bytes proof) RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1 := same
  rw [e]; exact h
 
-theorem mapOk {E : Type} (f : AspisR1Stage2.verifier.Error → E)
- (r : Result (core.result.Result Unit AspisR1Stage2.verifier.Error))
- (h : Op5T_Install.mapResult f r = ok (.Ok ())) : r = ok (.Ok ()) := by
- cases r with
+theorem resultOk (m : Result (core.result.Result Unit AspisR1Stage2.verifier.Error))
+ (h : Port3_QueryInstall.result m = ok (.Ok ())) : m = ok (.Ok ()) := by
+ cases m with
  | ok v =>
   cases v with
   | Ok x => cases x; rfl
-  | Err e => first | cases h | simp [Op5T_Install.mapResult] at h
- | fail e => first | cases h | simp [Op5T_Install.mapResult] at h
- | div => first | cases h | simp [Op5T_Install.mapResult] at h
+  | Err e => first | cases h | simp [Port3_QueryInstall.result] at h
+ | fail e => first | cases h | simp [Port3_QueryInstall.result] at h
+ | div => first | cases h | simp [Port3_QueryInstall.result] at h
 
 /-- op6 forward at k = 0 from the SAME returned library batch value. Only
 k = 0 and the canonical queries are used (no LIBC_BatchMerkle.Domain premise). -/
@@ -92,15 +90,17 @@ theorem batch {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (proof : Slice U8)
     | (simp [hl]; exact q _ m)
   have hp := NOC_MerkleBounded.hostParent c proof (NFW_PreparedPort.prepared p) (LIB_Env.nativeKey folded)
    0#usize (by decide) q' ((congrArg NHT_ResultPort.action model).trans rfl)
-  have st : Op5T_Install.mapResult Op5T_Install.stageError
-    (Op5T_Install.body Port4B_Install.leaves (Tx1Q_Install.digest (NNV_PreparedAtHost.digest c))
-     proof p.queries p.roots (LIB_Env.nativeKey folded) 0#usize ()) = ok (.Ok ()) :=
-   (Op5T_Concrete.stage_source _ _ _ _ _ _).trans hp
-  have br := mapOk _ _ st
+  have inner : Port3_NativeBatchBody.verifier.candidate.batch_merkle
+    (Port3_BatchStd.install Port4B_Install.leaves)
+    (VTop_Checkpoint.digest (Tx1Q_Install.digest (NNV_PreparedAtHost.digest c)))
+    proof (NFW_PreparedPort.prepared p) (LIB_Env.nativeKey folded) 0#usize () = ok (.Ok ()) :=
+   resultOk _ hp
   show Op5T_Install.mapResult Op5T_Install.currentError
-    (Op5T_Install.body Port4B_Install.leaves (Tx1Q_Install.digest (NNV_PreparedAtHost.digest c))
-     proof p.queries p.roots (LIB_Env.nativeKey folded) 0#usize ()) = ok (.Ok ())
-  rw [br]
+    (Port3_NativeBatchBody.verifier.candidate.batch_merkle
+    (Port3_BatchStd.install Port4B_Install.leaves)
+    (VTop_Checkpoint.digest (Tx1Q_Install.digest (NNV_PreparedAtHost.digest c)))
+    proof (NFW_PreparedPort.prepared p) (LIB_Env.nativeKey folded) 0#usize ()) = ok (.Ok ())
+  rw [inner]
   all_goals rfl
 
 /-- op7 forward on the derived query Domain, at the native carriers. -/
@@ -281,7 +281,7 @@ theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NN
 #print axioms off_folded
 #print axioms off_round1
 #print axioms foldedRoot
-#print axioms mapOk
+#print axioms resultOk
 #print axioms batch
 #print axioms query
 #print axioms finish_acc
