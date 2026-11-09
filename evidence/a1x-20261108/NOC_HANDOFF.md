@@ -231,3 +231,60 @@ blocked by open goals 1 and 2. The Ok clause (`okT`) could be composed from the 
 (X1, X2, X3, X4 plus the existing NNV/NNX ports), but okT alone is not the field. 27 scopes remain.
 
 target not yet established
+
+# Third continuation (lead: direct converses, then Ok clause, then X7/X8 with named hypotheses)
+
+Research merged at 6ce07a6a593 (fast-forward). Nothing under .worktrees/cx-a1b was read or written; the
+terminal-domain and reverse-Merkle lemmas were not worked on. Whole job: 27 of 50 scopes (16 pass,
+11 fail); 23 remain (4 reserved for X9).
+
+## Converse lane (5 of 15 scopes: L023-L027)
+
+| child | forward root | converse root | status |
+|---|---|---|---|
+| filled (op1) | NOC_PrepareFront.filled | NOC_ConvLeaves.filled/.filled_value | closed |
+| expand_semantic (op10) | NNH_Run5bCurrentExpand.semantic | NOC_ConvLeaves.expand_semantic | closed |
+| expand_values (op11) | NOC_PrepareFront.values | NOC_ConvLeaves.expand_values | closed |
+| parse_shape (op3) | NNH_Run5bCurrentShape.parse | NOC_ConvLeaves.parse | closed |
+| wide view (op5) | NNV_PrepareView.returned | NOC_ConvLeaves.view | closed |
+| Prepared::new (op8) | NNX_PreparedValue.source | NOC_ConvLeaves.prepared | closed |
+| prefix parse | NNV_SemanticParse.returned | NOC_ConvSemantic.parse | closed |
+| public transcript | NNV_SemanticTranscript.returned | NOC_ConvSemantic.transcript | closed |
+| begin | NNV_SemanticBegin.returned | NOC_ConvSemantic.begin_ | closed |
+| rounds | NNV_FinishNativePorts.rounds | NOC_ConvSemantic.rounds | closed |
+| circle | NNV_FinishNativePorts.circle | NOC_ConvSemantic.circle | closed |
+| validated record | NNV_FinishRecord.returned | NOC_ConvSemantic.record | closed |
+| K29 decode | NNX_FinishDecodePort.returned | NOC_ConvSemantic.decode (on the derived record domain) | closed |
+| payload | NNX_FinishPayload.source | NOC_ConvSemantic.payload | closed |
+| claims | NNV_FinishClaims.returned | NOC_ConvSemantic.claims (Ok-iff at the granted reservation, which the filled converse supplies) | closed |
+| canonical scan (op4) | NNV_CurrentScan.returned | NOC_Conv094.scan | closed |
+| geometry (op19) | NNV_CurrentGeometry.returned | NOC_Conv094.geometry | closed |
+| accumulator init (op20) | Tx1Q_PrefixInstall slots | NOC_Conv094.accNew | closed |
+| pending weights (op18) | NNH_Run5bCurrentPending.source | NOC_Conv094.weightsNew | closed |
+| query loop (op7) | NOC_QueryLink.link/current | NOC_QueryLink.loop (an equality on the Domain) | closed on the Domain |
+| flush (op17), checkpoint writer (op16) | NNX_Flush.source, NNV_CurrentCheckpoint.source | none needed: the 094 library binds `.ok (finishValue ..)` and `.ok (checkpointValue ..)`, so these library steps are total | n/a |
+| terminal | NNV_FinishTerminal.returned | second agent (publicDigestDom) | open, commissioned |
+| batch Merkle (op6) | NOC_MerkleBounded.model0 | second agent (reverse NNY chain) | open, commissioned |
+| 345 codec and guards (op0/op1/op12/op21/op24/op35/op36/op47) | NNH_S1HostCodec.validate_ok/encode_ok, NNH_Tx1BadRoute | — | not started |
+
+L025/L026 failed on the pending-weights step (`deref` against slice-coercion rewrite patterns); L027
+uses a term-level congruence. All other converse files passed first time.
+
+## Not started: Ok-clause composition, X7, X8, X9 (paused; 23 scopes left)
+I stopped before the compositions because each is a whole-body proof of a size that the earlier
+single-function composition (X3) needed 4 scopes for, and the remaining budget cannot cover all of
+them with any margin. The pieces still needed are:
+- the 094 body composition (NND_FreshTx1Source.fresh), stepping k/op3/op4/mark/ZERO/prepare/op20/folded
+  root/op6/op19/op18/op7/flush/op16 with the forward roots, at the Tx1Q carrier maps. The width
+  hypothesis comes from parse_shape (LIBC_ParseShape.Domain or TX1_094.Domain via NNH_Run5bA1Domain).
+  The batch domain (LIBC_BatchMerkle.Domain: parsed witness and committed roots) must be derived on the
+  path; no NOC lemma does this yet.
+- the 345 composition (NND_FreshStage1.fresh, first_decoded) against NNH_Stage1RefEval/NNH_Stage1Cut,
+  including the codec/guard converses above.
+- the converse compositions (semantic finish ⇒ observed value, prepare front, 094, 345) from the
+  converse table plus the two commissioned facts.
+Recommendation: run these as three capped items in this order: 094 forward (6), 345 forward = Ok clause
+(5), converse compositions with the two named hypotheses (8). Keep the 4 X9 scopes. That is 23; I'd
+rather you allocate it explicitly than spend it here without a margin.
+
+target not yet established
