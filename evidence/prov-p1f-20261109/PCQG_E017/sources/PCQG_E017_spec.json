@@ -1,0 +1,94 @@
+{
+ "run": "PCQG_E017",
+ "spec_id": "NDE2",
+ "label": "NDE_Reference2 re-extraction, overflow checks ON (P1f)",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::lift_ref",
+  "--start-from",
+  "crate::extension_limbs_ref",
+  "--start-from",
+  "crate::extension_raw_ref",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/crate/Cargo.toml",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "1"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "NDE_Reference2",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/raw",
+  "-subdir",
+  "NDE_Reference2",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/repro.llbc"
+ ],
+ "source_file": "PCQG_NDE_reference2.rs",
+ "reference_sha256": "51620fa48a66983596663dd13e959e8b4d77abfea9fb5b6da6bfc6417309e1c3",
+ "manifest_sha256": "9d646324ed8aa796b4ad0d45c5cba4199a4d183a1f667604293fdce1a45a03e5",
+ "namespace": "NDE_Reference2",
+ "start_from": [
+  "crate::lift_ref",
+  "crate::extension_limbs_ref",
+  "crate::extension_raw_ref"
+ ],
+ "configuration": {
+  "start_from": [
+   "crate::lift_ref",
+   "crate::extension_limbs_ref",
+   "crate::extension_raw_ref"
+  ],
+  "include": [],
+  "opaque": [],
+  "features": "(standalone crate, no features)",
+  "manifest": "generated nde_reference/Cargo.toml",
+  "namespace": "NDE_Reference2",
+  "crate": "nde_reference"
+ },
+ "covers": {
+  "modules": [
+   "NDE_Reference2.Funs"
+  ]
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "p1f": {
+  "basis": "PCVA_CLASSIFICATION CONFIG_MISMATCH: gate checked (overflow ON); P5 fresh emission NML_E012 was overflow OFF; same source and manifest, original Aeneas, overflow checks ON",
+  "differences_from_P5_emission": "Aeneas = rebuilt original b59d5188 (959659a6...) not b59d5188-extended; overflow checks ON; no -diagnose-translation (as NML); crate staged by PCQG_nde.py, no NHR frozen payload (standalone crate as in NML)"
+ }
+}
