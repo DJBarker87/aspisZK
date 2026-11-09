@@ -23,7 +23,8 @@ def m0 (reserved : Bool) : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.C
 /-- The one-line diff: restoring the old currentBase gives the old seed. -/
 theorem diff (reserved : Bool) :
  {m0 reserved with currentBase := NNH_HostSeed.m0.currentBase} = NNH_HostSeed.m0 := rfl
-theorem op1_slot (reserved : Bool) : (m0 reserved).currentBase.op1 = filled reserved := rfl
+theorem op1_slot (reserved : Bool) :
+ @AspisR1CurrentCaller.Ops.op1 (m0 reserved).currentBase = @filled reserved := rfl
 end AspisR1.NOC_HostSeed
 
 namespace AspisR1.NOC_HostCtx
@@ -313,8 +314,8 @@ theorem current {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
    op1 := (DrvC_Installation.currentInstalled (oldCfg c)).op1} =
  DrvC_Installation.currentInstalled (oldCfg c) := rfl
 theorem current_op1 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
- (DrvC_Installation.currentInstalled (newCfg c)).op1 =
-  NOC_HostSeed.filled (NNH_HostCtx.envOf c).reservation := rfl
+ @AspisR1CurrentCaller.Ops.op1 (DrvC_Installation.currentInstalled (newCfg c)) =
+  @NOC_HostSeed.filled (NNH_HostCtx.envOf c).reservation := rfl
 /-- The stage dictionary is unchanged. -/
 theorem stage {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  DrvC_Installation.stage (newCfg c) = DrvC_Installation.stage (oldCfg c) := rfl
