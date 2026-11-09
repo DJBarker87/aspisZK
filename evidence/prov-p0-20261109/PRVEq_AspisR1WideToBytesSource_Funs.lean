@@ -35,6 +35,7 @@ def Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter (T : Type) (N :
   into_iter := Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
 }
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- Trait implementation: [core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}]
     Source: '/rustc/library/core/src/slice/iter.rs', lines 2045:0-2045:46
     Name pattern: [core::iter::traits::iterator::Iterator<core::slice::iter::ChunksExactMut<'a, @T>, &'a mut [@T]>] -/
@@ -46,6 +47,7 @@ impl_def
   next :=
     core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next
 }
+-/
 
 /-- [aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::to_limbs]:
     Source: 'crates/aspis-core/src/field/wide_exact.rs', lines 238:4-249:5
@@ -62,6 +64,7 @@ def field.wide_exact.WideExact.to_limbs
   let i7 := self.c1.c1.b
   ok (Array.make 8#usize [ i, i1, i2, i3, i4, i5, i6, i7 ])
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- [aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::to_le_bytes]: loop body 0:
     Source: 'crates/aspis-core/src/field/wide_exact.rs', lines 275:8-277:9
     Visibility: public -/
@@ -98,7 +101,9 @@ def field.wide_exact.WideExact.to_le_bytes_loop.body
     ok (cont (iter1,
       fun z => let z1 := next_back z (some (chunk1, limb))
                back z1))
+-/
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- [aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::to_le_bytes]: loop 0:
     Source: 'crates/aspis-core/src/field/wide_exact.rs', lines 275:8-277:9
     Visibility: public -/
@@ -118,7 +123,9 @@ def field.wide_exact.WideExact.to_le_bytes_loop
     (fun (iter1, back1) => field.wide_exact.WideExact.to_le_bytes_loop.body
       iter1 back1)
     (iter, back)
+-/
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- [aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::to_le_bytes]:
     Source: 'crates/aspis-core/src/field/wide_exact.rs', lines 273:4-279:5
     Visibility: public -/
@@ -138,34 +145,31 @@ def field.wide_exact.WideExact.to_le_bytes
   let cem1 := zip_back back
   let s1 := chunks_exact_mut_back cem1
   ok (to_slice_mut_back s1)
+-/
 
 end PRVFresh_AspisR1WideToBytesSource_Funs
 
 theorem PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator : @PRVFresh_AspisR1WideToBytesSource_Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator = @AspisR1WideToBytesSource.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator"; delta PRVFresh_AspisR1WideToBytesSource_Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator AspisR1WideToBytesSource.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator; try rfl; done)
+  (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator"; rfl)
 #print axioms PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
 
 theorem PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter : @PRVFresh_AspisR1WideToBytesSource_Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter = @AspisR1WideToBytesSource.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter"; delta PRVFresh_AspisR1WideToBytesSource_Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter AspisR1WideToBytesSource.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter; try simp only [PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator]; try rfl; done)
+  (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter"; rfl)
 #print axioms PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter
 
-theorem PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice : @PRVFresh_AspisR1WideToBytesSource_Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice = @AspisR1WideToBytesSource.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice"; delta PRVFresh_AspisR1WideToBytesSource_Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice AspisR1WideToBytesSource.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice; try rfl; done)
-#print axioms PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice : @PRVFresh_AspisR1WideToBytesSource_Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice = @AspisR1WideToBytesSource.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
 theorem PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_limbs = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_limbs := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs"; delta PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_limbs AspisR1WideToBytesSource.field.wide_exact.WideExact.to_limbs; try rfl; done)
+  (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs"; rfl)
 #print axioms PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs
 
-theorem PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop.body = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop.body := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body"; delta PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop.body AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop.body; try simp only [PRVEq.AspisR1WideToBytesSource.Funs.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator, PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice]; try rfl; done)
-#print axioms PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop.body = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop.body
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
-theorem PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop"; delta PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop; try simp only [PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop.body]; try rfl; done)
-#print axioms PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes_loop = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes_loop
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
-theorem PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes := by
-  first | (trace "PRV-S1 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes"; delta PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes; try simp only [PRVEq.AspisR1WideToBytesSource.Funs.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter, PRVEq.AspisR1WideToBytesSource.Funs.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice, PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_limbs, PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes_loop]; try rfl; done)
-#print axioms PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.AspisR1WideToBytesSource.Funs.field.wide_exact.WideExact.to_le_bytes : @PRVFresh_AspisR1WideToBytesSource_Funs.field.wide_exact.WideExact.to_le_bytes = @AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
