@@ -128,7 +128,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
-b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+([str(p.relative_to(b)) for p in (b/'NOF_audit').glob('NEP_*') if p.is_file() and p.stat().st_size<20_000_000] if {kind!r}=='audit' else [])
+b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+([str(p.relative_to(b)) for p in (b/'NOF_audit2').glob('NEP_*') if p.is_file() and p.stat().st_size<20_000_000] if {kind!r}=='audit' else [])
 out={{n:(b/n).read_text() for n in names}}
 o=b/{out_obj!r}
 if o.is_file():out[a+'/OBJECT_PIN.json']=json.dumps(dict(path=str(o),sha256=hashlib.sha256(o.read_bytes()).hexdigest(),bytes=o.stat().st_size))
