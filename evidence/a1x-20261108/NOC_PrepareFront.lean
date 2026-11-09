@@ -175,14 +175,14 @@ theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx)
   rw [semLib,← s1Raw]
  have logical : pk.logical.drop 13831 = List.replicate 928 (0 : UInt8) := by
   rw [filledFacts.2]
-  show List.drop 13831 (List.replicate (13831+928) (0 : UInt8)) = _
-  simp
+  show List.drop 13831 (List.replicate (13831+928) (0 : UInt8)) = List.replicate 928 0
+  rw [List.drop_replicate,Nat.add_sub_cancel_left]
+ have rightRaw : right.val.length = (LIBC_Bytes.raw (pk.logical.drop 13831)).val.length := by
+  rw [rightLen,logical,LIBC_Bytes.raw_length _ (by simp only [List.length_replicate]; scalar_tac)]
+  all_goals simp only [List.length_replicate]
  have valBytes : LIB_Carriers.bytes (LIBC_ExpandValuesModel.output s2 right) = pk.y1 := by
   rw [y1Lib,← s2Raw]
-  congr 1
-  apply values_congr
-  rw [rightLen,logical,LIBC_Bytes.raw_length _ (by simp only [List.length_replicate]; scalar_tac)]
-  all_goals simp
+  exact congrArg LIB_Carriers.bytes (values_congr s2 right _ rightRaw)
  have viewed : LIB_VLib.wideViewValue (LIB_Carriers.bytes proof,
    LIB_Carriers.bytes (LIBC_ExpandSemanticModel.output s1),
    LIB_Carriers.bytes (LIBC_ExpandValuesModel.output s2 right)) (NNH_HostCtx.envOf c) = .ok v := by
