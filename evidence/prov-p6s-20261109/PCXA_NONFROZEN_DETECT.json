@@ -1,0 +1,1223 @@
+{
+ "schema": "PCXA_NONFROZEN/1",
+ "target_established": false,
+ "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "summary": {
+  "modules_with_flag": 25,
+  "modules_clean": 233
+ },
+ "detector": "Aeneas doc-comment Source line ranges vs frozen file text at 4bb3b3f (identifier-in-range test)",
+ "detector_limits": [
+  "Only definitions with a Source: line in a crates/ or programs/ path are checked; library (/rustc/...) items, closures, trait-method names (clone/eq/fmt/call), loop/body helpers, generated names and hand-written definitions are skipped.",
+  "An identifier-in-range hit does not prove the body equals the frozen body: a revision that moved a function by a few lines or kept its name but changed its body is not detected (e.g. the M31.mul fast path would be missed if its line range still contained `mul`); such cases are found only by the P2 equality passes.",
+  "A flag shows the line range does not contain the identifier in the frozen file; it is evidence of a different revision or of renamed/wrapped source, not proof."
+ ],
+ "modules": {
+  "AdapterRwModel": {
+   "checked": 375,
+   "skipped": {
+    "not_frozen_tree_path": 13,
+    "name_not_checkable": 147
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::require_distinct_accounts",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "63-72",
+     "problem": "identifier require_distinct_accounts not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::require_distinct_accounts",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "61-72",
+     "problem": "identifier require_distinct_accounts not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::require_zero",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "75-80",
+     "problem": "identifier require_zero not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "82-228",
+     "problem": "identifier authenticate_invariant_release_registry not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::authenticate_asq8_accounts",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "231-336",
+     "problem": "identifier authenticate_asq8_accounts not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::validate_asq8",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "339-374",
+     "problem": "identifier validate_asq8 not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage1_owned",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "377-415",
+     "problem": "identifier stage1_owned not in frozen lines",
+     "sha": "e09bfc695970"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe_program::r1_pool_adapter::owned::stage2_owned",
+     "source": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+     "lines": "418-446",
+     "problem": "identifier stage2_owned not in frozen lines",
+     "sha": "e09bfc695970"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "AspisR1AdapterReconstruct.Funs": {
+   "checked": 74,
+   "skipped": {
+    "not_frozen_tree_path": 2,
+    "name_not_checkable": 7,
+    "path_missing_in_frozen": 6
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_statement::atomic_statement::encode_digest_canonical",
+     "source": "crates/aspis-statement/src/atomic_statement.rs",
+     "lines": "75-77",
+     "problem": "identifier encode_digest_canonical not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_accounts::digest_is_canonical",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs",
+     "lines": "168-175",
+     "problem": "identifier digest_is_canonical not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::{aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1}::common",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "119-119",
+     "problem": "identifier common not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::statement_public_common",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "204-206",
+     "problem": "identifier statement_public_common not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::digest_is_canonical",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "107-114",
+     "problem": "identifier digest_is_canonical not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "466-473",
+     "problem": "identifier validate_pool_v1_pair_live_snapshot_v1 not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "493-496",
+     "problem": "identifier encode_pool_v1_pair_live_snapshot_v1 not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_terminal::validate_verified_afterstate",
+     "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+     "lines": "133-140",
+     "problem": "identifier validate_verified_afterstate not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+     "lines": "154-157",
+     "problem": "identifier encode_pool_v1_pair_verified_afterstate_v1 not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_late_public_statement_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "538-541",
+     "problem": "identifier encode_pool_v1_pair_late_public_statement_v1 not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "227-229",
+     "problem": "identifier validate_pool_v1_pair_forest_terminal_statement_v1 not in frozen lines",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::asq8_common",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "28-44",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::transfer_statement_box::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_r1_adapter_reconstruct::r1_pool_adapter::transfer_statement_box::closure}::call_once",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "56-56",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::transfer_statement_box",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "47-58",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::withdrawal_statement_box::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1,), solana_program_error::ProgramError> for aspis_r1_adapter_reconstruct::r1_pool_adapter::withdrawal_statement_box::closure}::call_once",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "70-70",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::withdrawal_statement_box",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "61-72",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::reconstruct_asq8_statement",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "75-101",
+     "problem": "path absent from frozen tree",
+     "sha": "bce4345d53e4"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "AspisR1AdapterReconstruct.Types": {
+   "checked": 50,
+   "skipped": {
+    "name_not_checkable": 12,
+    "not_frozen_tree_path": 2,
+    "path_missing_in_frozen": 6
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "165-165",
+     "problem": "identifier PoolV1PairForestTerminalFormatErrorV1 not in frozen lines",
+     "sha": "f494d5f800d3"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::AuthenticatedAsq8Accounts",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "17-25",
+     "problem": "path absent from frozen tree",
+     "sha": "f494d5f800d3"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::transfer_statement_box::closure",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "56-56",
+     "problem": "path absent from frozen tree",
+     "sha": "f494d5f800d3"
+    },
+    {
+     "symbol": "aspis_r1_adapter_reconstruct::r1_pool_adapter::withdrawal_statement_box::closure",
+     "source": "programs/adapter-reconstruct/lib.rs",
+     "lines": "70-70",
+     "problem": "path absent from frozen tree",
+     "sha": "f494d5f800d3"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "AspisR1DecodeKFullV10.Funs": {
+   "checked": 10,
+   "skipped": {
+    "not_frozen_tree_path": 3
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::r1_wire::{aspis_r1_cost_probe::r1_wire::ValidatedRecord<'a>}::decode_k_value",
+     "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+     "lines": "139-157",
+     "problem": "identifier decode_k_value not in frozen lines",
+     "sha": "9cfa90cf12f4"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::r1_wire::{aspis_r1_cost_probe::r1_wire::ValidatedRecord<'a>}::decode_k",
+     "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+     "lines": "177-181",
+     "problem": "identifier decode_k not in frozen lines",
+     "sha": "9cfa90cf12f4"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::r1_wire::{aspis_r1_cost_probe::r1_wire::ValidatedRecord<'a>}::decode_k",
+     "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+     "lines": "159-181",
+     "problem": "identifier decode_k not in frozen lines",
+     "sha": "9cfa90cf12f4"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "AspisR1TerminalDecoder.Funs": {
+   "checked": 108,
+   "skipped": {
+    "not_frozen_tree_path": 3,
+    "name_not_checkable": 63
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_statement::atomic_statement::encode_digest_canonical",
+     "source": "crates/aspis-statement/src/atomic_statement.rs",
+     "lines": "75-77",
+     "problem": "identifier encode_digest_canonical not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_accounts::digest_is_canonical",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs",
+     "lines": "168-175",
+     "problem": "identifier digest_is_canonical not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::Payment",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "184-184",
+     "problem": "identifier Payment not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::LaneTransition",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "185-185",
+     "problem": "identifier LaneTransition not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::transition_kind",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "190-202",
+     "problem": "identifier transition_kind not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::digest_is_canonical",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "107-114",
+     "problem": "identifier digest_is_canonical not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "466-473",
+     "problem": "identifier validate_pool_v1_pair_live_snapshot_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+     "lines": "493-496",
+     "problem": "identifier encode_pool_v1_pair_live_snapshot_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_terminal::validate_verified_afterstate",
+     "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+     "lines": "133-140",
+     "problem": "identifier validate_verified_afterstate not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+     "lines": "154-157",
+     "problem": "identifier encode_pool_v1_pair_verified_afterstate_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "318-323",
+     "problem": "identifier decode_lane_transition_boxed_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "359-371",
+     "problem": "identifier decode_transfer_statement_boxed_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "374-384",
+     "problem": "identifier decode_withdrawal_statement_boxed_v1 not in frozen lines",
+     "sha": "74e3d0451783"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "CurrentCompactCallerTypesV1": {
+   "checked": 25,
+   "skipped": {
+    "name_not_checkable": 2
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_core::state_only_prefix::r0::Challenges",
+     "source": "crates/aspis-core/src/state_only_prefix.rs",
+     "lines": "1841-1841",
+     "problem": "identifier Challenges not in frozen lines",
+     "sha": "dd338a7e3a4d"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NFG_InverseRef.Funs": {
+   "checked": 27,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_core::field::square_n",
+     "source": "crates/aspis-core/src/field.rs",
+     "lines": "48-50",
+     "problem": "identifier square_n not in frozen lines",
+     "sha": "c97c88893c5d"
+    }
+   ],
+   "splitB": false,
+   "closed": true,
+   "group": "R"
+  },
+  "NFN_ExtractedGeometry": {
+   "checked": 38,
+   "skipped": {
+    "name_not_checkable": 17,
+    "not_frozen_tree_path": 32
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_core::r0::domain::FibreIndex",
+     "source": "crates/aspis-core/src/r0/domain.rs",
+     "lines": "9-9",
+     "problem": "identifier FibreIndex not in frozen lines",
+     "sha": "142f655b5ca2"
+    },
+    {
+     "symbol": "aspis_core::field::square_n",
+     "source": "crates/aspis-core/src/field.rs",
+     "lines": "48-50",
+     "problem": "identifier square_n not in frozen lines",
+     "sha": "142f655b5ca2"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::batch_prefix_products",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "138-143",
+     "problem": "identifier batch_prefix_products not in frozen lines",
+     "sha": "142f655b5ca2"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::QueryGeometry}::for_range",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "171-174",
+     "problem": "identifier for_range not in frozen lines",
+     "sha": "142f655b5ca2"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::QueryGeometry}::for_range",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "152-177",
+     "problem": "identifier for_range not in frozen lines",
+     "sha": "142f655b5ca2"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::NEW_geometry_root",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "534-536",
+     "problem": "range beyond frozen file length",
+     "sha": "142f655b5ca2"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NFY_Part043": {
+   "checked": 60,
+   "skipped": {
+    "not_frozen_tree_path": 2,
+    "name_not_checkable": 14
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::asq8_reference_envelope",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "499-513",
+     "problem": "identifier asq8_reference_envelope not in frozen lines",
+     "sha": "c3419aa7e3ba"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_request_reference_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "473-496",
+     "problem": "identifier encode_pool_v1_pair_forest_terminal_request_reference_v1 not in frozen lines",
+     "sha": "c3419aa7e3ba"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_request_reference_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "522-572",
+     "problem": "identifier decode_pool_v1_pair_forest_terminal_request_reference_v1 not in frozen lines",
+     "sha": "c3419aa7e3ba"
+    },
+    {
+     "symbol": "aspis_statement::pool_v1::pair_forest_terminal::normalize_pool_v1_pair_forest_terminal_request_reference_v1",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+     "lines": "578-583",
+     "problem": "identifier normalize_pool_v1_pair_forest_terminal_request_reference_v1 not in frozen lines",
+     "sha": "c3419aa7e3ba"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NGN_Emitted": {
+   "checked": 3,
+   "skipped": {
+    "name_not_checkable": 1
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::entry",
+     "source": "crates/aspis-r1-cost-probe/src/lib.rs",
+     "lines": "49-49",
+     "problem": "range beyond frozen file length",
+     "sha": "b72974375af8"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NJA_CountBody": {
+   "checked": 7,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::multiproof::node_count",
+     "source": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+     "lines": "99-101",
+     "problem": "identifier node_count not in frozen lines",
+     "sha": "2e0ef4bcabbe"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::multiproof::node_count",
+     "source": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+     "lines": "96-106",
+     "problem": "identifier node_count not in frozen lines",
+     "sha": "2e0ef4bcabbe"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::multiproof::node_count",
+     "source": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+     "lines": "93-108",
+     "problem": "identifier node_count not in frozen lines",
+     "sha": "2e0ef4bcabbe"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NJC_ValidateEmission": {
+   "checked": 3,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::validate_checkpoint_queries",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "354-360",
+     "problem": "identifier validate_checkpoint_queries not in frozen lines",
+     "sha": "61381eacf275"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "NJS_Extract.Funs": {
+   "checked": 56,
+   "skipped": {
+    "not_frozen_tree_path": 1,
+    "name_not_checkable": 4
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::canonical_scan",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "66-68",
+     "problem": "identifier canonical_scan not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::canonical_scan",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "61-69",
+     "problem": "identifier canonical_scan not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::canonical_scan",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "59-71",
+     "problem": "identifier canonical_scan not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::canonical_scan",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "59-73",
+     "problem": "identifier canonical_scan not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::batch_keys",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "94-98",
+     "problem": "identifier batch_keys not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::sort_batch_keys",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "107-110",
+     "problem": "identifier sort_batch_keys not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::sort_batch_keys",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "105-111",
+     "problem": "identifier sort_batch_keys not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::batch_tree",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "180-206",
+     "problem": "identifier batch_tree not in frozen lines",
+     "sha": "21cc61a0ab3b"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "NJT_ClaimsRef_Funs": {
+   "checked": 1,
+   "skipped": {
+    "name_not_checkable": 1
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::r1_semantic::NJT_claims_ref",
+     "source": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+     "lines": "321-330",
+     "problem": "range beyond frozen file length",
+     "sha": "6f53933c7ab7"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "NKJ_Extracted.Funs": {
+   "checked": 1,
+   "skipped": {
+    "path_missing_in_frozen": 9
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_add",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "2-2",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_channels",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "3-6",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_product",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "7-7",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_row",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "8-10",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_accumulate",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "11-14",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_words",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "15-15",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_small2",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "16-20",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_small3",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "21-26",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    },
+    {
+     "symbol": "aspis_core::field::NKJ_reference::NKJ_small4",
+     "source": "crates/aspis-core/src/field/NKJ_reference.rs",
+     "lines": "27-33",
+     "problem": "path absent from frozen tree",
+     "sha": "37e4f961a899"
+    }
+   ],
+   "splitB": false,
+   "closed": true,
+   "group": "R"
+  },
+  "Port3_NativeBatchBody": {
+   "checked": 10,
+   "skipped": {
+    "name_not_checkable": 2
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::batch_tree",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "180-206",
+     "problem": "identifier batch_tree not in frozen lines",
+     "sha": "566a69acab73"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "Port3_NativeGeometryBody": {
+   "checked": 10,
+   "skipped": {
+    "name_not_checkable": 16
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::QueryGeometry}::for_range",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "171-174",
+     "problem": "identifier for_range not in frozen lines",
+     "sha": "fd5652bf709f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::QueryGeometry}::for_range",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "152-177",
+     "problem": "identifier for_range not in frozen lines",
+     "sha": "fd5652bf709f"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "Port3_NativePendingBody": {
+   "checked": 2,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::BatchedWeights}::new",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "209-213",
+     "problem": "identifier new not in frozen lines",
+     "sha": "8c0159182aca"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "R"
+  },
+  "Port3_NativeQueryBody": {
+   "checked": 10,
+   "skipped": {
+    "name_not_checkable": 2
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::accumulate_batched_with_node",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "280-280",
+     "problem": "identifier accumulate_batched_with_node not in frozen lines",
+     "sha": "55e8039d4ce1"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::accumulate_batched_with_node",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "281-286",
+     "problem": "identifier accumulate_batched_with_node not in frozen lines",
+     "sha": "55e8039d4ce1"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::candidate::query_loop",
+     "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "lines": "242-249",
+     "problem": "identifier query_loop not in frozen lines",
+     "sha": "55e8039d4ce1"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "R"
+  },
+  "Port4C_NativePrefix": {
+   "checked": 3,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::batch_prefix_products",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "138-143",
+     "problem": "identifier batch_prefix_products not in frozen lines",
+     "sha": "c10a94bdc7f8"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "R"
+  },
+  "Port5Q2_ReaderValidate": {
+   "checked": 6,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::validate_checkpoint_queries",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "354-360",
+     "problem": "identifier validate_checkpoint_queries not in frozen lines",
+     "sha": "fed80340af2c"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "Port5Q2_ReaderWeights": {
+   "checked": 14,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::verifier::read_checkpoint_weights",
+     "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+     "lines": "364-371",
+     "problem": "identifier read_checkpoint_weights not in frozen lines",
+     "sha": "c8e9a138f718"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "a"
+  },
+  "RPz7_FIo_NativeFuns": {
+   "checked": 203,
+   "skipped": {
+    "not_frozen_tree_path": 3,
+    "name_not_checkable": 14
+   },
+   "flagged": [
+    {
+     "symbol": "aspis_core::field::{aspis_core::field::QM31}::pow",
+     "source": "crates/aspis-core/src/field.rs",
+     "lines": "992-998",
+     "problem": "identifier pow not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_core::r0::transport::order",
+     "source": "crates/aspis-core/src/r0/transport.rs",
+     "lines": "38-44",
+     "problem": "identifier order not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_core::r0::transport::order",
+     "source": "crates/aspis-core/src/r0/transport.rs",
+     "lines": "30-48",
+     "problem": "identifier order not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push",
+     "source": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+     "lines": "118-121",
+     "problem": "identifier push not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::transport::{aspis_r1_cost_probe::transport::Variant}::row",
+     "source": "crates/aspis-r1-cost-probe/src/transport.rs",
+     "lines": "13-13",
+     "problem": "identifier row not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::powers",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "11-18",
+     "problem": "identifier powers not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::kpowers",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "21-21",
+     "problem": "identifier kpowers not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::s2_grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "35-38",
+     "problem": "identifier s2_grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::s2_grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "42-45",
+     "problem": "identifier s2_grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::s2_grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "40-47",
+     "problem": "identifier s2_grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "62-62",
+     "problem": "identifier grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "65-65",
+     "problem": "identifier grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "60-68",
+     "problem": "identifier grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "73-76",
+     "problem": "identifier grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::grouped_inactive_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "70-78",
+     "problem": "identifier grouped_inactive_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::twofold_libra_weights",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "88-88",
+     "problem": "identifier twofold_libra_weights not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::twofold_libra_weights",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "86-89",
+     "problem": "identifier twofold_libra_weights not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::twofold_libra_weights",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "93-96",
+     "problem": "identifier twofold_libra_weights not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::twofold_libra_weights",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "91-98",
+     "problem": "identifier twofold_libra_weights not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::factored_s2_libra_weights",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "108-132",
+     "problem": "identifier factored_s2_libra_weights not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::push_byte_products",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "140-142",
+     "problem": "identifier push_byte_products not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::partial_dot",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "145-147",
+     "problem": "identifier partial_dot not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::high_dot",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "150-152",
+     "problem": "identifier high_dot not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::dense_point_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "336-336",
+     "problem": "identifier dense_point_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::dense_point_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "334-338",
+     "problem": "identifier dense_point_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::dense_point_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "341-341",
+     "problem": "identifier dense_point_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::dense_point_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "345-345",
+     "problem": "identifier dense_point_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::dense_point_pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "343-347",
+     "problem": "identifier dense_point_pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::tensor",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "243-249",
+     "problem": "identifier tensor not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::tensor",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "242-251",
+     "problem": "identifier tensor not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::shared_partials",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "164-166",
+     "problem": "identifier shared_partials not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "270-270",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "285-285",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "293-293",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "291-295",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "299-299",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "297-301",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "302-302",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "325-325",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "314-314",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::weights::{aspis_r1_cost_probe::weights::Weights}::pair",
+     "source": "crates/aspis-r1-cost-probe/src/weights.rs",
+     "lines": "317-317",
+     "problem": "identifier pair not in frozen lines",
+     "sha": "44783123aa6f"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "RPz7_FIp_NativeDots": {
+   "checked": 6,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::fast_dots::four_dots_one",
+     "source": "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+     "lines": "19-35",
+     "problem": "identifier four_dots_one not in frozen lines",
+     "sha": "2d81e6b0b723"
+    },
+    {
+     "symbol": "aspis_r1_cost_probe::fast_dots::four_dots_one",
+     "source": "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+     "lines": "17-44",
+     "problem": "identifier four_dots_one not in frozen lines",
+     "sha": "2d81e6b0b723"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  },
+  "S1NativeCompactModelV1": {
+   "checked": 12,
+   "skipped": {},
+   "flagged": [
+    {
+     "symbol": "aspis_r1_cost_probe::compact::expand_semantic",
+     "source": "crates/aspis-r1-cost-probe/src/compact.rs",
+     "lines": "154-172",
+     "problem": "identifier expand_semantic not in frozen lines",
+     "sha": "d50bb6c0c654"
+    }
+   ],
+   "splitB": true,
+   "closed": true,
+   "group": "c"
+  }
+ },
+ "modules_checked": 258
+}
