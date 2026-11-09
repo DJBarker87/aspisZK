@@ -1,0 +1,114 @@
+PCVA_sources/PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean:73:4: error: unsolved goals
+case pos.ok
+digest : Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize
+i : Usize
+h : i < digest.to_slice.len
+m : AspisR1TerminalDecoder.aspis_core.field.M31
+hm : digest.index_usize i = ok m
+hp : m ≥ AspisR1TerminalDecoder.aspis_core.field.P
+j : UScalar UScalarTy.Usize
+hi : i + 1#usize = ok j
+⊢ (if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done false) else ok (cont j)) = do
+    let cf ← if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done (some false)) else ok (cont j)
+    ok
+        (match cf with
+        | cont j => cont j
+        | done o =>
+          done
+            (match o with
+            | none => true
+            | some b => b))
+
+case pos.fail
+digest : Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize
+i : Usize
+h : i < digest.to_slice.len
+m : AspisR1TerminalDecoder.aspis_core.field.M31
+hm : digest.index_usize i = ok m
+hp : m ≥ AspisR1TerminalDecoder.aspis_core.field.P
+e : Error
+hi : i + 1#usize = fail e
+⊢ (if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done false) else fail e) = do
+    let cf ← if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done (some false)) else fail e
+    ok
+        (match cf with
+        | cont j => cont j
+        | done o =>
+          done
+            (match o with
+            | none => true
+            | some b => b))
+
+case pos.div
+digest : Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize
+i : Usize
+h : i < digest.to_slice.len
+m : AspisR1TerminalDecoder.aspis_core.field.M31
+hm : digest.index_usize i = ok m
+hp : m ≥ AspisR1TerminalDecoder.aspis_core.field.P
+hi : i + 1#usize = div
+⊢ (if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done false) else div) = do
+    let cf ← if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done (some false)) else div
+    ok
+        (match cf with
+        | cont j => cont j
+        | done o =>
+          done
+            (match o with
+            | none => true
+            | some b => b))
+
+case neg
+digest : Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize
+i : Usize
+h : i < digest.to_slice.len
+m : AspisR1TerminalDecoder.aspis_core.field.M31
+hm : digest.index_usize i = ok m
+hp : ¬m ≥ AspisR1TerminalDecoder.aspis_core.field.P
+⊢ (if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done false)
+    else do
+      let i2 ← i + 1#usize
+      ok (cont i2)) =
+    do
+    let cf ←
+      if ↑AspisR1TerminalDecoder.aspis_core.field.P ≤ ↑m then ok (done (some false))
+        else do
+          let i3 ← i + 1#usize
+          ok (cont i3)
+    ok
+        (match cf with
+        | cont j => cont j
+        | done o =>
+          done
+            (match o with
+            | none => true
+            | some b => b))
+PCVA_sources/PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean:71:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [h, if_true,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVA_sources/PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean:72:68: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵m̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVA_sources/PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean:73:77: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [h̵p̵,̵ ̵conv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVA_sources/PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean:74:57: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵i̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PRVP3.body_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

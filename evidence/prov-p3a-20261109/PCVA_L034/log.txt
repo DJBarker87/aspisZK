@@ -1,0 +1,193 @@
+'PRV_fix_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:496:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.write_parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:500:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.read32' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.binary_step
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:504:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.binary_step"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.binary_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:511:33: error: unsolved goals
+H : Type
+inst : MultiproofConeRef.aspis_core.digest.Digest32 H
+hash : H
+s : MultiproofConeRef.reference.Scratch
+nodes : Slice U8
+f : MultiproofConeRef.reference.Scratch → Usize → Usize → Result MultiproofConeRef.reference.Level
+s' : MultiproofConeRef.reference.Scratch
+a b : Usize
+⊢ (if a ≥ s'.n then ok (MultiproofConeRef.reference.Level.Done { idx := s'.idx, val := s'.val, n := b, «at» := s'.at })
+    else do
+      let r ← MultiproofConeRef.reference.binary_step inst hash s' nodes a b
+      match r with
+        | MultiproofConeRef.reference.Row.Stop s1 => ok (MultiproofConeRef.reference.Level.Stop s1)
+        | MultiproofConeRef.reference.Row.Next next i1 w1 => f next i1 w1) =
+    if a ≥ s'.n then ok (MultiproofConeRef.reference.Level.Done { idx := s'.idx, val := s'.val, n := b, «at» := s'.at })
+    else do
+      let r ← MultiproofConeRef.reference.binary_step inst hash s' nodes a b
+      match r with
+        | MultiproofConeRef.reference.Row.Stop s1 => ok (MultiproofConeRef.reference.Level.Stop s1)
+        | MultiproofConeRef.reference.Row.Next next i1 w1 => f next i1 w1
+'PRVEq.MultiproofConeRef.Funs.reference.level_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:518:33: error: unsolved goals
+H : Type
+inst : MultiproofConeRef.aspis_core.digest.Digest32 H
+hash : H
+s : MultiproofConeRef.reference.Scratch
+nodes : Slice U8
+f : MultiproofConeRef.reference.Scratch → U32 → Result MultiproofConeRef.reference.Level
+s' : MultiproofConeRef.reference.Scratch
+a : U32
+⊢ (if a = 0#u32 then ok (MultiproofConeRef.reference.Level.Done s')
+    else do
+      let l ← MultiproofConeRef.reference.level_rows inst hash s' nodes 0#usize 0#usize
+      match l with
+        | MultiproofConeRef.reference.Level.Stop a => ok l
+        | MultiproofConeRef.reference.Level.Done next => do
+          let i ← a - 1#u32
+          f next i) =
+    if a = 0#u32 then ok (MultiproofConeRef.reference.Level.Done s')
+    else do
+      let l ← MultiproofConeRef.reference.level_rows inst hash s' nodes 0#usize 0#usize
+      match l with
+        | MultiproofConeRef.reference.Level.Stop a => ok l
+        | MultiproofConeRef.reference.Level.Done next => do
+          let i ← a - 1#u32
+          f next i
+'PRVEq.MultiproofConeRef.Funs.reference.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.valid_indices
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:522:3: warning: 'trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.valid_indices"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:522:186: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.valid_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:525:165: error: unsolved goals
+⊢ (fun {H} aspis_coredigestDigest32Inst hash root s nodes =>
+      if s.n = 0#usize then ok (false, s)
+      else
+        if s.n > 16#usize then ok (false, s)
+        else do
+          let b ← PRVFresh_MultiproofConeRef_Funs.reference.valid_indices s.idx s.n 0#usize
+          if b = true then do
+              let i1 ← nodes.len % 32#usize
+              if (i1 != 0#usize) = true then ok (false, s)
+                else do
+                  let l ←
+                    MultiproofConeRef.reference.levels aspis_coredigestDigest32Inst hash
+                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                  match l with
+                    | MultiproofConeRef.reference.Level.Stop out => ok (false, out)
+                    | MultiproofConeRef.reference.Level.Done out =>
+                      if out.n = 1#usize then do
+                        let i2 ← out.idx.index_usize 0#usize
+                        if i2 = 0#u32 then do
+                            let a ← out.val.index_usize 0#usize
+                            let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+                            if b1 = true then ok (decide (out.at = nodes.len), out) else ok (false, out)
+                          else ok (false, out)
+                      else ok (false, out)
+            else ok (false, s)) =
+    fun {H} aspis_coredigestDigest32Inst hash root s nodes =>
+    if s.n = 0#usize then ok (false, s)
+    else
+      if s.n > 16#usize then ok (false, s)
+      else do
+        let b ← MultiproofConeRef.reference.valid_indices s.idx s.n 0#usize
+        if b = true then do
+            let i1 ← nodes.len % 32#usize
+            if (i1 != 0#usize) = true then ok (false, s)
+              else do
+                let l ←
+                  MultiproofConeRef.reference.levels aspis_coredigestDigest32Inst hash
+                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                match l with
+                  | MultiproofConeRef.reference.Level.Stop out => ok (false, out)
+                  | MultiproofConeRef.reference.Level.Done out =>
+                    if out.n = 1#usize then do
+                      let i2 ← out.idx.index_usize 0#usize
+                      if i2 = 0#u32 then do
+                          let a ← out.val.index_usize 0#usize
+                          let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+                          if b1 = true then ok (decide (out.at = nodes.len), out) else ok (false, out)
+                        else ok (false, out)
+                    else ok (false, out)
+          else ok (false, s)
+'PRVEq.MultiproofConeRef.Funs.reference.verify_owned' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.leaf_step
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:531:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.leaf_step"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.leaf_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_word
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:535:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_word"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.canonical_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_qm
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:539:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_qm"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.canonical_qm' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.expand_chunk
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:543:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.expand_chunk"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.expand_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.row_shape
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:547:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.row_shape"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.row_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:551:3: warning: 'trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:551:261: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read16
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:555:3: warning: 'trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read16"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.read16' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.check_values
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:559:3: warning: 'trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.check_values"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:559:294: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:559:299: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:559:299: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.check_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.expand_rows
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:563:3: warning: 'trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.expand_rows"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:563:291: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:563:296: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVA_sources/PRVEq_MultiproofConeRef_Funs_P3.lean:563:296: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.MultiproofConeRef.Funs.reference.expand_rows' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+{"attempt": "PCVA_L009", "exit_status": 1, "wall_seconds": 2.5719521089922637, "peak_rss_kib": "2619860", "swaps": "0", "print_axioms": ["'PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone' depends on axioms: [sorryAx]", "'PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVA_sources/PRVEq_NHJ_SnapshotReference_Funs_P3.lean:23:4: error: Invalid pattern: Expected a constructor or constant marked with `[match_pattern]`
+
+Hint: Using `NGL_MetaReference.ProgramError.Custom` would be valid:
+  [apply] `NGL_MetaReference.ProgramError.Custom`
+PCVA_sources/PRVEq_NHJ_SnapshotReference_Funs_P3.lean:21:49: error: elabDoMatch: `sorryAx` is not a matcher
+PCVA_sources/PRVEq_NHJ_SnapshotReference_Funs_P3.lean:110:45: error(lean.unknownIdentifier): Unknown constant `NHJ_SnapshotReference.ProgramError.InvalidAccountData`
+PRV-S2 PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone
+PCVA_sources/PRVEq_NHJ_SnapshotReference_Funs_P3.lean:127:228: error: unsolved
+...
+.clone error
+        ok
+            { key := key, owner := owner, is_signer := is_signer, is_writable := is_writable, executable := executable,
+              length := core.result.Result.Err pe, bytes := core.result.Result.Err error }) =
+    fun key owner is_signer is_writable executable length1 length2 borrowed =>
+    match borrowed with
+    | core.result.Result.Ok data =>
+      if data.len = length1 then do
+        let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 data
+        ok
+            { key := key, owner := owner, is_signer := is_signer, is_writable := is_writable, executable := executable,
+              length := core.result.Result.Ok data.len, bytes := core.result.Result.Ok v }
+      else
+        if data.len = length2 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 data
+          ok
+              { key := key, owner := owner, is_signer := is_signer, is_writable := is_writable,
+                executable := executable, length := core.result.Result.Ok data.len, bytes := core.result.Result.Ok v }
+        else
+          ok
+            { key := key, owner := owner, is_signer := is_signer, is_writable := is_writable, executable := executable,
+              length := core.result.Result.Ok data.len,
+              bytes := core.result.Result.Err NGL_MetaReference.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← NHJ_SnapshotReference.ProgramError.Insts.CoreCloneClone.clone error
+      ok
+          { key := key, owner := owner, is_signer := is_signer, is_writable := is_writable, executable := executable,
+            length := core.result.Result.Err pe, bytes := core.result.Result.Err error }
+'PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb782ae99ecab4de383080af6601b6810.scope; invocation ID: cec5655ee8b84de8892e4cd031245c80
