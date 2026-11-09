@@ -235,8 +235,8 @@ target not yet established
 # Third continuation (lead: direct converses, then Ok clause, then X7/X8 with named hypotheses)
 
 Research merged at 6ce07a6a593 (fast-forward). Nothing under .worktrees/cx-a1b was read or written; the
-terminal-domain and reverse-Merkle lemmas were not worked on. Whole job: 27 of 50 scopes (16 pass,
-11 fail); 23 remain (4 reserved for X9).
+terminal-domain and reverse-Merkle lemmas were not worked on. Whole job: 27 of 50 scopes (15 pass,
+12 fail); 23 remain (4 reserved for X9).
 
 ## Converse lane (5 of 15 scopes: L023-L027)
 
