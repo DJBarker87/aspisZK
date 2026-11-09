@@ -28,7 +28,7 @@ theorem loop_eq (l : List Usize) (h : ∀ i ∈ l, i.val < 4) (c : verifier.cand
  induction l generalizing c with
  | nil => rfl
  | cons i is ih =>
-  have head := call_eq c i (h i (by simp))
+  have head : verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut Dsel c i = verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut Dcon c i := call_eq c i (h i (by simp))
   have tail : ∀ c', OraclePortStdBuilder.fromFnLoop (inst Dsel) is c' =
     OraclePortStdBuilder.fromFnLoop (inst Dcon) is c' :=
    fun c' => ih (fun j hj => h j (by simp [hj])) c'
@@ -76,8 +76,10 @@ theorem link (a : LIBC_QueryLoop.Args) (env : RSL.Env) (d : LIBC_QueryLoop.Domai
   (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.nativeG a) none (LIBC_QueryLoop.geo a)
   (LIBC_QueryLoop.pending a) 10#usize = .ok (.Ok (LIBC_VStateCarriers.toAcc after,pending)) := by
  have run := NNX_QueryOutput.source a env after pending called
- rw [NFS_QueryLoopRoot.tx1 _ _ _ _ _ _ _ 0 0 d.2.2.gCanonical d.2.2.invariant d.2.1] at run
- exact (loop _ _ _ _ _ _ d.2.2.gCanonical d.2.2.invariant d.2.1).trans run
+ exact (loop _ _ _ _ _ _ d.2.2.gCanonical d.2.2.invariant d.2.1).trans
+  ((NFS_QueryLoopRoot.tx1 (NFS_CallerDomains.select LIBC_QueryOps.seed) (LIBC_Bytes.raw a.1)
+   (LIBC_QueryLoop.nativeP a) (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.nativeG a) (LIBC_QueryLoop.geo a)
+   (LIBC_QueryLoop.pending a) 0 0 d.2.2.gCanonical d.2.2.invariant d.2.1).symm.trans run)
 
 /-- The same at the installed current-dictionary query leaves. -/
 theorem current (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE)
