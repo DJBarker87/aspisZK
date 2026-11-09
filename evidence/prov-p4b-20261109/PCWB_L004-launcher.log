@@ -1,0 +1,47 @@
+{"attempt": "PCWB_L004", "exit_status": 1, "wall_seconds": 2.2422106398735195, "peak_rss_kib": "2616796", "swaps": "0", "print_axioms": ["'PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step
+PCWB_sources/PRVEq_probe_p3a.lean:67:3: warning: 'trace "PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows
+PCWB_sources/PRVEq_probe_p3a.lean:71:3: warning: 'trace "PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCWB_sources/PR
+...
+ys at1
+              let i ← at1 + 1#usize
+              sort_rows next i) →
+      motive fun keys at1 => MultiproofSortRef.sort_reference.sort_rows keys at1 n
+PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows.eq_1 : ∀ (keys : Std.Array U64 16#usize) (at1 n : Usize),
+  PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows keys at1 n =
+    if at1 ≥ n then ok keys
+    else do
+      let next ← PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_rows keys at1
+      let i ← at1 + 1#usize
+      PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows next i n
+PCWB_sources/PRVEq_probe_p3a.lean:79:8: error(lean.unknownIdentifier): Unknown constant `PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows.mutual.fixpoint_induct`
+@Lean.Order.fix_induct : ∀ {α : Sort u_1} [inst : Lean.Order.CCPO α] {f : α → α} (hf : Lean.Order.monotone f)
+  (motive : α → Prop),
+  Lean.Order.admissible motive → (∀ (x : α), motive x → motive (f x)) → motive (Lean.Order.fix f hf)
+@Lean.Order.fix_eq : ∀ {α : Sort u_1} [inst : Lean.Order.CCPO α] {f : α → α} (hf : Lean.Order.monotone f),
+  Lean.Order.fix f hf = f (Lean.Order.fix f hf)
+@[irreducible] def PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows : Std.Array U64 16#usize →
+  Usize → Usize → Result (Std.Array U64 16#usize) :=
+fun keys at1 n => PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows.mutual n keys at1
+def PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows.mutual : Usize →
+  Std.Array U64 16#usize → Usize → Result (Std.Array U64 16#usize) :=
+fun n =>
+  Lean.Order.fix
+    (fun f keys at1 =>
+      if at1 ≥ n then ok keys
+      else do
+        let next ← PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_rows keys at1
+        let i ← at1 + 1#usize
+        f next i)
+    ⋯
+instPartialOrderResult
+instCCPOResult
+
+Running as unit: run-r90560731a62b49af8e0d61b9e2d86341.scope; invocation ID: 47c4ed82eb904b70a63817aada39e35b

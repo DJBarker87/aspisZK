@@ -42,14 +42,28 @@ SETS['mp_parser_A']=mp('d28944b2a05','parser_reference',['canonical_words','open
 SETS['mp_sort_B']=mp('8c029994865','sort_reference',['insert_rows','sort_rows'],'MultiproofSortRef')
 SETS['mp_cone_B']=mp('8c029994865','reference',CONE_ROOTS,'MultiproofConeRef')
 
+# ---- withdrawal-caller cut crate: sources come from the retained archive evidence/withdrawal-caller-extraction-20261016
+WC_ARCH='/private/tmp/claude-501/-Users-dominic-ZK/e51a42a3-64c9-4a23-9ea1-f7bf410e2db1/scratchpad/wc_x/input/'
+SETS['wc']=dict(frozen_workspace=False,crate_dir='crate',gitfiles={},textfiles={},expect={},
+  localfiles={'Cargo.toml':('416796c3bb52f23ed3335b6a217dd5752509d8cd8c0271bc3c00ea894a9b4807','caller-extraction-evidence.tar.gz:input/Cargo.toml'),
+              'Cargo.lock':('5781c880361f3041f83d648c883bcf014b679f2d559bfd12178eca2588f2a1ac','caller-extraction-evidence.tar.gz:input/Cargo.lock'),
+              'lib.rs':('166185cd1986e82a5ec27d85f5f549067cd0afa4917e24226c19450cffe739dc','caller-extraction-evidence.tar.gz:input/lib.rs')},
+  charon_command=[CH,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1','--dest-file','{OUT}/repro.llbc','--','--locked','--offline','--release','--lib','--no-default-features'],
+  aeneas_command=[AE,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1WithdrawalCaller','-dest','{OUT}/raw','-subdir','AspisR1WithdrawalCaller','-split-files','-emit-json','{OUT}/repro.llbc'],
+  env={'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':'{WS}/../PCWB_target_wc','CARGO_NET_OFFLINE':'true','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin'},
+  namespace='AspisR1WithdrawalCaller',recorded_original_tools=dict(charon='r18 charon (sha daad69be per archive pins; XRa_bin/charon identical)',aeneas='aspis-r1-r18-tools-20261016/bin/aeneas (b59d5188 unpatched native); substituted XRa_bin/aeneas-b59d5188-extended'))
+
 def build(key,run,sets=SETS):
     s=sets[key];d=E/'sources'/key;files={}
     for rel,(rev,path) in s['gitfiles'].items():
         b=subprocess.check_output(['git','-C','/Users/dominic/ZK','show',f'{rev}:{path}']);assert sha(b)==s['expect'][rel],(rel,sha(b))
         (d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(b);files[rel]=dict(sha256=sha(b),local=f'sources/{key}/{rel}',git=f'{rev}:{path}')
+    for rel,(h,prov) in s.get('localfiles',{}).items():
+        b=(Path(WC_ARCH)/rel).read_bytes();assert sha(b)==h,(rel,sha(b))
+        (d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(b);files[rel]=dict(sha256=h,local=f'sources/{key}/{rel}',git=prov)
     for rel,t in s['textfiles'].items():
         b=t.encode();(d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(b);files[rel]=dict(sha256=sha(b),local=f'sources/{key}/{rel}',git='reconstructed from the recorded extraction script literal')
     # the host side reads PCWB_crate/<rel>; the client uploads files under that name
-    spec=dict(run=run,spec_id=key,**{k:v for k,v in s.items() if k not in('gitfiles','textfiles','expect')},files=files)
+    spec=dict(run=run,spec_id=key,**{k:v for k,v in s.items() if k not in('gitfiles','textfiles','expect','localfiles')},files=files)
     (E/(run+'_spec.json')).write_text(json.dumps(spec,indent=1)+'\n');print(run,key,{k:v['sha256'][:12] for k,v in files.items()})
 if __name__=='__main__':build(sys.argv[1],sys.argv[2])
