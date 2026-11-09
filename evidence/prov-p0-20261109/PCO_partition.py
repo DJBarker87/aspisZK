@@ -9,7 +9,10 @@ Substitutions relative to PRV (all recorded in PCO_CLASSIFICATIONS.json):
   S3 reach lists: root -> REACHABLE.txt.xz chosen as the newest ledger directory that holds one.
   S4 blob->module map for the 336: taken from the PRV_PARTITION blobs list (the map file was not archived).
   S5 pins-hash set: every 64-hex string inside tracked json named *PINS.json, *-pins.json, *EXTRACTION_PINS*.json;
-     'frozen' = the file text contains the frozen revision. outside_strict (not archived) is treated as empty.
+     'frozen' = the file text contains the frozen revision. outside_strict (not archived) is rebuilt as: every 64-hex string
+     inside a tracked json named receipt*.json whose path contains 'aeneas' (an Aeneas run receipt). Control: with S1..S5 the
+     script reproduces PRV_PARTITION.json exactly at f7ccfbace7a (see PCO_CONTROL.json); only the informational field
+     c_modules_uncovered_not_frozen_mappable differs (5 here, 15 in PRV; PRV's frozen_rs.txt was not archived).
 Usage: PCO_partition.py --rev REV --gate-dir ledger30-20261111 --gate-prefix NNN --scratch DIR --out OUT.json
 Run from the evidence/ directory of a checkout that contains the NMH/NML/NKT inputs.
 """

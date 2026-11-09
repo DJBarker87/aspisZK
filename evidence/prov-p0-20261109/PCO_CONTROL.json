@@ -1,0 +1,25 @@
+{
+ "description": "Control run of PCO_partition.py at research f7ccfbace7a with ledger27/NNK_ gate files against PRV_PARTITION.json.",
+ "command": "python3 prov-p0-20261109/PCO_partition.py --rev f7ccfbace7a --gate-dir ledger27-20261111 --gate-prefix NNK --scratch SCRATCH --out OUT.json   (run from evidence/)",
+ "summary_equal": {
+  "module_groups": true,
+  "module_subgroups": true,
+  "blob_groups": true,
+  "blob_subgroups": true,
+  "rows": true,
+  "defs": true
+ },
+ "modules_regrouped": [],
+ "module_rowcount_differences": [],
+ "module_coverage_differences": [],
+ "rows_affected_c_equal": true,
+ "rows_affected_c_or_b_equal": true,
+ "informational_difference": {
+  "field": "summary.c_modules_uncovered_not_frozen_mappable",
+  "prv": 15,
+  "control": 5,
+  "cause": "PRV frozen_rs.txt (list of frozen .rs files used by the mappability heuristic) was not archived; does not affect any group or count"
+ },
+ "control_partition_sha256": "cad18152eee5f7d5f30b8e36ef7c17748e8517a535b5652ee48760b8336163b2",
+ "conclusion": "method reproduces PRV exactly; every difference between PRV_PARTITION.json and PCO_PARTITION.json is therefore caused by the changed base (ledger30 gate, 12 newly CLOSED rows, 3 new fresh frozen emission files, 3 new emitted gate modules) or by the pilot correction"
+}

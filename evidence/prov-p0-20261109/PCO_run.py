@@ -13,7 +13,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re,os,atexit,base64,lzma
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
-B='/home/dombarker/project-offloads/codex-pc-prov-p0-20261109'
+B=os.environ.get('PCO_HOST_BASE','/home/dombarker/project-offloads/codex-pc-prov-p0-20261109')  # each job sets its own host workspace
 GATE_T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 a,kind=sys.argv[1:3];target=sys.argv[3] if len(sys.argv)>3 else None
 assert re.fullmatch('PCO_[EL][0-9]{3}',a) and kind in ('extract','lean'),'bad attempt id'

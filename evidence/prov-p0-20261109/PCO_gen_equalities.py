@@ -352,6 +352,10 @@ def generate(a):
         elif p: c = 'lean_pending'
         else: c = ti['cls']
         types_summary[n] = dict(status=c, reached=n in reached, text_identical=ti.get('identical'))
+    if kind == 'types':
+        for e in ext_types:
+            types_summary[e] = dict(status='external_instantiated', reached=e in reached, text_identical=None, gate_defines=e in gate_names,
+                                    note='fresh emission declares this type as an external axiom (TypesExternal_Template); the gate module supplies its definition: an inherited SDK/std model assumption, not proved here')
     fresh_names = set(fnames)
     tokens = set(t for b in fblocks for t in lean_ident_tokens(b['body']))
     leaks = sorted(t for t in tokens if t in gate_names and t not in fresh_names)

@@ -51,7 +51,7 @@ for m, rec in sorted(mods.items()):
         if sp is None:
             cut[(rec['crates'][0] if rec['crates'] else '?', rec['kind'])]['modules'].add(m); cut[(rec['crates'][0] if rec['crates'] else '?', rec['kind'])]['defs'].append(dict(module=m, definition=dn, rust=d['rust'], source=d['source'])); continue
         crate, man, feat, pre, half = FROZEN_MAN[sp]
-        top = re.sub(r'\{[^{}]*\}', '', d['rust']).split('::')[1:2]
+        top = [re.sub(r'\.rs$', '', d['source'][len(sp):]).replace('src/', '', 1)]
         key = (crate, man, feat, pre, half, top[0] if top else '')
         gg = groups[key]; gg['modules'].add(m); gg['defs'].append(dict(module=m, definition=dn, rust=d['rust'], source=d['source']))
         if is_fn_symbol(d['rust']): gg['roots'].add(to_root(d['rust'], pre))
@@ -60,8 +60,9 @@ for p in pilots: specs.append(p)
 for key, gg in sorted(groups.items(), key=lambda x: (x[0][4], x[0][0], x[0][5])):
     crate, man, feat, pre, half, top = key
     n += 1
-    specs.append(dict(spec_id='S%03d' % n, kind='frozen' if gg['roots'] else 'frozen_types_only', label=f'{crate}::{top}', crate=crate, manifest=man, features=feat,
+    specs.append(dict(spec_id='S%03d' % n, kind='frozen' if gg['roots'] else 'frozen_types_only', label=f'{crate}:{top}', crate=crate, manifest=man, features=feat,
                       start_from=sorted(gg['roots']), include=[], opaque=[], namespace=re.sub(r'[^A-Za-z0-9_]', '_', f'PCO_{crate}_{top}'), p1_half=half,
+                      roots_needed=(None if gg['roots'] else 'types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.'),
                       covers=dict(modules=sorted(gg['modules']), definitions=[d['definition'] for d in gg['defs']], rust_symbols=sorted({d['rust'] for d in gg['defs']})),
                       basis='Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point).'))
 cn = 0

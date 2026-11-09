@@ -4,10 +4,10 @@ Usage: python3 PCO_render_spec.py S001 PCO_E001 [--namespace NS]
 The charon/aeneas argument shape is the one used by NMH_E018/NMH_E001 (NHR extractor): fixed core includes, one or more
 --start-from roots, entry --include/--opaque lists, dest llbc under <run>_emitted, cargo args `--locked --offline --release
 --lib --jobs 1 --features F`. Only frozen-kind specs are runnable (reference and cut kinds are routed to P4)."""
-import json,sys,subprocess
+import json,sys,subprocess,os
 from pathlib import Path
 E=Path(__file__).resolve().parent
-HOST='/home/dombarker/project-offloads/codex-pc-prov-p0-20261109'
+HOST=os.environ.get('PCO_HOST_BASE','/home/dombarker/project-offloads/codex-pc-prov-p0-20261109')
 TOOL='/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin'
 REV='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 def render(s,run,host=HOST,namespace=None):
