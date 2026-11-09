@@ -19,19 +19,21 @@ abbrev M {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) := NOC_HostSeed.m0 (NNH_HostCt
 theorem zero {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  ∃ we, AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO (cur c) = ok we ∧
   Array.repeat 29#usize we = NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29 := by
- refine ⟨{c0:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}},
-   c1:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}}},?_,?_⟩
+ refine ⟨{c0:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}},c1:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}}},?_,?_⟩
  · unfold AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
    have h0 : @AspisR1CurrentCaller.Ops.op0 (cur c) = ok {c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}} := by
     first | rfl | with_unfolding_all rfl
    rw [h0]
    all_goals first | rfl | with_unfolding_all rfl
- · apply Subtype.ext
-   show List.replicate 29 _ = List.map InstalledPreparation.currentE
-    (List.replicate 29 AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO)
-   rw [List.map_replicate]
-   congr 1
-   all_goals first | rfl | with_unfolding_all rfl | (unfold InstalledPreparation.currentE InstalledPreparation.currentQ; with_unfolding_all rfl)
+ · first
+    | (apply Subtype.ext
+       show List.replicate 29 _ = List.map InstalledPreparation.currentE
+        (List.replicate 29 AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO)
+       rw [List.map_replicate]
+       congr 1
+       all_goals first | rfl | with_unfolding_all rfl)
+    | with_unfolding_all rfl
+    | (apply Subtype.ext; with_unfolding_all rfl)
 
 theorem off_folded {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  compact.OFF_FOLDED_ROOT (cur c) = ok 7751#usize := by
