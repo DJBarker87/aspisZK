@@ -319,3 +319,28 @@ ours (L031/L032 import failures; L032 also isolated Op5T_Concrete as a foreign i
 width is a premise of this lemma and is discharged by the 345 caller from its own proof guard
 (NNH_Stage1ProofDomain.extent: the 345 proof window is exactly 57607 bytes). It is not a premise of any field.
 L033-L035 fixed: ZERO witness shape, queries index lemma, an implicit env.
+
+## 345 forward composition = Ok clause: closed (4 of 12 scopes, L037-L040)
+`NOC_Stage1Forward.ok345` (L040, standard axioms). LABELLED OK CLAUSE ONLY; it is not the A1 field.
+```lean
+theorem NOC_Stage1Forward.ok345 {W Tx} (c : NNH_HostCtx.Ctx W Tx) (program) (xs) (data) (saved : alloc.vec.Vec U8)
+ (called : NNH_ReturnsBundle.tx1Value ⟨key program,accounts xs,bytes data⟩ (NOC_Run5bCtx.envOf c) = .ok (bytes saved.deref)) :
+ r1_pool_adapter.owned.stage1_owned (S c) program xs data = .ok (.Ok saved)
+-- S c := NNH_CorrectConfiguration.sdk (NOC_HostSeed.m0 (envOf c).reservation) (envOf c) c.fixed.indexError c.fixed.reservation
+```
+This is NNH_ExactRemainingTypes.tx1Ok at the corrected seed (the old-seed version is false: op1 .div).
+`body` steps every call of the frozen 345 body (NND_FreshStage1.fresh) against a full Result equality:
+instruction compare, account count and indices, distinct, two read-only buffers, verifier checkpoint (`ckLemma`,
+via NNH_AuthGuardCongr + NNH_ModelCheckpoint), the three data reads, require_zero, op47 decode, op21 validate
+(slot = NNH_S1HostCodec.validate by rfl, NOM's item), common + op24 encode (NNX_CommonEncode), PROOF_BYTES
+(`proofBytes`, restated arithmetic), afterstate 688, checked end 58295, length gate, header compare (`gateLemma`,
+op0 = slice/array ne at the SAME encoded candidate; `byteSame` bridges NMT_345.byte and NND_Carrier.byte), tag 2 at
+696, semantic_public (`publicBinding`: the model public carried by toPublic is toCurrentPublic of
+C.semanticPublic of the SAME decoded statement; NOM's item 1, proved by cases), the 688..58295 proof window
+(width 57607 from NNH_Stage1ProofDomain.extent, which discharges NOC_Tx1Forward's width premise), data[1] = 10,
+first_decoded (`fdLemma`: op10 = AspisS6CurrentFirstInstallation.current at the corrected current dictionary,
+then NOC_Tx1Forward.source), and the saved-length check. L038 hit the per-declaration heartbeat budget with a single
+proof; L039 split it into per-declaration lemmas (no limit raised).
+
+Scopes: 40 of 80 used. Remaining allocation: converse compositions 14, X9 8, margin 9 (+1 unused from 094 forward,
++8 unused from 345). No moves made.
