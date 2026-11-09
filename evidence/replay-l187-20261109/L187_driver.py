@@ -140,6 +140,7 @@ while True:
       f.rename(f.with_suffix('.applied'))
     for item in list(st.get('to_recover',[])):
       m=item['module']; st['to_recover'].remove(item); save()
+      if st['status'][m]!='FAIL': log('queued recovery skipped (status now',st['status'][m],')',m); continue
       dep=set();stk=list(P[m]['imports'])
       while stk:
         x=stk.pop()
