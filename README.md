@@ -13,19 +13,17 @@ someone drew of it afterwards.
 
 ## What we have built
 
-**A verifier that works, on a public chain.** The latest Aspis verifier is live
-on Solana devnet as an immutable program, and on 29 October 2026 it did exactly
-what it was built to do: it verified a private transfer and then a private
-withdrawal, each spread over two transactions, the first running the opening
-stage of the proof and writing a checkpoint, the second picking the checkpoint
-up, finishing the verification and settling the payment in the pool, all at a
-little under 1.2 million compute units a transaction. It then threw out a
-replay of each settlement, because the nullifier had already been spent, and a
-tampered proof for each, without a single protected account changing. The
-signatures are below, and anyone can go and look at them.
+**A verifier running on a public chain.** The latest Aspis verifier is live on
+Solana devnet as an immutable program. On 29 October 2026 it verified a private
+transfer and then a private withdrawal, each spread over two transactions: the
+first runs the opening stage of the proof and writes a checkpoint, the second
+picks the checkpoint up, finishes the verification and settles the payment in
+the pool, at a little under 1.2 million compute units a transaction. It then
+rejected a replay of each settlement, because the nullifier had already been
+spent, and a tampered proof for each, with no protected account changing. The
+signatures are below.
 
-**Soundness proved, in Lean, end to end.** This is the result I am most
-pleased with. On 9 November 2026 the soundness of
+**Soundness proved, in Lean, end to end.** On 9 November 2026 the soundness of
 the whole two-transaction spend path was assembled into a single theorem,
 `AspisR1.TAS_FinalB.deployed_splitB`, with its averaged form
 `AspisR1.TAS_FinalB.deployed_charge`. It says that an adversary who is
@@ -37,13 +35,11 @@ piece of the argument supplied by a proof rather than left as an assumption.
 Lean reports only its three standard axioms for both theorems; an independent
 walk of the proof terms, some 146,000 constants apiece, finds exactly the same
 three; and a scan of the full closure of 20,019 modules finds no dangling
-reference, duplicated declaration or mismatched import anywhere. I know of no other
-production STARK verifier whose soundness has been carried all the way to a
-machine-checked theorem at this level of detail.
+reference, duplicated declaration or mismatched import anywhere.
 
 **The Rust shown to match the model, function by function.** The theorem is
 only worth having if the verifier that runs is the verifier that was reasoned
-about, and a great deal of the work has gone into establishing exactly that. At the frozen source
+about, and that correspondence has been established function by function. At the frozen source
 revision `4bb3b3f51e16` the verifier reaches 599 distinct Rust functions between
 the field arithmetic and the two entry points, and every one of them now has a
 proved statement in Lean: on every input in its stated domain the function, as
@@ -54,11 +50,10 @@ All 599 are proved, none qualified, none open; the full table is in
 [`docs/r1/LEDGER-599.md`](docs/r1/LEDGER-599.md). For a handful of functions
 whose translation the tools could not produce, the proof is against a
 transcription of the Rust checked by hand, and each of those is named in the
-proof package rather than hidden. Along the way the proofs caught a model of
-the host environment under which the first transaction could never have been
-accepted, which is exactly the kind of error this work exists to find; the
-theorems are stated at the corrected model, which allocates exactly as the
-source does.
+proof package rather than hidden. The proofs also caught a model of the
+host environment under which the first transaction could never have been
+accepted; the theorems are stated at the corrected model, which allocates
+exactly as the source does.
 
 **The number.** For an adversary making at most Q hash queries, the probability
 that a false spend is accepted is at most
@@ -71,8 +66,7 @@ B = 15/2^109 ≈ 2^-105.093
 which is just under 2^-100 at Q = 0, stays below (Q+1)·2^-100 for every Q up to
 about 2^152, and for any budget an attacker could actually spend is in effect
 (Q+34)·2^-105. There is no proof-of-work credit in that figure, no restriction
-on the attacker and no dividing a probability by attack work to make it look
-better. The derivation is in section 3 of
+on the attacker and no division of a probability by attack work. The derivation is in section 3 of
 [`docs/r1/SOUNDNESS-STATUS.md`](docs/r1/SOUNDNESS-STATUS.md), and both
 theorems are printed in full, with a plain reading of every part of each statement, in
 [`docs/r1/TOP-THEOREM.md`](docs/r1/TOP-THEOREM.md).
@@ -134,11 +128,10 @@ How to build the ELF and check it against its hash is in
 [`docs/r1/BUILD.md`](docs/r1/BUILD.md). The complete evidence behind the
 proofs, some 45 GB of Lean sources, compiled objects and receipts, is on the
 [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch at
-commit `07123926e88`; it is deliberately not on `main`.
+commit `07123926e88`; it is not on `main`.
 
 ## About
 
-I built Aspis as a solo research project, with a good deal of AI-assisted
-engineering along the way. Citation details are in [CITATION.cff](CITATION.cff),
+I built Aspis as a solo research project with AI-assisted engineering. Citation details are in [CITATION.cff](CITATION.cff),
 and the code is licensed under [MIT](LICENSE-MIT) or
 [Apache-2.0](LICENSE-APACHE).
