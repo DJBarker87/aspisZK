@@ -1,0 +1,32 @@
+{"attempt": "PCQC_E009", "exit_status": 0, "wall_seconds": 92.82935750600882, "peak_rss_kib": "550056", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::multiproof::_::bits", "--start-from", "crate::multiproof::_::width", "--start-from", "crate::multiproof::_::levels", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_E009_emitted/repro.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_workspace/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--off
+...
+fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 31s
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_E009_emitted/repro.llbc
+
+=== Translation time per function ===
+  aspis_r1_cost_probe::multiproof::{aspis_r1_cost_probe::multiproof::Arity}::bits: 0.0277s (size: 8, rank: 1)
+  aspis_r1_cost_probe::multiproof::{aspis_r1_cost_probe::multiproof::Arity}::levels: 0.0058s (size: 10, rank: 3)
+  aspis_r1_cost_probe::multiproof::{aspis_r1_cost_probe::multiproof::Arity}::width: 0.0036s (size: 9, rank: 2)
+  aspis_r1_cost_probe::multiproof::LEAF_BITS: 0.0001s (size: 3, rank: 4)
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_E009_emitted/raw/PCQC_aspis_r1_cost_probe_multiproof
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_E009_emitted/raw/PCQC_aspis_r1_cost_probe_multiproof/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p1c-20261109/PCQC_E009_emitted/raw/PCQC_aspis_r1_cost_probe_multiproof/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.167785 seconds
+{"attempt": "PCQC_E009", "exit": 0, "error": null}
+
+Running as unit: run-r07fd4a1671a94c1c8025c4e5c59211ae.scope; invocation ID: 268298ac3e8c4361ba1abcdacc21d011
