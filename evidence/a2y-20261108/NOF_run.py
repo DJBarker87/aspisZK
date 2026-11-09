@@ -79,14 +79,20 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-assert kind=='lean',kind
-src=E/(target+'.lean')
-if not src.exists():src=E/'NOF_dependency_inputs'/(target+'.lean')
-n='NOF_generated/'+target.replace('.','/')+'.lean';files[n]=src.read_text();sources=[n]
-out_obj='NOF_objects/'+target.replace('.','/')+'.olean'
-command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NOF_generated','-o',out_obj,n]
+assert kind in ['lean','audit'],kind
+pin_modules=None
+if kind=='lean':
+ src=E/(target+'.lean')
+ if not src.exists():src=E/'NOF_dependency_inputs'/(target+'.lean')
+ n='NOF_generated/'+target.replace('.','/')+'.lean';files[n]=src.read_text();sources=[n]
+ out_obj='NOF_objects/'+target.replace('.','/')+'.olean'
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NOF_generated','-o',out_obj,n]
+else:
+ files['NOF_raw_audit.py']=(E/'NOF_raw_audit.py').read_text();sources=['NOF_raw_audit.py']
+ out_obj='NOF_objects/NOF_audit_no_output_'+a
+ command=['python3','NOF_raw_audit.py'];pin_modules=[target]
 overlays=json.loads((E/'NNY_RUN5B_PATHS.json').read_text())
-config=dict(continuation_stage=stage,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NOF_tmp',CARGO_TARGET_DIR=B+'/NOF_target',LEAN_PATH=':'.join([B+'/NOF_objects',B+'/NNY_objects']+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain','--','.'],text=True).strip()),deps_fingerprint={},expected_time='Focused import elaboration')
+config=dict(continuation_stage=stage,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NOF_tmp',CARGO_TARGET_DIR=B+'/NOF_target',LEAN_PATH=':'.join([B+'/NOF_objects',B+'/NNY_objects']+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain','--','.'],text=True).strip()),deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Raw ax2 traversal with pinned ledger30 walker',pin_modules=pin_modules)
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,os
@@ -98,7 +104,7 @@ o=b/{out_obj!r};o.parent.mkdir(parents=True,exist_ok=True)
 assert not o.is_symlink() and not o.exists(),'refusing to overwrite existing or symlinked output '+str(o)
 assert os.path.realpath(o.parent).startswith(str(b/'NOF_objects')),'output dir escapes NOF_objects'
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
-modules=re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+modules=x.get('pin_modules') or re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
 def resolve(m):
  parts=m.split('.')
  for root in roots:
@@ -122,7 +128,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
-b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+([str(p.relative_to(b)) for p in (b/'NOF_audit').glob('NEP_*') if p.is_file() and p.stat().st_size<20_000_000] if {kind!r}=='audit' else [])
 out={{n:(b/n).read_text() for n in names}}
 o=b/{out_obj!r}
 if o.is_file():out[a+'/OBJECT_PIN.json']=json.dumps(dict(path=str(o),sha256=hashlib.sha256(o.read_bytes()).hexdigest(),bytes=o.stat().st_size))
