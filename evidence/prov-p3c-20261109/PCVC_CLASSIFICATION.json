@@ -1,0 +1,32 @@
+{
+ "schema": "PCVC_CLASSIFICATION/1",
+ "target_established": false,
+ "principles": "tool-encoding difference (loop encoding, constant path, param hoisting) = SOURCE_SHAPE; SEMANTIC only when bodies disagree on some input. No SEMANTIC difference found in P3c scope.",
+ "semantic_differences_without_provable_caller_domain": [],
+ "corrections": [
+  {
+   "definition": "AspisR1WithdrawalCaller validate_common",
+   "from": "SEMANTIC",
+   "to": "SOURCE_SHAPE",
+   "proof": "PRVEq_AspisR1WithdrawalCaller_Funs_P3.lean PRVC.Eq.validate_common (PCVC_L046)",
+   "difference": "fresh pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY vs gate pool_v1.POOL_V1_LEAF_CAPACITY; both 1#u64 <<< 20#usize"
+  },
+  {
+   "definition": "AspisR1WithdrawalCaller validate_pool_v1_withdrawal_public_v1",
+   "from": "SEMANTIC",
+   "to": "SOURCE_SHAPE",
+   "proof": "PRVC.Eq.validate_pool_v1_withdrawal_public_v1 (PCVC_L046)",
+   "difference": "spend.VALUE_LIMIT vs VALUE_LIMIT, both 1#u32 <<< 30#i32; plus validate_common"
+  },
+  {
+   "definition": "TerminalDecoder pair_forest_accounts digest_is_canonical family (4)",
+   "from": "SEMANTIC",
+   "to": "SOURCE_SHAPE (loop-return encoding)",
+   "proof": "P2f PRVEq_TD_HP_P3f.lean; refinement for body/loop, plain equality for digest_is_canonical and output_lane_v1"
+  }
+ ],
+ "unclassified_open": [
+  "RPz7_FIo_NativeFuns aspis_core.r0.transport.order (P3b OPEN_SEMANTIC, gate flagged non-frozen): not examined in P3c"
+ ],
+ "items": "see PCVC_STATUS.json (proved, classification SOURCE_SHAPE with tool_difference) and PCVC_REMAINING.json"
+}

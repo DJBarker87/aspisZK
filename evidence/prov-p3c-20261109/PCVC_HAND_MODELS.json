@@ -1,0 +1,17 @@
+{
+ "schema": "PCVC_HAND_MODELS/1",
+ "items": [
+  {
+   "name": "core.array.from_fn",
+   "kind": "external axiom in original Aeneas emission (FunsExternal_Template: axiom core.array.from_fn ... : F -> Result (Array T N))",
+   "gate": "array_from_fn_copy N CopyInst FnMutInst zero init (defined loop)",
+   "bridge_statement": "for each instantiation (T,F,inst): core.array.from_fn N inst f = array_from_fn_copy N CopyT inst (zero_T) f. Needs a fact about the hand model (the fresh side is an unconstrained axiom); NOT assumed, NOT proved here. Cannot be stated as one generic theorem: array_from_fn_copy needs Copy and zero per element type (U64: 0#u64, QM31: field.QM31.ZERO).",
+   "blocks": "dropped fresh declarations in Native04/05/07/09/10/11 (internal_linear_lazy, internal_round, interpolated_internal_pair, external_local_packed_raw, ... ) and their callers",
+   "for": "P6"
+  },
+  {
+   "name": "hoisted constant parameter",
+   "note": "Native10 path_lanes_literal_loop and Native13 pattern_values_literal_loop1: fresh loop has an extra parameter q (the monadic constant ZERO bound by the caller) where gate inlines the constant. Equality holds at q = Gate ZERO only; caller passes exactly that constant. Not proved (needs constant-binding lemma Fresh.ZERO = ok Gate.ZERO)."
+  }
+ ]
+}

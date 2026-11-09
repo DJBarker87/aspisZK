@@ -1,0 +1,47 @@
+{"attempt": "PCVC_L002", "exit_status": 1, "wall_seconds": 2.589597790967673, "peak_rss_kib": "2607704", "swaps": "0", "print_axioms": ["'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+@loop.fixpoint_induct : ∀ {α : Type u_1} {β : Type u_2} (body : α → Result (ControlFlow α β))
+  (motive : (α → Result β) → Prop),
+  admissible motive →
+    (∀ (loop : α → Result β),
+        motive loop →
+          motive fun x =>
+            match body x with
+            | ok r =>
+              match r with
+              | cont x => loop x
+              | done x => ok x
+            | fail e => fail e
+            | div => div) →
+      motive (loop body)
+PCVC_sources/PRVC_LoopBridge_test2.lean:37:75: error: Function expected at
+  f
+but this term has type
+  α
+
+Note: Expected a function because this term is being appli
+...
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+@loop.fixpoint_induct : ∀ {α : Type u_1} {β : Type u_2} (body : α → Result (ControlFlow α β))
+  (motive : (α → Result β) → Prop),
+  admissible motive →
+    (∀ (loop : α → Result β),
+        motive loop →
+          motive fun x =>
+            match body x with
+            | ok r =>
+              match r with
+              | cont x => loop x
+              | done x => ok x
+            | fail e => fail e
+            | div => div) →
+      motive (loop body)
+PCVC_sources/PRVC_LoopBridge_test2.lean:37:75: error: Function expected at
+  f
+but this term has type
+  α
+
+Note: Expected a function because this term is being applied to the argument
+  body'
+
+Running as unit: run-re718dc1596b24f408d10b85781a92050.scope; invocation ID: c453a89ba76c4b64a47bbbd079e53047
