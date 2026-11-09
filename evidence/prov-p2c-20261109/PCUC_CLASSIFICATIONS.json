@@ -1,0 +1,102 @@
+{
+ "schema": "PCUC_CLASSIFICATIONS v1",
+ "target_established": false,
+ "classifications": [
+  {
+   "id": "PCUC-C1",
+   "topic": "fresh emission selection",
+   "classification": "Only the 16 overflow-checks-on emission directories of PCUC_ALLOWED_DIRS.json were offered to the preparer (PCQC_E001-E012 raw dirs and PCQ_E037-E040). PCQC_E022/E023 (adapter_owned) excluded as unrelated. No superseded overflow-off emission used.",
+   "reason": "ruling 2026-11-09; PCQC_COVERAGE.json p2_emission_dirs_per_gate_module"
+  },
+  {
+   "id": "PCUC-C2",
+   "topic": "coverage measure",
+   "classification": "A pass covers a reached definition when a same-Rust-symbol declaration exists in the fresh file (PCUD_prepare.py measure); text identity only breaks ties. The Lean compile against the compiled gate constants is the check; a wrong gate candidate gives a Lean error, never a false equality.",
+   "reason": "as P2d"
+  },
+  {
+   "id": "PCUC-C3",
+   "topic": "single-file gate modules (NFY_Part042/043, Port23PUSH_Source)",
+   "classification": "Treated as two views: Funs view (generator kind funs, fresh Funs.lean) and Types view (new generator flag --kind types, fresh Types.lean, label suffix _T). NFY_Part042 has no function among its reached definitions, only the Types view; NFY_Part043 reaches only functions and gets Part042 text as gate-types source (PCUC_GATE_TYPES.json).",
+   "reason": "generator decides kind from the module name suffix; --kind is generator change 3"
+  },
+  {
+   "id": "PCUC-C4",
+   "topic": "gate text with a second hand-appended namespace (NFY_Part042)",
+   "classification": "The interface text of the gate file is cut after the end of its first (Aeneas) namespace; the cut tail (a hand-written Slice.Insts.CoreCmpPartialEqArray block, line 437 ff.) is recorded (gate_text_cut_tail_bytes in gen_prepared.json). Statements are against the compiled constants, unaffected.",
+   "reason": "generator requires one namespace"
+  },
+  {
+   "id": "PCUC-C5",
+   "topic": "gate Types source for TerminalDecoder.Funs",
+   "classification": "Types for the identity report come from evidence/replay-dry3-20261026/RPz2_recovered/AspisR1TerminalDecoder/Types.lean (the single partition candidate of AspisR1TerminalDecoder.Types, sha 29120a92...), imports of the Funs gate also include AspisR1TerminalDecoder.FunsExternal (extracted-terminal-decoder-20261016: only a scoped Option discriminant instance).",
+   "reason": "partition candidates; gate Funs imports Types and FunsExternal"
+  },
+  {
+   "id": "PCUC-C6",
+   "topic": "generator change 4 (column-preserving attribute strip)",
+   "classification": "The self-copy control PCUC_L007 showed that strip_reg_attrs moved a same-line `def` to the next line and broke the column alignment of a following layout-sensitive do block (PAYMENT_STATEMENT_OFFSET: \"unexpected empty do block\"). Fixed (columns kept when def follows the attribute list on the same line). Regenerating all delivered PRVEq files with the changed generator gives byte-identical round-1 and round-2 bundles (checked), so the verified results L004-L006 are unaffected.",
+   "reason": "generator defect found by control; no effect on delivered files"
+  },
+  {
+   "id": "PCUC-C7",
+   "topic": "self-copy controls (PCO_HANDOFF section 4)",
+   "classification": "PCUC_L008 (generator with change 4): AspisR1TerminalDecoder.Funs 240/240 common declarations proved with the candidate text as fresh emission; NFY_Part043 92/92; Port23PUSH_Source 8/11, the three failures (verifier.update_residue_row, verifier.BatchedWeights.push, verifier.Port23PUSH_push) are statements that do not type-check because the gate file defines its own hand-written type ArrayIntoIter and the self-copy defines a second, distinct one: expected artefact, not a mismatch of the candidate with the compiled constants. Hence the three candidate texts are consistent with the compiled modules.",
+   "reason": "PILOT-1 control requirement for hand-adapted gate files (Port23PUSH_Source is TRANSFORMED_COPY; NFY_Part043 has a BEGIN-copied block)"
+  },
+  {
+   "id": "PCUC-C8",
+   "topic": "AspisR1AdapterReconstruct.Funs",
+   "classification": "Checked first, as instructed. The gate candidate (sha bce4345d...) is byte-identical to the Aeneas output archived in adapter-reconstruct-432-20261016/source-extraction-proofs.tar.gz (extraction-a/generated/.../Funs.lean) and to proofs/sources/.../Funs.lean in the same archive. That is an ORIGINAL (archive-linked) emission, not a fresh overflow-checks-on emission: its extraction configuration is not recorded as overflow-on in this job, the module is a cut crate (aspis_r1_adapter_reconstruct) outside every P1 selection (PCQC_COVERAGE specs), and P4b could not repeat the Aeneas step for the neighbouring cut crates (PCWB_E008-E010). Status NO_FRESH_EMISSION with this reference. The archived raw Types.lean (sha c60d3e70...) differs from both gate Types candidates (6129adf2..., f494d5f8...), so the compiled Types module is an adapted file; its only fresh-covered definition (field.M31) is proved.",
+   "reason": "PCWB_CUT_TRIAGE C003; gen/adapter_archive_check.json"
+  },
+  {
+   "id": "PCUC-C9",
+   "topic": "AspisR1PublicPreparation.*",
+   "classification": "Cut crate (aspis_r1_public_preparation), no P1 selection and no emission; only M31 (Types, via the frozen payment_relation emission) and the structure/enum shapes covered by frozen emissions are compared; Funs reaches only aspis_core.field.P (no fresh emission contains the same symbol).",
+   "reason": "PCQC_COVERAGE specs have no entry"
+  },
+  {
+   "id": "PCUC-C10",
+   "topic": "NO_FRESH_EMISSION references",
+   "classification": "Definitions whose Rust symbol lies in a still-failing selection carry the P1 reference per spec (S005 encode_digest_canonical: PCQC_E015; S010: PCQC_E016; S012: PCQC_E017/E024 timeouts; S011 definitions missing from PCQ_E040: validate_verified_afterstate_loop and encode_pool_v1_pair_verified_afterstate_v1; S007/S008 never run).",
+   "reason": "PCQC_FAILURES.json"
+  },
+  {
+   "id": "PCUC-C11",
+   "topic": "aspis_core.field.P form difference",
+   "classification": "FAILED(transport-needed, class EXTERNAL_CONST_FORM), not CONFIG_MISMATCH and not SEMANTIC: the fresh emission keeps the constant opaque (axiom aspis_core.field.P : Result Std.U32 in FunsExternal_Template) because the P1 spec lists it as an external; the gate defines def aspis_core.field.P : Std.U32 := 2147483647#u32. Every fresh function that reads P (`let i <- aspis_core.field.P`) is ill-typed against the gate environment. The values agree in the Rust source; no value difference is claimed or excluded here. It needs either a P1 re-extraction with the constant transparent or a P3 transport lemma.",
+   "reason": "first errors: Type mismatch \"aspis_core.field.P has type U32 but is expected to have type Result ?\""
+  },
+  {
+   "id": "PCUC-C12",
+   "topic": "no CONFIG_MISMATCH occurred",
+   "classification": "No checked-vs-wrapping (or overflow-related) body difference appears in any compared definition of this cluster (all normalized diffs listed in PCUC_FOR_P3.json; the arithmetic-bearing Port23 field operations are blocked earlier by NAME_MISMATCH). Nothing to report as CONFIG_MISMATCH.",
+   "reason": "brief: overflow-related differences should no longer appear"
+  },
+  {
+   "id": "PCUC-C13",
+   "topic": "loop return encoding (pair_forest_accounts.digest_is_canonical_loop)",
+   "classification": "FAILED(transport-needed) with a genuine form difference besides P: the fresh loop body returns ControlFlow Usize (Option Bool) and digest_is_canonical matches on pending_return; the gate loop body returns ControlFlow Usize Bool and digest_is_canonical returns the loop result directly. This is a different loop translation (older Aeneas or a hand simplification in the compiled gate module), not a numeric difference. Needs a refinement proof in P3 (both encode the same canonical-digest test); the exact normalized diffs are in the FOR_P3 items.",
+   "reason": "diff_normalized of the three definitions"
+  },
+  {
+   "id": "PCUC-C14",
+   "topic": "unparseable fresh text (decode_pool_v1_pair_verified_afterstate_v1)",
+   "classification": "FAILED(FRESH_PARSE_ERROR): the fresh Aeneas text of this declaration (PCQ_E040 Funs.lean) puts the match arms, `|`, the pattern and its binder (`val27 =>`) all at column 68; Lean rejects the pattern because the binder is not to the right of the enclosing do item (checkColGt). The original fresh file has the identical layout (checked), so the cause is the emitter layout at deep nesting, not a generator transformation. A whitespace-only re-layout would be a toolchain/format question for the lead; not hand-edited here.",
+   "reason": "PRVEq_bundle_B21.lean:2885, original Funs.lean slice inspected"
+  },
+  {
+   "id": "PCUC-C15",
+   "topic": "Port23PUSH_Source status",
+   "classification": "Gate is a hand-adapted copy (TRANSFORMED_COPY): types named field.M31/field.QM31 instead of aspis_core.field.*, and verifier.update_residue_row / BatchedWeights.push take an explicit parameter `arrayIntoIter : ArrayIntoIter` where the fresh text calls MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter. Proved: power_limb_at, residue_limb_at, update_residue_row_loop1 (+body). Failed (NAME_MISMATCH/hand model): update_residue_row_loop0 (+body), update_residue_row, BatchedWeights.push. Types view: M31/CM31/QM31 have no common Lean name; BatchedWeights text-identical only. Fresh emission is PCQC_E011 (candidate probe crate); Dot::push stays NO_FRESH_EMISSION (S016 Aeneas failure) and is not reached by these definitions beyond the opaque external.",
+   "reason": "gate hand-written iterator model; PCUC_HAND_MODELS.json"
+  },
+  {
+   "id": "PCUC-C16",
+   "topic": "TEXT_IDENTICAL_ONLY and TEXT_DIFFERS",
+   "classification": "Inductives and structures outside the generator simple-structure fragment get no Lean statement: TEXT_IDENTICAL_ONLY when the normalized text matches (not a proof). NFY_Part042 AtomicStatementError and PoolV1TreeError are TEXT_DIFFERS only by the gate attribute @[JHd_discriminant isize], an attribute added to the gate copy (non-semantic registration attribute stripped by the generator for the fresh side).",
+   "reason": "as P0/P2a"
+  }
+ ]
+}

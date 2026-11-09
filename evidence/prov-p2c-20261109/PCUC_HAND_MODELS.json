@@ -1,0 +1,843 @@
+{
+ "schema": "PCUC_HAND_MODELS v1",
+ "target_established": false,
+ "note": "Record only. No trust row proposed or added. Entries: every external name (fresh External template axiom or name resolved to a gate constant) per gate module and pass.",
+ "entries": [
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "@[rust_fun \"core::array::equality::{core::cmp::PartialEq<[@T], [@U; @N]>}::eq\"]\naxiom Slice.Insts.CoreCmpPartialEqArray.eq\n  {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "Rust core library (slice PartialEq impl), rustc nightly-2026-06-01 sysroot",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "aspis_core.field.M31.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::from_le_bytes\"]\naxiom aspis_core.field.M31.from_le_bytes\n  : (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                             ] def aspis_core.field.M31.from_le_bytes (bytes : Array Std.U8 4#usize) : Result (Option aspis_core.field.M31) := do\n                                                                           let v \u2190 lift (core.num.U32.from_le_bytes bytes)\n                                                                           if v >= aspis_core.field.P\n                                                                           then ok none\n                                                                           else ok (some v)"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "atomic_statement.decode_digest_canonical",
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "aspis_core.field.M31.to_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::to_le_bytes\"]\naxiom aspis_core.field.M31.to_le_bytes\n  : aspis_core.field.M31 \u2192 Result (Array Std.U8 4#usize)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                           ] def aspis_core.field.M31.to_le_bytes (self : aspis_core.field.M31) : Result (Array Std.U8 4#usize) := do\n                                                                         ok (core.num.U32.to_le_bytes self)"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.encode_common",
+    "pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "aspis_core.field.P",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "@[rust_const \"aspis_core::field::P\"] axiom aspis_core.field.P : Result Std.U32"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[global_simps, irreducible, rust_const                       ] def aspis_core.field.P : Std.U32 := 2147483647#u32"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+    "pool_v1.payment_relation.digest_is_canonical",
+    "pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1",
+    "pool_v1.payment_relation.validate_common",
+    "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "atomic_statement.encode_digest_canonical",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "axiom atomic_statement.encode_digest_canonical\n  : (Array aspis_core.field.M31 8#usize) \u2192 Result (Array Std.U8 32#usize)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "def atomic_statement.encode_digest_canonical (digest : Array aspis_core.field.M31 8#usize) : Result (Array Std.U8 32#usize) := do\n  let bytes := Array.repeat 32#usize 0#u8\n  let s \u2190 lift (Array.to_slice digest)\n  let i \u2190 core.slice.Slice.iter s\n  let iter \u2190 core.iter.traits.iterator.Iterator.enumerate.trait_default (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-statement (workspace path crate, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.encode_common",
+    "pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs",
+   "external_name": "core.result.Result.map_err",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs",
+    "text": "@[rust_fun \"core::result::{core::result::Result<@T, @E>}::map_err\"]\naxiom core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) :\n  (core.result.Result T E) \u2192 O \u2192 Result (core.result.Result T F)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                        ] def core.result.Result.map_err {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst : core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) : Result (core.result.Result T F) := do\n                                                                      match self with\n                                                                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)\n                                                                      | core.result.Result.Err e => let t \u2190 opsfunctionFnOnceOTupleEFInst.call_once op e\n                                            "
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs_p2",
+   "external_name": "aspis_core.field.P",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs_p2",
+    "text": "@[rust_const \"aspis_core::field::P\"] axiom aspis_core.field.P : Result Std.U32"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[global_simps, irreducible, rust_const                       ] def aspis_core.field.P : Std.U32 := 2147483647#u32"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "pool_v1.pair_forest_accounts.digest_is_canonical",
+    "pool_v1.pair_forest_accounts.digest_is_canonical_loop",
+    "pool_v1.pair_forest_accounts.digest_is_canonical_loop.body",
+    "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs_p2",
+   "external_name": "atomic_statement.encode_digest_canonical",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs_p2",
+    "text": "axiom atomic_statement.encode_digest_canonical\n  : (Array aspis_core.field.M31 8#usize) \u2192 Result (Array Std.U8 32#usize)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "def atomic_statement.encode_digest_canonical (digest : Array aspis_core.field.M31 8#usize) : Result (Array Std.U8 32#usize) := do\n  let bytes := Array.repeat 32#usize 0#u8\n  let s \u2190 lift (Array.to_slice digest)\n  let i \u2190 core.slice.Slice.iter s\n  let iter \u2190 core.iter.traits.iterator.Iterator.enumerate.trait_default (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-statement (workspace path crate, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": [
+    "pool_v1.pair_forest_accounts.first_canonical_byte",
+    "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs_p3",
+   "external_name": "aspis_core.field.M31.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs_p3",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::from_le_bytes\"]\naxiom aspis_core.field.M31.from_le_bytes\n  : (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                             ] def aspis_core.field.M31.from_le_bytes (bytes : Array Std.U8 4#usize) : Result (Option aspis_core.field.M31) := do\n                                                                           let v \u2190 lift (core.num.U32.from_le_bytes bytes)\n                                                                           if v >= aspis_core.field.P\n                                                                           then ok none\n                                                                           else ok (some v)"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "atomic_statement.decode_digest_canonical",
+    "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs_p3",
+   "external_name": "core.result.Result.map_err",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs_p3",
+    "text": "@[rust_fun \"core::result::{core::result::Result<@T, @E>}::map_err\"]\naxiom core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) :\n  (core.result.Result T E) \u2192 O \u2192 Result (core.result.Result T F)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                        ] def core.result.Result.map_err {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst : core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) : Result (core.result.Result T F) := do\n                                                                      match self with\n                                                                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)\n                                                                      | core.result.Result.Err e => let t \u2190 opsfunctionFnOnceOTupleEFInst.call_once op e\n                                            "
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+   "dependent_reached_definitions": [
+    "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+    "pool_v1.pair_terminal.exact"
+   ]
+  },
+  {
+   "gate_module": "AspisR1TerminalDecoder.Funs",
+   "pass_label": "AspisR1TerminalDecoder_Funs_p3",
+   "external_name": "pool_v1.pair_terminal.validate_verified_afterstate",
+   "fresh_form": {
+    "file": "inputs/fresh_AspisR1TerminalDecoder_Funs_p3",
+    "text": "axiom pool_v1.pair_terminal.validate_verified_afterstate\n  :\n  pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 \u2192 Result\n    (core.result.Result Unit\n    pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)"
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+     "form": "def",
+     "text": "def pool_v1.pair_terminal.validate_verified_afterstate (afterstate : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1) : Result (core.result.Result Unit pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) := do\n  if afterstate.next_pair_index = 0#u64\n  then ok (core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)\n  else let i \u2190 pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY\n       if afterstate.next_pair_index > i"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-statement (workspace path crate, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": [
+    "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1"
+   ]
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "@[rust_fun \"core::array::equality::{core::cmp::PartialEq<[@T], [@U; @N]>}::eq\"]\naxiom Slice.Insts.CoreCmpPartialEqArray.eq\n  {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "Rust core library (slice PartialEq impl), rustc nightly-2026-06-01 sysroot",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "aspis_core.field.M31.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::from_le_bytes\"]\naxiom aspis_core.field.M31.from_le_bytes\n  : (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
+   },
+   "gate_hits": [
+    {
+     "file": "evidence/slice-s-retarget-20261104/NFY_L051/sources/NFY_generated/NFY_Part043.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                             ]\ndef aspis_core.field.M31.from_le_bytes\n  (bytes : Array Std.U8 4#usize) : Result (Option aspis_core.field.M31) := do\n  let v \u2190 lift (core.num.U32.from_le_bytes bytes)\n  if v >= aspis_core.field.P\n  then ok none"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "atomic_statement.decode_digest_canonical",
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "aspis_core.field.M31.to_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::to_le_bytes\"]\naxiom aspis_core.field.M31.to_le_bytes\n  : aspis_core.field.M31 \u2192 Result (Array Std.U8 4#usize)"
+   },
+   "gate_hits": [
+    {
+     "file": "evidence/slice-s-retarget-20261104/NFY_L051/sources/NFY_generated/NFY_Part043.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                           ]\ndef aspis_core.field.M31.to_le_bytes\n  (self : aspis_core.field.M31) : Result (Array Std.U8 4#usize) := do\n  ok (core.num.U32.to_le_bytes self)"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "aspis_core.field.P",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "@[rust_const \"aspis_core::field::P\"] axiom aspis_core.field.P : Result Std.U32"
+   },
+   "gate_hits": [
+    {
+     "file": "evidence/slice-s-retarget-20261104/NFY_L051/sources/NFY_generated/NFY_Part043.lean",
+     "form": "def",
+     "text": "@[global_simps, irreducible, rust_const                       ]\ndef aspis_core.field.P : Std.U32 := 2147483647#u32"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+    "pool_v1.payment_relation.digest_is_canonical",
+    "pool_v1.payment_relation.validate_common",
+    "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "atomic_statement.encode_digest_canonical",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "axiom atomic_statement.encode_digest_canonical\n  : (Array aspis_core.field.M31 8#usize) \u2192 Result (Array Std.U8 32#usize)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-statement (workspace path crate, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "NFY_Part043",
+   "pass_label": "NFY_Part043",
+   "external_name": "core.result.Result.map_err",
+   "fresh_form": {
+    "file": "inputs/fresh_NFY_Part043",
+    "text": "@[rust_fun \"core::result::{core::result::Result<@T, @E>}::map_err\"]\naxiom core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) :\n  (core.result.Result T E) \u2192 O \u2192 Result (core.result.Result T F)"
+   },
+   "gate_hits": [
+    {
+     "file": "evidence/slice-s-retarget-20261104/NFY_L051/sources/NFY_generated/NFY_Part043.lean",
+     "form": "def",
+     "text": "@[rust_fun                                                        ]\ndef core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) :\n  Result (core.result.Result T F)\n  := do"
+    }
+   ],
+   "gate_form": [
+    "def"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+   "dependent_reached_definitions": [
+    "pool_v1.payment_relation.decode_common",
+    "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+    "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+   ]
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter\n  {T : Type} {N : Std.Usize} :\n  (Array T N) \u2192 Result ((core.slice.iter.IterMut T) \u00d7\n    (core.slice.iter.IterMut T \u2192 Array T N))"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "Aeneas std model of core::slice::IterMut (Aeneas library)",
+   "dependent_reached_definitions": [
+    "verifier.BatchedWeights.push",
+    "verifier.update_residue_row"
+   ]
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.ONE",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_const \"aspis_core::field::{aspis_core::field::M31}::ONE\"]\naxiom aspis_core.field.M31.ONE : Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.ZERO",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_const \"aspis_core::field::{aspis_core::field::M31}::ZERO\"]\naxiom aspis_core.field.M31.ZERO : Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.double",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::double\"]\naxiom aspis_core.field.M31.double\n  : aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::from_le_bytes\"]\naxiom aspis_core.field.M31.from_le_bytes\n  : (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.mul",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::mul\"]\naxiom aspis_core.field.M31.mul\n  :\n  aspis_core.field.M31 \u2192 aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.reduce_u64",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::reduce_u64\"]\naxiom aspis_core.field.M31.reduce_u64 : Std.U64 \u2192 Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.M31.sub",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::M31}::sub\"]\naxiom aspis_core.field.M31.sub\n  :\n  aspis_core.field.M31 \u2192 aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.QM31.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::QM31}::from_le_bytes\"]\naxiom aspis_core.field.QM31.from_le_bytes\n  : (Slice Std.U8) \u2192 Result (Option aspis_core.field.QM31)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.QM31.mul",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"aspis_core::field::{aspis_core::field::QM31}::mul\"]\naxiom aspis_core.field.QM31.mul\n  :\n  aspis_core.field.QM31 \u2192 aspis_core.field.QM31 \u2192 Result\n    aspis_core.field.QM31"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result Bool"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": null
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result Bool"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.add",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.add\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.from_le_bytes",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.from_le_bytes\n  : (Slice Std.U8) \u2192 Result (Option aspis_core.field.wide_exact.WideExact)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.from_limbs",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.from_limbs\n  :\n  (Array Std.U32 8#usize) \u2192 Result (Option\n    aspis_core.field.wide_exact.WideExact)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.from_qm31",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.from_qm31\n  : aspis_core.field.QM31 \u2192 Result aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.mul",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.mul\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.mul_m31",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.mul_m31\n  :\n  aspis_core.field.wide_exact.WideExact \u2192 aspis_core.field.M31 \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.mul_qm31",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.mul_qm31\n  :\n  aspis_core.field.wide_exact.WideExact \u2192 aspis_core.field.QM31 \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.sub",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.sub\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "aspis_core.field.wide_exact.WideExact.to_limbs",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.to_limbs\n  : aspis_core.field.wide_exact.WideExact \u2192 Result (Array Std.U32 8#usize)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "core.array.from_fn",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "@[rust_fun \"core::array::from_fn\"]\naxiom core.array.from_fn\n  {T : Type} {F : Type} (N : Std.Usize) (opsfunctionFnMutFTupleUsizeTInst :\n  core.ops.function.FnMut F Std.Usize T) :\n  F \u2192 Result (Array T N)"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "fast_pairing.canonical.Dot.push",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": "axiom fast_pairing.canonical.Dot.push\n  :\n  fast_pairing.canonical.Dot \u2192 fast_pairing.canonical.Q \u2192\n    fast_pairing.canonical.Q \u2192 Result fast_pairing.canonical.Dot"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-r1-cost-probe (programs/r1-cost-probe, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": []
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source",
+   "external_name": "verifier.BatchedWeights",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source",
+    "text": null
+   },
+   "gate_hits": [
+    {
+     "file": "docs/research/100bit-spend-path-20261013/lean/Port23PUSH_Source.lean",
+     "form": "structure",
+     "text": "structure verifier.BatchedWeights where\n  \u00abraw\u00bb : alloc.vec.Vec (Array Std.U64 4#usize)\n  terms : Std.Usize"
+    },
+    {
+     "file": "docs/research/100bit-spend-path-20261013/lean/Port23PUSH_Source.lean",
+     "form": "def",
+     "text": "def verifier.BatchedWeights.push (arrayIntoIter : ArrayIntoIter)\n  (self : verifier.BatchedWeights) (index : Std.Usize) (power : field.QM31)\n  (basis : field.M31) :\n  Result verifier.BatchedWeights\n  := do"
+    }
+   ],
+   "gate_form": [
+    "def",
+    "structure"
+   ],
+   "hand_model": true,
+   "origin": "gate defines it (def/abbrev/instance) where the fresh emission has only an opaque external axiom (extraction-scope difference or hand model; record only)",
+   "pinned_crate": "crate aspis-r1-cost-probe (programs/r1-cost-probe, frozen 4bb3b3f5)",
+   "dependent_reached_definitions": [
+    "verifier.BatchedWeights.push"
+   ]
+  },
+  {
+   "gate_module": "Port23PUSH_Source",
+   "pass_label": "Port23PUSH_Source_T",
+   "external_name": "aspis_core.field.wide_exact.WideExact",
+   "fresh_form": {
+    "file": "inputs/fresh_Port23PUSH_Source_T",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result Bool"
+   },
+   "gate_hits": [],
+   "gate_form": [],
+   "hand_model": false,
+   "origin": "not defined in the gate module source or its Types/External sources: resolves to a gate-environment constant (imported module or Aeneas library) by name",
+   "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+   "dependent_reached_definitions": []
+  }
+ ]
+}
