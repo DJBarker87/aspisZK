@@ -60,7 +60,12 @@ for k,m in enumerate(cfg['modules']):
     try: cj=json.loads(co.read_text().splitlines()[0])
     except Exception: cj=dict(error='compare produced no result: exit %d %s'%(cr.returncode,cr.stderr[-300:]))
     row['decl_compare']=cj.get('result',cj)
-    if not cj.get('result',{}).get('identical_declarations'): row['status']='DIVERGENT'
+    res_=cj.get('result',{})
+    if m['label']=='COHERENCE_REPAIR':
+      # statements frozen: only theorem proofs may differ from the overlay object
+      row['coherence_repair']=dict(statements_identical=bool(res_.get('identical_except_theorem_proofs')),proofs_identical=bool(res_.get('identical_declarations')))
+      if not res_.get('identical_except_theorem_proofs'): row['status']='DIVERGENT'
+    elif not res_.get('identical_declarations'): row['status']='DIVERGENT'
     for x in (cf,co):
       if x.is_file(): x.unlink()
   elif r.returncode==0 and row.get('object_identical_to_overlay'):

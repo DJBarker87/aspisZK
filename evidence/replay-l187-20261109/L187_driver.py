@@ -27,14 +27,14 @@ def skip_dependants(m):
     if st['status'][d] in ('pending',):
       st['status'][d]='SKIPPED_DEP_FAILED:'+m; stack+=rev[d]
 
-def apply_fix(m,newpath,newsha,why,attempt):
+def apply_fix(m,newpath,newsha,why,attempt,label='SOURCE_PATH_DIFFERS'):
   """Swap module m's source for the recovered exact source and requeue m with its skipped/built dependants."""
   old=P[m]['source']
   data=subprocess.run(['git','-C',str(REPO),'show','HEAD:'+newpath],capture_output=True).stdout
   assert hashlib.sha256(data).hexdigest()==newsha,(m,newpath)
   r=ssh(f"cat > {W}/src/{P[m]['src_rel']}",inp=data.decode('utf8'))
   if r.returncode!=0: raise RuntimeError('upload '+m)
-  P[m]['source']=dict(path=newpath,sha256=newsha); P[m]['label']='SOURCE_PATH_DIFFERS'; P[m]['producing_attempt']=attempt
+  P[m]['source']=dict(path=newpath,sha256=newsha); P[m]['label']=label; P[m]['producing_attempt']=attempt
   (S/'l187_plan.json').write_text(json.dumps(plan))
   with open(E/'L187_SOURCE_FIXES.jsonl','a') as f: f.write(json.dumps(dict(module=m,why=why,old_source=old,new_source=P[m]['source'],producing_attempt=attempt,utc=time.time()))+'\n')
   # requeue m and every transitive dependant that was skipped for it or built on the old object
@@ -144,7 +144,7 @@ while True:
       fx=json.loads(f.read_text())
       for m,res in fx.items():
         if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
-          apply_fix(m,res['path'],res['sha256'],res.get('why','source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash'),res['producing_attempt'])
+          apply_fix(m,res['path'],res['sha256'],res.get('why','source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash'),res['producing_attempt'],res.get('label','SOURCE_PATH_DIFFERS'))
       f.rename(f.with_suffix('.applied'))
     for item in list(st.get('to_recover',[])):
       m=item['module']; st['to_recover'].remove(item); save()
