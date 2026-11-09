@@ -1,0 +1,51 @@
+{"attempt": "PCVC_L018", "exit_status": 0, "wall_seconds": 5.617556479061022, "peak_rss_kib": "2670280", "swaps": "0", "print_axioms": ["'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.RPu_FIq_Native02.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.RPu_FIq_Native02.field.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.RPu_FIq_Native02.field.M31.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.RPu_FIq_Native02.field.CM31.new' does not depend on any axioms", "'PRVC.Eq.field.qm31_m31_dot_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_m31_dot_loop1_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_m31_dot_loop1_loop1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_m31_dot_loop1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.RPu_FIq_Native02.field.P
+PCVC_sources/PRVC_N02_exp6.lean:432:3: warning: 'trace "PRV-S2 PRVEq.RPu_FIq_Native02.field.P"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVC_sources/PRVC_N02_exp6.lean:432:130: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.RPu_FIq_Native02.field.P' depends on axioms: [propext, Classical.choice,
+...
+(fun f =>
+          ∀ iter weights values sums,
+            f iter weights values sums ⊑
+              FIq_Native.PRVFresh_RPu_FIq_Native02.field.qm31_m31_dot_loop1 iter weights values sums)
+        (PRVC.adm_le4 _) ?_)
+      iter weights values sums
+  intro f hf iter weights values sums
+  refine
+    PartialOrder.rel_trans
+      (PRVC.rel_of_eq'
+        (?_ :
+          _ =
+            PRVC.bs (fun (iter1, sums1) => field.qm31_m31_dot_loop1.body weights values iter1 sums1)
+              (fun st => f st.1 weights values st.2) ((iter, sums))))
+      ?_
+  · rw [PRVC.bs_bind]
+    simp only [FIq_Native.PRVFresh_RPu_FIq_Native02.field.qm31_m31_dot_loop1.body, PRVEq.RPu_FIq_Native02.field.P,
+      PRVEq.RPu_FIq_Native02.field.reduce_u64, PRVEq.RPu_FIq_Native02.field.M31.reduce_u64,
+      PRVEq.RPu_FIq_Native02.field.CM31.new, PRVC.Eq.field.qm31_m31_dot_loop0, PRVC.Eq.field.qm31_m31_dot_loop1_loop0,
+      PRVC.Eq.field.qm31_m31_dot_loop1_loop1]
+    prv_peel
+  · refine
+      PartialOrder.rel_trans
+        (PRVC.bs_mono (fun (iter1, sums1) => field.qm31_m31_dot_loop1.body weights values iter1 sums1) _
+          (loop (fun (iter1, sums1) => field.qm31_m31_dot_loop1.body weights values iter1 sums1)) ?_ ((iter, sums)))
+        (PRVC.rel_of_eq'
+          (PRVC.loop_unfold (fun (iter1, sums1) => field.qm31_m31_dot_loop1.body weights values iter1 sums1)
+              ((iter, sums))).symm)
+    intro x
+    exact hf x.1 weights values x.2)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVC_sources/PRVC_N02_exp6.lean:575:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVC.Eq.field.qm31_m31_dot_loop1' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb0061ab0e0a24743bdb9cffd8b1183e7.scope; invocation ID: d6ee92c9e5f1443ca5a39f4b7039d547
