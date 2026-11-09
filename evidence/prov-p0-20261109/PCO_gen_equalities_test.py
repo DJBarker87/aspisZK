@@ -34,7 +34,7 @@ def main():
             checks = [('common', c['common_declarations'] == p['expect']['common']), ('types identical', len(rep['types_identity']['identical']) == p['expect']['types_identical']),
                       ('types differ', len(rep['types_identity']['differs']) == p['expect']['types_differs']), ('no sorry/axiom', not re.search(r'\bsorry\b|^axiom ', lean, re.M)),
                       ('namespace renamed', ('namespace PRVFresh_' + p['module'].replace('.', '_')) in lean and ('namespace ' + p['ns']) not in lean and ('import ' + p['ns']) not in lean),
-                      ('probe round', rep['probe_round'] is True), ('every pending theorem has both stages', lean.count('trace "PRV-S1"') == c['common_declarations'] and lean.count('trace "PRV-S2"') == c['common_declarations'])]
+                      ('probe round', rep['probe_round'] is True), ('every pending theorem has both stages', lean.count('trace "PRV-S1 ') == c['common_declarations'] and lean.count('trace "PRV-S2 ') == c['common_declarations'])]
             # synthetic probe log: first declaration proved at S1, second fails: expect the second to become a commented obligation
             names = list(st['defs'])
             lines = {n: st['defs'][n]['lines'] for n in names}
@@ -43,7 +43,7 @@ def main():
             for i, n in enumerate(names):
                 s, e = lines[n]
                 if i == 1: rows.append(f'{fm}:{s}:2: error: synthetic failure')
-                else: rows.append(f'{fm}:{s+1}:2: info: PRV-S1')
+                else: rows.append(f'PRV-S1 PRVEq.{p["module"]}.{n}')
             log.write_text('\n'.join(rows) + '\n')
             sf = tmp / 'state.json'; sf.write_text(json.dumps(st))
             lean2, st2, rep2 = run(p, tmp, str(sf), str(log))

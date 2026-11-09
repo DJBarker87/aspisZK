@@ -96,7 +96,66 @@
      "15 reached types, see PCO_PARTITION.json"
     ]
    },
-   "basis": "Exact NIV/NMH_E002 argument array (archived from slice-d-entry7-20261107/NIV_EXTRACTION_PREFLIGHT.json) with only output/workspace paths relocated; NMH_E002 timed out in a cold build at 180 s."
+   "basis": "Exact NIV/NMH_E002 argument array (archived from slice-d-entry7-20261107/NIV_EXTRACTION_PREFLIGHT.json) with only output/workspace paths relocated; NMH_E002 timed out in a cold build at 180 s.",
+   "retired": "E003 (this configuration, a copy of the NMH_E002 entry array) built in 114 s but its type output contains only solana_program_error::ProgramError: the opaque boundaries cut every AdapterRw type away. Wrong shape for AdapterRwTypes; superseded by S903."
+  },
+  {
+   "spec_id": "S903",
+   "kind": "frozen",
+   "label": "pilot AdapterRwTypes (merged owned roots)",
+   "crate": "aspis-r1-cost-probe-program",
+   "package": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts",
+   "start_from": [
+    "crate::r1_pool_adapter::owned::authenticate_asq8_accounts",
+    "crate::r1_pool_adapter::owned::validate_asq8",
+    "crate::r1_pool_adapter::owned::stage1_owned",
+    "crate::r1_pool_adapter::owned::stage2_owned"
+   ],
+   "include": [],
+   "opaque": [
+    "crate::r1_pool_adapter::decode_lane_from_pool_release",
+    "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+    "crate::r1_pool_adapter::decode_master_box",
+    "crate::r1_pool_adapter::decode_checkpoint_box",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_readonly_account",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_distinct_accounts",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::first_decoded",
+    "crate::r1_pool_adapter::decode_public_statement_box",
+    "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+    "crate::r1_pool_adapter::owned::snapshot",
+    "crate::r1_pool_adapter::owned::stage1",
+    "crate::r1_pool_adapter::owned::stage2",
+    "crate::r1_pool_adapter::scan_proof_buffer",
+    "crate::r1_pool_adapter::reconstruct_asq8_statement",
+    "crate::r1_pool_adapter::emit_result",
+    "crate::r1_pool_adapter::pool_program_id",
+    "crate::verifier::tx2_authenticated",
+    "crate::observer",
+    "crate::error",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_request_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::_::nullifier",
+    "solana_account_info::AccountInfo"
+   ],
+   "namespace": "PCO_adapter_owned",
+   "p1_half": "P1b",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AdapterRwTypes"
+    ],
+    "definitions": [
+     "the 15 reached types of AdapterRwTypes (PCO_PARTITION.json)"
+    ]
+   },
+   "basis": "Union of the receipted NMT_stage1_owned, NMS_stage2, NMS_validate and NMX_auth_cut configurations (roots authenticate_asq8_accounts, validate_asq8, stage1_owned, stage2_owned; union of their --opaque lists minus the roots); AdapterRwTypes draws its types from several emissions, so the per-module spec merges the roots."
   }
  ]
 }

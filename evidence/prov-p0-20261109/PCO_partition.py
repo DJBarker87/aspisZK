@@ -130,12 +130,11 @@ def stage_tree(a, S):
         out[pmap[o]] = {'hashes': sorted(set(re.findall(r'\b[0-9a-f]{64}\b', t))), 'frozen': FROZEN_REV in t}
     json.dump(out, open(f'{S}/strictpins_hashes.json', 'w'))
     strict = {}
-    rec = sorted(set(oid for p, oid in allp.items() if re.search(r'receipt[^/]*\.json$', p, re.I)))
+    rec = sorted(set(oid for p, oid in allp.items() if re.search(r'receipt[^/]*\.json$', p, re.I) and re.search(r'aeneas', p, re.I)))
     for oid, data in batch_cat(rec):
         if len(data) > 5_000_000: continue
         t = data.decode('utf-8', 'replace')
-        if re.search('aeneas', t, re.I):
-            for h in set(re.findall(r'\b[0-9a-f]{64}\b', t)): strict[h] = {'strict_receipts': True}
+        for h in set(re.findall(r'\b[0-9a-f]{64}\b', t)): strict[h] = {'strict_receipts': True}
     json.dump(strict, open(f'{S}/outside_strict.json', 'w'))
     json.dump(allp, open(f'{S}/tree_paths.json', 'w'))
     print('tree', len(lean), 'lean', len(rs), 'rs', len(pins), 'pins files')

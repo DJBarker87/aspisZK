@@ -178,13 +178,24 @@ def generate(a):
         if mod:
             for n in mod['reached_definitions']:
                 reached.add(n[len(gate_ns) + 1:] if n.startswith(gate_ns + '.') else n)
+    LINE_MAP = []
+    if getattr(a, 'bundle_offsets', None):
+        LINE_MAP = json.loads(Path(a.bundle_offsets).read_text())['PRVEq_' + M.replace('.', '_')]['line_map']
     # ---- previous-round state
     state = json.loads(Path(a.state).read_text()) if a.state and Path(a.state).exists() else None
-    log_by_pos = {}
+    log_by_pos = {}; stage_marks = {}
     if state and a.lean_log:
         for line in Path(a.lean_log).read_text().splitlines():
+            mm = re.match(r'^PRV-S([12]) (\S+)', line)
+            if mm: stage_marks.setdefault(mm.group(2), set()).add(int(mm.group(1)))
             m = re.match(r'^(?:\S*?)(?:PRVEq_[^:\s]+\.lean):(\d+):(\d+): (error|info|warning)\b[^:]*:?\s*(.*)$', line)
-            if m: log_by_pos.setdefault(int(m.group(1)), []).append((m.group(3), m.group(4)))
+            if m:
+                ln = int(m.group(1))
+                if getattr(a, 'bundle_offsets', None):
+                    inv = {b: j for j, b in LINE_MAP}
+                    if ln not in inv: continue
+                    ln = inv[ln]
+                log_by_pos.setdefault(ln, []).append((m.group(3), m.group(4)))
     # ---- decide per-definition plan
     gate_names = set(gblocks)
     fnames = [b['name'] for b in fblocks]
@@ -240,8 +251,8 @@ def generate(a):
             if not lines: continue
             s, e = lines
             errs = [(l, m) for l in range(s, e + 1) for (k, m) in log_by_pos.get(l, []) if k == 'error']
-            infos = [m for l in range(s, e + 1) for (k, m) in log_by_pos.get(l, []) if k == 'info']
-            stage = 1 if any('PRV-S1' in m for m in infos) else 2 if any('PRV-S2' in m for m in infos) else None
+            marks = stage_marks.get(f'PRVEq.{M}.{n}', set()) | stage_marks.get(f'PRVEq.{M}.{n}.equiv', set())
+            stage = max(marks) if marks else None
             if errs or stage is None: plan[n].update(status='failed', stage=None, error=(errs[0][1][:300] if errs else 'no stage marker (not elaborated)'))
             else: plan[n].update(status='proved', stage=stage)
         # a stage-2 proof is accepted only if every callee equality it may have used is itself accepted
@@ -252,6 +263,22 @@ def generate(a):
                 if bad: p.update(status='failed', stage=None, error='blocked by failed callee equalities: ' + ','.join(bad))
         if state.get('final_pending'):
             pass
+    # fresh-side errors: a fresh declaration that does not elaborate (e.g. an external boundary the gate models differently)
+    # is dropped together with every fresh declaration that mentions it (a dropped name would otherwise leak to the gate
+    # constant of the same name through `open`), and its equalities become obligations.
+    dropped = set(state.get('dropped', [])) if state else set()
+    if state and a.lean_log:
+        for n, rng in state.get('fresh_lines', {}).items():
+            s_, e_ = rng
+            if any(k == 'error' for l in range(s_, e_ + 1) for (k, m) in log_by_pos.get(l, [])): dropped.add(n)
+    changed = True
+    while changed:
+        changed = False
+        for b in fblocks:
+            if b['name'] not in dropped and any(c in dropped for c in callees(b['body'], fnames, b['name'])):
+                dropped.add(b['name']); changed = True
+    for n in dropped:
+        if n in plan: plan[n].update(status='failed', stage=None, error='fresh declaration (or a callee) did not elaborate against the gate environment', fresh_dropped=True)
     probe = not (state and all(p['status'] in ('proved', 'failed') for p in plan.values()))
     # ---- emit
     out = []
@@ -268,13 +295,20 @@ def generate(a):
     out.append('')
     subs = [dict(kind='namespace', old=a.fresh_ns, new=fresh_ns), dict(kind='imports_dropped', old=fh['imports'], new=[f'import {M}']),
             dict(kind='attributes_stripped', old=sorted(REG_ATTR.pattern.split('|')), new=[]), dict(kind='opened_namespace', old=None, new=gate_ns)]
+    fresh_lines = {}
     for b in fblocks:
         t = strip_reg_attrs(b['text'])
         if kind == 'types':
             t = re.sub(r'\bdiscriminant isize,?\s*', '', t)
         t = re.sub(r'\b' + re.escape(a.fresh_ns) + r'\.', fresh_ns + '.', t)
         if kind == 'types' and b['name'] in ext_set: continue
-        out.append(t); out.append('')
+        if b['name'] in dropped:
+            out.append('/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):'); out.append(t.replace('-/', '- /')); out.append('-/'); out.append('')
+            continue
+        s_line = len('\n'.join(out).split('\n')) + 1
+        out.append(t)
+        fresh_lines[b['name']] = [s_line, len('\n'.join(out).split('\n'))]
+        out.append('')
     out.append(f'end {fresh_ns}')
     out.append('')
     # ---- equalities
@@ -298,8 +332,8 @@ def generate(a):
             p['class'] = cls
             commented.append(n); defs_state[n] = dict(lines=None); continue
         cal = [eqname(c) for c in p['callees'] if plan[c]['status'] != 'failed']
-        s1 = f'(trace "PRV-S1"; rfl)'
-        s2 = f'(trace "PRV-S2"; delta {fresh_ns}.{n} {gate_ns}.{n}; try simp only [{", ".join(cal)}]; try rfl; done)' if cal else f'(trace "PRV-S2"; delta {fresh_ns}.{n} {gate_ns}.{n}; try rfl; done)'
+        s1 = f'(trace "PRV-S1 {eqname(n)}"; rfl)'
+        s2 = f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_ns}.{n} {gate_ns}.{n}; try simp only [{", ".join(cal)}]; try rfl; done)' if cal else f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_ns}.{n} {gate_ns}.{n}; try rfl; done)'
         if p['status'] == 'proved': tac = s1 if p['stage'] == 1 else s2
         else: tac = f'first | {s1} | {s2}'
         out.append(f'theorem {eqname(n)} : {stmt} := by')
@@ -309,9 +343,20 @@ def generate(a):
         out.append('')
         defs_state[n] = dict(lines=[start_line, end_line])
     # types that exist in the gate but whose declaration texts we cannot equate in Lean here
-    new_state = dict(module=M, kind=kind, defs={n: dict(defs_state.get(n, {}), **{k: v for k, v in plan[n].items() if k in ('status', 'stage', 'reached', 'callees', 'class', 'error')}) for n in plan},
+    new_state = dict(module=M, kind=kind, fresh_lines=fresh_lines, dropped=sorted(dropped), defs={n: dict(defs_state.get(n, {}), **{k: v for k, v in plan[n].items() if k in ('status', 'stage', 'reached', 'callees', 'class', 'error')}) for n in plan},
                      probe=probe)
-    summary = dict(module=M, kind=kind, gate_namespace=gate_ns, fresh_namespace=fresh_ns, probe_round=probe,
+    types_summary = {}
+    for n, ti in type_info.items():
+        p = plan.get(n)
+        if p and p['status'] == 'proved': c = ('lean_equiv_proved' if p['dkind'] == 'structure-equiv' else 'lean_eq_proved') + f'_stage{p["stage"]}'
+        elif p and p['status'] == 'failed': c = 'lean_failed:' + p.get('class', '?')
+        elif p: c = 'lean_pending'
+        else: c = ti['cls']
+        types_summary[n] = dict(status=c, reached=n in reached, text_identical=ti.get('identical'))
+    fresh_names = set(fnames)
+    tokens = set(t for b in fblocks for t in lean_ident_tokens(b['body']))
+    leaks = sorted(t for t in tokens if t in gate_names and t not in fresh_names)
+    summary = dict(module=M, kind=kind, types=types_summary, fresh_dropped=sorted(dropped), names_resolved_to_gate_funs=leaks, gate_namespace=gate_ns, fresh_namespace=fresh_ns, probe_round=probe,
                    counts=dict(common_declarations=len(plan), reached_in_common=sum(1 for p in plan.values() if p['reached']),
                                fresh_declarations=len(fnames), gate_declarations=len(gblocks),
                                proved_rfl=sum(1 for p in plan.values() if p['status'] == 'proved' and p['stage'] == 1),
@@ -341,9 +386,8 @@ def emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M):
         return f'{src}.{fname}'
     tof = ', '.join(f'{f} := {val(f, t, "x", False)}' for f, t in fl)
     inv = ', '.join(f'{f} := {val(f, t, "y", True)}' for f, t in fl)
-    s1 = '(trace "PRV-S1"; cases x; rfl)'; s2 = '(trace "PRV-S2"; cases x; simp)'
-    r1 = s1.replace('x', 'y'); r2 = s2.replace('x', 'y')
-    r1 = '(trace "PRV-S1"; cases y; rfl)'; r2 = '(trace "PRV-S2"; cases y; simp)'
+    s1 = f'(trace "PRV-S1 {eqname(n)}"; cases x; rfl)'; s2 = f'(trace "PRV-S2 {eqname(n)}"; cases x; simp)'
+    r1 = f'(trace "PRV-S1 {eqname(n)}"; cases y; rfl)'; r2 = f'(trace "PRV-S2 {eqname(n)}"; cases y; simp)'
     tl = ('first | ' + s1 + ' | ' + s2) if p['status'] == 'pending' else (s1 if p['stage'] == 1 else s2)
     tr = ('first | ' + r1 + ' | ' + r2) if p['status'] == 'pending' else (r1 if p['stage'] == 1 else r2)
     start = len('\n'.join(out).split('\n')) + 1
@@ -359,7 +403,7 @@ def emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M):
     defs_state[n] = dict(lines=[start, end])
 
 def classify_failure(p, fb, gb):
-    if p.get('mentions_differing_types'): return 'transport-needed'
+    if p.get('mentions_differing_types') or p.get('fresh_dropped'): return 'transport-needed'
     if p['body_identical']: return 'transport-needed'
     return 'semantic'
 
@@ -368,6 +412,7 @@ def main():
     ap.add_argument('--module', required=True); ap.add_argument('--fresh-dir', required=True); ap.add_argument('--fresh-ns', required=True)
     ap.add_argument('--gate-source', required=True); ap.add_argument('--gate-types-source'); ap.add_argument('--partition')
     ap.add_argument('--out', required=True); ap.add_argument('--report', required=True); ap.add_argument('--state'); ap.add_argument('--lean-log')
+    ap.add_argument('--bundle-offsets', help='PCO_bundle.py offsets json; the Lean log is then a bundle log')
     a = ap.parse_args()
     lean, st, summ = generate(a)
     Path(a.out).write_text(lean); Path(a.report).write_text(json.dumps(summ, indent=1) + '\n')
