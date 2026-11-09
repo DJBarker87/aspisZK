@@ -1,0 +1,105 @@
+{
+ "schema": "PCWA_TOOLS v1",
+ "tools": [
+  {
+   "file": "PCWA_run.py",
+   "origin": "../prov-p0-20261109/PCO_run.py",
+   "origin_sha256": "8ef5533fcaaca5bba100426982d18bd5c40e8ffb0d6ba2416847b9d6d78decaa",
+   "sha256": "dd662d43e7ba8c6a63d0b8710f981db0180cb100199b2680bd9aa45ab4be297c",
+   "changes": [
+    "PCO_ -> PCWA_ prefix (attempt-id regex PCWA_[EL][0-9]{3}), host base default codex-pc-prov-p4a-20261109",
+    "extract branch replaced: uploads PCWA_extract_ref.py, the spec and the spec.upload files; frozen stager/payload uploaded only when spec.frozen_stage; no NHR validation of the frozen workspace",
+    "event/config use spec.label instead of spec.spec_id"
+   ]
+  },
+  {
+   "file": "PCWA_run_host.py",
+   "origin": "../prov-p0-20261109/PCO_run_host.py",
+   "origin_sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "changes": [
+    "prefix strings only (file bytes identical to the original)"
+   ]
+  },
+  {
+   "file": "PCWA_bundle.py",
+   "origin": "../prov-p0-20261109/PCO_bundle.py",
+   "origin_sha256": "9a8057d8e26fbdb313ef96f0e2f6abe3cd19bc28e62be9476df991359cde4f79",
+   "sha256": "8cb6ff86e1b19d2b5c64636d77701999fbe3aa1b55aaf6ceeda8290ea03aa9ed",
+   "changes": [
+    "prefix strings only"
+   ]
+  },
+  {
+   "file": "PCWA_partition.py",
+   "origin": "../prov-p0-20261109/PCO_partition.py",
+   "origin_sha256": "cc5e70f2d6c03ed052614379ec7dffa6719d69dcbed7d83105685afcfe6cd45d",
+   "sha256": "ae182c1ed250b38ac0a3e270e001de65af279658f3b7120e0bc5bdd94c66cabb",
+   "changes": [
+    "prefix strings only (imported for uncomment())"
+   ]
+  },
+  {
+   "file": "PCWA_gen_equalities.py",
+   "origin": "../prov-p0-20261109/PCO_gen_equalities.py",
+   "origin_sha256": "a39f92d7cd75720fb5e31cd4318bf9caec8ef72b41b628daaec7a06a1ac98d48",
+   "sha256": "81dc71c2575c3d10af77085201a9dcb76bfe1f60f4cb1a5df11d0dfdce149d96",
+   "changes": [
+    "prefix strings only: used for the PCWA_L001 probe bundle (files probe1/)",
+    "alias variant (abbrev T := gate.T for text-identical types): used for the PCWA_L002-L004 probes, superseded",
+    "change 1 (PCWA_L005-L008 probes): fresh declarations are emitted in a namespace NESTED INSIDE the gate namespace instead of `open <gate namespace>`; Lean resolves bare names through the enclosing namespace chain before `open` declarations, exactly as the gate module does (Error and core.array.iter.IntoIter were ambiguous with Aeneas.Std in PCWA_L001, L002, L004); statements use the qualified fresh name",
+    "change 2 (PCWA_L009-L011 verification): --fresh-prelude FILE inserts verbatim gate hand-written lines (variable binder / local instance) after the fresh namespace opens; used for NHI_FilledExtracted and S8OwnedP6.Funs only"
+   ]
+  },
+  {
+   "file": "PCWA_extract_ref.py",
+   "origin": "evidence/prov-p0-20261109/PCO_extract.py (pattern), evidence/emission-repro2-20261110/NML_extract.py (reference-crate path), evidence/native-front1b-20261028/NDL_E004/sources/NDL_extract.py (std-only reference crate command shape)",
+   "origin_sha256": null,
+   "sha256": "c5837114d8a245e993b68856e6b18b0588630c7720e5bb50827fdf01af8e55ed",
+   "versions": {
+    "v1 (PCWA_E001-E008)": "receipt dirs PCWA_E001..E008/sources/PCWA_extract_ref.py",
+    "v2 (PCWA_E009, E010): adds spec.env_extra (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true, CARGO_PROFILE_DEV_OPT_LEVEL=3, CARGO_PROFILE_DEV_DEBUG=0, from the original NEG_E017/NEI_E005 receipts env)": "PCWA_E009/sources, PCWA_E010/sources",
+    "v3 (PCWA_E011, E012): adds spec.skip_charon (Aeneas-only reproduction from a committed LLBC), spec.crate_dir_rel and stage-before-crate ordering": "PCWA_E011/sources, PCWA_E012/sources"
+   },
+   "changes": [
+    "new controller; asserts cgroup caps, tool sha256, crate-file sha256 before and after; records PINS"
+   ]
+  },
+  {
+   "file": "PCWA_sources.py / PCWA_make_specs.py / PCWA_make_iso.py / PCWA_make_cut.py / PCWA_regen.py / PCWA_hand_models.py",
+   "origin": null,
+   "origin_sha256": null,
+   "sha256": {
+    "PCWA_sources.py": "ec128898b3020becbf105b2db3384f49be0a60787d774a5048a0b58e9dcc2423",
+    "PCWA_make_specs.py": "209257b55ea30293289032bcb278ff593919d9e6601d1850af7a157b1271cd09",
+    "PCWA_make_iso.py": "c61774143cfbe1377ad869e45b3721030e8a7eca81088124471d7b47ccd26c83",
+    "PCWA_make_cut.py": "e44c64b17d0eeb012439529f34ad848a2d057e3f4c38bcbda8324742e2532b12",
+    "PCWA_regen.py": "467018ae03eea7446fd0c18f2958e583c8b893feff56d7725390e6de477b0098",
+    "PCWA_hand_models.py": "fa728d3c27a3d4a18e75b8ab7c771f417fd529c31114272eb91df63d58582d55"
+   },
+   "changes": [
+    "new; source recovery from git/LLBC, spec rendering, registry-driven ingest, hand-model record"
+   ]
+  },
+  {
+   "file": "PCWA_STAGER_PIN.json",
+   "origin": "../prov-p0-20261109/PCO_STAGER_PIN.json",
+   "origin_sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45",
+   "sha256": "88f93e38db9eaadb99f9ead3b1374ac9f1297a23fd30080468e6269e0662c5c8",
+   "changes": [
+    "adaptation text only; NHR_stage.py sha256 pin 365cdfc8... unchanged"
+   ]
+  }
+ ],
+ "host_binaries": {
+  "path": "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/",
+  "sha256": {
+   "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+   "charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45",
+   "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958"
+  },
+  "note": "charon and charon-driver have the same sha256 as the binaries recorded by the original S8/WAdm receipts (daad69be.., efdbe5b8..); the recorded Aeneas of S8/WAdm (aeneas-b59d5188-lean432-extended-static, 4632746d..) is not on the host and was replaced by the XRa Aeneas"
+ },
+ "rust_toolchain": "nightly-2026-09-17 (RUSTUP_TOOLCHAIN) for every extraction",
+ "unmodified_files_under_evidence_prov_p0": "none edited"
+}
