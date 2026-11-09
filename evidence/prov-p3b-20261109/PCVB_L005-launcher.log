@@ -1,0 +1,68 @@
+{"attempt": "PCVB_L005", "exit_status": 1, "wall_seconds": 5.041858423035592, "peak_rss_kib": "2653144", "swaps": "0", "print_axioms": ["'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVB_sources/PCVB_T004.lean:79:24: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PCVB_sources/PCVB_T004.lean:81:8: warning: declaration uses `sorry`
+case h2
+P : U32
+x : U64
+hx : ↑x < 2 ^ 62
+i1 i2 : U64
+_✝⁷ : [> let i2 ← x >>> 31#u32 <]
+i2_post2 : i2.bv = x.bv >>> 31
+x1 : U64
+_✝⁶ : [> let x1 ← i1 + i2 <]
+x1_post : ↑x1 = ↑i1 + ↑i2
+i4 i5 : U64
+_✝⁵ : [> let i5 ← x1 >>> 31#u32 <]
+i5_post2 : i5.bv = x1.bv >>> 31
+x2 : U64
+_✝⁴ : [> let x2 ← i4 + i5 <]
+x2_post : ↑x2 = ↑i4 + ↑i5
+_✝³ : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_✝² : [> let i1 ← lift (
+...
+PCVB_sources/PCVB_T004.lean:79:24: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PCVB_sources/PCVB_T004.lean:81:8: warning: declaration uses `sorry`
+case h2
+P : U32
+x : U64
+hx : ↑x < 2 ^ 62
+i1 i2 : U64
+_✝⁷ : [> let i2 ← x >>> 31#u32 <]
+i2_post2 : i2.bv = x.bv >>> 31
+x1 : U64
+_✝⁶ : [> let x1 ← i1 + i2 <]
+x1_post : ↑x1 = ↑i1 + ↑i2
+i4 i5 : U64
+_✝⁵ : [> let i5 ← x1 >>> 31#u32 <]
+i5_post2 : i5.bv = x1.bv >>> 31
+x2 : U64
+_✝⁴ : [> let x2 ← i4 + i5 <]
+x2_post : ↑x2 = ↑i4 + ↑i5
+_✝³ : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_✝² : [> let i1 ← lift (x &&& UScalar.cast UScalarTy.U64 P) <]
+i1_post2 : i1.bv = x.bv &&& (UScalar.cast UScalarTy.U64 P).bv
+_✝¹ : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_✝ : [> let i4 ← lift (x1 &&& UScalar.cast UScalarTy.U64 P) <]
+i4_post2 : i4.bv = x1.bv &&& (UScalar.cast UScalarTy.U64 P).bv
+_ : [> let UScalar.cast UScalarTy.U32 x2 ← lift (UScalar.cast UScalarTy.U32 x2) <]
+hP : True
+i2_post1 : ↑i2 = ↑x / 2 ^ 31
+i5_post1 : ↑i5 = ↑x1 / 2 ^ 31
+i1_post1 : ↑i1 = ↑x % 2 ^ 31
+i4_post1 : ↑i4 = ↑x1 % 2 ^ 31
+h✝ : ¬2147483647 ≤ ↑x2 % 2 ^ 32
+⊢ ↑x2 % 2 ^ 32 = Fv ↑x
+PCVB_sources/PCVB_T004.lean:87:42: warning: This simp argument is unused:
+  hcast64
+
+Hint: Omit it from the simp argument list.
+  simp only [hmask P hP, hshr, hcast32, hc̵a̵s̵t̵6̵4̵,̵ ̵h̵P, ge_iff_le, UScalar.le_equiv, h64d] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8a447a08e3fc44cebc4c1b609a2c6561.scope; invocation ID: d3bda4830f71493b9b42cb587de347bc

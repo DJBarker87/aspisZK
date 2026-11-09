@@ -1,0 +1,75 @@
+{"attempt": "PCVB_L004", "exit_status": 1, "wall_seconds": 4.880613889079541, "peak_rss_kib": "2651584", "swaps": "0", "print_axioms": ["'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVB_sources/PCVB_T003.lean:74:35: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+case hmax
+P : U32
+x : U64
+hx : ↑x < 2 ^ 62
+i1 i2 : U64
+_✝¹ : [> let i2 ← x >>> 31#u32 <]
+i2_post2 : i2.bv = x.bv >>> 31
+_✝ : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_ : [> let i1 ← lift (x &&& UScalar.cast UScalarTy.U64 P) <]
+i1_post2 : i1.bv = x.bv &&& (UScalar.cast UScalarTy.U64 P).bv
+hP : True
+i2_post1 : ↑i2 = ↑x / 2 ^ 31
+i1_post1 : ↑i1 = ↑x % 2 ^ 31
+⊢ ↑i1 + ↑i2 ≤ 18446744073709551615
+case hmax
+P : U32
+x : U64
+hx : ↑x < 2 ^ 62
+i1 i2 : U64
+_✝⁵ : [> let i2 ←
+...
+e
+i2_post1 : ↑i2 = ↑x / 2 ^ 31
+i5_post1 : ↑i5 = ↑x1 / 2 ^ 31
+i1_post1 : ↑i1 = ↑x % 2 ^ 31
+i4_post1 : ↑i4 = ↑x1 % 2 ^ 31
+⊢ ↑i4 + ↑i5 ≤ 18446744073709551615
+P : U32
+x : U64
+hx : ↑x < 2 ^ 62
+i1 i2 : U64
+_✝⁸ : [> let i2 ← x >>> 31#u32 <]
+i2_post2 : i2.bv = x.bv >>> 31
+x1 : U64
+_✝⁷ : [> let x1 ← i1 + i2 <]
+x1_post : ↑x1 = ↑i1 + ↑i2
+i4 i5 : U64
+_✝⁶ : [> let i5 ← x1 >>> 31#u32 <]
+i5_post2 : i5.bv = x1.bv >>> 31
+x2 : U64
+_✝⁵ : [> let x2 ← i4 + i5 <]
+x2_post : ↑x2 = ↑i4 + ↑i5
+r : U32
+_✝⁴ : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_✝³ : [> let i1 ← lift (x &&& UScalar.cast UScalarTy.U64 P) <]
+i1_post2 : i1.bv = x.bv &&& (UScalar.cast UScalarTy.U64 P).bv
+_✝² : [> let UScalar.cast UScalarTy.U64 P ← lift (UScalar.cast UScalarTy.U64 P) <]
+_✝¹ : [> let i4 ← lift (x1 &&& UScalar.cast UScalarTy.U64 P) <]
+i4_post2 : i4.bv = x1.bv &&& (UScalar.cast UScalarTy.U64 P).bv
+_✝ : [> let UScalar.cast UScalarTy.U32 x2 ← lift (UScalar.cast UScalarTy.U32 x2) <]
+_ : [> let r ← UScalar.cast UScalarTy.U32 x2 - P <]
+hP : True
+i2_post1 : ↑i2 = ↑x / 2 ^ 31
+i5_post1 : ↑i5 = ↑x1 / 2 ^ 31
+i1_post1 : ↑i1 = ↑x % 2 ^ 31
+i4_post1 : ↑i4 = ↑x1 % 2 ^ 31
+h✝ : 2147483647 ≤ ↑x2 % 2 ^ 32
+r_post1 : ↑r = ↑x2 % 2 ^ 32 - 2147483647
+r_post2 : 2147483647 ≤ ↑x2 % 2 ^ 32
+⊢ ↑r =
+    if 2147483647 ≤ ↑x % 2 ^ 31 + ↑x / 2 ^ 31 then ↑x % 2 ^ 31 + ↑x / 2 ^ 31 - 2147483647 else ↑x % 2 ^ 31 + ↑x / 2 ^ 31
+PCVB_sources/PCVB_T003.lean:72:42: warning: This simp argument is unused:
+  hcast64
+
+Hint: Omit it from the simp argument list.
+  simp only [hmask P hP, hshr, hcast32, hc̵a̵s̵t̵6̵4̵,̵ ̵h̵P, ge_iff_le, UScalar.le_equiv, h64d, Fv] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0c99a96e7b414774abe87f55e31d91d7.scope; invocation ID: 317dfe00394b4c1a957ae7d5289bf5dc

@@ -1,0 +1,93 @@
+{"attempt": "PCVB_L001", "exit_status": 0, "wall_seconds": 4.515347858890891, "peak_rss_kib": "2645084", "swaps": "0", "print_axioms": []}
+PCVB_sources/PCVB_T001.lean:40:8: warning: declaration uses `sorry`
+case hmax
+P : U32
+hP : ↑P = 2147483647
+x : U64
+hx : ↑x < 2 ^ 62
+i2 : U64
+_✝¹ : [> let i2 ← lift (UScalar.cast UScalarTy.U64 P) <]
+i2_post : i2 = UScalar.cast UScalarTy.U64 P
+i3 : U64
+_✝ : [> let i3 ← lift (x &&& i2) <]
+i3_post1 : ↑i3 = ↑(x &&& i2)
+i3_post2 : i3.bv = x.bv &&& i2.bv
+i4 : U64
+_ : [> let i4 ← x >>> 31#i32 <]
+i4_post1 : ↑i4 = ↑x >>> 31
+i4_post2 : i4.bv = x.bv >>> 31
+⊢ ↑i3 + ↑i4 ≤ U64.max
+P : U32
+hP : ↑P = 2147483647
+x : U64
+hx : ↑x < 2 ^ 62
+i2 : U64
+_✝⁶ : [> let i2 ← lift (UScalar.cast UScalarTy.U64 P) <]
+i2_post : i2 = UScalar.cast UScalarTy.U64 P
+i3 : U64
+_✝⁵ : [> let i3 ← lift (x &&& i2) <]
+i3_post1 : ↑i3 = ↑(
+...
+t1 : ↑i4 = ↑(x1 &&& i3)
+i4_post2 : i4.bv = x1.bv &&& i3.bv
+i5 : U64
+_✝² : [> let i5 ← x1 >>> 31#u32 <]
+i5_post1 : ↑i5 = ↑x1 >>> 31
+i5_post2 : i5.bv = x1.bv >>> 31
+x2 : U64
+_✝¹ : [> let x2 ← i4 + i5 <]
+x2_post : ↑x2 = ↑i4 + ↑i5
+x3 : U32
+_✝ : [> let x3 ← lift (UScalar.cast UScalarTy.U32 x2) <]
+x3_post : x3 = UScalar.cast UScalarTy.U32 x2
+h✝ : x3 ≥ P
+r : U32
+_ : [> let r ← x3 - P <]
+r_post1 : ↑r = ↑x3 - ↑P
+r_post2 : ↑P ≤ ↑x3
+⊢ ↑r =
+    if 2147483647 ≤ ↑x % 2 ^ 31 + ↑x / 2 ^ 31 then ↑x % 2 ^ 31 + ↑x / 2 ^ 31 - 2147483647 else ↑x % 2 ^ 31 + ↑x / 2 ^ 31
+case h2
+P : U32
+hP : ↑P = 2147483647
+x : U64
+hx : ↑x < 2 ^ 62
+i : U64
+_✝⁷ : [> let i ← lift (UScalar.cast UScalarTy.U64 P) <]
+i_post : i = UScalar.cast UScalarTy.U64 P
+i1 : U64
+_✝⁶ : [> let i1 ← lift (x &&& i) <]
+i1_post1 : ↑i1 = ↑(x &&& i)
+i1_post2 : i1.bv = x.bv &&& i.bv
+i2 : U64
+_✝⁵ : [> let i2 ← x >>> 31#u32 <]
+i2_post1 : ↑i2 = ↑x >>> 31
+i2_post2 : i2.bv = x.bv >>> 31
+x1 : U64
+_✝⁴ : [> let x1 ← i1 + i2 <]
+x1_post : ↑x1 = ↑i1 + ↑i2
+i3 : U64
+_✝³ : [> let i3 ← lift (UScalar.cast UScalarTy.U64 P) <]
+i3_post : i3 = UScalar.cast UScalarTy.U64 P
+i4 : U64
+_✝² : [> let i4 ← lift (x1 &&& i3) <]
+i4_post1 : ↑i4 = ↑(x1 &&& i3)
+i4_post2 : i4.bv = x1.bv &&& i3.bv
+i5 : U64
+_✝¹ : [> let i5 ← x1 >>> 31#u32 <]
+i5_post1 : ↑i5 = ↑x1 >>> 31
+i5_post2 : i5.bv = x1.bv >>> 31
+x2 : U64
+_✝ : [> let x2 ← i4 + i5 <]
+x2_post : ↑x2 = ↑i4 + ↑i5
+x3 : U32
+_ : [> let x3 ← lift (UScalar.cast UScalarTy.U32 x2) <]
+x3_post : x3 = UScalar.cast UScalarTy.U32 x2
+h✝ : ¬x3 ≥ P
+⊢ ↑x3 =
+    if 2147483647 ≤ ↑x % 2 ^ 31 + ↑x / 2 ^ 31 then ↑x % 2 ^ 31 + ↑x / 2 ^ 31 - 2147483647 else ↑x % 2 ^ 31 + ↑x / 2 ^ 31
+PCVB_sources/PCVB_T001.lean:51:2: warning: 'all_goals trace_state' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+Running as unit: run-r2122abe429ad4709b4dd970a7fcab4f4.scope; invocation ID: f331604b7ded45a684bc28cbf2f75762

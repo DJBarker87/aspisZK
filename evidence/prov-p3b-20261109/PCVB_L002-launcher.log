@@ -1,0 +1,62 @@
+{"attempt": "PCVB_L002", "exit_status": 1, "wall_seconds": 4.769486943027005, "peak_rss_kib": "2650872", "swaps": "0", "print_axioms": ["'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVB_sources/PCVB_T002.lean:43:60: error: Tactic `rfl` failed: The left-hand side
+  U64.max
+is not definitionally equal to the right-hand side
+  18446744073709551615
+
+⊢ U64.max = 18446744073709551615
+PCVB_sources/PCVB_T002.lean:44:60: error: Tactic `decide` failed for proposition
+  U64.max = 18446744073709551615
+because its `Decidable` instance
+  instDecidableEqNat U64.max 18446744073709551615
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : U64.max.beq 18446744073709551615 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+PCVB_sources/PCVB_T002.lean:45:57: error: unsolved 
+...
+ide
+  18446744073709551615
+
+⊢ U64.max = 18446744073709551615
+PCVB_sources/PCVB_T002.lean:44:60: error: Tactic `decide` failed for proposition
+  U64.max = 18446744073709551615
+because its `Decidable` instance
+  instDecidableEqNat U64.max 18446744073709551615
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : U64.max.beq 18446744073709551615 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+PCVB_sources/PCVB_T002.lean:45:57: error: unsolved goals
+⊢ 2 ^ U64.numBits = 18446744073709551616
+PCVB_sources/PCVB_T002.lean:45:75: warning: This simp argument is unused:
+  UScalar.max
+
+Hint: Omit it from the simp argument list.
+  simp [U64.max, UScalar.̵m̵a̵x̵,̵ ̵U̵S̵c̵a̵l̵a̵r̵Ty.U64_numBits_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVB_sources/PCVB_T002.lean:45:88: warning: This simp argument is unused:
+  UScalarTy.U64_numBits_eq
+
+Hint: Omit it from the simp argument list.
+  simp [U64.max, UScalar.max,̵ ̵U̵S̵c̵a̵l̵a̵r̵T̵y̵.̵U̵6̵4̵_̵n̵u̵m̵B̵i̵t̵s̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVB_sources/PCVB_T002.lean:76:35: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PCVB_sources/PCVB_T002.lean:75:42: warning: This simp argument is unused:
+  hcast64
+
+Hint: Omit it from the simp argument list.
+  simp only [hmask P hP, hshr, hcast32, hc̵a̵s̵t̵6̵4̵,̵ ̵h̵P, ge_iff_le, UScalar.le_equiv, h64a, Fv] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVB_M31.fast_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4d3bb3eee5c74a74ae09430fc4c38aa0.scope; invocation ID: f58bb09234b3429485669889111a4091
