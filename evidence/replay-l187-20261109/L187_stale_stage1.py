@@ -25,7 +25,8 @@ for f in files:
   if not m: continue
   env=r.get('env') or {}
   base=os.path.dirname(env['TMPDIR']) if env.get('TMPDIR') else None
-  pins={v['path']:v['sha256'] for v in ((r.get('deps_fingerprint') or {}).get('selected_objects') or {}).values() if isinstance(v,dict) and str(v.get('path','')).endswith('.olean')}
+  df=r.get('deps_fingerprint'); so=(df.get('selected_objects') if isinstance(df,dict) else None) or {}
+  pins={v['path']:v['sha256'] for v in (so.values() if isinstance(so,dict) else []) if isinstance(v,dict) and str(v.get('path','')).endswith('.olean') and 'sha256' in v}
   out.append(dict(module=m,file=f,attempt=r.get('attempt'),out=o,base=base,lean_path=(env.get('LEAN_PATH') or '').split(':'),pins=pins,source_hashes=r.get('source_hashes')))
 pr.wait()
 json.dump(out,open(S+'stale_stage1.json','w'))
