@@ -1,0 +1,31 @@
+# PCUE_ HANDOFF: phase P2r (re-comparison of P2a and P2d against overflow-checks-on emissions)
+
+Target not yet established. No ledger row, trust row, RSL, security contract or shipped source changed. Branch `codex/pc-prov-p2r-20261109` (base research fd363950b73). Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Host workspace `/home/dombarker/project-offloads/codex-pc-prov-p2r-20261109/`. 26 of 40 Lean scopes, 0 extraction scopes, one scope at a time, caps 6G/8G, swap 0, 180 s, unraised (`PCUE_SCOPES.json`, `PCUE_ATTEMPTS.jsonl`, `PCUE_L0nn/receipt.json`). Scope source revision is the branch base with the new evidence directory untracked at launch (dirty flag in each receipt).
+
+## Ruling applied
+Only overflow-checks-on emissions count: PCQC_E001-E012, E022, E023 and PCQ_E037-E040 (`PCUE_EMISSION_INDEX.json`). Every emission P2a and P2d compared against (NMH_*, NHR_*, NKM, NNG, NMT, PCQ_E4xx, retained FILE: sources) is overflow-off or of unknown configuration, so no earlier proof is carried over. `PCUE_EQ_STATUS.json` supersedes `PCUA_EQ_STATUS.json` and `PCUD_EQ_STATUS.json` for all 713 definitions of the 87 modules they covered; every record keeps the earlier status and emission in `superseded_earlier_status`.
+
+## Result (713 definitions)
+PROVED_RFL 55, PROVED_UNFOLD 80, PROVED_EQUIV 56 (191 theorems, `#print axioms` only propext / Classical.choice / Quot.sound on all 191, no sorry / native_decide, maxHeartbeats only the Aeneas header value or lowered to 200000), FAILED 26, CONFIG_MISMATCH 8, TEXT_ONLY_NOT_COMPARED 35, GATE_SOURCE_UNAVAILABLE 60, NO_FRESH_EMISSION 393 (no overflow-checks-on emission declares the name; extraction limits are in PCQC_FAILURES.json; earlier proofs against overflow-off emissions for 55 definitions therefore no longer count).
+Proof scopes: `PCUE_L020` (VT1), `L021` (VT2), `L022` (VF1), `L023` (VF2), `L024` (VF3), `L025` (VF4), all exit 0; the compiled bundles are byte-identical (after the comment line) to the final PRVEq files (diff checked). Statement form: `@<gate ns>.PRVFresh_<label>.f = @<gate ns>.f` against the compiled gate constants (Equiv for structures). Proved definitions that reach a fresh external name resolved by name to a gate constant: 2, listed in `PCUE_HAND_MODELS.json`.
+
+Earlier status to new status:
+- P2d CONFIG_PENDING_OVERFLOW_CHECKS (52): 13 PROVED_UNFOLD (field M31/CM31/QM31 slices of AspisV8R19, AspisR72Sampler, NFG_CheckedFieldRef against PCQ_E037/E038), 39 NO_FRESH_EMISSION (M31.mul, reduce_u64, CM31/QM31 mul and friends have no overflow-on emission: the P1a S001 roots covered only neg/add/sub/double/mul_by_r).
+- P2a SEM-1 obligations: CurrentWide M31.add, M31.sub, M31.double, mul_by_r are PROVED_UNFOLD against PCQ_E038 (the gate CurrentWide model equals the checked emission). CM31.add/sub/mul, M31.mul, reduce_u64: NO_FRESH_EMISSION.
+- NO_COMMON_LEAN_NAME (88): 32 now proved (name map), 15 TEXT_ONLY, 41 NO_FRESH_EMISSION.
+- P2a/P2d NO_FRESH_EMISSION with an overflow-on emission now: 18 PROVED, 7 FAILED, 3 TEXT_ONLY.
+- CONFIG_MISMATCH (8, both bodies recorded): `fast_pairing.canonical.reduce` (gate `Std.U64.wrapping_shr/add/sub`, fresh checked `>>>`, `+`, `-`) and its dependents `canonical.Dot.finish`, `EbyKDot.finish`; `EbyKDot.push` (gate `Usize.wrapping_add`); `transport.Variant.row_loop.body` (gate `Usize.wrapping_mul`) and dependents `row_loop`, `row`; `NMT_stage1_owned stage1_owned` (gate `Usize.wrapping_add`). P2a had recorded `reduce`, `Dot.finish`, `EbyKDot.push/finish` as PROVED_UNFOLD against overflow-off emissions: those proofs no longer count and the overflow-on result is the opposite. The gate model is a wrapping model of source whose overflow-checks-on build is checked. Whether the release build is checked or wrapping is a configuration question for the lead, not decided here.
+- FAILED (26): fresh declaration or callee does not elaborate against the gate environment (external/instance boundary, e.g. `r0.heap.filled` instance, Weights `WideExact` not defined in the gate namespace, WideToBytes `ChunksExactMut` library instance missing), `compact.OFF_*` constants (Type mismatch), and the five `fast_dots` loops of RPz7_FIp_NativeDots (heartbeat timeout at 200000, PCUE_L018; not raised). Details in `PCUE_FOR_P3.json`.
+
+## Generator changes (recorded in PCUE_TOOLS.json; starting copy PCUD_gen_equalities.py, sha256 in the file)
+Nested fresh namespace (PCWA change 1); PARSE-1 fix (declaration directly after a namespace line); STRUCT-1 fix (keyword field names such as `at` quoted; tested only on a synthetic structure, PCUE_L026, because the real verifier.Reader exists only in overflow-off emissions); deterministic name map (`aspis_core.` prefix added or removed; `open <gate ns>.aspis_core` or `abbrev` for carrier types); `--kind`, `--open-extra`; lowered per-equality heartbeat budget.
+LIB-1 (wrapping_shr/shl shift type): does not persist as an elaboration failure with overflow-on emissions (they contain no wrapping_shr/shl); see classification C9.
+
+## Failures and replacements
+PCUE_L001 probe: fresh Types declarations that depend on an external type failed to elaborate; replaced by `--prune-fresh` (closure only). PCUE_L009 (F4 bundle) hit the 180 s timeout (peak RSS shown is the timeout wrapper): not rerun unchanged; replaced by one bundle per heavy module and the lowered heartbeat budget; the shape is retired. Round-3 ingest bug (failed equalities re-emitted as live theorems): states discarded, round-2 files regenerated and verified identical to the compiled bundles.
+
+## Not done
+No extraction (budget 0). GATE_SOURCE_UNAVAILABLE modules need multi-namespace gate support. No change to the 393 NO_FRESH_EMISSION definitions without new overflow-on extractions (M31.mul/reduce_u64/CM31/QM31 arithmetic; WideExact arithmetic; NativeDots `Dot.push`; the cut-crate modules). Hand models / trust rows: record only.
+
+## Files
+`PCUE_EQ_STATUS.json`, `PCUE_FOR_P3.json`, `PCUE_HAND_MODELS.json`, `PCUE_CLASSIFICATIONS.json`, `PCUE_TOOLS.json`, `PCUE_SCOPES.json`, `PCUE_ATTEMPTS.jsonl`, `PCUE_PLAN.json`, `PCUE_EMISSION_INDEX.json`, `PRVEq_<label>.lean` (final per pass), `PRVEq_bundle_*2.lean` (compiled bundles; V* are the verification bundles), `gen/` (states, reports, probe/verification logs, bundles.json, verify_attempts.json, name maps), `tests/`.
