@@ -1,0 +1,40 @@
+{
+ "schema": 1,
+ "classifications": [
+  {
+   "id": "PCQF-C1",
+   "topic": "P transparency",
+   "classification": "Charon --include aspis_core::field::P makes the constant a def (PCQF_E002 etc.: `def aspis_core.field.P : Std.U32 := 2147483647#u32`, body uses the plain constant, not a monadic `let i <- P`). Not a source or tool change; recorded in PCQF_TOOLS.json. In aspis-core selections the item is local and already a def (PCQ_E038, PCQF_E007)."
+  },
+  {
+   "id": "PCQF-C2",
+   "topic": "per-gate-module overflow configuration (lead ruling received mid-task)",
+   "classification": "Gate text of every P2b/P2c function module in scope binds + - * with checked arrows and has no wrapping_ markers, so ON for all; type/const-only modules have no arithmetic (no effect, ON kept). PCQF_CONFIG_BY_MODULE.json, PINS field p1e_config, PCQF_COVERAGE.json extraction_configuration_per_gate_module. No OFF variant was needed. Heuristic regex over gate text, not a proof of how the gate was extracted."
+  },
+  {
+   "id": "PCQF-C3",
+   "topic": "features for semantic/copy terminal",
+   "classification": "The audit feature set FS (copied from P1 statement specs) compiles out functions the gate contains (absorption_lanes_literal etc., cfg(any(test,not(audit)))); Charon fails silently on non-existent roots (PCQF_E018/E019/E021). Round-2 specs use features r0,pool-v1-kernel. Whether the gate was extracted with that exact set is inferred from the presence of the literal variants, not recorded anywhere found; the earlier P1 statement runs (S009,S011,S013,S014) kept FS. This is a configuration question for the lead."
+  },
+  {
+   "id": "PCQF-C4",
+   "topic": "NO_FROZEN_COUNTERPART",
+   "classification": "external_linear_lazy_row(+closure), array_from_fn_copy(+loop), core::num::u16::trailing_zeros_aux: listed in PCQF_extract_specs.json no_frozen_counterpart, not run."
+  },
+  {
+   "id": "PCQF-C5",
+   "topic": "retired shapes",
+   "classification": "Aeneas aeneas-b59d5188-extended cannot translate: qm31_sum_products3_prepared (E012,E028), qm31_m31_dot (E014,E029), state_only_poseidon external_linear_lazy / interpolate_three_constant_columns / internal_linear_lazy-containing group / external_local_packed_raw loop at 238 (E015-E017,E031,E032), pair_terminal validate_verified_afterstate loop (E022,E033), semantic_terminal group failures (E020,E023-E025,E034), copy_terminal (E021 root, E026,E035). Each failed at least twice in distinct shapes or has a recorded second shape; the specific failing function inside a multi-root run is identified only where Aeneas printed a Source range. Retired for this tool; P1d tests the original Aeneas."
+  },
+  {
+   "id": "PCQF-C6",
+   "topic": "FP3-3 unparseable decode_pool_v1_pair_verified_afterstate_v1",
+   "classification": "PCQF_E005 re-run is text-identical to PCQ_E040 modulo prefix (P is not reached), so the deep-nesting column layout issue persists; no scope was spent on a layout variant."
+  },
+  {
+   "id": "PCQF-C7",
+   "topic": "budget",
+   "classification": "35 of 35 extraction scopes used, 0 Lean scopes; budget exhausted before S010/S012/S005b/S006 or cut-crate shapes were revisited (not in this job scope beyond the P2b/P2c lists)."
+  }
+ ]
+}
