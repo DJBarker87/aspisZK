@@ -405,7 +405,9 @@ theorem PRVEq.OraclePortCkptAbi2Extracted.Funs.encode_k : @PRVFresh_OraclePortCk
 #print axioms PRVEq.OraclePortCkptAbi2Extracted.Funs.encode_k
 
 theorem PRVEq.OraclePortCkptAbi2Extracted.Funs.decode_e_spec : @PRVFresh_OraclePortCkptAbi2Extracted_Funs.decode_e_spec = @OraclePortCkptAbi2Extracted.decode_e_spec := by
-  first | (trace "PRV-S1 PRVEq.OraclePortCkptAbi2Extracted.Funs.decode_e_spec"; rfl) | (trace "PRV-S2 PRVEq.OraclePortCkptAbi2Extracted.Funs.decode_e_spec"; delta PRVFresh_OraclePortCkptAbi2Extracted_Funs.decode_e_spec OraclePortCkptAbi2Extracted.decode_e_spec; try simp only [PRVEq.OraclePortCkptAbi2Extracted.Funs.aspis_core.field.wide_exact.WideExact.from_limbs, PRVEq.OraclePortCkptAbi2Extracted.Funs.word_spec]; try rfl; done)
+  -- S1 (`rfl`) hits the whnf heartbeat limit (PCT_L013); go straight to delta, callee rewrite, then syntactic rfl
+  delta PRVFresh_OraclePortCkptAbi2Extracted_Funs.decode_e_spec OraclePortCkptAbi2Extracted.decode_e_spec
+  simp only [PRVEq.OraclePortCkptAbi2Extracted.Funs.aspis_core.field.wide_exact.WideExact.from_limbs, PRVEq.OraclePortCkptAbi2Extracted.Funs.word_spec]
 #print axioms PRVEq.OraclePortCkptAbi2Extracted.Funs.decode_e_spec
 
 
