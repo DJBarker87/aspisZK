@@ -9,7 +9,7 @@ B='/home/dombarker/project-offloads/codex-cx-a2-20261108';T='/home/dombarker/.el
 if (E/'NOF_HOLD').exists():sys.exit(75)
 guard=E/'NOF_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,stage,kind,target=sys.argv[1:];assert re.fullmatch('NOF_L[0-9]{3}',a) and 1<=int(a[-3:])<=20 and not (E/a).exists()
-CAPS={'P0':3,'P1':4,'P2':6,'P3':2,'P4':5}; assert stage in CAPS
+CAPS={'P0':3,'P1':4,'AUDIT':2,'P2':6,'P3':2,'P4':5}; assert stage in CAPS
 used={};
 for n in ['NOF_ATTEMPTS.jsonl','NOF_TRANSPORT.jsonl']:
  p=E/n
@@ -19,8 +19,10 @@ for n in ['NOF_ATTEMPTS.jsonl','NOF_TRANSPORT.jsonl']:
   if 'exit_status' in row or row.get('submitted') is True:used[row['attempt']]=row.get('continuation_stage',row.get('stage'))
 assert len(used)<20,'NOF allowance 20 scopes exhausted'
 assert sum(1 for s in used.values() if s==stage)<CAPS[stage],stage+' cap exhausted: STOP the whole job'
-for k in range(int(stage[1])):
+need=2 if stage=='AUDIT' else int(stage[1])
+for k in range(need):
  assert (E/f'NOF_P{k}_CLOSED.json').exists(),f'P{k} not closed: STOP'
+if stage in ['P2','P3','P4']:assert (E/'NOF_AUDIT_CLEAR.json').exists(),'lead-ordered slot audit must clear before P2'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
