@@ -101,6 +101,10 @@ new('NEW8b','state_only_poseidon c with external_linear_lazy opaque',STM,[SOPN+n
 new('NEW13b','pair_terminal encode_pool_v1_pair_verified_afterstate_v1 with validate_verified_afterstate opaque',STM,
     ['crate::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1','core::option::_::ok_or'],'PCQF_aspis_statement_pair_terminal_c',['AspisR1TerminalDecoder.Funs'],['pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1'],
     opaque=['crate::pool_v1::pair_terminal::validate_verified_afterstate','crate::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1','crate::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1','crate::pool_v1::payment_relation::pool_v1_membership_root_v1','crate::atomic_statement::encode_digest_canonical'],**LOOP)
+new('NEW11c','pair_forest_semantic_terminal c with validate_transition opaque (failure at 213:23-217:9)',STM0,[SMT+n for n in ['semantic_packed','poseidon_selectors','composition_parts','equality_value','terminal_parts','r0::_::terminal_qm31']],
+    'PCQF_aspis_statement_sem_c3',['RPu_FIq_Native11','RPu_FIq_Native14'],['pool_v1.pair_forest_semantic_terminal.*'],opaque=[SMT+'validate_transition'],**LOOP)
+new('NEW12c','pair_forest_copy_terminal with pattern_values_literal opaque (failure at 266:12-270:13)',STM0,[CPT+n for n in ['lift_m31','accumulate_endpoint','link_weight','copy_residual','_::row','pattern_values','selector_mask_sum_16','_::active_literal','_::active','evaluate_with_selectors','_::expand','_::at_point','_::boxed_at_point']],
+    'PCQF_aspis_statement_copy_terminal3',['RPu_FIq_CopyPrefix','RPu_FIq_Native08','RPu_FIq_Native13','RPu_FIq_Native14'],['pool_v1.pair_forest_copy_terminal.*'],opaque=[CPT+'pattern_values_literal'],**LOOP)
 d=dict(schema=1,target_established=False,frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',
   note='P1e specs. include/opaque are applied exactly as listed; every run has overflow checks on.',specs=specs,
   no_frozen_counterpart=[

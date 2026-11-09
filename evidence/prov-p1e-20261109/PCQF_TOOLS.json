@@ -1,0 +1,52 @@
+{
+ "note": "Controller copies from P1c (PCQC_) with PCQC_ -> PCQF_; stager unchanged (evidence/extract-stage-20261106/NHR_stage.py); per-run extra_env overflow checks ON (ruling 2026-11-09). Tool: aeneas-b59d5188-extended with Charon of the same pin as P1c.",
+ "tools": {
+  "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+  "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+  "charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+ },
+ "stager_sha256": "365cdfc836535c0d77f3aa26edfa6216812b935851d4f710a36a02e4c9bb1de6",
+ "controller_sha256": "cb6999a6f3c5ef85d98ca6721c6963e7acb99f0e21c4fccb2bee3702be0f6d56",
+ "toolchain": {
+  "CARGO_BUILD_JOBS": "1",
+  "RAYON_NUM_THREADS": "1",
+  "RUSTUP_TOOLCHAIN": "nightly-2026-09-17"
+ },
+ "files": {
+  "PCQF_extract.py": {
+   "original": "prov-p1c-20261109/PCQC_extract.py",
+   "original_sha256": "a1b6620c8df84b7f3c48e6b9a5288f187a430fd01118bbb5a99c5a22c26adff0",
+   "sha256": "cb6999a6f3c5ef85d98ca6721c6963e7acb99f0e21c4fccb2bee3702be0f6d56",
+   "changes": "PCQC_ -> PCQF_ (prefix, attempt-id regex, file names, env PCQF_HOST_BASE); codex-pc-prov-p1c-20261109 -> codex-pc-prov-p1e-20261109; no logic change"
+  },
+  "PCQF_run.py": {
+   "original": "prov-p1c-20261109/PCQC_run.py",
+   "original_sha256": "50f83e85240961fd5439df494cfae4809a1349f2627162f1e99eb9b71231995d",
+   "sha256": "e15e1659a9a1a1fef6b7981b92772549f14a2fde1cb11c74ed4a11447d46db79",
+   "changes": "PCQC_ -> PCQF_ (prefix, attempt-id regex, file names, env PCQF_HOST_BASE); codex-pc-prov-p1c-20261109 -> codex-pc-prov-p1e-20261109; no logic change"
+  },
+  "PCQF_run_host.py": {
+   "original": "prov-p1c-20261109/PCQC_run_host.py",
+   "original_sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "changes": "PCQC_ -> PCQF_ (prefix, attempt-id regex, file names, env PCQF_HOST_BASE); codex-pc-prov-p1c-20261109 -> codex-pc-prov-p1e-20261109; no logic change"
+  },
+  "PCQF_STAGER_PIN.json": {
+   "original": "prov-p1c-20261109/PCQC_STAGER_PIN.json",
+   "original_sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45",
+   "sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45",
+   "changes": "PCQC_ -> PCQF_ (prefix, attempt-id regex, file names, env PCQF_HOST_BASE); codex-pc-prov-p1c-20261109 -> codex-pc-prov-p1e-20261109; no logic change"
+  },
+  "PCQF_render_spec.py": {
+   "original": "prov-p1a-20261109/PCQ_render_spec.py",
+   "sha256": "a07100f25b7e5e2f676e9db46e008a3fa17d8f48e2ed712382549cea4b962c06",
+   "changes": "overflow checks always on; reads PCQF_extract_specs.json; include list rendered after start-from as in the original"
+  },
+  "PCQF_chain.sh": {
+   "original": "prov-p1c-20261109/PCQC_chain.sh",
+   "sha256": "106de2d173fd588d4ad83eb58a8b2e532c3b163f853882f392077a0a43faeabc",
+   "changes": "renders spec from PCQF_extract_specs.json instead of copying an earlier spec; strictly sequential"
+  }
+ },
+ "transparency_option": "Charon --include aspis_core::field::P (made aspis_core::field::P a def in aspis-statement and cost-probe selections; see PCQF_SUPERSEDES.json)"
+}

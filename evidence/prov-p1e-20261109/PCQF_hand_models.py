@@ -20,7 +20,8 @@ def gshow(path):
     r=subprocess.run(['git','-C',ZK,'show','HEAD:'+path],capture_output=True,text=True);return r.stdout if r.returncode==0 else None
 gate={}
 for m,v in J(EV/'prov-p2b-20261109/inputs/gate_sources.json').items():gate[m]=v['paths'][:1]
-for m,x in J(EV/'prov-p2c-20261109/PCUC_EQ_STATUS.json')['modules'].items():gate[m]=[x['passes'][0]['gate_path']]
+for m,x in J(EV/'prov-p2c-20261109/PCUC_EQ_STATUS.json')['modules'].items():
+    if x['passes']:gate[m]=[x['passes'][0]['gate_path']]
 FRESH=re.compile(r"^((?:@\[[^\n]*\]\n)?)(axiom|opaque)\s+([^\s:(\[{]+)(.*?)(?=\n\n|\n/--|\Z)",re.M|re.S)
 GATE=re.compile(r"^(?:@\[[^\n]*\]\s*)*(?:private\s+|protected\s+|noncomputable\s+|scoped\s+)*(def|abbrev|instance|axiom|opaque|structure|inductive|theorem)\s+(\S+)",re.M)
 res=dict(schema=1,target_established=False,note='Record only; no trust row added or proposed. Name match: exact or suffix after the gate namespace.',entries=[],unlocated_gate_modules=[])

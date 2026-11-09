@@ -79,6 +79,9 @@ for r in req:
     if hit:
         run=hit[0];dd=rel(E/(run['run']+'_emitted/raw'))+'/'+run['ns']
         p2.setdefault(r['module'],{}).setdefault(dd,dict(run=run['run'],dir=dd,definitions=[]))['definitions'].append(g)
+cfgm=J(E/'PCQF_CONFIG_BY_MODULE.json')['modules'] if (E/'PCQF_CONFIG_BY_MODULE.json').exists() else {}
+cov['extraction_configuration_per_gate_module']={m:dict(overflow_checks=v['overflow_checks'],basis=v['basis']) for m,v in cfgm.items()}
+cov['runs_configuration']={r['run']:dict(overflow_checks='ON',exit=r['exit']) for r in runs}
 cov['p2_emission_dirs_per_gate_module']={m:sorted(v.values(),key=lambda x:x['run']) for m,v in sorted(p2.items())}
 summ={}
 for e in cov['specs'].values():
