@@ -37,12 +37,12 @@ theorem mulE (a b z : Usize) (h : a.val*b.val=z.val) (s : a.val*b.val≤Usize.ma
  (a*b : Result Usize) = ok z := AspisR1CurrentCaller.UsizeArithmetic.mul_eq_ok a b z h s
 theorem subE (a b z : Usize) (h : a.val-b.val=z.val) (s : b.val≤a.val) :
  (a-b : Result Usize) = ok z := by
- have hs : (a-b : Result Usize) ⦃ x => x.val=a.val-b.val ⦄ := UScalar.sub_spec s
+ have hs : (a-b : Result Usize) ⦃ x => x.val=a.val-b.val ∧ b.val≤a.val ⦄ := UScalar.sub_spec s
  obtain ⟨x,hx,hv1⟩ := WP.spec_imp_exists hs
  rw [hx]
  congr 1
  apply UScalar.eq_of_val_eq
- exact hv1.trans h
+ exact hv1.1.trans h
 
 open _root_.AdapterRw aspis_r1_cost_probe in
 theorem proofBytes : compact.PROOF_BYTES = ok 57607#usize := by
@@ -135,7 +135,7 @@ theorem mapVErrOk (a : RSL.TX1_094.Args VL) (env : RSL.Env) (s : RSL.Bytes)
  NNH_Tx1Returns.value a env = .ok s := by
  change NNH_Tx1ReturnedValues.mapVErrValue VL (NNH_Tx1Returns.value a env) = .ok s at h
  cases hv : NNH_Tx1Returns.value a env with
- | ok b => rw [hv] at h; exact h
+ | ok b => rw [hv] at h; unfold NNH_Tx1ReturnedValues.mapVErrValue at h; exact h
  | error e => rw [hv] at h; cases h
 
 /-- The 345 Ok clause at the corrected host (NOT the A1 field): a returned
@@ -163,7 +163,8 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
   apply UScalar.eq_of_val_eq
   change xs.val.length = 3
   have l := congrArg List.length shape
-  simpa only [accounts,List.length_map] using l
+  simp only [accounts,List.length_map] at l
+  rw [l]; rfl
  -- distinct
  have dist : RSL.distinctKeys ((Array.make 3#usize [pa,pba,cka]).val.map NNH_ModelCarrier.account) = true := by
   have d := packet.distinct
@@ -205,7 +206,7 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
   c.fixed.indexError c.fixed.reservation pba packet.public_data
   ((congrArg RSL.OwnedAccount.bytes e1).trans packet.public_read)
  obtain ⟨st,decRun,stEq⟩ := NNH_S1CodecOk.decode (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c)
-  c.fixed.indexError c.fixed.reservation ub packet.statement (by rw [ubEq]; exact packet.decode)
+  c.fixed.indexError c.fixed.reservation ub packet.statement ((congrArg C.decodeStatement ubEq).trans packet.decode)
  have val21 : (S c).op21 st = ok (.Ok ()) := by
   have slot : (S c).op21 st = NNH_S1HostCodec.validate st := rfl
   rw [slot]
@@ -231,7 +232,8 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
   rw [← lenData,← pbEq]; simp only [bytes,List.length_map]
  have lenPb : Slice.len pb = 58295#usize := by
   apply UScalar.eq_of_val_eq; change pb.val.length = _; rw [pbLen]; scalar_tac
- have pbytes : _root_.AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok 57607#usize := proofBytes
+ have pbytes : _root_.AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok 57607#usize := by
+  unfold _root_.AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES; exact proofBytes
  have hck : lift (Usize.checked_add 688#usize 57607#usize) = ok (some 58295#usize) := by
   rw [NNH_Stage2Sizes.checkedEnd]; rfl
  obtain ⟨s0,s0Run,s0Val⟩ := prefixRead pb 688#usize (by change (688#usize).val ≤ pb.val.length; rw [pbLen]; scalar_tac)
@@ -239,9 +241,16 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
   apply Subtype.ext
   rw [s0Val]
   show pb.val.slice 0 (688#usize).val = nat.val
+  have nb : nat.val.map NMT_345.byte = nat.val.map byte := by
+   first | rfl | (simp [NMT_345.byte, byte]) | with_unfolding_all rfl
+  have r1 : nat.val.map byte = packet.candidate := nb.symm.trans natEq
   have hb : (pb.val.slice 0 (688#usize).val).map byte = nat.val.map byte := by
-   rw [natEq,← takeData,← pbEq]
-   first | (simp only [List.slice,bytes,List.map_take,List.drop_zero,Nat.sub_zero]; rfl) | (simp [List.slice,bytes,List.map_take]) | rfl
+   rw [r1,← takeData,← pbEq]
+   show List.map byte (List.slice 0 688 pb.val) = List.take 688 (List.map byte pb.val)
+   first
+    | (simp only [List.slice,List.map_take,List.drop_zero,Nat.sub_zero])
+    | (simp [List.slice,List.map_take])
+    | rfl
   exact NNH_ByteListInjective.value _ _ hb
  have neRun : (S c).op0 core.cmp.PartialEqU8 s0 nat = ok false := by
   change core.slice.cmp.PartialEqSlice.ne core.cmp.PartialEqU8 s0 (Array.to_slice nat) = ok false
@@ -264,7 +273,7 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
    have := congrArg unbyte h1
    rw [byte_back] at this
    rw [this]; with_unfolding_all rfl
-  show pb.val[(696#usize).val]? = some 2#u8
+  show pb.val[696]? = some 2#u8
   rw [List.getElem?_eq_getElem inside]
   exact congrArg some h2
  -- public binding and the 094 child
@@ -305,7 +314,7 @@ theorem ok345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (program : solana_pubkey.
   have dg : AspisS6CurrentFirstInstallation.toDigest (SolanaDigest.Insts.Aspis_coreDigestDigest32 (S c)) =
    NNV_PreparedAtHost.digest c := rfl
   rw [dg]
-  rw [show verifier.candidate.tx1 (NNH_Run5bCurrentShape.current (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c)
+  rw [show AspisR1CurrentCaller.verifier.candidate.tx1 (NNH_Run5bCurrentShape.current (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c)
      c.fixed.indexError c.fixed.reservation) (NNV_PreparedAtHost.digest c)
      (AspisR1CurrentCaller.FirstComposition.toCurrentPublic (C.semanticPublic (NNH_S1DecodeOk.carrier st)))
      ub s1 10#usize () none = _ from tx1Run]
