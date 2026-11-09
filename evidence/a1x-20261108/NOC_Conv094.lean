@@ -67,9 +67,11 @@ theorem weightsNew (a : LIB_VCarriers.Acc) (width : a.weights.val.length=64) (ou
  have h' : Tx1Q_PrefixInstall.newPending env.reservation
    (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc a)).weights.deref = .ok (.Ok out) := h
  have s := Tx1Q_PrefixInstall.pending_success _ _ _ h'
- rw [round,Port3_NativePendingInstall.reference_eq _ _ size] at s
- unfold LIBC_WeightsNew.value LIBC_WeightsNew.model
- rw [s]
+ rw [round] at s
+ have s2 := (Port3_NativePendingInstall.reference_eq _ _ size).symm.trans s
+ change LIBC_ResultGraph.value LIBC_WeightsNew.port (.error .Allocation)
+  (Port3_PendingInstall.pending env.reservation (LIBC_VStateCarriers.toAcc a).weights.deref) = _
+ rw [s2]
  rfl
 #print axioms scan
 #print axioms geometry
