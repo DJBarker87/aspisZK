@@ -1,0 +1,80 @@
+{
+ "run": "PCWC_E001",
+ "spec_id": "S1ValuesOwned-reconstruction-iter1",
+ "frozen_workspace": false,
+ "crate_dir": "crate",
+ "files": {
+  "Cargo.toml": {
+   "local": "sources/s1_y1_v1/Cargo.toml",
+   "sha256": "e80ce728cc395bfeeacd9355c3fbfac35b566cff7ee11f70ff955f8eee868381"
+  },
+  "Cargo.lock": {
+   "local": "sources/s1_y1_v1/Cargo.lock",
+   "sha256": "6ff5e6b413306d95847b172f73016a2e8aef99fc0fc4fac90414d0039dac95b3"
+  },
+  "src/lib.rs": {
+   "local": "sources/s1_y1_v1/src/lib.rs",
+   "sha256": "4247a14748532dc1b38aa0645e2341bbafd4d5e5115a918c85c24748b25ec2a2"
+  }
+ },
+ "namespace": "AspisS1ValuesOwned",
+ "env": {
+  "RUSTUP_TOOLCHAIN": "nightly-2026-06-01",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_TARGET_DIR": "{WS}/../PCWC_target_s1",
+  "CARGO_NET_OFFLINE": "true",
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+ },
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::result::_::map_err",
+  "--start-from",
+  "crate::values_owned_reference",
+  "--dest-file",
+  "{OUT}/repro.llbc",
+  "--",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--no-default-features",
+  "--jobs",
+  "1"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "AspisS1ValuesOwned",
+  "-dest",
+  "{OUT}/raw",
+  "-subdir",
+  "AspisS1ValuesOwned",
+  "-split-files",
+  "-emit-json",
+  "{OUT}/repro.llbc"
+ ],
+ "recorded_original_tools": {
+  "charon": "XRa_bin/charon daad69be (== recorded r18 Charon cb50ff16)",
+  "aeneas": "PCWC_T001 rebuilt Aeneas, sha256 959659a6 (== recorded original)"
+ },
+ "assumption": "flags and environment are the most likely historical ones (copied from sibling r18-era extractions, PCWB_make_refspec.py), not recorded for this crate; overflow checks on per standing ruling"
+}

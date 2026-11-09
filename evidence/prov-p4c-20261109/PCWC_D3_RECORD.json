@@ -1,0 +1,14 @@
+{
+ "ruling": "D3 (Stream A lead zk-11, 2026-11-09): MultiproofConeRef reference.rs e812aae3 vs 32548b0d (two cfg_attr(kani) lines only; E007 reproduces live Funs modulo one comment) count as the same function. No new runs.",
+ "hashes": {
+  "live_extraction_source": "32548b0d36950447a5fc781da3a36442caeff65513854c5277d110ff5e2fd7a3",
+  "kani_receipts_name": "e812aae3d06b442cf0f364fd0106dc3a2ecd1ccc8bd2600bf10e769132389f71"
+ },
+ "files": {
+  "a": "evidence/prov-p4b-20261109/sources/mp_cone_A/src/reference.rs",
+  "b": "evidence/prov-p4b-20261109/sources/mp_cone_B/src/reference.rs"
+ },
+ "diff_a_to_b": "110a111,112\n> #[cfg_attr(kani, kani::requires(bytes.len()==32))]\n> #[cfg_attr(kani, kani::ensures(|out: &[u8;32]| out.as_slice()==bytes))]\n",
+ "evidence": "PCWB_KANI_LINKS.json K1; PCWB_E007 (re-extraction from e812aae3: Funs identical to live except the Source line-number comment of read32)",
+ "scope": "Applies to MultiproofConeRef and (reference.rs part of) MultiproofParserRef. Recorded, not re-derived; the Kani contract is transferred by this ruling, not by a new run."
+}

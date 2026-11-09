@@ -1,0 +1,74 @@
+{
+ "run": "PCWC_E003",
+ "spec_id": "wc",
+ "frozen_workspace": false,
+ "crate_dir": "crate",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--start-from",
+  "crate::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1",
+  "--dest-file",
+  "{OUT}/repro.llbc",
+  "--",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--no-default-features"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "AspisR1WithdrawalCaller",
+  "-dest",
+  "{OUT}/raw",
+  "-subdir",
+  "AspisR1WithdrawalCaller",
+  "-split-files",
+  "-emit-json",
+  "{OUT}/repro.llbc"
+ ],
+ "env": {
+  "RUSTUP_TOOLCHAIN": "nightly-2026-06-01",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "CARGO_TARGET_DIR": "{WS}/../PCWC_target_wc",
+  "CARGO_NET_OFFLINE": "true",
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+ },
+ "namespace": "AspisR1WithdrawalCaller",
+ "recorded_original_tools": {
+  "charon": "XRa_bin/charon daad69be (== recorded r18 Charon)",
+  "aeneas": "PCWC_T001 rebuilt Aeneas sha256 959659a6 (== original aspis-r1-r18-tools bin/aeneas)"
+ },
+ "files": {
+  "Cargo.toml": {
+   "sha256": "416796c3bb52f23ed3335b6a217dd5752509d8cd8c0271bc3c00ea894a9b4807",
+   "local": "sources/wc/Cargo.toml",
+   "git": "caller-extraction-evidence.tar.gz:input/Cargo.toml"
+  },
+  "Cargo.lock": {
+   "sha256": "5781c880361f3041f83d648c883bcf014b679f2d559bfd12178eca2588f2a1ac",
+   "local": "sources/wc/Cargo.lock",
+   "git": "caller-extraction-evidence.tar.gz:input/Cargo.lock"
+  },
+  "lib.rs": {
+   "sha256": "166185cd1986e82a5ec27d85f5f549067cd0afa4917e24226c19450cffe739dc",
+   "local": "sources/wc/lib.rs",
+   "git": "caller-extraction-evidence.tar.gz:input/lib.rs"
+  }
+ },
+ "note": "Same commands/environment as PCWB_E008 (whose Charon LLBC reproduced the archived LLBC); only the Aeneas binary is the rebuilt original."
+}
