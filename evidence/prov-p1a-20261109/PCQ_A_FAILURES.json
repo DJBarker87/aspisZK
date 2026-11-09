@@ -1,0 +1,89 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "note": "All failures recorded with the exact Aeneas/Charon text. The offending function is attributed from source shape unless a solo run exists (E015, E024). None of the failed shapes was retried with overflow-checks on (budget of 40 scopes exhausted).",
+ "failures": [
+  {
+   "spec": "S004",
+   "selection": "aspis-core r0::transport::order",
+   "runs": [
+    "PCQ_E003",
+    "PCQ_E006"
+   ],
+   "errors": [
+    "E003: Aeneas PrePasses.ml:840 \"Nested-loop returns require exactly one Option language item\" (transport.rs 25:0-48:1)",
+    "E006 (with core::option::_::ok_or root): uncaught Not_found at InterpReduceCollapse.ml:1991 (loop-join collapse)"
+   ],
+   "gate_definition": "FIo_Native.aspis_core.r0.transport.order",
+   "overflow_checks_tried": false
+  },
+  {
+   "spec": "S005 (encode_digest_canonical only)",
+   "selection": "atomic_statement::encode_digest_canonical",
+   "runs": [
+    "PCQ_E015",
+    "PCQ_E025"
+   ],
+   "errors": [
+    "uncaught Not_found at InterpReduceCollapse.ml:1991 in both (iter().enumerate() loop with bytes[a..b].copy_from_slice); E025 added ok_or root and opaque core::array::_::index_mut, core::slice::_::copy_from_slice"
+   ],
+   "gate_definitions": [
+    "encode_digest_canonical",
+    "encode_digest_canonical_loop",
+    "encode_digest_canonical_loop.body"
+   ],
+   "overflow_checks_tried": false,
+   "consequence": "opaque (axiom) in every fresh emission that reaches it (S009, S011, S013, S014)"
+  },
+  {
+   "spec": "S006",
+   "selection": "asq8_payment_reference::encode_common",
+   "runs": [
+    "PCQ_E005"
+   ],
+   "errors": [
+    "Charon \"ERROR Code failed to compile\": module asq8_payment_reference is #[cfg(any(test, kani, aeneas_ref))] (pair_forest_terminal.rs:1447-1449), absent from the frozen build. No retry: reproducing it would need a cfg flag, i.e. a different build configuration."
+   ],
+   "gate_definition": "AspisR20Request.pool_v1.pair_forest_terminal.asq8_payment_reference.encode_common",
+   "overflow_checks_tried": false
+  },
+  {
+   "spec": "S010",
+   "selection": "pair_forest_terminal decoders",
+   "runs": [
+    "PCQ_E008..E010 shapes: E010 Charon root asq8_reference_envelope (cfg-gated), E017,E020,E027 Not_found, E031 Name clash, E035 opaque enum"
+   ],
+   "errors": [
+    "E031: Aeneas \"Name clash detected ... pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition\" (pair_forest_terminal.rs 179:0-202:1 / 199:4)",
+    "E035 (enum made opaque): Invalid_argument \"Can't get the list of fields of this adt\""
+   ],
+   "gate_definitions": "see PCQ_A_COVERAGE.json S010 (12 MISSING)",
+   "overflow_checks_tried": false,
+   "note": "asq8_reference_envelope is cfg(any(test,kani,aeneas_ref)): not in the frozen build"
+  },
+  {
+   "spec": "S012",
+   "selection": "pair_tree_profile decoders/encoders",
+   "runs": [
+    "PCQ_E012",
+    "E022",
+    "E029",
+    "E033",
+    "E034",
+    "E024(solo validate)"
+   ],
+   "errors": [
+    "E024 solo validate_pool_v1_pair_live_snapshot_v1: Aeneas Failure \"Unreachable\" InterpAbs.ml:1955 at pair_tree_profile.rs 466:4-473:1",
+    "E033: Name clash PoolV1PairLatePublicStatementErrorV1.Afterstate (pair_tree_profile.rs 422:0-435:1 / 433:4)",
+    "E034 (enum opaque): Invalid_argument \"Can't get the list of fields of this adt\""
+   ],
+   "gate_definitions": "see PCQ_A_COVERAGE.json S012 (13 MISSING)",
+   "overflow_checks_tried": false
+  },
+  {
+   "spec": "S011 (partial)",
+   "selection": "pair_terminal",
+   "note": "emitted (PCQ_E032, overflow-on PCQ_E040) only with validate_verified_afterstate and encode_pool_v1_pair_verified_afterstate_v1 opaque; those two gate definitions are MISSING; not isolated individually (budget)."
+  }
+ ]
+}
