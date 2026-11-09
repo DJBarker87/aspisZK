@@ -19,8 +19,13 @@ AdapterRwModel source (call chain per slot recorded below).
 
 ## Result: no reached slot is a residual
 
-Top-level residual slots: **only AdapterRw.op21 and AdapterRw.op24**. Neither is called
-by `stage2_owned` or anything it reaches. All 25 stage slots are non-residual.
+Top-level residual slots found by this head test: AdapterRw.op21 and AdapterRw.op24. Neither is called
+by `stage2_owned` or anything it reaches.
+
+**Correction (lead cross-check against A1's NOC_SlotAudit):** the head test is too narrow for four stage
+slots. Stage op4, op7, op8 and op12 print `residual=false head=none mentions_m=true` here, i.e. their weak-head
+value is not a recognisable installed constant; A1 confirms they are still `.div` placeholders from
+NNH_HostSeed.m0. They are NOT on the reached TX2 path; see the next section.
 
 ### verifier.candidate.tx2_common (stage = NNH_Tx2SlotTransport.stage m env err r)
 
@@ -58,9 +63,28 @@ op10/op42/op43 appear only under `observer → first_decoded`; `AdapterRw.Cuts.o
 op10 is the only reached-by-text slot that mentions currentBase (head
 AspisS6CurrentFirstInstallation.current), and it is unreachable for that reason.
 
+## Stage op4, op7, op8, op12 (seed `.div` placeholders): not reached
+
+| slot | reached? | how confirmed |
+|---|---|---|
+| stage op4 | no | not read by `verifier.candidate.tx2_common` or `tx2_authenticated` (source read below) |
+| stage op7 | no | same |
+| stage op8 | no | same |
+| stage op12 | no | same |
+
+1. Reading the bodies: in VTop_Model.lean, `verifier.candidate.tx2_common` together with `tx2_authenticated` reads exactly these dictionary fields: op0, op2, op3 (only in authenticated), op5, op6, op9, op10, op11, op13 (three marks), op14, op15, op16, op17, op18, op19, op20, op21, op22, op23 and unwrap32. There is no op4, op7, op8 or op12. The dumped field list is in this file's commit message context and in the table above.
+2. Helpers: on the reached path, op5, op6, op11 and op19 are rewritten by compiled theorems to installers that take no `VTop_Stages.Ops` argument:
+   - op5: NNU_MerkleSlots.installed to Port4B_Install.batch;
+   - op6: NNU_Query.source to NJJ_Common.query;
+   - op11: NNU_Geometry.source to NJC_ClosedCalls.geometry;
+   - op19 with obs = none: NNH_Run5bFinishEdge.selected to NLB_Parent.finish.
+   No VTop dictionary is passed into these helpers, so none of them can call op4, op7, op8 or op12. op3 is rewritten by NNY_ParserAssociation.source to NLE_ParseInstall.parse.
+3. stage2_owned reaches the stage dictionary only through adapter op11 = `tx2_authenticated (stage …)` (audit head). The adapter crawl above lists every adapter slot it calls.
+4. Formal confirmation: NOF_CommonConverse.common (L010) and NOF_Tx2Op11 quantify over an arbitrary seed `m`. They therefore hold whatever values stage op4, op7, op8 and op12 take, including `.div`. Their success does not depend on these slots.
+
 ## Consequence for NOF theorems
 
 No divergent slot is reached on the TX2 path; P2 proceeds. Every NOF theorem quantifies
 over an arbitrary `m : IDa_Deployed.Uninstalled _` and never mentions `currentBase`
-(in particular not `currentBase.op1`), so each stays valid when the seed's current-caller
-op1 is corrected.
+(in particular not `currentBase.op1`), and none depends on stage op4/op7/op8/op12 or adapter
+op21/op24, so each stays valid when those seed slots are later corrected.
