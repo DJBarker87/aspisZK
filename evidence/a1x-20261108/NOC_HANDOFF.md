@@ -288,3 +288,34 @@ Recommendation: run these as three capped items in this order: 094 forward (6), 
 rather you allocate it explicitly than spend it here without a margin.
 
 target not yet established
+
+# Fourth continuation (lead allocation: budget 80; 094 fwd 10, 345 12, converse comps 14, X9 8, margin 9)
+
+Research merged at 66113b37590 (NOM_ terminal-domain and reverse-Merkle lemmas), as instructed. NOM_objects
+prepended by reference in NOC_PATHS.json (read-only). Whole job: 36 of 80 scopes.
+
+## 094 forward composition: closed (9 of 10 scopes, L028-L036)
+`NOC_Tx1Cut.returned` (L030): canonical returned-path packet of NNH_Tx1Returns.value (every intermediate value).
+`NOC_Tx1Forward.source` (L036, standard axioms):
+```lean
+theorem source {W Tx} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NNH_Tx1Returns.V)
+ (pubBytes proof : Slice U8) (k : Usize)
+ (hpub : a.public_bytes = LIB_Carriers.bytes pubBytes) (hproof : a.proof = LIB_Carriers.bytes proof)
+ (hk : a.k = k.val) (width : proof.val.length = 57607) (out : RSL.Bytes)
+ (called : NNH_Tx1Returns.value a (NOC_Run5bCtx.envOf c) = .ok out) :
+ ∃ v, verifier.candidate.tx1 (cur c) (NNV_PreparedAtHost.digest c)
+   (FirstComposition.toCurrentPublic a.public_) pubBytes proof k () none = .ok (.Ok v) ∧
+  LIB_Carriers.bytes (alloc.vec.Vec.deref v) = out
+```
+Every native call of the frozen 094 body is stepped against a full Result equality: k guard (k = 10 from the
+library split check), op3, op4, ZERO scratch (= the library zeroE29 scratch, `zero`), prepare (X4), op20, folded
+root window and copy (`foldedRoot`), op6 (`batch`: via NOC_MerkleBounded.hostParent at k = 0 with the canonical
+queries from NNG_GeometryDomain094 on the SAME returned prepare law; no LIBC_BatchMerkle.Domain premise is needed in
+either direction, since NOM_MerkleParent.hostParent has the same k < 2 / queries hypotheses), op19, op18 (width 64
+from NNG_AccumulatorDomain094), op7 (`query`, on the query Domain derived by NOC_QueryDomain.domain), op17
+(NNX_Flush), `finish_acc` (native flushed accumulator = LIBC_Finish.value), op16 (NNV_CurrentCheckpoint).
+Width: Op3I_ParseLaws (the only lemma deriving it from parse_shape) lives in a cache whose closure conflicts with
+ours (L031/L032 import failures; L032 also isolated Op5T_Concrete as a foreign import and it was dropped), so the
+width is a premise of this lemma and is discharged by the 345 caller from its own proof guard
+(NNH_Stage1ProofDomain.extent: the 345 proof window is exactly 57607 bytes). It is not a premise of any field.
+L033-L035 fixed: ZERO witness shape, queries index lemma, an implicit env.
