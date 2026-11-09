@@ -176,7 +176,7 @@ target not yet established
 
 # Second continuation (lead reallocation: X2 cap 8, converse cap 15, X7-X9 ≥ 10)
 
-Research merged at 5e64710e835 (fast-forward). Whole job: 23 of 50 scopes (14 pass, 9 fail).
+Research merged at 5e64710e835 (fast-forward). Whole job: 23 of 50 scopes (13 pass, 10 fail).
 
 ## X2 closed (7 of 8 scopes, L016-L022)
 - `NOC_ReadTransport.read` (L017): `SAQ_Decoder.read bytes i = NFS_ReadCanonical.read bytes i` for every
