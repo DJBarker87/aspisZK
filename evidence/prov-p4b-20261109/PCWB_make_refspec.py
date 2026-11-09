@@ -53,6 +53,28 @@ SETS['wc']=dict(frozen_workspace=False,crate_dir='crate',gitfiles={},textfiles={
   env={'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':'{WS}/../PCWB_target_wc','CARGO_NET_OFFLINE':'true','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin'},
   namespace='AspisR1WithdrawalCaller',recorded_original_tools=dict(charon='r18 charon (sha daad69be per archive pins; XRa_bin/charon identical)',aeneas='aspis-r1-r18-tools-20261016/bin/aeneas (b59d5188 unpatched native); substituted XRa_bin/aeneas-b59d5188-extended'))
 
+# ---- archive-based standalone cut crates (input/ tree of a retained extraction packet)
+import tarfile,io
+SPL='docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/'
+def arch(key,archive,starts,includes,ns,extra_charon_tail,prefix='input/'):
+    blob=subprocess.check_output(['git','-C','/Users/dominic/ZK','show','research:'+archive]);t=tarfile.open(fileobj=io.BytesIO(blob))
+    files={}
+    for ti in t:
+        nm=ti.name[2:] if ti.name.startswith('./') else ti.name
+        if ti.isfile() and nm.startswith(prefix):
+            rel=nm[len(prefix):]
+            if rel in('Cargo.toml','Cargo.lock') or (rel.startswith('src/') and rel.endswith('.rs')):files[rel]=t.extractfile(ti).read()
+    d=dict(frozen_workspace=False,crate_dir='crate',gitfiles={},textfiles={},expect={},rawfiles={k:(sha(v),archive+':'+prefix+k,v) for k,v in files.items()},
+      charon_command=[CH,'cargo','--preset','aeneas','--mir','built','--sysroot','default']+includes+sum([['--start-from',x] for x in starts],[])+['--dest-file','{OUT}/repro.llbc','--']+extra_charon_tail,
+      aeneas_command=[AE,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',ns,'-dest','{OUT}/raw','-subdir',ns,'-split-files','-emit-json','{OUT}/repro.llbc'],
+      env={'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':'{WS}/../PCWB_target_'+key,'CARGO_NET_OFFLINE':'true','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin'},namespace=ns,
+      recorded_original_tools=dict(charon='r18 charon (daad69be; XRa_bin/charon identical)',aeneas='aspis-r1-r18-tools-20261016/bin/aeneas sha 959659a6 (NOT on host); substituted XRa_bin/aeneas-b59d5188-extended c0cf4fcc'))
+    return d
+TAIL=['--locked','--offline','--release','--lib','--no-default-features','--jobs','1']
+INC2=['--include','core::option::Option','--include','core::result::Result','--include','core::result::_::map_err']
+SETS['sem_calls']=arch('sem_calls',SPL+'semantic-calls-root-v5-results-20261019.tar.gz',['crate::r1_semantic::semantic_boundary_entry','crate::r1_semantic::semantic_value_entry'],INC2,'AspisR1SemanticCallExtraction',['--manifest-path','{CRATE}/Cargo.toml']+TAIL)
+SETS['batched_w']=arch('batched_w',SPL+'batched-calls-root-v5-results-20261019.tar.gz',['crate::batched_weights::push_entry','crate::batched_weights::value_entry'],INC2,'AspisR1BatchedWeightsExtraction',['--manifest-path','{CRATE}/Cargo.toml']+TAIL)
+
 def build(key,run,sets=SETS):
     s=sets[key];d=E/'sources'/key;files={}
     for rel,(rev,path) in s['gitfiles'].items():
@@ -61,9 +83,11 @@ def build(key,run,sets=SETS):
     for rel,(h,prov) in s.get('localfiles',{}).items():
         b=(Path(WC_ARCH)/rel).read_bytes();assert sha(b)==h,(rel,sha(b))
         (d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(b);files[rel]=dict(sha256=h,local=f'sources/{key}/{rel}',git=prov)
+    for rel,(h,prov,raw) in s.get('rawfiles',{}).items():
+        (d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(raw);files[rel]=dict(sha256=h,local=f'sources/{key}/{rel}',git=prov)
     for rel,t in s['textfiles'].items():
         b=t.encode();(d/rel).parent.mkdir(parents=True,exist_ok=True);(d/rel).write_bytes(b);files[rel]=dict(sha256=sha(b),local=f'sources/{key}/{rel}',git='reconstructed from the recorded extraction script literal')
     # the host side reads PCWB_crate/<rel>; the client uploads files under that name
-    spec=dict(run=run,spec_id=key,**{k:v for k,v in s.items() if k not in('gitfiles','textfiles','expect','localfiles')},files=files)
+    spec=dict(run=run,spec_id=key,**{k:v for k,v in s.items() if k not in('gitfiles','textfiles','expect','localfiles','rawfiles')},files=files)
     (E/(run+'_spec.json')).write_text(json.dumps(spec,indent=1)+'\n');print(run,key,{k:v['sha256'][:12] for k,v in files.items()})
 if __name__=='__main__':build(sys.argv[1],sys.argv[2])

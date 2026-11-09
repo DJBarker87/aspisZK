@@ -1,0 +1,120 @@
+{
+ "run": "PCWB_E010",
+ "spec_id": "batched_w",
+ "frozen_workspace": false,
+ "crate_dir": "crate",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::result::_::map_err",
+  "--start-from",
+  "crate::batched_weights::push_entry",
+  "--start-from",
+  "crate::batched_weights::value_entry",
+  "--dest-file",
+  "{OUT}/repro.llbc",
+  "--",
+  "--manifest-path",
+  "{CRATE}/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--no-default-features",
+  "--jobs",
+  "1"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "AspisR1BatchedWeightsExtraction",
+  "-dest",
+  "{OUT}/raw",
+  "-subdir",
+  "AspisR1BatchedWeightsExtraction",
+  "-split-files",
+  "-emit-json",
+  "{OUT}/repro.llbc"
+ ],
+ "env": {
+  "RUSTUP_TOOLCHAIN": "nightly-2026-06-01",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "CARGO_TARGET_DIR": "{WS}/../PCWB_target_batched_w",
+  "CARGO_NET_OFFLINE": "true",
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+ },
+ "namespace": "AspisR1BatchedWeightsExtraction",
+ "recorded_original_tools": {
+  "charon": "r18 charon (daad69be; XRa_bin/charon identical)",
+  "aeneas": "aspis-r1-r18-tools-20261016/bin/aeneas sha 959659a6 (NOT on host); substituted XRa_bin/aeneas-b59d5188-extended c0cf4fcc"
+ },
+ "files": {
+  "src/batched_weights.rs": {
+   "sha256": "58e3fd94a19bd836abeebca0e921f098d28b67dcbeef7a76b639a3da49af1769",
+   "local": "sources/batched_w/src/batched_weights.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/batched_weights.rs"
+  },
+  "src/lib.rs": {
+   "sha256": "a31cb0b91d9565219ebbd2463c789b2006a3fa8c823abd5cc6ffd2a014af1b81",
+   "local": "sources/batched_w/src/lib.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/lib.rs"
+  },
+  "src/r1_semantic/mod.rs": {
+   "sha256": "610635793746322bbea93fb9bdca0255f06d77d99cd6635272df27d275dd2054",
+   "local": "sources/batched_w/src/r1_semantic/mod.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/r1_semantic/mod.rs"
+  },
+  "src/aspis_core/field.rs": {
+   "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+   "local": "sources/batched_w/src/aspis_core/field.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/aspis_core/field.rs"
+  },
+  "src/aspis_core/mod.rs": {
+   "sha256": "dadb7b721d255d4f7b54e5f52732038d792ba1902049c91c5f6cc368c7f2e873",
+   "local": "sources/batched_w/src/aspis_core/mod.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/aspis_core/mod.rs"
+  },
+  "src/aspis_core/field/wide_exact.rs": {
+   "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+   "local": "sources/batched_w/src/aspis_core/field/wide_exact.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/aspis_core/field/wide_exact.rs"
+  },
+  "src/aspis_core/lib.rs": {
+   "sha256": "6233570efd079570f842ea7e7575105d316b5bf30f5d20b706df2f17b1d541ca",
+   "local": "sources/batched_w/src/aspis_core/lib.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/aspis_core/lib.rs"
+  },
+  "src/r1_wire/mod.rs": {
+   "sha256": "b905c62d18570f227e6081c6c74f4c66bcf005429034b5075f7aaa9bada9662f",
+   "local": "sources/batched_w/src/r1_wire/mod.rs",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/src/r1_wire/mod.rs"
+  },
+  "Cargo.lock": {
+   "sha256": "cd3fc391b1c868d1f4667a4dc4bb24b39ceebe61aaaea50f2f9ba1dd685d622b",
+   "local": "sources/batched_w/Cargo.lock",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/Cargo.lock"
+  },
+  "Cargo.toml": {
+   "sha256": "894716507ba1c27d48b8006309b73a44358d87c763395e5dc4f403570910c3ec",
+   "local": "sources/batched_w/Cargo.toml",
+   "git": "docs/research/100bit-spend-path-20261013/evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz:input/Cargo.toml"
+  }
+ }
+}
