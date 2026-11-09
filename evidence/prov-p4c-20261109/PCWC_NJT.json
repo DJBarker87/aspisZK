@@ -1,0 +1,88 @@
+{
+ "schema": "PCWC_NJT v1",
+ "module": "NJT_ClaimsRef (NJT_ClaimsRef_Funs / _Types / _External), 12 CLOSED rows (TX1:087, 094, 129, 136, 137, 328, 330, 333, 344, 345; TX2:213, 221)",
+ "status": "RE-EXTRACTED_BYTE_IDENTICAL; Funs equalities compiled (5/5 rfl); Types and External are gate hand models (not equalities)",
+ "scratch_tree": {
+  "frozen_tree": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 staged by the unchanged NHR stager (same payload and manifest hashes as NJT: payload xz 58902e9c...)",
+  "appended": [
+   {
+    "file": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "frozen_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "ref_sha256": "2bf403f75b4f9fb0d834bec61771d156c5555bd4fdf3dcdd804840ca58a6e5ea",
+    "scratch_sha256": "e2a6d18185b13d5d6d7858284e30310119d53bac7e48d15c210152f847c553ea"
+   }
+  ],
+  "verified": "frozen r1_semantic.rs sha256 c66eba53... == NJT_REFERENCE_PINS frozen_source; ref 2bf403f7...; scratch e2a6d181... (asserted in the controller before any tool ran)"
+ },
+ "extraction": {
+  "attempt": "PCWC_E002",
+  "exit": 0,
+  "wall_s": 62.7,
+  "peak_rss_kib": 537276,
+  "swaps": 0,
+  "tools": {
+   "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+   "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+   "charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+  },
+  "commands": "NJT_EXTRACTION_PINS.json commands unchanged except absolute paths (--manifest-path, --dest-file, -dest, workspace)",
+  "environment": {
+   "CARGO_BUILD_JOBS": "1",
+   "CARGO_NET_OFFLINE": "true",
+   "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_E002_ws/../PCWC_target_njt",
+   "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+   "RAYON_NUM_THREADS": "1",
+   "RUSTFLAGS": "-Zthreads=1 -C link-arg=-Wl,--threads=1",
+   "RUSTUP_TOOLCHAIN": "nightly-2026-09-17"
+  },
+  "environment_note": "Recorded historical environment (NJT_E001/sources/NJT_extract_claims.py line 14): RUSTUP_TOOLCHAIN=nightly-2026-09-17, no overflow checks, RUSTFLAGS=-Zthreads=1 -C link-arg=-Wl,--threads=1. NOT changed to overflow-checks-on because the original NJT extraction did not use them (standing ruling: use the recorded environment exactly). Only CARGO_TARGET_DIR differs.",
+  "outputs_equal_recorded": {
+   "Funs.lean": "e76c1331...",
+   "Types.lean": "9acfeaf2...",
+   "FunsExternal_Template.lean": "75c8541d..."
+  },
+  "llbc_sha256_fresh": "dcea83e13fe689dce3e50a92ec4610def3b7e683fe2e68615f8db072f8ea9e61",
+  "llbc_sha256_recorded": "9df9e08af14cd689bc926c32f718ec24adfe6ca5537af71272517cb3a43616ca",
+  "llbc_note": "The LLBC bytes differ (workspace paths embedded); the Lean outputs, which are what the gate consumes, are byte-identical to the recorded raw outputs. Not investigated further."
+ },
+ "live_comparison": {
+  "Funs": "fresh Funs.lean == live NJT_ClaimsRef_Funs.lean except the two import lines (NJT_EMITTED_ADAPTATION.diff records the same canonical import installation)",
+  "Types": "live NJT_ClaimsRef_Types.lean is NOT the emission: imports NJM_COMBINED_IMPORT and defines 9 abbrevs to AspisR1ClaimsUnrolledParent.* / AspisR1PublicPreparation.* types (hand model/transport, group: gate hand model, not equal to the fresh Types by text)",
+  "External": "live NJT_ClaimsRef_External.lean is the gate external layer; the emitted FunsExternal_Template.lean is retained UNCOMPILED evidence (NJT_HANDOFF)"
+ },
+ "equalities": {
+  "file": "PRVEq_NJT_ClaimsRef_Funs.lean",
+  "report": "PRVEq_NJT_ClaimsRef_Funs.report.json",
+  "scopes": "PCWC_L003 (probe, exit 0), PCWC_L004 (final, exit 0)",
+  "counts": {
+   "common_declarations": 5,
+   "reached_in_common": 1,
+   "fresh_declarations": 5,
+   "gate_declarations": 5,
+   "proved_rfl": 5,
+   "proved_unfold": 0,
+   "failed": 0,
+   "pending": 0
+  },
+  "theorems": [
+   "aspis_core.field.QM31.Insts.CoreCloneClone",
+   "aspis_core.field.QM31.Insts.CoreMarkerCopy",
+   "r1_semantic.NJT_claims_ref.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError(+.call_once)",
+   "r1_semantic.NJT_claims_ref (the reached definition)"
+  ],
+  "axioms": "propext, Classical.choice, Quot.sound only (NJT_claims_ref); the others none",
+  "condition": "The equalities hold with externals and the 8 types resolved by name to the gate constants (gate hand models); the fresh Types text differs from the gate Types (types_identity.differs lists 8 names). They do not remove any gate hand model."
+ },
+ "native_pairs": {
+  "source": "NJT_CUTS.md rows for 129 and NJT_HANDOFF.md",
+  "tying_reference_to_frozen_body": [
+   "NJG_K024/025 args and K026/027 result; NJM_K011/K012 data (original native row)",
+   "NJM_K006 with K007/K008 (native Box)",
+   "NJT_K003 with K004/K005 (safe singleton carrier)",
+   "NJT_K006/K007 (safe data phase)",
+   "NJT_K008/K009 (allocation prefix, size 1392 align 4)"
+  ],
+  "note": "Cited, not re-audited or re-run here. Kani receipts name their own source hashes (NJT_SOURCE_PINS); not compared in this job."
+ },
+ "caveat": "NJT-F1 allocation-join caveat stays as recorded (NJT_HANDOFF.md: reserve is a returning-success VALUE interpretation; the unsafe uninit/set_len/cast/assume_init packet SAME-call installation into StdCalls remains unproved). Not this job's obligation; the claims row 129 therefore keeps that open finding."
+}

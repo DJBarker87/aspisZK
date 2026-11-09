@@ -105,6 +105,9 @@ elif kind=='refextract':
  for rel,info in spec['files'].items():
   data=(E/info['local']).read_bytes();assert hashlib.sha256(data).hexdigest()==info['sha256'],rel
   put('PCWC_crate/'+rel,E/info['local'])
+ for ap in spec.get('append',[]):
+  data=(E/ap['local']).read_bytes();assert hashlib.sha256(data).hexdigest()==ap['ref_sha256'],ap['local']
+  put('PCWC_crate/__append/'+Path(ap['local']).name,E/ap['local'])
  put('PCWC_refx.py',E/'PCWC_refx.py');put(a+'_spec.json',E/(a+'_spec.json'))
  sources=['PCWC_refx.py',a+'_spec.json']
  if spec.get('frozen_workspace'):

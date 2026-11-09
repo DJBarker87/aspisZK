@@ -28,6 +28,12 @@ if spec.get('frozen_workspace'):
  p=E/'NHR_stage.py';loader=importlib.util.spec_from_file_location('PCWC_private_NHR_stage',p);m=importlib.util.module_from_spec(loader);loader.loader.exec_module(m)
  manifest=m.stage(ws)
  pins['frozen']=dict(revision=m.REV,stager_sha256=sha(p.read_bytes()),manifest_sha256=sha((E/'NHR_STAGING_MANIFEST.json').read_bytes()),cargo_lock_sha256=sha((ws/'Cargo.lock').read_bytes()),aspis_core_manifest_sha256=sha((ws/'crates/aspis-core/Cargo.toml').read_bytes()))
+for ap in spec.get('append',[]):
+ # PCWC addition: append a reference text to a staged frozen file (NJT: r1_semantic.rs + newline + NJT_claims_ref.rs.txt), hash-checked both ways
+ tgt=ws/ap['file'];orig=tgt.read_bytes();assert sha(orig)==ap['frozen_sha256'],('frozen file drift',ap['file'])
+ refb=(E/'PCWC_crate'/'__append'/Path(ap['local']).name).read_bytes();assert sha(refb)==ap['ref_sha256']
+ tgt.write_bytes(orig+b'\n'+refb);assert sha(tgt.read_bytes())==ap['scratch_sha256'],('scratch hash mismatch',ap['file'])
+ pins.setdefault('append',[]).append(dict(file=ap['file'],frozen_sha256=ap['frozen_sha256'],ref_sha256=ap['ref_sha256'],scratch_sha256=ap['scratch_sha256']))
 crate=ws/spec['crate_dir'];crate.mkdir(parents=True,exist_ok=True)
 for relp,info in spec['files'].items():
  data=(E/'PCWC_crate'/relp).read_bytes();assert sha(data)==info['sha256'],('source drift',relp)
