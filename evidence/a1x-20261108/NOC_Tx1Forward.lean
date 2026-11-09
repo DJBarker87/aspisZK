@@ -19,7 +19,8 @@ abbrev M {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) := NOC_HostSeed.m0 (NNH_HostCt
 theorem zero {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  ∃ we, AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO (cur c) = ok we ∧
   Array.repeat 29#usize we = NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29 := by
- refine ⟨{c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}},?_,?_⟩
+ refine ⟨{c0:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}},
+   c1:={c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}}},?_,?_⟩
  · unfold AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
    have h0 : @AspisR1CurrentCaller.Ops.op0 (cur c) = ok {c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}} := by
     first | rfl | with_unfolding_all rfl
@@ -92,7 +93,11 @@ theorem batch {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (proof : Slice U8)
    have m := List.getElem_mem hl
    show (p.queries.val[j]!).val < 262144
    have e : p.queries.val[j]! = p.queries.val[j] := by
-    first | simp [hl] | exact getElem!_pos p.queries.val j hl
+    first
+     | exact getElem!_pos p.queries.val j hl
+     | (simp [List.getElem?_eq_getElem hl]; done)
+     | (simp [hl]; rw [List.getElem?_eq_getElem hl]; rfl)
+     | (simp; rw [List.getElem?_eq_getElem hl]; rfl)
    rw [e]
    exact q _ m
   have hp := NOC_MerkleBounded.hostParent c proof (NFW_PreparedPort.prepared p) (LIB_Env.nativeKey folded)
