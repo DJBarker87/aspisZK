@@ -107,3 +107,69 @@ No delivered-type rfl example, raw ax2 walk or NOC_FinalCombined import exists, 
 is no field term. Stage commits on codex/cx-a1-20261107; no push.
 
 target not yet established
+
+# Continuation after the lead's op1 decision (extension: 20 scopes, 50 total)
+
+Research merged at 83979aef8fd (fast-forward, no index.lock touched). Scopes used
+in the whole job: 15 of 50 (9 pass, 6 fail); 0 Kani, 0 extraction; caps unchanged.
+
+## R1 slot audit (L009 fail on a trailing #print name, L010 pass) — NOC_SLOT_AUDIT.md
+Only current op1 is a residual `.div` slot on the A1 tx1 path; current op6 and every sdk slot
+reached by stage1_owned/first_decoded are installed. Stage-dictionary op4/op7/op8/op12 are also
+`.div`; the stage dictionary enters the sdk only through op11 (TX2), so this is flagged to the
+A2 lane, not audited here for TX2 reachability.
+
+## R2 allocation source — NOC_SLOT_AUDIT.md §R2
+Frozen Rust (4bb3b3f): candidate.rs:255-256 calls heap.rs:5-10 `filled`, which returns
+`Ok(vec![0; n])` on a successful `try_reserve_exact` and `Err(Allocation)` otherwise; the
+Aeneas extraction keeps it opaque (NHR_OPACITY.json). `LIB_VLib.filledValue` is a faithful model
+under the existing allocator trust row (one reservation bit per environment). Note:
+JGp_Allocation.filled hard-codes `true`; the repair uses the configuration's reservation instead.
+
+## R3 corrected host (L011 fail on implicit-argument statements, L012 pass)
+Delivered constant: `AspisR1.NOC_Run5bHost.S_host` (module NOC_Run5bHost), built exactly as
+NNH_Run5bHost.S_host from `NOC_HostCtx.missingLit c := NNH_Tx2Configuration.select
+(NNH_CorrectConfiguration.residual (NOC_HostSeed.m0 (envOf c).reservation) (envOf c)) (envOf c)`.
+One-line diff from the old seed (proved by `NOC_HostSeed.diff`, rfl):
+```lean
+def m0 (reserved : Bool) := {NNH_HostSeed.m0 with currentBase :=
+  {NNH_HostSeed.m0.currentBase with op1 := NOC_HostSeed.filled reserved}}   -- was: .div
+```
+`NOC_HostSeed.filled reserved` = JGp_Allocation.filled's body with `reserved` in place of
+`true` (OraclePortStdAllocation.filled, Err → Allocation). The reservation bit is the
+configuration's own (`reserveOK c.fixed.reservation`), the same bit the library child reads.
+Transfer by rfl (NOC_SeedTransfer): `config` (only currentBase differs), `currentBase`
+(only op1), `current` (installed current dictionary differs only in op1), `current_op1`,
+`stage` (unchanged), `sdk` (differs only in op10, the tx1 entry), `digest` (the semantic/prepared
+host digest is unchanged). Transfer of accepted roots: X3 (`NOC_SeedTransfer.op9`, by definitional
+unfolding) and X1 (stated via the unchanged digest) transfer unchanged; NNV/NNX roots about op5, op8,
+op9, op10, query/flush/checkpoint slots transfer the same way. Anything that runs tx1 or prepare
+(sdk op10) must be restated; NNV_WeakErrHost.modelRet1 must be restated at the new S_host for X9.
+`extraction` is re-proved with DGP_HostDigest.digestSource at the new seed. This is a model-fidelity
+correction, not a contract or trust change.
+
+## X4 closed at the corrected configuration (L013 probe fail, L014 fail, L015 pass)
+```lean
+theorem AspisR1.NOC_PrepareFront.source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx)
+ (pub : NNH_Libraries.VL.Public) (proof : Slice U8) (g g' : LIB_VCarriers.E29)
+ (prep : LIB_VCarriers.Prepared) (width : proof.val.length = 57607)
+ (called : NNH_Tx1Returns.preparedValue ⟨pub,LIB_Carriers.bytes proof,g⟩ (NOC_Run5bCtx.envOf c) = .ok (prep,g')) :
+ verifier.candidate.prepare (DrvC_Installation.currentInstalled (NOC_Run5bCtx.configuration c))
+  (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic pub) proof () none
+  (NNV_PreparedInputs.scratch g) =
+ .ok (.Ok (InstalledPreparation.currentPrepared prep),NNV_PreparedInputs.scratch g')
+```
+Standard axioms. `width` is the 094-path proof domain (to be discharged in X7). Every call of
+the installed front is stepped against a full Result equality: corrected op1 with LIBC_Filled.model
+at the reservation the library call granted; NNG_Split087.split; two checked proof windows
+(NNH_SliceRangeOk); op10 NNH_Run5bCurrentExpand.semantic; op11 `NOC_PrepareFront.values`
+(installed owned expansion = LIBC model, the NGV_ExpandAssociation argument restated);
+recombination/windows (NHL_BorrowWindows); op5 NNV_PrepareView; op9 NOC_SeedTransfer.op9;
+op8 NNX_PreparedValue.source. L013 was a probe whose doc comment preceded `run_cmd` (exit 1,
+output used); its client transport closed after submission and the receipt was recovered
+read-only, not resubmitted. L014 failed only on two list facts that `simp`/`congr` tried to
+compute on the 14759-element buffer (recursion depth); L015 uses symbolic replicate lemmas.
+
+## Paused before X2 (no scope spent on it) — reason and recommendation in NOC_REMAINING.md
+
+target not yet established
