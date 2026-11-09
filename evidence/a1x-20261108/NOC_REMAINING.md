@@ -34,9 +34,10 @@ Recommended repair (changes S_host's literal instantiation, so not taken here): 
 allocation slot op1 in the host's current base, matching the library child
 `LIB_VLib.filledValue` (`if env.reservation then ok zeros else error`), as the JHe chain does
 with `JGp_Allocation.base` (`{ops with op1 := filled}`). Then rebuild the host closure objects
-that depend on S_host and re-run X4. Every other current slot used by tx1/prepare that I
-checked (op0, op2, op5, op8-op15, op21, op3, op4, op7, op16-op20) is overwritten by an installer;
-I did not audit op6 or the stage/adapter dictionaries for the same defect.
+that depend on S_host and re-run X4. By reading the installer sources (L006 prints plus
+lean/Tx1Q_Install, Op3I/Op4P and the ConcreteConstants source; only op15 was also checked by
+rfl, in L008), every other current slot used by tx1/prepare (op0, op2-op5, op7-op21) is
+overwritten by an installer. I did not audit op6 or the stage/adapter dictionaries for the same defect.
 
 ## Not started (stopped after X4 per the brief)
 
