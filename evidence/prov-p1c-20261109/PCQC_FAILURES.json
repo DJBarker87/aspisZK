@@ -1,0 +1,151 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "note": "Every selection that failed in P1a/P1b was retried once with overflow checks on; exact error texts below, from the xz stdout logs of the PCQC runs.",
+ "failures": [
+  {
+   "spec": "S004",
+   "selection": "aspis-core r0::transport::order",
+   "earlier_runs": [
+    "PCQ_E003",
+    "PCQ_E006"
+   ],
+   "p1c_run": "PCQC_E014",
+   "shape": "E006 shape (roots order + core::option::_::ok_or) with overflow checks on",
+   "error": "Aeneas uncaught Not_found, Stdlib Map.find from InterpReduceCollapse.collapse_ctx_following_sequence (InterpReduceCollapse.ml line 1991)",
+   "outcome": "FAILED with overflow checks on; same error as PCQ_E006. Second failure of the shape; listed, not retried again.",
+   "gate_definition": "FIo_Native.aspis_core.r0.transport.order"
+  },
+  {
+   "spec": "S005b",
+   "selection": "atomic_statement::encode_digest_canonical solo",
+   "earlier_runs": [
+    "PCQ_E015",
+    "PCQ_E025"
+   ],
+   "p1c_run": "PCQC_E015",
+   "shape": "E015 solo shape with overflow checks on",
+   "error": "Aeneas uncaught Not_found, Map.find from InterpReduceCollapse.collapse_ctx_following_sequence (line 1991)",
+   "outcome": "FAILED; same error as PCQ_E015/E025. encode_digest_canonical (+_loop, _loop.body) stays an opaque axiom in every fresh emission that reaches it.",
+   "gate_definition": "encode_digest_canonical, encode_digest_canonical_loop, encode_digest_canonical_loop.body"
+  },
+  {
+   "spec": "S010",
+   "selection": "pair_forest_terminal decoders (7 roots + 6 opaque, PCQ_E031 shape)",
+   "earlier_runs": [
+    "PCQ_E010",
+    "PCQ_E017",
+    "PCQ_E020",
+    "PCQ_E027",
+    "PCQ_E031",
+    "PCQ_E035"
+   ],
+   "p1c_run": "PCQC_E016",
+   "shape": "E031 shape with overflow checks on",
+   "error": "Aeneas Name clash: \"pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition\" (pair_forest_terminal.rs 179:0-202:1); Aeneas exit 2",
+   "outcome": "FAILED; same error as PCQ_E031. 12 gate definitions MISSING.",
+   "gate_definition": "see PCQC_COVERAGE.json S010"
+  },
+  {
+   "spec": "S012",
+   "selection": "pair_tree_profile decoders/encoders",
+   "earlier_runs": [
+    "PCQ_E012",
+    "PCQ_E022",
+    "PCQ_E024",
+    "PCQ_E029",
+    "PCQ_E033",
+    "PCQ_E034"
+   ],
+   "p1c_runs": [
+    "PCQC_E017",
+    "PCQC_E024"
+   ],
+   "shape": "E033 shape (7 roots, 6 opaque) with overflow checks on (E017); then 3 boxed-decoder roots only, same opacity (E024, changed shape after the first timeout)",
+   "error": "E017 and E024: killed by the fixed 180 s scope timeout (exit 124). Charon finished (80.7 s and 76.6 s, LLBC imported), Aeneas had not finished and wrote no receipt. The same shape without overflow checks (PCQ_E033) ended in 42 s with a Name clash, so the overflow-checks LLBC makes Aeneas run past the budget here.",
+   "outcome": "FAILED twice (shape class retired, timeout never raised). 13 gate definitions MISSING.",
+   "gate_definition": "see PCQC_COVERAGE.json S012"
+  },
+  {
+   "spec": "S016",
+   "selection": "fast_pairing Dot::push (roots EbyKDot push + canonical Dot push, PCQ_E401 shape)",
+   "earlier_runs": [
+    "PCQ_E401",
+    "PCQ_E411"
+   ],
+   "p1c_run": "PCQC_E018",
+   "shape": "E401 shape with overflow checks on",
+   "error": "Aeneas Internal error, fast_pairing.rs lines 118:12-121:13, interp/InterpBorrows.ml line 2731",
+   "outcome": "FAILED; same error as PCQ_E401/E411. Dot::push, push_loop, push_loop.body stay an opaque axiom (PCQC_E007 has EbyKDot.push).",
+   "gate_definition": "FIo_Native.fast_pairing.canonical.Dot.push{,_loop,_loop.body}"
+  },
+  {
+   "spec": "S022",
+   "selection": "weights Weights::raw (roots raw + scalar_factor, PCQ_E413 shape)",
+   "earlier_runs": [
+    "PCQ_E413"
+   ],
+   "p1c_run": "PCQC_E019",
+   "shape": "E413 shape with overflow checks on",
+   "error": "Aeneas \"Nested borrows are not supported yet\", weights.rs 229:47-229:130, interp/InterpAbs.ml line 168",
+   "outcome": "FAILED; same as PCQ_E413. Weights.raw.closure, closure_1 MISSING (PCQC_E012 covers Weights, scalar_factor.closure).",
+   "gate_definition": "FIo_Native.weights.Weights.raw.closure, closure_1"
+  },
+  {
+   "spec": "S019",
+   "selection": "r1_wire ValidatedRecord::decode_k via monomorphic caller r1_semantic::claims (PCQ_E409 shape)",
+   "earlier_runs": [
+    "PCQ_E403",
+    "PCQ_E409"
+   ],
+   "p1c_run": "PCQC_E020",
+   "shape": "E409 shape with overflow checks on",
+   "error": "Aeneas Internal error, r1_semantic.rs lines 47:8-55:1, interp/InterpReduceCollapse.ml line 1880",
+   "outcome": "FAILED; same as PCQ_E409. 5 ValidatedRecord gate definitions MISSING. PCQ_E403 (Charon exit 101 on the const-generic root) not retried: shape class retired.",
+   "gate_definition": "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.*"
+  },
+  {
+   "spec": "S1 (lead addendum 2026-11-09)",
+   "selection": "compact.rs::expand_values (line 127 at 4bb3b3f), root crate::compact::expand_values, cost-probe manifest and features",
+   "earlier_runs": [],
+   "p1c_runs": [
+    "PCQC_E021",
+    "PCQC_E025"
+   ],
+   "shape": "E021: no opacity. E025: core::slice::_::copy_from_slice and core::slice::_::fill opaque (loop body callees; both selectors matched and are opaque per PCQC_OPAQUE_CHECK.json)",
+   "error": "both: Aeneas \"Markers remain after collapsing a context\" (ended regions { ... }), source compact.rs lines 131:4-134:5, the `for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32))` loop; Aeneas exit 2",
+   "outcome": "FAILED twice. The failure is in the zip/chunks_exact_mut borrow loop itself, not in its callees. No fresh Aeneas emission of expand_values exists; ExpandValuesFrozenEq (PCWC_S1_OBLIGATION.lean) cannot use one. Next shape not tried (needs a source restructure or a P4c reference-style hand model, which this job may not decide).",
+   "gate_definition": "S1ValuesOwnedModelV1.expand_values"
+  },
+  {
+   "spec": "S903 (pilot AdapterOwned, P0 PCO_E004)",
+   "selection": "r1_pool_adapter owned (4 roots, 28 opaque)",
+   "earlier_runs": [
+    "PCO_E004"
+   ],
+   "p1c_run": "PCQC_E013",
+   "shape": "original shape, overflow checks on",
+   "error": "killed by the 180 s scope timeout (exit 124): the cold cargo build of the program crate with the overflow-checks flags took 2m54s, Charon was still finishing",
+   "outcome": "Replaced by the changed shape PCQC_E022 + PCQC_E023 (roots split into two halves, same opacity): both succeeded. Not a failure of the selection.",
+   "gate_definition": "AdapterRwTypes (types-only pilot)"
+  },
+  {
+   "spec": "S006",
+   "selection": "asq8_payment_reference::encode_common",
+   "earlier_runs": [
+    "PCQ_E005"
+   ],
+   "p1c_run": null,
+   "error": "cfg(any(test, kani, aeneas_ref)) module absent from the frozen build",
+   "outcome": "NOT retried (brief)."
+  },
+  {
+   "spec": "S018",
+   "selection": "NJT_claims_ref",
+   "earlier_runs": [],
+   "p1c_run": null,
+   "error": "no frozen counterpart; handled by P4c as a reference crate",
+   "outcome": "NOT retried (brief)."
+  }
+ ]
+}
