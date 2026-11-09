@@ -1,0 +1,936 @@
+{
+ "schema": "PCUA_FOR_P3/1",
+ "target_established": false,
+ "note": "Obligations (every definition of the hub cluster that is not PROVED_* and not reused from P0) and the classified semantic/interface differences. Analytical domain statements are derived from the normalized diffs; no domain restriction is proved here.",
+ "semantic_and_interface_differences": [
+  {
+   "id": "SEM-1",
+   "class_": "CHECKED_VS_WRAPPING_ARITHMETIC",
+   "description": "The gate bodies use Aeneas checked arithmetic (`+ - *` and `>>>` in Result, fail on overflow/underflow or oversize shift); the fresh frozen emission translates the same Rust with `Std.<ty>.wrapping_*` lifted into Result (the frozen release profile has no overflow checks). Both are exact translations of different arithmetic semantics; the bodies are equal exactly on inputs where no checked operation fails.",
+   "instances": [
+    {
+     "definition": "AspisR1CurrentWide.field.M31.add",
+     "statement": "fresh frozen NFG_InverseRef (NMH_E008) vs gate CW_Funs_sources",
+     "disagree_when": "ANALYTICAL: self + rhs >= 2^32 in U32 (gate: fail; fresh: wraps then subtracts P when >= P). Witness: self = rhs = 4294967295#u32. Equal for self, rhs < P = 2147483647 (no checked op can fail: self+rhs < 2^32, `s - P` is guarded by s >= P)."
+    },
+    {
+     "definition": "AspisR1CurrentWide.field.M31.sub",
+     "disagree_when": "ANALYTICAL: self + P >= 2^32, i.e. self >= 2147483649, or rhs > self + P (U32 underflow). Witness: self = 4294967295, rhs = 0 (gate fails at self + P). Equal for self, rhs < P (the `s - P` is guarded by s >= P)."
+    },
+    {
+     "definition": "AspisR1CurrentWide.field.M31.mul",
+     "disagree_when": "ANALYTICAL: never. Both U32 factors are cast to U64, so the U64 product is at most (2^32-1)^2 < 2^64: no overflow, so gate and fresh agree on all inputs. The equality needs a no-overflow lemma (not provable by rfl/unfold, which is why the generated stage 2 failed)."
+    },
+    {
+     "definition": "AspisR1CurrentWide.field.reduce_u64",
+     "disagree_when": "ANALYTICAL: never. i1 = x & P <= P, i2 = x >> 31 < 2^33, so x1 < 2^34; the second round sums stay below 2^32 + 2^31; `x3 - P` is guarded by x3 >= P. All checked ops succeed for every U64 x; the equality needs this bound lemma."
+    },
+    {
+     "definition": "AspisR1CurrentWide.field.M31.reduce_u64, M31.double, CM31.add, CM31.sub, CM31.mul, field.mul_by_r",
+     "disagree_when": "ANALYTICAL: inherit the conditions of M31.add / M31.sub (callees) and, for CM31.mul, the U64 sums of products of M31 values: with canonical (< P) arguments no checked operation fails."
+    },
+    {
+     "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one* (gate RPz7_FIp_NativeDots)",
+     "disagree_when": "ANALYTICAL: the index arithmetic `slot * 120`, `term * 4`, `i + i1` and `+ 4` on Usize is checked in the gate and wrapping in the fresh emission: they differ when slot * 120 + term * 4 + 4 overflows 2^64 (gate: fail). Equal when no index expression overflows (slot * 120 + term * 4 + 4 < 2^64 for every term reached by the loop)."
+    },
+    {
+     "definition": "transport.Variant.row_loop.body (gate RPz7_FIo_NativeFuns)",
+     "disagree_when": "ANALYTICAL: gate uses `j >>> i` and `i2 <<< i4` (checked shifts: fail when the shift amount >= 64); fresh uses wrapping_shr / wrapping_shl (shift amount reduced mod 64). Equal when i, i4 < 64."
+    }
+   ],
+   "p3_task": "Prove, per definition, equality of the gate and fresh bodies under the stated domain (or the all-inputs no-overflow lemma for M31.mul and reduce_u64), then discharge the domain at the call sites (canonical field elements) as part of the consuming bridge. Do not hide the domain: a theorem that holds only on the domain is not the equality of the two constants."
+  },
+  {
+   "id": "LIB-1",
+   "class_": "AENEAS_LIBRARY_API_MISMATCH",
+   "description": "Fresh frozen emissions pass the shift amount of wrapping_shr/wrapping_shl at the Rust operand type (31#i32 for U64.wrapping_shr in fast_dots; a Usize in transport row_loop), but the gate Lean environment declares these functions with a U32 amount. The fresh declarations therefore do not elaborate against the gate library (\"Application type mismatch ... expected U32\").",
+   "instances": [
+    {
+     "definition": "RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0.body",
+     "error": "31#i32 : IScalar I32, expected U32 in i2.wrapping_shr 31#i32"
+    },
+    {
+     "definition": "RPz7_FIo_NativeFuns.transport.Variant.row_loop.body",
+     "error": "i : Usize, expected U32 in j.wrapping_shr i"
+    },
+    {
+     "definition": "fresh-only (dropped, not gate-reached) verifier.* functions of PCQ_E415",
+     "error": "same message at line 250 of the D1 bundle"
+    }
+   ],
+   "p3_task": "Either re-emit/compile the fresh frozen text against the Aeneas library version that matches the emitter (a toolchain-pairing question, not decided here; no trust row proposed), or state the equality through a thin shim lemma between the two library signatures. Until then these fresh declarations cannot be compared to the gate in the gate environment."
+  },
+  {
+   "id": "NAME-1",
+   "class_": "GATE_MODULE_SPLIT_NAME_MISMATCH",
+   "description": "The gate RPz7_FIp_NativeDots refers to field decoders as AspisR1.FIp_DotDecode.field.{M31,QM31}.from_le_bytes (module DotDecode), while the fresh emission names them aspis_core.field.M31.from_le_bytes in the same namespace as the caller. With `open FIo_Native` the fresh name resolves to FIo_Native.aspis_core.field.M31.from_le_bytes, which does not exist in the gate (\"Unknown constant\").",
+   "p3_task": "Provide the alias lemma fresh callee = DotDecode gate callee. PCUA proved the DotDecode side (PRVEq_DotDecode: PRVFresh.field.{P,M31,CM31,QM31}.from_le_bytes = gate, fresh text from NMH_E013, which is text-identical to the corresponding Q415 declarations only if checked by P3), so the alias reduces to the text identity of the NMH_E013 and PCQ_E415 declarations."
+  },
+  {
+   "id": "NAME-2",
+   "class_": "FRESH_CRATE_PREFIX_MISMATCH",
+   "description": "NMH_E008/E024 (NFG_InverseRef, crate aspis-core) name the items field.mul_by_r / field.reduce_u64, the gate RPz7_FIo_NativeFuns names them aspis_core.field.mul_by_r / aspis_core.field.reduce_u64 (cost-probe crate view). The generator pairs by exact name and found 0 common declarations.",
+   "p3_task": "Re-emit the two items from the cost-probe crate root (P1a/P1b follow-up) or add a recorded prefix-rename step to the generator; then run stage 1/2."
+  },
+  {
+   "id": "STRUCT-1",
+   "class_": "GENERATOR_STRUCTURE_EQUIV_FAILURE",
+   "description": "verifier.Reader (Stage2ContinuationTypes, fresh NHR_tx2_common): the generated Equiv fails with \"Fields missing: `at`\" (a field named `at`, a Lean keyword-like name, in the structure literal).",
+   "p3_task": "Hand or generator-assisted Equiv for verifier.Reader; no semantic issue observed."
+  },
+  {
+   "id": "TYPES-1",
+   "class_": "INDUCTIVE_OR_COMPLEX_STRUCTURE_TEXT_ONLY",
+   "description": "Inductives and structures with non-simple fields get no Lean theorem from the generator (P0 limitation). Their entries are TEXT_IDENTICAL_ONLY in PCUA_EQ_STATUS.json and count as not proved.",
+   "p3_task": "Generate Equiv / inductive-iso proofs (cases-based) for verifier.Error, transport.Variant, verifier.Phase, multiproof.Arity, verifier.Prepared, verifier.BatchedWeights, verifier.Accumulator, verifier.QueryGeometry, verifier.View, aspis_core.r0.Error, weights.Weights, weights.Weights.scalar_factor.closure."
+  },
+  {
+   "id": "EXT-1",
+   "class_": "EXTERNAL_BOUNDARY_RESOLVED_BY_NAME",
+   "description": "Theorems whose fresh declaration reaches a fresh External-template name resolve it to the gate constant of the same name (see PCUA_HAND_MODELS.json and conditional_on_external_boundaries in PCUA_EQ_STATUS.json). These theorems are conditional on that boundary; the dependent definitions are listed there (fast_pairing.EbyKDot.push reaches the opaque Dot.push; EbyKDot.finish reaches WideExact.from_limbs; Q.from_wide reaches WideExact.to_limbs; DotDecode CM31/QM31.from_le_bytes reach core::option Try::branch/from_residual).",
+   "p3_task": "Prove or accept each boundary explicitly; PCUA proposes no trust row."
+  },
+  {
+   "id": "PARSE-1",
+   "class_": "GENERATOR_GATE_PARSE_LIMIT",
+   "description": "RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body is the first declaration after the `namespace` line with no blank line; the generator splits blocks on blank lines and reads it as header text, so it is not paired (the other five NativeDots definitions are paired and fail for NAME-1/LIB-1/SEM-1).",
+   "p3_task": "Fix block splitting for a declaration directly after a namespace line."
+  }
+ ],
+ "obligations": [
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.M31.add",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::M31}::add",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.M31.add = AspisR1CurrentWide.Funs.field.M31.add (gate constant)",
+   "error_class": [
+    "UNSOLVED_GOAL_AFTER_UNFOLD",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "unsolved goals\n\u22a2 (fun self rhs => do\n      let s \u2190 lift (U32.wrapping_add self rhs)\n      if s \u2265 AspisR1CurrentWide.field.P then do\n          let s1 \u2190 lift (s.wrapping_sub AspisR1CurrentWide.field.P)\n          ok s1\n        else ok s) =\n    fun self rhs => do\n    let s \u2190 self + rhs\n    if s \u2265 AspisR1CurrentWide.field.P then do\n        let s1 \u2190 s - AspisR1CurrentWide.field.P\n        ok s1\n      else ok s\n'PRVEq.AspisR1CurrentWide.Funs.field.M31.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef",
+   "normalized_text_diff_gate_to_fresh": "@@ -20,7 +20,10 @@  s  \u2190 +lift +( +Std.U32.wrapping_add  self -+  rhs +)  if  s @@ -32,7 +35,10 @@  s1  \u2190 +lift +( +Std.U32.wrapping_sub  s --  field.P +)  ok  s1"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.CM31.add",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::CM31}::add",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.CM31.add = AspisR1CurrentWide.Funs.field.CM31.add (gate constant)",
+   "error_class": [
+    "BLOCKED_BY_FAILED_CALLEE"
+   ],
+   "first_failing_goal_or_error": "blocked by failed callee equalities: field.M31.add",
+   "blocked_by": [
+    "field.M31.add"
+   ],
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.QM31.add",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::QM31}::add",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::{CRATE::field::QM31}::add (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.wide_exact.WideExact.add",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::add",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::add (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.M31.sub",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::M31}::sub",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.M31.sub = AspisR1CurrentWide.Funs.field.M31.sub (gate constant)",
+   "error_class": [
+    "UNSOLVED_GOAL_AFTER_UNFOLD",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "unsolved goals\n\u22a2 (fun self rhs => do\n      let i \u2190 lift (U32.wrapping_add self AspisR1CurrentWide.field.P)\n      let s \u2190 lift (i.wrapping_sub rhs)\n      if s \u2265 AspisR1CurrentWide.field.P then do\n          let s1 \u2190 lift (s.wrapping_sub AspisR1CurrentWide.field.P)\n          ok s1\n        else ok s) =\n    fun self rhs => do\n    let i \u2190 self + AspisR1CurrentWide.field.P\n    let s \u2190 i - rhs\n    if s \u2265 AspisR1CurrentWide.field.P then do\n        let s1 \u2190 s - AspisR1CurrentWide.field.P\n        ok s1\n      else ok s\n'PRVEq.AspisR1CurrentWide.Funs.field.M31.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef",
+   "normalized_text_diff_gate_to_fresh": "@@ -20,13 +20,19 @@  i  \u2190 +lift +( +Std.U32.wrapping_add  self -+  field.P +)  let  s  \u2190 +lift +( +Std.U32.wrapping_sub  i --  rhs +)  if  s @@ -38,7 +44,10 @@  s1  \u2190 +lift +( +Std.U32.wrapping_sub  s --  field.P +)  ok  s1"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.CM31.sub",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::CM31}::sub",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.CM31.sub = AspisR1CurrentWide.Funs.field.CM31.sub (gate constant)",
+   "error_class": [
+    "BLOCKED_BY_FAILED_CALLEE"
+   ],
+   "first_failing_goal_or_error": "blocked by failed callee equalities: field.M31.sub",
+   "blocked_by": [
+    "field.M31.sub"
+   ],
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.QM31.sub",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::QM31}::sub",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::{CRATE::field::QM31}::sub (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.wide_exact.WideExact.sub",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::sub",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::sub (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.M31.double",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::M31}::double",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.M31.double = AspisR1CurrentWide.Funs.field.M31.double (gate constant)",
+   "error_class": [
+    "BLOCKED_BY_FAILED_CALLEE"
+   ],
+   "first_failing_goal_or_error": "blocked by failed callee equalities: field.M31.add",
+   "blocked_by": [
+    "field.M31.add"
+   ],
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.mul_by_r",
+   "status": "FAILED",
+   "rust": "CRATE::field::mul_by_r",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.mul_by_r = AspisR1CurrentWide.Funs.field.mul_by_r (gate constant)",
+   "error_class": [
+    "BLOCKED_BY_FAILED_CALLEE"
+   ],
+   "first_failing_goal_or_error": "blocked by failed callee equalities: field.M31.add,field.M31.sub,field.M31.double",
+   "blocked_by": [
+    "field.M31.add",
+    "field.M31.sub",
+    "field.M31.double"
+   ],
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.reduce_u64",
+   "status": "FAILED",
+   "rust": "CRATE::field::reduce_u64",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.reduce_u64 = AspisR1CurrentWide.Funs.field.reduce_u64 (gate constant)",
+   "error_class": [
+    "UNSOLVED_GOAL_AFTER_UNFOLD",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "unsolved goals\n\u22a2 (fun x => do\n      let i \u2190 lift (UScalar.cast UScalarTy.U64 AspisR1CurrentWide.field.P)\n      let i1 \u2190 lift (x &&& i)\n      let i2 \u2190 lift (x.wrapping_shr 31#u32)\n      let x1 \u2190 lift (U64.wrapping_add i1 i2)\n      let i3 \u2190 lift (UScalar.cast UScalarTy.U64 AspisR1CurrentWide.field.P)\n      let i4 \u2190 lift (x1 &&& i3)\n      let i5 \u2190 lift (x1.wrapping_shr 31#u32)\n      let x2 \u2190 lift (U64.wrapping_add i4 i5)\n      let x3 \u2190 lift (UScalar.cast UScalarTy.U32 x2)\n      if x3 \u2265 AspisR1CurrentWide.field.P then ok (U32.wrapping_sub x3 AspisR1CurrentWide.field.P) else ok x3) =\n    fun x => do\n    let i \u2190 lift (UScalar.cast UScalarTy.U64 AspisR1CurrentWide.field.P)\n    let i1 \u2190 lift (x &&& i)",
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef",
+   "normalized_text_diff_gate_to_fresh": "@@ -36,15 +36,19 @@  i2  \u2190 +lift +( +Std.U64.wrapping_shr  x -> -> ->  31#u32 +)  let  x1  \u2190 +lift +( +Std.U64.wrapping_add  i1 -+  i2 +)  let  i3 @@ -71,15 +75,19 @@  i5  \u2190 +lift +( +Std.U64.wrapping_shr  x1 -> -> ->  31#u32 +)  let  x2  \u2190 +lift +( +Std.U64.wrapping_add  i4 -+  i5 +)  let  x3 @@ -98,7 +106,10 @@  field.P  then +ok +( +Std.U32.wrapping_sub  x3 --  field.P +)  else  ok"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.M31.reduce_u64",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::M31}::reduce_u64",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.M31.reduce_u64 = AspisR1CurrentWide.Funs.field.M31.reduce_u64 (gate constant)",
+   "error_class": [
+    "BLOCKED_BY_FAILED_CALLEE"
+   ],
+   "first_failing_goal_or_error": "blocked by failed callee equalities: field.reduce_u64",
+   "blocked_by": [
+    "field.reduce_u64"
+   ],
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.M31.mul",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::M31}::mul",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.M31.mul = AspisR1CurrentWide.Funs.field.M31.mul (gate constant)",
+   "error_class": [
+    "UNSOLVED_GOAL_AFTER_UNFOLD",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "unsolved goals\n\u22a2 (fun self rhs => do\n      let i \u2190 lift (UScalar.cast UScalarTy.U64 self)\n      let i1 \u2190 lift (UScalar.cast UScalarTy.U64 rhs)\n      let i2 \u2190 lift (U64.wrapping_mul i i1)\n      let i3 \u2190 AspisR1CurrentWide.field.reduce_u64 i2\n      ok i3) =\n    fun self rhs => do\n    let i \u2190 lift (UScalar.cast UScalarTy.U64 self)\n    let i1 \u2190 lift (UScalar.cast UScalarTy.U64 rhs)\n    let i2 \u2190 i * i1\n    let i3 \u2190 AspisR1CurrentWide.field.reduce_u64 i2\n    ok i3\n'PRVEq.AspisR1CurrentWide.Funs.field.M31.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef",
+   "normalized_text_diff_gate_to_fresh": "@@ -40,7 +40,10 @@  i2  \u2190 +lift +( +Std.U64.wrapping_mul  i -*  i1 +)  let  i3"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.CM31.mul",
+   "status": "FAILED",
+   "rust": "CRATE::field::{CRATE::field::CM31}::mul",
+   "statement": "@PRVEq_CWFuns.lean :: PRVFresh_AspisR1CurrentWide_Funs.field.CM31.mul = AspisR1CurrentWide.Funs.field.CM31.mul (gate constant)",
+   "error_class": [
+    "UNSOLVED_GOAL_AFTER_UNFOLD",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "unsolved goals\n\u22a2 (fun self rhs => do\n      let m0 \u2190 self.a.mul rhs.a\n      let m1 \u2190 self.b.mul rhs.b\n      let i1 \u2190 lift (core.convert.num.FromU64U32.from self.a)\n      let i3 \u2190 lift (core.convert.num.FromU64U32.from self.b)\n      let i4 \u2190 lift (i1.wrapping_add i3)\n      let i6 \u2190 lift (core.convert.num.FromU64U32.from rhs.a)\n      let i8 \u2190 lift (core.convert.num.FromU64U32.from rhs.b)\n      let i9 \u2190 lift (i6.wrapping_add i8)\n      let i10 \u2190 lift (i4.wrapping_mul i9)\n      let m2 \u2190 AspisR1CurrentWide.field.M31.reduce_u64 i10\n      let m \u2190 m0.sub m1\n      let m3 \u2190 m2.sub m0\n      let m4 \u2190 m3.sub m1\n      ok { a := m, b := m4 }) =\n    fun self rhs => do\n    let m0 \u2190 self.a.mul rhs.a\n    let m1 \u2190 self.b.mul rhs.b",
+   "job": "CWFuns",
+   "fresh_emission": "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef",
+   "normalized_text_diff_gate_to_fresh": "@@ -58,7 +58,10 @@  i4  \u2190 +lift +( +Std.U64.wrapping_add  i1 -+  i3 +)  let  i5 @@ -90,13 +93,19 @@  i9  \u2190 +lift +( +Std.U64.wrapping_add  i6 -+  i8 +)  let  i10  \u2190 +lift +( +Std.U64.wrapping_mul  i4 -*  i9 +)  let  m2"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.QM31.mul",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::QM31}::mul",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::{CRATE::field::QM31}::mul (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.wide_exact.mul_u",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::mul_u",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::wide_exact::mul_u (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.wide_exact.WideExact.mul",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.CM31.mul_m31",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::CM31}::mul_m31",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::{CRATE::field::CM31}::mul_m31 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.QM31.mul_m31",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::QM31}::mul_m31",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::{CRATE::field::QM31}::mul_m31 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "AspisR1CurrentWide.Funs",
+   "definition": "AspisR1CurrentWide.field.wide_exact.WideExact.mul_m31",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul_m31",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul_m31 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "CurrentWideMulCanonical",
+   "definition": "AspisR1CurrentWideMul.field.wide_exact.mul_u",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::mul_u",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::field::wide_exact::mul_u); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "CurrentWideMulCanonical",
+   "definition": "AspisR1CurrentWideMul.field.wide_exact.WideExact.mul",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "CurrentWideMulCanonical",
+   "definition": "AspisR1CurrentWideMul.field.QM31.sub",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{CRATE::field::QM31}::sub",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::field::{CRATE::field::QM31}::sub); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "CurrentWideEqSemanticV7",
+   "definition": "AspisR1CurrentWide.field.M31.Insts.CoreCmpPartialEqM31.eq",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::M31> for CRATE::field::M31}::eq",
+   "reason": "no standalone `eq` definition of the aspis-core field types exists in any fresh frozen emission checked (E009 has only the impl_def instance form); aspis-core emission under P1a is pending"
+  },
+  {
+   "gate_module": "CurrentWideEqSemanticV7",
+   "definition": "AspisR1CurrentWide.field.CM31.Insts.CoreCmpPartialEqCM31.eq",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::CM31> for CRATE::field::CM31}::eq",
+   "reason": "no standalone `eq` definition of the aspis-core field types exists in any fresh frozen emission checked (E009 has only the impl_def instance form); aspis-core emission under P1a is pending"
+  },
+  {
+   "gate_module": "CurrentWideEqSemanticV7",
+   "definition": "AspisR1CurrentWide.field.QM31.Insts.CoreCmpPartialEqQM31.eq",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::QM31> for CRATE::field::QM31}::eq",
+   "reason": "no standalone `eq` definition of the aspis-core field types exists in any fresh frozen emission checked (E009 has only the impl_def instance form); aspis-core emission under P1a is pending"
+  },
+  {
+   "gate_module": "CurrentWideEqSemanticV7",
+   "definition": "AspisR1CurrentWide.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::field::wide_exact::{impl core::cmp::PartialEq<CRATE::field::wide_exact::WideExact> for CRATE::field::wide_exact::WideExact}::eq",
+   "reason": "no standalone `eq` definition of the aspis-core field types exists in any fresh frozen emission checked (E009 has only the impl_def instance form); aspis-core emission under P1a is pending"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Types",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::Q",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::Q); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Types",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_2",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Types",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Types",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.P",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::P",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::P); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_2.Insts.CoreOpsFunctionFnTupleU64U64.call",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2}::call",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2}::call); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.PP",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::PP",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::PP); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_mut",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_mut); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_once",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_once); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_mut",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_mut); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_once",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_once); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "AspisR1CanonicalQRawUnified.Funs",
+   "definition": "AspisR1CanonicalQRawUnified.canonical.Q.raw",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.Error",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::Error",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.transport.Variant",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::transport::Variant",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.Prepared",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::Prepared",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.multiproof.Arity",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::multiproof::Arity",
+   "job": "Stage2E010",
+   "fresh_emission": "emission-repro-20261110/NMH_E010_emitted/raw/NJS_Extract",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.BatchedWeights",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::BatchedWeights",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.Accumulator",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::Accumulator",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::QueryGeometry",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.Phase",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::Phase",
+   "job": "Stage2Q415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.Reader",
+   "status": "FAILED",
+   "rust": "CRATE::verifier::Reader",
+   "statement": "@PRVEq_Stage2E003.lean :: PRVFresh_Stage2ContinuationTypes.verifier.Reader = Stage2ContinuationTypes.verifier.Reader (gate constant)",
+   "error_class": [
+    "ERROR"
+   ],
+   "first_failing_goal_or_error": "Fields missing: `at`\n\nHint: Add missing fields:\n  \n  \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332 \u0332a\u0332t\u0332 \u0332:\u0332=\u0332 \u0332_\u0332",
+   "job": "Stage2E003",
+   "fresh_emission": "emission-repro-20261110/NMH_E003_emitted/raw/NHR_tx2_common"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.View",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::View",
+   "job": "Stage2E003",
+   "fresh_emission": "emission-repro-20261110/NMH_E003_emitted/raw/NHR_tx2_common",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure_4.closure",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#4::closure",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#4::closure (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure_4",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#4",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#4 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure_3",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#3",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#3 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure_2",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#2",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#2 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure_1",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#1",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure#1 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "Stage2ContinuationTypes",
+   "definition": "AspisR1Stage2.verifier.QueryGeometry.for_range.closure",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::verifier::{CRATE::verifier::QueryGeometry}::for_range::closure (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "S1M31EmbeddingSourceV1",
+   "definition": "AspisS1M31Embedding.source_from_m31",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::source_from_m31",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::source_from_m31 (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.aspis_core.r0.Error",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::r0::Error",
+   "job": "NativeTypesE003",
+   "fresh_emission": "emission-repro-20261110/NMH_E003_emitted/raw/NHR_tx2_common",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.transport.Variant",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::transport::Variant",
+   "job": "NativeTypesQ415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.verifier.Error",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::verifier::Error",
+   "job": "NativeTypesQ415",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.weights.Weights",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::weights::Weights",
+   "job": "NativeTypesE416",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E416_emitted/raw/PCQ_aspis_r1_cost_probe_weights",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.weights.Weights.raw.closure_1",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::weights::{CRATE::weights::Weights}::raw::closure#1",
+   "reason": "P1b failure list S022 (PCQ_E413): Aeneas exit 2: Nested borrows are not supported yet, weights.rs 229:47-229:130 (fold closure over self.points inside Weights::raw), Compiler source interp/Inter"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.weights.Weights.raw.closure",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::weights::{CRATE::weights::Weights}::raw::closure",
+   "reason": "P1b failure list S022 (PCQ_E413): Aeneas exit 2: Nested borrows are not supported yet, weights.rs 229:47-229:130 (fold closure over self.points inside Weights::raw), Compiler source interp/Inter"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeTypes",
+   "definition": "FIo_Native.weights.Weights.scalar_factor.closure",
+   "status": "TEXT_IDENTICAL_ONLY",
+   "rust": "CRATE::weights::{CRATE::weights::Weights}::scalar_factor::closure",
+   "job": "NativeTypesE416",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E416_emitted/raw/PCQ_aspis_r1_cost_probe_weights",
+   "reason": "inductive or non-simple structure: the generator emits no Lean theorem (text identity of the normalized declaration to the fresh emission only); not a proof of equality"
+  },
+  {
+   "gate_module": "FIo_QRawTypes",
+   "definition": "FIo_QRaw.canonical.Q",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::Q",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::Q); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawTypes",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure_2",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawTypes",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure_1",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawTypes",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::closure",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::closure); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.P",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::P",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::P); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure_2.Insts.CoreOpsFunctionFnTupleU64U64.call",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2}::call",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2}::call); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.PP",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::PP",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::PP); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_mut",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_mut); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_once",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_once); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_mut",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_mut); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_once",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_once); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "FIo_QRawFuns",
+   "definition": "FIo_QRaw.canonical.Q.raw",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::canonical::{CRATE::canonical::Q}::raw",
+   "reason": "cut crate / transformed copy: the item has no frozen counterpart (CRATE::canonical::{CRATE::canonical::Q}::raw); routed to P4 (PRV_REPORT: QRaw canonical::raw and Mul-canonical items belong to cut crates)"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.aspis_core.field.mul_by_r",
+   "status": "FRESH_EMISSION_EXISTS_NOT_PAIRED",
+   "rust": "CRATE::field::mul_by_r",
+   "reason": "a same-named Rust item exists in a fresh frozen emission but the generator did not pair it with the gate declaration: either the fresh declaration name differs from the gate name by a crate prefix (aspis_core.* vs field.*), or the declaration kind is not def/abbrev/simple structure (inductive, instance, class: text-identity only), or the emission was not selected for this module in this job",
+   "fresh_candidates": [
+    "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
+    "emission-repro-20261110/NMH_E024_emitted/raw/NFG_InverseRef/Funs.lean"
+   ]
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.aspis_core.field.reduce_u64",
+   "status": "FRESH_EMISSION_EXISTS_NOT_PAIRED",
+   "rust": "CRATE::field::reduce_u64",
+   "reason": "a same-named Rust item exists in a fresh frozen emission but the generator did not pair it with the gate declaration: either the fresh declaration name differs from the gate name by a crate prefix (aspis_core.* vs field.*), or the declaration kind is not def/abbrev/simple structure (inductive, instance, class: text-identity only), or the emission was not selected for this module in this job",
+   "fresh_candidates": [
+    "emission-repro-20261110/NMH_E008_emitted/raw/NFG_InverseRef/Funs.lean",
+    "emission-repro-20261110/NMH_E024_emitted/raw/NFG_InverseRef/Funs.lean"
+   ]
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.aspis_core.r0.heap.filled",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::r0::heap::filled",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::r0::heap::filled (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.aspis_core.r0.transport.order",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::r0::transport::order",
+   "reason": "no fresh frozen emission contains the Rust item CRATE::r0::transport::order (aspis-core / probe items: P1a pending, or P1b selection not run; no extraction scope in this job)"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.fast_pairing.canonical.Dot.push_loop.body",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::fast_pairing::canonical::{CRATE::fast_pairing::canonical::Dot}::push",
+   "reason": "P1b failure list S016 (PCQ_E401, PCQ_E411): Aeneas exit 2: [Error] Internal error, Source crates/aspis-r1-cost-probe/src/fast_pairing.rs lines 118:12-121:13, Compiler source interp/InterpBorrows.ml line 2"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.fast_pairing.canonical.Dot.push_loop",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::fast_pairing::canonical::{CRATE::fast_pairing::canonical::Dot}::push",
+   "reason": "P1b failure list S016 (PCQ_E401, PCQ_E411): Aeneas exit 2: [Error] Internal error, Source crates/aspis-r1-cost-probe/src/fast_pairing.rs lines 118:12-121:13, Compiler source interp/InterpBorrows.ml line 2"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.fast_pairing.canonical.Dot.push",
+   "status": "NO_FRESH_EMISSION",
+   "rust": "CRATE::fast_pairing::canonical::{CRATE::fast_pairing::canonical::Dot}::push",
+   "reason": "P1b failure list S016 (PCQ_E401, PCQ_E411): Aeneas exit 2: [Error] Internal error, Source crates/aspis-r1-cost-probe/src/fast_pairing.rs lines 118:12-121:13, Compiler source interp/InterpBorrows.ml line 2"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.transport.Variant.row_loop.body",
+   "status": "FAILED",
+   "rust": "CRATE::transport::{CRATE::transport::Variant}::row",
+   "statement": "@PRVEq_NativeFunsE410.lean :: PRVFresh_RPz7_FIo_NativeFuns.transport.Variant.row_loop.body = RPz7_FIo_NativeFuns.transport.Variant.row_loop.body (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "Application type mismatch: The argument\n  i\nhas type\n  Usize\nbut is expected to have type\n  U32\nin the application\n  j.wrapping_shr i",
+   "first_failing_fresh_declaration": "transport.Variant.row_loop.body",
+   "job": "NativeFunsE410",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E410_emitted/raw/PCQ_aspis_r1_cost_probe_transport",
+   "normalized_text_diff_gate_to_fresh": "@@ -73,9 +73,8 @@  i1  \u2190 +lift  ( +Std.Usize.wrapping_shr  j -> -> ->  i  ) @@ -109,9 +108,8 @@  i5  \u2190 +lift  ( +Std.Usize.wrapping_shl  i2 -< -< -<  i4  )"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.transport.Variant.row_loop",
+   "status": "FAILED",
+   "rust": "CRATE::transport::{CRATE::transport::Variant}::row",
+   "statement": "@PRVEq_NativeFunsE410.lean :: PRVFresh_RPz7_FIo_NativeFuns.transport.Variant.row_loop = RPz7_FIo_NativeFuns.transport.Variant.row_loop (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE"
+   ],
+   "first_failing_goal_or_error": "Application type mismatch: The argument\n  i\nhas type\n  Usize\nbut is expected to have type\n  U32\nin the application\n  j.wrapping_shr i",
+   "first_failing_fresh_declaration": "transport.Variant.row_loop.body",
+   "job": "NativeFunsE410",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E410_emitted/raw/PCQ_aspis_r1_cost_probe_transport"
+  },
+  {
+   "gate_module": "RPz7_FIo_NativeFuns",
+   "definition": "FIo_Native.transport.Variant.row",
+   "status": "FAILED",
+   "rust": "CRATE::transport::{CRATE::transport::Variant}::row",
+   "statement": "@PRVEq_NativeFunsE410.lean :: PRVFresh_RPz7_FIo_NativeFuns.transport.Variant.row = RPz7_FIo_NativeFuns.transport.Variant.row (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE"
+   ],
+   "first_failing_goal_or_error": "Application type mismatch: The argument\n  i\nhas type\n  Usize\nbut is expected to have type\n  U32\nin the application\n  j.wrapping_shr i",
+   "first_failing_fresh_declaration": "transport.Variant.row_loop.body",
+   "job": "NativeFunsE410",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E410_emitted/raw/PCQ_aspis_r1_cost_probe_transport"
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body",
+   "status": "FRESH_EMISSION_EXISTS_NOT_PAIRED",
+   "rust": "CRATE::fast_dots::four_dots_one",
+   "reason": "a same-named Rust item exists in a fresh frozen emission but the generator did not pair it with the gate declaration: either the fresh declaration name differs from the gate name by a crate prefix (aspis_core.* vs field.*), or the declaration kind is not def/abbrev/simple structure (inductive, instance, class: text-identity only), or the emission was not selected for this module in this job",
+   "fresh_candidates": [
+    "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate/Funs.lean"
+   ]
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0",
+   "status": "FAILED",
+   "rust": "CRATE::fast_dots::four_dots_one",
+   "statement": "@PRVEq_NativeDots.lean :: PRVFresh_RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0 = RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0 (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE"
+   ],
+   "first_failing_goal_or_error": "Unknown constant `FIo_Native.aspis_core.field.M31.from_le_bytes`",
+   "first_failing_fresh_declaration": "fast_dots.four_dots_one_loop0_loop0.body",
+   "job": "NativeDots",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "normalized_text_diff_gate_to_fresh": "@@ -18,5 +18,5 @@  :  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  29#usize  )"
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0.body",
+   "status": "FAILED",
+   "rust": "CRATE::fast_dots::four_dots_one",
+   "statement": "@PRVEq_NativeDots.lean :: PRVFresh_RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0.body = RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0.body (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "Application type mismatch: The argument\n  31#i32\nhas type\n  IScalar IScalarTy.I32\nbut is expected to have type\n  U32\nin the application\n  i2.wrapping_shr 31#i32",
+   "first_failing_fresh_declaration": "fast_dots.four_dots_one_loop0.body",
+   "job": "NativeDots",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "normalized_text_diff_gate_to_fresh": "@@ -12,5 +12,5 @@  :  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  29#usize  ) @@ -104,7 +104,10 @@  i  \u2190 +lift +( +Std.Usize.wrapping_add  start -+  4#usize +)  let  i1 @@ -152,15 +155,19 @@  i4  \u2190 +lift +( +Std.U64.wrapping_shr  i2 -> -> -> -31#i32 +31#i32 +)  let  i5  \u2190 +lift +( +Std.U64.wrapping_add  i3 -+  i4 +)  let  i6 @@ -172,7 +179,10 @@  i7  \u2190 +lift +( +Std.U64.wrapping_add  i6 -+  i5 +)  let  limbs1 @@ -202,15 +212,19 @@  i10  \u2190 +lift +( +Std.U64.wrapping_shr  i8 -> -> -> -31#i32 +31#i32 +)  let  i11  \u2190 +lift +( +Std.U64.wrapping_add  i9 -+  i10 +)  let  i12 @@ -222,7 +236,10 @@  i13  \u2190 +lift +( +Std.U64.wrapping_add  i12 -+  i11 +)  let  limbs2 @@ -252,15 +269,19 @@  i16  \u2190 +lift +( +Std.U64.wrapping_shr  i14 -> -> -> -31#i32 +31#i32 +)  let  i17  \u2190 +lift +( +Std.U64.wrapping_add  i15 -+  i16 +)  let  i18 @@ -272,7 +293,10 @@  i19  \u2190 +lift +( +Std.U64.wrapping_add  i18 -+  i17 +)  let  limbs3 @@ -302,15 +326,19 @@  i22  \u2190 +lift +( +Std.U64.wrapping_shr  i20 -> -> -> -31#i32 +31#i32 +)  let  i23  \u2190 +lift +( +Std.U64.wrapping_add  i21 -+  i22 +)  let  i24 @@ -322,7 +350,10 @@  i25  \u2190 +lift +( +Std.U64.wrapping_add  i24 -+  i23 +)  let  limbs4 @@ -352,15 +383,19 @@  i28  \u2190 +lift +( +Std.U64.wrapping_shr  i26 -> -> -> -31#i32 +31#i32 +)  let  i29  \u2190 +lift +( +Std.U64.wrapping_add  i27 -+  i28 +)  let  i30 @@ -372,7 +407,10 @@  i31  \u2190 +lift +( +Std.U64.wrapping_add  i30 -+  i29 +)  let  limbs5 @@ -402,15 +440,19 @@  i34  \u2190 +lift +( +Std.U64.wrapping_shr  i32 -> -> -> -31#i32 +31#i32 +)  let  i35  \u2190 +lift +( +Std.U64.wrapping_add  i33 -+  i34 +)  let  i36 @@ -422,7 +464,10 @@  i37  \u2190 +lift +( +Std.U64.wrapping_add  i36 -+  i35 +)  let  limbs6 @@ -452,15 +497,19 @@  i40  \u2190 +lift +( +Std.U64.wrapping_shr  i38 -> -> -> -31#i32 +31#i32 +)  let  i41  \u2190 +lift +( +Std.U64.wrapping_add  i39 -+  i40 +)  let  i42 @@ -472,7 +521,10 @@  i43  \u2190 +lift +( +Std.U64.wrapping_add  i42 -+  i41 +)  let  limbs7 @@ -502,15 +554,19 @@  i46  \u2190 +lift +( +Std.U64.wrapping_shr  i44 -> -> -> -31#i32 +31#i32 +)  let  i47  \u2190 +lift +( +Std.U64.wrapping_add  i45 -+  i46 +)  let  i48 @@ -522,7 +578,10 @@  i49  \u2190 +lift +( +Std.U64.wrapping_add  i48 -+  i47 +)  let  limbs8"
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0",
+   "status": "FAILED",
+   "rust": "CRATE::fast_dots::four_dots_one",
+   "statement": "@PRVEq_NativeDots.lean :: PRVFresh_RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0 = RPz7_FIp_NativeDots.fast_dots.four_dots_one_loop0 (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE"
+   ],
+   "first_failing_goal_or_error": "Application type mismatch: The argument\n  31#i32\nhas type\n  IScalar IScalarTy.I32\nbut is expected to have type\n  U32\nin the application\n  i2.wrapping_shr 31#i32",
+   "first_failing_fresh_declaration": "fast_dots.four_dots_one_loop0.body",
+   "job": "NativeDots",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "normalized_text_diff_gate_to_fresh": "@@ -21,5 +21,5 @@  :  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  29#usize  )"
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots_one",
+   "status": "FAILED",
+   "rust": "CRATE::fast_dots::four_dots_one",
+   "statement": "@PRVEq_NativeDots.lean :: PRVFresh_RPz7_FIp_NativeDots.fast_dots.four_dots_one = RPz7_FIp_NativeDots.fast_dots.four_dots_one (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE",
+    "CHECKED_VS_WRAPPING_ARITHMETIC"
+   ],
+   "first_failing_goal_or_error": "Unknown constant `FIo_Native.aspis_core.field.QM31.from_le_bytes`",
+   "first_failing_fresh_declaration": "fast_dots.four_dots_one",
+   "job": "NativeDots",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "normalized_text_diff_gate_to_fresh": "@@ -12,5 +12,5 @@  :  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  29#usize  ) @@ -22,5 +22,5 @@  :  Result -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  :  = @@ -73,5 +73,5 @@  m  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i  let @@ -84,5 +84,5 @@  m1  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i1  let @@ -95,5 +95,5 @@  m2  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i2  let @@ -106,5 +106,5 @@  m3  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i3  let @@ -117,5 +117,5 @@  m4  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i4  let @@ -128,5 +128,5 @@  m5  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i5  let @@ -139,5 +139,5 @@  m6  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i6  let @@ -150,10 +150,10 @@  m7  \u2190 -FIo_Native.aspis_core.field.M31.reduce_u64 +aspis_core.field.M31.reduce_u64  i7  let  o  \u2190 -FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs +aspis_core.field.wide_exact.WideExact.from_limbs  (  Array.make @@ -185,5 +185,5 @@  tail  \u2190 -FIo_Native.fast_pairing.EbyKDot.new +fast_pairing.EbyKDot.new  let  we @@ -195,19 +195,37 @@  i8  \u2190 +lift +( +Std.Usize.wrapping_mul  slot -*  120#usize +)  let  i9  \u2190 +lift +( +Std.Usize.wrapping_add  i8 -+  104#usize +)  let  i10  \u2190 -i8 -+ +lift +( +Std.Usize.wrapping_mul +slot  120#usize +) +let +i11 +\u2190 +lift +( +Std.Usize.wrapping_add +i10 +120#usize +)  let  s @@ -233,10 +251,10 @@  :  = -i10 +i11  }  let  o1  \u2190 -AspisR1.FIp_DotDecode.field.QM31.from_le_bytes +aspis_core.field.QM31.from_le_bytes  s  let @@ -252,5 +270,5 @@  )  \u2190 -FIo_Native.fast_pairing.EbyKDot.push +fast_pairing.EbyKDot.push  tail  we @@ -260,45 +278,63 @@  r  let -i11 -\u2190 +i12 +\u2190 +lift +( +Std.Usize.wrapping_mul  slot -*  32#usize -let +) +let +i13 +\u2190 +lift +( +Std.Usize.wrapping_add +480#usize  i12 -\u2190 -480#usize -+ -i11 -let +) +let +i14 +\u2190 +lift +( +Std.Usize.wrapping_mul +0#usize +16#usize +) +let +offset0 +\u2190 +lift +( +Std.Usize.wrapping_add  i13 -\u2190 +i14 +) +let +i15 +\u2190 +lift +( +Std.Usize.wrapping_add  0#usize -* +26#usize +) +let +we1 +\u2190 +Array.index_usize +g +i15 +let +i16 +\u2190 +lift +( +Std.Usize.wrapping_add +offset0  16#usize -let -offset0 -\u2190 -i12 -+ -i13 -let -i14 -\u2190 -0#usize -+ -26#usize -let -we1 -\u2190 -Array.index_usize -g -i14 -let -i15 -\u2190 -offset0 -+ -16#usize +)  let  s1 @@ -324,10 +360,10 @@  :  = -i15 +i16  }  let  o2  \u2190 -AspisR1.FIp_DotDecode.field.QM31.from_le_bytes +aspis_core.field.QM31.from_le_bytes  s1  let @@ -343,5 +379,5 @@  )  \u2190 -FIo_Native.fast_pairing.EbyKDot.push +fast_pairing.EbyKDot.push  tail1  we1 @@ -351,27 +387,48 @@  r1  let -i16 -\u2190 +i17 +\u2190 +lift +( +Std.Usize.wrapping_mul +slot +32#usize +) +let +i18 +\u2190 +lift +( +Std.Usize.wrapping_add  480#usize -+ -i11 -let  i17 -\u2190 +) +let +i19 +\u2190 +lift +( +Std.Usize.wrapping_mul  1#usize -*  16#usize +)  let  offset1  \u2190 -i16 -+ -i17 -let +lift +( +Std.Usize.wrapping_add  i18 -\u2190 +i19 +) +let +i20 +\u2190 +lift +( +Std.Usize.wrapping_add  1#usize -+  26#usize +)  let  we2 @@ -379,11 +436,14 @@  Array.index_usize  g -i18 -let -i19 -\u2190 +i20 +let +i21 +\u2190 +lift +( +Std.Usize.wrapping_add  offset1 -+  16#usize +)  let  s2 @@ -409,10 +469,10 @@  :  = -i19 +i21  }  let  o3  \u2190 -AspisR1.FIp_DotDecode.field.QM31.from_le_bytes +aspis_core.field.QM31.from_le_bytes  s2  let @@ -428,5 +488,5 @@  )  \u2190 -FIo_Native.fast_pairing.EbyKDot.push +fast_pairing.EbyKDot.push  tail2  we2 @@ -438,7 +498,7 @@  we3  \u2190 -FIo_Native.fast_pairing.EbyKDot.finish +fast_pairing.EbyKDot.finish  tail3 -FIo_Native.aspis_core.field.wide_exact.WideExact.add +aspis_core.field.wide_exact.WideExact.add  value  we3"
+  },
+  {
+   "gate_module": "RPz7_FIp_NativeDots",
+   "definition": "AspisR1.FIp_NativeDots.fast_dots.four_dots",
+   "status": "FAILED",
+   "rust": "CRATE::fast_dots::four_dots",
+   "statement": "@PRVEq_NativeDots.lean :: PRVFresh_RPz7_FIp_NativeDots.fast_dots.four_dots = RPz7_FIp_NativeDots.fast_dots.four_dots (gate constant)",
+   "error_class": [
+    "FRESH_DECLARATION_DOES_NOT_ELABORATE_AGAINST_GATE"
+   ],
+   "first_failing_goal_or_error": "Unknown constant `FIo_Native.aspis_core.field.QM31.from_le_bytes`",
+   "first_failing_fresh_declaration": "fast_dots.four_dots_one",
+   "job": "NativeDots",
+   "fresh_emission": "prov-p1b-20261109/PCQ_E415_emitted/raw/PCQ_aspis_r1_cost_probe_candidate",
+   "normalized_text_diff_gate_to_fresh": "@@ -11,5 +11,5 @@  :  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  29#usize  ) @@ -18,5 +18,5 @@  (  Array -FIo_Native.aspis_core.field.wide_exact.WideExact +aspis_core.field.wide_exact.WideExact  4#usize  )"
+  }
+ ]
+}

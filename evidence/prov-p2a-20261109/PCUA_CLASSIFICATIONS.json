@@ -1,0 +1,102 @@
+{
+ "schema": "PCUA_CLASSIFICATIONS/1",
+ "target_established": false,
+ "classifications": [
+  {
+   "id": "A-1",
+   "case": "PROVED_EQUIV status",
+   "classification": "A structure whose fields are simple is closed by a generated `Equiv` between the fresh and the gate type (stage 1/2 proved). It is weaker than a type equality and is reported as PROVED_EQUIV, not as PROVED_RFL; it counts as a proved isomorphism only.",
+   "reason": "brief names only PROVED_RFL/UNFOLD/FAILED; the generator (P0) already distinguishes them"
+  },
+  {
+   "id": "A-2",
+   "case": "Inductives and non-simple structures",
+   "classification": "TEXT_IDENTICAL_ONLY (or TYPE_TEXT_DIFFERS): no Lean theorem; counted as not proved and listed in PCUA_FOR_P3 (TYPES-1).",
+   "reason": "P0 limitation, no hand-written proofs allowed"
+  },
+  {
+   "id": "B-1",
+   "case": "compiled_source_ambiguous: AspisR1CurrentWide.Funs",
+   "classification": "The two candidates (sources/AspisR1CurrentWide/Funs.lean and extraction/generated/.../Funs.lean) have identical normalized declaration text (all 25 blocks; only two set_option header lines differ). Self-copy control PCUA_L011 (candidate A as the fresh emission, gate_src control_cw/): 25 of 25 declarations proved against the gate constants (all stage 2), exit 0. Compiled source fixed as the declaration text common to both; AspisR1CurrentWide.Types candidates likewise differ only by two set_option lines (4 blocks).",
+   "reason": "PCO_HANDOFF section 4 control; statements are against compiled constants either way"
+  },
+  {
+   "id": "B-2",
+   "case": "compiled_source_ambiguous: CurrentWideEqSemanticV7",
+   "classification": "No control run: no fresh frozen emission of its four reached definitions exists, so there is nothing to compare; the module stays NO_FRESH_EMISSION.",
+   "reason": "no fresh text to control against"
+  },
+  {
+   "id": "B-3",
+   "case": "Stage2ContinuationTypes has two committed candidates (lean/ and import-coll prototype) differing only in the attribute argument `@[import_union_discriminant isize]` vs `@[import_union_discriminant]`",
+   "classification": "Not flagged ambiguous by the partition; used lean/Stage2ContinuationTypes.lean (the path named by the partition candidates first). Registration attributes are stripped by the generator, and the statements are against compiled constants; the 5 Stage2 declarations proved are unaffected by the attribute.",
+   "reason": "attribute-only difference"
+  },
+  {
+   "id": "C-1",
+   "case": "Choice of fresh emission per gate module",
+   "classification": "Per module, the emission of the right file kind (Types for *Types modules, Funs otherwise) that covers the most reached definitions, then further emissions for the remaining ones (greedy, PCUA_SURVEY.json from PCUA_survey.py). The same Rust item appearing in several emissions is proved once (best status kept; also_attempted lists the rest).",
+   "reason": "brief: modules whose fresh emission exists"
+  },
+  {
+   "id": "C-2",
+   "case": "Emissions used",
+   "classification": "P1b emissions PCQ_E415 (candidate closure), PCQ_E410 (transport), PCQ_E416 (weights); merged NMH emissions NMH_E013 (field_decode), NMH_E014 (wide_decode, used for AspisR1CurrentWide.Types), NMH_E008 (NFG_InverseRef), NMH_E003 (NHR_tx2_common), NMH_E010 (NJS_Extract). NHR_tx2_common/NJS_Extract Types are used only for Types modules.",
+   "reason": "survey"
+  },
+  {
+   "id": "D-1",
+   "case": "Gate types source for modules without a Types sibling",
+   "classification": "RPz7_FIp_DotDecode: its own file is passed as the gate types source (it declares the field abbrevs itself); RPz7_FIp_NativeDots / NativeFuns: RPz7_FIo_NativeTypes; AspisR1CurrentWide.Funs: its Types candidate.",
+   "reason": "generator needs a types text for the identity check"
+  },
+  {
+   "id": "D-2",
+   "case": "S1M31EmbeddingSourceV1 (mixed module)",
+   "classification": "Run as a Types module with the new --kind types override (its reached definitions are the three field types and the uncovered hand function source_from_m31). source_from_m31 has no fresh counterpart.",
+   "reason": "module name does not end in Types"
+  },
+  {
+   "id": "E-1",
+   "case": "Tool changes (PCUA_TOOLS.json)",
+   "classification": "(a) --kind override, (b) repeatable --open-extra NS (used once: FIo_Native for NativeDots), (c) set_option maxErrors 100000 inserted into bundles by PCUA_jobs.py so Lean does not stop at 100 messages (this is a message limit, not a resource cap), (d) jobs/driver/status scripts. The proof strategies of the generator are unchanged (rfl, then delta+callee rewriting; nothing added); no generated proof was edited.",
+   "reason": "tooling needed to run the cluster"
+  },
+  {
+   "id": "E-2",
+   "case": "First probe bundle A1 (L001)",
+   "classification": "Hit the 100-message limit in NativeDots and left CW/S1M31 unelaborated; its log is kept (probe_A1.log). DotDecode results from it are valid (they came before the limit). The other modules were re-probed (L002 for NativeDots with --open-extra, L004 for CW/S1M31). Not a resource failure.",
+   "reason": "record of a changed shape, not an unchanged rerun"
+  },
+  {
+   "id": "F-1",
+   "case": "Probe receipts with sorryAx",
+   "classification": "Probe scopes (L001, L002, L004, L005, L007) elaborated failing theorems with error recovery, so their axiom lines contain sorryAx. They are probe artefacts, never final; final scopes are L006, L009, L010 (exit 0, 60 theorem axiom lines, only propext / Classical.choice / Quot.sound).",
+   "reason": "as in PCO_HANDOFF"
+  },
+  {
+   "id": "G-1",
+   "case": "Admission waits",
+   "classification": "L002 waited about 3 minutes for the Stream C share (other Stream C jobs hold the 3 slots); no other deviation. All admissions: host scopes < 6, Stream C < 3, free disk >= 40 GB.",
+   "reason": "brief"
+  },
+  {
+   "id": "G-2",
+   "case": "Peak RSS",
+   "classification": "Largest scope 5.7 GB RSS (importing NativeFuns + Stage2 + CurrentWide closures in one process), below the 6G MemoryHigh and 8G MemoryMax; no scope was killed, no timeout, no cap raised.",
+   "reason": "resource policy"
+  },
+  {
+   "id": "H-1",
+   "case": "Conditional proofs",
+   "classification": "A PROVED theorem whose fresh declaration reaches a fresh External-template name that resolves by name to a gate constant is flagged conditional_on_external_boundaries in PCUA_EQ_STATUS.json and recorded in PCUA_HAND_MODELS.json; it is not reported as an unconditional equality of the Rust item.",
+   "reason": "AGENTS section 3"
+  },
+  {
+   "id": "I-1",
+   "case": "Fresh-vs-gate type carriers in Funs modules",
+   "classification": "For Funs modules the fresh file is compiled without its own Types; type names resolve to the gate carriers (report.types_identity lists fresh Types whose normalized text differs from or is missing in the gate Types). Proved Funs theorems mention no differing type (mentions_differing_types empty for every PROVED definition) but the carrier identity itself is a premise inherited from the Types-module results.",
+   "reason": "generator design (P0)"
+  }
+ ]
+}

@@ -1,0 +1,306 @@
+import RPz7_FIp_DotDecode
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow Error
+noncomputable section
+namespace AspisR1.FIp_NativeDots
+/-- [aspis_r1_cost_probe::fast_dots::four_dots_one]: loop body 1:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 19:12-35:13 -/
+@[rust_loop_body]
+def fast_dots.four_dots_one_loop0_loop0.body
+  (q : Array Std.U8 608#usize)
+  (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize) (slot : Std.Usize)
+  (iter : core.ops.range.Range Std.Usize) (sums : Array Std.U64 8#usize) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Array Std.U64
+    8#usize)) (Array Std.U64 8#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done sums)
+  | some term =>
+    let i ← slot * 120#usize
+    let i1 ← term * 4#usize
+    let i2 ← i + i1
+    let i3 ← i + i1
+    let i4 ← i3 + 4#usize
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice
+        (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) q
+        { start := i2, «end» := i4 }
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let o1 ← AspisR1.FIp_DotDecode.field.M31.from_le_bytes a
+    let scalar ← core.option.Option.unwrap o1
+    let we ← Array.index_usize g term
+    let coefficient ← FIo_Native.aspis_core.field.wide_exact.WideExact.to_limbs we
+    let i5 ← Array.index_usize coefficient 0#usize
+    let i6 ← lift (core.convert.num.FromU64U32.from i5)
+    let i7 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i8 ← i6 * i7
+    let i9 ← Array.index_usize sums 0#usize
+    let i10 ← i9 + i8
+    let sums1 ← Array.update sums 0#usize i10
+    let i11 ← Array.index_usize coefficient 1#usize
+    let i12 ← lift (core.convert.num.FromU64U32.from i11)
+    let i13 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i14 ← i12 * i13
+    let i15 ← Array.index_usize sums1 1#usize
+    let i16 ← i15 + i14
+    let sums2 ← Array.update sums1 1#usize i16
+    let i17 ← Array.index_usize coefficient 2#usize
+    let i18 ← lift (core.convert.num.FromU64U32.from i17)
+    let i19 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i20 ← i18 * i19
+    let i21 ← Array.index_usize sums2 2#usize
+    let i22 ← i21 + i20
+    let sums3 ← Array.update sums2 2#usize i22
+    let i23 ← Array.index_usize coefficient 3#usize
+    let i24 ← lift (core.convert.num.FromU64U32.from i23)
+    let i25 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i26 ← i24 * i25
+    let i27 ← Array.index_usize sums3 3#usize
+    let i28 ← i27 + i26
+    let sums4 ← Array.update sums3 3#usize i28
+    let i29 ← Array.index_usize coefficient 4#usize
+    let i30 ← lift (core.convert.num.FromU64U32.from i29)
+    let i31 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i32 ← i30 * i31
+    let i33 ← Array.index_usize sums4 4#usize
+    let i34 ← i33 + i32
+    let sums5 ← Array.update sums4 4#usize i34
+    let i35 ← Array.index_usize coefficient 5#usize
+    let i36 ← lift (core.convert.num.FromU64U32.from i35)
+    let i37 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i38 ← i36 * i37
+    let i39 ← Array.index_usize sums5 5#usize
+    let i40 ← i39 + i38
+    let sums6 ← Array.update sums5 5#usize i40
+    let i41 ← Array.index_usize coefficient 6#usize
+    let i42 ← lift (core.convert.num.FromU64U32.from i41)
+    let i43 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i44 ← i42 * i43
+    let i45 ← Array.index_usize sums6 6#usize
+    let i46 ← i45 + i44
+    let sums7 ← Array.update sums6 6#usize i46
+    let i47 ← Array.index_usize coefficient 7#usize
+    let i48 ← lift (core.convert.num.FromU64U32.from i47)
+    let i49 ← lift (core.convert.num.FromU64U32.from scalar)
+    let i50 ← i48 * i49
+    let i51 ← Array.index_usize sums7 7#usize
+    let i52 ← i51 + i50
+    let sums8 ← Array.update sums7 7#usize i52
+    ok (cont (iter1, sums8))
+
+/-- [aspis_r1_cost_probe::fast_dots::four_dots_one]: loop 1:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 19:12-35:13 -/
+@[rust_loop]
+def fast_dots.four_dots_one_loop0_loop0
+  (iter : core.ops.range.Range Std.Usize) (q : Array Std.U8 608#usize)
+  (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize) (slot : Std.Usize)
+  (sums : Array Std.U64 8#usize) :
+  Result (Array Std.U64 8#usize)
+  := do
+  loop
+    (fun (iter1, sums1) => fast_dots.four_dots_one_loop0_loop0.body q g slot
+      iter1 sums1)
+    (iter, sums)
+
+/-- [aspis_r1_cost_probe::fast_dots::four_dots_one]: loop body 0:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 17:8-44:9 -/
+@[rust_loop_body]
+def fast_dots.four_dots_one_loop0.body
+  (q : Array Std.U8 608#usize)
+  (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize) (slot : Std.Usize)
+  (iter : core.iter.adapters.step_by.StepBy (core.ops.range.Range Std.Usize))
+  (limbs : Array Std.U64 8#usize) :
+  Result (ControlFlow ((core.iter.adapters.step_by.StepBy (core.ops.range.Range
+    Std.Usize)) × (Array Std.U64 8#usize)) (Array Std.U64 8#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.adapters.step_by.IteratorStepBy.next
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done limbs)
+  | some start =>
+    let sums := Array.repeat 8#usize 0#u64
+    let i ← start + 4#usize
+    let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+    let sums1 ←
+      fast_dots.four_dots_one_loop0_loop0 { start, «end» := i1 } q g slot
+        sums
+    let i2 ← Array.index_usize sums1 0#usize
+    let i3 ← lift (i2 &&& 2147483647#u64)
+    let i4 ← i2 >>> 31#i32
+    let i5 ← i3 + i4
+    let i6 ← Array.index_usize limbs 0#usize
+    let i7 ← i6 + i5
+    let limbs1 ← Array.update limbs 0#usize i7
+    let i8 ← Array.index_usize sums1 1#usize
+    let i9 ← lift (i8 &&& 2147483647#u64)
+    let i10 ← i8 >>> 31#i32
+    let i11 ← i9 + i10
+    let i12 ← Array.index_usize limbs1 1#usize
+    let i13 ← i12 + i11
+    let limbs2 ← Array.update limbs1 1#usize i13
+    let i14 ← Array.index_usize sums1 2#usize
+    let i15 ← lift (i14 &&& 2147483647#u64)
+    let i16 ← i14 >>> 31#i32
+    let i17 ← i15 + i16
+    let i18 ← Array.index_usize limbs2 2#usize
+    let i19 ← i18 + i17
+    let limbs3 ← Array.update limbs2 2#usize i19
+    let i20 ← Array.index_usize sums1 3#usize
+    let i21 ← lift (i20 &&& 2147483647#u64)
+    let i22 ← i20 >>> 31#i32
+    let i23 ← i21 + i22
+    let i24 ← Array.index_usize limbs3 3#usize
+    let i25 ← i24 + i23
+    let limbs4 ← Array.update limbs3 3#usize i25
+    let i26 ← Array.index_usize sums1 4#usize
+    let i27 ← lift (i26 &&& 2147483647#u64)
+    let i28 ← i26 >>> 31#i32
+    let i29 ← i27 + i28
+    let i30 ← Array.index_usize limbs4 4#usize
+    let i31 ← i30 + i29
+    let limbs5 ← Array.update limbs4 4#usize i31
+    let i32 ← Array.index_usize sums1 5#usize
+    let i33 ← lift (i32 &&& 2147483647#u64)
+    let i34 ← i32 >>> 31#i32
+    let i35 ← i33 + i34
+    let i36 ← Array.index_usize limbs5 5#usize
+    let i37 ← i36 + i35
+    let limbs6 ← Array.update limbs5 5#usize i37
+    let i38 ← Array.index_usize sums1 6#usize
+    let i39 ← lift (i38 &&& 2147483647#u64)
+    let i40 ← i38 >>> 31#i32
+    let i41 ← i39 + i40
+    let i42 ← Array.index_usize limbs6 6#usize
+    let i43 ← i42 + i41
+    let limbs7 ← Array.update limbs6 6#usize i43
+    let i44 ← Array.index_usize sums1 7#usize
+    let i45 ← lift (i44 &&& 2147483647#u64)
+    let i46 ← i44 >>> 31#i32
+    let i47 ← i45 + i46
+    let i48 ← Array.index_usize limbs7 7#usize
+    let i49 ← i48 + i47
+    let limbs8 ← Array.update limbs7 7#usize i49
+    ok (cont (iter1, limbs8))
+
+/-- [aspis_r1_cost_probe::fast_dots::four_dots_one]: loop 0:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 17:8-44:9 -/
+@[rust_loop]
+def fast_dots.four_dots_one_loop0
+  (iter : core.iter.adapters.step_by.StepBy (core.ops.range.Range Std.Usize))
+  (q : Array Std.U8 608#usize)
+  (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize) (slot : Std.Usize)
+  (limbs : Array Std.U64 8#usize) :
+  Result (Array Std.U64 8#usize)
+  := do
+  loop
+    (fun (iter1, limbs1) => fast_dots.four_dots_one_loop0.body q g slot iter1
+      limbs1)
+    (iter, limbs)
+
+/-- [aspis_r1_cost_probe::fast_dots::four_dots_one]:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 15:0-64:1 -/
+def fast_dots.four_dots_one
+  (q : Array Std.U8 608#usize)
+  (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize) (slot : Std.Usize)
+  :
+  Result FIo_Native.aspis_core.field.wide_exact.WideExact
+  := do
+  let limbs := Array.repeat 8#usize 0#u64
+  let iter ←
+    core.iter.traits.iterator.Iterator.step_by.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      { start := 0#usize, «end» := 26#usize } 4#usize
+  let limbs1 ← fast_dots.four_dots_one_loop0 iter q g slot limbs
+  let i ← Array.index_usize limbs1 0#usize
+  let m ← FIo_Native.aspis_core.field.M31.reduce_u64 i
+  let i1 ← Array.index_usize limbs1 1#usize
+  let m1 ← FIo_Native.aspis_core.field.M31.reduce_u64 i1
+  let i2 ← Array.index_usize limbs1 2#usize
+  let m2 ← FIo_Native.aspis_core.field.M31.reduce_u64 i2
+  let i3 ← Array.index_usize limbs1 3#usize
+  let m3 ← FIo_Native.aspis_core.field.M31.reduce_u64 i3
+  let i4 ← Array.index_usize limbs1 4#usize
+  let m4 ← FIo_Native.aspis_core.field.M31.reduce_u64 i4
+  let i5 ← Array.index_usize limbs1 5#usize
+  let m5 ← FIo_Native.aspis_core.field.M31.reduce_u64 i5
+  let i6 ← Array.index_usize limbs1 6#usize
+  let m6 ← FIo_Native.aspis_core.field.M31.reduce_u64 i6
+  let i7 ← Array.index_usize limbs1 7#usize
+  let m7 ← FIo_Native.aspis_core.field.M31.reduce_u64 i7
+  let o ←
+    FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs
+      (Array.make 8#usize [ m, m1, m2, m3, m4, m5, m6, m7 ])
+  let value ← core.option.Option.unwrap o
+  let tail ← FIo_Native.fast_pairing.EbyKDot.new
+  let we ← Array.index_usize g 28#usize
+  let i8 ← slot * 120#usize
+  let i9 ← i8 + 104#usize
+  let i10 ← i8 + 120#usize
+  let s ←
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) q
+      { start := i9, «end» := i10 }
+  let o1 ← AspisR1.FIp_DotDecode.field.QM31.from_le_bytes s
+  let q1 ← core.option.Option.unwrap o1
+  let (r, tail1) ← FIo_Native.fast_pairing.EbyKDot.push tail we q1
+  core.result.Result.unwrap core.fmt.DebugUnit r
+  let i11 ← slot * 32#usize
+  let i12 ← 480#usize + i11
+  let i13 ← 0#usize * 16#usize
+  let offset0 ← i12 + i13
+  let i14 ← 0#usize + 26#usize
+  let we1 ← Array.index_usize g i14
+  let i15 ← offset0 + 16#usize
+  let s1 ←
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) q
+      { start := offset0, «end» := i15 }
+  let o2 ← AspisR1.FIp_DotDecode.field.QM31.from_le_bytes s1
+  let q2 ← core.option.Option.unwrap o2
+  let (r1, tail2) ← FIo_Native.fast_pairing.EbyKDot.push tail1 we1 q2
+  core.result.Result.unwrap core.fmt.DebugUnit r1
+  let i16 ← 480#usize + i11
+  let i17 ← 1#usize * 16#usize
+  let offset1 ← i16 + i17
+  let i18 ← 1#usize + 26#usize
+  let we2 ← Array.index_usize g i18
+  let i19 ← offset1 + 16#usize
+  let s2 ←
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) q
+      { start := offset1, «end» := i19 }
+  let o3 ← AspisR1.FIp_DotDecode.field.QM31.from_le_bytes s2
+  let q3 ← core.option.Option.unwrap o3
+  let (r2, tail3) ← FIo_Native.fast_pairing.EbyKDot.push tail2 we2 q3
+  core.result.Result.unwrap core.fmt.DebugUnit r2
+  let we3 ← FIo_Native.fast_pairing.EbyKDot.finish tail3
+  FIo_Native.aspis_core.field.wide_exact.WideExact.add value we3
+
+/-- [aspis_r1_cost_probe::fast_dots::four_dots]:
+    Source: 'crates/aspis-r1-cost-probe/src/fast_dots.rs', lines 67:0-75:1
+    Visibility: public -/
+def fast_dots.four_dots
+  (q : Slice Std.U8) (g : Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize)
+  :
+  Result (Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize)
+  := do
+  let s ←
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice
+      Std.U8) q { «end» := 608#usize }
+  let r ← core.array.TryFromSharedArraySlice.try_from 608#usize s
+  let q1 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+  let we ← fast_dots.four_dots_one q1 g 0#usize
+  let we1 ← fast_dots.four_dots_one q1 g 1#usize
+  let we2 ← fast_dots.four_dots_one q1 g 2#usize
+  let we3 ← fast_dots.four_dots_one q1 g 3#usize
+  ok (Array.make 4#usize [ we, we1, we2, we3 ])
+
+
+#print axioms fast_dots.four_dots
+end AspisR1.FIp_NativeDots
+end
