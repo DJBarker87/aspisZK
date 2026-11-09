@@ -1,0 +1,253 @@
+NOC_generated/NOC_PrepareConv.lean:51:21: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_PrepareConv.lean:52:4: warning: '(simp only []; rw [hl])' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_PrepareConv.lean:53:4: warning: '(simp only [hl]; rfl)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_PrepareConv.lean:54:4: warning: '(simp [hl])' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_PrepareConv.lean:52:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_PrepareConv.lean:53:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_PrepareConv.lean:54:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_PrepareConv.lean:141:92: error: unsolved goals
+W Tx : Type
+c : NNH_HostCtx.Ctx W Tx
+pub : NNH_Libraries.VL.Public
+proof : Slice U8
+width : (↑proof).length = 57607
+digest : LIB_VPublicDomain.publicDigestDom pub
+p' : verifier.Prepared
+g1 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+s1 : Slice U8
+s1Run :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 16#usize, «end» := 7031#usize } =
+    ok s1
+s1Raw : s1 = LIBC_Bytes.raw (RSL.slice (LIB_Carriers.bytes proof) 16 7031)
+s1Len : (↑s1).length = 7031 - 16
+s2 : Slice U8
+s2Run :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7031#usize, «end» := 7495#usize } =
+    ok s2
+s2Raw : s2 = LIBC_Bytes.raw (RSL.slice (LIB_Carriers.bytes proof) 7031 7495)
+s2Len : (↑s2).length = 7495 - 7031
+left right : Slice U8
+back : Slice U8 × Slice U8 → Slice U8
+splitRun :
+  core.slice.Slice.split_at_mut (NOC_PrepareFront.zeros 14759#usize).deref_mut.1 13831#usize = ok ((left, right), back)
+leftVal : ↑left = List.take ↑13831#usize ↑(NOC_PrepareFront.zeros 14759#usize).deref_mut.1
+rightVal : ↑right = List.drop ↑13831#usize ↑(NOC_PrepareFront.zeros 14759#usize).deref_mut.1
+backVal : ∀ (a b : Slice U8), (↑a).length = (↑left).length → (↑b).length = (↑right).length → ↑(back (a, b)) = ↑a ++ ↑b
+leftLen : (↑left).length = 13831
+rightLen : (↑right).length = 928
+s1L : (↑s1).length = 7015
+s2L : (↑s2).length = 464
+expS :
+  (NNH_Run5bCurrentShape.current (NOC_HostSeed.m0 (NNH_HostCtx.envOf c).reservation) (NNH_HostCtx.envOf c)
+          c.fixed.indexError c.fixed.reservation).op10
+      s1 left =
+    ok (core.result.Result.Ok (), LIBC_ExpandSemanticModel.output s1)
+expV : (cur c).op11 s2 right = ok (core.result.Result.Ok (), LIBC_ExpandValuesModel.output s2 right)
+semOutLen : (↑(LIBC_ExpandSemanticModel.output s1)).length = 13831
+valOutLen : (↑(LIBC_ExpandValuesModel.output s2 right)).length = 928
+vecVal :
+  ↑((NOC_PrepareFront.zeros 14759#usize).deref_mut.2
+        (back (LIBC_ExpandSemanticModel.output s1, LIBC_ExpandValuesModel.output s2 right))) =
+    ↑(LIBC_ExpandSemanticModel.output s1) ++ ↑(LIBC_ExpandValuesModel.output s2 right)
+windows :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+        ((NOC_PrepareFront.zeros 14759#usize).deref_mut.2
+          (back (LIBC_ExpandSemanticModel.output s1, LIBC_ExpandValuesModel.output s2 right)))
+        { «end» := 13831#usize } =
+      ok (LIBC_ExpandSemanticModel.output s1) ∧
+    alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+        ((NOC_PrepareFront.zeros 14759#usize).deref_mut.2
+          (back (LIBC_ExpandSemanticModel.output s1, LIBC_ExpandValuesModel.output s2 right)))
+        { start := 13831#usize } =
+      ok (LIBC_ExpandValuesModel.output s2 right)
+h✝² :
+  (do
+      let r ← (cur c).op1 core.marker.CopyU8 14759#usize 0#u8
+      let r1 ←
+        AspisR1CurrentCaller.core.result.Result.map_err
+            (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (NNV_PreparedAtHost.digest c))
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (s, deref_mut_back) ← lift val.deref_mut
+          let (_x0, split_at_mut_back) ← core.slice.Slice.split_at_mut s 13831#usize
+          let i3 ← compact.OFF_SEMANTIC (cur c)
+          let i4 ← compact.OFF_Y1 (cur c)
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let (r2, semantic1) ← (cur c).op10 s1 _x0.1
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let i5 ← compact.OFF_INACTIVE (cur c)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i4, «end» := i5 }
+              let (r3, y11) ← (cur c).op11 s2 _x0.2
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let s4 ←
+                    alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                        (deref_mut_back (split_at_mut_back (semantic1, y11))) { «end» := 13831#usize }
+                  let s5 ←
+                    alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                        (deref_mut_back (split_at_mut_back (semantic1, y11))) { start := 13831#usize }
+                  let r4 ← (cur c).op5 proof s4 s5
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue v => do
+                      let r5 ←
+                        (cur c).op9 (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic pub) v.semantic ()
+                            none
+                      let r6 ←
+                        AspisR1CurrentCaller.core.result.Result.map_err
+                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                              (NNV_PreparedAtHost.digest c))
+                            r5 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          verifier.mark none verifier.Phase.Semantic
+                          (cur c).op8 (NNV_PreparedAtHost.digest c) val2 v ()
+                              (NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r7 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                          ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r7 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (verifier.Error.Insts.CoreConvertFromCodecError (cur c)) residual
+                  ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (verifier.Error.Insts.CoreConvertFromCodecError (cur c)) residual
+              ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)) =
+    ok (core.result.Result.Ok p', g1)
+granted : (NNH_HostCtx.envOf c).reservation = true
+hz : (cur c).op1 core.marker.CopyU8 14759#usize 0#u8 = ok (core.result.Result.Ok (NOC_PrepareFront.zeros 14759#usize))
+vzv : ↑(NOC_PrepareFront.zeros 14759#usize) = List.replicate (↑14759#usize) 0#u8
+h✝¹ :
+  (do
+      let r4 ← (cur c).op5 proof (LIBC_ExpandSemanticModel.output s1) (LIBC_ExpandValuesModel.output s2 right)
+      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue v => do
+          let r5 ← (cur c).op9 (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic pub) v.semantic () none
+          let r6 ←
+            AspisR1CurrentCaller.core.result.Result.map_err
+                (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  (NNV_PreparedAtHost.digest c))
+                r5 ()
+          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+          match cf4 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              verifier.mark none verifier.Phase.Semantic
+              (cur c).op8 (NNV_PreparedAtHost.digest c) val2 v () (NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)) =
+    ok (core.result.Result.Ok p', g1)
+vlib : LIBC_WideView.View
+hvw :
+  LIB_VLib.wideViewValue
+      (LIB_Carriers.bytes proof, LIB_Carriers.bytes (LIBC_ExpandSemanticModel.output s1),
+        LIB_Carriers.bytes (LIBC_ExpandValuesModel.output s2 right))
+      (NOC_Run5bCtx.envOf c) =
+    Except.ok vlib
+hview :
+  (cur c).op5 proof (LIBC_ExpandSemanticModel.output s1) (LIBC_ExpandValuesModel.output s2 right) =
+    ok (core.result.Result.Ok (NNV_PreparedInputs.view vlib))
+h✝ :
+  (do
+      let r5 ←
+        (cur c).op9 (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic pub)
+            (NNV_PreparedInputs.view vlib).semantic () none
+      let r6 ←
+        AspisR1CurrentCaller.core.result.Result.map_err
+            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (NNV_PreparedAtHost.digest c))
+            r5 ()
+      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+      match cf4 with
+        | core.ops.control_flow.ControlFlow.Continue val2 => do
+          verifier.mark none verifier.Phase.Semantic
+          (cur c).op8 (NNV_PreparedAtHost.digest c) val2 (NNV_PreparedInputs.view vlib) ()
+              (NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r7 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r7, NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29)) =
+    ok (core.result.Result.Ok p', g1)
+sem : RSL.Verified NNH_ObservedReturns.V
+hobs :
+  NNH_ObservedReturns.value { public_ := pub, bytes := LIB_Carriers.bytes (NNV_PreparedInputs.view vlib).semantic }
+      (NNH_Run5bCtx.envOf c) =
+    Except.ok sem
+fwd :
+  (DrvC_Installation.currentInstalled (NOC_SeedTransfer.newCfg c)).op9 (NNV_PreparedAtHost.digest c)
+      (FirstComposition.toCurrentPublic pub) (NNV_PreparedInputs.view vlib).semantic () none =
+    ok (core.result.Result.Ok (NNV_PreparedInputs.sem sem))
+hsem :
+  (cur c).op9 (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic pub)
+      (NNV_PreparedInputs.view vlib).semantic () none =
+    ok (core.result.Result.Ok (NNV_PreparedInputs.sem sem))
+h :
+  (cur c).op8 (NNV_PreparedAtHost.digest c) (NNV_PreparedInputs.sem sem) (NNV_PreparedInputs.view vlib) ()
+      (NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29) =
+    ok (core.result.Result.Ok p', g1)
+pr : LIB_VLib.library.Prepared
+after : LIB_VLib.library.E29
+hl : LIB_Prepared.value (sem, vlib, LIB_Instances.VL.zeroE29) (NNH_Run5bCtx.envOf c) = (Except.ok pr, after)
+left✝ : p' = InstalledPreparation.currentPrepared pr
+right✝ : g1 = NNV_PreparedInputs.scratch after
+⊢ LIB_Carriers.bytes (LIBC_ExpandSemanticModel.output (LIBC_Bytes.raw (RSL.slice (LIB_Carriers.bytes proof) 16 7031))) =
+    LIB_Carriers.bytes
+      (LIBC_ExpandSemanticModel.output
+        (LIBC_Bytes.raw (RSL.slice (LIB_Carriers.bytes proof) RSL.OFF_SEMANTIC RSL.OFF_Y1)))
+NOC_generated/NOC_PrepareConv.lean:187:22: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.NOC_PrepareConv.front' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_PrepareConv.preparedOk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_PrepareConv.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

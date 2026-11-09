@@ -344,3 +344,57 @@ proof; L039 split it into per-declaration lemmas (no limit raised).
 
 Scopes: 40 of 80 used. Remaining allocation: converse compositions 14, X9 8, margin 9 (+1 unused from 094 forward,
 +8 unused from 345). No moves made.
+
+# Fifth continuation (lead: converse compositions, then iff345 for the NOQ_ X9 scaffold; budget 100)
+
+Research merged at 036c5b025fd before starting (already up to date). Scopes this continuation: L041-L057
+(17 scopes: 7 pass, 10 fail); whole job 57 of 100. Caps unchanged (MemoryHigh 6G, MemoryMax 8G,
+MemorySwapMax 0, TasksMax 64, `lake env lean -j1 -M7000 -DElab.async=false`, 180 s); admission allowed:true,
+host lean count < 6 and disk >= 40 GB at every launch; peak RSS 6.73-6.99 GB, swap 0. No cap, heartbeat,
+timeout or recursion limit raised; no sorry/axiom/native_decide in any accepted module.
+
+## Delivered: the 345 Ok-iff at the S_host model1 sdk (L057, standard axioms only)
+
+```lean
+theorem AspisR1.NOC_Stage1Iff.iff345 {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx)
+ (program : AdapterRw.solana_pubkey.Pubkey) (xs : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+ (data : Slice U8) (saved : alloc.vec.Vec U8) :
+ AdapterRw.r1_pool_adapter.owned.stage1_owned (AspisR1.NOC_HostCtx.sdk c) program xs data = .ok (.Ok saved) ↔
+ NNH_ReturnsBundle.tx1Value ⟨NND_Carrier.key program, NNH_ModelCarrier.accounts xs, NND_Carrier.bytes data⟩
+  (AspisR1.NOC_Run5bCtx.envOf c) = .ok (NND_Carrier.bytes saved.deref)
+```
+Carrier spellings are exactly ok345's (`key`, `accounts`, `bytes` from NND_Carrier/NNH_ModelCarrier, env
+`NOC_Run5bCtx.envOf c`). The sdk is the literal `NOC_HostCtx.sdk c` (S_host's model1 is
+`stage1_owned (NOC_HostCtx.sdk c)`); `NOC_Stage1Iff.sameSdk : NOC_Stage1Forward.S c = NOC_HostCtx.sdk c`
+restates NOF_A2FieldCorrected.sdk_at_slot/clockFree locally (no a2 overlay import). The weak-Err clause is
+the contraposition of the left-to-right direction. No hypothesis beyond the arguments.
+
+## Converse chain (all standard axioms)
+- (a) `AspisR1.NOC_SemConv.finish` (native FinishModel.finish Ok at Bi ⇒ NNH_FinishReturns.value ok, given
+  the granted reservation, publicDigestDom of the public and the SAME returned public transcript; terminal via
+  NOM_TerminalDomain.domain/terminal) and `.op9` (installed op9 Ok ⇒ NNH_ObservedReturns.value ok), L042.
+- (b) `AspisR1.NOC_PrepareConv.prepare` (installed prepare Ok at the zero scratch ⇒ preparedValue ok; library
+  side rebuilt as an NNV_PrepareFrontCut.Packet and consumed by `front`/`preparedOk`), L045.
+- (c) `AspisR1.NOC_Tx1Conv.tx1` (installed current tx1 Ok at k = 10 ⇒ NNH_Tx1Returns.value ok), with
+  `.batch` (op6 converse through NOM_MerkleParent.hostParent, queries from NNG_GeometryDomain094) and
+  `.query` (op7: native and library are images of the SAME query-loop Result on the Domain), L047.
+- (d) `NOC_Stage1Inv.invert` (native inversion into the `Facts` packet; both accepted routes), L052;
+  `NOC_Stage1Conv.conv` (Facts ⇒ library 345 value with the SAME bytes; per-group lemmas route/guards/codec/
+  gate/child), L055; `AspisR1.NOC_Stage1Iff.iff345`, L057.
+Each converse value is matched to the native one by the corresponding FORWARD theorem plus determinism
+(no separate value-correspondence proof), e.g. the 094 child uses NOC_Tx1Forward.source and fdLemma.
+
+Finding (not a mismatch): stage1_owned also accepts data [3,11] (a duplicated body ending in first_decoded at
+split 11). The library accepts that route too and errors at `k != SPLIT`; natively the installed tx1 returns
+Parse at split 11 (`NOC_Stage1Conv.fd11`), so that route is never Ok. Both routes are covered.
+
+Failures (uncredited): L041 macro name resolution (branch/bind lemmas resolved outside the opened namespaces);
+L043/L044 elaboration recursion on a concrete 14759-element list (fixed by generalizing it); L046 goal used
+raw(bytes proof); L048 import conflict (S6CurrentCodecTotalV1 → RPz7_ copy); L049 whole-body 345 proof hit
+the heartbeat budget and scalar_tac over a huge context (split into Inv/Conv per the lead); L050/L051 the
+[3,11] route and structure layout; L053/L054 three local rewrites; L056 namespace qualification.
+
+Overlay: /home/dombarker/project-offloads/codex-cx-a1-20261108/NOC_objects (hashes in NOC_OVERLAY.json).
+X9 not started here (NOQ_ owns the scaffold per the lead).
+
+target not yet established
