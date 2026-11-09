@@ -301,6 +301,14 @@ pub fn apply_pool_v1_pair_forest_h1_padding_mask_v1(
     apply_h1_padding_mask_for_active(h1, padding, &pool_v1_pair_forest_copy_active_rows()?)
 }
 
+#[cfg(test)]
+#[path = "r11_mask_material_kat.rs"]
+mod r11_mask_material_kat;
+
+#[cfg(test)]
+#[path = "r13_source_bridge.rs"]
+mod r13_source_bridge;
+
 struct SeedExpander {
     hash: HashFn,
     seed: [u8; 32],
@@ -329,10 +337,19 @@ impl SeedExpander {
         }
     }
 
+    #[cfg_attr(kani, kani::requires(self.word <= 8))]
+    #[cfg_attr(kani, kani::requires(self.hash == crate::HOST_HASH))]
+    #[cfg_attr(kani, kani::requires(crate::prover_commit_oracle::expander_domain(
+        b"aspis:state-only:private-mask-expand:v1", self.seed, self.counter, self.word)))]
+    #[cfg_attr(kani, kani::modifies(&mut self.counter, &mut self.block, &mut self.word))]
+    #[cfg_attr(kani, kani::ensures(|result| crate::prover_commit_reference::next_matches(
+        b"aspis:state-only:private-mask-expand:v1",
+        crate::prover_commit_reference::State { seed: old(self.seed), counter: old(self.counter), block: old(self.block), word: old(self.word) },
+        *result,
+        crate::prover_commit_reference::State { seed: self.seed, counter: self.counter, block: self.block, word: self.word })))]
     fn next_word(&mut self) -> u32 {
         if self.word == 8 {
-            self.block =
-                (self.hash)(&[MASK_EXPAND_DOMAIN, &self.seed, &self.counter.to_le_bytes()]);
+            self.block = state_only_mask_expander_block(self.hash, self.seed, self.counter);
             self.counter = self.counter.wrapping_add(1);
             self.word = 0;
         }
@@ -1394,5 +1411,414 @@ mod tests {
         let mut output = baseline;
         output.output_delta.after.as_mut().unwrap().owner[0] ^= 1;
         assert_ne!(output.digest(HOST_HASH), digest);
+    }
+}
+
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use aspis_core::field::{WideExact, CM31, M31, QM31};
+    use aspis_core::state_only_prefix::r0::{self as wire, Error, SemanticTranscript};
+    use aspis_core::state_only_sumcheck::{
+        evaluate_state_only_polynomial, state_only_boundary_sum,
+    };
+
+    /// R0 keeps all 28 coefficients on the wire, embedded in E. This is the
+    /// same interpolation used by the legacy prover, with a new row driver.
+    fn interpolate(values: &[QM31; 28]) -> [QM31; 28] {
+        let mut out = [QM31::ZERO; 28];
+        for i in 0..28 {
+            let mut basis = [M31::ZERO; 28];
+            basis[0] = M31::ONE;
+            let mut degree = 0;
+            let mut denominator = M31::ONE;
+            for j in 0..28 {
+                if i == j {
+                    continue;
+                }
+                for k in (0..=degree + 1).rev() {
+                    let shifted = if k == 0 { M31::ZERO } else { basis[k - 1] };
+                    basis[k] = shifted.sub(basis[k].mul(M31(j as u32)));
+                }
+                degree += 1;
+                denominator = denominator.mul(M31(i as u32).sub(M31(j as u32)));
+            }
+            let scale = values[i].mul_m31(denominator.inv());
+            for k in 0..28 {
+                out[k] = out[k].add(scale.mul_m31(basis[k]));
+            }
+        }
+        out
+    }
+
+    pub fn prove_sumcheck(
+        transcript: &mut SemanticTranscript,
+        output: &mut Vec<u8>,
+        initial_claim: QM31,
+        mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,
+    ) -> Result<([QM31; 10], QM31), Error> {
+        let mut point = [QM31::ZERO; 10];
+        let mut running = initial_claim;
+        for round in 0..10 {
+            let remaining = 9 - round;
+            let mut values = [QM31::ZERO; 28];
+            for (sample, value) in values.iter_mut().enumerate() {
+                point[round] = QM31::from_cm31(CM31::from_m31(M31(sample as u32)));
+                for assignment in 0..1usize << remaining {
+                    for offset in 0..remaining {
+                        point[round + 1 + offset] =
+                            if (assignment >> (remaining - 1 - offset)) & 1 == 0 {
+                                QM31::ZERO
+                            } else {
+                                QM31::ONE
+                            };
+                    }
+                    *value = value.add(oracle(&point)?);
+                }
+            }
+            let polynomial = interpolate(&values);
+            if state_only_boundary_sum(&polynomial) != running {
+                return Err(Error::Boundary { round });
+            }
+            let framed = wire::record(
+                15 + round as u8,
+                &wire::encode_values(polynomial.map(WideExact::from_qm31)),
+            )?;
+            point[round] = transcript.semantic(15 + round as u8, &framed)?;
+            output.extend_from_slice(&framed);
+            running = evaluate_state_only_polynomial(&polynomial, point[round]);
+        }
+        if oracle(&point)? != running {
+            return Err(Error::Terminal);
+        }
+        Ok((point, running))
+    }
+}
+
+fn state_only_mask_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
+    hash(&[MASK_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
+}
+
+#[cfg(kani)]
+mod prover_commit_rom {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_block() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let actual = state_only_mask_expander_block(crate::HOST_HASH, seed, counter);
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:private-mask-expand:v1", &seed, &counter.to_le_bytes(),
+        ]);
+        assert_eq!(actual, expected);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_next_word() {
+        rom::reset(2);
+        let seed = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed, counter, block, word };
+        let (expected_block, expected_counter, slot) = if word == 8 {
+            (crate::HOST_HASH(&[b"aspis:state-only:private-mask-expand:v1", &seed, &counter.to_le_bytes()]), counter.wrapping_add(1), 0)
+        } else { (block, counter, word) };
+        let offset = 4 * slot;
+        let expected = u32::from_le_bytes([
+            expected_block[offset], expected_block[offset+1],
+            expected_block[offset+2], expected_block[offset+3],
+        ]);
+        assert_eq!(actual.next_word(), expected);
+        assert_eq!(actual.block, expected_block);
+        assert_eq!(actual.counter, expected_counter);
+        assert_eq!(actual.word, slot + 1);
+        assert_eq!(actual.seed, seed);
+    }
+    // Exact m31 try body, with its return carried as an absorbing result.
+    // The source m31 body is pinned and checked by harness/check-step-source.py.
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_try_step() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let successful: bool = kani::any();
+        let value: u32 = kani::any();
+        kani::assume(value < aspis_core::field::P);
+        let result = if successful { Ok(aspis_core::field::M31(value)) }
+            else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::try_step(
+            crate::HOST_HASH, b"aspis:state-only:private-mask-expand:v1", state, result);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        let observed = match result {
+            Ok(value) => Ok(value),
+            Err(_) => {
+                let candidate = actual.next_word() & 0x7fff_ffff;
+                if candidate < aspis_core::field::P {
+                    Ok(aspis_core::field::M31(candidate))
+                } else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) }
+            }
+        };
+        assert_eq!(observed, expected);
+        assert_eq!(actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert!(actual.word <= 8);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_limb() {
+        // At most three fresh blocks per side from any valid word slot.
+        rom::reset(6);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb(crate::HOST_HASH, b"aspis:state-only:private-mask-expand:v1", state);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+
+}
+
+#[cfg(kani)]
+mod prover_commit_caller7 {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn mask_limb_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:private-mask-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb_caller(
+            crate::HOST_HASH, b"aspis:state-only:private-mask-expand:v1", state);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(*&actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(rom::expander_query)]
+    fn mask_qm31_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:private-mask-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"aspis:state-only:private-mask-expand:v1", state);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        assert_eq!(actual.qm31(), expected);
+        assert_eq!(*&actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof_for_contract(SeedExpander::next_word)]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    fn mask_next_contract() {
+        let seed: [u8;32] = kani::any();
+        let base_counter: u64 = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        kani::assume(word < 8 || counter.wrapping_sub(base_counter) < 9);
+        rom::reset_expander(b"aspis:state-only:private-mask-expand:v1", seed, base_counter);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        let _ = actual.next_word();
+    }
+
+
+}
+
+#[cfg(kani)]
+mod prover_commit_balance7 {
+    use super::*;
+    fn canonical(raw: u32) -> M31 {
+        let value = raw & 0x7fff_ffff;
+        M31(if value == P { 0 } else { value })
+    }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn balance_m31_caller() {
+        let raw: [u32;1024] = kani::any();
+        let table: Vec<M31> = raw.into_iter().map(canonical).collect();
+        let mut active: [bool;1024] = kani::any();
+        let dependent: usize = kani::any();
+        let probe: usize = kani::any();
+        kani::assume(dependent < 1024 && probe < 1024);
+        active[dependent] = false;
+        let mut actual = table.clone();
+        let observed = balance_m31_copy_inactive(&mut actual, dependent, &active);
+        let (expected, table) = crate::prover_commit_reference::balance_m31_owned(table, dependent, &active);
+        assert_eq!(observed, expected);
+        assert_eq!(actual.len(), table.len());
+        assert_eq!(actual[probe].0, table[probe].0);
+    }
+    #[kani::proof]
+    #[kani::unwind(4098)]
+    fn balance_qm31_caller() {
+        let raw: [u32;4096] = kani::any();
+        let mut table = Vec::with_capacity(1024);
+        for row in 0..1024 {
+            table.push(QM31 { c0: CM31::new(canonical(raw[4*row]), canonical(raw[4*row+1])),
+                c1: CM31::new(canonical(raw[4*row+2]), canonical(raw[4*row+3])) });
+        }
+        let mut active: [bool;1024] = kani::any();
+        let dependent: usize = kani::any();
+        let probe: usize = kani::any();
+        kani::assume(dependent < 1024 && probe < 1024);
+        active[dependent] = false;
+        let mut actual = table.clone();
+        let observed = balance_qm31_copy_inactive(&mut actual, dependent, &active);
+        let (expected, table) = crate::prover_commit_reference::balance_qm31_owned(table, dependent, &active);
+        assert_eq!(observed, expected);
+        assert_eq!(actual.len(), table.len());
+        assert_eq!(actual[probe].c0.a.0, table[probe].c0.a.0);
+        assert_eq!(actual[probe].c0.b.0, table[probe].c0.b.0);
+        assert_eq!(actual[probe].c1.a.0, table[probe].c1.a.0);
+        assert_eq!(actual[probe].c1.b.0, table[probe].c1.b.0);
+    }
+}
+
+/// Single-row comparisons, with arbitrary accumulated sum. These establish
+/// the fold transition, not an extraction of the full iterator consumer.
+#[cfg(kani)]
+mod prover_commit_balance8 {
+    use super::*;
+    fn canonical(raw: u32) -> M31 {
+        let v = raw & 0x7fff_ffff;
+        M31(if v == P { 0 } else { v })
+    }
+    fn field() -> QM31 {
+        QM31 { c0: CM31::new(canonical(kani::any()), canonical(kani::any())),
+            c1: CM31::new(canonical(kani::any()), canonical(kani::any())) }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn m31_step() {
+        let sum = canonical(kani::any());
+        let value = canonical(kani::any());
+        let active: bool = kani::any();
+        let row: usize = kani::any();
+        let dependent: usize = kani::any();
+        let observed = core::iter::once(row)
+            .filter(|r| !active && *r != dependent)
+            .fold(sum, |s, _| s.add(value));
+        let expected = crate::prover_commit_reference::balance_m31_step(sum, value, active, row, dependent);
+        assert_eq!(observed, expected);
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn qm31_step() {
+        let sum = field();
+        let value = field();
+        let active: bool = kani::any();
+        let row: usize = kani::any();
+        let dependent: usize = kani::any();
+        let observed = core::iter::once(row)
+            .filter(|r| !active && *r != dependent)
+            .fold(sum, |s, _| s.add(value));
+        let expected = crate::prover_commit_reference::balance_qm31_step(sum, value, active, row, dependent);
+        assert_eq!(observed, expected);
+    }
+}
+
+/// Universal four-call control-flow comparison over an arbitrary scalar trace.
+/// Stubs are relational inputs, not asserted scalar contracts. Each side sees
+/// the same trace; all sampled results and successor states are unconstrained.
+#[cfg(kani)]
+mod prover_commit_four8 {
+    use super::*;
+    use aspis_core::field::{M31, QM31};
+    use crate::prover_commit_reference::State;
+    type Sample = Result<M31, StateOnlyMaskBuildError>;
+    const ZERO: State = State { seed: [0;32], counter: 0, block: [0;32], word: 0 };
+    static mut STATES: [State;4] = [ZERO;4];
+    static mut VALUES: [Sample;4] = [Ok(M31::ZERO);4];
+    static mut CURSOR: usize = 0;
+    fn transition() -> (Sample, State) {
+        unsafe {
+            assert!(CURSOR < 4);
+            let pair = (VALUES[CURSOR], STATES[CURSOR]);
+            CURSOR += 1;
+            pair
+        }
+    }
+    fn shipped_scalar(state: &mut SeedExpander) -> Sample {
+        let (value, after) = transition();
+        state.seed = after.seed;
+        state.counter = after.counter;
+        state.block = after.block;
+        state.word = after.word;
+        value
+    }
+    fn reference_scalar(_: aspis_core::HashFn, _: &[u8], _: State) -> (Sample, State) {
+        transition()
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(SeedExpander::m31, shipped_scalar)]
+    #[kani::stub(crate::prover_commit_reference::limb_caller, reference_scalar)]
+    fn four_control() {
+        for i in 0..4 {
+            unsafe {
+                STATES[i] = kani::any();
+                VALUES[i] = if kani::any::<bool>() { Ok(M31(kani::any())) }
+                    else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+            }
+        }
+        let state: State = kani::any();
+        unsafe { CURSOR = 0; }
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"unused relational input", state);
+        let expected_calls = unsafe { CURSOR };
+        unsafe { CURSOR = 0; }
+        let mut actual = SeedExpander { hash: crate::HOST_HASH,
+            seed: state.seed, counter: state.counter, block: state.block, word: state.word };
+        let observed: Result<QM31, StateOnlyMaskBuildError> = actual.qm31();
+        assert_eq!(observed, expected);
+        assert_eq!(actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert_eq!(unsafe { CURSOR }, expected_calls);
     }
 }

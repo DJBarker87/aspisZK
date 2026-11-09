@@ -12,7 +12,7 @@
 use alloc::{boxed::Box, vec, vec::Vec};
 
 use crate::field::{
-    qm31_add_sum_products3_prepared, qm31_dot3_separate, qm31_power_table, qm31_sum_products3,
+    qm31_add_sum_products3_prepared, qm31_dot3, qm31_power_table, qm31_sum_products3,
     PreparedQm31Multiplier, CM31, M31, M31_QUARTER, QM31,
 };
 use crate::proof::M31_CIRCLE_BASIS_DISCRIMINATOR;
@@ -27,7 +27,7 @@ use crate::state_only_sumcheck::{
 };
 use crate::statement_sumcheck::PaymentConstraintChallenges;
 use crate::sumcheck::{boundary_sum, evaluate, SumcheckPolynomial, WeightAccumulator};
-use crate::transcript::{label, Transcript, V7_ALPHA_ZERO_BIND_ID, V7_GAMMA_BIND_ID};
+use crate::transcript::{label, Transcript};
 use crate::v6_onefold::{
     binary_frontier_nodes, V6FixedFieldReader, V6FixedFieldStream, V6OneFoldWire, V6WireError,
     V6_C1_TREE_TAG, V6_C2_TREE_TAG, V6_FINAL_QM31_VALUES, V6_FRONTIER_CAP_PER_TREE,
@@ -125,10 +125,6 @@ pub enum V7TranscriptDiagnosticPhase {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-#[cfg_attr(
-    feature = "aeneas-observer",
-    charon::variants_prefix("V6TranscriptErrorVariant_")
-)]
 pub enum V6TranscriptError {
     Wire(V6WireError),
     HidingContext,
@@ -203,95 +199,6 @@ pub struct V6QueryBatchView<'a> {
     pub selector: u8,
     pub compact_counter: u8,
     pub frontier_nodes: usize,
-}
-
-/// State exposed immediately before the query-batch challenge is absorbed
-/// and squeezed.  This is intentionally a borrowed view so probes cannot
-/// alter the relation accumulator or disclosed final object.
-pub struct V6QueryBatchPrechallengeView<'a> {
-    pub transcript_state: [u8; 32],
-    pub running_claim: QM31,
-    pub weights: &'a WeightAccumulator,
-    pub gamma: QM31,
-    pub alpha0: QM31,
-    pub final256_coefficients: &'a [QM31; V6_FINAL_QM31_VALUES],
-    pub queries: [u32; V6_QUERY_COUNT],
-    pub selector: u8,
-    pub compact_counter: u8,
-    pub frontier_nodes: usize,
-}
-
-/// Owned projection of the exact state immediately before the Tag-73
-/// query-batch challenge. This is feature-gated source-proof plumbing; the
-/// selected verifier continues to install a no-op observer.
-#[cfg(feature = "aeneas-observer")]
-#[derive(Clone, Debug)]
-pub struct V6QueryBatchPrechallengeSnapshot {
-    pub transcript_state: [u8; 32],
-    pub running_claim: QM31,
-    pub terminal_discrepancy: QM31,
-    pub gamma: QM31,
-    pub alpha0: QM31,
-    pub queries: [u32; V6_QUERY_COUNT],
-    pub selector: u8,
-    pub compact_counter: u8,
-    pub frontier_nodes: usize,
-}
-
-/// Materialize the small source-proof projection without copying either the
-/// accumulator or the disclosed final vector. Keeping this calculation in
-/// `aspis-core` lets Aeneas translate its complete local call graph through
-/// `WeightAccumulator::dot` and `weight_at`.
-#[cfg(feature = "aeneas-observer")]
-#[inline(never)]
-pub fn snapshot_query_batch_prechallenge(
-    view: &V6QueryBatchPrechallengeView<'_>,
-) -> V6QueryBatchPrechallengeSnapshot {
-    V6QueryBatchPrechallengeSnapshot {
-        transcript_state: view.transcript_state,
-        running_claim: view.running_claim,
-        terminal_discrepancy: view
-            .running_claim
-            .sub(prequery_dot_256(view.weights, view.final256_coefficients)),
-        gamma: view.gamma,
-        alpha0: view.alpha0,
-        queries: view.queries,
-        selector: view.selector,
-        compact_counter: view.compact_counter,
-        frontier_nodes: view.frontier_nodes,
-    }
-}
-
-#[cfg(feature = "aeneas-observer")]
-type V6PrechallengeObserverOutput = Option<V6QueryBatchPrechallengeSnapshot>;
-
-#[cfg(not(feature = "aeneas-observer"))]
-type V6PrechallengeObserverOutput = ();
-
-/// Isolated source-proof branch for the owned pre-query observation.  Keeping
-/// this as a named helper gives the Aeneas replay a small, symbolic target:
-/// with capture enabled it returns exactly the freshly materialized snapshot.
-#[cfg(feature = "aeneas-observer")]
-#[inline(never)]
-fn capture_v6_query_batch_prechallenge(
-    capture: bool,
-    view: &V6QueryBatchPrechallengeView<'_>,
-) -> V6PrechallengeObserverOutput {
-    if capture {
-        Some(snapshot_query_batch_prechallenge(view))
-    } else {
-        None
-    }
-}
-
-#[cfg(not(feature = "aeneas-observer"))]
-#[inline(always)]
-fn capture_v6_query_batch_prechallenge(
-    capture: bool,
-    view: &V6QueryBatchPrechallengeView<'_>,
-) -> V6PrechallengeObserverOutput {
-    let _ = capture;
-    let _ = view;
 }
 
 fn profile_root_salt(
@@ -611,7 +518,7 @@ fn gamma_point_claims_and_query_powers(
     debug_assert_eq!(V6_TOTAL_COLUMNS, SPEND_TOTAL_COLUMNS);
     let powers = qm31_power_table::<SPEND_TOTAL_COLUMNS>(gamma);
     (
-        qm31_dot3_separate(&powers, &claims[0], &claims[1], &claims[2]),
+        qm31_dot3(&powers, [&claims[0], &claims[1], &claims[2]]),
         StateOnlySpendQueryPowers::from_full_table(&powers),
         powers[SPEND_D_GENERATOR_INDEX],
     )
@@ -755,167 +662,9 @@ fn derive_first_compact_queries(
     Err(V6TranscriptError::CompactCandidatesExhausted)
 }
 
-/// Continue the accepted verifier after the pre-query observer point.  The
-/// split makes the source boundary explicit: the observer snapshot is fixed
-/// before frontier validation, query authentication, relation rounds, and the
-/// terminal dot check, then returned unchanged by the successful tail.
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
-fn finish_onefold_relation_after_prechallenge<QueryFold, Trace>(
-    mut transcript: Transcript,
-    c1_frontier: &[u8],
-    c2_frontier: &[u8],
-    frontier_node_bytes: usize,
-    query_batch_labels: (u8, u8),
-    shift_query_batch_for_tag73: bool,
-    expose_final256_to_query_fold: bool,
-    query_fold: QueryFold,
-    trace: &mut Trace,
-    gamma: QM31,
-    gamma_powers: &StateOnlySpendQueryPowers,
-    d_power: QM31,
-    mut running_claim: QM31,
-    mut weights: WeightAccumulator,
-    mut alpha: [QM31; V6_RELATION_ROUNDS],
-    mut folded_values: Box<[QM31; V6_FINAL_QM31_VALUES]>,
-    relation_fields: Box<[[QM31; V6_RELATION_SENT_VALUES]; V6_RELATION_ROUNDS]>,
-    selector: u8,
-    semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
-    kappa: QM31,
-    queries: [u32; V6_QUERY_COUNT],
-    compact_counter: u8,
-    frontier_nodes: usize,
-    transcript_state_after_queries: [u8; 32],
-    prechallenge_snapshot: V6PrechallengeObserverOutput,
-) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
-where
-    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
-    Trace: FnMut(V6RelationDiagnosticPhase),
-{
-    if frontier_node_bytes == 0
-        || c1_frontier.len() % frontier_node_bytes != 0
-        || c2_frontier.len() % frontier_node_bytes != 0
-    {
-        return Err(V6TranscriptError::Wire(V6WireError::WrongLength));
-    }
-    let c1_nodes = c1_frontier.len() / frontier_node_bytes;
-    let c2_nodes = c2_frontier.len() / frontier_node_bytes;
-    if c1_nodes != frontier_nodes || c2_nodes != frontier_nodes {
-        return Err(V6TranscriptError::FrontierCountMismatch {
-            expected: frontier_nodes,
-            c1: c1_nodes,
-            c2: c2_nodes,
-        });
-    }
-    transcript.absorb(query_batch_labels.0, &[]);
-    let query_batch_challenge = transcript
-        .challenge_nonzero_qm31()
-        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
-    trace(V6RelationDiagnosticPhase::Queries);
-    let authenticated_queries = {
-        let query_view = V6QueryBatchView {
-            gamma,
-            gamma_powers,
-            d_power,
-            alpha0: alpha[0],
-            final256_coefficients: if expose_final256_to_query_fold {
-                Some(folded_values.as_ref())
-            } else {
-                None
-            },
-            queries,
-            selector,
-            compact_counter,
-            frontier_nodes,
-        };
-        query_fold(&query_view).map_err(V6TranscriptError::Wire)?
-    };
-    let query_claim = if shift_query_batch_for_tag73 {
-        add_v7_final256_query_batch_shifted(
-            &mut weights,
-            &mut running_claim,
-            queries,
-            authenticated_queries,
-            query_batch_challenge,
-        )
-    } else {
-        add_v6_final256_query_batch(
-            &mut weights,
-            &mut running_claim,
-            queries,
-            authenticated_queries,
-            query_batch_challenge,
-        )
-    }
-    .map_err(|_| V6TranscriptError::RelationShape)?;
-    let mut query_claim_bytes = [0u8; 16];
-    query_claim.write_le_bytes(&mut query_claim_bytes);
-    transcript.absorb(query_batch_labels.1, &query_claim_bytes);
-    trace(V6RelationDiagnosticPhase::QueryBatch);
-
-    for round in 1..V6_RELATION_ROUNDS {
-        let polynomial = decode_compact_relation_polynomial(&relation_fields[round], running_claim);
-        absorb_compact_relation_polynomial(&mut transcript, round, &polynomial);
-        alpha[round] = transcript
-            .challenge_qm31()
-            .map_err(|_| V6TranscriptError::ChallengeSampling)?;
-        running_claim = evaluate(&polynomial, alpha[round]);
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOnePolynomial,
-            2 => V6RelationDiagnosticPhase::RoundTwoPolynomial,
-            _ => V6RelationDiagnosticPhase::RoundThreePolynomial,
-        });
-        if round == V6_RELATION_ROUNDS - 1
-            && !weights.fold_tag73_relation_tail_arity4([alpha[1], alpha[2], alpha[3]])
-        {
-            return Err(V6TranscriptError::RelationShape);
-        }
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOneWeights,
-            2 => V6RelationDiagnosticPhase::RoundTwoWeights,
-            _ => V6RelationDiagnosticPhase::RoundThreeWeights,
-        });
-        match round {
-            1 => fold_values_prefix::<256>(&mut folded_values, alpha[round]),
-            2 => fold_values_prefix::<64>(&mut folded_values, alpha[round]),
-            _ => fold_values_prefix::<16>(&mut folded_values, alpha[round]),
-        }
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOne,
-            2 => V6RelationDiagnosticPhase::RoundTwo,
-            _ => V6RelationDiagnosticPhase::RoundThree,
-        });
-    }
-    if weights.dot(&folded_values[..4]) != running_claim {
-        return Err(V6TranscriptError::RelationTerminal);
-    }
-    trace(V6RelationDiagnosticPhase::Terminal);
-    let folded_query_sum = authenticated_queries
-        .values
-        .into_iter()
-        .fold(QM31::ZERO, QM31::add);
-
-    Ok((
-        V6VerifiedTranscript {
-            gamma,
-            kappa,
-            alpha,
-            queries,
-            selector,
-            compact_counter,
-            frontier_nodes,
-            semantic_point,
-            query_batch_challenge,
-            folded_query_sum,
-            transcript_state_after_queries,
-        },
-        prechallenge_snapshot,
-    ))
-}
-
-#[allow(clippy::too_many_arguments)]
-#[inline(never)]
-fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields, Prechallenge>(
+fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields>(
     mut transcript: Transcript,
     work_nonces: &[u8; 24],
     c1_frontier: &[u8],
@@ -934,10 +683,8 @@ fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields, Prechallenge
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
-    mut prechallenge: Prechallenge,
-    capture_prechallenge_snapshot: bool,
     mut trace: Trace,
-) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     DeriveQueries: FnOnce(
@@ -948,7 +695,6 @@ where
     >,
     Trace: FnMut(V6RelationDiagnosticPhase),
     Fields: V6FixedFieldStream,
-    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     trace(V6RelationDiagnosticPhase::Start);
     check_and_absorb_work(
@@ -958,12 +704,9 @@ where
         V6WorkStage::Batch,
         check_pow,
     )?;
-    let gamma = if shift_query_batch_for_tag73 {
-        transcript.challenge_nonzero_qm31_bound(V7_GAMMA_BIND_ID)
-    } else {
-        transcript.challenge_nonzero_qm31()
-    }
-    .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    let gamma = transcript
+        .challenge_nonzero_qm31()
+        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
     let inactive_claim = fields.next_qm31()?;
     let mut inactive_bytes = [0u8; 16];
     inactive_claim.write_le_bytes(&mut inactive_bytes);
@@ -1025,17 +768,14 @@ where
         V6WorkStage::Fold,
         check_pow,
     )?;
-    alpha[0] = if shift_query_batch_for_tag73 {
-        transcript.challenge_qm31_bound(V7_ALPHA_ZERO_BIND_ID)
-    } else {
-        transcript.challenge_qm31()
-    }
-    .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    alpha[0] = transcript
+        .challenge_qm31()
+        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
     running_claim = evaluate(&first, alpha[0]);
     weights.fold_deferred_relation_arity4(alpha[0]);
     trace(V6RelationDiagnosticPhase::RoundZero);
 
-    let folded_values = decode_and_absorb_final256(&mut transcript, &mut fields)?;
+    let mut folded_values = decode_and_absorb_final256(&mut transcript, &mut fields)?;
     fields.finish()?;
     trace(V6RelationDiagnosticPhase::Final256);
 
@@ -1054,53 +794,131 @@ where
         accepted_query_transcript,
     ) = derive_queries(&transcript)?;
     transcript = accepted_query_transcript;
-    let prechallenge_view = V6QueryBatchPrechallengeView {
-        transcript_state: transcript.diagnostic_state(),
-        running_claim,
-        weights: &weights,
-        gamma,
-        alpha0: alpha[0],
-        final256_coefficients: folded_values.as_ref(),
-        queries,
-        selector,
-        compact_counter,
-        frontier_nodes,
+    if frontier_node_bytes == 0
+        || c1_frontier.len() % frontier_node_bytes != 0
+        || c2_frontier.len() % frontier_node_bytes != 0
+    {
+        return Err(V6TranscriptError::Wire(V6WireError::WrongLength));
+    }
+    let c1_nodes = c1_frontier.len() / frontier_node_bytes;
+    let c2_nodes = c2_frontier.len() / frontier_node_bytes;
+    if c1_nodes != frontier_nodes || c2_nodes != frontier_nodes {
+        return Err(V6TranscriptError::FrontierCountMismatch {
+            expected: frontier_nodes,
+            c1: c1_nodes,
+            c2: c2_nodes,
+        });
+    }
+    transcript.absorb(query_batch_labels.0, &[]);
+    let query_batch_challenge = transcript
+        .challenge_nonzero_qm31()
+        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    trace(V6RelationDiagnosticPhase::Queries);
+    let authenticated_queries = {
+        let query_view = V6QueryBatchView {
+            gamma,
+            gamma_powers: &gamma_powers,
+            d_power,
+            alpha0: alpha[0],
+            final256_coefficients: if expose_final256_to_query_fold {
+                Some(folded_values.as_ref())
+            } else {
+                None
+            },
+            queries,
+            selector,
+            compact_counter,
+            frontier_nodes,
+        };
+        query_fold(&query_view).map_err(V6TranscriptError::Wire)?
     };
-    let prechallenge_snapshot =
-        capture_v6_query_batch_prechallenge(capture_prechallenge_snapshot, &prechallenge_view);
-    prechallenge(&prechallenge_view);
-    finish_onefold_relation_after_prechallenge(
-        transcript,
-        c1_frontier,
-        c2_frontier,
-        frontier_node_bytes,
-        query_batch_labels,
-        shift_query_batch_for_tag73,
-        expose_final256_to_query_fold,
-        query_fold,
-        &mut trace,
+    let query_claim = if shift_query_batch_for_tag73 {
+        add_v7_final256_query_batch_shifted(
+            &mut weights,
+            &mut running_claim,
+            queries,
+            authenticated_queries,
+            query_batch_challenge,
+        )
+    } else {
+        add_v6_final256_query_batch(
+            &mut weights,
+            &mut running_claim,
+            queries,
+            authenticated_queries,
+            query_batch_challenge,
+        )
+    }
+    .map_err(|_| V6TranscriptError::RelationShape)?;
+    let mut query_claim_bytes = [0u8; 16];
+    query_claim.write_le_bytes(&mut query_claim_bytes);
+    transcript.absorb(query_batch_labels.1, &query_claim_bytes);
+    trace(V6RelationDiagnosticPhase::QueryBatch);
+
+    for round in 1..V6_RELATION_ROUNDS {
+        let polynomial = decode_compact_relation_polynomial(&relation_fields[round], running_claim);
+        absorb_compact_relation_polynomial(&mut transcript, round, &polynomial);
+        alpha[round] = transcript
+            .challenge_qm31()
+            .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+        running_claim = evaluate(&polynomial, alpha[round]);
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOnePolynomial,
+            2 => V6RelationDiagnosticPhase::RoundTwoPolynomial,
+            _ => V6RelationDiagnosticPhase::RoundThreePolynomial,
+        });
+        // Relation weights do not influence the transcript or the running
+        // claim between rounds. Collect all three challenges, then apply the
+        // exact structured tail once. The kernel still performs round one's
+        // checked multilinear merge before either later dual fold.
+        if round == V6_RELATION_ROUNDS - 1
+            && !weights.fold_tag73_relation_tail_arity4([alpha[1], alpha[2], alpha[3]])
+        {
+            return Err(V6TranscriptError::RelationShape);
+        }
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOneWeights,
+            2 => V6RelationDiagnosticPhase::RoundTwoWeights,
+            _ => V6RelationDiagnosticPhase::RoundThreeWeights,
+        });
+        match round {
+            1 => fold_values_prefix::<256>(&mut folded_values, alpha[round]),
+            2 => fold_values_prefix::<64>(&mut folded_values, alpha[round]),
+            _ => fold_values_prefix::<16>(&mut folded_values, alpha[round]),
+        }
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOne,
+            2 => V6RelationDiagnosticPhase::RoundTwo,
+            _ => V6RelationDiagnosticPhase::RoundThree,
+        });
+    }
+    if weights.dot(&folded_values[..4]) != running_claim {
+        return Err(V6TranscriptError::RelationTerminal);
+    }
+    trace(V6RelationDiagnosticPhase::Terminal);
+    let folded_query_sum = authenticated_queries
+        .values
+        .into_iter()
+        .fold(QM31::ZERO, QM31::add);
+
+    Ok(V6VerifiedTranscript {
         gamma,
-        &gamma_powers,
-        d_power,
-        running_claim,
-        weights,
-        alpha,
-        folded_values,
-        relation_fields,
-        selector,
-        semantic_point,
         kappa,
+        alpha,
         queries,
+        selector,
         compact_counter,
         frontier_nodes,
+        semantic_point,
+        query_batch_challenge,
+        folded_query_sum,
         transcript_state_after_queries,
-        prechallenge_snapshot,
-    )
+    })
 }
 
 #[allow(clippy::too_many_arguments)]
 #[inline(always)]
-fn finish_v6_relation<QueryFold, Trace, Prechallenge>(
+fn finish_v6_relation<QueryFold, Trace>(
     transcript: Transcript,
     wire: &V6OneFoldWire<'_>,
     fields: V6FixedFieldReader<'_>,
@@ -1111,14 +929,11 @@ fn finish_v6_relation<QueryFold, Trace, Prechallenge>(
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
-    prechallenge: Prechallenge,
-    capture_prechallenge_snapshot: bool,
     trace: Trace,
-) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
-    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     finish_onefold_relation(
         transcript,
@@ -1139,15 +954,13 @@ where
         semantic_point,
         point_claims,
         query_fold,
-        prechallenge,
-        capture_prechallenge_snapshot,
         trace,
     )
 }
 
 #[allow(clippy::too_many_arguments)]
 #[inline(always)]
-fn finish_v7_compact_relation<QueryFold, Trace, Prechallenge>(
+fn finish_v7_compact_relation<QueryFold, Trace>(
     transcript: Transcript,
     wire: &V7CompactOneFoldWire<'_>,
     fields: V6FixedFieldReader<'_>,
@@ -1157,14 +970,11 @@ fn finish_v7_compact_relation<QueryFold, Trace, Prechallenge>(
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
-    prechallenge: Prechallenge,
-    capture_prechallenge_snapshot: bool,
     trace: Trace,
-) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
-    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     finish_onefold_relation(
         transcript,
@@ -1199,8 +1009,6 @@ where
         semantic_point,
         point_claims,
         query_fold,
-        prechallenge,
-        capture_prechallenge_snapshot,
         trace,
     )
 }
@@ -1307,10 +1115,7 @@ where
         &point_claims,
         query_fold,
         |_| {},
-        false,
-        |_| {},
     )
-    .map(|(accepted, _)| accepted)
 }
 
 /// Verify the compact V7 transcript while reusing the frozen V6 semantic and
@@ -1346,16 +1151,15 @@ where
     )
 }
 
-/// Shared implementation for the compact V7 transcript.  The selected
-/// production wrapper supplies a no-op `prechallenge` callback.  Keeping the
-/// callback explicit here lets the default-off Aeneas observer invoke exactly
-/// the same parser, transcript, terminal, and query-verification path.
+/// Pool/native-profile entrypoint for the compact V7 transcript.  The caller
+/// supplies a typed hiding context whose statement digest and nonce are
+/// checked by the hiding precommit.  The legacy wrapper above remains pinned
+/// to the atomic-spend context and therefore keeps its exact transcript.
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
-fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner<
+pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context<
     TerminalCheck,
     QueryFold,
-    Prechallenge,
 >(
     hash: HashFn,
     wire: &V7CompactOneFoldWire<'_>,
@@ -1366,13 +1170,10 @@ fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner<
     check_pow: bool,
     terminal_check: TerminalCheck,
     query_fold: QueryFold,
-    prechallenge: Prechallenge,
-    capture_prechallenge_snapshot: bool,
-) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
-    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     let mut fields = V6FixedFieldReader::new(wire.fixed_fields_packed)?;
     let (mut transcript, lambda, chi, batching) =
@@ -1403,144 +1204,7 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        prechallenge,
-        capture_prechallenge_snapshot,
         |_| {},
-    )
-}
-
-/// Pool/native-profile entrypoint for the compact V7 transcript.  The caller
-/// supplies a typed hiding context whose statement digest and nonce are
-/// checked by the hiding precommit.  The legacy wrapper above remains pinned
-/// to the atomic-spend context and therefore keeps its exact transcript.
-#[allow(clippy::too_many_arguments)]
-#[inline(never)]
-pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context<
-    TerminalCheck,
-    QueryFold,
->(
-    hash: HashFn,
-    wire: &V7CompactOneFoldWire<'_>,
-    context: &V6TranscriptContext,
-    hiding_context: StateOnlyHidingContext,
-    inactive_row_groups: &[u8; 64],
-    inactive_group_masks: &[u16],
-    check_pow: bool,
-    terminal_check: TerminalCheck,
-    query_fold: QueryFold,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
-where
-    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
-    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
-{
-    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
-        hash,
-        wire,
-        context,
-        hiding_context,
-        inactive_row_groups,
-        inactive_group_masks,
-        check_pow,
-        terminal_check,
-        query_fold,
-        |_| {},
-        false,
-    )
-    .map(|(accepted, _)| accepted)
-}
-
-/// Default-off source-observation sibling of the selected V7 wrapper.
-///
-/// It is compiled solely for the Rust-to-Lean bridge.  It differs from the
-/// selected wrapper only in receiving the pre-query view already constructed
-/// by the shared implementation; it neither changes nor bypasses any parser,
-/// transcript, work, Merkle, terminal, or query check.
-#[cfg(feature = "aeneas-observer")]
-#[allow(clippy::too_many_arguments)]
-#[inline(never)]
-pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe<
-    TerminalCheck,
-    QueryFold,
-    Prechallenge,
->(
-    hash: HashFn,
-    wire: &V7CompactOneFoldWire<'_>,
-    context: &V6TranscriptContext,
-    hiding_context: StateOnlyHidingContext,
-    inactive_row_groups: &[u8; 64],
-    inactive_group_masks: &[u16],
-    check_pow: bool,
-    terminal_check: TerminalCheck,
-    query_fold: QueryFold,
-    prechallenge: Prechallenge,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
-where
-    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
-    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
-    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
-{
-    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
-        hash,
-        wire,
-        context,
-        hiding_context,
-        inactive_row_groups,
-        inactive_group_masks,
-        check_pow,
-        terminal_check,
-        query_fold,
-        prechallenge,
-        false,
-    )
-    .map(|(accepted, _)| accepted)
-}
-
-/// Source-proof wrapper that retains the exact pre-query snapshot produced by
-/// the shared accepted verifier execution.
-///
-/// The `Option` is intentional: it keeps the wrapper total even on an early
-/// verifier return.  The downstream source proof must show that a successful
-/// selected V7 execution returns `Some`; this helper introduces neither a
-/// panic nor an additional trusted callback result.
-#[cfg(feature = "aeneas-observer")]
-#[allow(clippy::too_many_arguments)]
-#[inline(never)]
-pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot<
-    TerminalCheck,
-    QueryFold,
->(
-    hash: HashFn,
-    wire: &V7CompactOneFoldWire<'_>,
-    context: &V6TranscriptContext,
-    hiding_context: StateOnlyHidingContext,
-    inactive_row_groups: &[u8; 64],
-    inactive_group_masks: &[u16],
-    check_pow: bool,
-    terminal_check: TerminalCheck,
-    query_fold: QueryFold,
-) -> Result<
-    (
-        V6VerifiedTranscript,
-        Option<V6QueryBatchPrechallengeSnapshot>,
-    ),
-    V6TranscriptError,
->
-where
-    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
-    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
-{
-    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
-        hash,
-        wire,
-        context,
-        hiding_context,
-        inactive_row_groups,
-        inactive_group_masks,
-        check_pow,
-        terminal_check,
-        query_fold,
-        |_| {},
-        true,
     )
 }
 
@@ -1621,10 +1285,7 @@ where
         &point_claims,
         query_fold,
         |_| {},
-        false,
-        |_| {},
     )
-    .map(|(accepted, _)| accepted)
 }
 
 /// Diagnostic twin of
@@ -1689,11 +1350,8 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
-        false,
         |phase| trace(V7TranscriptDiagnosticPhase::Relation(phase)),
     )
-    .map(|(accepted, _)| accepted)
 }
 
 /// Diagnostic twin of [`verify_v6_transcript_and_relation_prepared`]. It is
@@ -1751,11 +1409,8 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
-        false,
         trace,
     )
-    .map(|(accepted, _)| accepted)
 }
 
 #[cfg(test)]
@@ -1942,83 +1597,6 @@ mod tests {
         );
     }
 
-    #[cfg(feature = "aeneas-observer")]
-    #[test]
-    fn aeneas_observer_receives_the_prequery_view_from_the_accepted_v7_run() {
-        let context = context();
-        let hiding_context =
-            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id);
-        let frontier = expected_v7_frontier_with_hiding_context(hiding_context).unwrap();
-        let body = v7_zero_body(frontier);
-        let wire = V7CompactOneFoldWire::parse(&body, frontier).unwrap();
-        let mut observed = None;
-        let accepted =
-            verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
-                test_hash,
-                &wire,
-                &context,
-                hiding_context,
-                &[0u8; 64],
-                &[u16::MAX],
-                false,
-                |_| true,
-                |_| Ok(zero_query_batch()),
-                |view| {
-                    observed = Some((
-                        view.gamma,
-                        view.alpha0,
-                        view.queries,
-                        view.selector,
-                        view.compact_counter,
-                        view.frontier_nodes,
-                        view.final256_coefficients[0],
-                    ));
-                },
-            )
-            .unwrap();
-        let (gamma, alpha0, queries, selector, counter, observed_frontier, first_final) =
-            observed.expect("a successful V7 run reaches the pre-query observer");
-        assert_eq!(gamma, accepted.gamma);
-        assert_eq!(alpha0, accepted.alpha[0]);
-        assert_eq!(queries, accepted.queries);
-        assert_eq!(selector, accepted.selector);
-        assert_eq!(counter, accepted.compact_counter);
-        assert_eq!(observed_frontier, accepted.frontier_nodes);
-        assert_eq!(first_final, QM31::ZERO);
-    }
-
-    #[cfg(feature = "aeneas-observer")]
-    #[test]
-    fn aeneas_snapshot_wrapper_returns_the_accepted_v7_prequery_snapshot() {
-        let context = context();
-        let hiding_context =
-            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id);
-        let frontier = expected_v7_frontier_with_hiding_context(hiding_context).unwrap();
-        let body = v7_zero_body(frontier);
-        let wire = V7CompactOneFoldWire::parse(&body, frontier).unwrap();
-        let (accepted, snapshot) =
-            verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot(
-                test_hash,
-                &wire,
-                &context,
-                hiding_context,
-                &[0u8; 64],
-                &[u16::MAX],
-                false,
-                |_| true,
-                |_| Ok(zero_query_batch()),
-            )
-            .unwrap();
-        let snapshot = snapshot.expect("an accepted V7 run reaches the pre-query snapshot");
-        assert_eq!(snapshot.gamma, accepted.gamma);
-        assert_eq!(snapshot.alpha0, accepted.alpha[0]);
-        assert_eq!(snapshot.queries, accepted.queries);
-        assert_eq!(snapshot.selector, accepted.selector);
-        assert_eq!(snapshot.compact_counter, accepted.compact_counter);
-        assert_eq!(snapshot.frontier_nodes, accepted.frontier_nodes);
-        assert_eq!(snapshot.terminal_discrepancy, QM31::ZERO);
-    }
-
     #[test]
     fn typed_v7_hiding_context_rejects_outer_statement_and_attempt_mismatches() {
         let context = context();
@@ -2154,31 +1732,4 @@ mod tests {
             assert_eq!(decode(&points[2]), row ^ 12);
         }
     }
-}
-
-/// Full-width pre-query observer calculation. This is not a production
-/// terminal-dot replacement. The caller reaches this observer after round
-/// zero, where the represented covector has 256 entries.
-///
-/// Keeping a standalone, fixed-size source function here lets Aeneas extract
-/// this loop and the real `weight_at` call graph without traversing the
-/// unreachable log-length-two fast path in `WeightAccumulator::dot`.
-/// The resulting Lean definition must still be proved: this is not a trusted
-/// replacement for either translated function.
-#[cfg(feature = "aeneas-observer")]
-#[inline(never)]
-pub fn prequery_dot_256(
-    weights: &WeightAccumulator,
-    coefficients: &[QM31; V6_FINAL_QM31_VALUES],
-) -> QM31 {
-    let mut sum = QM31::ZERO;
-    let mut index = 0usize;
-    while index < V6_FINAL_QM31_VALUES {
-        let coefficient = coefficients[index];
-        let weight = weights.weight_at(index as u32);
-        let product = coefficient.mul(weight);
-        sum = sum.add(product);
-        index += 1;
-    }
-    sum
 }

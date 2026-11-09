@@ -1,21 +1,49 @@
 # Documentation
 
-V7 is the current release candidate; no V7 transaction has been signed or
-submitted. V5 is the finalized mainnet result. It records a private-spend
-construction, Lean proofs, selected production verifier paths translated with
-Charon and Aeneas, a byte-reproducible Solana program, and a finalized
-mainnet-beta state transition. The V5 Rust-to-model connection is complete
-through the initial relation value, decoded relation tail, and both final
-accumulators. The final clean replay passed on 24 August 2026, so one
-successful selected translated verifier call deterministically yields the
-maintained accepted-path security-event conclusion; the main and compact
-accumulator equalities are derived inside that theorem.
+R1 is the current implementation. Its verifier checks a private spend across
+two Solana transactions, its 599 reached Rust functions each carry a verified
+Lean statement, and the composed soundness theorem for the actual spend path
+compiled on 9 November 2026 with standard axioms only; the release target,
+100-bit classical soundness per attempt, is not yet established, and the gates
+that remain are set out in the proof package. The R1 verifier ran on Solana
+devnet on 29 October 2026 and has not been deployed to mainnet. V7, the
+one-transaction design that preceded it, is kept as the previous design and
+was never submitted to a public cluster. V5 is the finalized mainnet result,
+with a verified private spend on mainnet-beta on 24 July 2026 UTC.
+
+## R1 (current)
+
+The [R1 proof package](r1/) is the place to start. Its
+[README](r1/README.md) lists every file and where on the research branch it
+came from; the [status document](r1/SOUNDNESS-STATUS.md) is the authority for
+every figure, the [top-level theorems](r1/TOP-THEOREM.md) are printed in full
+with a reading of each binder, and the [open gates](r1/OPEN-GATES.md) say what
+still stands between those theorems and the release claim. The
+[devnet run](r1/DEVNET-RUN.md) and the [build recipe](r1/BUILD.md) cover the
+deployed program. The full evidence is on the `research` branch at commit
+`07123926e88273271344977a3fdc26d1780cde14`.
+
+## History: V7 and V5
+
+The pages below describe the earlier designs and remain accurate as records of
+them. V5 is a private-spend construction with Lean proofs, selected production
+verifier paths translated with Charon and Aeneas, a byte-reproducible Solana
+program and a finalized mainnet-beta state transition; its Rust-to-model
+connection is complete through the initial relation value, decoded relation
+tail and both final accumulators, and its final clean replay passed on 24
+August 2026. Its source is no longer in `crates/` and `programs/`, which now
+hold R1; the frozen V5 inputs are kept in [`../release/`](../release/). V7's
+local runtime measurements and formal record are in the [V7 activation
+record](research/v7-one-tx-activation-20260828.md), the [V7 formal
+consolidation](research/v7-one-tx-formal-consolidation-20260828.md) and
+[`v7/`](v7/).
 
 ## Layout
 
 | Folder | Contents |
 | --- | --- |
-| this folder | Overview pages: how it works, formal verification, assumptions, code map, design history, V5 mainnet result |
+| this folder | Overview pages: how it works, formal verification, assumptions, code map, design history, V5 mainnet result (V5/V7 era) |
+| [`r1/`](r1/) | R1 proof package (current) |
 | [`v5/`](v5/) | V5 accepted source map |
 | [`v6/`](v6/) | V6 one-fold theorem audit |
 | [`v7/`](v7/) | V7 plans, theorem audits, gate checklist and download provenance |
@@ -25,30 +53,25 @@ accumulator equalities are derived inside that theorem.
 | [`research/`](research/) | Dated research and audit notes |
 | [`reviews/`](reviews/) | Publication and security-extension reviews |
 
-## Start here
+## V5 and V7 reading order
 
 1. [How Aspis works](how-it-works.md) — the private-spend statement, proof
    upload, atomic transaction, and cleanup
-2. [From mathematics to mainnet](../README.md#from-mathematics-to-mainnet) —
-   the four-stage path
-3. [What has been formally checked](formal-verification.md) — what Lean
+2. [What has been formally checked](formal-verification.md) — what Lean
    checks, how selected Rust is connected, and what remains trusted
-4. [V5 mainnet result](v5-mainnet-demo.md) — finalized execution first, then
+3. [V5 mainnet result](v5-mainnet-demo.md) — finalized execution first, then
    exact deployment, lifecycle, compute, and refund evidence
-5. [Verify and reproduce the
-   evidence](../README.md#reproduce-the-evidence) — separate checks for the
-   proof layers, program identity, and mainnet bundle
-6. [Security assumptions](assumptions-ledger.md) — cryptographic,
+4. [Security assumptions](assumptions-ledger.md) — cryptographic,
    translation, compiler, and runtime boundaries
-7. [Accepted V5 source map](v5/v5-accepted-source-map.md) — the 15 review stops
+5. [Accepted V5 source map](v5/v5-accepted-source-map.md) — the 15 review stops
    from instruction dispatch through proof checks and the state update
-8. [Code map](code-map.md) — broader concept-to-file navigation
-9. [Formalization report](../paper/aspis-formalization/) — mathematical,
+6. [Code map](code-map.md) — broader concept-to-file navigation
+7. [Formalization report](../paper/aspis-formalization/) — mathematical,
    Rust-to-Lean, security, and trusted-boundary record
-10. [Construction paper](../paper/aspis-spend/) — earlier protocol and
+8. [Construction paper](../paper/aspis-spend/) — earlier protocol and
    deployment description
-11. [Design history and previous releases](design-history.md) — evolution of
-   the current V5 result and the earlier q18/g37 record
+9. [Design history and previous releases](design-history.md) — evolution of
+   the V5 result and the earlier q18/g37 record
 
 ## V6 research
 

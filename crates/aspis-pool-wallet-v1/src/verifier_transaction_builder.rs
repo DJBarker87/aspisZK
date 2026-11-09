@@ -49,10 +49,40 @@ pub const V7_POOL_RECEIPT_INITIALIZE_TAG: u8 = 74;
 pub const V7_POOL_RECEIPT_FINALIZE_TAG: u8 = 75;
 pub const V7_POOL_RECEIPT_CLOSE_TAG: u8 = 76;
 
-/// Conservative upload payload used by the V6/V7 release lifecycle.  Each
-/// chunk is a separate transaction instruction; no transaction is assembled
-/// or submitted here.
+/// Legacy (V6/V7 release lifecycle) upload payload, kept as the
+/// `ProofUploadChunkV1::Legacy` option.  Each chunk is a separate transaction
+/// instruction; no transaction is assembled or submitted here.
 pub const V7_POOL_PROOF_UPLOAD_CHUNK_BYTES: usize = 960;
+
+/// Default upload payload (PREREG-PROOF-SIZE-2 item 6): the largest chunk of
+/// this builder's upload instruction (tag 1 || u32 offset || u32 length ||
+/// chunk; proof account writable, upload authority signing) that fits one
+/// 4,096-byte TxV1 transaction.  The measured TxV1 overhead of the R1 driver's
+/// lifecycle write (tag 5 || u32 offset || chunk, same accounts and signers,
+/// with its compute-budget instructions) is 329 bytes, maximum chunk 3,767
+/// (evidence/proof-size-20261019 REPORT.md section 4, receipts/upload-probe);
+/// this instruction carries 4 more data bytes (the u32 length), so its
+/// maximum is 3,763, re-measured in evidence/format-adopt-20261019.
+pub const POOL_PROOF_UPLOAD_CHUNK_BYTES_TXV1_MAX: usize = 3_763;
+
+/// Proof-upload chunk size.  `TxV1Max` is the default; `Legacy` keeps the
+/// 960-byte chunk of the V6/V7 lifecycle for callers that submit legacy or
+/// V0 (1,232-byte) transactions.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum ProofUploadChunkV1 {
+    #[default]
+    TxV1Max,
+    Legacy,
+}
+
+impl ProofUploadChunkV1 {
+    pub const fn bytes(self) -> usize {
+        match self {
+            Self::TxV1Max => POOL_PROOF_UPLOAD_CHUNK_BYTES_TXV1_MAX,
+            Self::Legacy => V7_POOL_PROOF_UPLOAD_CHUNK_BYTES,
+        }
+    }
+}
 
 const _: () = assert!(V7_POOL_NATIVE_TAG73_REQUEST_BYTES == 600);
 const _: () = assert!(POOL_V1_PAYMENT_STATEMENT_BYTES == 216);
@@ -708,26 +738,28 @@ pub fn build_initialize_native_proof_instruction_v1(
     })
 }
 
-/// Split a complete proof into the frozen 960-byte upload instructions.  The
-/// final chunk is shorter; offsets cover the body exactly once in order.
+/// Split a complete proof into upload instructions of the default
+/// (`ProofUploadChunkV1::TxV1Max`) chunk size.  The final chunk is shorter;
+/// offsets cover the body exactly once in order.
 pub fn build_native_proof_upload_instructions_v1(
     lifecycle: &NativePoolTag73LifecycleContextV1<'_>,
 ) -> Result<Vec<Instruction>, PoolVerifierTransactionBuilderErrorV1> {
+    build_native_proof_upload_instructions_with_chunk_v1(lifecycle, ProofUploadChunkV1::default())
+}
+
+/// As `build_native_proof_upload_instructions_v1`, with an explicit chunk size
+/// (`ProofUploadChunkV1::Legacy` reproduces the 960-byte V6/V7 split).
+pub fn build_native_proof_upload_instructions_with_chunk_v1(
+    lifecycle: &NativePoolTag73LifecycleContextV1<'_>,
+    chunk_size: ProofUploadChunkV1,
+) -> Result<Vec<Instruction>, PoolVerifierTransactionBuilderErrorV1> {
     lifecycle.validate()?;
     let plan = lifecycle.plan;
-    let mut instructions = Vec::with_capacity(
-        lifecycle
-            .proof_body
-            .len()
-            .div_ceil(V7_POOL_PROOF_UPLOAD_CHUNK_BYTES),
-    );
-    for (chunk_index, chunk) in lifecycle
-        .proof_body
-        .chunks(V7_POOL_PROOF_UPLOAD_CHUNK_BYTES)
-        .enumerate()
-    {
+    let chunk_bytes = chunk_size.bytes();
+    let mut instructions = Vec::with_capacity(lifecycle.proof_body.len().div_ceil(chunk_bytes));
+    for (chunk_index, chunk) in lifecycle.proof_body.chunks(chunk_bytes).enumerate() {
         let offset = chunk_index
-            .checked_mul(V7_POOL_PROOF_UPLOAD_CHUNK_BYTES)
+            .checked_mul(chunk_bytes)
             .and_then(|value| u32::try_from(value).ok())
             .ok_or(PoolVerifierTransactionBuilderErrorV1::ProofLengthOverflow)?;
         let chunk_length = u32::try_from(chunk.len())
@@ -968,6 +1000,23 @@ mod tests {
         }
     }
 
+    /// PREREG-PROOF-SIZE-2 item 6: uploads for one full R1 spend at the
+    /// default chunk.  Body = 688-byte candidate afterstate + the 57,607-byte
+    /// compact proof (the ASPU body); statement = the 1,880-byte ASF8.
+    #[test]
+    fn r1_full_spend_upload_count_at_txv1_max_chunk() {
+        const R1_PROOF_BODY: usize = 688 + 57_607;
+        const R1_STATEMENT: usize = 1_880;
+        let count = |chunk: ProofUploadChunkV1| {
+            (R1_PROOF_BODY.div_ceil(chunk.bytes()), R1_STATEMENT.div_ceil(chunk.bytes()))
+        };
+        assert_eq!(ProofUploadChunkV1::default(), ProofUploadChunkV1::TxV1Max);
+        let (proof, statement) = count(ProofUploadChunkV1::TxV1Max);
+        assert_eq!((proof, statement), (16, 1));
+        assert!(proof + statement <= 17, "pre-registered bound");
+        assert_eq!(count(ProofUploadChunkV1::Legacy), (61, 2));
+    }
+
     #[test]
     fn proof_upload_and_receipt_lifecycle_freeze_exact_wires_accounts_and_order() {
         let verifier = key(1);
@@ -1002,16 +1051,30 @@ mod tests {
         assert_eq!(create.accounts[1], AccountMeta::new(proof_key, true));
 
         let uploads = build_native_proof_upload_instructions_v1(&lifecycle).unwrap();
-        assert_eq!(uploads.len(), proof.len().div_ceil(960));
-        let mut recovered = vec![0u8; proof.len()];
-        for instruction in &uploads {
-            assert_eq!(instruction.data[0], V7_POOL_PROOF_UPLOAD_TAG);
-            let offset = u32::from_le_bytes(instruction.data[1..5].try_into().unwrap()) as usize;
-            let length = u32::from_le_bytes(instruction.data[5..9].try_into().unwrap()) as usize;
-            assert_eq!(instruction.data.len(), 9 + length);
-            recovered[offset..offset + length].copy_from_slice(&instruction.data[9..]);
+        assert_eq!(
+            uploads,
+            build_native_proof_upload_instructions_with_chunk_v1(&lifecycle, ProofUploadChunkV1::TxV1Max).unwrap()
+        );
+        let legacy =
+            build_native_proof_upload_instructions_with_chunk_v1(&lifecycle, ProofUploadChunkV1::Legacy).unwrap();
+        assert_eq!(uploads.len(), proof.len().div_ceil(3_763));
+        assert_eq!(legacy.len(), proof.len().div_ceil(960));
+        for (uploads, chunk) in [(&uploads, 3_763usize), (&legacy, 960)] {
+            let mut recovered = vec![0u8; proof.len()];
+            let mut expected_offset = 0usize;
+            for instruction in uploads {
+                assert_eq!(instruction.data[0], V7_POOL_PROOF_UPLOAD_TAG);
+                let offset = u32::from_le_bytes(instruction.data[1..5].try_into().unwrap()) as usize;
+                let length = u32::from_le_bytes(instruction.data[5..9].try_into().unwrap()) as usize;
+                assert_eq!(offset, expected_offset);
+                assert!(length <= chunk);
+                assert_eq!(instruction.data.len(), 9 + length);
+                assert_eq!(instruction.accounts, uploads[0].accounts);
+                recovered[offset..offset + length].copy_from_slice(&instruction.data[9..]);
+                expected_offset += length;
+            }
+            assert_eq!(recovered, proof);
         }
-        assert_eq!(recovered, proof);
 
         let receipt_init =
             build_initialize_native_authorization_receipt_instruction_v1(&lifecycle).unwrap();

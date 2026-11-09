@@ -17,12 +17,6 @@ use aspis_core::v6_transcript::{
     verify_v7_compact_transcript_and_relation_prepared_with_hiding_context, V6QueryBatchView,
     V6SemanticView, V6TranscriptContext, V6TranscriptError, V6VerifiedTranscript,
 };
-#[cfg(feature = "aeneas-observer")]
-use aspis_core::v6_transcript::{
-    snapshot_query_batch_prechallenge,
-    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot,
-    V6QueryBatchPrechallengeSnapshot, V6QueryBatchPrechallengeView,
-};
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
 use aspis_core::v7_fixed_canonical_audit::{
     verify_and_gamma_combine_v7_canonical_openings, V7CanonicalOneFoldWire,
@@ -58,8 +52,6 @@ pub enum V7VerifyError {
     StatementDigest,
     Transcript(V6TranscriptError),
     Query(V6WireError),
-    #[cfg(feature = "aeneas-observer")]
-    PrechallengeObservationMissing,
 }
 
 impl From<V6TranscriptError> for V7VerifyError {
@@ -290,71 +282,6 @@ pub fn verify_v7_read_only_with_statement_digest(
         transcript,
         folded_query_sum,
     })
-}
-
-/// Owned transcript state observed immediately before the Tag-73 query-batch
-/// challenge.  This exists only in the default-off Aeneas bridge feature; the
-/// selected verifier continues to pass the same no-op observer.
-#[cfg(feature = "aeneas-observer")]
-pub type V7Tag73PrechallengeSnapshot = V6QueryBatchPrechallengeSnapshot;
-
-#[cfg(feature = "aeneas-observer")]
-/// Small source-proof root for the exact scalar value consumed at the K1.3
-/// pre-query boundary.  It is feature-gated and called only by the observer
-/// root; the selected verifier continues to use no observation path.
-#[inline(never)]
-pub fn snapshot_prechallenge(
-    view: &V6QueryBatchPrechallengeView<'_>,
-) -> V7Tag73PrechallengeSnapshot {
-    snapshot_query_batch_prechallenge(view)
-}
-
-/// Feature-gated, monomorphic observer root for the selected atomic Tag-73
-/// read-only verifier.  Its parser, hiding context, terminal predicate, and
-/// authenticated query fold are the production ones.  The shared verifier's
-/// existing capture branch retains the prechallenge value for source proofs.
-#[cfg(feature = "aeneas-observer")]
-#[allow(clippy::too_many_arguments)]
-#[inline(never)]
-pub fn observe_v7_read_only_with_statement_digest(
-    hash: HashFn,
-    proof: &[u8],
-    frontier_nodes: usize,
-    program_id: &Pubkey,
-    release_binding: [u8; 32],
-    attempt_id: &Pubkey,
-    statement: &AtomicPaymentStatementV4,
-    statement_digest: [u8; 32],
-    check_pow: bool,
-) -> Result<(VerifiedV7ReadOnly, V7Tag73PrechallengeSnapshot), V7VerifyError> {
-    let wire = V7CompactOneFoldWire::parse_deferred_canonicality(proof, frontier_nodes)?;
-    let context = V6TranscriptContext {
-        program_id: program_id.to_bytes(),
-        release_binding,
-        statement_digest,
-        attempt_id: attempt_id.to_bytes(),
-    };
-    let (transcript, observed) =
-        verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot(
-            hash,
-            &wire,
-            &context,
-            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id),
-            atomic_state_only_copy_inactive_row_groups_v3(),
-            atomic_state_only_copy_inactive_group_masks_v3(),
-            check_pow,
-            |view| terminal_matches(statement, view),
-            |view| authenticate_and_fold_queries(hash, &wire, view),
-        )?;
-    let snapshot = observed.ok_or(V7VerifyError::PrechallengeObservationMissing)?;
-    let folded_query_sum = transcript.folded_query_sum;
-    Ok((
-        VerifiedV7ReadOnly {
-            transcript,
-            folded_query_sum,
-        },
-        snapshot,
-    ))
 }
 
 #[allow(clippy::too_many_arguments)]

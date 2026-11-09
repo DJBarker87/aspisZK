@@ -1,331 +1,190 @@
 # Aspis ZK: native Circle STARK verification on Solana
 
 Aspis is a transparent, trusted-setup-free zero-knowledge payment system for
-Solana. Its on-chain verifier uses Circle STARK techniques. The accompanying
-proof work is written in Lean 4 and connected to selected production Rust with
-Charon and Aeneas.
+Solana. Its on-chain verifier uses Circle STARK techniques over the M31 field,
+and the accompanying proof work is written in Lean 4 and connected to the
+production Rust with Charon and Aeneas, which translate Rust functions into
+Lean definitions that can be reasoned about directly. The current
+implementation is R1, in which a private spend is verified across two Solana
+transactions: the first runs stage 1 of the verifier and stores a checkpoint
+account, and the second resumes from that checkpoint, completes verification
+and settles the spend in the Pool.
 
 [Read the plain-language introduction at aspis.djbmaths.uk](https://aspis.djbmaths.uk/).
 
-One point deserves emphasis. The V7 mathematics no longer relies on a theorem
-from the literature being supplied as a premise. The decoding, list-size,
-agreement, and classical random-oracle Fiat-Shamir results cited by
-earlier versions have been reconstructed in Lean for the exact fields, domains,
-and thresholds used by Aspis.
+## What has been proved
 
-The current V7 design can verify a private transfer or withdrawal, update an
-eight-lane pool, record the nullifier, and settle the result in one Solana
-transaction. Exact local runtime tests put every measured V7 path below 1.3
-million compute units. The earlier V5 verifier has already completed a
-finalized mainnet transaction, using 1,334,452 compute units for the full
-private-spend verification and state change.
+The R1 verifier, at the frozen source revision `4bb3b3f51e16`, reaches 599
+distinct Rust functions across its two transactions, from field arithmetic and
+the transcript up to the stage-1 and stage-2 entry points. For each of them
+there is a verified statement in Lean: on every input in its stated domain, the
+function, as translated from the frozen Rust by Charon and Aeneas, returns the
+same result, fails in the same way and makes the same calls in the same order,
+hash calls included, as the mathematical model the soundness argument reasons
+about; and every caller proves, rather than assumes, that its uses of a callee
+stay inside that callee's domain. All 599 statements are proved, with none left
+qualified or open. For most of them the Lean side is the tool's own
+translation of the frozen function; for the small number where the tools could
+not produce a usable translation, the proof is against a transcription of the
+frozen body that was reviewed by hand and is recorded, function by function, as
+a trust row in the proof package, so that nothing of this kind is hidden inside
+a theorem's hypotheses.
+A table of all 599, with the Rust function and the Lean theorems behind each,
+is in [`docs/r1/LEDGER-599.md`](docs/r1/LEDGER-599.md).
 
-## Current results
+On 9 November 2026 these statements were composed into a soundness theorem for
+the actual two-transaction spend path, `AspisR1.TAS_FinalB.deployed_splitB`,
+and its averaged form `AspisR1.TAS_FinalB.deployed_charge`. They prove every
+conjunct of the adopted statement of the security property,
+`AspisR1.RPx_Deployed.deployed`, for the pair of transactions the adversary
+actually submits, with one change approved by the owner: the conjunct about
+the spend's outcome now holds unless the run falls in a hash-collision event,
+and that event is already paid for inside the numeric bound below. The
+assembly takes 22 interface arguments, and in the final theorem every one of
+them is supplied by a proved term rather than left as an assumption, so what
+remains in the statement is its own parameter (the adversary's query budget),
+the description of the two-transaction run, and the named trust rows.
+The adversary is arbitrary and fully adaptive; it may query the hash oracle as
+it likes before choosing each transaction, and every query counts, repeats and
+rejected attempts included. Lean's `#print axioms` reports only `propext`,
+`Classical.choice` and `Quot.sound` for both theorems, and an independent walk
+of the proof terms, about 146,000 constants for each, reached exactly the same
+three axioms; a scan of the whole closure of 20,019 modules found no dangling
+reference, duplicated declaration or mismatched import.
 
-| Work | Present result | Evidence |
-| --- | --- | --- |
-| V7 Solana verifier | Complete eight-lane transfer and withdrawal paths execute in one versioned Solana transaction in local runtime tests | [V7 activation record](docs/research/v7-one-tx-activation-20260828.md) |
-| V7 formal work | Lean checks the main mathematical arguments and exact calculations. The remaining work applies the final probability theorems directly to the current production program | [V7 formal record](docs/research/v7-one-tx-formal-consolidation-20260828.md) |
-| V5 mainnet result | A finalized Solana mainnet transaction accepted the archived 75,358-byte proof, advanced the pool, and marked the nullifier as spent | [V5 mainnet bundle](release/aspis-v5-tag67-mainnet-v1/) |
-| V5 end-to-end evidence | Lean mathematics, selected Rust-to-Lean proofs, byte-for-byte reproducible program code, and finalized transaction records are preserved together | [Formal verification](docs/formal-verification.md) |
+Two of the pieces this needed are worth naming. The first is a correction to
+the model of the host environment, made on 9 November: the old model left the
+zero-filled buffer allocation at the start of stage 1 as a placeholder that
+never returns, and Lean showed that under it the first transaction could never
+be accepted, which would have made any theorem stated there vacuous for real
+runs. The corrected model allocates as the frozen source does, under the
+existing allocator trust row, and both theorems are stated at it. The second
+is the pair of theorems that carry the model across to the program's own stage
+code, `AspisR1.NOQ_FinalCombined.field` for the first transaction and
+`AspisR1.NOF_A2FieldCorrected.field` for the second: whenever the first
+stage's code returns successfully with a saved checkpoint, the model returns
+the same checkpoint, and when the code rejects the model does not accept; the
+second gives the same agreement for the second stage's successful runs.
 
-## What Aspis does
+The averaged theorem rests on two facts about one fixed recorder program, which
+replays the adversary's run and records its hash reads. For every oracle, if
+the two transactions are accepted and the spend's outcome property fails, the
+recorder finds a collision among those reads; and the average of that collision
+event over a random oracle is at most the bound below. The theorem states
+these as two facts rather than as one averaged statement about the failure
+itself, and a third conjunct bounds the model's failure probability by the
+same quantity.
 
-A private spend has a public statement and a secret witness. The statement
-names such things as the pool root, output commitment, asset, value, fee, and
-nullifier. The nullifier is a public one-use marker that prevents the same note
-from being spent twice. The witness contains the owner secret, note opening,
-and Merkle path.
-The proof shows that the hidden note belongs to the spender and that the state
-transition is valid, without publishing the witness.
-
-The Solana program checks the proof before changing state. On acceptance it
-advances the selected pool lane and creates the spent-nullifier marker in the
-same transaction. A withdrawal also transfers the authorised tokens from the
-vault. If any check or write fails, the whole transaction rolls back.
-
-Aspis uses a transparent STARK construction, so there is no trusted setup and
-no ceremony-generated proving key. The remaining cryptographic boundaries
-include the real-world security of SHA-256 and Poseidon2. Their algorithms and
-use in the protocol are modelled in Lean; their resistance to attack remains a
-cryptographic assumption.
-
-## V7: one transaction, eight pool lanes
-
-V7 is the current design. It divides the pool state into eight lanes, so
-independent spends need not all wait on one shared state update. A successful
-transaction does the following:
-
-```text
-check the pool and verifier configuration
-  -> run the zero-knowledge verifier
-  -> receive a fixed-size result
-  -> update the pool lane and spent-nullifier record
-  -> transfer SPL tokens as well, if this is a withdrawal
-```
-
-The following figures are complete transaction measurements. They include the
-pool program, the proof verifier, account checks, state changes, and the token
-transfer for a withdrawal. Each figure comes from one measured execution.
-
-| V7 operation | History storage | Compute units | Transaction bytes | Margin below 1.3M CU |
-| --- | --- | ---: | ---: | ---: |
-| Private transfer | Current page | 1,145,890 | 799 | 154,110 |
-| Private transfer | New page | 1,191,463 | 832 | 108,537 |
-| Withdrawal | Current page | 1,136,135 | 964 | 163,865 |
-| Withdrawal | New page | 1,201,757 | 997 | 98,243 |
-
-An invalid proof that has not completed the required proof-of-work is rejected
-after 61,309 CU and leaves every account byte unchanged. The evidence files
-record the program and proof hashes, transaction sizes, execution logs, and
-account changes.
-
-These measurements use LiteSVM with the same 1,400,000-CU limit used by the
-target runtime. V7 has not been submitted to devnet or mainnet. Before that
-happens, the remaining formal proofs must be joined to the current production
-source, the final program binaries must be reproduced independently, and the
-whole account lifecycle must be tested on a public network.
-
-The [V7 activation record](docs/research/v7-one-tx-activation-20260828.md)
-contains the binaries, hashes, commands, and full test record. The [compute
-report](docs/research/v7-cu-sparsity-lock-20260828.md) gives the lower-level
-performance details.
-
-## Formal verification
-
-The formal work has two connected parts:
-
-1. [`AspisFormal/`](AspisFormal/) contains the Lean models and proofs for the
-   spend rules, Merkle authentication, proof checks, challenge sampling, and
-   concrete security calculations.
-2. [`aeneas-verif/`](aeneas-verif/) uses Charon and Aeneas to translate
-   selected Rust functions into Lean, where their behaviour can be compared
-   with the mathematical models.
-
-The second part is vital. A correct theorem about an inaccurate model would
-say nothing reliable about the program running on Solana. Charon records the
-types, loops, and decisions in selected production Rust. Aeneas turns that
-record into Lean functions. Further Lean theorems must then show that those
-functions agree with the mathematical verifier. This is where a difference in
-byte parsing, branching, hash use, or account updates can be found. Translation
-alone is not treated as a proof of correctness, and the remaining V7 source
-connections are stated openly.
-
-### The cited mathematics is now proved here
-
-Early Aspis work used published results for three substantial steps. V7 now
-contains its own Lean proofs of all three:
-
-1. the exact list-decoding bounds, including the concrete maximum list sizes;
-2. the agreement argument used to carry possible answers through the folding
-   stages of the proof; and
-3. the classical random-oracle argument that connects the interactive proof
-   to its Fiat-Shamir form.
-
-Each proof is specialized to the actual Aspis parameters. The theorem
-statements contain no generic premise that merely repeats the desired
-conclusion. The main theorem files print their axiom dependencies, whose
-complete union is the ordinary Lean foundation used by this project:
+The bound is `F3T_Numeric.total`, in the contract's own units. For an
+adversary making at most Q hash queries,
 
 ```text
-propext
-Classical.choice
-Quot.sound
+total(Q) = (Q+34)·B + 6·(Q+1161)²/2^256 + 6·(Q+2965)²/2^256 + 2^-126 + 2^-454,
+B = 15/2^109 ≈ 2^-105.093
 ```
 
-There is no project-specific axiom or paper theorem hidden behind those
-declarations. The [decoding and agreement
-record](docs/research/v7-exact-correlated-agreement-audit-20260827.md) and the
-[Fiat-Shamir compiler record](docs/research/v7-k1.6-fs-aok-compiler.md) give
-the theorem-by-theorem evidence.
+where the first term charges each of the Q queries and the 34 starts of the
+submitted transcript, the next two are collision terms, and the last two are
+the extractor's abort allowance and the query-scan exhaustion term; there is no
+proof-of-work or grinding credit, and no probability is divided by attack work.
+With no adversary queries, total(0) ≈ 0.99609·2^-100 ≈ 2^-100.0056, and
+`F3T_Numeric.margin_exact` proves that it lies below 2^-100 by about 2^-108.
+`F3U_Range.per_attempt` proves total(Q) ≤ (Q+1)·2^-100 for every Q up to
+7388980242446479800895501321004157112314840375 (about 2^152.372), and
+`F3U_RangeMaximal.exact_range` proves that this range is exact. For every Q
+below about 2^100 the bound is approximately (Q+34)·2^-105.093. The full
+derivation is in section 3 of [`docs/r1/SOUNDNESS-STATUS.md`](docs/r1/SOUNDNESS-STATUS.md),
+and both theorems are printed in full, with a reading of each binder, in
+[`docs/r1/TOP-THEOREM.md`](docs/r1/TOP-THEOREM.md).
 
-For V7, Lean already checks the two Merkle trees, the finite query and
-challenge calculations, the main polynomial relations, the random-oracle
-execution model, and the final error accounting. It also handles the case in
-which an attacker asks the random oracle a question before the verifier asks
-the same question and later receives the cached answer.
+## What is not yet established
 
-Two kinds of proof work remain. Some probability theorems still have to be
-applied to the exact events produced by the current program. A few Rust parsing
-and control-flow paths also need to be translated from the current source.
-These are tracked as named proof obligations. The numerical security
-accounting has not been relaxed to make the proofs fit.
+The release target, 100-bit classical soundness per attempt for the actual
+frozen spend path with no proof-of-work credit, is not yet established, and
+eight gates stand between the theorems above and that claim; each is described
+with what would close it in [`docs/r1/OPEN-GATES.md`](docs/r1/OPEN-GATES.md).
+Many of the Lean files the tools generated from the Rust cannot yet be traced
+to a reproducible run of those tools, so they must be regenerated and proved
+equal to the committed ones. The final proof closure has been checked against
+cached builds but not yet rebuilt cold from source. The proofs are about the
+Rust source, and the final audit tying that source to the deployed binary is
+not done. The translations behind the proofs use checked arithmetic while the
+deployed program wraps on overflow, and the transfer between the two is proved
+only in part. The theorem takes the Pool's actions in the recorded run as
+given, and the owner has yet to decide whether to bring the Pool inside the
+security game or to state the claim as conditional on it. Repeated attempts
+are covered within one experiment, but a bound for a campaign of separately
+submitted spends is so far proved only for a stand-in model, with its
+connection to the real host still open. No full witness yet shows that a real accepted transaction pair satisfies the
+theorem's description of a run. And the trust inventory has still to be
+matched one to one with the final closure, with a removal condition for every
+row.
 
-Lean checks the model stated in each theorem. Compiler correctness, Solana
-runtime behaviour, and the security of SHA-256 and Poseidon2 retain their own
-clearly stated assumptions. The [V7 formal
-record](docs/research/v7-one-tx-formal-consolidation-20260828.md) gives the
-theorem names and exact remaining obligations for specialist review.
+Three things are outside this claim altogether. Privacy is a separate
+property with its own contract and its own theorems, and nothing here bears on
+it. Settlement in the Pool is not covered, because the Pool's execution enters
+only as an assumption about the recorded run. Liveness is not claimed: one
+standard-library panic path has neither its reachability nor its exclusion
+proved, though it can only abort a transaction, never make a false spend
+accepted.
 
-## V5 mainnet transaction and end-to-end evidence
+## Running on Solana
 
-V5 is the finalized on-chain baseline. On 25 July 2026 in Europe/Berlin, or 24
-July UTC, the deployed Aspis program verified the complete archived proof on
-Solana mainnet-beta. It then advanced the pool and recorded the nullifier as
-spent.
+On 29 October 2026 the release R1 verifier was deployed to Solana devnet as a
+new immutable program, `CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ`, whose
+1,563,728-byte ELF, SHA-256 `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
+was rebuilt bit for bit from the frozen source. It settled a private transfer,
+in transaction [`53pTHDf…m2hhvR`](https://explorer.solana.com/tx/53pTHDfJBmqX7hdxPofSfajURpMhCiB6ceAdMw9ftf3RAXZ6k8D26WaW4MGito2Ty3kRQrAXQSDJ5QBNFsm2hhvR?cluster=devnet)
+(stage 1, 1,214,746 compute units) followed by [`FNLSBxj…PCFxF`](https://explorer.solana.com/tx/FNLSBxjiJ8jPYzE2E25BCgzJ6rm9yrSXnRMgwhj3E5yxwU4wYPfs9vugucr6cVrgnhem2b6TbqPCe3PKjPRFCxF?cluster=devnet)
+(stage 2 and settlement, 1,145,305), and a withdrawal, in
+[`3C6fKwt…5ut4F7L`](https://explorer.solana.com/tx/3C6fKwts7pAaTko8kJvBJk4weuUc9y7dfbLTGjRiKuqXo6fWr7xvNoG7w19Nb8V9yY6erAda5jt65khHY5ut4F7L?cluster=devnet)
+(1,206,747) and [`46bYP2B…cES3wn2`](https://explorer.solana.com/tx/46bYP2Bz1sTiwNDSFxYVumN1kPYa4TARupv8ptAMMx7ixwSNCZwU59WLNDz1zv5V97qgKFp6NtY4njs9rcES3wn2?cluster=devnet)
+(1,154,975), which moved 250 test tokens out of the vault. A replay of each
+settlement was rejected because its nullifier had already been consumed, and a
+mutated stage-1 proof was rejected for each, with the protected accounts and
+the fresh checkpoint left unchanged. The proofs used public test fixtures, so
+the run demonstrates execution on a public cluster, not privacy, and the Pool
+build that ran there predates the removal of the legacy Pool instructions on
+9 November; the full record, with every signature and account, is in
+[`docs/r1/DEVNET-RUN.md`](docs/r1/DEVNET-RUN.md). R1 has not been deployed to
+mainnet.
 
-[View the finalized transaction on Solana Explorer](https://explorer.solana.com/tx/EJviPgF12i9iK2CveVaQSMeFQqDMFPQ1iPRUYEwNQE3zGquTUZNJXPZEENorcQtsnQj1orFmH1TPsgdbR3vJ2fE?cluster=mainnet-beta)
+The earlier V5 verifier has already completed a finalized mainnet
+transaction. On 24 July 2026 UTC it verified a 75,358-byte private-spend proof
+on Solana mainnet-beta, advanced the pool and recorded the nullifier as spent
+in one transaction using 1,334,452 compute units:
+[`EJviPgF…R3vJ2fE`](https://explorer.solana.com/tx/EJviPgF12i9iK2CveVaQSMeFQqDMFPQ1iPRUYEwNQE3zGquTUZNJXPZEENorcQtsnQj1orFmH1TPsgdbR3vJ2fE?cluster=mainnet-beta).
+Its evidence is kept in [`docs/v5-mainnet-demo.md`](docs/v5-mainnet-demo.md)
+and [`release/`](release/). V7, the one-transaction design that preceded R1,
+is kept under [`docs/v7/`](docs/v7/) as the previous design.
 
-| Item | Finalized V5 record |
-| --- | --- |
-| Transaction | `EJviPgF12i9iK2CveVaQSMeFQqDMFPQ1iPRUYEwNQE3zGquTUZNJXPZEENorcQtsnQj1orFmH1TPsgdbR3vJ2fE` |
-| Slot | `435019536` |
-| Program | `7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue` |
-| Proof | 75,358 bytes |
-| Compute used | 1,334,452 CU |
-| Transaction limit | 1,356,912 CU |
-| Nullifier | `7Umhkv2Z3E2DksnpivCz2tovtbRoL1uXtnYBAtQBgu8Q` |
-| Compiled Solana program | 1,258,496 bytes |
-| Program SHA-256 | `4cf3c1d5ddd47efa68875c0070247e007083c5c9bb2d5988db0d644a609edf40` |
-
-The V5 evidence chain preserves four separate links:
-
-1. Lean checks the private-spend rules and the main mathematical calculations
-   used by the proof system.
-2. Charon and Aeneas translate selected verifier Rust into Lean. Lean then
-   follows one complete successful verifier run, from parsing through the
-   final checks.
-3. Pinned source and build tools reproduce the exact deployed program bytes.
-4. The mainnet archive reconstructs the proof from 79 finalized uploads and
-   the program from 1,466 finalized loader writes, then checks the transaction,
-   state change, cleanup, and refund records.
-
-The clean replay of this complete successful path passed on 24 August 2026.
-Its final results are derived from the same translated execution rather than
-being supplied by the caller. The [formal verification
-record](docs/formal-verification.md) explains the remaining field-by-field link
-between the public statement in Rust and its mathematical model.
-
-The archived proof also passes the released verifier callback in regression
-tests. Changing any one of the nine public fields causes rejection. The proof
-account and ProgramData were closed after the demonstration, so the
-[payer RPC archive](release/aspis-v5-tag67-mainnet-rpc-archive-v1/) is the
-permanent reconstruction record.
-
-## Reproduce the evidence
-
-### Lean development
-
-```bash
-cd AspisFormal
-lake exe cache get
-lake build
-```
-
-Many research notes give smaller focused targets for reviewers who do not
-wish to rebuild every Lean file. Start with [formal
-verification](docs/formal-verification.md) and the [V7 formal consolidation
-note](docs/research/v7-one-tx-formal-consolidation-20260828.md).
-
-### Rust-to-Lean replay
-
-The maintained Lean 4.32 replay lives under
-`aeneas-verif/v5-result-aware-source-link-20260821/`. The [Aeneas replay
-notes](aeneas-verif/README.md#replaying-the-final-accepted-path-theorem) record
-the pinned tools, generated inputs, and dependency caches.
-
-### Exact V5 program and release inputs
-
-```bash
-./release/aspis-v5-tag67-frozen-candidate-v1/verify.sh
-```
-
-The [V5 release preflight](release/preflight/v5-production-freeze.md) pins the
-source, Agave release, platform tools, and provenance used for a byte-for-byte
-rebuild.
-
-### Finalized V5 mainnet lifecycle
-
-```bash
-./release/aspis-v5-tag67-mainnet-v1/verify.sh
-python3 tools/check_release_facts.py
-```
-
-These offline checks verify the published proof and statement, compiled
-program, lifecycle receipts, compute values, cleanup accounting, and committed
-hashes.
-
-## Research branch: R1
-
-The [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch
-holds R1, a successor design under development. R1 targets 100-bit soundness
-per proof attempt with no proof-of-work credit. A spend uses two
-transactions: the first runs stage 1 of the verifier and stores a checkpoint,
-and the second completes verification inside the pool settlement. R1 ran end to end on Solana devnet on 20 October 2026 (a private transfer
-and a withdrawal, each proved in about 37 s, uploaded in 17 transactions and
-settled in two); it has not been released, and V7 remains the release
-candidate.
-
-Status on 20 October 2026:
-
-| Area | Status | Record |
-| --- | --- | --- |
-| Compute | Proof size 57,607 bytes (binary Merkle multiproofs, compact field encoding). Measured on six saved fixtures and on devnet: stage 1 at most 1,199,286 CU, settlement at most 1,178,702 CU. A pre-registered worst-case argument with executable checks bounds stage 1 by 1,294,560 CU and settlement by 1,282,451 CU on the frozen verifier. The argument is not a formal proof. | [Final bound review](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/100bit-spend-path-20261013/design/LEAD-REVIEW-CU-BOUND-4-20261020.md), [devnet record](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/100bit-spend-path-20261013/design/LEAD-REVIEW-DEVNET-20261020.md) |
-| Soundness | The verifier source is frozen; stage 1 and stage 2 are extracted to Lean; the binary commitment layer, fold geometry, statement bindings and extractor cost are proved; the remaining links (re-pins of the arithmetic optimisations, source refinement, checkpoint provenance) are tracked in a gap map. | [Gap map](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/100bit-spend-path-20261013/design/R1-SOUNDNESS-GAP-MAP-20261019.md) |
-| Privacy | The Lean theorem `privacy_R1` states that the transcript of the retrying honest prover can be simulated from the public statement, in the classical random-oracle model, with an error term that evaluates to about 2^-109; the layout, read budget and explicit simulator are proved for the binary proof format. It is conditional on named premises, including the refinement of the Rust prover to the Lean model. | [Privacy log](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/v8-r0-zk-20261009/LOG.md) |
-
-## Scope and limitations
-
-V7 is an active release candidate. Its local execution evidence is complete
-for the measured paths, while the remaining source and probability links are
-still being proved. No V7 transaction has been signed or submitted.
-
-V5 demonstrates one private input, one private output, and one sequential pool.
-The demonstration anonymity set was one. It does not include a wallet,
-deposits, multiple inputs or outputs, or a growing privacy set. Its 75,358-byte
-proof required a temporary account and 79 upload transactions before sealing.
-
-The remaining assumptions concern the cryptographic strength of Poseidon2 and
-SHA-256, faithful translation and compilation, and Solana runtime behaviour.
-Network metadata, timing, fee-payer linkage, transaction graphs, and physical
-side channels lie outside the proved privacy view. The project has extensive
-formal proofs, tests, reproducible builds, and finalized chain evidence; it has
-not yet received an independent cryptographic or Solana security audit.
-
-The demonstration witness was freshly generated for the release. It did not
-represent a user's funded private note, and the secret witness was neither
-published nor retained.
-
-## Repository guide
+## Repository map
 
 | Path | Contents |
 | --- | --- |
-| `AspisFormal/` | Lean 4 mathematical, probability, and program-execution proofs |
-| `aeneas-verif/` | Charon/Aeneas generated Lean and source-to-model bridges |
-| `crates/aspis-core/` | Fields, transcript, proof format, commitments, and verifier arithmetic |
-| `crates/aspis-statement/` | Private-spend statement and relation |
-| `crates/aspis-prover/` | Prover, grinding, fixtures, and security calculators |
-| `programs/aspis-verifier/` | Solana STARK verifier program |
-| `programs/aspis-pool/` | V7 pool, lane, history, nullifier, and withdrawal logic |
-| `crates/aspis-pool-wallet-v1/` | Wallet and client code for the V7 pool |
-| `programs/aspis-registry/` | Governed verifier-registry program |
-| `kani-verif/` | Kani proof bundles for V5 FRI helpers |
-| `xtask/` | Build, deployment, recovery, and evidence tools |
-| `scripts/` | V7 runtime, devnet, and compute-unit drivers |
-| `tools/` | Release-fact, parameter-binding, and replay checkers |
-| `config/` | V7 devnet harness configurations |
-| `manifests/` | Soundness parameters and the V7 split-tensor profile |
-| `audit/` | Focused probes and Stwo reference-vector generators |
-| `release/` | Frozen release inputs and finalized public bundles |
-| `results/` | Runtime measurements, binary hashes, and replay records |
-| `archive/` | Manifests of archived source states |
-| `docs/` | Design explanations, source maps, assumptions, and research audits ([index](docs/README.md)) |
-| `paper/aspis-formalization/` | Formalization report (PDF in `pdf/`) |
-| `paper/aspis-spend/` | Construction and deployment paper |
+| `crates/`, `programs/` | The frozen R1 source: verifier in `programs/r1-cost-probe` and `crates/aspis-r1-cost-probe`, Pool in `programs/aspis-pool` |
+| `docs/r1/` | The R1 proof package: status, contract, theorems, ledger, trust inventory, devnet run, build, open gates |
+| `docs/research/v8-r0-zk-20261009/` | Workspace path dependencies of the frozen manifests (extracted writer copies and the prover-side checker) |
+| `AspisFormal/`, `aeneas-verif/` | Lean proofs and Rust-to-Lean bridges for V5 and V7; the R1 Lean development is on the `research` branch |
+| `kani-verif/` | Kani proof bundles for V5 helpers |
+| `release/`, `results/` | Frozen V5 release inputs, the finalized mainnet bundles, and runtime measurements |
+| `docs/` | Design notes, the V5 and V7 records and dated research notes ([index](docs/README.md)) |
+| `paper/` | Formalization report and construction paper (V5 era) |
+| `xtask/`, `scripts/`, `tools/`, `config/`, `manifests/`, `audit/`, `archive/` | Build, deployment and evidence tooling, probes, and archived source manifests |
 
-Each top-level folder has a README describing its contents.
+## Reproduction
 
-For a short introduction, see [How Aspis works](docs/how-it-works.md). The
-[assumptions ledger](docs/assumptions-ledger.md), [security
-policy](SECURITY.md), and [V5 accepted source
-map](docs/v5/v5-accepted-source-map.md) provide the review boundaries.
-
-## Earlier result
-
-An earlier feasibility release remains preserved. Its finalized
-[mainnet transaction](https://explorer.solana.com/tx/3G1voggszvDMGi5PbGM1kuEMYKvh2TNMbH6hHHwndUdRQJNT7ehRFpQpksxLnx5tp2xkS5jGi359rVXk42sRPFcv?cluster=mainnet-beta)
-used 1,344,003 CU on 16 July 2026. The [historical mainnet
-record](docs/mainnet-demo.md) contains its proof and immutable evidence.
+The devnet ELF is built from the repository root with `cargo-build-sbf` from
+Solana release 3.1.13; the exact command, environment, features and expected
+hashes are in [`docs/r1/BUILD.md`](docs/r1/BUILD.md), together with the receipt
+of the build that reproduced it bit for bit. The proof package in
+[`docs/r1/`](docs/r1/) can be read on its own, and its README shows how to
+check its copies against the research branch. The complete evidence, about
+45 GB of Lean sources, compiled objects, receipts and logs, is on the
+[`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch at
+the pinned commit `07123926e88273271344977a3fdc26d1780cde14`; it is not on
+`main`. The V5 release bundles keep their own offline checks, described in
+[`docs/README.md`](docs/README.md).
 
 ## Project
 

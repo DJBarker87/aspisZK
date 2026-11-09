@@ -128,6 +128,20 @@ compile_error!("V7_CU_PROBE_FORBIDS_OTHER_PROBES: select exactly one local probe
 compile_error!("V7_POOL_CU_PROFILE_FORBIDS_OTHER_ENTRYPOINTS: select only the local Pool profiler");
 
 pub mod atomic_payment;
+#[cfg(all(
+    feature = "v8-state-only-cu-probe",
+    not(feature = "no-entrypoint"),
+    any(
+        feature = "spend-production",
+        feature = "v5-cu-probe",
+        feature = "v6-cu-probe",
+        feature = "v7-cu-probe",
+        feature = "v7-pool-cu-profile"
+    )
+))]
+compile_error!("V8_STATE_ONLY_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS");
+#[cfg(feature = "v8-state-only-cu-probe")]
+pub mod v8_state_only_cu_probe;
 pub mod dispatch;
 pub mod lifecycle;
 #[cfg(any(feature = "v5-cu-probe", feature = "v5-production-tag67"))]
@@ -140,8 +154,6 @@ pub mod v5_full_transaction;
 pub mod v5_relation_stress;
 #[cfg(feature = "v6-cu-probe")]
 pub mod v6_cu_probe;
-#[cfg(feature = "v7-cu-probe")]
-pub mod v7_cu_tail_probe;
 #[cfg(any(feature = "v6-production-tag72", test))]
 pub mod v6_transaction;
 #[cfg(any(
@@ -180,8 +192,6 @@ pub mod v7_pool_native_dispatch;
 #[cfg(any(feature = "v7-pool-dispatch-profile", test))]
 pub mod v7_pool_receipt;
 pub mod v7_staged_pair_profile;
-#[cfg(any(feature = "v7-terminal-pda-certificate-audit", test))]
-pub mod v7_terminal_pda_certificate;
 #[cfg(any(feature = "v7-production-tag73", test))]
 pub mod v7_transaction;
 #[cfg(any(
@@ -236,3 +246,11 @@ pub(crate) mod test_support {
         )
     }
 }
+
+#[cfg(all(feature = "r0-cu-probe", not(feature = "no-entrypoint"), any(
+    feature = "spend-production", feature = "v5-cu-probe", feature = "v6-cu-probe",
+    feature = "v7-cu-probe", feature = "v7-pool-cu-profile", feature = "v8-state-only-cu-probe"
+)))]
+compile_error!("R0_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS");
+#[cfg(feature = "r0-cu-probe")]
+pub mod r0_cu_probe;

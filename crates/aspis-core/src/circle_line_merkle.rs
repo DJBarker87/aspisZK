@@ -46,6 +46,12 @@ pub const RATE32_CIRCLE_OPENING_GEOMETRY: CircleOpeningGeometry = CircleOpeningG
     later_binary_depths: [11, 9, 7],
 };
 
+/// Rate-1/256 geometry: 2^18 points grouped into 2^16 arity-four fibres.
+pub const RATE256_CIRCLE_OPENING_GEOMETRY: CircleOpeningGeometry = CircleOpeningGeometry {
+    layer0_binary_depth: 16,
+    later_binary_depths: [14, 12, 10],
+};
+
 /// Rate-1/512 geometry for the unchanged 1,024-coefficient message.  Four
 /// arity-four folds preserve the rate while each committed tree is four
 /// binary levels deeper than the rate-1/32 profile.

@@ -717,8 +717,12 @@ fn parse_finalized_tx_v1_block_v2(
                 if instruction_index + 1 != instructions.len() {
                     return Err(FinalizedTxV1RpcErrorV2::WrongTerminalPosition);
                 }
+                // Pool instruction data is ASQ8 || 4 B4 bump hints.
+                let (terminal_request_bytes, _) =
+                    aspis_pool::split_pair_forest_terminal_bump_hints_v1(&instruction.data)
+                        .map_err(|_| FinalizedTxV1RpcErrorV2::InvalidTerminal)?;
                 let terminal_request =
-                    decode_pool_v1_pair_forest_terminal_request_v1(&instruction.data)
+                    decode_pool_v1_pair_forest_terminal_request_v1(terminal_request_bytes)
                         .map_err(|_| FinalizedTxV1RpcErrorV2::InvalidTerminal)?;
                 if succeeded {
                     let terminal_accounts = instruction
@@ -783,9 +787,14 @@ fn parse_finalized_tx_v1_block_v2(
                                     .ok()?;
                                     let carrier_instruction_index =
                                         u16::try_from(carrier_instruction_index).ok()?;
+                                    let (terminal_request_bytes, _) =
+                                        aspis_pool::split_pair_forest_terminal_bump_hints_v1(
+                                            &instruction.data,
+                                        )
+                                        .ok()?;
                                     carrier
                                         .validate_terminal_v2(
-                                            &instruction.data,
+                                            terminal_request_bytes,
                                             proof_account,
                                             carrier_instruction_index,
                                             terminal_instruction_index_u16,
@@ -1312,9 +1321,14 @@ mod tests {
             master: master.to_bytes(),
             lane_id,
             lane_account: lane_account.to_bytes(),
-            request: encode_pool_v1_pair_forest_terminal_request_v1(&request)
-                .unwrap()
-                .to_vec(),
+            // Terminal instruction data: ASQ8 || 4 bump hints.
+            request: [
+                encode_pool_v1_pair_forest_terminal_request_v1(&request)
+                    .unwrap()
+                    .as_slice(),
+                &[255, 0, 0, 0],
+            ]
+            .concat(),
             carrier: encode_tx_v1_ciphertext_carrier_v2(&carrier)
                 .unwrap()
                 .to_vec(),

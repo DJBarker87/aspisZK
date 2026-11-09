@@ -39,7 +39,7 @@ pub const V7_COMPACT_PROFILE_BINDING: [u8; 32] = [
     b'A', b'V', b'7', b'O', b'F', b'0', b'0', b'1', // magic/version
     26, 3, 10, 16, 0xcb, 0x00, 26, 32, // widths, q, cap203, digest/salt bytes
     27, 4, 6, 35, 31, 34, 0x71, 0xf1, // transcript widths, work, tree tags
-    0x81, 0x02, 8, 20, 18, 1, 64, 2, // 641 fields, logs, stream/cap, causal-bind rev
+    0x81, 0x02, 8, 20, 18, 1, 64, 1, // 641 fields, logs, stream/cap, full-C2 rev
 ];
 
 pub const V7_COMPACT_C2_QM31_PER_QUERY: usize = 12;
@@ -212,9 +212,6 @@ pub fn verify_and_gamma_combine_v7_openings(
 ) -> Result<[[QM31; 4]; V6_QUERY_COUNT], V6WireError> {
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
-    #[cfg(feature = "v7-query-order-source-bound-audit")]
-    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
-    #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
     {
@@ -280,9 +277,6 @@ where
 {
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
-    #[cfg(feature = "v7-query-order-source-bound-audit")]
-    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
-    #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
     {
@@ -385,7 +379,10 @@ mod tests {
                 .unwrap()
                 .try_into()
                 .unwrap();
-            assert!(binary_frontier_nodes(queries, 18).unwrap() > V7_COMPACT_FRONTIER_CAP_PER_TREE);
+            assert!(
+                binary_frontier_nodes(queries, 18).unwrap()
+                    > V7_COMPACT_FRONTIER_CAP_PER_TREE
+            );
         }
     }
 }

@@ -38,3 +38,20 @@ afterwards asked whether that budget could hold a shielded spend, a real
 relation with an atomic nullifier and pool transition, rather than a minimal
 counter. The construction that eventually fit shares no components with the
 prototype, but the feasibility direction is owed to that paper.
+
+## R1 replaces V7 (9 November 2026)
+
+On 9 November 2026 the owner decided that R1 replaces V7 as the current
+implementation on the default branch. V7 verified a spend and settled it in a
+single transaction and was measured only in local runtime tests; R1 splits
+verification across two transactions joined by a checkpoint account, uses a
+57,607-byte compact proof, and was developed on the `research` branch with
+the aim of 100-bit classical soundness per attempt and no proof-of-work
+credit. `crates/` and `programs/` now hold the frozen R1 source (revision
+`4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`, with the Pool at
+`b936275465600469312d1f058cdc91ea2a11f3dc`), taken from research commit
+`07123926e88273271344977a3fdc26d1780cde14`, and the R1 proof package is in
+[`r1/`](r1/). The V7 records stay under [`v7/`](v7/) and in the dated
+research notes, and the V5 mainnet record is unchanged. The R1 release target
+is not yet established; the remaining gates are listed in
+[`r1/OPEN-GATES.md`](r1/OPEN-GATES.md).

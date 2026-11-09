@@ -789,253 +789,143 @@ impl WeightAccumulator {
         true
     }
 
-    // BEGIN V7_WEIGHT_AT_INDEXED_HELPERS_20260913
-    // Iterator-free spellings of the existing ordered scalar evaluations.
-    // No field operation or source-level multiplication order is changed.
-    #[inline]
-    fn weight_at_multilinear_indexed(scale: QM31, point: &[QM31], index: u32) -> QM31 {
-        let mut value = scale;
-        let mut coordinate = 0usize;
-        while coordinate < point.len() {
-            let shift = (point.len() - 1 - coordinate) as u32;
-            let bit = (index >> shift) & 1;
-            let z = point[coordinate];
-            value = if bit == 0 {
-                value.mul(QM31::ONE.sub(z))
-            } else {
-                value.mul(z)
-            };
-            coordinate += 1;
-        }
-        value
-    }
-
-    #[inline]
-    fn weight_at_tensor_indexed(scale: QM31, factors: &[QM31], index: u32) -> QM31 {
-        let mut value = scale;
-        let mut coordinate = 0usize;
-        while coordinate < factors.len() {
-            let shift = (factors.len() - 1 - coordinate) as u32;
-            let bit = (index >> shift) & 1;
-            if bit != 0 {
-                value = value.mul(factors[coordinate]);
-            }
-            coordinate += 1;
-        }
-        value
-    }
-
-    #[inline]
-    fn weight_at_product_indexed(scale: QM31, pairs: &[[QM31; 2]], index: u32) -> QM31 {
-        let mut value = scale;
-        let mut coordinate = 0usize;
-        while coordinate < pairs.len() {
-            let shift = (pairs.len() - 1 - coordinate) as u32;
-            let bit = ((index >> shift) & 1) as usize;
-            value = value.mul(pairs[coordinate][bit]);
-            coordinate += 1;
-        }
-        value
-    }
-
-    #[inline]
-    fn weight_at_line_tensor_indexed(
-        log_len: u32,
-        scale: QM31,
-        x: M31,
-        index: u32,
-    ) -> QM31 {
-        let mut value = scale;
-        let mut factor = x;
-        let mut bit = 0u32;
-        while bit < log_len {
-            if index & (1u32 << bit) != 0 {
-                value = value.mul_m31(factor);
-            }
-            factor = Self::double_x_m31(factor);
-            bit += 1;
-        }
-        value
-    }
-
-    #[inline]
-    fn weight_at_line_batch_indexed(
-        log_len: u32,
-        scales: &[QM31],
-        xs: &[M31],
-        deferred_halvings: u8,
-        index: u32,
-    ) -> QM31 {
-        let mut sum = QM31::ZERO;
-        let mut position = 0usize;
-        // The old zip stops at the SHORTER slice. Preserve this even for
-        // malformed private states; do not replace it with an equality check.
-        while position < scales.len() && position < xs.len() {
-            let mut value = scales[position];
-            let mut factor = xs[position];
-            let mut bit = 0u32;
-            while bit < log_len {
-                if index & (1u32 << bit) != 0 {
-                    value = value.mul_m31(factor);
-                }
-                factor = Self::double_x_m31(factor);
-                bit += 1;
-            }
-            sum = sum.add(value);
-            position += 1;
-        }
-        Self::halve_qm31(sum, deferred_halvings)
-    }
-
-    #[inline]
-    fn weight_at_grouped_binary_deferred_indexed(
-        log_len: u32,
-        row_groups: &[u8],
-        group_masks: &[u16],
-        first_alpha: Option<QM31>,
-        group_values: &[QM31],
-        index: u32,
-    ) -> QM31 {
-        match log_len {
-            10 => {
-                debug_assert!(first_alpha.is_none());
-                grouped_64x16_binary_deferred_weight_at_log10(
-                    row_groups,
-                    group_masks,
-                    index,
-                )
-            }
-            8 => Self::weight_at_grouped_binary_deferred_log8(
-                row_groups,
-                group_masks,
-                first_alpha,
-                index,
-            ),
-            2 | 4 | 6 => {
-                debug_assert!(first_alpha.is_none());
-                Self::weight_at_grouped_binary_deferred_log246(row_groups, group_values, index)
-            }
-            _ => unreachable!("invalid deferred binary fold depth"),
-        }
-    }
-
-    #[inline]
-    fn weight_at_grouped_binary_deferred_log8_arithmetic(alpha: QM31, bits: u16) -> QM31 {
-        let alpha2 = alpha.square();
-        let alpha3 = alpha2.mul(alpha);
-        let mut sum = QM31::ZERO;
-        if bits & 1 != 0 {
-            sum = sum.add(QM31::ONE);
-        }
-        if bits & 2 != 0 {
-            sum = sum.add(alpha3);
-        }
-        if bits & 4 != 0 {
-            sum = sum.add(alpha2);
-        }
-        if bits & 8 != 0 {
-            sum = sum.add(alpha);
-        }
-        sum.half().half()
-    }
-
-    #[inline]
-    fn weight_at_grouped_binary_deferred_log8(
-        row_groups: &[u8],
-        group_masks: &[u16],
-        first_alpha: Option<QM31>,
-        index: u32,
-    ) -> QM31 {
-        let alpha = first_alpha.unwrap();
-        let high = index as usize / 4;
-        let low_chunk = index as usize & 3;
-        let mask = group_masks[usize::from(row_groups[high])];
-        let shift = (4 * low_chunk) as u32;
-        let bits = (mask >> shift) & 0x0f;
-        Self::weight_at_grouped_binary_deferred_log8_arithmetic(alpha, bits)
-    }
-
-    #[inline]
-    fn weight_at_grouped_binary_deferred_log246(
-        row_groups: &[u8],
-        group_values: &[QM31],
-        index: u32,
-    ) -> QM31 {
-        group_values[usize::from(row_groups[index as usize])]
-    }
-
-    #[inline]
-    fn weight_component_at_indexed(
-        log_len: u32,
-        component: &WeightComponent,
-        index: u32,
-    ) -> QM31 {
-        match component {
-            WeightComponent::Geometric { scale, base } => scale.mul(base.pow(index as u64)),
-            WeightComponent::Multilinear { scale, point } => {
-                Self::weight_at_multilinear_indexed(*scale, point, index)
-            }
-            WeightComponent::Tensor { scale, factors } => {
-                Self::weight_at_tensor_indexed(*scale, factors, index)
-            }
-            WeightComponent::LineM31Tensor { scale, x } => {
-                Self::weight_at_line_tensor_indexed(log_len, *scale, *x, index)
-            }
-            WeightComponent::LineM31Batch {
-                scales,
-                xs,
-                deferred_halvings,
-            } => Self::weight_at_line_batch_indexed(
-                log_len,
-                scales,
-                xs,
-                *deferred_halvings,
-                index,
-            ),
-            WeightComponent::Product { scale, pairs } => {
-                Self::weight_at_product_indexed(*scale, pairs, index)
-            }
-            WeightComponent::Dense { values } => values[index as usize],
-            WeightComponent::Grouped64x16 {
-                row_groups,
-                group_values,
-                low_width,
-            }
-            | WeightComponent::Grouped128x16 {
-                row_groups,
-                group_values,
-                low_width,
-            } => {
-                let low_width = usize::from(*low_width);
-                let high = index as usize / low_width;
-                let low = index as usize & (low_width - 1);
-                let group = usize::from(row_groups[high]);
-                group_values[group * low_width + low]
-            }
-            WeightComponent::Grouped64x16BinaryDeferred {
-                row_groups,
-                group_masks,
-                first_alpha,
-                group_values,
-            } => Self::weight_at_grouped_binary_deferred_indexed(
-                log_len,
-                row_groups,
-                group_masks,
-                *first_alpha,
-                group_values,
-                index,
-            ),
-        }
-    }
-    // END V7_WEIGHT_AT_INDEXED_HELPERS_20260913
-
     pub fn weight_at(&self, index: u32) -> QM31 {
         debug_assert!(index < (1u32 << self.log_len));
         let mut total = QM31::ZERO;
         let mut component_index = 0usize;
         while component_index < self.components.len() {
             let component = &self.components[component_index];
-            let value = Self::weight_component_at_indexed(self.log_len, component, index);
+            let value = match component {
+                WeightComponent::Geometric { scale, base } => scale.mul(base.pow(index as u64)),
+                WeightComponent::Multilinear { scale, point } => {
+                    let mut value = *scale;
+                    for (coordinate, z) in point.iter().enumerate() {
+                        let bit = (index >> (point.len() - 1 - coordinate)) & 1;
+                        value = if bit == 0 {
+                            value.mul(QM31::ONE.sub(*z))
+                        } else {
+                            value.mul(*z)
+                        };
+                    }
+                    value
+                }
+                WeightComponent::Tensor { scale, factors } => {
+                    let mut value = *scale;
+                    for (coordinate, factor) in factors.iter().enumerate() {
+                        let bit = (index >> (factors.len() - 1 - coordinate)) & 1;
+                        if bit != 0 {
+                            value = value.mul(*factor);
+                        }
+                    }
+                    value
+                }
+                WeightComponent::LineM31Tensor { scale, x } => {
+                    let mut value = *scale;
+                    let mut factor = *x;
+                    let mut bit = 0u32;
+                    while bit < self.log_len {
+                        if index & (1u32 << bit) != 0 {
+                            value = value.mul_m31(factor);
+                        }
+                        factor = Self::double_x_m31(factor);
+                        bit += 1;
+                    }
+                    value
+                }
+                WeightComponent::LineM31Batch {
+                    scales,
+                    xs,
+                    deferred_halvings,
+                } => {
+                    let mut sum = QM31::ZERO;
+                    for (&scale, &x) in scales.iter().zip(xs) {
+                        let mut value = scale;
+                        let mut factor = x;
+                        let mut bit = 0u32;
+                        while bit < self.log_len {
+                            if index & (1u32 << bit) != 0 {
+                                value = value.mul_m31(factor);
+                            }
+                            factor = Self::double_x_m31(factor);
+                            bit += 1;
+                        }
+                        sum = sum.add(value);
+                    }
+                    Self::halve_qm31(sum, *deferred_halvings)
+                }
+                WeightComponent::Product { scale, pairs } => {
+                    let mut value = *scale;
+                    for (coordinate, pair) in pairs.iter().enumerate() {
+                        let bit = ((index >> (pairs.len() - 1 - coordinate)) & 1) as usize;
+                        value = value.mul(pair[bit]);
+                    }
+                    value
+                }
+                WeightComponent::Dense { values } => values[index as usize],
+                WeightComponent::Grouped64x16 {
+                    row_groups,
+                    group_values,
+                    low_width,
+                } => {
+                    let low_width = usize::from(*low_width);
+                    let high = index as usize / low_width;
+                    let low = index as usize & (low_width - 1);
+                    let group = usize::from(row_groups[high]);
+                    group_values[group * low_width + low]
+                }
+                WeightComponent::Grouped64x16BinaryDeferred {
+                    row_groups,
+                    group_masks,
+                    first_alpha,
+                    group_values,
+                } => match self.log_len {
+                    10 => {
+                        debug_assert!(first_alpha.is_none());
+                        grouped_64x16_binary_deferred_weight_at_log10(
+                            row_groups,
+                            group_masks,
+                            index,
+                        )
+                    }
+                    8 => {
+                        let alpha = first_alpha
+                            .as_ref()
+                            .expect("the first deferred fold stores its challenge");
+                        let high = index as usize / 4;
+                        let low_chunk = index as usize & 3;
+                        let mask = group_masks[usize::from(row_groups[high])];
+                        let bits = (mask >> (4 * low_chunk)) & 0x0f;
+                        let alpha2 = alpha.square();
+                        let alpha3 = alpha2.mul(*alpha);
+                        let powers = [QM31::ONE, alpha3, alpha2, *alpha];
+                        let mut sum = QM31::ZERO;
+                        let mut slot = 0u32;
+                        while slot < 4 {
+                            if bits & (1u16 << slot) != 0 {
+                                sum = sum.add(powers[slot as usize]);
+                            }
+                            slot += 1;
+                        }
+                        sum.half().half()
+                    }
+                    2 | 4 | 6 => {
+                        debug_assert!(first_alpha.is_none());
+                        group_values[usize::from(row_groups[index as usize])]
+                    }
+                    _ => unreachable!("invalid deferred binary fold depth"),
+                },
+                WeightComponent::Grouped128x16 {
+                    row_groups,
+                    group_values,
+                    low_width,
+                } => {
+                    let low_width = usize::from(*low_width);
+                    let high = index as usize / low_width;
+                    let low = index as usize & (low_width - 1);
+                    let group = usize::from(row_groups[high]);
+                    group_values[group * low_width + low]
+                }
+            };
             total = total.add(value);
             component_index += 1;
         }
@@ -1852,199 +1742,6 @@ impl WeightAccumulator {
         self.log_len -= 3;
     }
 
-    /// Accumulate one line-tensor contribution for the four-value terminal
-    /// dot product.  Keeping this as a regular helper rather than a closure
-    /// preserves the arithmetic while avoiding a captured mutable borrow in
-    /// the Aeneas source model.
-    #[inline]
-    fn accumulate_line_dot(
-        line_deferred_halvings: u8,
-        mut scale: QM31,
-        x: M31,
-        mut halvings: u8,
-        line_count: &mut usize,
-        line_constant_limbs: &mut [M31; 4],
-        line_raw: &mut [[u64; 4]; 3],
-        line_sums: &mut [[M31; 4]; 3],
-    ) {
-        while halvings < line_deferred_halvings {
-            scale = scale.add(scale);
-            halvings += 1;
-        }
-        let high = Self::double_x_m31(x);
-        let factors = [x, high, x.mul(high)];
-        let limbs = [scale.c0.a.0, scale.c0.b.0, scale.c1.a.0, scale.c1.b.0];
-        for limb in 0..4 {
-            line_constant_limbs[limb] = line_constant_limbs[limb].add(M31(limbs[limb]));
-            for slot in 0..3 {
-                line_raw[slot][limb] += u64::from(limbs[limb]) * u64::from(factors[slot].0);
-            }
-        }
-        *line_count += 1;
-        if *line_count % 4 == 0 {
-            for slot in 0..3 {
-                for limb in 0..4 {
-                    line_sums[slot][limb] =
-                        line_sums[slot][limb].add(M31::reduce_u64(line_raw[slot][limb]));
-                    line_raw[slot][limb] = 0;
-                }
-            }
-        }
-    }
-
-    #[inline(always)]
-    fn line_batch_deferred_halvings(component: &WeightComponent) -> u8 {
-        match component {
-            WeightComponent::LineM31Batch {
-                deferred_halvings, ..
-            } => *deferred_halvings,
-            _ => 0,
-        }
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    #[inline(always)]
-    fn accumulate_line_batch_dot(
-        line_deferred_halvings: u8,
-        scales: &[QM31],
-        xs: &[M31],
-        deferred_halvings: u8,
-        line_count: &mut usize,
-        line_constant_limbs: &mut [M31; 4],
-        line_raw: &mut [[u64; 4]; 3],
-        line_sums: &mut [[M31; 4]; 3],
-    ) {
-        let mut batch_index = 0usize;
-        while batch_index < scales.len() && batch_index < xs.len() {
-            Self::accumulate_line_dot(
-                line_deferred_halvings,
-                scales[batch_index],
-                xs[batch_index],
-                deferred_halvings,
-                line_count,
-                line_constant_limbs,
-                line_raw,
-                line_sums,
-            );
-            batch_index += 1;
-        }
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    #[inline(always)]
-    fn accumulate_line_component_dot(
-        component: &WeightComponent,
-        line_deferred_halvings: u8,
-        line_count: &mut usize,
-        line_constant_limbs: &mut [M31; 4],
-        line_raw: &mut [[u64; 4]; 3],
-        line_sums: &mut [[M31; 4]; 3],
-    ) {
-        match component {
-            WeightComponent::LineM31Tensor { scale, x } => Self::accumulate_line_dot(
-                line_deferred_halvings,
-                *scale,
-                *x,
-                0,
-                line_count,
-                line_constant_limbs,
-                line_raw,
-                line_sums,
-            ),
-            WeightComponent::LineM31Batch {
-                scales,
-                xs,
-                deferred_halvings,
-            } => Self::accumulate_line_batch_dot(
-                line_deferred_halvings,
-                scales,
-                xs,
-                *deferred_halvings,
-                line_count,
-                line_constant_limbs,
-                line_raw,
-                line_sums,
-            ),
-            _ => {}
-        }
-    }
-
-    #[inline(always)]
-    fn dot_dense_terminal(values: &[QM31], weights: &[QM31]) -> QM31 {
-        let mut sum = QM31::ZERO;
-        let mut index = 0usize;
-        while index < values.len() {
-            sum = sum.add(values[index].mul(weights[index]));
-            index += 1;
-        }
-        sum
-    }
-
-    #[inline(always)]
-    fn dot_grouped_binary_terminal(
-        values: &[QM31],
-        row_groups: &[u8],
-        group_values: &[QM31],
-    ) -> QM31 {
-        let mut sum = QM31::ZERO;
-        let mut index = 0usize;
-        while index < values.len() {
-            sum = sum.add(values[index].mul(group_values[usize::from(row_groups[index])]));
-            index += 1;
-        }
-        sum
-    }
-
-    #[inline(always)]
-    fn dot_terminal_component(component: &WeightComponent, values: &[QM31]) -> QM31 {
-        match component {
-            WeightComponent::Geometric { scale, base } => {
-                let base2 = base.square();
-                let evaluation = values[0]
-                    .add(base.mul(values[1]))
-                    .add(base2.mul(values[2]))
-                    .add(base2.mul(*base).mul(values[3]));
-                scale.mul(evaluation)
-            }
-            WeightComponent::Multilinear { scale, point } => {
-                debug_assert_eq!(point.len(), 2);
-                let low = values[0].add(point[1].mul(values[1].sub(values[0])));
-                let high = values[2].add(point[1].mul(values[3].sub(values[2])));
-                scale.mul(low.add(point[0].mul(high.sub(low))))
-            }
-            WeightComponent::Tensor { scale, factors } => {
-                debug_assert_eq!(factors.len(), 2);
-                let low = values[0].add(factors[1].mul(values[1]));
-                let high = values[2].add(factors[1].mul(values[3]));
-                scale.mul(low.add(factors[0].mul(high)))
-            }
-            WeightComponent::LineM31Tensor { .. } => QM31::ZERO,
-            WeightComponent::LineM31Batch { .. } => QM31::ZERO,
-            WeightComponent::Product { scale, pairs } => {
-                debug_assert_eq!(pairs.len(), 2);
-                let evaluation = values[0]
-                    .mul(pairs[0][0].mul(pairs[1][0]))
-                    .add(values[1].mul(pairs[0][0].mul(pairs[1][1])))
-                    .add(values[2].mul(pairs[0][1].mul(pairs[1][0])))
-                    .add(values[3].mul(pairs[0][1].mul(pairs[1][1])));
-                scale.mul(evaluation)
-            }
-            WeightComponent::Dense { values: weights } =>
-                Self::dot_dense_terminal(values, weights),
-            WeightComponent::Grouped64x16 { .. } => {
-                unreachable!("grouped component becomes dense before log length two")
-            }
-            WeightComponent::Grouped64x16BinaryDeferred {
-                row_groups,
-                group_values,
-                ..
-            } => Self::dot_grouped_binary_terminal(values, row_groups, group_values),
-            WeightComponent::Grouped128x16 { .. } => {
-                unreachable!("grouped component becomes dense before log length two")
-            }
-        }
-    }
-
     pub fn dot(&self, values: &[QM31]) -> QM31 {
         debug_assert_eq!(values.len(), 1usize << self.log_len);
         if self.log_len == 2 && values.len() == 4 {
@@ -2054,35 +1751,61 @@ impl WeightAccumulator {
             // extension-field dot.  The former spelling performed one full
             // QM31 multiplication per query after independently evaluating
             // the same coefficient tuple.
-            // Keep the terminal path in direct control flow.  This is the
-            // same maximum as the previous `filter_map(...).max()` spelling,
-            // but avoids pulling generic iterator adapters into the accepted
-            // source certificate.
-            let mut line_deferred_halvings = 0u8;
-            let mut component_index = 0usize;
-            while component_index < self.components.len() {
-                let deferred_halvings =
-                    Self::line_batch_deferred_halvings(&self.components[component_index]);
-                if deferred_halvings > line_deferred_halvings {
-                    line_deferred_halvings = deferred_halvings;
-                }
-                component_index += 1;
-            }
+            let line_deferred_halvings = self
+                .components
+                .iter()
+                .filter_map(|component| match component {
+                    WeightComponent::LineM31Batch {
+                        deferred_halvings, ..
+                    } => Some(*deferred_halvings),
+                    _ => None,
+                })
+                .max()
+                .unwrap_or(0);
             let mut line_count = 0usize;
             let mut line_constant_limbs = [M31::ZERO; 4];
             let mut line_raw = [[0u64; 4]; 3];
             let mut line_sums = [[M31::ZERO; 4]; 3];
-            component_index = 0;
-            while component_index < self.components.len() {
-                Self::accumulate_line_component_dot(
-                    &self.components[component_index],
-                    line_deferred_halvings,
-                    &mut line_count,
-                    &mut line_constant_limbs,
-                    &mut line_raw,
-                    &mut line_sums,
-                );
-                component_index += 1;
+            for component in &self.components {
+                let mut accumulate_line = |mut scale: QM31, x: M31, mut halvings: u8| {
+                    while halvings < line_deferred_halvings {
+                        scale = scale.add(scale);
+                        halvings += 1;
+                    }
+                    let high = Self::double_x_m31(x);
+                    let factors = [x, high, x.mul(high)];
+                    let limbs = [scale.c0.a.0, scale.c0.b.0, scale.c1.a.0, scale.c1.b.0];
+                    for limb in 0..4 {
+                        line_constant_limbs[limb] = line_constant_limbs[limb].add(M31(limbs[limb]));
+                        for slot in 0..3 {
+                            line_raw[slot][limb] +=
+                                u64::from(limbs[limb]) * u64::from(factors[slot].0);
+                        }
+                    }
+                    line_count += 1;
+                    if line_count % 4 == 0 {
+                        for slot in 0..3 {
+                            for limb in 0..4 {
+                                line_sums[slot][limb] = line_sums[slot][limb]
+                                    .add(M31::reduce_u64(line_raw[slot][limb]));
+                                line_raw[slot][limb] = 0;
+                            }
+                        }
+                    }
+                };
+                match component {
+                    WeightComponent::LineM31Tensor { scale, x } => accumulate_line(*scale, *x, 0),
+                    WeightComponent::LineM31Batch {
+                        scales,
+                        xs,
+                        deferred_halvings,
+                    } => {
+                        for (&scale, &x) in scales.iter().zip(xs) {
+                            accumulate_line(scale, x, *deferred_halvings);
+                        }
+                    }
+                    _ => {}
+                }
             }
             if line_count % 4 != 0 {
                 for slot in 0..3 {
@@ -2112,12 +1835,71 @@ impl WeightAccumulator {
                     line_deferred_halvings,
                 )
             };
-            component_index = 0;
-            while component_index < self.components.len() {
-                let contribution =
-                    Self::dot_terminal_component(&self.components[component_index], values);
+            for component in &self.components {
+                let contribution = match component {
+                    WeightComponent::Geometric { scale, base } => {
+                        let base2 = base.square();
+                        let evaluation = values[0]
+                            .add(base.mul(values[1]))
+                            .add(base2.mul(values[2]))
+                            .add(base2.mul(*base).mul(values[3]));
+                        scale.mul(evaluation)
+                    }
+                    WeightComponent::Multilinear { scale, point } => {
+                        debug_assert_eq!(point.len(), 2);
+                        let low = values[0].add(point[1].mul(values[1].sub(values[0])));
+                        let high = values[2].add(point[1].mul(values[3].sub(values[2])));
+                        scale.mul(low.add(point[0].mul(high.sub(low))))
+                    }
+                    WeightComponent::Tensor { scale, factors } => {
+                        debug_assert_eq!(factors.len(), 2);
+                        let low = values[0].add(factors[1].mul(values[1]));
+                        let high = values[2].add(factors[1].mul(values[3]));
+                        scale.mul(low.add(factors[0].mul(high)))
+                    }
+                    WeightComponent::LineM31Tensor { .. } => QM31::ZERO,
+                    WeightComponent::LineM31Batch { .. } => QM31::ZERO,
+                    WeightComponent::Product { scale, pairs } => {
+                        debug_assert_eq!(pairs.len(), 2);
+                        let evaluation = values[0]
+                            .mul(pairs[0][0].mul(pairs[1][0]))
+                            .add(values[1].mul(pairs[0][0].mul(pairs[1][1])))
+                            .add(values[2].mul(pairs[0][1].mul(pairs[1][0])))
+                            .add(values[3].mul(pairs[0][1].mul(pairs[1][1])));
+                        scale.mul(evaluation)
+                    }
+                    WeightComponent::Dense { values: weights } => {
+                        let mut sum = QM31::ZERO;
+                        let mut index = 0usize;
+                        while index < values.len() {
+                            sum = sum.add(values[index].mul(weights[index]));
+                            index += 1;
+                        }
+                        sum
+                    }
+                    WeightComponent::Grouped64x16 { .. } => {
+                        unreachable!("grouped component becomes dense before log length two")
+                    }
+                    WeightComponent::Grouped64x16BinaryDeferred {
+                        row_groups,
+                        group_values,
+                        ..
+                    } => {
+                        let mut sum = QM31::ZERO;
+                        let mut index = 0usize;
+                        while index < values.len() {
+                            sum = sum.add(
+                                values[index].mul(group_values[usize::from(row_groups[index])]),
+                            );
+                            index += 1;
+                        }
+                        sum
+                    }
+                    WeightComponent::Grouped128x16 { .. } => {
+                        unreachable!("grouped component becomes dense before log length two")
+                    }
+                };
                 total = total.add(contribution);
-                component_index += 1;
             }
             return total;
         }
@@ -3682,9 +3464,3 @@ mod tests {
         );
     }
 }
-
-// BEGIN V7_WEIGHT_AT_NORMALIZATION_TESTS_20260913
-#[cfg(all(test, feature = "aeneas-observer"))]
-#[path = "sumcheck/weight_at_normalization_20260913.rs"]
-mod weight_at_normalization_20260913;
-// END V7_WEIGHT_AT_NORMALIZATION_TESTS_20260913

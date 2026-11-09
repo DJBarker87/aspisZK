@@ -5,6 +5,7 @@
 //! queried leaves.  Tree tags must be unique across committed oracles.
 
 use crate::transcript::HashFn;
+use crate::{digest::LegacyHashFn, Digest32};
 
 const DOM_LEAF: u8 = 0x10;
 
@@ -31,7 +32,18 @@ pub fn private_leaf_hash(
     value: &[u8],
     salt: &[u8; STATE_ONLY_PRIVATE_LEAF_SALT_BYTES],
 ) -> [u8; 32] {
-    hash(&[&[DOM_LEAF, tree_tag], value, salt])
+    private_leaf_hash_with_digest(LegacyHashFn(hash), tree_tag, value, salt)
+}
+
+/// The same three-slice leaf grammar with a statically selected backend.
+#[inline]
+pub fn private_leaf_hash_with_digest<H: Digest32>(
+    hash: H,
+    tree_tag: u8,
+    value: &[u8],
+    salt: &[u8; STATE_ONLY_PRIVATE_LEAF_SALT_BYTES],
+) -> [u8; 32] {
+    hash.digest(&[&[DOM_LEAF, tree_tag], value, salt])
 }
 
 #[cfg(test)]

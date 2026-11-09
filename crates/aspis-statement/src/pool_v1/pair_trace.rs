@@ -214,7 +214,7 @@ fn digest_canonical(value: &Digest) -> bool {
     value.iter().all(|limb| limb.0 < P)
 }
 
-fn pair_empty_roots() -> [Digest; POOL_V1_PAIR_TREE_DEPTH + 1] {
+pub(super) fn pair_empty_roots() -> [Digest; POOL_V1_PAIR_TREE_DEPTH + 1] {
     let zero = [M31::ZERO; DIGEST_ELEMS];
     let mut roots = [zero; POOL_V1_PAIR_TREE_DEPTH + 1];
     roots[0] = pool_v1_tree_parent(&zero, &zero);
@@ -251,7 +251,7 @@ fn nullifier_input(input: &PoolV1PairInputNoteWitnessV1) -> [M31; 16] {
     fields
 }
 
-fn value_bits(value: u32) -> [M31; POOL_V1_PAIR_VALUE_BITS] {
+pub(super) fn value_bits(value: u32) -> [M31; POOL_V1_PAIR_VALUE_BITS] {
     core::array::from_fn(|bit| M31((value >> bit) & 1))
 }
 
@@ -467,7 +467,7 @@ fn write_occupancy(
     }
 }
 
-fn validate_common(
+pub(super) fn validate_common(
     public_pool: [u8; 32],
     public_domain: [u8; 32],
     anchor_sequence: u64,

@@ -903,3 +903,8 @@ mod tests {
         );
     }
 }
+
+// Proof-only reference route; appended to preserve every shipped source location.
+#[cfg(any(kani, aeneas_ref))]
+#[path = "../../../tools/r1-builder-reference/poseidon.rs"]
+mod builder_reference;

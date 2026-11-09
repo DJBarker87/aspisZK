@@ -31,6 +31,8 @@ pub mod state_only_spend_release;
 pub mod state_only_zerocheck;
 
 pub mod v6_onefold_prover;
+pub mod v8_privacy_affine_gate;
+pub mod v8_privacy_publication;
 pub mod v8_six_mask_hiding_rank;
 
 /// Deterministic eight-lane fixture shared by host integration tests.  Its
@@ -1600,3 +1602,16 @@ pub fn seeded_coeffs(log_rows: u32, seed: u64) -> Vec<M31> {
         })
         .collect()
 }
+
+#[cfg(feature = "r0")]
+pub mod r0;
+
+#[cfg(all(feature = "r0", feature = "insecure-spend-fixture"))]
+pub mod r0_fixture;
+
+// D92: proof-only shared byte random oracle; absent from shipped builds.
+#[cfg(kani)]
+mod prover_commit_oracle;
+
+#[cfg(any(kani, aeneas_ref))]
+mod prover_commit_reference;

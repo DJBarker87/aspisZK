@@ -767,13 +767,22 @@ impl Profile21SourceExpander {
         }
     }
 
+    #[cfg_attr(kani, kani::requires(self.word <= 8))]
+    #[cfg_attr(kani, kani::requires(self.hash == crate::HOST_HASH))]
+    #[cfg_attr(kani, kani::requires(crate::prover_commit_oracle::expander_domain(
+        b"aspis:state-only:profile21:source-expand:v1", *self.seed, self.counter, self.word)))]
+    #[cfg_attr(kani, kani::modifies(&mut self.counter, &mut self.block, &mut self.word))]
+    #[cfg_attr(kani, kani::ensures(|result| crate::prover_commit_reference::next_matches(
+        b"aspis:state-only:profile21:source-expand:v1",
+        crate::prover_commit_reference::State { seed: old(*self.seed), counter: old(self.counter), block: old(self.block), word: old(self.word) },
+        *result,
+        crate::prover_commit_reference::State { seed: *self.seed, counter: self.counter, block: self.block, word: self.word })))]
     fn next_word(&mut self) -> u32 {
         if self.word == 8 {
-            self.block = (self.hash)(&[
-                PROFILE21_SOURCE_EXPAND_DOMAIN,
-                self.seed.as_ref(),
-                &self.counter.to_le_bytes(),
-            ]);
+            let hash = self.hash;
+            let seed: [u8; 32] = *self.seed;
+            let counter = self.counter;
+            self.block = profile21_source_expander_block(hash, seed, counter);
             self.counter = self.counter.wrapping_add(1);
             self.word = 0;
         }
@@ -1241,5 +1250,290 @@ mod tests {
             .count();
         assert_eq!(winners, 1);
         fs::remove_dir_all(directory).unwrap();
+    }
+}
+
+fn profile21_source_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
+    hash(&[PROFILE21_SOURCE_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
+}
+
+#[cfg(kani)]
+mod prover_commit_rom {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_block() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        assert_eq!(profile21_source_expander_block(crate::HOST_HASH, seed, counter),
+            crate::HOST_HASH(&[b"aspis:state-only:profile21:source-expand:v1", &seed, &counter.to_le_bytes()]));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_next_word() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        let (expected_block, expected_counter, slot) = if word == 8 {
+            (crate::HOST_HASH(&[b"aspis:state-only:profile21:source-expand:v1", &seed, &counter.to_le_bytes()]), counter.wrapping_add(1), 0)
+        } else { (block, counter, word) };
+        let offset = 4 * slot;
+        let expected = u32::from_le_bytes([expected_block[offset], expected_block[offset+1], expected_block[offset+2], expected_block[offset+3]]);
+        assert_eq!(actual.next_word(), expected);
+        assert_eq!(actual.block, expected_block);
+        assert_eq!(actual.counter, expected_counter);
+        assert_eq!(actual.word, slot + 1);
+        assert_eq!(*actual.seed, seed);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn pool_binding() {
+        rom::reset(2);
+        let binding: [u8; 32] = kani::any();
+        let context = StateOnlyHidingContext { statement_digest: kani::any(), mask_nonce: kani::any(), mask_layout_fingerprint: kani::any(), layout_factor_fingerprint: kani::any() };
+        let mut encoded = [0u8; 81];
+        encoded[0] = 1;
+        encoded[1..33].copy_from_slice(&context.statement_digest);
+        encoded[33..65].copy_from_slice(&context.mask_nonce);
+        encoded[65..73].copy_from_slice(&context.mask_layout_fingerprint.to_le_bytes());
+        encoded[73..81].copy_from_slice(&context.layout_factor_fingerprint.to_le_bytes());
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:pool-v1:private-attempt-binding:v1", &binding, &encoded,
+            b"profile=pool-v1-tag73;generators=H26,G27,D28;factorD=0;rows=1024;c1=16;selected=28;theta=29;queries=16;first-cap=203",
+        ]);
+        assert_eq!(pool_v1_private_attempt_binding(crate::HOST_HASH, &binding, context), expected);
+    }
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn pool_leaf_salt() {
+        rom::reset(4);
+        let nonce: [u8; 32] = kani::any();
+        let binding: [u8; 32] = kani::any();
+        let secret: [u8; 32] = kani::any();
+        let tag: u8 = kani::any();
+        let index: u32 = kani::any();
+        let context = StateOnlyHidingContext {
+            statement_digest: kani::any(), mask_nonce: nonce,
+            mask_layout_fingerprint: PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1,
+            layout_factor_fingerprint: PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1,
+        };
+        let reserved = ReservedStateOnlyAttemptSecrets {
+            mask_nonce: nonce, precommit_binding: binding, reserved_context: context,
+            leaf_salt_seed: Zeroizing::new(secret), source_mask_seed: Zeroizing::new(kani::any()),
+        };
+        let mut encoded = [0u8; 81];
+        encoded[0] = 1;
+        encoded[1..33].copy_from_slice(&context.statement_digest);
+        encoded[33..65].copy_from_slice(&nonce);
+        encoded[65..73].copy_from_slice(&0xf9daf3d54f4285d1u64.to_le_bytes());
+        encoded[73..81].copy_from_slice(&0x698bcdedff44a4dbu64.to_le_bytes());
+        let attempt = crate::HOST_HASH(&[
+            b"aspis:state-only:pool-v1:private-attempt-binding:v1", &binding, &encoded,
+            b"profile=pool-v1-tag73;generators=H26,G27,D28;factorD=0;rows=1024;c1=16;selected=28;theta=29;queries=16;first-cap=203",
+        ]);
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:private-leaf-salt:v1", &attempt, &nonce, &[tag], &index.to_le_bytes(), &secret,
+        ]);
+        assert_eq!(reserved.derive_pool_v1_leaf_salt(crate::HOST_HASH, context, tag, index), Ok(expected));
+    }
+
+    // Exact m31 try body, with its return carried as an absorbing result.
+    // The source m31 body is pinned and checked by harness/check-step-source.py.
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_try_step() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let successful: bool = kani::any();
+        let value: u32 = kani::any();
+        kani::assume(value < aspis_core::field::P);
+        let result = if successful { Ok(aspis_core::field::M31(value)) }
+            else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::try_step(
+            crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state, result);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        let observed = match result {
+            Ok(value) => Ok(value),
+            Err(_) => {
+                let candidate = actual.next_word() & 0x7fff_ffff;
+                if candidate < aspis_core::field::P {
+                    Ok(aspis_core::field::M31(candidate))
+                } else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) }
+            }
+        };
+        assert_eq!(observed, expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert!(actual.word <= 8);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(516)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_limb() {
+        // At most three fresh blocks per side from any valid word slot.
+        rom::reset(6);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb(crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+
+}
+
+#[cfg(kani)]
+mod prover_commit_caller7 {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(Profile21SourceExpander::next_word)]
+    fn source_limb_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb_caller(
+            crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(rom::expander_query)]
+    fn source_qm31_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.qm31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof_for_contract(Profile21SourceExpander::next_word)]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    fn source_next_contract() {
+        let seed: [u8;32] = kani::any();
+        let base_counter: u64 = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        kani::assume(word < 8 || counter.wrapping_sub(base_counter) < 9);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, base_counter);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        let _ = actual.next_word();
+    }
+
+
+}
+
+/// Universal four-call control-flow comparison over an arbitrary scalar trace.
+/// Stubs are relational inputs, not asserted scalar contracts. Each side sees
+/// the same trace; all sampled results and successor states are unconstrained.
+#[cfg(kani)]
+mod prover_commit_four8 {
+    use super::*;
+    use aspis_core::field::{M31, QM31};
+    use crate::prover_commit_reference::State;
+    type Sample = Result<M31, StateOnlyMaskBuildError>;
+    const ZERO: State = State { seed: [0;32], counter: 0, block: [0;32], word: 0 };
+    static mut STATES: [State;4] = [ZERO;4];
+    static mut VALUES: [Sample;4] = [Ok(M31::ZERO);4];
+    static mut CURSOR: usize = 0;
+    fn transition() -> (Sample, State) {
+        unsafe {
+            assert!(CURSOR < 4);
+            let pair = (VALUES[CURSOR], STATES[CURSOR]);
+            CURSOR += 1;
+            pair
+        }
+    }
+    fn shipped_scalar(state: &mut Profile21SourceExpander) -> Sample {
+        let (value, after) = transition();
+        *state.seed = after.seed;
+        state.counter = after.counter;
+        state.block = after.block;
+        state.word = after.word;
+        value
+    }
+    fn reference_scalar(_: aspis_core::HashFn, _: &[u8], _: State) -> (Sample, State) {
+        transition()
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(Profile21SourceExpander::m31, shipped_scalar)]
+    #[kani::stub(crate::prover_commit_reference::limb_caller, reference_scalar)]
+    fn four_control() {
+        for i in 0..4 {
+            unsafe {
+                STATES[i] = kani::any();
+                VALUES[i] = if kani::any::<bool>() { Ok(M31(kani::any())) }
+                    else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+            }
+        }
+        let state: State = kani::any();
+        unsafe { CURSOR = 0; }
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"unused relational input", state);
+        let expected_calls = unsafe { CURSOR };
+        unsafe { CURSOR = 0; }
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH,
+            seed: Zeroizing::new(state.seed), counter: state.counter, block: state.block, word: state.word };
+        let observed: Result<QM31, StateOnlyMaskBuildError> = actual.qm31();
+        assert_eq!(observed, expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert_eq!(unsafe { CURSOR }, expected_calls);
     }
 }

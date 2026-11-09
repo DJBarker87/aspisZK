@@ -186,6 +186,7 @@ fn loader_v3_deployment_accounts(
 }
 
 fn registry_state(
+    program_id: Pubkey,
     pool: Pubkey,
     authority: Pubkey,
     generation: u64,
@@ -193,6 +194,7 @@ fn registry_state(
 ) -> VerifierRegistryV1 {
     VerifierRegistryV1 {
         flags,
+        bump: pool_v1_verifier_registry_address(&program_id, &pool).1,
         pool: pool.to_bytes(),
         authority: if flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0 {
             [0u8; 32]
@@ -216,9 +218,11 @@ fn registry_account(
         key: pool_v1_verifier_registry_address(&program_id, &pool).0,
         owner: program_id,
         lamports: 1,
-        data: encode_verifier_registry_v1(&registry_state(pool, authority, generation, flags))
-            .unwrap()
-            .to_vec(),
+        data: encode_verifier_registry_v1(&registry_state(
+            program_id, pool, authority, generation, flags,
+        ))
+        .unwrap()
+        .to_vec(),
         is_signer: false,
         is_writable: true,
         executable: false,
@@ -232,10 +236,11 @@ fn registry_v2_state(
     generation: u64,
     flags: u8,
 ) -> VerifierRegistryV2 {
-    let programdata =
-        Pubkey::find_program_address(&[program_id.as_ref()], &bpf_loader_upgradeable::id()).0;
+    let (programdata, programdata_bump) =
+        Pubkey::find_program_address(&[program_id.as_ref()], &bpf_loader_upgradeable::id());
     VerifierRegistryV2 {
         flags,
+        bump: pool_v1_verifier_registry_v2_address(&program_id, &pool).1,
         pool: pool.to_bytes(),
         authority: if flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0 {
             [0u8; 32]
@@ -248,6 +253,7 @@ fn registry_v2_state(
         registry_program: program_id.to_bytes(),
         loader_program: bpf_loader_upgradeable::id().to_bytes(),
         programdata_address: programdata.to_bytes(),
+        programdata_bump,
         executable_hash: [0xA5; 32],
     }
 }
@@ -285,6 +291,9 @@ fn entry_state(
     VerifierRegistryEntryV1 {
         status,
         statement_version: 1,
+        // This is a state template, not an account image. entry_account below
+        // derives the canonical bump for the fixture's selected program.
+        bump: 0,
         pool: pool.to_bytes(),
         verifier_program,
         profile_binding,
@@ -338,18 +347,19 @@ fn zeroed_entry_v2_account(
 
 fn entry_account(
     program_id: Pubkey,
-    entry: VerifierRegistryEntryV1,
+    mut entry: VerifierRegistryEntryV1,
     writable: bool,
 ) -> TestAccount {
     let pool = Pubkey::new_from_array(entry.pool);
+    let (key, bump) = pool_v1_verifier_entry_address(
+        &program_id,
+        &pool,
+        &entry.profile_binding,
+        &entry.release_binding,
+    );
+    entry.bump = bump;
     TestAccount {
-        key: pool_v1_verifier_entry_address(
-            &program_id,
-            &pool,
-            &entry.profile_binding,
-            &entry.release_binding,
-        )
-        .0,
+        key,
         owner: program_id,
         lamports: 1,
         data: encode_verifier_registry_entry_v1(&entry).unwrap().to_vec(),
@@ -374,6 +384,41 @@ fn invoke_initialize(
         system.info(),
     ];
     process_instruction_with_runtime(program_id, &accounts, instruction, 0, &mut NoCpi)
+}
+
+fn pending_entry_v2_account(program_id: Pubkey, pool: Pubkey, release: [u8; 32]) -> TestAccount {
+    let (key, bump) =
+        pool_v1_verifier_entry_v2_address(&program_id, &pool, &PROFILE_BINDING, &release);
+    let verifier = Pubkey::new_from_array(VERIFIER_A);
+    let loader = bpf_loader_upgradeable::id();
+    let (programdata, programdata_bump) =
+        Pubkey::find_program_address(&[verifier.as_ref()], &loader);
+    let entry = VerifierRegistryEntryV2 {
+        status: VerifierEntryStatusV1::Pending,
+        statement_version: 1,
+        bump,
+        pool: pool.to_bytes(),
+        verifier_program: VERIFIER_A,
+        profile_binding: PROFILE_BINDING,
+        release_binding: release,
+        loader_program: loader.to_bytes(),
+        programdata_address: programdata.to_bytes(),
+        programdata_bump,
+        executable_hash: [0x5a; 32],
+        expected_upgrade_authority: [0; 32],
+        activation_slot: 110,
+        retirement_slot: POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT,
+        policy_binding: POLICY_BINDING,
+    };
+    TestAccount {
+        key,
+        owner: program_id,
+        lamports: 1,
+        data: encode_verifier_registry_entry_v2(&entry).unwrap().to_vec(),
+        is_signer: false,
+        is_writable: true,
+        executable: false,
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -575,6 +620,14 @@ fn v2_initialize_certifies_the_exact_finalized_registry_executable_before_writin
     );
     let decoded = decode_verifier_registry_v2(&registry.data).unwrap();
     assert_eq!(decoded.pool, pool.to_bytes());
+    assert_eq!(
+        decoded.bump,
+        pool_v1_verifier_registry_v2_address(&program_id, &pool).1
+    );
+    assert_eq!(
+        decoded.programdata_bump,
+        Pubkey::find_program_address(&[program_id.as_ref()], &bpf_loader_upgradeable::id()).1
+    );
     assert_eq!(decoded.registry_program, program_id.to_bytes());
     assert_eq!(
         decoded.loader_program,
@@ -614,6 +667,10 @@ fn v2_initialize_certifies_the_exact_finalized_registry_executable_before_writin
     assert!(frozen.is_immutable());
     assert_eq!(frozen.authority, [0u8; 32]);
     assert_eq!(frozen.executable_hash, expected_hash);
+    assert_eq!(
+        (frozen.bump, frozen.programdata_bump),
+        (decoded.bump, decoded.programdata_bump)
+    );
 }
 
 #[test]
@@ -731,6 +788,14 @@ fn v2_schedule_binds_exact_finalized_verifier_code_and_rolls_back_all_mutations(
     );
     let decoded = decode_verifier_registry_entry_v2(&entry.data).unwrap();
     assert_eq!(decoded.status, VerifierEntryStatusV1::Pending);
+    assert_eq!(
+        decoded.bump,
+        pool_v1_verifier_entry_v2_address(&program_id, &pool, &PROFILE_BINDING, &RELEASE_A).1
+    );
+    assert_eq!(
+        decoded.programdata_bump,
+        Pubkey::find_program_address(&[verifier_key.as_ref()], &bpf_loader_upgradeable::id()).1
+    );
     assert_eq!(decoded.verifier_program, VERIFIER_A);
     assert_eq!(
         decoded.programdata_address,
@@ -755,6 +820,11 @@ fn v2_schedule_binds_exact_finalized_verifier_code_and_rolls_back_all_mutations(
             .unwrap()
             .status,
         VerifierEntryStatusV1::Active
+    );
+    let active = decode_verifier_registry_entry_v2(&entry.data).unwrap();
+    assert_eq!(
+        (active.bump, active.programdata_bump),
+        (decoded.bump, decoded.programdata_bump)
     );
     assert_eq!(
         invoke_simple_v2(
@@ -867,18 +937,20 @@ fn v2_operator_mutations_reject_corrupted_deployment_certificates_without_writes
 
     let mut registry = registry_v2_account(program_id, pool, authority_key, 0, 0);
     let verifier_program = Pubkey::new_from_array(VERIFIER_A);
-    let verifier_programdata =
-        Pubkey::find_program_address(&[verifier_program.as_ref()], &bpf_loader_upgradeable::id()).0;
+    let (verifier_programdata, programdata_bump) =
+        Pubkey::find_program_address(&[verifier_program.as_ref()], &bpf_loader_upgradeable::id());
     let mut entry = zeroed_entry_v2_account(program_id, pool, PROFILE_BINDING, RELEASE_A);
     entry.data = encode_verifier_registry_entry_v2(&VerifierRegistryEntryV2 {
         status: VerifierEntryStatusV1::Pending,
         statement_version: 1,
+        bump: pool_v1_verifier_entry_v2_address(&program_id, &pool, &PROFILE_BINDING, &RELEASE_A).1,
         pool: pool.to_bytes(),
         verifier_program: VERIFIER_A,
         profile_binding: PROFILE_BINDING,
         release_binding: RELEASE_A,
         loader_program: solana_sdk_ids::loader_v4::id().to_bytes(),
         programdata_address: verifier_programdata.to_bytes(),
+        programdata_bump,
         executable_hash: [0x5a; 32],
         expected_upgrade_authority: [0; 32],
         activation_slot: 110,
@@ -927,6 +999,10 @@ fn initialize_requires_strict_authority_and_nonzero_delay_and_cannot_reinitializ
     );
     let decoded = decode_verifier_registry_v1(&registry.data).unwrap();
     assert_eq!(decoded.pool, pool.to_bytes());
+    assert_eq!(
+        decoded.bump,
+        pool_v1_verifier_registry_address(&program_id, &pool).1
+    );
     assert_eq!(decoded.authority, authority_key.to_bytes());
     assert_eq!(decoded.generation, 0);
     assert_eq!(decoded.minimum_activation_delay_slots, 10);
@@ -1070,6 +1146,14 @@ fn schedule_enforces_authority_generation_and_full_nonzero_delay_before_any_writ
     );
     let decoded_entry = decode_verifier_registry_entry_v1(&entry.data).unwrap();
     assert_eq!(decoded_entry.status, VerifierEntryStatusV1::Pending);
+    assert_eq!(
+        decoded_entry.bump,
+        pool_v1_verifier_entry_address(&program_id, &pool, &PROFILE_BINDING, &RELEASE_A).1
+    );
+    assert_eq!(
+        decode_verifier_registry_v1(&registry.data).unwrap().bump,
+        pool_v1_verifier_registry_address(&program_id, &pool).1
+    );
     assert_eq!(decoded_entry.activation_slot, 110);
 
     let registry_before = registry.snapshot();
@@ -1191,6 +1275,10 @@ fn pause_and_unpause_increment_once_while_noops_stale_generation_and_overflow_ro
     );
     let paused = decode_verifier_registry_v1(&registry.data).unwrap();
     assert!(paused.is_paused());
+    assert_eq!(
+        paused.bump,
+        pool_v1_verifier_registry_address(&program_id, &pool).1
+    );
     assert_eq!(paused.generation, 4);
 
     let before = registry.snapshot();
@@ -1243,6 +1331,7 @@ fn pause_and_unpause_increment_once_while_noops_stale_generation_and_overflow_ro
     );
     let unpaused = decode_verifier_registry_v1(&registry.data).unwrap();
     assert!(!unpaused.is_paused());
+    assert_eq!(unpaused.bump, paused.bump);
     assert_eq!(unpaused.generation, 5);
 
     let mut overflow_registry = registry_account(program_id, pool, authority_key, u64::MAX, 0);
@@ -1308,6 +1397,10 @@ fn activation_waits_for_the_scheduled_slot_and_is_status_only() {
     );
     let active = decode_verifier_registry_entry_v1(&entry.data).unwrap();
     assert_eq!(active.status, VerifierEntryStatusV1::Active);
+    assert_eq!(
+        active.bump,
+        pool_v1_verifier_entry_address(&program_id, &pool, &PROFILE_BINDING, &RELEASE_A).1
+    );
     assert_eq!(active.activation_slot, pending.activation_slot);
     assert_eq!(
         decode_verifier_registry_v1(&registry.data)
@@ -1406,15 +1499,23 @@ fn retirement_pair(pool: Pubkey) -> (VerifierRegistryEntryV1, VerifierRegistryEn
 fn retirement_requires_distinct_active_exact_profile_continuity() {
     let pool = Pubkey::new_unique();
     let (retiring, replacement) = retirement_pair(pool);
-    let replacement_before = encode_verifier_registry_entry_v1(&replacement).unwrap();
     let mut fixture = RetireFixture::new(retiring, replacement);
+    let replacement_before = fixture.replacement.data.clone();
+    let retiring_bump = decode_verifier_registry_entry_v1(&fixture.retiring.data)
+        .unwrap()
+        .bump;
+    let registry_bump = decode_verifier_registry_v1(&fixture.registry.data)
+        .unwrap()
+        .bump;
 
     assert_eq!(fixture.invoke(110), Ok(()));
     let registry = decode_verifier_registry_v1(&fixture.registry.data).unwrap();
     let retired = decode_verifier_registry_entry_v1(&fixture.retiring.data).unwrap();
     assert_eq!(registry.generation, 6);
+    assert_eq!(registry.bump, registry_bump);
     assert_eq!(retired.status, VerifierEntryStatusV1::Retired);
     assert_eq!(retired.retirement_slot, 110);
+    assert_eq!(retired.bump, retiring_bump);
     assert_eq!(fixture.replacement.data, replacement_before);
 
     let (retiring, mut replacement) = retirement_pair(pool);
@@ -1575,6 +1676,10 @@ fn freeze_is_irreversible_and_every_mutation_rejects_without_changes() {
     assert!(frozen.is_paused());
     assert_eq!(frozen.authority, [0u8; 32]);
     assert_eq!(frozen.generation, 9);
+    assert_eq!(
+        frozen.bump,
+        pool_v1_verifier_registry_address(&program_id, &pool).1
+    );
 
     for opcode in [
         RegistryMutationOpcodeV1::Pause,
@@ -1666,7 +1771,7 @@ fn account_version_pda_privilege_and_instruction_validation_fail_closed() {
     let mut authority = authority_account(authority_key, true);
 
     let mut corrupt = registry_account(program_id, pool, authority_key, 0, 0);
-    corrupt.data[4] = 2;
+    corrupt.data[4] = 1;
     let before = corrupt.snapshot();
     assert_eq!(
         invoke_simple(
@@ -1928,4 +2033,257 @@ fn canonical_seed_schedules_bind_pool_profile_and_release() {
         entry,
         pool_v1_verifier_entry_address(&program_id, &pool, &PROFILE_BINDING, &RELEASE_B,).0
     );
+}
+
+#[test]
+fn v1_stored_bumps_and_old_images_reject_without_writes() {
+    let program_id = Pubkey::new_unique();
+    let pool = Pubkey::new_unique();
+    let authority_key = Pubkey::new_unique();
+    for old_version in [false, true] {
+        let mut registry = registry_account(program_id, pool, authority_key, 0, 0);
+        let mut authority = authority_account(authority_key, true);
+        registry.data[6] ^= 1;
+        if old_version {
+            registry.data[4] = 1;
+            registry.data[6] = 0;
+        }
+        let before = registry.snapshot();
+        assert_eq!(
+            invoke_simple(
+                &program_id,
+                &mut registry,
+                &mut authority,
+                RegistryMutationOpcodeV1::Pause,
+                0
+            ),
+            Err(custom(if old_version {
+                RegistryProgramErrorV1::InvalidRegistryAccount
+            } else {
+                RegistryProgramErrorV1::InvalidRegistryAddress
+            }))
+        );
+        registry.assert_unchanged(&before);
+
+        let mut registry = registry_account(program_id, pool, authority_key, 0, 0);
+        let mut entry = entry_account(
+            program_id,
+            entry_state(
+                pool,
+                PROFILE_BINDING,
+                RELEASE_A,
+                VERIFIER_A,
+                VerifierEntryStatusV1::Pending,
+                110,
+            ),
+            true,
+        );
+        entry.data[7] ^= 1;
+        if old_version {
+            entry.data[4] = 1;
+            entry.data[7] = 0;
+        }
+        let registry_before = registry.snapshot();
+        let entry_before = entry.snapshot();
+        assert_eq!(
+            invoke_activate(
+                &program_id,
+                &mut registry,
+                &mut entry,
+                &mut authority,
+                0,
+                110
+            ),
+            Err(custom(if old_version {
+                RegistryProgramErrorV1::InvalidEntryAccount
+            } else {
+                RegistryProgramErrorV1::InvalidEntryAddress
+            }))
+        );
+        assert_all_unchanged(&[(&registry, registry_before), (&entry, entry_before)]);
+    }
+}
+
+#[test]
+fn v2_stored_pda_and_programdata_bumps_and_old_images_reject_without_writes() {
+    let program_id = Pubkey::new_unique();
+    let pool = Pubkey::new_unique();
+    let authority_key = Pubkey::new_unique();
+    for index in [7, 248, 4] {
+        let mut registry = registry_v2_account(program_id, pool, authority_key, 0, 0);
+        let mut authority = authority_account(authority_key, true);
+        registry.data[index] ^= 1;
+        if index == 4 {
+            registry.data[4] = 2;
+            registry.data[7] = 0;
+            registry.data[248] = 0;
+        }
+        let before = registry.snapshot();
+        assert_eq!(
+            invoke_simple_v2(
+                &program_id,
+                &mut registry,
+                &mut authority,
+                RegistryMutationOpcodeV1::Pause,
+                0
+            ),
+            Err(custom(if index == 4 {
+                RegistryProgramErrorV1::InvalidRegistryAccount
+            } else {
+                RegistryProgramErrorV1::InvalidRegistryAddress
+            }))
+        );
+        registry.assert_unchanged(&before);
+    }
+    for index in [312, 313, 4] {
+        let mut registry = registry_v2_account(program_id, pool, authority_key, 0, 0);
+        let mut entry = pending_entry_v2_account(program_id, pool, RELEASE_A);
+        let mut authority = authority_account(authority_key, true);
+        entry.data[index] ^= 1;
+        if index == 4 {
+            entry.data[4] = 2;
+            entry.data[312] = 0;
+            entry.data[313] = 0;
+        }
+        let registry_before = registry.snapshot();
+        let entry_before = entry.snapshot();
+        assert_eq!(
+            invoke_activate_v2(
+                &program_id,
+                &mut registry,
+                &mut entry,
+                &mut authority,
+                0,
+                110
+            ),
+            Err(custom(if index == 4 {
+                RegistryProgramErrorV1::InvalidEntryAccount
+            } else {
+                RegistryProgramErrorV1::InvalidEntryAddress
+            }))
+        );
+        assert_all_unchanged(&[(&registry, registry_before), (&entry, entry_before)]);
+    }
+}
+
+#[test]
+fn v2_pause_activate_retire_and_freeze_preserve_both_canonical_bumps() {
+    let program_id = Pubkey::new_unique();
+    let pool = Pubkey::new_unique();
+    let authority_key = Pubkey::new_unique();
+    let mut registry = registry_v2_account(program_id, pool, authority_key, 0, 0);
+    let mut retiring = pending_entry_v2_account(program_id, pool, RELEASE_A);
+    let mut replacement = pending_entry_v2_account(program_id, pool, RELEASE_B);
+    let mut authority = authority_account(authority_key, true);
+    let original_registry = decode_verifier_registry_v2(&registry.data).unwrap();
+    let original_retiring = decode_verifier_registry_entry_v2(&retiring.data).unwrap();
+    let original_replacement = decode_verifier_registry_entry_v2(&replacement.data).unwrap();
+    let registry_bumps = |account: &TestAccount| {
+        let value = decode_verifier_registry_v2(&account.data).unwrap();
+        (value.bump, value.programdata_bump)
+    };
+    let entry_bumps = |account: &TestAccount| {
+        let value = decode_verifier_registry_entry_v2(&account.data).unwrap();
+        (value.bump, value.programdata_bump)
+    };
+    for (generation, opcode) in [
+        (0, RegistryMutationOpcodeV1::Pause),
+        (1, RegistryMutationOpcodeV1::Unpause),
+    ] {
+        assert_eq!(
+            invoke_simple_v2(
+                &program_id,
+                &mut registry,
+                &mut authority,
+                opcode,
+                generation
+            ),
+            Ok(())
+        );
+        assert_eq!(
+            registry_bumps(&registry),
+            (original_registry.bump, original_registry.programdata_bump)
+        );
+    }
+    assert_eq!(
+        invoke_activate_v2(
+            &program_id,
+            &mut registry,
+            &mut retiring,
+            &mut authority,
+            2,
+            110
+        ),
+        Ok(())
+    );
+    assert_eq!(
+        invoke_activate_v2(
+            &program_id,
+            &mut registry,
+            &mut replacement,
+            &mut authority,
+            3,
+            110
+        ),
+        Ok(())
+    );
+    assert_eq!(
+        entry_bumps(&retiring),
+        (original_retiring.bump, original_retiring.programdata_bump)
+    );
+    assert_eq!(
+        entry_bumps(&replacement),
+        (
+            original_replacement.bump,
+            original_replacement.programdata_bump
+        )
+    );
+    replacement.is_writable = false;
+    let replacement_before = replacement.snapshot();
+    {
+        let accounts = [
+            registry.info(),
+            retiring.info(),
+            replacement.info(),
+            authority.info(),
+        ];
+        assert_eq!(
+            process_instruction_with_runtime(
+                &program_id,
+                &accounts,
+                &encode_simple_mutation_v2(RegistryMutationOpcodeV1::Retire, 4).unwrap(),
+                111,
+                &mut NoCpi
+            ),
+            Ok(())
+        );
+    }
+    assert_eq!(
+        decode_verifier_registry_entry_v2(&retiring.data)
+            .unwrap()
+            .status,
+        VerifierEntryStatusV1::Retired
+    );
+    assert_eq!(
+        entry_bumps(&retiring),
+        (original_retiring.bump, original_retiring.programdata_bump)
+    );
+    replacement.assert_unchanged(&replacement_before);
+    assert_eq!(
+        invoke_simple_v2(
+            &program_id,
+            &mut registry,
+            &mut authority,
+            RegistryMutationOpcodeV1::Freeze,
+            5
+        ),
+        Ok(())
+    );
+    assert_eq!(
+        registry_bumps(&registry),
+        (original_registry.bump, original_registry.programdata_bump)
+    );
+    assert!(decode_verifier_registry_v2(&registry.data)
+        .unwrap()
+        .is_immutable());
 }

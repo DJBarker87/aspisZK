@@ -25,6 +25,9 @@ use crate::lane_forest_transaction_v1::{
 pub const V7_TX_V1_TERMINAL_COMPUTE_UNIT_LIMIT_V2: u32 = 1_300_000;
 pub const V7_TX_V1_TERMINAL_LOADED_ACCOUNT_BYTES_V2: u32 = 64 * 1024 * 1024;
 pub const V7_TX_V1_TERMINAL_REQUEST_BYTES_V2: usize = 320;
+/// Pool terminal instruction data: ASQ8 request || 4 B4 bump hints.
+pub const V7_TX_V1_TERMINAL_INSTRUCTION_DATA_BYTES_V2: usize =
+    V7_TX_V1_TERMINAL_REQUEST_BYTES_V2 + aspis_pool::POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES;
 pub const V7_TX_V1_TERMINAL_RETURN_BYTES_V2: usize = 792;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -76,24 +79,25 @@ impl PairForestTxV1CaseV2 {
         }
     }
 
+    /// Includes the 4 B4 bump-hint bytes of the terminal instruction data.
     pub const fn expected_wire_bytes_v2(self) -> usize {
         match (self.operation, self.history_path) {
             (
                 PairForestTerminalOperationV2::PrivateTransfer,
                 PairForestTerminalHistoryPathV2::SamePage,
-            ) => 833,
+            ) => 837,
             (
                 PairForestTerminalOperationV2::PrivateTransfer,
                 PairForestTerminalHistoryPathV2::Rollover,
-            ) => 866,
+            ) => 870,
             (
                 PairForestTerminalOperationV2::Withdrawal,
                 PairForestTerminalHistoryPathV2::SamePage,
-            ) => 998,
+            ) => 1_002,
             (
                 PairForestTerminalOperationV2::Withdrawal,
                 PairForestTerminalHistoryPathV2::Rollover,
-            ) => 1_031,
+            ) => 1_035,
         }
     }
 }
@@ -221,7 +225,7 @@ pub fn build_pair_forest_tx_v1_simulation_preflight_v2(
     if instruction.accounts.len() != case.expected_instruction_accounts_v2() {
         return Err(PairForestTxV1SimulationErrorV2::WrongInstructionAccountCount);
     }
-    if instruction.data.len() != V7_TX_V1_TERMINAL_REQUEST_BYTES_V2
+    if instruction.data.len() != V7_TX_V1_TERMINAL_INSTRUCTION_DATA_BYTES_V2
         || instruction.data.get(..4) != Some(b"ASQ8")
     {
         return Err(PairForestTxV1SimulationErrorV2::WrongInstructionData);
@@ -364,7 +368,7 @@ mod tests {
             program_id: key(200),
             accounts,
             data: {
-                let mut data = vec![0u8; V7_TX_V1_TERMINAL_REQUEST_BYTES_V2];
+                let mut data = vec![0u8; V7_TX_V1_TERMINAL_INSTRUCTION_DATA_BYTES_V2];
                 data[..4].copy_from_slice(b"ASQ8");
                 data
             },

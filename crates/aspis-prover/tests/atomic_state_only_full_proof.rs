@@ -1,7 +1,9 @@
 use std::sync::OnceLock;
 
 use aspis_core::field::M31;
-use aspis_core::state_only_prefix::{STATE_ONLY_PREFIX_OFFSETS, STATE_ONLY_RATE512_SHAPE};
+use aspis_core::state_only_prefix::{
+    STATE_ONLY_PREFIX_OFFSETS, STATE_ONLY_RATE256_SHAPE, STATE_ONLY_RATE512_SHAPE,
+};
 use aspis_prover::state_only_candidate_prefix::StateOnlyPowMode;
 use aspis_prover::state_only_hiding::InMemoryStateOnlyMaskNonceStore;
 use aspis_prover::state_only_proof::build_hiding_atomic_state_only_proof_v3;
@@ -159,4 +161,65 @@ fn atomic_proof_corruption_teeth_cover_terminal_relation_and_openings() {
             "accepted corruption at {offset}"
         );
     }
+}
+
+#[test]
+fn atomic_rate256_q22_roundtrip_and_corruption_teeth() {
+    let (statement, witness) = fixture();
+    let proof = build_hiding_atomic_state_only_proof_v3(
+        &statement,
+        &witness,
+        [24; 32],
+        [0xd3; 32],
+        &mut InMemoryStateOnlyMaskNonceStore::default(),
+        STATE_ONLY_RATE256_SHAPE,
+        HOST_HASH,
+        StateOnlyPowMode::UnminedZero,
+    )
+    .unwrap();
+    assert!(!proof.pow_valid);
+    let verified = verify_atomic_state_only_candidate_unmined_for_diagnostics_v3(
+        &proof.bytes,
+        &statement,
+        HOST_HASH,
+        None,
+    )
+    .unwrap();
+    assert_eq!(verified.prefix.shape, STATE_ONLY_RATE256_SHAPE);
+    assert_eq!(verified.schedule.query_count, 22);
+    assert!(verified.schedule.queries[..22]
+        .iter()
+        .all(|&q| q < (1 << 16)));
+    assert!(verify_atomic_state_only_candidate_v3(&proof.bytes, &statement, HOST_HASH).is_err());
+    for offset in [
+        STATE_ONLY_PREFIX_OFFSETS.initial_mask_claim_start,
+        STATE_ONLY_PREFIX_OFFSETS.sumcheck_start,
+        STATE_ONLY_PREFIX_OFFSETS.statement_evaluations_start,
+        STATE_ONLY_PREFIX_OFFSETS.rounds[0].ood_values_start,
+        STATE_ONLY_PREFIX_OFFSETS.rounds[2].sumcheck_start,
+        STATE_ONLY_PREFIX_OFFSETS.final_polynomial_start,
+        STATE_ONLY_PREFIX_OFFSETS.openings_start + 2,
+        proof.bytes.len() - 1,
+    ] {
+        let mut corrupt = proof.bytes.clone();
+        corrupt[offset] ^= 1;
+        assert!(
+            verify_atomic_state_only_candidate_unmined_for_diagnostics_v3(
+                &corrupt, &statement, HOST_HASH, None,
+            )
+            .is_err(),
+            "accepted rate256 corruption at {offset}"
+        );
+    }
+    let mut changed_statement = statement.clone();
+    changed_statement.sequence += 1;
+    assert!(
+        verify_atomic_state_only_candidate_unmined_for_diagnostics_v3(
+            &proof.bytes,
+            &changed_statement,
+            HOST_HASH,
+            None,
+        )
+        .is_err()
+    );
 }
