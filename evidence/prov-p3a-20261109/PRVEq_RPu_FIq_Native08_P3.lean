@@ -6,6 +6,13 @@ open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.unusedVariables false
 noncomputable section
 
+/-- Generic fixpoint transport (P3a, class SOURCE_SHAPE, fixpoint constants): two `Lean.Order.fix` constants of equal functionals are equal;
+the monotonicity proofs are propositions and play no role. -/
+theorem PRV_fix_congr {α : Sort _} [Lean.Order.CCPO α] {F1 F2 : α → α} {m1 : Lean.Order.monotone F1} {m2 : Lean.Order.monotone F2}
+    (h : F1 = F2) : Lean.Order.fix F1 m1 = Lean.Order.fix F2 m2 := by
+  subst h; rfl
+#print axioms PRV_fix_congr
+
 namespace PRVFresh_RPu_FIq_Native08
 open FIq_Native
 
@@ -229,7 +236,7 @@ def pool_v1.pair_forest_semantic_terminal.empty_root
     Array.index_usize
       pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1
       level
-  core.array.Array.map (BuiltinFnMut Std.U32 field.M31) a
+  FIq_Native.core.array.Array.map (BuiltinFnMut Std.U32 field.M31) a
     (field.M31_constructor)
 
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::bounded_append_carry]: loop 0:
@@ -496,7 +503,10 @@ theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31 : 
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31
 
 theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop : @PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop = @FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop := by
-  first | (trace "PRV-S1 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop"; rfl) | (trace "PRV-S2 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop"; delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop; try simp only [PRVEq.RPu_FIq_Native08.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK, PRVEq.RPu_FIq_Native08.poseidon2.DIGEST_ELEMS, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31]; try rfl; done)
+  delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop
+  delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop.mutual FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop.mutual
+  funext iter output selector opened start expected right_tweak
+  exact congrFun (congrFun (PRV_fix_congr (by funext f v0 v1; simp only [PRVEq.RPu_FIq_Native08.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK, PRVEq.RPu_FIq_Native08.poseidon2.DIGEST_ELEMS, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31]; try rfl))  iter) output
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop
 
 
@@ -527,7 +537,10 @@ theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_copy_terminal.Selectors.row :
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_copy_terminal.Selectors.row
 
 theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop : @PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop = @FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop := by
-  first | (trace "PRV-S1 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop"; rfl) | (trace "PRV-S2 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop"; delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop; try simp only [PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.empty_root, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_copy_terminal.Selectors.row]; try rfl; done)
+  delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop
+  delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop.mutual FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop.mutual
+  funext iter a selectors digests source
+  exact congrFun (congrFun (PRV_fix_congr (by funext f v0 v1; try simp only [PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.add_digest_binding, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.empty_root, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_copy_terminal.Selectors.row]; try rfl))  iter) digests
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop
 
 
@@ -541,7 +554,8 @@ theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_l
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
 
 theorem PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal : @PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal = @FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal := by
-  first | (trace "PRV-S1 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal"; rfl) | (trace "PRV-S2 PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal"; delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal; try simp only [PRVEq.RPu_FIq_Native08.poseidon2.DIGEST_ELEMS, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop]; try rfl; done)
+  delta PRVFresh_RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal
+  simp only [PRVEq.RPu_FIq_Native08.poseidon2.DIGEST_ELEMS, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.lift_m31, PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop]
 #print axioms PRVEq.RPu_FIq_Native08.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal
 
 
