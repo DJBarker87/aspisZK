@@ -1,0 +1,188 @@
+{
+ "module": "AspisV8R19.QuarticFieldSlice",
+ "kind": "funs",
+ "fresh_lines": {
+  "field.P": [
+   16,
+   19
+  ],
+  "field.reduce_u64": [
+   21,
+   35
+  ],
+  "field.M31.add": [
+   37,
+   45
+  ],
+  "field.M31.sub": [
+   47,
+   56
+  ],
+  "field.M31.mul": [
+   58,
+   66
+  ],
+  "field.M31.reduce_u64": [
+   68,
+   73
+  ],
+  "field.M31.double": [
+   75,
+   79
+  ],
+  "field.CM31.sub": [
+   81,
+   88
+  ],
+  "field.CM31.mul": [
+   90,
+   112
+  ],
+  "field.CM31.square": [
+   114,
+   132
+  ],
+  "field.mul_by_r": [
+   134,
+   141
+  ]
+ },
+ "dropped": [],
+ "defs": {
+  "field.P": {
+   "lines": [
+    146,
+    148
+   ],
+   "reached": true,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.reduce_u64": {
+   "lines": [
+    151,
+    153
+   ],
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.M31.add": {
+   "lines": [
+    156,
+    158
+   ],
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.M31.sub": {
+   "lines": [
+    161,
+    163
+   ],
+   "reached": true,
+   "callees": [
+    "field.P"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.M31.mul": {
+   "lines": null,
+   "reached": true,
+   "callees": [
+    "field.reduce_u64"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.M31.reduce_u64": {
+   "lines": [
+    169,
+    171
+   ],
+   "reached": true,
+   "callees": [
+    "field.reduce_u64"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.M31.double": {
+   "lines": [
+    174,
+    176
+   ],
+   "reached": false,
+   "callees": [
+    "field.M31.add"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.CM31.sub": {
+   "lines": [
+    179,
+    181
+   ],
+   "reached": false,
+   "callees": [
+    "field.M31.sub"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "field.CM31.mul": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "field.M31.sub",
+    "field.M31.mul",
+    "field.M31.reduce_u64"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.CM31.square": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "field.P",
+    "field.M31.mul",
+    "field.M31.reduce_u64",
+    "field.M31.double"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "field.mul_by_r": {
+   "lines": [
+    190,
+    192
+   ],
+   "reached": false,
+   "callees": [
+    "field.M31.add",
+    "field.M31.sub",
+    "field.M31.double"
+   ],
+   "status": "proved",
+   "stage": 2
+  }
+ },
+ "probe": false
+}
