@@ -1,0 +1,51 @@
+{"attempt": "PCVC_L021", "exit_status": 1, "wall_seconds": 6.701720402110368, "peak_rss_kib": "2653720", "swaps": "0", "print_axioms": ["'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.M31.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.CM31.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_sum_products3_prepared_loop0_loop0_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_sum_products3_prepared_loop0_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.Eq.field.qm31_sum_products3_prepared_loop0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.Eq.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCVC_sources/PRVEq_RPu_FIq_Native01_P3.lean:325:117: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVC_sources/PRVEq_RPu_FIq_Native01_P3.lean:326:4: warning: '(delta FIq_Native.PRVFresh_RPu_FIq_Native01.field.M31.add FIq_Native.field.M31.add; simp only [PRVC.Eq.field.P];
+  rfl)' tactic does nothing
+
+Note: This linter ca
+...
+     (fun f =>
+          ∀ iter left right sums,
+            f iter left right sums ⊑
+              FIq_Native.PRVFresh_RPu_FIq_Native01.field.qm31_sum_products3_prepared_loop0 iter left right sums)
+        (PRVC.adm_le4 _) ?_)
+      iter left right sums
+  intro f hf iter left right sums
+  refine
+    PartialOrder.rel_trans
+      (PRVC.rel_of_eq'
+        (?_ :
+          _ =
+            PRVC.bs (fun (iter1, sums1) => field.qm31_sum_products3_prepared_loop0.body left right iter1 sums1)
+              (fun st => f st.1 left right st.2) ((iter, sums))))
+      ?_
+  · rw [PRVC.bs_bind]
+    simp only [FIq_Native.PRVFresh_RPu_FIq_Native01.field.qm31_sum_products3_prepared_loop0.body, PRVC.Eq.field.P,
+      PRVC.Eq.field.M31.add, PRVC.Eq.field.CM31.add, PRVC.Eq.field.qm31_sum_products3_prepared_loop0_loop0_loop0,
+      PRVC.Eq.field.qm31_sum_products3_prepared_loop0_loop0]
+    prv_peel
+  · refine
+      PartialOrder.rel_trans
+        (PRVC.bs_mono (fun (iter1, sums1) => field.qm31_sum_products3_prepared_loop0.body left right iter1 sums1) _
+          (loop (fun (iter1, sums1) => field.qm31_sum_products3_prepared_loop0.body left right iter1 sums1)) ?_
+          ((iter, sums)))
+        (PRVC.rel_of_eq'
+          (PRVC.loop_unfold (fun (iter1, sums1) => field.qm31_sum_products3_prepared_loop0.body left right iter1 sums1)
+              ((iter, sums))).symm)
+    intro x
+    exact hf x.1 left right x.2)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVC_sources/PRVEq_RPu_FIq_Native01_P3.lean:455:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVC.Eq.field.qm31_sum_products3_prepared_loop0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4625d4173c574a2697c44beb1d8f4145.scope; invocation ID: 898add39538f4795b2ac3ee53c59aa12

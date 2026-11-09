@@ -127,16 +127,19 @@ theorem adm_le6 {α1 α2 α3 α4 α5 α6 β : Type _} (h : α1 → α2 → α3 �
   admissible_pi_apply (fun x1 (g : α2 → α3 → α4 → α5 → α6 → Result β) => ∀ x2 x3 x4 x5 x6, g x2 x3 x4 x5 x6 ⊑ h x1 x2 x3 x4 x5 x6)
     (fun a => adm_le5 (h a))
 
+theorem uncurry_proj {α β γ : Type _} (f : α → β → γ) (p : α × β) :
+    Aeneas.Std.uncurry f p = f p.1 p.2 := by cases p; rfl
+
 /-- normalise both sides, one side at a time (a whole-goal `simp` can refuse on dependent numerals) -/
 macro "prv_norm" : tactic => `(tactic| (
-  try (conv_lhs => simp only [bind_assoc_eq, ite_bind, dite_bind, bind_tc_ok, Aeneas.Std.bind_ok, Aeneas.Std.uncurry_apply_pair])
-  try (conv_rhs => simp only [bind_assoc_eq, ite_bind, dite_bind, bind_tc_ok, Aeneas.Std.bind_ok, Aeneas.Std.uncurry_apply_pair])))
+  try (conv_lhs => simp only [bind_assoc_eq, ite_bind, dite_bind, bind_tc_ok, Aeneas.Std.bind_ok, Aeneas.Std.uncurry_apply_pair, uncurry_proj])
+  try (conv_rhs => simp only [bind_assoc_eq, ite_bind, dite_bind, bind_tc_ok, Aeneas.Std.bind_ok, Aeneas.Std.uncurry_apply_pair, uncurry_proj])))
 
 /-- push the loop continuation inward and match the two do-block shapes -/
 macro "prv_peel" : tactic => `(tactic| (
   prv_norm
   repeat (first
-    | rfl
+    | with_reducible rfl
     | (apply PRVC.bind_congr; intro a; try (obtain ⟨_, _⟩ := a); prv_norm)
     | (apply PRVC.ite_congr'; prv_norm)
     | (apply PRVC.dite_congr' <;> intro h)

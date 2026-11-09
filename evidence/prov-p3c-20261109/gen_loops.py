@@ -20,7 +20,10 @@ def build(src,out,names,bridge_inline=True,extra_done=()):
     open(out,'w').write(txt)
     return report
 def one(base,name,done,F,G,NSF):
-    m=re.search(r'\ndef '+re.escape(name)+r'\n(.*?)\n  := do\n  loop\n    \(fun (.*?)\)\n    (.*?)\n\n',base,re.S)
+    m0=re.search(r'\ndef '+re.escape(name)+r'\n',base)
+    if not m0: return None
+    e0=base.find('\n\n',m0.end()); seg=base[m0.start():(e0+2 if e0>0 else len(base))]
+    m=re.search(r'\ndef '+re.escape(name)+r'\n(.*?)(?:\n  | ):= do\n  loop\n    \(fun (.*?)\)\n    (.*?)\n\n',seg+'\n',re.S)
     if not m: return None
     hdr,lam,init=m.group(1),m.group(2),m.group(3).strip()
     lam=' '.join(lam.split())
