@@ -237,12 +237,6 @@ pub mod label {
     /// record. The profile-specific domain and complete 1,520-byte record are
     /// absorbed before the C1 root and before lambda/chi.
     pub const V7_PAIR_LIVE_APPEND_SNAPSHOT: u8 = 61;
-    /// Tag-73 causal challenge binding. The record is
-    /// `challenge_id || canonical_qm31_le`. It is absorbed
-    /// immediately after the bounded sampler succeeds, so no later
-    /// transcript state can be computed without fixing the decoded challenge.
-    /// Older profiles never use this label.
-    pub const V7_CHALLENGE_BIND: u8 = 62;
 }
 
 const DOM_ABSORB: u8 = 0x00;
@@ -270,8 +264,36 @@ pub const OOD_RETRY_LIMIT: u32 = 3;
 /// later line layers continue to use [`Transcript::challenge_ood_qm31`].
 pub const CIRCLE_POINT_RETRY_LIMIT: u32 = 3;
 
-pub const V7_GAMMA_BIND_ID: u8 = 0;
-pub const V7_ALPHA_ZERO_BIND_ID: u8 = 1;
+/// Fixed rational-map parameters used by the R0 reference schedule when a
+/// sampled circle parameter is rejected: `t₀ = (0 + 1·u)`, `t₁ = (1 + 1·u)`
+/// in `(c0, c1)` tower order, i.e. `R0P.CircleSampler.circleFallbackParameter0/1`.
+/// Both have `c1 ≠ 0`, so neither is a pole nor in CM31, and they differ.
+pub const CIRCLE_FALLBACK_PARAMETERS: [QM31; 2] = [
+    QM31 {
+        c0: crate::field::CM31::ZERO,
+        c1: crate::field::CM31::ONE,
+    },
+    QM31 {
+        c0: crate::field::CM31::ONE,
+        c1: crate::field::CM31::ONE,
+    },
+];
+
+/// The fallback circle point for OOD row `sample` (0 or 1): the image of
+/// [`CIRCLE_FALLBACK_PARAMETERS`] under the secure rational map. The map
+/// cannot fail on these parameters (`c1 ≠ 0`), so the unwrap is total; it is
+/// written as an explicit match to keep this crate panic-free in practice.
+pub fn circle_fallback_point(sample: usize) -> SecureCirclePoint {
+    let parameter = CIRCLE_FALLBACK_PARAMETERS[sample % 2];
+    match secure_ood_circle_point_from_parameter(parameter) {
+        Ok(point) => point,
+        // Unreachable: `c1 = 1 ≠ 0` for both parameters.
+        Err(_) => SecureCirclePoint {
+            x: QM31::ONE,
+            y: QM31::ZERO,
+        },
+    }
+}
 
 /// The bounded rejection-sampling loop ran out of retries (a 2^-248-per-limb
 /// completeness event). The verifier maps this to proof rejection.
@@ -388,17 +410,9 @@ impl Transcript {
         let mut limbs = [M31::ZERO; 4];
         let mut block = self.squeeze_block();
         let mut word_index = 0usize;
-        // Keep this as an indexed loop rather than `iter_mut()`: the latter
-        // lowers through `Range`/iterator internals that the pinned Aeneas
-        // backend cannot translate.  The fixed four-limb traversal and all
-        // sampler state transitions are otherwise identical.
-        let mut limb_index = 0usize;
-        while limb_index < limbs.len() {
+        for limb in limbs.iter_mut() {
             let mut accepted = false;
-            // This is deliberately a counter rather than `for _ in 0..` for
-            // the same Aeneas lowering reason as the outer fixed-limb loop.
-            let mut retry_index = 0u32;
-            while retry_index < CHALLENGE_RETRY_LIMIT {
+            for _ in 0..CHALLENGE_RETRY_LIMIT {
                 if word_index == 8 {
                     block = self.squeeze_block();
                     word_index = 0;
@@ -411,16 +425,14 @@ impl Transcript {
                 word_index += 1;
                 let masked = word & crate::field::P;
                 if masked != crate::field::P {
-                    limbs[limb_index] = M31(masked);
+                    *limb = M31(masked);
                     accepted = true;
                     break;
                 }
-                retry_index += 1;
             }
             if !accepted {
                 return Err(ChallengeSampleExhausted);
             }
-            limb_index += 1;
         }
         Ok(QM31 {
             c0: crate::field::CM31 {
@@ -434,26 +446,6 @@ impl Transcript {
         })
     }
 
-    fn bind_decoded_challenge(&mut self, challenge_id: u8, value: QM31) {
-        let mut record = [0u8; 17];
-        record[0] = challenge_id;
-        value.write_le_bytes(&mut record[1..]);
-        self.absorb(label::V7_CHALLENGE_BIND, &record);
-    }
-
-    /// Tag-73 ordinary-QM31 sampler with an immediate decoded-value bind.
-    /// This preserves exact rejection sampling while preventing the duplex's
-    /// independent advance leg from exposing a later state before this
-    /// challenge has been fixed.
-    pub fn challenge_qm31_bound(
-        &mut self,
-        challenge_id: u8,
-    ) -> Result<QM31, ChallengeSampleExhausted> {
-        let value = self.challenge_qm31()?;
-        self.bind_decoded_challenge(challenge_id, value);
-        Ok(value)
-    }
-
     /// Sample exactly uniformly from `QM31 ∖ {0}` with a bounded
     /// rejection loop. Every rejected zero consumes fresh transcript blocks;
     /// exhaustion is a completeness rejection, never a zero fallback.
@@ -465,17 +457,6 @@ impl Transcript {
             }
         }
         Err(ChallengeSampleExhausted)
-    }
-
-    /// Tag-73 nonzero-QM31 sampler with one immediate bind covering the
-    /// accepted decoded value.
-    pub fn challenge_nonzero_qm31_bound(
-        &mut self,
-        challenge_id: u8,
-    ) -> Result<QM31, ChallengeSampleExhausted> {
-        let value = self.challenge_nonzero_qm31()?;
-        self.bind_decoded_challenge(challenge_id, value);
-        Ok(value)
     }
 
     /// Sample exactly uniformly from QM31 \ CM31. Since every evaluation
@@ -507,20 +488,30 @@ impl Transcript {
             let parameter = self
                 .challenge_qm31()
                 .map_err(|_| CirclePointSampleError::ChallengeSampleExhausted)?;
-            // Every CM31 parameter is rejected by the OOD policy.  Check that
-            // public condition before the rational map so a rejected outer
-            // candidate cannot execute the otherwise redundant QM31 inverse.
-            // The helper below retains its precise standalone error ordering;
-            // this transcript wrapper exposes only candidate exhaustion, so
-            // the accepted value and number of transcript draws are unchanged.
-            if parameter.c1 == crate::field::CM31::ZERO {
-                continue;
-            }
             if let Ok(point) = secure_ood_circle_point_from_parameter(parameter) {
                 return Ok(point);
             }
         }
         Err(CirclePointSampleError::ParameterSampleExhausted)
+    }
+
+    /// Sample the layer-zero circle OOD point for row `sample` of the R0
+    /// reference schedule with a total one-block law and no retry: one
+    /// `challenge_qm31` parameter `t`; if the rational map rejects it
+    /// (`t in CM31`, which contains both poles), the point is the fixed
+    /// row-specific fallback [`circle_fallback_point`] instead of a fresh
+    /// draw. The fallbacks lie outside CM31, are distinct, and are the
+    /// points `R0P.CircleSampler.circleFallback0/1` of the formal model, so
+    /// the sampled point is never base-rational and each row's bad set is
+    /// the proved `(1+δQ)/P⁴` fiber. Only the per-limb exhaustion of
+    /// `challenge_qm31` remains an error.
+    pub fn challenge_reference_circle_point(
+        &mut self,
+        sample: usize,
+    ) -> Result<SecureCirclePoint, ChallengeSampleExhausted> {
+        let parameter = self.challenge_qm31()?;
+        Ok(secure_ood_circle_point_from_parameter(parameter)
+            .unwrap_or_else(|_| circle_fallback_point(sample)))
     }
 
     /// Derive `count` query positions in [0, bound) where bound is a power of
@@ -1047,26 +1038,6 @@ mod tests {
     }
 
     #[test]
-    fn v7_bound_qm31_binds_exact_decoded_value_without_changing_sample() {
-        let mut ordinary = Transcript::new(test_hash);
-        ordinary.absorb(label::PROFILE, b"v7-bound-qm31-test");
-        let mut bound = ordinary.clone();
-        let mut manual = ordinary.clone();
-
-        let expected = ordinary.challenge_qm31().unwrap();
-        let manual_value = manual.challenge_qm31().unwrap();
-        let mut record = [0u8; 17];
-        record[0] = V7_ALPHA_ZERO_BIND_ID;
-        manual_value.write_le_bytes(&mut record[1..]);
-        manual.absorb(label::V7_CHALLENGE_BIND, &record);
-        let actual = bound.challenge_qm31_bound(V7_ALPHA_ZERO_BIND_ID).unwrap();
-
-        assert_eq!(actual, expected);
-        assert_eq!(bound.diagnostic_state(), manual.diagnostic_state());
-        assert_ne!(bound.diagnostic_state(), ordinary.diagnostic_state());
-    }
-
-    #[test]
     fn ordered_queries_without_replacement_are_unique_bounded_and_deterministic() {
         let mut first = Transcript::new(test_hash);
         first.absorb(label::PROFILE, b"ordered-query-sampler-v1");
@@ -1215,49 +1186,6 @@ mod tests {
         }
     }
 
-    fn first_two_cm31_then_secure_hash(inputs: &[&[u8]]) -> [u8; 32] {
-        if let Some(state) = framed_state(inputs, DOM_SQUEEZE) {
-            let mut block = [0u8; 32];
-            block[0..4].copy_from_slice(&1u32.to_le_bytes());
-            block[4..8].copy_from_slice(&2u32.to_le_bytes());
-            if state[0] >= 2 {
-                block[8..12].copy_from_slice(&3u32.to_le_bytes());
-                block[12..16].copy_from_slice(&4u32.to_le_bytes());
-            }
-            block
-        } else if let Some(state) = framed_state(inputs, DOM_ADVANCE) {
-            let mut next = [0u8; 32];
-            next[0] = state[0].saturating_add(1);
-            next
-        } else {
-            test_hash(inputs)
-        }
-    }
-
-    fn legacy_secure_circle_sampler(
-        transcript: &mut Transcript,
-    ) -> Result<SecureCirclePoint, CirclePointSampleError> {
-        for _ in 0..CIRCLE_POINT_RETRY_LIMIT {
-            let parameter = transcript
-                .challenge_qm31()
-                .map_err(|_| CirclePointSampleError::ChallengeSampleExhausted)?;
-            if let Ok(point) = secure_ood_circle_point_from_parameter(parameter) {
-                return Ok(point);
-            }
-        }
-        Err(CirclePointSampleError::ParameterSampleExhausted)
-    }
-
-    #[test]
-    fn circle_sampler_precheck_preserves_accepted_point_and_transcript_state() {
-        let mut optimized = Transcript::new(first_two_cm31_then_secure_hash);
-        let mut legacy = Transcript::new(first_two_cm31_then_secure_hash);
-        let optimized_point = optimized.challenge_secure_circle_point().unwrap();
-        let legacy_point = legacy_secure_circle_sampler(&mut legacy).unwrap();
-        assert_eq!(optimized_point, legacy_point);
-        assert_eq!(optimized.state, legacy.state);
-    }
-
     #[test]
     fn ood_sampler_rejects_subfield_points_with_a_bound() {
         let mut t = Transcript::new(cm31_only_hash);
@@ -1271,6 +1199,44 @@ mod tests {
             circle.challenge_secure_circle_point(),
             Err(CirclePointSampleError::ParameterSampleExhausted)
         );
+    }
+
+    #[test]
+    fn reference_circle_fallback_points_are_valid_distinct_and_outside_cm31() {
+        for (sample, parameter) in CIRCLE_FALLBACK_PARAMETERS.iter().enumerate() {
+            assert_ne!(parameter.c1, crate::field::CM31::ZERO);
+            let point = secure_ood_circle_point_from_parameter(*parameter)
+                .expect("fallback parameter must be accepted by the secure map");
+            assert_eq!(circle_fallback_point(sample), point);
+            // Outside CM31: the inverse parameter y/(1+x) has c1 ≠ 0, so the
+            // point cannot have both coordinates in CM31.
+            assert!(point.x.c1 != crate::field::CM31::ZERO || point.y.c1 != crate::field::CM31::ZERO);
+        }
+        assert_ne!(circle_fallback_point(0), circle_fallback_point(1));
+    }
+
+    #[test]
+    fn reference_circle_sampler_uses_row_fallback_without_retry() {
+        // Every block is a CM31 parameter: row 0 falls back to f0, row 1 to
+        // f1, and each row consumes exactly the one block of its parameter.
+        let mut t = Transcript::new(cm31_only_hash);
+        let before = t.state;
+        assert_eq!(t.challenge_reference_circle_point(0), Ok(circle_fallback_point(0)));
+        let mut one_block = Transcript { state: before, hash: cm31_only_hash };
+        let _ = one_block.challenge_qm31().unwrap();
+        assert_eq!(t.state, one_block.state);
+        assert_eq!(t.challenge_reference_circle_point(1), Ok(circle_fallback_point(1)));
+
+        // Accepted draws agree with the legacy retry sampler on its first try.
+        let mut legacy = Transcript::new(test_hash);
+        let mut reference = Transcript::new(test_hash);
+        for sample in 0..2 {
+            assert_eq!(
+                reference.challenge_reference_circle_point(sample).unwrap(),
+                legacy.challenge_secure_circle_point().unwrap()
+            );
+        }
+        assert_eq!(reference.state, legacy.state);
     }
 
     fn singular_circle_hash(inputs: &[&[u8]]) -> [u8; 32] {

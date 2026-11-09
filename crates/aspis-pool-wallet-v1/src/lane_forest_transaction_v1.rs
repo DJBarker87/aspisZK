@@ -11,7 +11,9 @@
 use std::{collections::BTreeSet, io::Read, time::Duration};
 
 use aspis_pool::{
-    pool_v1_nullifier_marker_address, pool_v1_pair_forest_checkpoint_address,
+    encode_pair_forest_terminal_instruction_data_v1, pool_v1_pair_forest_checkpoint_address,
+    pool_v1_pair_forest_nullifier_marker_address, pool_v1_pair_forest_terminal_bump_hints_v1,
+    split_pair_forest_terminal_bump_hints_v1,
     pool_v1_pair_forest_lane_address, pool_v1_pair_forest_lane_root_page_address,
     pool_v1_pair_forest_master_address, pool_v1_vault_authority_address,
     pool_v1_vault_token_account_address, LEGACY_SPL_TOKEN_PROGRAM_ID,
@@ -19,19 +21,10 @@ use aspis_pool::{
 use aspis_statement::{
     encode_digest_canonical,
     pool_v1::{
-        encode_pool_v1_pair_forest_terminal_request_v1, encode_pool_v1_terminal_pda_certificate_v1,
-        pool_v1_pair_forest_output_lane_v1, root_history_location, PoolV1PairForestLaneStateV1,
-        PoolV1PairForestMasterV1, PoolV1PairForestTerminalPaymentV1,
-        PoolV1PairForestTerminalRequestV1, PoolV1TerminalPdaCertificateV1, POOL_V1_PAIR_CAPACITY,
-        POOL_V1_PAIR_FOREST_TERMINAL_VERSION, POOL_V1_TERMINAL_PDA_BUMP_CHECKPOINT,
-        POOL_V1_TERMINAL_PDA_BUMP_COUNT, POOL_V1_TERMINAL_PDA_BUMP_CURRENT_PAGE,
-        POOL_V1_TERMINAL_PDA_BUMP_ENTRY, POOL_V1_TERMINAL_PDA_BUMP_LANE,
-        POOL_V1_TERMINAL_PDA_BUMP_MARKER, POOL_V1_TERMINAL_PDA_BUMP_MASTER,
-        POOL_V1_TERMINAL_PDA_BUMP_NEXT_PAGE, POOL_V1_TERMINAL_PDA_BUMP_REGISTRY,
-        POOL_V1_TERMINAL_PDA_BUMP_REGISTRY_PROGRAMDATA, POOL_V1_TERMINAL_PDA_BUMP_VAULT_AUTHORITY,
-        POOL_V1_TERMINAL_PDA_BUMP_VAULT_TOKEN, POOL_V1_TERMINAL_PDA_BUMP_VERIFIER_PROGRAMDATA,
-        POOL_V1_TERMINAL_PDA_CERTIFICATE_FLAG_ROLLOVER,
-        POOL_V1_TERMINAL_PDA_CERTIFICATE_FLAG_WITHDRAWAL,
+        encode_pool_v1_pair_forest_terminal_request_v1, pool_v1_pair_forest_output_lane_v1,
+        root_history_location, PoolV1PairForestLaneStateV1, PoolV1PairForestMasterV1,
+        PoolV1PairForestTerminalPaymentV1, PoolV1PairForestTerminalRequestV1,
+        POOL_V1_PAIR_CAPACITY, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
         POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,
     },
 };
@@ -45,7 +38,7 @@ use solana_program::{
     instruction::{AccountMeta, Instruction},
     pubkey::Pubkey,
 };
-use solana_sdk_ids::{bpf_loader_upgradeable, system_program};
+use solana_sdk_ids::system_program;
 use solana_signature_v1::Signature as V1Signature;
 use solana_transaction::versioned::VersionedTransaction as LegacyVersionedTransaction;
 use solana_transaction_v1::versioned::VersionedTransaction as V1VersionedTransaction;
@@ -93,7 +86,6 @@ pub enum PairForestTransactionV1ErrorV2 {
     SerializationFailed,
     TransactionTooLarge,
     InvalidCarrier,
-    WrongPdaCertificate,
     SignedMessageMismatch,
     InvalidSignature,
 }
@@ -396,174 +388,6 @@ fn terminal_request_identity_v2(
     }
 }
 
-/// Construct the exact verifier-owned APD8 image for one already-sealed proof.
-///
-/// This client-side search is advisory only: the verifier independently
-/// repeats every canonical `find_program_address` call before it writes the
-/// certificate. The terminal transaction consumes the immutable image using
-/// fixed single-attempt derivations.
-#[allow(clippy::too_many_arguments)]
-pub fn build_pair_forest_terminal_pda_certificate_v1_4k_v2(
-    pool_program: Pubkey,
-    master: &PoolV1PairForestMasterV1,
-    lane: &PoolV1PairForestLaneStateV1,
-    profile: PairForestSpendProfileSelectionV2,
-    proof_account: Pubkey,
-    request: &PoolV1PairForestTerminalRequestV1,
-) -> Result<PoolV1TerminalPdaCertificateV1, PairForestTransactionV1ErrorV2> {
-    if profile.registry_family != PairForestVerifierRegistryFamilyV2::ImmutableDeploymentV2 {
-        return Err(PairForestTransactionV1ErrorV2::WrongProfile);
-    }
-    // Reuse the legacy builder's complete live-state/request authentication;
-    // the discarded instruction is never signed or submitted.
-    let checked = build_pair_forest_terminal_instruction_v1_4k_v2(
-        pool_program,
-        master,
-        lane,
-        profile,
-        Pubkey::new_unique(),
-        proof_account,
-        request,
-    )?;
-    let (_, _, checkpoint_sequence, _, withdrawal) = terminal_request_identity_v2(request);
-    let master_address = Pubkey::new_from_array(master.identity.pool);
-    let mint = Pubkey::new_from_array(master.identity.asset_mint);
-    let verifier_program = Pubkey::new_from_array(profile.verifier_program);
-    let registry_program = Pubkey::new_from_array(profile.registry_program);
-    let canonical_nullifier = encode_digest_canonical(request.public.nullifier());
-    let (derived_master, master_bump) = pool_v1_pair_forest_master_address(&pool_program, &mint);
-    let (checkpoint, checkpoint_bump) =
-        pool_v1_pair_forest_checkpoint_address(&pool_program, &master_address, checkpoint_sequence);
-    let (selected_lane, lane_bump) =
-        pool_v1_pair_forest_lane_address(&pool_program, &master_address, lane.lane_id)
-            .map_err(|_| PairForestTransactionV1ErrorV2::WrongLane)?;
-    let current_location = root_history_location(lane.tree.next_leaf_index);
-    let next_location = root_history_location(lane.tree.next_leaf_index + 1);
-    let (current_history_page, current_page_bump) = pool_v1_pair_forest_lane_root_page_address(
-        &pool_program,
-        &master_address,
-        lane.lane_id,
-        current_location.page_number,
-    )
-    .map_err(|_| PairForestTransactionV1ErrorV2::WrongLane)?;
-    let rollover = current_location.page_number != next_location.page_number;
-    let (next_history_page, next_page_bump) = if rollover {
-        pool_v1_pair_forest_lane_root_page_address(
-            &pool_program,
-            &master_address,
-            lane.lane_id,
-            next_location.page_number,
-        )
-        .map_err(|_| PairForestTransactionV1ErrorV2::WrongLane)?
-    } else {
-        (Pubkey::default(), 0)
-    };
-    let (nullifier_marker, marker_bump) =
-        pool_v1_nullifier_marker_address(&pool_program, &master_address, &canonical_nullifier)
-            .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
-    let (registry, registry_bump) =
-        aspis_registry::pool_v1_verifier_registry_v2_address(&registry_program, &master_address);
-    let (registry_entry, entry_bump) = aspis_registry::pool_v1_verifier_entry_v2_address(
-        &registry_program,
-        &master_address,
-        &request.verifier_profile,
-        &request.verifier_release,
-    );
-    let loader = bpf_loader_upgradeable::id();
-    let (registry_programdata, registry_programdata_bump) =
-        Pubkey::find_program_address(&[registry_program.as_ref()], &loader);
-    let (verifier_programdata, verifier_programdata_bump) =
-        Pubkey::find_program_address(&[verifier_program.as_ref()], &loader);
-    let (vault_authority, vault_authority_bump, vault_token, vault_token_bump) = if withdrawal {
-        let (authority, authority_bump) =
-            pool_v1_vault_authority_address(&pool_program, &master_address);
-        let (token, token_bump) =
-            pool_v1_vault_token_account_address(&pool_program, &master_address);
-        (authority, authority_bump, token, token_bump)
-    } else {
-        (Pubkey::default(), 0, Pubkey::default(), 0)
-    };
-    if checked
-        .accounts
-        .iter()
-        .all(|meta| meta.pubkey != derived_master)
-        || registry.to_bytes() != profile.registry_address
-        || registry_entry.to_bytes() != profile.entry_address
-    {
-        return Err(PairForestTransactionV1ErrorV2::WrongPdaCertificate);
-    }
-    let mut bumps = [0u8; POOL_V1_TERMINAL_PDA_BUMP_COUNT];
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_MASTER] = master_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_CHECKPOINT] = checkpoint_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_LANE] = lane_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_CURRENT_PAGE] = current_page_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_NEXT_PAGE] = next_page_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_MARKER] = marker_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_REGISTRY] = registry_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_REGISTRY_PROGRAMDATA] = registry_programdata_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_ENTRY] = entry_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_VERIFIER_PROGRAMDATA] = verifier_programdata_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_VAULT_AUTHORITY] = vault_authority_bump;
-    bumps[POOL_V1_TERMINAL_PDA_BUMP_VAULT_TOKEN] = vault_token_bump;
-    let certificate = PoolV1TerminalPdaCertificateV1 {
-        flags: u8::from(rollover) * POOL_V1_TERMINAL_PDA_CERTIFICATE_FLAG_ROLLOVER
-            | u8::from(withdrawal) * POOL_V1_TERMINAL_PDA_CERTIFICATE_FLAG_WITHDRAWAL,
-        proof_account: proof_account.to_bytes(),
-        pool_program: pool_program.to_bytes(),
-        master: master_address.to_bytes(),
-        asset_mint: mint.to_bytes(),
-        checkpoint: checkpoint.to_bytes(),
-        checkpoint_sequence,
-        selected_lane: selected_lane.to_bytes(),
-        lane_id: lane.lane_id,
-        current_history_page: current_history_page.to_bytes(),
-        current_page_number: current_location.page_number,
-        next_history_page: next_history_page.to_bytes(),
-        next_page_number: if rollover {
-            next_location.page_number
-        } else {
-            0
-        },
-        nullifier_marker: nullifier_marker.to_bytes(),
-        canonical_nullifier,
-        registry_program: registry_program.to_bytes(),
-        registry: registry.to_bytes(),
-        registry_programdata: registry_programdata.to_bytes(),
-        registry_entry: registry_entry.to_bytes(),
-        verifier_program: verifier_program.to_bytes(),
-        verifier_programdata: verifier_programdata.to_bytes(),
-        vault_authority: vault_authority.to_bytes(),
-        vault_token: vault_token.to_bytes(),
-        profile_binding: request.verifier_profile,
-        release_binding: request.verifier_release,
-        bumps,
-    };
-    encode_pool_v1_terminal_pda_certificate_v1(&certificate)
-        .map_err(|_| PairForestTransactionV1ErrorV2::WrongPdaCertificate)?;
-    Ok(certificate)
-}
-
-/// Build the one-time verifier instruction that authenticates and persists an
-/// APD8 image. The certificate account must be a fresh verifier-owned signer.
-pub fn build_initialize_terminal_pda_certificate_instruction_v1_4k_v2(
-    certificate_account: Pubkey,
-    certificate: &PoolV1TerminalPdaCertificateV1,
-) -> Result<Instruction, PairForestTransactionV1ErrorV2> {
-    if certificate_account == Pubkey::default() {
-        return Err(PairForestTransactionV1ErrorV2::ZeroAccount);
-    }
-    let data = encode_pool_v1_terminal_pda_certificate_v1(certificate)
-        .map_err(|_| PairForestTransactionV1ErrorV2::WrongPdaCertificate)?;
-    Ok(Instruction {
-        program_id: Pubkey::new_from_array(certificate.verifier_program),
-        accounts: vec![
-            AccountMeta::new(certificate_account, true),
-            AccountMeta::new_readonly(Pubkey::new_from_array(certificate.proof_account), false),
-        ],
-        data: data.to_vec(),
-    })
-}
-
 /// Build the exact one-terminal `ASQ8` top-level Pool instruction.
 ///
 /// Same-page/genesis transfer: 11 accounts. Rollover transfer: 12.
@@ -692,7 +516,8 @@ pub fn build_pair_forest_terminal_instruction_v1_4k_v2(
     )
     .map_err(|_| PairForestTransactionV1ErrorV2::WrongLane)?
     .0;
-    let marker = pool_v1_nullifier_marker_address(
+    // B1 marker: create_with_seed(master, packed SHA-256 seed, Pool).
+    let marker = pool_v1_pair_forest_nullifier_marker_address(
         &pool_program,
         &master_address,
         &encode_digest_canonical(request.public.nullifier()),
@@ -746,66 +571,20 @@ pub fn build_pair_forest_terminal_instruction_v1_4k_v2(
     Ok(Instruction {
         program_id: pool_program,
         accounts,
-        data: encode_pool_v1_pair_forest_terminal_request_v1(request)
-            .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?
-            .to_vec(),
+        // ASQ8 || 4 B4 bump hints (current page, next page, vault authority,
+        // vault token account); unused hints are zero.
+        data: encode_pair_forest_terminal_instruction_data_v1(
+            &encode_pool_v1_pair_forest_terminal_request_v1(request)
+                .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?,
+            pool_v1_pair_forest_terminal_bump_hints_v1(
+                &pool_program,
+                &master_address,
+                &lane_address,
+                lane.tree.next_leaf_index,
+                withdrawal,
+            ),
+        ),
     })
-}
-
-/// Build the audit-feature terminal instruction with one additional immutable
-/// verifier-owned APD8 certificate account.
-///
-/// The function reconstructs the complete expected certificate locally and
-/// rejects any caller-supplied image that differs byte-for-byte. The verifier
-/// remains the authority: it performed the same canonical searches when the
-/// account was initialized and replays fixed single-attempt derivations during
-/// terminal execution.
-#[allow(clippy::too_many_arguments)]
-pub fn build_pair_forest_terminal_instruction_with_pda_certificate_v1_4k_v3(
-    pool_program: Pubkey,
-    master: &PoolV1PairForestMasterV1,
-    lane: &PoolV1PairForestLaneStateV1,
-    profile: PairForestSpendProfileSelectionV2,
-    marker_payer: Pubkey,
-    proof_account: Pubkey,
-    certificate_account: Pubkey,
-    certificate: &PoolV1TerminalPdaCertificateV1,
-    request: &PoolV1PairForestTerminalRequestV1,
-) -> Result<Instruction, PairForestTransactionV1ErrorV2> {
-    if certificate_account == Pubkey::default() {
-        return Err(PairForestTransactionV1ErrorV2::ZeroAccount);
-    }
-    let expected = build_pair_forest_terminal_pda_certificate_v1_4k_v2(
-        pool_program,
-        master,
-        lane,
-        profile,
-        proof_account,
-        request,
-    )?;
-    if *certificate != expected {
-        return Err(PairForestTransactionV1ErrorV2::WrongPdaCertificate);
-    }
-    let withdrawal = matches!(
-        request.public,
-        PoolV1PairForestTerminalPaymentV1::Withdrawal(_)
-    );
-    let mut instruction = build_pair_forest_terminal_instruction_v1_4k_v2(
-        pool_program,
-        master,
-        lane,
-        profile,
-        marker_payer,
-        proof_account,
-        request,
-    )?;
-    let certificate_index = instruction.accounts.len() - if withdrawal { 5 } else { 0 };
-    instruction.accounts.insert(
-        certificate_index,
-        AccountMeta::new_readonly(certificate_account, false),
-    );
-    require_unique_metas_v2(&instruction.accounts)?;
-    Ok(instruction)
 }
 
 pub(crate) fn to_v1_instruction_v2(
@@ -934,27 +713,25 @@ fn build_exact_pair_forest_v1_instructions_v2(
 fn terminal_proof_account_v2(
     instruction: &Instruction,
 ) -> Result<Pubkey, PairForestTransactionV1ErrorV2> {
+    let (request_bytes, _) = split_pair_forest_terminal_bump_hints_v1(&instruction.data)
+        .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
     let request =
-        aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(&instruction.data)
+        aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(request_bytes)
             .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
-    // The retained current page is writable for a same-page append and
-    // readonly for rollover.  This authenticated terminal shape fixes the
-    // proof position independently of the optional APD8 certificate appended
-    // immediately after the proof (and before withdrawal custody accounts).
-    let rollover = !instruction
-        .accounts
-        .get(3)
-        .ok_or(PairForestTransactionV1ErrorV2::WrongRequest)?
-        .is_writable;
-    let legacy_accounts = match request.public {
-        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_) => 11,
-        PoolV1PairForestTerminalPaymentV1::Withdrawal(_) => 16,
-    } + usize::from(rollover);
-    let account_count = instruction.accounts.len();
-    if account_count != legacy_accounts && account_count != legacy_accounts + 1 {
-        return Err(PairForestTransactionV1ErrorV2::WrongRequest);
-    }
-    let proof_index = 10 + usize::from(rollover);
+    let proof_index = match request.public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_) => {
+            if !matches!(instruction.accounts.len(), 11 | 12) {
+                return Err(PairForestTransactionV1ErrorV2::WrongRequest);
+            }
+            instruction.accounts.len() - 1
+        }
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(_) => {
+            if !matches!(instruction.accounts.len(), 16 | 17) {
+                return Err(PairForestTransactionV1ErrorV2::WrongRequest);
+            }
+            instruction.accounts.len() - 6
+        }
+    };
     let proof = &instruction.accounts[proof_index];
     if proof.pubkey == Pubkey::default() || proof.is_signer || proof.is_writable {
         return Err(PairForestTransactionV1ErrorV2::WrongRequest);
@@ -983,8 +760,12 @@ pub fn build_exact_pair_forest_v1_carrier_transaction_v2(
         return Err(PairForestTransactionV1ErrorV2::InvalidCarrier);
     }
     let proof_account = terminal_proof_account_v2(terminal_instruction)?;
+    // The carrier binds the ASQ8 request, not the Pool-only bump hints.
+    let (terminal_request_bytes, _) =
+        split_pair_forest_terminal_bump_hints_v1(&terminal_instruction.data)
+            .map_err(|_| PairForestTransactionV1ErrorV2::InvalidCarrier)?;
     carrier
-        .validate_terminal_v2(&terminal_instruction.data, proof_account.to_bytes(), 0, 1)
+        .validate_terminal_v2(terminal_request_bytes, proof_account.to_bytes(), 0, 1)
         .map_err(|_| PairForestTransactionV1ErrorV2::InvalidCarrier)?;
     let carrier_instruction =
         build_tx_v1_ciphertext_carrier_instruction_v2(carrier, wallet_proof_authority)
@@ -1119,6 +900,7 @@ mod tests {
     fn master(program: Pubkey, mint: Pubkey, registry_program: Pubkey) -> PoolV1PairForestMasterV1 {
         let initialization = initialization(mint, registry_program);
         PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: pool_v1_pair_forest_master_address(&program, &mint)
                     .0
@@ -1142,6 +924,7 @@ mod tests {
         sequence: u64,
     ) -> PoolV1PairForestLaneStateV1 {
         PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master: master.identity.pool,
             lane_id,
             tree: IncrementalMerkleTreeV1 {
@@ -1352,10 +1135,10 @@ mod tests {
             expected_v0,
             expected_addresses,
         ) in [
-            (false, false, 11, 845, 823, 12),
-            (false, true, 12, 878, 856, 13),
-            (true, false, 16, 1_010, 988, 17),
-            (true, true, 17, 1_043, 1_021, 18),
+            (false, false, 11, 849, 827, 12),
+            (false, true, 12, 882, 860, 13),
+            (true, false, 16, 1_014, 992, 17),
+            (true, true, 17, 1_047, 1_025, 18),
         ] {
             let (program, master, lane, profile, request) = terminal_fixture(withdrawal, rollover);
             let proof_account = key(21);
@@ -1371,7 +1154,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(instruction.accounts.len(), expected_accounts);
-            assert_eq!(instruction.data.len(), 320);
+            assert_eq!(instruction.data.len(), 324);
             let transaction = build_exact_pair_forest_v1_transaction_v2(
                 &instruction,
                 marker_payer,
@@ -1399,10 +1182,10 @@ mod tests {
     #[test]
     fn immutable_registry_v2_terminal_wires_preserve_account_count_and_exact_four_kib_sizes() {
         for (withdrawal, rollover, expected_accounts, expected_v1, expected_addresses) in [
-            (false, false, 11, 845, 12),
-            (false, true, 12, 878, 13),
-            (true, false, 16, 1_010, 17),
-            (true, true, 17, 1_043, 18),
+            (false, false, 11, 849, 12),
+            (false, true, 12, 882, 13),
+            (true, false, 16, 1_014, 17),
+            (true, true, 17, 1_047, 18),
         ] {
             let (program, master, lane, profile, request) =
                 immutable_terminal_fixture(withdrawal, rollover);
@@ -1421,7 +1204,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(instruction.accounts.len(), expected_accounts);
-            assert_eq!(instruction.data.len(), 320);
+            assert_eq!(instruction.data.len(), 324);
             assert!(instruction
                 .accounts
                 .iter()
@@ -1448,106 +1231,6 @@ mod tests {
             assert_eq!(
                 SOLANA_V1_TRANSACTION_MAX_BYTES_V2 - transaction.serialized_wire_bytes_v2(),
                 SOLANA_V1_TRANSACTION_MAX_BYTES_V2 - expected_v1
-            );
-        }
-    }
-
-    #[test]
-    fn terminal_pda_certificate_is_exact_and_adds_one_readonly_address() {
-        for (withdrawal, rollover) in [(false, false), (false, true), (true, false), (true, true)] {
-            let (program, master, lane, profile, request) =
-                immutable_terminal_fixture(withdrawal, rollover);
-            let proof = key(21);
-            let payer = key(22);
-            let certificate_account = key(24);
-            let certificate = build_pair_forest_terminal_pda_certificate_v1_4k_v2(
-                program, &master, &lane, profile, proof, &request,
-            )
-            .unwrap();
-            assert_eq!(certificate.withdrawal(), withdrawal);
-            assert_eq!(certificate.rollover(), rollover);
-            assert_eq!(certificate.proof_account, proof.to_bytes());
-            let initialization = build_initialize_terminal_pda_certificate_instruction_v1_4k_v2(
-                certificate_account,
-                &certificate,
-            )
-            .unwrap();
-            assert_eq!(initialization.program_id, key(20));
-            assert_eq!(initialization.accounts.len(), 2);
-            assert!(initialization.accounts[0].is_signer);
-            assert!(initialization.accounts[0].is_writable);
-
-            let legacy = build_pair_forest_terminal_instruction_v1_4k_v2(
-                program, &master, &lane, profile, payer, proof, &request,
-            )
-            .unwrap();
-            let terminal = build_pair_forest_terminal_instruction_with_pda_certificate_v1_4k_v3(
-                program,
-                &master,
-                &lane,
-                profile,
-                payer,
-                proof,
-                certificate_account,
-                &certificate,
-                &request,
-            )
-            .unwrap();
-            assert_eq!(terminal.accounts.len(), legacy.accounts.len() + 1);
-            assert_eq!(
-                terminal
-                    .accounts
-                    .iter()
-                    .filter(|meta| meta.pubkey == certificate_account)
-                    .count(),
-                1
-            );
-            let old_wire =
-                build_exact_pair_forest_v1_transaction_v2(&legacy, payer, [23; 32], config(), &[])
-                    .unwrap();
-            let wire = build_exact_pair_forest_v1_transaction_v2(
-                &terminal,
-                payer,
-                [23; 32],
-                config(),
-                &[],
-            )
-            .unwrap();
-            assert_eq!(
-                wire.serialized_wire_bytes_v2(),
-                // One 32-byte key plus one account index in the compiled
-                // terminal instruction.
-                old_wire.serialized_wire_bytes_v2() + 33
-            );
-            assert!(wire.serialized_wire_bytes_v2() < SOLANA_V1_TRANSACTION_MAX_BYTES_V2);
-            let carrier_wire = build_exact_pair_forest_v1_carrier_transaction_v2(
-                &carrier(&request, proof, withdrawal),
-                key(25),
-                &terminal,
-                payer,
-                [23; 32],
-                config(),
-                &[],
-            )
-            .unwrap();
-            assert_eq!(carrier_wire.instruction_count_v2(), 2);
-            assert!(carrier_wire.serialized_wire_bytes_v2() < 3_500);
-
-            let mut wrong = certificate;
-            wrong.bumps[POOL_V1_TERMINAL_PDA_BUMP_MASTER] ^= 1;
-            assert_eq!(
-                build_pair_forest_terminal_instruction_with_pda_certificate_v1_4k_v3(
-                    program,
-                    &master,
-                    &lane,
-                    profile,
-                    payer,
-                    proof,
-                    certificate_account,
-                    &wrong,
-                    &request,
-                ),
-                Err(PairForestTransactionV1ErrorV2::WrongPdaCertificate)
             );
         }
     }

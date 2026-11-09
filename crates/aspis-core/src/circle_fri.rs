@@ -1281,6 +1281,46 @@ mod tests {
             );
         }
 
+        assert_eq!(RATE256_CIRCLE_INV_2X.len(), 1 << 16);
+        assert_eq!(RATE256_CIRCLE_INV_2Y.len(), 1 << 16);
+        for fiber in [0usize, 1, 137, 4_096, 32_767, 65_535] {
+            let point = circle_fiber_point_for_domain_log(18, fiber).unwrap();
+            assert_eq!(M31(RATE256_CIRCLE_INV_2X[fiber]), point.x.double().inv());
+            assert_eq!(M31(RATE256_CIRCLE_INV_2Y[fiber]), point.y.double().inv());
+        }
+        for (layer, table) in [
+            (1u8, &RATE256_LINE1_INV[..]),
+            (2, &RATE256_LINE2_INV[..]),
+            (3, &RATE256_LINE3_INV[..]),
+        ] {
+            for fiber in [0usize, 1, table.len() / 6, table.len() / 3 - 1] {
+                let coordinates = line_fold_coordinates_for_circle(18, layer, fiber).unwrap();
+                assert_eq!(
+                    M31(table[3 * fiber]),
+                    coordinates.first_pair_x.double().inv()
+                );
+                assert_eq!(
+                    M31(table[3 * fiber + 1]),
+                    coordinates.second_pair_x.double().inv()
+                );
+                assert_eq!(
+                    M31(table[3 * fiber + 2]),
+                    coordinates.second_fold_x.double().inv()
+                );
+            }
+        }
+        for index in [
+            0usize,
+            1,
+            RATE256_FINAL_X.len() / 2,
+            RATE256_FINAL_X.len() - 1,
+        ] {
+            assert_eq!(
+                M31(RATE256_FINAL_X[index]),
+                line_domain_x_for_circle(18, FIXED_FINAL_LINE_LAYER, index).unwrap()
+            );
+        }
+
         assert_eq!(RATE512_CIRCLE_INV_2X.len(), 1 << 17);
         assert_eq!(RATE512_CIRCLE_INV_2Y.len(), 1 << 17);
         for fiber in [0usize, 1, 137, 4_096, 65_535, 131_071] {

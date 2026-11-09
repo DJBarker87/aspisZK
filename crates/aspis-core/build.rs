@@ -118,6 +118,7 @@ fn main() {
         (12u32, "FIXED"),
         (14u32, "RATE16"),
         (15u32, "RATE32"),
+        (18u32, "RATE256"),
         (19u32, "RATE512"),
     ] {
         let fiber_count = 1usize << (domain_log_size - 2);

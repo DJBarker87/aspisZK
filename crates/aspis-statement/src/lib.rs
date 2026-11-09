@@ -204,3 +204,6 @@ pub use wide_v4::{
     C2_COLUMNS as WIDE_V4_C2_COLUMNS, C2_FIBER_BYTES as WIDE_V4_C2_FIBER_BYTES,
     TOTAL_COLUMNS as WIDE_V4_TOTAL_COLUMNS,
 };
+
+#[cfg(feature = "r0")]
+pub mod r0;

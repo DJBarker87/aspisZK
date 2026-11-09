@@ -1,3 +1,8 @@
+> R1 update (2026-10-20): the R1 pair-forest marker path is no longer the
+> nullifier-marker PDA path described below. B1 uses `create_with_seed` under
+> the forest master; see [the accepted B1 review](../../docs/research/100bit-spend-path-20261013/design/LEAD-REVIEW-POOL-B1-20261019.md)
+> and its freshness premise. Historical results and legacy PDA routes are unchanged.
+
 # Aspis Pool V1 Solana program
 
 `aspis-pool` exposes a native Solana `process_instruction` entrypoint for
@@ -388,6 +393,24 @@ Nullifier marker: [b"aspis-pool-nullifier-v1", pool, canonical_nullifier]
 Vault authority:  [b"aspis-pool-vault-authority-v1", pool]
 Vault token:      [b"aspis-pool-vault-token-v1", pool]
 ```
+
+The pair-forest (R1) terminal route (`ASQ8`, audit `ASF8`) does not use the
+nullifier-marker PDA above. Its marker (B1, 2026-10-19) is
+
+```text
+seed   = pack7(SHA-256(b"aspis-marker-seed-v1" || master || canonical_nullifier)[0..28])
+marker = create_with_seed(master, seed, pool_program)   // 32 ASCII seed bytes
+```
+
+with the forest master PDA as base (authenticated by its stored bump, signing
+`CreateAccountWithSeed`, or `Transfer` + `AllocateWithSeed` + `AssignWithSeed`
+for a prefunded address). Its instruction data is `ASQ8 || hints` (or
+`ASF8 || hints`) with four Pool-only bump hints
+`[current_page, next_page, vault_authority, vault_token_account]`, each checked
+with one `create_program_address`; unused hints are zero. The retained
+checkpoint is authenticated by its stored bump. No accepted forest settlement
+runs a bump search. See
+`docs/research/100bit-spend-path-20261013/design/POOL-B1-FRESHNESS-PREMISE.md`.
 
 The program retains the existing 1,000-byte `ASPK` version-2 state, 8,256-byte
 `ASPR` root pages, 208-byte `ASNM` markers, depth-20 Poseidon tree, and pinned

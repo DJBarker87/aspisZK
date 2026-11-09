@@ -6,6 +6,16 @@ version.workspace = true
 description = "Aspis native WHIR-style M31 PCS substrate: shared no_std verifier core (host + SBF byte-exact)"
 
 [features]
+# R-E4 measured regression: retained for audit, never selected by default.
+r0-r91-audit = []
+# Frozen R-E3 differential and passive field-byte tracing; native only.
+r0-e4-reference = []
+# Native differential evidence only; absent from the SBF probe.
+r0-hoist-reference = []
+# R0 semantic rows use their own wire, transcript and entrypoints.
+r0 = []
+# Native single-thread operation accounting only; never part of SBF measurements.
+r0-op-count = []
 # Exposes deliberately weakened Fiat-Shamir schedules solely so adversarial
 # tests can demonstrate their teeth. Never enable in a deployed verifier.
 insecure-test-ordering = []
@@ -15,10 +25,6 @@ insecure-test-framing = []
 # Exposes private decoder entry points to the isolated universal-equivalence
 # harness. This feature is never enabled by the verifier build.
 formal-verification = []
-# Default-off source-observation seam for the Aeneas/Lean bridge.  The
-# selected verifier continues to pass a no-op callback; this feature only
-# exposes the already-constructed pre-query view to an isolated observer root.
-aeneas-observer = []
 # Default-off byte-for-CU experiment. This changes only the fixed-field wire
 # representation and is never enabled by a selected production build.
 v7-fixed-canonical-audit = []
@@ -32,14 +38,12 @@ v7-fixed-canonical-exact-once-audit = ["v7-fixed-canonical-audit"]
 # are unchanged; only the order in which the same scalar products are summed
 # is specialized to reuse each 26-column power row across all four slots.
 v7-gamma-four-slot-block-audit = []
-# Audit-only replacement for the standard-library sort used by the compact
-# opening consumer.  The explicit 16-element insertion schedule has a visible
-# 15..120 comparison bound and preserves the exact sorted query/ordinal pairs.
-v7-query-order-source-bound-audit = []
 
 [dependencies]
 
 [dev-dependencies]
+num-bigint = "0.4"
+serde_json = "1"
 sha2 = "0.10.8"
 # Property/fuzz-style harnesses run on the pinned stable toolchain via
 # `cargo test`; cargo-fuzz's nightly+libFuzzer requirement would break the

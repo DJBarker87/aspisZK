@@ -4409,6 +4409,7 @@ mod tests {
             .unwrap()
             .0;
         let after = PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master,
             lane_id: lane_id.as_u8(),
             tree: next,

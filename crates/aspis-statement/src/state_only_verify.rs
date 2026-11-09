@@ -9,7 +9,7 @@ use alloc::{boxed::Box, vec::Vec};
 use aspis_core::circle_fri::FIXED_TRACE_LOG_SIZE;
 use aspis_core::circle_line_merkle::{
     CircleOpeningGeometry, RATE16_CIRCLE_OPENING_GEOMETRY, RATE32_CIRCLE_OPENING_GEOMETRY,
-    RATE512_CIRCLE_OPENING_GEOMETRY,
+    RATE256_CIRCLE_OPENING_GEOMETRY, RATE512_CIRCLE_OPENING_GEOMETRY,
 };
 use aspis_core::circle_openings::{
     verify_state_only_circle_openings_for_geometry, CircleOpeningsError, CircleQuerySegment,
@@ -24,8 +24,8 @@ use aspis_core::state_only_prefix::{
     run_atomic_state_only_transcript_schedule_host_unmined_for_diagnostics_v3,
     run_atomic_state_only_transcript_schedule_host_v3, run_state_only_transcript_schedule_host,
     StateOnlyCandidatePrefix, StateOnlyTranscriptError, StateOnlyTranscriptScheduleResult,
-    STATE_ONLY_RATE16_SHAPE, STATE_ONLY_RATE32_SHAPE, STATE_ONLY_RATE512_SHAPE,
-    STATE_ONLY_STATEMENT_VALUE_COUNT,
+    STATE_ONLY_RATE16_SHAPE, STATE_ONLY_RATE32_SHAPE, STATE_ONLY_RATE256_SHAPE,
+    STATE_ONLY_RATE512_SHAPE, STATE_ONLY_STATEMENT_VALUE_COUNT,
 };
 use aspis_core::state_only_query::StateOnlyQueryPowers;
 use aspis_core::state_only_relation::{prepare_state_only_relation, StateOnlyRelationPrepared};
@@ -177,6 +177,8 @@ pub const fn state_only_geometry(
         Some(RATE16_CIRCLE_OPENING_GEOMETRY)
     } else if prefix.shape.profile_id == STATE_ONLY_RATE32_SHAPE.profile_id {
         Some(RATE32_CIRCLE_OPENING_GEOMETRY)
+    } else if prefix.shape.profile_id == STATE_ONLY_RATE256_SHAPE.profile_id {
+        Some(RATE256_CIRCLE_OPENING_GEOMETRY)
     } else if prefix.shape.profile_id == STATE_ONLY_RATE512_SHAPE.profile_id {
         Some(RATE512_CIRCLE_OPENING_GEOMETRY)
     } else {
@@ -377,7 +379,7 @@ pub fn verify_state_only_relation_structural_probe_unmined_traced(
     trace: StateOnlyRelationStructuralTrace,
 ) -> Result<(), StateOnlyCandidateVerifyError> {
     let (prefix, _) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     trace(StateOnlyRelationStructuralPhase::Parsed);
@@ -721,7 +723,7 @@ pub fn verify_state_only_atomic_terminal_cost_candidate_unmined_traced<'a>(
     trace: StateOnlyVerifyTrace,
 ) -> Result<VerifiedStateOnlyCandidate<'a>, StateOnlyCandidateVerifyError> {
     let (prefix, suffix) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     let geometry = state_only_geometry(&prefix).ok_or(StateOnlyRelationVerifyError::PrefixShape)?;
@@ -796,7 +798,7 @@ fn verify_atomic_state_only_candidate_inner_v3<'a>(
     let statement_digest = crate::atomic_payment_statement_digest_v4(statement, hash)
         .map_err(|_| StateOnlyCandidateVerifyError::StatementValues)?;
     let (prefix, suffix) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     let geometry = state_only_geometry(&prefix).ok_or(StateOnlyRelationVerifyError::PrefixShape)?;
@@ -1131,5 +1133,141 @@ mod tests {
         let mut randomness_only = [QM31::ZERO; MASKED_SWITCH_UNIVERSAL_DIMENSION];
         randomness_only[19] = QM31::ONE;
         assert_ne!(full_target(&randomness_only), QM31::ZERO);
+    }
+}
+
+/// Semantic-only R0 acceptance and the typed handoff to R-D. Successful
+/// return is NOT proof acceptance: authentication/opening checks remain the
+/// responsibility of the opening layer. There is no PoW path in this API.
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use crate::pool_v1::pair_forest_semantic_terminal::r0::Public;
+    use aspis_core::circle::SecureCirclePoint;
+    use aspis_core::field::{WideExact, QM31};
+    use aspis_core::state_only_hiding::r0::masked_terminal;
+    use aspis_core::state_only_prefix::r0::{
+        self as wire, Challenges, Error, PointClaims, Prefix, SemanticTranscript,
+    };
+    use aspis_core::state_only_sumcheck::r0 as sumcheck;
+    use aspis_core::transcript::HashFn;
+
+    pub struct VerifiedSemantics {
+        pub c1_root: [u8; 32],
+        pub c2_root: [u8; 32],
+        pub challenges: Challenges,
+        pub alpha: [QM31; 10],
+        pub claims: PointClaims,
+        pub before_z1: [WideExact; 29],
+        /// Pass this state, both roots, challenges.with_alphas(&alpha), and
+        /// claims to R-D's SemanticBoundary::from_verified_parts. R-D replays
+        /// rows 25/26 itself; passing the row-27 state would double-absorb.
+        pub state_before_z0: [u8; 32],
+        pub z: [SecureCirclePoint; 2],
+        /// State immediately before opening row 27. No extra gamma, delta,
+        /// OOD mixing, statement-point or work-nonce absorbs/squeezes.
+        pub transcript: SemanticTranscript,
+    }
+    pub fn verify_semantics(
+        public: Public<'_>,
+        bytes: &[u8],
+        hash: HashFn,
+    ) -> Result<VerifiedSemantics, Error> {
+        let prefix = Prefix::parse(bytes)?;
+        let mut transcript =
+            SemanticTranscript::new(hash, &public.public_bytes()?, prefix.c1_root)?;
+        let challenges = wire::begin(&prefix, &mut transcript)?;
+        let checked = sumcheck::verify(&prefix, &mut transcript)?;
+        let claims = prefix.point_claims()?;
+        let terminal = public.terminal(&claims, &checked.alpha, &challenges)?;
+        if checked.terminal_claim
+            != masked_terminal(&claims, &checked.alpha, challenges.eta, terminal)
+        {
+            return Err(Error::Terminal);
+        }
+        let state_before_z0 = transcript.state();
+        let z0 = transcript.challenge_reference_circle_point(25, prefix.record(25)?)?;
+        let before_z1 = wire::decode_values::<29>(26, prefix.payload(26)?)?;
+        let z1 = transcript.challenge_reference_circle_point(26, prefix.record(26)?)?;
+        if z0 == z1 {
+            return Err(Error::EqualCirclePoints);
+        }
+        // Retain beforeZ1 literally. The model does not compare this message
+        // to the repeated Y0 in row 27; that record belongs to R-D.
+        Ok(VerifiedSemantics {
+            c1_root: *prefix.c1_root,
+            c2_root: prefix.payload(2)?.try_into().unwrap(),
+            challenges,
+            alpha: checked.alpha,
+            claims,
+            before_z1,
+            state_before_z0,
+            z: [z0, z1],
+            transcript,
+        })
+    }
+    // Representation-only verifier variant. The checks and their sequence
+    // deliberately match verify_semantics above.
+    pub struct VerifiedSemanticsHeap {
+        pub c1_root: [u8; 32],
+        pub c2_root: [u8; 32],
+        pub challenges: Challenges,
+        pub alpha: [QM31; 10],
+        pub claims: alloc::boxed::Box<PointClaims>,
+        pub before_z1: alloc::boxed::Box<[WideExact; 29]>,
+        /// Pass this state, both roots, challenges.with_alphas(&alpha), and
+        /// claims to R-D's SemanticBoundary::from_verified_parts. R-D replays
+        /// rows 25/26 itself; passing the row-27 state would double-absorb.
+        pub state_before_z0: [u8; 32],
+        pub z: [SecureCirclePoint; 2],
+        /// State immediately before opening row 27. No extra gamma, delta,
+        /// OOD mixing, statement-point or work-nonce absorbs/squeezes.
+        pub transcript: SemanticTranscript,
+    }
+    #[inline(never)]
+    fn before_z1_heap(payload: &[u8]) -> Result<alloc::boxed::Box<[WideExact; 29]>, Error> {
+        let mut out = aspis_core::r0::heap::uninit::<[WideExact; 29]>()
+            .map_err(|_| Error::Allocation)?;
+        // The same decoder and canonicality checks, with only storage changed.
+        out.write(wire::decode_values::<29>(26, payload)?);
+        Ok(unsafe { out.assume_init() })
+    }
+    #[inline(never)]
+    pub fn verify_semantics_heap(
+        public: Public<'_>,
+        bytes: &[u8],
+        hash: HashFn,
+    ) -> Result<VerifiedSemanticsHeap, Error> {
+        let prefix = Prefix::parse(bytes)?;
+        let mut transcript =
+            SemanticTranscript::new(hash, &public.public_bytes()?, prefix.c1_root)?;
+        let challenges = wire::begin(&prefix, &mut transcript)?;
+        let checked = sumcheck::verify(&prefix, &mut transcript)?;
+        let claims = prefix.point_claims_boxed()?;
+        let terminal = public.terminal(&claims, &checked.alpha, &challenges)?;
+        if checked.terminal_claim
+            != masked_terminal(&claims, &checked.alpha, challenges.eta, terminal)
+        {
+            return Err(Error::Terminal);
+        }
+        let state_before_z0 = transcript.state();
+        let z0 = transcript.challenge_reference_circle_point(25, prefix.record(25)?)?;
+        let before_z1 = before_z1_heap(prefix.payload(26)?)?;
+        let z1 = transcript.challenge_reference_circle_point(26, prefix.record(26)?)?;
+        if z0 == z1 {
+            return Err(Error::EqualCirclePoints);
+        }
+        // Retain beforeZ1 literally. The model does not compare this message
+        // to the repeated Y0 in row 27; that record belongs to R-D.
+        Ok(VerifiedSemanticsHeap {
+            c1_root: *prefix.c1_root,
+            c2_root: prefix.payload(2)?.try_into().unwrap(),
+            challenges,
+            alpha: checked.alpha,
+            claims,
+            before_z1,
+            state_before_z0,
+            z: [z0, z1],
+            transcript,
+        })
     }
 }

@@ -549,6 +549,7 @@ mod tests {
 
     fn registry(keys: Keys) -> VerifierRegistryV1 {
         VerifierRegistryV1 {
+            bump: 0,
             flags: 0,
             pool: keys.pool.to_bytes(),
             authority: [7u8; 32],
@@ -560,6 +561,7 @@ mod tests {
 
     fn entry(keys: Keys) -> VerifierRegistryEntryV1 {
         VerifierRegistryEntryV1 {
+            bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: POOL_V1_HISTORICAL_ANCHOR_VERSION,
             pool: keys.pool.to_bytes(),

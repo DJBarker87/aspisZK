@@ -683,6 +683,7 @@ fn forest_state(deployment_domain: [u8; 32]) -> LaneForestDurableStateV2 {
     let mint = Pubkey::new_from_array([0xb2; 32]);
     let master = pool_v1_pair_forest_master_address(&program, &mint).0;
     let master_value = PoolV1PairForestMasterV1 {
+        bump: 0,
         identity: PoolIdentityV1 {
             pool: master.to_bytes(),
             asset_mint: mint.to_bytes(),
@@ -708,6 +709,7 @@ fn forest_state(deployment_domain: [u8; 32]) -> LaneForestDurableStateV2 {
                 .unwrap()
                 .0;
             let value = PoolV1PairForestLaneStateV1 {
+                bump: 0,
                 master: master.to_bytes(),
                 lane_id,
                 tree: IncrementalMerkleTreeV1 {
@@ -900,9 +902,13 @@ fn finalized_terminal_observation_without_notes(
         instruction_index: 2,
         top_level_instruction_count: 3,
         instruction_program: *state.program_id(),
-        instruction_bytes: encode_pool_v1_pair_forest_terminal_request_v1(&request)
-            .unwrap()
-            .to_vec(),
+        instruction_bytes: [
+            encode_pool_v1_pair_forest_terminal_request_v1(&request)
+                .unwrap()
+                .as_slice(),
+            &[255, 0, 0, 0],
+        ]
+        .concat(),
         ciphertext_delivery: FinalizedPairForestCiphertextDeliveryV2::Verified {
             instruction_index: 1,
             authority: [0xa3; 32],
@@ -1001,6 +1007,7 @@ fn ingest_checkpoint(
         )
     });
     let checkpoint = PoolV1PairForestCheckpointV1 {
+        bump: 0,
         master: state.master().address,
         deployment_domain: state.master().value.identity.deployment_domain,
         checkpoint_sequence,

@@ -494,6 +494,7 @@ where
         token_accounts,
         &destination,
         decoded.statement.amount,
+        None,
     )?;
     let transfer_infos = exact_withdrawal_transfer_account_infos_v1(token_accounts)?;
     pair_cu_checkpoint("aspis-pair-cu:custody_plan_complete");

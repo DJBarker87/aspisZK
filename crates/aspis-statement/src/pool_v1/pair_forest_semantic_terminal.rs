@@ -102,6 +102,20 @@ fn lift_m31(value: M31) -> QM31 {
     QM31::from_cm31(CM31::from_m31(value))
 }
 
+/// Count only the trailing one bits used by the twenty-level append tree.
+/// The bounded form is equivalent to capping u64::trailing_ones at twenty.
+fn bounded_append_carry(mut index: u64) -> usize {
+    let mut carry = 0usize;
+    while carry < 20 {
+        if index & 1 == 0 {
+            return carry;
+        }
+        index >>= 1u32;
+        carry += 1;
+    }
+    carry
+}
+
 #[inline(always)]
 fn add_preweighted<const N: usize>(
     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
@@ -191,7 +205,7 @@ fn validate_transition(
         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition);
     }
     let index = source.next_pair_index;
-    let carry = core::cmp::min(index.trailing_ones() as usize, 20);
+    let carry = bounded_append_carry(index);
     for level in 0..20 {
         if level == carry && carry < 20 {
             continue;
@@ -223,7 +237,12 @@ fn initial_variant_selectors(
     high29: QM31,
 ) -> (QM31, QM31, QM31, QM31) {
     match variant {
-        CompiledVariant::PrivateTransfer => (high27, QM31::ZERO, high27.add(high28), high29),
+        CompiledVariant::PrivateTransfer => (
+            high27,
+            QM31::ZERO,
+            high27.add(high28),
+            high29,
+        ),
         CompiledVariant::Withdrawal => (
             QM31::ZERO,
             high27.add(high28).add(high29),
@@ -243,12 +262,13 @@ fn semantic_initial_and_absorption(
         .add(selectors.high[1])
         .add(selectors.high[25])
         .add(selectors.high[30]);
-    let (transfer_first, fixed, private_chunk_eight, private_chunk_two) = initial_variant_selectors(
-        public.variant,
-        selectors.high[27],
-        selectors.high[28],
-        selectors.high[29],
-    );
+    let (transfer_first, fixed, private_chunk_eight, private_chunk_two) =
+        initial_variant_selectors(
+            public.variant,
+            selectors.high[27],
+            selectors.high[28],
+            selectors.high[29],
+        );
     let full_initial_selector = selectors.low[0].mul(first_common.add(transfer_first).add(fixed));
     let rate_initial_selector = selectors.low[0].mul(nodes);
     let full = PreparedQm31Multiplier::new(full_initial_selector);
@@ -476,7 +496,9 @@ fn add_value_lanes(
     }
     index = 0;
     while index < 10 {
-        range[10 + index] = openings.succ_z[index].square().sub(openings.succ_z[index]);
+        range[10 + index] = openings.succ_z[index]
+            .square()
+            .sub(openings.succ_z[index]);
         index += 1;
     }
     index = 0;
@@ -671,7 +693,7 @@ fn public_digest_lanes(
         &after.next_root,
         false,
     );
-    let carry = core::cmp::min(source.next_pair_index.trailing_ones() as usize, 20);
+    let carry = bounded_append_carry(source.next_pair_index);
     if carry < 20 {
         add_digest_binding(
             &mut digests,
@@ -796,7 +818,7 @@ fn public_digest_packed_row_major(
         &after.next_root,
         false,
     );
-    let carry = core::cmp::min(source.next_pair_index.trailing_ones() as usize, 20);
+    let carry = bounded_append_carry(source.next_pair_index);
     if carry < 20 {
         add_digest_binding_packed(
             &mut digests,
@@ -882,7 +904,10 @@ fn append_level_packed_selector_tensor(
     frontier: Digest,
     opened: [QM31; POSEIDON2_WIDTH],
     high: QM31,
-) -> ([QM31; DIGEST_ELEMS / 4], [QM31; DIGEST_ELEMS / 4]) {
+) -> (
+    [QM31; DIGEST_ELEMS / 4],
+    [QM31; DIGEST_ELEMS / 4],
+) {
     let prepared_high = PreparedQm31Multiplier::new(high);
     if ((next_pair_index >> level) & 1) == 0 {
         let expected = empty_root(level);
@@ -896,7 +921,8 @@ fn append_level_packed_selector_tensor(
             opened[RATE + 4].sub(lift_m31(expected[4])),
             opened[RATE + 5].sub(lift_m31(expected[5])),
             opened[RATE + 6].sub(lift_m31(expected[6])),
-            opened[RATE + 7].sub(lift_m31(expected[7].add(MERKLE_NODE_COMPRESSION_V3_TWEAK))),
+            opened[RATE + 7]
+                .sub(lift_m31(expected[7].add(MERKLE_NODE_COMPRESSION_V3_TWEAK))),
         ];
         (
             [
@@ -938,7 +964,10 @@ fn append_levels_packed_selector_tensor(
     frontier: [Digest; 20],
     opened: [QM31; POSEIDON2_WIDTH],
     selector_high: [QM31; 64],
-) -> ([QM31; DIGEST_ELEMS / 4], [QM31; DIGEST_ELEMS / 4]) {
+) -> (
+    [QM31; DIGEST_ELEMS / 4],
+    [QM31; DIGEST_ELEMS / 4],
+) {
     let mut local0 = [QM31::ZERO; DIGEST_ELEMS / 4];
     let mut local12 = [QM31::ZERO; DIGEST_ELEMS / 4];
     let mut level = 0usize;
@@ -1014,18 +1043,32 @@ fn public_digest_packed_selector_tensor(
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
     let mut local_sums = [[QM31::ZERO; DIGEST_ELEMS / 4]; 3];
-    let anchor = left_digest_packed_selector_tensor(selectors.high[56], openings.z, public.anchor);
+    let anchor = left_digest_packed_selector_tensor(
+        selectors.high[56],
+        openings.z,
+        public.anchor,
+    );
     local_sums[1][0] = local_sums[1][0].add(anchor[0]);
     local_sums[1][1] = local_sums[1][1].add(anchor[1]);
-    let nullifier =
-        left_digest_packed_selector_tensor(selectors.high[26], openings.z, public.nullifier);
+    let nullifier = left_digest_packed_selector_tensor(
+        selectors.high[26],
+        openings.z,
+        public.nullifier,
+    );
     local_sums[1][0] = local_sums[1][0].add(nullifier[0]);
     local_sums[1][1] = local_sums[1][1].add(nullifier[1]);
-    let recipient =
-        optional_recipient_packed_selector_tensor(public.recipient, openings.z, selectors.high[29]);
+    let recipient = optional_recipient_packed_selector_tensor(
+        public.recipient,
+        openings.z,
+        selectors.high[29],
+    );
     local_sums[1][0] = local_sums[1][0].add(recipient[0]);
     local_sums[1][1] = local_sums[1][1].add(recipient[1]);
-    let change = left_digest_packed_selector_tensor(selectors.high[32], openings.z, public.change);
+    let change = left_digest_packed_selector_tensor(
+        selectors.high[32],
+        openings.z,
+        public.change,
+    );
     local_sums[1][0] = local_sums[1][0].add(change[0]);
     local_sums[1][1] = local_sums[1][1].add(change[1]);
 
@@ -1045,11 +1088,14 @@ fn public_digest_packed_selector_tensor(
     local_sums[0][1] = local_sums[0][1].add(append_local0[1]);
     local_sums[2][0] = local_sums[2][0].add(append_local12[0]);
     local_sums[2][1] = local_sums[2][1].add(append_local12[1]);
-    let next_root =
-        left_digest_packed_selector_tensor(selector_high[53], opened_z, after.next_root);
+    let next_root = left_digest_packed_selector_tensor(
+        selector_high[53],
+        opened_z,
+        after.next_root,
+    );
     local_sums[1][0] = local_sums[1][0].add(next_root[0]);
     local_sums[1][1] = local_sums[1][1].add(next_root[1]);
-    let carry = core::cmp::min(next_pair_index.trailing_ones() as usize, 20);
+    let carry = bounded_append_carry(next_pair_index);
     let carry_index = core::cmp::min(carry, 19);
     let carry_contribution = optional_carry_packed_selector_tensor(
         carry,
@@ -1199,10 +1245,11 @@ fn composition_parts(
     ),
     PoolV1PairForestSemanticTerminalErrorV1,
 > {
-    if public
-        .withdrawal_amount
-        .is_some_and(|amount| amount == 0 || amount >= (1 << 30))
-    {
+    let invalid_amount = match public.withdrawal_amount {
+        None => false,
+        Some(amount) => amount == 0 || amount >= (1 << 30u32),
+    };
+    if invalid_amount {
         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
     }
     validate_transition(public)?;
@@ -1646,12 +1693,8 @@ mod tests {
         let rows = [row, (row + 1) & 1023, row ^ 12];
         StateOnlyPoseidonOpenings {
             z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[0]])),
-            succ_z: core::array::from_fn(|column| {
-                lift_m31(compiled.semantic_c1.c1[column][rows[1]])
-            }),
-            xor12_z: core::array::from_fn(|column| {
-                lift_m31(compiled.semantic_c1.c1[column][rows[2]])
-            }),
+            succ_z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[1]])),
+            xor12_z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[2]])),
         }
     }
 
@@ -1791,8 +1834,7 @@ mod tests {
         let mut claims = [QM31::ZERO; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1];
         for point in 0..3 {
             for column in 0..16 {
-                claims[point * 28 + column] =
-                    lift_m31(compiled.semantic_c1.c1[column][rows[point]]);
+                claims[point * 28 + column] = lift_m31(compiled.semantic_c1.c1[column][rows[point]]);
             }
         }
         claims[SELECTED_H1_COLUMN] = helper[row];
@@ -1936,5 +1978,353 @@ mod tests {
             ),
             Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition)
         );
+    }
+}
+
+/// R0's width-29 view of this exact pair-forest terminal. No generic Spend
+/// terminal, legacy transcript or legacy claim stride is selected here.
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use super::*;
+    use alloc::vec::Vec;
+    use aspis_core::field::WideExact;
+    use aspis_core::state_only_prefix::r0::{Challenges, Error, PointClaims};
+
+    #[derive(Clone, Copy)]
+    pub enum Public<'a> {
+        Transfer(
+            &'a PoolV1PrivateTransferPublicV1,
+            &'a PoolV1PairLatePublicStatementV1,
+        ),
+        Withdrawal(
+            &'a PoolV1WithdrawalPublicV1,
+            &'a PoolV1PairLatePublicStatementV1,
+        ),
+    }
+    impl<'a> Public<'a> {
+        fn semantic(self) -> SemanticPublic<'a> {
+            match self {
+                Self::Transfer(public, transition) => private_public(public, transition),
+                Self::Withdrawal(public, transition) => withdrawal_public(public, transition),
+            }
+        }
+        pub fn transition(self) -> &'a PoolV1PairLatePublicStatementV1 {
+            self.semantic().transition
+        }
+        /// SPEC §9 declaration order. Pool/domain/sequence and source current
+        /// root are not fields of R0P.Public and are not silently hashed here.
+        /// Existing reject-only public guards remain in the terminal.
+        pub fn public_bytes(self) -> Result<Vec<u8>, Error> {
+            fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+                for value in values {
+                    if value.0 >= aspis_core::field::P {
+                        return Err(Error::Public);
+                    }
+                    out.extend_from_slice(&value.0.to_le_bytes());
+                }
+                Ok(())
+            }
+            // The fixed width is checked at both call sites. Explicit calls
+            // avoid nested frontier loops during source extraction.
+            fn frontier(out: &mut Vec<u8>, values: &[Digest; 20]) -> Result<(), Error> {
+                fields(out, &values[0])?;
+                fields(out, &values[1])?;
+                fields(out, &values[2])?;
+                fields(out, &values[3])?;
+                fields(out, &values[4])?;
+                fields(out, &values[5])?;
+                fields(out, &values[6])?;
+                fields(out, &values[7])?;
+                fields(out, &values[8])?;
+                fields(out, &values[9])?;
+                fields(out, &values[10])?;
+                fields(out, &values[11])?;
+                fields(out, &values[12])?;
+                fields(out, &values[13])?;
+                fields(out, &values[14])?;
+                fields(out, &values[15])?;
+                fields(out, &values[16])?;
+                fields(out, &values[17])?;
+                fields(out, &values[18])?;
+                fields(out, &values[19])?;
+                Ok(())
+            }
+            let p = self.semantic();
+            let mut out = Vec::new();
+            out.push(match p.variant {
+                CompiledVariant::PrivateTransfer => 0,
+                CompiledVariant::Withdrawal => 1,
+            });
+            fields(&mut out, &p.anchor)?;
+            fields(&mut out, &p.nullifier)?;
+            fields(&mut out, &[p.asset_id])?;
+            out.push(u8::from(p.recipient.is_some()));
+            if let Some(value) = p.recipient {
+                fields(&mut out, &value)?;
+            }
+            fields(&mut out, &p.change)?;
+            out.push(u8::from(p.withdrawal_amount.is_some()));
+            if let Some(value) = p.withdrawal_amount {
+                fields(&mut out, &[M31(value)])?;
+            }
+            let source = p.transition.live_snapshot;
+            let after = p.transition.candidate_afterstate;
+            out.extend_from_slice(&source.next_pair_index.to_le_bytes());
+            frontier(&mut out, &source.frontier)?;
+            fields(&mut out, &after.next_root)?;
+            frontier(&mut out, &after.next_frontier)?;
+            Ok(out)
+        }
+        /// Fast K path. D is deliberately absent from the terminal formula,
+        /// but its three claims remain in the width-29 opening statement.
+        pub fn terminal_qm31(
+            self,
+            claims: &[[QM31; 29]; 3],
+            alpha: &[QM31; 10],
+            c: &Challenges,
+        ) -> Result<QM31, Error> {
+            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);
+            terminal_parts(
+                self.semantic(),
+                &selected,
+                alpha,
+                c.lambda,
+                c.chi,
+                c.theta,
+                &c.zc,
+                c.mu,
+            )
+            .map(|parts| parts.0)
+            .map_err(|_| Error::Public)
+        }
+        /// Extend the existing polynomial evaluator to E without narrowing
+        /// adversarial E claims. At fixed K coordinates, substituting
+        /// c0+t*c1 for every claim gives degree <=25: the Poseidon evaluator
+        /// has two consecutive fifth powers (5*5); Copy has four affine
+        /// denominators times H1 (degree 5); the other families have degree
+        /// <=3. Selectors, theta, mu and equality weights are constants here.
+        /// Hence 26 K evaluations determine its value at t=v exactly.
+        /// This is polynomial base extension, not a probabilistic identity
+        /// test. The honest K path requires only one terminal evaluation.
+        pub fn terminal(
+            self,
+            claims: &PointClaims,
+            alpha: &[QM31; 10],
+            c: &Challenges,
+        ) -> Result<WideExact, Error> {
+            if claims.iter().flatten().all(|x| x.c1() == QM31::ZERO) {
+                let values = terminal_values(claims, None);
+                return self
+                    .terminal_qm31(&values, alpha, c)
+                    .map(WideExact::from_qm31);
+            }
+            let mut total = WideExact::ZERO;
+            for i in 0..26u32 {
+                let values = terminal_values(claims, Some(M31(i)));
+                let value = self.terminal_qm31(&values, alpha, c)?;
+                let mut numerator = WideExact::ONE;
+                let mut denominator = M31::ONE;
+                for j in 0..26u32 {
+                    if i == j {
+                        continue;
+                    }
+                    numerator =
+                        numerator.mul(WideExact::V.sub(WideExact::from_qm31(lift_m31(M31(j)))));
+                    denominator = denominator.mul(M31(i).sub(M31(j)));
+                }
+                total = total.add(numerator.mul_qm31(value.mul_m31(denominator.inv())));
+            }
+            Ok(total)
+        }
+    }
+    // Isolate the 87 K values in one small frame; arithmetic is unchanged.
+    #[inline(never)]
+    fn terminal_values(claims: &PointClaims, t: Option<M31>) -> [[QM31;29];3] {
+        let mut values=[[QM31::ZERO;29];3];
+        for p in 0..3 {for l in 0..29 {
+            let x=claims[p][l];
+            values[p][l]=match t {None=>x.c0(),Some(t)=>x.c0().add(x.c1().mul_m31(t))};
+        }}
+        values
+    }
+
+}
+
+
+#[cfg(all(test, feature = "r0"))]
+mod public_serializer_tests {
+    use super::*;
+    use crate::pool_v1::{PoolV1PairLiveSnapshotV1, PoolV1PairVerifiedAfterstateV1};
+    use alloc::vec::Vec;
+    use aspis_core::{field::P, state_only_prefix::r0::Error};
+
+    fn digest(seed: u32) -> Digest {
+        core::array::from_fn(|limb| M31(seed + limb as u32))
+    }
+
+    fn fixture() -> (
+        PoolV1PrivateTransferPublicV1,
+        PoolV1WithdrawalPublicV1,
+        PoolV1PairLatePublicStatementV1,
+    ) {
+        let transfer = PoolV1PrivateTransferPublicV1 {
+            pool: [1; 32],
+            deployment_domain: [2; 32],
+            anchor_sequence: 3,
+            anchor_root: digest(10),
+            nullifier: digest(20),
+            asset_id: M31(30),
+            recipient_commitment: digest(40),
+            change_commitment: digest(50),
+        };
+        let withdrawal = PoolV1WithdrawalPublicV1 {
+            pool: transfer.pool,
+            deployment_domain: transfer.deployment_domain,
+            anchor_sequence: transfer.anchor_sequence,
+            anchor_root: transfer.anchor_root,
+            nullifier: transfer.nullifier,
+            asset_id: transfer.asset_id,
+            amount: 61,
+            destination_token_account: [7; 32],
+            change_commitment: transfer.change_commitment,
+        };
+        let transition = PoolV1PairLatePublicStatementV1 {
+            live_snapshot: PoolV1PairLiveSnapshotV1 {
+                pool: transfer.pool,
+                deployment_domain: transfer.deployment_domain,
+                sequence: 8,
+                next_pair_index: 0x0102_0304_0506_0708,
+                current_root: digest(70),
+                frontier: core::array::from_fn(|row| digest(100 + 8 * row as u32)),
+            },
+            candidate_afterstate: PoolV1PairVerifiedAfterstateV1 {
+                next_pair_index: 9,
+                next_root: digest(300),
+                next_frontier: core::array::from_fn(|row| digest(400 + 8 * row as u32)),
+            },
+        };
+        (transfer, withdrawal, transition)
+    }
+
+    // Retain the previous loop implementation as a differential oracle. The
+    // fixture performs no proof generation or Merkle-tree construction.
+    fn loop_reference(public: r0::Public<'_>) -> Result<Vec<u8>, Error> {
+        fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+            for value in values {
+                if value.0 >= P {
+                    return Err(Error::Public);
+                }
+                out.extend_from_slice(&value.0.to_le_bytes());
+            }
+            Ok(())
+        }
+        let p = match public {
+            r0::Public::Transfer(p, t) => private_public(p, t),
+            r0::Public::Withdrawal(p, t) => withdrawal_public(p, t),
+        };
+        let mut out = Vec::new();
+        out.push(match p.variant {
+            CompiledVariant::PrivateTransfer => 0,
+            CompiledVariant::Withdrawal => 1,
+        });
+        fields(&mut out, &p.anchor)?;
+        fields(&mut out, &p.nullifier)?;
+        fields(&mut out, &[p.asset_id])?;
+        out.push(u8::from(p.recipient.is_some()));
+        if let Some(value) = p.recipient {
+            fields(&mut out, &value)?;
+        }
+        fields(&mut out, &p.change)?;
+        out.push(u8::from(p.withdrawal_amount.is_some()));
+        if let Some(value) = p.withdrawal_amount {
+            fields(&mut out, &[M31(value)])?;
+        }
+        let source = p.transition.live_snapshot;
+        let after = p.transition.candidate_afterstate;
+        out.extend_from_slice(&source.next_pair_index.to_le_bytes());
+        for digest in &source.frontier {
+            fields(&mut out, digest)?;
+        }
+        fields(&mut out, &after.next_root)?;
+        for digest in &after.next_frontier {
+            fields(&mut out, digest)?;
+        }
+        Ok(out)
+    }
+
+    fn rejects_like_reference(public: r0::Public<'_>) {
+        assert_eq!(loop_reference(public), Err(Error::Public));
+        assert_eq!(public.public_bytes(), Err(Error::Public));
+    }
+
+    #[test]
+    fn explicit_frontiers_match_loop_serializer_for_both_variants() {
+        let (transfer, withdrawal, mut transition) = fixture();
+        for index in [0, 1, (1 << 20) - 1, u64::MAX] {
+            transition.live_snapshot.next_pair_index = index;
+            let variants = [
+                r0::Public::Transfer(&transfer, &transition),
+                r0::Public::Withdrawal(&withdrawal, &transition),
+            ];
+            for (variant, public) in variants.into_iter().enumerate() {
+                let actual = public.public_bytes().unwrap();
+                assert_eq!(actual, loop_reference(public).unwrap());
+                assert_eq!(actual[0], variant as u8);
+                assert_eq!(actual.len(), if variant == 0 { 1455 } else { 1427 });
+            }
+        }
+    }
+
+    #[test]
+    fn explicit_frontiers_reject_each_noncanonical_serialized_field() {
+        let (transfer, withdrawal, transition) = fixture();
+        for bad in [P, u32::MAX] {
+            for limb in 0..DIGEST_ELEMS {
+                for field in 0..4 {
+                    let mut p = transfer;
+                    match field {
+                        0 => p.anchor_root[limb] = M31(bad),
+                        1 => p.nullifier[limb] = M31(bad),
+                        2 => p.recipient_commitment[limb] = M31(bad),
+                        _ => p.change_commitment[limb] = M31(bad),
+                    }
+                    rejects_like_reference(r0::Public::Transfer(&p, &transition));
+                }
+                for field in 0..3 {
+                    let mut p = withdrawal;
+                    match field {
+                        0 => p.anchor_root[limb] = M31(bad),
+                        1 => p.nullifier[limb] = M31(bad),
+                        _ => p.change_commitment[limb] = M31(bad),
+                    }
+                    rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+                }
+                let mut t = transition;
+                t.candidate_afterstate.next_root[limb] = M31(bad);
+                rejects_like_reference(r0::Public::Transfer(&transfer, &t));
+                rejects_like_reference(r0::Public::Withdrawal(&withdrawal, &t));
+                for row in 0..20 {
+                    for after in [false, true] {
+                        let mut t = transition;
+                        if after {
+                            t.candidate_afterstate.next_frontier[row][limb] = M31(bad);
+                        } else {
+                            t.live_snapshot.frontier[row][limb] = M31(bad);
+                        }
+                        rejects_like_reference(r0::Public::Transfer(&transfer, &t));
+                        rejects_like_reference(r0::Public::Withdrawal(&withdrawal, &t));
+                    }
+                }
+            }
+            let mut p = transfer;
+            p.asset_id = M31(bad);
+            rejects_like_reference(r0::Public::Transfer(&p, &transition));
+            let mut p = withdrawal;
+            p.asset_id = M31(bad);
+            rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+            p = withdrawal;
+            p.amount = bad;
+            rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+        }
     }
 }

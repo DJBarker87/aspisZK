@@ -29,10 +29,10 @@ use aspis_statement::pool_v1::{
     PoolV1PairForestLaneStateV1, PoolV1PairForestMasterV1, PoolV1PairForestTerminalCommonV1,
     PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalResultV1,
     PoolV1PairForestTerminalStatementV1, PoolV1PairLatePublicStatementV1, PoolV1PairLiveSnapshotV1,
-    PoolV1TerminalPdaCertificateV1, POOL_V1_PAIR_FOREST_ALL_LANES_MASK,
-    POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES,
-    POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES, V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES,
-    V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING, V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
+    POOL_V1_PAIR_FOREST_ALL_LANES_MASK, POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES,
+    POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+    V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES, V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+    V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
 };
 #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 use aspis_statement::pool_v1::{
@@ -78,31 +78,10 @@ const VERIFIER_ENTRY_V2_SEED: &[u8] = b"aspis-verifier-entry-v2";
 // generated mainnet Pool/registry/policy constants replace them in release
 // evidence; accepting values named by the request/master would be forgeable
 // under direct verifier invocation.
-#[cfg(all(
-    feature = "v7-pair-forest-lane-invariant-audit",
-    not(feature = "v7-pair-forest-public-devnet-identity-audit")
-))]
+#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [0x41; 32];
-#[cfg(all(
-    feature = "v7-pair-forest-lane-invariant-audit",
-    not(feature = "v7-pair-forest-public-devnet-identity-audit")
-))]
+#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [0x44; 32];
-
-// Immutable research deployments on public devnet. This capability changes
-// only the authenticated Pool/Registry identities; policy bytes, account
-// validation, statement reconstruction, transcript, proof relation and
-// verifier execution are identical to the ordinary invariant-audit build.
-#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
-const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [
-    0xef, 0xca, 0x7e, 0xf3, 0x31, 0x09, 0xdd, 0xf8, 0x3a, 0x61, 0x0f, 0x18, 0xbb, 0x0f, 0x2f, 0xe7,
-    0x98, 0xc5, 0x7c, 0x7c, 0x4e, 0xb9, 0x4f, 0xeb, 0xb7, 0x02, 0xab, 0xd1, 0xa0, 0x23, 0xcc, 0xdf,
-];
-#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
-const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [
-    0xa9, 0x96, 0xed, 0xcc, 0xd1, 0x27, 0x24, 0x7d, 0xe2, 0x1d, 0x3d, 0xce, 0xfe, 0xfe, 0x2d, 0xed,
-    0x64, 0xcf, 0x62, 0x66, 0x3b, 0xfe, 0x6c, 0xed, 0x3d, 0x0a, 0x16, 0xba, 0x66, 0x8b, 0xbe, 0xba,
-];
 #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 const PAIR_FOREST_INVARIANT_POLICY_BINDING_AUDIT_V1: [u8; 32] = [7; 32];
 
@@ -145,12 +124,26 @@ fn frontier_nodes_from_proof_length(length: usize) -> Option<usize> {
         .then_some(nodes)
 }
 
-fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
-    if account.owner != owner || account.is_signer || account.is_writable || account.executable {
+fn readonly_meta_ok(
+    owner: &Pubkey,
+    expected: &Pubkey,
+    is_signer: bool,
+    is_writable: bool,
+    executable: bool,
+) -> ProgramResult {
+    if owner != expected || is_signer || is_writable || executable {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
 }
+
+fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
+    readonly_meta_ok(account.owner, owner, account.is_signer, account.is_writable, account.executable)
+}
+
+#[cfg(test)]
+#[path = "readonly_meta_tests.rs"]
+mod readonly_meta_tests;
 
 fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {
     for (index, account) in accounts.iter().enumerate() {
@@ -173,7 +166,6 @@ fn authenticate_invariant_release_registry_v1(
     master: &PoolV1PairForestMasterV1,
     registry_account: &AccountInfo<'_>,
     entry_account: &AccountInfo<'_>,
-    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
 ) -> ProgramResult {
     authenticate_invariant_release_registry_at_slot_v1(
         verifier_program,
@@ -182,7 +174,6 @@ fn authenticate_invariant_release_registry_v1(
         master,
         registry_account,
         entry_account,
-        certificate,
         Clock::get()?.slot,
     )
 }
@@ -196,7 +187,6 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     master: &PoolV1PairForestMasterV1,
     registry_account: &AccountInfo<'_>,
     entry_account: &AccountInfo<'_>,
-    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
     current_slot: u64,
 ) -> ProgramResult {
     if pool_program.to_bytes() != PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1
@@ -214,15 +204,8 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     require_readonly_account(registry_account, &registry_program)?;
     let immutable_deployment =
         master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    if !immutable_deployment || certificate.is_none() {
-        return Err(ProgramError::InvalidAccountData);
-    }
     if immutable_deployment {
         let loader = bpf_loader_upgradeable::id();
-        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-        let expected_registry = Pubkey::new_from_array(certificate.unwrap().registry);
-        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let expected_registry = Pubkey::find_program_address(
             &[VERIFIER_REGISTRY_V2_SEED, master_account.key.as_ref()],
             &registry_program,
@@ -233,10 +216,6 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
         let registry = decode_verifier_registry_v2(&registry_account.try_borrow_data()?)
             .map_err(|_| ProgramError::InvalidAccountData)?;
-        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-        let registry_programdata =
-            Pubkey::new_from_array(certificate.unwrap().registry_programdata);
-        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let registry_programdata =
             Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
         if registry.pool != master_account.key.to_bytes()
@@ -252,9 +231,6 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
 
         require_readonly_account(entry_account, &registry_program)?;
-        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-        let expected_entry = Pubkey::new_from_array(certificate.unwrap().registry_entry);
-        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let expected_entry = Pubkey::find_program_address(
             &[
                 VERIFIER_ENTRY_V2_SEED,
@@ -270,10 +246,6 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
         let entry = decode_verifier_registry_entry_v2(&entry_account.try_borrow_data()?)
             .map_err(|_| ProgramError::InvalidAccountData)?;
-        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-        let verifier_programdata =
-            Pubkey::new_from_array(certificate.unwrap().verifier_programdata);
-        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let verifier_programdata =
             Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
         if entry.pool != master_account.key.to_bytes()
@@ -292,23 +264,16 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         return Ok(());
     }
 
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    return Err(ProgramError::InvalidAccountData);
-
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let expected_registry = Pubkey::find_program_address(
         &[VERIFIER_REGISTRY_SEED, master_account.key.as_ref()],
         &registry_program,
     )
     .0;
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if registry_account.key != &expected_registry {
         return Err(ProgramError::InvalidAccountData);
     }
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)
         .map_err(|_| ProgramError::InvalidAccountData)?;
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if registry.pool != master_account.key.to_bytes()
         || registry.authority != master.verifier_policy.registry_authority
         || registry.policy_binding != master.verifier_policy.policy_binding
@@ -318,9 +283,7 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         return Err(ProgramError::InvalidAccountData);
     }
 
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     require_readonly_account(entry_account, &registry_program)?;
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let expected_entry = Pubkey::find_program_address(
         &[
             VERIFIER_ENTRY_SEED,
@@ -331,14 +294,11 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         &registry_program,
     )
     .0;
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if entry_account.key != &expected_entry {
         return Err(ProgramError::InvalidAccountData);
     }
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_data()?)
         .map_err(|_| ProgramError::InvalidAccountData)?;
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if entry.pool != master_account.key.to_bytes()
         || entry.policy_binding != PAIR_FOREST_INVARIANT_POLICY_BINDING_AUDIT_V1
         || entry.verifier_program != verifier_program.to_bytes()
@@ -349,7 +309,6 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     {
         return Err(ProgramError::InvalidAccountData);
     }
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     Ok(())
 }
 
@@ -398,7 +357,7 @@ fn decode_lane_from_pool_release_invariant_box_v1(
         || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
         || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
         || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
-        || bytes[72..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
+        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
             .iter()
             .any(|byte| *byte != 0)
     {
@@ -450,6 +409,7 @@ fn decode_lane_from_pool_release_invariant_box_v1(
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(Box::new(PoolV1PairForestLaneStateV1 {
+        bump: bytes[72],
         master,
         lane_id: bytes[5],
         tree: IncrementalMerkleTreeV1 {
@@ -483,23 +443,7 @@ fn authenticate_asq8_accounts_v1(
     pool_program: &Pubkey,
     output_lane: u8,
 ) -> Result<AuthenticatedV7PairForestAsq8AccountsV1, ProgramError> {
-    #[cfg(all(
-        feature = "v7-pair-forest-lane-invariant-audit",
-        feature = "v7-terminal-pda-certificate-audit"
-    ))]
-    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, certificate_account] =
-        accounts
-    else {
-        return Err(if accounts.len() < 7 {
-            ProgramError::NotEnoughAccountKeys
-        } else {
-            ProgramError::InvalidArgument
-        });
-    };
-    #[cfg(all(
-        feature = "v7-pair-forest-lane-invariant-audit",
-        not(feature = "v7-terminal-pda-certificate-audit")
-    ))]
+    #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
     let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account] =
         accounts
     else {
@@ -522,22 +466,7 @@ fn authenticate_asq8_accounts_v1(
     require_readonly_account(master_account, pool_program)?;
     require_readonly_account(checkpoint_account, pool_program)?;
     require_readonly_account(lane_account, pool_program)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    require_readonly_account(certificate_account, verifier_program)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    require_distinct_accounts(&[
-        proof_account,
-        master_account,
-        checkpoint_account,
-        lane_account,
-        registry_account,
-        entry_account,
-        certificate_account,
-    ])?;
-    #[cfg(all(
-        feature = "v7-pair-forest-lane-invariant-audit",
-        not(feature = "v7-terminal-pda-certificate-audit")
-    ))]
+    #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
     require_distinct_accounts(&[
         proof_account,
         master_account,
@@ -554,49 +483,17 @@ fn authenticate_asq8_accounts_v1(
         lane_account,
     ])?;
 
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    let certificate = aspis_statement::pool_v1::decode_pool_v1_terminal_pda_certificate_v1(
-        &certificate_account.try_borrow_data()?,
-    )
-    .map_err(|_| ProgramError::InvalidAccountData)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    {
-        crate::v7_terminal_pda_certificate::validate_terminal_pda_certificate_single_attempt_v1(
-            &certificate,
-        )?;
-        if certificate.proof_account != proof_account.key.to_bytes()
-            || certificate.pool_program != pool_program.to_bytes()
-            || certificate.master != master_account.key.to_bytes()
-            || certificate.checkpoint != checkpoint_account.key.to_bytes()
-            || certificate.selected_lane != lane_account.key.to_bytes()
-            || certificate.lane_id != output_lane
-            || certificate.registry_program != PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1
-            || certificate.registry != registry_account.key.to_bytes()
-            || certificate.registry_entry != entry_account.key.to_bytes()
-            || certificate.verifier_program != verifier_program.to_bytes()
-            || certificate.profile_binding != V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING
-            || certificate.release_binding != V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING
-        {
-            return Err(ProgramError::InvalidAccountData);
-        }
-    }
-
     let master = decode_master_box(&master_account.try_borrow_data()?)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    let master_address_matches = certificate.asset_mint == master.identity.asset_mint
-        && certificate.master == master_account.key.to_bytes();
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
-    let master_address_matches = Pubkey::find_program_address(
-        &[
-            PAIR_FOREST_MASTER_SEED,
-            Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
-        ],
-        pool_program,
-    )
-    .0 == *master_account.key;
     if master.identity.pool != master_account.key.to_bytes()
         || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK
-        || !master_address_matches
+        || Pubkey::find_program_address(
+            &[
+                PAIR_FOREST_MASTER_SEED,
+                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+            ],
+            pool_program,
+        )
+        .0 != *master_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -608,56 +505,36 @@ fn authenticate_asq8_accounts_v1(
         &master,
         registry_account,
         entry_account,
-        {
-            #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-            {
-                Some(&certificate)
-            }
-            #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
-            {
-                None
-            }
-        },
     )?;
 
     let checkpoint = decode_checkpoint_box(&checkpoint_account.try_borrow_data()?)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    let checkpoint_address_matches = certificate.checkpoint_sequence
-        == checkpoint.checkpoint_sequence
-        && certificate.checkpoint == checkpoint_account.key.to_bytes();
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
-    let checkpoint_address_matches = Pubkey::find_program_address(
-        &[
-            PAIR_FOREST_CHECKPOINT_SEED,
-            master_account.key.as_ref(),
-            &checkpoint.checkpoint_sequence.to_le_bytes(),
-        ],
-        pool_program,
-    )
-    .0 == *checkpoint_account.key;
     if checkpoint.master != master_account.key.to_bytes()
         || checkpoint.deployment_domain != master.identity.deployment_domain
-        || !checkpoint_address_matches
+        || Pubkey::find_program_address(
+            &[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_account.key.as_ref(),
+                &checkpoint.checkpoint_sequence.to_le_bytes(),
+            ],
+            pool_program,
+        )
+        .0 != *checkpoint_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }
 
     let selected_lane = decode_lane_box(&lane_account.try_borrow_data()?)?;
-    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
-    let lane_address_matches = certificate.selected_lane == lane_account.key.to_bytes();
-    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
-    let lane_address_matches = Pubkey::find_program_address(
-        &[
-            PAIR_FOREST_LANE_SEED,
-            master_account.key.as_ref(),
-            &[output_lane],
-        ],
-        pool_program,
-    )
-    .0 == *lane_account.key;
     if selected_lane.master != master_account.key.to_bytes()
         || selected_lane.lane_id != output_lane
-        || !lane_address_matches
+        || Pubkey::find_program_address(
+            &[
+                PAIR_FOREST_LANE_SEED,
+                master_account.key.as_ref(),
+                &[output_lane],
+            ],
+            pool_program,
+        )
+        .0 != *lane_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -1253,30 +1130,6 @@ mod tests {
     const STRICT_WORK_TRANSFER_NONCES: [u64; 3] = [41_330_364_500, 516_418_238, 29_526_748_214];
     const STRICT_WORK_TRANSFER_FRONTIER_NODES: usize = 201;
 
-    #[test]
-    fn configured_invariant_identity_capability_is_exact() {
-        let pool = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
-        let registry = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
-
-        #[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
-        {
-            assert_eq!(
-                pool.to_string(),
-                "H93Xdk81pavjXwmNBSFeDbfndBxpyD3X43Bp7P2XpJYW"
-            );
-            assert_eq!(
-                registry.to_string(),
-                "CR1PE8CVHdqkfPwSDGQUph22AK23n5S9wciZvdYxpn8h"
-            );
-        }
-
-        #[cfg(not(feature = "v7-pair-forest-public-devnet-identity-audit"))]
-        {
-            assert_eq!(pool, fixed_pubkey(0x41));
-            assert_eq!(registry, fixed_pubkey(0x44));
-        }
-    }
-
     fn digest(seed: u32) -> aspis_statement::Digest {
         core::array::from_fn(|index| M31(seed + 17 * index as u32))
     }
@@ -1316,7 +1169,9 @@ mod tests {
         registry_program: Pubkey,
         proof_key: Pubkey,
         master_key: Pubkey,
+        master_bump: u8,
         checkpoint_key: Pubkey,
+        checkpoint_bump: u8,
         lane_key: Pubkey,
         checkpoint_sequence: u64,
         deployment_domain: [u8; 32],
@@ -1328,47 +1183,30 @@ mod tests {
         Pubkey::new_from_array([byte; 32])
     }
 
-    #[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
-    #[test]
-    fn public_devnet_identity_capability_is_exact() {
-        assert_eq!(
-            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1).to_string(),
-            "H93Xdk81pavjXwmNBSFeDbfndBxpyD3X43Bp7P2XpJYW"
-        );
-        assert_eq!(
-            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1).to_string(),
-            "CR1PE8CVHdqkfPwSDGQUph22AK23n5S9wciZvdYxpn8h"
-        );
-    }
-
     fn strict_transfer_context() -> StrictTransferContext {
         let verifier = crate::id();
-        let pool_program = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
+        let pool_program = fixed_pubkey(0x41);
         let mint = fixed_pubkey(0x42);
         let token_program = fixed_pubkey(0x43);
-        let registry_program =
-            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
+        let registry_program = fixed_pubkey(0x44);
         let proof_key = fixed_pubkey(0x45);
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_transfer_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let deployment_domain = [5; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
         let mut tree = IncrementalMerkleTreeV1::from_parts_with_empty_roots(
@@ -1385,6 +1223,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1405,7 +1244,9 @@ mod tests {
             registry_program,
             proof_key,
             master_key,
+            master_bump,
             checkpoint_key,
+            checkpoint_bump,
             lane_key,
             checkpoint_sequence,
             deployment_domain,
@@ -1435,6 +1276,7 @@ mod tests {
         aspis_core::v7_onefold::V7CompactOneFoldWire::parse(proof, frontier_nodes).unwrap();
 
         let master = PoolV1PairForestMasterV1 {
+            bump: context.master_bump,
             identity: PoolIdentityV1 {
                 pool: context.master_key.to_bytes(),
                 asset_mint: context.mint.to_bytes(),
@@ -1454,6 +1296,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: context.checkpoint_bump,
             master: context.master_key.to_bytes(),
             deployment_domain: context.deployment_domain,
             checkpoint_sequence: context.checkpoint_sequence,
@@ -1561,29 +1404,27 @@ mod tests {
         let verifier = crate::id();
         let pool_program = Pubkey::new_unique();
         let mint = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let mut nullifier = digest(100);
         nullifier[0] = M31(3);
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 7u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let empty = V7_PAIR_EMPTY_ROOTS;
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree: IncrementalMerkleTreeV1 {
@@ -1593,6 +1434,7 @@ mod tests {
             },
         };
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1612,6 +1454,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain: master.identity.deployment_domain,
             checkpoint_sequence,
@@ -1684,26 +1527,23 @@ mod tests {
         let verifier = crate::id();
         let pool_program = Pubkey::new_unique();
         let mint = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_transfer_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let proof_key = Pubkey::new_unique();
         let deployment_domain = [5; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
@@ -1721,6 +1561,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1749,6 +1590,7 @@ mod tests {
         assert_eq!(built.transition.live_snapshot, snapshot);
 
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1768,6 +1610,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain,
             checkpoint_sequence,
@@ -1839,26 +1682,23 @@ mod tests {
         let mint = Pubkey::new_unique();
         let token_program = Pubkey::new_unique();
         let destination_token_account = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_withdrawal_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let proof_key = Pubkey::new_unique();
         let deployment_domain = [6; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
@@ -1876,6 +1716,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1912,6 +1753,7 @@ mod tests {
         assert_eq!(built.transition.live_snapshot, snapshot);
 
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1931,6 +1773,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain,
             checkpoint_sequence,
@@ -2061,17 +1904,18 @@ mod tests {
     #[test]
     fn immutable_registry_v2_release_certificate_authenticates_fail_closed() {
         let verifier_program = crate::id();
-        let pool_program = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
-        let registry_program =
-            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
+        let pool_program = fixed_pubkey(0x41);
+        let registry_program = fixed_pubkey(0x44);
         let loader = bpf_loader_upgradeable::id();
-        let master_key = fixed_pubkey(0x71);
-        let registry_key = Pubkey::find_program_address(
+        let (master_key, master_bump) = Pubkey::find_program_address(
+            &[PAIR_FOREST_MASTER_SEED, fixed_pubkey(0x72).as_ref()],
+            &pool_program,
+        );
+        let (registry_key, registry_bump) = Pubkey::find_program_address(
             &[VERIFIER_REGISTRY_V2_SEED, master_key.as_ref()],
             &registry_program,
-        )
-        .0;
-        let entry_key = Pubkey::find_program_address(
+        );
+        let (entry_key, entry_bump) = Pubkey::find_program_address(
             &[
                 VERIFIER_ENTRY_V2_SEED,
                 master_key.as_ref(),
@@ -2079,13 +1923,13 @@ mod tests {
                 &V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
             ],
             &registry_program,
-        )
-        .0;
-        let registry_programdata =
-            Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
-        let verifier_programdata =
-            Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
+        );
+        let (registry_programdata, registry_programdata_bump) =
+            Pubkey::find_program_address(&[registry_program.as_ref()], &loader);
+        let (verifier_programdata, verifier_programdata_bump) =
+            Pubkey::find_program_address(&[verifier_program.as_ref()], &loader);
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: fixed_pubkey(0x72).to_bytes(),
@@ -2106,6 +1950,8 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let registry = VerifierRegistryV2 {
+            bump: registry_bump,
+            programdata_bump: registry_programdata_bump,
             flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: master_key.to_bytes(),
             authority: [0; 32],
@@ -2118,6 +1964,8 @@ mod tests {
             executable_hash: [0xa5; 32],
         };
         let entry = VerifierRegistryEntryV2 {
+            bump: entry_bump,
+            programdata_bump: verifier_programdata_bump,
             status: VerifierEntryStatusV1::Active,
             statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
             pool: master_key.to_bytes(),
@@ -2187,7 +2035,6 @@ mod tests {
                 &master,
                 &registry_account,
                 &entry_account,
-                None,
                 current_slot,
             )
         };

@@ -9,6 +9,8 @@ description = "Aspis on-chain verifier program: Spend production verification an
 crate-type = ["cdylib", "lib"]
 
 [features]
+# R-E4 measured regression: retained for audit, never selected by default.
+r0-r91-audit = ["aspis-statement/r0-r91-audit"]
 default = ["spend-production", "v5-production-tag67"]
 no-entrypoint = []
 custom-heap = []
@@ -34,21 +36,18 @@ v5-cu-probe = []
 # Local-validator-only entrypoint for the V6 26+3 packed parser and arithmetic
 # kernels. It is intentionally incompatible with every production entrypoint.
 v6-cu-probe = []
+# Never-production measurement of the unchanged atomic-v3 reference verifier.
+v8-state-only-cu-probe = ["aspis-statement/pool-v1-kernel"]
+# Strict R0 reference measurement only; no production dispatch entry.
+r0-cu-probe = ["custom-heap", "aspis-statement/r0", "aspis-statement/pool-v1-kernel"]
 # Local-validator-only entrypoint for the compact V7 verifier. It retains the
 # complete atomic wrapper while allowing work-hash acceptance to be isolated
 # from the production Tag-73 binary during CU development.
-v7-cu-probe = [
-    "aspis-core/v7-query-order-source-bound-audit",
-    "aspis-statement/pool-v1-kernel",
-]
+v7-cu-probe = []
 # Local-only CU profiler for one honest native Pool Tag-73 proof.  It exposes
 # the production cryptographic path behind a distinct entrypoint and logs
 # coarse phase boundaries.  It is deliberately not a production feature.
 v7-pool-cu-profile = ["aspis-statement/pool-v1-kernel"]
-# Default-off, host-only source-observation root for the Aeneas/Lean bridge.
-# It retains the production parser and verifier calls while recording the
-# already-built pre-query view in an owned result.
-aeneas-observer = ["aspis-core/aeneas-observer"]
 # Frozen production switch. This compiles tag 67 into the minimal production
 # dispatcher and routes it only through the atomic verify-and-apply wrapper.
 # The executable, transcript, formal, and CU gates are recorded in the release
@@ -129,20 +128,6 @@ v7-pair-forest-binary-copy-weights-audit = [
 # persisted active root/frontier Poseidon reconstruction, which is an
 # inductive invariant of Pool constructors and writers.
 v7-pair-forest-lane-invariant-audit = []
-# Default-off proof-preparation certificate. Canonical PDA bump search runs
-# once while the sealed proof context is fixed; terminal consumers replay
-# only single-attempt derivations from this immutable verifier-owned image.
-v7-terminal-pda-certificate-audit = ["v7-pair-forest-lane-invariant-audit"]
-# Audit-only source-visible query-order schedule. It changes neither query
-# derivation nor sorted output; it replaces only an opaque std sort call.
-v7-query-order-source-bound-audit = ["aspis-core/v7-query-order-source-bound-audit"]
-# Research-only identity capability for the immutable public-devnet programs
-# recorded by the 2026-09-07 lifecycle attempt.  This feature is deliberately
-# not part of the one-transaction candidate alias: builds must name it
-# explicitly, and the ordinary audit constants remain unchanged otherwise.
-v7-pair-forest-public-devnet-identity-audit = [
-    "v7-pair-forest-lane-invariant-audit",
-]
 # Audit-only cache for repeated generated Copy endpoint rows. A cached row
 # selector is consumed only after an exact row-tag match; misses use the
 # unchanged high[row>>4] * low[row&15] computation.

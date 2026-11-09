@@ -290,11 +290,15 @@ pub fn begin_state_only_hiding_precommit(
 /// the exact candidate count, so q3 and the retired q4 draft cannot collide.
 pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
+    let mut absorb = |byte: u8| {
+        hash ^= u64::from(byte);
+        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+    };
     // Frozen consensus bytes: this domain separator feeds the pinned layout
     // factor fingerprint checked fail-closed by the verifying schedule. The
     // aspis-spend release proofs are ground against exactly these bytes.
     for byte in b"aspis-state-only-spend-zero-factor-d-v1" {
-        absorb_layout_fingerprint_byte(&mut hash, *byte);
+        absorb(*byte);
     }
     for value in [
         PINNED_ATOMIC_STATE_ONLY_RELATION_FREE_MASK_FINGERPRINT_V3,
@@ -302,7 +306,7 @@ pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
         PINNED_ATOMIC_STATE_ONLY_HIDING_LAYOUT_FACTOR_FINGERPRINT_V3,
     ] {
         for byte in value.to_le_bytes() {
-            absorb_layout_fingerprint_byte(&mut hash, byte);
+            absorb(byte);
         }
     }
     for byte in [
@@ -314,7 +318,7 @@ pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
         STATE_ONLY_SPEND_D_FACTOR_IDENTIFIER,
         STATE_ONLY_SPEND_QUERY_CANDIDATES as u8,
     ] {
-        absorb_layout_fingerprint_byte(&mut hash, byte);
+        absorb(byte);
     }
     hash
 }
@@ -332,8 +336,12 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         true,
     );
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
+    let mut absorb = |byte: u8| {
+        hash ^= u64::from(byte);
+        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+    };
     for byte in b"aspis-state-only-pool-v1-tag73-zero-factor-d-v1" {
-        absorb_layout_fingerprint_byte(&mut hash, *byte);
+        absorb(*byte);
     }
     for value in [
         mask_layout_fingerprint,
@@ -341,11 +349,11 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         ordinary,
     ] {
         for byte in value.to_le_bytes() {
-            absorb_layout_fingerprint_byte(&mut hash, byte);
+            absorb(byte);
         }
     }
     for byte in b"tag73-q16-first-cap203-v1" {
-        absorb_layout_fingerprint_byte(&mut hash, *byte);
+        absorb(*byte);
     }
     for byte in [
         POOL_V1_TAG73_TOTAL_GENERATOR_WIDTH as u8,
@@ -356,10 +364,10 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         POOL_V1_TAG73_D_FACTOR_IDENTIFIER,
         POOL_V1_TAG73_QUERY_COUNT as u8,
     ] {
-        absorb_layout_fingerprint_byte(&mut hash, byte);
+        absorb(byte);
     }
     for byte in (POOL_V1_TAG73_FIRST_QUERY_CAP as u16).to_le_bytes() {
-        absorb_layout_fingerprint_byte(&mut hash, byte);
+        absorb(byte);
     }
     hash
 }
@@ -678,12 +686,6 @@ pub fn state_only_hiding_layout_factor_fingerprint(mask_layout_fingerprint: u64)
     )
 }
 
-#[inline]
-fn absorb_layout_fingerprint_byte(hash: &mut u64, byte: u8) {
-    *hash ^= u64::from(byte);
-    *hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
-}
-
 /// Bind one concrete relation-free mask layout to its copy-active registry
 /// while retaining the frozen width-28 factor schedule.  Alternate statement
 /// profiles must pin the output before using it in a transcript context.
@@ -693,19 +695,23 @@ pub fn state_only_hiding_layout_factor_fingerprint_for_registry(
     has_copy_inactive_zero_claim: bool,
 ) -> u64 {
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
+    let mut absorb = |byte: u8| {
+        hash ^= u64::from(byte);
+        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+    };
     for byte in b"aspis-state-only-hiding-v2-shared-powers" {
-        absorb_layout_fingerprint_byte(&mut hash, *byte);
+        absorb(*byte);
     }
     for byte in mask_layout_fingerprint.to_le_bytes() {
-        absorb_layout_fingerprint_byte(&mut hash, byte);
+        absorb(byte);
     }
     for byte in b"copy-inactive-dense-zero-claim-v1" {
-        absorb_layout_fingerprint_byte(&mut hash, *byte);
+        absorb(*byte);
     }
     for byte in copy_active_rows_fingerprint.to_le_bytes() {
-        absorb_layout_fingerprint_byte(&mut hash, byte);
+        absorb(byte);
     }
-    absorb_layout_fingerprint_byte(&mut hash, u8::from(has_copy_inactive_zero_claim));
+    absorb(u8::from(has_copy_inactive_zero_claim));
     for value in [
         STATE_ONLY_HIDING_C1_COLUMNS as u16,
         STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS as u16,
@@ -717,25 +723,25 @@ pub fn state_only_hiding_layout_factor_fingerprint_for_registry(
         STATE_ONLY_HIDING_TERMINAL_POINTS as u16,
     ] {
         for byte in value.to_le_bytes() {
-            absorb_layout_fingerprint_byte(&mut hash, byte);
+            absorb(byte);
         }
     }
     for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {
-        absorb_layout_fingerprint_byte(&mut hash, column as u8);
-        absorb_layout_fingerprint_byte(&mut hash, (column & 3) as u8);
-        absorb_layout_fingerprint_byte(&mut hash, FACTOR_FAMILIES[column]);
-        absorb_layout_fingerprint_byte(&mut hash, FACTOR_EXPONENTS[column]);
+        absorb(column as u8);
+        absorb((column & 3) as u8);
+        absorb(FACTOR_FAMILIES[column]);
+        absorb(FACTOR_EXPONENTS[column]);
     }
     for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
-        absorb_layout_fingerprint_byte(&mut hash, 0xfe); // Full-domain shared-power mask-only C1 namespace.
-        absorb_layout_fingerprint_byte(&mut hash, column as u8);
-        absorb_layout_fingerprint_byte(&mut hash, MASK_ONLY_FACTOR_EXPONENTS[column]);
-        absorb_layout_fingerprint_byte(&mut hash, (column & 3) as u8);
+        absorb(0xfe); // Full-domain shared-power mask-only C1 namespace.
+        absorb(column as u8);
+        absorb(MASK_ONLY_FACTOR_EXPONENTS[column]);
+        absorb((column & 3) as u8);
     }
-    absorb_layout_fingerprint_byte(&mut hash, 0xff); // Explicit G is not one of the sixteen C1 columns.
-    absorb_layout_fingerprint_byte(&mut hash, 0x45); // Even-coefficient-interval schedule marker.
-    absorb_layout_fingerprint_byte(&mut hash, EXPLICIT_FACTOR_EXPONENT as u8);
-    absorb_layout_fingerprint_byte(&mut hash, EXPLICIT_FACTOR_FAMILY as u8);
+    absorb(0xff); // Explicit G is not one of the sixteen C1 columns.
+    absorb(0x45); // Even-coefficient-interval schedule marker.
+    absorb(EXPLICIT_FACTOR_EXPONENT as u8);
+    absorb(EXPLICIT_FACTOR_FAMILY as u8);
     hash
 }
 
@@ -1172,5 +1178,39 @@ mod tests {
             begin_state_only_hiding_precommit(&mut transcript, crossed),
             Err(StateOnlyHidingScheduleError::LayoutFactorFingerprint)
         );
+    }
+}
+
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use crate::field::{WideExact, QM31};
+    use crate::state_only_prefix::r0::{PointClaims, LANES};
+    /// MaskValue is K-linear in the claims at fixed alpha. Preserve arbitrary
+    /// E claims (including their v component); D has exactly zero mask factor.
+    pub fn mask_value(claims: &[WideExact; LANES], alpha: &[QM31; 10]) -> WideExact {
+        let component = |high: bool| {
+            let part = |lane: usize| {
+                if high {
+                    claims[lane].c1()
+                } else {
+                    claims[lane].c0()
+                }
+            };
+            super::state_only_selected_mask_value(
+                &core::array::from_fn(part),
+                &core::array::from_fn(|i| part(16 + i)),
+                part(27),
+                alpha,
+            )
+        };
+        WideExact::new(component(false), component(true))
+    }
+    pub fn masked_terminal(
+        claims: &PointClaims,
+        alpha: &[QM31; 10],
+        eta: QM31,
+        terminal: WideExact,
+    ) -> WideExact {
+        mask_value(&claims[0], alpha).add(WideExact::from_qm31(eta).mul(terminal))
     }
 }

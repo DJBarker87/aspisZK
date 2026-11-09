@@ -115,6 +115,20 @@ pub enum PoolV1PairForestTerminalStatementV1 {
 }
 
 impl PoolV1PairForestTerminalStatementV1 {
+    #[cfg(feature = "r0")]
+    #[inline(always)]
+    pub fn semantic_public(&self) -> super::pair_forest_semantic_terminal::r0::Public<'_> {
+        use super::pair_forest_semantic_terminal::r0::Public;
+        match self {
+            Self::PrivateTransfer { common, public } => {
+                Public::Transfer(public, &common.lane_transition)
+            }
+            Self::Withdrawal { common, public } => {
+                Public::Withdrawal(public, &common.lane_transition)
+            }
+        }
+    }
+
     #[inline]
     pub fn common(&self) -> &PoolV1PairForestTerminalCommonV1 {
         match self {
@@ -389,7 +403,7 @@ pub fn decode_pool_v1_pair_forest_terminal_statement_v1(
     if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
         return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
     }
-    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC {
+    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC[0..4] {
         return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
     }
     if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
@@ -947,6 +961,7 @@ mod tests {
             checkpoint_account: common.checkpoint_account,
             selected_lane_account: common.selected_lane_account,
             master: PoolV1PairForestMasterV1 {
+                bump: 0,
                 identity: PoolIdentityV1 {
                     pool: common.master_account,
                     asset_mint: [5; 32],
@@ -966,6 +981,7 @@ mod tests {
                 last_checkpoint_lane_sequences: checkpoint_sequences,
             },
             checkpoint: PoolV1PairForestCheckpointV1 {
+                bump: 0,
                 master: common.master_account,
                 deployment_domain: source.deployment_domain,
                 checkpoint_sequence: common.checkpoint_sequence,
@@ -973,6 +989,7 @@ mod tests {
                 lane_sequences: checkpoint_sequences,
             },
             selected_lane: PoolV1PairForestLaneStateV1 {
+                bump: 0,
                 master: common.master_account,
                 lane_id: common.output_lane,
                 tree: IncrementalMerkleTreeV1 {
@@ -1427,3 +1444,122 @@ mod tests {
         }
     }
 }
+#[cfg(any(test, kani, aeneas_ref))]
+#[path = "asq8_payment_reference.rs"]
+mod asq8_payment_reference;
+
+// Reference-only ASQ8 encoder. Keeping the payment borrow inside each return
+// branch avoids the pinned Aeneas borrow-abstraction join in the shipped form.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn encode_pool_v1_pair_forest_terminal_request_reference_v1(
+    request: &PoolV1PairForestTerminalRequestV1,
+) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES], PoolV1PairForestTerminalFormatErrorV1> {
+    if request.verifier_profile == [0u8; 32]
+        || request.verifier_release == [0u8; 32]
+        || request.pool_program == [0u8; 32]
+    {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    match request.public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
+            let payment = asq8_payment_reference::encode_pool_v1_private_transfer_public_v1(&public)
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?;
+            Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
+                request.pool_program, PoolV1TransitionKind::PrivateTransfer as u8, payment))
+        }
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {
+            let payment = asq8_payment_reference::encode_pool_v1_withdrawal_public_v1(&public)
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?;
+            Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
+                request.pool_program, PoolV1TransitionKind::Withdrawal as u8, payment))
+        }
+    }
+}
+
+#[cfg(any(test, kani, aeneas_ref))]
+fn asq8_reference_envelope(
+    profile: [u8; 32], release: [u8; 32], program: [u8; 32], kind: u8,
+    payment: [u8; POOL_V1_PAYMENT_STATEMENT_BYTES],
+) -> [u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES] {
+    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES];
+    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC);
+    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
+    output[5] = kind;
+    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[REQUEST_PROFILE_OFFSET..REQUEST_RELEASE_OFFSET].copy_from_slice(&profile);
+    output[REQUEST_RELEASE_OFFSET..REQUEST_POOL_PROGRAM_OFFSET].copy_from_slice(&release);
+    output[REQUEST_POOL_PROGRAM_OFFSET..REQUEST_PAYMENT_OFFSET].copy_from_slice(&program);
+    output[REQUEST_PAYMENT_OFFSET..].copy_from_slice(&payment);
+    output
+}
+
+#[cfg(kani)]
+#[path = "asq8_kani.rs"]
+mod asq8_kani;
+
+// Fixed-admitted-size parser reference: constructor closures avoid the pinned
+// translator's constructor-coercion name collision. Kani checks all 320 bytes.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn decode_pool_v1_pair_forest_terminal_request_reference_v1(
+    bytes: &[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES],
+) -> Result<PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalFormatErrorV1> {
+    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
+    }
+    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
+    }
+    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);
+    }
+    let kind = transition_kind(bytes[5])?;
+    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);
+    }
+    if bytes[7] != 0 {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    let public = match kind {
+        PoolV1TransitionKind::PrivateTransfer => {
+            PoolV1PairForestTerminalPaymentV1::PrivateTransfer(
+                decode_pool_v1_private_transfer_public_v1(&bytes[REQUEST_PAYMENT_OFFSET..])
+                    .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?,
+            )
+        }
+        PoolV1TransitionKind::Withdrawal => PoolV1PairForestTerminalPaymentV1::Withdrawal(
+            decode_pool_v1_withdrawal_public_v1(&bytes[REQUEST_PAYMENT_OFFSET..])
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?,
+        ),
+    };
+    let request = PoolV1PairForestTerminalRequestV1 {
+        verifier_profile: bytes[REQUEST_PROFILE_OFFSET..REQUEST_RELEASE_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        verifier_release: bytes[REQUEST_RELEASE_OFFSET..REQUEST_POOL_PROGRAM_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        pool_program: bytes[REQUEST_POOL_PROGRAM_OFFSET..REQUEST_PAYMENT_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        public,
+    };
+    if request.verifier_profile == [0u8; 32]
+        || request.verifier_release == [0u8; 32]
+        || request.pool_program == [0u8; 32]
+    {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    Ok(request)
+}
+
+// Fused reference for the exact Pool decode/re-encode handoff. Kani proves
+// this whole Result equal to the shipped pipeline on every 320-byte input;
+// successful normalization therefore preserves the original verifier bytes.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn normalize_pool_v1_pair_forest_terminal_request_reference_v1(
+    bytes: &[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES],
+) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES], PoolV1PairForestTerminalFormatErrorV1> {
+    decode_pool_v1_pair_forest_terminal_request_reference_v1(bytes)?;
+    Ok(*bytes)
+}
+

@@ -12,11 +12,6 @@
 //! Stage 1 work and no soundness figure may be quoted from this code alone.
 
 #![no_std]
-// Charon needs a distinct constructor name for the `Wire` error variant when
-// it translates this crate under the extraction-only observer feature.  These
-// tool attributes are inert in every ordinary host and SBF build.
-#![cfg_attr(feature = "aeneas-observer", feature(register_tool))]
-#![cfg_attr(feature = "aeneas-observer", register_tool(charon))]
 
 extern crate alloc;
 
@@ -30,10 +25,13 @@ pub mod circle_openings;
 pub mod circle_pcs_shape;
 pub mod circle_prefix;
 pub mod circle_query;
+pub mod digest;
 pub mod field;
 pub mod merkle;
 pub mod params;
 pub mod proof;
+pub mod r0;
+pub mod r0_transcript;
 pub mod state_only_hiding;
 pub mod state_only_masked_switch;
 pub mod state_only_masked_switch_basis;
@@ -66,6 +64,7 @@ pub mod v7_staged_pair;
 pub mod verify;
 
 pub use params::{FoldPayload, MerkleMode, Profile, PROFILES};
+pub use digest::Digest32;
 pub use transcript::HashFn;
 #[cfg(feature = "insecure-test-framing")]
 pub use verify::verify_with_insecure_m31_circle_as_legacy_for_tests;
@@ -95,3 +94,6 @@ mod tests {
         assert_eq!(half.mul(half), CM31::ONE);
     }
 }
+
+#[cfg(feature = "r0-op-count")]
+pub mod r0_op_count;
