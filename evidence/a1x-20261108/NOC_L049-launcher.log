@@ -1,0 +1,49 @@
+{"attempt": "NOC_L049", "exit_status": 1, "wall_seconds": 56.07425085105933, "peak_rss_kib": "6778436", "swaps": "0", "print_axioms": ["'NOC_Stage1Conv.outerOk' does not depend on any axioms", "'NOC_Stage1Conv.keyInj' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Conv.wadd' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Conv.distinct3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NOC_Stage1Conv.neConv' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Conv.consume' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NOC_generated/NOC_Stage1Conv.lean:30:56: error: unsolved goals
+case refine_1
+pa pb pc : r1_pool_adapter.owned.OwnedAccount
+a0 : Usize.wrapping_add 0#usize 1#usize = 1#usize
+a1 : Usize.wrapping_add 1#usize 1#usize = 2#usize
+a2 : Usize.wrapping_add 2#usize 1#usize = 3#usize
+e : pa.key = pb.key
+h :
+  ∃ x,
+    (if
+            Option.map (fun x => x.key) (↑(Array.make 3#usize [pa, pb, pc] ⋯))[↑0#usize]? =
+              Option.map (fun x => x.key) (↑(Array.make 3#usize [pa, pb, pc] ⋯))[↑1#usize]? then
+          ok (some (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument))
+        else ok none) =
+        ok x ∧
+      ∃ x_1,
+        (match x with
+            | none => do
+     
+...
+         | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame solana_program_error.ProgramError) residual
+      else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)) =
+      ok (core.result.Result.Ok saved)
+⊢ NNH_ReturnsBundle.tx1Value { program_id := key program, accounts := accounts xs, data := bytes data }
+      (NOC_Run5bCtx.envOf c) =
+    Except.ok (bytes saved.deref)
+NOC_generated/NOC_Stage1Conv.lean:301:58: error: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `simp`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NOC_generated/NOC_Stage1Conv.lean:97:29: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'NOC_Stage1Conv.outerOk' does not depend on any axioms
+'NOC_Stage1Conv.keyInj' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Conv.wadd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Conv.distinct3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NOC_Stage1Conv.neConv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Conv.consume' depends on axioms: [propext, Classical.choice, Quot.sound]
+NOC_generated/NOC_Stage1Conv.lean:422:14: error(lean.unknownIdentifier): Unknown constant `conv`
+
+Running as unit: run-r44bd12e25cbd4aa182579387edef5d34.scope; invocation ID: 05f01d3583074f1f84069fb48480e54b
