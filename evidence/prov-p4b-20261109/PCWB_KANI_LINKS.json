@@ -1,0 +1,47 @@
+{
+ "schema": "pcwb-kani-links-v1",
+ "note": "No Kani was run by this job. Hashes are read from retained receipts under docs/research/100bit-spend-path-20261013/evidence/multiproof-cone-20261021/host*. Only exit-0 receipts are listed as naming a source.",
+ "live_extraction_sources": {
+  "MultiproofConeRef": {
+   "reference_rs_sha256": "32548b0d36950447a5fc781da3a36442caeff65513854c5277d110ff5e2fd7a3",
+   "evidence": "host/extraction/charon-5-inputs.json and aeneas-5-inputs.json (source_sha256); PCWB_E004 re-extraction Funs byte-identical to live (sha db9dda28...)"
+  },
+  "MultiproofParserRef": {
+   "reference_rs_sha256": "32548b0d...",
+   "parser_reference_rs_sha256": "3ade6c8915f1793b40108d8b6991267232d30f0a72fa3924a7dced5e99280299",
+   "evidence": "host/receipts/parser-charon-2, parser-aeneas-2; PCWB_E005 Funs and Types byte-identical to live"
+  },
+  "MultiproofSortRef": {
+   "sort_reference_rs_sha256": "a7841dd451ad722b739a2d8481b5ae6ed82a474b2be6159a8c53a2ba4518222e",
+   "reference_rs_sha256": "e812aae3d06b442cf0f364fd0106dc3a2ecd1ccc8bd2600bf10e769132389f71",
+   "evidence": "host/receipts/sort-charon-2, sort-aeneas-2; PCWB_E006 Funs byte-identical to live"
+  }
+ },
+ "kani_exit0_receipts_name": {
+  "reference_rs": "e812aae3d06b442cf0f364fd0106dc3a2ecd1ccc8bd2600bf10e769132389f71",
+  "parser_reference_rs": "3ade6c8915f1793b40108d8b6991267232d30f0a72fa3924a7dced5e99280299",
+  "sort_reference_rs": "a7841dd451ad722b739a2d8481b5ae6ed82a474b2be6159a8c53a2ba4518222e (from cone2-leaf-*, cone6-*, p6-callbacks-1, batch-sort-atomic-1; the earlier batch-sort-step-1, exit 65, names an older sort_reference 4d1df7e6...)",
+  "receipts_exit0_harness_examples": [
+   "host/receipts/final-local-cuts-2 (binary_*_group, leaf_batch_step, semantic_*, parser_*, batch_sorted_key_step ...)",
+   "host/receipts/batch-sort-atomic-1 (batch_sort_insert_step)",
+   "host-cone6/cone6-guards-final-1",
+   "host-p6/p6-callbacks-1",
+   "host/receipts/cone2-leaf-2",
+   "host/receipts/cone4-order-1"
+  ]
+ },
+ "findings": [
+  {
+   "id": "K1",
+   "statement": "The live MultiproofConeRef.Funs was extracted from reference.rs sha256 32548b0d (tree d28944b2a05); every exit-0 Kani receipt names the later reference.rs e812aae3 (tree 7bb8b8b2f83 and after). The two files differ in exactly two lines, both #[cfg_attr(kani, kani::requires/ensures)] on read32. PCWB_E007 (e812aae3 tree 8c029994865) re-extracts MultiproofConeRef.Funs identical to the live module except one Source line-number comment (read32 at 111 not 113) and Types identical modulo the same post-processing as E004. The Kani contract therefore names a different hash from the one that produced the live module; the difference does not reach the non-Kani MIR, but this job did not rerun Kani and does not transfer the contract by itself. Lead decision whether the cfg(kani)-only difference is accepted as the identical function."
+  },
+  {
+   "id": "K2",
+   "statement": "MultiproofParserRef and MultiproofSortRef: the hash of parser_reference.rs and sort_reference.rs named by exit-0 Kani receipts equals the hash used to extract the live modules. reference.rs: parser extraction used 32548b0d, Kani names e812aae3 (same K1 difference; parser Funs includes reference.canonical_word, read16, canonical_qm, check_values, expand_chunk, expand_rows, row_shape, which are in reference.rs). SortRef: extraction used reference.rs e812aae3 (no difference)."
+  },
+  {
+   "id": "K3",
+   "statement": "NEO_/NEB_ references: exit-0 Kani receipts name exactly the reference sources that produced the live modules. NEO_WindowV2 (reference source 2e0240558aeaf9b15337057bea3b93c190503d71b06dd80102bdf5894aa247f7): evidence/slice-q-compose2-20261102/NEO_K053..K057 (exit 0) list NEO_window_reference.rs 2e024055 (and NEO_parser_reference.rs 1943f54c). NEO_ParserRef (1943f54c2276e8aa663d7cfc0e0f1c1f07ad01b115cccb94c18e4c5f9a0380ee): NEO_K053..K057 exit 0; NEO_K014 and K018 (exit 1) also name it. NEB_AdditiveRef (c0941595b7b8eddea92f6376d3bdc78fe32414053a4942cda83bab71d762f6c9): evidence/slice-q-compose-20261029/NEB_K009 (exit 0) lists NEB_additive_reference.rs c0941595 and the frozen-side cut NEB_additive.rs 8261268e (NEK_NEB_ADDITIVE_RECOVERY.json). Harness names are not stored in these receipts (their target field has no --harness); the contract-to-frozen-function content was not audited here. Hash identity only."
+  }
+ ]
+}

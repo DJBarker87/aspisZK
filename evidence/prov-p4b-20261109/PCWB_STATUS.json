@@ -1,0 +1,144 @@
+{
+ "schema": "pcwb-status-v1",
+ "target_established": false,
+ "statement": "Target not yet established. No ledger row, trust row, RSL or security contract was changed.",
+ "branch": "codex/pc-prov-p4b-20261109",
+ "modules": [
+  {
+   "module": "NHV_NEO_WindowV2_Funs",
+   "group": "b3",
+   "source": "evidence/slice-q-compose2-20261102/NEO_E009/sources/NEO_window_reference.rs",
+   "source_sha256": "2e0240558aeaf9b15337057bea3b93c190503d71b06dd80102bdf5894aa247f7",
+   "committed": "evidence/prov-p4b-20261109/sources/neo_window/",
+   "reextraction": "PCWB_E001 exit 0: Funs and Types byte-identical to retained NEO_window2_extracted and equal to the live NHV module after removing import lines",
+   "equalities": "PRVEq_NHV_NEO_WindowV2_Funs.lean: 5/5 theorems compile (L001)",
+   "kani": "NEO_K053..K057 exit 0 name the same hash",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_COMPILED"
+  },
+  {
+   "module": "NHV_NEO_ParserRef_Funs",
+   "group": "b3",
+   "source": "evidence/slice-q-compose2-20261102/NEO_E001/sources/NEO_parser_reference.rs",
+   "source_sha256": "1943f54c2276e8aa663d7cfc0e0f1c1f07ad01b115cccb94c18e4c5f9a0380ee",
+   "committed": "sources/neo_parser/",
+   "reextraction": "PCWB_E002 exit 0: byte-identical to retained NEO_parser_extracted; equal to live after import strip",
+   "equalities": "3/3 (L001)",
+   "kani": "NEO_K053..K057 exit 0 name the same hash",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_COMPILED"
+  },
+  {
+   "module": "NHV_NEB_AdditiveRef_Funs",
+   "group": "b3",
+   "source": "evidence/slice-q-compose-20261029/NEB_E003/sources/NEB_additive_reference.rs",
+   "source_sha256": "c0941595b7b8eddea92f6376d3bdc78fe32414053a4942cda83bab71d762f6c9",
+   "committed": "sources/neb_additive/",
+   "reextraction": "PCWB_E003 exit 0: byte-identical to retained NEB_AdditiveRef; equal to live after import strip",
+   "equalities": "10/10 declarations (3 reached) (L001)",
+   "kani": "NEB_K009 exit 0 names the same hash",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_COMPILED"
+  },
+  {
+   "module": "NHV_NEO_*_Types, NHV_NEB_AdditiveRef_Types",
+   "group": "b3",
+   "reextraction": "E001-E003 Types identical to live after import strip; the modules declare no definitions (0 equality statements)",
+   "status": "LOCATED_REEXTRACTED_TEXT_IDENTICAL"
+  },
+  {
+   "module": "MultiproofConeRef.Funs",
+   "group": "b3",
+   "source": "tools/multiproof-cone-20261021 @ d28944b2a05 (reference.rs 32548b0d...)",
+   "committed": "sources/mp_cone_A/",
+   "reextraction": "PCWB_E004 exit 0 (frozen aspis-core 4bb3b3f staged, charon daad69be, aeneas c0cf4fcc substitute): Funs byte-identical to live db9dda28; E007 from the Kani-named reference.rs e812aae3: identical except one line-number comment",
+   "equalities": "13 of 16 declarations compile (L003); level_rows, levels, verify_owned are commented P3 obligations",
+   "kani": "K1: Kani receipts name e812aae3, live module extracted from 32548b0d",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_PARTIAL_3_OBLIGATIONS"
+  },
+  {
+   "module": "MultiproofConeRef.Types",
+   "group": "b3",
+   "reextraction": "E004: differs from live by ImportUnionNamedDiscriminant import, discriminant attribute name and one absolute-path comment (C4)",
+   "status": "LOCATED_REEXTRACTED_DIFFERENCES_CLASSIFIED"
+  },
+  {
+   "module": "MultiproofParserRef.Funs",
+   "group": "b3",
+   "source": "tools/multiproof-cone-20261021 @ d28944b2a05 (reference.rs 32548b0d, parser_reference.rs 3ade6c89...)",
+   "committed": "sources/mp_parser_A/",
+   "reextraction": "PCWB_E005 exit 0: Funs and Types byte-identical to live",
+   "equalities": "14/14 compile (L003)",
+   "kani": "parser_reference.rs 3ade6c89 named by exit-0 Kani receipts; reference.rs per K1",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_COMPILED"
+  },
+  {
+   "module": "MultiproofSortRef.Funs",
+   "group": "b3",
+   "source": "tools/multiproof-cone-20261021 @ 8c029994865 (sort_reference.rs a7841dd4..., reference.rs e812aae3)",
+   "committed": "sources/mp_sort_B/",
+   "reextraction": "PCWB_E006 exit 0: Funs byte-identical to live; Types differ by the two import-union post-processing items",
+   "equalities": "2 of 3 compile (L003); sort_rows is a commented P3 obligation",
+   "kani": "a7841dd4 and e812aae3 named by exit-0 Kani receipts",
+   "status": "LOCATED_REEXTRACTED_EQUALITIES_PARTIAL_1_OBLIGATION"
+  },
+  {
+   "module": "MultiproofConeRef.Types / MultiproofSortRef.Types / MultiproofParserRef.Types",
+   "group": "b3",
+   "status": "see Funs rows"
+  },
+  {
+   "module": "AspisR1WithdrawalCaller.Funs (encode_digest_canonical)",
+   "group": "c2 cut",
+   "source": "evidence/withdrawal-caller-extraction-20261016/caller-extraction-evidence.tar.gz input/lib.rs",
+   "source_sha256": "166185cd1986e82a5ec27d85f5f549067cd0afa4917e24226c19450cffe739dc",
+   "committed": "sources/wc/",
+   "reextraction": "PCWB_E008: Charon reproduces the retained LLBC (PCWB_LLBC_COMPARE.json); Aeneas extended build crashes (C5), no fresh Lean",
+   "equalities": "none (archived generated Funs is byte-identical to the live module, so it is the live module)",
+   "status": "LOCATED_HASH_LINKED_CHARON_REPRODUCED_AENEAS_BLOCKED"
+  },
+  {
+   "module": "AspisR1SemanticCallExtraction.Funs/.Types",
+   "group": "c2 cut",
+   "source": "evidence/source-proof-loop-extraction-20261019/semantic-calls-root-v5-results-20261019.tar.gz input/",
+   "committed": "sources/sem_calls/",
+   "reextraction": "PCWB_E009: Charon reproduces retained LLBC; Aeneas crash",
+   "status": "LOCATED_HASH_LINKED_CHARON_REPRODUCED_AENEAS_BLOCKED"
+  },
+  {
+   "module": "AspisR1BatchedWeightsExtraction.Types (and .Funs source)",
+   "group": "c2 cut",
+   "source": "evidence/source-proof-loop-extraction-20261019/batched-calls-root-v5-results-20261019.tar.gz input/",
+   "committed": "sources/batched_w/",
+   "reextraction": "PCWB_E010: same",
+   "status": "LOCATED_HASH_LINKED_CHARON_REPRODUCED_AENEAS_BLOCKED"
+  },
+  {
+   "module": "S1ValuesOwnedModelV1 (copy_chunk)",
+   "group": "c2 cut",
+   "status": "SOURCE_NOT_FOUND",
+   "note": "no Rust text containing fn copy_chunk in any research blob, nor in any of the 105 .llbc.xz containers; see PCWB_DECISIONS_NEEDED.md D1"
+  },
+  {
+   "module": "remaining cut modules (C001..C016 except the above and P4a items)",
+   "status": "TRIAGED_ONLY",
+   "note": "PCWB_CUT_TRIAGE.json: 65 modules, 11 with an archive hash link, 26 with an LLBC in the same evidence directory, 4 with a Cargo crate of the right name only, 24 with nothing found by name. No re-extraction attempted (budget of effort, see handoff)."
+  }
+ ],
+ "budget": {
+  "extraction_scopes_used": 10,
+  "extraction_budget": 12,
+  "lean_scopes_used": 4,
+  "lean_budget": 12,
+  "kani_runs": 0
+ },
+ "deliverables": [
+  "PCWB_SCOPES.json",
+  "PCWB_ATTEMPTS.jsonl",
+  "PCWB_CLASSIFICATIONS.json",
+  "PCWB_HAND_MODELS.json",
+  "PCWB_KANI_LINKS.json",
+  "PCWB_LLBC_COMPARE.json",
+  "PCWB_CUT_TRIAGE.json",
+  "PCWB_TOOLS.json",
+  "PCWB_DECISIONS_NEEDED.md",
+  "PCWB_HANDOFF.md"
+ ]
+}
