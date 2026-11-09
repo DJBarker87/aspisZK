@@ -120,7 +120,7 @@ while i<len(src):
         i+=1
         fn=re.match(r'@(\S+) = @(\S+)$',stmt.strip()); f,g=fn.group(1),fn.group(2)
         pf=f[1:] if f.startswith('@') else f
-        bare0=pf.split('.',1)[1]
+        bare0=re.split(r'(?:^|\.)PRVFresh_[^.]*\.',pf,1)[-1]
         if bare0 in INSTS:
             vs=' '.join('c%d'%k for k in range(len(INSTS[bare0])))
             res.append(f'theorem {name} : {stmt} := by')
@@ -131,7 +131,7 @@ while i<len(src):
             proved_names.append((name,bare0)); continue
         short=g.split('.',1)[1] if False else None
         # bare declaration name relative to the fresh namespace
-        bare=pf.split('.',1)[1]
+        bare=re.split(r'(?:^|\.)PRVFresh_[^.]*\.',pf,1)[-1]
         body='\n'.join(blocks.get(bare,[]))
         cal=[]
         for e in proved_names:
@@ -162,12 +162,17 @@ while i<len(src):
             res.append(f'#print axioms {name}'); res.append('')
             proved_names.append((name,bare)); continue
         res.append(f'theorem {name} : {stmt} := by')
-        res.append(f'  first | (trace "PRV-S1 {name}"; rfl) | (trace "PRV-S2 {name}"; delta {pf} {g};{simp} try rfl; done)')
+        if '--s2only' in sys.argv:
+            res.append(f'  delta {pf} {g}')
+            if cal: res.append(f'  simp only [{", ".join(cal)}]')
+            res.append('  try rfl')
+        else:
+            res.append(f'  first | (trace "PRV-S1 {name}"; rfl) | (trace "PRV-S2 {name}"; delta {pf} {g};{simp} try rfl; done)')
         proved_names.append((name,bare))
         res.append(f'#print axioms {name}'); res.append('')
         continue
     mt=re.match(r'theorem (PRVEq\.\S+) : @(\S+) = @',l)
-    if mt: proved_names.append((mt.group(1),mt.group(2).split('.',1)[1]))
+    if mt: proved_names.append((mt.group(1),re.split(r'(?:^|\.)PRVFresh_[^.]*\.',mt.group(2),1)[-1]))
     res.append(l)
     if CALL_MAP and l=='noncomputable section' and not any('PRVEq_partialEq_ne_default' in r for r in res):
         res.extend(['','theorem PRVEq_partialEq_ne_default {Self Rhs : Type} (c : Self → Rhs → Result Bool) :',
