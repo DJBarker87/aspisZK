@@ -1,0 +1,32 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "note": "P1d failures; exact errors from the xz stdout logs of the PCQE runs. Successes of the same phase are in PCQE_COVERAGE.json.",
+ "failures": [
+  {
+   "spec": "S019",
+   "selection": "r1_wire ValidatedRecord::decode_k via r1_semantic::claims (E409 shape)",
+   "run": "PCQE_E005",
+   "p1c_run": "PCQC_E020",
+   "error": "Aeneas Internal error, r1_semantic.rs lines 47:8-55:1, interp/InterpMatchCtxs.ml line 230 (P1c: InterpReduceCollapse.ml 1880)",
+   "outcome": "FAILED with the original Aeneas; a different compiler site, same source span. Not retried: the first attempt did not get further (same failing function, earlier phase of the same symbolic evaluation is not shown). 5 ValidatedRecord gate definitions remain MISSING."
+  },
+  {
+   "spec": "S010",
+   "selection": "pair_forest_terminal decoders",
+   "run": "PCQE_E006 (E031 shape, 7 roots)",
+   "p1c_run": "PCQC_E016",
+   "error": "killed by the fixed 180 s timeout (exit 124); Charon 90.6 s, LLBC imported, Aeneas unfinished (P1c: Name clash LaneTransition)",
+   "outcome": "FAILED. Changed shape (roots split): PCQE_E010 (common, statement_public_common, transition_kind, ok_or) SUCCEEDED; PCQE_E011 (the four *_boxed_v1 decoders) timed out at 180 s (Charon about 86 s, Aeneas unfinished). Remaining MISSING: MASTER_OFFSET, the four boxed decoders, PoolV1PairForestTerminalRequestV1, asq8_reference_envelope. Shape class (boxed decoder roots) retired after E011 and S012 E009."
+  },
+  {
+   "spec": "S012",
+   "selection": "pair_tree_profile decoders",
+   "run": "PCQE_E009 (3 boxed-decoder roots, same as retired PCQC_E024 root set)",
+   "p1c_run": "PCQC_E017,PCQC_E024",
+   "error": "killed by the 180 s timeout; Charon 86.5 s, Aeneas unfinished",
+   "outcome": "FAILED. Split roots A (decode_pool_v1_pair_live_snapshot_v1, digest_is_canonical, encode_pool_v1_pair_late_public_statement_v1) PCQE_E008 SUCCEEDED (Aeneas 10.3 s). Boxed roots remain MISSING (decode_pair_afterstate_boxed_v1, decode_pair_live_snapshot_boxed_v1, decode_pool_v1_pair_late_public_statement_boxed_v1) plus POOL_V1_PAIR_CAPACITY. The root set of E009 equals that of the retired P1c E024, so it counts as the second failure of that root set across tools; not retried."
+  }
+ ],
+ "memory_note": "The three 180 s timeouts (E006, E009, E011; all boxed-decoder roots) show cgroup memory.peak 3.28 GB, at the MemoryHigh=3G throttle: Aeneas is growing past the high-water mark and being throttled, so the failure is memory-heavy evaluation of the boxed decoders, not only slowness. Caps were not raised."
+}
