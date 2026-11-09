@@ -18,12 +18,17 @@ The R1 verifier, at the frozen source revision `4bb3b3f51e16`, reaches 599
 distinct Rust functions across its two transactions, from field arithmetic and
 the transcript up to the stage-1 and stage-2 entry points. For each of them
 there is a verified statement in Lean: on every input in its stated domain, the
-function, as translated from the frozen Rust, returns the same result, fails in
-the same way and makes the same calls in the same order, hash calls included,
-as the mathematical model the soundness argument reasons about; and every
-caller proves, rather than assumes, that its uses of a callee stay inside that
-callee's domain. All 599 statements are proved, with none left qualified or
-open, and each holds under the named trust rows listed in the proof package.
+function, as translated from the frozen Rust by Charon and Aeneas, returns the
+same result, fails in the same way and makes the same calls in the same order,
+hash calls included, as the mathematical model the soundness argument reasons
+about; and every caller proves, rather than assumes, that its uses of a callee
+stay inside that callee's domain. All 599 statements are proved, with none left
+qualified or open. For most of them the Lean side is the tool's own
+translation of the frozen function; for the small number where the tools could
+not produce a usable translation, the proof is against a transcription of the
+frozen body that was reviewed by hand and is recorded, function by function, as
+a trust row in the proof package, so that nothing of this kind is hidden inside
+a theorem's hypotheses.
 A table of all 599, with the Rust function and the Lean theorems behind each,
 is in [`docs/r1/LEDGER-599.md`](docs/r1/LEDGER-599.md).
 
