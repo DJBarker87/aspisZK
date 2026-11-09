@@ -1,0 +1,22 @@
+[
+ {
+  "case": "import shape",
+  "decision": "second scope imports the two root modules instead of NNN_COMBINED_IMPORT",
+  "reason": "dependency cone of a constant lies in its own module closure; first scope exceeded -M7000 from a meta-program ownership defect while holding the 19272-module combined import; allowed second scope with changed shape"
+ },
+ {
+  "case": "name test for the frozen-side model",
+  "decision": "isNFU = any constant whose name ends with compact.expand_values",
+  "reason": "covers NFU_Retarget.compact.expand_values, AspisS1NativeCompact.compact.expand_values and Aeneas variants; zero hits from either root, so the result is stronger than a single-name test"
+ },
+ {
+  "case": "reading of every path passes through",
+  "decision": "dependency-graph evidence (zero equality theorems and zero NFU constants in either cone) plus source reading of the nearest bridge modules",
+  "reason": "a structural walk can show absence of a link in the cone; it cannot prove the semantic gap, so the classification states what the cone contains and what lies outside"
+ },
+ {
+  "case": "UNLINKED label",
+  "decision": "UNLINKED under the lead definition (S1 constants reached with no reference=NFU equality in the cone)",
+  "reason": "the equality theorem exists (NGV_ExpandAssociation.result) but is downstream of RPx_Deployed, not a dependency of either root"
+ }
+]
