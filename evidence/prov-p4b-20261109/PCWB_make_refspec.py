@@ -21,6 +21,27 @@ SETS={
  'neo_parser':tiny('neo_parser',('research',D2+'NEO_E001/sources/NEO_parser_reference.rs'),'1943f54c2276e8aa663d7cfc0e0f1c1f07ad01b115cccb94c18e4c5f9a0380ee','neb_parser_reference',['m_ref','limbs_ref'],'NEO_ParserRef'),
  'neb_additive':tiny('neb_additive',('research',D1+'NEB_E003/sources/NEB_additive_reference.rs'),'c0941595b7b8eddea92f6376d3bdc78fe32414053a4942cda83bab71d762f6c9','neb_additive_reference',['add_word','sub_word','normalize_word','add2','add4','add8','sub2','sub4','sub8'],'NEB_AdditiveRef'),
 }
+
+# ---- multiproof cone crate (tools/multiproof-cone-20261021) at a recorded commit
+R18='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/'
+def mp(commit,roots_mod,roots,ns,names=None):
+    tree=subprocess.check_output(['git','-C','/Users/dominic/ZK','ls-tree','-r',commit,'tools/multiproof-cone-20261021']).decode().split('\n')
+    paths=[l.split('\t')[1] for l in tree if l and (l.split('\t')[1].endswith(('Cargo.toml','Cargo.lock')) or '/src/' in l.split('\t')[1])]
+    gitfiles={};expect={}
+    for p in paths:
+        rel=p[len('tools/multiproof-cone-20261021/'):];b=subprocess.check_output(['git','-C','/Users/dominic/ZK','show',f'{commit}:{p}'])
+        gitfiles[rel]=(commit,p);expect[rel]=sha(b)
+    env={'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_BUILD_JOBS':'4','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':'{WS}/../PCWB_target_mp','CARGO_NET_OFFLINE':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=4','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin'}
+    return dict(frozen_workspace=True,crate_dir='tools/multiproof-cone-20261021',gitfiles=gitfiles,textfiles={},expect=expect,
+      charon_command=[CH,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option','--include','core::option::Option']+sum([['--start-from','crate::'+roots_mod+'::'+r] for r in roots],[])+['--dest-file','{OUT}/repro.llbc','--','--manifest-path','{CRATE}/Cargo.toml','--offline','--release','--lib','--jobs','4'],
+      aeneas_command=[AE,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',ns,'-dest','{OUT}/raw','-subdir',ns,'-split-files','-emit-json','{OUT}/repro.llbc'],env=env,namespace=ns,
+      recorded_original_tools=dict(charon=R18+'charon (sha256 daad69be..., identical to XRa_bin/charon)',aeneas='aeneas-b59d5188-lean432-extended-static sha256 4632746d... (NOT available on the host); substitute XRa_bin/aeneas-b59d5188-extended sha256 c0cf4fcc...'))
+CONE_ROOTS=['verify_owned','valid_indices','binary_step','leaf_step','level_rows','levels','canonical_word','canonical_qm','expand_chunk','row_shape','semantic_offsets','check_values','expand_rows']
+SETS['mp_cone_A']=mp('d28944b2a05','reference',CONE_ROOTS,'MultiproofConeRef')
+SETS['mp_parser_A']=mp('d28944b2a05','parser_reference',['canonical_words','opening_scan','opening_rows','scan','header','semantic_rows','parse'],'MultiproofParserRef')
+SETS['mp_sort_B']=mp('8c029994865','sort_reference',['insert_rows','sort_rows'],'MultiproofSortRef')
+SETS['mp_cone_B']=mp('8c029994865','reference',CONE_ROOTS,'MultiproofConeRef')
+
 def build(key,run,sets=SETS):
     s=sets[key];d=E/'sources'/key;files={}
     for rel,(rev,path) in s['gitfiles'].items():
