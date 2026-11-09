@@ -1,0 +1,11 @@
+# NOX_ remaining obligations for L188 (gate row 9)
+
+Target not yet established. What this job closed is the reproducible source-to-ELF build for both verifier pins, together with the deployment association of the devnet pin, reused from NDZ. The items below remain.
+
+1. **Final trust and axiom audit of the final closure.** This is the other half of row 9, and NOX did no Lean work. It needs the `#print axioms` and raw ax2 walk of the cold-replayed (L187) final closure, with a one-to-one match against SOUNDNESS-CLAIM-DRAFT section 4. The trust lines in NOX_REALIZATION.md should be adopted into the inventory (P7-SBF-Compiler, P7-LLVM-LLD, P7-cargo-build-sbf, P7-Registry-Crates, AllocatorABI/BumpAllocator, SBF-Loader/VM, Stack frames), or the lead should record why they are not.
+2. **R22 (gate row 16).** The deployed code wraps. The 24 modules in NOX_R22_CONFIG.json `r22_dependent_modules` carry checked semantics, and 71 modules are undetermined. The open choices are: close R22 by totality per reached cone; settle each undetermined module, either from the gate source text or by a fresh overflow-on emission; or have the owner record R22 as a retained trust row named in the claim's first sentence.
+3. **Semantic association.** The name map in host/analysis/NOX_ELF_AUDIT.json identifies 61 of 337 targets. The rest are inlined. A semantic link needs an approach beyond symbol names, and none exists today. Candidate methods are a DWARF or inline-table build, which must be a separate diagnostic build because it changes the ELF; translation validation at the LLVM-IR level; or an accepted statement that compiler trust (P7) covers this. Owner/lead decision.
+4. **Registry snapshot.** Archive the crates.io sources the build used as hashes per file, or vendor them, so that P7-Registry-Crates has a removal path.
+5. **Default deployment.** No default (mainnet) instance exists. Any future deployment needs its own ProgramData readback against f8c0ec72….
+6. **Pool.** The devnet Pool BmsNik… runs 121f3e29…, not the frozen e0e49c34…. This depends on (aj)(a). It is outside NOX's scope.
+7. **Stack.** The stack check is at name level only, as in freeze-20261020. A frame-size bound for the surviving functions remains an S10 item.
