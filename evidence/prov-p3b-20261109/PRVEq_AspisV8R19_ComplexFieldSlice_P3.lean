@@ -144,6 +144,39 @@ theorem fast_chain (P : Std.U32) (hP : P.val = 2147483647) (R : Std.U64 → Resu
   cases fastBody P z <;> rfl
 
 #print axioms fast_chain
+theorem redarith {x x1 x2 i1 i2 i4 i5 r : Nat} (hx : x < 18446744073709551616) (h1 : i1 = x % 2^31) (h2 : i2 = x / 2^31)
+    (hx1 : x1 = i1 + i2) (h4 : i4 = x1 % 2^31) (h5 : i5 = x1 / 2^31) (hx2 : x2 = i4 + i5)
+    (hr : r = if 2147483647 ≤ x2 % 2^32 then x2 % 2^32 - 2147483647 else x2 % 2^32) : r = x % 2147483647 := by
+  subst h1 h2 hx1 h4 h5 hx2
+  simp only [e31, e32] at *
+  have e0 := Nat.mod_add_div x 2147483648
+  have hb : x / 2147483648 < 8589934592 := by omega
+  have ha : x % 2147483648 < 2147483648 := Nat.mod_lt _ (by omega)
+  generalize x % 2147483648 = a at *
+  generalize x / 2147483648 = b at *
+  have e1 := Nat.mod_add_div (a + b) 2147483648
+  have hc : (a + b) % 2147483648 < 2147483648 := Nat.mod_lt _ (by omega)
+  have hd : (a + b) / 2147483648 < 8 := by omega
+  generalize (a + b) % 2147483648 = c at *
+  generalize (a + b) / 2147483648 = d at *
+  have hlt : c + d < 4294967296 := by omega
+  rw [Nat.mod_eq_of_lt hlt] at hr
+  split_ifs at hr <;> omega
+
+set_option maxHeartbeats 400000 in
+theorem red_val_spec (P : Std.U32) (hP : P.val = 2147483647) (x : Std.U64) :
+    redBody P x ⦃ r => r.val = x.val % 2147483647 ⦄ := by
+  have hx : x.val < 18446744073709551616 := by scalar_tac
+  unfold redBody
+  step*
+  all_goals (
+    subst_vars
+    simp only [hmask P hP, hshr, hcast32, hcast64, hP, ge_iff_le, UScalar.le_equiv, h64d] at *)
+  · omega
+  · omega
+  · exact redarith hx i1_post1 i2_post1 x1_post i4_post1 i5_post1 x2_post (by rw [if_pos r_post2]; exact r_post1)
+  · exact redarith hx i1_post1 i2_post1 x1_post i4_post1 i5_post1 x2_post (by rw [if_neg ‹_›])
+
 end PCVB_M31
 
 

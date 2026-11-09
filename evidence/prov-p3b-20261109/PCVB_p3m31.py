@@ -10,6 +10,9 @@ inp,out=sys.argv[1:3]
 here=__import__('pathlib').Path(__file__).resolve().parent
 lem=(here/'PCVB_m31_lemmas.lean').read_text()
 R23='--r23' in sys.argv
+QM='--qm' in sys.argv
+BLOCK=[a.split('=',1)[1] for a in sys.argv if a.startswith('--qm31-block=')]
+if '--qm' in sys.argv: lem+='\n'+(here/'PCVB_qm_lemmas.lean').read_text()
 if R23: lem+= '\n'+(here/'PCVB_r23_lemmas.lean').read_text()
 lem=lem.replace('namespace PCVB_M31','namespace PCVB_M31',1)
 src=open(inp).read()
@@ -53,6 +56,9 @@ first=OB.search(src)
 assert first,'no obligation'
 for mo in OB.finditer(src):
     eq,fq,gq=mo.groups()
+    if BLOCK and eq.endswith('field.QM31.mul'):
+        txt=open(BLOCK[0]).read(); newly.append(eq)
+        out_s+=src[last:mo.start()]+txt; last=mo.end(); count+=1; continue
     if eq.endswith('field.M31.mul'):
         txt=mulproof(eq,fq,gq); newly.append(eq)
         if R23:
