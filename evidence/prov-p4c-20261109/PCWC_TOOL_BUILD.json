@@ -1,0 +1,38 @@
+{
+ "schema": "PCWC_TOOL_BUILD v1",
+ "attempt": "PCWC_T001",
+ "class_": "TOOL-BUILD (not an extraction scope); budget 900 s; scope MemoryHigh=3G MemoryMax=4G MemorySwapMax=0 TasksMax=64",
+ "recipe": {
+  "source": "native-r18-tools-20261016 recipe re-run unchanged: build-aeneas.sh sha256 e26dd4a9... (checked), same image, same two source archives",
+  "aeneas_archive": {
+   "revision": "b59d5188c082f704a418c7cb4e52ad69328002d1",
+   "sha256": "946d65f31e14d65efdbad996d4f706a612fcc62b2a35331fa9e2d525c596e988"
+  },
+  "charon_archive": {
+   "revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+   "sha256": "d8e799da5e85805ae21798bb19ed93f8a0d1a295cc3d82047c62b85d51dc92e8"
+  },
+  "archives_from": "evidence native-r18-tools-20261016/native-tools-evidence.tar.gz (research), inputs/*.tar.gz; hashes equal tools-final-pins.json",
+  "image": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7 (aspis-v7-aeneas-debug-deps:r3, present on host)",
+  "toolchain": "ocaml 5.2.1, dune 3.24.2 (see build-a-environment.txt); commands: dune build --profile release -j1 @install (charon ml) then dune build --profile release -j1 main.exe in aeneas/src; DUNE_CACHE=disabled; OCAMLPATH=/work/charon/_build/install/default/lib:/home/opam/.opam/5.2/lib",
+  "container": "docker create --read-only --network none --pids-limit 64 --memory 4g --memory-swap 4g --tmpfs /tmp -e HOME=/tmp -v <work>:/work --entrypoint bash <image> /work/build-aeneas.sh; caps then set on the container cgroup by sudo -n systemctl set-property --runtime docker-<id>.scope MemoryHigh=3G MemoryMax=4G MemorySwapMax=0 and verified before the compiler started (same step as the original)",
+  "differences_from_original": "original caps were 6G/8G and container-level; this run 3G/4G (tool-build class); --pids-limit 64, --memory flags and HOME=/tmp tmpfs are additions of this controller (the original create command is not recorded); inputs (archives, script, image) identical."
+ },
+ "result": {
+  "exit_status": 0,
+  "wall_seconds": 142.125,
+  "cgroup_peak_bytes": "1187176448",
+  "swap": "0",
+  "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+  "timeout_hit": false,
+  "binary_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+  "expected_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+  "matches_expected": true,
+  "host_path": "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "version": "aeneas b59d5188c082f704a418c7cb4e52ad69328002d1"
+ },
+ "charon": {
+  "note": "The original Charon cb50ff16 binary is pinned by its recorded hash and is present: XRa_bin/charon sha256 daad69be... and charon-driver efdbe5b8... equal tools-final-pins.json / README; no Charon rebuild needed."
+ },
+ "claim": "Aeneas b59d5188 rebuilt in one tool-build scope is byte-identical (sha256 959659a6...) to the original aspis-r1-r18-tools-20261016/bin/aeneas. Source-identity plus inputs-identity plus output-hash-identity; this is not a cross-platform reproducibility claim."
+}
