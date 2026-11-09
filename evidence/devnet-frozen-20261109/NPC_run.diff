@@ -1,0 +1,26 @@
+--- ../legacy-removal-20261109/NKX_run.py	2026-11-09 20:16:18
++++ NPC_run.py	2026-11-09 20:28:40
+@@ -1,4 +1,4 @@
+-"""Own build/test driver, invoked inside one admitted capped scope."""
++"""NPC_: NKX_run.py adapted minimally (revision file name, 1800 s timeout). Own build driver, invoked inside one admitted capped scope."""
+ import pathlib,subprocess,json,hashlib,time,os,sys,re
+ B=pathlib.Path(__file__).resolve().parent; S=B/'src'; mode=sys.argv[1]; out=B/mode;out.mkdir(exist_ok=False)
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+@@ -39,7 +39,7 @@
+    __import__('shutil').rmtree(p)
+   for p in (B/'target').glob('**/release/deps/*aspis_pool*'):
+    if p.is_file():p.unlink()
+-rec=dict(attempt=mode,target=cmd,source_revision=(B/'NKX_revision.txt').read_text().strip(),source_tree_dirty=mode.startswith('tests'),driver_sha256=sha(pathlib.Path(__file__)),source_manifest={str(p.relative_to(S)):sha(p) for root in ['crates','programs'] for p in (S/root).rglob('*') if p.is_file()},limits=limits,cgroup=str(cg),disk_free_before_bytes=__import__('shutil').disk_usage(B).free,own_disk_before_bytes=int(subprocess.check_output(['du','-sb',str(B)],text=True).split()[0]),lock_before=lock,environment={k:v for k,v in env.items() if k.startswith(('CARGO_','RUST','S10_','ASPIS_'))},print_axioms='N/A: engineering build/test',expected_work='optimized compilation and native tests' if mode.startswith(('baseline','tests')) else 'optimized SBF compilation/linking')
++rec=dict(attempt=mode,target=cmd,source_revision=(B/'NPC_revision.txt').read_text().strip(),source_tree_dirty=mode.startswith('tests'),driver_sha256=sha(pathlib.Path(__file__)),source_manifest={str(p.relative_to(S)):sha(p) for root in ['crates','programs'] for p in (S/root).rglob('*') if p.is_file()},limits=limits,cgroup=str(cg),disk_free_before_bytes=__import__('shutil').disk_usage(B).free,own_disk_before_bytes=int(subprocess.check_output(['du','-sb',str(B)],text=True).split()[0]),lock_before=lock,environment={k:v for k,v in env.items() if k.startswith(('CARGO_','RUST','S10_','ASPIS_'))},print_axioms='N/A: engineering build/test',expected_work='optimized compilation and native tests' if mode.startswith(('baseline','tests')) else 'optimized SBF compilation/linking')
+ meta=subprocess.run(['cargo','metadata','--manifest-path',str(S/'programs'/('aspis-pool' if mode.startswith(('baseline','tests','pool')) else 'r1-cost-probe')/'Cargo.toml'),'--features',cmd[cmd.index('--features')+1] if '--features' in cmd else '','--locked','--offline','--format-version','1'],cwd=S,env=env,capture_output=True,text=True)
+ assert meta.returncode==0,meta.stderr
+ metadata=json.loads(meta.stdout)
+@@ -49,7 +49,7 @@
+ rec['native_rustc_version']=subprocess.check_output(['rustc','--version'],cwd=S,env=env,text=True).strip()
+ (out/'command.json').write_text(json.dumps(rec,indent=1)+'\n')
+ t=time.monotonic()
+-with (out/'stdout.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout','600','taskset','--cpu-list','0-3',*cmd],cwd=S,env=env,stdout=f,stderr=subprocess.STDOUT)
++with (out/'stdout.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout','1800','taskset','--cpu-list','0-3',*cmd],cwd=S,env=env,stdout=f,stderr=subprocess.STDOUT)
+ rec.update(exit_status=r.returncode,wall_seconds=time.monotonic()-t,cgroup_memory_peak_bytes=(cg/'memory.peak').read_text().strip(),lock_after=sha(S/'Cargo.lock'))
+ s=(out/'time.log').read_text()
+ for key,label in [('peak_rss_kib','Maximum resident set size'),('swaps','Swaps')]:rec[key]=next((l.split(':',1)[1].strip() for l in s.splitlines() if label in l),None)
