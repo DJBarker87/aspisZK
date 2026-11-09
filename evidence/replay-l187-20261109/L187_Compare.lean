@@ -5,11 +5,28 @@ command line, so byte equality of replayed and overlay objects is not meaningful
 original job used a different path. This tool compares module data: imports, constant names
 (in order) and every ConstantInfo (types, values, theorem proofs, recursor rules). -/
 namespace L187Compare
-def eqDecl (a b : ConstantInfo) : Bool × Bool :=  -- (equal including proofs, equal ignoring theorem proofs)
+def quotTag : QuotKind → Nat
+  | .type => 0 | .ctor => 1 | .lift => 2 | .ind => 3
+/-- (equal including theorem proofs, equal ignoring theorem proofs); per constructor as in
+ledger30's NNN_RuntimeScan.sameDeclaration, with theorem values compared explicitly. -/
+def eqDecl (a b : ConstantInfo) : Bool × Bool :=
   match a, b with
-  | .thmInfo x, .thmInfo y => (x == y, x.toConstantVal == y.toConstantVal && x.all == y.all)
-  | _, _ => let e := a == b; (e, e)
-def compare (ov rp : System.FilePath) : IO Json := do
+  | .axiomInfo x, .axiomInfo y => let e := x == y; (e, e)
+  | .defnInfo x, .defnInfo y => let e := x == y; (e, e)
+  | .thmInfo x, .thmInfo y =>
+    let s := x.toConstantVal == y.toConstantVal && x.all == y.all; (s && x.value == y.value, s)
+  | .opaqueInfo x, .opaqueInfo y => let e := x == y; (e, e)
+  | .ctorInfo x, .ctorInfo y => let e := x == y; (e, e)
+  | .recInfo x, .recInfo y => let e := x == y; (e, e)
+  | .quotInfo x, .quotInfo y => let e := x.toConstantVal == y.toConstantVal && quotTag x.kind == quotTag y.kind; (e, e)
+  | .inductInfo x, .inductInfo y =>
+    let e := x.toConstantVal == y.toConstantVal && x.numParams == y.numParams &&
+      x.numIndices == y.numIndices && x.all == y.all && x.ctors == y.ctors &&
+      x.numNested == y.numNested && x.isRec == y.isRec && x.isUnsafe == y.isUnsafe &&
+      x.isReflexive == y.isReflexive
+    (e, e)
+  | _, _ => (false, false)
+unsafe def compare (ov rp : System.FilePath) : IO Json := do
   let (da, ra) ← readModuleData ov
   let (db, rb) ← readModuleData rp
   let ia := da.imports.map (·.module.toString); let ib := db.imports.map (·.module.toString)
@@ -24,10 +41,14 @@ def compare (ov rp : System.FilePath) : IO Json := do
       let (e1, e2) := eqDecl c d
       if !e1 then full := false; if firstDiff.size < 5 then firstDiff := firstDiff.push c.name.toString
       if !e2 then modProofs := false
-  ra.free; rb.free
-  return Json.mkObj [("imports_equal", toJson (ia == ib)), ("const_names_equal", toJson (na == nb)),
-    ("constants", toJson da.constants.size), ("identical_declarations", toJson full),
+  let impEq := ia == ib; let namesEq := na == nb; let n := da.constants.size
+  let j := Json.mkObj [("imports_equal", toJson impEq), ("const_names_equal", toJson namesEq),
+    ("constants", toJson n), ("identical_declarations", toJson full),
     ("identical_except_theorem_proofs", toJson modProofs), ("first_differing", toJson firstDiff)]
+  let s := j.compress  -- materialise every value before the regions are released
+  -- regions are not freed: the tool runs as one short process per module (freeing crashed in 4.32)
+  let _ := (ra, rb)
+  return Json.parse s |>.toOption.getD j
 end L187Compare
 /-- argv: input file with lines "module<TAB>overlay.olean<TAB>replay.olean", output jsonl. -/
 unsafe def main (args : List String) : IO UInt32 := do

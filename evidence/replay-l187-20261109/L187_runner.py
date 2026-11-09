@@ -53,7 +53,22 @@ for k,m in enumerate(cfg['modules']):
   else:
     for sib in list(tmp.parent.glob(tmp.name+'*'))+[tmp.with_suffix(e) for e in ['.ir','.ilean','.c']]:
       if sib.is_file(): sib.unlink()
+  if r.returncode==0 and row.get('object_sha256') and not row.get('object_identical_to_overlay'):
+    cf=W/'tmp'/(b+'_'+str(k)+'.cmp.tsv'); co=W/'tmp'/(b+'_'+str(k)+'.cmp.jsonl')
+    cf.write_text(m['module']+'\t'+m['overlay']+'\t'+str(out)+'\n')
+    cr=subprocess.run(['timeout','120',str(W/'tools'/'L187_Compare'),str(cf),str(co)],capture_output=True,text=True)
+    try: cj=json.loads(co.read_text().splitlines()[0])
+    except Exception: cj=dict(error='compare produced no result: exit %d %s'%(cr.returncode,cr.stderr[-300:]))
+    row['decl_compare']=cj.get('result',cj)
+    if not cj.get('result',{}).get('identical_declarations'): row['status']='DIVERGENT'
+    for x in (cf,co):
+      if x.is_file(): x.unlink()
+  elif r.returncode==0 and row.get('object_identical_to_overlay'):
+    row['decl_compare']='byte-identical'
   res.write(json.dumps(row)+'\n');res.flush()
+  if row['status']=='DIVERGENT':
+    for mm in cfg['modules'][k+1:]: res.write(json.dumps(dict(module=mm['module'],status='NOT_RUN_BATCH_STOPPED'))+'\n')
+    status='divergent_stop';break
   if r.returncode!=0:
     for mm in cfg['modules'][k+1:]: res.write(json.dumps(dict(module=mm['module'],status='NOT_RUN_BATCH_STOPPED'))+'\n')
     status='failure_stop';break

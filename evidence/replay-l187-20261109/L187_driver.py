@@ -44,7 +44,7 @@ def apply_fix(m,newpath,newsha,why,attempt):
     if d in seen: continue
     seen.add(d)
     v=st['status'][d]
-    if v.startswith('SKIPPED_DEP_FAILED') or v.startswith('PASS') or v=='FAIL': st['status'][d]='pending'; st['to_recover']=[x for x in st.get('to_recover',[]) if x['module']!=d]
+    if v.startswith('SKIPPED_DEP_FAILED') or v.startswith('PASS') or v in ('FAIL','DIVERGENT'): st['status'][d]='pending'; st['to_recover']=[x for x in st.get('to_recover',[]) if x['module']!=d]
     stack+=rev[d]
   st.setdefault('fixed',[]).append(m); save(); log('source fix',m,why,old['path'],'->',newpath)
 def recover(m):
@@ -83,6 +83,14 @@ def collect(b):
     if s=='PASS':
       st['status'][m]='PASS_IDENTICAL' if row.get('object_identical_to_overlay') else 'PASS_DIFFERS'
       if row.get('sorry_warnings'): alert('SORRY',f"{m} in {b}: sorry warning(s)")
+    elif s=='DIVERGENT':
+      st['status'][m]='DIVERGENT'; skip_dependants(m)
+      (E/'ALERT_DIVERGENT').write_text(f"{m} rebuilt object is declaration-different from its overlay object ({b}): "+json.dumps(row.get('decl_compare'))+"\n")
+      log('DIVERGENT',m,b,json.dumps(row.get('decl_compare')))
+      if m not in st.get('fixed',[]):
+        st.setdefault('to_recover',[]).append(dict(module=m,batch=b,diag='DIVERGENT '+json.dumps(row.get('decl_compare'))))
+      else:
+        alert('DIVERGENT_AFTER_FIX',f"{m} still declaration-different after source recovery ({b}): "+json.dumps(row.get('decl_compare')))
     elif s=='FAIL':
       st['status'][m]='FAIL'; skip_dependants(m)
       if m not in st.get('fixed',[]):
@@ -136,11 +144,11 @@ while True:
       fx=json.loads(f.read_text())
       for m,res in fx.items():
         if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
-          apply_fix(m,res['path'],res['sha256'],'source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash',res['producing_attempt'])
+          apply_fix(m,res['path'],res['sha256'],res.get('why','source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash'),res['producing_attempt'])
       f.rename(f.with_suffix('.applied'))
     for item in list(st.get('to_recover',[])):
       m=item['module']; st['to_recover'].remove(item); save()
-      if st['status'][m]!='FAIL': log('queued recovery skipped (status now',st['status'][m],')',m); continue
+      if st['status'][m] not in ('FAIL','DIVERGENT'): log('queued recovery skipped (status now',st['status'][m],')',m); continue
       dep=set();stk=list(P[m]['imports'])
       while stk:
         x=stk.pop()
