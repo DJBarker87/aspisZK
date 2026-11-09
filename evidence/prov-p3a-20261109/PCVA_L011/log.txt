@@ -1,0 +1,49 @@
+PCVA_sources/PRVEq_NDE_Reference5_Funs_P3.lean:32:45: error: Application type mismatch: The argument
+  level
+has type
+  U8
+but is expected to have type
+  U32
+in the application
+  index.wrapping_shr level
+PCVA_sources/PRVEq_NDE_Reference5_Funs_P3.lean:37:45: error: Application type mismatch: The argument
+  level
+has type
+  U8
+but is expected to have type
+  U32
+in the application
+  index.wrapping_shr level
+PRV-S2 PRVEq.NDE_Reference5.Funs.link_weight_ref
+PCVA_sources/PRVEq_NDE_Reference5_Funs_P3.lean:44:135: error: unsolved goals
+⊢ (fun kind level index withdraw =>
+      match kind with
+      | 0#8#uscalar => ok 1#u32
+      | 1#8#uscalar => if withdraw = true then ok 0#u32 else ok 1#u32
+      | 2#8#uscalar => if withdraw = true then ok 1#u32 else ok 0#u32
+      | 3#8#uscalar => do
+        let i ← lift (index.wrapping_shr sorry)
+        let i1 ← lift (i &&& 1#u64)
+        let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+        ok (U32.wrapping_sub 1#u32 i2)
+      | 4#8#uscalar => do
+        let i ← lift (index.wrapping_shr sorry)
+        let i1 ← lift (i &&& 1#u64)
+        ok (UScalar.cast UScalarTy.U32 i1)
+      | x => fail Error.panic) =
+    fun kind level index withdraw =>
+    match kind with
+    | 0#8#uscalar => ok 1#u32
+    | 1#8#uscalar => if withdraw = true then ok 0#u32 else ok 1#u32
+    | 2#8#uscalar => if withdraw = true then ok 1#u32 else ok 0#u32
+    | 3#8#uscalar => do
+      let i ← index >>> level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      1#u32 - i2
+    | 4#8#uscalar => do
+      let i ← index >>> level
+      let i1 ← lift (i &&& 1#u64)
+      ok (UScalar.cast UScalarTy.U32 i1)
+    | x => fail Error.panic
+'PRVEq.NDE_Reference5.Funs.link_weight_ref' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

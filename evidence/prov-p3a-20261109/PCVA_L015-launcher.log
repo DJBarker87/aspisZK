@@ -1,0 +1,39 @@
+{"attempt": "PCVA_L015", "exit_status": 0, "wall_seconds": 2.3141587311401963, "peak_rss_kib": "2612412", "swaps": "0", "print_axioms": []}
+U64.wrapping_shr : U64 → U32 → U64
+def NDE_Reference5.link_weight_ref : U8 → U8 → U64 → Bool → Result U32 :=
+fun kind level index withdraw =>
+  match kind with
+  | 0#8#uscalar => ok 1#u32
+  | 1#8#uscalar => if withdraw = true then ok 0#u32 else ok 1#u32
+  | 2#8#uscalar => if withdraw = true then ok 1#u32 else ok 0#u32
+  | 3#8#uscalar => do
+    let i ← index >>> level
+    let i1 ← lift (i &&& 1#u64)
+    let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+    1#u32 - i2
+  | 4#8#uscalar => do
+    let i ← index >>> level
+    let i1 ← lift (i &&& 1#u64)
+    ok (UScalar.cast UScalarTy.U32 i1)
+  | x => fail Error.panic
+
+...
+U64.wrapping_shr : U64 → U32 → U64
+def NDE_Reference5.link_weight_ref : U8 → U8 → U64 → Bool → Result U32 :=
+fun kind level index withdraw =>
+  match kind with
+  | 0#8#uscalar => ok 1#u32
+  | 1#8#uscalar => if withdraw = true then ok 0#u32 else ok 1#u32
+  | 2#8#uscalar => if withdraw = true then ok 1#u32 else ok 0#u32
+  | 3#8#uscalar => do
+    let i ← index >>> level
+    let i1 ← lift (i &&& 1#u64)
+    let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+    1#u32 - i2
+  | 4#8#uscalar => do
+    let i ← index >>> level
+    let i1 ← lift (i &&& 1#u64)
+    ok (UScalar.cast UScalarTy.U32 i1)
+  | x => fail Error.panic
+
+Running as unit: run-r83c858e477f54cc385e2160ed6fe6c57.scope; invocation ID: 573efdae9a0e4c219a846bdb3f0431ad
