@@ -1,0 +1,43 @@
+{"attempt": "NOC_L016", "exit_status": 1, "wall_seconds": 12.823842474026605, "peak_rss_kib": "5701152", "swaps": "0", "print_axioms": ["'AspisR1.NOC_ReadTransport.wmul' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOC_ReadTransport.wadd' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOC_ReadTransport.start' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOC_ReadTransport.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NOC_ReadTransport.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NOC_generated/NOC_ReadTransport.lean:40:62: error: unsolved goals
+bytes : Slice U8
+i : Usize
+hi : ↑i < 4
+⊢ (do
+      let selected ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := i.wrapping_mul 32#usize, «end» := (i.wrapping_add 1#usize).wrapping_mul 32#usize }
+      if (selected.len != 32#usize) = true then do
+          let raw ← ofOption none Error.panic
+          ok
+              { c0 := { c0 := { a := raw.c0.c0.a, b := raw.c0.c0.b }, c1 := { a := raw.c0.c1.a, b := raw.c0.c1.b } },
+                c1 := { c0 := { a := raw.c1.c0.a, b := raw.c1.c0.b }, c1 := { a := raw.c1.c1.a, b := raw.c1.c1.b } } }
+        else do
+        
+...
+                                       c1 := { a := out.c1.c1.a, b := out.c1.c1.b } } }
+                                      else do
+                                        let out ←
+                                          ofOption
+                                              (some
+                                                {
+                                                  c0 :=
+                                                    { c0 := { a := x_32, b := x_33 }, c1 := { a := x_34, b := x_35 } },
+                                                  c1 :=
+                                                    { c0 := { a := x_36, b := x_37 }, c1 := { a := x_38, b := x } } })
+                                              Error.panic
+                                        ok
+                                            {
+                                              c0 :=
+                                                { c0 := { a := out.c0.c0.a, b := out.c0.c0.b },
+                                                  c1 := { a := out.c0.c1.a, b := out.c0.c1.b } },
+                                              c1 :=
+                                                { c0 := { a := out.c1.c0.a, b := out.c1.c0.b },
+                                                  c1 := { a := out.c1.c1.a, b := out.c1.c1.b } } }
+'AspisR1.NOC_ReadTransport.wmul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_ReadTransport.wadd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_ReadTransport.start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_ReadTransport.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_ReadTransport.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0def587d5e784a3897f497761ecee625.scope; invocation ID: 48a0357ae632406fb8ffa5bb8693a7fd

@@ -48,6 +48,7 @@ theorem read (bytes : Slice U8) (i : Usize) (hi : i.val < 4) :
   FIo_Native.aspis_core.field.wide_exact.WideExact.BYTE_LEN,
   AspisR1RecordParser.field.P, FIo_Native.aspis_core.field.P,
   core.option.Option.unwrap, AspisR1.SAQ_RecordDecode.fromRecord, AspisR1.FIo_Install.fromE]
+ simp only [ofOption, bind_tc_ok, bind_tc_fail]
 #print axioms wmul
 #print axioms wadd
 #print axioms start
