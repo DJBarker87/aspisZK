@@ -1,0 +1,64 @@
+{
+ "items": [
+  {
+   "id": "PCUB-C1",
+   "topic": "cluster membership",
+   "decision": "Followed PCO_PARTITION.json: 17 RPu_ modules (NativeTypes, NativeExternal, Native01-14, CopyPrefix) and 9 RPv_ modules. Differences from the partition groups, recorded: RPu_FIq_Native08 is group a (a_identical, 15 reached definitions) and was treated like the others; RPu_FIq_Native12 and RPv_SelectedClaimSlice have no reached definition (c0 / d) so nothing is compared; RPv_RawPoseidonExtensionSlice is group R.",
+   "reason": "brief: follow the partition membership and record differences"
+  },
+  {
+   "id": "PCUB-C2",
+   "topic": "which fresh emissions were usable",
+   "decision": "Only overflow-checks-on emissions named in PCQC_COVERAGE.json / PCQ_E037-E040: PCQ_E037 (aspis-core checked_field, Types), PCQ_E038 (aspis-core field Funs), PCQ_E039 (aspis-statement payment_relation), PCQ_E040 (pair_terminal), PCQC_E023 (adapter_owned_b Types). PCQC_E011 and the other PCQC dirs were read for External-template lookups only. Superseded PCO_E002 / PCO_E004 and every overflow-off emission were not used. No definition of this cluster appears in the PCQC p2_emission_dirs_per_gate_module map (it has no RPu_/RPv_ key); the emissions above were found by Rust-path presence (crate prefix ignored) and each equality is checked by Lean, so a wrong pairing yields a Lean failure, never a false equality.",
+   "reason": "ruling 2026-11-09 fresh emissions only; PCQC_COVERAGE.json"
+  },
+  {
+   "id": "PCUB-C3",
+   "topic": "crate mismatch between gate and fresh emissions",
+   "decision": "The gate modules name the crate aspis_r1_mask_extraction_probe (not part of the frozen tree); fresh emissions name aspis_core / aspis_statement. The compared definitions carry identical Source: line ranges (field.rs 19:0, 62:4-88:5, 94:4-119:5, 183:4-185:5, 860:0-866:1; format.rs POOL_V1_TREE_DEPTH) and identical normalized bodies, so the theorems are statements about the fresh frozen function versus the gate constant; they do not say that the probe crate equals the frozen crate for any other item.",
+   "reason": "classification under the provenance principle"
+  },
+  {
+   "id": "PCUB-C4",
+   "topic": "compiled-source ambiguity and self-copy controls",
+   "decision": "RPu_FIq_NativeTypes is flagged compiled_source_ambiguous; all candidate paths of every cluster module have one sha256 (inputs/gate_sources.json). Self-copy controls (candidate text with its namespace renamed as the fresh emission, statements against the compiled gate constants): NativeTypes 30 of 30 proved, Native11 8 of 8, Native01 34 of 38. The four Native01 control failures (PreparedQm31Multiplier.mul and its closure call, qm31_sum_products3_prepared_loop0 and loop0_loop0) are deterministic whnf heartbeat timeouts at the default 200000 (the gate source has no maxHeartbeats header) on text-identical sides; they are not body differences and were not rerun with a raised limit. They are outside the compared set (no fresh counterpart).",
+   "reason": "PCO_HANDOFF section 4 self-copy control; no raised heartbeats"
+  },
+  {
+   "id": "PCUB-C5",
+   "topic": "generator change: --rename-fresh",
+   "decision": "Fresh Types name the field type aspis_core.field.M31 and, in the adapter emission, prefix statement names with aspis_statement.; the gate uses field.M31 and pool_v1.*. The generator now rewrites these path prefixes in the fresh text before parsing (listed in report substitutions). It does not change any gate constant. After the rewrite the structures are compared by a generated Equiv checked by Lean.",
+   "reason": "transport of names only; the statements remain against compiled gate constants"
+  },
+  {
+   "id": "PCUB-C6",
+   "topic": "generator change: structures with Array field types",
+   "decision": "A structure whose field types mention only reducible alias types of the same file (field.M31 := Std.U32 on both sides, proved equal by rfl in the same bundle) now gets a generated Equiv with fields copied directly. Lean elaboration of the Equiv is the check. Before this change those structures were TEXT_IDENTICAL_ONLY.",
+   "reason": "sound because the Equiv is a Lean term; five pool_v1 structures plus CM31/QM31 now have a proved Equiv"
+  },
+  {
+   "id": "PCUB-C7",
+   "topic": "FRESH_EXTERNAL_AXIOM_ONLY",
+   "decision": "M31.ZERO/ONE/mul/reduce_u64 and QM31.mul have a fresh form only as External-template axioms (opaque) in the usable cost-probe emission PCQC_E011; the gate has its own Aeneas-translated definition. No equality is possible. Recorded in PCUB_HAND_MODELS.json with resolved_as_hand_written_model false (the gate definition is an Aeneas translation of the probe crate, not hand-written).",
+   "reason": "hand-model record rule"
+  },
+  {
+   "id": "PCUB-C8",
+   "topic": "NO_FRESH_EMISSION reference",
+   "decision": "201 reached definitions have no same-Rust-path declaration in any usable fresh emission. These are not entries of the P1 failure list (PCQC_FAILURES.json): no spec exists for them. PCO_extract_specs.json routes the modules to cut specs C001 (crate unknown) and C005 (aspis_r1_mask_extraction_probe, NativeTypes) with route P4, and PCWB_CUT_TRIAGE.json found nothing by name. The Rust items exist in the frozen tree for 182 of the 201 by a name heuristic (PCUB_EQ_STATUS frozen_source), so a frozen spec could be written; 16 items were not found by name (closures, trait impls, and the probe-only helpers external_linear_lazy_row and array_from_fn_copy, confirmed absent from crates/ at 4bb3b3f5 by git grep) and 3 are core items. This job ran no extraction (budget 0).",
+   "reason": "brief"
+  },
+  {
+   "id": "PCUB-C9",
+   "topic": "semantic differences",
+   "decision": "None found. Every compared definition (6 Funs, 8 Types) proved; no checked-versus-wrapping difference, so no CONFIG_MISMATCH and no SEMANTIC entry.",
+   "reason": "brief"
+  },
+  {
+   "id": "PCUB-C10",
+   "topic": "generator version per scope",
+   "decision": "PCUB_L001 compiled probe files made before generator changes 3 and 4; Native01, Native11, NativeTypes_a and the controls are unaffected by them (no rename, no Array-field structures; the NativeTypes_ctl file was regenerated and re-probed in PCUB_L003 after change 4). PCUB_L002 and PCUB_L003 used the final generator; PCUB_L004 compiled the final files regenerated by ingest.sh with the final generator.",
+   "reason": "traceability"
+  }
+ ]
+}
