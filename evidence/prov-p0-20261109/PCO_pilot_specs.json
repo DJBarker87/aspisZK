@@ -1,0 +1,161 @@
+{
+ "specs": [
+  {
+   "spec_id": "S900",
+   "kind": "frozen",
+   "label": "pilot AspisR1WideToBytesSource.Funs",
+   "crate": "aspis-core",
+   "package": "aspis_core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::field::wide_exact::_::to_le_bytes"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_wide_to_bytes",
+   "p1_half": "P1a",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AspisR1WideToBytesSource.Funs",
+     "AspisR1WideToBytesSource.Types"
+    ],
+    "definitions": [
+     "field.wide_exact.WideExact.to_limbs",
+     "field.wide_exact.WideExact.to_le_bytes_loop.body",
+     "field.wide_exact.WideExact.to_le_bytes_loop",
+     "field.wide_exact.WideExact.to_le_bytes"
+    ]
+   },
+   "basis": "Same Charon/Aeneas arguments as the receipted diagnostic NMH_E018 (wide-serialize); P0 pilot a_identical module."
+  },
+  {
+   "spec_id": "S901",
+   "kind": "frozen",
+   "label": "pilot NFG_CheckedFieldRef.Funs",
+   "crate": "aspis-core",
+   "package": "aspis_core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::field::_::neg",
+    "crate::field::_::is_zero"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_checked_field",
+   "p1_half": "P1a",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "NFG_CheckedFieldRef.Funs",
+     "NFG_CheckedFieldRef.Types"
+    ],
+    "definitions": [
+     "field.P",
+     "field.M31.neg",
+     "field.M31.is_zero",
+     "field.CM31.neg",
+     "field.CM31.is_zero",
+     "field.QM31.neg",
+     "field.QM31.is_zero"
+    ]
+   },
+   "basis": "aspis-core r0 impl-wildcard roots (the NMH_E013/E024 selector style); P0 pilot c2 module exercising the M31 U32 class."
+  },
+  {
+   "spec_id": "S902",
+   "kind": "frozen",
+   "label": "pilot AdapterRwTypes",
+   "crate": "aspis-r1-cost-probe-program",
+   "package": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts",
+   "start_from": [
+    "crate::process_r1_cost_probe_instruction"
+   ],
+   "include": [],
+   "opaque": [
+    "crate::pool_route::admitted",
+    "crate::r1_pool_adapter::owned::stage1",
+    "crate::r1_pool_adapter::owned::stage2",
+    "crate::r1_pool_adapter::lifecycle_init",
+    "crate::r1_pool_adapter::lifecycle_write",
+    "crate::r1_pool_adapter::lifecycle_finalize",
+    "solana_account_info::AccountInfo"
+   ],
+   "namespace": "PCO_adapter_types",
+   "p1_half": "P1b",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AdapterRwTypes"
+    ],
+    "definitions": [
+     "15 reached types, see PCO_PARTITION.json"
+    ]
+   },
+   "basis": "Exact NIV/NMH_E002 argument array (archived from slice-d-entry7-20261107/NIV_EXTRACTION_PREFLIGHT.json) with only output/workspace paths relocated; NMH_E002 timed out in a cold build at 180 s.",
+   "retired": "E003 (this configuration, a copy of the NMH_E002 entry array) built in 114 s but its type output contains only solana_program_error::ProgramError: the opaque boundaries cut every AdapterRw type away. Wrong shape for AdapterRwTypes; superseded by S903."
+  },
+  {
+   "spec_id": "S903",
+   "kind": "frozen",
+   "label": "pilot AdapterRwTypes (merged owned roots)",
+   "crate": "aspis-r1-cost-probe-program",
+   "package": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts",
+   "start_from": [
+    "crate::r1_pool_adapter::owned::authenticate_asq8_accounts",
+    "crate::r1_pool_adapter::owned::validate_asq8",
+    "crate::r1_pool_adapter::owned::stage1_owned",
+    "crate::r1_pool_adapter::owned::stage2_owned"
+   ],
+   "include": [],
+   "opaque": [
+    "crate::r1_pool_adapter::decode_lane_from_pool_release",
+    "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+    "crate::r1_pool_adapter::decode_master_box",
+    "crate::r1_pool_adapter::decode_checkpoint_box",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_readonly_account",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_distinct_accounts",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::first_decoded",
+    "crate::r1_pool_adapter::decode_public_statement_box",
+    "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+    "crate::r1_pool_adapter::owned::snapshot",
+    "crate::r1_pool_adapter::owned::stage1",
+    "crate::r1_pool_adapter::owned::stage2",
+    "crate::r1_pool_adapter::scan_proof_buffer",
+    "crate::r1_pool_adapter::reconstruct_asq8_statement",
+    "crate::r1_pool_adapter::emit_result",
+    "crate::r1_pool_adapter::pool_program_id",
+    "crate::verifier::tx2_authenticated",
+    "crate::observer",
+    "crate::error",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_request_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::_::nullifier",
+    "solana_account_info::AccountInfo"
+   ],
+   "namespace": "PCO_adapter_owned",
+   "p1_half": "P1b",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AdapterRwTypes"
+    ],
+    "definitions": [
+     "the 15 reached types of AdapterRwTypes (PCO_PARTITION.json)"
+    ]
+   },
+   "basis": "Union of the receipted NMT_stage1_owned, NMS_stage2, NMS_validate and NMX_auth_cut configurations (roots authenticate_asq8_accounts, validate_asq8, stage1_owned, stage2_owned; union of their --opaque lists minus the roots); AdapterRwTypes draws its types from several emissions, so the per-module spec merges the roots."
+  }
+ ]
+}

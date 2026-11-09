@@ -1,0 +1,121 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "note": "Every place where the brief's literal text did not cover a case, or a shared tool/assumption was adapted. Classified under the preamble's discretion principles. None of these touches a trust row, the security contract, a ledger row or the frozen source.",
+ "substitutions_partition": [
+  {
+   "id": "S1",
+   "what": "tree/blobs come from git objects of --rev (6ce07a6a593 for the real run, f7ccfbace7a for the control)",
+   "reason": "PRV used the f7ccfbace7a tree; the base moved."
+  },
+  {
+   "id": "S2",
+   "what": "gate files: ledger30-20261111/NNN_LEDGER.json.xz and NNN_LOADED_scan.jsonl replace ledger27 NNK_ equivalents",
+   "reason": "brief item 1; NNN_CLOSURE_PINS is not read by any PRV script."
+  },
+  {
+   "id": "S3",
+   "what": "root -> REACHABLE.txt.xz: the newest ledger directory (<= the gate's number) holding a file for that root; the ledger30 gate itself holds only 4, ledger29 NNM_raw 13721 files, etc.",
+   "reason": "PRV used the 13047 files of ledger27 only. All 1099 ledger30 roots have a file; the 12 new roots (FIN_*, NNG_*, NMX_R4/R6/R9 ...) resolve to their own raw audits in ledger28/29/30 directories. The reach list of a root is taken from the ledger in which it was last audited; ledger30 states 13715 prior audits are reused."
+  },
+  {
+   "id": "S4",
+   "what": "blob -> module map of the 336: read from PRV_PARTITION.json['blobs']",
+   "reason": "PRV's blob_mods.json was not archived; the 336 blob list and their modules are fixed inputs (NMH_INVENTORY) and unchanged."
+  },
+  {
+   "id": "S5",
+   "what": "pin-hash sets rebuilt from tracked json (*PINS.json, *-pins.json, *EXTRACTION_PINS*.json; 'frozen' if the text names the frozen revision); outside_strict rebuilt as hashes inside receipt*.json under a path containing 'aeneas'",
+   "reason": "PRV's strictpins_hashes.json / outside_strict.json were not archived. The first reconstruction (any receipt*.json mentioning aeneas) over-credited 16 modules and was rejected on the control; the final rule reproduces PRV exactly (PCO_CONTROL.json)."
+  },
+  {
+   "id": "S6",
+   "what": "informational field c_modules_uncovered_not_frozen_mappable not reproduced (5 vs PRV's 15)",
+   "reason": "PRV's frozen_rs.txt was not archived; the field is a mappability heuristic and affects no group, row or count. P4 must not rely on it; PCO_extract_specs.json derives its own cut list from the reached-definition source paths."
+  },
+  {
+   "id": "S7",
+   "what": "9 of 1099 roots (the FIN_*/NNG_* candidates) do have reach files, so no row is unassessed; TX1:059 and TX2:040 remain rootless (NKT-F3) and are not counted, as in PRV",
+   "reason": "completeness note"
+  }
+ ],
+ "classifications": [
+  {
+   "id": "PILOT-1",
+   "case": "AspisR1WideToBytesSource.Funs was a_identical in PRV_PARTITION.json",
+   "finding": "The compiled gate module is generated-adapted/Funs.lean, not generated-original/Funs.lean (the only path-named candidate PRV could see). The adapted file replaces three Aeneas iterator/zip externals by the hand-written P6ToBytes.StdModel.MutableIterator, zipNext and MutableIterator.zip.trait_default. PCO_L007 (self-copy of the adapted text, all 8 declarations rfl against the gate constants) shows the gate equals the adapted text; PCO_L008 shows the fresh frozen emission matches only to_limbs (1 of 4 reached definitions) and three impl_defs of the fresh text do not even elaborate against the gate's FunsExternal.",
+   "classification": "partition error of the PRV method (candidate selection by path+imports), not a protocol or source change. Module moved a -> c1 in PCO_PARTITION.json (field pilot_correction); rows unchanged because all 18 rows already relied on group c. PCO_shadow.py lists 14 modules with the same ambiguity (compiled_source_ambiguous); the equality statements are against compiled constants so they stay valid, but the PRV group of those 14 modules is provisional.",
+   "action": "P2/P5 must decide the compiled text per ambiguous module by the self-copy control (as PCO_L007) or by regenerating from the gate; do not trust path+imports alone."
+  },
+  {
+   "id": "PILOT-2",
+   "case": "text-identical definition whose callee is not equal (NFG CM31.neg / QM31.neg)",
+   "finding": "PRV coverage IDENTICAL is per definition text. CM31.neg calls M31.neg, whose gate body uses checked U32 subtraction while the frozen emission uses wrapping_sub; the equality of CM31.neg is blocked by it.",
+   "classification": "calibration: IDENTICAL is an upper bound for rfl; the generator records blocked-by-callee as the class of the blocking callee (semantic here).",
+   "action": "none for P0; P3 handles the domain-restricted M31.neg equality (canonical self <= P)."
+  },
+  {
+   "id": "PILOT-3",
+   "case": "irreducible constants (field.P is @[global_simps, irreducible])",
+   "finding": "plain rfl fails (different irreducible constants); stage 2 (delta both sides, simp only [callee equalities], rfl) closes it (PCO_L009).",
+   "classification": "stage-2 unfold class, as designed.",
+   "action": "none"
+  },
+  {
+   "id": "PILOT-4",
+   "case": "loop definitions",
+   "finding": "Not a failure mode: in the self-copy control (PCO_L007) @[rust_loop] and @[rust_loop_body] definitions (loop (fun ..) ..) are closed by plain rfl at default transparency. The WideToBytes loop equalities fail in the real pilot only because the fresh text depends on the unadapted iterator externals (PILOT-1).",
+   "classification": "the equation-lemma congruence strategy of brief item 5 is not needed; no re-pilot triggered.",
+   "action": "none"
+  },
+  {
+   "id": "PILOT-5",
+   "case": "AdapterRwTypes: the first spec (S902, the NMH_E002/NIV entry array) built in 114 s (no cold-build timeout this time) but its Types output contains only solana_program_error::ProgramError",
+   "finding": "The reached types of AdapterRwTypes come from several emissions (NMS_stage2 9, NMX_auth_cut 6, NMT_stage1_owned 4 ...), and the entry boundary opacity cuts them away. Spec S903 merges the roots authenticate_asq8_accounts, validate_asq8, stage1_owned, stage2_owned with the union of the receipted --opaque lists minus the roots; PCO_E004 emitted all 15 reached types.",
+   "classification": "a Types module needs a per-module merged-root spec; PCO_make_specs.py flags types-only groups (roots_needed) for P1.",
+   "action": "S902 is kept as a retired spec with its receipt (PCO_E003)."
+  },
+  {
+   "id": "PILOT-6",
+   "case": "fresh Types vs gate Types and external boundaries",
+   "finding": "The generator compiles the fresh Funs against the gate's Types by `open <gate namespace>` and Lean's name-resolution priority (names declared in the fresh namespace win; undeclared names fall through to the opened gate namespace). This is only sound if (a) the fresh Types are text-identical after normalization (checked per type; PCO_gen_equalities.py report types_identity), (b) no fresh Funs name leaks to a gate Funs constant (report names_resolved_to_gate_funs; empty in all three pilots except the external solana_pubkey.Pubkey in AdapterRwTypes), and (c) any fresh declaration that fails to elaborate is dropped with all its dependents (otherwise its name would leak to the gate constant and make rfl trivially true). Rules (b)/(c) are implemented; (a) uses the normalization: comments dropped, whitespace collapsed, Aeneas registration attributes (rust_type, rust_trait*, rust_fun, rust_loop*, discriminant, import_union_discriminant) ignored, other attributes (reducible, irreducible, global_simps) kept.",
+   "classification": "mechanism choice under brief item 3(a); it does not change any claim. Registration attributes are stripped from the fresh copy because they are keyed by Rust path and would be registered twice.",
+   "action": "P2 reviews report.names_resolved_to_gate_funs and external_funs for every module; an external boundary resolved to the gate constant is an inherited assumption, not an equality proved here."
+  },
+  {
+   "id": "PILOT-7",
+   "case": "Types lane scope",
+   "finding": "Lean theorems are generated for def/abbrev types whose body names no structure of the same file (rfl) and for parameterless structures whose fields are closed or a direct simple fresh type (generated Equiv, proofs `cases; rfl`). Other types (inductives, structures with nested containers of fresh types, trait-parameterised structures) get a Python text-identity check only and are listed as text_identical_only; they have no Lean equality in P0.",
+   "classification": "weakest sufficient interface for P0: because the fresh Funs are compiled against the gate Types, type isomorphisms are needed only where the Types differ; the Equiv generator is an evidence bonus, not a dependency of the Funs lane. text_identical_only is NOT a Lean-proved fact and is reported separately.",
+   "action": "P2 decides whether to extend the Equiv generator to Array/Option/Slice fields or accept text identity for these types."
+  },
+  {
+   "id": "BUDGET-1",
+   "case": "scope accounting",
+   "finding": "Used 13 of 15 scopes: 4 extraction (E001-E004, cap 4) and 9 Lean (L001-L009). The pilot cap of 6 Lean scopes was reached by L006; L007 (self-copy control for the loop question), L008 and L009 (per-file compile of the two deliverables that had only been compiled inside a bundle) were taken from the remaining 5. L001 and L004 were wasted by generator defects fixed before the next scope (L001 unnamed trace markers: stage cannot be recovered from the Lean log because info messages carry no position; L004 `/- -/` nesting of the dropped-block comment). No scope was killed by memory or timeout, no cap or timeout was raised, no scope was rerun unchanged (every rerun followed a recorded generator change).",
+   "classification": "within the 15-scope total; the sub-split is exceeded by 3 and recorded here instead of silently absorbed.",
+   "action": "2 scopes remain for a re-pilot if the lead wants one."
+  },
+  {
+   "id": "TOOL-1",
+   "case": "extraction scope caps",
+   "finding": "The brief fixes extraction scopes at MemoryHigh=3G/MemoryMax=4G; the shared launcher S2W_run_host.py hard-asserts 6G/8G. PCO_run_host.py is an owned copy that takes the expected limits from the config (extraction 3G/4G, Lean 6G/8G); the unchanged NHR stager is imported as an API (its main() cgroup assertion is not executed, as in NMH_extract.py) and PCO_extract.py enforces the 3G/4G pair itself. Peak RSS 0.54-0.73 GB.",
+   "classification": "follows the brief's caps; no shared launcher touched.",
+   "action": "none"
+  },
+  {
+   "id": "TOOL-2",
+   "case": "--opaque validation",
+   "finding": "NHR options validation rewrites selectors to the cost-probe crate and would fail for aspis-core/program roots; as in NMH the spec passes opacity=[] to the stager. PCO_extract.py checks each --opaque selector against the retained NHR_DECLARATIONS.json afterwards and writes PCO_OPAQUE_CHECK.json (E004: see receipt). Result: E003 7 selectors, 6 matched an Opaque declaration, solana_account_info::AccountInfo is a type (0 function matches); E004 28 selectors, 23 matched an Opaque declaration and 5 matched nothing (owned::snapshot, owned::stage1, owned::stage2, verifier::tx2_authenticated: not reachable from the merged roots; solana_account_info::AccountInfo: a type). Unmatched selectors are no-ops inherited from the archived arrays; they are recorded, not repaired.",
+   "classification": "the NHR stager is not forked (hash pinned: PCO_STAGER_PIN.json).",
+   "action": "none"
+  },
+  {
+   "id": "TOOL-3",
+   "case": "bundle compile vehicle",
+   "finding": "PCO_L003/L004/L005 compiled PRVEq_bundle_pilotB*.lean, the exact concatenation (PCO_bundle.py) of the per-module files with hoisted imports and per-file sections. The deliverable files themselves were compiled alone in L006 (AdapterRwTypes), L008 (WideToBytes.Funs), L009 (NFG_CheckedFieldRef.Funs).",
+   "classification": "scope-saving vehicle; deliverable receipts are per file.",
+   "action": "none"
+  }
+ ]
+}
