@@ -1,0 +1,93 @@
+{
+ "schema": "PCWC_ARCHIVE v1",
+ "tool": "PCWC_T001 rebuilt Aeneas sha256 959659a6 (== original); Charon XRa_bin daad69be (== recorded)",
+ "packets": {
+  "AspisR1WithdrawalCaller (encode_digest_canonical)": {
+   "extraction": "PCWC_E003",
+   "exit": 0,
+   "compare": {
+    "namespace": "AspisR1WithdrawalCaller",
+    "archived_from": "archive caller-extraction-evidence.tar.gz extraction-a/generated",
+    "files": {
+     "Funs": {
+      "archived_sha256": "d8cd77e8c1fbfd6c51a0163712c05c3d78d9aaaceaffc3370b9e36849f4b76e0",
+      "fresh_sha256": "d8cd77e8c1fbfd6c51a0163712c05c3d78d9aaaceaffc3370b9e36849f4b76e0",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     },
+     "Types": {
+      "archived_sha256": "c4ca66305b9b9f3bd30fc854b5ddc18d69d6a9f6ed22f939efc788471b6e90c7",
+      "fresh_sha256": "c4ca66305b9b9f3bd30fc854b5ddc18d69d6a9f6ed22f939efc788471b6e90c7",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     }
+    }
+   },
+   "equality": "PRVEq_AspisR1WithdrawalCaller_Funs.lean, PCWC_L010 exit 0, 26/26 (21 reached) all unfold, standard axioms",
+   "note": "Funs and Types fresh == archived generated (extraction-a/generated) byte for byte. P4b: live Types differs from the archive by a documented naming-only discriminant expansion (not re-examined). Source lib.rs 166185cd..., LLBC reproduced by Charon (PCWB_LLBC_COMPARE.json)."
+  },
+  "AspisR1SemanticCallExtraction": {
+   "extraction": "PCWC_E004",
+   "exit": 0,
+   "compare": {
+    "namespace": "AspisR1SemanticCallExtraction",
+    "archived_from": "source-proof-loop-extraction-20261019/*/source.lean",
+    "files": {
+     "Funs": {
+      "archived_sha256": "23015e042f01cee036fa2e7c4d64f020bed944ca7dd416668c268c39dba10555",
+      "fresh_sha256": "23015e042f01cee036fa2e7c4d64f020bed944ca7dd416668c268c39dba10555",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     },
+     "Types": {
+      "archived_sha256": "ecae20d604815bf6650bbdd7442dcd07a9af7bca262ebaa01e7f72f03d03e9b3",
+      "fresh_sha256": "ecae20d604815bf6650bbdd7442dcd07a9af7bca262ebaa01e7f72f03d03e9b3",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     }
+    }
+   },
+   "equality": "PRVEq_AspisR1SemanticCallExtraction_Funs.lean, PCWC_L009 exit 0, 22/22 (all reached) unfold, standard axioms"
+  },
+  "AspisR1BatchedWeightsExtraction": {
+   "extraction": "PCWC_E005",
+   "exit": 0,
+   "compare": {
+    "namespace": "AspisR1BatchedWeightsExtraction",
+    "archived_from": "source-proof-loop-extraction-20261019/*/source.lean",
+    "files": {
+     "Funs": {
+      "archived_sha256": "7a8d7fa28dcd6546541ec8c39408430a137013832e46750a862882509d786776",
+      "fresh_sha256": "7a8d7fa28dcd6546541ec8c39408430a137013832e46750a862882509d786776",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     },
+     "Types": {
+      "archived_sha256": "6163dd34fe82739e3bf15a96d86eb2cc0a07d4730615e81178d9bf7b35909e20",
+      "fresh_sha256": "6163dd34fe82739e3bf15a96d86eb2cc0a07d4730615e81178d9bf7b35909e20",
+      "identical": true,
+      "diff": "",
+      "diff_lines": 0
+     }
+    }
+   },
+   "equality": "PRVEq_AspisR1BatchedWeightsExtraction_Funs.lean, PCWC_L008 exit 0, 9/9 (4 rfl, 5 unfold; 7 reached), standard axioms"
+  }
+ },
+ "claim": "With the rebuilt original Aeneas the Charon-reproduced LLBC of each of the three archived packets emits Funs and Types byte-identical to the archived generated Lean (and, per PCWB, to the live modules), and per-definition equalities between the fresh emission and the gate constants compile. This closes the Aeneas half that PCWB D2 left open for these three packets.",
+ "shape_retired": {
+  "shape": "first-chain probe (S1 rfl then S2) of the SemanticCall/WithdrawalCaller equality over the full module in one 180 s scope",
+  "attempts": [
+   "PCWC_L005 (3-module bundle, exit 124 at 180 s)",
+   "PCWC_L007 (SemanticCall alone, exit 124 at 180 s, no output)"
+  ],
+  "replacement": "every theorem pinned to stage S2 (delta both sides, rfl) through a synthetic marker log (PCWC_pin_s2.sh); the Lean compile of the pinned file is the check (L009, L010 exit 0, ~3 s). BW used the ordinary probe (L006 exit 0, 22 s) then final L008.",
+  "reason": "the S1 rfl attempt on large fresh-vs-gate loop bodies is expensive when it fails; the pin is a scheduling choice, not a weaker statement."
+ },
+ "not_done": "The other archive-linked modules of PCWB_CUT_TRIAGE.json (AdapterReconstruct.Funs, PrefixAggregateParser.Funs, CircleSampleWrapper.Types and the rest of the 11) were not re-extracted in this job; their Aeneas half is now unblocked by T001 (route: PCWB_make_refspec.py arch(), the rebuilt Aeneas path). 24 modules with no recovered source (hand-transformed RPu_/RPv_/S1 copies, the FIo_QRaw pair) remain a lead decision (PCWB D4)."
+}
