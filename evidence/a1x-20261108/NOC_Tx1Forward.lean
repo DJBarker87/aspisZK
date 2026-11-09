@@ -19,12 +19,18 @@ abbrev M {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) := NOC_HostSeed.m0 (NNH_HostCt
 theorem zero {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  ∃ we, AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO (cur c) = ok we ∧
   Array.repeat 29#usize we = NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29 := by
- refine ⟨_,rfl,?_⟩
- apply Subtype.ext
- show List.replicate 29 _ = List.map InstalledPreparation.currentE
-  (List.replicate 29 AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO)
- rw [List.map_replicate]
- all_goals rfl
+ refine ⟨{c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}},?_,?_⟩
+ · unfold AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO
+  have h0 : @AspisR1CurrentCaller.Ops.op0 (cur c) = ok {c0:={a:=0#u32,b:=0#u32},c1:={a:=0#u32,b:=0#u32}} := by
+   first | rfl | with_unfolding_all rfl
+  rw [h0]
+  all_goals first | rfl | with_unfolding_all rfl
+ · apply Subtype.ext
+  show List.replicate 29 _ = List.map InstalledPreparation.currentE
+   (List.replicate 29 AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO)
+  rw [List.map_replicate]
+  congr 1
+  all_goals first | rfl | with_unfolding_all rfl | (unfold InstalledPreparation.currentE InstalledPreparation.currentQ; with_unfolding_all rfl)
 
 theorem off_folded {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) :
  compact.OFF_FOLDED_ROOT (cur c) = ok 7751#usize := by
@@ -47,7 +53,7 @@ theorem foldedRoot (proof : Slice U8) (width : proof.val.length = 57607) (folded
   core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s =
    ok (.Ok (LIB_Env.nativeKey folded)) := by
  obtain ⟨s,run,same⟩ := NNH_SliceRangeOk.value proof 7751#usize 7783#usize (by scalar_tac)
-  (by change (7783#usize).val ≤ proof.val.length; first | scalar_tac | omega)
+  (by change (7783#usize).val ≤ proof.val.length; scalar_tac)
  refine ⟨s,run,NNX_RootCopy.source s folded ?_⟩
  have e : LIB_Carriers.bytes s = RSL.slice (LIB_Carriers.bytes proof) RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1 := same
  rw [e]; exact h
@@ -84,10 +90,11 @@ theorem batch {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (proof : Slice U8)
    intro j hj
    have hl : j < p.queries.val.length := by have := p.queries.property; scalar_tac
    have m := List.getElem_mem hl
-   first
-    | (rw [getElem!_pos p.queries.val j hl]; exact q _ m)
-    | (simp only [getElem!_pos, hl]; exact q _ m)
-    | (simp [hl]; exact q _ m)
+   show (p.queries.val[j]!).val < 262144
+   have e : p.queries.val[j]! = p.queries.val[j] := by
+    first | simp [hl] | exact getElem!_pos p.queries.val j hl
+   rw [e]
+   exact q _ m
   have hp := NOC_MerkleBounded.hostParent c proof (NFW_PreparedPort.prepared p) (LIB_Env.nativeKey folded)
    0#usize (by decide) q' ((congrArg NHT_ResultPort.action model).trans rfl)
   have inner : Port3_NativeBatchBody.verifier.candidate.batch_merkle
@@ -238,7 +245,7 @@ theorem source {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (a : RSL.TX1_094.Args NN
      LIB_Carriers.bytes proof,LIB_Carriers.bytes pubBytes) (NOC_Run5bCtx.envOf c)).val,
     (LIBC_Checkpoint.output (p,LIBC_Finish.value (r.2,r.1) (NOC_Run5bCtx.envOf c),
      LIB_Carriers.bytes proof,LIB_Carriers.bytes pubBytes) (NOC_Run5bCtx.envOf c)).property⟩ := by
-  rw [finish_acc]; exact ck
+  rw [finish_acc _ _ (NOC_Run5bCtx.envOf c)]; exact ck
  have ksplit : ((10#usize : Usize) != compact.SPLIT) = false := by
   first | (unfold compact.SPLIT; simp) | simp [compact.SPLIT] | rfl
  -- the body

@@ -1,0 +1,203 @@
+NOC_generated/NOC_Tx1Forward.lean:22:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.21 = ?m.21
+but is expected to have type
+  aspis_core.field.wide_exact.WideExact.ZERO (cur c) = ok ?m.17
+in the application
+  And.intro rfl
+NOC_generated/NOC_Tx1Forward.lean:50:71: warning: 'omega' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Tx1Forward.lean:50:71: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Tx1Forward.lean:61:31: warning: 'simp [Port3_QueryInstall.result] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Tx1Forward.lean:62:31: warning: 'simp [Port3_QueryInstall.result] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Tx1Forward.lean:63:28: warning: 'simp [Port3_QueryInstall.result] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Tx1Forward.lean:61:31: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Tx1Forward.lean:62:31: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Tx1Forward.lean:63:28: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Tx1Forward.lean:90:28: error: Application type mismatch: The argument
+  m
+has type
+  (↑p.queries)[j] ∈ ↑p.queries
+but is expected to have type
+  (↑(NFW_PreparedPort.prepared p).queries)[j]?.getD default ∈ ↑p.queries
+in the application
+  q ((↑(NFW_PreparedPort.prepared p).queries)[j]?.getD default) m
+NOC_generated/NOC_Tx1Forward.lean:90:13: warning: This simp argument is unused:
+  hl
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NOC_generated/NOC_Tx1Forward.lean:240:96: error: unsolved goals
+case env
+W Tx : Type
+c : NNH_HostCtx.Ctx W Tx
+a : RSL.TX1_094.Args NNH_Tx1Returns.V
+pubBytes proof : Slice U8
+hpub : a.public_bytes = LIB_Carriers.bytes pubBytes
+hproof : a.proof = LIB_Carriers.bytes proof
+width : (↑proof).length = 57607
+out : RSL.Bytes
+called : NNH_Tx1Returns.value a (NOC_Run5bCtx.envOf c) = Except.ok out
+split : (a.k != RSL.SPLIT) = false
+hparse : LIB_VLib.parseShapeValue (LIB_Carriers.bytes proof) (NOC_Run5bCtx.envOf c) = Except.ok ()
+hscan : LIB_VLib.canonicalScanValue (LIB_Carriers.bytes proof) (NOC_Run5bCtx.envOf c) = Except.ok ()
+p : LIB_VCarriers.Prepared
+g : LIB_VCarriers.E29
+hprep :
+  NNH_Tx1Returns.preparedValue { public_ := a.public_, proof := LIB_Carriers.bytes proof, g := NOC_Tx1Cut.V.zeroE29 }
+      (NOC_Run5bCtx.envOf c) =
+    Except.ok (p, g)
+acc : LIB_VCarriers.Acc
+hacc : LIB_VLib.accNewValue () (NOC_Run5bCtx.envOf c) = Except.ok acc
+folded : RSL.B32
+hf : RSL.TX1_136.toB32 (RSL.slice (LIB_Carriers.bytes proof) RSL.OFF_FOLDED_ROOT RSL.OFF_ROUND1) = some folded
+hbatch : LIB_VLib.batchMerkleValue (LIB_Carriers.bytes proof, p, folded, 0) (NOC_Run5bCtx.envOf c) = Except.ok ()
+geo : LIB_VCarriers.Geo
+hgeo : LIB_VLib.geometryValue (p, 0, 10) (NOC_Run5bCtx.envOf c) = Except.ok geo
+pending : LIB_VCarriers.Weights
+hpend : LIB_VLib.weightsNewValue acc (NOC_Run5bCtx.envOf c) = Except.ok pending
+r : LIB_VCarriers.Acc × LIB_VCarriers.Weights
+hr :
+  LIB_VLib.queryLoopValue (LIB_Carriers.bytes proof, p, acc, g, geo, pending, 10) (NOC_Run5bCtx.envOf c) = Except.ok r
+out_eq :
+  out =
+    LIB_VLib.checkpointValue
+      (p, LIB_VLib.finishValue (r.2, r.1) (NOC_Run5bCtx.envOf c), LIB_Carriers.bytes proof, LIB_Carriers.bytes pubBytes)
+      (NOC_Run5bCtx.envOf c)
+ak10 : a.k = 10
+hk : a.k = ↑10#usize
+kv : ↑10#usize = 10
+variant : transport.Variant
+op3 :
+  (NNH_Run5bCurrentShape.current (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op3 proof =
+    ok (core.result.Result.Ok variant)
+op4 :
+  (NNH_Run5bCurrentShape.current (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op4 proof =
+    ok (core.result.Result.Ok ())
+we : aspis_core.field.wide_exact.WideExact
+zr : aspis_core.field.wide_exact.WideExact.ZERO (cur c) = ok we
+zs : Array.repeat 29#usize we = NNV_PreparedInputs.scratch LIB_Instances.VL.zeroE29
+prep :
+  verifier.candidate.prepare (cur c) (NNV_PreparedAtHost.digest c) (FirstComposition.toCurrentPublic a.public_) proof ()
+      none (Array.repeat 29#usize we) =
+    ok (core.result.Result.Ok (InstalledPreparation.currentPrepared p), NNV_PreparedInputs.scratch g)
+native : AspisR1Stage2.verifier.Accumulator
+left✝¹ :
+  Port3_Initial.constructor (NNH_HostCtx.envOf c).reservation AspisR1Stage2.transport.Variant.S2 =
+    ok (core.result.Result.Ok native)
+same : acc = LIBC_VStateCarriers.fromAcc native
+op20 :
+  (NNH_Run5bCurrentShape.current (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op20
+      transport.Variant.S2 =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.unAccumulator native))
+op20' :
+  (cur c).op20 transport.Variant.S2 =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc acc)))
+s : Slice U8
+srun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok s
+stry :
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s =
+    ok (core.result.Result.Ok (LIB_Env.nativeKey folded))
+sem : RSL.Verified NNV_PrepareFrontCut.V
+vw : NNV_PrepareFrontCut.V.View
+left✝ :
+  Nonempty
+    (NNV_PrepareFrontCut.Packet { public_ := a.public_, proof := LIB_Carriers.bytes proof, g := NOC_Tx1Cut.V.zeroE29 }
+      (NOC_Run5bCtx.envOf c) sem vw)
+prepCalled :
+  LIB_Prepared.value (sem, vw, { public_ := a.public_, proof := LIB_Carriers.bytes proof, g := NOC_Tx1Cut.V.zeroE29 }.g)
+      (NOC_Run5bCtx.envOf c) =
+    (Except.ok p, g)
+law :
+  LIBC_PreparedLaw.law
+    (LIBC_PreparedCarriers.input LIB_Prepared.types
+      (sem, vw, { public_ := a.public_, proof := LIB_Carriers.bytes proof, g := NOC_Tx1Cut.V.zeroE29 }.g))
+    (NOC_Run5bCtx.envOf c)
+    { exit := RSL.Exit.ret (Except.ok p, g),
+      events :=
+        LIBC_PreparedLog.events
+          (LIBC_PreparedLaw.run
+              (LIBC_PreparedCarriers.input LIB_Prepared.types
+                (sem, vw, { public_ := a.public_, proof := LIB_Carriers.bytes proof, g := NOC_Tx1Cut.V.zeroE29 }.g))
+              (NOC_Run5bCtx.envOf c)).1 }
+gd : LIBC_Geometry.Domain (p, 0, 10)
+op6 :
+  (cur c).op6 (NNV_PreparedAtHost.digest c) proof (InstalledPreparation.currentPrepared p) (LIB_Env.nativeKey folded)
+      0#usize () =
+    ok (core.result.Result.Ok ())
+g19 :
+  (NNH_Run5bCurrentShape.current (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op19 p.queries
+      0#usize 10#usize =
+    ok (core.result.Result.Ok (Tx1Q_PrefixInstall.unGeometry geo))
+z : LIBC_Usize.raw 0 = 0#usize
+t : LIBC_Usize.raw 10 = 10#usize
+ha : LIBC_AccNew.value (NOC_Run5bCtx.envOf c) = Except.ok acc
+hg : LIBC_Geometry.value (p, 0, 10) (NOC_Run5bCtx.envOf c) = Except.ok geo
+hb : LIBC_WeightsNew.value acc (NOC_Run5bCtx.envOf c) = Except.ok pending
+initial : LIBC_AccNew.child.run () (NOC_Run5bCtx.envOf c) { exit := RSL.Exit.ret (Except.ok acc), events := [] }
+w64 : (↑acc.weights).length = 64
+op18 :
+  (NNH_Run5bCurrentShape.current (M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op18
+      (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc acc)).weights.deref =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.unPending pending))
+w : List.length (LIB_Carriers.bytes proof) = 57607
+d : LIBC_QueryLoop.Domain (LIB_Carriers.bytes proof, p, acc, g, geo, pending, 10)
+hr' : LIBC_QueryLoop.value (LIB_Carriers.bytes proof, p, acc, g, geo, pending, 10) (NOC_Run5bCtx.envOf c) = Except.ok r
+op7 :
+  (cur c).op7 proof (InstalledPreparation.currentPrepared p)
+      (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc acc)) (NNV_PreparedInputs.scratch g) none
+      (Tx1Q_PrefixInstall.unGeometry geo) (Tx1Q_Carriers.unPending pending) 10#usize =
+    ok
+      (core.result.Result.Ok (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc r.1), Tx1Q_Carriers.unPending r.2))
+op17 :
+  (DrvC_Installation.currentInstalled (NNH_Run5bCtx.configuration c)).op17 (Tx1Q_Carriers.unPending r.2)
+      (Tx1Q_Carriers.unAccumulator (LIBC_VStateCarriers.toAcc r.1)).weights.deref =
+    ok (Tx1Q_Carriers.slice Tx1Q_Carriers.unK (NJJ_Flush.output r.2))
+ck :
+  (DrvC_Installation.currentInstalled (NNH_Run5bCtx.configuration c)).op16 (NNV_PreparedAtHost.digest c)
+      (InstalledPreparation.currentPrepared
+        (p, LIBC_Finish.value (r.2, r.1) (NOC_Run5bCtx.envOf c), LIB_Carriers.bytes proof,
+            LIB_Carriers.bytes pubBytes).1)
+      (Tx1Q_Carriers.unAccumulator
+        (LIBC_VStateCarriers.toAcc
+          (p, LIBC_Finish.value (r.2, r.1) (NOC_Run5bCtx.envOf c), LIB_Carriers.bytes proof,
+                LIB_Carriers.bytes pubBytes).2.1))
+      proof pubBytes () =
+    ok
+      ⟨↑(LIBC_Checkpoint.output
+            (p, LIBC_Finish.value (r.2, r.1) (NOC_Run5bCtx.envOf c), LIB_Carriers.bytes proof,
+              LIB_Carriers.bytes pubBytes)
+            (NNH_Run5bCtx.envOf c)),
+        ⋯⟩
+⊢ RSL.Env
+'AspisR1.NOC_Tx1Forward.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.off_folded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.off_round1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.foldedRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.resultOk' does not depend on any axioms
+'AspisR1.NOC_Tx1Forward.batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.query' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.finish_acc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.lawOf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOC_Tx1Forward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
