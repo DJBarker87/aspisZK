@@ -1,0 +1,88 @@
+{
+ "question": "does every path from root to AspisS1ValuesOwned pass through a proved reference = NFU_Retarget.compact.expand_values equality",
+ "target_status": "Target not yet established",
+ "outer_classification": "UNLINKED for both roots",
+ "roots": {
+  "AspisR1.RPx_Deployed.deployed (rows TX1:168,169,170)": {
+   "classification": "UNLINKED",
+   "reachable_constants": 115024,
+   "s1_family_constants_reached": 149,
+   "s1_core_constants_reached": 16,
+   "equality_theorems_in_cone": [],
+   "reached_constants_named_compact_expand_values": [],
+   "theorem_types_mentioning_both_s1_and_compact_expand_values_in_cone": 0,
+   "witness_path_root_to_S1_core": [
+    "AspisR1.RPx_Deployed.deployed",
+    "AspisR1.FJv_DResult.Outcome",
+    "AspisR1.ClaimsUnrolledSdk.sdkOps",
+    "AspisS1ValuesOwnedInstallation.withValues",
+    "AspisS1ValuesOwnedInstallation.expandValues",
+    "AspisS1ValuesOwned.values_owned_reference"
+   ],
+   "path_avoiding_B_set": [
+    "AspisR1.RPx_Deployed.deployed",
+    "AspisR1.FJv_DResult.Outcome",
+    "AspisR1.ClaimsUnrolledSdk.sdkOps",
+    "AspisS1ValuesOwnedInstallation.withValues",
+    "AspisS1ValuesOwnedInstallation.expandValues",
+    "AspisS1ValuesOwned.values_owned_reference"
+   ],
+   "note": "B set is empty, so blocking it changes nothing: every path is a path with no equality theorem. S1 entry is AspisS1ValuesOwnedInstallation.nativeValues/withValues -> expandValues -> values_owned_reference.",
+   "use_sites": "consumers of nativeValues/withValues in the cone include ClaimsUnrolledSdk.sdkOps, RowShape_InstalledSlots.verifierOps, S1PrepareCode.prepare/source, PSem_*, P2P_*, FJv_*; full list in PCWD_L002/stdout.log (S1_ENTRY lines)"
+  },
+  "AspisR1.NHS_CheckpointPacket.source (row TX1:186)": {
+   "classification": "UNLINKED",
+   "reachable_constants": 27696,
+   "s1_family_constants_reached": 38,
+   "s1_core_constants_reached": 16,
+   "equality_theorems_in_cone": [],
+   "reached_constants_named_compact_expand_values": [],
+   "theorem_types_mentioning_both_s1_and_compact_expand_values_in_cone": 0,
+   "witness_path_root_to_S1_core": [
+    "AspisR1.NHS_CheckpointPacket.source",
+    "AspisR1.NHS_NFWObligation.source",
+    "AspisR1.NHS_PrepareScratch.source",
+    "AspisS1ValuesOwnedInstallation.nativeValues",
+    "AspisS1ValuesOwnedInstallation.expandValues",
+    "AspisS1ValuesOwned.values_owned_reference"
+   ],
+   "path_avoiding_B_set": [
+    "AspisR1.NHS_CheckpointPacket.source",
+    "AspisR1.NHS_NFWObligation.source",
+    "AspisR1.NHS_PrepareScratch.source",
+    "AspisS1ValuesOwnedInstallation.nativeValues",
+    "AspisS1ValuesOwnedInstallation.expandValues",
+    "AspisS1ValuesOwned.values_owned_reference"
+   ],
+   "note": "B set is empty, so blocking it changes nothing: every path is a path with no equality theorem. S1 entry is AspisS1ValuesOwnedInstallation.nativeValues/withValues -> expandValues -> values_owned_reference.",
+   "use_sites": "NHS_PrepareScratch.source (nativeValues), RowShape_InstalledSlots.verifierOps, SAP_Cuts.buffers, SAP_OpeningCuts.opening"
+  }
+ },
+ "equality_theorems_that_exist_outside_the_cones": {
+  "NGV_ExpandAssociation_result": {
+   "statement": "for bytes before with bytes.length<=1856, %16=0, before.length=2*bytes.length: exists after, NFU_Retarget.compact.expand_values bytes before = ok(Ok(),after) and AspisS1ValuesOwnedInstallation.expandValues bytes before = ok(Ok(),after), with byte formula",
+   "window": "input <=1856 bytes, output = 2*input (<=3712)",
+   "source": "evidence/slice-d-parser3-20261105/NGV_ExpandAssociation.lean",
+   "position": "module imports RPx_Deployed (NGK_COMBINED_IMPORT), so it is downstream of the deployed root and not a dependency of either root"
+  },
+  "consumers": [
+   "evidence/candidate-prepare-20261106/NHF_Expansions.lean construct (y1 window select proof 7031 464, out 928)",
+   "evidence/slice-d-parser3-20261105/NGV_RowPayload.lean construct"
+  ],
+  "LIBC_ExpandValues": {
+   "source": "evidence/libc-20261111/LIBC_ExpandValues.lean",
+   "statement": "native_result/model_port about NFU_Retarget.compact.expand_values only, Domain a.1.length<=1856 and a.2.length<=3712; does not mention the S1 constants",
+   "position": "imports RPx_Deployed"
+  },
+  "NNH_Run5bCurrentExpand": {
+   "source": "evidence/integrate-20261111/NNH_L880/sources/NNH_generated/NNH_Run5bCurrentExpand.lean",
+   "statement": "op11 = AspisS1NativeCompact.compact.expand_values AspisS1ValuesOwnedInstallation.nativeValues by rfl (slot only); no equality with NFU; not in the module closure of the ledger30 scan"
+  }
+ },
+ "what_is_missing": "a theorem in the dependency cone of RPx_Deployed.deployed and NHS_CheckpointPacket.source (or a composition above them stated for the headline) that rewrites the S1 nativeValues/expandValues operation to NFU_Retarget.compact.expand_values on the reached window; NGV_ExpandAssociation.result is the right statement but is not used by either root, and the Run5b slot theorem only identifies op11 with the native wrapper at nativeValues",
+ "scope": "read-only reach analysis of constants types and values; not a proof; no ledger/trust/RSL change",
+ "scopes": [
+  "PCWD_L001 exit 134 (retired shape)",
+  "PCWD_L002 exit 0, 47.0 s, peak RSS 6675380 KiB, cgroup peak 930344960 B, swap 0"
+ ]
+}
