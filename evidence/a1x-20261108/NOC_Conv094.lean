@@ -71,8 +71,7 @@ theorem weightsNew (a : LIB_VCarriers.Acc) (width : a.weights.val.length=64) (ou
  have s2 := (Port3_NativePendingInstall.reference_eq _ _ size).symm.trans s
  change LIBC_ResultGraph.value LIBC_WeightsNew.port (.error .Allocation)
   (Port3_PendingInstall.pending env.reservation (LIBC_VStateCarriers.toAcc a).weights.deref) = _
- rw [s2]
- rfl
+ exact congrArg (LIBC_ResultGraph.value LIBC_WeightsNew.port (.error .Allocation)) s2
 #print axioms scan
 #print axioms geometry
 #print axioms accNew
