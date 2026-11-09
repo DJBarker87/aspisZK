@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""L187 option-B local driver. Autonomous: schedules dependency-ready batches (<=3 concurrent, host lean
+"""L187 option-B local driver. Autonomous: schedules dependency-ready batches (<=2 concurrent per lead 2026-11-09, 1 if host lean count is 5, host lean
 count < 6, scope count < 6, disk >= 40 GB, admission allowed:true AND exit 0), fetches results,
 commits receipts per batch (xz + sha256 sidecar), skips dependants of failures, writes ALERT files."""
 import json,subprocess,time,lzma,hashlib,pathlib,sys,collections,os
@@ -106,7 +106,7 @@ while True:
       if not (E/'ALERT_DISK').exists(): alert('DISK',f"host free {hs['free']} < 40 GB; launches paused")
     else:
       if (E/'ALERT_DISK').exists(): (E/'ALERT_DISK').unlink()
-      while len(st['inflight'])<3 and hs['lean']+1<6 and hs['scopes']+1<6:
+      while len(st['inflight'])<(1 if hs['lean']>=5 else 2) and hs['lean']+1<6 and hs['scopes']+1<6:
         mods=pick()
         if not mods: break
         try: ok=launch(mods,hs)
