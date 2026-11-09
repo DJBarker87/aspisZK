@@ -25,7 +25,7 @@ sup('SUP4','S015 cost-probe candidate query_values','prov-p1c-20261109/PCQC_E011
     ['aspis_core::field::_::ZERO','aspis_core::field::_::ONE','aspis_core::field::_::mul','aspis_core::field::reduce_u64','aspis_core::field::_::reduce_u64'])
 sup('SUP5','S013 payment_relation','prov-p1a-20261109/PCQ_E039_spec.json','PCQF_aspis_statement_pool_v1_payment_relation')
 sup('SUP6','S011 pair_terminal','prov-p1a-20261109/PCQ_E040_spec.json','PCQF_aspis_statement_pool_v1_pair_terminal')
-def new(sid,label,cfg,roots,ns,mods,defs,syms=(),include=(),opaque=(),basis=None):
+def new(sid,label,cfg,roots,ns,mods,defs,syms=(),include=(),opaque=(),basis=None,**_):
     specs.append(dict(spec_id=sid,kind='frozen',label=label,start_from=roots,include=list(include),opaque=list(opaque),namespace=ns,
         covers=dict(modules=mods,definitions=list(defs),rust_symbols=list(syms)),basis=basis or 'P1e: frozen functions behind P2b NO_FRESH_EMISSION definitions.',**cfg))
 F='crate::field::'
@@ -33,6 +33,13 @@ new('NEW1','aspis-core field: M31/CM31/QM31 leaf arithmetic',CORE,[F+'reduce_u64
     'PCQF_aspis_core_field_a',['RPu_FIq_Native01','RPu_FIq_Native02'],['field.reduce_u64','field.M31.reduce_u62','field.CM31.*','field.QM31.*'])
 new('NEW2','aspis-core field: prepared multiplier, karatsuba, sum_products3_prepared, pack_base4, m31_dot',CORE,[F+'_::new',F+'_::mul',F+'qm31_from_karatsuba_channel_sums',F+'qm31_sum_products3_prepared',F+'qm31_pack_base4',F+'qm31_m31_dot'],
     'PCQF_aspis_core_field_b',['RPu_FIq_Native01','RPu_FIq_Native02','RPu_FIq_NativeTypes','RPv_PoseidonPreparedSum3Source','RPv_Qm31PackBase4Slice'],['field.PreparedQm31Multiplier.*','field.qm31_*'])
+NEW2D=dict(basis='P1e split of NEW2 (PCQF_E008 failed in Aeneas: uncaught Not_found at InterpReduceCollapse.ml:1991, loop-join collapse): one loop-bearing root per run')
+new('NEW2a','aspis-core field: qm31_from_karatsuba_channel_sums, qm31_sum_products3_prepared (split of NEW2)',CORE,[F+'qm31_from_karatsuba_channel_sums',F+'qm31_sum_products3_prepared'],
+    'PCQF_aspis_core_field_b1',['RPu_FIq_Native01','RPu_FIq_Native02','RPu_FIq_NativeTypes','RPv_PoseidonPreparedSum3Source'],['field.qm31_from_karatsuba_channel_sums','field.qm31_sum_products3_prepared*'],**NEW2D)
+new('NEW2b','aspis-core field: qm31_pack_base4 (split of NEW2)',CORE,[F+'qm31_pack_base4'],
+    'PCQF_aspis_core_field_b2',['RPu_FIq_Native02','RPu_FIq_NativeTypes','RPv_Qm31PackBase4Slice'],['field.qm31_pack_base4*'],**NEW2D)
+new('NEW2c','aspis-core field: qm31_m31_dot (split of NEW2)',CORE,[F+'qm31_m31_dot'],
+    'PCQF_aspis_core_field_b3',['RPu_FIq_Native02'],['field.qm31_m31_dot*'],**NEW2D)
 new('NEW3','aspis-core state_only_prefix r0 types',CORE,['crate::state_only_prefix::r0::Error','crate::state_only_prefix::r0::Challenges'],
     'PCQF_aspis_core_state_only_prefix',['RPu_FIq_NativeTypes'],['state_only_prefix.r0.Error','state_only_prefix.r0.Challenges'])
 new('NEW4','aspis-statement constants: poseidon2, spend DOMAIN_*, pair_tree_profile capacity, pool_v1::format (S007)',STM,
