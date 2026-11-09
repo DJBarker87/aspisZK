@@ -1,0 +1,669 @@
+{
+ "schema": "PCWA_HAND_MODELS v1",
+ "target_established": false,
+ "note": "Record only (lead addendum 2026-11-09). No trust row is added, removed or proposed. Entries with gate_definition.text null need manual lookup; see PCWA_CLASSIFICATIONS.json HM-1.",
+ "entries": [
+  {
+   "gate_module": "NHI_FilledExtracted",
+   "external_name": "core.result.Result.map_err",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-d-pair-20261106/NHI_FilledExternal.lean",
+    "text": "abbrev core.result.Result.map_err := @FIo_Native.core.result.Result.map_err",
+    "resolves_to": {
+     "file": "evidence/replay-dry8-20261026/RPz7_FIo_NativeExternal.lean",
+     "text": "def core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) :\n  Result (core.result.Result T F)\n  := do\n  match self with\n  | core.result.Result.Ok t => ok (core.result.Result.Ok t)\n  | core.result.Result.Err e =>\n    let t \u2190 opsfunctionFnOnceOTupleEFInst.call_once op e\n    ok (core.result.Result.Err t)"
+    }
+   },
+   "fresh_form": {
+    "file": "PCWA_E004_emitted/raw/NHI_FilledRef/FunsExternal_Template.lean",
+    "text": "axiom core.result.Result.map_err\n  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :\n  core.ops.function.FnOnce O E F) :\n  (core.result.Result T E) \u2192 O \u2192 Result (core.result.Result T F)"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+   "dependent_reached_definitions": [
+    "filled_ref"
+   ]
+  },
+  {
+   "gate_module": "NHI_FilledExtracted",
+   "external_name": "alloc.vec.Vec.try_reserve_exact",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-d-pair-20261106/NHI_FilledExternal.lean",
+    "text": "abbrev alloc.vec.Vec.try_reserve_exact := @FIo_Native.alloc.vec.Vec.try_reserve_exact",
+    "resolves_to": {
+     "file": "evidence/replay-dry8-20261026/RPz7_FIo_NativeExternal.lean",
+     "text": "def alloc.vec.Vec.try_reserve_exact {T : Type} [a : Allocation]\n    (A : Type) (self : alloc.vec.Vec T) (n : Usize) :\n    Result ((core.result.Result Unit alloc.collections.TryReserveError) \u00d7 alloc.vec.Vec T) :=\n  a.reserve A self n"
+    }
+   },
+   "fresh_form": {
+    "file": "PCWA_E004_emitted/raw/NHI_FilledRef/FunsExternal_Template.lean",
+    "text": "axiom alloc.vec.Vec.try_reserve_exact\n  {T : Type} (A : Type) :\n  (alloc.vec.Vec T) \u2192 Std.Usize \u2192 Result ((core.result.Result Unit\n    alloc.collections.TryReserveError) \u00d7 (alloc.vec.Vec T))"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+   "dependent_reached_definitions": [
+    "filled_ref"
+   ]
+  },
+  {
+   "gate_module": "NHI_FilledTypes",
+   "external_name": "alloc.collections.TryReserveError",
+   "kind": "type",
+   "gate_definition": {
+    "file": "evidence/slice-d-pair-20261106/NHI_FilledExternal.lean",
+    "text": "abbrev alloc.collections.TryReserveError := FIo_Native.alloc.collections.TryReserveError",
+    "resolves_to": {
+     "file": "evidence/replay-dry8-20261026/RPz7_FIo_NativeTypes.lean",
+     "text": "abbrev alloc.collections.TryReserveError := AspisR1.NP6_StdModel.ReserveError"
+    }
+   },
+   "fresh_form": {
+    "file": "PCWA_E004_emitted/raw/NHI_FilledRef/TypesExternal_Template.lean",
+    "text": "axiom alloc.collections.TryReserveError : Type"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+   "dependent_reached_definitions": [
+    "filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"
+   ]
+  },
+  {
+   "gate_module": "NHI_FilledExtracted",
+   "external_name": "FIo_Native.Allocation (instance-implicit parameter)",
+   "kind": "type class / hand-added binder",
+   "gate_definition": {
+    "file": "evidence/slice-d-pair-20261106/NHI_FilledExtracted.lean",
+    "text": "variable [allocation : FIo_Native.Allocation]",
+    "resolves_to": {
+     "file": "evidence/replay-dry8-20261026/RPz7_FIo_NativeExternal.lean",
+     "text": "/-- Explicit allocator interpretation; no success property is bundled here. -/\nclass Allocation where\n  reserve : {T : Type} \u2192 (A : Type) \u2192 alloc.vec.Vec T \u2192 Usize \u2192\n    Result ((core.result.Result Unit alloc.collections.TryReserveError) \u00d7 alloc.vec.Vec T)"
+    }
+   },
+   "fresh_form": {
+    "file": null,
+    "text": "(absent: the raw emission has the axiom alloc.vec.Vec.try_reserve_exact and no allocator binder)"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+   "dependent_reached_definitions": [
+    "filled_ref",
+    "filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"
+   ],
+   "note": "Equality statements copy this binder verbatim as --fresh-prelude (gate_sources/NHI_FilledExtracted.prelude.lean); theorem holds for every instance."
+  },
+  {
+   "gate_module": "NHJ_SnapshotReference.Funs",
+   "external_name": "alloc.string.String.Insts.CoreCloneClone.clone",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-d-entry3-20261106/NHJ_SnapshotReference.FunsExternal.lean",
+    "text": "/-- This branch is unreachable on BorrowErrorLaw (the sole error is ABF).\nNo claim about native String cloning is exported or used. -/\ndef alloc.string.String.Insts.CoreCloneClone.clone (_ : String) : Result String := .div"
+   },
+   "fresh_form": {
+    "file": "PCWA_E003_emitted/raw/NHJ_SnapshotReference/FunsExternal_Template.lean",
+    "text": "axiom alloc.string.String.Insts.CoreCloneClone.clone : String \u2192 Result String"
+   },
+   "pinned_crate": "Rust std alloc::string::String::clone, nightly-2026-09-17 sysroot",
+   "dependent_reached_definitions": [
+    "ProgramError.Insts.CoreCloneClone.clone"
+   ]
+  },
+  {
+   "gate_module": "NHJ_SnapshotReference.Types",
+   "external_name": "ProgramError (type, replaced by alias)",
+   "kind": "type alias replacing an emitted inductive",
+   "gate_definition": {
+    "file": "evidence/slice-d-entry3-20261106/NHJ_SnapshotReference.Types.lean",
+    "text": "abbrev ProgramError := NGL_MetaReference.ProgramError"
+   },
+   "fresh_form": {
+    "file": "PCWA_E003_emitted/raw/NHJ_SnapshotReference/Types.lean",
+    "text": "inductive ProgramError where\n| Custom : Std.U32 \u2192 ProgramError\n| InvalidArgument : ProgramError\n| InvalidInstructionData : ProgramError\n| InvalidAccountData : ProgramError\n| AccountDataTooSmall : ProgramError\n| InsufficientFunds : ProgramError\n| IncorrectProgramId : ProgramError\n| MissingRequiredSignature : ProgramError\n| AccountAlreadyInitialized : ProgramError\n| UninitializedAccount : ProgramError\n| NotEnoughAccountKeys : ProgramError\n| AccountBorrowFailed : ProgramError\n| MaxSeedLengthExceeded : ProgramError\n| InvalidSeeds : ProgramError\n| BorshIoError : String \u2192 ProgramError\n| AccountNotRentExempt : ProgramError\n| UnsupportedSysvar : ProgramError\n| IllegalOwner : ProgramError\n| MaxAccountsDataAllocationsExceeded : ProgramError\n| InvalidRealloc : ProgramError\n| MaxInstructionTraceLengthExceeded : ProgramError\n| BuiltinProgramsMustConsumeComputeUnits : ProgramError\n| InvalidAccountOwner : ProgramError\n| ArithmeticOverflow : ProgramError\n| Immutable : ProgramError\n| IncorrectAuthority : ProgramError"
+   },
+   "pinned_crate": "nhj_snapshot_reference 0.1.0 (reference crate, source sha256 e8a85ac9...); alias target NGL_MetaReference.ProgramError (ngl_reference crate)",
+   "dependent_reached_definitions": [
+    "ProgramError.Insts.CoreCloneClone.clone",
+    "snapshot_ref"
+   ],
+   "note": "Both dependent equalities remain commented obligations (transport-needed): constructors are not reachable through the gate alias."
+  },
+  {
+   "gate_module": "NGD_AtG.Types",
+   "external_name": "import_union_discriminant (registration attribute) / ImportUnionNamedDiscriminant",
+   "kind": "hand-edited attribute and import",
+   "gate_definition": {
+    "file": "evidence/slice-d-parser-20261104/NGD_AtG/Types.lean",
+    "text": "import ImportUnionNamedDiscriminant\n@[import_union_discriminant isize]"
+   },
+   "fresh_form": {
+    "file": "PCWA_E002_emitted/raw/NGD_AtG/Types.lean",
+    "text": "@[discriminant isize]   (Aeneas registration attribute on inductive Error)"
+   },
+   "pinned_crate": "nfu_reference 0.1.0 (reference crate, source sha256 a4cf8bb1...)",
+   "dependent_reached_definitions": [
+    "Error"
+   ],
+   "note": "Discriminant-reading instance is produced by a different attribute in the gate; the Error constructors are text-identical after stripping registration attributes; no Lean proof of the inductive identity is generated (types are text-identical-only)."
+  },
+  {
+   "gate_module": "NEI_PushRaw.Funs",
+   "external_name": "MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-mul2-20261101/NEI_PushRaw/FunsExternal.lean",
+    "text": "abbrev MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter :=\n @NEG_RowIsolated.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter"
+   },
+   "fresh_form": {
+    "file": "PCWA_E009_emitted/raw/NEG_PushActual/FunsExternal_Template.lean",
+    "text": "axiom MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter\n  {T : Type} {N : Std.Usize} :\n  (Array T N) \u2192 Result ((core.slice.iter.IterMut T) \u00d7\n    (core.slice.iter.IterMut T \u2192 Array T N))"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package; aspis-core field types per frozen tree",
+   "dependent_reached_definitions": [
+    "update_residue_row"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.wide_exact.WideExact.from_qm31",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "-- Frozen field calls already have direct closed callee bridges. Constructors\n-- use the newly emitted normalization path, not an assumed canonical identity.\ndef aspis_core.field.wide_exact.WideExact.from_qm31 (q : NEV_Bindings.Q) : Result NEV_Bindings.E := do\n let e \u2190 NEV_CodeFieldRaw.aspis_core.field.wide_exact.WideExact.from_qm31 (NEV_Bindings.toCtorQ q)\n ok (NEV_Bindings.fromCtorE e)"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.from_qm31\n  : aspis_core.field.QM31 \u2192 Result aspis_core.field.wide_exact.WideExact"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node_loop1.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.wide_exact.WideExact.add",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def aspis_core.field.wide_exact.WideExact.add (x y : NEV_Bindings.E) : Result NEV_Bindings.E := do\n let e \u2190 FIo_Native.aspis_core.field.wide_exact.WideExact.add (NEV_Bindings.toNativeE x) (NEV_Bindings.toNativeE y)\n ok (NEV_Bindings.fromNativeE e)"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.add\n  :\n  aspis_core.field.wide_exact.WideExact \u2192\n    aspis_core.field.wide_exact.WideExact \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.wide_exact.WideExact.mul_qm31",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def aspis_core.field.wide_exact.WideExact.mul_qm31 (x : NEV_Bindings.E) (y : NEV_Bindings.Q) : Result NEV_Bindings.E := do\n let e \u2190 FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31 (NEV_Bindings.toNativeE x) (NEV_Bindings.toNativeQ y)\n ok (NEV_Bindings.fromNativeE e)"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.mul_qm31\n  :\n  aspis_core.field.wide_exact.WideExact \u2192 aspis_core.field.QM31 \u2192 Result\n    aspis_core.field.wide_exact.WideExact"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.M31.ZERO",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def aspis_core.field.M31.ZERO : Result U32 := ok 0#u32"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.M31.ZERO : Result aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.M31.ONE",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def aspis_core.field.M31.ONE : Result U32 := ok 1#u32"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.M31.ONE : Result aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.M31.sub",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "abbrev aspis_core.field.M31.sub := NEI_LineFull.aspis_core.field.M31.sub"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.M31.sub\n  :\n  aspis_core.field.M31 \u2192 aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node_loop0.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.M31.mul",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "abbrev aspis_core.field.M31.mul := NEI_LineFull.aspis_core.field.M31.mul"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.M31.mul\n  :\n  aspis_core.field.M31 \u2192 aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node_loop0.body",
+    "accumulate_batched_with_node_loop0_loop0.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.M31.double",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "abbrev aspis_core.field.M31.double := NEI_LineFull.aspis_core.field.M31.double"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.M31.double\n  : aspis_core.field.M31 \u2192 Result aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node_loop0.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "aspis_core.field.QM31.mul",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def aspis_core.field.QM31.mul (x y : NEV_Bindings.Q) : Result NEV_Bindings.Q := do\n let q \u2190 FIo_Native.aspis_core.field.QM31.mul (NEV_Bindings.toNativeQ x) (NEV_Bindings.toNativeQ y)\n ok (NEV_Bindings.fromNativeQ q)"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.QM31.mul\n  :\n  aspis_core.field.QM31 \u2192 aspis_core.field.QM31 \u2192 Result\n    aspis_core.field.QM31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "trace.value",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "-- program-build disables the diagnostic trace body. This is source parity,\n-- not runtime oracle trust or a successful-result premise.\ndef trace.value (_ : U16) (_ : Usize) (_ : NEV_Bindings.E) : Result Unit := ok ()"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "/-- [neg_isolated::trace::value]:\n    Source: 'src/../../NEI_src/crates/aspis-r1-cost-probe/src/trace.rs', lines 6:0-11:1\n    Visibility: public -/\naxiom trace.value\n  :\n  Std.U16 \u2192 Std.Usize \u2192 aspis_core.field.wide_exact.WideExact \u2192 Result\n    Unit"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node",
+    "accumulate_batched_with_node_loop1.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types / NFS_AccumPart00",
+   "external_name": "BatchedWeights.push",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/slice-q-accum-20261104/NFS_AccumPart00.lean",
+    "text": "def BatchedWeights.push (b : BatchedWeights) (j : Usize) (q : NEV_Bindings.Q) (m : U32) : Result BatchedWeights := do\n let out \u2190 NEI_PushRaw.BatchedWeights.push \u27e8b.raw,b.terms\u27e9 j (NEV_Bindings.toPushQ q) m\n ok \u27e8out.raw,out.terms\u27e9"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/FunsExternal_Template.lean",
+    "text": "/-- [neg_isolated::{neg_isolated::BatchedWeights}::push]:\n    Source: 'src/lib.rs', lines 49:20-52:5 -/\naxiom BatchedWeights.push\n  :\n  BatchedWeights \u2192 Std.Usize \u2192 aspis_core.field.QM31 \u2192\n    aspis_core.field.M31 \u2192 Result BatchedWeights"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+   "dependent_reached_definitions": [
+    "accumulate_batched_with_node_loop1.body"
+   ]
+  },
+  {
+   "gate_module": "NEV_AccumulateRaw.Types",
+   "external_name": "transport.Variant discriminant instance (NEV_discriminantVariant)",
+   "kind": "hand-added instance replacing @[discriminant isize]",
+   "gate_definition": {
+    "file": "evidence/slice-q-mul3-20261103/NEV_AccumulateRaw/Types.lean",
+    "text": "\n\n-- Instance-name repair only: Aeneas's discriminant attribute chose the global\n-- name instDiscriminantVariantIsize, colliding with a coherent model module.\ndef transport.Variant.NEV_read_discriminant (v : transport.Variant) : Isize :=\n match v with | .S1 => 0#isize | .S2 => 1#isize | .D => 2#isize\ninstance NEV_discriminantVariant : Discriminant transport.Variant Isize where\n read_discriminant := transport.Variant.NEV_read_discriminant"
+   },
+   "fresh_form": {
+    "file": "PCWA_E010_emitted/raw/NEI_AccumulateIsolated/Types.lean",
+    "text": "@[discriminant isize] on inductive transport.Variant"
+   },
+   "pinned_crate": "aspis-r1-cost-probe transport::Variant (isolated copy, frozen tree)",
+   "dependent_reached_definitions": [
+    "Prepared"
+   ],
+   "note": "Gate comment: instance-name repair only."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Funs",
+   "external_name": "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_FunsExternal.lean",
+    "text": "/-- Concrete content interpretations of the pure owned standard iterator. -/\ndef Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter\n    {T : Type} {N : Usize} (xs : Aeneas.Std.Array T N) : Result (core.array.iter.IntoIter T N) := ok xs.val"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/FunsExternal_Template.lean",
+    "text": "axiom Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter\n  {T : Type} {N : Std.Usize} :\n  (Array T N) \u2192 Result (core.array.iter.IntoIter T N)"
+   },
+   "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_coordinates",
+    "WAdm_model.WAdm_early",
+    "WAdm_model.WAdm_queries",
+    "WAdm_model.WAdm_roots",
+    "WAdm_model.WAdm_semantic",
+    "WAdm_model.WAdm_tail"
+   ]
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Funs",
+   "external_name": "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_FunsExternal.lean",
+    "text": "def core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next\n    {T : Type} {N : Usize} (xs : core.array.iter.IntoIter T N) :\n    Result (Option T \u00d7 core.array.iter.IntoIter T N) :=\n  match xs with | [] => ok (none,[]) | x::tail => ok (some x,tail)"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/FunsExternal_Template.lean",
+    "text": "axiom core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next\n  {T : Type} {N : Std.Usize} :\n  (core.array.iter.IntoIter T N) \u2192 Result ((Option T) \u00d7\n    (core.array.iter.IntoIter T N))"
+   },
+   "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_coordinates_loop.body",
+    "WAdm_model.WAdm_early_loop.body",
+    "WAdm_model.WAdm_queries_loop.body",
+    "WAdm_model.WAdm_roots_loop.body",
+    "WAdm_model.WAdm_semantic_loop.body",
+    "WAdm_model.WAdm_tail_loop.body"
+   ]
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Funs",
+   "external_name": "aspis_core.field.wide_exact.WideExact.to_le_bytes",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_FunsExternal.lean",
+    "text": "/-- Physical eight-limb LE scalar content. The native source byte contract\nis checked separately; no parent/writer output equation enters this body. -/\ndef aspis_core.field.wide_exact.WideExact.to_le_bytes\n    (x : aspis_core.field.wide_exact.WideExact) : Result (Aeneas.Std.Array U8 32#usize) :=\n  ok \u27e8AspisR1.CheckpointBytesE.rawBytes x,AspisR1.CheckpointBytesE.rawBytes_length x\u27e9"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.wide_exact.WideExact.to_le_bytes\n  : aspis_core.field.wide_exact.WideExact \u2192 Result (Array Std.U8 32#usize)"
+   },
+   "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_early_loop.body",
+    "WAdm_model.WAdm_tail_loop.body"
+   ]
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Funs",
+   "external_name": "aspis_core.field.QM31.write_le_bytes",
+   "kind": "function",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_FunsExternal.lean",
+    "text": "/-- Retain the existing emitted checked slices and their back-writes. -/\ndef aspis_core.field.QM31.write_le_bytes (x : aspis_core.field.QM31) (out : Slice U8) : Result (Slice U8) :=\n  OraclePortCkptAbi2Extracted.aspis_core.field.QM31.write_le_bytes x out"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/FunsExternal_Template.lean",
+    "text": "axiom aspis_core.field.QM31.write_le_bytes\n  : aspis_core.field.QM31 \u2192 (Slice Std.U8) \u2192 Result (Slice Std.U8)"
+   },
+   "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_putK"
+   ]
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "core.array.iter.IntoIter",
+   "kind": "type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_TypesExternal.lean",
+    "text": "/-- Content carrier of the owned standard array iterator. Native library\nvalidity/lifetime and allocator behavior remain external runtime trust. -/\nabbrev core.array.iter.IntoIter (T : Type) (_N : Aeneas.Std.Usize) := List T"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/TypesExternal_Template.lean",
+    "text": "axiom core.array.iter.IntoIter (T : Type) (N : Std.Usize) : Type"
+   },
+   "pinned_crate": "Rust core::array::IntoIter",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_coordinates_loop",
+    "WAdm_model.WAdm_coordinates_loop.body",
+    "WAdm_model.WAdm_early_loop",
+    "WAdm_model.WAdm_early_loop.body",
+    "WAdm_model.WAdm_queries_loop",
+    "WAdm_model.WAdm_queries_loop.body",
+    "WAdm_model.WAdm_roots_loop",
+    "WAdm_model.WAdm_roots_loop.body",
+    "WAdm_model.WAdm_semantic_loop",
+    "WAdm_model.WAdm_semantic_loop.body",
+    "WAdm_model.WAdm_tail_loop",
+    "WAdm_model.WAdm_tail_loop.body"
+   ]
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.field.M31",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.field.M31 := OraclePortCkptAbi2Extracted.aspis_core.field.M31"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "def aspis_core.field.M31 := Std.U32"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.field.CM31",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.field.CM31 := OraclePortCkptAbi2Extracted.aspis_core.field.CM31"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_core.field.CM31 where\n  a : aspis_core.field.M31\n  b : aspis_core.field.M31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.field.QM31",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.field.QM31 := OraclePortCkptAbi2Extracted.aspis_core.field.QM31"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_core.field.QM31 where\n  c0 : aspis_core.field.CM31\n  c1 : aspis_core.field.CM31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_checkpoint",
+    "WAdm_model.WAdm_coordinates",
+    "WAdm_model.WAdm_coordinates_loop",
+    "WAdm_model.WAdm_coordinates_loop.body",
+    "WAdm_model.WAdm_fields",
+    "WAdm_model.WAdm_putK",
+    "WAdm_model.WAdm_semantic",
+    "WAdm_model.WAdm_semantic_loop",
+    "WAdm_model.WAdm_semantic_loop.body",
+    "WAdm_model.WAdm_weights",
+    "WAdm_model.WAdm_weights_loop",
+    "WAdm_model.WAdm_weights_loop.body"
+   ],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.circle.SecureCirclePoint",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.circle.SecureCirclePoint := OraclePortCkptAbi2Extracted.aspis_core.circle.SecureCirclePoint"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_core.circle.SecureCirclePoint where\n  x : aspis_core.field.QM31\n  y : aspis_core.field.QM31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.field.wide_exact.WideExact",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.field.wide_exact.WideExact := OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_core.field.wide_exact.WideExact where\n  c0 : aspis_core.field.QM31\n  c1 : aspis_core.field.QM31"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_early",
+    "WAdm_model.WAdm_early_loop",
+    "WAdm_model.WAdm_early_loop.body",
+    "WAdm_model.WAdm_fields",
+    "WAdm_model.WAdm_tail",
+    "WAdm_model.WAdm_tail_loop",
+    "WAdm_model.WAdm_tail_loop.body"
+   ],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_core.digest.Digest32",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_core.digest.Digest32 := AspisR1Stage2.aspis_core.digest.Digest32"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_core.digest.Digest32 (Self : Type) where\n  coremarkerCopyInst : core.marker.Copy Self\n  digest : Self \u2192 (Slice (Slice Std.U8)) \u2192 Result (Array Std.U8 32#usize)"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_checkpoint"
+   ],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_r1_cost_probe.transport.Variant",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_r1_cost_probe.transport.Variant := OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "inductive aspis_r1_cost_probe.transport.Variant where\n| S1 : aspis_r1_cost_probe.transport.Variant\n| S2 : aspis_r1_cost_probe.transport.Variant\n| D : aspis_r1_cost_probe.transport.Variant"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "RPz7_WAdm_Fissioned_Types",
+   "external_name": "aspis_r1_cost_probe.verifier.Prepared",
+   "kind": "type alias replacing an emitted native type",
+   "gate_definition": {
+    "file": "evidence/replay-dry8-20261026/RPz7_WAdm_Fissioned_Types.lean",
+    "text": "abbrev aspis_r1_cost_probe.verifier.Prepared := OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared"
+   },
+   "fresh_form": {
+    "file": "PCWA_E011_emitted/raw/WAdm_Fissioned/Types.lean",
+    "text": "structure aspis_r1_cost_probe.verifier.Prepared where\n  variant : aspis_r1_cost_probe.transport.Variant\n  roots : Array (Array Std.U8 32#usize) 2#usize\n  gamma : aspis_core.field.wide_exact.WideExact\n  kappa : aspis_core.field.wide_exact.WideExact\n  alpha : Array aspis_core.field.wide_exact.WideExact 2#usize\n  rho : aspis_core.field.QM31\n  queries : Array Std.U32 22#usize\n  semantic_alpha : Array aspis_core.field.QM31 10#usize\n  z : Array aspis_core.circle.SecureCirclePoint 2#usize\n  claim : aspis_core.field.wide_exact.WideExact\n  state : Array Std.U8 32#usize"
+   },
+   "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+   "dependent_reached_definitions": [
+    "WAdm_model.WAdm_fields"
+   ],
+   "note": "All 24 Funs equalities close by rfl against these aliases; the alias targets are other gate modules whose own provenance is a separate obligation (nominal alias, not an equality of structure texts)."
+  },
+  {
+   "gate_module": "S8OwnedP6.Funs",
+   "external_name": "Discriminant (Option T) Isize (local instance optionDiscriminant)",
+   "kind": "hand-added local instance",
+   "gate_definition": {
+    "file": "docs/research/100bit-spend-path-20261013/lean/S8OwnedP6/Funs.lean",
+    "text": "-- Runtime elaboration support: the emitted Option residual reads tag zero.\n-- Local scope prevents discriminant collisions in downstream combined imports.\nlocal instance optionDiscriminant {T : Type} : Discriminant (Option T) Isize where\n  read_discriminant := fun x => match x with | none => 0#isize | some _ => 1#isize"
+   },
+   "fresh_form": {
+    "file": null,
+    "text": "(absent in the raw emission extraction-complete/generated/S8OwnedP6/Funs.lean)"
+   },
+   "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package (core::option::Option residual); tools/s8-kani-20261021 crate",
+   "dependent_reached_definitions": [
+    "core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+    "aspis_core.field.CM31.from_le_bytes",
+    "aspis_core.field.QM31.from_le_bytes",
+    "check_values_owned_loop.body",
+    "check_values_owned_loop",
+    "check_values_owned"
+   ],
+   "note": "Equality statements copy the instance verbatim as --fresh-prelude (gate_sources/S8OwnedP6.Funs.prelude.lean). Without it the fresh declarations do not elaborate (PCWA_L008)."
+  },
+  {
+   "gate_module": "S8OwnedP6.Types",
+   "external_name": "Types.lean adaptation (ImportUnionNamedDiscriminant)",
+   "kind": "hand-edited import/attribute",
+   "gate_definition": {
+    "file": "docs/research/100bit-spend-path-20261013/lean/S8OwnedP6/Types.lean",
+    "text": "import ImportUnionNamedDiscriminant\n@[import_union_discriminant isize]"
+   },
+   "fresh_form": {
+    "file": "PCWA_E012_emitted/raw/S8OwnedP6/Types.lean",
+    "text": "raw emission with @[discriminant isize]"
+   },
+   "pinned_crate": "tools/s8-kani-20261021 (s8-owned-correspondence 0.1.0)",
+   "dependent_reached_definitions": []
+  }
+ ]
+}

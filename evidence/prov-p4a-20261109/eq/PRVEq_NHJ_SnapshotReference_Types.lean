@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NHJ_SnapshotReference
 namespace PRVFresh_NHJ_SnapshotReference_Types
-open NHJ_SnapshotReference
 
 /-- [nhj_snapshot_reference::ProgramError]
     Source: 'src/lib.rs', lines 2:0-2:561
@@ -56,4 +56,5 @@ structure OwnedAccount where
   bytes : core.result.Result (alloc.vec.Vec Std.U8) ProgramError
 
 end PRVFresh_NHJ_SnapshotReference_Types
+end NHJ_SnapshotReference
 

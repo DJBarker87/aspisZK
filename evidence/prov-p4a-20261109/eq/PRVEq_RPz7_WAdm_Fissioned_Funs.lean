@@ -10,8 +10,8 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+namespace WAdm_Fissioned
 namespace PRVFresh_RPz7_WAdm_Fissioned_Funs
-open WAdm_Fissioned
 
 /-- [wadm_native_fixture::WAdm_model::WAdm_fields]:
     Source: 'WAdm_model.rs', lines 10:0-14:1
@@ -398,100 +398,101 @@ def WAdm_model.WAdm_checkpoint
   ok out15
 
 end PRVFresh_RPz7_WAdm_Fissioned_Funs
+end WAdm_Fissioned
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields = @WAdm_Fissioned.WAdm_model.WAdm_fields := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields WAdm_Fissioned.WAdm_model.WAdm_fields; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields = @WAdm_Fissioned.WAdm_model.WAdm_fields := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_fields
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_roots_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body WAdm_Fissioned.WAdm_model.WAdm_roots_loop.body; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_roots_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop = @WAdm_Fissioned.WAdm_model.WAdm_roots_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop WAdm_Fissioned.WAdm_model.WAdm_roots_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop = @WAdm_Fissioned.WAdm_model.WAdm_roots_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots = @WAdm_Fissioned.WAdm_model.WAdm_roots := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots WAdm_Fissioned.WAdm_model.WAdm_roots; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots = @WAdm_Fissioned.WAdm_model.WAdm_roots := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_early_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body WAdm_Fissioned.WAdm_model.WAdm_early_loop.body; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_early_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop = @WAdm_Fissioned.WAdm_model.WAdm_early_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop WAdm_Fissioned.WAdm_model.WAdm_early_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop = @WAdm_Fissioned.WAdm_model.WAdm_early_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early = @WAdm_Fissioned.WAdm_model.WAdm_early := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early WAdm_Fissioned.WAdm_model.WAdm_early; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early = @WAdm_Fissioned.WAdm_model.WAdm_early := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_tail_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body WAdm_Fissioned.WAdm_model.WAdm_tail_loop.body; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_tail_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop = @WAdm_Fissioned.WAdm_model.WAdm_tail_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop WAdm_Fissioned.WAdm_model.WAdm_tail_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop = @WAdm_Fissioned.WAdm_model.WAdm_tail_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail = @WAdm_Fissioned.WAdm_model.WAdm_tail := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail WAdm_Fissioned.WAdm_model.WAdm_tail; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail = @WAdm_Fissioned.WAdm_model.WAdm_tail := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK = @WAdm_Fissioned.WAdm_model.WAdm_putK := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK WAdm_Fissioned.WAdm_model.WAdm_putK; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK = @WAdm_Fissioned.WAdm_model.WAdm_putK := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_queries_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body WAdm_Fissioned.WAdm_model.WAdm_queries_loop.body; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_queries_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop = @WAdm_Fissioned.WAdm_model.WAdm_queries_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop WAdm_Fissioned.WAdm_model.WAdm_queries_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop = @WAdm_Fissioned.WAdm_model.WAdm_queries_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries = @WAdm_Fissioned.WAdm_model.WAdm_queries := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries WAdm_Fissioned.WAdm_model.WAdm_queries; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries = @WAdm_Fissioned.WAdm_model.WAdm_queries := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_semantic_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body WAdm_Fissioned.WAdm_model.WAdm_semantic_loop.body; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_semantic_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop = @WAdm_Fissioned.WAdm_model.WAdm_semantic_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop WAdm_Fissioned.WAdm_model.WAdm_semantic_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop = @WAdm_Fissioned.WAdm_model.WAdm_semantic_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic = @WAdm_Fissioned.WAdm_model.WAdm_semantic := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic WAdm_Fissioned.WAdm_model.WAdm_semantic; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic = @WAdm_Fissioned.WAdm_model.WAdm_semantic := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop.body; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop = @WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop = @WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates = @WAdm_Fissioned.WAdm_model.WAdm_coordinates := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates WAdm_Fissioned.WAdm_model.WAdm_coordinates; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates = @WAdm_Fissioned.WAdm_model.WAdm_coordinates := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_weights_loop.body := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body WAdm_Fissioned.WAdm_model.WAdm_weights_loop.body; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body = @WAdm_Fissioned.WAdm_model.WAdm_weights_loop.body := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop = @WAdm_Fissioned.WAdm_model.WAdm_weights_loop := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop WAdm_Fissioned.WAdm_model.WAdm_weights_loop; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop.body]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop = @WAdm_Fissioned.WAdm_model.WAdm_weights_loop := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights = @WAdm_Fissioned.WAdm_model.WAdm_weights := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights WAdm_Fissioned.WAdm_model.WAdm_weights; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights_loop]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights = @WAdm_Fissioned.WAdm_model.WAdm_weights := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights
 
-theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint : @PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint = @WAdm_Fissioned.WAdm_model.WAdm_checkpoint := by
-  first | (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint"; rfl) | (trace "PRV-S2 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint"; delta PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint WAdm_Fissioned.WAdm_model.WAdm_checkpoint; try simp only [PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_roots, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_early, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_tail, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_putK, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_queries, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_semantic, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_coordinates, PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_weights]; try rfl; done)
+theorem PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint : @WAdm_Fissioned.PRVFresh_RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint = @WAdm_Fissioned.WAdm_model.WAdm_checkpoint := by
+  (trace "PRV-S1 PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint"; rfl)
 #print axioms PRVEq.RPz7_WAdm_Fissioned_Funs.WAdm_model.WAdm_checkpoint
 

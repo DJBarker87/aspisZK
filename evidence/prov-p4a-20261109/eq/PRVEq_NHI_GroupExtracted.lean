@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NHE_GroupRef
 namespace PRVFresh_NHI_GroupExtracted
-open NHE_GroupRef
 
 /-- [nfu_reference::group_ref]:
     Source: 'src/lib.rs', lines 1:0-1:127
@@ -23,8 +23,9 @@ def group_ref
   Array.update coefficients group added
 
 end PRVFresh_NHI_GroupExtracted
+end NHE_GroupRef
 
-theorem PRVEq.NHI_GroupExtracted.group_ref : @PRVFresh_NHI_GroupExtracted.group_ref = @NHE_GroupRef.group_ref := by
-  first | (trace "PRV-S1 PRVEq.NHI_GroupExtracted.group_ref"; rfl) | (trace "PRV-S2 PRVEq.NHI_GroupExtracted.group_ref"; delta PRVFresh_NHI_GroupExtracted.group_ref NHE_GroupRef.group_ref; try rfl; done)
+theorem PRVEq.NHI_GroupExtracted.group_ref : @NHE_GroupRef.PRVFresh_NHI_GroupExtracted.group_ref = @NHE_GroupRef.group_ref := by
+  (trace "PRV-S1 PRVEq.NHI_GroupExtracted.group_ref"; rfl)
 #print axioms PRVEq.NHI_GroupExtracted.group_ref
 

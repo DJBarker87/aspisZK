@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NEV_AccumulateRaw
 namespace PRVFresh_NEV_AccumulateRaw_Types
-open NEV_AccumulateRaw
 
 /-- [aspis_core::field::M31]
     Source: '/home/dombarker/project-offloads/codex-pc-prov-p4a-20261109/NEI_src/crates/aspis-core/src/field.rs', lines 23:0-23:14
@@ -91,44 +91,45 @@ structure Accumulator where
   next : Std.Usize
 
 end PRVFresh_NEV_AccumulateRaw_Types
+end NEV_AccumulateRaw
 
-theorem PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31 : @PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.M31 = @NEV_AccumulateRaw.aspis_core.field.M31 := by
-  first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31"; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31"; delta PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.M31 NEV_AccumulateRaw.aspis_core.field.M31; try rfl; done)
+theorem PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31 : @NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.M31 = @NEV_AccumulateRaw.aspis_core.field.M31 := by
+  (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31"; rfl)
 #print axioms PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.M31
 
-def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv : PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.CM31 ≃ NEV_AccumulateRaw.aspis_core.field.CM31 where
+def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv : NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.CM31 ≃ NEV_AccumulateRaw.aspis_core.field.CM31 where
   toFun x := { a := x.a, b := x.b }
   invFun y := { a := y.a, b := y.b }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31"; cases y; rfl)
 #print axioms PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv
 
-def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv : PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.QM31 ≃ NEV_AccumulateRaw.aspis_core.field.QM31 where
+def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv : NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.QM31 ≃ NEV_AccumulateRaw.aspis_core.field.QM31 where
   toFun x := { c0 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv x.c0), c1 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv x.c1) }
   invFun y := { c0 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv.symm y.c0), c1 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.CM31.equiv.symm y.c1) }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31"; cases y; rfl)
 #print axioms PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv
 
-def PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint.equiv : PRVFresh_NEV_AccumulateRaw_Types.aspis_core.circle.SecureCirclePoint ≃ NEV_AccumulateRaw.aspis_core.circle.SecureCirclePoint where
+def PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint.equiv : NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types.aspis_core.circle.SecureCirclePoint ≃ NEV_AccumulateRaw.aspis_core.circle.SecureCirclePoint where
   toFun x := { x := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv x.x), y := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv x.y) }
   invFun y := { x := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv.symm y.x), y := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv.symm y.y) }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint"; cases y; rfl)
 #print axioms PRVEq.NEV_AccumulateRaw.Types.aspis_core.circle.SecureCirclePoint.equiv
 
-def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact.equiv : PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.wide_exact.WideExact ≃ NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact where
+def PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact.equiv : NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types.aspis_core.field.wide_exact.WideExact ≃ NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact where
   toFun x := { c0 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv x.c0), c1 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv x.c1) }
   invFun y := { c0 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv.symm y.c0), c1 := (PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.QM31.equiv.symm y.c1) }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact"; cases y; rfl)
 #print axioms PRVEq.NEV_AccumulateRaw.Types.aspis_core.field.wide_exact.WideExact.equiv
 

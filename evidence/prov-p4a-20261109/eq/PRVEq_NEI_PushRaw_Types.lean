@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NEI_PushRaw
 namespace PRVFresh_NEI_PushRaw_Types
-open NEI_PushRaw
 
 /-- [aspis_core::field::M31]
     Source: '/home/dombarker/project-offloads/codex-pc-prov-p4a-20261109/NEG_src/crates/aspis-core/src/field.rs', lines 23:0-23:14
@@ -42,26 +42,27 @@ structure BatchedWeights where
   terms : Std.Usize
 
 end PRVFresh_NEI_PushRaw_Types
+end NEI_PushRaw
 
-theorem PRVEq.NEI_PushRaw.Types.aspis_core.field.M31 : @PRVFresh_NEI_PushRaw_Types.aspis_core.field.M31 = @NEI_PushRaw.aspis_core.field.M31 := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.M31"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Types.aspis_core.field.M31"; delta PRVFresh_NEI_PushRaw_Types.aspis_core.field.M31 NEI_PushRaw.aspis_core.field.M31; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Types.aspis_core.field.M31 : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Types.aspis_core.field.M31 = @NEI_PushRaw.aspis_core.field.M31 := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.M31"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Types.aspis_core.field.M31
 
-def PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv : PRVFresh_NEI_PushRaw_Types.aspis_core.field.CM31 ≃ NEI_PushRaw.aspis_core.field.CM31 where
+def PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv : NEI_PushRaw.PRVFresh_NEI_PushRaw_Types.aspis_core.field.CM31 ≃ NEI_PushRaw.aspis_core.field.CM31 where
   toFun x := { a := x.a, b := x.b }
   invFun y := { a := y.a, b := y.b }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31"; cases y; rfl)
 #print axioms PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv
 
-def PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31.equiv : PRVFresh_NEI_PushRaw_Types.aspis_core.field.QM31 ≃ NEI_PushRaw.aspis_core.field.QM31 where
+def PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31.equiv : NEI_PushRaw.PRVFresh_NEI_PushRaw_Types.aspis_core.field.QM31 ≃ NEI_PushRaw.aspis_core.field.QM31 where
   toFun x := { c0 := (PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv x.c0), c1 := (PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv x.c1) }
   invFun y := { c0 := (PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv.symm y.c0), c1 := (PRVEq.NEI_PushRaw.Types.aspis_core.field.CM31.equiv.symm y.c1) }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31"; cases y; rfl)
 #print axioms PRVEq.NEI_PushRaw.Types.aspis_core.field.QM31.equiv
 

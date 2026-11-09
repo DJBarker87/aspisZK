@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NHE_TensorRef
 namespace PRVFresh_NHI_TensorExtracted
-open NHE_TensorRef
 
 /-- [nfu_reference::tensor_ref]:
     Source: 'src/lib.rs', lines 1:0-1:199
@@ -35,8 +35,9 @@ def tensor_ref
   Array.update output3 i4 a3
 
 end PRVFresh_NHI_TensorExtracted
+end NHE_TensorRef
 
-theorem PRVEq.NHI_TensorExtracted.tensor_ref : @PRVFresh_NHI_TensorExtracted.tensor_ref = @NHE_TensorRef.tensor_ref := by
-  first | (trace "PRV-S1 PRVEq.NHI_TensorExtracted.tensor_ref"; rfl) | (trace "PRV-S2 PRVEq.NHI_TensorExtracted.tensor_ref"; delta PRVFresh_NHI_TensorExtracted.tensor_ref NHE_TensorRef.tensor_ref; try rfl; done)
+theorem PRVEq.NHI_TensorExtracted.tensor_ref : @NHE_TensorRef.PRVFresh_NHI_TensorExtracted.tensor_ref = @NHE_TensorRef.tensor_ref := by
+  (trace "PRV-S1 PRVEq.NHI_TensorExtracted.tensor_ref"; rfl)
 #print axioms PRVEq.NHI_TensorExtracted.tensor_ref
 

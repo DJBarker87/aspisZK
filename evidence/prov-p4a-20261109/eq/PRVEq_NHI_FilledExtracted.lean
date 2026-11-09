@@ -10,10 +10,10 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+namespace NHI_FilledRef
 namespace PRVFresh_NHI_FilledExtracted
-open NHI_FilledRef
-abbrev Error := NHI_FilledRef.Error
-abbrev filled_ref.closure := NHI_FilledRef.filled_ref.closure
+-- PCWA fresh-prelude (verbatim gate hand-written lines): gate_sources/NHI_FilledExtracted.prelude.lean
+variable [allocation : FIo_Native.Allocation]
 
 /-- [nfu_reference::filled_ref::{impl core::ops::function::FnOnce<(alloc::collections::TryReserveError,), nfu_reference::Error> for nfu_reference::filled_ref::closure}::call_once]:
     Source: 'src/lib.rs', lines 4:125-4:145 -/
@@ -61,16 +61,17 @@ def filled_ref
       residual
 
 end PRVFresh_NHI_FilledExtracted
+end NHI_FilledRef
 
-theorem PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once : @PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once = @NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once := by
-  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"; delta PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once; try rfl; done)
+theorem PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once : @NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once = @NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once := by
+  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once"; delta NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once; try rfl; done)
 #print axioms PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
 
-theorem PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError : @PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError = @NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError := by
-  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError"; delta PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError; try simp only [PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once]; try rfl; done)
+theorem PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError : @NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError = @NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError := by
+  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError"; delta NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError NHI_FilledRef.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError; try simp only [PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once]; try rfl; done)
 #print axioms PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
 
-theorem PRVEq.NHI_FilledExtracted.filled_ref : @PRVFresh_NHI_FilledExtracted.filled_ref = @NHI_FilledRef.filled_ref := by
-  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref"; delta PRVFresh_NHI_FilledExtracted.filled_ref NHI_FilledRef.filled_ref; try simp only [PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError]; try rfl; done)
+theorem PRVEq.NHI_FilledExtracted.filled_ref : @NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref = @NHI_FilledRef.filled_ref := by
+  first | (trace "PRV-S1 PRVEq.NHI_FilledExtracted.filled_ref"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledExtracted.filled_ref"; delta NHI_FilledRef.PRVFresh_NHI_FilledExtracted.filled_ref NHI_FilledRef.filled_ref; try simp only [PRVEq.NHI_FilledExtracted.filled_ref.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError]; try rfl; done)
 #print axioms PRVEq.NHI_FilledExtracted.filled_ref
 

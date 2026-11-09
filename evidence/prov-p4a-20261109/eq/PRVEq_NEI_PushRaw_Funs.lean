@@ -10,12 +10,8 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+namespace NEI_PushRaw
 namespace PRVFresh_NEI_PushRaw_Funs
-open NEI_PushRaw
-abbrev BatchedWeights := NEI_PushRaw.BatchedWeights
-abbrev aspis_core.field.CM31 := NEI_PushRaw.aspis_core.field.CM31
-abbrev aspis_core.field.M31 := NEI_PushRaw.aspis_core.field.M31
-abbrev aspis_core.field.QM31 := NEI_PushRaw.aspis_core.field.QM31
 
 /-- [neg_isolated::residue_limb_at]:
     Source: 'src/lib.rs', lines 5:0-5:62 -/
@@ -135,36 +131,37 @@ def BatchedWeights.push
   ok { self with «raw» := v }
 
 end PRVFresh_NEI_PushRaw_Funs
+end NEI_PushRaw
 
-theorem PRVEq.NEI_PushRaw.Funs.residue_limb_at : @PRVFresh_NEI_PushRaw_Funs.residue_limb_at = @NEI_PushRaw.residue_limb_at := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.residue_limb_at"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.residue_limb_at"; delta PRVFresh_NEI_PushRaw_Funs.residue_limb_at NEI_PushRaw.residue_limb_at; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.residue_limb_at : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.residue_limb_at = @NEI_PushRaw.residue_limb_at := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.residue_limb_at"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.residue_limb_at
 
-theorem PRVEq.NEI_PushRaw.Funs.power_limb_at : @PRVFresh_NEI_PushRaw_Funs.power_limb_at = @NEI_PushRaw.power_limb_at := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.power_limb_at"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.power_limb_at"; delta PRVFresh_NEI_PushRaw_Funs.power_limb_at NEI_PushRaw.power_limb_at; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.power_limb_at : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.power_limb_at = @NEI_PushRaw.power_limb_at := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.power_limb_at"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.power_limb_at
 
-theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body : @PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0.body = @NEI_PushRaw.update_residue_row_loop0.body := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body"; delta PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0.body NEI_PushRaw.update_residue_row_loop0.body; try simp only [PRVEq.NEI_PushRaw.Funs.residue_limb_at, PRVEq.NEI_PushRaw.Funs.power_limb_at]; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0.body = @NEI_PushRaw.update_residue_row_loop0.body := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body
 
-theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0 : @PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0 = @NEI_PushRaw.update_residue_row_loop0 := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0"; delta PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0 NEI_PushRaw.update_residue_row_loop0; try simp only [PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0.body]; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0 : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop0 = @NEI_PushRaw.update_residue_row_loop0 := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0
 
-theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body : @PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1.body = @NEI_PushRaw.update_residue_row_loop1.body := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body"; delta PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1.body NEI_PushRaw.update_residue_row_loop1.body; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1.body = @NEI_PushRaw.update_residue_row_loop1.body := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body
 
-theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1 : @PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1 = @NEI_PushRaw.update_residue_row_loop1 := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1"; delta PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1 NEI_PushRaw.update_residue_row_loop1; try simp only [PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1.body]; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1 : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.update_residue_row_loop1 = @NEI_PushRaw.update_residue_row_loop1 := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1
 
-theorem PRVEq.NEI_PushRaw.Funs.update_residue_row : @PRVFresh_NEI_PushRaw_Funs.update_residue_row = @NEI_PushRaw.update_residue_row := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.update_residue_row"; delta PRVFresh_NEI_PushRaw_Funs.update_residue_row NEI_PushRaw.update_residue_row; try simp only [PRVEq.NEI_PushRaw.Funs.update_residue_row_loop0, PRVEq.NEI_PushRaw.Funs.update_residue_row_loop1]; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.update_residue_row : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.update_residue_row = @NEI_PushRaw.update_residue_row := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.update_residue_row"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.update_residue_row
 
-theorem PRVEq.NEI_PushRaw.Funs.BatchedWeights.push : @PRVFresh_NEI_PushRaw_Funs.BatchedWeights.push = @NEI_PushRaw.BatchedWeights.push := by
-  first | (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.BatchedWeights.push"; rfl) | (trace "PRV-S2 PRVEq.NEI_PushRaw.Funs.BatchedWeights.push"; delta PRVFresh_NEI_PushRaw_Funs.BatchedWeights.push NEI_PushRaw.BatchedWeights.push; try simp only [PRVEq.NEI_PushRaw.Funs.update_residue_row]; try rfl; done)
+theorem PRVEq.NEI_PushRaw.Funs.BatchedWeights.push : @NEI_PushRaw.PRVFresh_NEI_PushRaw_Funs.BatchedWeights.push = @NEI_PushRaw.BatchedWeights.push := by
+  (trace "PRV-S1 PRVEq.NEI_PushRaw.Funs.BatchedWeights.push"; rfl)
 #print axioms PRVEq.NEI_PushRaw.Funs.BatchedWeights.push
 

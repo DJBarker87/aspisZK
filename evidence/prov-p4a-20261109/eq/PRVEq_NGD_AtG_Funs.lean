@@ -9,9 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NGD_AtG
 namespace PRVFresh_NGD_AtG_Funs
-open NGD_AtG
-abbrev Error := NGD_AtG.Error
 
 /-- [core::option::{core::option::Option<T>}::ok_or]:
     Source: '/rustc/library/core/src/option.rs', lines 1334:4-1334:73
@@ -139,20 +138,21 @@ def parse_at_g
       ((Slice Std.U8) × Std.Usize) (core.convert.FromSame Error) residual
 
 end PRVFresh_NGD_AtG_Funs
+end NGD_AtG
 
-theorem PRVEq.NGD_AtG.Funs.core.option.Option.ok_or : @PRVFresh_NGD_AtG_Funs.core.option.Option.ok_or = @NGD_AtG.core.option.Option.ok_or := by
-  first | (trace "PRV-S1 PRVEq.NGD_AtG.Funs.core.option.Option.ok_or"; rfl) | (trace "PRV-S2 PRVEq.NGD_AtG.Funs.core.option.Option.ok_or"; delta PRVFresh_NGD_AtG_Funs.core.option.Option.ok_or NGD_AtG.core.option.Option.ok_or; try rfl; done)
+theorem PRVEq.NGD_AtG.Funs.core.option.Option.ok_or : @NGD_AtG.PRVFresh_NGD_AtG_Funs.core.option.Option.ok_or = @NGD_AtG.core.option.Option.ok_or := by
+  (trace "PRV-S1 PRVEq.NGD_AtG.Funs.core.option.Option.ok_or"; rfl)
 #print axioms PRVEq.NGD_AtG.Funs.core.option.Option.ok_or
 
-theorem PRVEq.NGD_AtG.Funs.shape : @PRVFresh_NGD_AtG_Funs.shape = @NGD_AtG.shape := by
-  first | (trace "PRV-S1 PRVEq.NGD_AtG.Funs.shape"; rfl) | (trace "PRV-S2 PRVEq.NGD_AtG.Funs.shape"; delta PRVFresh_NGD_AtG_Funs.shape NGD_AtG.shape; try rfl; done)
+theorem PRVEq.NGD_AtG.Funs.shape : @NGD_AtG.PRVFresh_NGD_AtG_Funs.shape = @NGD_AtG.shape := by
+  (trace "PRV-S1 PRVEq.NGD_AtG.Funs.shape"; rfl)
 #print axioms PRVEq.NGD_AtG.Funs.shape
 
-theorem PRVEq.NGD_AtG.Funs.parse_g : @PRVFresh_NGD_AtG_Funs.parse_g = @NGD_AtG.parse_g := by
-  first | (trace "PRV-S1 PRVEq.NGD_AtG.Funs.parse_g"; rfl) | (trace "PRV-S2 PRVEq.NGD_AtG.Funs.parse_g"; delta PRVFresh_NGD_AtG_Funs.parse_g NGD_AtG.parse_g; try simp only [PRVEq.NGD_AtG.Funs.core.option.Option.ok_or, PRVEq.NGD_AtG.Funs.shape]; try rfl; done)
+theorem PRVEq.NGD_AtG.Funs.parse_g : @NGD_AtG.PRVFresh_NGD_AtG_Funs.parse_g = @NGD_AtG.parse_g := by
+  (trace "PRV-S1 PRVEq.NGD_AtG.Funs.parse_g"; rfl)
 #print axioms PRVEq.NGD_AtG.Funs.parse_g
 
-theorem PRVEq.NGD_AtG.Funs.parse_at_g : @PRVFresh_NGD_AtG_Funs.parse_at_g = @NGD_AtG.parse_at_g := by
-  first | (trace "PRV-S1 PRVEq.NGD_AtG.Funs.parse_at_g"; rfl) | (trace "PRV-S2 PRVEq.NGD_AtG.Funs.parse_at_g"; delta PRVFresh_NGD_AtG_Funs.parse_at_g NGD_AtG.parse_at_g; try simp only [PRVEq.NGD_AtG.Funs.core.option.Option.ok_or, PRVEq.NGD_AtG.Funs.shape, PRVEq.NGD_AtG.Funs.parse_g]; try rfl; done)
+theorem PRVEq.NGD_AtG.Funs.parse_at_g : @NGD_AtG.PRVFresh_NGD_AtG_Funs.parse_at_g = @NGD_AtG.parse_at_g := by
+  (trace "PRV-S1 PRVEq.NGD_AtG.Funs.parse_at_g"; rfl)
 #print axioms PRVEq.NGD_AtG.Funs.parse_at_g
 

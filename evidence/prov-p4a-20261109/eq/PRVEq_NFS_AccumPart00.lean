@@ -10,17 +10,8 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+namespace NEV_AccumulateRaw
 namespace PRVFresh_NFS_AccumPart00
-open NEV_AccumulateRaw
-abbrev Accumulator := NEV_AccumulateRaw.Accumulator
-abbrev BatchedWeights := NEV_AccumulateRaw.BatchedWeights
-abbrev Prepared := NEV_AccumulateRaw.Prepared
-abbrev aspis_core.circle.SecureCirclePoint := NEV_AccumulateRaw.aspis_core.circle.SecureCirclePoint
-abbrev aspis_core.field.CM31 := NEV_AccumulateRaw.aspis_core.field.CM31
-abbrev aspis_core.field.M31 := NEV_AccumulateRaw.aspis_core.field.M31
-abbrev aspis_core.field.QM31 := NEV_AccumulateRaw.aspis_core.field.QM31
-abbrev aspis_core.field.wide_exact.WideExact := NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact
-abbrev transport.Variant := NEV_AccumulateRaw.transport.Variant
 
 /-- [neg_isolated::basis_at]:
     Source: 'src/lib.rs', lines 66:0-66:61 -/
@@ -173,40 +164,41 @@ def accumulate_batched_with_node
     { weights1 with terms := i })
 
 end PRVFresh_NFS_AccumPart00
+end NEV_AccumulateRaw
 
-theorem PRVEq.NFS_AccumPart00.basis_at : @PRVFresh_NFS_AccumPart00.basis_at = @NEV_AccumulateRaw.basis_at := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.basis_at"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.basis_at"; delta PRVFresh_NFS_AccumPart00.basis_at NEV_AccumulateRaw.basis_at; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.basis_at : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.basis_at = @NEV_AccumulateRaw.basis_at := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.basis_at"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.basis_at
 
-theorem PRVEq.NFS_AccumPart00.accumulated_weight_at : @PRVFresh_NFS_AccumPart00.accumulated_weight_at = @NEV_AccumulateRaw.accumulated_weight_at := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulated_weight_at"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulated_weight_at"; delta PRVFresh_NFS_AccumPart00.accumulated_weight_at NEV_AccumulateRaw.accumulated_weight_at; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulated_weight_at : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulated_weight_at = @NEV_AccumulateRaw.accumulated_weight_at := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulated_weight_at"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulated_weight_at
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0 : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0 := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0 NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0; try simp only [PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0.body]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0 : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0 := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0.body NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body; try simp only [PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0_loop0]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0 : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0 := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0 NEV_AccumulateRaw.accumulate_batched_with_node_loop0; try simp only [PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0.body]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0 : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop0 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop0 := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1.body NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body; try simp only [PRVEq.NFS_AccumPart00.basis_at, PRVEq.NFS_AccumPart00.accumulated_weight_at]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1.body = @NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1 : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop1 := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1 NEV_AccumulateRaw.accumulate_batched_with_node_loop1; try simp only [PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1.body]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1 : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node_loop1 = @NEV_AccumulateRaw.accumulate_batched_with_node_loop1 := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1
 
-theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node : @PRVFresh_NFS_AccumPart00.accumulate_batched_with_node = @NEV_AccumulateRaw.accumulate_batched_with_node := by
-  first | (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node"; rfl) | (trace "PRV-S2 PRVEq.NFS_AccumPart00.accumulate_batched_with_node"; delta PRVFresh_NFS_AccumPart00.accumulate_batched_with_node NEV_AccumulateRaw.accumulate_batched_with_node; try simp only [PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop0, PRVEq.NFS_AccumPart00.accumulate_batched_with_node_loop1]; try rfl; done)
+theorem PRVEq.NFS_AccumPart00.accumulate_batched_with_node : @NEV_AccumulateRaw.PRVFresh_NFS_AccumPart00.accumulate_batched_with_node = @NEV_AccumulateRaw.accumulate_batched_with_node := by
+  (trace "PRV-S1 PRVEq.NFS_AccumPart00.accumulate_batched_with_node"; rfl)
 #print axioms PRVEq.NFS_AccumPart00.accumulate_batched_with_node
 

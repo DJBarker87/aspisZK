@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NHI_FilledRef
 namespace PRVFresh_NHI_FilledTypes
-open NHI_FilledRef
 
 /-- [nfu_reference::Error]
     Source: 'src/lib.rs', lines 3:22-3:48
@@ -24,8 +24,9 @@ inductive Error where
 def filled_ref.closure := Unit
 
 end PRVFresh_NHI_FilledTypes
+end NHI_FilledRef
 
-theorem PRVEq.NHI_FilledTypes.filled_ref.closure : @PRVFresh_NHI_FilledTypes.filled_ref.closure = @NHI_FilledRef.filled_ref.closure := by
-  first | (trace "PRV-S1 PRVEq.NHI_FilledTypes.filled_ref.closure"; rfl) | (trace "PRV-S2 PRVEq.NHI_FilledTypes.filled_ref.closure"; delta PRVFresh_NHI_FilledTypes.filled_ref.closure NHI_FilledRef.filled_ref.closure; try rfl; done)
+theorem PRVEq.NHI_FilledTypes.filled_ref.closure : @NHI_FilledRef.PRVFresh_NHI_FilledTypes.filled_ref.closure = @NHI_FilledRef.filled_ref.closure := by
+  (trace "PRV-S1 PRVEq.NHI_FilledTypes.filled_ref.closure"; rfl)
 #print axioms PRVEq.NHI_FilledTypes.filled_ref.closure
 

@@ -9,12 +9,13 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace S8OwnedP6
 namespace PRVFresh_S8OwnedP6_Funs
-open S8OwnedP6
-abbrev CodecError := S8OwnedP6.CodecError
-abbrev aspis_core.field.CM31 := S8OwnedP6.aspis_core.field.CM31
-abbrev aspis_core.field.M31 := S8OwnedP6.aspis_core.field.M31
-abbrev aspis_core.field.QM31 := S8OwnedP6.aspis_core.field.QM31
+-- PCWA fresh-prelude (verbatim gate hand-written lines): gate_sources/S8OwnedP6.Funs.prelude.lean
+-- Runtime elaboration support: the emitted Option residual reads tag zero.
+-- Local scope prevents discriminant collisions in downstream combined imports.
+local instance optionDiscriminant {T : Type} : Discriminant (Option T) Isize where
+  read_discriminant := fun x => match x with | none => 0#isize | some _ => 1#isize
 
 /-- [core::option::{core::option::Option<T>}::ok_or]:
     Source: '/rustc/library/core/src/option.rs', lines 1334:4-1334:73
@@ -316,76 +317,77 @@ def check_values_owned
   | some r => ok r
 
 end PRVFresh_S8OwnedP6_Funs
+end S8OwnedP6
 
-theorem PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or : @PRVFresh_S8OwnedP6_Funs.core.option.Option.ok_or = @S8OwnedP6.core.option.Option.ok_or := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or"; delta PRVFresh_S8OwnedP6_Funs.core.option.Option.ok_or S8OwnedP6.core.option.Option.ok_or; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.ok_or = @S8OwnedP6.core.option.Option.ok_or := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.ok_or S8OwnedP6.core.option.Option.ok_or; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or
 
-theorem PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch : @PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch = @S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitTry.branch := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch"; delta PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitTry.branch; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch = @S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitTry.branch := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitTry.branch; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch
 
-theorem PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual : @PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual = @S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"; delta PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual = @S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.P : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.P = @S8OwnedP6.aspis_core.field.P := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.P"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.P"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.P S8OwnedP6.aspis_core.field.P; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.P : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.P = @S8OwnedP6.aspis_core.field.P := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.P"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.P"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.P S8OwnedP6.aspis_core.field.P; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.P
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64 : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.reduce_u64 = @S8OwnedP6.aspis_core.field.reduce_u64 := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.reduce_u64 S8OwnedP6.aspis_core.field.reduce_u64; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.P]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64 : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.reduce_u64 = @S8OwnedP6.aspis_core.field.reduce_u64 := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.reduce_u64 S8OwnedP6.aspis_core.field.reduce_u64; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.P]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64 : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.reduce_u64 = @S8OwnedP6.aspis_core.field.M31.reduce_u64 := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.reduce_u64 S8OwnedP6.aspis_core.field.M31.reduce_u64; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64 : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.reduce_u64 = @S8OwnedP6.aspis_core.field.M31.reduce_u64 := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.reduce_u64 S8OwnedP6.aspis_core.field.M31.reduce_u64; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.reduce_u64]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.from_le_bytes = @S8OwnedP6.aspis_core.field.M31.from_le_bytes := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.from_le_bytes S8OwnedP6.aspis_core.field.M31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.P]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.from_le_bytes = @S8OwnedP6.aspis_core.field.M31.from_le_bytes := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.M31.from_le_bytes S8OwnedP6.aspis_core.field.M31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.P]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.CM31.from_le_bytes = @S8OwnedP6.aspis_core.field.CM31.from_le_bytes := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.CM31.from_le_bytes S8OwnedP6.aspis_core.field.CM31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch, PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.CM31.from_le_bytes = @S8OwnedP6.aspis_core.field.CM31.from_le_bytes := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.CM31.from_le_bytes S8OwnedP6.aspis_core.field.CM31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch, PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.from_le_bytes]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes
 
-theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes : @PRVFresh_S8OwnedP6_Funs.aspis_core.field.QM31.from_le_bytes = @S8OwnedP6.aspis_core.field.QM31.from_le_bytes := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes"; delta PRVFresh_S8OwnedP6_Funs.aspis_core.field.QM31.from_le_bytes S8OwnedP6.aspis_core.field.QM31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch, PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.QM31.from_le_bytes = @S8OwnedP6.aspis_core.field.QM31.from_le_bytes := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.aspis_core.field.QM31.from_le_bytes S8OwnedP6.aspis_core.field.QM31.from_le_bytes; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitTry.branch, PRVEq.S8OwnedP6.Funs.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, PRVEq.S8OwnedP6.Funs.aspis_core.field.CM31.from_le_bytes]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes
 
-theorem PRVEq.S8OwnedP6.Funs.scalar_owned : @PRVFresh_S8OwnedP6_Funs.scalar_owned = @S8OwnedP6.scalar_owned := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.scalar_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.scalar_owned"; delta PRVFresh_S8OwnedP6_Funs.scalar_owned S8OwnedP6.scalar_owned; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.scalar_owned : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.scalar_owned = @S8OwnedP6.scalar_owned := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.scalar_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.scalar_owned"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.scalar_owned S8OwnedP6.scalar_owned; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.scalar_owned
 
-theorem PRVEq.S8OwnedP6.Funs.residue_owned : @PRVFresh_S8OwnedP6_Funs.residue_owned = @S8OwnedP6.residue_owned := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.residue_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.residue_owned"; delta PRVFresh_S8OwnedP6_Funs.residue_owned S8OwnedP6.residue_owned; try simp only [PRVEq.S8OwnedP6.Funs.scalar_owned]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.residue_owned : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.residue_owned = @S8OwnedP6.residue_owned := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.residue_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.residue_owned"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.residue_owned S8OwnedP6.residue_owned; try simp only [PRVEq.S8OwnedP6.Funs.scalar_owned]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.residue_owned
 
-theorem PRVEq.S8OwnedP6.Funs.value_owned : @PRVFresh_S8OwnedP6_Funs.value_owned = @S8OwnedP6.value_owned := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.value_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.value_owned"; delta PRVFresh_S8OwnedP6_Funs.value_owned S8OwnedP6.value_owned; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.value_owned : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.value_owned = @S8OwnedP6.value_owned := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.value_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.value_owned"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.value_owned S8OwnedP6.value_owned; try simp only [PRVEq.S8OwnedP6.Funs.aspis_core.field.M31.reduce_u64]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.value_owned
 
-theorem PRVEq.S8OwnedP6.Funs.finish_owned_loop.body : @PRVFresh_S8OwnedP6_Funs.finish_owned_loop.body = @S8OwnedP6.finish_owned_loop.body := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned_loop.body"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned_loop.body"; delta PRVFresh_S8OwnedP6_Funs.finish_owned_loop.body S8OwnedP6.finish_owned_loop.body; try simp only [PRVEq.S8OwnedP6.Funs.value_owned]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.finish_owned_loop.body : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned_loop.body = @S8OwnedP6.finish_owned_loop.body := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned_loop.body"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned_loop.body"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned_loop.body S8OwnedP6.finish_owned_loop.body; try simp only [PRVEq.S8OwnedP6.Funs.value_owned]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.finish_owned_loop.body
 
-theorem PRVEq.S8OwnedP6.Funs.finish_owned_loop : @PRVFresh_S8OwnedP6_Funs.finish_owned_loop = @S8OwnedP6.finish_owned_loop := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned_loop"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned_loop"; delta PRVFresh_S8OwnedP6_Funs.finish_owned_loop S8OwnedP6.finish_owned_loop; try simp only [PRVEq.S8OwnedP6.Funs.finish_owned_loop.body]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.finish_owned_loop : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned_loop = @S8OwnedP6.finish_owned_loop := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned_loop"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned_loop"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned_loop S8OwnedP6.finish_owned_loop; try simp only [PRVEq.S8OwnedP6.Funs.finish_owned_loop.body]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.finish_owned_loop
 
-theorem PRVEq.S8OwnedP6.Funs.finish_owned : @PRVFresh_S8OwnedP6_Funs.finish_owned = @S8OwnedP6.finish_owned := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned"; delta PRVFresh_S8OwnedP6_Funs.finish_owned S8OwnedP6.finish_owned; try simp only [PRVEq.S8OwnedP6.Funs.finish_owned_loop]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.finish_owned : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned = @S8OwnedP6.finish_owned := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.finish_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.finish_owned"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.finish_owned S8OwnedP6.finish_owned; try simp only [PRVEq.S8OwnedP6.Funs.finish_owned_loop]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.finish_owned
 
-theorem PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body : @PRVFresh_S8OwnedP6_Funs.check_values_owned_loop.body = @S8OwnedP6.check_values_owned_loop.body := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body"; delta PRVFresh_S8OwnedP6_Funs.check_values_owned_loop.body S8OwnedP6.check_values_owned_loop.body; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or, PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned_loop.body = @S8OwnedP6.check_values_owned_loop.body := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned_loop.body S8OwnedP6.check_values_owned_loop.body; try simp only [PRVEq.S8OwnedP6.Funs.core.option.Option.ok_or, PRVEq.S8OwnedP6.Funs.aspis_core.field.QM31.from_le_bytes]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body
 
-theorem PRVEq.S8OwnedP6.Funs.check_values_owned_loop : @PRVFresh_S8OwnedP6_Funs.check_values_owned_loop = @S8OwnedP6.check_values_owned_loop := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned_loop"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned_loop"; delta PRVFresh_S8OwnedP6_Funs.check_values_owned_loop S8OwnedP6.check_values_owned_loop; try simp only [PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.check_values_owned_loop : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned_loop = @S8OwnedP6.check_values_owned_loop := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned_loop"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned_loop"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned_loop S8OwnedP6.check_values_owned_loop; try simp only [PRVEq.S8OwnedP6.Funs.check_values_owned_loop.body]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.check_values_owned_loop
 
-theorem PRVEq.S8OwnedP6.Funs.check_values_owned : @PRVFresh_S8OwnedP6_Funs.check_values_owned = @S8OwnedP6.check_values_owned := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned"; delta PRVFresh_S8OwnedP6_Funs.check_values_owned S8OwnedP6.check_values_owned; try simp only [PRVEq.S8OwnedP6.Funs.check_values_owned_loop]; try rfl; done)
+theorem PRVEq.S8OwnedP6.Funs.check_values_owned : @S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned = @S8OwnedP6.check_values_owned := by
+  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Funs.check_values_owned"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Funs.check_values_owned"; delta S8OwnedP6.PRVFresh_S8OwnedP6_Funs.check_values_owned S8OwnedP6.check_values_owned; try simp only [PRVEq.S8OwnedP6.Funs.check_values_owned_loop]; try rfl; done)
 #print axioms PRVEq.S8OwnedP6.Funs.check_values_owned
 

@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace S8OwnedP6
 namespace PRVFresh_S8OwnedP6_Types
-open S8OwnedP6
 
 /-- [aspis_core::field::M31]
     Source: '/home/dombarker/project-offloads/codex-pc-prov-p4a-20261109/PCWA_E012_ws/crates/aspis-core/src/field.rs', lines 23:0-23:14
@@ -44,26 +44,27 @@ inductive CodecError where
 | NonCanonical : CodecError
 
 end PRVFresh_S8OwnedP6_Types
+end S8OwnedP6
 
-theorem PRVEq.S8OwnedP6.Types.aspis_core.field.M31 : @PRVFresh_S8OwnedP6_Types.aspis_core.field.M31 = @S8OwnedP6.aspis_core.field.M31 := by
-  first | (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.M31"; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Types.aspis_core.field.M31"; delta PRVFresh_S8OwnedP6_Types.aspis_core.field.M31 S8OwnedP6.aspis_core.field.M31; try rfl; done)
+theorem PRVEq.S8OwnedP6.Types.aspis_core.field.M31 : @S8OwnedP6.PRVFresh_S8OwnedP6_Types.aspis_core.field.M31 = @S8OwnedP6.aspis_core.field.M31 := by
+  (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.M31"; rfl)
 #print axioms PRVEq.S8OwnedP6.Types.aspis_core.field.M31
 
-def PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv : PRVFresh_S8OwnedP6_Types.aspis_core.field.CM31 ≃ S8OwnedP6.aspis_core.field.CM31 where
+def PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv : S8OwnedP6.PRVFresh_S8OwnedP6_Types.aspis_core.field.CM31 ≃ S8OwnedP6.aspis_core.field.CM31 where
   toFun x := { a := x.a, b := x.b }
   invFun y := { a := y.a, b := y.b }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.CM31"; cases y; rfl)
 #print axioms PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv
 
-def PRVEq.S8OwnedP6.Types.aspis_core.field.QM31.equiv : PRVFresh_S8OwnedP6_Types.aspis_core.field.QM31 ≃ S8OwnedP6.aspis_core.field.QM31 where
+def PRVEq.S8OwnedP6.Types.aspis_core.field.QM31.equiv : S8OwnedP6.PRVFresh_S8OwnedP6_Types.aspis_core.field.QM31 ≃ S8OwnedP6.aspis_core.field.QM31 where
   toFun x := { c0 := (PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv x.c0), c1 := (PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv x.c1) }
   invFun y := { c0 := (PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv.symm y.c0), c1 := (PRVEq.S8OwnedP6.Types.aspis_core.field.CM31.equiv.symm y.c1) }
   left_inv x := by
-    first | (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases x; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases x; simp)
+    (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases x; rfl)
   right_inv y := by
-    first | (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases y; rfl) | (trace "PRV-S2 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases y; simp)
+    (trace "PRV-S1 PRVEq.S8OwnedP6.Types.aspis_core.field.QM31"; cases y; rfl)
 #print axioms PRVEq.S8OwnedP6.Types.aspis_core.field.QM31.equiv
 

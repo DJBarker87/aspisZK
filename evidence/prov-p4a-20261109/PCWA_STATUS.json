@@ -1,0 +1,240 @@
+{
+ "schema": "PCWA_STATUS v1",
+ "target_established": false,
+ "statement": "Target not yet established. No ledger row, trust row, RSL, security contract or shipped source changed.",
+ "totals": {
+  "extraction_scopes": "12/12 (PCWA_E001-E012; E007 and E008 retired shapes)",
+  "lean_scopes": "11/12 (PCWA_L001-L011; L001-L005, L008 diagnostic with expected errors)",
+  "kani_runs": 0,
+  "lean_statements_proved": {
+   "rfl": 70,
+   "unfold": 13
+  },
+  "commented_obligations": 2
+ },
+ "modules": {
+  "NGM_GuardRef": {
+   "module": "NGM_GuardRef.Funs (+ .Types, no declarations)",
+   "source_located": true,
+   "source": "a914357fa95c1f3cf1cfa10910e3480e8efc97e2cfe744c227ae4ff2d53ffc78",
+   "source_record": "NDL_SOURCE_ARCHIVE/a914357f....patch (reconstructed bytes hash-match the file name and rust_reference_sha256 of NDL_E004)",
+   "extraction": "PCWA_E001",
+   "reproduction": "byte-identical to committed NDL_GuardRef/{Funs,Types}.lean; gate NGM_GuardRef = same text with namespace rename (checked by diff)",
+   "equalities": {
+    "lean_scope": "PCWA_L009",
+    "proved_rfl": 3,
+    "proved_unfold": 0,
+    "commented_obligations": 0,
+    "axioms_standard_only": true,
+    "file": "eq/PRVEq_NGM_GuardRef_Funs.lean"
+   },
+   "kani": "Kani: evidence/native-front1b-20261028/NDL_K032/receipt.json (harness weights::NDL_weights::guard_raw_contract, exit 0, 1 verified, 0 failed) names NDL_reference.rs a914357f...; NDL_K033 (exit 1) same hash; both classed AFFECTED in k3-audit-20261030/NEH_APPLICABILITY.json by the conservative STATIC_TOKEN scan (not reviewed here); not rerun"
+  },
+  "NGD_AtG": {
+   "module": "NGD_AtG.Types, NGD_AtG.Funs",
+   "source_located": true,
+   "source": "a4cf8bb1a3fc0ecd0e5a7ec67b829995f621d02e783d2562a46014c847ef16dc",
+   "source_record": "LLBC-embedded src/lib.rs of slice-d-parser-20261104/NGD_E001.llbc and NGD_E002.llbc (hash a4cf8bb1... both); committed copy NGD_E001/sources/NGD_references.rs",
+   "extraction": "PCWA_E002",
+   "reproduction": "byte-identical to the recorded outputs of NGD_E002 (Types 0c6e4602, Funs 2e52b0a2); gate Types = fresh Types plus a hand `import ImportUnionNamedDiscriminant` and `@[import_union_discriminant isize]`",
+   "equalities": {
+    "Funs": {
+     "lean_scope": "PCWA_L009",
+     "proved_rfl": 4,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NGD_AtG_Funs.lean"
+    },
+    "Types": "text-identical only (no Lean statement for the inductive Error; 0 common value declarations)"
+   },
+   "kani": "no Kani receipt in the tree names a4cf8bb1... (searched whole tree, PCWA_KANI_GREP.txt); nothing rerun"
+  },
+  "NHJ_SnapshotReference": {
+   "module": "NHJ_SnapshotReference.Types, .Funs",
+   "source_located": true,
+   "source": "e8a85ac95461fcd40751c9c63d31c5a8d500471f865be6b0d543ba6dc828c53b",
+   "source_record": "LLBC-embedded src/lib.rs of slice-d-entry3-20261106/NHJ_E001.llbc.xz (hash e8a85ac9...)",
+   "extraction": "PCWA_E003",
+   "reproduction": "byte-identical to the recorded outputs of NHJ_E001 (Types 5eeecc95, Funs 0feeabc5); gate Types replaces the emitted inductive ProgramError by `abbrev ProgramError := NGL_MetaReference.ProgramError`",
+   "equalities": {
+    "Funs": {
+     "lean_scope": "PCWA_L009",
+     "proved_rfl": 0,
+     "proved_unfold": 0,
+     "commented_obligations": 2,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NHJ_SnapshotReference_Funs.lean"
+    },
+    "Types": "types text differ (ProgramError alias); 0 common value declarations"
+   },
+   "kani": "no Kani receipt names e8a85ac9...",
+   "remaining": "2 commented transport obligations (P3)"
+  },
+  "NHI_Filled": {
+   "module": "NHI_FilledTypes, NHI_FilledExtracted",
+   "source_located": true,
+   "source": "99210adacb2be00b5af9e4b396ee4bebd68affe9abf2e9e7ff39775cd8a37ae0",
+   "source_record": "LLBC-embedded src/lib.rs of slice-d-pair-20261106/NHI_E001.llbc (hash 99210ada...)",
+   "extraction": "PCWA_E004",
+   "reproduction": "byte-identical to the recorded outputs of NHI_E001 (Types 02107a6c, Funs 658ff2ae); gate files differ only in imports, namespace-preserving, plus `variable [allocation : FIo_Native.Allocation]`",
+   "equalities": {
+    "Types": {
+     "lean_scope": "PCWA_L009",
+     "proved_rfl": 1,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NHI_FilledTypes.lean"
+    },
+    "Funs": {
+     "lean_scope": "PCWA_L009",
+     "proved_rfl": 3,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NHI_FilledExtracted.lean"
+    }
+   },
+   "kani": "no Kani receipt names 99210ada..."
+  },
+  "NHI_Tensor": {
+   "module": "NHI_TensorExtracted",
+   "source_located": true,
+   "source": "1d6d8da9bfa721bc3e3ee32dacc7df8ea75f1fc2228b944a21f3d8b823daca26",
+   "source_record": "LLBC-embedded src/lib.rs of slice-d-finish3-20261106/NHE_E001.llbc (hash 1d6d8da9...)",
+   "extraction": "PCWA_E005",
+   "reproduction": "byte-identical to the recorded outputs of NHE_E001; gate = raw Funs with the empty-Types import elided",
+   "equalities": {
+    "lean_scope": "PCWA_L009",
+    "proved_rfl": 1,
+    "proved_unfold": 0,
+    "commented_obligations": 0,
+    "axioms_standard_only": true,
+    "file": "eq/PRVEq_NHI_TensorExtracted.lean"
+   },
+   "kani": "no Kani receipt names 1d6d8da9..."
+  },
+  "NHI_Group": {
+   "module": "NHI_GroupExtracted",
+   "source_located": true,
+   "source": "5a599defb791c8f14c47b61a3f09df61d1ebc58bd967d855179a0109d22dbb63",
+   "source_record": "LLBC-embedded src/lib.rs of slice-d-finish3-20261106/NHE_E002.llbc (hash 5a599def...)",
+   "extraction": "PCWA_E006",
+   "reproduction": "byte-identical to the recorded outputs of NHE_E002; gate = raw Funs with the empty-Types import elided",
+   "equalities": {
+    "lean_scope": "PCWA_L009",
+    "proved_rfl": 1,
+    "proved_unfold": 0,
+    "commented_obligations": 0,
+    "axioms_standard_only": true,
+    "file": "eq/PRVEq_NHI_GroupExtracted.lean"
+   },
+   "kani": "no Kani receipt names 5a599def..."
+  },
+  "NEI_PushRaw": {
+   "module": "NEI_PushRaw.Types, .Funs",
+   "source_located": true,
+   "source": "generated isolation slice sources/NEG_PushActual_iso/src/lib.rs",
+   "source_record": "NEG_E017 pins/receipt + NEG_extract.py + NEG_K001 verifier.rs 7c9ad2bc; function bodies identical to the frozen-derived slice (PCWA_ISO_COMPARE.json)",
+   "extraction": "PCWA_E009 (PCWA_E007 retired: overflow checks missing)",
+   "reproduction": "Funs byte-identical to NEG_E017 output d1339f53 (= gate NEI_PushRaw/Funs with namespace rename); Types identical after replacing the host path in Source: comments (PCWA_PATH_NORMALIZATION.json)",
+   "equalities": {
+    "Types": {
+     "lean_scope": "PCWA_L010",
+     "proved_rfl": 3,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NEI_PushRaw_Types.lean"
+    },
+    "Funs": {
+     "lean_scope": "PCWA_L010",
+     "proved_rfl": 8,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NEI_PushRaw_Funs.lean"
+    }
+   },
+   "kani": "no Kani receipt names the isolated lib.rs hashes; the tie to the frozen functions is textual (verifier.rs 8c872d42 == frozen; slice lines identical), not a Kani contract"
+  },
+  "NEV_AccumulateRaw / NFS_AccumPart00": {
+   "module": "NEV_AccumulateRaw.Types (gate has no .Funs module), NFS_AccumPart00 (block lines 310-468)",
+   "source_located": true,
+   "source": "sources/NEI_AccumulateIsolated_iso/src/lib.rs",
+   "source_record": "NEI_E005 committed isolation text; sha256 equals the pin isolated_source_sha256",
+   "extraction": "PCWA_E010 (PCWA_E008 retired: overflow checks missing)",
+   "reproduction": "Funs byte-identical to NEI_E005 output c7d0c4a6 (= committed NEV_AccumulateRaw/Funs.lean with namespace rename); Types identical after path normalization; gate Types adds a hand discriminant instance",
+   "equalities": {
+    "Types": {
+     "lean_scope": "PCWA_L010",
+     "proved_rfl": 5,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NEV_AccumulateRaw_Types.lean"
+    },
+    "NFS": {
+     "lean_scope": "PCWA_L010",
+     "proved_rfl": 9,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_NFS_AccumPart00.lean"
+    }
+   },
+   "kani": "as NEI_PushRaw"
+  },
+  "WAdm_model": {
+   "module": "RPz7_WAdm_Fissioned_Funs",
+   "source_located": true,
+   "source": "WAdm_model.rs 90226a77..., WAdm_lib.rs 22b715f4... embedded in the committed LLBC (sha 5d06e116...)",
+   "source_record": "WAdm_CHARON002 source_hashes equal the embedded hashes",
+   "extraction": "PCWA_E011 (Aeneas step only; Charon not repeated)",
+   "reproduction": "Funs equal to committed WAdm_051 Funs except two header set_option lines added by the XRa Aeneas; gate = Funs with import renames; gate Types is a hand file of nominal aliases",
+   "equalities": {
+    "lean_scope": "PCWA_L010",
+    "proved_rfl": 24,
+    "proved_unfold": 0,
+    "commented_obligations": 0,
+    "axioms_standard_only": true,
+    "file": "eq/PRVEq_RPz7_WAdm_Fissioned_Funs.lean"
+   },
+   "kani": "evidence/writer-adm-20261025/WAdm_KANI001/receipt.json (exit 0) names both hashes (WAdm_lib.rs 22b715f4, WAdm_model.rs 90226a77); WAdm_KANI002 (exit 0) names a DIFFERENT WAdm_model.rs bea79a75... (same lib.rs); neither rerun"
+  },
+  "S8OwnedP6 (check_values_owned)": {
+   "module": "S8OwnedP6.Types, S8OwnedP6.Funs",
+   "source_located": true,
+   "source": "tools/s8-kani-20261021 (owned.rs d71c7578..., lib.rs 10b32ca5...)",
+   "source_record": "committed crate; hashes appear in s8-kani-20261021 manifest and receipts",
+   "extraction": "PCWA_E012",
+   "reproduction": "Funs and Types byte-identical to extraction-complete outputs d4d96947/9a745d80 after path normalization; compiled gate Funs (lean/S8OwnedP6/Funs.lean 8d708006) = that plus a 6-line hand local instance; gate Types a6c32cbf is an adapted file",
+   "equalities": {
+    "Types": {
+     "lean_scope": "PCWA_L011",
+     "proved_rfl": 3,
+     "proved_unfold": 0,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_S8OwnedP6_Types.lean"
+    },
+    "Funs": {
+     "lean_scope": "PCWA_L011",
+     "proved_rfl": 5,
+     "proved_unfold": 13,
+     "commented_obligations": 0,
+     "axioms_standard_only": true,
+     "file": "eq/PRVEq_S8OwnedP6_Funs.lean"
+    }
+   },
+   "kani": "s8-kani-20261021/receipts kani-05 (proofs::value_contract, exit 0), kani-06 (compact_fixed_y1_29, exit 0), kani-08 (reducer_contract, exit 0) name owned.rs d71c7578...; kani-07/09 (finish_fixed_production64, finish64_with_verified_reducer) exit 124; kani-10 exit 1; no harness named check_values_owned among them; nothing rerun",
+   "caveat": "aspis-core taken from the frozen tree 4bb3b3f (the S8 evidence does not pin its aspis-core revision); the byte-identical result supports but does not prove that identity"
+  },
+  "values_owned_reference": {
+   "module": "S1ValuesOwnedModelV1",
+   "source_located": false,
+   "decision": "PCWA_DECISIONS_NEEDED.md D1"
+  }
+ }
+}

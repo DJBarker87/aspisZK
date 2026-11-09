@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NGM_GuardRef
 namespace PRVFresh_NGM_GuardRef_Funs
-open NGM_GuardRef
 
 /-- [nco_reference::qeq_ref]:
     Source: 'src/lib.rs', lines 17:0-17:89
@@ -88,16 +88,17 @@ def guard_raw_ref
   else ok false
 
 end PRVFresh_NGM_GuardRef_Funs
+end NGM_GuardRef
 
-theorem PRVEq.NGM_GuardRef.Funs.qeq_ref : @PRVFresh_NGM_GuardRef_Funs.qeq_ref = @NGM_GuardRef.qeq_ref := by
-  first | (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.qeq_ref"; rfl) | (trace "PRV-S2 PRVEq.NGM_GuardRef.Funs.qeq_ref"; delta PRVFresh_NGM_GuardRef_Funs.qeq_ref NGM_GuardRef.qeq_ref; try rfl; done)
+theorem PRVEq.NGM_GuardRef.Funs.qeq_ref : @NGM_GuardRef.PRVFresh_NGM_GuardRef_Funs.qeq_ref = @NGM_GuardRef.qeq_ref := by
+  (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.qeq_ref"; rfl)
 #print axioms PRVEq.NGM_GuardRef.Funs.qeq_ref
 
-theorem PRVEq.NGM_GuardRef.Funs.roweq_ref : @PRVFresh_NGM_GuardRef_Funs.roweq_ref = @NGM_GuardRef.roweq_ref := by
-  first | (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.roweq_ref"; rfl) | (trace "PRV-S2 PRVEq.NGM_GuardRef.Funs.roweq_ref"; delta PRVFresh_NGM_GuardRef_Funs.roweq_ref NGM_GuardRef.roweq_ref; try simp only [PRVEq.NGM_GuardRef.Funs.qeq_ref]; try rfl; done)
+theorem PRVEq.NGM_GuardRef.Funs.roweq_ref : @NGM_GuardRef.PRVFresh_NGM_GuardRef_Funs.roweq_ref = @NGM_GuardRef.roweq_ref := by
+  (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.roweq_ref"; rfl)
 #print axioms PRVEq.NGM_GuardRef.Funs.roweq_ref
 
-theorem PRVEq.NGM_GuardRef.Funs.guard_raw_ref : @PRVFresh_NGM_GuardRef_Funs.guard_raw_ref = @NGM_GuardRef.guard_raw_ref := by
-  first | (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.guard_raw_ref"; rfl) | (trace "PRV-S2 PRVEq.NGM_GuardRef.Funs.guard_raw_ref"; delta PRVFresh_NGM_GuardRef_Funs.guard_raw_ref NGM_GuardRef.guard_raw_ref; try simp only [PRVEq.NGM_GuardRef.Funs.roweq_ref]; try rfl; done)
+theorem PRVEq.NGM_GuardRef.Funs.guard_raw_ref : @NGM_GuardRef.PRVFresh_NGM_GuardRef_Funs.guard_raw_ref = @NGM_GuardRef.guard_raw_ref := by
+  (trace "PRV-S1 PRVEq.NGM_GuardRef.Funs.guard_raw_ref"; rfl)
 #print axioms PRVEq.NGM_GuardRef.Funs.guard_raw_ref
 

@@ -9,8 +9,8 @@ set_option linter.unusedVariables false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 
+namespace NGD_AtG
 namespace PRVFresh_NGD_AtG_Types
-open NGD_AtG
 
 /-- [nfu_reference::Error]
     Source: 'src/lib.rs', lines 4:0-4:212
@@ -29,4 +29,5 @@ inductive Error where
 | Public : Error
 
 end PRVFresh_NGD_AtG_Types
+end NGD_AtG
 

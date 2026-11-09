@@ -10,10 +10,10 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+namespace NHJ_SnapshotReference
 namespace PRVFresh_NHJ_SnapshotReference_Funs
-open NHJ_SnapshotReference
-abbrev OwnedAccount := NHJ_SnapshotReference.OwnedAccount
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- [nhj_snapshot_reference::{impl core::clone::Clone for nhj_snapshot_reference::ProgramError}::clone]:
     Source: 'src/lib.rs', lines 1:9-1:14
     Visibility: public -/
@@ -56,7 +56,9 @@ def ProgramError.Insts.CoreCloneClone.clone
   | ProgramError.ArithmeticOverflow => ok ProgramError.ArithmeticOverflow
   | ProgramError.Immutable => ok ProgramError.Immutable
   | ProgramError.IncorrectAuthority => ok ProgramError.IncorrectAuthority
+-/
 
+/- PRV-FRESH-DROPPED (did not elaborate against the gate environment, or depends on a dropped declaration):
 /-- [nhj_snapshot_reference::snapshot_ref]:
     Source: 'src/lib.rs', lines 4:0-10:1
     Visibility: public -/
@@ -120,14 +122,14 @@ def snapshot_ref
         length := (core.result.Result.Err pe),
         bytes := (core.result.Result.Err error)
       }
+-/
 
 end PRVFresh_NHJ_SnapshotReference_Funs
+end NHJ_SnapshotReference
 
-theorem PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone : @PRVFresh_NHJ_SnapshotReference_Funs.ProgramError.Insts.CoreCloneClone.clone = @NHJ_SnapshotReference.ProgramError.Insts.CoreCloneClone.clone := by
-  first | (trace "PRV-S1 PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone"; rfl) | (trace "PRV-S2 PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone"; delta PRVFresh_NHJ_SnapshotReference_Funs.ProgramError.Insts.CoreCloneClone.clone NHJ_SnapshotReference.ProgramError.Insts.CoreCloneClone.clone; try rfl; done)
-#print axioms PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone : @NHJ_SnapshotReference.PRVFresh_NHJ_SnapshotReference_Funs.ProgramError.Insts.CoreCloneClone.clone = @NHJ_SnapshotReference.ProgramError.Insts.CoreCloneClone.clone
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
-theorem PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref : @PRVFresh_NHJ_SnapshotReference_Funs.snapshot_ref = @NHJ_SnapshotReference.snapshot_ref := by
-  first | (trace "PRV-S1 PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref"; rfl) | (trace "PRV-S2 PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref"; delta PRVFresh_NHJ_SnapshotReference_Funs.snapshot_ref NHJ_SnapshotReference.snapshot_ref; try simp only [PRVEq.NHJ_SnapshotReference.Funs.ProgramError.Insts.CoreCloneClone.clone]; try rfl; done)
-#print axioms PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NHJ_SnapshotReference.Funs.snapshot_ref : @NHJ_SnapshotReference.PRVFresh_NHJ_SnapshotReference_Funs.snapshot_ref = @NHJ_SnapshotReference.snapshot_ref
+   last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 

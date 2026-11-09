@@ -290,12 +290,17 @@ def generate(a):
     for so in fh['set_options']: out.append(so)
     if fh['noncomputable']: out.append('noncomputable section')
     out.append('')
+    # PCWA change 1 (supersedes the alias attempt of PCWA_L002): the fresh declarations live in a namespace NESTED INSIDE the gate
+    # namespace instead of `open <gate namespace>`. Lean resolves a bare name through the enclosing namespace chain before `open`
+    # declarations, which is exactly how the gate module itself resolves it (e.g. `Error`, `core.array.iter.IntoIter`, which exist both
+    # in the gate namespace and in Aeneas.Std: PCWA_L002/L004 'Ambiguous term'). Fresh names still take priority (innermost).
+    out.append(f'namespace {gate_ns}')
     out.append(f'namespace {fresh_ns}')
-    out.append(f'open {gate_ns}')
-    # PCWA change 1: text-identical fresh types are aliased to the gate constants inside the fresh namespace. Without this the bare
-    # name (e.g. `Error`) is ambiguous between the opened gate namespace and Aeneas.Std (observed in PCWA_L001: 'Ambiguous term').
-    for tn in sorted(k for k, v in types_report.items() if v == 'identical'):
-        out.append(f'abbrev {tn} := {gate_ns}.{tn}')
+    # PCWA change 2: optional verbatim prelude copied from the gate module's own hand-written lines (e.g. `variable [allocation : ...]`,
+    # `local instance ... : Discriminant (Option T) Isize`). The text is recorded in the report (fresh_prelude) and in PCWA_HAND_MODELS.json.
+    if a.fresh_prelude:
+        out.append('-- PCWA fresh-prelude (verbatim gate hand-written lines): ' + a.fresh_prelude)
+        out.extend(Path(a.fresh_prelude).read_text().rstrip('\n').split('\n'))
     out.append('')
     subs = [dict(kind='namespace', old=a.fresh_ns, new=fresh_ns), dict(kind='imports_dropped', old=fh['imports'], new=[f'import {M}']),
             dict(kind='attributes_stripped', old=sorted(REG_ATTR.pattern.split('|')), new=[]), dict(kind='opened_namespace', old=None, new=gate_ns)]
@@ -312,6 +317,8 @@ def generate(a):
         fresh_lines[b['name']] = [s_line, len('\n'.join(out).split('\n'))]
         out.append('')
     out.append(f'end {fresh_ns}')
+    out.append(f'end {gate_ns}')
+    fresh_q = f'{gate_ns}.{fresh_ns}'
     out.append('')
     # ---- equalities
     defs_state = {}
@@ -320,9 +327,9 @@ def generate(a):
     order = [b for b in fblocks if b['name'] in plan]
     for b in order:
         n = b['name']; p = plan[n]
-        stmt = f'@{fresh_ns}.{n} = @{gate_ns}.{n}'
+        stmt = f'@{fresh_q}.{n} = @{gate_ns}.{n}'
         if p['dkind'] == 'structure-equiv':
-            emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M)
+            emit_equiv(out, defs_state, commented, p, n, fresh_q, gate_ns, eqname, M)
             continue
         start_line = len('\n'.join(out).split('\n')) + 1
         if p['status'] == 'failed':
@@ -336,7 +343,7 @@ def generate(a):
             commented.append(n); defs_state[n] = dict(lines=None); continue
         cal = [eqname(c) for c in p['callees'] if plan[c]['status'] != 'failed']
         s1 = f'(trace "PRV-S1 {eqname(n)}"; rfl)'
-        s2 = f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_ns}.{n} {gate_ns}.{n}; try simp only [{", ".join(cal)}]; try rfl; done)' if cal else f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_ns}.{n} {gate_ns}.{n}; try rfl; done)'
+        s2 = f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_q}.{n} {gate_ns}.{n}; try simp only [{", ".join(cal)}]; try rfl; done)' if cal else f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_q}.{n} {gate_ns}.{n}; try rfl; done)'
         if p['status'] == 'proved': tac = s1 if p['stage'] == 1 else s2
         else: tac = f'first | {s1} | {s2}'
         out.append(f'theorem {eqname(n)} : {stmt} := by')
@@ -417,7 +424,7 @@ def classify_failure(p, fb, gb):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--module', required=True); ap.add_argument('--fresh-dir', required=True); ap.add_argument('--fresh-ns', required=True)
-    ap.add_argument('--gate-source', required=True); ap.add_argument('--gate-types-source'); ap.add_argument('--partition')
+    ap.add_argument('--fresh-prelude'); ap.add_argument('--gate-source', required=True); ap.add_argument('--gate-types-source'); ap.add_argument('--partition')
     ap.add_argument('--out', required=True); ap.add_argument('--report', required=True); ap.add_argument('--state'); ap.add_argument('--state-out'); ap.add_argument('--lean-log')
     ap.add_argument('--bundle-offsets', help='PCWA_bundle.py offsets json; the Lean log is then a bundle log')
     a = ap.parse_args()
