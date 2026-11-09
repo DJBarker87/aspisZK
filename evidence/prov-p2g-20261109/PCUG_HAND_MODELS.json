@@ -1,0 +1,46 @@
+{
+ "schema": "PCUG_HAND_MODELS/1",
+ "target_established": false,
+ "note": "Record only. No hand model written, no trust row added or proposed. A missing source refinement is not a cryptographic assumption.",
+ "entries": [
+  {
+   "name": "aspis_statement::state_only_poseidon::external_linear_lazy",
+   "source": "crates/aspis-statement/src/state_only_poseidon.rs lines 139-190 (frozen 4bb3b3f5)",
+   "reason": "PCQG_E004, PCQG_E016: Aeneas \"Unimplemented\" InterpMatchCtxs.ml:419 at 156:8-172:9 (from_fn closure matching on mutable counter inside while loop)",
+   "obligation_comment": "-- OBLIGATION (not proved): for state : [QM31;16], external_linear_lazy(state) = for each group g in 0..4, with input = map extension_limbs state[4g..4g+4] and for output o in 0..4: raw[limb] = M_o . (input[0..4][limb]) (rows (2,3,1,1),(1,2,3,1),(1,1,2,3),(3,1,1,2) over u64), state[4g+o] := extension_from_raw_limbs raw; then sums[column][limb] = sum_{r in 0..4} limb of state[4r+column]; finally state[i] := extension_from_raw_limbs (limbs(state[i])[limb] + sums[i&3][limb]). No overflow failure under canonical (< P) limbs; checked arithmetic on u64.",
+   "obtained_instead": "opaque axiom in PCQG_E010/E015 (aspis_statement.state_only_poseidon.external_linear_lazy); callers emitted"
+  },
+  {
+   "name": "aspis_statement::pool_v1::pair_forest_semantic_terminal::empty_root",
+   "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs line 189-192",
+   "reason": "PCQG_E006/E011/E013: Aeneas name clash for the constructor value M31 in `.map(M31)`",
+   "obligation_comment": "-- OBLIGATION (not proved): empty_root level = Array.map M31.mk (constants.POOL_V1_PAIR_EMPTY_ROOTS_V1[level]) with checked index (fails when level >= 21); the b59d5188-extended emission is `core.array.Array.map (BuiltinFnMut Std.U32 field.M31) a (field.M31_constructor)`.",
+   "obtained_instead": "opaque axiom in PCQG_E014/E015"
+  },
+  {
+   "name": "loop encoding bridge (original Aeneas `loop` vs gate recursive loop definitions)",
+   "reason": "PCUG-C3(a): 47 records",
+   "obligation_comment": "-- OBLIGATION (not proved): for each loop definition f of a gate module, the gate recursive definition f (inlined iterator/range step, recursion through f itself) equals fresh f := loop (fun st => f.body args st) st0 as Result values. Generic form: fix-point/`loop` equality lemma PRV_fix_congr (PCVA, MultiproofSortRef) instantiated per loop; the generator must not emit rfl for these cells (non-terminating defeq)."
+  },
+  {
+   "name": "monadic vs pure constants (field.QM31.ZERO/ONE, ok field.M31.ONE arms)",
+   "reason": "PCUG-C3(b)",
+   "obligation_comment": "-- OBLIGATION (not proved): fresh `let q <- field.QM31.ZERO` / `ok field.M31.ONE` equals the gate pure constant use; one lemma per constant (const_bind: (do let q <- c; k q) = k c when c is the ok-wrapped def) plus one rewriting step in each affected body."
+  },
+  {
+   "name": "core.array.from_fn vs array_from_fn_copy",
+   "reason": "PCUG-C3(c)",
+   "obligation_comment": "-- OBLIGATION (not proved): the original-Aeneas `core.array.from_fn N closure` is not defined in the gate library (Unknown identifier); the extended build uses array_from_fn_copy N CopyInst closure init. Needs the library constant or a statement of equality at the Rust-semantics level; not a trust row."
+  },
+  {
+   "name": "aspis_core.field.P external axiom (TerminalDecoder pair_terminal / digest_is_canonical)",
+   "reason": "PCUG-C3(d); 6 records",
+   "obligation_comment": "-- OBLIGATION (not proved): PCQG_E005 emits `axiom aspis_core.field.P : Result Std.U32` while the gate has `def aspis_core.field.P : Std.U32 := 2147483647#u32`; P2f solved the same shape for first_canonical_byte by a transparent P from PCQF_E002 (PRVEq_TD_HP_P3f.lean, P_eq). The pair_terminal and digest_is_canonical equalities need the same restatement against an emission with transparent P."
+  },
+  {
+   "name": "Native14 E015 fresh closure does not elaborate in 180 s",
+   "reason": "PCUG-C5; 7 records FRESH_ELABORATION_TIMEOUT",
+   "obligation_comment": "-- OBLIGATION (not proved): terminal_parts/composition_parts/equality_value/terminal_qm31 (PCQG_E015 closure). Needs a split of the fresh text into separately elaborated chunks or a different tool; the Lean statement is the one recorded in PCUG_PLAN.json pass RPu_FIq_Native14_p2."
+  }
+ ]
+}

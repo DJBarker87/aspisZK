@@ -1,0 +1,89 @@
+{
+ "schema": "PCUG_TOOLS/1",
+ "aeneas_for_fresh_emissions": {
+  "tool": "ORIGINAL Aeneas b59d5188 rebuilt, sha256 959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3 (PCQG_TOOLS.json); all compared emissions are PCQG_E001..E018 exit 0, overflow-checks ON",
+  "note": "different tool from the b59d5188-extended build behind PCQ_/PCQC_/PCQF_ emissions and (as the diffs show) behind the gate modules: loops, monadic constants and array_from_fn differ"
+ },
+ "lean": "leanprover/lean4 v4.32.0, gate-compatible Aeneas library via ledger30 NNN_PATHS.json (LEAN_PATH chain; gate not rebuilt, objects read-only)",
+ "starting_generator": "evidence/prov-p2f-20261109/PCUF_gen_equalities.py",
+ "starting_generator_sha256": "a5adcd0b03203b6494fb1f97ba3bc9a32557c52cb7d3813f73ff43698d268aa6",
+ "final_generator": "PCUG_gen_equalities.py",
+ "final_generator_sha256": "ad382af9855c6feb99b9e687774edadc7f184e31cda7a92a71b135d63e20a57b",
+ "changes": [
+  {
+   "id": "PCUG-G1",
+   "change": "--only FILE: funs passes compare only the scope definitions and their callee closure inside the common declarations (the P2f generator compared every common declaration of the fresh file); the partition is not used"
+  },
+  {
+   "id": "PCUG-G2",
+   "change": "--skip-divergent: a definition whose fresh and gate bodies are not token-equal and that mentions `loop`, and every definition calling such a definition, is not attempted (obligation with the reason recorded). Reason: PCUG_L010, L016 timed out at 180 s in a stage-1 rfl between a fresh `loop` and a gate recursive loop (non-identical fixpoints; the defeq check does not terminate within the scope); used only for the labels RPu_FIq_Native10, Native13, Native14, Native14_p2"
+  },
+  {
+   "id": "PCUG-P1",
+   "change": "PCUG_plan.py: every P2b-origin pass (Funs and Types) renames `aspis_core.` and `aspis_statement.` path prefixes (the P2b gate modules use unprefixed crate paths); round-1 probes PCUG_L007..L011 showed Unknown identifier aspis_core.field.*"
+  },
+  {
+   "id": "PCUG-P2",
+   "change": "PREFER order for RPu_FIq_Native14 (PCQG_E009 then PCQG_E015) after the single 14-definition pass timed out (PCUG_L017)"
+  },
+  {
+   "id": "PCUG-P3",
+   "change": "NDE_Reference2/5.Funs: gate source = evidence/native-front2-20261028/NDE_Reference<k>/{Funs,Types}.lean (checked operators, text-identical to PCQG_E017/E018); P5 had used the wrapping NML emission as gate input"
+  },
+  {
+   "id": "PCUG-F1",
+   "change": "PCUG_final.py: required configuration per definition (gate declaration text contains wrapping_ -> OFF, else ON); an overflow-ON emission against an OFF-required definition has basis_not_correct"
+  },
+  {
+   "id": "PCUG-F2",
+   "change": "PCUG_final.py: diff_class on every FAILED/CONFIG_MISMATCH record; fresh_closure_mentions_opaque_P1f_names and relative_to_gate_callees on Funs records"
+  }
+ ],
+ "scripts": {
+  "PCUG_gen_equalities.py": {
+   "sha256": "ad382af9855c6feb99b9e687774edadc7f184e31cda7a92a71b135d63e20a57b"
+  },
+  "PCUG_gen.py": {
+   "sha256": "d56a55908d70751163b3119de3e4363e0ad16e12257236d9bedfe68c84a0977c"
+  },
+  "PCUG_plan.py": {
+   "sha256": "6ae7114319e4ef4ee89b6a3dfd9014b7bf8f82b91ec757a41d2d6667a6816ef9"
+  },
+  "PCUG_scan.py": {
+   "sha256": "f4ddf21aaa328d13096a7cd3a120b5859080365aa6ad554ae9fe71f13d574166"
+  },
+  "PCUG_final.py": {
+   "sha256": "8e68a4beb9f67d6b42241b1859996a5f880343a9bcc34019d93b7870cc2c616e"
+  },
+  "PCUG_bundle.py": {
+   "sha256": "1e6f6c526c403f3b74efd8580a362f8652d887db916ce18c3980614ddd6d48c7"
+  },
+  "PCUG_run.py": {
+   "sha256": "fc5e746c49c8e388616562a13cc4f7d478e1bc2056216dc88117b7334e35d5c8"
+  },
+  "PCUG_run_host.py": {
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c"
+  },
+  "PCUG_partition.py": {
+   "sha256": "5554582fc3be751df3a2ef7780cc84bf60277276d2824f2da15d37878f20ff9c"
+  },
+  "run_scope.sh": {
+   "sha256": "d2ccc44fb54504f9745b30d6e5c453c6ae642723617b218bd46fe60295efae6f"
+  },
+  "chain1.sh": {
+   "sha256": "06f0ac58e1e7ff4326f667721f4c5b5abf8d4dd6b884fcf4e3e1ae0c46aad77c"
+  },
+  "chain2.sh": {
+   "sha256": "6b7b0540538b94a5b38e59e9aff5995ec8be4c062509e2235e69d13f5c253cc7"
+  },
+  "chain3.sh": {
+   "sha256": "82827b7d3b1f37cc4f146d59c7a66ca42532b8b039ca7f56e80e40f18fef6ec9"
+  },
+  "chain4.sh": {
+   "sha256": "faadd09d74eebbf89d10d8f7cc5df80bc301cac150647173fbd7dd76ee111e0d"
+  },
+  "chain5.sh": {
+   "sha256": "9c27293617b168e130f5f04e9f3473e3d319c25b04d27cfba53dfbf3a5e73ecf"
+  }
+ }
+}
