@@ -87,3 +87,36 @@ X5/X6 and the assembly once the converse ports exist. If you want me to continue
 anyway, X2 is next with its 3-scope cap.
 
 target not yet established
+
+# Update 2026-11-09 (after L040): exact frontier
+
+Closed since the last update: 094 forward (`NOC_Tx1Forward.source`, L036) and the 345 Ok clause
+(`NOC_Stage1Forward.ok345`, L040, labelled Ok clause only). NOM's two model lemmas are merged (66113b37590) and
+used by reference; NOM's items 1 (public binding) and the op21 slot rfl are discharged inside L040. NOM's item 2
+(LIBC_BatchMerkle.Domain on the 094 path) is not needed: both batch directions go through
+NOC_MerkleBounded.hostParent / NOM_MerkleParent.hostParent, whose only hypotheses are k < 2 and the canonical
+queries, which NOC_Tx1Forward derives from NNG_GeometryDomain094 on the SAME returned prepare law.
+
+Open, in the lead's order:
+1. Converse compositions (cap 14, none spent). Needed statement (weak-Err clause, AMN.viaReturns1.errT shape):
+   `stage1_owned (S c) program xs data = .ok (.Ok saved) → NNH_ReturnsBundle.tx1Value ⟨key program,accounts xs,bytes data⟩ (envOf c) = .ok (bytes saved.deref)`
+   (with ok345 this is the Ok-iff; contraposition gives errT). Chain, innermost first:
+   (a) semantic finish converse: native op9 Ok ⇒ NNH_ObservedReturns.value ok, from NOC_ConvSemantic leaves plus
+       NOM_TerminalDomain.terminal on the Domain from NOM_TerminalDomain.reached (its `same` premise is exactly
+       publicBinding's equation, already proved in NOC_Stage1Forward);
+   (b) prepare-front converse: native prepare Ok ⇒ library preparedValue ok with the SAME prep/scratch, from
+       NOC_ConvLeaves (filled, expand_semantic, expand_values, view, prepared) and (a);
+   (c) 094 converse: native tx1 Ok v ⇒ NNH_Tx1Returns.value ok (bytes v), from NOC_ConvLeaves.parse,
+       NOC_Conv094 (scan, geometry, accNew, weightsNew), NOM_MerkleParent.hostParent (batch), NOC_QueryLink.loop
+       on the Domain (NOC_QueryDomain.domain), flush/checkpoint total; the width premise again from the 345 guard;
+   (d) 345 converse: inversion of NOC_Stage1Forward.body (every guard port there is an equality or has an exact
+       library equation: route compare, distinct, readonly, checkpoint, getters, require_zero, decode/validate/encode
+       via NNH_S1HostCodec/NMT_345 validate_iff, gate, first_decoded).
+   Technique note: inversions must case-split each native call result; keep one declaration per call group
+   (L038 showed the per-declaration heartbeat budget binds on whole-body proofs).
+2. X9 (cap 8): restate NNV_WeakErrHost.modelRet1 at NOC_Run5bHost.S_host; okT from ok345 (map
+   NNE_PhysicalAccepted.child1 / model1 c p e.first data to the tx1Ok carrier form), errT from 1 by
+   contraposition; assemble AMN.viaReturns1 + toNND_A1; delivered-type rfl example; raw ax2 walk with the
+   ledger29 walker; NOC_FinalCombined importing every NOC root (and NOM roots) in one scope.
+
+target not yet established

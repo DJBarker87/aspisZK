@@ -1,0 +1,52 @@
+{"attempt": "NOC_L037", "exit_status": 1, "wall_seconds": 50.063509337138385, "peak_rss_kib": "6752352", "swaps": "0", "print_axioms": ["'NOC_Stage1Forward.proofBytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.publicBinding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.commonOk' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.neFalse' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.prefixRead' depends on axioms: [propext, Quot.sound]", "'NOC_Stage1Forward.indexAt' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.vecEq' depends on axioms: [propext]", "'NOC_Stage1Forward.mapVErrOk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NOC_Stage1Forward.ok345' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NOC_generated/NOC_Stage1Forward.lean:40:62: error: Type mismatch
+  UScalar.sub_spec s
+has type
+  a - b ⦃ z => ↑z = ↑a - ↑b ∧ ↑b ≤ ↑a ⦄
+but is expected to have type
+  a - b ⦃ x => ↑x = ↑a - ↑b ⦄
+NOC_generated/NOC_Stage1Forward.lean:94:44: warning: 'with_unfolding_all rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Stage1Forward.lean:94:44: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Stage1Forward.lean:105:12: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵c
+...
+
+s0Run : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) pb { «end» := 688#usize } = ok s0
+s0Val : ↑s0 = List.slice 0 ↑688#usize ↑pb
+s0nat : s0 = nat.to_slice
+neRun : (S c).op0 core.cmp.PartialEqU8 s0 nat = ok false
+off : lift (Usize.wrapping_add 688#usize 8#usize) = ok 696#usize
+inside : 696 < (↑pb).length
+h1 : byte (↑pb)[696] = 2
+h2 : (↑pb)[696] = 2#u8
+⊢ (↑pb)[↑696#usize]? = some 2#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    pb
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑pb
+NOC_generated/NOC_Stage1Forward.lean:308:11: error(lean.unknownIdentifier): Unknown identifier `verifier.candidate.tx1`
+'NOC_Stage1Forward.proofBytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.publicBinding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.commonOk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.neFalse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.prefixRead' depends on axioms: [propext, Quot.sound]
+'NOC_Stage1Forward.indexAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.vecEq' depends on axioms: [propext]
+'NOC_Stage1Forward.mapVErrOk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.ok345' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0eaf26e7c2fe48e3bda0341204fb1bf8.scope; invocation ID: 7756ecd513d74e3987a3622f214864c8
