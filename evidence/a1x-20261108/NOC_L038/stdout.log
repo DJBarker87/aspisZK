@@ -1,0 +1,180 @@
+NOC_generated/NOC_Stage1Forward.lean:94:44: warning: 'with_unfolding_all rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Stage1Forward.lean:94:44: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Stage1Forward.lean:105:12: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NOC_generated/NOC_Stage1Forward.lean:106:5: warning: '(unfold core.cmp.PartialEqU8; simp)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Stage1Forward.lean:107:5: warning: '(simp [core.cmp.PartialEqU8, bne_iff_ne])' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NOC_generated/NOC_Stage1Forward.lean:106:5: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Stage1Forward.lean:107:5: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NOC_generated/NOC_Stage1Forward.lean:138:73: error: Type mismatch
+  h
+has type
+  (match Except.ok b with
+    | Except.ok b => Except.ok b
+    | Except.error a => Except.error RSL.ProgramError.invalidInstructionData) =
+    Except.ok s
+but is expected to have type
+  Except.ok b = Except.ok s
+NOC_generated/NOC_Stage1Forward.lean:244:59: error: unsolved goals
+W Tx : Type
+c : NNH_HostCtx.Ctx W Tx
+program : solana_pubkey.Pubkey
+xs : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+saved : alloc.vec.Vec U8
+called :
+  NNH_ReturnsBundle.tx1Value { program_id := key program, accounts := accounts xs, data := bytes data }
+      (NOC_Run5bCtx.envOf c) =
+    Except.ok (bytes saved.deref)
+p pub ck : RSL.OwnedAccount
+left✝ : RSL.TX1_345.badRoute { program_id := key program, accounts := accounts xs, data := bytes data } = false
+packet :
+  NNH_Stage1Cut.Packet { program_id := key program, accounts := accounts xs, data := bytes data } p pub ck
+    (bytes saved.deref) (NOC_Run5bCtx.envOf c)
+dataEq : bytes data = [3, 10]
+shape : accounts xs = [p, pub, ck]
+pa : r1_pool_adapter.owned.OwnedAccount
+i0 : xs.index_usize 0#usize = ok pa
+e0 : account pa = p
+pba : r1_pool_adapter.owned.OwnedAccount
+i1 : xs.index_usize 1#usize = ok pba
+e1 : account pba = pub
+cka : r1_pool_adapter.owned.OwnedAccount
+i2 : xs.index_usize 2#usize = ok cka
+e2 : account cka = ck
+cmp :
+  (NNH_CorrectConfiguration.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op1
+      core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] ⋯) =
+    ok (decide ([3, 10] = [3, 10]))
+byte10 : byte 10#u8 = 10
+cmpT : (S c).op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] ⋯) = ok true
+len3 : xs.len = 3#usize
+dist : RSL.distinctKeys (List.map account ↑(Array.make 3#usize [pa, pba, cka] ⋯)) = true
+distRun :
+  r1_pool_adapter.owned.require_distinct_accounts
+      (NNH_Tx2Configuration.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation)
+      (Array.make 3#usize [pa, pba, cka] ⋯) =
+    ok (core.result.Result.Ok ())
+rb :
+  ∀ (a : r1_pool_adapter.owned.OwnedAccount) (o : RSL.OwnedAccount),
+    account a = o →
+      RSL.readonlyBuffer o = Except.ok () →
+        r1_pool_adapter.owned.require_readonly_buffer a = ok (core.result.Result.Ok ())
+rbP : r1_pool_adapter.owned.require_readonly_buffer pa = ok (core.result.Result.Ok ())
+rbU : r1_pool_adapter.owned.require_readonly_buffer pba = ok (core.result.Result.Ok ())
+co : NNH_ReturnedClone.checkpointValue ck (key program) true = Except.ok ()
+ckm :
+  outer (reply id)
+      (r1_pool_adapter.owned.require_verifier_checkpoint
+        (NGL_CheckpointModel.install
+          (NNH_MRegistryOps.install (NNH_LaneModel.install (S c)) LIB_Deployed.deployed (NNH_HostCtx.envOf c)))
+        cka program true) =
+    ok (Except.ok ())
+ckRun :
+  r1_pool_adapter.owned.require_verifier_checkpoint
+      (NGL_CheckpointModel.install
+        (NNH_MRegistryOps.install (NNH_LaneModel.install (S c)) LIB_Deployed.deployed (NNH_HostCtx.envOf c)))
+      cka program true =
+    ok (core.result.Result.Ok PUnit.unit)
+right✝ : id PUnit.unit = ()
+ckOk : r1_pool_adapter.owned.require_verifier_checkpoint (S c) cka program true = ok (core.result.Result.Ok ())
+cb : Slice U8
+cbRun :
+  r1_pool_adapter.owned.OwnedAccount.data
+      (NNH_CorrectTx2Inputs.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation) cka =
+    ok (core.result.Result.Ok cb)
+cbEq : bytes cb = packet.checkpoint_data
+zr : r1_pool_adapter.owned.require_zero cb = ok (core.result.Result.Ok ())
+ub : Slice U8
+ubRun :
+  r1_pool_adapter.owned.OwnedAccount.data
+      (NNH_CorrectTx2Inputs.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation) pba =
+    ok (core.result.Result.Ok ub)
+ubEq : bytes ub = packet.public_data
+st : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+decRun :
+  (NNH_CorrectConfiguration.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation).op47
+      ub =
+    ok (core.result.Result.Ok st)
+stEq : NNH_S1DecodeOk.carrier st = packet.statement
+val21 : (S c).op21 st = ok (core.result.Result.Ok ())
+cm : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+cmRun : st.common = ok cm
+nat : Std.Array U8 688#usize
+natRun :
+  NMT_345.encodeCall (NMT_345.commonValue packet.statement).lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok nat)
+natEq : List.map NMT_345.byte ↑nat = packet.candidate
+enc :
+  (NNH_Run5bCtx.sdk c).op24 cm.lane_transition.candidate_afterstate =
+    match ok (core.result.Result.Ok nat) with
+    | ok (core.result.Result.Ok out) => ok (core.result.Result.Ok out)
+    | ok (core.result.Result.Err a) => div
+    | fail e => fail e
+    | div => div
+enc24 : (S c).op24 cm.lane_transition.candidate_afterstate = ok (core.result.Result.Ok nat)
+pb : Slice U8
+pbRun :
+  r1_pool_adapter.owned.OwnedAccount.data
+      (NNH_CorrectTx2Inputs.sdk (NOC_Tx1Forward.M c) (NNH_HostCtx.envOf c) c.fixed.indexError c.fixed.reservation) pa =
+    ok (core.result.Result.Ok pb)
+pbEq : bytes pb = packet.proof_data
+g :
+  (List.length packet.proof_data != RSL.PROOF_ACCOUNT_BYTES ||
+        List.take RSL.AFTERSTATE_BYTES packet.proof_data != packet.candidate ||
+      List.getD packet.proof_data (RSL.AFTERSTATE_BYTES + 8) 0 != RSL.TX1_345.S2_TAG) =
+    false
+gAB :
+  (List.length packet.proof_data != RSL.PROOF_ACCOUNT_BYTES ||
+      List.take RSL.AFTERSTATE_BYTES packet.proof_data != packet.candidate) =
+    false
+gC : (List.getD packet.proof_data (RSL.AFTERSTATE_BYTES + 8) 0 != RSL.TX1_345.S2_TAG) = false
+gA : (List.length packet.proof_data != RSL.PROOF_ACCOUNT_BYTES) = false
+gB : (List.take RSL.AFTERSTATE_BYTES packet.proof_data != packet.candidate) = false
+lenData : List.length packet.proof_data = 58295
+takeData : List.take 688 packet.proof_data = packet.candidate
+tagData : List.getD packet.proof_data 696 0 = 2
+pbLen : (↑pb).length = 58295
+lenPb : pb.len = 58295#usize
+pbytes : aspis_r1_cost_probe.verifier.PROOF_BYTES = ok 57607#usize
+hck : lift (Usize.checked_add 688#usize 57607#usize) = ok (some 58295#usize)
+s0 : Slice U8
+s0Run : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) pb { «end» := 688#usize } = ok s0
+s0Val : ↑s0 = List.slice 0 ↑688#usize ↑pb
+⊢ ∀ a ∈ ↑nat, UInt8.ofNat ↑a = { toBitVec := a.bv }
+NOC_generated/NOC_Stage1Forward.lean:320:37: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NOC_generated/NOC_Stage1Forward.lean:148:79: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'NOC_Stage1Forward.proofBytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.publicBinding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.commonOk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.neFalse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.prefixRead' depends on axioms: [propext, Quot.sound]
+'NOC_Stage1Forward.indexAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NOC_Stage1Forward.vecEq' depends on axioms: [propext]
+'NOC_Stage1Forward.mapVErrOk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NOC_generated/NOC_Stage1Forward.lean:390:14: error(lean.unknownIdentifier): Unknown constant `ok345`
