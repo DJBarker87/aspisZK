@@ -1,0 +1,130 @@
+NOF_generated/NOF_CommonConverse.lean:135:56: error: Application type mismatch: The argument
+  hY
+has type
+  (let (p, a) := (p, a)
+    if (a.next != 10#usize) = true then
+      ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+    else do
+      let g ← (source m env err r).op17 29#usize p.gamma
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7495#usize, «end» := 7527#usize }
+      let o ← (source m env err r).op2 s
+      let r1 ← (source m env err r).op0 o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := 7751#usize, «end» := 7783#usize }
+          let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+          let folded_root ← (source m env err r).unwrap32 r2
+          let r3 ← (source m env err r).op5 (LIBB_PartitionEnv.digest env) proof p folded_root 1#usize ()
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue _ => do
+              let r4 ← (source m env err r).op11 p.queries a.next 22#usize
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let r5 ← (source m env err r).op10 a.weights.deref
+                  let cf4 ←
+                    match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let r6 ← (source m env err r).op6 proof p a g none val2 val3 22#usize
+                      let cf5 ←
+                        match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                          Tx2I_Cuts.tail (source m env err r) proof p none val1 7527#usize 7751#usize 7783#usize val4
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+but is expected to have type
+  (do
+      let x ← ?m.289
+      ?m.290 x) =
+    ok ?m.291
+in the application
+  Port3_PushFrame.bind_success ?m.289 ?m.290 ?m.291 hY
+NOF_generated/NOF_CommonConverse.lean:132:66: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵e̵x̵t̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲ at hY
+  ̲  ̲ ̲ ̲ ̲⊢
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲-̲-̲ ̲p̲o̲w̲e̲r̲s̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NOF_generated/NOF_CommonConverse.lean:132:71: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵e̵x̵t̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲n̲e̲x̲t̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲ at hY
+  ̲  ̲ ̲ ̲ ̲⊢
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲-̲-̲ ̲p̲o̲w̲e̲r̲s̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NOF_generated/NOF_CommonConverse.lean:133:2: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵e̵x̵t̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲n̲e̲x̲t̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲ at hY
+  ̲  ̲ ̲ ̲ ̲⊢
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲-̲-̲ ̲p̲o̲w̲e̲r̲s̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NOF_generated/NOF_CommonConverse.lean:133:21: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵e̵x̵t̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲n̲e̲x̲t̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲ at hY
+  ̲  ̲ ̲ ̲ ̲⊢
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲-̲-̲ ̲p̲o̲w̲e̲r̲s̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NOF_CommonConverse.source_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOF_CommonConverse.tail_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NOF_CommonConverse.common' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
