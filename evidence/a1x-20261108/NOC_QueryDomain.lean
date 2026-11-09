@@ -1,4 +1,6 @@
 import NNG_QueryDomain094
+import NNG_GeometryDomain094
+import NNG_AccumulatorDomain094
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NOC_QueryDomain
@@ -36,14 +38,17 @@ theorem domain (input : LIBC_PreparedLaw.Args) (proof : RSL.Bytes) (width : proo
  (hg : LIBC_Geometry.value (p,0,10) env = .ok geo)
  (hb : LIBC_WeightsNew.value a env = .ok pending) :
  LIBC_QueryLoop.Domain (proof,p,a,g,geo,pending,10) := by
- have initial : LIBC_AccNew.child.law () env ⟨.ret (.ok a),[]⟩ :=
-  (graphRet _ _ _ _ [] ha (by intro h; cases h)).symm
- have geometry : LIBC_Geometry.child.law (p,0,10) env ⟨.ret (.ok geo),[]⟩ :=
-  Or.inl (graphRet _ _ _ _ [] hg (by intro h; cases h)).symm
- have weights : LIBC_WeightsNew.child.law a env ⟨.ret (.ok pending),[]⟩ :=
-  (graphRet _ _ _ _ [] hb (by intro h; cases h)).symm
+ have prep := prepared input env p g hp
+ have initial : LIBC_AccNew.child.run () env ⟨.ret (.ok a),[]⟩ :=
+  ⟨trivial,(graphRet _ _ _ _ [] ha (by intro h; cases h)).symm⟩
+ have geometry : LIBC_Geometry.child.run (p,0,10) env ⟨.ret (.ok geo),[]⟩ :=
+  ⟨NNG_GeometryDomain094.reached input env p g _ prep,
+   Or.inl (graphRet _ _ _ _ [] hg (by intro h; cases h)).symm⟩
+ have weights : LIBC_WeightsNew.child.run a env ⟨.ret (.ok pending),[]⟩ :=
+  ⟨NNG_AccumulatorDomain094.weights_domain env a [] initial,
+   (graphRet _ _ _ _ [] hb (by intro h; cases h)).symm⟩
  exact NNG_QueryDomain094.reached proof width input env p g a geo pending _ [] [] []
-  (prepared input env p g hp) initial geometry weights
+  prep initial geometry weights
 #print axioms graphRet
 #print axioms prepared
 #print axioms domain
