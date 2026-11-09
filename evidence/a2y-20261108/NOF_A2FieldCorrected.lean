@@ -4,10 +4,11 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NOF_A2FieldCorrected
 open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 
 /-- Seed-generic clock independence of the selected residual (proof pattern of
 NNR_ClockFree.M1b, restated for an arbitrary seed). -/
-theorem clockFree (H : Bytes → AspisV8R19.SourceDuplexStep.State)
+theorem clockFree (H : Bytes → State)
  (pda : List RSL.Bytes → RSL.B32 → Option RSL.B32) (k k' : Except RSL.ProgramError UInt64)
  (r : NP6_StdModel.Reservation) (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE) :
  NNH_Tx2Configuration.select (NNH_CorrectConfiguration.residual m (DGP_HostDigest.envInst H pda k r))
