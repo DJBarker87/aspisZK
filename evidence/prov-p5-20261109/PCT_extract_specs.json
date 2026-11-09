@@ -1,0 +1,2506 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "partition_revision": "6ce07a6a593a289a9134b17714920122ceee5eec",
+ "specs": [
+  {
+   "spec_id": "S900",
+   "kind": "frozen",
+   "label": "pilot AspisR1WideToBytesSource.Funs",
+   "crate": "aspis-core",
+   "package": "aspis_core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::field::wide_exact::_::to_le_bytes"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_wide_to_bytes",
+   "p1_half": "P1a",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AspisR1WideToBytesSource.Funs",
+     "AspisR1WideToBytesSource.Types"
+    ],
+    "definitions": [
+     "field.wide_exact.WideExact.to_limbs",
+     "field.wide_exact.WideExact.to_le_bytes_loop.body",
+     "field.wide_exact.WideExact.to_le_bytes_loop",
+     "field.wide_exact.WideExact.to_le_bytes"
+    ]
+   },
+   "basis": "Same Charon/Aeneas arguments as the receipted diagnostic NMH_E018 (wide-serialize); P0 pilot a_identical module."
+  },
+  {
+   "spec_id": "S901",
+   "kind": "frozen",
+   "label": "pilot NFG_CheckedFieldRef.Funs",
+   "crate": "aspis-core",
+   "package": "aspis_core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::field::_::neg",
+    "crate::field::_::is_zero"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_checked_field",
+   "p1_half": "P1a",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "NFG_CheckedFieldRef.Funs",
+     "NFG_CheckedFieldRef.Types"
+    ],
+    "definitions": [
+     "field.P",
+     "field.M31.neg",
+     "field.M31.is_zero",
+     "field.CM31.neg",
+     "field.CM31.is_zero",
+     "field.QM31.neg",
+     "field.QM31.is_zero"
+    ]
+   },
+   "basis": "aspis-core r0 impl-wildcard roots (the NMH_E013/E024 selector style); P0 pilot c2 module exercising the M31 U32 class."
+  },
+  {
+   "spec_id": "S902",
+   "kind": "frozen",
+   "label": "pilot AdapterRwTypes",
+   "crate": "aspis-r1-cost-probe-program",
+   "package": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts",
+   "start_from": [
+    "crate::process_r1_cost_probe_instruction"
+   ],
+   "include": [],
+   "opaque": [
+    "crate::pool_route::admitted",
+    "crate::r1_pool_adapter::owned::stage1",
+    "crate::r1_pool_adapter::owned::stage2",
+    "crate::r1_pool_adapter::lifecycle_init",
+    "crate::r1_pool_adapter::lifecycle_write",
+    "crate::r1_pool_adapter::lifecycle_finalize",
+    "solana_account_info::AccountInfo"
+   ],
+   "namespace": "PCO_adapter_types",
+   "p1_half": "P1b",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AdapterRwTypes"
+    ],
+    "definitions": [
+     "15 reached types, see PCO_PARTITION.json"
+    ]
+   },
+   "basis": "Exact NIV/NMH_E002 argument array (archived from slice-d-entry7-20261107/NIV_EXTRACTION_PREFLIGHT.json) with only output/workspace paths relocated; NMH_E002 timed out in a cold build at 180 s.",
+   "retired": "E003 (this configuration, a copy of the NMH_E002 entry array) built in 114 s but its type output contains only solana_program_error::ProgramError: the opaque boundaries cut every AdapterRw type away. Wrong shape for AdapterRwTypes; superseded by S903."
+  },
+  {
+   "spec_id": "S903",
+   "kind": "frozen",
+   "label": "pilot AdapterRwTypes (merged owned roots)",
+   "crate": "aspis-r1-cost-probe-program",
+   "package": "aspis_r1_cost_probe_program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts",
+   "start_from": [
+    "crate::r1_pool_adapter::owned::authenticate_asq8_accounts",
+    "crate::r1_pool_adapter::owned::validate_asq8",
+    "crate::r1_pool_adapter::owned::stage1_owned",
+    "crate::r1_pool_adapter::owned::stage2_owned"
+   ],
+   "include": [],
+   "opaque": [
+    "crate::r1_pool_adapter::decode_lane_from_pool_release",
+    "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+    "crate::r1_pool_adapter::decode_master_box",
+    "crate::r1_pool_adapter::decode_checkpoint_box",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_readonly_account",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_distinct_accounts",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::first_decoded",
+    "crate::r1_pool_adapter::decode_public_statement_box",
+    "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+    "crate::r1_pool_adapter::owned::snapshot",
+    "crate::r1_pool_adapter::owned::stage1",
+    "crate::r1_pool_adapter::owned::stage2",
+    "crate::r1_pool_adapter::scan_proof_buffer",
+    "crate::r1_pool_adapter::reconstruct_asq8_statement",
+    "crate::r1_pool_adapter::emit_result",
+    "crate::r1_pool_adapter::pool_program_id",
+    "crate::verifier::tx2_authenticated",
+    "crate::observer",
+    "crate::error",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_pool_v1_pair_forest_terminal_request_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_statement_v1",
+    "aspis_statement::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::_::nullifier",
+    "solana_account_info::AccountInfo"
+   ],
+   "namespace": "PCO_adapter_owned",
+   "p1_half": "P1b",
+   "pilot": true,
+   "covers": {
+    "modules": [
+     "AdapterRwTypes"
+    ],
+    "definitions": [
+     "the 15 reached types of AdapterRwTypes (PCO_PARTITION.json)"
+    ]
+   },
+   "basis": "Union of the receipted NMT_stage1_owned, NMS_stage2, NMS_validate and NMX_auth_cut configurations (roots authenticate_asq8_accounts, validate_asq8, stage1_owned, stage2_owned; union of their --opaque lists minus the roots); AdapterRwTypes draws its types from several emissions, so the per-module spec merges the roots."
+  },
+  {
+   "spec_id": "S001",
+   "kind": "frozen",
+   "label": "aspis-core:field",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::field::_::neg",
+    "crate::field::mul_by_r"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_core_field",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "NFG_CheckedFieldRef.Funs",
+     "RPz7_FIo_NativeFuns"
+    ],
+    "definitions": [
+     "NFG_CheckedFieldRef.field.M31.neg",
+     "NFG_CheckedFieldRef.field.QM31.neg",
+     "FIo_Native.aspis_core.field.mul_by_r"
+    ],
+    "rust_symbols": [
+     "CRATE::field::mul_by_r",
+     "CRATE::field::{CRATE::field::M31}::neg",
+     "CRATE::field::{CRATE::field::QM31}::neg"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S002",
+   "kind": "frozen",
+   "label": "aspis-core:r0/heap",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::r0::heap::filled"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_core_r0_heap",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeFuns"
+    ],
+    "definitions": [
+     "FIo_Native.aspis_core.r0.heap.filled"
+    ],
+    "rust_symbols": [
+     "CRATE::r0::heap::filled"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S003",
+   "kind": "frozen_types_only",
+   "label": "aspis-core:r0/mod",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_core_r0_mod",
+   "p1_half": "P1a",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeTypes"
+    ],
+    "definitions": [
+     "FIo_Native.aspis_core.r0.Error"
+    ],
+    "rust_symbols": [
+     "CRATE::r0::Error"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S004",
+   "kind": "frozen",
+   "label": "aspis-core:r0/transport",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0",
+   "start_from": [
+    "crate::r0::transport::order"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_core_r0_transport",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeFuns"
+    ],
+    "definitions": [
+     "FIo_Native.aspis_core.r0.transport.order"
+    ],
+    "rust_symbols": [
+     "CRATE::r0::transport::order"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S005",
+   "kind": "frozen",
+   "label": "aspis-statement:atomic_statement",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::atomic_statement::decode_digest_canonical",
+    "aspis_statement::atomic_statement::encode_digest_canonical",
+    "aspis_statement::atomic_statement::unwrap_fixed_slice"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_atomic_statement",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "AspisR1TerminalDecoder.Types",
+     "NFY_Part042",
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body",
+     "AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop",
+     "AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical",
+     "AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice",
+     "AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical",
+     "AspisR1TerminalDecoder.atomic_statement.AtomicStatementError",
+     "AspisR20Request.atomic_statement.AtomicStatementError",
+     "AspisR20Request.atomic_statement.unwrap_fixed_slice",
+     "AspisR20Request.atomic_statement.decode_digest_canonical"
+    ],
+    "rust_symbols": [
+     "CRATE::atomic_statement::AtomicStatementError",
+     "CRATE::atomic_statement::decode_digest_canonical",
+     "CRATE::atomic_statement::encode_digest_canonical",
+     "CRATE::atomic_statement::unwrap_fixed_slice"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S006",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/asq8_payment_reference",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::pair_forest_terminal::asq8_payment_reference::encode_common"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_asq8_payment_reference",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR20Request.pool_v1.pair_forest_terminal.asq8_payment_reference.encode_common"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::pair_forest_terminal::asq8_payment_reference::encode_common"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S007",
+   "kind": "frozen_types_only",
+   "label": "aspis-statement:pool_v1/format",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_format",
+   "p1_half": "P1a",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION",
+     "AspisR1TerminalDecoder.pool_v1.format.POOL_V1_TREE_DEPTH",
+     "AspisR20Request.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION",
+     "AspisR20Request.pool_v1.format.POOL_V1_TREE_DEPTH"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::format::POOL_V1_DIGEST_ENCODING_VERSION",
+     "CRATE::pool_v1::format::POOL_V1_TREE_DEPTH"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S008",
+   "kind": "frozen_types_only",
+   "label": "aspis-statement:pool_v1/incremental_merkle",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_incremental_merkle",
+   "p1_half": "P1a",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Types",
+     "NFY_Part042"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1TreeError",
+     "AspisR20Request.pool_v1.incremental_merkle.PoolV1TreeError"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::incremental_merkle::PoolV1TreeError"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S009",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/pair_forest_accounts",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::pair_forest_accounts::digest_is_canonical",
+    "aspis_statement::pool_v1::pair_forest_accounts::first_canonical_byte",
+    "aspis_statement::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_pair_forest_accounts",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical_loop",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.digest_is_canonical",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.first_canonical_byte",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::pair_forest_accounts::digest_is_canonical",
+     "CRATE::pool_v1::pair_forest_accounts::first_canonical_byte",
+     "CRATE::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S010",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/pair_forest_terminal",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::pair_forest_terminal::_::common",
+    "aspis_statement::pool_v1::pair_forest_terminal::asq8_reference_envelope",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+    "aspis_statement::pool_v1::pair_forest_terminal::statement_public_common",
+    "aspis_statement::pool_v1::pair_forest_terminal::transition_kind"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_pair_forest_terminal",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "AspisR1TerminalDecoder.Types",
+     "NFY_Part042",
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.MASTER_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.transition_kind",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.statement_public_common",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1",
+     "AspisR20Request.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1",
+     "AspisR20Request.pool_v1.pair_forest_terminal.transition_kind",
+     "AspisR20Request.pool_v1.pair_forest_terminal.asq8_reference_envelope"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::pair_forest_terminal::MASTER_OFFSET",
+     "CRATE::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalCommonV1",
+     "CRATE::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalRequestV1",
+     "CRATE::pool_v1::pair_forest_terminal::asq8_reference_envelope",
+     "CRATE::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+     "CRATE::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1",
+     "CRATE::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+     "CRATE::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+     "CRATE::pool_v1::pair_forest_terminal::statement_public_common",
+     "CRATE::pool_v1::pair_forest_terminal::transition_kind",
+     "CRATE::pool_v1::pair_forest_terminal::{CRATE::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1}::common"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S011",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/pair_terminal",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::pair_terminal::decode_pool_v1_pair_verified_afterstate_v1",
+    "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+    "aspis_statement::pool_v1::pair_terminal::exact",
+    "aspis_statement::pool_v1::pair_terminal::validate_verified_afterstate"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_pair_terminal",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "AspisR1TerminalDecoder.Types"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate_loop",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.exact",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.exact.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1",
+     "CRATE::pool_v1::pair_terminal::decode_pool_v1_pair_verified_afterstate_v1",
+     "CRATE::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1",
+     "CRATE::pool_v1::pair_terminal::exact",
+     "CRATE::pool_v1::pair_terminal::exact::closure",
+     "CRATE::pool_v1::pair_terminal::validate_verified_afterstate"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S012",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/pair_tree_profile",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::decode_pool_v1_pair_live_snapshot_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::digest_is_canonical",
+    "aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_late_public_statement_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1",
+    "aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_pair_tree_profile",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "AspisR1TerminalDecoder.Types"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical_loop.body",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical_loop",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1",
+     "AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::pair_tree_profile::POOL_V1_PAIR_CAPACITY",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1",
+     "CRATE::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1",
+     "CRATE::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1",
+     "CRATE::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1",
+     "CRATE::pool_v1::pair_tree_profile::decode_pool_v1_pair_live_snapshot_v1",
+     "CRATE::pool_v1::pair_tree_profile::digest_is_canonical",
+     "CRATE::pool_v1::pair_tree_profile::encode_pool_v1_pair_late_public_statement_v1",
+     "CRATE::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1",
+     "CRATE::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S013",
+   "kind": "frozen",
+   "label": "aspis-statement:pool_v1/payment_relation",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "aspis_statement::pool_v1::payment_relation::decode_common",
+    "aspis_statement::pool_v1::payment_relation::decode_pool_v1_private_transfer_public_v1",
+    "aspis_statement::pool_v1::payment_relation::decode_pool_v1_withdrawal_public_v1",
+    "aspis_statement::pool_v1::payment_relation::digest_is_canonical",
+    "aspis_statement::pool_v1::payment_relation::encode_common",
+    "aspis_statement::pool_v1::payment_relation::encode_pool_v1_private_transfer_public_v1",
+    "aspis_statement::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1",
+    "aspis_statement::pool_v1::payment_relation::require_header",
+    "aspis_statement::pool_v1::payment_relation::transfer_common",
+    "aspis_statement::pool_v1::payment_relation::validate_common",
+    "aspis_statement::pool_v1::payment_relation::validate_pool_v1_private_transfer_public_v1",
+    "aspis_statement::pool_v1::payment_relation::validate_pool_v1_withdrawal_public_v1",
+    "aspis_statement::pool_v1::payment_relation::withdrawal_common"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_pool_v1_payment_relation",
+   "p1_half": "P1a",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "AspisR1TerminalDecoder.Types",
+     "NFY_Part042",
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.ASSET_ID_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.NULLIFIER_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_ROOT_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.POOL_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.encode_common",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.withdrawal_common",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.validate_common",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.transfer_common",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.POOL_V1_CANONICAL_FEE",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.require_header",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1WithdrawalPublicV1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.CommonPublicV1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common.closure_1",
+     "AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common.closure",
+     "AspisR20Request.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1",
+     "AspisR20Request.pool_v1.payment_relation.PoolV1WithdrawalPublicV1",
+     "AspisR20Request.pool_v1.payment_relation.CommonPublicV1",
+     "AspisR20Request.pool_v1.payment_relation.decode_common.closure_1",
+     "AspisR20Request.pool_v1.payment_relation.decode_common.closure",
+     "AspisR20Request.pool_v1.payment_relation.transfer_common",
+     "AspisR20Request.pool_v1.payment_relation.digest_is_canonical",
+     "AspisR20Request.pool_v1.payment_relation.validate_common",
+     "AspisR20Request.pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+     "AspisR20Request.pool_v1.payment_relation.POOL_V1_CANONICAL_FEE",
+     "AspisR20Request.pool_v1.payment_relation.withdrawal_common",
+     "AspisR20Request.pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+     "AspisR20Request.pool_v1.payment_relation.ASSET_ID_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.NULLIFIER_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.ANCHOR_ROOT_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.POOL_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.decode_common",
+     "AspisR20Request.pool_v1.payment_relation.require_header",
+     "AspisR20Request.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET",
+     "AspisR20Request.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+     "AspisR20Request.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1"
+    ],
+    "rust_symbols": [
+     "CRATE::pool_v1::payment_relation::ANCHOR_ROOT_OFFSET",
+     "CRATE::pool_v1::payment_relation::ANCHOR_SEQUENCE_OFFSET",
+     "CRATE::pool_v1::payment_relation::ASSET_ID_OFFSET",
+     "CRATE::pool_v1::payment_relation::CommonPublicV1",
+     "CRATE::pool_v1::payment_relation::NULLIFIER_OFFSET",
+     "CRATE::pool_v1::payment_relation::POOL_OFFSET",
+     "CRATE::pool_v1::payment_relation::POOL_V1_CANONICAL_FEE",
+     "CRATE::pool_v1::payment_relation::PoolV1PaymentStatementFormatError",
+     "CRATE::pool_v1::payment_relation::PoolV1PrivateTransferPublicV1",
+     "CRATE::pool_v1::payment_relation::PoolV1WithdrawalPublicV1",
+     "CRATE::pool_v1::payment_relation::SECOND_OUTPUT_OFFSET",
+     "CRATE::pool_v1::payment_relation::decode_common",
+     "CRATE::pool_v1::payment_relation::decode_common::closure",
+     "CRATE::pool_v1::payment_relation::decode_common::closure#1",
+     "CRATE::pool_v1::payment_relation::decode_pool_v1_private_transfer_public_v1",
+     "CRATE::pool_v1::payment_relation::decode_pool_v1_withdrawal_public_v1",
+     "CRATE::pool_v1::payment_relation::digest_is_canonical",
+     "CRATE::pool_v1::payment_relation::encode_common",
+     "CRATE::pool_v1::payment_relation::encode_pool_v1_private_transfer_public_v1",
+     "CRATE::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1",
+     "CRATE::pool_v1::payment_relation::require_header",
+     "CRATE::pool_v1::payment_relation::transfer_common",
+     "CRATE::pool_v1::payment_relation::validate_common",
+     "CRATE::pool_v1::payment_relation::validate_pool_v1_private_transfer_public_v1",
+     "CRATE::pool_v1::payment_relation::validate_pool_v1_withdrawal_public_v1",
+     "CRATE::pool_v1::payment_relation::withdrawal_common"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S014",
+   "kind": "frozen_types_only",
+   "label": "aspis-statement:spend",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_statement_spend",
+   "p1_half": "P1a",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs",
+     "NFY_Part043"
+    ],
+    "definitions": [
+     "AspisR1TerminalDecoder.spend.VALUE_LIMIT",
+     "AspisR20Request.spend.VALUE_LIMIT"
+    ],
+    "rust_symbols": [
+     "CRATE::spend::VALUE_LIMIT"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S015",
+   "kind": "frozen_types_only",
+   "label": "aspis-r1-cost-probe:candidate",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_candidate",
+   "p1_half": "P1b",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "Stage2ContinuationTypes"
+    ],
+    "definitions": [
+     "AspisR1Stage2.verifier.candidate.query_values.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::verifier::candidate::query_values::closure"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S016",
+   "kind": "frozen",
+   "label": "aspis-r1-cost-probe:fast_pairing",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "crate::fast_pairing::_::push",
+    "crate::fast_pairing::canonical::_::push"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_fast_pairing",
+   "p1_half": "P1b",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeFuns"
+    ],
+    "definitions": [
+     "FIo_Native.fast_pairing.canonical.Dot.push_loop.body",
+     "FIo_Native.fast_pairing.canonical.Dot.push_loop",
+     "FIo_Native.fast_pairing.canonical.Dot.push",
+     "FIo_Native.fast_pairing.EbyKDot.push"
+    ],
+    "rust_symbols": [
+     "CRATE::fast_pairing::canonical::{CRATE::fast_pairing::canonical::Dot}::push",
+     "CRATE::fast_pairing::{CRATE::fast_pairing::EbyKDot}::push"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S017",
+   "kind": "frozen_types_only",
+   "label": "aspis-r1-cost-probe:multiproof",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_multiproof",
+   "p1_half": "P1b",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "Stage2ContinuationTypes"
+    ],
+    "definitions": [
+     "AspisR1Stage2.multiproof.Arity"
+    ],
+    "rust_symbols": [
+     "CRATE::multiproof::Arity"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S018",
+   "kind": "frozen_types_only",
+   "label": "aspis-r1-cost-probe:r1_semantic",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_r1_semantic",
+   "p1_half": "P1b",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "NJT_ClaimsRef_Funs"
+    ],
+    "definitions": [
+     "NJT_ClaimsRef.r1_semantic.NJT_claims_ref"
+    ],
+    "rust_symbols": [
+     "CRATE::r1_semantic::NJT_claims_ref"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S019",
+   "kind": "frozen",
+   "label": "aspis-r1-cost-probe:r1_wire",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "crate::r1_wire::_::decode_k",
+    "crate::r1_wire::_::decode_k_value",
+    "crate::r1_wire::_::payload"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_r1_wire",
+   "p1_half": "P1b",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "AspisR1DecodeKFullV10.Funs"
+    ],
+    "definitions": [
+     "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.payload",
+     "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value",
+     "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body",
+     "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop",
+     "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k"
+    ],
+    "rust_symbols": [
+     "CRATE::r1_wire::{CRATE::r1_wire::ValidatedRecord<'a>}::decode_k",
+     "CRATE::r1_wire::{CRATE::r1_wire::ValidatedRecord<'a>}::decode_k_value",
+     "CRATE::r1_wire::{CRATE::r1_wire::ValidatedRecord<'a>}::payload"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S020",
+   "kind": "frozen",
+   "label": "aspis-r1-cost-probe:transport",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [
+    "crate::transport::_::row"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_transport",
+   "p1_half": "P1b",
+   "roots_needed": null,
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeFuns",
+     "RPz7_FIo_NativeTypes",
+     "Stage2ContinuationTypes"
+    ],
+    "definitions": [
+     "FIo_Native.transport.TAU",
+     "FIo_Native.transport.Variant.row_loop.body",
+     "FIo_Native.transport.Variant.row_loop",
+     "FIo_Native.transport.Variant.row",
+     "FIo_Native.transport.Variant",
+     "AspisR1Stage2.transport.Variant"
+    ],
+    "rust_symbols": [
+     "CRATE::transport::TAU",
+     "CRATE::transport::Variant",
+     "CRATE::transport::{CRATE::transport::Variant}::row"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S021",
+   "kind": "frozen_types_only",
+   "label": "aspis-r1-cost-probe:verifier",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_verifier",
+   "p1_half": "P1b",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeTypes",
+     "Stage2ContinuationTypes"
+    ],
+    "definitions": [
+     "FIo_Native.verifier.Error",
+     "AspisR1Stage2.verifier.Error",
+     "AspisR1Stage2.verifier.Phase"
+    ],
+    "rust_symbols": [
+     "CRATE::verifier::Error",
+     "CRATE::verifier::Phase"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "S022",
+   "kind": "frozen_types_only",
+   "label": "aspis-r1-cost-probe:weights",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build",
+   "start_from": [],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCO_aspis_r1_cost_probe_weights",
+   "p1_half": "P1b",
+   "roots_needed": "types only: no function item among the uncovered/differing definitions of this source file. Take the roots from the callers of these types (the sibling Funs modules of the covered Type modules), as done for pilot S903.",
+   "covers": {
+    "modules": [
+     "RPz7_FIo_NativeTypes"
+    ],
+    "definitions": [
+     "FIo_Native.weights.Weights",
+     "FIo_Native.weights.Weights.raw.closure_1",
+     "FIo_Native.weights.Weights.raw.closure",
+     "FIo_Native.weights.Weights.scalar_factor.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::weights::Weights",
+     "CRATE::weights::{CRATE::weights::Weights}::raw::closure",
+     "CRATE::weights::{CRATE::weights::Weights}::raw::closure#1",
+     "CRATE::weights::{CRATE::weights::Weights}::scalar_factor::closure"
+    ]
+   },
+   "basis": "Derived from PCO_PARTITION.json reached definitions that are UNCOVERED or COVERED_DIFFERS; roots are the function items; include/opaque lists are empty and must be reviewed per spec (the NMH specs for the same functions are the starting point)."
+  },
+  {
+   "spec_id": "C001",
+   "kind": "cut",
+   "label": "cut crate ? (TRANSFORMED_COPY)",
+   "crate": "?",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisV8R19.QuarticFieldSlice",
+     "CurrentClaimDotModel",
+     "CurrentClaimSumModel",
+     "CurrentPowersCallback",
+     "CurrentWideMulCanonical",
+     "LoopPowersCandidateModel",
+     "RPu_FIq_CopyPrefix",
+     "RPu_FIq_Native01",
+     "RPu_FIq_Native02",
+     "RPu_FIq_Native03",
+     "RPu_FIq_Native04",
+     "RPu_FIq_Native05",
+     "RPu_FIq_Native06",
+     "RPu_FIq_Native07",
+     "RPu_FIq_Native09",
+     "RPu_FIq_Native10",
+     "RPu_FIq_Native11",
+     "RPu_FIq_Native13",
+     "RPu_FIq_Native14",
+     "RPu_FIq_NativeExternal",
+     "RPv_ArrayFromFnCopySlice",
+     "RPv_PoseidonPreparedSum3Source",
+     "RPv_Qm31PackBase4Slice",
+     "RPv_RawPoseidonExternalRowWrapperSlice",
+     "RPv_RowCallbackSlice",
+     "S1ClaimBorrowedAbiNativeV1",
+     "S1ClaimBoundedResultCompositionV1",
+     "S1ClaimOwnedNestedModelV1",
+     "S1M31EmbeddingSourceV1"
+    ],
+    "definitions": [
+     "AspisR66Field.field.reduce_u64",
+     "AspisR66Field.field.M31.mul",
+     "AspisR66Field.field.M31.add",
+     "AspisR66Field.field.M31.sub",
+     "AspisR66Field.field.M31.neg",
+     "AspisR66Field.field.r23_product_u32_bounded",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim",
+     "AspisR1CurrentPreparedClaim.aspis_core.field.M31",
+     "AspisR1CurrentPreparedClaim.aspis_core.field.CM31",
+     "AspisR1CurrentPreparedClaim.aspis_core.field.QM31",
+     "AspisR1CurrentPreparedClaim.aspis_core.circle.SecureCirclePoint",
+     "AspisR1CurrentPreparedClaim.aspis_core.field.WideExact",
+     "AspisR1CurrentPreparedClaim.r1_wire.Challenges",
+     "AspisR1CurrentPreparedClaim.r1_semantic.Verified",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure",
+     "AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.ZERO",
+     "AspisR1CurrentPreparedClaim.trace.value",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop",
+     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum",
+     "AspisR1CurrentPowers.field.WideExact",
+     "AspisR1CurrentWideMul.field.wide_exact.mul_u",
+     "AspisR1CurrentWideMul.field.wide_exact.WideExact.mul",
+     "AspisR1CurrentWideMul.field.QM31.sub",
+     "AspisR1LoopPowers.field.WideExact",
+     "AspisR1LoopPowers.field.WideExact.ONE",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.lift_m31",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.accumulate_endpoint",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual",
+     "FIq_Native.field.M31.Insts.CoreCmpPartialEqM31.eq",
+     "FIq_Native.field.M31_constructor",
+     "FIq_Native.field.reduce_u64",
+     "FIq_Native.field.M31.add",
+     "FIq_Native.field.M31.sub",
+     "FIq_Native.field.M31.mul",
+     "FIq_Native.field.M31.reduce_u62",
+     "FIq_Native.field.CM31.new",
+     "FIq_Native.field.CM31.from_m31",
+     "FIq_Native.field.CM31.mul",
+     "FIq_Native.field.CM31.square",
+     "FIq_Native.field.CM31.mul_m31",
+     "FIq_Native.field.QM31.Insts.CoreCloneClone.clone",
+     "FIq_Native.field.PreparedQm31Multiplier.new",
+     "FIq_Native.field.PreparedQm31Multiplier.mul",
+     "FIq_Native.field.qm31_from_karatsuba_channel_sums",
+     "FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0",
+     "FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0",
+     "FIq_Native.field.qm31_sum_products3_prepared_loop0",
+     "FIq_Native.field.qm31_sum_products3_prepared",
+     "FIq_Native.field.QM31.from_cm31",
+     "FIq_Native.field.QM31.add",
+     "FIq_Native.field.QM31.sub",
+     "FIq_Native.field.QM31.mul",
+     "FIq_Native.field.QM31.mul_m31",
+     "FIq_Native.field.qm31_pack_base4.closure.Insts.CoreOpsFunctionFnTupleM31U64.call",
+     "FIq_Native.field.qm31_pack_base4",
+     "FIq_Native.field.qm31_m31_dot_loop0",
+     "FIq_Native.field.qm31_m31_dot_loop1_loop0",
+     "FIq_Native.field.qm31_m31_dot_loop1_loop1",
+     "FIq_Native.field.qm31_m31_dot_loop1",
+     "FIq_Native.field.qm31_m31_dot",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.withdrawal_public",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.private_public",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.semantic",
+     "FIq_Native.poseidon2.INTERNAL",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy.SHIFTS",
+     "FIq_Native.state_only_poseidon.extension_from_raw_limbs",
+     "FIq_Native.state_only_poseidon.extension_limbs",
+     "FIq_Native.poseidon2.POSEIDON2_WIDTH",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy_loop0",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy_loop1",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy",
+     "FIq_Native.state_only_poseidon.pow5",
+     "FIq_Native.state_only_poseidon.internal_round",
+     "FIq_Native.state_only_poseidon.interpolated_internal_pair",
+     "FIq_Native.state_only_poseidon.interpolate_three_constant_limb",
+     "FIq_Native.state_only_poseidon.interpolate_three_constant_columns_loop",
+     "FIq_Native.state_only_poseidon.interpolate_three_constant_columns",
+     "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0_loop0",
+     "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0",
+     "FIq_Native.state_only_poseidon.external_local_packed_raw",
+     "FIq_Native.state_only_poseidon.external_local_packed",
+     "FIq_Native.state_only_poseidon.external_linear_packed_loop",
+     "FIq_Native.state_only_poseidon.external_linear_packed",
+     "FIq_Native.state_only_poseidon.full_round_packed_loop",
+     "FIq_Native.state_only_poseidon.full_round_packed",
+     "FIq_Native.state_only_poseidon.external_linear_lazy_row",
+     "FIq_Native.state_only_poseidon.external_linear_lazy_loop0",
+     "FIq_Native.state_only_poseidon.external_linear_lazy_loop1",
+     "FIq_Native.state_only_poseidon.external_linear_lazy",
+     "FIq_Native.state_only_poseidon.full_round_loop",
+     "FIq_Native.state_only_poseidon.full_round",
+     "FIq_Native.poseidon2.EXTERNAL_FINAL",
+     "FIq_Native.poseidon2.EXTERNAL_INITIAL",
+     "FIq_Native.state_only_poseidon.interpolated_full_pair_packed",
+     "FIq_Native.state_only_poseidon.full_round_m31_constants_packed_loop",
+     "FIq_Native.state_only_poseidon.full_round_m31_constants_packed",
+     "FIq_Native.state_only_poseidon.full_round_m31_constants_loop",
+     "FIq_Native.state_only_poseidon.full_round_m31_constants",
+     "FIq_Native.poseidon2.RATE",
+     "FIq_Native.state_only_poseidon.leading_pair_packed_loop",
+     "FIq_Native.state_only_poseidon.leading_pair_packed",
+     "FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted_loop",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop3",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high_loop0_loop0",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high_loop0",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes",
+     "FIq_Native.spend.DOMAIN_NOTE",
+     "FIq_Native.spend.DOMAIN_NULLIFIER",
+     "FIq_Native.spend.DOMAIN_OWNER_KEY",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.initial_variant_selectors",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.poseidon_selectors",
+     "FIq_Native.pool_v1.format.POOL_V1_TREE_DEPTH",
+     "FIq_Native.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values_literal_loop0",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values_literal_loop1",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values_literal",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active_literal",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors_loop",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.at_point",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop0",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop1",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31",
+     "FIq_Native.core.num.U16.trailing_zeros_aux",
+     "AspisR1SelectedMaskProbe.array_from_fn_copy_loop",
+     "AspisR1SelectedMaskProbe.array_from_fn_copy",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_from_karatsuba_channel_sums",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared",
+     "AspisR1SelectedMaskProbe.field.qm31_pack_base4.closure",
+     "AspisR1SelectedMaskProbe.field.qm31_pack_base4.closure.Insts.CoreOpsFunctionFnTupleM31U64.call",
+     "AspisR1SelectedMaskProbe.field.qm31_pack_base4",
+     "AspisR1SelectedMaskProbe.state_only_poseidon.external_linear_lazy_row",
+     "AspisR1SelectedMaskProbe.state_only_poseidon.external_linear_lazy_row.closure",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_scalar",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_push",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0.body",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0.body",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops",
+     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.prepared_claim_owned",
+     "AspisR1CurrentPreparedClaim.ClaimDotBoundedResult.outerLoop",
+     "AspisR1CurrentPreparedClaim.verifier.owned_scalar",
+     "AspisR1CurrentPreparedClaim.verifier.owned_push",
+     "AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body",
+     "AspisR1CurrentPreparedClaim.verifier.owned_sum_loop",
+     "AspisR1CurrentPreparedClaim.verifier.owned_sum",
+     "AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0.body",
+     "AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0",
+     "AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0.body",
+     "AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0",
+     "AspisR1CurrentPreparedClaim.verifier.owned_claim_loops",
+     "AspisS1M31Embedding.source_from_m31"
+    ],
+    "rust_symbols": [
+     "CRATE::array_from_fn_copy",
+     "CRATE::aspis_core::circle::SecureCirclePoint",
+     "CRATE::aspis_core::field::CM31",
+     "CRATE::aspis_core::field::M31",
+     "CRATE::aspis_core::field::QM31",
+     "CRATE::aspis_core::field::WideExact",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::WideExact}::ZERO",
+     "CRATE::field::M31",
+     "CRATE::field::WideExact",
+     "CRATE::field::qm31_from_karatsuba_channel_sums",
+     "CRATE::field::qm31_m31_dot",
+     "CRATE::field::qm31_pack_base4",
+     "CRATE::field::qm31_pack_base4::closure",
+     "CRATE::field::qm31_pack_base4::{impl core::ops::function::Fn<(CRATE::field::M31,), u64> for CRATE::field::qm31_pack_base4::closure}::call",
+     "CRATE::field::qm31_sum_products3_prepared",
+     "CRATE::field::r23_product_u32_bounded",
+     "CRATE::field::reduce_u64",
+     "CRATE::field::wide_exact::mul_u",
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul",
+     "CRATE::field::{CRATE::field::CM31}::from_m31",
+     "CRATE::field::{CRATE::field::CM31}::mul",
+     "CRATE::field::{CRATE::field::CM31}::mul_m31",
+     "CRATE::field::{CRATE::field::CM31}::new",
+     "CRATE::field::{CRATE::field::CM31}::square",
+     "CRATE::field::{CRATE::field::M31}::add",
+     "CRATE::field::{CRATE::field::M31}::mul",
+     "CRATE::field::{CRATE::field::M31}::neg",
+     "CRATE::field::{CRATE::field::M31}::reduce_u62",
+     "CRATE::field::{CRATE::field::M31}::sub",
+     "CRATE::field::{CRATE::field::PreparedQm31Multiplier}::mul",
+     "CRATE::field::{CRATE::field::PreparedQm31Multiplier}::new",
+     "CRATE::field::{CRATE::field::QM31}::add",
+     "CRATE::field::{CRATE::field::QM31}::from_cm31",
+     "CRATE::field::{CRATE::field::QM31}::mul",
+     "CRATE::field::{CRATE::field::QM31}::mul_m31",
+     "CRATE::field::{CRATE::field::QM31}::sub",
+     "CRATE::field::{CRATE::field::WideExact}::ONE",
+     "CRATE::field::{impl core::clone::Clone for CRATE::field::QM31}::clone",
+     "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::M31> for CRATE::field::M31}::eq",
+     "CRATE::pool_v1::format::POOL_V1_TREE_DEPTH",
+     "CRATE::pool_v1::pair_forest_copy_terminal::accumulate_endpoint",
+     "CRATE::pool_v1::pair_forest_copy_terminal::copy_residual",
+     "CRATE::pool_v1::pair_forest_copy_terminal::evaluate_with_selectors",
+     "CRATE::pool_v1::pair_forest_copy_terminal::lift_m31",
+     "CRATE::pool_v1::pair_forest_copy_terminal::link_weight",
+     "CRATE::pool_v1::pair_forest_copy_terminal::pattern_values",
+     "CRATE::pool_v1::pair_forest_copy_terminal::pattern_values_literal",
+     "CRATE::pool_v1::pair_forest_copy_terminal::selector_mask_sum_16",
+     "CRATE::pool_v1::pair_forest_copy_terminal::{CRATE::pool_v1::pair_forest_copy_terminal::Selectors}::active",
+     "CRATE::pool_v1::pair_forest_copy_terminal::{CRATE::pool_v1::pair_forest_copy_terminal::Selectors}::active_literal",
+     "CRATE::pool_v1::pair_forest_copy_terminal::{CRATE::pool_v1::pair_forest_copy_terminal::Selectors}::at_point",
+     "CRATE::pool_v1::pair_forest_copy_terminal::{CRATE::pool_v1::pair_forest_copy_terminal::Selectors}::boxed_at_point",
+     "CRATE::pool_v1::pair_forest_copy_terminal::{CRATE::pool_v1::pair_forest_copy_terminal::Selectors}::expand",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::absorption_lanes_literal",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_occupancy_lanes",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_path_lanes",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_preweighted",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_schedule_lanes",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_value_lanes",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::composition_parts",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::equality_value",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::initial_variant_selectors",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::path_lanes_literal",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::poseidon_selectors",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::private_public",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::r0::{CRATE::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::semantic",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::r0::{CRATE::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::reconstruct_10",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::selected_claim",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::semantic_initial_and_absorption",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::semantic_packed",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::sum_high",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::terminal_parts",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::validate_transition",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::withdrawal_public",
+     "CRATE::pool_v1::pair_tree_profile::POOL_V1_PAIR_CAPACITY",
+     "CRATE::poseidon2::EXTERNAL_FINAL",
+     "CRATE::poseidon2::EXTERNAL_INITIAL",
+     "CRATE::poseidon2::INTERNAL",
+     "CRATE::poseidon2::POSEIDON2_WIDTH",
+     "CRATE::poseidon2::RATE",
+     "CRATE::r1_semantic::Verified",
+     "CRATE::r1_wire::Challenges",
+     "CRATE::source_from_m31",
+     "CRATE::spend::DOMAIN_NOTE",
+     "CRATE::spend::DOMAIN_NULLIFIER",
+     "CRATE::spend::DOMAIN_OWNER_KEY",
+     "CRATE::state_only_poseidon::evaluate_state_only_poseidon_oracle_projected",
+     "CRATE::state_only_poseidon::extension_from_raw_limbs",
+     "CRATE::state_only_poseidon::extension_limbs",
+     "CRATE::state_only_poseidon::external_linear_lazy",
+     "CRATE::state_only_poseidon::external_linear_lazy_row",
+     "CRATE::state_only_poseidon::external_linear_lazy_row::closure",
+     "CRATE::state_only_poseidon::external_linear_packed",
+     "CRATE::state_only_poseidon::external_local_packed",
+     "CRATE::state_only_poseidon::external_local_packed_raw",
+     "CRATE::state_only_poseidon::full_round",
+     "CRATE::state_only_poseidon::full_round_m31_constants",
+     "CRATE::state_only_poseidon::full_round_m31_constants_packed",
+     "CRATE::state_only_poseidon::full_round_packed",
+     "CRATE::state_only_poseidon::internal_linear_lazy",
+     "CRATE::state_only_poseidon::internal_linear_lazy::SHIFTS",
+     "CRATE::state_only_poseidon::internal_round",
+     "CRATE::state_only_poseidon::interpolate_three_constant_columns",
+     "CRATE::state_only_poseidon::interpolate_three_constant_limb",
+     "CRATE::state_only_poseidon::interpolated_full_pair_packed",
+     "CRATE::state_only_poseidon::interpolated_internal_pair",
+     "CRATE::state_only_poseidon::leading_pair_packed",
+     "CRATE::state_only_poseidon::pow5",
+     "CRATE::trace::value",
+     "CRATE::verifier::owned_claim_loops",
+     "CRATE::verifier::owned_push",
+     "CRATE::verifier::owned_scalar",
+     "CRATE::verifier::owned_sum",
+     "CRATE::verifier::prepared_claim",
+     "CRATE::verifier::prepared_claim_dot",
+     "CRATE::verifier::prepared_claim_dot::closure",
+     "CRATE::verifier::prepared_claim_owned",
+     "CRATE::verifier::prepared_claim_sum",
+     "core::num::{u16}::trailing_zeros"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C002",
+   "kind": "cut",
+   "label": "cut crate aspis_core (FROZEN_CRATE)",
+   "crate": "aspis_core",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR72Sampler.Funs",
+     "AspisR72Sampler.Types"
+    ],
+    "definitions": [
+     "AspisR72Sampler.field.M31.add",
+     "AspisR72Sampler.field.M31.sub",
+     "AspisR72Sampler.field.reduce_u64",
+     "AspisR72Sampler.field.M31.mul",
+     "AspisR72Sampler.field.M31.neg",
+     "AspisR72Sampler.field.r23_product_u32_bounded",
+     "AspisR72Sampler.field.CM31.square",
+     "AspisR72Sampler.field.CM31.mul",
+     "AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call",
+     "AspisR72Sampler.field.r24_canonical_mul.PP",
+     "AspisR72Sampler.field.CM31.new",
+     "AspisR72Sampler.field.r24_canonical_mul",
+     "AspisR72Sampler.field.QM31.mul",
+     "AspisR72Sampler.field.QM31.sub",
+     "AspisR72Sampler.field.QM31.add",
+     "AspisR72Sampler.circle.CirclePointError",
+     "AspisR72Sampler.field.r24_canonical_mul.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::circle::CirclePointError",
+     "CRATE::field::r23_product_u32_bounded",
+     "CRATE::field::r24_canonical_mul",
+     "CRATE::field::r24_canonical_mul::PP",
+     "CRATE::field::r24_canonical_mul::closure",
+     "CRATE::field::r24_canonical_mul::{impl core::ops::function::Fn<(u64,), u64> for CRATE::field::r24_canonical_mul::closure}::call",
+     "CRATE::field::reduce_u64",
+     "CRATE::field::{CRATE::field::CM31}::mul",
+     "CRATE::field::{CRATE::field::CM31}::new",
+     "CRATE::field::{CRATE::field::CM31}::square",
+     "CRATE::field::{CRATE::field::M31}::add",
+     "CRATE::field::{CRATE::field::M31}::mul",
+     "CRATE::field::{CRATE::field::M31}::neg",
+     "CRATE::field::{CRATE::field::M31}::sub",
+     "CRATE::field::{CRATE::field::QM31}::add",
+     "CRATE::field::{CRATE::field::QM31}::mul",
+     "CRATE::field::{CRATE::field::QM31}::sub"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C003",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_adapter_reconstruct (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_adapter_reconstruct",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1AdapterReconstruct.Funs",
+     "AspisR1AdapterReconstruct.Types"
+    ],
+    "definitions": [
+     "AspisR1AdapterReconstruct.r1_pool_adapter.asq8_common",
+     "AspisR1AdapterReconstruct.r1_pool_adapter.transfer_statement_box",
+     "AspisR1AdapterReconstruct.r1_pool_adapter.withdrawal_statement_box",
+     "AspisR1AdapterReconstruct.r1_pool_adapter.reconstruct_asq8_statement",
+     "AspisR1AdapterReconstruct.r1_pool_adapter.transfer_statement_box.closure",
+     "AspisR1AdapterReconstruct.r1_pool_adapter.withdrawal_statement_box.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::r1_pool_adapter::asq8_common",
+     "CRATE::r1_pool_adapter::reconstruct_asq8_statement",
+     "CRATE::r1_pool_adapter::transfer_statement_box",
+     "CRATE::r1_pool_adapter::transfer_statement_box::closure",
+     "CRATE::r1_pool_adapter::withdrawal_statement_box",
+     "CRATE::r1_pool_adapter::withdrawal_statement_box::closure"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C004",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_cost_probe (FROZEN_CRATE)",
+   "crate": "aspis_r1_cost_probe",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "ClaimsUnrolledParentSource",
+     "ClaimsUnrolledParentTypes"
+    ],
+    "definitions": [
+     "AspisR1ClaimsUnrolledParent.aspis_core.r0.heap.filled",
+     "AspisR1ClaimsUnrolledParent.candidate_claims.claims",
+     "AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure_1",
+     "AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::candidate_claims::claims",
+     "CRATE::candidate_claims::claims::closure",
+     "CRATE::candidate_claims::claims::closure#1",
+     "CRATE::r0::heap::filled"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C005",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_mask_extraction_probe (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_mask_extraction_probe",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "RPu_FIq_NativeTypes"
+    ],
+    "definitions": [
+     "FIq_Native.field.PreparedQm31Multiplier",
+     "FIq_Native.field.PreparedQm31Multiplier.new.closure",
+     "FIq_Native.field.PreparedQm31Multiplier.mul.closure",
+     "FIq_Native.field.qm31_from_karatsuba_channel_sums.closure",
+     "FIq_Native.field.qm31_pack_base4.closure",
+     "FIq_Native.state_only_prefix.r0.Error",
+     "FIq_Native.state_only_prefix.r0.Challenges",
+     "FIq_Native.pool_v1.payment_relation.PoolV1WithdrawalPublicV1",
+     "FIq_Native.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1",
+     "FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1",
+     "FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1",
+     "FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic",
+     "FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings",
+     "FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2",
+     "FIq_Native.state_only_poseidon.StateOnlyPoseidonSelectors",
+     "FIq_Native.state_only_poseidon.interpolated_internal_pair.closure_2",
+     "FIq_Native.state_only_poseidon.interpolated_internal_pair.closure_1",
+     "FIq_Native.state_only_poseidon.interpolated_internal_pair.closure",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy.closure_2",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy.closure_1",
+     "FIq_Native.state_only_poseidon.internal_linear_lazy.closure",
+     "FIq_Native.state_only_poseidon.external_linear_packed.closure",
+     "FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure",
+     "FIq_Native.state_only_poseidon.external_local_packed_raw.closure",
+     "FIq_Native.state_only_poseidon.external_linear_lazy.closure_1",
+     "FIq_Native.state_only_poseidon.external_linear_lazy.closure.closure",
+     "FIq_Native.state_only_poseidon.external_linear_lazy.closure",
+     "FIq_Native.state_only_poseidon.external_linear_lazy_row.closure",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts.closure",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted.closure",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes.closure",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal.closure",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.CompiledPoolV1PairForestEndpoint",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.CompiledPoolV1PairForestLink",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension",
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.CompiledPoolV1PairForestPattern",
+     "FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::field::PreparedQm31Multiplier",
+     "CRATE::field::qm31_from_karatsuba_channel_sums::closure",
+     "CRATE::field::qm31_pack_base4::closure",
+     "CRATE::field::{CRATE::field::PreparedQm31Multiplier}::mul::closure",
+     "CRATE::field::{CRATE::field::PreparedQm31Multiplier}::new::closure",
+     "CRATE::pool_v1::pair_forest_copy_terminal::CompiledPoolV1PairForestEndpoint",
+     "CRATE::pool_v1::pair_forest_copy_terminal::CompiledPoolV1PairForestLink",
+     "CRATE::pool_v1::pair_forest_copy_terminal::CompiledPoolV1PairForestPattern",
+     "CRATE::pool_v1::pair_forest_copy_terminal::CopyRowExtension",
+     "CRATE::pool_v1::pair_forest_copy_terminal::PoolV1PairForestCompiledVariantV1",
+     "CRATE::pool_v1::pair_forest_copy_terminal::Selectors",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::CompiledVariant",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::SemanticPublic",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::absorption_lanes_literal::closure",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_preweighted::closure",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::add_value_lanes::closure",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#3",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::equality_value::closure",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::r0::Public",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::reconstruct_10::closure",
+     "CRATE::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1",
+     "CRATE::pool_v1::payment_relation::PoolV1PrivateTransferPublicV1",
+     "CRATE::pool_v1::payment_relation::PoolV1WithdrawalPublicV1",
+     "CRATE::state_only_poseidon::StateOnlyPoseidonOpenings",
+     "CRATE::state_only_poseidon::StateOnlyPoseidonSelectors",
+     "CRATE::state_only_poseidon::evaluate_state_only_poseidon_oracle_projected::closure#2",
+     "CRATE::state_only_poseidon::external_linear_lazy::closure",
+     "CRATE::state_only_poseidon::external_linear_lazy::closure#1",
+     "CRATE::state_only_poseidon::external_linear_lazy::closure::closure",
+     "CRATE::state_only_poseidon::external_linear_lazy_row::closure",
+     "CRATE::state_only_poseidon::external_linear_packed::closure",
+     "CRATE::state_only_poseidon::external_local_packed_raw::closure",
+     "CRATE::state_only_poseidon::external_local_packed_raw::closure::closure",
+     "CRATE::state_only_poseidon::internal_linear_lazy::closure",
+     "CRATE::state_only_poseidon::internal_linear_lazy::closure#1",
+     "CRATE::state_only_poseidon::internal_linear_lazy::closure#2",
+     "CRATE::state_only_poseidon::interpolated_internal_pair::closure",
+     "CRATE::state_only_poseidon::interpolated_internal_pair::closure#1",
+     "CRATE::state_only_poseidon::interpolated_internal_pair::closure#2",
+     "CRATE::state_only_prefix::r0::Challenges",
+     "CRATE::state_only_prefix::r0::Error"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C006",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_prefix_parser_extract (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_prefix_parser_extract",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1PrefixAggregateParser.Funs"
+    ],
+    "definitions": [
+     "AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31.eq",
+     "AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1",
+     "AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body",
+     "AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop",
+     "AspisR1PrefixAggregateParser.r1_wire.validate_record_fields"
+    ],
+    "rust_symbols": [
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::c1",
+     "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::QM31> for CRATE::field::QM31}::eq",
+     "CRATE::r1_wire::validate_record_fields"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C007",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_public_preparation (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_public_preparation",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1PublicPreparation.Types"
+    ],
+    "definitions": [
+     "AspisR1PublicPreparation.aspis_core.field.M31",
+     "AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error",
+     "AspisR1PublicPreparation.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1",
+     "AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1",
+     "AspisR1PublicPreparation.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1",
+     "AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1",
+     "AspisR1PublicPreparation.pool_v1.payment_relation.PoolV1WithdrawalPublicV1",
+     "AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1",
+     "AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1",
+     "AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public",
+     "AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.CompiledVariant",
+     "AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.SemanticPublic",
+     "AspisR1PublicPreparation.r1_wire.Error",
+     "AspisR1PublicPreparation.r1_wire.SemanticTranscript.new.closure",
+     "AspisR1PublicPreparation.r1_semantic.public_transcript.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::aspis_core::field::M31",
+     "CRATE::aspis_core::state_only_prefix::r0::Error",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::CompiledVariant",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::SemanticPublic",
+     "CRATE::pool_v1::pair_forest_semantic_terminal::r0::Public",
+     "CRATE::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalCommonV1",
+     "CRATE::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1",
+     "CRATE::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1",
+     "CRATE::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1",
+     "CRATE::pool_v1::payment_relation::PoolV1PrivateTransferPublicV1",
+     "CRATE::pool_v1::payment_relation::PoolV1WithdrawalPublicV1",
+     "CRATE::r1_semantic::public_transcript::closure",
+     "CRATE::r1_wire::Error",
+     "CRATE::r1_wire::{CRATE::r1_wire::SemanticTranscript<H>}::new::closure"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C008",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_semantic_call_extraction (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_semantic_call_extraction",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1BatchedWeightsExtraction.Types",
+     "AspisR1SemanticCallExtraction.Funs",
+     "AspisR1SemanticCallExtraction.Types"
+    ],
+    "definitions": [
+     "AspisR1BatchedWeightsExtraction.aspis_core.field.M31",
+     "AspisR1BatchedWeightsExtraction.aspis_core.field.CM31",
+     "AspisR1BatchedWeightsExtraction.aspis_core.field.QM31",
+     "AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.sub",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.double",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31.sub",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.mul_by_r",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.ZERO",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.mul",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop.body",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_value",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_entry",
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_value_entry",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31"
+    ],
+    "rust_symbols": [
+     "CRATE::aspis_core::field::CM31",
+     "CRATE::aspis_core::field::M31",
+     "CRATE::aspis_core::field::QM31",
+     "CRATE::aspis_core::field::mul_by_r",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::CM31}::add",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::CM31}::mul",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::CM31}::sub",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::M31}::add",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::M31}::double",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::M31}::mul",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::M31}::sub",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::QM31}::ZERO",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::QM31}::add",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::QM31}::mul",
+     "CRATE::batched_weights::BatchedWeights",
+     "CRATE::r1_semantic::semantic_boundary",
+     "CRATE::r1_semantic::semantic_boundary_entry",
+     "CRATE::r1_semantic::semantic_value",
+     "CRATE::r1_semantic::semantic_value_entry"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C009",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_stage2_adopted_caller (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_stage2_adopted_caller",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1CanonicalDotFinish.Funs",
+     "AspisR1CanonicalDotFinish.Types",
+     "AspisR1CanonicalQRawUnified.Funs",
+     "AspisR1CanonicalQRawUnified.Types",
+     "AspisR1CurrentWide.Funs",
+     "AspisR1DotPushLocal.Funs",
+     "AspisR1DotPushLocal.Types",
+     "AspisR1EbyKFinish.Funs",
+     "AspisR1EbyKFinish.Types",
+     "AspisR1GammaCaller.Types",
+     "CurrentWideEqSemanticV7",
+     "FIo_QRawFuns",
+     "FIo_QRawTypes"
+    ],
+    "definitions": [
+     "AspisR1CanonicalDotFinish.canonical.P",
+     "AspisR1CanonicalDotFinish.canonical.reduce",
+     "AspisR1CanonicalDotFinish.canonical.Q.limbs",
+     "AspisR1CanonicalDotFinish.canonical.Dot.finish",
+     "AspisR1CanonicalDotFinish.canonical.Q",
+     "AspisR1CanonicalQRawUnified.canonical.P",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_2.Insts.CoreOpsFunctionFnTupleU64U64.call",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.PP",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw",
+     "AspisR1CanonicalQRawUnified.canonical.Q",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_2",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure_1",
+     "AspisR1CanonicalQRawUnified.canonical.Q.raw.closure",
+     "AspisR1CurrentWide.field.M31.add",
+     "AspisR1CurrentWide.field.QM31.add",
+     "AspisR1CurrentWide.field.wide_exact.WideExact.add",
+     "AspisR1CurrentWide.field.M31.sub",
+     "AspisR1CurrentWide.field.QM31.sub",
+     "AspisR1CurrentWide.field.wide_exact.WideExact.sub",
+     "AspisR1CurrentWide.field.reduce_u64",
+     "AspisR1CurrentWide.field.M31.mul",
+     "AspisR1CurrentWide.field.CM31.mul",
+     "AspisR1CurrentWide.field.QM31.mul",
+     "AspisR1CurrentWide.field.wide_exact.mul_u",
+     "AspisR1CurrentWide.field.wide_exact.WideExact.mul",
+     "AspisR1CurrentWide.field.CM31.mul_m31",
+     "AspisR1CurrentWide.field.QM31.mul_m31",
+     "AspisR1CurrentWide.field.wide_exact.WideExact.mul_m31",
+     "AspisR1DotPushLocal.canonical.P",
+     "AspisR1DotPushLocal.canonical.Dot.push",
+     "AspisR1DotPushLocal.canonical.Q",
+     "AspisR1DotPushLocal.canonical.Dot",
+     "AspisR1EbyKFinish.canonical.P",
+     "AspisR1EbyKFinish.canonical.reduce",
+     "AspisR1EbyKFinish.canonical.Q.limbs",
+     "AspisR1EbyKFinish.canonical.Dot.finish",
+     "AspisR1EbyKFinish.EbyKDot.finish",
+     "AspisR1EbyKFinish.canonical.Q",
+     "AspisR1EbyKFinish.canonical.Dot",
+     "AspisR1EbyKFinish.EbyKDot",
+     "AspisR1GammaCaller.field.WideExact",
+     "AspisR1CurrentWide.field.QM31.Insts.CoreCmpPartialEqQM31.eq",
+     "AspisR1CurrentWide.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq",
+     "FIo_QRaw.canonical.P",
+     "FIo_QRaw.canonical.Q.raw.closure_2.Insts.CoreOpsFunctionFnTupleU64U64.call",
+     "FIo_QRaw.canonical.Q.raw.PP",
+     "FIo_QRaw.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+     "FIo_QRaw.canonical.Q.raw.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+     "FIo_QRaw.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnMutTupleU32U64.call_mut",
+     "FIo_QRaw.canonical.Q.raw.closure.Insts.CoreOpsFunctionFnOnceTupleU32U64.call_once",
+     "FIo_QRaw.canonical.Q.raw",
+     "FIo_QRaw.canonical.Q",
+     "FIo_QRaw.canonical.Q.raw.closure_2",
+     "FIo_QRaw.canonical.Q.raw.closure_1",
+     "FIo_QRaw.canonical.Q.raw.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::EbyKDot",
+     "CRATE::canonical::Dot",
+     "CRATE::canonical::P",
+     "CRATE::canonical::Q",
+     "CRATE::canonical::reduce",
+     "CRATE::canonical::{CRATE::canonical::Dot}::finish",
+     "CRATE::canonical::{CRATE::canonical::Dot}::push",
+     "CRATE::canonical::{CRATE::canonical::Q}::limbs",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::PP",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::closure",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#2}::call",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_mut",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnMut<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_mut",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure#1}::call_once",
+     "CRATE::canonical::{CRATE::canonical::Q}::raw::{impl core::ops::function::FnOnce<(u32,), u64> for CRATE::canonical::{CRATE::canonical::Q}::raw::closure}::call_once",
+     "CRATE::field::WideExact",
+     "CRATE::field::reduce_u64",
+     "CRATE::field::wide_exact::mul_u",
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::add",
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul",
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::mul_m31",
+     "CRATE::field::wide_exact::{CRATE::field::wide_exact::WideExact}::sub",
+     "CRATE::field::wide_exact::{impl core::cmp::PartialEq<CRATE::field::wide_exact::WideExact> for CRATE::field::wide_exact::WideExact}::eq",
+     "CRATE::field::{CRATE::field::CM31}::mul",
+     "CRATE::field::{CRATE::field::CM31}::mul_m31",
+     "CRATE::field::{CRATE::field::M31}::add",
+     "CRATE::field::{CRATE::field::M31}::mul",
+     "CRATE::field::{CRATE::field::M31}::sub",
+     "CRATE::field::{CRATE::field::QM31}::add",
+     "CRATE::field::{CRATE::field::QM31}::mul",
+     "CRATE::field::{CRATE::field::QM31}::mul_m31",
+     "CRATE::field::{CRATE::field::QM31}::sub",
+     "CRATE::field::{impl core::cmp::PartialEq<CRATE::field::QM31> for CRATE::field::QM31}::eq",
+     "CRATE::{CRATE::EbyKDot}::finish"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C010",
+   "kind": "cut",
+   "label": "cut crate aspis_r1_withdrawal_caller (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_r1_withdrawal_caller",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1WithdrawalCaller.Funs",
+     "AspisR1WithdrawalCaller.Types"
+    ],
+    "definitions": [
+     "AspisR1WithdrawalCaller.aspis_core.field.M31.to_le_bytes",
+     "AspisR1WithdrawalCaller.VALUE_LIMIT",
+     "AspisR1WithdrawalCaller.encode_digest_canonical_loop.body",
+     "AspisR1WithdrawalCaller.encode_digest_canonical_loop",
+     "AspisR1WithdrawalCaller.encode_digest_canonical",
+     "AspisR1WithdrawalCaller.pool_v1.POOL_V1_TREE_DEPTH",
+     "AspisR1WithdrawalCaller.pool_v1.POOL_V1_LEAF_CAPACITY",
+     "AspisR1WithdrawalCaller.pool_v1.POOL_V1_DIGEST_ENCODING_VERSION",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.digest_is_canonical",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.validate_common",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.withdrawal_common",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.POOL_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.ANCHOR_ROOT_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.NULLIFIER_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.ASSET_ID_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.encode_common",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1",
+     "AspisR1WithdrawalCaller.aspis_core.field.M31",
+     "AspisR1WithdrawalCaller.pool_v1.historical_anchor.PoolV1TransitionKind",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.PoolV1WithdrawalPublicV1",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.PoolV1PaymentStatementFormatError",
+     "AspisR1WithdrawalCaller.pool_v1.payment_relation.CommonPublicV1"
+    ],
+    "rust_symbols": [
+     "CRATE::VALUE_LIMIT",
+     "CRATE::aspis_core::field::M31",
+     "CRATE::aspis_core::field::{CRATE::aspis_core::field::M31}::to_le_bytes",
+     "CRATE::encode_digest_canonical",
+     "CRATE::pool_v1::POOL_V1_DIGEST_ENCODING_VERSION",
+     "CRATE::pool_v1::POOL_V1_LEAF_CAPACITY",
+     "CRATE::pool_v1::POOL_V1_TREE_DEPTH",
+     "CRATE::pool_v1::historical_anchor::PoolV1TransitionKind",
+     "CRATE::pool_v1::payment_relation::ANCHOR_ROOT_OFFSET",
+     "CRATE::pool_v1::payment_relation::ANCHOR_SEQUENCE_OFFSET",
+     "CRATE::pool_v1::payment_relation::ASSET_ID_OFFSET",
+     "CRATE::pool_v1::payment_relation::CommonPublicV1",
+     "CRATE::pool_v1::payment_relation::NULLIFIER_OFFSET",
+     "CRATE::pool_v1::payment_relation::POOL_OFFSET",
+     "CRATE::pool_v1::payment_relation::PoolV1PaymentStatementFormatError",
+     "CRATE::pool_v1::payment_relation::PoolV1WithdrawalPublicV1",
+     "CRATE::pool_v1::payment_relation::SECOND_OUTPUT_OFFSET",
+     "CRATE::pool_v1::payment_relation::digest_is_canonical",
+     "CRATE::pool_v1::payment_relation::encode_common",
+     "CRATE::pool_v1::payment_relation::encode_pool_v1_withdrawal_public_v1",
+     "CRATE::pool_v1::payment_relation::validate_common",
+     "CRATE::pool_v1::payment_relation::validate_pool_v1_withdrawal_public_v1",
+     "CRATE::pool_v1::payment_relation::withdrawal_common"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C011",
+   "kind": "cut",
+   "label": "cut crate aspis_s1_y1_source_20261024 (PROBE_OR_CUT_CRATE)",
+   "crate": "aspis_s1_y1_source_20261024",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "S1ValuesOwnedModelV1"
+    ],
+    "definitions": [
+     "AspisS1ValuesOwned.read_input",
+     "AspisS1ValuesOwned.write_output",
+     "AspisS1ValuesOwned.copy_chunk_loop.body",
+     "AspisS1ValuesOwned.copy_chunk_loop",
+     "AspisS1ValuesOwned.copy_chunk",
+     "AspisS1ValuesOwned.values_owned_reference_loop.body",
+     "AspisS1ValuesOwned.values_owned_reference_loop",
+     "AspisS1ValuesOwned.values_owned_reference"
+    ],
+    "rust_symbols": [
+     "CRATE::copy_chunk",
+     "CRATE::read_input",
+     "CRATE::values_owned_reference",
+     "CRATE::write_output"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C012",
+   "kind": "cut",
+   "label": "cut crate eby_k_push_cut (PROBE_OR_CUT_CRATE)",
+   "crate": "eby_k_push_cut",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "EbyKPushExplicitTypesV1"
+    ],
+    "definitions": [
+     "AspisR1EbyKPushCutV3.fast_pairing.canonical.Q.from_limbs.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::fast_pairing::canonical::{CRATE::fast_pairing::canonical::Q}::from_limbs::closure"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C013",
+   "kind": "cut",
+   "label": "cut crate r1_circle_sample_wrapper_extraction (PROBE_OR_CUT_CRATE)",
+   "crate": "r1_circle_sample_wrapper_extraction",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1CircleSampleWrapper.Types"
+    ],
+    "definitions": [
+     "AspisR1CircleSampleWrapper.circle.CirclePointError",
+     "AspisR1CircleSampleWrapper.r0_transcript.CircleRow"
+    ],
+    "rust_symbols": [
+     "CRATE::circle::CirclePointError",
+     "CRATE::r0_transcript::CircleRow"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C014",
+   "kind": "cut",
+   "label": "cut crate r1_post25_sampler_extraction (PROBE_OR_CUT_CRATE)",
+   "crate": "r1_post25_sampler_extraction",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "AspisR1Post25Sampler.Funs",
+     "AspisR1Post25Sampler.Types"
+    ],
+    "definitions": [
+     "AspisR1Post25Sampler.field.CM31.new",
+     "AspisR1Post25Sampler.field.canonical_qm31.closure.Insts.CoreOpsFunctionFnTupleM31M31.call",
+     "AspisR1Post25Sampler.field.canonical_qm31",
+     "AspisR1Post25Sampler.field.WideExact.new",
+     "AspisR1Post25Sampler.sampler.qm31_div_pass_loop.body",
+     "AspisR1Post25Sampler.sampler.low_base_p_digits_loop0.body",
+     "AspisR1Post25Sampler.sampler.low_base_p_digits_loop0",
+     "AspisR1Post25Sampler.sampler.low_base_p_digits_loop1.body",
+     "AspisR1Post25Sampler.sampler.low_base_p_digits_loop1",
+     "AspisR1Post25Sampler.sampler.low_base_p_digits",
+     "AspisR1Post25Sampler.sampler.decode8",
+     "AspisR1Post25Sampler.sampler.ordinary_sample",
+     "AspisR1Post25Sampler.field.WideExact",
+     "AspisR1Post25Sampler.field.canonical_qm31.closure"
+    ],
+    "rust_symbols": [
+     "CRATE::field::WideExact",
+     "CRATE::field::canonical_qm31",
+     "CRATE::field::canonical_qm31::closure",
+     "CRATE::field::canonical_qm31::{impl core::ops::function::Fn<(CRATE::field::M31,), CRATE::field::M31> for CRATE::field::canonical_qm31::closure}::call",
+     "CRATE::field::{CRATE::field::CM31}::new",
+     "CRATE::field::{CRATE::field::WideExact}::new",
+     "CRATE::sampler::decode8",
+     "CRATE::sampler::low_base_p_digits",
+     "CRATE::sampler::ordinary_sample",
+     "CRATE::sampler::qm31_div_pass"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C015",
+   "kind": "cut",
+   "label": "cut crate s8_owned_correspondence (PROBE_OR_CUT_CRATE)",
+   "crate": "s8_owned_correspondence",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "S8OwnedP6.Funs",
+     "S8OwnedP6.Types"
+    ],
+    "definitions": [
+     "S8OwnedP6.aspis_core.field.reduce_u64",
+     "S8OwnedP6.residue_owned",
+     "S8OwnedP6.value_owned",
+     "S8OwnedP6.finish_owned_loop.body",
+     "S8OwnedP6.finish_owned_loop",
+     "S8OwnedP6.finish_owned",
+     "S8OwnedP6.check_values_owned_loop.body",
+     "S8OwnedP6.check_values_owned_loop",
+     "S8OwnedP6.check_values_owned",
+     "S8OwnedP6.CodecError"
+    ],
+    "rust_symbols": [
+     "CRATE::CodecError",
+     "CRATE::check_values_owned",
+     "CRATE::field::reduce_u64",
+     "CRATE::finish_owned",
+     "CRATE::residue_owned",
+     "CRATE::value_owned"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C016",
+   "kind": "cut",
+   "label": "cut crate s9_actual_weights_new_box_candidate (PROBE_OR_CUT_CRATE)",
+   "crate": "s9_actual_weights_new_box_candidate",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "FIn_WeightsTypes"
+    ],
+    "definitions": [
+     "FIn_WeightsExtract.Weights"
+    ],
+    "rust_symbols": [
+     "CRATE::Weights"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "C017",
+   "kind": "cut",
+   "label": "cut crate wadm_native_fixture (PROBE_OR_CUT_CRATE)",
+   "crate": "wadm_native_fixture",
+   "p1_half": "P4",
+   "route": "P4",
+   "covers": {
+    "modules": [
+     "RPz7_WAdm_Fissioned_Funs"
+    ],
+    "definitions": [
+     "WAdm_Fissioned.WAdm_model.WAdm_fields",
+     "WAdm_Fissioned.WAdm_model.WAdm_roots_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_roots_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_roots",
+     "WAdm_Fissioned.WAdm_model.WAdm_early_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_early_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_early",
+     "WAdm_Fissioned.WAdm_model.WAdm_tail_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_tail_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_tail",
+     "WAdm_Fissioned.WAdm_model.WAdm_putK",
+     "WAdm_Fissioned.WAdm_model.WAdm_queries_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_queries_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_queries",
+     "WAdm_Fissioned.WAdm_model.WAdm_semantic_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_semantic_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_semantic",
+     "WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_coordinates",
+     "WAdm_Fissioned.WAdm_model.WAdm_weights_loop.body",
+     "WAdm_Fissioned.WAdm_model.WAdm_weights_loop",
+     "WAdm_Fissioned.WAdm_model.WAdm_weights",
+     "WAdm_Fissioned.WAdm_model.WAdm_checkpoint"
+    ],
+    "rust_symbols": [
+     "CRATE::WAdm_model::WAdm_checkpoint",
+     "CRATE::WAdm_model::WAdm_coordinates",
+     "CRATE::WAdm_model::WAdm_early",
+     "CRATE::WAdm_model::WAdm_fields",
+     "CRATE::WAdm_model::WAdm_putK",
+     "CRATE::WAdm_model::WAdm_queries",
+     "CRATE::WAdm_model::WAdm_roots",
+     "CRATE::WAdm_model::WAdm_semantic",
+     "CRATE::WAdm_model::WAdm_tail",
+     "CRATE::WAdm_model::WAdm_weights"
+    ]
+   },
+   "basis": "Source path of the reached definitions is not under a frozen crate: no frozen counterpart. The cut crate source (or a re-route of the parent bridge to the frozen function) is a P4 decision."
+  },
+  {
+   "spec_id": "R001",
+   "kind": "reference",
+   "label": "reference namespace FIn_ExtractFuns",
+   "crate": [
+    "fin_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b1_committed_hash_linked"
+   ],
+   "covers": {
+    "modules": [
+     "FIn_ExtractFuns"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R002",
+   "kind": "reference",
+   "label": "reference namespace MultiproofConeRef",
+   "crate": [
+    "aspis_multiproof_cone"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "MultiproofConeRef.Funs",
+     "MultiproofConeRef.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R003",
+   "kind": "reference",
+   "label": "reference namespace MultiproofParserRef",
+   "crate": [
+    "aspis_multiproof_cone"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "MultiproofParserRef.Funs"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R004",
+   "kind": "reference",
+   "label": "reference namespace MultiproofSortRef",
+   "crate": [
+    "aspis_multiproof_cone"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "MultiproofSortRef.Funs",
+     "MultiproofSortRef.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R005",
+   "kind": "reference",
+   "label": "reference namespace NEI_PushRaw",
+   "crate": [
+    "neg_isolated"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b2_committed_not_linked:evidence/slice-q-mul2-20261101/NEI_K001/sources/NEI_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NEI_PushRaw.Funs",
+     "NEI_PushRaw.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R006",
+   "kind": "reference",
+   "label": "reference namespace NEV_AccumulateRaw",
+   "crate": [
+    "neg_isolated"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NEV_AccumulateRaw.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R007",
+   "kind": "reference",
+   "label": "reference namespace NFS_AccumPart00",
+   "crate": [
+    "neg_isolated"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NFS_AccumPart00"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R008",
+   "kind": "reference",
+   "label": "reference namespace NGD_AtG",
+   "crate": [
+    "nfu_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NGD_AtG.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R009",
+   "kind": "reference",
+   "label": "reference namespace NGM_GuardRef",
+   "crate": [
+    "nco_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NGM_GuardRef.Funs"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R010",
+   "kind": "reference",
+   "label": "reference namespace NHI_FilledExtracted",
+   "crate": [
+    "nfu_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b1_committed_hash_linked"
+   ],
+   "covers": {
+    "modules": [
+     "NHI_FilledExtracted"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R011",
+   "kind": "reference",
+   "label": "reference namespace NHI_FilledTypes",
+   "crate": [
+    "nfu_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b1_committed_hash_linked"
+   ],
+   "covers": {
+    "modules": [
+     "NHI_FilledTypes"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R012",
+   "kind": "reference",
+   "label": "reference namespace NHI_GroupExtracted",
+   "crate": [
+    "nfu_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHI_GroupExtracted"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R013",
+   "kind": "reference",
+   "label": "reference namespace NHI_TensorExtracted",
+   "crate": [
+    "nfu_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHI_TensorExtracted"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R014",
+   "kind": "reference",
+   "label": "reference namespace NHJ_SnapshotReference",
+   "crate": [
+    "nhj_snapshot_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHJ_SnapshotReference.Types"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R015",
+   "kind": "reference",
+   "label": "reference namespace NHV_NEB_AdditiveRef_Funs",
+   "crate": [
+    "neb_additive_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHV_NEB_AdditiveRef_Funs"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R016",
+   "kind": "reference",
+   "label": "reference namespace NHV_NEO_ParserRef_Funs",
+   "crate": [
+    "neb_parser_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHV_NEO_ParserRef_Funs"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  },
+  {
+   "spec_id": "R017",
+   "kind": "reference",
+   "label": "reference namespace NHV_NEO_WindowV2_Funs",
+   "crate": [
+    "neb_q_reference"
+   ],
+   "p1_half": "P4",
+   "route": "P4",
+   "source_status": [
+    "b3_source_not_found"
+   ],
+   "covers": {
+    "modules": [
+     "NHV_NEO_WindowV2_Funs"
+    ]
+   },
+   "basis": "Group (b) reference crate emission; b2 has a committed source not linked to the emission, b1 is hash-linked, b3 source not located by the bounded search. Reconstruct or re-route (P4)."
+  }
+ ],
+ "unmapped": [
+  {
+   "module": "NFU_LPl_Kit_Types",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NFY_Part033",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NFY_Part034",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NFY_Part041",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NIL_ResumeTailCut",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NJA_WellPredicates",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NJI_Extracted.Core",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "NJI_Extracted.Master",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "RPu_FIq_Native12",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  },
+  {
+   "module": "RPz7_FIo_NativeExternal",
+   "reason": "c0: no annotated definition reached; hand-transformed copy, manual mapping"
+  }
+ ],
+ "counts": {
+  "frozen": 17,
+  "frozen_types_only": 9,
+  "cut": 17,
+  "reference": 17,
+  "pilots": 4,
+  "unmapped_modules": 10
+ }
+}

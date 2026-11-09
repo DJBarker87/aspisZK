@@ -1,0 +1,50 @@
+[
+ {
+  "id": "PCT-C0",
+  "topic": "scope concurrency (lead query)",
+  "finding": "L012, L013, L014 ran strictly one after another from one run3.sh command; PCT_run.py's exclusive PCT_CLIENT_ACTIVE guard forbids a second client. Receipt timestamps (utc, from PCT_ATTEMPTS.jsonl): L012 submitted 1794227835, result 1794227844 (wall 7.33 s, peak RSS 3092020 KiB, exit 0); L013 submitted 1794227852, result 1794227953 (wall 99.34 s, peak RSS 3918940 KiB, exit 1, expected probe errors); L014 submitted 1794227959, result 1794227969 (wall 7.25 s, peak RSS 2745904 KiB, exit 1). No overlap. The earlier status note that said they were running at once was inaccurate wording (one foreground command had been moved to the background by the harness).",
+  "action": "one scope at a time continues; several modules per scope via PCT_bundle.py"
+ },
+ {
+  "id": "PCT-C1",
+  "topic": "fresh dir and gate candidate selection",
+  "finding": "PCT_prepare2.py picks, greedily in up to 4 passes, the (fresh emission, gate candidate) pairs covering the module's reached definitions by the partition's own identity measure (PCT_partition.segments norm_sha per Rust symbol). Fresh candidates are raw Aeneas output directories plus single-namespace pinned retained emission files used as pseudo directories. The statements are against gate constants, so a wrong gate-source candidate gives a Lean error, never a false equality.",
+  "action": "recorded in gen/prepared2.json"
+ },
+ {
+  "id": "PCT-C2",
+  "topic": "self-copy controls",
+  "finding": "Controls (PCT_controls.py, L018, L020, L021) were run only for modules with an unproved or uncovered reached definition (53 candidates). Modules whose reached definitions were all proved against a receipted fresh emission got no control: the equalities are stated against gate constants and do not depend on knowing the compiled source text. Control results are probe-stage (no separate verify compile). L019 (second half of the control bundle) hit the 180 s timeout at FIn_WeightsFuns_ctl1 weights_new_loop1_loop0 (whnf pathology); not rerun unchanged: FIn_WeightsFuns_ctl1/2 retired, the rest split into K3/K4 (L020, L021).",
+  "action": "PCT_STATUS.json compiled_source"
+ },
+ {
+  "id": "PCT-C3",
+  "topic": "tool patches (recorded; originals in PCT_TOOLS.json)",
+  "finding": "PCT_gen_equalities.py: patch 1 opens the non-Aeneas namespaces the gate source opens; patch 2 adds --tag for a second fresh dir of one gate module. PCT_bundle.py: set_option maxErrors line (no effect). PCT_run.py: -DmaxErrors=100000 added to the lean command (not a memory or time cap). PCT_TOOLS.json lists the first-copy hashes; post-patch hashes are the final_sha256 fields of PCT_TOOLS.json.",
+  "action": "see tools"
+ },
+ {
+  "id": "PCT-C4",
+  "topic": "verify round semantics",
+  "finding": "A verify ingest regenerates failed theorems as probes again, so the delivered PRVEq_*.lean files are the round-2 outputs (gen/round2b is the copy) and the round-2 bundles A2/B2/C2 (L015/L016/L017, all exit 0) are the verification compiles. Status is read from the state2 files.",
+  "action": "PCT_status.py"
+ },
+ {
+  "id": "PCT-C5",
+  "topic": "statuses beyond the brief's list",
+  "finding": "TEXT_IDENTICAL_ONLY (15 definitions): the partition says the declaration is text identical to the receipted fresh emission but the generator emits no Lean statement for it (inductive, non-simple structure, or dropped). NOT_COVERED (77): no verified text-identical receipted fresh emission pass exists; routed to P2. Neither is a proved equality.",
+  "action": "PCT_FOR_P2P3.json"
+ },
+ {
+  "id": "PCT-C6",
+  "topic": "module count in the brief",
+  "finding": "The brief says 19 a_identical + 22 a_pending = 41 modules; all 41 were processed. 33 got at least one Lean pass; 8 had no identical raw or pinned fresh candidate and are reclassified to c1 in PCT_FOR_P2P3.json (S8Kani2MutableSource, VTop_Model, Port3_NativeBatchBody, Port3_NativeGeometryBody, Port5Q2_ReaderWeights, Port5Q2_ReaderValidate, Op4P_Extract.Types, NDH_Reference.Funs), plus AspisR1WithdrawalValidation.Types.",
+  "action": "PCT_FOR_P2P3.json reclassified_modules"
+ },
+ {
+  "id": "PCT-C7",
+  "topic": "AdapterRwModel and NND",
+  "finding": "AdapterRwModel passes cover 12 of 33 reached definitions (rfl/unfold) and 5 fail to elaborate (transport-needed). NND's equality theorems (evidence/model-bridge-20261111, NND_PROVENANCE.md) for the TX2 definitions and the require_zero case were not duplicated and were not re-read in this job: the remaining AdapterRwModel definitions must be matched against them by P2/P3.",
+  "action": "open"
+ }
+]
