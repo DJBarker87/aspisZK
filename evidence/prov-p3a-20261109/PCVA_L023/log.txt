@@ -1,0 +1,25 @@
+structure Aeneas.Std.core.cmp.PartialEq (Self Rhs : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.cmp.PartialEq.eq : Self → Rhs → Result Bool
+  Aeneas.Std.core.cmp.PartialEq.ne : Self → Rhs → Result Bool :=
+    fun self_1 other => do
+      let __do_lift ← self.eq self_1 other
+      ok !__do_lift
+constructor:
+  Aeneas.Std.core.cmp.PartialEq.mk {Self Rhs : Type} (eq ne : Self → Rhs → Result Bool) : core.cmp.PartialEq Self Rhs
+def Aeneas.Std.core.cmp.PartialEq.ne.default : {Self Rhs : Type} →
+  (Self → Rhs → Result Bool) → Self → Rhs → Result Bool :=
+fun {Self Rhs} eq self other => do
+  let __do_lift ← eq self other
+  ok (decide ¬__do_lift = true)
+def Aeneas.Std.core.cmp.PartialEq.ne._default : {Self Rhs : Type} →
+  (Self → Rhs → Result Bool) → Self → Rhs → Result Bool :=
+fun {Self Rhs} eq =>
+  id fun self other => do
+    let __do_lift ← eq self other
+    ok !__do_lift
+PCVA_sources/t2.lean:9:13: error(lean.unknownIdentifier): Unknown identifier `aspis_core.field.QM31`
+PCVA_sources/t2.lean:9:37: error(lean.unknownIdentifier): Unknown identifier `aspis_core.field.QM31`
+PCVA_sources/t2.lean:9:179: error(lean.unknownIdentifier): Unknown identifier `aspis_core.field.QM31`
+PCVA_sources/t2.lean:9:201: error(lean.unknownIdentifier): Unknown identifier `aspis_core.field.QM31`

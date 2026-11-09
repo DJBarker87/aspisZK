@@ -10,8 +10,64 @@ set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
 
+theorem PRVEq_partialEq_ne_default {Self Rhs : Type} (c : Self → Rhs → Result Bool) :
+    ({ eq := c, ne := fun s o => core.cmp.PartialEq.ne.default c s o } : core.cmp.PartialEq Self Rhs) = { eq := c } := by
+  have h : (fun s o => core.cmp.PartialEq.ne.default c s o) = core.cmp.PartialEq.ne._default c := by
+    funext s o
+    simp only [core.cmp.PartialEq.ne.default, core.cmp.PartialEq.ne._default, id]
+    congr 1; funext b; cases b <;> rfl
+  rw [h]; rfl
+#print axioms PRVEq_partialEq_ne_default
+
+
 namespace PRVFresh_NMP_prepare_Funs
 open NMP_prepare
+
+variable (NMP_call_0 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F),
+(core.result.Result T E) → O → Result (core.result.Result T F))
+
+variable (NMP_call_1 : ∀ {T : Type} (coremarkerCopyInst : core.marker.Copy T),
+Std.Usize → T → Result (core.result.Result (alloc.vec.Vec T)
+    aspis_core.r0.Error))
+
+variable (NMP_call_2 : (Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → Result
+    (core.result.Result verifier.View verifier.Error))
+
+variable (NMP_call_3 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+(r1_semantic.Verified H) → verifier.View → H → (Array
+    aspis_core.field.wide_exact.WideExact 29#usize) → Result
+    ((core.result.Result verifier.Prepared verifier.Error) × (Array
+    aspis_core.field.wide_exact.WideExact 29#usize)))
+
+variable (NMP_call_4 : (Option (verifier.Phase → Result Unit)) → verifier.Phase → Result Unit)
+
+variable (NMP_call_5 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+r1_wire.Prefix → (r1_wire.SemanticTranscript H) → Result
+    ((core.result.Result aspis_core.state_only_prefix.r0.Challenges
+    r1_wire.Error) × (r1_wire.SemanticTranscript H)))
+
+variable (NMP_call_6 : (Slice Std.U8) → Result (core.result.Result r1_wire.Prefix r1_wire.Error))
+
+variable (NMP_call_7 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+    r1_wire.Prefix → (r1_wire.SemanticTranscript H) →
+    aspis_core.state_only_prefix.r0.Challenges → (Option (verifier.Phase →
+    Result Unit)) → Result (core.result.Result (r1_semantic.Verified H)
+    r1_wire.Error))
+
+variable (NMP_call_8 : (Option (verifier.Phase → Result Unit)) → Std.U8 → Result Unit)
+
+variable (NMP_call_9 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H),
+aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → H →
+    (Array Std.U8 32#usize) → Result (core.result.Result
+    (r1_wire.SemanticTranscript H) r1_wire.Error))
+
+variable (NMP_call_10 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
+    compact.CodecError) × (Slice Std.U8)))
+
+variable (NMP_call_11 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
+    compact.CodecError) × (Slice Std.U8)))
 
 /-- [aspis_r1_cost_probe::verifier::candidate::{impl core::convert::From<aspis_r1_cost_probe::compact::CodecError> for aspis_r1_cost_probe::verifier::Error}::from]:
     Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 23:4-25:5
@@ -39,23 +95,23 @@ def r1_semantic.verify_observed
   (obs : Option (verifier.Phase → Result Unit)) :
   Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
   := do
-  let r ← r1_wire.Prefix.parse bytes
+  let r ← NMP_call_6 bytes
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
   match cf with
   | core.ops.control_flow.ControlFlow.Continue p =>
-    r1_semantic.mark obs 0#u8
+    NMP_call_8 obs 0#u8
     let r1 ←
-      r1_semantic.public_transcript aspis_coredigestDigest32Inst public1 hash
+      NMP_call_9 aspis_coredigestDigest32Inst public1 hash
         p.c1_root
     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val =>
-      let (r2, val1) ← r1_wire.begin aspis_coredigestDigest32Inst p val
+      let (r2, val1) ← NMP_call_5 aspis_coredigestDigest32Inst p val
       let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
-        r1_semantic.mark obs 1#u8
-        r1_semantic.verify_finish aspis_coredigestDigest32Inst public1 p val1
+        NMP_call_8 obs 1#u8
+        NMP_call_7 aspis_coredigestDigest32Inst public1 p val1
           val2 obs
       | core.ops.control_flow.ControlFlow.Break residual =>
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
@@ -206,9 +262,9 @@ def verifier.candidate.prepare
   let i ← compact.LOGICAL_SEMANTIC
   let i1 ← compact.LOGICAL_Y1
   let i2 ← lift (Std.Usize.wrapping_add i i1)
-  let r ← aspis_core.r0.heap.filled core.marker.CopyU8 i2 0#u8
+  let r ← NMP_call_1 core.marker.CopyU8 i2 0#u8
   let r1 ←
-    core.result.Result.map_err
+    NMP_call_0
       (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
       aspis_coredigestDigest32Inst) r ()
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
@@ -221,7 +277,7 @@ def verifier.candidate.prepare
     let s1 ←
       core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
         Std.U8) proof { start := compact.OFF_SEMANTIC, «end» := i3 }
-    let (r2, semantic1) ← compact.expand_semantic s1 semantic
+    let (r2, semantic1) ← NMP_call_10 s1 semantic
     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue _ =>
@@ -230,7 +286,7 @@ def verifier.candidate.prepare
         core.slice.index.Slice.index
           (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) proof
           { start := i3, «end» := i4 }
-      let (r3, y11) ← compact.expand_values s2 y1
+      let (r3, y11) ← NMP_call_11 s2 y1
       let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue _ =>
@@ -242,22 +298,22 @@ def verifier.candidate.prepare
         let s5 ←
           alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice
             Std.U8) val1 { start := i }
-        let r4 ← verifier.candidate.wide_view proof s4 s5
+        let r4 ← NMP_call_2 proof s4 s5
         let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
         match cf3 with
         | core.ops.control_flow.ControlFlow.Continue v =>
           let r5 ←
-            r1_semantic.verify_observed aspis_coredigestDigest32Inst public1
+            (r1_semantic.verify_observed NMP_call_5 NMP_call_6 NMP_call_7 NMP_call_8 NMP_call_9) aspis_coredigestDigest32Inst public1
               v.semantic hash obs
           let r6 ←
-            core.result.Result.map_err
+            NMP_call_0
               (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
               aspis_coredigestDigest32Inst) r5 ()
           let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
           match cf4 with
           | core.ops.control_flow.ControlFlow.Continue val2 =>
-            verifier.mark obs verifier.Phase.Semantic
-            verifier.Prepared.new aspis_coredigestDigest32Inst val2 v hash g
+            NMP_call_4 obs verifier.Phase.Semantic
+            NMP_call_3 aspis_coredigestDigest32Inst val2 v hash g
           | core.ops.control_flow.ControlFlow.Break residual =>
             let r7 ←
               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
