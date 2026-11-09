@@ -26,15 +26,10 @@ theorem step {α β : Type} {m : Result α} {v : α} {k : α → Result β} {r :
 known constructor, phase marks and decided Boolean guards. -/
 syntax "noc_nrm" : tactic
 macro_rules
- | `(tactic| noc_nrm) => `(tactic| ((try simp only [Aeneas.Std.uncurry_apply_pair]);
-    (try simp only [Aeneas.Std.uncurry]);
-    (try simp only [bind_tc_ok, core.result.Result.Insts.CoreOpsTry.branch, VerifyPrefix.mark,
-     Bool.false_eq_true, ↓reduceIte])))
+ | `(tactic| noc_nrm) => `(tactic| ((try simp only [Aeneas.Std.uncurry_apply_pair]); (try simp only [Aeneas.Std.uncurry]); (try simp only [bind_tc_ok, core.result.Result.Insts.CoreOpsTry.branch, VerifyPrefix.mark, Bool.false_eq_true, ↓reduceIte])))
 syntax "noc_stp " term : tactic
 macro_rules
- | `(tactic| noc_stp $h) => `(tactic| first
-    | refine step $h ?_
-    | (noc_nrm; refine step $h ?_))
+ | `(tactic| noc_stp $h) => `(tactic| first | refine step $h ?_ | (noc_nrm; refine step $h ?_))
 
 /-- Full fixed finish Result at the installed boundaries, from the SAME
 returned finish value. -/
