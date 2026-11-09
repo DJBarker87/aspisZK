@@ -100,7 +100,7 @@ else:
  assert target and (E/(target+'.lean')).exists()
  n='PCT_sources/'+target+'.lean';put(n,E/(target+'.lean'));sources=[n]
  paths=json.loads((E.parent/'ledger30-20261111/NNN_PATHS.json').read_text())
- command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCT_sources','-o','PCT_exports/'+target+'.olean',n]
+ command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCT_sources','-o','PCT_exports/'+target+'.olean',n]
  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'};scope_p=['-p','MemoryHigh=6G','-p','MemoryMax=8G']
  env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCT_tmp',LEAN_PATH=':'.join([B+'/PCT_exports']+paths));collect=[]
  expected='Focused import elaboration of one generated equality module'

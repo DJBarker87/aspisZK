@@ -291,56 +291,72 @@ def verifier.candidate.prepare
 
 end PRVFresh_NMP_prepare_Funs
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError.from : @PRVFresh_NMP_prepare_Funs.verifier.Error.Insts.CoreConvertFromCodecError.from = @NMP_prepare.verifier.Error.Insts.CoreConvertFromCodecError.from
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError.from : @PRVFresh_NMP_prepare_Funs.verifier.Error.Insts.CoreConvertFromCodecError.from = @NMP_prepare.verifier.Error.Insts.CoreConvertFromCodecError.from := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError.from"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError.from
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError : @PRVFresh_NMP_prepare_Funs.verifier.Error.Insts.CoreConvertFromCodecError = @NMP_prepare.verifier.Error.Insts.CoreConvertFromCodecError
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError : @PRVFresh_NMP_prepare_Funs.verifier.Error.Insts.CoreConvertFromCodecError = @NMP_prepare.verifier.Error.Insts.CoreConvertFromCodecError := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.Error.Insts.CoreConvertFromCodecError
 
 /- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.r1_semantic.verify_observed : @PRVFresh_NMP_prepare_Funs.r1_semantic.verify_observed = @NMP_prepare.r1_semantic.verify_observed
    last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.HEADER : @PRVFresh_NMP_prepare_Funs.compact.HEADER = @NMP_prepare.compact.HEADER
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.HEADER : @PRVFresh_NMP_prepare_Funs.compact.HEADER = @NMP_prepare.compact.HEADER := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.HEADER"; delta PRVFresh_NMP_prepare_Funs.compact.HEADER NMP_prepare.compact.HEADER; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.HEADER
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.OFF_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.OFF_SEMANTIC = @NMP_prepare.compact.OFF_SEMANTIC
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.OFF_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.OFF_SEMANTIC = @NMP_prepare.compact.OFF_SEMANTIC := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.OFF_SEMANTIC"; delta PRVFresh_NMP_prepare_Funs.compact.OFF_SEMANTIC NMP_prepare.compact.OFF_SEMANTIC; try simp only [PRVEq.NMP_prepare.Funs.compact.HEADER]; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.OFF_SEMANTIC
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.SEMANTIC_COMPACT_VALUES : @PRVFresh_NMP_prepare_Funs.compact.SEMANTIC_COMPACT_VALUES = @NMP_prepare.compact.SEMANTIC_COMPACT_VALUES
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.SEMANTIC_COMPACT_VALUES : @PRVFresh_NMP_prepare_Funs.compact.SEMANTIC_COMPACT_VALUES = @NMP_prepare.compact.SEMANTIC_COMPACT_VALUES := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.SEMANTIC_COMPACT_VALUES"; delta PRVFresh_NMP_prepare_Funs.compact.SEMANTIC_COMPACT_VALUES NMP_prepare.compact.SEMANTIC_COMPACT_VALUES; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.SEMANTIC_COMPACT_VALUES
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.SEMANTIC_BYTES : @PRVFresh_NMP_prepare_Funs.verifier.SEMANTIC_BYTES = @NMP_prepare.verifier.SEMANTIC_BYTES
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.SEMANTIC_BYTES : @PRVFresh_NMP_prepare_Funs.verifier.SEMANTIC_BYTES = @NMP_prepare.verifier.SEMANTIC_BYTES := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.verifier.SEMANTIC_BYTES"; delta PRVFresh_NMP_prepare_Funs.verifier.SEMANTIC_BYTES NMP_prepare.verifier.SEMANTIC_BYTES; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.SEMANTIC_BYTES
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.LOGICAL_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.LOGICAL_SEMANTIC = @NMP_prepare.compact.LOGICAL_SEMANTIC
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.LOGICAL_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.LOGICAL_SEMANTIC = @NMP_prepare.compact.LOGICAL_SEMANTIC := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.LOGICAL_SEMANTIC"; delta PRVFresh_NMP_prepare_Funs.compact.LOGICAL_SEMANTIC NMP_prepare.compact.LOGICAL_SEMANTIC; try simp only [PRVEq.NMP_prepare.Funs.verifier.SEMANTIC_BYTES]; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.LOGICAL_SEMANTIC
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.COMPACT_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.COMPACT_SEMANTIC = @NMP_prepare.compact.COMPACT_SEMANTIC
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.COMPACT_SEMANTIC : @PRVFresh_NMP_prepare_Funs.compact.COMPACT_SEMANTIC = @NMP_prepare.compact.COMPACT_SEMANTIC := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.COMPACT_SEMANTIC"; delta PRVFresh_NMP_prepare_Funs.compact.COMPACT_SEMANTIC NMP_prepare.compact.COMPACT_SEMANTIC; try simp only [PRVEq.NMP_prepare.Funs.compact.SEMANTIC_COMPACT_VALUES, PRVEq.NMP_prepare.Funs.compact.LOGICAL_SEMANTIC]; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.COMPACT_SEMANTIC
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.OFF_Y1 : @PRVFresh_NMP_prepare_Funs.compact.OFF_Y1 = @NMP_prepare.compact.OFF_Y1
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.OFF_Y1 : @PRVFresh_NMP_prepare_Funs.compact.OFF_Y1 = @NMP_prepare.compact.OFF_Y1 := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.OFF_Y1"; delta PRVFresh_NMP_prepare_Funs.compact.OFF_Y1 NMP_prepare.compact.OFF_Y1; try simp only [PRVEq.NMP_prepare.Funs.compact.OFF_SEMANTIC, PRVEq.NMP_prepare.Funs.compact.COMPACT_SEMANTIC]; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.OFF_Y1
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.COMPACT_Y1 : @PRVFresh_NMP_prepare_Funs.compact.COMPACT_Y1 = @NMP_prepare.compact.COMPACT_Y1
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.COMPACT_Y1 : @PRVFresh_NMP_prepare_Funs.compact.COMPACT_Y1 = @NMP_prepare.compact.COMPACT_Y1 := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.COMPACT_Y1"; delta PRVFresh_NMP_prepare_Funs.compact.COMPACT_Y1 NMP_prepare.compact.COMPACT_Y1; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.COMPACT_Y1
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.OFF_INACTIVE : @PRVFresh_NMP_prepare_Funs.compact.OFF_INACTIVE = @NMP_prepare.compact.OFF_INACTIVE
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.OFF_INACTIVE : @PRVFresh_NMP_prepare_Funs.compact.OFF_INACTIVE = @NMP_prepare.compact.OFF_INACTIVE := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.OFF_INACTIVE"; delta PRVFresh_NMP_prepare_Funs.compact.OFF_INACTIVE NMP_prepare.compact.OFF_INACTIVE; try simp only [PRVEq.NMP_prepare.Funs.compact.OFF_Y1, PRVEq.NMP_prepare.Funs.compact.COMPACT_Y1]; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.OFF_INACTIVE
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.compact.LOGICAL_Y1 : @PRVFresh_NMP_prepare_Funs.compact.LOGICAL_Y1 = @NMP_prepare.compact.LOGICAL_Y1
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.compact.LOGICAL_Y1 : @PRVFresh_NMP_prepare_Funs.compact.LOGICAL_Y1 = @NMP_prepare.compact.LOGICAL_Y1 := by
+  (trace "PRV-S2 PRVEq.NMP_prepare.Funs.compact.LOGICAL_Y1"; delta PRVFresh_NMP_prepare_Funs.compact.LOGICAL_Y1 NMP_prepare.compact.LOGICAL_Y1; try rfl; done)
+#print axioms PRVEq.NMP_prepare.Funs.compact.LOGICAL_Y1
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once = @NMP_prepare.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once = @NMP_prepare.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError = @NMP_prepare.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError = @NMP_prepare.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once = @NMP_prepare.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once = @NMP_prepare.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
 
-/- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError = @NMP_prepare.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
-   last probe error: 'no stage marker (not elaborated)' -/
+theorem PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError = @NMP_prepare.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError := by
+  (trace "PRV-S1 PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError"; rfl)
+#print axioms PRVEq.NMP_prepare.Funs.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
 
 /- PRV-OBLIGATION (transport-needed; P3): PRVEq.NMP_prepare.Funs.verifier.candidate.prepare : @PRVFresh_NMP_prepare_Funs.verifier.candidate.prepare = @NMP_prepare.verifier.candidate.prepare
    last probe error: 'fresh declaration (or a callee) did not elaborate against the gate environment' -/

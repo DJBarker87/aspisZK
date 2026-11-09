@@ -145,7 +145,7 @@ def parse_externals(text):
     return sorted(set(m.group(1) for m in re.finditer(r'(?m)^\s*(?:@\[[^\]]*\]\s*)*axiom\s+(\S+)', clean)))
 
 def generate(a):
-    M = a.module; fm = M.replace('.', '_'); fresh_ns = 'PRVFresh_' + fm
+    M = a.module; TAG = getattr(a, 'tag', '') or ''; ML = M + TAG; fm = ML.replace('.', '_'); fresh_ns = 'PRVFresh_' + fm  # PCT patch 2: --tag for a second fresh dir
     gate_text = Path(a.gate_source).read_text()
     gh = header_info(gate_text); assert len(gh['namespaces']) == 1, ('gate source must have one namespace', gh['namespaces'])
     gate_ns = gh['namespaces'][0]
@@ -180,7 +180,7 @@ def generate(a):
                 reached.add(n[len(gate_ns) + 1:] if n.startswith(gate_ns + '.') else n)
     LINE_MAP = []
     if getattr(a, 'bundle_offsets', None):
-        LINE_MAP = json.loads(Path(a.bundle_offsets).read_text())['PRVEq_' + M.replace('.', '_')]['line_map']
+        LINE_MAP = json.loads(Path(a.bundle_offsets).read_text())['PRVEq_' + ML.replace('.', '_')]['line_map']
     # ---- previous-round state
     state = json.loads(Path(a.state).read_text()) if a.state and Path(a.state).exists() else None
     log_by_pos = {}; stage_marks = {}
@@ -251,7 +251,7 @@ def generate(a):
             if not lines: continue
             s, e = lines
             errs = [(l, m) for l in range(s, e + 1) for (k, m) in log_by_pos.get(l, []) if k == 'error']
-            marks = stage_marks.get(f'PRVEq.{M}.{n}', set()) | stage_marks.get(f'PRVEq.{M}.{n}.equiv', set())
+            marks = stage_marks.get(f'PRVEq.{ML}.{n}', set()) | stage_marks.get(f'PRVEq.{ML}.{n}.equiv', set())
             stage = max(marks) if marks else None
             if errs or stage is None: plan[n].update(status='failed', stage=None, error=(errs[0][1][:300] if errs else 'no stage marker (not elaborated)'))
             else: plan[n].update(status='proved', stage=stage)
@@ -315,7 +315,7 @@ def generate(a):
     out.append('')
     # ---- equalities
     defs_state = {}
-    def eqname(n): return f'PRVEq.{M}.{n}'
+    def eqname(n): return f'PRVEq.{ML}.{n}'
     commented = []
     order = [b for b in fblocks if b['name'] in plan]
     for b in order:
@@ -419,6 +419,7 @@ def main():
     ap.add_argument('--module', required=True); ap.add_argument('--fresh-dir', required=True); ap.add_argument('--fresh-ns', required=True)
     ap.add_argument('--gate-source', required=True); ap.add_argument('--gate-types-source'); ap.add_argument('--partition')
     ap.add_argument('--out', required=True); ap.add_argument('--report', required=True); ap.add_argument('--state'); ap.add_argument('--state-out'); ap.add_argument('--lean-log')
+    ap.add_argument('--tag', default='', help='PCT patch 2: suffix for a second fresh directory of the same gate module')
     ap.add_argument('--bundle-offsets', help='PCT_bundle.py offsets json; the Lean log is then a bundle log')
     a = ap.parse_args()
     assert not (a.state and a.lean_log and a.state_out is None), 'pass --state-out so the previous state is never overwritten'

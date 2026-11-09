@@ -244,56 +244,6 @@ def r1_wire.Error.Insts.CoreMarkerCopy : core.marker.Copy r1_wire.Error := {
   cloneInst := r1_wire.Error.Insts.CoreCloneClone
 }
 
-/-- [aspis_r1_parse_record_extract::r1_wire::{impl core::fmt::Debug for aspis_r1_parse_record_extract::r1_wire::Error}::fmt]:
-    Source: 'lib.rs', lines 131:22-131:27
-    Visibility: public -/
-def r1_wire.Error.Insts.CoreFmtDebug.fmt
-  (self : r1_wire.Error) (f : core.fmt.Formatter) :
-  Result ((core.result.Result Unit core.fmt.Error) × core.fmt.Formatter)
-  := do
-  match self with
-  | r1_wire.Error.Allocation =>
-    core.fmt.Formatter.write_str f (toStr "Allocation")
-  | r1_wire.Error.RowOrder __self_0 __self_1 =>
-    let __self_01 := Dyn.mk _ core.fmt.DebugU8 __self_0
-    let __self_11 := Dyn.mk _ (core.fmt.DebugShared core.fmt.DebugU8) __self_1
-    core.fmt.Formatter.debug_struct_field2_finish f (toStr "RowOrder") (toStr
-      "expected") __self_01 (toStr "actual") __self_11
-  | r1_wire.Error.InvalidRow =>
-    core.fmt.Formatter.write_str f (toStr "InvalidRow")
-  | r1_wire.Error.Tag __self_0 =>
-    let __self_01 := Dyn.mk _ (core.fmt.DebugShared core.fmt.DebugU8) __self_0
-    core.fmt.Formatter.debug_struct_field1_finish f (toStr "Tag") (toStr "row")
-      __self_01
-  | r1_wire.Error.Length __self_0 =>
-    let __self_01 := Dyn.mk _ (core.fmt.DebugShared core.fmt.DebugU8) __self_0
-    core.fmt.Formatter.debug_struct_field1_finish f (toStr "Length") (toStr
-      "row") __self_01
-  | r1_wire.Error.NonCanonical __self_0 __self_1 =>
-    let __self_01 := Dyn.mk _ core.fmt.DebugU8 __self_0
-    let __self_11 :=
-      Dyn.mk _ (core.fmt.DebugShared core.fmt.DebugUsize) __self_1
-    core.fmt.Formatter.debug_struct_field2_finish f (toStr "NonCanonical")
-      (toStr "row") __self_01 (toStr "value") __self_11
-  | r1_wire.Error.Boundary __self_0 =>
-    let __self_01 :=
-      Dyn.mk _ (core.fmt.DebugShared core.fmt.DebugUsize) __self_0
-    core.fmt.Formatter.debug_struct_field1_finish f (toStr "Boundary") (toStr
-      "round") __self_01
-  | r1_wire.Error.Terminal => core.fmt.Formatter.write_str f (toStr "Terminal")
-  | r1_wire.Error.EqualCirclePoints =>
-    core.fmt.Formatter.write_str f (toStr "EqualCirclePoints")
-  | r1_wire.Error.TrailingBytes =>
-    core.fmt.Formatter.write_str f (toStr "TrailingBytes")
-  | r1_wire.Error.Public => core.fmt.Formatter.write_str f (toStr "Public")
-
-/-- Trait implementation: [aspis_r1_parse_record_extract::r1_wire::{impl core::fmt::Debug for aspis_r1_parse_record_extract::r1_wire::Error}]
-    Source: 'lib.rs', lines 131:22-131:27 -/
-@[reducible]
-def r1_wire.Error.Insts.CoreFmtDebug : core.fmt.Debug r1_wire.Error := {
-  fmt := r1_wire.Error.Insts.CoreFmtDebug.fmt
-}
-
 /-- Trait implementation: [aspis_r1_parse_record_extract::r1_wire::{impl core::marker::StructuralPartialEq for aspis_r1_parse_record_extract::r1_wire::Error}]
     Source: 'lib.rs', lines 131:29-131:38 -/
 @[reducible]
@@ -544,17 +494,15 @@ def r1_wire.parse_record
       if i2 != tag
       then ok (core.result.Result.Err (r1_wire.Error.Tag row))
       else
-        let s ←
-          core.slice.index.Slice.index
-            (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) record1
-            { start := 1#usize, «end» := 5#usize }
-        let r1 ←
-          core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8
-            s
-        let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r1
-        let i3 ← lift (core.num.U32.from_le_bytes a)
-        let i4 ← lift (UScalar.cast .Usize i3)
-        if i4 != size
+        let i3 ← Slice.index_usize record1 1#usize
+        let i4 ← Slice.index_usize record1 2#usize
+        let i5 ← Slice.index_usize record1 3#usize
+        let i6 ← Slice.index_usize record1 4#usize
+        let i7 ←
+          lift (core.num.U32.from_le_bytes
+            (Array.make 4#usize [ i3, i4, i5, i6 ]))
+        let i8 ← lift (UScalar.cast .Usize i7)
+        if i8 != size
         then ok (core.result.Result.Err (r1_wire.Error.Length row))
         else
           let payload ←
@@ -563,8 +511,8 @@ def r1_wire.parse_record
               { start := 5#usize }
           if row >= 14#u8
           then
-            let r2 ← r1_wire.validate_record_fields row payload
-            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            let r1 ← r1_wire.validate_record_fields row payload
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
             match cf1 with
             | core.ops.control_flow.ControlFlow.Continue _ =>
               ok (core.result.Result.Ok payload)

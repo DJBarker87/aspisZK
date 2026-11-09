@@ -67,34 +67,9 @@ structure aspis_core.field.wide_exact.WideExact where
   c0 : aspis_core.field.QM31
   c1 : aspis_core.field.QM31
 
-/-- [aspis_core::r0::Error]
-    Source: 'crates/aspis-core/src/r0/mod.rs', lines 39:0-39:14
-    Name pattern: [aspis_core::r0::Error]
-    Visibility: public -/
-@[discriminant isize, rust_type "aspis_core::r0::Error"]
-inductive aspis_core.r0.Error where
-| IndexOutOfRange : aspis_core.r0.Error
-| WrongLength : aspis_core.r0.Error
-| ZeroDenominator : aspis_core.r0.Error
-| Allocation : aspis_core.r0.Error
-| NonCanonical : aspis_core.r0.Error
-| WrongField : aspis_core.r0.Error
-| InvalidPoints : aspis_core.r0.Error
-| QuotientNotInImage : aspis_core.r0.Error
-| RankDeficient : aspis_core.r0.Error
-| Parse : aspis_core.r0.Error
-| Semantic : aspis_core.r0.Error
-| Schedule : aspis_core.r0.Error
-| Sampler : aspis_core.r0.Error
-| Commitment : aspis_core.r0.Error
-| Authentication : aspis_core.r0.Error
-| V1 : aspis_core.r0.Error
-| V2 : aspis_core.r0.Error
-
 /-- [aspis_r1_cost_probe::transport::Variant]
     Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 3:0-3:30
     Visibility: public -/
-@[discriminant isize]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
@@ -119,7 +94,6 @@ structure verifier.Prepared where
 /-- [aspis_r1_cost_probe::verifier::Error]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 20:0-27:38
     Visibility: public -/
-@[discriminant isize]
 inductive verifier.Error where
 | Parse : verifier.Error
 | Semantic : verifier.Error
@@ -155,7 +129,6 @@ structure verifier.Accumulator where
 /-- [aspis_r1_cost_probe::verifier::Phase]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 29:0-29:152
     Visibility: public -/
-@[discriminant isize]
 inductive verifier.Phase where
 | Parsed : verifier.Phase
 | Semantic : verifier.Phase
@@ -168,22 +141,6 @@ inductive verifier.Phase where
 | CheckpointWrite : verifier.Phase
 | Relation : verifier.Phase
 | Final : verifier.Phase
-
-/-- [aspis_r1_cost_probe::verifier::resume::closure#1]
-    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 428:76-428:96 -/
-@[reducible]
-def verifier.resume.closure_1 (H : Type) := Unit
-
-/-- [aspis_r1_cost_probe::verifier::resume::closure]
-    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 394:137-394:145 -/
-@[reducible]
-def verifier.resume.closure (H : Type) := Unit
-
-/-- [aspis_r1_cost_probe::verifier::Reader]
-    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 342:0-342:41 -/
-structure verifier.Reader where
-  bytes : Slice Std.U8
-  «at» : Std.Usize
 
 /-- [aspis_r1_cost_probe::verifier::View]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 34:0-38:1
