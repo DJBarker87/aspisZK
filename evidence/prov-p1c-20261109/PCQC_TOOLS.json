@@ -1,0 +1,39 @@
+{
+ "note": "Controller copies from P1a with PCQ_ -> PCQC_; stager unchanged; every P1c extraction is made with CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true and RUSTFLAGS \" -C overflow-checks=yes\" appended (ruling 2026-11-09).",
+ "files": {
+  "PCQC_extract.py": {
+   "original": "evidence/prov-p1a-20261109/PCQ_extract.py",
+   "original_sha256": "e8c3c1d9fdc9ceb03f4089c999d56803d3ccf10812f15ccaaf10beed2024276f",
+   "sha256": "a1b6620c8df84b7f3c48e6b9a5288f187a430fd01118bbb5a99c5a22c26adff0",
+   "changes": "PCQ_ -> PCQC_ (prefix, attempt-id regex PCQC_[EL][0-9]{3}, file names, env PCQC_HOST_BASE); host base default codex-pc-prov-p1a-20261109 -> codex-pc-prov-p1c-20261109. Overflow-checks handling (extra_env appended to the stager RUSTFLAGS, CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS set) is inherited unchanged from P1a PCQ_extract.py."
+  },
+  "PCQC_run.py": {
+   "original": "evidence/prov-p1a-20261109/PCQ_run.py",
+   "original_sha256": "849e479ffa61918fe94ef19da2246b13de1729c684970dcf2e24ac3c8b4ba321",
+   "sha256": "50f83e85240961fd5439df494cfae4809a1349f2627162f1e99eb9b71231995d",
+   "changes": "PCQ_ -> PCQC_ (prefix, attempt-id regex PCQC_[EL][0-9]{3}, file names, env PCQC_HOST_BASE); host base default codex-pc-prov-p1a-20261109 -> codex-pc-prov-p1c-20261109. Overflow-checks handling (extra_env appended to the stager RUSTFLAGS, CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS set) is inherited unchanged from P1a PCQ_extract.py."
+  },
+  "PCQC_run_host.py": {
+   "original": "evidence/prov-p1a-20261109/PCQ_run_host.py",
+   "original_sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "changes": "content unchanged (0 prefix occurrences)"
+  },
+  "PCQC_STAGER_PIN.json": {
+   "original": "evidence/prov-p1a-20261109/PCQ_STAGER_PIN.json",
+   "original_sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45",
+   "sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45",
+   "changes": "renamed only; content byte-identical (stager evidence/extract-stage-20261106/NHR_stage.py sha256 365cdfc8..., NOT copied)"
+  },
+  "PCQC_make_spec.py": {
+   "original": null,
+   "sha256": "1c8105a8bcb1fce9c7647d5411634876c8745a091d53f0fcfbbc26bb88aab257",
+   "changes": "new in P1c; replaces PCQ_render_spec.py: copies an earlier run spec verbatim (so the selection is identical) and changes only run id, host base, PCQ_/PCO_ -> PCQC_, extra_env=overflow checks on, plus a p1c record field"
+  },
+  "PCQC_chain.sh": {
+   "original": "evidence/prov-p1a-20261109/PCQ_chain_driver.sh",
+   "sha256": "677c603b697d191917bf28a5197d4368f0a6b80600877a70b389f3a5e03a627c",
+   "changes": "rewritten: strictly sequential driver over (new run, old spec, old run, kind)"
+  }
+ }
+}
