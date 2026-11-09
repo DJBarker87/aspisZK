@@ -1,0 +1,155 @@
+{
+ "schema": "PCVB_STATUS/1",
+ "target_established": false,
+ "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "claims": [
+  {
+   "id": "M31.mul",
+   "statement": "for each gate module, `@PRVFresh_<M>.field.M31.mul = @<gate ns>.field.M31.mul` (equality of functions M31 -> M31 -> Result M31, no hypotheses)",
+   "modules": [
+    "AspisR72Sampler.Funs",
+    "AspisV8R19.ComplexFieldSlice",
+    "AspisV8R19.GuardedFieldSlice",
+    "AspisV8R19.QuarticFieldSlice"
+   ],
+   "proof": "case split on the two guards of the gate body; guarded branch by PCVB_M31.fast_chain (fastBody = redBody for products <= P^2), unguarded branches are syntactically the fresh chain"
+  },
+  {
+   "id": "CM31.mul/CM31.square",
+   "statement": "fresh = gate as functions, R72Sampler and Quartic slice",
+   "proof": "M31.mul, M31.reduce_u64, M31.sub, M31.double equalities plus gate helper r23_product_u32_bounded = plain checked u64 product (theorem r23_gate)"
+  },
+  {
+   "id": "QM31.mul",
+   "statement": "@PRVFresh_AspisR72Sampler_Funs.field.QM31.mul = @AspisR72Sampler.field.QM31.mul",
+   "proof": "r24_none (some limb >= P gives ok none), r24_canon (all limbs < P gives ok (some res) with res limbs = PCVB_QM.gateQ), chain_spec (gate Karatsuba chain limbs = PCVB_QM.qmul), PCVB_QM.comp0..comp3 (qmul = gateQ, omega over product atoms)"
+  },
+  {
+   "id": "QM31.square",
+   "statement": "fresh = gate, R72Sampler",
+   "proof": "congruence on CM31.* equalities"
+  }
+ ],
+ "files": [
+  {
+   "module": "AspisR72Sampler.Funs",
+   "file": "PRVEq_AspisR72Sampler_Funs_P3.lean",
+   "sha256": "f4d4efb18b487fa867720ed202ead3fed09738f8f56a25fa852684b1b5499adc",
+   "receipt": "PCVB_L040/receipt.json",
+   "exit_status": 0,
+   "wall_seconds": 42.844213142991066,
+   "peak_rss_kib": 3009104,
+   "swaps": "0",
+   "n_axiom_lines": 28,
+   "all_standard_axioms_only": true,
+   "print_axioms": [
+    "'PCVB_M31.fast_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PCVB_QM.comp0' depends on axioms: [propext, Quot.sound]",
+    "'PCVB_QM.comp1' depends on axioms: [propext, Quot.sound]",
+    "'PCVB_QM.comp2' depends on axioms: [propext, Quot.sound]",
+    "'PCVB_QM.comp3' depends on axioms: [propext, Quot.sound]",
+    "'PCVB_R23.r23_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.ZERO' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.r23_gate' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.M31.double' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.ZERO' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.new' does not depend on any axioms",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.CM31.double' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.mul_by_r' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.QM31.ONE' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.QM31.add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.QM31.sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.QM31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisR72Sampler.Funs.field.QM31.square' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "source_revision_at_launch": "c5cd1d2a062b605371c745db67353c480de9575a",
+   "source_tree_dirty_at_launch": true
+  },
+  {
+   "module": "AspisV8R19.QuarticFieldSlice",
+   "file": "PRVEq_AspisV8R19_QuarticFieldSlice_P3.lean",
+   "sha256": "2c3dd2a544ee699fa396e80a6e2399a0ebc81fb31d44a51023d53892fbb2ce29",
+   "receipt": "PCVB_L041/receipt.json",
+   "exit_status": 0,
+   "wall_seconds": 14.760107351001352,
+   "peak_rss_kib": 2693532,
+   "swaps": "0",
+   "n_axiom_lines": 14,
+   "all_standard_axioms_only": true,
+   "print_axioms": [
+    "'PCVB_M31.fast_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PCVB_R23.r23_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.M31.add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.M31.sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.M31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.r23_gate' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.M31.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.M31.double' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.CM31.sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.CM31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.CM31.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.QuarticFieldSlice.field.mul_by_r' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "source_revision_at_launch": "c5cd1d2a062b605371c745db67353c480de9575a",
+   "source_tree_dirty_at_launch": true
+  },
+  {
+   "module": "AspisV8R19.ComplexFieldSlice",
+   "file": "PRVEq_AspisV8R19_ComplexFieldSlice_P3.lean",
+   "sha256": "8f78d90226642922ed949f8154cb9045f9b7658b23a356301290a8fd1625b786",
+   "receipt": "PCVB_L042/receipt.json",
+   "exit_status": 0,
+   "wall_seconds": 10.716946306172758,
+   "peak_rss_kib": 2686052,
+   "swaps": "0",
+   "n_axiom_lines": 5,
+   "all_standard_axioms_only": true,
+   "print_axioms": [
+    "'PCVB_M31.fast_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.ComplexFieldSlice.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.ComplexFieldSlice.field.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.ComplexFieldSlice.field.M31.add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.ComplexFieldSlice.field.M31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "source_revision_at_launch": "c5cd1d2a062b605371c745db67353c480de9575a",
+   "source_tree_dirty_at_launch": true
+  },
+  {
+   "module": "AspisV8R19.GuardedFieldSlice",
+   "file": "PRVEq_AspisV8R19_GuardedFieldSlice_P3.lean",
+   "sha256": "6789c3d79b4e46c7309fee6808885195dee4b3a6de0d10ba8031835a4c75c494",
+   "receipt": "PCVB_L043/receipt.json",
+   "exit_status": 0,
+   "wall_seconds": 8.332426776876673,
+   "peak_rss_kib": 2686484,
+   "swaps": "0",
+   "n_axiom_lines": 4,
+   "all_standard_axioms_only": true,
+   "print_axioms": [
+    "'PCVB_M31.fast_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.GuardedFieldSlice.aspis_core.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PRVEq.AspisV8R19.GuardedFieldSlice.aspis_core.field.reduce_u64' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]",
+    "'PRVEq.AspisV8R19.GuardedFieldSlice.aspis_core.field.M31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "source_revision_at_launch": "c5cd1d2a062b605371c745db67353c480de9575a",
+   "source_tree_dirty_at_launch": true
+  }
+ ],
+ "what_is_not_claimed": [
+  "Equalities are against the P2f fresh emissions (PCQF_aspis_core_field_a sha256 3fe20d13..., PCQF_aspis_r1_cost_probe_candidate sha256 04b39d85... for the Guarded slice) as recorded by P2f; P3b re-extracted nothing.",
+  "No claim about any definition outside the four modules; the remaining 46 items are open (PCVB_REMAINING.json).",
+  "A theorem compiling is not evidence that the gate module is the one used by R1; PCXA_NONFROZEN.json lists AspisR72Sampler as extracted from a non-frozen source blob (a47a9996aa63); these theorems show its field functions equal the frozen ones, they do not make its other definitions frozen-equal."
+ ]
+}
