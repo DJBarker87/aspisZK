@@ -64,14 +64,13 @@ partial_fixpoint
 end PRVFresh_MultiproofSortRef_Funs
 
 theorem PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step : @PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_step = @MultiproofSortRef.sort_reference.insert_step := by
-  first | (trace "PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step"; rfl) | (trace "PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step"; delta PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_step MultiproofSortRef.sort_reference.insert_step; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step"; rfl)
 #print axioms PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step
 
 theorem PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows : @PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_rows = @MultiproofSortRef.sort_reference.insert_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows"; delta PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_rows MultiproofSortRef.sort_reference.insert_rows; try simp only [PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows"; delta PRVFresh_MultiproofSortRef_Funs.sort_reference.insert_rows MultiproofSortRef.sort_reference.insert_rows; try simp only [PRVEq.MultiproofSortRef.Funs.sort_reference.insert_step]; try rfl; done)
 #print axioms PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows
 
-theorem PRVEq.MultiproofSortRef.Funs.sort_reference.sort_rows : @PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows = @MultiproofSortRef.sort_reference.sort_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofSortRef.Funs.sort_reference.sort_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofSortRef.Funs.sort_reference.sort_rows"; delta PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows MultiproofSortRef.sort_reference.sort_rows; try simp only [PRVEq.MultiproofSortRef.Funs.sort_reference.insert_rows]; try rfl; done)
-#print axioms PRVEq.MultiproofSortRef.Funs.sort_reference.sort_rows
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.MultiproofSortRef.Funs.sort_reference.sort_rows : @PRVFresh_MultiproofSortRef_Funs.sort_reference.sort_rows = @MultiproofSortRef.sort_reference.sort_rows
+   last probe error: 'unsolved goals' -/
 

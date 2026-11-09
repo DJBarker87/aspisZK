@@ -486,66 +486,63 @@ partial_fixpoint
 end PRVFresh_MultiproofConeRef_Funs
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.write_parent : @PRVFresh_MultiproofConeRef_Funs.reference.write_parent = @MultiproofConeRef.reference.write_parent := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.write_parent"; delta PRVFresh_MultiproofConeRef_Funs.reference.write_parent MultiproofConeRef.reference.write_parent; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.write_parent"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.write_parent
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.read32 : @PRVFresh_MultiproofConeRef_Funs.reference.read32 = @MultiproofConeRef.reference.read32 := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.read32"; delta PRVFresh_MultiproofConeRef_Funs.reference.read32 MultiproofConeRef.reference.read32; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read32"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.read32
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.binary_step : @PRVFresh_MultiproofConeRef_Funs.reference.binary_step = @MultiproofConeRef.reference.binary_step := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.binary_step"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.binary_step"; delta PRVFresh_MultiproofConeRef_Funs.reference.binary_step MultiproofConeRef.reference.binary_step; try simp only [PRVEq.MultiproofConeRef.Funs.reference.write_parent, PRVEq.MultiproofConeRef.Funs.reference.read32]; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.binary_step"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.binary_step
 
-theorem PRVEq.MultiproofConeRef.Funs.reference.level_rows : @PRVFresh_MultiproofConeRef_Funs.reference.level_rows = @MultiproofConeRef.reference.level_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.level_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.level_rows"; delta PRVFresh_MultiproofConeRef_Funs.reference.level_rows MultiproofConeRef.reference.level_rows; try simp only [PRVEq.MultiproofConeRef.Funs.reference.binary_step]; try rfl; done)
-#print axioms PRVEq.MultiproofConeRef.Funs.reference.level_rows
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.MultiproofConeRef.Funs.reference.level_rows : @PRVFresh_MultiproofConeRef_Funs.reference.level_rows = @MultiproofConeRef.reference.level_rows
+   last probe error: 'unsolved goals' -/
 
-theorem PRVEq.MultiproofConeRef.Funs.reference.levels : @PRVFresh_MultiproofConeRef_Funs.reference.levels = @MultiproofConeRef.reference.levels := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.levels"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.levels"; delta PRVFresh_MultiproofConeRef_Funs.reference.levels MultiproofConeRef.reference.levels; try simp only [PRVEq.MultiproofConeRef.Funs.reference.level_rows]; try rfl; done)
-#print axioms PRVEq.MultiproofConeRef.Funs.reference.levels
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.MultiproofConeRef.Funs.reference.levels : @PRVFresh_MultiproofConeRef_Funs.reference.levels = @MultiproofConeRef.reference.levels
+   last probe error: 'unsolved goals' -/
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.valid_indices : @PRVFresh_MultiproofConeRef_Funs.reference.valid_indices = @MultiproofConeRef.reference.valid_indices := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.valid_indices"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.valid_indices"; delta PRVFresh_MultiproofConeRef_Funs.reference.valid_indices MultiproofConeRef.reference.valid_indices; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.valid_indices"; delta PRVFresh_MultiproofConeRef_Funs.reference.valid_indices MultiproofConeRef.reference.valid_indices; try rfl; done)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.valid_indices
 
-theorem PRVEq.MultiproofConeRef.Funs.reference.verify_owned : @PRVFresh_MultiproofConeRef_Funs.reference.verify_owned = @MultiproofConeRef.reference.verify_owned := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.verify_owned"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.verify_owned"; delta PRVFresh_MultiproofConeRef_Funs.reference.verify_owned MultiproofConeRef.reference.verify_owned; try simp only [PRVEq.MultiproofConeRef.Funs.reference.levels, PRVEq.MultiproofConeRef.Funs.reference.valid_indices]; try rfl; done)
-#print axioms PRVEq.MultiproofConeRef.Funs.reference.verify_owned
+/- PRV-OBLIGATION (transport-needed; P3): PRVEq.MultiproofConeRef.Funs.reference.verify_owned : @PRVFresh_MultiproofConeRef_Funs.reference.verify_owned = @MultiproofConeRef.reference.verify_owned
+   last probe error: 'blocked by failed callee equalities: reference.levels' -/
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.leaf_step : @PRVFresh_MultiproofConeRef_Funs.reference.leaf_step = @MultiproofConeRef.reference.leaf_step := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.leaf_step"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.leaf_step"; delta PRVFresh_MultiproofConeRef_Funs.reference.leaf_step MultiproofConeRef.reference.leaf_step; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.leaf_step"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.leaf_step
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.canonical_word : @PRVFresh_MultiproofConeRef_Funs.reference.canonical_word = @MultiproofConeRef.reference.canonical_word := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_word"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.canonical_word"; delta PRVFresh_MultiproofConeRef_Funs.reference.canonical_word MultiproofConeRef.reference.canonical_word; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_word"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.canonical_word
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.canonical_qm : @PRVFresh_MultiproofConeRef_Funs.reference.canonical_qm = @MultiproofConeRef.reference.canonical_qm := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_qm"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.canonical_qm"; delta PRVFresh_MultiproofConeRef_Funs.reference.canonical_qm MultiproofConeRef.reference.canonical_qm; try simp only [PRVEq.MultiproofConeRef.Funs.reference.canonical_word]; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.canonical_qm"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.canonical_qm
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.expand_chunk : @PRVFresh_MultiproofConeRef_Funs.reference.expand_chunk = @MultiproofConeRef.reference.expand_chunk := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.expand_chunk"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.expand_chunk"; delta PRVFresh_MultiproofConeRef_Funs.reference.expand_chunk MultiproofConeRef.reference.expand_chunk; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.expand_chunk"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.expand_chunk
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.row_shape : @PRVFresh_MultiproofConeRef_Funs.reference.row_shape = @MultiproofConeRef.reference.row_shape := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.row_shape"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.row_shape"; delta PRVFresh_MultiproofConeRef_Funs.reference.row_shape MultiproofConeRef.reference.row_shape; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.row_shape"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.row_shape
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets : @PRVFresh_MultiproofConeRef_Funs.reference.semantic_offsets = @MultiproofConeRef.reference.semantic_offsets := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets"; delta PRVFresh_MultiproofConeRef_Funs.reference.semantic_offsets MultiproofConeRef.reference.semantic_offsets; try simp only [PRVEq.MultiproofConeRef.Funs.reference.row_shape]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets"; delta PRVFresh_MultiproofConeRef_Funs.reference.semantic_offsets MultiproofConeRef.reference.semantic_offsets; try simp only [PRVEq.MultiproofConeRef.Funs.reference.row_shape]; try rfl; done)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.semantic_offsets
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.read16 : @PRVFresh_MultiproofConeRef_Funs.reference.read16 = @MultiproofConeRef.reference.read16 := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read16"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.read16"; delta PRVFresh_MultiproofConeRef_Funs.reference.read16 MultiproofConeRef.reference.read16; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.read16"; rfl)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.read16
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.check_values : @PRVFresh_MultiproofConeRef_Funs.reference.check_values = @MultiproofConeRef.reference.check_values := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.check_values"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.check_values"; delta PRVFresh_MultiproofConeRef_Funs.reference.check_values MultiproofConeRef.reference.check_values; try simp only [PRVEq.MultiproofConeRef.Funs.reference.canonical_qm, PRVEq.MultiproofConeRef.Funs.reference.read16]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.check_values"; delta PRVFresh_MultiproofConeRef_Funs.reference.check_values MultiproofConeRef.reference.check_values; try simp only [PRVEq.MultiproofConeRef.Funs.reference.canonical_qm, PRVEq.MultiproofConeRef.Funs.reference.read16]; try rfl; done)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.check_values
 
 theorem PRVEq.MultiproofConeRef.Funs.reference.expand_rows : @PRVFresh_MultiproofConeRef_Funs.reference.expand_rows = @MultiproofConeRef.reference.expand_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofConeRef.Funs.reference.expand_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.expand_rows"; delta PRVFresh_MultiproofConeRef_Funs.reference.expand_rows MultiproofConeRef.reference.expand_rows; try simp only [PRVEq.MultiproofConeRef.Funs.reference.expand_chunk, PRVEq.MultiproofConeRef.Funs.reference.read16]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofConeRef.Funs.reference.expand_rows"; delta PRVFresh_MultiproofConeRef_Funs.reference.expand_rows MultiproofConeRef.reference.expand_rows; try simp only [PRVEq.MultiproofConeRef.Funs.reference.expand_chunk, PRVEq.MultiproofConeRef.Funs.reference.read16]; try rfl; done)
 #print axioms PRVEq.MultiproofConeRef.Funs.reference.expand_rows
 

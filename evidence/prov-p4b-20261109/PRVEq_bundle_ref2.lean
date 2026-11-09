@@ -1,4 +1,4 @@
--- PRV bundle (compile vehicle only): exact concatenation of PRVEq_MultiproofConeRef.Funs.lean, PRVEq_MultiproofSortRef.Funs.lean, PRVEq_MultiproofParserRef.Funs.lean
+-- PRV bundle (compile vehicle only): exact concatenation of PRVEq_MultiproofConeRef_Funs.lean, PRVEq_MultiproofSortRef_Funs.lean, PRVEq_MultiproofParserRef_Funs.lean
 import Aeneas
 import MultiproofConeRef.Funs
 import MultiproofSortRef.Funs

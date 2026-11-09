@@ -539,58 +539,58 @@ def parser_reference.parse
 end PRVFresh_MultiproofParserRef_Funs
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.canonical_word : @PRVFresh_MultiproofParserRef_Funs.reference.canonical_word = @MultiproofParserRef.reference.canonical_word := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.canonical_word"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.canonical_word"; delta PRVFresh_MultiproofParserRef_Funs.reference.canonical_word MultiproofParserRef.reference.canonical_word; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.canonical_word"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.canonical_word
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words : @PRVFresh_MultiproofParserRef_Funs.parser_reference.canonical_words = @MultiproofParserRef.parser_reference.canonical_words := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.canonical_words MultiproofParserRef.parser_reference.canonical_words; try simp only [PRVEq.MultiproofParserRef.Funs.reference.canonical_word]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.canonical_words MultiproofParserRef.parser_reference.canonical_words; try simp only [PRVEq.MultiproofParserRef.Funs.reference.canonical_word]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan : @PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_scan = @MultiproofParserRef.parser_reference.opening_scan := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_scan MultiproofParserRef.parser_reference.opening_scan; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_scan MultiproofParserRef.parser_reference.opening_scan; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows : @PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_rows = @MultiproofParserRef.parser_reference.opening_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_rows MultiproofParserRef.parser_reference.opening_rows; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.opening_rows MultiproofParserRef.parser_reference.opening_rows; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.opening_scan]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.read16 : @PRVFresh_MultiproofParserRef_Funs.reference.read16 = @MultiproofParserRef.reference.read16 := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.read16"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.read16"; delta PRVFresh_MultiproofParserRef_Funs.reference.read16 MultiproofParserRef.reference.read16; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.read16"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.read16
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.canonical_qm : @PRVFresh_MultiproofParserRef_Funs.reference.canonical_qm = @MultiproofParserRef.reference.canonical_qm := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.canonical_qm"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.canonical_qm"; delta PRVFresh_MultiproofParserRef_Funs.reference.canonical_qm MultiproofParserRef.reference.canonical_qm; try simp only [PRVEq.MultiproofParserRef.Funs.reference.canonical_word]; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.canonical_qm"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.canonical_qm
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.check_values : @PRVFresh_MultiproofParserRef_Funs.reference.check_values = @MultiproofParserRef.reference.check_values := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.check_values"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.check_values"; delta PRVFresh_MultiproofParserRef_Funs.reference.check_values MultiproofParserRef.reference.check_values; try simp only [PRVEq.MultiproofParserRef.Funs.reference.read16, PRVEq.MultiproofParserRef.Funs.reference.canonical_qm]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.check_values"; delta PRVFresh_MultiproofParserRef_Funs.reference.check_values MultiproofParserRef.reference.check_values; try simp only [PRVEq.MultiproofParserRef.Funs.reference.read16, PRVEq.MultiproofParserRef.Funs.reference.canonical_qm]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.check_values
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.scan : @PRVFresh_MultiproofParserRef_Funs.parser_reference.scan = @MultiproofParserRef.parser_reference.scan := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.scan"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.scan"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.scan MultiproofParserRef.parser_reference.scan; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words, PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows, PRVEq.MultiproofParserRef.Funs.reference.check_values]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.scan"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.scan MultiproofParserRef.parser_reference.scan; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.canonical_words, PRVEq.MultiproofParserRef.Funs.parser_reference.opening_rows, PRVEq.MultiproofParserRef.Funs.reference.check_values]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.scan
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.header : @PRVFresh_MultiproofParserRef_Funs.parser_reference.header = @MultiproofParserRef.parser_reference.header := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.header"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.header"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.header MultiproofParserRef.parser_reference.header; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.header"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.header
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.expand_chunk : @PRVFresh_MultiproofParserRef_Funs.reference.expand_chunk = @MultiproofParserRef.reference.expand_chunk := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.expand_chunk"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.expand_chunk"; delta PRVFresh_MultiproofParserRef_Funs.reference.expand_chunk MultiproofParserRef.reference.expand_chunk; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.expand_chunk"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.expand_chunk
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.expand_rows : @PRVFresh_MultiproofParserRef_Funs.reference.expand_rows = @MultiproofParserRef.reference.expand_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.expand_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.expand_rows"; delta PRVFresh_MultiproofParserRef_Funs.reference.expand_rows MultiproofParserRef.reference.expand_rows; try simp only [PRVEq.MultiproofParserRef.Funs.reference.read16, PRVEq.MultiproofParserRef.Funs.reference.expand_chunk]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.expand_rows"; delta PRVFresh_MultiproofParserRef_Funs.reference.expand_rows MultiproofParserRef.reference.expand_rows; try simp only [PRVEq.MultiproofParserRef.Funs.reference.read16, PRVEq.MultiproofParserRef.Funs.reference.expand_chunk]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.expand_rows
 
 theorem PRVEq.MultiproofParserRef.Funs.reference.row_shape : @PRVFresh_MultiproofParserRef_Funs.reference.row_shape = @MultiproofParserRef.reference.row_shape := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.row_shape"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.reference.row_shape"; delta PRVFresh_MultiproofParserRef_Funs.reference.row_shape MultiproofParserRef.reference.row_shape; try rfl; done)
+  (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.reference.row_shape"; rfl)
 #print axioms PRVEq.MultiproofParserRef.Funs.reference.row_shape
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows : @PRVFresh_MultiproofParserRef_Funs.parser_reference.semantic_rows = @MultiproofParserRef.parser_reference.semantic_rows := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.semantic_rows MultiproofParserRef.parser_reference.semantic_rows; try simp only [PRVEq.MultiproofParserRef.Funs.reference.check_values, PRVEq.MultiproofParserRef.Funs.reference.expand_rows, PRVEq.MultiproofParserRef.Funs.reference.row_shape]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.semantic_rows MultiproofParserRef.parser_reference.semantic_rows; try simp only [PRVEq.MultiproofParserRef.Funs.reference.check_values, PRVEq.MultiproofParserRef.Funs.reference.expand_rows, PRVEq.MultiproofParserRef.Funs.reference.row_shape]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows
 
 theorem PRVEq.MultiproofParserRef.Funs.parser_reference.parse : @PRVFresh_MultiproofParserRef_Funs.parser_reference.parse = @MultiproofParserRef.parser_reference.parse := by
-  first | (trace "PRV-S1 PRVEq.MultiproofParserRef.Funs.parser_reference.parse"; rfl) | (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.parse"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.parse MultiproofParserRef.parser_reference.parse; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.scan, PRVEq.MultiproofParserRef.Funs.parser_reference.header, PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows]; try rfl; done)
+  (trace "PRV-S2 PRVEq.MultiproofParserRef.Funs.parser_reference.parse"; delta PRVFresh_MultiproofParserRef_Funs.parser_reference.parse MultiproofParserRef.parser_reference.parse; try simp only [PRVEq.MultiproofParserRef.Funs.parser_reference.scan, PRVEq.MultiproofParserRef.Funs.parser_reference.header, PRVEq.MultiproofParserRef.Funs.parser_reference.semantic_rows]; try rfl; done)
 #print axioms PRVEq.MultiproofParserRef.Funs.parser_reference.parse
 
