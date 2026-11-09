@@ -8,6 +8,7 @@ import NNU_Geometry
 import NNU_Query
 import NNU_MerkleSlots
 import NNU_CommonResume
+import NNU_Inactive
 import NNH_Tx2LiteralSlots
 import NNU_Offsets
 set_option autoImplicit false
@@ -153,12 +154,17 @@ theorem common (m : IDa_Deployed.Uninstalled NFN_NEW_GeometryDictionary.CE)
  obtain ⟨s,hs,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
  rw [hs,bind_tc_ok]
  obtain ⟨o,ho,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
- have h2 := ho
- change (NNH_Tx2SlotTransport.stage m env err r).op2 s = _ at h2
+ have h2 : (NNH_Tx2SlotTransport.stage m env err r).op2 s = ok o := by
+  have ho' : NJC_ClosedCalls.inactive s = ok o := ho
+  rw [← NNU_Inactive.source] at ho'
+  exact ho'
  rw [h2,bind_tc_ok]
  obtain ⟨r1,hr1,hY⟩ := Port3_PushFrame.bind_success _ _ _ hY
- have h0 := hr1
- change (NNH_Tx2SlotTransport.stage m env err r).op0 o _ = _ at h0
+ have h0 : (NNH_Tx2SlotTransport.stage m env err r).op0 o
+   AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse = ok r1 := by
+  first
+  | exact hr1
+  | (cases o <;> exact hr1)
  rw [h0,bind_tc_ok]
  rcases r1 with val1 | e1
  swap
