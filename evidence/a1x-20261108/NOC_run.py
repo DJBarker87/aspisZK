@@ -16,8 +16,8 @@ for n in ['NOC_ATTEMPTS.jsonl','NOC_TRANSPORT.jsonl']:
   for line in p.read_text().splitlines():
    row=json.loads(line)
    if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
-assert 1 <= int(a[-3:]) <= 50
-assert len(used) < 50, 'NOC 50 scope budget (30 + lead extension 20)'
+assert 1 <= int(a[-3:]) <= 80
+assert len(used) < 80, 'NOC 80 scope budget (lead extensions)'
 
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
