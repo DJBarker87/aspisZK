@@ -1,0 +1,81 @@
+{
+ "schema": "PCWC_S1_RECONSTRUCTION v1",
+ "status": "ReconstructedSource (Funs, modulo four mechanical post-processing steps); Types NOT reproduced (hand replacement in the gate)",
+ "iterations": 1,
+ "claim": "The crate sources/s1_y1_v1 (Cargo.toml, Cargo.lock, src/lib.rs), extracted with the rebuilt original Aeneas (959659a6, PCWC_T001) and Charon daad69be (PCWC_E001, exit 0), emits a Funs.lean that equals the committed S1ValuesOwnedModelV1.lean (sha256 4eacd73f...) byte for byte after steps T1-T4 of PCWC_s1_compare.py. All eight reached definitions (read_input, write_output, copy_chunk, copy_chunk_loop, copy_chunk_loop.body, values_owned_reference, values_owned_reference_loop, values_owned_reference_loop.body) including all Source line spans (31:0-34:1, 36:0-39:1, 40:0-50:1, 42:4-48:5, 53:0-66:1, 59:4-64:5) are reproduced from the first attempt.",
+ "not_claimed": [
+  "That this is the historical source: it is a source that reproduces the module, not the original file (no original hash exists).",
+  "That the post-processing steps are the historical ones: T1-T4 are inferred from the diff; T3 (replacing the local enum constructor by the frozen extraction type) is the one with semantic content.",
+  "Types: the committed S1ValuesOwnedTypesV1.lean is `abbrev CodecError := AspisR1CurrentCaller.compact.CodecError`; the fresh Types.lean is `inductive CodecError | Length | NonZeroHigh | NonCanonical` (three variants copied from the frozen enum, line span 7:0-11:1 of my layout). They differ by design; the iso with the frozen type is a (trivial but unproved here) obligation.",
+  "Any Kani receipt: none names this crate; S3b not run.",
+  "That the reference equals frozen compact::expand_values: see PCWC_S1_OBLIGATION.lean (P3)."
+ ],
+ "reconstructed_source": {
+  "files": {
+   "Cargo.toml": "e80ce728cc395bfeeacd9355c3fbfac35b566cff7ee11f70ff955f8eee868381",
+   "Cargo.lock": "6ff5e6b413306d95847b172f73016a2e8aef99fc0fc4fac90414d0039dac95b3",
+   "src/lib.rs": "4247a14748532dc1b38aa0645e2341bbafd4d5e5115a918c85c24748b25ec2a2"
+  },
+  "path": "evidence/prov-p4c-20261109/sources/s1_y1_v1/"
+ },
+ "committed_lean": {
+  "funs": "evidence/port17release-20261024/dependency-source/S1ValuesOwnedModelV1.lean",
+  "funs_sha256": "4eacd73f095f07680d5fbba22b5ff8e1cf10429e46f454afb2f7891c541ac903",
+  "types": "evidence/port17release-20261024/dependency-source/S1ValuesOwnedTypesV1.lean"
+ },
+ "output": {
+  "fresh_funs_sha256": "09a5f3db0dda0e1e49cdbff91df2dde769ef5cac869f18aa5954fc228d09ad48",
+  "transformed_funs_sha256": "4eacd73f095f07680d5fbba22b5ff8e1cf10429e46f454afb2f7891c541ac903",
+  "identical_after_transform": true,
+  "raw_diff_lines": 46,
+  "comparison": "PCWC_S1_COMPARE_E001.json"
+ },
+ "post_processing": [
+  {
+   "step": "T1 import of the Types module renamed to the gate module name",
+   "occurrences": 1
+  },
+  {
+   "step": "T2 delete Aeneas default maxHeartbeats line",
+   "occurrences": 1
+  },
+  {
+   "step": "T2 delete Aeneas default maxRecDepth line",
+   "occurrences": 1
+  },
+  {
+   "step": "T3 qualify the CodecError constructor with the frozen-extraction type",
+   "occurrences": 2
+  },
+  {
+   "step": "T4 add #print axioms lines",
+   "occurrences": 1
+  }
+ ],
+ "inference_of_source_shape": [
+  "by-value ownership-passing style (Vec<u8> in, tuple out): the Lean signatures return (U8 x Vec) and Vec; names `next`, `next_input`, `next_output`, `value`, `count` are source variable names",
+  "Source line spans fix the layout: read_input 31-34, write_output 36-39, copy_chunk 40-50 with the byte loop 42-48, values_owned_reference 53-66 with the chunk loop 59-64",
+  "Lines 1-30 are unconstrained (enum + padding comments in the reconstruction)"
+ ],
+ "extraction": {
+  "attempt": "PCWC_E001",
+  "charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+  "aeneas_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+  "pins": "PCWC_E001_emitted/PCWC_E001_PINS.json",
+  "environment": {
+   "CARGO_BUILD_JOBS": "1",
+   "CARGO_NET_OFFLINE": "true",
+   "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+   "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_E001_ws/../PCWC_target_s1",
+   "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+   "RUSTFLAGS": "-C overflow-checks=yes",
+   "RUSTUP_TOOLCHAIN": "nightly-2026-06-01"
+  },
+  "commands_are_assumed": "Flags (preset aeneas, mir built, sysroot default, -sequential ... -split-files -emit-json, --start-from crate::values_owned_reference) are the most likely historical ones copied from sibling r18-era extractions; the original command for this crate is not recorded. Overflow checks on per the standing ruling (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true, RUSTFLAGS=-C overflow-checks=yes)."
+ },
+ "kani_S3b": {
+  "run": false,
+  "reason": "No Kani harness consuming aspis_s1_y1_source_20261024 functions found: P4a whole-tree search (PCWA D1), P4b search (PCWB D1), and this job: git grep of the design notes and non-Lean files for values_owned/aspis_s1_y1 hits only design notes and s8 logs (check_values_owned, a different crate); hits of expand_values in .rs files are the frozen compact.rs, its callers and multiproof-cone copies of the frozen tree. The installed_exact docstring speaks of a byte formula \"checked on the unchanged native function\"; the harness behind it was not located."
+ },
+ "obligation": "PCWC_S1_OBLIGATION.lean (compiles, PCWC_L002 exit 0, axioms propext/Classical.choice/Quot.sound)"
+}

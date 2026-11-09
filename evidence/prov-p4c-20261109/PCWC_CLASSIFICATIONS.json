@@ -1,0 +1,68 @@
+[
+ {
+  "id": "C1",
+  "case": "Docker use in the TOOL-BUILD scope",
+  "classification": "The brief says the build runs in one scope of the tool-build class. The original recipe is a container build; the controller runs inside the admitted 3G/4G systemd scope and applies 3G/4G swap-0 caps to the container cgroup by the original sudo set-property step, verified before the compiler starts. Container --pids-limit 64 and --memory 4g/--memory-swap 4g added.",
+  "reason": "Caps must bind the process doing the work; the scope holds only the controller."
+ },
+ {
+  "id": "C2",
+  "case": "MemoryHigh of the container",
+  "classification": "Set to 3G via systemctl set-property (verified in cgroup: memory.high 3221225472).",
+  "reason": "Same as the original, smaller values."
+ },
+ {
+  "id": "C3",
+  "case": "Overflow-check environment for S1 reconstruction (E001)",
+  "classification": "Original environment for this crate is not recorded. Run with CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true and RUSTFLAGS=-C overflow-checks=yes (assumption, per standing ruling and lead message). Result: the emitted Funs matched the committed module.",
+  "reason": "Matching output is evidence the assumption is compatible, not that the original used it."
+ },
+ {
+  "id": "C4",
+  "case": "Overflow-check environment for NJT (E002)",
+  "classification": "Recorded environment (NJT_extract_claims.py line 14) has no overflow checks and uses RUSTUP_TOOLCHAIN=nightly-2026-09-17; used exactly, overflow checks NOT added.",
+  "reason": "Standing ruling: exact recorded environment where recorded; overflow checks on only where the original used them or where unrecorded."
+ },
+ {
+  "id": "C5",
+  "case": "Overflow-check environment for archive packets (E003-E005)",
+  "classification": "PCWB environment (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true), which already reproduced the archived LLBC; RUSTFLAGS overflow-checks not added because the LLBC reproduction was already exact and adding it could only change it.",
+  "reason": "Do not alter a configuration that verifiably reproduced the recorded artefact."
+ },
+ {
+  "id": "C6",
+  "case": "S1 reconstruction vs committed Funs differs in four mechanical points",
+  "classification": "T1 import rename, T2 Aeneas default maxHeartbeats/maxRecDepth lines removed, T3 CodecError.Length qualified with the frozen type, T4 #print axioms lines added. Funs reported as byte-identical AFTER these steps, never as byte-identical to raw output. Types differs by design (abbrev).",
+  "reason": "Honest labelling; T3 is the only step with semantic content and is inferred."
+ },
+ {
+  "id": "C7",
+  "case": "S2 reach lists come from ledger29 files",
+  "classification": "ledger30 NNN_raw holds no list for these roots; the PCO_partition rule picks the newest ledger directory <= 30 with a file (ledger29 NNM_raw). Recorded in PCWC_S1_ROOTS.json reach_file_note. The ledger30 gate adds modules but the headline and these roots import closure is unchanged per the NNN gate; not re-verified in this job.",
+  "reason": "Same method as PRV/PCO; flagged as a limitation."
+ },
+ {
+  "id": "C8",
+  "case": "S2 witness paths are module-level plus constant tail",
+  "classification": "A constant-edge walk of the gate was not run (does not fit the 180 s Lean class; no committed edge lists). Reported as such.",
+  "reason": "No overclaim; the reaching criterion (constant in reach list) is exact, only the path is coarse."
+ },
+ {
+  "id": "C9",
+  "case": "Timeouts L005 and L007",
+  "classification": "Shape retired (full first-chain probe), replacement pin-to-S2; see PCWC_ARCHIVE.json shape_retired. Two failures of one shape class: shape not used again.",
+  "reason": "AGENTS resource rule 5."
+ },
+ {
+  "id": "C10",
+  "case": "S3b Kani",
+  "classification": "Not run: no harness consuming the crate located.",
+  "reason": "Brief: only if a consuming harness exists."
+ },
+ {
+  "id": "C11",
+  "case": "Obligation file statement carries 2*len <= Usize.max",
+  "classification": "Added because the reference fails on Usize overflow of 2*len, the Lean Slice carrier allows it, and installed_exact carries the same premise. Not a weakening of a gate claim; the P3 statement must carry it or prove the carrier bound.",
+  "reason": "Do not state a false equality."
+ }
+]
