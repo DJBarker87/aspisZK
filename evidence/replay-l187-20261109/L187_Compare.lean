@@ -32,19 +32,20 @@ unsafe def compare (ov rp : System.FilePath) : IO Json := do
   let ia := da.imports.map (·.module.toString); let ib := db.imports.map (·.module.toString)
   let na := da.constNames; let nb := db.constNames
   let mut full := true; let mut modProofs := true; let mut firstDiff : Array String := #[]
+  let mut allDiff : Array String := #[]
   if na != nb then full := false; modProofs := false
   let mb : Std.HashMap Name ConstantInfo := db.constants.foldl (fun m c => m.insert c.name c) {}
   for c in da.constants do
     match mb[c.name]? with
-    | none => full := false; modProofs := false; if firstDiff.size < 5 then firstDiff := firstDiff.push c.name.toString
+    | none => full := false; modProofs := false; allDiff := allDiff.push c.name.toString; if firstDiff.size < 5 then firstDiff := firstDiff.push c.name.toString
     | some d =>
       let (e1, e2) := eqDecl c d
-      if !e1 then full := false; if firstDiff.size < 5 then firstDiff := firstDiff.push c.name.toString
+      if !e1 then full := false; allDiff := allDiff.push c.name.toString; if firstDiff.size < 5 then firstDiff := firstDiff.push c.name.toString
       if !e2 then modProofs := false
   let impEq := ia == ib; let namesEq := na == nb; let n := da.constants.size
   let j := Json.mkObj [("imports_equal", toJson impEq), ("const_names_equal", toJson namesEq),
     ("constants", toJson n), ("identical_declarations", toJson full),
-    ("identical_except_theorem_proofs", toJson modProofs), ("first_differing", toJson firstDiff)]
+    ("identical_except_theorem_proofs", toJson modProofs), ("first_differing", toJson firstDiff), ("all_differing", toJson allDiff)]
   let s := j.compress  -- materialise every value before the regions are released
   -- regions are not freed: the tool runs as one short process per module (freeing crashed in 4.32)
   let _ := (ra, rb)
