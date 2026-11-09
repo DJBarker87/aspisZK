@@ -1,0 +1,171 @@
+PRV-S2 PRVEq.FIn_WeightsFuns.field.P
+PCUG_sources/PRVEq_bundle_W1.lean:105:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.P"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:105:57: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:105:65: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.P"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:105:206: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.FIn_WeightsFuns.field.P' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.reduce_u64
+PCUG_sources/PRVEq_bundle_W1.lean:109:153: error: unsolved goals
+⊢ (fun x => do
+      let i ← lift (UScalar.cast UScalarTy.U64 FIn_WeightsExtract.field.P)
+      let i1 ← lift (x &&& i)
+      let i2 ← x >>> 31#u32
+      let x1 ← i1 + i2
+      let i3 ← lift (UScalar.cast UScalarTy.U64 FIn_WeightsExtract.field.P)
+      let i4 ← lift (x1 &&& i3)
+      let i5 ← x1 >>> 31#u32
+      let x2 ← i4 + i5
+      let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+      if x3 ≥ FIn_WeightsExtract.field.P then x3 - FIn_WeightsExtract.field.P else ok x3) =
+    fun x => do
+    let i ← lift (UScalar.cast UScalarTy.U64 FIn_WeightsExtract.field.P)
+    let i1 ← lift (x &&& i)
+    let i2 ← lift (x.wrapping_shr 31#u32)
+    let x1 ← lift (U64.wrapping_add i1 i2)
+    let i3 ← lift (UScalar.cast UScalarTy.U64 FIn_WeightsExtract.field.P)
+    let i4 ← lift (x1 &&& i3)
+    let i5 ← lift (x1.wrapping_shr 31#u32)
+    let x2 ← lift (U64.wrapping_add i4 i5)
+    let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+    if x3 ≥ FIn_WeightsExtract.field.P then ok (U32.wrapping_sub x3 FIn_WeightsExtract.field.P) else ok x3
+'PRVEq.FIn_WeightsFuns.field.reduce_u64' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.add
+PCUG_sources/PRVEq_bundle_W1.lean:114:144: error: unsolved goals
+⊢ (fun self rhs => do
+      let s ← self + rhs
+      if s ≥ FIn_WeightsExtract.field.P then do
+          let s1 ← s - FIn_WeightsExtract.field.P
+          ok s1
+        else ok s) =
+    fun self rhs => do
+    let s ← lift (U32.wrapping_add self rhs)
+    if s ≥ FIn_WeightsExtract.field.P then do
+        let s1 ← lift (s.wrapping_sub FIn_WeightsExtract.field.P)
+        ok s1
+      else ok s
+'PRVEq.FIn_WeightsFuns.field.M31.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.sub
+PCUG_sources/PRVEq_bundle_W1.lean:119:144: error: unsolved goals
+⊢ (fun self rhs => do
+      let i ← self + FIn_WeightsExtract.field.P
+      let s ← i - rhs
+      if s ≥ FIn_WeightsExtract.field.P then do
+          let s1 ← s - FIn_WeightsExtract.field.P
+          ok s1
+        else ok s) =
+    fun self rhs => do
+    let i ← lift (U32.wrapping_add self FIn_WeightsExtract.field.P)
+    let s ← lift (i.wrapping_sub rhs)
+    if s ≥ FIn_WeightsExtract.field.P then do
+        let s1 ← lift (s.wrapping_sub FIn_WeightsExtract.field.P)
+        ok s1
+      else ok s
+'PRVEq.FIn_WeightsFuns.field.M31.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.reduce_u64
+PCUG_sources/PRVEq_bundle_W1.lean:125:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.M31.reduce_u64"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:125:70: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:125:78: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.reduce_u64"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:125:309: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:125:314: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:125:314: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.FIn_WeightsFuns.field.M31.reduce_u64' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.double
+PCUG_sources/PRVEq_bundle_W1.lean:130:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.M31.double"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:130:66: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:130:74: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.M31.double"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:130:290: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:130:295: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:130:295: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.FIn_WeightsFuns.field.M31.double' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.CM31.add
+PCUG_sources/PRVEq_bundle_W1.lean:135:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.CM31.add"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:135:64: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:135:72: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.CM31.add"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:135:282: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:135:287: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:135:287: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.FIn_WeightsFuns.field.CM31.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.CM31.sub
+PCUG_sources/PRVEq_bundle_W1.lean:140:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.CM31.sub"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:140:64: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:140:72: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.CM31.sub"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:140:282: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:140:287: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:140:287: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.FIn_WeightsFuns.field.CM31.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PRV-S2 PRVEq.FIn_WeightsFuns.field.mul_by_r
+PCUG_sources/PRVEq_bundle_W1.lean:145:11: warning: 'trace "PRV-S1 PRVEq.FIn_WeightsFuns.field.mul_by_r"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:145:64: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:145:72: warning: 'trace "PRV-S2 PRVEq.FIn_WeightsFuns.field.mul_by_r"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:145:359: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:145:364: warning: 'done' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCUG_sources/PRVEq_bundle_W1.lean:145:364: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PRVEq.FIn_WeightsFuns.field.mul_by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

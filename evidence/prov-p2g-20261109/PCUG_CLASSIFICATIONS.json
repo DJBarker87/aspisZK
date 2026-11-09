@@ -1,0 +1,60 @@
+{
+ "schema": "PCUG_CLASSIFICATIONS/1",
+ "classifications": [
+  {
+   "id": "PCUG-C1",
+   "topic": "scope",
+   "classification": "Scope = every definition of PCUF_ALL_STATUS that is not PROVED on a correct basis (a PROVED record flagged basis_not_correct, i.e. against a retained/receipted emission, counts as open) and has a non-axiom declaration of its (prefix-normalised) name in a PCQG_ run with exit 0: 195 definitions in 40 gate modules (PCUG_scan.py, PCUG_SCAN.json), broader than the 139 of PCQG_COVERAGE.json because the P5 field primitives (field.P, reduce_u64, M31/CM31/QM31 Types) are also present in the PCQG_E001/E003 emissions. Cover by greedy choice of PCQG_ directory per module and kind (PCUG_plan.py)."
+  },
+  {
+   "id": "PCUG-C2",
+   "topic": "configuration",
+   "classification": "All PCQG_ emissions are overflow-ON. Required configuration per definition: OFF where the gate declaration text contains wrapping_ (FIn_WeightsFuns M31.add/sub, reduce_u64; NFN_ExtractedGeometry and RPz7_FIo_NativeFuns reduce_u64: CONFIG_MISMATCH, five records). The ALL_STATUS field required_configuration of these P5 records (ON) was a module-level default and is overridden per definition. The records stay open (no OFF emission from P1f); they are not counted as FAILED proofs of the equality."
+  },
+  {
+   "id": "PCUG-C3",
+   "topic": "tool difference (key finding)",
+   "classification": "The compared emissions come from the ORIGINAL Aeneas; the gate modules were produced by the extended build. Equality fails structurally, with identical Rust source, at (a) loop encoding: fresh `loop (fun (iter,acc) => f.body ..)` vs gate inlined recursive loop definitions (47 records, LOOP_ENCODING_OR_CALLER); (b) constants: fresh `let q <- field.QM31.ZERO` (monadic) vs gate pure `field.QM31.ZERO` and `ok field.M31.ONE` arms (7); (c) `core.array.from_fn` (original) vs `array_from_fn_copy` + Copy instance (extended; 5 plus drops, unknown identifier against the gate library); (d) the external axiom `aspis_core.field.P : Result U32` vs gate `def P : U32` (6, TerminalDecoder). None of these indicates a source change; each is a P3 bridge lemma class or an obstacle of using this tool for gate modules. The proofs obtained are for definitions without loops, constants or from_fn (field primitives, Types, NDE)."
+  },
+  {
+   "id": "PCUG-C4",
+   "topic": "NDE",
+   "classification": "NDE_Reference2 reduce_ref, extension_raw_ref, extension_limbs_ref and NDE_Reference5 link_weight_ref: PROVED_RFL (PCUG_L001/L021, standard axioms) against the compiled gate source evidence/native-front2-20261028 (text-identical to PCQG_E017/E018 Funs: diff empty, re-checked here). The P5 NML_E012/E006 inputs were wrapping emissions and are not the gate source."
+  },
+  {
+   "id": "PCUG-C5",
+   "topic": "timeouts and changed shapes",
+   "classification": "PCUG_L010 (Native09+10+13) and PCUG_L011 (Native14, single 14-definition pass) exited 124 at 180 s; both had been compiled with unresolved crate prefixes (PCUG-P1) and the Native10 hang was later localised to a stage-1 rfl between non-identical loops. Changed shape: prefix renames (L012..L015 completed, 4-32 s), Native09 alone (L015 ok), Native10 with PCUG-G2 (L018 ok, 6 s). L016 (Native10+13 after PCUG-P1) timed out again at path_lanes_literal: shape retired, replaced by PCUG-G2. Native14: L017 (single pass), L019 (E015 pass with PCUG-G2) and L020 (diagnostic with fresh declarations only) all exit 124 with EMPTY output: the E015 fresh declaration closure itself does not elaborate in 180 s; shape retired after three failures; its 7 records are FAILED(FRESH_ELABORATION_TIMEOUT); the E009 pass of Native14 and all of Native13 contain only divergent-loop definitions and are recorded as NOT ATTEMPTED (no Lean run). No cap or timeout was raised and no timed-out scope was rerun unchanged."
+  },
+  {
+   "id": "PCUG-C6",
+   "topic": "NOT ATTEMPTED records",
+   "classification": "18 records ({'RPu_FIq_Native10': 2, 'RPu_FIq_Native13': 9, 'RPu_FIq_Native14': 7}) are FAILED with error NOT ATTEMPTED (PCUG change 2) and a normalized diff: the goal was not elaborated, so these are recorded obstacles, not Lean-refuted equalities."
+  },
+  {
+   "id": "PCUG-C7",
+   "topic": "conditional proofs",
+   "classification": "Four PROVED_RFL records (Native08 Selectors.row, semantic_terminal.lift_m31, scalar_lanes; Native09 reconstruct_10) are relative to gate constants: the fresh closure calls field.QM31.mul/add, CM31.from_m31, QM31.from_cm31 which the fresh emission does not declare and which resolve by name to the gate constants (relative_to_gate_callees; flag conditional=true). No proved record depends on the opaque names external_linear_lazy or empty_root; nine FAILED records have them in their fresh closure (fresh_closure_mentions_opaque_P1f_names): Native06 full_round, Native07 evaluate_state_only_poseidon_oracle_projected, full_round_m31_constants, leading_pair_packed, Native11 validate_transition(+loop), Native14 composition_parts, terminal_parts, terminal_qm31."
+  },
+  {
+   "id": "PCUG-C8",
+   "topic": "superseding rule",
+   "classification": "Per PCUF rule: authoritative = latest PROVED with a correct basis; else latest non-proved with a correct basis; else latest flagged. A new correct-basis FAILED record therefore replaces an earlier PROVED record whose basis was a retained emission (e.g. AspisR1BatchedWeightsExtraction M31.reduce_u64); the replaced record stays in `supersedes`. A new basis-incorrect, non-proved record does not replace an earlier proof (it is attached as later_attempt_P2g). PROVED records with a correct basis: 503 -> 569 (+66); open 916 -> 850."
+  },
+  {
+   "id": "PCUG-C9",
+   "topic": "what the proofs establish",
+   "classification": "Each PROVED_* theorem states @fresh = @gate-constant for the PCQG_ emission text (Types: Equiv or rfl). They compare the emission with the compiled gate declaration; they do not connect the emission to the frozen Rust source (that is P1/PCQG_ provenance) and, being name-level over callees, are conditional where C7 says so. Gate-compatible Aeneas library used for compilation; the tool of the fresh text is the original Aeneas, recorded per record (aeneas_tool)."
+  },
+  {
+   "id": "PCUG-C10",
+   "topic": "nonfrozen candidates",
+   "classification": "No gate definition in this scope shows a body difference that is not explained by the tool classes of C3 or by configuration; PCUG_NONFROZEN_CANDIDATES.json is therefore empty. The M31.mul drift found by P2f is not re-tested here (its emission is not in the P1f set). Absence of a candidate is not evidence of source equality: the 47 loop-encoding and 7 constant diffs hide any semantic difference inside those bodies until the P3 bridges exist."
+  },
+  {
+   "id": "PCUG-C11",
+   "topic": "scope accounting",
+   "classification": "22 of 30 Lean scopes (PCUG_L001..L022), 0 extraction scopes, strictly one at a time; each launch passed the admission (host < 6, Stream C < 2, disk >= 40 GB, reservation barrier allowed:true); caps 6G/8G, swap 0, 180 s, -j1 -M7000. Peak RSS 4.5 GiB (L021 verification V1; L004 4.2 GiB). Six exit-124 scopes (PCUG_L010, PCUG_L011, PCUG_L016, PCUG_L017, PCUG_L019, PCUG_L020) are listed in C5; the others exit 0 or 1 (probe with expected errors)."
+  }
+ ]
+}
