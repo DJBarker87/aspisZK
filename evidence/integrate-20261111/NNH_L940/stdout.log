@@ -1,0 +1,628 @@
+NNH_generated/NNH8_Statements.lean:79:42: error: Application type mismatch: The argument
+  realizes_by_construction ?m.23 ?m.24 ?m.25 ?m.26
+has type
+  EVB.RecSig.Realizes ?m.22 (ctxB ?m.23 ?m.24 ?m.25 ?m.26)
+but is expected to have type
+  (NNH8_Exec.recSig L0 copy std).Realizes (ctxB (NNH8_Exec.exec L0 copy std) fx w H)
+in the application
+  ⟨NNH_HostEnv.environment_rep (NOC_Run5bHost.hostRuntime.sha (ctxB (NNH8_Exec.exec L0 copy std) fx w H))
+      (NOC_Run5bHost.hostRuntime.pda (ctxB (NNH8_Exec.exec L0 copy std) fx w H))
+      (NOC_Run5bHost.hostRuntime.clock (ctxB (NNH8_Exec.exec L0 copy std) fx w H))
+      (NOC_Run5bHost.hostRuntime.reservation (ctxB (NNH8_Exec.exec L0 copy std) fx w H)),
+    realizes_by_construction ?m.23 ?m.24 ?m.25 ?m.26⟩
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError
+          (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+  (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List.{0} (AspisR1.CPP_BankState.Action A))
+  (game :
+    @AspisR1.CPH_Game.DeployedPairExecution Tx A p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+      (@AspisR1.CPG_Projection.ordinary Tx A p
+        (AspisR1.Hist_Nonvacuity.key
+          (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+      (@AspisR1.CPG_Projection.before Tx A p) (@AspisR1.CPG_Projection.tentative Tx A p)
+      (@AspisR1.CPG_Projection.success Tx A p) (@AspisR1.CPG_Projection.loaded Tx A p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : Nat)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@AspisR1.ARW_Induced.issued A native1 copy allocator AspisR1.CPH_Program.verifier a H))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)),
+  have P : AspisR1.F3T_ByteCarrier.ByteProver :=
+    @AspisR1.ARW_Induced.program A native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime : AspisR1.F3T_Runtime.Runtime :=
+    @AspisR1.ARX_AdmittedRuntime.runtime W A CoreError Tx L copy allocator
+      (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) indexError reservation
+      native1 native2 hashv a;
+  have select :
+    AspisR1.F3X_Projection.Output →
+      Prod.{0, 0} AspisR1.R9PoolRuntimeBinding.Inputs AspisR1.R9PoolRuntimeBinding.Inputs :=
+    fun (x : AspisR1.F3X_Projection.Output) =>
+    AspisR1.P2P_NativeSelection.pair
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError
+          (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  And
+    (@AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary Unit (AspisR1.P6C_Extension.dictionary hashv H) Unit.unit H
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf)
+    (And
+      (@Eq.{1} AspisR1.OraclePortRuntimeBindingC7.Verifier
+        (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError
+            (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+        (@AspisR1.DrvC_SourceEntry.source AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError
+            (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation)
+          hashv))
+      (And
+        (@Eq.{2} AdapterRw.Ops
+          (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+            (@AspisR1.FIp_Install.configuration CoreError indexError
+              (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+          (@AspisR1.SdkD_PairBatches.dictionary AspisR1.FIo_Install.W CoreError
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.std AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))))
+        (And
+          (@AspisR1.FJv_DResult.Outcome W AspisR1.FIo_Install.W CoreError L e1 e2 w1 w2
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            (AspisR1.FIp_Install.boundaries
+              (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation)))
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation))
+            prior (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p t) hashv
+            (@AspisR1.BinRawByteCollisionTargets.event
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                AspisR1.F3X_Projection.Output)
+              (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+                AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  AspisR1.F3X_Projection.Output)
+                H
+                (@AspisR1.Hiq_RecordedJoint.program AspisR1.F3X_Projection.Output
+                  (@AspisR1.F3X_Account.program AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError
+                      (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation)
+                      reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))))
+          (And
+            (And
+              (@AspisR1.F3X_ModelClaims.Claims AspisR1.FIo_Install.W CoreError
+                (@AspisR1.FIp_Install.configuration CoreError indexError
+                  (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation)
+                D P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+              (And
+                (@AspisR1.F3Y_SourceClaims.Claims AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError
+                    (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation)
+                  D hashv P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                (And
+                  (@AspisR1.F3Y_AccountMass.Claims AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError
+                      (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation)
+                      reservation)
+                    hashv P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                  (And
+                    (@LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                      (AspisR1.F3T_Numeric.total
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)))
+                    (And
+                      (@LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          AspisR1.F3U_RangeEdges.maxQueries →
+                        @LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                          (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                              (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                                (@Nat.cast.{0} Rat Rat.instNatCast Q0) (@Nat.cast.{0} Rat Rat.instNatCast Q1))
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))))
+                      (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+                        And
+                          (@LE.le.{0} Rat Rat.instLE AspisR1.F3U_Numeric.margin
+                            (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+                              (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                                (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                                (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                  (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                  (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))
+                              (AspisR1.F3T_RuntimeBound.failureModel runtime)))
+                          (@LT.lt.{0} Rat Rat.instLT (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100))))))))))))
+            (And
+              (And
+                (@Eq.{1}
+                  (Aeneas.Std.Result.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE))
+                  (native1 AspisR1.CPH_Program.verifier (AspisR1.S2W_D189Entry.Entry.first e1) data1)
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE)
+                    (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE saved)))
+                (And
+                  (@Eq.{1} Nat
+                    (@List.length.{0} Aeneas.Std.U8
+                      (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                        (fun (l : List.{0} Aeneas.Std.U8) =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                        saved))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                  (And
+                    (@Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                          (@Prod.fst.{0, 0} Nat Nat
+                            (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                      (AspisR1.MultiproofConeCanonical.bytesOf
+                        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                          (fun (l : List.{0} Aeneas.Std.U8) =>
+                            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                          saved)))
+                    (And
+                      (@Eq.{1} (Nat → AspisR1.S2W_D189Entry.Record)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record)
+                          (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                      (And
+                        (@Eq.{1} (Nat → Prod.{0, 0} Nat Nat)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                            (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                        (And
+                          (@Eq.{1} (Nat → Int)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                          (∀ (cell : Nat),
+                            @Ne.{1} Nat cell
+                                (@Prod.fst.{0, 0} Nat Nat
+                                  (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                                    (AspisR1.S2W_D189Entry.Entry.heap e1)
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                              @Eq.{1} AspisR1.S2Trust.Payload
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1 cell)
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record)
+                                  (AspisR1.S2W_D189Entry.Entry.heap e1) cell))))))))
+              (And
+                (@AspisR1.Rc2_Events.Facts A AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError
+                    (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation) reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved)
+                (And (@AspisR1.CPH_Protection.Facts Tx A p t saved AspisR1.CPH_Program.verifier)
+                  (And
+                    (@AspisR1.CPH_Trace.Facts Tx A p t u saved native1 native2 copy allocator
+                      AspisR1.CPH_Program.verifier)
+                    (And
+                      (@AspisR1.CPH_Recorder.Facts Tx A AspisR1.FIo_Install.W CoreError
+                        (@AspisR1.FIp_Install.configuration CoreError indexError
+                          (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation)
+                          reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved)
+                      (AspisR1.S6N_Installation.Facts
+                        (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+                          (@AspisR1.FIp_Install.configuration CoreError indexError
+                            (@AspisR1.IDa_Deployed.deployedConfiguration CoreError missing indexError reservation)
+                            reservation))))))))))))
+@AspisR1.TAS_FinalB.deployed_splitB : ∀ {W Tx : Type}
+  (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (w : AspisR1.NOC_Run5bCtx.World W Tx) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (run :
+    @RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL
+      (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch AspisR1.NNG_Candidate344.allocation
+        alloc2)
+      (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+        (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w H)),
+  have c : RSL.TAS.Sig.Ctx (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) :=
+    @RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w H;
+  And
+    (RSL.TAS.Sig.Bound (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c
+      (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+      (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+    (And
+      (@AspisR1.NNH8_Split.rest W Tx L0 copy c (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+        (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+      (Or
+        (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std) c
+          (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+          (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+        (@RSL.TASB.ExecB.ERec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H)))
+@AspisR1.TAS_FinalB.deployed_charge : ∀ {W Tx : Type}
+  (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (anchor : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (wOf : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.NOC_Run5bCtx.World W Tx),
+  And
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Rat Rat.instLE
+        (@Max.max.{0} Rat Rat.instSup (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+          (RSL.TASB.ind
+            (And
+              (@RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0
+                NNH_Libraries.VL
+                (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch
+                  AspisR1.NNG_Candidate344.allocation alloc2)
+                (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+              (Not
+                (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+                  (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std)
+                  (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                    H)
+                  (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                      H))
+                  (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                      H)))))))
+        (RSL.TASB.ind
+          (@AspisR1.BinRawByteCollisionTargets.event
+            (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.Outcome Bool))
+            (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+              AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+                (AspisR1.NNH_HostCtx.Fixed.Q1 fx))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.Outcome Bool))
+              H (AspisR1.NNH8_RecorderFixed.fixedProgram copy fx anchor)))))
+    (And
+      (@LE.le.{0} Rat Rat.instLE
+        (@AspisV8R19.MemoizedProgramLaw.lazyMean AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.Outcome Bool))
+          (@Pi.instFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+              AspisV8R19.DuplexFrames.Byte)
+            (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+            (SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+              (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 31) (instOfNatNat (nat_lit 31)))))
+            fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+            SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+              (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255)))))
+          (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+            @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+              (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+          (AspisR1.NNH8_RecorderFixed.fixedProgram copy fx anchor)
+          (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          fun
+            (v :
+              AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.Outcome Bool))) =>
+          AspisV8R19.CausalFirstHitUnionBound.indicator
+            (@AspisR1.BinRawByteCollisionTargets.event
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.Outcome Bool))
+              (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+                AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+                  (AspisR1.NNH_HostCtx.Fixed.Q1 fx))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+              v))
+        (AspisR1.F3T_Numeric.total
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+            (AspisR1.NNH_HostCtx.Fixed.Q1 fx))))
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        have c : RSL.TAS.Sig.Ctx (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) :=
+          @RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+            (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H;
+        @LE.le.{0} Rat Rat.instLE
+          (AspisR1.F3T_RuntimeBound.failureModel
+            (@AspisR1.NOC_Run5bHost.runtime W Tx L0 copy c
+              (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+              (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)))
+          (AspisR1.F3T_Numeric.total
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+              (AspisR1.NNH_HostCtx.Fixed.Q1 fx)))))
+@AspisR1.TAS_FinalB.fail_sub_rec : ∀ {W Tx : Type} (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (wOf : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.NOC_Run5bCtx.World W Tx)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (fail :
+    And
+      (@RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL
+        (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch AspisR1.NNG_Candidate344.allocation
+          alloc2)
+        (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+      (Not
+        (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std)
+          (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+            (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H)
+          (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+            (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+              (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+          (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+            (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+              (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))))),
+  @RSL.TASB.ExecB.ERec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+    (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H
+@AspisR1.NNH8_DeployedOuter : ∀ {W Tx : Type} (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (r m : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Rat)
+  (hm :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) (m H))
+  (each :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Rat Rat.instLE (r H)
+        (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) (m H)
+          (RSL.TASB.ind
+            (@RSL.TASB.ExecB.ERec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+              (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H))))
+  (wOf : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.NOC_Run5bCtx.World W Tx)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Rat Rat.instLE
+    (@Max.max.{0} Rat Rat.instSup (r H)
+      (RSL.TASB.ind
+        (And
+          (@RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0
+            NNH_Libraries.VL
+            (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch AspisR1.NNG_Candidate344.allocation
+              alloc2)
+            (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+              (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+          (Not
+            (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+              (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std)
+              (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H)
+              (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+              (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                  H)))))))
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) (m H)
+      (RSL.TASB.ind
+        (@RSL.TASB.ExecB.ERec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H)))
+def AspisR1.NNH8_Exec.exec : {W Tx : Type} →
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) →
+    (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+      (std : AspisR1.S2W_TrustedStd.TrustedStd copy) →
+        RSL.TASB.ExecB (AspisR1.NOC_Run5bHost.S_host L copy std) (AspisR1.NNH8_Exec.recSig L copy std) :=
+fun {W Tx} L copy std =>
+  { Fixed := AspisR1.NOC_Run5bCtx.Fixed, World := AspisR1.NOC_Run5bCtx.World W Tx,
+    Oracle := AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State,
+    In1 := AspisR1.GExq_AccountExperiment.FirstInputs Bool, In2 := AspisR1.GExq_AccountExperiment.SecondInputs Bool,
+    first := fun fx H => AspisR1.NNH_StateNormalize.firstAt fx.a H,
+    second := fun fx w H i =>
+      AspisR1.NNH_StateNormalize.secondTop
+        (AspisV8R19.MemoizedProgramLaw.eval H (fx.a.second i w.saved (AspisR1.NNH8_Exec.post i w.saved) true)).2,
+    build := fun fx w H i j => { fixed := fx, world := w, sha256 := H, i := i, j := j },
+    realizes_mk := AspisR1.NNH8_Exec.exec._proof_1 L copy std, exhibited_mk := AspisR1.NNH8_Exec.exec._proof_2,
+    QueriesF := fun fx =>
+      ∀ (J K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisR1.ARW_Induced.issued
+              (AdapterRw.r1_pool_adapter.owned.stage1_owned
+                (NNH_CorrectConfiguration.sdk
+                  (AspisR1.NNH8_Exec.seed (AspisR1.DGP_HostDigest.envInst J fx.pda fx.clock fx.reservation))
+                  (AspisR1.DGP_HostDigest.envInst J fx.pda fx.clock fx.reservation) fx.indexError fx.reservation))
+              copy NNE_AbortIndicator.allocator AspisR1.CPH_Program.verifier (AspisR1.NNH_StateNormalize.normalize fx.a)
+              K).length ≤
+          fx.Q0 + fx.Q1,
+    queries_mk := fun x x_1 H x_2 x_3 h => h H, ERec := AspisR1.NNH8_Exec.ERec copy,
+    eventRec_mk := AspisR1.NNH8_Exec.exec._proof_3 L copy std }
+def AspisR1.NNH8_Exec.recSig : {W Tx : Type} →
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) →
+    (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+      (std : AspisR1.S2W_TrustedStd.TrustedStd copy) → RSL.EVB.RecSig (AspisR1.NOC_Run5bHost.S_host L copy std) :=
+fun {W Tx} L copy std =>
+  {
+    Realizes := fun c =>
+      (AspisV8R19.MemoizedProgramLaw.eval c.sha256 (AspisR1.NNH_StateNormalize.normalize c.fixed.a).first).2 = c.i ∧
+        (AspisV8R19.MemoizedProgramLaw.eval c.sha256
+              ((AspisR1.NNH_StateNormalize.normalize c.fixed.a).second c.i c.world.saved
+                (AspisR1.NNH8_Exec.post c.i c.world.saved) true)).2 =
+          c.j,
+    EventRec := fun c => AspisR1.NNH8_Exec.ERec copy c.fixed c.sha256,
+    SelectsPair := fun c =>
+      AspisR1.ARQ_Observer.select (AspisR1.NOC_Run5bCtx.configuration c) AspisR1.CPH_Program.verifier
+          (AspisV8R19.MemoizedProgramLaw.eval c.sha256
+              (AspisR1.NNH_RecordedCharge.source copy (AspisR1.NOC_Run5bCtx.base c) c.fixed.indexError
+                c.fixed.reservation (AspisR1.NOC_Run5bCtx.hashv c) c.fixed.a (c.fixed.Q0 + c.fixed.Q1))).2 =
+        AspisR1.P2P_NativeSelection.pair (AspisR1.NOC_Run5bCtx.sdk c) AspisR1.CPH_Program.verifier c.i.entry c.j.entry
+          c.j.data c.j.slot }
+'AspisR1.TAS_FinalB.deployed_splitB' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TAS_FinalB.deployed_charge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TAS_FinalB.fail_sub_rec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_DeployedOuter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.world_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.frame_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.game_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.trace_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.out1_recorded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.out1_inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH8_NonVacuity.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
