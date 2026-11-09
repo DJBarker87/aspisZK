@@ -104,3 +104,43 @@ but is expected to have type
 2026-11-09T22:23:09Z source fix CurrentWideMulExact compile failure with the committed copy at module path; exact source recovered by object identity and receipt hash docs/research/100bit-spend-path-20261013/evidence/s1-current-wide-exact-field-20261020/diagnostics/rejected-v1/CurrentWideMulExact.lean -> docs/research/100bit-spend-path-20261013/evidence/s1-current-wide-exact-field-20261020/sources/CurrentWideMulExact.lean
 2026-11-09T22:23:15Z launched B0021 400 first CurrentWideMulExact host {'scopes': 2, 'lean': 2, 'free': 52782530560, 'done': ['B0016', 'B0003', 'B0020', 'B0007', 'B0006', 'B0008', 'B0012', 'B0001', 'B0010', 'B0013', 'B0009', 'B0017', 'B0018', 'B0015', 'B0011', 'B0014', 'B0005', 'B0004', 'B0002']}
 2026-11-09T22:26:17Z FAIL queued for source recovery GammaCandidateTotalityV14 B0021
+2026-11-09T22:26:19Z collected B0021 {'PASS': 53, 'FAIL': 1, 'NOT_RUN_BATCH_STOPPED': 346} identical 45 differs 8 commit rc 0 
+2026-11-09T22:26:32Z ALERT FAILURE GammaCandidateTotalityV14 (RECOVERED_AT_PATH) failed in B0021; no different exact source recoverable (UNRECOVERED): dd lowDigits n = ok (carry1 != 0#u32, digits1)
+hadd2' : candidateGammaHelpers.add digits1 1#u32 = ok (carry2 != 0#u32, digits2)
+⊢ (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1GammaCaller.DigitsModel.candidate_gamma_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+2026-11-09T22:26:38Z launched B0022 400 first NBL_AddNative host {'scopes': 2, 'lean': 2, 'free': 52566708224, 'done': ['B0016', 'B0003', 'B0020', 'B0007', 'B0006', 'B0008', 'B0012', 'B0001', 'B0010', 'B0013', 'B0021', 'B0009', 'B0017', 'B0018', 'B0015', 'B0011', 'B0014', 'B0005', 'B0004', 'B0002']}
+2026-11-09T22:28:39Z FAIL queued for source recovery PowersP6IndexedOutputV1 B0022

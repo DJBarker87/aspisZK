@@ -1,0 +1,37 @@
+GammaCandidateTotalityV14 (RECOVERED_AT_PATH) failed in B0021; no different exact source recoverable (UNRECOVERED): dd lowDigits n = ok (carry1 != 0#u32, digits1)
+hadd2' : candidateGammaHelpers.add digits1 1#u32 = ok (carry2 != 0#u32, digits2)
+⊢ (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1GammaCaller.DigitsModel.candidate_gamma_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
