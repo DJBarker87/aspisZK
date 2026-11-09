@@ -44,7 +44,7 @@ def apply_fix(m,newpath,newsha,why,attempt):
     if d in seen: continue
     seen.add(d)
     v=st['status'][d]
-    if v.startswith('SKIPPED_DEP_FAILED') or v.startswith('PASS'): st['status'][d]='pending'
+    if v.startswith('SKIPPED_DEP_FAILED') or v.startswith('PASS') or v=='FAIL': st['status'][d]='pending'; st['to_recover']=[x for x in st.get('to_recover',[]) if x['module']!=d]
     stack+=rev[d]
   st.setdefault('fixed',[]).append(m); save(); log('source fix',m,why,old['path'],'->',newpath)
 def recover(m):
@@ -132,20 +132,27 @@ while True:
       if b in hs['done']:
         try: collect(b)
         except Exception as e: log('collect error',b,repr(e))
-    for item in list(st.get('to_recover',[])):
-      m=item['module']; st['to_recover'].remove(item); save()
-      try: res=recover(m)
-      except Exception as e: res=dict(status='UNRECOVERED',error=repr(e))
-      if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
-        apply_fix(m,res['path'],res['sha256'],'compile failure with the committed copy at module path; exact source recovered by object identity and receipt hash',res['producing_attempt'])
-      else:
-        alert('FAILURE',f"{m} ({P[m]['label']}) failed in {item['batch']}; no different exact source recoverable ({res.get('status')}): "+item['diag'])
     for f in sorted(E.glob('PREFIX_*.json')):
       fx=json.loads(f.read_text())
       for m,res in fx.items():
         if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
           apply_fix(m,res['path'],res['sha256'],'source import header differs from the overlay object import table, or known compile failure; exact source recovered by object identity and receipt hash',res['producing_attempt'])
       f.rename(f.with_suffix('.applied'))
+    for item in list(st.get('to_recover',[])):
+      m=item['module']; st['to_recover'].remove(item); save()
+      dep=set();stk=list(P[m]['imports'])
+      while stk:
+        x=stk.pop()
+        if x in dep: continue
+        dep.add(x); stk+=P[x]['imports']
+      if dep & set(st.get('fixed',[])):
+        st['status'][m]='pending'; log('requeued (a dependency source was fixed)',m); continue
+      try: res=recover(m)
+      except Exception as e: res=dict(status='UNRECOVERED',error=repr(e))
+      if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
+        apply_fix(m,res['path'],res['sha256'],'compile failure with the committed copy at module path; exact source recovered by object identity and receipt hash',res['producing_attempt'])
+      else:
+        alert('FAILURE',f"{m} ({P[m]['label']}) failed in {item['batch']}; no different exact source recoverable ({res.get('status')}): "+item['diag'])
     if hs['free']<40_000_000_000:
       if not (E/'ALERT_DISK').exists(): alert('DISK',f"host free {hs['free']} < 40 GB; launches paused")
     else:
