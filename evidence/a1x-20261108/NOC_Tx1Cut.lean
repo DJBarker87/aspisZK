@@ -57,7 +57,7 @@ theorem returned (a : TX1_094.Args V) (env : Env) (out : Bytes)
   have out_eq : out = LIB_VLib.checkpointValue
     (pg.1,LIB_VLib.finishValue (r.2,r.1) env,a.proof,a.public_bytes) env :=
    e3.trans (e2.trans (congrArg (fun x => LIB_VLib.checkpointValue (pg.1,x,a.proof,a.public_bytes) env) e1))
-  exact ⟨⟨split,hparse,hscan,pg.1,pg.2,hprep,acc,hacc,folded,rfl,hbatch,geo,hgeo,pending,hpend,r,hr,out_eq⟩⟩
+  exact ⟨⟨split,hparse,hscan,pg.1,pg.2,hprep,acc,hacc,folded,hf,hbatch,geo,hgeo,pending,hpend,r,hr,out_eq⟩⟩
 #print axioms returned
 end AspisR1.NOC_Tx1Cut
 end
