@@ -1,0 +1,35 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "question": "does CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true plus RUSTFLAGS \"-C overflow-checks=yes\" reproduce the gate checked form of M31.neg?",
+ "bodies": {
+  "field.M31.neg": {
+   "PCQ_E037_overflow_on": "def field.M31.neg (self : field.M31) : Result field.M31 := do\n  if self = 0#u32\n  then ok 0#u32\n  else let i \u2190 field.P - self\n       ok i",
+   "PCO_E002_overflow_off": "def field.M31.neg (self : field.M31) : Result field.M31 := do\n  if self = 0#u32\n  then ok 0#u32\n  else let i \u2190 lift (Std.U32.wrapping_sub field.P self)\n       ok i",
+   "gate_NFG_CheckedFieldRef.Funs": "def field.M31.neg (self : field.M31) : Result field.M31 := do\n  if self = 0#u32\n  then ok 0#u32\n  else let i \u2190 field.P - self\n       ok i",
+   "on_matches_gate": true,
+   "off_matches_gate": false
+  },
+  "field.CM31.neg": {
+   "PCQ_E037_overflow_on": "def field.CM31.neg (self : field.CM31) : Result field.CM31 := do\n  let m \u2190 field.M31.neg self.a\n  let m1 \u2190 field.M31.neg self.b\n  ok { a := m, b := m1 }",
+   "PCO_E002_overflow_off": "def field.CM31.neg (self : field.CM31) : Result field.CM31 := do\n  let m \u2190 field.M31.neg self.a\n  let m1 \u2190 field.M31.neg self.b\n  ok { a := m, b := m1 }",
+   "gate_NFG_CheckedFieldRef.Funs": "def field.CM31.neg (self : field.CM31) : Result field.CM31 := do\n  let m \u2190 field.M31.neg self.a\n  let m1 \u2190 field.M31.neg self.b\n  ok { a := m, b := m1 }",
+   "on_matches_gate": true,
+   "off_matches_gate": true
+  },
+  "field.QM31.neg": {
+   "PCQ_E037_overflow_on": "def field.QM31.neg (self : field.QM31) : Result field.QM31 := do\n  let c \u2190 field.CM31.neg self.c0\n  let c1 \u2190 field.CM31.neg self.c1\n  ok { c0 := c, c1 }",
+   "PCO_E002_overflow_off": "def field.QM31.neg (self : field.QM31) : Result field.QM31 := do\n  let c \u2190 field.CM31.neg self.c0\n  let c1 \u2190 field.CM31.neg self.c1\n  ok { c0 := c, c1 }",
+   "gate_NFG_CheckedFieldRef.Funs": "def field.QM31.neg (self : field.QM31) : Result field.QM31 := do\n  let c \u2190 field.CM31.neg self.c0\n  let c1 \u2190 field.CM31.neg self.c1\n  ok { c0 := c, c1 }",
+   "on_matches_gate": true,
+   "off_matches_gate": true
+  }
+ },
+ "gate_source": "research:evidence/slice-q-compose6-20261104/NFG_row_extracted/NFG_CheckedFieldRef/Funs.lean",
+ "commands": {
+  "overflow_on": "PCQ_OVERFLOW=1 python3 PCQ_render_spec.py S901 PCQ_E037; python3 PCQ_run.py PCQ_E037 extract (charon env: stager RUSTFLAGS + \" -C overflow-checks=yes\", CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; see PCQ_E037_spec.json extra_env, PCQ_E037_emitted/PCQ_E037_PINS.json)",
+  "overflow_off": "PCO_E002 (P0), same spec otherwise"
+ },
+ "caveat": "The stager sets RUSTFLAGS=\"-Zthreads=1 -C link-arg=-Wl,--threads=1\" and cannot be edited; the controller appends -C overflow-checks=yes to it instead of replacing it (historical run-extraction.sh used RUSTFLAGS=\"-C overflow-checks=yes\" alone). Same flag, extra thread-limit flags.",
+ "conclusion": "overflow-checks ON reproduces the gate checked form of M31.neg (on_matches_gate true, off false); all later extractions use it."
+}
