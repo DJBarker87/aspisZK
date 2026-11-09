@@ -1,0 +1,25 @@
+{
+ "status": "STOPPED BEFORE REBUILD: estimate exceeds both the 400-scope and the 12-hour thresholds; no host workspace created, 0 scopes used",
+ "closure": "L187_CLOSURE.json.xz (sha256 sidecar of the raw JSON): 19862 modules = 5761 base (Init/Lean/Std/Mathlib/Aesop/Batteries/Qq/ProofWidgets/Plausible/ImportGraph/Aeneas/AeneasMeta/CompPoly) + 14101 project",
+ "toolchain_4_31_0_modules_in_closure": 0,
+ "scopes_as_specified": {"per_module_project_scopes": 14101, "compPoly_if_counted_as_project": 87, "final_combined_16GiB": 1, "raw_ax2": 2, "total_approx": 14104},
+ "wall_time_estimate": {
+  "observed_end_to_end_per_scope_seconds": "60-90 in run 7 (compile 1-48 s plus about 30-40 s launcher overhead: share/disk/admission checks and per-launch dependency pin hashing)",
+  "assumed_mean_seconds": 45,
+  "sequential_hours": 176,
+  "three_concurrent_slots_hours": 59,
+  "critical_path_layers": 669,
+  "critical_path_floor_hours_unbounded_width": 8.4,
+  "note": "three slots assumed because the host count limit is 6 and Stream C may use 3"
+ },
+ "preconditions_found": {
+  "project_modules_without_committed_source_at_module_path": 37,
+  "project_modules_with_several_distinct_committed_sources": 122,
+  "consequence": "these 159 modules cannot be rebuilt from committed sources by path alone; their exact source must be recovered from the producing job's receipt (source_hashes) before a replay, which overlaps provenance row 7"
+ },
+ "options_for_lead": [
+  "A: as specified (one scope per module): about 14100 scopes, about 59 h at three slots",
+  "B: layer-ordered batches, one capped 6G/8G scope running a sequence of single-module lean -M7000 processes (each process still capped, no cap raised): about 350-400 scopes, about 20-25 h at three slots; needs an explicit authorisation because it changes 'each module its own scope'",
+  "in both cases first produce a source manifest for the 159 unresolved modules from their producing receipts"
+ ]
+}
