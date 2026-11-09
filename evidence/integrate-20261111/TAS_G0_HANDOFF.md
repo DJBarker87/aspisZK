@@ -160,3 +160,15 @@ committed artifacts. No headline composition or release claim is made.
 top assembled CONDITIONAL on a1, a2, sp.rest
 
 target not yet established
+
+
+## Run 7 (G0 FINAL), 2026-11-09
+
+The top is assembled UNCONDITIONALLY at AspisR1.NOC_Run5bHost.S_host:
+- AspisR1.TAS_FinalB.deployed_splitB and deployed_charge compile in TAS_G0_COMBINED_IMPORT (L945);
+- raw ax2 is standard-only (L942-L944);
+- the NFX scan exits 0 (L948);
+- TAS_G0_MISSING.json lists no fields;
+- condition (4) is PROVED under the section-1 rule as amended by (bu).
+
+Full record: NNH_HANDOFF.md "Run 7" and TAS_G0_AUDIT.json. The run-6 content is kept under run6_superseded in the three JSON files. Target not yet established.

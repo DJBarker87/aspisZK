@@ -83,9 +83,16 @@ if kind=='lean':
  if target=='NNH_OwnerStatements':files['NNH_AUDIT_ROOTS.json']=(E/'NNH_AUDIT_ROOTS.json').read_text()
  n='NNH_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'NNH_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M15000' if big else '-M7000','-DElab.async=false','-R','NNH_generated','-o','NNH_R7_objects/'+target.replace('.','/')+'.olean',n]
- if target in ['NNH_Driver','NNH_ProofDriver','NNH_PoolProofDriver','NNH_PoolDriver']:command+=['-c','NNH_native/'+target+'.c']
+ if target in ['NNH_Driver','NNH_ProofDriver','NNH_PoolProofDriver','NNH_PoolDriver','NNH8_RuntimeScan']:command+=['-c','NNH_native/'+target+'.c']
+elif kind=='rawaudit':
+ roots,module=target.split('@')
+ sources=['NNH_R7_raw_audit.py'];files['NNH_R7_raw_audit.py']=(E/'NNH_R7_raw_audit.py').read_text()
+ command=['python3','NNH_R7_raw_audit.py',a,roots,module]
+elif kind=='scan':
+ sources=['NNH8_EXPECTED_IMPORTS.jsonl'];files[sources[0]]=(E/sources[0]).read_text()
+ command=['NNH_native/NNH8_RuntimeScan','scan',a+'/NNH8_LOADED_scan.jsonl']
 elif kind=='link':
- sources=['NNH_native/'+target+'.c','NNH_native/NFA_WALKER.c','NNH_native/NFA_MemoryLimit.c']
+ sources=['NNH_native/'+target+'.c']+([] if target=='NNH8_RuntimeScan' else ['NNH_native/NFA_WALKER.c','NNH_native/NFA_MemoryLimit.c'])
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNH_native/'+target,*sources]
 elif kind=='audit':
  sources=['NNH_AUDIT_ROOTS.json','NNH_AUDIT_MODULES.json','NNH_RAW_BINARY_PIN.json','NNH_RAW_DRIVER_SOURCE.txt']
@@ -98,7 +105,7 @@ elif kind=='audit':
 
 else:raise ValueError(kind)
 overlays=json.loads((E/'NNH_RUN7_PATHS.json').read_text())
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join([B+'/NNH_R7_objects']+overlays)),timeout=600 if big else 180,module_kind='lean16' if big else kind,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join([B+'/NNH_R7_objects']+overlays)),timeout=600 if big else 180,module_kind='lean16' if big else kind,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Raw ax2 traversal with pinned ledger30 walker' if kind=='rawaudit' else 'NFX loaded-closure scan' if kind=='scan' else 'Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -113,6 +120,8 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
+elif x['kind']=='rawaudit':modules += [x['command'][4]]
+elif x['kind']=='scan':modules += ['TAS_G0_COMBINED_IMPORT']
 elif x['kind']=='audit':modules += ['NNH_FINAL_COMBINED_IMPORT','NNH_ContinuationCombined'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
 rels=set()
 for root in roots:

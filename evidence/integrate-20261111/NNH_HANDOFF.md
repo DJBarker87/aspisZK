@@ -994,3 +994,334 @@ Release blockers persist:extraction provenance(bk),source-to-ELF/final audit
 L188,cold replayL187,Pool boundary(aj)(a)(Pool B/D settlement not covered),and
 multi-attempt host gate. Closing probability does not establish source/native
 correspondence or full deployed soundness. Target not yet established.
+
+
+## Run 7 (G0 FINAL), 2026-11-09
+
+Both top theorems compile unconditionally at the corrected host, with every
+interface field supplied by a delivered closed term. TAS_G0_MISSING.json lists
+no fields. Condition (4) is PROVED under the section-1 rule as amended by
+ruling (bu); see the deviation note below. Top assembled; target not yet established.
+
+Base: research 4f67612e79d merged cleanly into codex/cx-integrate-20261107
+(no index.lock touched). Host: S := AspisR1.NOC_Run5bHost.S_host (Tx := Tx) L0
+copy std. Host model correction 2026-11-09 (AGENTS section 4), one slot, no
+contract or trust change.
+
+### Fields
+
+- a1 := AspisR1.NOQ_FinalCombined.field; a2 := AspisR1.NOF_A2FieldCorrected.field;
+  sp.rest := AspisR1.NNH8_Rest.assemble. Each is checked against its field type
+  by a `type_of% ... = ... := rfl` example in TAS_FinalB.
+- alloc1 := AspisR1.NNG_Candidate344.allocation is statement data. This closes
+  finding NNH-G0-F3 by instantiation; alloc1 is not a hypothesis.
+- nms and g1a use the ruling-(bu) forms: NNT_Field.r241 and NNT_G1aLaw.field. nmn is dropped.
+- O2 := NNQ_HostDigest.o2 and O1 := NNH_DigestSyntaxTransport.o1, both applied at
+  the NOC seed.
+
+What transferred unchanged (host-independent or seed-generic):
+- the libraries, the 16-slot implementation and the ledger30 roots
+  (NNH_Run6Fields, NNH_Run6Installed);
+- the 064 frame, the native lift/oracle/clock lemmas, the weak-reader cuts and
+  NNH_Run6ReaderNative;
+- O1 and O2;
+- `NNH_G1aEnv.sig S = S` (by rfl).
+
+What was restated under NNH8_ (a namespace swap plus seed replacement only; no
+hypothesis added or removed):
+- Split; X/R/rs (NNH8_Exec), where ERec and QueriesF use NOC_HostSeed.m0 at the
+  env reservation bit;
+- hl, hb, a3/a4/a5;
+- sp.rest (all NNW_ producers);
+- the nmfB chain (NNH8_Native, NNH8_NMF);
+- the SAME-recorder charge chain (NNH8_Charge) and the top helpers (NNH8_Top).
+
+a0, r0 and S come from NOC_Run5bHost.
+
+### Kernel statements (verbatim, pp.all, NNH_L941)
+
+```
+@AspisR1.TAS_FinalB.deployed_splitB : ∀ {W Tx : Type}
+  (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (w : AspisR1.NOC_Run5bCtx.World W Tx) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (run :
+    @RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0 NNH_Libraries.VL
+      (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch AspisR1.NNG_Candidate344.allocation
+        alloc2)
+      (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+        (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w H)),
+  have c : RSL.TAS.Sig.Ctx (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) :=
+    @RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w H;
+  And
+    (RSL.TAS.Sig.Bound (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c
+      (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+      (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+    (And
+      (@AspisR1.NNH8_Split.rest W Tx L0 copy c (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+        (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+      (Or
+        (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std) c
+          (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+          (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+        (@RSL.TASB.ExecB.ERec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H)))
+```
+
+```
+@AspisR1.TAS_FinalB.deployed_charge : ∀ {W Tx : Type}
+  (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (anchor : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (wOf : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.NOC_Run5bCtx.World W Tx),
+  And
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Rat Rat.instLE
+        (@Max.max.{0} Rat Rat.instSup (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+          (RSL.TASB.ind
+            (And
+              (@RSL.TASB.Runs (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0
+                NNH_Libraries.VL
+                (AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch
+                  AspisR1.NNG_Candidate344.allocation alloc2)
+                (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H))
+              (Not
+                (@RSL.EVB.HeadlineB.OutcomeRec (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                  (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+                  (@AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std)
+                  (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                    H)
+                  (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                      H))
+                  (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                    (@RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+                      (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H)
+                      H)))))))
+        (RSL.TASB.ind
+          (@AspisR1.BinRawByteCollisionTargets.event
+            (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.Outcome Bool))
+            (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+              AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+                (AspisR1.NNH_HostCtx.Fixed.Q1 fx))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.Outcome Bool))
+              H (AspisR1.NNH8_RecorderFixed.fixedProgram copy fx anchor)))))
+    (And
+      (@LE.le.{0} Rat Rat.instLE
+        (@AspisV8R19.MemoizedProgramLaw.lazyMean AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (AspisR1.GExq_AccountExperiment.Outcome Bool))
+          (@Pi.instFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+              AspisV8R19.DuplexFrames.Byte)
+            (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+            (SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+              (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 31) (instOfNatNat (nat_lit 31)))))
+            fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) =>
+            SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+              (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255)))))
+          (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+            @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+              (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+          (AspisR1.NNH8_RecorderFixed.fixedProgram copy fx anchor)
+          (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          fun
+            (v :
+              AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  (AspisR1.GExq_AccountExperiment.Outcome Bool))) =>
+          AspisV8R19.CausalFirstHitUnionBound.indicator
+            (@AspisR1.BinRawByteCollisionTargets.event
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisR1.GExq_AccountExperiment.Outcome Bool))
+              (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+                AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+                  (AspisR1.NNH_HostCtx.Fixed.Q1 fx))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+              v))
+        (AspisR1.F3T_Numeric.total
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+            (AspisR1.NNH_HostCtx.Fixed.Q1 fx))))
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        have c : RSL.TAS.Sig.Ctx (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) :=
+          @RSL.TASB.ctxB (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+            (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx (wOf H) H;
+        @LE.le.{0} Rat Rat.instLE
+          (AspisR1.F3T_RuntimeBound.failureModel
+            (@AspisR1.NOC_Run5bHost.runtime W Tx L0 copy c
+              (RSL.TAS.Sig.model1 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+              (RSL.TAS.Sig.model2 (@AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)))
+          (AspisR1.F3T_Numeric.total
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (AspisR1.NNH_HostCtx.Fixed.Q0 fx)
+              (AspisR1.NNH_HostCtx.Fixed.Q1 fx)))))
+```
+
+fail_sub_rec and NNH8_DeployedOuter, and RPx_Deployed.deployed's kernel text
+(the "before"), are in TAS_G0_AUDIT.json (kernel_statements_verbatim,
+before_after).
+
+### Before/after against RPx_Deployed.deployed
+
+Binders before:
+- L sdk copy std allocator e1 e2 w1 w2 admission1 admission2;
+- missing indexError reservation native1 native2 hashv extraction;
+- sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2;
+- saved post1 post2 accepted1 accepted2 root length prior words;
+- p t u actions game RuntimePersistence D a Q0 Q1 queries.
+
+Binders after:
+- L0, and borrow (the sdk trust row);
+- copy std allocation217 allocation234 ch alloc2;
+- fx (pda clock reservation indexError root length prior words D a Q0 Q1);
+- w (w1 w2 saved post1 post2 p t u actions);
+- H, queries (QueriesF), and run (frame, trace, ok1/out1, ok2/out2).
+
+What moved or was instantiated:
+- Admissions and RuntimePersistence are now conjuncts of run.frame
+  (GameFrame /\ retained). They are the same trust rows.
+- allocator, state and final are instantiated by ruling (bo).
+- missing is instantiated by ruling (s), at the corrected seed.
+- hashv, sha256, p1 and syscall are instantiated by ruling (bt).
+- native1 and native2 are the AdapterRw models.
+- e1/e2/data1/data2/slot are the outputs of normalize fx.a at H.
+- accepted1 and accepted2 are derived from run through a1–a4.
+
+Conclusion:
+- before: C5num /\ ten conjuncts /\ Outcome(bad := event);
+- after: Bound /\ NNH8_Split.rest /\ (OutcomeRec \/ ERec), where
+  NNH8_Split.conclusion_iff splits the old conclusion.
+
+Written confirmations:
+- no Root0 hypothesis, no hash-injectivity premise and no Realizes premise
+  (zero tokens in all four kernel statements);
+- no new trust row;
+- no NativeRep, selected, rootImage, eventImage, success or selector hypothesis;
+- realizes_mk is the eval-of-map lemma;
+- exhibited_mk = rfl, eventRec_mk = Iff.rfl and queries_mk = fun _ _ H _ _ h => h H
+  (each checked by an rfl example; queries_mk is the forall-world L154 family,
+  not literally id);
+- `a` = fx.a is universal and never constant;
+- the averaging conditions on nothing (all H, arbitrary wOf).
+
+### Condition (4)
+
+Verdict: PROVED under the section-1 rule as amended by ruling (bu).
+
+(i) AspisR1.NNH8_DeployedOuter and AspisR1.TAS_FinalB.fail_sub_rec hold at the
+literal corrected host with no field argument. They use RSL.EVB.no_second_charge,
+which is in the raw cone.
+
+Deviation: RSL.TASB.fail_sub_rec itself is not reached. It is stated over the
+pre-(bu) interface (nmn, NNE_EntryRep). The inclusion is its identical proof over
+NNT_TopL.top_splitB_physical, as in run 6. The lead should confirm this reading.
+
+(ii) AspisR1.TAS_FinalB.deployed_charge composes three facts on one probability
+space (all H, the actual adaptive adversary fx.a, any wOf), with E_rec charged
+once:
+- pointwise domination of the actual failure by the ONE fixed recorder program's
+  event (O1 + O2);
+- NNH_RecordedCharge.bound, i.e. accountLoss <= total;
+- failureModel <= total at a := normalize a.
+
+This does not establish the source/native correspondence or full deployed soundness.
+
+### Gate evidence
+
+| Attempt | What | Result |
+|---|---|---|
+| L945 | TAS_G0_COMBINED_IMPORT | exit 0, 48.8 s, 6,881,368 KiB, swap 0, ordinary 6G/8G cap; 16 GiB scope NOT used |
+| L942 | raw ax2, deployed_splitB | 146,370 constants, 6,981,053 edges |
+| L943 | raw ax2, deployed_charge | 146,551 constants |
+| L944 | raw ax2, fail_sub_rec and NNH8_DeployedOuter | walked = collected = {Classical.choice, Quot.sound, propext} |
+| L948 | NFX scan of the run-7 closure | exit 0; see below |
+
+- The raw ax2 walker is ledger30's pinned NNM_ProofDriver (46ee271b...ca3c).
+  On every root, walked = collected = {Classical.choice, Quot.sound, propext}.
+- #print axioms is standard-only for every root.
+- The scanner is ledger30's scan with only the root and file names changed.
+- NFX scan result: 20,019 modules and 883,431 declarations. There are 0 dangling
+  references, 0 duplicate owners and 0 import mismatches against ledger30's
+  baseline plus the evidence sources. 3,191 cached replicas are listed separately;
+  3,135 of them are proof-identical.
+
+Lead provenance check: the deployed_splitB cone contains
+AspisR1.NOC_PrepareFront.values, LIBC_ExpandValuesModel.source,
+NFU_Retarget.compact.expand_values and AspisS1ValuesOwnedInstallation.expandValues.
+This records reachability only.
+
+Non-vacuity is PARTIAL (definitional only), from NNH8_NonVacuity:
+- worldOf and world_recorded;
+- GameFrame, Game, TraceRep and Out1 are, by Iff.rfl, the recorded CPG/CPH/trace
+  and carrier facts rather than the seed's False;
+- Out1 is inhabited;
+- Exhibited, EnvRep and Realizes hold at every world.
+
+No Runs inhabitant is built from an actual accepted deployed pair.
+
+### Owner-visible lines (verbatim)
+
+- ruling (bu)(3)(a): TX2:064's root leaves the top's hypothesis set;
+- ruling (bu)(3)(b): off-Root0 fidelity caveat for the credited stage2 (value-level Ok association only);
+- The proved corrected-environment facts say that the slot c.j.slot output by the attacker is fed to the model as the runtime clock reply, NND_Carrier.reply NND_Carrier.slot c.j.slot, and decoding that reply yields exactly c.j.slot; the reindexed producer consumes its weak entry Ref at that environment. Thus a top using this representation counts a run with the runtime clock equal to the selected attacker-output slot. Under the existing RuntimeClockSlotBinding reading, that output records the reply bound to the bank slot, so this representation must exclude no deployed run; it must not become an independently assumed equality or a filter on Realizes. This job proves the roundtrip, EnvRep, model/recorder clock-independence and local producer restatement, but does NOT prove or install the complete lossless final-top representation. The old host permits a different clock reply (M1_refuted), so that final signature/composition obligation remains explicit for the owner.
+- TGB-1b resolved only via the separate-header model;
+- condition (4): PROVED under the section-1 rule (as amended by ruling (bu): the inclusion is the fail_sub_rec proof over NNT_TopL.top_splitB_physical, composed with RSL.EVB.no_second_charge, NNH_RecordedCharge.bound with DGP O1/O2 and the failureModel <= total chain at a := normalize a; AspisR1.NNH8_DeployedOuter and AspisR1.TAS_FinalB.deployed_charge compile in TAS_G0_COMBINED_IMPORT with standard axioms). This does not establish the source/native correspondence or full deployed soundness.
+- host model correction 2026-11-09 (AGENTS section 4), one slot, no contract or trust change
+
+### Resources
+
+- 19 of 40 scopes used (L930–L948): 17 passed and 2 failed.
+  - L930: a trailing example sat outside the opens.
+  - L940: the implicit R of realizes_by_construction was not given.
+  - Each was fixed by a changed source, never rerun unchanged.
+- Max Lean RSS was 6,947,444 KiB. The scanner peaked at 8,317,012 KiB under the
+  8 GiB cgroup. Swap 0 throughout.
+- 0 Kani, 0 extraction. No cap, heartbeat, timeout or recursion was raised.
+- Every launch had allowed:true admission, fewer than 6 scopes and fewer than 6
+  lean processes, and at least 40 GB free.
+- Receipts: NNH_Run7_COMPILE.tsv and NNH_L930..L948.
+- Seeds were referenced read-only. No push, no shipped-source, trust or row change,
+  no sibling worktree.
+
+### Gate status
+
+Claim draft section 6:
+- rows 1–3 have artifacts;
+- row 4's artifact is complete here, but it is NOT yet transcribed into the claim
+  draft's section 1.2.2 (this job did not edit the draft);
+- release blockers remain: extraction provenance (bk); source-to-ELF / L188 with
+  cold replay L187; Pool boundary (aj)(a) (Pool B/D settlement not covered);
+  multi-attempt accounting; the Runs non-vacuity witness; trust removal
+  conditions; K086; R22.
+
+target not yet established
