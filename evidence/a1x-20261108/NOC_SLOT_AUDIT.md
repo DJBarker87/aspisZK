@@ -30,9 +30,8 @@ All other slots of all three dictionaries are installed (table below).
 345 `stage1_owned (sdk c)` (= NND_FreshStage1.fresh by rfl) and its helpers call sdk slots:
 op1 (instruction-tag slice eq), op47 (public decode), op21 (validate), op24 (afterstate encode),
 op0 (checkpoint slice eq), op35 (`OwnedAccount.data`, ProgramError clone), op36
-(`require_distinct_accounts` loop, Pubkey eq), op12 (`require_verifier_checkpoint`), op44
-(afterstate-bytes constant path), and through `first_decoded` (NND_FreshFirstDecoded.fresh):
-op10 (current tx1), op43 (SolanaDigest digest), plus `observer` (= `ok none`, no slot).
+(`require_distinct_accounts` loop, Pubkey eq), op12 (`require_verifier_checkpoint`), and through
+`first_decoded` (NND_FreshFirstDecoded.fresh): op10 (current tx1), op44, op43 (SolanaDigest digest), plus `observer` (= `ok none`, no slot).
 Helper bodies were printed in L010 (DEF lines). All of these sdk slots are installed (table).
 094 `verifier.candidate.tx1 (currentInstalled ..)` (NND_FreshTx1Source.fresh) calls current
 op3, op4, op0 (ZERO), prepare (op15, op1, op10, op12, op13, op14, op11, op5, op9, op8, op2),
