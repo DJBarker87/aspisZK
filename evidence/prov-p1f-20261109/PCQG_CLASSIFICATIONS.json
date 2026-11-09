@@ -1,0 +1,50 @@
+{
+ "schema": 1,
+ "classifications": [
+  {
+   "id": "PCQG-C1",
+   "topic": "tool and scope of the retry",
+   "classification": "Every P1e failure selection was re-run once with the rebuilt ORIGINAL Aeneas b59d5188 (959659a6...) on P1e's last failing spec shape (tool change is the changed shape). Selections that then failed received one further changed shape only where the first got further or the cause was identified (PCQG_FAILURES.json). 18 of 25 extraction scopes used, 0 Lean."
+  },
+  {
+   "id": "PCQG-C2",
+   "topic": "features",
+   "classification": "Frozen-source specs carry the P1e feature sets unchanged: r0,pool-v1-kernel for the semantic/copy terminal groups (PCQF-C3: the audit feature set compiles out literal functions the gate contains; Charon accepts the roots only with r0,pool-v1-kernel); the state_only_poseidon and pair_terminal selections keep the audit feature set FS because Charon already accepted their roots there. The gate's own feature set is inferred (presence of the literal variants), not recorded anywhere; PINS carry feature_set_note."
+  },
+  {
+   "id": "PCQG-C3",
+   "topic": "overflow configuration",
+   "classification": "Per gate module (lead ruling): the P1e classification (regex over gate text, PCQG_CONFIG_BY_MODULE_from_P1e.json) is reused unchanged for its modules; all are ON. NDE_Reference2 and NDE_Reference5 are ON per PCVA_CLASSIFICATION (gate checked). Every run: CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true and -C overflow-checks=yes appended to RUSTFLAGS. The classification is a text heuristic, not proof of how the gate was extracted; the NDE emissions however are TEXT-IDENTICAL to the gate Funs.lean and Types.lean (diff empty), which is direct evidence for those two modules."
+  },
+  {
+   "id": "PCQG-C4",
+   "topic": "external_linear_lazy (retired shape)",
+   "classification": "The original Aeneas gets past P1e's InterpBorrows.ml:2731 at state_only_poseidon.rs 156:8-172:9 but fails there with \"Unimplemented ... interp/InterpMatchCtxs.ml, line 419\" (E004 root group NEW8; E016 standalone root). The failing span is the body of external_linear_lazy itself (while loop with a core::array::from_fn closure that matches on the mutable outer counter `output`), so no root split or opaque callee can avoid it; two failures retire the shape. external_linear_lazy is obtained only as an opaque axiom (E010 NEW8b, E015) with its callers (full_round etc.) emitted. Needed: another tool, a source restructure (not allowed) or a hand model (obligation in PCQG_HAND_MODELS.json). Not a trust row."
+  },
+  {
+   "id": "PCQG-C5",
+   "topic": "empty_root (retired shape)",
+   "classification": "pair_forest_semantic_terminal.rs:191 `POOL_V1_PAIR_EMPTY_ROOTS_V1[level].map(M31)` uses the tuple-struct constructor M31 as a function value; the original Aeneas reports \"Name clash detected ... aspis_core.field.M31\" (type name vs constructor) in extract/ExtractBase.ml:269 (E006 NEW9b, E011 NEW11 with external_linear_lazy opaque, E013 root-half bisect isolating empty_root). The b59d5188-extended build renames this to field.M31_constructor (see the historical candidate-Funs.lean). With empty_root opaque, groups A (E014) and C (E015) are emitted. Three failures of one cause; shape retired. The extension is the tool difference: an emission of empty_root requires the gate-compatible (extended) library or a hand model."
+  },
+  {
+   "id": "PCQG-C6",
+   "topic": "groups obtained",
+   "classification": "NEW2a (karatsuba + sum_products3_prepared) E001; NEW2c qm31_m31_dot E002; NEW7 (interpolate_three_constant_columns, external_local_packed_raw, packed external/full_round_packed) E003; NEW13 pair_terminal validate_verified_afterstate (+loop; live snapshot validators opaque as in the P1e spec) E005; NEW10b semantic add_* group E007; NEW12b copy terminal group E009; NEW8b full_round group with external_linear_lazy opaque E010; semantic group A with empty_root opaque E014 (halves h1 E012 also ok); semantic group C with external_linear_lazy and empty_root opaque E015; NDE2 E017, NDE5 E018. In E005 the roots validate_pool_v1_pair_live_snapshot_v1 / encode_pool_v1_pair_live_snapshot_v1 / pool_v1_membership_root_v1 / encode_digest_canonical were opaque as in the P1e spec NEW13, so they are axiom-only in this emission (not obtained here; P1d E008 obtained decode paths for S012 split A)."
+  },
+  {
+   "id": "PCQG-C7",
+   "topic": "out of scope / not attempted",
+   "classification": "S019 r1_wire and the S010/S012 boxed-decoder roots (P1d retired those shapes) were not retried: no genuinely different shape was identified (cgroup peak at the 3G throttle is memory growth, a split/opaque callee would be needed and P1d already split them). NO_FROZEN_COUNTERPART items (external_linear_lazy_row, array_from_fn_copy, trailing_zeros_aux) are not P1e failures and were not run."
+  },
+  {
+   "id": "PCQG-C8",
+   "topic": "what the successes do and do not establish",
+   "classification": "Name-level coverage only (PCQG_COVERAGE.json); a FRESH_PRESENT definition is a non-axiom declaration of the normalised name in a good run. No equality with any gate definition is claimed; equality remains P2/P3 and must use the gate-compatible library because the tool is the original Aeneas, not the extended build behind PCQ_/PCQC_/PCQF_ emissions."
+  },
+  {
+   "id": "PCQG-C9",
+   "topic": "scope accounting",
+   "classification": "One scope at a time. At launch the Stream C count was 0 or 1 (the sibling job's scope was visible in the share_check of E006-E009, E011 and E013, so a P1f scope never made the Stream C total exceed 2); whole-host count at most 2 (E013). The admission requires Stream C < 2 before launch. No scope was killed or timed out; maximum cgroup peak 1.14 GB (E001); E012 wall 171.5 s within the 180 s limit."
+  }
+ ]
+}

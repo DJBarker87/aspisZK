@@ -1,0 +1,21 @@
+{
+ "schema": 1,
+ "target_established": false,
+ "note": "Record only. No hand model written, no trust row added or proposed. Each entry is a commented obligation with the exact Rust statement the missing Aeneas emission would have to match; none is proved or assumed.",
+ "entries": [
+  {
+   "name": "aspis_statement::state_only_poseidon::external_linear_lazy",
+   "source": "crates/aspis-statement/src/state_only_poseidon.rs lines 139-190 (frozen 4bb3b3f5)",
+   "reason": "PCQG_E004, PCQG_E016: Aeneas \"Unimplemented\" InterpMatchCtxs.ml:419 at 156:8-172:9 (from_fn closure matching on mutable counter inside while loop)",
+   "obligation_comment": "-- OBLIGATION (not proved): for state : [QM31;16], external_linear_lazy(state) = for each group g in 0..4, with input = map extension_limbs state[4g..4g+4] and for output o in 0..4: raw[limb] = M_o . (input[0..4][limb]) (rows (2,3,1,1),(1,2,3,1),(1,1,2,3),(3,1,1,2) over u64), state[4g+o] := extension_from_raw_limbs raw; then sums[column][limb] = sum_{r in 0..4} limb of state[4r+column]; finally state[i] := extension_from_raw_limbs (limbs(state[i])[limb] + sums[i&3][limb]). No overflow failure under canonical (< P) limbs; checked arithmetic on u64.",
+   "obtained_instead": "opaque axiom in PCQG_E010/E015 (aspis_statement.state_only_poseidon.external_linear_lazy); callers emitted"
+  },
+  {
+   "name": "aspis_statement::pool_v1::pair_forest_semantic_terminal::empty_root",
+   "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs line 189-192",
+   "reason": "PCQG_E006/E011/E013: Aeneas name clash for the constructor value M31 in `.map(M31)`",
+   "obligation_comment": "-- OBLIGATION (not proved): empty_root level = Array.map M31.mk (constants.POOL_V1_PAIR_EMPTY_ROOTS_V1[level]) with checked index (fails when level >= 21); the b59d5188-extended emission is `core.array.Array.map (BuiltinFnMut Std.U32 field.M31) a (field.M31_constructor)`.",
+   "obtained_instead": "opaque axiom in PCQG_E014/E015"
+  }
+ ]
+}

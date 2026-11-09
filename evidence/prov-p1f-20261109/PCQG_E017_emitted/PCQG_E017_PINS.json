@@ -1,0 +1,96 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NDE_Reference2",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/raw",
+    "-subdir",
+    "NDE_Reference2",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/repro.llbc"
+  ],
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::lift_ref",
+    "--start-from",
+    "crate::extension_limbs_ref",
+    "--start-from",
+    "crate::extension_raw_ref",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/repro.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pc-prov-p1f-20261109/PCQG_E017_emitted/crate/Cargo.toml",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1"
+  ],
+  "environment": {
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RAYON_NUM_THREADS": "1",
+    "RUSTFLAGS": "-Zthreads=1 -C link-arg=-Wl,--threads=1 -C overflow-checks=yes",
+    "RUSTUP_TOOLCHAIN": "nightly-2026-09-17"
+  },
+  "exits": {
+    "aeneas": 0,
+    "charon": 0
+  },
+  "frozen_validation_note": "standalone historical reference crate (not the frozen release source); same source and manifest as P5 emission NML_E012/E006",
+  "llbc_sha256": "1934579fc985d52be14b547fa9a63d2c9098c85aa475c891ceb7dda6a8912007",
+  "manifest_sha256": "9d646324ed8aa796b4ad0d45c5cba4199a4d183a1f667604293fdce1a45a03e5",
+  "namespace": "NDE_Reference2",
+  "output_sha256": {
+    "raw/NDE_Reference2/Funs.lean": "0b2a334d0091f86402cef63bba97afe2360ee786a46fe78cf55440b41983a5cb",
+    "raw/NDE_Reference2/Types.lean": "5c299184e19c92757fe5000f419ea1a02dceb0a8768ece2b9c40bc47c6a07597"
+  },
+  "p1f": {
+    "basis": "PCVA_CLASSIFICATION CONFIG_MISMATCH: gate checked (overflow ON); P5 fresh emission NML_E012 was overflow OFF; same source and manifest, original Aeneas, overflow checks ON",
+    "differences_from_P5_emission": "Aeneas = rebuilt original b59d5188 (959659a6...) not b59d5188-extended; overflow checks ON; no -diagnose-translation (as NML); crate staged by PCQG_nde.py, no NHR frozen payload (standalone crate as in NML)"
+  },
+  "p1f_config": {
+    "aeneas": "rebuilt ORIGINAL b59d5188 sha256 959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3, verified by the controller before use",
+    "cargo_profile_release_overflow_checks": "true",
+    "feature_set_note": "Features are inferred, not recorded for the gate: audit feature set FS compiles out functions the gate contains; r0,pool-v1-kernel keeps the roots (PCQF-C3). Run features: (standalone crate, no features)",
+    "overflow_checks": "ON",
+    "per_gate_module": {
+      "NDE_Reference2.Funs": "n/a (not a classified gate module)"
+    },
+    "reason": "lead ruling (per gate module): all gate modules reached by this run have checked arithmetic or no arithmetic (PCQG_CONFIG_BY_MODULE.json), so ON",
+    "rustflags_appended": "-C overflow-checks=yes"
+  },
+  "reference_sha256": "51620fa48a66983596663dd13e959e8b4d77abfea9fb5b6da6bfc6417309e1c3",
+  "run": "PCQG_E017",
+  "spec_id": "NDE2",
+  "start_from": [
+    "crate::lift_ref",
+    "crate::extension_limbs_ref",
+    "crate::extension_raw_ref"
+  ],
+  "tools": {
+    "aeneas": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  }
+}
