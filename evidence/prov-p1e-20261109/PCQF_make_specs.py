@@ -40,6 +40,13 @@ new('NEW2b','aspis-core field: qm31_pack_base4 (split of NEW2)',CORE,[F+'qm31_pa
     'PCQF_aspis_core_field_b2',['RPu_FIq_Native02','RPu_FIq_NativeTypes','RPv_Qm31PackBase4Slice'],['field.qm31_pack_base4*'],**NEW2D)
 new('NEW2c','aspis-core field: qm31_m31_dot (split of NEW2)',CORE,[F+'qm31_m31_dot'],
     'PCQF_aspis_core_field_b3',['RPu_FIq_Native02'],['field.qm31_m31_dot*'],**NEW2D)
+NEW2R=dict(basis='P1e second shape after PCQF_E012/E014 failed (Aeneas Not_found InterpReduceCollapse.ml:1991 for the karatsuba+sum_products3_prepared pair; InterpBorrows.ml:2731 at field.rs 1482:8-1484:9 for qm31_m31_dot)')
+new('NEW2d','aspis-core field: qm31_from_karatsuba_channel_sums solo (second shape of NEW2a)',CORE,[F+'qm31_from_karatsuba_channel_sums'],
+    'PCQF_aspis_core_field_b4',['RPu_FIq_Native01','RPu_FIq_NativeTypes','RPv_PoseidonPreparedSum3Source'],['field.qm31_from_karatsuba_channel_sums'],**NEW2R)
+new('NEW2e','aspis-core field: qm31_sum_products3_prepared with qm31_from_karatsuba_channel_sums opaque (second shape of NEW2a)',CORE,[F+'qm31_sum_products3_prepared'],
+    'PCQF_aspis_core_field_b5',['RPu_FIq_Native01','RPu_FIq_Native02','RPv_PoseidonPreparedSum3Source'],['field.qm31_sum_products3_prepared*'],opaque=[F+'qm31_from_karatsuba_channel_sums'],**NEW2R)
+new('NEW2f','aspis-core field: qm31_m31_dot with M31::reduce_u64 and CM31::new opaque (second shape of NEW2c)',CORE,[F+'qm31_m31_dot'],
+    'PCQF_aspis_core_field_b6',['RPu_FIq_Native02'],['field.qm31_m31_dot*'],opaque=[F+'_::reduce_u64',F+'reduce_u64',F+'_::new'],**NEW2R)
 new('NEW3','aspis-core state_only_prefix r0 types',CORE,['crate::state_only_prefix::r0::Error','crate::state_only_prefix::r0::Challenges'],
     'PCQF_aspis_core_state_only_prefix',['RPu_FIq_NativeTypes'],['state_only_prefix.r0.Error','state_only_prefix.r0.Challenges'])
 new('NEW4','aspis-statement constants: poseidon2, spend DOMAIN_*, pair_tree_profile capacity, pool_v1::format (S007)',STM,
@@ -72,6 +79,28 @@ new('NEW13','aspis-statement pair_terminal gaps (S011): validate_verified_afters
     'PCQF_aspis_statement_pair_terminal_b',['AspisR1TerminalDecoder.Funs'],['pool_v1.pair_terminal.validate_verified_afterstate','pool_v1.pair_terminal.validate_verified_afterstate_loop','pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1'],
     opaque=['crate::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1','crate::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1','crate::pool_v1::payment_relation::pool_v1_membership_root_v1','crate::atomic_statement::encode_digest_canonical'],
     basis='P2c S011 gap: the earlier S011 run made these two roots opaque (PCQ_E040 opacity), so no body was emitted.')
+
+# ---- second shapes (P1e round 2)
+STM0=dict(STM,features='r0,pool-v1-kernel')
+FEAT=dict(basis='P1e second shape: PCQF_E018/E019/E021 (Charon: root does not exist) because the audit features compile out the literal variants the gate contains (absorption_lanes_literal, occupancy_lanes_literal, path_lanes_literal, public_digest_lanes, add_digest_binding: cfg(any(test, not(semantic-factor-audit/packed-digest-audit))); pattern_values_literal, Selectors::active_literal likewise). The gate carries the literal variants, so the audit features are off: features r0,pool-v1-kernel.')
+new('NEW9b','pair_forest_semantic_terminal a, default features',STM0,[SMT+n for n in ['withdrawal_public','private_public','r0::_::semantic','selected_claim','copy_variant','scalar_lanes','lift_m31','add_digest_binding','empty_root','bounded_append_carry','public_digest_lanes','occupancy_lanes_literal','variant_expected_output']],
+    'PCQF_aspis_statement_sem_a2',['RPu_FIq_Native03','RPu_FIq_Native07','RPu_FIq_Native08','RPu_FIq_NativeTypes'],['pool_v1.pair_forest_semantic_terminal.*'],**FEAT)
+new('NEW10b','pair_forest_semantic_terminal b, default features',STM0,[SMT+n for n in ['add_preweighted','add_occupancy_lanes','reconstruct_10','add_value_lanes','path_lanes_literal','sum_high','add_path_lanes','absorption_lanes_literal','initial_variant_selectors','semantic_initial_and_absorption','add_schedule_lanes']],
+    'PCQF_aspis_statement_sem_b2',['RPu_FIq_Native09','RPu_FIq_Native10','RPu_FIq_NativeTypes'],['pool_v1.pair_forest_semantic_terminal.*'],**FEAT)
+new('NEW11b','pair_forest_semantic_terminal c, default features',STM0,[SMT+n for n in ['semantic_packed','poseidon_selectors','validate_transition','composition_parts','equality_value','terminal_parts','r0::_::terminal_qm31']],
+    'PCQF_aspis_statement_sem_c2',['RPu_FIq_Native11','RPu_FIq_Native14','RPu_FIq_NativeTypes'],['pool_v1.pair_forest_semantic_terminal.*'],**FEAT)
+new('NEW12b','pair_forest_copy_terminal, default features',STM0,[CPT+n for n in ['lift_m31','accumulate_endpoint','link_weight','copy_residual','_::row','pattern_values_literal','pattern_values','selector_mask_sum_16','_::active_literal','_::active','evaluate_with_selectors','_::expand','_::at_point','_::boxed_at_point']],
+    'PCQF_aspis_statement_copy_terminal2',['RPu_FIq_CopyPrefix','RPu_FIq_Native08','RPu_FIq_Native13','RPu_FIq_Native14','RPu_FIq_NativeTypes'],['pool_v1.pair_forest_copy_terminal.*'],**FEAT)
+LOOP=dict(basis='P1e second shape: the first run failed in Aeneas at the named function (loop-borrow translation limit of aeneas-b59d5188-extended); that function is made opaque so the rest can be emitted. The opaque function stays without a fresh body.')
+new('NEW6b','state_only_poseidon a with internal_linear_lazy opaque',STM,[SOPN+n for n in ['extension_from_raw_limbs','extension_limbs','pow5','internal_round','interpolated_internal_pair']],
+    'PCQF_aspis_statement_sop_a2',['RPu_FIq_Native04'],['state_only_poseidon.*'],opaque=[SOPN+'internal_linear_lazy'],**LOOP)
+new('NEW7b','state_only_poseidon b with interpolate_three_constant_columns opaque',STM,[SOPN+n for n in ['interpolate_three_constant_limb','external_local_packed_raw','external_local_packed','external_linear_packed','full_round_packed']],
+    'PCQF_aspis_statement_sop_b2',['RPu_FIq_Native05'],['state_only_poseidon.*'],opaque=[SOPN+'interpolate_three_constant_columns'],**LOOP)
+new('NEW8b','state_only_poseidon c with external_linear_lazy opaque',STM,[SOPN+n for n in ['full_round','interpolated_full_pair_packed','full_round_m31_constants_packed','full_round_m31_constants','leading_pair_packed','evaluate_state_only_poseidon_oracle_projected']],
+    'PCQF_aspis_statement_sop_c2',['RPu_FIq_Native06','RPu_FIq_Native07'],['state_only_poseidon.*'],opaque=[SOPN+'external_linear_lazy'],**LOOP)
+new('NEW13b','pair_terminal encode_pool_v1_pair_verified_afterstate_v1 with validate_verified_afterstate opaque',STM,
+    ['crate::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1','core::option::_::ok_or'],'PCQF_aspis_statement_pair_terminal_c',['AspisR1TerminalDecoder.Funs'],['pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1'],
+    opaque=['crate::pool_v1::pair_terminal::validate_verified_afterstate','crate::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1','crate::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1','crate::pool_v1::payment_relation::pool_v1_membership_root_v1','crate::atomic_statement::encode_digest_canonical'],**LOOP)
 d=dict(schema=1,target_established=False,frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',
   note='P1e specs. include/opaque are applied exactly as listed; every run has overflow checks on.',specs=specs,
   no_frozen_counterpart=[
