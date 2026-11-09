@@ -1,10 +1,9 @@
 # Aspis ZK: a trustless, formally verified Circle STARK verifier on Solana
 
-Aspis is a private payment system for Solana, and the thing at the heart of it
-is something I am genuinely excited about: a zero-knowledge verifier that runs
-natively on chain, needs no trusted setup and no ceremony, and whose soundness
-is not argued in a paper but proved, as mathematics, in Lean 4, against the
-Rust that actually runs. The proofs are Circle STARKs over the Mersenne-31
+Aspis is a private payment system for Solana, and at the heart of it is a
+zero-knowledge verifier that runs natively on chain, needs no trusted setup and
+no ceremony, and whose soundness is not argued in a paper but proved, as
+mathematics, in Lean 4, against the Rust that actually runs. The proofs are Circle STARKs over the Mersenne-31
 field; the verifier checks them inside a Solana transaction; and the theorem
 that says a forged proof cannot get through is a theorem about that verifier's
 own source code, translated into Lean by Charon and Aeneas, not about a model
@@ -25,7 +24,8 @@ replay of each settlement, because the nullifier had already been spent, and a
 tampered proof for each, without a single protected account changing. The
 signatures are below, and anyone can go and look at them.
 
-**Soundness proved, in Lean, end to end.** On 9 November 2026 the soundness of
+**Soundness proved, in Lean, end to end.** This is the result I am most
+pleased with. On 9 November 2026 the soundness of
 the whole two-transaction spend path was assembled into a single theorem,
 `AspisR1.TAS_FinalB.deployed_splitB`, with its averaged form
 `AspisR1.TAS_FinalB.deployed_charge`. It says that an adversary who is
@@ -37,14 +37,13 @@ piece of the argument supplied by a proof rather than left as an assumption.
 Lean reports only its three standard axioms for both theorems; an independent
 walk of the proof terms, some 146,000 constants apiece, finds exactly the same
 three; and a scan of the full closure of 20,019 modules finds no dangling
-reference, duplicated declaration or mismatched import anywhere. This is, as
-far as I know, the first time a production STARK verifier's soundness has been
-carried all the way to a machine-checked theorem at this level of detail, and
-it is a real milestone for the project.
+reference, duplicated declaration or mismatched import anywhere. I know of no other
+production STARK verifier whose soundness has been carried all the way to a
+machine-checked theorem at this level of detail.
 
 **The Rust shown to match the model, function by function.** The theorem is
 only worth having if the verifier that runs is the verifier that was reasoned
-about, and that is where most of the last two months went. At the frozen source
+about, and a great deal of the work has gone into establishing exactly that. At the frozen source
 revision `4bb3b3f51e16` the verifier reaches 599 distinct Rust functions between
 the field arithmetic and the two entry points, and every one of them now has a
 proved statement in Lean: on every input in its stated domain the function, as
@@ -57,7 +56,7 @@ whose translation the tools could not produce, the proof is against a
 transcription of the Rust checked by hand, and each of those is named in the
 proof package rather than hidden. Along the way the proofs caught a model of
 the host environment under which the first transaction could never have been
-accepted, which is precisely the kind of thing this work exists to catch; the
+accepted, which is exactly the kind of error this work exists to find; the
 theorems are stated at the corrected model, which allocates exactly as the
 source does.
 
@@ -80,9 +79,10 @@ theorems are printed in full, with a plain reading of every part of each stateme
 
 ## What is left
 
-I am not yet putting "100-bit secure" on the tin, and I will not until the last
-checks are in; the mathematics is done, and what remains is the plumbing between
-the proofs and the deployed bytes. The Lean that the tools generated from the
+There is still some way to go before I describe this version as 100-bit
+secure, and I will not do so until the remaining checks are complete. The
+mathematics is in place; what remains is to tie the proofs to the deployed
+bytes with the same rigour. The Lean that the tools generated from the
 Rust is being regenerated and proved equal to the committed copies; the whole
 proof closure is being rebuilt cold rather than checked against cached builds;
 the translations use checked arithmetic where the deployed program wraps on
