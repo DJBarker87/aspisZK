@@ -26,23 +26,8 @@ for f in files:
     o=cmd[cmd.index('-o')+1]; m=next((mp2m[k] for k in mp2m if o==k or o.endswith('/'+k)),None)
     if m and f.endswith('receipt.json') and x.get('exit_status')==0:
       cands[m].append(dict(file=f,attempt=x.get('attempt'),out=o,sources=x.get('sources'),source_hashes=x.get('source_hashes')))
-names='\n'.join(sorted({m.split('.')[-1]+'.olean' for m in mods}))
-ov='\n'.join(plan[m]['overlay'] for m in mods)
-code=f"""python3 - <<'PY'
-import os,hashlib,json
-names=set('''{names}'''.split())
-ov='''{ov}'''.split()
-res=dict(overlay={{p:hashlib.sha256(open(p,'rb').read()).hexdigest() for p in ov}},copies=[])
-for root,dirs,fs in os.walk('/home/dombarker/project-offloads'):
-  if 'codex-cx-replay-l187-20261109' in root: dirs[:]=[]; continue
-  for f in fs:
-    if f in names:
-      p=os.path.join(root,f)
-      try: res['copies'].append((hashlib.sha256(open(p,'rb').read()).hexdigest(),p))
-      except Exception: pass
-print(json.dumps(res))
-PY"""
-h=json.loads(subprocess.run(['ssh',H,code],capture_output=True,text=True,timeout=3000).stdout)
+q=json.dumps(dict(rels=sorted({m.replace('.','/')+'.olean' for m in mods}),overlays=[plan[m]['overlay'] for m in mods]))
+h=json.loads(subprocess.run(['ssh',H,'python3 /home/dombarker/project-offloads/codex-cx-replay-l187-20261109/L187_hostcopies.py'],input=q,capture_output=True,text=True,timeout=3000).stdout)
 copies=collections.defaultdict(list)
 for x,p in h['copies']: copies[x].append(p)
 idx=json.load(open(S+'lean_sha_index.json'))  # sha256 -> committed .lean/.lean.txt paths at HEAD
