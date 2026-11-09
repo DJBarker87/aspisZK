@@ -32,9 +32,9 @@ theorem domain (input : LIBC_PreparedLaw.Args) (proof : RSL.Bytes) (width : proo
  (env : RSL.Env) (p : LIB_VCarriers.Prepared) (g : LIB_VCarriers.E29)
  (a : LIB_VCarriers.Acc) (geo : LIB_VCarriers.Geo) (pending : LIB_VCarriers.Weights)
  (hp : LIBC_PreparedLaw.value input env = (.ok p,g))
- (ha : LIB_VLib.accNewValue () env = .ok a)
- (hg : LIB_VLib.geometryValue (p,0,10) env = .ok geo)
- (hb : LIB_VLib.weightsNewValue a env = .ok pending) :
+ (ha : LIBC_AccNew.value env = .ok a)
+ (hg : LIBC_Geometry.value (p,0,10) env = .ok geo)
+ (hb : LIBC_WeightsNew.value a env = .ok pending) :
  LIBC_QueryLoop.Domain (proof,p,a,g,geo,pending,10) := by
  have initial : LIBC_AccNew.child.law () env ⟨.ret (.ok a),[]⟩ :=
   (graphRet _ _ _ _ [] ha (by intro h; cases h)).symm
