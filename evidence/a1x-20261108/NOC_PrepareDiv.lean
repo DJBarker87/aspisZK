@@ -14,7 +14,8 @@ theorem logical_semantic {W Tx : Type} (c : Ctx W Tx) :
  unfold compact.LOGICAL_SEMANTIC; rfl
 
 theorem logical_y1 : compact.LOGICAL_Y1 = ok 928#usize := by
- unfold compact.LOGICAL_Y1; rfl
+ unfold compact.LOGICAL_Y1
+ first | rfl | (apply AspisR1CurrentCaller.UsizeArithmetic.mul_eq_ok <;> scalar_tac)
 
 theorem logical_sum : ((13831#usize : Usize) + (928#usize : Usize)) = ok 14759#usize := by
  first | rfl | (apply AspisR1CurrentCaller.UsizeArithmetic.add_eq_ok <;> scalar_tac)
