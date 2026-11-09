@@ -145,8 +145,8 @@ while True:
         x=stk.pop()
         if x in dep: continue
         dep.add(x); stk+=P[x]['imports']
-      if dep & set(st.get('fixed',[])):
-        st['status'][m]='pending'; log('requeued (a dependency source was fixed)',m); continue
+      if (dep & set(st.get('fixed',[]))) and m not in st.setdefault('requeued_after_fix',[]):
+        st['requeued_after_fix'].append(m); st['status'][m]='pending'; log('requeued once (a dependency source was fixed)',m); continue
       try: res=recover(m)
       except Exception as e: res=dict(status='UNRECOVERED',error=repr(e))
       if res.get('status')=='RECOVERED_BY_HASH' and res['sha256']!=P[m]['source']['sha256']:
