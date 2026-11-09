@@ -19,7 +19,7 @@ Snapshot in NPC_DEVNET_READONLY.json (script NPC_readonly.py, getAccountInfo/get
 | Payer CVZJcAv9... | 9.588839320 SOL; no open buffers under it. Key present at ~/.config/solana/aspis-deploy/devnet-payer-20261029.json, mode 0600, public key checked. |
 | Lost authority Xjb7roDV... | 3.708326000 SOL, system account, unmovable. |
 
-Key search for Xjb7roDV..., by public key only (solana-keygen pubkey, nothing printed but the public key): 530 keypair-shaped JSON files on the build host under /home/dombarker and /tmp, no match. Mac home-directory scan: see the closing note in NPC_HANDOFF.md. This repeats the 29 October finding; it does not depend on it.
+Key search for Xjb7roDV..., by public key only (solana-keygen pubkey, nothing printed but the public key): 530 keypair-shaped JSON files on the build host under /home/dombarker and /tmp, no match. Mac: of 300,652 JSON files under 400 bytes in /Users/dominic (excluding Library, node_modules, target, .git, .lake, .Trash), 217 have keypair shape (a 64-integer array); none derives to Xjb7roDV.... This repeats the 29 October finding; it does not depend on it.
 
 The verifier's dependence on the Pool id is verified by bytes as well as source. programs/r1-cost-probe/src/r1_pool_adapter.rs:79-81 places `ASPIS_R1_POOL_PROGRAM_ID` (build-time) in `.rodata.aspis_pool_program_id`. The adapter rejects any other Pool program at :535 (master/policy check) and :898 (terminal request check). The on-chain verifier payload contains the 32 bytes of BmsNik... exactly once, at file offset 0x174b70. The Pool has no `declare_id!` (programs/aspis-pool/src/processor.rs:3); its deployed payload does not contain its own id.
 
