@@ -113,8 +113,11 @@ theorem query {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (proof : Slice U8)
  unfold LIBC_QueryLoop.value LIBC_QueryLoop.model
  change LIBC_ResultGraph.value LIBC_QueryLoop.port (.error .Query)
   (Port3_QueryInstall.result (NNX_QueryOutput.run (LIB_Carriers.bytes proof,p,acc,g,geo,pending,10))) = _
- rw [hy']
- rfl
+ first
+  | ((rw [LIBC_Bytes.from_native, hy']) <;> rfl)
+  | ((simp only [LIBC_Bytes.from_native]; rw [hy']) <;> rfl)
+  | ((simp only [NNX_QueryOutput.run, LIBC_Bytes.from_native]; rw [hy']) <;> rfl)
+  | ((simp only [LIBC_Bytes.from_native, hy']) <;> rfl)
 
 theorem splitOk {E : Type} {e : E} :
  (if ((10 : Nat) != RSL.SPLIT) = true then Except.error e else Except.ok ()) = Except.ok () := by
