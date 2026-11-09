@@ -1,0 +1,15 @@
+import NOC_Op9
+import NNH_Run5bCurrentValues
+import NNH_Run5bCurrentExpand
+import NNV_PrepareView
+import NNX_PreparedValue
+set_option autoImplicit false
+#print AspisR1CurrentCaller.verifier.candidate.prepare
+#print AspisR1.RowShape_InstalledSlots.verifierOps
+#print AspisS1ValuesOwnedInstallation.withValues
+#print AspisS1ValuesOwnedInstallation.expandValues
+#print AspisR1.Tx1Q_PrefixInstall.install
+#print AspisR1.FIq_Install.configuration
+#print AspisR1.FIp_Install.configuration
+#print AspisR1.Op5T_Concrete.current
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.install
