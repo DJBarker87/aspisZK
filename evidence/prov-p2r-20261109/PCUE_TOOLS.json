@@ -1,0 +1,91 @@
+{
+ "schema": "PCUE_TOOLS/1",
+ "starting_generator_copy": "evidence/prov-p2d-20261109/PCUD_gen_equalities.py",
+ "starting_generator_sha256": "b84a15f09824638d5094329b47a898b2ebee131c3343de16d76c2da41c18e458",
+ "pcwa_changes_source": "evidence/prov-p4a-20261109/PCWA_TOOLS.json (read with git show research:; PCWA_gen_equalities.py change 1 adopted; change 2 --fresh-prelude NOT adopted)",
+ "tools": [
+  {
+   "file": "PCUE_gen_equalities.py",
+   "origin": "../prov-p2d-20261109/PCUD_gen_equalities.py (sha256 b84a15f09824638d5094329b47a898b2ebee131c3343de16d76c2da41c18e458; the P2d copy with PCUD patches 1-4)",
+   "changes": [
+    "prefix PCUD_ -> PCUE_",
+    "change 1 (from PCWA change 1, PCWA_TOOLS.json): fresh declarations are emitted in a namespace NESTED INSIDE the gate namespace; statements use the qualified fresh name; the former `open <gate namespace>` of the fresh namespace is removed",
+    "change 2 (P2a PARSE-1): parse_blocks peels leading namespace/section/open/set_option/variable/universe lines of a raw block so a declaration directly after such a line is recognised",
+    "change 3: --kind {funs,types} override (single-file gate modules; as in PCUA_gen_equalities.py)",
+    "change 4 (P2d NO_COMMON_LEAN_NAME, aspis_core.* prefix): --name-map JSON {fresh name: gate name}; the planner builds it deterministically (rule: gate name = fresh name with a leading `aspis_core.` added or removed). Statements and delta use the gate name; identity of types is checked modulo the map (textual rename in the comparison only, emitted fresh text is never rewritten). For Funs passes, fresh carrier type names missing in the gate are resolved by `open <gate ns>.aspis_core` (prefix added in the gate) or `abbrev <fresh type> := <gate type>` (prefix added in the fresh emission); both are recorded in the report (alias_types, name_map)",
+    "change 5 (P2a STRUCT-1): structure-field names that are Lean keywords are emitted as \u00abname\u00bb in generated Equiv literals; tested in PCUE_L026 on a synthetic structure with a field named `at` (the real verifier.Reader is only in overflow-off emissions, so it is not retested on it)",
+    "change 6: every generated equality is preceded by `set_option maxHeartbeats 200000 in` (LOWERED from the default, never raised) after the PCUE_L009 timeout",
+    "--open-extra NS (from PCUA_gen_equalities.py): extra namespace opened inside the fresh namespace (used for RPz7_FIp_NativeDots: FIo_Native)",
+    "the driver PCUE_gen.py always passes --prune-fresh (PCUD patch 3)"
+   ],
+   "sha256": "11795d59f72edf6e86797cfa03fbe48ab0370d8082f3b3d3a2adedffe1814ea5"
+  },
+  {
+   "file": "PCUE_partition.py",
+   "origin": "../prov-p2d-20261109/PCUD_partition.py",
+   "changes": [
+    "prefix only (imported for uncomment())"
+   ],
+   "sha256": "918af2f9951b296f53e2ba3c5e38d48a72e64ee19d579df59a0c2a1833a6ad97"
+  },
+  {
+   "file": "PCUE_run.py",
+   "origin": "../prov-p2d-20261109/PCUD_run.py",
+   "changes": [
+    "prefix PCUD_ -> PCUE_; host base codex-pc-prov-p2d-20261109 -> codex-pc-prov-p2r-20261109"
+   ],
+   "sha256": "0ae27f95656563ddce1a87666d73810146ab220fc0084954fb9afa9f65c05067"
+  },
+  {
+   "file": "PCUE_run_host.py",
+   "origin": "../prov-p2d-20261109/PCUD_run_host.py",
+   "changes": [
+    "prefix only"
+   ],
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c"
+  },
+  {
+   "file": "PCUE_bundle.py",
+   "origin": "../prov-p2d-20261109/PCUD_bundle.py",
+   "changes": [
+    "prefix only"
+   ],
+   "sha256": "e361f290ae359a5e1dc68d04b670f7b3b946c5d7eb3ef9c7e70a6a6f4d1b399e"
+  },
+  {
+   "file": "PCUE_index.py / PCUE_plan.py / PCUE_match.py / PCUE_gen.py / PCUE_final.py / PCUE_hand_models.py / PCUE_write_records.py / run_scope.sh / chain1-3.sh",
+   "origin": null,
+   "changes": [
+    "new PCUE scripts: overflow-checks-on emission index, plan, driver, aggregation"
+   ]
+  },
+  {
+   "file": "PCUE_index.py",
+   "sha256": "de89851107ff09a18b96898108cea9c35b93f59ff648301031e2904774cbd23e"
+  },
+  {
+   "file": "PCUE_plan.py",
+   "sha256": "bd9b8904d6d463a4125c40563c7d2b085a04f36dab1e7107906508df60d91e96"
+  },
+  {
+   "file": "PCUE_match.py",
+   "sha256": "89cfc7ffe0b9b4586eeeaf60c7caacee9fc4597354bdd553097ac4030a0413ca"
+  },
+  {
+   "file": "PCUE_gen.py",
+   "sha256": "1c36d9cf3055be93b0542a442a83c1deb8a14ea1cb1b47fbaa3ffea14bd03ec2"
+  },
+  {
+   "file": "PCUE_final.py",
+   "sha256": "c127743a7288bc812bd6c0920abd8cefc4e32e4c757a0ae4080eff04b9180e87"
+  },
+  {
+   "file": "PCUE_hand_models.py",
+   "sha256": "fc593c0777999899efbcd5011855d0ec57a3fefd27d99f919c8ef252788c2307"
+  },
+  {
+   "file": "run_scope.sh",
+   "sha256": "5193a93613c8e9c9c72f541966537c4c5b7e1744f35f66f49440af29ccd0a25a"
+  }
+ ]
+}

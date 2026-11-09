@@ -1,0 +1,71 @@
+{
+ "schema": "PCUE_CLASSIFICATIONS/1",
+ "target_established": false,
+ "classifications": [
+  {
+   "id": "C1",
+   "topic": "Scope of the redo",
+   "text": "Only overflow-checks-on fresh emissions count (ruling 2026-11-09). All emissions P2a/P2d used (NMH_*, NHR_*, NKM_circle, NNG, NMT, PCQ_E4xx, FILE: retained sources) are not in the overflow-on set (receipt check in PCUE_final.old_info: fresh_overflow_on false). Every definition they proved or failed is therefore re-planned against PCUE_EMISSION_INDEX.json (PCQC_E001-E012, E022, E023; PCQ_E037-E040); a definition with no same-named (or prefix-variant) declaration there is NO_FRESH_EMISSION, with the earlier status and its emission kept in superseded_earlier_status. An earlier proof is not carried over."
+  },
+  {
+   "id": "C2",
+   "topic": "Name-level coverage",
+   "text": "Coverage is by Lean declaration name (and the aspis_core. prefix variant), not by Rust symbol; the Lean compile against the gate constants is the check. Declarations with kind axiom/opaque in the overflow-on emission do not count as coverage."
+  },
+  {
+   "id": "C3",
+   "topic": "Passes with no common declaration",
+   "text": "Five planned passes (CurrentCompactCallerTypesV1_p2, NJA_Multiproof_Types, R1CandidateWideParserSource, RPz7_FIo_NativeTypes_p3, Stage2ContinuationTypes_p2) have zero common declarations after pruning and were not compiled; their definitions are TEXT_ONLY_NOT_COMPARED / NO_FRESH_EMISSION in the status file."
+  },
+  {
+   "id": "C4",
+   "topic": "Status TEXT_ONLY_NOT_COMPARED",
+   "text": "The overflow-on emission declares the name but the generator produces no equality for the declaration shape (inductives, structures with parameters or non-simple fields, external types). Text identity is not a proof and is never counted as one."
+  },
+  {
+   "id": "C5",
+   "topic": "Status GATE_SOURCE_UNAVAILABLE",
+   "text": "Five modules (NFN_ExtractedGeometry, CurrentClaimSumModel, ClaimsUnrolledParentTypes, S8Kani2MutableSource, CurrentWideEqSemanticV7; 60 definitions) have a gate source with several namespaces (or none readable at the recorded path), which the generator rejects by design. Not a claim about the overflow-on emissions; name-level presence is recorded informationally per definition. Needs a generator extension for multi-namespace gates, not done here."
+  },
+  {
+   "id": "C6",
+   "topic": "Heartbeat budget",
+   "text": "After PCUE_L009 timed out (F4 bundle, 180 s, default per-theorem budget), each generated equality was given `set_option maxHeartbeats 200000 in` (lowered, never raised). The four fast_dots equalities of RPz7_FIp_NativeDots then failed with (deterministic) timeout at isDefEq/whnf in PCUE_L018 and are recorded as FAILED (heavy defeq on the fast_dots loops), not as semantic differences. The old shape (one bundle with NativeFuns x4, NativeDots, DotDecode, S1NativeCompact, R1CandidateFieldParsers) is retired; replacement: one bundle per heavy module (F4a/F4b/F4c/F4d/F6)."
+  },
+  {
+   "id": "C7",
+   "topic": "Round-3 ingest discarded",
+   "text": "Ingesting a verification log (round 3) re-emitted failed equalities as live theorems (the generator keeps failed status only for the probe round). The round-3 states and re-emitted files were deleted; the round-2 files were regenerated from the probe logs and are byte-identical (after the first line) to the bundles compiled in PCUE_L020-L025 (checked by diff). The final state is state2 of each label."
+  },
+  {
+   "id": "C8",
+   "topic": "CONFIG_MISMATCH rule",
+   "text": "A FAILED equality whose normalized token diff contains a wrapping_/checked_/overflowing_/saturating_ operation on either side, or that is blocked by such a callee, is CONFIG_MISMATCH, with fresh_body and gate_body recorded. This applies only now that the fresh side is overflow-checks-on. The 8 cases: fast_pairing.canonical.reduce (gate wrapping_shr/add/sub vs fresh checked >>> + -), Dot.finish and EbyKDot.finish (blocked by reduce), EbyKDot.push (gate Usize.wrapping_add), transport.Variant.row_loop.body (gate Usize.wrapping_mul), row_loop and row (blocked), NMT_stage1_owned stage1_owned (gate Usize.wrapping_add). The gate model is an overflow-off (wrapping) model of source that an overflow-checks-on build compiles to checked arithmetic."
+  },
+  {
+   "id": "C9",
+   "topic": "LIB-1 (wrapping_shr/shl shift type) with overflow-on emissions",
+   "text": "Not reproduced as an elaboration failure: PCQC_E011 and PCQC_E008 contain no wrapping_shr/wrapping_shl (the frozen source uses plain shifts and arithmetic, emitted checked), so the fresh declarations elaborate against the gate library. The previously blocked equalities (NativeDots, transport row/row_loop) now surface either as CONFIG_MISMATCH (gate uses wrapping_*) or, for the fast_dots loops, as a heartbeat timeout (C6). Not otherwise touched."
+  },
+  {
+   "id": "C10",
+   "topic": "Type names of gate vs fresh (aspis_core. prefix)",
+   "text": "Planner rule only: the gate name is the fresh name with a leading `aspis_core.` added or removed (nothing else). Fresh carrier types in Funs passes are resolved by `open <gate ns>.aspis_core` or `abbrev`, never by editing a proof. Types that the gate lacks entirely (e.g. aspis_core.field.wide_exact.WideExact in AspisR1WeightsFieldCurrent) stay unresolved and the equality is FAILED (fresh declaration did not elaborate)."
+  },
+  {
+   "id": "C11",
+   "topic": "PROVED_EQUIV vs PROVED_RFL for structures",
+   "text": "Generated isomorphisms of structures (Equiv) are PROVED_EQUIV (as in P2a); P2d called these PROVED_RFL. They are isomorphisms, not type equalities."
+  },
+  {
+   "id": "C12",
+   "topic": "Conditional proofs",
+   "text": "2 PROVED definitions reach an external name of the fresh emission that resolves by name to a gate constant (PCUE_HAND_MODELS.json, proved_definitions_conditional_on_it); they are conditional on that gate constant being the intended model."
+  },
+  {
+   "id": "C13",
+   "topic": "Probe receipts",
+   "text": "PCUE_L001 (probe, the first pass before --prune-fresh), L006-L019 probes contain error recovery output; only L020-L025 (verification of the final files) and L026 (synthetic STRUCT-1 test) are deliverable evidence for proofs. L002-L005 were clean probes whose files were later verified inside L020/L021."
+  }
+ ]
+}
