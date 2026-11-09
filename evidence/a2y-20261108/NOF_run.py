@@ -9,7 +9,7 @@ B='/home/dombarker/project-offloads/codex-cx-a2-20261108';T='/home/dombarker/.el
 if (E/'NOF_HOLD').exists():sys.exit(75)
 guard=E/'NOF_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,stage,kind,target=sys.argv[1:];assert re.fullmatch('NOF_L[0-9]{3}',a) and 1<=int(a[-3:])<=20 and not (E/a).exists()
-CAPS={'P0':3,'P1':4,'AUDIT':2,'P2':6,'P3':2,'P4':5}; assert stage in CAPS
+CAPS={'P0':3,'P1':4,'AUDIT':2,'P2':6,'P3':2,'P4':5,'P5':4}; assert stage in CAPS
 used={};
 for n in ['NOF_ATTEMPTS.jsonl','NOF_TRANSPORT.jsonl']:
  p=E/n
@@ -92,7 +92,7 @@ else:
  out_obj='NOF_objects/NOF_audit_no_output_'+a
  command=['python3','NOF_raw_audit.py'];pin_modules=[target]
 overlays=json.loads((E/'NNY_RUN5B_PATHS.json').read_text())
-config=dict(continuation_stage=stage,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NOF_tmp',CARGO_TARGET_DIR=B+'/NOF_target',LEAN_PATH=':'.join([B+'/NOF_objects',B+'/NNY_objects']+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain','--','.'],text=True).strip()),deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Raw ax2 traversal with pinned ledger30 walker',pin_modules=pin_modules)
+config=dict(continuation_stage=stage,attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NOF_tmp',CARGO_TARGET_DIR=B+'/NOF_target',LEAN_PATH=':'.join([B+'/NOF_objects',B+'/NNY_objects']+(json.loads((E/'NOF_EXTRA_PATHS.json').read_text()) if (E/'NOF_EXTRA_PATHS.json').exists() else [])+overlays)),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain','--','.'],text=True).strip()),deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Raw ax2 traversal with pinned ledger30 walker',pin_modules=pin_modules)
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,os
@@ -128,7 +128,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
-b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+([str(p.relative_to(b)) for p in (b/'NOF_audit').glob('NEP_*') if p.is_file() and p.stat().st_size<20_000_000] if {kind!r}=='audit' else [])
+b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']+([str(p.relative_to(b)) for p in (b/'NOF_audit2').glob('NEP_*') if p.is_file() and p.stat().st_size<20_000_000] if {kind!r}=='audit' else [])
 out={{n:(b/n).read_text() for n in names}}
 o=b/{out_obj!r}
 if o.is_file():out[a+'/OBJECT_PIN.json']=json.dumps(dict(path=str(o),sha256=hashlib.sha256(o.read_bytes()).hexdigest(),bytes=o.stat().st_size))

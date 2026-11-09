@@ -12,7 +12,7 @@ It has a delivered-type `rfl` example (NOF_A2Field.lean, L012). The raw ax2 walk
 pinned walker is standard-only (L014). The coherent combined import NOF_FinalCombined passes (L013).
 
 Branch codex/cx-a2-20261107 (merged with research 8e24e017860); receipts in evidence/a2y-20261108/NOF_*.
-Budget: **14 of 20 capped scopes, 0 Kani, 0 extraction.** Of these, 9 had exit 0 and 5 failed.
+Budget for the first delivery: **14 of 20 capped scopes, 0 Kani, 0 extraction.** Of these, 9 had exit 0 and 5 failed. The follow-up (below) brings the total to 18/20.
 
 | stage | cap | used |
 |---|---|---|
@@ -94,6 +94,43 @@ Deviation from the brief, recorded: S_host's ModelRet2 has the NNH_AcceptanceSig
 - Raw ax2: walker NNM_ProofDriver sha256 46ee271b…ca3c (same binary as ledger30 L008). Reachable lists are in NOF_audit/*.xz with sha256.
 - Walker fixtures: the eight passing ledger30 fixtures for this identical binary are reused, not rerun.
 - This is focused cached validation, not a frozen-release replay.
+
+## Follow-up: corrected host (NOC seed), P5, 4 of 4 scopes
+
+```lean
+AspisR1.NOF_A2FieldCorrected.field {W Tx} (L0 copy std) :
+  RSL.TAS.NND_A2 (AspisR1.NOC_Run5bHost.S_host (W := W) (Tx := Tx) L0 copy std)
+    NNH_Libraries.L NNH_Libraries.D NNH_Libraries.V0
+```
+
+It compiles with the same delivered-type `rfl` example (L016). The axioms are propext, Classical.choice and Quot.sound.
+
+**Shape check:** NOC_Run5bHost.S_host is built exactly like NNH_Run5bHost.S_host:
+- the same NNH_RecordSig.physical / NNH_AcceptanceSig.physical / NNH_HostEnv.install over identical `data`/`hostRuntime`;
+- so ModelRet2 and EnvRep have the same shape;
+- only model2's `sdk c` changes, to `NOC_HostCtx.sdk c`, whose seed is `NOC_HostSeed.m0 (envOf c).reservation`.
+
+The transfer is a re-instantiation. The seed-generic theorems are reused unchanged:
+- NOF_Tx2Op11.tx2Op11 at m := NOC_HostSeed.m0 ρ;
+- NNY_Stage2PacketResidual.returned;
+- NOF_A2Field.reserved_at;
+- NNH_Run5bCtx.env_unique (same Ctx and EnvRep).
+
+There is no NOC analogue of NNH_Run5bCtx.missing_at_slot. So:
+- `NOF_A2FieldCorrected.clockFree` restates NNR_ClockFree.M1b for an arbitrary seed, using NNR_ClockFree.residual and modelSlots, which are already seed-generic;
+- `NOF_A2FieldCorrected.sdk_at_slot` is the NOC sdk identity.
+
+Scopes:
+- L015 failed: carrier namespace not opened (`Bytes`); fixed by opening the namespaces that NNR_ClockFree opens. Uncredited.
+- L016 passes.
+- L017: `NOF_FinalCombined2` = NOF_FinalCombined (L013, left unchanged so its pin stays valid) + NOF_A2FieldCorrected. Passes and prints all four new audits.
+- L018: raw ax2 on the new root only, with the same pinned walker. For `AspisR1.NOF_A2FieldCorrected.field`, walked = collected = {Classical.choice, Quot.sound, propext}, with 58812 reachable constants. Output is in NOF_audit2/*.xz with sha256.
+
+Overlay for the corrected field: LEAN_PATH = NOF_objects, NNY_objects, then NOF_EXTRA_PATHS.json, then NNY_RUN5B_PATHS.json.
+- NOF_EXTRA_PATHS.json holds the read-only references codex-cx-a1-20261108/NOC_objects, NNX_objects and NNV_objects.
+- The import preflight found only three extra duplicate names. All are automatically generated `eq_1`/`congr_simp` lemmas of the kind already present in the passing baseline.
+
+Budget for the whole job: **18 of 20** capped scopes (L001–L018), 0 Kani, 0 extraction.
 
 ## Overlay for G0 FINAL
 
