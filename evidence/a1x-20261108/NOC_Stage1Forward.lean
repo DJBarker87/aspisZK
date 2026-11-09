@@ -135,18 +135,16 @@ theorem mapVErrOk (a : RSL.TX1_094.Args VL) (env : RSL.Env) (s : RSL.Bytes)
  NNH_Tx1Returns.value a env = .ok s := by
  change NNH_Tx1ReturnedValues.mapVErrValue VL (NNH_Tx1Returns.value a env) = .ok s at h
  cases hv : NNH_Tx1Returns.value a env with
- | ok b => rw [hv] at h; simp only [NNH_Tx1ReturnedValues.mapVErrValue] at h; exact h
+ | ok b => rw [hv] at h; simp only [NNH_Tx1ReturnedValues.mapVErrValue] at h; exact congrArg Except.ok (Except.ok.inj h)
  | error e => rw [hv] at h; cases h
 
 theorem byteSame (x : U8) : NMT_345.byte x = byte x := by
+ try simp only [NMT_345.byte, byte]
  first
-  | rfl
-  | (show UInt8.ofNat x.val = UInt8.ofBitVec x.bv
-     congr 1
-     apply BitVec.eq_of_toNat_eq
-     rw [BitVec.toNat_ofNat]
-     exact Nat.mod_eq_of_lt x.bv.isLt)
-  | (simp only [NMT_345.byte, byte]; congr 1; apply BitVec.eq_of_toNat_eq; simp)
+  | (unfold UInt8.ofNat; congr 1; apply BitVec.eq_of_toNat_eq; rw [BitVec.toNat_ofNat]; exact Nat.mod_eq_of_lt x.bv.isLt)
+  | (simp only [UInt8.ofNat]; congr 1; apply BitVec.eq_of_toNat_eq; rw [BitVec.toNat_ofNat]; exact Nat.mod_eq_of_lt x.bv.isLt)
+  | (apply UInt8.toNat_inj.mp; simp [UScalar.val]; exact Nat.mod_eq_of_lt x.bv.isLt)
+  | (apply UInt8.toBitVec_inj.mp; apply BitVec.eq_of_toNat_eq; simp [UScalar.val])
 
 theorem cmpLemma {W Tx : Type} (c : NNH_HostCtx.Ctx W Tx) (data : Slice U8) (dataEq : bytes data = [3,10]) :
  (S c).op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8,10#u8]) = ok true := by
