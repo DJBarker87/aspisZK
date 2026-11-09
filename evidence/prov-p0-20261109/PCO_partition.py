@@ -89,6 +89,19 @@ def file_imports(t):
 class Ctx: pass
 C = Ctx()
 
+def batch_cat(oids):
+    """Yield (oid, bytes) for each oid using one git cat-file --batch process."""
+    oids = list(oids)
+    p = subprocess.Popen(['git', 'cat-file', '--batch'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    def feed():
+        for i in oids: p.stdin.write((i + '\n').encode())
+        p.stdin.close()
+    t = threading.Thread(target=feed); t.start()
+    for i in oids:
+        hdr = p.stdout.readline().split(); n = int(hdr[2]); data = p.stdout.read(n); p.stdout.read(1)
+        yield i, data
+    t.join(); p.wait()
+
 def cat_oid(oid):
     return subprocess.run(['git', 'cat-file', '-p', oid], capture_output=True).stdout.decode('utf-8', 'replace')
 
@@ -111,16 +124,18 @@ def stage_tree(a, S):
     open(f'{S}/frozen_rs.txt', 'w').write('\n'.join(p for p in fl if p.endswith('.rs') and '/src/' in p) + '\n')
     # pins hashes
     out = {}
-    for o, p in pins:
-        t = cat_oid(o)
-        out[p] = {'hashes': sorted(set(re.findall(r'\b[0-9a-f]{64}\b', t))), 'frozen': FROZEN_REV in t}
+    pmap = {o: p for o, p in pins}
+    for o, data in batch_cat(list(pmap)):
+        t = data.decode('utf-8', 'replace')
+        out[pmap[o]] = {'hashes': sorted(set(re.findall(r'\b[0-9a-f]{64}\b', t))), 'frozen': FROZEN_REV in t}
     json.dump(out, open(f'{S}/strictpins_hashes.json', 'w'))
     strict = {}
-    for p, oid in allp.items():
-        if re.search(r'receipt[^/]*\.json$', p, re.I):
-            t = cat_oid(oid)
-            if re.search('aeneas', t, re.I):
-                for h in set(re.findall(r'\b[0-9a-f]{64}\b', t)): strict[h] = {'strict_receipts': True}
+    rec = sorted(set(oid for p, oid in allp.items() if re.search(r'receipt[^/]*\.json$', p, re.I)))
+    for oid, data in batch_cat(rec):
+        if len(data) > 5_000_000: continue
+        t = data.decode('utf-8', 'replace')
+        if re.search('aeneas', t, re.I):
+            for h in set(re.findall(r'\b[0-9a-f]{64}\b', t)): strict[h] = {'strict_receipts': True}
     json.dump(strict, open(f'{S}/outside_strict.json', 'w'))
     json.dump(allp, open(f'{S}/tree_paths.json', 'w'))
     print('tree', len(lean), 'lean', len(rs), 'rs', len(pins), 'pins files')
