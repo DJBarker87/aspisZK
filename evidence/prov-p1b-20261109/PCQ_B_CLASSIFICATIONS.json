@@ -1,0 +1,47 @@
+{
+ "schema": "PCQ_B_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "B-1",
+   "case": "Spec kinds: the six frozen_types_only specs (S015,S017,S018,S021,S022) carried no roots",
+   "classification": "Roots taken from the callers of the covered types/closures in the frozen source (S015 query_values; S017 Arity::{bits,width,levels}; S021 verifier::validate_checkpoint_queries; S022 Weights::{raw,scalar_factor}); kind rewritten to frozen in PCQ_extract_specs.json (original in PCO_extract_specs.json untouched). Include/opaque stayed empty (shape of NMH_E012/E015/E026, no inferred opacity).",
+   "reason": "principle: derive roots from callers, as for pilot S903"
+  },
+  {
+   "id": "B-2",
+   "case": "Opacity lists from earlier NMH/NMS/NMT specs",
+   "classification": "No NMH spec had the same roots for fast_pairing push, r1_wire, transport, weights, Arity, Error/Phase; the closest simple shapes NMH_E012, E015, E019, E026 have 3 default includes and no opaque. Nothing was copied; opaque additions were made only after a failure and are recorded per spec (retry_note) in PCQ_extract_specs.json.",
+   "reason": "the stager forbids inferred opacity (NMH_no_inferred_opacity.py)"
+  },
+  {
+   "id": "B-3",
+   "case": "LLBC reuse per crate",
+   "classification": "Not possible: every spec has different roots/opacity so each LLBC differs; hashes in PCQ_B_ATTEMPTS.jsonl.",
+   "reason": "roots determine the LLBC"
+  },
+  {
+   "id": "B-4",
+   "case": "Retry numbering",
+   "classification": "Retries took the next free ids; E404-E408 and E417+ unused (a driver run stopped at the first failure).",
+   "reason": "ids unique, none reused"
+  },
+  {
+   "id": "B-5",
+   "case": "Coverage meaning",
+   "classification": "COVERED = a fresh frozen definition of the same name exists (suffix after the gate namespace); it is not an equality. A sibling run of the same crate can cover a gate definition (S021 Phase via PCQ_E415) and is noted per entry.",
+   "reason": "equality is P2/P3"
+  },
+  {
+   "id": "B-6",
+   "case": "Hand models",
+   "classification": "PCQ_B_HAND_MODELS.json: hand_written_gate_definitions_whose_name_is_emitted_by_fresh_run is empty for P1b (no non-Aeneas-generated gate file in the import closure defines a name that the fresh runs emit or leave external). Gate-side Aeneas-generated bodies versus fresh opaque externals (WideExact, WideExact.to_limbs, Dot.push, COEFFICIENT_TO_ROW) are listed separately. Hand-written gate files in the closure with their declared names are listed for the next reviewer. Record only; no trust rows added or proposed.",
+   "reason": "lead addendum"
+  },
+  {
+   "id": "B-7",
+   "case": "Toolchain label mismatch",
+   "classification": "charon-driver log shows nightly-2026-06-01 while PINS environment field says nightly-2026-09-17 (inherited from PCO_extract.py). Recorded in HAND_MODELS crate_of(); not reconciled, no source/tool change.",
+   "reason": "P0 tool inheritance"
+  }
+ ]
+}

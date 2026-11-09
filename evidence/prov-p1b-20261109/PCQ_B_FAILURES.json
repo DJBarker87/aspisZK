@@ -1,0 +1,53 @@
+{
+ "schema": "PCQ_B_FAILURES/1",
+ "target_established": false,
+ "failures": [
+  {
+   "spec": "S016",
+   "definitions": [
+    "FIo_Native.fast_pairing.canonical.Dot.push",
+    "...Dot.push_loop",
+    "...Dot.push_loop.body"
+   ],
+   "runs": [
+    "PCQ_E401",
+    "PCQ_E411"
+   ],
+   "error": "Aeneas exit 2: [Error] Internal error, Source crates/aspis-r1-cost-probe/src/fast_pairing.rs lines 118:12-121:13, Compiler source interp/InterpBorrows.ml line 2731 (the `for j in 0..4 { self.sums[j] = ... }` loop in canonical::Dot::push)",
+   "outcome": "Dot::push made opaque (axiom in fresh External template); EbyKDot.push covered by PCQ_E402. Not retried again: same Aeneas shape class hit twice (E401, E411)."
+  },
+  {
+   "spec": "S019",
+   "definitions": [
+    "AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.{payload,decode_k_value,decode_k_loop.body,decode_k_loop,decode_k}"
+   ],
+   "runs": [
+    "PCQ_E403",
+    "PCQ_E409"
+   ],
+   "error": "E403: Charon exit 101 after cargo build (no panic text) with the const-generic ValidatedRecord::decode_k as --start-from root. E409 (retry: monomorphic caller root r1_semantic::claims): Aeneas exit 2, Internal error, r1_semantic.rs lines 47:8-55:1 (unsafe pointer-write loop in claims), Compiler source interp/InterpReduceCollapse.ml line 1880",
+   "outcome": "All other callers of decode_k (r1_semantic.rs 98,116,134,184,257,265) are generic over the Digest32 hasher H, so no other monomorphic root exists in the crate; failure list. A different route (not tried: a root that is monomorphic over a concrete hasher type, which the frozen crate does not expose) is the next shape."
+  },
+  {
+   "spec": "S022",
+   "definitions": [
+    "FIo_Native.weights.Weights.raw.closure",
+    "FIo_Native.weights.Weights.raw.closure_1"
+   ],
+   "runs": [
+    "PCQ_E413"
+   ],
+   "error": "Aeneas exit 2: Nested borrows are not supported yet, weights.rs 229:47-229:130 (fold closure over self.points inside Weights::raw), Compiler source interp/InterpAbs.ml line 168",
+   "outcome": "raw dropped from roots in PCQ_E416 (roots scalar_factor + box_from_parts); Weights and scalar_factor.closure covered; the raw closures are on the failure list."
+  },
+  {
+   "spec": "S018",
+   "definitions": [
+    "NJT_ClaimsRef.r1_semantic.NJT_claims_ref"
+   ],
+   "runs": [],
+   "error": "no run: no function or closure named NJT_claims_ref exists in the frozen crates/aspis-r1-cost-probe/src/r1_semantic.rs at 4bb3b3f (318 lines; git grep claims_ref on the frozen tree is empty). The gate module NJT_ClaimsRef_Funs was emitted from a claims-queryscan probe variant whose source (lines 328+) is outside the frozen tree.",
+   "outcome": "MISSING with reason: no frozen counterpart. Not a trust-row question; it is a source-provenance gap for the rows that rely on NJT_ClaimsRef_Funs (12 per PCQ_PARTITION)."
+  }
+ ]
+}
