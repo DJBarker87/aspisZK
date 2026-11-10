@@ -15,7 +15,7 @@ T=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0
 mode=$1; L=$2; shift 2; TO=180; D=$W/logs/$L; mkdir -p $D $W/native
 [ "$TO" -le 600 ] || { echo "TIMEOUT ABOVE 600 REFUSED"; exit 5; }
 [ "$(pgrep -c -x lean)" -lt 6 ] || { echo "HOST LEAN COUNT >= 6"; exit 4; }
-pgrep -f "$W/(src|native)/|leanchecker"  >/dev/null && { echo "ANOTHER NPP SCOPE RUNNING"; exit 6; }
+pgrep -f "$W/(src|native)/|leanchecker -v NPP_"  >/dev/null && { echo "ANOTHER NPP SCOPE RUNNING"; exit 6; }
 avail=$(free -g | awk '/^Mem:/{print $7}')
 [ "$avail" -ge 12 ] || { echo "AVAILABLE MEMORY ${avail}G < 12G"; exit 7; }
 python3 - "$D" "$avail" <<'PY' || { echo "RESERVATION REFUSED"; cat "$1/reservation.json" 2>/dev/null; exit 3; }
