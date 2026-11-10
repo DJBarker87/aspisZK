@@ -23,7 +23,7 @@ What the generated file contains (the Lean statements are against the gate's com
   PRVEq.<M>.<f>                     theorem @PRVFresh_<M>.f = @<gate ns>.f for each common declaration, callee-first:
                                     stage 1  rfl
                                     stage 2  delta both sides, rewrite with the already stated callee equalities, rfl
-                                    else     a commented obligation (never sorry or axiom) routed to P3
+                                    else     a commented obligation (never unproved_placeholder or axiom) routed to P3
   Each theorem carries a trace marker so one probe compile reveals which stage closed it:
       first | (trace "PRV-S1"; rfl) | (trace "PRV-S2"; delta ..; try simp only [..]; try rfl; done)
   Iteration: compile the emitted file once (probe). Feed the Lean log back with --state/--lean-log: theorems whose position
