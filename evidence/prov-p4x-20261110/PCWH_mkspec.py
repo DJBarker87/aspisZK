@@ -36,5 +36,6 @@ d.update(run=run,spec_id=run,charon_command=c2,aeneas_command=a,aeneas_tool='sec
  tool_label='second tool version: Aeneas 0d21a9ec + Charon 454586e9 (PCWH_TOOL_BUILD.json)',derived_from=base)
 [d.pop(k,None) for k in ('llbc_stable','aeneas_only','llbc','llbc_produced_by')]
 d['configuration'].update(roots=roots,namespace=[ns])
+d.setdefault('extra_env',{})['CARGO_PROFILE_RELEASE_CODEGEN_UNITS']='2'  # PCWH: new charon-driver codegens dependencies; 16 default units x 4 jobs exceeded TasksMax=64 (PCWH_E003)
 d['expected_limits']={'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'}
 json.dump(d,open(run+'_spec.json','w'),indent=1);print(run,len(roots),'roots',ns)
