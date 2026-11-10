@@ -15,7 +15,9 @@ def name(b):
 P='pool_v1.pair_forest_copy_terminal.'
 want=[P+'lift_m31',P+'pattern_values_literal_loop0.body',P+'pattern_values_literal_loop0',
       P+'pattern_values_literal_loop1_loop0.body',P+'pattern_values_literal_loop1_loop0',
-      P+'pattern_values_literal_loop1.body',P+'pattern_values_literal_loop1',P+'pattern_values_literal',P+'pattern_values']
+      P+'pattern_values_literal_loop1.body',P+'pattern_values_literal_loop1',P+'pattern_values_literal',P+'pattern_values',
+      P+'selector_mask_sum_16_loop.body',P+'selector_mask_sum_16_loop',P+'selector_mask_sum_16',P+'constants.ACTIVE_ROW_MASKS',
+      P+'Selectors.active_literal_loop.body',P+'Selectors.active_literal_loop',P+'Selectors.active_literal',P+'Selectors.active']
 keep={}
 for b in blocks:
     n=name(b)
@@ -34,7 +36,7 @@ b=b.replace('pattern_values_literal_loop1.body q','pattern_values_literal_loop1.
 b=keep[P+'pattern_values_literal']; b=addparam(b,P+'pattern_values_literal')
 b=b.replace('pattern_values_literal_loop1 q openings','pattern_values_literal_loop1 COPY_PATTERNS q openings'); keep[P+'pattern_values_literal']=b
 b=keep[P+'pattern_values']; b=addparam(b,P+'pattern_values'); b=b.replace('pattern_values_literal openings lambda','pattern_values_literal COPY_PATTERNS openings lambda'); keep[P+'pattern_values']=b
-shim="/-- PCVD constant binding: cross-crate fresh emission types the constant as `Result`; interpretation `ok <gate constant>`. -/\ndef field.QM31.ZERO : Result field.QM31 := ok FIq_Native.field.QM31.ZERO"
+shim="/-- PCVD constant binding: cross-crate fresh emission types the constant as `Result`; interpretation `ok <gate constant>`. -/\ndef field.QM31.ZERO : Result field.QM31 := ok FIq_Native.field.QM31.ZERO\n\n/-- PCVD constant binding (see above) -/\ndef field.QM31.ONE : Result field.QM31 := ok FIq_Native.field.QM31.ONE"
 order=[k for k in keep if k not in ('poseidon2.POSEIDON2_WIDTH','PATTERNS_V1')]
 body='\n\n'.join(([keep['poseidon2.POSEIDON2_WIDTH']] if 'poseidon2.POSEIDON2_WIDTH' in keep else [])+[keep[k] for k in order])
 txt=head+'namespace PRVFresh_RPu_FIq_Native13\n\n'+shim+'\n\n'+body+'\n\nend PRVFresh_RPu_FIq_Native13\nend FIq_Native\n'
@@ -49,7 +51,7 @@ F=ns; G='FIq_Native.'; NSF='FIq_Native.PRVFresh_RPu_FIq_Native13'
 KCg='FIq_Native.pool_v1.pair_forest_copy_terminal.constants.COPY_PATTERNS'
 QZ='FIq_Native.field.QM31.ZERO'
 gen_loops.HOIST[P+'pattern_values_literal_loop1']={'COPY_PATTERNS':KCg,'q':QZ}
-gen_p3.SHIMNAMES[:]=[ns+'field.QM31.ZERO']
+gen_p3.SHIMNAMES[:]=[ns+'field.QM31.ZERO',ns+'field.QM31.ONE']
 done=[]
 res=txt.rstrip()+'\n'
 # nonloop with hoisted C: written directly
@@ -69,7 +71,8 @@ theorem PRVC.Eq.{name} : @{fa} = @{G}{name} := by
 '''
 def nlc(name):   # constants / no hoist
     return nl(name,[])
-steps=[('nl','poseidon2.POSEIDON2_WIDTH'),('nl',P+'lift_m31'),('loop',P+'pattern_values_literal_loop0'),('loop',P+'pattern_values_literal_loop1_loop0'),('loop',P+'pattern_values_literal_loop1'),('nlh',P+'pattern_values_literal'),('nlh2',P+'pattern_values')]
+steps=[('nl','poseidon2.POSEIDON2_WIDTH'),('nl',P+'lift_m31'),('loop',P+'pattern_values_literal_loop0'),('loop',P+'pattern_values_literal_loop1_loop0'),('loop',P+'pattern_values_literal_loop1'),('nlh',P+'pattern_values_literal'),('nlh2',P+'pattern_values'),
+       ('nl',P+'constants.ACTIVE_ROW_MASKS'),('loop',P+'selector_mask_sum_16_loop'),('nl',P+'selector_mask_sum_16'),('loop',P+'Selectors.active_literal_loop'),('nl',P+'Selectors.active_literal'),('nl',P+'Selectors.active')]
 for kind,w in steps:
     if kind=='nl' and w=='poseidon2.POSEIDON2_WIDTH' and w not in keep: continue
     if kind=='loop': t=gen_loops.one(txt,w,done,F,G,NSF); assert t,w

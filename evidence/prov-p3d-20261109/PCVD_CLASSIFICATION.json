@@ -1,0 +1,51 @@
+{
+ "schema": "PCVD_CLASSIFICATION/1",
+ "target_established": false,
+ "principles": "tool-encoding differences (cross-crate constant typed Result, hoisted constant parameter, helper inlined vs external, external type/function abstracted by the gate, crate-prefix name map, loop encoding) are SOURCE_SHAPE or NOMINAL.  SEMANTIC only when bodies disagree on some input.  A result is never relabelled: instantiations and parametric abstractions are named in each status row.",
+ "semantic_differences_without_provable_caller_domain": [],
+ "new_semantic_differences_found": [],
+ "note_on_pre_existing_SEM1": "P2a/P3b recorded SEM-1 (overflow-checked fresh vs wrapping gate) for CurrentWide M31.add/sub and their dependants (FIn_WeightsFuns, FIo transport/Dot, NFN reduce_u64).  These are CONFIG_MISMATCH rows, not proof items of this phase; no caller domain was examined here.  Hand argument only (NOT machine-checked): in reduce_u64 no intermediate can overflow for any u64 input (x&P<=2^31-1, x>>31<2^33, x1<2^34, x2<2^31+7, x3>=P before the subtraction), so checked and wrapping coincide on all of U64 there; M31.add/sub on unreduced u32 operands can overflow and need the caller canonicality (a<P, b<P), which this phase did not establish.",
+ "decisions": [
+  {
+   "item": "7 monadic-constant records + 2 hoisted-parameter loops (brief item 1)",
+   "classification": "CONSTANT_BINDING / HOISTED_CONSTANT_PARAMETER (SOURCE_SHAPE)",
+   "reason": "Aeneas types a constant of another crate as an opaque `axiom X : Result T` (FunsExternal_Template).  The fresh text `let q <- X` therefore does not elaborate against the gate pure `X : T`.  The shim `def X : Result T := ok <gate X>` in the fresh namespace instantiates the external; every theorem then holds by unfolding.  The instantiation is NOT proved (it is the statement that the opaque external equals the transparent aspis_core definition, whose emissions PCQF_E007/E013 are text-identical to the gate constant).  The hoisted loops (Native10 path_lanes_literal_loop, Native13 pattern_values_literal_loop1) carry the constant as a leading parameter in the fresh text; equality is claimed only at the instantiated value (ONE for path_lanes_literal_loop; ZERO and the gate COPY_PATTERNS for loop1 -- the brief wrote ZERO for both loops, the source passes ONE for the Native10 one).",
+   "scope_exceptions": "external_linear_packed (Native05) and add_value_lanes (Native09) carry the same constant shape but call add_preweighted / external_local_packed, which depend on core.array.from_fn (hand model, P6): not provable here, listed in PCVD_HAND_MODELS.json."
+  },
+  {
+   "item": "20 instance-boundary items (brief item 2)",
+   "classification": "INSTANCE_TRANSPORT / INSTANCE_TRANSPORT_PARAMETRIC (SOURCE_SHAPE)",
+   "reason": "WithdrawalCaller encode_*: the only gap is a cross-crate callee; the transparent PCQE_E002 text of atomic_statement.encode_digest_canonical is proved equal to the gate local helper (body, loop, wrapper).  weights.field, Port23PUSH update_residue_row/push, trace.value: the gate abstracts an opaque external (decoder callback, ArrayIntoIter ABI, WideExact) which the fresh emission treats as an opaque axiom; the transport lemma quantifies over the abstraction (all W,d / all ai / all W).  No fact about a hand model was needed or assumed.  6 of 20 proved; 13 belong to non-frozen gate modules (FIo, FIp, TerminalDecoder) and wait for P1g; 1 (Native04 interpolated_internal_pair) depends on core.array.from_fn."
+  },
+  {
+   "item": "6 EXTERNAL_P TerminalDecoder pair_terminal / pair_tree_profile records (brief item 3)",
+   "classification": "EXTERNAL_P_NO_TRANSPARENT_EMISSION (left open)",
+   "reason": "The transparent-P emissions (PCQF_E002..E006) do not contain pair_terminal.encode_pool_v1_pair_verified_afterstate_v1, validate_verified_afterstate(+loop) or pair_tree_profile.digest_is_canonical(+loop,+body); the emissions that contain them (PCQG_E005, PCQE_E008) leave aspis_core.field.P an opaque axiom.  A shim would only instantiate the external as in item 1, and the gate module AspisR1TerminalDecoder.Funs is one of the 26 non-frozen modules (PCVB_NONFROZEN_STATUS.json); both reasons point to P1g."
+  },
+  {
+   "item": "2 NOMINAL records (item 4)",
+   "classification": "NOMINAL",
+   "reason": "bodies text-identical; the missing step was the callee equalities (fresh reduce_u64 / M31.reduce_u64 / CM31.new / QM31 instances = AspisR1SelectedMaskProbe.field.*, both overflow-checked), proved."
+  },
+  {
+   "item": "2 HEARTBEAT records (item 4)",
+   "classification": "SOURCE_SHAPE (proof-shape)",
+   "reason": "defeq of the large bodies exceeds the budget at with_reducible rfl; the same statements close by `simp only [callee equalities]` followed by syntactic equality (nonloop_simp), at the file default of 1000000 heartbeats."
+  },
+  {
+   "item": "blocked-by-callee (item 5)",
+   "classification": "mixed",
+   "reason": "unblocked and proved: PreparedSum3Source qm31_sum_products3_prepared and its three loops.  Still blocked: FIn_WeightsFuns CM31.add/sub, M31.double, M31.reduce_u64, mul_by_r (CM31/M31 callees are CONFIG_MISMATCH)."
+  },
+  {
+   "item": "CONFIG_MISMATCH records",
+   "classification": "CONFIG_MISMATCH_NO_OFF_EMISSION",
+   "reason": "No emission with overflow checks OFF covering FIn_WeightsFuns M31.add/sub/reduce_u64, NFN reduce_u64 or FIo reduce_u64 exists in the repository evidence (no *_spec.json with OVERFLOW_CHECKS=false; PCQ_E415 is the fast_pairing dot emission).  Left as instructed."
+  },
+  {
+   "item": "Native13 beyond the brief",
+   "classification": "SOURCE_SHAPE (new shape)",
+   "reason": "The retired shape compiled the full fresh section.  PCVD_L004/L031 compile a slice that omits the 200-line COPY_PATTERNS literal.  Because the brief excludes Native13/14 sections that do not elaborate, the extra Native13 theorems (selector_mask_sum_16*, Selectors.active*, ACTIVE_ROW_MASKS) are reported separately and not counted against the brief scope; Native14 was not attempted."
+  }
+ ]
+}

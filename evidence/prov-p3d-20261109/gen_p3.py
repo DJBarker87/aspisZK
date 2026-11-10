@@ -48,10 +48,10 @@ def gen(mod,out,only=None,skip=()):
     wanted=[i['definition'].split('.',1)[1] for i in its]
     thms=re.findall(r'^theorem PRVEq\.[^ ]*?\.(\S+) :',base,re.M)
     fresh_part=base[base.index('namespace '+ns.group(2)):base.index('end '+ns.group(2))]
-    alld=[m.group(1) for m in re.finditer(r'^(?:@\[[^\]]*\] )?def (\S+)',fresh_part,re.M) if not m.group(1).endswith('.body')]
+    alld=[m.group(1) for m in re.finditer(r'^(?:@\[[^\]]*\][ \n])?def\s+(\S+)',fresh_part,re.M) if not m.group(1).endswith('.body')]
     pos={}
     for w in alld:
-        m=re.search(r'\ndef '+re.escape(w)+r'\n',fresh_part) or re.search(r'def '+re.escape(w)+r'\b',fresh_part)
+        m=re.search(r'\ndef\s+'+re.escape(w)+r'\n',fresh_part) or re.search(r'def\s+'+re.escape(w)+r'\b',fresh_part)
         pos[w]=m.start()
     order=[w for w in sorted(pos,key=pos.get) if (w in wanted or all(not t.endswith(w) for t in thms)) and w not in skip]
     done=re.findall(r'^theorem (PRVEq\.\S+) :',base,re.M)
