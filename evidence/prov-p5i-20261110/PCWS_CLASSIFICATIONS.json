@@ -1,0 +1,40 @@
+{
+ "schema": "PCWS_CLASSIFICATIONS/1",
+ "classifications": [
+  {
+   "id": "PCWS-C1",
+   "case": "NJS_Extract.Funs configuration",
+   "classification": "OFF: the gate carries Std.Usize.wrapping_add/mul/sub and U64.wrapping_shl/shr on plain operators; fresh OFF emission matches textually (48 of 48 compared declarations equal after parametrization); tag OFF_EMISSION_WRAPPING"
+  },
+  {
+   "id": "PCWS-C2",
+   "case": "NJS gate hand-parametrization",
+   "classification": "The gate replaces 14 externals by variables NJS_call_0..13 and threads them explicitly. PCWS_param.py does the same to the fresh emission; the equalities are proved for every instantiation. Definitions whose closure uses no variable are EQUALITY_PROVED; those using project externals (C1_TAG, C2_TAG, private_leaf_hash_with_digest, slot_offset, M31/QM31 from_le_bytes, echeck, check_values) are CONDITIONAL_ON_BINDING; parse_shape uses core::array PartialEq and core::slice::iter::Iter::any (HM-D, HM-B): DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "id": "PCWS-C3",
+   "case": "tool for canonical_scan",
+   "classification": "canonical_scan has `continue` to an outer loop: original Aeneas 959659a6 (PCWS_E001) and the second tool pair (PCWS_E002) both fail with \"Continue to outer loops are not supported yet\"; the extended Aeneas b59d5188 (the tool of the archived NJS emission PCUJ_E003) on the saved LLBC of PCWS_E001 translates it (PCWS_E003). Labelled extended-tool"
+  },
+  {
+   "id": "PCWS-C4",
+   "case": "shift amount type",
+   "classification": "fresh `wrapping_shl i1 8#i32` does not elaborate against the gate library (U64.wrapping_shl : U64 -> U32 -> U64); the PCQH-C2 ShrAmt bridge (amount converted by as-u32) is added to the fresh namespace; encoding difference, not a semantic one; OFF only. Gate has 8#u32"
+  },
+  {
+   "id": "PCWS-C5",
+   "case": "TerminalDecoder and DecodeKFull extraction",
+   "classification": "CANNOT_EXTRACT with the tool errors recorded; no transcription, no trust row"
+  },
+  {
+   "id": "PCWS-C6",
+   "case": "NID_ResumeEmissionTypes",
+   "classification": "types Prepared, Accumulator, Reader have Array/Vec/Slice fields: TYPE_ISOMORPHISM by Equiv with the generic PRVEq_PCWN_TE transport; emission reused (NMH_E003, 4bb3b3f, NHR_PINS.json)"
+  },
+  {
+   "id": "PCWS-C7",
+   "case": "failed shapes (never rerun unchanged)",
+   "classification": "L001 variable block missing in the generated file; L002 repeated L001 unchanged by mistake (a sed -i failure on macOS meant the generator change was not applied; counted as a wasted scope, recorded here); L003 shift literal; L005 guillemet field name `at` in the Equiv generator (fixed in the generator, L007); L006 NID Funs gate has 25 variables incl. 16 internal functions; L008 PCWL generator lacks Array transport (PRVEq_PCWS.arrEquiv); L010 PCWN_gen_equalities lacks nested types (switched to PCWN_gen.py)"
+  }
+ ]
+}

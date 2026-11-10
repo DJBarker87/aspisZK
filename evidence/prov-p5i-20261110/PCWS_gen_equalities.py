@@ -145,9 +145,9 @@ def parse_structure_fields(body):
     fields = []; cur = None
     for line in m.group(2).split('\n'):
         if not line.strip(): continue
-        fm = re.match(r'^  ([A-Za-z_][A-Za-z0-9_\']*)\s*:(.*)$', line)
+        fm = re.match(r'^  («[^»]+»|[A-Za-z_][A-Za-z0-9_\']*)\s*:(.*)$', line)   # PCWS: accept guillemet-quoted field names such as «at»
         if fm and not line.startswith('   '):
-            cur = [fm.group(1), fm.group(2).strip()]; fields.append(cur)
+            cur = [fm.group(1).strip('«»'), fm.group(2).strip()]; fields.append(cur)
         elif cur is not None and line.startswith('  '): cur[1] += ' ' + line.strip()
         else: return None
     return [(n, ' '.join(t.split())) for n, t in fields] if fields else None
