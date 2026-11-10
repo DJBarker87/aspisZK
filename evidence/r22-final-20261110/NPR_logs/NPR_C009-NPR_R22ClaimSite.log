@@ -1,0 +1,50 @@
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22ClaimSite.lean:107:19: error: Expected type must not contain free variables
+  ↑({ start := 0#usize, «end» := 29#usize }, dot).1.end ≤ 29
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22ClaimSite.lean:107:31: error: Expected type must not contain free variables
+  ↑({ start := 0#usize, «end» := 29#usize }, dot).1.end - ↑({ start := 0#usize, «end» := 29#usize }, dot).1.start ≤ 29
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+def AspisR1S5ClaimDotConcreteAdapter.concreteOps : AspisR1EbyKPushDotBackend.RawFn →
+  ClaimDotOps AspisR1S5ClaimDotConcreteAdapter.PushState :=
+fun rawFn =>
+  { powers := ClaimPowers.powers, field := ClaimParser.field, c0 := ClaimParser.c0,
+    newDot := AspisR1FinishDotConcreteOps.sourceNewDot,
+    pushDot := fun s v q =>
+      AspisR1EbyKPushDotBackend.pushWithDotBackend rawFn s (AspisR1S5ClaimDotConcreteAdapter.toPushWide v)
+        (AspisR1S5ClaimDotConcreteAdapter.toPushQm q),
+    finishDot := fun s => do
+      let out ← AspisR1FinishDotSourceABI.finishFromPush s
+      ok (ClaimParser.fromFinish out) }
+def AspisR1CurrentWide.Proof.finishField : Slice U8 → Usize → Result AspisR1CurrentWide.Proof.FinishE :=
+fun bytes i => do
+  let value ←
+    AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes i
+  ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+'AspisR1.NPR_R22ClaimSite.loop_congr_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.inner_body_cont' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.inner_body_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.inner_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.outer_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.claim_loops_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.claim_guarded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22ClaimSite.claim_site_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+       45.64 real         3.15 user         3.59 sys
+          5411127296  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              148352  page reclaims
+              262170  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               39039  voluntary context switches
+              224541  involuntary context switches
+         65926976180  instructions retired
+         23968133419  cycles elapsed
+           906820832  peak memory footprint

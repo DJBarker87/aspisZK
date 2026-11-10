@@ -1,0 +1,132 @@
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:31:21: error: Ambiguous term
+  aspis_core.field.QM31
+Possible interpretations:
+  AspisR1FinishRelationCurrent.aspis_core.field.QM31 : Type
+  
+  AspisR1Stage2.aspis_core.field.QM31 : Type
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:41:4: error: unsolved goals
+case neg
+W D : Type
+ops : FinishOps W D
+f' : Slice U8 → Usize → Result aspis_core.field.WideExact
+fm : Slice U8
+weights : Slice sorry
+hagree : ∀ j < weights.len, f' fm j = ops.field fm j
+dot : D
+j : Usize
+d : D
+i : Usize
+hi : ¬i < weights.len
+⊢ (if i < sorry.len then do
+      let we ← f' fm i
+      let q ← sorry.index_usize i
+      let (r, dot1) ← ops.pushDot d we q
+      let r1 ←
+        AspisR1FinishRelationCurrent.core.result.Result.map_err
+            verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let j1 ← i + 1#usize
+          ok (ControlFlow.cont (dot1, j1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame AspisR1FinishRelationCurrent.verifier.Error) residual
+          ok (ControlFlow.done (dot1, some return_capture))
+    else ok (ControlFlow.done (d, none))) =
+    if i < sorry.len then do
+      let we ← ops.field fm i
+      let q ← sorry.index_usize i
+      let (r, dot1) ← ops.pushDot d we q
+      let r1 ←
+        AspisR1FinishRelationCurrent.core.result.Result.map_err
+            verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let j1 ← i + 1#usize
+          ok (ControlFlow.cont (dot1, j1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame AspisR1FinishRelationCurrent.verifier.Error) residual
+          ok (ControlFlow.done (dot1, some return_capture))
+    else ok (ControlFlow.done (d, none))
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:40:17: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵i̵,̵ ̵↓reduceIte, hagree i hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:40:21: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hi, ↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵ ̵hagree i hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:41:17: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵i̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:41:21: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hi,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:51:21: error: Ambiguous term
+  aspis_core.field.QM31
+Possible interpretations:
+  AspisR1FinishRelationCurrent.aspis_core.field.QM31 : Type
+  
+  AspisR1Stage2.aspis_core.field.QM31 : Type
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_R22DotSite.lean:62:21: error: Ambiguous term
+  aspis_core.field.QM31
+Possible interpretations:
+  AspisR1FinishRelationCurrent.aspis_core.field.QM31 : Type
+  
+  AspisR1Stage2.aspis_core.field.QM31 : Type
+def AspisR1.Port3_FinishStage.release : {W : Type} → Stage2Finish.FinishOps W → Stage2Finish.FinishOps W :=
+fun {W} ops =>
+  { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+    polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+    newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+def AspisR1.IDa_Deployed.finish : NP6_StdModel.Reservation → Stage2Finish.FinishOps FIo_Install.W :=
+fun reservation =>
+  { field := FIn_Primitives.field, quarter := ok 536870912#u32, add := FIn_Primitives.add, mulM := SAG_StageScale.mulM,
+    ne := Port3_FinishStage.ne, polynomial := FIn_ExtractInstall.polynomial, trace := fun x x_1 x_2 => ok (),
+    folds := Port3_FinishStage.folds, newWeights := FIn_WeightsInstall.newWeights, pair := FIo_Install.pair reservation,
+    mark := Port3_QueryStage.mark, dot := SAG_DotClosed.source }
+'AspisR1.NPR_R22DotSite.dot_loop_field_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.dot_field_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.dot_guarded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.guard_ok3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.installed_op4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.finish_op4_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.deref_length' depends on axioms: [propext]
+'AspisR1.NPR_R22DotSite.mapped_length' depends on axioms: [propext]
+       42.21 real         2.95 user         5.35 sys
+          5328863232  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              151060  page reclaims
+              262281  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               45695  voluntary context switches
+              255046  involuntary context switches
+         55894744457  instructions retired
+         27791126754  cycles elapsed
+           898891264  peak memory footprint
