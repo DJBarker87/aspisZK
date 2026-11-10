@@ -50,5 +50,9 @@ add('D15','core','circle: secure_circle_point_from_parameter, secure_ood_circle_
 add('D16','core','field: M31::inv, CM31::inv/inv_with, QM31::try_inv, square_n, eq instances',
  ['crate::field::_::inv','crate::field::_::inv_with','crate::field::_::try_inv','crate::field::square_n','crate::field::_::eq'],include=[],modules=['AspisR72Sampler.Funs'])
 add('D17','core','r0::transport::order (priority: last unexamined SEMANTIC item)',['crate::r0::transport::order','core::option::_::ok_or'],include=[],modules=['FIo_Native'])
+add('D01a','prog','AdapterRw split a: all D01 roots except require_distinct_accounts',
+ ['crate::first_decoded','crate::observer','crate::r1_pool_adapter::owned::require_readonly_buffer','crate::r1_pool_adapter::owned::require_verifier_checkpoint','crate::r1_pool_adapter::owned::require_zero','crate::r1_pool_adapter::readonly_buffer_meta_ok','crate::r1_pool_adapter::owned::_::data_len'],
+ opaque=['aspis_r1_cost_probe::verifier::tx1','crate::error'],modules=['AdapterRwModel'],basis='Changed shape after E004 (extended Not_found) and E005 (original: returns inside nested loops in require_distinct_accounts).')
+add('D01b','prog','AdapterRw split b: require_distinct_accounts alone',['crate::r1_pool_adapter::owned::require_distinct_accounts'],modules=['AdapterRwModel'],basis='Changed shape after E004/E005.')
 (E/'PCQD_extract_specs.json').write_text(json.dumps(dict(schema='PCQD_extract_specs/1',note='roots and opacity per group; extended Aeneas first. P1g.',specs=S),indent=1)+'\n')
 print(len(S))

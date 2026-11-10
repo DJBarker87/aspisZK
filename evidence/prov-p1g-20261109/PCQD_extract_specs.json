@@ -449,6 +449,61 @@
    "crate": "aspis-core",
    "manifest": "crates/aspis-core/Cargo.toml",
    "features": "r0"
+  },
+  {
+   "spec_id": "D01a",
+   "kind": "frozen",
+   "label": "AdapterRw split a: all D01 roots except require_distinct_accounts",
+   "start_from": [
+    "crate::first_decoded",
+    "crate::observer",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+    "crate::r1_pool_adapter::owned::_::data_len"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "aspis_r1_cost_probe::verifier::tx1",
+    "crate::error"
+   ],
+   "namespace": "PCQD_d01a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Changed shape after E004 (extended Not_found) and E005 (original: returns inside nested loops in require_distinct_accounts).",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D01b",
+   "kind": "frozen",
+   "label": "AdapterRw split b: require_distinct_accounts alone",
+   "start_from": [
+    "crate::r1_pool_adapter::owned::require_distinct_accounts"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d01b",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Changed shape after E004/E005.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
   }
  ]
 }
