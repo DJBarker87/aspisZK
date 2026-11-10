@@ -10,8 +10,9 @@
  "rule": "Every judgment is made at 4bb3b3f on the gate body in the L187 replayed closure. No 2021 judgment is carried over (carried_over_from_2021=false everywhere); the 2021 family judgment is informational. frozen_file_changed is by Rust file blob between b2727acd and 4bb3b3f; changed files (fast_dots.rs, fast_pairing.rs, weights.rs, r1_wire.rs, r1_pool_adapter.rs, pair_forest_*.rs, poseidon2.rs) are re-judged here, never inherited. The gate-body-to-4bb3b3f link is the definition provenance status (Stream C P6), not this packet.",
  "counts_checked_and_mixed": {
   "TOTAL_PROVED": 60,
-  "OPEN": 137,
-  "DOMAIN_LEMMA_PROVED": 28
+  "OPEN": 133,
+  "DOMAIN_LEMMA_PROVED": 31,
+  "DIRECT": 1
  },
  "counts_by_class": {
   "CHECKED/TOTAL_PROVED": 57,
@@ -23,7 +24,7 @@
  "rows": {
   "touched_by_checked_or_mixed": 396,
   "with_at_least_one_open_or_domain_only_definition": 376,
-  "served_only_by_TOTAL_definitions": 20
+  "served_only_by_TOTAL_or_DIRECT_definitions": 20
  },
  "screen_note": "existing_closure_statements_screen lists closure theorems whose statement names the exact definition next to an ok/spec conclusion; labels are a textual screen (NPH_existing_host.py), not certified judgments, except where nph_judgment cites them.",
  "definitions": [
@@ -2988,7 +2989,8 @@
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "AspisR1BatchedWeightsExtraction.Funs",
@@ -3034,7 +3036,8 @@
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "AspisR1CanonicalDotFinish.Funs",
@@ -5388,14 +5391,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: DOMAIN_KNOWN_NOT_COMPOSED",
-   "open_reason": "index>>>9 and table index need the fibre-index admission bound (NNG_GeometryDomain094 / R17 tables); callback ops.mul is abstract",
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation, index >>> 9#i32, succeeds for every index; the remaining steps (array index, pure &&&, the ops.table_value/ops.mul callbacks) are not overflow-checked in the body, so checked and wrapping executions of the body coincide; the callbacks' own arithmetic is the R22 item of the installed kernels (CM31.mul)",
    "existing_closure_statements_screen": [
     {
      "theorem": "point_bound",
      "file": "SAQ_Domain.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "nph_theorems": [
+    "AspisR1.NPH_R22QRawShift.fibre_shift_ok"
    ]
   },
   {
@@ -8748,7 +8753,8 @@
      "file": "CurrentFinishField.lean",
      "screen": "DOMAIN_SCREEN"
     }
-   ]
+   ],
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "GammaCallerExplicitHelpers",
@@ -9388,7 +9394,8 @@
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)"
+   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "NCV_Reference.Funs",
@@ -9576,7 +9583,8 @@
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)"
+   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "NCX_Reference.Funs",
@@ -9838,7 +9846,8 @@
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)"
+   "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "NDI_BatchRef.Funs",
@@ -16449,7 +16458,8 @@
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "S8Kani2MutableSource",
@@ -16497,7 +16507,8 @@
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8)",
    "carried_over_from_2021": false,
    "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
   },
   {
    "module": "S8OwnedP6.Funs",
@@ -16998,8 +17009,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 R22FastPairingRawRanges: mathematical ranges only)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: DOMAIN_LEMMA_EXISTING_OR_SAME_BODY",
-   "open_reason": "canonical-limb totality exists for the AspisR1CanonicalQRawUnified copy (AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs, closure); FIo_QRaw has the same normalised body (086b87d9e8e1e7cf) but distinct closure types, transfer not proved; caller canonicality join open",
+   "nph_judgment": "DOMAIN_LEMMA_PROVED (caller join open): checked-total on canonical limbs by the closure theorem AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs; the Q values reaching it are not yet proved canonical",
    "existing_closure_statements_screen": [
     {
      "theorem": "qraw_total_of_canonical_limbs",
@@ -17031,6 +17041,9 @@
      "file": "JGi_QRawInputPrefixTotalityV1.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "nph_theorems": [
+    "AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs (existing, in the TAS_FinalB closure)"
    ]
   },
   {
@@ -17491,8 +17504,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 R22FastPairingRawRanges: mathematical ranges only)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: DOMAIN_LEMMA_EXISTING_OR_SAME_BODY",
-   "open_reason": "canonical-limb totality exists for the AspisR1CanonicalQRawUnified copy (AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs, closure); FIo_QRaw has the same normalised body (086b87d9e8e1e7cf) but distinct closure types, transfer not proved; caller canonicality join open",
+   "nph_judgment": "DOMAIN_LEMMA_PROVED (caller join open): definitionally equal to the AspisR1CanonicalQRawUnified body (qraw_eq), hence checked-total on canonical limbs (fio_qraw_total_of_canonical_limbs); the Q values reaching it are not yet proved canonical",
    "existing_closure_statements_screen": [
     {
      "theorem": "fold",
@@ -17514,6 +17526,10 @@
      "file": "RPu_JFs_TX2_RawMap.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "nph_theorems": [
+    "AspisR1.NPH_R22QRawShift.qraw_eq",
+    "AspisR1.NPH_R22QRawShift.fio_qraw_total_of_canonical_limbs"
    ]
   },
   {
@@ -17716,8 +17732,22 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: DOMAIN_KNOWN_NOT_COMPOSED",
-   "open_reason": "checked shifts j>>>i, i2<<<i4; amounts <= 8 on the reached domain iter.end <= 16 (PCQH-C5, NPE_ ShrAmt check); totality lemma on that domain not yet written"
+   "nph_judgment": "DOMAIN_LEMMA_PROVED (caller join open): both checked shifts are safe when the loop index d < 16 and the TAU entry read is < 16 (row_shr_ok, row_shl_ok); the reached domain iter.end <= 16 is the PCQH-C5/NPE_ EQUALITY_DOMAIN fact and the TAU entry bound is a constant-table fact, neither composed here",
+   "nph_theorems": [
+    "AspisR1.NPH_R22QRawShift.row_shr_ok",
+    "AspisR1.NPH_R22QRawShift.row_shl_ok"
+   ]
   }
- ]
+ ],
+ "outside_both_top_cones": [
+  "AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push",
+  "AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push_loop.body",
+  "AspisR1FinishRelationCurrent.verifier.finish_relation_round",
+  "NCV_Reference.valid_sequences_loop.body",
+  "NCV_Reference.zero_sequences_loop.body",
+  "NDH_TranscriptReference.absorb_ref",
+  "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
+  "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
+ ],
+ "revision_note": "updated after NPH_L013 (NPH_R22QRawShift): fibre_point DIRECT; both Q.raw copies and transport row_loop.body domain-lemma-proved"
 }

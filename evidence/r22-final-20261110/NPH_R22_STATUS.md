@@ -56,6 +56,8 @@ S8Kani2MutableExtraction), finish_relation_round, NCV valid_sequences/zero_seque
 bodies, and NDH absorb_ref. They are kept in the obligation here because rows cite them.
 Whether the headline needs them at all is a question for the cone owner.
 
+Counts in this section are as first published (L001–L009). Section 7 supersedes them.
+
 | Judgment | Definitions | CLOSED rows they serve (union) |
 |---|---:|---:|
 | (a) TOTAL, proved by NPH_ | 60 (57 checked, 3 mixed) | 288 |
@@ -216,5 +218,95 @@ release replay must include them for the CheckedVsWrapping row to cite them.
 Next concrete deliverable: the limb ≤ P caller invariant for the 28 domain-lemma kernels, plus
 Q.raw. That moves about 230 rows from domain-only toward (b). After it come the mechanical
 index/cursor loop bodies.
+
+Target not yet established.
+
+## 7. Continuation (lead instruction 2026-11-10, after merge of ac90858a331)
+
+Four more scopes were used (L010–L013, 13 of 30 in total; L010–L012 failed on proof-script
+details, each followed by a change). The new module is NPH_R22QRawShift, accepted in L013:
+2.43 s, 5,449,788 KiB, swap 0, 5 axiom lines, all [propext, Classical.choice, Quot.sound].
+
+**Updated counts (225 checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL | 60 |
+| DIRECT (c) | 1 |
+| domain lemma proved, caller join open | 31 |
+| precondition proved from the callers (b) | 0 |
+| open | 133 |
+
+Rows are unchanged: 376 of 396 still depend on a definition that is neither TOTAL nor DIRECT.
+
+**Item (2), Q.raw.** `qraw_eq` proves FIo_QRaw.canonical.Q.raw definitionally equal to the
+AspisR1CanonicalQRawUnified body; both closure types are `Unit`, so the 2026-11-10 concern
+about distinct closure types was unfounded. `fio_qraw_total_of_canonical_limbs` transfers the
+closure theorem AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs to the second copy.
+The caller join (every Q reaching Q.raw has limbs ≤ 2^31-2) is not proved. It is the same
+obstruction as item (1) below.
+
+**Item (3).**
+- fibre_point is DIRECT. Its only overflow-checked operation is `index >>> 9#i32`, which
+  succeeds for every index (`fibre_shift_ok`). Its other steps are array indexing, a pure `&&&`
+  and two callbacks. None of them is overflow-checked in the body, so the checked and wrapping
+  executions of the body coincide. The callbacks' own arithmetic is the R22 item of the
+  installed CM31 kernels.
+- transport row_loop.body: `row_shr_ok` and `row_shl_ok` make both checked shifts safe when
+  the loop index is below 16 and the TAU entry read is below 16. The reached-domain fact
+  (iter.end ≤ 16, PCQH-C5 and NPE_) and the TAU constant-table bound are not composed here,
+  so it stays domain-only.
+
+**Item (1), the limb ≤ P caller invariant: not established; an obstruction is reported.**
+NPH_callers_host.py (output NPH_CALLERS.json.xz) lists every reached definition that names one
+of the 28 kernels. There are 76 distinct callers. 48 are inside the field modules: CM31/QM31
+add, sub, mul, square, double, mul_by_r, inv_with and similar. The kernel closure of
+NPH_R22Weak extends to these, but that extension still needs each body written out. 28 callers
+are outside the field modules. Among them are hand-written ops installers and model glue:
+NBF_BasisInstall.install, AspisR1.SAQ_Geometry.install, AspisR1.SAQ_Query.install,
+LIBC_QueryOps.seed, NJJ_QueryOps.concrete, NFN_NEW_GeometryContextGeneric.replace,
+R17CurrentCM31Semantics.operations, R17CurrentM31Semantics.operations,
+RawExtractedSemanticCallOpsV20.resultMap, NNU_QueryFieldBase.toQM and others (listed in the
+JSON). They place the kernels into callback records. The gate code then calls those
+callbacks on values it computes itself.
+
+The ledger's field-domain roots, for example NHV_NEB_FieldDomains.cm_arguments and
+cm_add_calls, take canonicality (canonC/canonQ/canonE) as a hypothesis. They do not prove it.
+So no per-kernel lemma "the arguments at the reached call sites are ≤ P" follows from the
+closed rows as they stand. Proving it means following values through every callback record
+to their gate producers. This is the 2021 backend obstruction (R22OverflowWorkerBackendObstruction),
+now located at named ops installers.
+
+Recommended route (one job): give the M31 carrier of the installed ops records a ≤ P
+subtype, or add an invariant field to each Ops record. Then prove once that every producer
+respects it:
+- the strict decoders return none for ≥ P (AspisR1.ActualDecodeKStrictQM31Parser.success_has_strict_limbs
+  is in the cone);
+- the samplers are canonical;
+- the constants are canonical;
+- the `& P` mask gives ≤ P;
+- the kernels preserve it (NPH_R22Weak).
+
+This changes the statement of the ops interface. A lead or owner decision is needed before any
+module is re-pinned. No caps were raised, and nothing was re-run unchanged.
+
+**Item (4) is not started.** A body scan (of NPH_CENSUS_BODIES.json.xz) shows 32 open bodies whose only checked arithmetic is one increment
+`x + 1#usize`. In each case x is either guarded by `x < n` or an iterator index below the range
+end; this was checked per body by reading, not proved. Examples: digest_is_canonical ×2 (51 and 32 rows), the NCV/NCX loops, the Poseidon
+lane loops, array_from_fn_copy_loop and finish_owned_loop.body. These are arithmetic-safe for
+every input, by the same argument as fibre_point, once a generic `x < n → x + 1 ok` lemma and
+a per-body lemma are written. This is the next mechanical deliverable. The other 17 scopes
+were not used.
+
+**Eight definitions served by closed rows, not by the headline** (absent from both the
+deployed_splitB and deployed_charge raw cones):
+- AspisR1BatchedWeightsExtraction BatchedWeights.push, and push_loop.body
+- S8Kani2MutableExtraction BatchedWeights.push, and push_loop.body
+- AspisR1FinishRelationCurrent.verifier.finish_relation_round
+- NCV_Reference valid_sequences_loop.body
+- NCV_Reference zero_sequences_loop.body
+- NDH_TranscriptReference.absorb_ref
+
+No reachable input on which wrapping accepts and checked rejects was found.
 
 Target not yet established.
