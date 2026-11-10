@@ -6,6 +6,7 @@ open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false
 set_option linter.hashCommand false
 set_option linter.unusedVariables false
+set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 noncomputable section
@@ -546,13 +547,74 @@ structure Bound (ops : Ops) (x : Ext) : Prop where
   h_r1_pool_adapter_decode_public_statement_box : x.r1_pool_adapter_decode_public_statement_box = ops.op47
   h_aspis_r1_cost_probe_transport_Variant_tag : x.aspis_r1_cost_probe_transport_Variant_tag = AdapterRw.aspis_r1_cost_probe.transport.Variant.tag
   h_aspis_r1_cost_probe_verifier_PROOF_BYTES : x.aspis_r1_cost_probe_verifier_PROOF_BYTES = AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES
-  h_Slice_Insts_CoreCmpPartialEqArray_ne : ∀ (T U : Type) (N : Std.Usize) (i : core.cmp.PartialEq T U), @x.Slice_Insts_CoreCmpPartialEqArray_ne T U N i = @ops.op0 T U N i
-  h_Slice_Insts_CoreCmpPartialEqArray_eq : ∀ (T U : Type) (N : Std.Usize) (i : core.cmp.PartialEq T U), @x.Slice_Insts_CoreCmpPartialEqArray_eq T U N i = @ops.op1 T U N i
+  h_Slice_Insts_CoreCmpPartialEqArray_ne : @x.Slice_Insts_CoreCmpPartialEqArray_ne = @ops.op0
+  h_Slice_Insts_CoreCmpPartialEqArray_eq : @x.Slice_Insts_CoreCmpPartialEqArray_eq = @ops.op1
   h_r1_pool_adapter_owned_require_zero : x.r1_pool_adapter_owned_require_zero = AdapterRw.r1_pool_adapter.owned.require_zero
   h_first_decoded : x.first_decoded = AdapterRw.first_decoded ops
 
 end PCVK_S1
 end AdapterRw
+
+theorem PRVEq_partialEq_ne_default {Self Rhs : Type} (c : Self → Rhs → Result Bool) :
+    ({ eq := c, ne := fun s o => core.cmp.PartialEq.ne.default c s o } : core.cmp.PartialEq Self Rhs) = { eq := c } := by
+  have h : (fun s o => core.cmp.PartialEq.ne.default c s o) = core.cmp.PartialEq.ne._default c := by
+    funext s o
+    simp only [core.cmp.PartialEq.ne.default, core.cmp.PartialEq.ne._default, id]
+    congr 1; funext b; cases b <;> rfl
+  rw [h]; rfl
+
+theorem PRVEq_usize_add_wrap (a b : Std.Usize) (h : a.val + b.val < 4294967296) :
+    (a + b : Result Std.Usize) = ok (Std.Usize.wrapping_add a b) := by
+  have hmax : a.val + b.val ≤ Std.Usize.max := by scalar_tac
+  obtain ⟨z, hz, hv⟩ := Aeneas.Std.WP.spec_imp_exists (Usize.add_spec (x := a) (y := b) hmax)
+  rw [hz]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  rw [hv, Std.Usize.wrapping_add_val_eq]
+  have h2 : a.val + b.val < UScalar.size UScalarTy.Usize := by
+    rw [Std.Usize.max_def] at hmax
+    rw [UScalar.size_UScalarTyUsize, Std.Usize.size_def]
+    have := Nat.one_le_two_pow (n := Std.Usize.numBits)
+    omega
+  exact (Nat.mod_eq_of_lt h2).symm
+
+theorem PRVEq_after_ex (ops : AdapterRw.Ops) :
+    ∃ ps : Std.Usize, AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok ps ∧ ps.val = 688 := by
+  unfold AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
+  have hmax : (8#usize).val + (680#usize).val ≤ Std.Usize.max := by scalar_tac
+  obtain ⟨z, hz, hv⟩ := Aeneas.Std.WP.spec_imp_exists (Usize.add_spec (x := 8#usize) (y := 680#usize) hmax)
+  refine ⟨z, hz, ?_⟩
+  have h8 : (8#usize).val = 8 := by scalar_tac
+  have h6 : (680#usize).val = 680 := by scalar_tac
+  omega
+
+open Lean Meta Elab Tactic in
+/-- unfold every matcher constant occurring in the goal (fresh and gate matchers are separate constants with equal bodies). -/
+elab "delta_matchers" : tactic => do
+  let g ← getMainGoal
+  let ty ← instantiateMVars (← g.getType)
+  let env ← getEnv
+  let names := ty.foldConsts (#[] : Array Name) fun c a => if Lean.Meta.isMatcherCore env c then a.push c else a
+  if names.isEmpty then return
+  let ids := names.map (fun n => mkIdent n)
+  evalTactic (← `(tactic| delta $ids:ident*))
+
+theorem PRVEq_S1_cp0 : AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once = AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once := by
+  unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError.call_once
+  rfl
+
+theorem PRVEq_S1_cp1 : AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError = AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError := by
+  unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError AdapterRw.r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+  rfl
+
+theorem PRVEq_S1_cp2 : AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once = AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once := by
+  unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError.call_once
+  rfl
+
+theorem PRVEq_S1_cp3 : AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError = AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError := by
+  unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError AdapterRw.r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+  rfl
+
 
 namespace PRVEq.AdapterStage1_k1
 variable {ops : AdapterRw.Ops} {x : AdapterRw.PCVK_S1.Ext} (b : AdapterRw.PCVK_S1.Bound ops x)
@@ -563,32 +625,27 @@ theorem data_eq :
   funext self
   unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.OwnedAccount.data AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
   rw [b.h_solana_program_error_ProgramError_Insts_CoreCloneClone_clone]
-
-end PRVEq.AdapterStage1_k1
-
-theorem PRVEq.AdapterStage1_k1.after_val (ops : AdapterRw.Ops) :
-    AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok 688#usize := by
-  unfold AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
   rfl
 
-namespace PRVEq.AdapterStage1_k1
-variable {ops : AdapterRw.Ops} {x : AdapterRw.PCVK_S1.Ext} (b : AdapterRw.PCVK_S1.Bound ops x)
-include b
-
-theorem stage_eq :
+theorem r1_pool_adapter_owned_stage1_owned_eq :
     AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned x = AdapterRw.r1_pool_adapter.owned.stage1_owned ops := by
   funext program_id accounts data
+  obtain ⟨ps, hps, hpsv⟩ := PRVEq_after_ex ops
+  have h8 : (8#usize).val = 8 := by scalar_tac
+  have hadd : (ps + 8#usize : Result Std.Usize) = ok (Std.Usize.wrapping_add ps 8#usize) :=
+    PRVEq_usize_add_wrap ps 8#usize (by omega)
   unfold AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned AdapterRw.r1_pool_adapter.owned.stage1_owned
-  simp only [data_eq b, b.h_aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_semantic_public, b.h_aspis_statement_pool_v1_pair_forest_terminal_validate_pool_v1_pair_forest_terminal_statement_v1, b.h_aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_common, b.h_aspis_statement_pool_v1_pair_terminal_encode_pool_v1_pair_verified_afterstate_v1, b.h_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES, b.h_solana_program_error_ProgramError_Insts_CoreCloneClone_clone, b.h_r1_pool_adapter_owned_require_verifier_checkpoint, b.h_r1_pool_adapter_owned_require_distinct_accounts, b.h_r1_pool_adapter_owned_require_readonly_buffer, b.h_r1_pool_adapter_decode_public_statement_box, b.h_aspis_r1_cost_probe_transport_Variant_tag, b.h_aspis_r1_cost_probe_verifier_PROOF_BYTES, b.h_Slice_Insts_CoreCmpPartialEqArray_ne, b.h_Slice_Insts_CoreCmpPartialEqArray_eq, b.h_r1_pool_adapter_owned_require_zero, b.h_first_decoded, after_val ops]
+  simp only [data_eq b, PRVEq_S1_cp0, PRVEq_S1_cp1, PRVEq_S1_cp2, PRVEq_S1_cp3, b.h_aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_semantic_public, b.h_aspis_statement_pool_v1_pair_forest_terminal_validate_pool_v1_pair_forest_terminal_statement_v1, b.h_aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_common, b.h_aspis_statement_pool_v1_pair_terminal_encode_pool_v1_pair_verified_afterstate_v1, b.h_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES, b.h_solana_program_error_ProgramError_Insts_CoreCloneClone_clone, b.h_r1_pool_adapter_owned_require_verifier_checkpoint, b.h_r1_pool_adapter_owned_require_distinct_accounts, b.h_r1_pool_adapter_owned_require_readonly_buffer, b.h_r1_pool_adapter_decode_public_statement_box, b.h_aspis_r1_cost_probe_transport_Variant_tag, b.h_aspis_r1_cost_probe_verifier_PROOF_BYTES, b.h_Slice_Insts_CoreCmpPartialEqArray_ne, b.h_Slice_Insts_CoreCmpPartialEqArray_eq, b.h_r1_pool_adapter_owned_require_zero, b.h_first_decoded, hps, bind_tc_ok, hadd]
   rfl
 
 end PRVEq.AdapterStage1_k1
 
 namespace PRVEq.AdapterStage1_k1
 open AdapterRw AdapterRw.PCVK_S1
-/-- Non-vacuity: for every ops there is an Ext satisfying Bound (each field is the gate counterpart). -/
-theorem bound_exists (ops : Ops) : ∃ x : Ext, Bound ops x :=
-  ⟨{
+/-- Non-vacuity: for every ops0 there are ops (ops0 with the two digest fields set) and x with Bound ops x. -/
+theorem bound_exists (ops0 : Ops) : ∃ ops : Ops, ∃ x : Ext, Bound ops x := by
+  let ops : Ops := ops0
+  exact ⟨ops, {
     aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_semantic_public := AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
     aspis_statement_pool_v1_pair_forest_terminal_validate_pool_v1_pair_forest_terminal_statement_v1 := ops.op21
     aspis_statement_pool_v1_pair_forest_terminal_PoolV1PairForestTerminalStatementV1_common := AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common
@@ -605,10 +662,12 @@ theorem bound_exists (ops : Ops) : ∃ x : Ext, Bound ops x :=
     Slice_Insts_CoreCmpPartialEqArray_eq := @ops.op1
     r1_pool_adapter_owned_require_zero := AdapterRw.r1_pool_adapter.owned.require_zero
     first_decoded := AdapterRw.first_decoded ops
-    }, by refine {..} <;> intros <;> rfl⟩
+    }, ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, fun _ => rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩⟩
 end PRVEq.AdapterStage1_k1
 
+#print axioms PRVEq_partialEq_ne_default
+#print axioms PRVEq_usize_add_wrap
+#print axioms PRVEq_after_ex
 #print axioms PRVEq.AdapterStage1_k1.data_eq
-#print axioms PRVEq.AdapterStage1_k1.after_val
-#print axioms PRVEq.AdapterStage1_k1.stage_eq
+#print axioms PRVEq.AdapterStage1_k1.r1_pool_adapter_owned_stage1_owned_eq
 #print axioms PRVEq.AdapterStage1_k1.bound_exists

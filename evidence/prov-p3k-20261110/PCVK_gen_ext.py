@@ -43,7 +43,7 @@ body=funs[funs.index('namespace'):]
 body=body[body.index('\n')+1:body.rindex('end ')]
 blocks=[b.strip('\n') for b in split_blocks(body) if b.strip()]
 def defname(b):
-    m=re.search(r'(?:^|\n)(?:@\[[^\]]*\]\s*)*def\s+(\S+)',b,re.S)
+    m=re.search(r'(?:^|\n)(?:@\[[^\]]*\]\s*)*(?:impl_)?def\s+(\S+)',b,re.S)
     return m.group(1) if m else None
 names={defname(b):b for b in blocks if defname(b)}
 # reachable
@@ -91,9 +91,19 @@ for (doc,b) in sel2:
         if m==n: continue
         b=re.sub(r'(?<![\w.])'+re.escape(m)+r'(?![\w.])','('+m+' x)',b)
     if n in needx:
+        if re.search(r'(^|\n)impl_def ',b):
+            h,sep,bd=b.partition(':=')
+            def _r(m,bd=bd):
+                pre=bd[:m.start()].rstrip()
+                return (n+' x') if pre.endswith('(') else '('+n+' x)'
+            bd=re.sub(r'(?<![\w.])'+re.escape(n)+r'(?![\w.])',_r,bd)
+            b=h+sep+bd
         b=re.sub(r'(def\s+'+re.escape(n)+r')',r'\1 (x : Ext)',b,count=1)
     res.append(b)
-stru='structure Ext where\n'+'\n'.join('  %s : %s'%(v,ext[k]) for k,v in used.items())+'\n'
+hashfield=any('solana_hash.Hash' in ext[k] for k in used)
+if hashfield:
+    for k in used: ext[k]=ext[k].replace('solana_hash.Hash','Hash')
+stru='structure Ext where\n'+('  Hash : Type\n' if hashfield else '')+'\n'.join('  %s : %s'%(v,ext[k]) for k,v in used.items())+'\n'
 open(out,'w').write(stru+'\n'+'\n\n'.join(res)+'\n')
-json.dump(dict(fields={v:k for k,v in used.items()},needx=sorted(needx),blocks=sorted(need)),open(out+'.json','w'),indent=1)
+json.dump(dict(fields={v:k for k,v in used.items()},needx=[defname(b) for _,b in sel2 if defname(b) in needx],blocks=[defname(b) for _,b in sel2]),open(out+'.json','w'),indent=1)
 print(len(used),'externals',len(sel),'blocks',len(needx),'with x')
