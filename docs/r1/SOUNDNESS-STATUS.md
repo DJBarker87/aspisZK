@@ -771,7 +771,7 @@ Every interface field is a delivered closed term at the seventh assembly run.
 
 | Field | Delivered as |
 | --- | --- |
-| nmn | Dropped by ruling (bu)(2) |
+| nmn | Dropped under the 7 November decision |
 | nms, g1a | Their (bu) forms, `NNT_Field.r241` and `NNT_G1aLaw.field` |
 | nmfB | `NNH8_NMF.nmfB` |
 | hb | `NNH8_HeadlineB.headlineB` |
@@ -786,7 +786,7 @@ Every interface field is a delivered closed term at the seventh assembly run.
 
 | Binder of the headline | Instantiated as | Why it is not a restriction |
 | --- | --- | --- |
-| `native1`, `native2` | The owned stage models | The actual code meets the models through the actual-code rows and the a1 and a2 fields; extraction at native := model then holds by `rfl`, except the digest source, which ruling (bt) supplies |
+| `native1`, `native2` | The owned stage models | The actual code meets the models through the actual-code rows and the a1 and a2 fields; extraction at native := model then holds by `rfl`, except the digest source, which the hash-adapter instantiation supplies |
 | `A`, `allocator`, the four states | `Bool`, the abort indicator, all `true` | A run that returned successfully had every allocation succeed, since a failed allocation aborts the program |
 | `CoreError` | The error type of the extracted frozen core library | The installed configuration is the deployed one, so this names the type the deployed code uses; the value `fx.indexError` stays universal |
 | `a`, in the pair and in `queries` | `a⊤`, the normalised adversary | Allocator state models allocation success, which the deployed attacker does not control; `a` itself stays universal |
@@ -864,7 +864,7 @@ Every interface field is a delivered closed term at the seventh assembly run.
 | `CoreOptionResultCombinators` | The Lean definitions of `Option::ok_or`, `Result::map`, `Result::map_err`, the `?` instances, Option equality and the reservation error type are the Rust semantics at the translation toolchain; also `Vec::try_reserve_exact`, read as succeeding with enough capacity or failing with the vector unchanged. No differential check | Reached; 205 closed statements | The Aeneas library definitions with one generic equality lemma per combinator | Entered 10 November 2026 under my trust-boundary decision |
 | `CoreArraySliceOps` | The Lean definitions of `Array::map`, slice and array equality, windows, `first` and full-range indexing are the Rust semantics at that toolchain; also `core::array::from_fn`, on condition that the hand model is proved in one lemma to give f(i) at index i in index order, until which its 66 or so consumers stay open. No differential check | Reached; 128 closed statements | Aeneas library definitions with a generic lemma per operation, or re-translation without the operation | Entered 10 November 2026 |
 | `CoreNumOpsIterModels` | The Lean definitions of `u16` `count_ones` and `trailing_zeros`, range clone, reverse and inclusive-range folds and the default `all`/`any` are the Rust semantics at that toolchain. A differential check of the two bit functions on all 65,536 inputs agreed, run with a different compiler, so only a plausibility check | Reached | Proofs against the Lean integer library, or re-translation | Entered 10 November 2026 |
-| `AeneasDiscriminantHelpers` | Aeneas's discriminant registration and reading are accepted as tool post-processing; reading discriminants of Aspis's own enums stays a proof item | Reached | The Aeneas-native form, or a proof that the registration's reading equals the match-based discriminant | Entered 10 November 2026, narrowed by the lead |
+| `AeneasDiscriminantHelpers` | Aeneas's discriminant registration and reading are accepted as tool post-processing; reading discriminants of Aspis's own enums stays a proof item | Reached | The Aeneas-native form, or a proof that the registration's reading equals the match-based discriminant | Entered 10 November 2026, narrowed on 10 November 2026 |
 
 ### Translation, tools and realisation
 
@@ -1032,4 +1032,4 @@ This page is written from the status document on the
 `docs/research/100bit-spend-path-20261013/design/SOUNDNESS-CLAIM-DRAFT-20261108.md`,
 at commit `90795727483`. The Lean statements in Appendix A are copied verbatim
 from it, and through it from the audit record of the final assembly. The
-evidence directories, job receipts and rulings it cites are on that branch.
+evidence directories, job receipts and decision records it cites are on that branch.

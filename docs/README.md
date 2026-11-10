@@ -1,29 +1,27 @@
 # Documentation
 
-R1 is the current implementation. Its verifier checks a private spend across
-two Solana transactions, its 599 reached Rust functions each carry a verified
-Lean statement, and the composed soundness theorem for the actual spend path
-compiled on 9 November 2026 with standard axioms only; the release target,
-100-bit classical soundness per attempt, is not yet established, and the gates
-that remain are set out in the proof package. The R1 verifier ran on Solana
-devnet on 29 October 2026 and has not been deployed to mainnet. V7, the
-one-transaction design that preceded it, is kept as the previous design and
-was never submitted to a public cluster. V5 is the finalized mainnet result,
-with a verified private spend on mainnet-beta on 24 July 2026 UTC.
+The current version of Aspis verifies a private spend across two Solana
+transactions. The soundness of its protocol is proved in Lean, every function
+of the verifier's Rust is matched to that proof, and it has run on Solana
+devnet, most recently in November 2026. It has not been deployed to mainnet.
+The checks that remain before the deployed version itself is described as
+100-bit sound are set out in the proof package. An earlier version, V5, is the
+one that ran on mainnet, in July 2026, and V7 is the one-transaction design
+that came between the two.
 
-## R1 (current)
+## The current version
 
-The [R1 proof package](r1/) is the place to start. Its
-[README](r1/README.md) lists every file and where on the research branch it
-came from; the [status document](r1/SOUNDNESS-STATUS.md) is the authority for
-every figure, the [top-level theorems](r1/TOP-THEOREM.md) are printed in full
-with a reading of each binder, and the [open gates](r1/OPEN-GATES.md) say what
-still stands between those theorems and the release claim. The
-[devnet run](r1/DEVNET-RUN.md) and the [build recipe](r1/BUILD.md) cover the
-deployed program. The full evidence is on the `research` branch at commit
-`07123926e88273271344977a3fdc26d1780cde14`.
+The [proof package](r1/) is the place to start. Its [index](r1/README.md) says
+what each document is for. The [theorem page](r1/TOP-THEOREM.md) gives the
+soundness theorem in full with an explanation of how to read it, the
+[status document](r1/SOUNDNESS-STATUS.md) is the complete account behind it,
+and the [open items](r1/OPEN-GATES.md) say what still stands between the
+theorem and the claim about the deployed version. The
+[devnet record](r1/DEVNET-RUN.md) and the [build instructions](r1/BUILD.md)
+cover the deployed programs. The full evidence is on the `research` branch.
+In the repository's file and directory names the current version is called R1.
 
-## History: V7 and V5
+## Earlier versions: V7 and V5
 
 The pages below describe the earlier designs and remain accurate as records of
 them. V5 is a private-spend construction with Lean proofs, selected production
