@@ -1,0 +1,47 @@
+{
+ "schema": "PCXC_TOOLS/1",
+ "changes_relative_to_PCXB": [
+  {
+   "file": "PCXC_run.py",
+   "from_": "evidence/prov-p6c-20261109/PCXB_run.py",
+   "changes": "prefix PCXB->PCXC; host workspace codex-pc-prov-p6x-20261110; LEAN_PATH gets the P6c objects (PCXB_exports) after the own PCXC_exports (read-only reference); optional env PCXC_PATHS_FILE (alternate path chain: PCXC_PATHS_TAS.json from the NNH_L939 receipt, needed for TAS_FinalB) and PCXC_DATA (local_path=host_name data files, xz decompressed, uploaded to PCXC_data/); admission unchanged (host scopes < 6, Stream C < 2, disk >= 40 GB, reservation barrier, one scope at a time).",
+   "sha256": "77e315576eb1d3f0a04a10fc4e3b6fea67e394bbdc9bdad212e539761c182a2b"
+  },
+  {
+   "file": "PCXC_run_host.py",
+   "from_": "PCXB_run_host.py",
+   "changes": "prefix only",
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c"
+  },
+  {
+   "file": "PCXC_native_decide_edit.sh",
+   "purpose": "Task 1: corrected credited file and regenerated bundle PRVCmb_C13",
+   "sha256": "f149e6e5eccbeb698c3320c47337d1d1c27999c694879f02f818b81265074ead"
+  },
+  {
+   "file": "PCXC_audit.sh",
+   "from_": "PCXB_audit.sh",
+   "changes": "paths and prefix only",
+   "sha256": "6a8d0f44deedbabc089237fda2df971ef432a100a84d2f6205eb5889103b6eed"
+  },
+  {
+   "file": "PCXC_reach_lists.sh / PCXC_nofrozen_reach.sh",
+   "purpose": "Task 2 list-level step and report"
+  },
+  {
+   "file": "PCXC_ConeWalk.lean.in (+ PCXC_gen_cone.sh)",
+   "purpose": "Task 2 witness walker (streaming .olean reader, no environment import)",
+   "sha256": "40906056c3df2fe0187320d57bb2d6a5ba0f4b2ee39df02c4f3130aea742d865"
+  },
+  {
+   "file": "PCXC_WalkTemplate.lean.in (+ PCXC_gen_walk.sh)",
+   "purpose": "first, import-based walker shape (killed in PCXC_L003); retained as failed shape"
+  }
+ ],
+ "toolchain": "lean v4.32.0 (host /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0), lake env lean -j1 -M7000 -DElab.async=false, scopes MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64, timeout 180 s",
+ "reused_unchanged": [
+  "PRVCmb_ROOT.lean (copy of PCXB)",
+  "PRVH_WrapAdd.lean (copy of PCXB)",
+  "PCXB_rename.py (imported from ../prov-p6c-20261109)"
+ ]
+}
