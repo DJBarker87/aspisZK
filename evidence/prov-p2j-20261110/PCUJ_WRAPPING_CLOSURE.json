@@ -1,0 +1,25 @@
+{
+ "definitions": [
+  "NJS_Extract.verifier.candidate.batch_keys_loop",
+  "NJS_Extract.verifier.candidate.batch_keys",
+  "NJS_Extract.verifier.candidate.sort_batch_keys",
+  "NJS_Extract.verifier.candidate.sort_batch_keys_loop0",
+  "NJS_Extract.verifier.candidate.sort_batch_keys_loop0.body",
+  "NJS_Extract.verifier.candidate.sort_batch_keys_loop0_loop0",
+  "NNG_verify_finish.r1_semantic.verify_finish.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31",
+  "NNG_verify_finish.r1_semantic.verify_finish.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31",
+  "NNG_verify_finish.r1_semantic.verify_finish.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError"
+ ],
+ "evidence": {
+  "scopes": [
+   "PCUJ_L005 (NNG, exit 1)",
+   "PCUJ_L009 (NJS, exit 1)"
+  ],
+  "text": "The ON emissions (PCUJ_E002 = NMH_E009 re-extracted with overflow checks ON; PCUJ_E003 = NMH_E010 re-extracted ON) emit plain checked operators (`16#usize + tupled_args`, `i1 <<< 8#i32`, `j - 1#usize`) in the callee closure of these definitions, whereas the gate declarations emit `lift (Usize.wrapping_add ..)`, `lift (Std.U64.wrapping_shl ..)`, `lift (Usize.wrapping_sub ..)` (the OFF translation). The equality `@fresh = @gate` is therefore not provable at ON (unsolved goal in the unfolded callee). The PCUI_ text-only independence test looked at the instance/aggregate declaration and did not follow its callees (closure_2.call_mut; batch_keys_loop.body; sort_batch_keys_loop0_loop0.body). The OFF equality credited in PCUI_ is unchanged.",
+  "call_sites": [
+   "crates/aspis-r1-cost-probe/src/r1_semantic.rs verify_finish closure `claims[0][16 + i]` (NNG closure_2.call_mut: gate wrapping_add 16 tupled_args, ON emission 16 + tupled_args)",
+   "crates/aspis-r1-cost-probe/src/candidate.rs batch_keys loop: `(index as u64) << 8 | j` and `lo + j`",
+   "candidate.rs sort_batch_keys inner loop: `j - 1` guarded by `j > 0`"
+  ]
+ }
+}
