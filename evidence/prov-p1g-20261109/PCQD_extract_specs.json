@@ -1,0 +1,793 @@
+{
+ "schema": "PCQD_extract_specs/1",
+ "note": "roots and opacity per group; extended Aeneas first. P1g.",
+ "specs": [
+  {
+   "spec_id": "D01",
+   "kind": "frozen",
+   "label": "AdapterRw: first_decoded, observer, owned require_* helpers, readonly_buffer_meta_ok, OwnedAccount::data_len",
+   "start_from": [
+    "crate::first_decoded",
+    "crate::observer",
+    "crate::r1_pool_adapter::owned::require_distinct_accounts",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+    "crate::r1_pool_adapter::owned::_::data_len"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "aspis_r1_cost_probe::verifier::tx1",
+    "crate::error"
+   ],
+   "namespace": "PCQD_d01",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Callees of first_decoded outside the gate definitions (verifier::tx1, error) opaque as P1c did for crate-level callees.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D02",
+   "kind": "frozen",
+   "label": "AdapterReconstruct: asq8_common, reconstruct_asq8_statement, transfer/withdrawal_statement_box",
+   "start_from": [
+    "crate::r1_pool_adapter::asq8_common",
+    "crate::r1_pool_adapter::reconstruct_asq8_statement",
+    "crate::r1_pool_adapter::transfer_statement_box",
+    "crate::r1_pool_adapter::withdrawal_statement_box"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1"
+   ],
+   "namespace": "PCQD_d02",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1AdapterReconstruct.Funs",
+     "AspisR1AdapterReconstruct.Types"
+    ]
+   },
+   "basis": "validate_pool_v1_pair_forest_terminal_statement_v1 opaque as in PCQC_E023.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D03",
+   "kind": "frozen",
+   "label": "r1_wire: ValidatedRecord decode_k/payload, row_shape, CLAIMS, LANES, SemanticTranscript, Error",
+   "start_from": [
+    "crate::r1_wire::_::decode_k",
+    "crate::r1_wire::_::payload",
+    "crate::r1_wire::row_shape",
+    "crate::r1_wire::CLAIMS",
+    "crate::r1_wire::LANES",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Error"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d03",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1DecodeKFullV10.Funs",
+     "AspisS1NativeCompactModelV1",
+     "CurrentCompactCallerTypesV1"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D04",
+   "kind": "frozen",
+   "label": "compact: SEMANTIC_ROWS, compact_row, expand_semantic",
+   "start_from": [
+    "crate::compact::SEMANTIC_ROWS",
+    "crate::compact::compact_row",
+    "crate::compact::expand_semantic"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d04",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "S1NativeCompactModelV1"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D05",
+   "kind": "frozen",
+   "label": "r1_semantic: Verified type, claims, verifier::View",
+   "start_from": [
+    "crate::r1_semantic::claims",
+    "crate::r1_semantic::Verified",
+    "crate::verifier::View"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d05",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "ClaimsUnrolledParentSource",
+     "NJT_ClaimsRef_Funs",
+     "CurrentCompactCallerTypesV1"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D06",
+   "kind": "frozen",
+   "label": "fast_domain: TABLE_A, TABLE_B, table_value, fibre_point, line_node",
+   "start_from": [
+    "crate::fast_domain::TABLE_A",
+    "crate::fast_domain::TABLE_B",
+    "crate::fast_domain::table_value",
+    "crate::fast_domain::fibre_point",
+    "crate::fast_domain::line_node"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d06",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NFN_ExtractedGeometry"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D07",
+   "kind": "frozen",
+   "label": "verifier: QueryGeometry::for_range, batch_prefix_products",
+   "start_from": [
+    "crate::verifier::_::for_range",
+    "crate::verifier::batch_prefix_products"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d07",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NFN_ExtractedGeometry",
+     "Port3_NativeGeometryBody",
+     "Port4C_NativePrefix"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D08",
+   "kind": "frozen",
+   "label": "NGN: transport Variant::folds, Prepared::new",
+   "start_from": [
+    "crate::transport::_::folds",
+    "crate::verifier::_::new"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d08",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NGN_Emitted"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D09",
+   "kind": "frozen",
+   "label": "multiproof::node_count",
+   "start_from": [
+    "crate::multiproof::node_count"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d09",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NJA_CountBody"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D10",
+   "kind": "frozen",
+   "label": "candidate: batch_merkle, batch_merkle_values, batch_tree, query_loop",
+   "start_from": [
+    "crate::verifier::candidate::batch_merkle",
+    "crate::verifier::candidate::batch_merkle_values",
+    "crate::verifier::candidate::batch_tree",
+    "crate::verifier::candidate::query_loop"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d10",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "Port3_NativeBatchBody",
+     "Port3_NativeQueryBody"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D11",
+   "kind": "frozen",
+   "label": "verifier: BatchedWeights::new, read_checkpoint_weights, validate_checkpoint_queries, candidate::prepare",
+   "start_from": [
+    "crate::verifier::_::new",
+    "crate::verifier::read_checkpoint_weights",
+    "crate::verifier::candidate::prepare"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d11",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "Port3_NativePendingBody",
+     "Port5Q2_ReaderWeights",
+     "CurrentCompactCallerTypesV1"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D12",
+   "kind": "frozen",
+   "label": "pair_forest_terminal boxed decoders and MASTER_OFFSET",
+   "start_from": [
+    "crate::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::MASTER_OFFSET"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d12",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel"
+  },
+  {
+   "spec_id": "D13",
+   "kind": "frozen",
+   "label": "pair_tree_profile boxed decoders, live snapshot encode/validate",
+   "start_from": [
+    "crate::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1",
+    "crate::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d13",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel"
+  },
+  {
+   "spec_id": "D14",
+   "kind": "frozen",
+   "label": "asq8_payment_reference::encode_common, asq8_reference_envelope",
+   "start_from": [
+    "crate::pool_v1::pair_forest_terminal::asq8_payment_reference::encode_common",
+    "crate::pool_v1::pair_forest_terminal::asq8_reference_envelope"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d14",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NFY_Part043"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel"
+  },
+  {
+   "spec_id": "D15",
+   "kind": "frozen",
+   "label": "circle: secure_circle_point_from_parameter, secure_ood_circle_point_from_parameter, CirclePointError",
+   "start_from": [
+    "crate::circle::secure_circle_point_from_parameter",
+    "crate::circle::secure_ood_circle_point_from_parameter",
+    "crate::circle::CirclePointError"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCQD_d15",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR72Sampler.Funs",
+     "AspisR72Sampler.Types"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0"
+  },
+  {
+   "spec_id": "D16",
+   "kind": "frozen",
+   "label": "field: M31::inv, CM31::inv/inv_with, QM31::try_inv, square_n, eq instances",
+   "start_from": [
+    "crate::field::_::inv",
+    "crate::field::_::inv_with",
+    "crate::field::_::try_inv",
+    "crate::field::square_n",
+    "crate::field::_::eq"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCQD_d16",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR72Sampler.Funs"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0"
+  },
+  {
+   "spec_id": "D17",
+   "kind": "frozen",
+   "label": "r0::transport::order (priority: last unexamined SEMANTIC item)",
+   "start_from": [
+    "crate::r0::transport::order",
+    "core::option::_::ok_or"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCQD_d17",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "FIo_Native"
+    ]
+   },
+   "basis": "",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0"
+  },
+  {
+   "spec_id": "D01a",
+   "kind": "frozen",
+   "label": "AdapterRw split a: all D01 roots except require_distinct_accounts",
+   "start_from": [
+    "crate::first_decoded",
+    "crate::observer",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+    "crate::r1_pool_adapter::owned::_::data_len"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "aspis_r1_cost_probe::verifier::tx1",
+    "crate::error"
+   ],
+   "namespace": "PCQD_d01a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Changed shape after E004 (extended Not_found) and E005 (original: returns inside nested loops in require_distinct_accounts).",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D01b",
+   "kind": "frozen",
+   "label": "AdapterRw split b: require_distinct_accounts alone",
+   "start_from": [
+    "crate::r1_pool_adapter::owned::require_distinct_accounts"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d01b",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Changed shape after E004/E005.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D16a",
+   "kind": "frozen",
+   "label": "field inverses without eq: M31::inv, CM31::inv/inv_with, QM31::try_inv, square_n",
+   "start_from": [
+    "crate::field::square_n",
+    "crate::field::_::inv",
+    "crate::field::_::inv_with",
+    "crate::field::_::try_inv"
+   ],
+   "include": [],
+   "opaque": [],
+   "namespace": "PCQD_d16a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR72Sampler.Funs"
+    ]
+   },
+   "basis": "Changed shape after E025 (Charon driver failure; _::eq selector suspected).",
+   "crate": "aspis-core",
+   "manifest": "crates/aspis-core/Cargo.toml",
+   "features": "r0"
+  },
+  {
+   "spec_id": "D14r",
+   "kind": "frozen",
+   "label": "asq8_payment_reference (cfg aeneas_ref reference module of the frozen source, NOT in the shipped build)",
+   "start_from": [
+    "crate::pool_v1::pair_forest_terminal::asq8_payment_reference::encode_common",
+    "crate::pool_v1::pair_forest_terminal::asq8_reference_envelope"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d14r",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NFY_Part043"
+    ]
+   },
+   "basis": "E023: module is cfg(any(test,kani,aeneas_ref)) so absent from the shipped release build; this run adds --cfg aeneas_ref (a non-shipped configuration of the frozen source).",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel",
+   "rustflags_extra": "--cfg aeneas_ref"
+  },
+  {
+   "spec_id": "D10a",
+   "kind": "frozen",
+   "label": "candidate batch fns with fast_pairing push opaque",
+   "start_from": [
+    "crate::verifier::candidate::batch_merkle",
+    "crate::verifier::candidate::batch_merkle_values",
+    "crate::verifier::candidate::batch_tree",
+    "crate::verifier::candidate::query_loop"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "crate::fast_pairing::canonical::_::push"
+   ],
+   "namespace": "PCQD_d10a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "Port3_NativeBatchBody",
+     "Port3_NativeQueryBody"
+    ]
+   },
+   "basis": "Changed shape after E019 (internal error at fast_pairing.rs 118-121).",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D11a",
+   "kind": "frozen",
+   "label": "verifier BatchedWeights::new",
+   "start_from": [
+    "crate::verifier::_::new"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d11a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "Port3_NativePendingBody"
+    ]
+   },
+   "basis": "Split of D11 after E020.",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D11b",
+   "kind": "frozen",
+   "label": "verifier read_checkpoint_weights",
+   "start_from": [
+    "crate::verifier::read_checkpoint_weights"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d11b",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "Port5Q2_ReaderWeights"
+    ]
+   },
+   "basis": "Split of D11 after E020.",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D08a",
+   "kind": "frozen",
+   "label": "transport Variant::folds",
+   "start_from": [
+    "crate::transport::_::folds"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d08a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "NGN_Emitted"
+    ]
+   },
+   "basis": "Split of D08 after E012.",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D01c",
+   "kind": "frozen",
+   "label": "AdapterRw split c: observer, readonly_buffer_meta_ok, require_readonly_buffer, require_zero, data_len",
+   "start_from": [
+    "crate::observer",
+    "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+    "crate::r1_pool_adapter::owned::require_readonly_buffer",
+    "crate::r1_pool_adapter::owned::require_zero",
+    "crate::r1_pool_adapter::owned::_::data_len"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d01c",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Split of D01a after E016.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D01d",
+   "kind": "frozen",
+   "label": "AdapterRw split d: first_decoded, require_verifier_checkpoint",
+   "start_from": [
+    "crate::first_decoded",
+    "crate::r1_pool_adapter::owned::require_verifier_checkpoint"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "aspis_r1_cost_probe::verifier::tx1",
+    "crate::error"
+   ],
+   "namespace": "PCQD_d01d",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AdapterRwModel"
+    ]
+   },
+   "basis": "Split of D01a after E016.",
+   "crate": "aspis-r1-cost-probe-program",
+   "manifest": "programs/r1-cost-probe/Cargo.toml",
+   "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D03a",
+   "kind": "frozen",
+   "label": "r1_wire without decode_k: payload, row_shape, CLAIMS, LANES, SemanticTranscript, Error",
+   "start_from": [
+    "crate::r1_wire::_::payload",
+    "crate::r1_wire::row_shape",
+    "crate::r1_wire::CLAIMS",
+    "crate::r1_wire::LANES",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Error"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d03a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1DecodeKFullV10.Funs",
+     "AspisS1NativeCompactModelV1"
+    ]
+   },
+   "basis": "Changed shape after E007 (extended) and E015 (original): internal error in decode_k loop (r1_wire.rs 158-165).",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D08b",
+   "kind": "frozen",
+   "label": "verifier Prepared::new (original)",
+   "start_from": [
+    "crate::verifier::_::new"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d08b",
+   "aeneas_tool": "original",
+   "covers": {
+    "modules": [
+     "NGN_Emitted"
+    ]
+   },
+   "basis": "Split of D08; E012 extended Not_found.",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D12b",
+   "kind": "frozen",
+   "label": "pair_forest_terminal decoders with pair_tree_profile boxed decoders opaque",
+   "start_from": [
+    "crate::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::MASTER_OFFSET"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "crate::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1"
+   ],
+   "namespace": "PCQD_d12b",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs"
+    ]
+   },
+   "basis": "Changed shape after E021 (extended: Unreachable at pair_tree_profile.rs 466-473) and E030 (original: memory growth 3.26 GB cgroup peak, timeout).",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel"
+  }
+ ]
+}
