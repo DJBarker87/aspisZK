@@ -1,0 +1,367 @@
+{
+ "schema": "PCWP_STATUS/1",
+ "target_established": false,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "branch": "codex/pc-prov-p5f-20261110",
+ "lean_scopes": "26 of 30 (PCWP_L001-L025; PCWP_L026 not launched: generator-side error before submission); exit 0: L002 L011 L017 L024",
+ "extraction_scopes": "3 of 6 (PCWP_E001 failed shape, E002 and E003 exit 0), cargo --jobs 4, CARGO_BUILD_JOBS=4, rustc -Zthreads=1, identity by class receipt PCWE_E003",
+ "classification_rule": "DEPENDS_ON_LIBRARY_TRUST: the fresh closure reaches a trust-row external (rows named per definition); EQUALITY_PROVED: closure names no row. Lead ruling 2026-11-10: any definition proved through the from_fn HM-D member is DEPENDS_ON_LIBRARY_TRUST, never SETTLED.",
+ "item1_lemma": {
+  "file": "PRVEq_PCWP_FromFnSem.lean",
+  "scope": "PCWP_L002",
+  "exit": 0,
+  "theorems": [
+   "PCWP_FromFnSem.fromFnLoop_stateless",
+   "PCWP_FromFnSem.array_from_fn_copy_stateless",
+   "PCWP_FromFnSem.array_from_fn_copy_elem",
+   "PCWP_FromFnSem.array_from_fn_copy_first_fail",
+   "PCWP_FromFnSem.array_from_fn_copy_first_div"
+  ],
+  "claim": "the gate hand model FIq_Native.array_from_fn_copy (= AspisR1.OraclePortStdBuilder.fromFn) for a stateless Result-valued closure equals length-checked left-to-right evaluation over indices 0..N-1: element i is f(i); the first failing index k fixes the result (fail e or div) whatever g does at indices > k",
+  "scope_of_claim": "stateless closures; the state-threaded general case is the definition of fromFnLoop itself (not a separate theorem). It is a lemma about the gate model, not a proof about core::array::from_fn.",
+  "axioms": "propext, Classical.choice, Quot.sound"
+ },
+ "settled_by_class": {
+  "DEPENDS_ON_LIBRARY_TRUST": 12,
+  "EQUALITY_PROVED": 2,
+  "CONDITIONAL_ON_BINDING": 0,
+  "TYPE_ISOMORPHISM": 0
+ },
+ "depends_on_library_trust_by_row": {
+  "HM-D": [
+   "FIq_Native.state_only_poseidon.internal_linear_lazy",
+   "FIq_Native.state_only_poseidon.internal_linear_lazy_loop1",
+   "FIq_Native.state_only_poseidon.interpolated_internal_pair",
+   "FIq_Native.state_only_poseidon.external_linear_packed",
+   "FIq_Native.state_only_poseidon.external_linear_packed_loop",
+   "FIq_Native.state_only_poseidon.external_local_packed",
+   "FIq_Native.state_only_poseidon.external_local_packed_raw",
+   "FIq_Native.state_only_poseidon.full_round_packed",
+   "FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+   "FIq_Native.state_only_poseidon.full_round_m31_constants_packed",
+   "FIq_Native.state_only_poseidon.interpolated_full_pair_packed",
+   "FIq_Native.state_only_poseidon.leading_pair_packed"
+  ],
+  "HM-F": [
+   "FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected"
+  ]
+ },
+ "equality_proved": [
+  "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0",
+  "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0_loop0"
+ ],
+ "records": [
+  {
+   "module": "RPu_FIq_Native04",
+   "definition": "FIq_Native.state_only_poseidon.internal_linear_lazy",
+   "theorem": "PRVEq.RPu_FIq_Native04_n04.state_only_poseidon.internal_linear_lazy",
+   "file": "PRVEq_RPu_FIq_Native04_n04c.lean",
+   "scope": "PCWP_L011",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native04",
+   "definition": "FIq_Native.state_only_poseidon.internal_linear_lazy_loop1",
+   "theorem": "PRVC.Eq.state_only_poseidon.internal_linear_lazy_loop1",
+   "file": "PRVEq_RPu_FIq_Native04_n04c.lean",
+   "scope": "PCWP_L011",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native04",
+   "definition": "FIq_Native.state_only_poseidon.interpolated_internal_pair",
+   "theorem": "PRVEq.RPu_FIq_Native04_n04.state_only_poseidon.interpolated_internal_pair",
+   "file": "PRVEq_RPu_FIq_Native04_n04c.lean",
+   "scope": "PCWP_L011",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square",
+    "aspis_core.field.qm31_m31_dot"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_linear_packed",
+   "theorem": "PRVEq.RPu_FIq_Native05_n05.state_only_poseidon.external_linear_packed",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.QM31.add"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_linear_packed_loop",
+   "theorem": "PRVC.Eq.state_only_poseidon.external_linear_packed_loop",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_local_packed",
+   "theorem": "PRVEq.RPu_FIq_Native05_n05.state_only_poseidon.external_local_packed",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_local_packed_raw",
+   "theorem": "PRVEq.RPu_FIq_Native05_n05.state_only_poseidon.external_local_packed_raw",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0",
+   "theorem": "PRVC.Eq.state_only_poseidon.external_local_packed_raw_loop0",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "EQUALITY_PROVED",
+   "rows": [],
+   "library_externals": [],
+   "shared_boundary_externals": [],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.external_local_packed_raw_loop0_loop0",
+   "theorem": "PRVC.Eq.state_only_poseidon.external_local_packed_raw_loop0_loop0",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "EQUALITY_PROVED",
+   "rows": [],
+   "library_externals": [],
+   "shared_boundary_externals": [],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native05",
+   "definition": "FIq_Native.state_only_poseidon.full_round_packed",
+   "theorem": "PRVEq.RPu_FIq_Native05_n05.state_only_poseidon.full_round_packed",
+   "file": "PRVEq_RPu_FIq_Native05_n05_c.lean",
+   "scope": "PCWP_L017",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native07",
+   "definition": "FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+   "theorem": "PRVEq.RPu_FIq_Native07_n07.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+   "file": "PRVEq_RPu_FIq_Native07_n07_c.lean",
+   "scope": "PCWP_L024",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D",
+    "HM-F"
+   ],
+   "library_externals": [
+    "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+    "core.array.Array.map",
+    "core.array.from_fn",
+    "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold",
+    "core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.fold"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.add",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.M31.reduce_u64",
+    "aspis_core.field.PreparedQm31Multiplier.mul",
+    "aspis_core.field.PreparedQm31Multiplier.new",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square",
+    "aspis_core.field.QM31.sub",
+    "aspis_core.field.qm31_m31_dot",
+    "aspis_core.field.qm31_pack_base4",
+    "aspis_core.field.qm31_sum_products3_prepared",
+    "state_only_poseidon.external_linear_lazy"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native07",
+   "definition": "FIq_Native.state_only_poseidon.full_round_m31_constants_packed",
+   "theorem": "PRVEq.RPu_FIq_Native07_n07.state_only_poseidon.full_round_m31_constants_packed",
+   "file": "PRVEq_RPu_FIq_Native07_n07_c.lean",
+   "scope": "PCWP_L024",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.add",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native07",
+   "definition": "FIq_Native.state_only_poseidon.interpolated_full_pair_packed",
+   "theorem": "PRVEq.RPu_FIq_Native07_n07.state_only_poseidon.interpolated_full_pair_packed",
+   "file": "PRVEq_RPu_FIq_Native07_n07_c.lean",
+   "scope": "PCWP_L024",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.M31.reduce_u64",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square",
+    "state_only_poseidon.external_linear_lazy"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  },
+  {
+   "module": "RPu_FIq_Native07",
+   "definition": "FIq_Native.state_only_poseidon.leading_pair_packed",
+   "theorem": "PRVEq.RPu_FIq_Native07_n07.state_only_poseidon.leading_pair_packed",
+   "file": "PRVEq_RPu_FIq_Native07_n07_c.lean",
+   "scope": "PCWP_L024",
+   "cls": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": [
+    "HM-D"
+   ],
+   "library_externals": [
+    "core.array.Array.map",
+    "core.array.from_fn"
+   ],
+   "shared_boundary_externals": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.M31.add",
+    "aspis_core.field.M31.reduce_u62",
+    "aspis_core.field.QM31.add",
+    "aspis_core.field.QM31.mul",
+    "aspis_core.field.QM31.square",
+    "state_only_poseidon.external_linear_lazy"
+   ],
+   "configuration": "ON (original Aeneas 959659a6; overflow-checks=yes)",
+   "previous_cause": "DEPENDS_ON_LIBRARY_TRUST"
+  }
+ ],
+ "not_attempted_or_open": "see PCWP_REMAINING.json"
+}

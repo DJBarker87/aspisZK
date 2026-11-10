@@ -1,0 +1,288 @@
+/-- Trait implementation: [core::array::iter::{impl core::iter::traits::iterator::Iterator<T> for core::array::iter::IntoIter<T, N>}]
+    Source: '/rustc/library/core/src/array/iter.rs', lines 238:0-238:51
+    Name pattern: [core::iter::traits::iterator::Iterator<core::array::iter::IntoIter<@T, @N>, @T>] -/
+@[reducible]
+impl_def core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator (T :
+  Type) (N : Std.Usize) : core.iter.traits.iterator.Iterator
+  (core.array.iter.IntoIter T N) T := {
+  next := core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next
+  fold := fun {B : Type} {F : Type} (opsfunctionFnMutPPairPInst :
+    core.ops.function.FnMut F (B × T) B) =>
+    core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+    opsfunctionFnMutPPairPInst
+  rev := fun {Clause0_Clause0_Item : Type}
+    (double_endedDoubleEndedIteratorIntoIterPInst :
+    core.iter.traits.double_ended.DoubleEndedIterator (core.array.iter.IntoIter
+    T N) Clause0_Clause0_Item) =>
+    core.iter.traits.iterator.Iterator.rev.trait_default
+    (core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator T N)
+    double_endedDoubleEndedIteratorIntoIterPInst
+}
+=====
+/-- Trait implementation: [core::array::iter::{impl core::iter::traits::double_ended::DoubleEndedIterator<T> for core::array::iter::IntoIter<T, N>}]
+    Source: '/rustc/library/core/src/array/iter.rs', lines 295:0-295:62
+    Name pattern: [core::iter::traits::double_ended::DoubleEndedIterator<core::array::iter::IntoIter<@T, @N>, @T>] -/
+@[reducible]
+def
+  core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator
+  (T : Type) (N : Std.Usize) :
+  core.iter.traits.double_ended.DoubleEndedIterator (core.array.iter.IntoIter T
+  N) T := {
+  iteratorInst := core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator
+    T N
+  next_back :=
+    core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator.next_back
+}
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 31:0-32:92
+    Visibility: public -/
+@[global_simps, irreducible]
+def
+  pool_v1.pair_forest_semantic_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1
+  : Result Std.Usize := do
+  let i ← state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS
+  let i1 ←
+    pool_v1.pair_forest_semantic_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
+      + i
+  i1 + 2#usize
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::SELECTED_H1_COLUMN]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 56:0-57:88 -/
+@[global_simps, irreducible]
+def pool_v1.pair_forest_semantic_terminal.SELECTED_H1_COLUMN
+  : Result Std.Usize := do
+  let i ← state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS
+  pool_v1.pair_forest_semantic_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
+    + i
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::SELECTED_G_COLUMN]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 58:0-58:56 -/
+@[global_simps, irreducible]
+def pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN
+  : Result Std.Usize := do
+  let i ← pool_v1.pair_forest_semantic_terminal.SELECTED_H1_COLUMN
+  i + 1#usize
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::selected_claim]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1199:0-1205:1 -/
+def pool_v1.pair_forest_semantic_terminal.selected_claim
+  (claims : Array field.QM31 84#usize) (point : Std.Usize)
+  (column : Std.Usize) :
+  Result field.QM31
+  := do
+  let i ←
+    pool_v1.pair_forest_semantic_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1
+  let i1 ← point * i
+  let i2 ← i1 + column
+  Array.index_usize claims i2
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#3<'_0>}::call_mut]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1261:41-1267:5 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3)
+  (tupled_args : Std.Usize) :
+  Result (field.QM31 ×
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3)
+  := do
+  let i ←
+    pool_v1.pair_forest_semantic_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
+      + tupled_args
+  let q ← pool_v1.pair_forest_semantic_terminal.selected_claim c 0#usize i
+  ok (q, c)
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#3<'_0>}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1261:41-1267:5 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3)
+  (i : Std.Usize) :
+  Result field.QM31
+  := do
+  let (q, _) ←
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+      c i
+  ok q
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#3<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1261:41-1267:5 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3 Std.Usize
+  field.QM31 := {
+  call_once :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+}
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#3<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1261:41-1267:5 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+  : core.ops.function.FnMut
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3 Std.Usize
+  field.QM31 := {
+  FnOnceInst :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  call_mut :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+}
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#2<'_0>}::call_mut]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1259:38-1259:80 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2)
+  (tupled_args : Std.Usize) :
+  Result (field.QM31 ×
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2)
+  := do
+  let q ←
+    pool_v1.pair_forest_semantic_terminal.selected_claim c 2#usize tupled_args
+  ok (q, c)
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#2<'_0>}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1259:38-1259:80 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2)
+  (i : Std.Usize) :
+  Result field.QM31
+  := do
+  let (q, _) ←
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+      c i
+  ok q
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#2<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1259:38-1259:80 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2 Std.Usize
+  field.QM31 := {
+  call_once :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+}
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#2<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1259:38-1259:80 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+  : core.ops.function.FnMut
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2 Std.Usize
+  field.QM31 := {
+  FnOnceInst :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  call_mut :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+}
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#1<'_0>}::call_mut]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1258:37-1258:79 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1)
+  (tupled_args : Std.Usize) :
+  Result (field.QM31 ×
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1)
+  := do
+  let q ←
+    pool_v1.pair_forest_semantic_terminal.selected_claim c 1#usize tupled_args
+  ok (q, c)
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#1<'_0>}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1258:37-1258:79 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1)
+  (i : Std.Usize) :
+  Result field.QM31
+  := do
+  let (q, _) ←
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+      c i
+  ok q
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#1<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1258:37-1258:79 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1 Std.Usize
+  field.QM31 := {
+  call_once :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+}
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure#1<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1258:37-1258:79 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+  : core.ops.function.FnMut
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1 Std.Usize
+  field.QM31 := {
+  FnOnceInst :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  call_mut :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+}
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure<'_0>}::call_mut]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1257:32-1257:74 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure)
+  (tupled_args : Std.Usize) :
+  Result (field.QM31 ×
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure)
+  := do
+  let q ←
+    pool_v1.pair_forest_semantic_terminal.selected_claim c 0#usize tupled_args
+  ok (q, c)
+=====
+/-- [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure<'_0>}::call_once]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1257:32-1257:74 -/
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+  (c : pool_v1.pair_forest_semantic_terminal.composition_parts.closure)
+  (i : Std.Usize) :
+  Result field.QM31
+  := do
+  let (q, _) ←
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+      c i
+  ok q
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnOnce<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1257:32-1257:74 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  : core.ops.function.FnOnce
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure Std.Usize
+  field.QM31 := {
+  call_once :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once
+}
+=====
+/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::{impl core::ops::function::FnMut<(usize,), aspis_core::field::QM31> for aspis_statement::pool_v1::pair_forest_semantic_terminal::composition_parts::closure<'_0>}]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs', lines 1257:32-1257:74 -/
+@[reducible]
+def
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+  : core.ops.function.FnMut
+  pool_v1.pair_forest_semantic_terminal.composition_parts.closure Std.Usize
+  field.QM31 := {
+  FnOnceInst :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31
+  call_mut :=
+    pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut
+}
