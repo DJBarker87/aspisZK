@@ -1,0 +1,57 @@
+{"attempt": "PCVY_L029", "exit_status": 1, "wall_seconds": 4.880589228123426, "peak_rss_kib": "2607748", "swaps": "0", "print_axioms": ["'PCVY_Op50.set_take' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.frontier_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.frontier_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p10.lean:50:86: error: unsolved goals
+Dig : Type
+inst✝ : DecidableEq Dig
+k : PCVV_LaneDecodeRef.K Dig
+tree : List UInt8
+nli fuel level : ℕ
+node : Dig
+hd : k.decodeDigest (sl tree (48 + 32 * level) (48 + 32 * level + 32)) = some node
+hc : (nli >>> level &&& 1 == 0 && node != k.emptyRoots level) = false
+hr : PCVV_LaneDecodeRef.frontierLoop k tree nli fuel (level + 1) = none
+⊢ nli >>> level % 2 = 0 → node = k.emptyRoots level
+PCVY_sources/PRVEq_Op50_p10.lean:51:10: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50
+...
+ This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p10.lean:105:74: error: Application type mismatch: The argument
+  hcond
+has type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqArray val (K0.emptyRoots ↑level)) = true
+but is expected to have type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqOfDecidableEq val (K0.emptyRoots ↑level)) = true
+in the application
+  fl_cond K0 (bytesOf tree) (↑next) k (↑level) val hd' hcond
+PCVY_sources/PRVEq_Op50_p10.lean:122:80: error: Application type mismatch: The argument
+  hcond'
+has type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqArray val (K0.emptyRoots ↑level)) = false
+but is expected to have type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqOfDecidableEq val (K0.emptyRoots ↑level)) = false
+in the application
+  fl_rec_none K0 (bytesOf tree) (↑next) k (↑level) val hd' hcond'
+PCVY_sources/PRVEq_Op50_p10.lean:133:85: error: Application type mismatch: The argument
+  hcond'
+has type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqArray val (K0.emptyRoots ↑level)) = false
+but is expected to have type
+  (↑next >>> ↑level &&& 1 == 0 && @bne (Std.Array U32 8#usize) instBEqOfDecidableEq val (K0.emptyRoots ↑level)) = false
+in the application
+  fl_rec_some K0 (bytesOf tree) (↑next) k (↑level) val rest hd' hcond'
+'PCVY_Op50.set_take' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.frontier_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.frontier_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r283ce5e28d1d486a9b1cf047d10c1e35.scope; invocation ID: 08b5324c587a46ad819825f0fa5407ca

@@ -1,0 +1,64 @@
+{"attempt": "PCVY_L013", "exit_status": 1, "wall_seconds": 5.219845154089853, "peak_rss_kib": "2656900", "swaps": "0", "print_axioms": ["'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]", "'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, sorryAx, Quot.sound]", "'PCVY_Op50.u32_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.u64_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p7.lean:14:64: error: unsolved goals
+case cons
+a : U8
+tail✝ : List U8
+tail_ih✝ : (BitVec.fromLEBytes (List.map U8.bv tail✝)).toNat = le (List.map bt tail✝)
+⊢ (BitVec.fromLEBytes (List.map U8.bv (a :: tail✝))).toNat = le (List.map bt (a :: tail✝))
+PCVY_sources/PRVEq_Op50_p7.lean:17:11: error: unexpected token 'as'; expected command
+PCVY_sources/PRVEq_Op50_p7.lean:28:20: error: don't know how to synthesize placeholder for argument `eq`
+context:
+a : Std.Array U8 4#usize
+⊢ 8 * (List.map U8.bv ↑a).length = UScalarTy.U32.numBits
+PCVY_sources/PRVEq_Op50_p7.lean:26:62: error: unsolved goals
+a : Std.Array U8 4#usize
+⊢ ↑(BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#us
+...
+q_Op50_p7.lean:146:79: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 7
+  b - c ≥ 0
+where
+ b := ↑↑i
+ c := ↑↑8#usize
+PCVY_sources/PRVEq_Op50_p7.lean:155:22: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+PCVY_sources/PRVEq_Op50_p7.lean:163:8: warning: declaration uses `sorry`
+PCVY_sources/PRVEq_Op50_p7.lean:172:8: warning: declaration uses `sorry`
+PCVY_sources/PRVEq_Op50_p7.lean:226:38: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PCVY_sources/PRVEq_Op50_p7.lean:230:2: error: unsolved goals
+case pos
+a : Std.Array U32 8#usize
+⊢ sorry () = true
+PCVY_sources/PRVEq_Op50_p7.lean:231:2: error: unsolved goals
+case neg
+a b : Std.Array U32 8#usize
+he : ¬a = b
+this : ¬List.drop 0 ↑a = List.drop 0 ↑b
+⊢ (match if ↑a = ↑b then none else some false with
+    | none => ok true
+    | some b1 => ok b1) =
+    ok (sorry ())
+PCVY_sources/PRVEq_Op50_p7.lean:233:10: warning: This simp argument is unused:
+  this
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵h̵i̵s̵,̵ ̵h̵e̵]̵[̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p7.lean:233:16: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp [this,̵ ̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1bfcbfc84ec1415e94b26ab1edc45336.scope; invocation ID: feef355704854da39b518d8b52bac722

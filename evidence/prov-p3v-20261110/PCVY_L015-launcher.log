@@ -1,0 +1,75 @@
+{"attempt": "PCVY_L015", "exit_status": 1, "wall_seconds": 5.273096211953089, "peak_rss_kib": "2657088", "swaps": "0", "print_axioms": ["'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]", "'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, sorryAx, Quot.sound]", "'PCVY_Op50.u32_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.u64_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p7.lean:23:38: error: No goals to be solved
+PCVY_sources/PRVEq_Op50_p7.lean:35:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.330 <<< 8 ||| ↑a
+in the target expression
+  ↑a ||| (le (List.map bt t) % (2 ^ (8 * t.length) * 256)) <<< 8 % (2 ^ (8 * t.length) * 256) =
+    ↑a + 256 * le (List.map bt t)
+
+case cons
+a : U8
+t : List U8
+ih : (BitVec.fromLEBytes (List.map U8.bv t)).toNat = le (List.map bt t)
+ha : ↑a < 256
+hlt : (BitVec.fromLEBytes (List.map U8.bv t)).toNat < 2 ^ (8 * t.length)
+hP : 1 ≤ 2 ^ (8 * t.length)
+hW : 2 ^ (8 * (t.length + 1)) = 2 ^ (8 * t.length) * 256
+h1 : a.bv.toNat % (2 ^ (8 * t.length) * 256) = ↑a
+h2 :
+  (BitVec.fro
+...
+ls
+b : Slice U8
+s : Usize
+h : ↑s + 8 ≤ (↑b).length
+hb : (↑b).length ≤ Usize.max
+s1 : Usize
+e1 : s + 1#usize = ok s1
+v1 : ↑s1 = ↑s + 1
+s2 : Usize
+e2 : s + 2#usize = ok s2
+v2 : ↑s2 = ↑s + 2
+s3 : Usize
+e3 : s + 3#usize = ok s3
+v3 : ↑s3 = ↑s + 3
+s4 : Usize
+e4 : s + 4#usize = ok s4
+v4 : ↑s4 = ↑s + 4
+s5 : Usize
+e5 : s + 5#usize = ok s5
+v5 : ↑s5 = ↑s + 5
+s6 : Usize
+e6 : s + 6#usize = ok s6
+v6 : ↑s6 = ↑s + 6
+s7 : Usize
+e7 : s + 7#usize = ok s7
+v7 : ↑s7 = ↑s + 7
+h0 : ↑s < (↑b).length
+h1 : ↑s1 < (↑b).length
+h2 : ↑s2 < (↑b).length
+h3 : ↑s3 < (↑b).length
+h4 : ↑s4 < (↑b).length
+h5 : ↑s5 < (↑b).length
+h6 : ↑s6 < (↑b).length
+h7 : ↑s7 < (↑b).length
+⊢ ∃ w, NCV_Reference.word64 b s = ok w ∧ ↑w = le (sl (List.map bt ↑b) (↑s) (↑s + 8))
+'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]
+'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, sorryAx, Quot.sound]
+'PCVY_Op50.u32_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.u64_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PCVY_sources/PRVEq_Op50_p7.lean:170:22: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+PCVY_sources/PRVEq_Op50_p7.lean:247:10: warning: This simp argument is unused:
+  this
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵h̵i̵s̵,̵ ̵h̵e̵]̵[̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbfa2c48ad77a430cbab1e68b71647bf1.scope; invocation ID: 0690a7c79aa5415b87f8e5fd6b2aebb1

@@ -1,0 +1,70 @@
+{"attempt": "PCVY_L014", "exit_status": 1, "wall_seconds": 5.194882092997432, "peak_rss_kib": "2658160", "swaps": "0", "print_axioms": ["'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]", "'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, sorryAx, Quot.sound]", "'PCVY_Op50.u32_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.u64_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p7.lean:21:4: error: 'show' tactic failed, pattern
+  le (List.map bt t) <<< 8 ||| a.bv.toNat = (bt a).toNat + 256 * le (List.map bt t)
+is not definitionally equal to target
+  (BitVec.setWidth (8 * (a.bv :: List.map U8.bv t).length) a.bv |||
+        BitVec.setWidth (8 * (a.bv :: List.map U8.bv t).length) (BitVec.fromLEBytes (List.map U8.bv t)) <<< 8).toNat =
+    le (bt a :: List.map bt t)
+PCVY_sources/PRVEq_Op50_p7.lean:20:50: warning: This simp argument is unused:
+  BitVec.toNat_cast
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, BitVec.fromLEBytes, B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵c̵a̵s̵t̵,̵ ̵BitVec.toNat_append, ih]
+
+Note: This linter can be disabl
+...
+ls
+b : Slice U8
+s : Usize
+h : ↑s + 8 ≤ (↑b).length
+hb : (↑b).length ≤ Usize.max
+s1 : Usize
+e1 : s + 1#usize = ok s1
+v1 : ↑s1 = ↑s + 1
+s2 : Usize
+e2 : s + 2#usize = ok s2
+v2 : ↑s2 = ↑s + 2
+s3 : Usize
+e3 : s + 3#usize = ok s3
+v3 : ↑s3 = ↑s + 3
+s4 : Usize
+e4 : s + 4#usize = ok s4
+v4 : ↑s4 = ↑s + 4
+s5 : Usize
+e5 : s + 5#usize = ok s5
+v5 : ↑s5 = ↑s + 5
+s6 : Usize
+e6 : s + 6#usize = ok s6
+v6 : ↑s6 = ↑s + 6
+s7 : Usize
+e7 : s + 7#usize = ok s7
+v7 : ↑s7 = ↑s + 7
+h0 : ↑s < (↑b).length
+h1 : ↑s1 < (↑b).length
+h2 : ↑s2 < (↑b).length
+h3 : ↑s3 < (↑b).length
+h4 : ↑s4 < (↑b).length
+h5 : ↑s5 < (↑b).length
+h6 : ↑s6 < (↑b).length
+h7 : ↑s7 < (↑b).length
+⊢ ∃ w, NCV_Reference.word64 b s = ok w ∧ ↑w = le (sl (List.map bt ↑b) (↑s) (↑s + 8))
+'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]
+'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, sorryAx, Quot.sound]
+'PCVY_Op50.u32_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.u64_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PCVY_sources/PRVEq_Op50_p7.lean:157:22: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+PCVY_sources/PRVEq_Op50_p7.lean:234:10: warning: This simp argument is unused:
+  this
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵h̵i̵s̵,̵ ̵h̵e̵]̵[̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r35166feb21584148990da0b0d2facba5.scope; invocation ID: 1643ac294eca4af6bd3d8093b119327c

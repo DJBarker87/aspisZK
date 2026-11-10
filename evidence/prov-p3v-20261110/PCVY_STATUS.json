@@ -1,0 +1,86 @@
+{
+ "schema": "PCVY_STATUS/1",
+ "target_established": false,
+ "job": "PCVY_ P3v op50 equality to its transcription",
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "branch": "codex/pc-prov-p3v-20261110",
+ "lean_scopes_used": 38,
+ "lean_scopes_budget": 38,
+ "extraction_scopes": 0,
+ "op50_status": "OPEN (unchanged); nothing credited; trust row ReviewedTranscription-LaneDecode not yet accept-on-sight",
+ "exit0_claims": [
+  {
+   "scope": "PCVY_L001",
+   "file": "PRVEq_Op50_p1.lean",
+   "claim": "op50_slot: for every host context c, (AspisR1.NOC_HostCtx.sdk c).op50 = NNH_LaneModel.decode (rfl); NNH_LaneModel.decode b = decode_lane_ref b followed by NNH_LaneCarrier.native / Err InvalidAccountData",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "scope": "PCVY_L002",
+   "file": "PCVV_LaneDecodeRef.lean",
+   "claim": "P3t transcription compiles unchanged (byte-identical copy)"
+  },
+  {
+   "scope": "PCVY_L010",
+   "file": "PRVEq_Op50_p5.lean",
+   "claim": "equal_loop_eq, equal_eq: NCV_Reference.equal b v = ok (decide (b.val = v.val)) for all slices",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L012",
+   "file": "PRVEq_Op50_p6.lean",
+   "claim": "zero_loop_eq, zero_eq (all-zero test); bytes32_loop_eq, bytes32_eq (copy of 32 bytes at s equals (drop s).take 32, given s+32 <= length)",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L018",
+   "file": "PRVEq_Op50_p7.lean",
+   "claim": "word32_eq, word64_eq (little-endian value = PCVV le of the slice), u32_val/u64_val, eq_digest_loop_eq, eq_digest_eq",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L021",
+   "file": "PRVEq_Op50_p8.lean",
+   "claim": "digest_loop_eq, digest_eq: NCV_Reference.digest b s = ok (Ok d / Err) exactly as decDig (frozen decode_digest_canonical shape, 8 words < 2147483647) on the 32-byte slice",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L025",
+   "file": "PRVEq_Op50_p9.lean",
+   "claim": "K0 (constants of the transcription), instDecEqDig, fr_body: one iteration of decode_frontier_loop = the transcription's step (bad digest -> Err; condition true -> Err; else cont with F.set level val)",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L032",
+   "file": "PRVEq_Op50_p10.lean",
+   "claim": "frontier_loop_eq (decode_frontier_loop from level l = transcription frontierLoop, G.val = F.take l ++ rest, 688 <= tree length) and frontier_eq (decode_frontier wrapper at the zero frontier); generic bne_bridge, fl_* helpers, set_take",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L034",
+   "file": "PRVEq_Op50_p11.lean",
+   "claim": "generic staging of the transcription (hdrBad, S1..S5; decodeLane_fact by rfl; dl_bad/dl_ok, S*_bad/ok lemmas) and ref-side slicing lemmas idx_to/idx_range/idx_from, literal list facts for magic/binding",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L036",
+   "file": "PRVEq_Op50_p12.lean",
+   "claim": "hdrBad_false_iff: hdrBad K0 (bytesOf b) = false iff HdrOK b (the eight header conditions on the Aeneas bytes)",
+   "axioms": "standard"
+  },
+  {
+   "scope": "PCVY_L038",
+   "file": "PRVEq_Op50_p13.lean",
+   "claim": "ref_hdr_bad: if HdrOK b fails then NCV_Reference.decode_lane_ref b = ok (Err ()); with dl_bad and hdrBad_false_iff this gives agreement of reference and transcription on every input failing a header guard",
+   "axioms": "standard"
+  }
+ ],
+ "not_exit0": [],
+ "not_done": [
+  "ref side after the header: master zero test, tree guards, next_leaf_index, root digest, frontier, final root check (tail simulation)",
+  "decode_lane_ref_eq (top-level equality with LaneRel/Cmp)",
+  "composition with op50_slot (L001) for the deployed slot"
+ ],
+ "transcription_review": "PCVY_TRANSCRIPTION_REVIEW.md: no line differs; constants checked against frozen text; EMPTY roots 168/168 words equal",
+ "label": "REVIEWED_TRANSCRIPTION_PENDING_OWNER; op50 OPEN"
+}

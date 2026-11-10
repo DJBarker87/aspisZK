@@ -1,0 +1,31 @@
+# PCVY_ HANDOFF (job P3v: op50 equality to its transcription)
+
+Target not yet established. op50 stays OPEN; no ledger row, trust row, RSL, contract or shipped source touched; nothing pushed or merged. Branch codex/pc-prov-p3v-20261110. Frozen source 4bb3b3f. Lean scopes 30 of 30 used (7 exit 0, 23 exit 1 during development), extraction 0, one scope at a time, caps unraised, swap 0 (all in PCVY_ATTEMPTS.jsonl and PCVY_L0nn/receipt.json). Files PRVEq_Op50_p5..p10 are the equality modules in import order (p5 imports nothing of mine; each later one imports the previous). They are named p* because each was an iteration target; no copy was renamed without a recompile.
+
+## What is established (exit 0, standard axioms propext/Classical.choice/Quot.sound only, no sorry/axiom/native_decide, heartbeats not raised)
+1. Deployed slot (L001): for every host context c, `(NOC_HostCtx.sdk c).op50 = NNH_LaneModel.decode` (rfl), where decode b = decode_lane_ref b followed by the lane carrier. So the whole question is NCV_Reference.decode_lane_ref against the transcription.
+2. Loop lemmas against NCV_Reference, each stated separately, input domain stated in the hypotheses:
+   - equal_loop_eq / equal_eq (p5, L010); zero_loop_eq / zero_eq and bytes32_loop_eq / bytes32_eq (p6, L012);
+   - word32_eq / word64_eq with the little-endian value equal to PCVV_LaneDecodeRef.le of the slice (p7, L018); eq_digest_loop_eq / eq_digest_eq (p7);
+   - digest_loop_eq / digest_eq (p8, L021): the reference digest returns Ok/Err exactly as `decDig`, my definition of aspis_statement::decode_digest_canonical (eight M31::from_le_bytes, value < 2147483647);
+   - fr_body (p9, L025): one iteration of decode_frontier_loop equals one step of the transcription's frontierLoop (bad digest -> Err, empty-root condition true -> Err, else cont with the frontier updated at `level`). K0, the instantiation of the transcription's constants K, is defined in p9.
+3. Transcription review: PCVY_TRANSCRIPTION_REVIEW.md. No line differs; constants checked against the frozen text; the 168 empty-root words and the binding equal the reference crate's (PCVY_CONSTS_CHECK.json). So no PCVY_LaneDecodeRef.lean was needed.
+
+## Not established
+- p10 (frontier_loop_eq: the loop-by-induction lemma to the transcription's frontierLoop, with generic helpers fl_dec_none/fl_cond/fl_rec_none/fl_rec_some and set_take) ended exit 1 in the last allowed scope (L030) with a single error at line 17, the statement of the bridge lemma `bne_eq_bne` between Aeneas' BEq instance on digest arrays and the one derived from DecidableEq. In that run `#print axioms frontier_loop_eq` listed only standard axioms, but an exit-1 run is not credited. Likely repair: the two instances are defeq (an earlier `rw [Bool.eq_iff_iff]` closed the goal by rfl), so state the lemma with `rfl`, or remove it and pass `hcond` to fl_cond directly; this needs one scope.
+- decode_frontier wrapper (frontier loop at the zero frontier, level 0): obligation text kept as a comment in p10.
+- decode_lane_ref_eq, the composition. Planned statement: for all b, `∃ r, decode_lane_ref b = ok r ∧ Cmp (decodeLane K0 (bytesOf b)) r` where Cmp relates `some l` to `Ok r` through field-wise LaneRel (bump, master bytes, lane id, next index, root, frontier list) and `none` to `Err ()`; then compose with op50_slot and NNH_LaneCarrier.native. Steps: length guard, magic via equal_eq plus injectivity of bt (bt_inj, p6), header bytes via the index lemma idx_slice, zero via zero_eq, master via bytes32_eq, word64_eq for next_leaf_index, digest_eq for root, frontier_loop_eq, last root check via eq_digest_eq.
+Estimated need: 4 to 6 further Lean scopes. Until then the row cannot be called accept-on-sight on equality grounds; only the review and the five loop-level lemmas plus fr_body stand.
+
+## Failed shapes (recorded, not repeated)
+`interval_cases` is not available in this toolchain (replaced by `obtain rfl | ...` from omega); `simp`/`rw` with a mvar-typed `if_pos` inside goals that carry `Std.Array U32 8#usize` types fails (the literal's proof does not check at instances transparency): replaced by generic lemmas over a type variable Dig; `decide (a = b)` on Aeneas arrays has no instance (use `a.val = b.val`). Scopes L003-L009, L011, L013-L017, L019-L020, L022-L024, L026-L029 were development iterations that ended exit 1; each source change followed the printed error.
+
+
+## Update after lead message (8 more Lean scopes, L031-L038; total 38)
+Label: REVIEWED_TRANSCRIPTION_PENDING_OWNER. op50 stays OPEN. Target not yet established.
+Exit 0, standard axioms only:
+- L032 (p10): bridge fixed by a generic `bne_bridge` (the earlier failure was the array-typed statement, changed shape, not a rerun); `frontier_loop_eq` and the `frontier_eq` wrapper (decode_frontier) are proved.
+- L034 (p11): the transcription factored into stages hdrBad, S1..S5 (verbatim fragments; `decodeLane_fact` is rfl) with bad/ok lemmas; ref-side slice lemmas.
+- L036 (p12): `hdrBad_false_iff`: the transcription's header guard passes iff HdrOK b (eight conditions on the Aeneas bytes: length 768, magic, version, lane id < 8, count 8, depth 20, binding, zero reserved bytes).
+- L038 (p13): `ref_hdr_bad`: if HdrOK b fails, decode_lane_ref b = ok (Err ()). Together with `dl_bad` and `hdrBad_false_iff` the reference and the transcription agree on every input failing a header guard.
+Not done (scopes exhausted): ref-side simulation after the header (master zero test via bytes32_eq/zero_eq, tree guards, word64_eq for next_leaf_index, digest_eq for root, frontier_loop_eq, last root check via eq_digest_eq), which feeds S1..S5 with `S*_bad/ok`; `decode_lane_ref_eq` (planned LaneRel/Cmp statement above); composition with `op50_slot`. Every ingredient lemma it needs is now proved; what remains is the sequential case analysis, about the size of p13 times two, plus a tree-guard analogue of hdrBad_false_iff (treeBad). Recommend 4 to 6 more scopes.

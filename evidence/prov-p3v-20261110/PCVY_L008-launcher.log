@@ -1,0 +1,70 @@
+{"attempt": "PCVY_L008", "exit_status": 1, "wall_seconds": 5.3908005428966135, "peak_rss_kib": "2592192", "swaps": "0", "print_axioms": ["'PCVY_Op50.equal_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.equal_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p5.lean:88:4: error: unsolved goals
+case pos
+b v : Slice U8
+hl : (↑b).length = (↑v).length
+k : ℕ
+ih :
+  ∀ (i : Usize),
+    (↑b).length - ↑i = k →
+      ↑i ≤ (↑b).length →
+        NCV_Reference.equal_loop b v i = ok (if List.drop ↑i ↑b = List.drop ↑i ↑v then none else some false)
+i : Usize
+hk : (↑b).length - ↑i = k + 1
+hi : ↑i ≤ (↑b).length
+hiv : ↑i < (↑v).length
+c : Usize
+hc : i + 1#usize = ok c
+hcv : ↑c = ↑i + ↑1#usize
+hcv' : ↑c = ↑i + 1
+eb : List.drop ↑i ↑b = (↑b)[↑i] :: List.drop (↑i + 1) ↑b
+ev : List.drop ↑i ↑v = (↑v)[↑i] :: List.drop (↑i + 1) ↑v
+ih' :
+  loop (fun i1 => NCV_Reference.equal_loop.body b v i1) c =
+    ok (if List.drop (↑i + 1) ↑b = List.drop (↑i + 1)
+...
+↑i + 1
+eb : List.drop ↑i ↑b = (↑b)[↑i] :: List.drop (↑i + 1) ↑b
+ev : List.drop ↑i ↑v = (↑v)[↑i] :: List.drop (↑i + 1) ↑v
+ih' : NCV_Reference.equal_loop b v c = ok (if List.drop (↑i + 1) ↑b = List.drop (↑i + 1) ↑v then none else some false)
+hne : ¬(↑b)[↑i] = (↑v)[↑i]
+⊢ ¬List.drop ↑i ↑b = List.drop ↑i ↑v
+PCVY_sources/PRVEq_Op50_p5.lean:94:12: warning: This simp argument is unused:
+  hne
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵n̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.equal_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PCVY_sources/PRVEq_Op50_p5.lean:105:12: warning: This simp argument is unused:
+  Slice.len_val
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.len_̵v̵a̵l̵,̵ ̵S̵l̵i̵c̵e̵.̵l̵e̵n̵gth, hl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p5.lean:105:27: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.len_val, S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵ ̵hl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p5.lean:107:49: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hn, if_false, Bool.false_eq_true,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p5.lean:112:12: warning: This simp argument is unused:
+  this
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵h̵i̵s̵,̵ ̵h̵e̵]̵[̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.equal_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9d7401f898c94948b5115c13cf902af0.scope; invocation ID: b6c64ea762b74dc1bbfaddf02566f7f2
