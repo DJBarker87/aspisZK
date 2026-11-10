@@ -70,26 +70,28 @@ Lean every integer operation either gives the true result or fails, whereas the
 deployed program is built with the ordinary release profile, in which
 arithmetic wraps. The theorem is therefore about the checked program, and to
 carry it over to the binary one has to show, on every path the verifier takes,
-that no checked operation can fail, so that the two agree. Of the 197
-definitions in the theorem's cone that execute checked arithmetic, 196 are
-settled: 72 cannot fail on any input, 52 have a single bounded increment or
+that no checked operation can fail, so that the two agree. All 197
+definitions in the theorem's cone that execute checked arithmetic are now
+settled: 73 cannot fail on any input, 52 have a single bounded increment or
 bounds-checked read as their only checked operation, and for 72 the condition
 that rules out overflow is proved from their callers, among them `binary_step`,
 the step of the Merkle traversal that had been the one place where a concrete
 way for the two semantics to part was identified; its traversal invariant, that
-the position never passes the number of nodes, is now proved on every reached
-state, so the unguarded length difference never wraps there. `weights.field`
-joined them on 10 November: the deployed second transaction is proved to run
-its finish only on weights of length 64, and the finish and claim dots call
-the field slot only inside that domain. What is left is
-`r24_canonical_mul`, which has no counterpart in the frozen source and is a
-refinement obligation rather than an overflow question. It still touches
-27 of the 393 verified statements these definitions serve. No input on which
+the position never passes the number of nodes, is proved on every reached
+state, so the unguarded length difference never wraps there. The last two
+joined on 10 November: `weights.field`, whose index is proved below 64 at
+every executed call, and `r24_canonical_mul`, a helper whose sixteen limb
+products, squared modulus and reduction steps are each proved to succeed on
+every input, every addition and subtraction in it being a wrapping one. No
+verified statement now depends on an open arithmetic definition. No input on which
 the wrapping binary accepts while the checked model rejects is known anywhere.
-Some of the settled counts also lean on textual screening
-that still has to become Lean statements or be named for review. The item is
-finished when that one is settled, or when the owner records the difference as
-a retained trust row and the claim names it in its first sentence. (Section
+What is left on this item is not arithmetic: seven places where the
+count relied on reading the source rather than on a Lean statement, such as
+that a call site is read once or that a list of checked operations is complete.
+Each is named for review, and the item is finished when each has become a Lean
+statement or the owner has accepted it by name. One of the 197, the helper
+above, also has no counterpart in the frozen source and is counted separately
+under provenance. (Section
 4.4, row R22; section 6, item 16.)
 
 ## A run that meets the hypotheses
