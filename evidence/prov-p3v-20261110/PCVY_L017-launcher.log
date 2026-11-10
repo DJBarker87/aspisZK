@@ -1,0 +1,69 @@
+{"attempt": "PCVY_L017", "exit_status": 1, "wall_seconds": 5.181330624036491, "peak_rss_kib": "2665580", "swaps": "0", "print_axioms": ["'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]", "'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, Quot.sound]", "'PCVY_Op50.u32_val' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.u64_val' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p7.lean:94:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑s + 1
+in the target expression
+  (↑b)[1 + ↑s]? = [(↑b)[↑s], (↑b)[↑s1], (↑b)[↑s2], (↑b)[↑s3]][1]?
+
+case inr.inl
+b : Slice U8
+s : Usize
+h : ↑s + 4 ≤ (↑b).length
+hb : (↑b).length ≤ Usize.max
+s1 : Usize
+e1 : s + 1#usize = ok s1
+v1 : ↑s1 = ↑s + 1
+s2 : Usize
+e2 : s + 2#usize = ok s2
+v2 : ↑s2 = ↑s + 2
+s3 : Usize
+e3 : s + 3#usize = ok s3
+v3 : ↑s3 = ↑s + 3
+h0 : ↑s < (↑b).length
+h1 : ↑s1 < (↑b).length
+h2 : ↑s2 < (↑b).length
+h3 : ↑s3 < (↑b).length
+hj : 1 < 4
+⊢ (↑b)[1 + ↑s]? = [(↑b)[↑s], (↑b)[↑s1], (↑b)[↑s2], (↑b)[↑s3]][1]?
+
+Note: The target expression is not type-correct under the `instan
+...
+b).length
+h2 : ↑s2 < (↑b).length
+h3 : ↑s3 < (↑b).length
+h4 : ↑s4 < (↑b).length
+h5 : ↑s5 < (↑b).length
+h6 : ↑s6 < (↑b).length
+h7 : ↑s7 < (↑b).length
+hj : 7 < 8
+⊢ (↑b)[7 + ↑s]? = [(↑b)[↑s], (↑b)[↑s1], (↑b)[↑s2], (↑b)[↑s3], (↑b)[↑s4], (↑b)[↑s5], (↑b)[↑s6], (↑b)[↑s7]][7]?
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    b
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑b
+'PCVY_Op50.or_shl8' depends on axioms: [propext, Quot.sound]
+'PCVY_Op50.fromLE_toNat' depends on axioms: [propext, Quot.sound]
+'PCVY_Op50.u32_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.u64_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.word32_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.word64_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+PCVY_sources/PRVEq_Op50_p7.lean:170:22: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+PCVY_sources/PRVEq_Op50_p7.lean:247:10: warning: This simp argument is unused:
+  this
+
+Hint: Omit it from the simp argument list.
+  simp [̵t̵h̵i̵s̵,̵ ̵h̵e̵]̵[̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVY_Op50.eq_digest_loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.eq_digest_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a1b6b681e274042b21c1219d8ea83ad.scope; invocation ID: 2f96ff0605d547a184407ba4dca5f51d
