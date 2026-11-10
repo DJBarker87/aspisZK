@@ -1,0 +1,77 @@
+{"attempt": "PCVZ_L010", "exit_status": 1, "wall_seconds": 1.3392060869373381, "peak_rss_kib": "2596500", "swaps": "0", "print_axioms": ["'PRVEq_P3W.loop_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVZ_sources/PRVEq_P3W_LoopMap.lean:85:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapR f (bs F h y)
+in the target expression
+  mapR f
+      ((fun x =>
+          match F x with
+          | ok r =>
+            match r with
+            | cont x => h x
+            | done x => ok x
+          | fail e => fail e
+          | div => div)
+        y) ⊑
+    loop G y
+
+case a.refine_2
+α : Type u_1
+β γ : Type u_2
+F : α → Result (ControlFlow α β)
+G : α → Result (ControlFlow α γ)
+f : β → γ
+hrel :
+  ∀ (x : α),
+    G x = do
+      let cf ← F x
+      ok (mapCF f cf)
+hstep : ∀ (h : α → Result β) (x : α), bs G (fun y => mapR f (h y)) x = mapR f (bs F h x)
+x : α
+h : α → Result β
+...
+PCVZ_sources/PRVEq_P3W_LoopMap.lean:85:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapR f (bs F h y)
+in the target expression
+  mapR f
+      ((fun x =>
+          match F x with
+          | ok r =>
+            match r with
+            | cont x => h x
+            | done x => ok x
+          | fail e => fail e
+          | div => div)
+        y) ⊑
+    loop G y
+
+case a.refine_2
+α : Type u_1
+β γ : Type u_2
+F : α → Result (ControlFlow α β)
+G : α → Result (ControlFlow α γ)
+f : β → γ
+hrel :
+  ∀ (x : α),
+    G x = do
+      let cf ← F x
+      ok (mapCF f cf)
+hstep : ∀ (h : α → Result β) (x : α), bs G (fun y => mapR f (h y)) x = mapR f (bs F h x)
+x : α
+h : α → Result β
+hh : ∀ (y : α), mapR f (h y) ⊑ loop G y
+y : α
+h1 : mapR f (bs F h y) = bs G (fun z => mapR f (h z)) y
+⊢ mapR f
+      ((fun x =>
+          match F x with
+          | ok r =>
+            match r with
+            | cont x => h x
+            | done x => ok x
+          | fail e => fail e
+          | div => div)
+        y) ⊑
+    loop G y
+'PRVEq_P3W.loop_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b7a09c3a96740108b0790fd53bce9db.scope; invocation ID: e10064513c024e50942c965b25eb12b4

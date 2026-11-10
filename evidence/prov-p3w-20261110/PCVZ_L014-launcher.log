@@ -1,0 +1,58 @@
+{"attempt": "PCVZ_L014", "exit_status": 1, "wall_seconds": 1.711982392007485, "peak_rss_kib": "2601540", "swaps": "0", "print_axioms": ["'PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop0.body' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop1.body_proj' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at
+PCVZ_sources/PRVEq_P3W_Probe2.lean:148:3: warning: 'trace "PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at
+PCVZ_sources/PRVEq_P3W_Probe2.lean:153:3: warning: 'trace "PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.NEI_PushRaw.Funs_n3.verifier.residu
+...
+n im => back (next_back im none))
+    | some limb => do
+      let i1 ← limb >>> 31#u32
+      let limb1 ← (limb &&& 2147483647#u64) + i1
+      ok (cont (iter1, fun im => back (next_back im (some limb1))))) =
+    do
+    let cf ←
+      let (o, iter1, next_back) := (some limb, iter1, nb)
+        match o with
+        | none => ok (done (iter1, fun im => back (next_back im none)))
+        | some limb => do
+          let i1 ← limb >>> 31#u32
+          let limb1 ← (limb &&& 2147483647#u64) + i1
+          ok (cont (iter1, fun im => back (next_back im (some limb1))))
+    ok (PRVEq_P3W.mapCF Prod.snd cf)
+case ok.some
+iter : core.slice.iter.IterMut U64
+back : core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64
+hsh : ∀ (x : U64), x >>> 31#i32 = x >>> 31#u32
+iter1 : core.slice.iter.IterMut U64
+nb : core.slice.iter.IterMut U64 → Option U64 → core.slice.iter.IterMut U64
+limb : U64
+hn : core.slice.iter.IteratorIterMut.next iter = ok (some limb, iter1, nb)
+⊢ (let (o, iter1, next_back) := (some limb, iter1, nb)
+    match o with
+    | none => ok (done fun im => back (next_back im none))
+    | some limb => do
+      let i1 ← limb >>> 31#u32
+      let limb1 ← (limb &&& 2147483647#u64) + i1
+      ok (cont (iter1, fun im => back (next_back im (some limb1))))) =
+    do
+    let cf ←
+      let (o, iter1, next_back) := (some limb, iter1, nb)
+        match o with
+        | none => ok (done (iter1, fun im => back (next_back im none)))
+        | some limb => do
+          let i1 ← limb >>> 31#u32
+          let limb1 ← (limb &&& 2147483647#u64) + i1
+          ok (cont (iter1, fun im => back (next_back im (some limb1))))
+    ok (PRVEq_P3W.mapCF Prod.snd cf)
+'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop1.body_proj' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-rf1c17862307542c196ce4b913123576c.scope; invocation ID: 185e291fb9c9466085a8de2151488e0a
