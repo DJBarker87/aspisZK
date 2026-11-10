@@ -10,7 +10,7 @@ ex=[e for e in cc if J(e)!='NOT_EXECUTED'];touched=set();bad=set()
 for e in ex:
   touched|=set(e['rows'])
   if J(e) in ('OPEN','DOMAIN_LEMMA_PROVED'):bad|=set(e['rows'])
-start=dict(TOTAL_PROVED=72,DIRECT=42,PRECONDITION_B=54,DOMAIN_LEMMA_PROVED=0,OPEN=29,NOT_EXECUTED=28)
+start=dict(TOTAL_PROVED=72,DIRECT=52,PRECONDITION_B=68,DOMAIN_LEMMA_PROVED=0,OPEN=5,NOT_EXECUTED=28)
 nar=open('NPH_final_narrative.md').read()
 sec=dict(re.findall(r'<<(\w+)>>\n(.*?)(?=\n<<|\Z)',nar,re.S))
 def row(name,key):
@@ -23,7 +23,7 @@ out.append("| Judgment | Definitions | Start of this run | Change |\n|---|---:|-
 for n,k in [('TOTAL (a)','TOTAL_PROVED'),('DIRECT (c)','DIRECT'),('precondition proved from the callers (b)','PRECONDITION_B'),('domain lemma proved, caller join open','DOMAIN_LEMMA_PROVED'),('open','OPEN'),('NOT_EXECUTED (excluded, ruling 1)','NOT_EXECUTED')]:out.append(row(n,k))
 exn=len(ex);out.append(f"| **executed (the obligation)** | **{exn}** | 197 | {exn-197:+d} |")
 out.append(f"| all checked or mixed | {len(cc)} | 225 | {len(cc)-225:+d} |\n")
-out.append(f"Rows. The executed checked or mixed definitions touch **{len(touched)}** CLOSED rows. **{len(bad)}** of them still depend on at least one open definition (153 at the start of this run). {len(touched)-len(bad)} are served only by TOTAL, DIRECT or (b) definitions.\n")
+out.append(f"Rows. The executed checked or mixed definitions touch **{len(touched)}** CLOSED rows. **{len(bad)}** of them still depend on at least one open definition (55 at the start of this run). {len(touched)-len(bad)} are served only by TOTAL, DIRECT or (b) definitions.\n")
 out.append(sec['resources'].strip()+"\n")
 out.append("## 2. What moved in this run\n");out.append(sec['moved'].strip()+"\n")
 n_open=cnt['OPEN']+cnt['DOMAIN_LEMMA_PROVED']
