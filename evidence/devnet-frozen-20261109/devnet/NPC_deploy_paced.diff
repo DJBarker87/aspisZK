@@ -1,0 +1,20 @@
+--- /Users/dominic/ZK/.worktrees/cx-devnet2/scripts/r1_devnet_deploy_paced.py	2026-11-09 20:16:26
++++ /Users/dominic/ZK/.worktrees/cx-devnet2/evidence/devnet-frozen-20261109/devnet/NPC_deploy_paced.py	2026-11-10 01:13:10
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env python3
+-"""Paced deployment with retained buffer keys, byte readback and receipts."""
++"""Paced deployment with retained buffer keys, byte readback and receipts.
++NPC_: r1_devnet_deploy_paced.py (d76d9964) plus an explicit ProgramData re-check immediately before --final."""
+ import base64,hashlib,json,os,pathlib,subprocess,sys,time,signal
+ from r1_devnet_rpc import rpc
+ from r1_devnet_release_gate import base58
+@@ -101,6 +102,9 @@
+     if role in ('verifier','registry'):
+         # V2 certifies exactly an immutable loader deployment; required by this release.
+         before={row['signature'] for row in rpc(URL,'getSignaturesForAddress',[pd,{'commitment':'finalized','limit':20}])}
++        # NPC_: re-read ProgramData immediately before the irreversible finalization; STOP unless the payload is still the pinned ELF with the payer as authority.
++        recheck=account(pd);rd=base64.b64decode(recheck['value']['data'][0]);assert rd[12]==1 and rd[13:45]==base58(C['payer']) and rd[45:]==elf,'ProgramData changed before finalization: STOP'
++        write(role+'-prefinal-recheck',{'address':pd,'context_slot':recheck['context']['slot'],'authority':C['payer'],'payload_sha256':hashlib.sha256(rd[45:]).hexdigest(),'payload_bytes':len(rd)-45})
+         final=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','set-upgrade-authority',program,'--final']
+         with open(O/(role+'-immutable.json'),'w') as stdout,open(O/(role+'-immutable-stderr.txt'),'w') as stderr:subprocess.run(final,stdout=stdout,stderr=stderr,check=True)
+         changes=[row for row in rpc(URL,'getSignaturesForAddress',[pd,{'commitment':'finalized','limit':20}]) if row['signature'] not in before]

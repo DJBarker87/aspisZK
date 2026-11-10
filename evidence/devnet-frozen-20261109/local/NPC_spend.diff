@@ -1,0 +1,43 @@
+--- ../../scripts/r1_devnet_spend.py	2026-11-09 20:16:26
++++ local/NPC_spend.py	2026-11-09 21:08:49
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env python3
+ """Config-driven R1 devnet setup and spends; wallet files stay in retained host private directories.
++NPC_: r1_devnet_spend.py (aad527c7) plus a per-transaction recording hook (npc_pre/npc_post) and a configurable upload worker count.
+ Run inside r1_devnet_receipt.sh and the documented capped scope.
+ """
+ import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
+@@ -7,6 +8,7 @@
+ from r1_devnet_rpc import rpc
+ from r1_devnet_policy import require_key, created_accounts, state_rent
+ from Client64_proof_accounts import proof_plan, retain_key, key_public
++from NPC_record import npc_pre, npc_post
+ C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
+ URL=C['rpc_url'];SIGNER=C.get('signer','native-target/release/devnet_spend')
+ CLI=pathlib.Path(C.get('cli_dir',str(pathlib.Path.home()/'.local/share/solana/install/active_release/bin')))
+@@ -72,6 +74,7 @@
+         bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']
+         signed=invoke({'keys':keys,'instructions':ixs,'blockhash':bh['blockhash']})
+         wire=base64.b64encode(bytes.fromhex(signed['hex'])).decode();sig=signed['signature']
++        npc_state=npc_pre(URL,O,name,attempt,ixs,signed,C['payer'],negative)
+         simulation=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',simulation)
+         simerr=simulation['value']['err']
+         if simerr=='BlockhashNotFound':continue
+@@ -93,7 +96,7 @@
+             if tx:break
+             time.sleep(2)
+         if not tx:raise RuntimeError('finalized tx metadata unavailable')
+-        write(name+'-transaction',tx);record_rent(tx)
++        write(name+'-transaction',tx);record_rent(tx);npc_post(URL,O,name,npc_state,tx)
+         result={'signature':sig,'explorer':(None if URL.startswith(('http://127.0.0.1:','http://localhost:')) else f'https://explorer.solana.com/tx/{sig}?cluster=devnet'),'slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
+         write(name,result)
+         if bool(result['error'])!=negative:raise RuntimeError(f'{name} unexpected finalized result: {result}')
+@@ -128,7 +131,7 @@
+         return send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],[PAYER_KEY,path])
+     # Disjoint ranges may be submitted concurrently. Every transaction must
+     # finalize before byte readback or stage 1; at most four are in flight.
+-    with ThreadPoolExecutor(max_workers=4) as pool:
++    with ThreadPoolExecutor(max_workers=int(C.get('upload_workers',4))) as pool:
+         stats=list(pool.map(one,enumerate(range(0,len(body),3763))))
+     actual=bytes.fromhex(readhex(address,C['carrier']));assert actual==body
+     result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'wall_seconds':time.time()-timing['started_unix'],'wall_origin_kind':timing['origin_kind'],'transaction_wall_seconds_sum':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
