@@ -1,1 +1,24 @@
-{"schema":"PCVG_REMAINING/1","target_established":false,"note":"blocked: host unreachable; no scopes run; all 20 records remain as in PCVF_REMAINING.json"}
+{
+ "schema": "PCVG_REMAINING/1",
+ "target_established": false,
+ "triage": [
+  {
+   "records": "WideToBytes x4 (to_le_bytes in AspisR1WideToBytesIndexedCandidate.FunsNoResourceOptions and AspisR1WideToBytesSource.Funs: to_le_bytes, to_le_bytes_loop, to_le_bytes_loop.body)",
+   "status": "DEPENDS_ON_LIBRARY_TRUST",
+   "row": "HM-B (core slice iterator model: chunks_exact_mut, ChunksExactMut::next)",
+   "reason": "only obstacle recorded in PCXD_NOT_ATTEMPTED_23: gate written against P6ToBytes.StdModel iterators while the emission uses core.slice.iter.ChunksExactMut instances; the bridge is a statement about a library iterator. Not attempted as proof, per lead ruling. The Aspis-side residue (loop body arithmetic) is not separated and remains OPEN."
+  },
+  {
+   "records": "S1NativeCompact expand_semantic, expand_semantic_loop, expand_semantic_loop.body",
+   "status": "OPEN (triaged, no scope run)",
+   "reason": "Gate S1NativeCompactModelV1 (host copy codex-cx-replay-l187-20261109/src) is hand-adapted relative to the emission: (1) compact.expand_semantic/_loop/_body take a parameter (ops : Ops), so the correct statement has the CONDITIONAL_ON_BINDING shape of AdapterRw (fresh text with externals replaced by Ops fields, hypothesis Bound ops); (2) r1_wire.row_shape is a match on literals in the gate versus an if-chain in the emission (a 256-case finite equality over U8, decidable by cases, not yet written); (3) CodecError is AspisR1CurrentCaller.compact.CodecError in the gate versus the fresh namespace type (an encoding difference, needs a type-alias statement); (4) r1_wire.POINTS is Result Usize := ok 3#usize in the gate versus Std.Usize := 3#usize in the emission (encoding difference: Result wrapper, which explains the P2d 'Type mismatch' for POINTS/CLAIMS/COMPACT_SEMANTIC). None of these four is a numeric difference at the matching configuration. Option.ok_or already EQUALITY_PROVED (PCVF_L001). Next deliverable: one Lean file stating constants with the Result wrapper, row_shape by cases on U8, then the ops-bound loop equalities."
+  },
+  {
+   "records": "decode_pool_v1_pair_verified_afterstate_v1, secure_ood_circle_point_from_parameter, node_count, NMT stage1_owned, Port23PUSH push, FIo (mul_by_r, heap.filled, Dot.push), FIp four_dots x5",
+   "status": "OPEN (not attempted)",
+   "reason": "no scope run this session: context spent on the trust-row drafting, classification and differential check that the lead's change put first. Reasons recorded in PCXD_NOT_ATTEMPTED_23.json stand."
+  }
+ ],
+ "item_S1Claim_reconstruction": "not attempted",
+ "item_binding_upgrades": "not attempted"
+}
