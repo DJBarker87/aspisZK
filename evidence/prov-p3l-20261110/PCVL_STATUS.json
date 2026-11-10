@@ -1,0 +1,58 @@
+{
+ "schema": "PCVL_STATUS/1",
+ "target_established": false,
+ "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "budget": {
+  "lean_used": 7,
+  "lean_max": 40,
+  "extraction_used": 4,
+  "extraction_max": 4,
+  "one_scope_at_a_time": true,
+  "caps_unraised": true,
+  "note": "Lean scopes PCVL_L001-L007; extraction PCVL_E001-E004"
+ },
+ "difference_at_matching_configuration": "none found. Every difference met was a naming/carrier or encoding difference (see PCVL_CLASSIFICATIONS.json); no comparison at a matching configuration returned a semantic difference.",
+ "items": {
+  "1a VTop_Stages.verifier.candidate.tx2_common": {
+   "file": "PRVEq_VTop_l1.lean",
+   "scope": "PCVL_L004",
+   "exit": 0,
+   "theorem": "VTop_Stages.PRVFresh_VTop_l1.eq_tx2_common",
+   "statement": "for every Ext (the 23 external axioms of the PCVJ_E002 emission as fields) and every gate ops : Ops with Bound ops x, fresh tx2_common x = gate tx2_common ops (all arguments); Bound binds ops.op18 to the fresh resume (expanded in the file), op14-16/20-23 to the fresh compact constants, op0 to the fresh ok_or, the other used fields to Ext fields",
+   "axioms": "propext, Classical.choice, Quot.sound",
+   "status": "CONDITIONAL_ON_BINDING"
+  },
+  "1b VTop_Stages.verifier.candidate.tx2_authenticated": {
+   "file": "PRVEq_VTop_l1.lean",
+   "scope": "PCVL_L004",
+   "exit": 0,
+   "theorem": "VTop_Stages.PRVFresh_VTop_l1.eq_tx2_authenticated",
+   "axioms": "propext, Classical.choice, Quot.sound",
+   "status": "CONDITIONAL_ON_BINDING",
+   "note": "uses eq_tx2_common"
+  },
+  "1c non-vacuity": {
+   "theorem": "bound_exists (mkOps x satisfies Bound for every x)",
+   "scope": "PCVL_L004",
+   "exit": 0
+  },
+  "2 AspisR1PublicPreparation semantic_validated, begin, public_transcript and the sampler copy (26 fresh definitions)": {
+   "file": "PRVEq_PP_l4.lean",
+   "scope": "PCVL_L007",
+   "exit": 0,
+   "fresh_emission": "PCVL_E003 (PCVL_pp3), Aeneas extended, overflow ON, aspis_core P/CM31.new/QM31.ZERO transparent",
+   "statement": "fresh = gate for all 26 common definitions with the carrier map of PCVL_gen_pp3.sh",
+   "axioms": "propext, Classical.choice, Quot.sound (26 theorems)",
+   "status": "CONDITIONAL_ON_BINDING",
+   "callees_remaining": [
+    "pool_v1 ... Public.public_bytes (aspis_statement; extraction retired after two Aeneas failures E002, E004; name resolves to the gate's definition)",
+    "core.result.Result.map_err (HM-C Option/Result library trust; name resolves to the gate's definition)"
+   ],
+   "superseded_earlier": "PRVEq_PP_l1.lean (PCVL_L001 exit 0) bound P and QM31.ZERO by prelude `ok gate` and left CM31.new, public_bytes, map_err resolved to the gate; superseded by l4 for P, ZERO, CM31.new"
+  }
+ },
+ "not_attempted_here": [
+  "stage1_owned, stage2_owned, candidate tx1/prepare (sibling PCVK_)",
+  "equality of the Ext fields to frozen items (each packet boundary is a separate record)"
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "schema": "PCVL_REMAINING/1",
+ "items": [
+  {
+   "id": "R1",
+   "what": "VTop tx2_common / tx2_authenticated: relate each Ext field used (WideExact.from_le_bytes, parse_shape, batch_merkle, query_loop, BatchedWeights.new/finish, QueryGeometry.for_range, mark, powers, finish_relation) and the resume externals (checkpoint_size, read_checkpoint_semantic_alpha, read_checkpoint_weights, QM31.from_le_bytes, QM31.ZERO, QM31 clone, heap.filled, Variant.final_len, Variant.tag) to the frozen items",
+   "blocker": "each is a retained packet boundary of the top design (opaque in the extraction by owner choice); records per callee",
+   "class": "CONDITIONAL_ON_BINDING"
+  },
+  {
+   "id": "R2",
+   "what": "VTop library externals in Ext: Slice PartialEqArray eq/ne, Result.map_err, slice Iter.any",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": "HM-B/HM-C/HM-D"
+  },
+  {
+   "id": "R3",
+   "what": "The deployed Ops instance equals an Ops with Bound (the instantiation)",
+   "class": "instantiation, not shown here"
+  },
+  {
+   "id": "R4",
+   "what": "PublicPreparation: public_bytes (aspis_statement) equality with the frozen item",
+   "blocker": "Aeneas extended fails on it in both shapes tried (E002: Failure 'Can't retrieve the variants of non-adt type SemanticPublic'; E004 with SemanticPublic included: Not_found in Map.find). Extraction budget (4) is spent. Next shape: a separate extraction rooted at public_bytes with its own include set."
+  },
+  {
+   "id": "R5",
+   "what": "PublicPreparation: core.result.Result.map_err",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "rows": "HM-C"
+  },
+  {
+   "id": "R6",
+   "what": "16 of 87 gate Debug fmt definitions of AspisR1PublicPreparation depend on native-decide axioms in the gate text; not credited (not in the 26 fresh definitions)"
+  },
+  {
+   "id": "R7",
+   "what": "The probe-crate carrier r1_wire.Challenges (gate) vs aspis_core::state_only_prefix::r0::Challenges (frozen): equal field-by-field as Lean structures; the mapping is by name through the rename list; no Rust-level identity of the two types is claimed"
+  }
+ ]
+}
