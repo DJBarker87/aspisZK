@@ -1,0 +1,21 @@
+-- PCWT_ binding discharge for AspisR1.Port5Q2_ReaderWeights.weights and weights_loop, route (a)/(b).
+-- What was bound (PCVF_ k1): the fresh read_checkpoint_weights text (PCQD_E034, frozen 4bb3b3f, overflow ON) has two externals,
+-- QM31::from_le_bytes (crates/aspis-core/src/field.rs, Aspis item) and Vec<QM31>::iter_mut/into_iter (std).  The gate is parametric in `read`.
+-- Here the Aspis external is bound to the FRESH frozen decoder chain M31/CM31/QM31::from_le_bytes (text of the NMH emission as compiled in
+-- PRVEq_R1CandidateFieldParsers_j1, renamed to the gate universe aspis_core.field.*), and the std external to the gate hand model intoIter.
+-- HM-C/HM-G items (Option Try branch/from_residual, Option discriminant) are copied from the gate R1CandidateFieldParsers (this Aeneas Std lacks them).
+-- Library items (HM-B): core.slice.iter.IteratorIterMut.next in the loop body, the Vec iter_mut/into_iter model `intoIter`.
+import Aeneas
+import Port5Q2_ReaderWeights
+import PRVEq_Port5Q2_ReaderWeights_k1
+open Aeneas Aeneas.Std Result ControlFlow Error AspisR1Stage2
+set_option linter.dupNamespace false
+set_option linter.hashCommand false
+set_option linter.unusedVariables false
+set_option maxHeartbeats 200000
+set_option maxRecDepth 2048
+noncomputable section
+
+namespace AspisR1.Port5Q2_ReaderWeights
+namespace PRVFresh_t3
+
