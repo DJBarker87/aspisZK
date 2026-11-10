@@ -365,11 +365,39 @@ def a_generic_lead_classes(pre, d):
     return recs, notes, dict(lead_classes=len(lc), by_class=dict(cnt))
 
 
+def a_PCWG():
+    st = S('PCWG', 'prov-p3y-20261110', 'STATUS')
+    recs = []; notes = []; cnt = collections.Counter()
+    for x in st['items']:
+        d = x['definition']; lc = x['lead_class'].split(' ')[0]
+        cands = byname.get(d, [])
+        if len(cands) > 1:
+            pref = [c for c in cands if c.endswith('.Funs')]
+            cands = pref if len(pref) == 1 else cands
+        if len(cands) != 1:
+            unmatched.append(dict(job='PCWG', definition=d, modules=cands, reason='UNMATCHED/AMBIGUOUS gate module')); continue
+        k = cands[0] + '|' + d
+        new = {'EQUALITY_PROVED': 'EQUALITY_PROVED_JOB', 'OPEN': 'OPEN'}.get(lc, lc)
+        hm = None
+        if lc == 'DEPENDS_ON_LIBRARY_TRUST':
+            hm = sorted(set(re.findall(r'HM-[A-G]', json.dumps(x)))) or None
+            if not hm: hm_job_level.append(dict(job='PCWG', key=k, text='DEPENDS_ON_LIBRARY_TRUST without a named HM row in the STATUS item'))
+        cnt[new] += 1
+        before = cls.get(k)
+        r = assign('PCWG', k, new, 'PCWG lead_class ' + x['lead_class'], hm=hm)
+        if r and k == 'NGD_SlotRef.Funs|NGD_SlotRef.OFF_NODES':
+            notes.append('OFF_NODES: class before P3y = %s; PCWF (P3x) did not credit it (its STATUS says "not in the 12"), so there is no double credit; now %s' % (before, cls[k]))
+        recs.append(r)
+    notes.append('only lead_class EQUALITY_PROVED counts as settled; others other/open per the STATUS lead_corrections; STATUS "SETTLED" for loop-return and type-map refinements is NOT credited')
+    return recs, notes, dict(items=len(st['items']), mapped=len(recs), by_class=dict(cnt))
+
+
 JOBS = [('p2k', 'PCQL', 'prov-p2k-20261110', a_PCQL), ('p3u', 'PCVX', 'prov-p3u-20261110', a_PCVX), ('p3w', 'PCVZ', 'prov-p3w-20261110', a_PCVZ),
         ('p3v', 'PCVY', 'prov-p3v-20261110', a_PCVY), ('p3x', 'PCWF', 'prov-p3x-20261110', a_PCWF), ('p6h', 'PCXK', 'prov-p6h-20261110', a_PCXK),
         ('p5b', 'PCWK', 'prov-p5b-20261110', a_PCWK), ('p4x', 'PCWH', 'prov-p4x-20261110', a_PCWH), ('p5a', 'PCWJ', 'prov-p5a-20261110', a_PCWJ),
         ('p5d', 'PCWM', 'prov-p5d-20261110', a_PCWM), ('p5c', 'PCWL', 'prov-p5c-20261110', a_PCWL),
-        ('p5e', 'PCWN', 'prov-p5e-20261110', lambda: a_generic_lead_classes('PCWN', 'prov-p5e-20261110'))]
+        ('p5e', 'PCWN', 'prov-p5e-20261110', lambda: a_generic_lead_classes('PCWN', 'prov-p5e-20261110')),
+        ('p3y', 'PCWG', 'prov-p3y-20261110', a_PCWG)]
 for spec in args.job:
     d, pre = spec.split(':')
     JOBS.append((d, pre, d, (lambda pre=pre, d=d: a_generic_lead_classes(pre, d))))
@@ -393,7 +421,7 @@ for k in sorted(cone): by_class[cls[k]].append(k)
 settled_with_trust = sorted(k for k in cone if cls[k] in SET and any(k == f"{r['module']}|{r['definition']}" for r in TRUST['records']))
 
 # ---------------------------------------------------------------- comparison with the lead's hand counts (reported, never tuned to)
-HAND = {'PCXK': (1096, 542, 69), 'PCWJ': (1122, 516, 69), 'PCWM': (1125, 494, 88), 'PCWL': (1131, 460, 116), 'PCWN': (1142, 441, 124)}
+HAND = {'PCXK': (1096, 542, 69), 'PCWJ': (1122, 516, 69), 'PCWM': (1125, 494, 88), 'PCWL': (1131, 460, 116), 'PCWN': (1142, 441, 124)}  # P3y has no hand count yet
 hand_cmp = {}
 for j in log:
     if j['prefix'] in HAND:
