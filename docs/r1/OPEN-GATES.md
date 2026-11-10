@@ -5,8 +5,8 @@ claim I intend to make for the current version: that its spend path, as it
 actually runs, has 100-bit classical soundness per attempt, with no
 proof-of-work or grinding credit. That target is not yet established. The facts
 below come from the status document as it stands on the `research` branch at
-commit `85627fe4eca` (10 November 2026), which is newer than the copy in this
-folder, [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), taken at `abda96330df`;
+commit `cfa09f5e2c4` (10 November 2026), the same commit the copy in this
+folder, [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), was taken from;
 each paragraph ends with the section of that document it rests on.
 
 Several of the earlier items are done. The two theorems compile with only
@@ -58,24 +58,22 @@ deployed program is built with the ordinary release profile, in which
 arithmetic wraps. The theorem is therefore about the checked program, and to
 carry it over to the binary one has to show, on every path the verifier takes,
 that no checked operation can fail, so that the two agree. Of the 197
-definitions in the theorem's cone that execute checked arithmetic, 192 are
+definitions in the theorem's cone that execute checked arithmetic, 196 are
 settled: 72 cannot fail on any input, 52 have a single bounded increment or
-bounds-checked read as their only checked operation, and for 68 the condition
-that rules out overflow is proved from their callers. Five are left,
-`binary_step`, `weights.field`, `values_owned_reference`, `prepare` and
-`r24_canonical_mul`, and between them they still touch 55 of the 393 verified
-statements these definitions serve. `binary_step`, a step of the Merkle
-traversal, is the one where a concrete way for the two semantics to part has
-been identified: it computes a length difference without a guard, and if that
-difference wrapped to a value below 32 the deployed code would take the
-accepting branch where the checked model aborts. The traversal invariant that
-the position never passes the number of nodes rules this out, and that
-invariant is being proved now; no reachable state violating it is known, and no
-input on which the wrapping binary accepts while the checked model rejects is
-known anywhere. The other four need an index bound at the deployed finish, a
-length bound of 1,856, the value of one installed constant and, for
-`r24_canonical_mul`, which has no counterpart in the frozen source, a
-refinement proof. Some of the settled counts also lean on textual screening
+bounds-checked read as their only checked operation, and for 71 the condition
+that rules out overflow is proved from their callers, among them `binary_step`,
+the step of the Merkle traversal that had been the one place where a concrete
+way for the two semantics to part was identified; its traversal invariant, that
+the position never passes the number of nodes, is now proved on every reached
+state, so the unguarded length difference never wraps there. What is left is
+`weights.field`, whose index operations are shown safe at every call site but
+whose two producers, the width of the weights at the deployed finish and the
+bound on the claim-dot iterator, are still to be composed, and
+`r24_canonical_mul`, which has no counterpart in the frozen source and is a
+refinement obligation rather than an overflow question. Those two still touch
+44 of the 393 verified statements these definitions serve. No input on which
+the wrapping binary accepts while the checked model rejects is known anywhere.
+Some of the settled counts also lean on textual screening
 that still has to become Lean statements or be named for review. The item is
 finished when all five are settled, or when the owner records the difference as
 a retained trust row and the claim names it in its first sentence. (Section
