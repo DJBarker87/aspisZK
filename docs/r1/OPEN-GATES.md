@@ -1,7 +1,7 @@
 # What remains before the soundness claim
 
-The claim I intend to make for the current version is that its spend path, as
-it actually runs, has 100-bit classical soundness per attempt, with no
+The claim to be made for the current version is that its spend path, as it
+actually runs, has 100-bit classical soundness per attempt, with no
 proof-of-work or grinding credit. The protocol's soundness is proved in Lean,
 with the bound stated in [`TOP-THEOREM.md`](TOP-THEOREM.md), and this page sets
 out what still stands between those theorems and the claim about the deployed
@@ -25,18 +25,19 @@ question is being answered definition by definition: the tools are run again
 on the frozen source in the configuration originally used, and each fresh
 translation is proved equal to the committed one.
 
-On 10 November 2026 (research commit `f69d16b57e6`) the theorems' dependency
-cone held 1,707 translated definitions. Of these, 1,131 were settled, meaning
+On 10 November 2026 (research commit `9fb1e206d7d`) the theorems' dependency
+cone held 1,707 translated definitions. Of these, 1,150 were settled, meaning
 they are proved equal to a fresh translation of the frozen source or reproduced
-from archived input shown to be that source, and 460 were not yet settled, most
+from archived input shown to be that source, and 428 were not yet settled, most
 because the tools do not yet produce a fresh translation in the right
 configuration or because the archived input has not been tied to the frozen
-source. The remaining 116 are related to the frozen source in a weaker way that
+source. The remaining 129 are related to the frozen source in a weaker way that
 is recorded but not counted as settled, for instance an equality that holds
 only on the domain the verifier uses, one that rests on a named assumption about
 the standard library, or a type related to its fresh counterpart by a proved
-isomorphism. Counted by statement, 120 of the 599 verified statements rest only
-on settled definitions. These figures move several times a day.
+isomorphism. Counted by statement, 122 of the 599 verified statements rest only
+on settled definitions. These figures move several times a day, and from now on
+only the output of the counting script is cited.
 
 The unsettled group includes the places where the committed Lean came from
 throwaway copies. When the tools could not handle a crate whole, the function
@@ -52,9 +53,10 @@ About a dozen verifier functions cannot be translated by any version of the
 tools tried so far, because they use early returns or breaks inside loops,
 function-pointer types or a borrow join that the translator does not support.
 These are limits of the translation tool and say nothing against the code. They
-stay open obligations, and under my ruling of 10 November 2026 they are never
-turned into trust assumptions; whether to pursue a fix in the upstream tool is
-a decision I have still to take.
+stay open obligations and are not turned into trust assumptions. Work on the
+translator itself is now funded, so these functions are an open obligation with
+a route to closing it
+and not a permanent exclusion.
 
 Two genuine differences between committed and fresh translations have turned
 up, and both have been settled as harmless. The loop that shifts a transport
@@ -62,9 +64,9 @@ row is proved to give the same result wherever the verifier can reach it, and
 the conversion of a shift amount is proved equal to Rust's own wrapping shift
 in the deployed configuration. The hand-written Lean models of library code,
 among them the Solana SDK's key and hash types and the core slice iterators,
-are accepted as named trust assumptions, following my ruling of 10 November
-2026 that Aspis's own code is proved and everything outside it is trusted
-through a named assumption with a precise statement. The six top verifier
+are accepted as named trust assumptions. The rule is that Aspis's own code is
+proved and everything outside it is trusted through a named assumption with a
+precise statement. The six top verifier
 bodies (the two stages, the candidate preparation and first transaction, the
 second transaction and the public-preparation transcript) each have an equality
 with a fresh translation stated for arbitrary callees, with its hypotheses
@@ -105,7 +107,7 @@ What is left here is not arithmetic. There are seven places where the count
 relied on reading the source instead of on a Lean statement, such as that a
 call site is read once or that a list of checked operations is complete. Each
 is named for review, and the item is finished when each has become a Lean
-statement or I have accepted it by name. The multiplication helper above has
+statement or has been accepted by name as an assumption. The multiplication helper above has
 since been proved equal to the frozen field multiplication on its guarded
 domain, and is counted under provenance in the weaker column described there.
 
@@ -131,10 +133,10 @@ established: the interpreter timed out, and a native build would need the whole
 dependency cone compiled to machine code. This is an executable check and not a
 proof, so it does not by itself discharge the four remaining facts. Running the
 model's own entry point at kernel level is blocked by two places in the model
-that would need restating. I have still to decide how to treat them; the lead's
-recommendation is that this item rest on the executable evidence together with
-the proved equivalence for the first stage that the reference value feeds, with
-a restatement only if a release reviewer requires a kernel-level witness.
+that would need restating. How to treat them is undecided. The likely course is
+for this item to rest on the executable evidence together with the proved
+equivalence for the first stage that the reference value feeds, with a
+restatement only if a reviewer requires a kernel-level witness.
 
 ## The host model at the deployed addresses
 
@@ -162,11 +164,11 @@ witness of the previous section.
 The theorems prove nothing about the pool program. They take, as part of the
 description of a run, that every action in the recorded transaction lineage
 that is not the verifier's is what the pool and the runtime did, so settlement
-itself lies outside them. I have still to decide between bringing the pool's
-execution inside the security game, which would mean proving the
-association between the verifier's result and the pool's use of it, and
-stating the claim as conditional on that association. Once the decision is
-recorded, the item is finished either with that proof or with the condition
+itself lies outside them. There are two ways to close this. One is to bring the
+pool's execution inside the security game, which means proving the association
+between the verifier's result and the pool's use of it, and the other is to
+state the claim as conditional on that association. The choice has not been
+made, and the item is finished either with that proof or with the condition
 named in the claim's first sentence.
 
 ## Repeated attempts
@@ -194,31 +196,28 @@ theorems do not reach are marked as such. That reconciled table is in
 [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), Appendix F; the separate
 [`TRUST-INVENTORY.md`](TRUST-INVENTORY.md) in this folder was taken before it.
 
-On 10 November 2026 I ruled that no trust assumption is accepted unless it is a
-standard Solana runtime or Rust library operation. Under that rule the
+Since 10 November 2026 no trust assumption is accepted unless it is a standard
+Solana runtime or Rust library operation. Under that rule the
 transcription of the public-preparation accessor was withdrawn as a trust item;
 its proofs stay as evidence, the newer tool now translates the function, and
-its equality is pending one lemma identifying two library names. The
+it is proved equal to its fresh translation with no assumption named. The
 transcription of the compiler-derived clone and equality operations on the
 field types stays, since those are compiler derives, and the deployment-id
 constant entered the SDK assumption with a receipt comparing it byte for byte
-with the deployed ELF. The reviewed transcriptions of Aspis code that the lead
-added under my standing delegation are not awaiting confirmation: each is to be
-discharged by a translation proved equal, and until then the statements that
-use it are conditional.
-Whether the same treatment applies to the transcriptions accepted on
-27 October 2026 is a question I have still to settle.
+with the deployed ELF. The reviewed transcriptions of Aspis code fall under the
+same rule, including those accepted earlier, on 27 October 2026. Each is an
+open obligation and not an assumption, to be discharged by a translation proved
+equal, and until then the statements that use it are conditional.
 
-What is outstanding is confirmation. I have still to confirm or reject five
-assumptions about the Solana runtime, covering the binding of the clock reading
+Five assumptions about the Solana runtime are still provisional. They cover the binding of the clock reading
 to the bank slot, the clearing of return data, the admission of the pool's
 entry point, the view of accounts after a cross-program call, and the address
 derivation used for test fixtures (`RuntimeClockSlotBinding`,
 `RuntimeReturnDataClear`, `RuntimeEntrypointAdmission-Pool`,
 `RuntimeCpiAccountView` and `FixturePdaRuntime` in the inventory). Each proposed
 assumption has also still to be classified as a trust assumption, a proof task
-or discharged. The item is finished when every one is confirmed, or is named in
-the claim as unconfirmed.
+or discharged. The item is finished when every one is either confirmed or named
+in the claim as provisional.
 
 ## One library panic path
 
@@ -234,7 +233,7 @@ the claim.
 
 ## Where this comes from
 
-The provenance figures are those of research commit `f69d16b57e6` on
+The provenance figures are those of research commit `9fb1e206d7d` on
 10 November 2026. Everything else on this page comes from the status document
 on the [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch
 at commit `90795727483`, which [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md) in

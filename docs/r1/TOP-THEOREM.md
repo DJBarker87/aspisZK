@@ -26,8 +26,10 @@ choosing the first transaction, see the result, and query again before choosing
 the second, and nothing restricts how it uses what it has seen. An accepted
 false spend is a run in which both transactions are accepted but the
 knowledge extractor, reading the attacker's hash queries, cannot recover a
-witness for the spend, so that the acceptance is not backed by anyone who
-actually knew how to make the spend.
+witness for the spend. How the extracted witness is tied to the spend relation
+is to be confirmed by the final audit of the statement, and until then the
+theorem should not be read as saying that acceptance implies a valid spend
+witness.
 
 Both theorems are proved in Lean with only its three standard axioms. They are
 mathematics about the model of the spend path and about the Lean translation of

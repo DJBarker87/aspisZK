@@ -1,14 +1,13 @@
 # Trust inventory
 
 Every machine-checked proof rests on something it does not prove. For the
-current version I draw the line at the frozen Aspis source: Aspis's own code is
-proved, and everything outside it is trusted through a named assumption with a
-precise statement. This page sets out those assumptions, says where each one
-enters the proof, and gives the condition under which it could be removed. Each
-is stated openly, and the theorems say exactly where it enters. Some I have
-confirmed, some were added by the lead under my standing decision on Solana
-runtime assumptions and await my individual confirmation, and some have no
-recorded removal condition yet.
+current version the line is drawn at the frozen Aspis source, so that Aspis's
+own code is proved and everything outside it is trusted through a named
+assumption with a precise statement. This page sets out those assumptions, says
+where each one enters the proof, and gives the condition under which it could
+be removed. Most are settled, a few about the Solana runtime are still
+provisional and are marked as such, and some have no removal condition recorded
+yet.
 
 The first kind of assumption is cryptographic. All the probabilities in the
 soundness theorem are taken over SHA-256 modelled as a random oracle, a
@@ -19,8 +18,7 @@ inputs and that the value returned is the oracle's value. The random-oracle
 model itself has no removal condition, since an argument in the standard model
 would be a different theorem.
 
-The second kind concerns the Solana runtime. Following my decision of
-4 November 2026, the runtime is trusted at the specific points where the
+The second kind concerns the Solana runtime. The runtime is trusted at the specific points where the
 verifier relies on it: that each entry point starts with a valid heap and fresh
 borrow guards, that account data written by a successful transaction is what
 the next transaction on the same lineage loads, and that a handful of syscalls,
@@ -51,20 +49,20 @@ frozen body apart from those substitutions. What is trusted is the
 correspondence the stand-in asserts. These are recorded as a reclassification
 of the existing translation and Kani trust, never as a removal of anything.
 
-On 10 November 2026 I ruled that no trust assumption is accepted unless it is a
-standard Solana runtime or Rust library operation. A reviewed transcription of
+Since 10 November 2026 no trust assumption is accepted unless it is a standard
+Solana runtime or Rust library operation. A reviewed transcription of
 Aspis code is therefore not a permanent assumption: each is to be discharged by
 a translation proved equal to it, the statements that use it are conditional
 until then, and functions that no tool can yet translate stand as open
 obligations. Under the same rule the transcription of the public-preparation
 accessor was withdrawn as a trust item (its proofs stay as evidence, and the
-newer tool now translates the function, with its equality pending one lemma
-identifying two library names), the transcription of the compiler-derived clone
+newer tool now translates the function, which is proved equal to its fresh
+translation with no assumption named), the transcription of the compiler-derived clone
 and equality operations stays because those are compiler derives, and the
 deployment-id constant entered the SDK assumption with a receipt comparing it
-byte for byte with the deployed ELF. Whether this treatment also applies to the
-transcriptions accepted on 27 October 2026 is a question I have still to
-settle.
+byte for byte with the deployed ELF. The rule covers the transcriptions accepted
+earlier, on 27 October 2026, as well, so those too are open obligations and the
+statements that use them are conditional until a translation is proved equal.
 
 Some things in the theorems look like conditions but are not trust. The query
 budget is a parameter of the statement, the Q of the bound; the two-transaction
@@ -108,8 +106,8 @@ the names the ledger, the status document and the Lean sources use.
 | `FixturePdaRuntime` | For seven fixed test invocations the runtime's program-address derivation agrees with the model; the off-curve facts and digest equations for those seven are proved, so only the syscall's agreement with its documented algorithm is assumed | The non-vacuity witness only; never used by the soundness theorem | None |
 
 The return-data, clock, account-view and pool-admission assumptions, and the
-fixture derivation assumption, were added by the lead under my delegation, and
-each is for me to confirm individually.
+fixture derivation assumption, are provisional and have still to be confirmed
+one by one.
 
 ## Reference: the SDK, the standard library and the tools
 
@@ -123,7 +121,7 @@ each is for me to confirm individually.
 | `NativeContractSemanticTransport` | For the enumerated frozen stage bodies, the hash wrapper, their references and the recorded tool versions, Kani's and Aeneas's readings of the Rust denote the same semantics, and the recorded association of the Rust entry points and digest wrapper with the corresponding Lean parameters holds. A clarification I approved on 28 October 2026 of existing P6 and D188 trust, with no new kind | 380 verified statements | None recorded |
 | P7, compiler and pinned libraries | The compiler, LLVM, platform tools and ABI, and the release-pinned Lean, Mathlib and Aeneas libraries, for the exact source, features and toolchain recorded | The whole closure | None for the tool; the source-to-ELF association is a separate obligation |
 | `AllocatorABICompilerSourceToELF` | The binding of the proof to the concrete final artefact, including the physical reading of the allocator | The root realisation | Discharged only by the final audit |
-| `CheckedVsWrapping` (R22) | The translations were made with overflow checks on while the deployed program wraps, so the theorems are about the checked semantics; carrying them to the binary needs, on every reached path, that no checked operation fails or that wrapping acceptance implies checked acceptance with the same result | Every verified statement whose proof uses a translated body | Discharged when that audit closes on the final closure, or if I record it as a retained assumption; current state in [`OPEN-GATES.md`](OPEN-GATES.md) |
+| `CheckedVsWrapping` (R22) | The translations were made with overflow checks on while the deployed program wraps, so the theorems are about the checked semantics; carrying them to the binary needs, on every reached path, that no checked operation fails or that wrapping acceptance implies checked acceptance with the same result | Every verified statement whose proof uses a translated body | Discharged when that audit closes on the final closure, or if it is recorded as a retained assumption; current state in [`OPEN-GATES.md`](OPEN-GATES.md) |
 | Standard logical axioms | `propext`, `Classical.choice` and `Quot.sound` only, for each top theorem and audited root | The kernel | None. The imported libraries also hold 105 nonstandard axiom declarations; none is reachable from the top theorems or is a premise, but a strict check that every import uses only standard axioms still fails |
 
 ## Reference: reviewed transcriptions
@@ -148,8 +146,8 @@ were brought inside the security game.
 
 ## Reference: the approved appendix of 27 October 2026
 
-The inventory rests on a trust appendix that I approved on 27 October 2026 and
-incorporated into the security contract. It was written as a proposal
+The inventory rests on a trust appendix that was approved on 27 October 2026
+and incorporated into the security contract. It was written as a proposal
 and is retained verbatim at the source linked below; where its text says "not
 adopted" or "candidate", the contract amendment controls, and for the
 translation tool the trace-fidelity reading was chosen. Its main records and
@@ -164,7 +162,7 @@ qualifications are these.
 | Rejected paths | On one rejection the Rust returns a parse error where the translation fails with a panic after ten of twelve leaf hashes, so identical error kinds on every rejection are not claimed; accepted results and effects must agree, and rejected prefixes must both reject and count the reads made before rejection |
 | First-transaction preparation (D188-P2) | The selected translated models represent a retired version of the first transaction at five preparation interfaces whose association with the frozen source is not established: the dot-product type (historical sums with a count against the release sums), the prepared claim (a scalar against a 29-element array of powers), the query geometry (the release caches a line coordinate), the first transaction itself (a retired eight-way dispatch against the release's compact, batched path) and a retired finishing step with no release counterpart. The theorems remain valid about their selected model, but attributing them to the deployed code across this boundary is qualified until association proofs close against the same release source. The pinned translator fails on six release functions on this path, and the chosen route extracts the rest with those six as opaque leaves handled through an owned reference, Kani and a Lean correspondence. The status document lists this attribution among the things not claimed unless the final audit shows the five interfaces covered by native bridges |
 | Dropped write (D188-P3) | The pinned translation of one sampler function drops a write the frozen Rust performs, so that body gets no credit; credit for four related bodies was suspended pending per-function checks, the recommended repair being to narrow the translation assumption and bridge those bodies natively |
-| Later additions | My clarification of 28 October 2026 on Kani and Aeneas semantics, the adoption of the fixture address-derivation assumption for the non-vacuity witness only, and the runtime and transcription assumptions added from 4 to 10 November 2026, all included in the tables above |
+| Later additions | The clarification of 28 October 2026 on Kani and Aeneas semantics, the adoption of the fixture address-derivation assumption for the non-vacuity witness only, and the runtime and transcription assumptions added from 4 to 10 November 2026, all included in the tables above |
 
 ## Where this comes from
 
