@@ -1,0 +1,39 @@
+{"attempt": "PCVU_L016", "exit_status": 0, "wall_seconds": 17.647999277105555, "peak_rss_kib": "5851320", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+@Slice.setAtNat : {α : Type u_1} → Slice α → ℕ → α → Slice α
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α
+...
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+@Slice.setAtNat : {α : Type u_1} → Slice α → ℕ → α → Slice α
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α → Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, Slice.setAtNat._proof_1 v i x⟩
+
+Running as unit: run-r95a614a3fbd74620a8ed519ba794a8f9.scope; invocation ID: 4cebdf118b5c4eff9dca271a9a346888
