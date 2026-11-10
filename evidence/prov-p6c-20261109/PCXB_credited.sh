@@ -54,10 +54,10 @@ P4 = ['evidence/prov-p4b-20261109/PRVEq_NHV_NEO_WindowV2_Funs.lean', 'evidence/p
 for p in P4:
     assert p in paths, p
     f = files[p]; f['phases'].add('PCXA(P4b/P4c module-level)')
-GEN = ['evidence/prov-p2h-20261109/PRVEq_const_bind.lean', 'evidence/prov-p1h-20261109/PRVH_Shift.lean', 'evidence/prov-p1h-20261109/PRVH_LoopDom.lean', 'evidence/prov-p1h-20261109/PRVC_LoopBridge.lean']
+GEN = ['evidence/prov-p6c-20261109/PRVEq_transport_row_P3.lean', 'evidence/prov-p2h-20261109/PRVEq_const_bind.lean', 'evidence/prov-p1h-20261109/PRVH_Shift.lean', 'evidence/prov-p1h-20261109/PRVH_LoopDom.lean', 'evidence/prov-p1h-20261109/PRVC_LoopBridge.lean']
 for p in GEN:
     assert p in paths, p
-    files[p]['phases'].add('generic lemma module')
+    files[p]['phases'].add('generic lemma module or P3e (PCVE_) file')
 rows = []
 for p, v in sorted(files.items()):
     t = show(p)

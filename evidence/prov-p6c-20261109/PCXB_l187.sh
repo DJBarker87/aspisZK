@@ -10,7 +10,7 @@ pco_all = L.J('prov-p0-20261109/PCO_PARTITION.json'); pco = pco_all['modules']
 fixes = {}
 for l in open(L.SCR.rsplit('/', 1)[0] + '/in/L187_SOURCE_FIXES.jsonl'):
     o = json.loads(l); fixes[o['module']] = o
-pcuf = L.J('prov-p2f-20261109/PCUF_ALL_STATUS.json')['modules']
+pcuf = L.J('prov-p1h-20261109/PCQH_ALL_STATUS.json')['modules']
 def pmod(label):
     if label in pco: return label
     for suf in ('_Funs', '_Types'):
@@ -19,7 +19,7 @@ proved_by_mod = collections.Counter()
 for label, d in pcuf.items():
     m = pmod(label)
     for r in d.values():
-        if r['status'].startswith('PROVED') and not r['basis_not_correct']: proved_by_mod[m or label] += 1
+        if r['status'] in ('EQUALITY_PROVED', 'EQUALITY_DOMAIN', 'CONDITIONAL_ON_BINDING'): proved_by_mod[m or label] += 1
 clomod = {x['module']: x for x in clo['modules']}
 def ours(m):
     p = pco.get(m)

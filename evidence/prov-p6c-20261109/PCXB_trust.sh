@@ -3,7 +3,7 @@
 cd /Users/dominic/ZK/.worktrees/pc-prov-p6c/evidence/prov-p6c-20261109
 python3 -I -B - <<'PY'
 import json, collections
-H = json.load(open('PCXB_HAND_MODELS.json'))['entries']
+H = json.load(open('../prov-p6s-20261109/PCXA_HAND_MODELS.json'))['entries']; HM = json.load(open('PCXB_HAND_MODELS.json')); EX = json.load(open('PCXB_EXTERNALS_601.json'))
 hw = [x for x in H if x['category'].startswith('HAND_WRITTEN')]
 unres = [x for x in H if x['category'] == 'NO_GATE_DEFINITION_FOUND_IN_EXAMINED_FILES']
 by = collections.defaultdict(list)
@@ -32,7 +32,7 @@ S = {
 }
 L = ['# PCXB_TRUST_PROPOSALS: proposed trust-row text for hand-written gate models', '',
  'Target not yet established. PROPOSED TEXT ONLY: no trust row exists or has been added by this job, and none of this changes a ledger row, the RSL or the security contract. A hand model becomes a trust row only if a CLOSED-row root or the deployed_splitB cone reaches it (flags below); an unreached entry is an unused template.', '',
- f'Source: PCXB_HAND_MODELS.json, {len(H)} deduplicated (gate module, external name) entries from every *_HAND_MODELS.json of the campaign: {len(hw)} hand-written gate models, {len(unres)} unresolved externals (no gate definition found in the examined files: open obligations, not models), the rest Aeneas-generated bodies or unclassified. The hand-written flag combines explicit hand_model flags with a text test (no Aeneas Source: doc comment); it is a classification, not an audit of the model bodies. The statement of each model (that it matches the Rust item) is NOT proved anywhere here.', '',
+ f'Source: PCXA_HAND_MODELS.json (carried) and PCXB_HAND_MODELS.json, {len(H)} deduplicated (gate module, external name) entries from every *_HAND_MODELS.json of the campaign: {len(hw)} hand-written gate models, {len(unres)} unresolved externals (no gate definition found in the examined files: open obligations, not models), the rest Aeneas-generated bodies or unclassified. The hand-written flag combines explicit hand_model flags with a text test (no Aeneas Source: doc comment); it is a classification, not an audit of the model bodies. The statement of each model (that it matches the Rust item) is NOT proved anywhere here.', '',
  'Class (a) and (b) were pre-notified to the owner by zk-11 (SDK type models; core slice iterator model).', '']
 for k in sorted(by):
     xs = by[k]; st, rm = S[k]
@@ -47,6 +47,13 @@ for k in sorted(by):
 L += ['## Unresolved externals (not a trust proposal)', '', f'{len(unres)} entries name an external of a fresh emission for which no gate definition was found in the examined gate files (the fresh file elaborates only if the compiled gate environment supplies the name). These are provenance obligations: until each is resolved to an Aeneas library definition or a hand model, the equalities that depend on it are conditional on the gate constant of that name. Most are Aeneas-library items (core/alloc) that the gate environment provides through imported Aeneas modules. See `proved_definitions_conditional_on_it` in PCUF_HAND_MODELS.json for the 22 proved definitions that depend on one.', '',
       '## Cross-class notes', '', '* The L187 closure and the gate environment already contain these names; whether the owner treats class (c) to (g) as std-library trust or as proof tasks is an owner decision. This job recommends treating (c), (d), (f), (g) as proof tasks (small, closed, generic lemmas) and (a), (b), (e), (h), (i) as trust rows only until their removal conditions are met.',
       '* S1ValuesOwnedModelV1 is in the deployed_splitB cone (module-level hit, 7 CLOSED rows) and its link to the frozen function is an unproved P3 obligation; do not treat it as an unused template.']
+L += ['', '## Classes added by the second P6 run (PROPOSED text only)', '',
+ '### PROPOSED-HM-L: ShrAmt bridge', '', '**Statement.** ' + HM['named_items'][0]['inventory_line'], '', '**Residuals.** ' + ' '.join(HM['named_items'][0]['residuals']), '',
+ '**Removal condition.** None needed for the overflow-checks-OFF use; the item is a verified bridge and could be recorded as discharged. It must carry the restriction "never reuse for checked shifts with amounts wider than 32 bits".', '',
+ '### PROPOSED-HM-M: array_from_fn_copy standing in for core::array::from_fn', '', f'**Statement.** The gate hand model array_from_fn_copy is accepted as the semantics of core::array::from_fn (pinned Rust core library) for the instantiations the {HM["named_items"][1]["n_dependants"]} blocked dependants use. **Removal.** one bridge theorem per (element type, closure) instantiation, or re-extraction through a library definition. Owner decides; the dependants stay OPEN until then.', '',
+ '### PROPOSED-HM-N: parametric records (Port3_NativeGeometryBody Ops, Port4C_NativePrefix Leaves, Port5Q2_ReaderWeights ReadK/IterMut model, AdapterRwModel AdapterRw.Ops) and compact.OFF_* constants', '', '**Statement.** The hand-written records are accepted as the boundary through which the gate functions reach field, domain, reader and SDK operations; the frozen functions call the concrete items. **Removal.** instantiate the record by the frozen items and prove the fresh = gate equality for the instantiation (34 definitions HAND_ADAPTED); compact.OFF_* requires the Ops-instance constants to be shown equal to the frozen constants.', '',
+ '### PROPOSED-HM-O: cross-crate constant encoding assumption (one line)', '', HM['named_items'][4]['one_line'], '',
+ f'### Externals with no gate definition: {EX["counts"]}', '', 'No existing trust row of the 2026-10-27 appendix literally covers any of the 601 (class b is empty); the appendix SDK rows are account-data/RefCell borrow fields, not the Pubkey/Hash type models; TrustedStd covers only option_ok_or and result_unwrap32. (c) is an upper bound (see PCXB_EXTERNALS_601.json rule).']
 open('PCXB_TRUST_PROPOSALS.md', 'w').write('\n'.join(L) + '\n')
 print({k: len(v) for k, v in by.items()}, len(unres))
 PY

@@ -15,18 +15,18 @@ def summ(sel, pred):
             if pred(r): dc[r['status']] += 1
     return dict(modules=len(sel), module_rollups=dict(mc), definitions=dict(dc), definitions_total=sum(dc.values()))
 S = dict(splitB_cone=summ(sbm, lambda r: r['in_splitB_cone']), CLOSED_roots_union=summ({m: v for m, v in mods.items() if v['in_CLOSED_root_cone']}, lambda r: r['in_CLOSED_root_cone']))
-wrong = sum(1 for v in sbm.values() for r in v['definitions'].values() if r['in_splitB_cone'] and r['status'] == 'OPEN' and r.get('open_reason', '').startswith('WRONG_BASIS'))
+wrong = sum(1 for v in sbm.values() for r in v['definitions'].values() if r['in_splitB_cone'] and r['status'] == 'OPEN' and r.get('open_class') == 'WRONG_BASIS')
 S['splitB_cone']['open_wrong_basis_definitions'] = wrong
 S['rows'] = dict(collections.Counter(r['status'] for r in rows.values()))
 def order(m): return (0 if mods[m]['in_splitB_cone'] else 1, mods[m]['rollup'] != 'OPEN', m)
 out = dict(schema='PCXB_PROVENANCE/1', target_established=False,
-  statement='Target not yet established. SNAPSHOT (first of two P6 runs). Provenance only: no ledger row, trust row, RSL or contract changed. OPEN includes every definition whose only record has a wrong basis (ruling a).',
+  statement='Target not yet established. COMPLETE P6 (second run, PCXB_). Provenance only: no ledger row, trust row, RSL or contract changed. OPEN includes every definition whose only record has a wrong basis (ruling a).',
   headline_root='AspisR1.TAS_FinalB.deployed_splitB', headline_cone_constants=146370,
   cone_evidence='integrate-20261111/NNH_L942/audit/NEP_proof0_AspisR1.TAS_FinalB.deployed_splitB_REACHABLE.txt.xz (sha256 0b316cbba462874e984430db4c9ddcaa2d902053315934a8b608eaea48d30090, verified), walker NNM_ProofDriver 46ee271b..., TAS_G0_AUDIT.json raw_ax2',
   inputs=dict(partition='prov-p0-20261109/PCO_PARTITION.json (ledger30 base 6ce07a6a593; module/blob ownership re-run reproduces module groups and row counts, one module differs: AspisR1WideToBytesSource.Funs, whose group comes from the PCO shadow/pilot correction)',
-              definition_status='prov-p2f-20261109/PCUF_ALL_STATUS.json (P5, P2a-d, P2r, P3a, P4a, P2f); P4b/P4c from the audited theorem lists of PCXB_L009/L010; sibling P1f (PCQG_) not used',
-              statuses='RECEIPTED | EQUALITY_PROVED | EQUALITY_DOMAIN | OPEN. EQUALITY_DOMAIN here = the 4 loop-return refinements only; no canonical-domain equality exists yet.'),
-  summary=S, limits=['Definition set = annotated (Aeneas Source: doc) names reached by the cone or by a CLOSED root under the PCO ownership rule, plus any name with a PCUF record; unannotated hand-written/auxiliary names reached are counted per module (hand_or_unannotated_names_reached) and are not assigned a provenance status.',
+              definition_status='prov-p1h-20261109/PCQH_ALL_STATUS.json (P5, P2a-h, P3a-d, P4a-e, P1h, PCXA markers) plus the P3e (PCVE_) overlay for the transport row family (lead addendum)',
+              statuses='RECEIPTED | EQUALITY_PROVED | CONDITIONAL_ON_BINDING | EQUALITY_DOMAIN | OPEN (open_class, open_reason) | HAND_ADAPTED | NO_FROZEN_COUNTERPART. EQUALITY_DOMAIN = the 4 loop-return refinements only. The transport row family (P3e, PCVE_) and the ShrAmt-dependent NFN definitions were upgraded after the NPE_ ShrAmt check (overflow-checks-OFF only): row EQUALITY_PROVED, row_loop.body and row_loop EQUALITY_DOMAIN with iter.end <= 16.'),
+  summary=S, limits=['Statuses are those of PCQH_ALL_STATUS.json (PCQH selection rule: latest PROVED with a correct basis, else latest non-proved record); definitions reached by the cone but not in that file are OPEN (no record) unless the module is RECEIPTED. Definition set = annotated (Aeneas Source: doc) names reached by the cone or by a CLOSED root under the PCO ownership rule, plus any name with a PCUF record; unannotated hand-written/auxiliary names reached are counted per module (hand_or_unannotated_names_reached) and are not assigned a provenance status.',
     'Group R modules are RECEIPTED at module level; the receipt is a hash-linked extraction receipt (extraction provenance), its overflow configuration is not re-derived here (configuration "per receipt").',
     'Arithmetic class is a text detector (wrapping_* call / checked `<- a op b` bind); it is a heuristic, validated against the 10 PCUF OFF-required definitions (all WRAPPING/NO_ARITH/MIXED), and is informational for the R22 split.',
     'Row view is definition-level over the names each row root reaches; modules with no annotated definition reached are not counted as OPEN. Compiled-source-ambiguous modules (14 flagged by PCO) keep provisional groups.'],

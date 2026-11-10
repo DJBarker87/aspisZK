@@ -7,7 +7,7 @@ sys.path.insert(0, '.')
 import PCXB_lib as L
 pco = L.J('prov-p0-20261109/PCO_PARTITION.json')['modules']
 c1 = json.load(open(L.SCR + '/compose1.json')); closed_rows = json.load(open(L.SCR + '/closed_rows.json'))
-st = L.J('prov-p2f-20261109/PCUF_ALL_STATUS.json')
+st = L.J('prov-p1h-20261109/PCQH_ALL_STATUS.json')
 pcuf = st['modules']
 led = L.JX('ledger30-20261111/NNN_LEDGER.json.xz')
 closed = sorted(r['row'] for r in led['rows'] if r['status'] == 'CLOSED')
@@ -34,17 +34,6 @@ def receipts(cd):
     if b and b['verdict'].startswith('REPRODUCED'): out.append('emission-repro2-20261110/NML_PROVENANCE.json blob ' + s[:12] + ' run ' + str(b.get('run')))
     out += pinfile.get(s, [])[:3]
     return out or ['(status derived by PCO_partition.py from strict-receipt hash membership; path not recoverable in this snapshot)']
-# ---- extra module-level records: P4b / P4c audited theorems
-EXTRA_CFG = {'NHV_': 'OFF', 'Multiproof': 'ON', 'AspisR1WithdrawalCaller': 'ON', 'AspisR1SemanticCallExtraction': 'ON', 'AspisR1BatchedWeightsExtraction': 'ON', 'NJT_ClaimsRef': 'OFF'}
-extra = collections.defaultdict(list)   # module -> [(defrel, theorem, scope, phase, cfg)]
-for a, ph in (('PCXB_L009', 'P4b'), ('PCXB_L010', 'P4c')):
-    t = lzma.open(f'{a}/stdout.log.xz').read().decode()
-    ax = dict((n, rest) for n, rest in re.findall(r"^'([^']+)' (does not depend on any axioms|depends on axioms: \[[^\]]*\])", t, re.M))
-    for n, k in re.findall(r'^PRVEQ_KIND (\S+) (\S+)$', t, re.M):
-        mm = re.match(r'PRVEq\.((?:NHV_\w+?_Funs)|(?:Multiproof\w+?\.Funs)|(?:AspisR1\w+?\.Funs)|(?:NJT_ClaimsRef_Funs))\.(.*)$', n)
-        if not mm: continue
-        cfg = next(v for k2, v in EXTRA_CFG.items() if mm[1].startswith(k2))
-        extra[mm[1]].append((mm[2], n, a, ph, cfg))
 # ---- per module / definition
 OPENR = lambda **k: dict(status='OPEN', **k)
 out_mod = {}
@@ -59,33 +48,39 @@ for m, d in c1.items():
         cls = d['arith'].get(n)
         r = pm_recs.get(n)
         base = dict(in_splitB_cone=n in d['splitB_names'], in_CLOSED_root_cone=n in d['closed_names'], arithmetic_class=cls)
-        ex = [e for e in extra.get(m.replace('.', '_'), []) + extra.get(m, []) if n == m + '.' + e[0] or n.endswith('.' + e[0])]
-        if g['group'] == 'R':
-            recs[n] = dict(base, status='RECEIPTED', configuration='per receipt (not re-derived)', aeneas_tool='per receipt (not re-derived)', evidence=[x for cd in g['candidates'] for x in receipts(cd)][:3])
-        elif r:
+        if r:
             s = r['status']
-            if r['basis_not_correct']:
-                recs[n] = dict(base, status='OPEN', open_reason='WRONG_BASIS: ' + '; '.join(r['basis_problems']) + f' (record status {s})', pcuf_status=s, configuration=r['configuration'], required_configuration=r['required_configuration'], aeneas_tool=r['aeneas_tool'], theorem=r['theorem'], receipt=r['receipt'])
-            elif s in ('PROVED_RFL', 'PROVED_UNFOLD', 'PROVED_EQUIV', 'PROVED_P3'):
-                recs[n] = dict(base, status='EQUALITY_PROVED', kind=s, theorem=r['theorem'], proving_file=r['proving_file'], receipt=r['receipt'], configuration=r['configuration'], required_configuration=r['required_configuration'], aeneas_tool=r['aeneas_tool'], decided_by=r['decided_by'], note=r['note'])
-            elif s == 'PROVED_P3_LOOP_REFINEMENT':
-                recs[n] = dict(base, status='EQUALITY_DOMAIN', semantic_class='loop-return refinement (fresh Option-Bool loop return refines gate Bool loop), not a plain equality; callee atomic_statement.encode_digest_canonical resolved by name to the gate constant', theorem=r['theorem'], proving_file=r['proving_file'], receipt=r['receipt'], configuration=r['configuration'], aeneas_tool=r['aeneas_tool'], caller_domain_theorems='none needed (no domain hypothesis; refinement statement)')
-            else:
-                recs[n] = dict(base, status='OPEN', open_reason=f'{s}' + (': ' + r['note'][:200] if r.get('note') else ''), pcuf_status=s, configuration=r['configuration'], required_configuration=r['required_configuration'], aeneas_tool=r['aeneas_tool'])
-        elif ex:
-            e = ex[0]; need_on = cls in ('CHECKED', 'MIXED')
-            if need_on and e[4] == 'OFF':
-                recs[n] = dict(base, status='OPEN', open_reason=f'WRONG_BASIS: {e[3]} equality {e[1]} proved against an overflow-OFF extraction but the gate body is checked-arithmetic (detector class {cls})', configuration='OFF', required_configuration='ON')
-            else:
-                recs[n] = dict(base, status='EQUALITY_PROVED', kind=f'{e[3]}_MODULE_LEVEL_RECORD', theorem=e[1], receipt=f'prov-p6c-20261109/{e[2]}/receipt.json (audit scope; original compile in {"PCWB_L001/L003" if e[3]=="P4b" else "PCWC_L004/L008-L010"})', configuration=e[4], required_configuration='ON' if need_on else 'ON-or-OFF (arithmetic class ' + str(cls) + ')', aeneas_tool='original Aeneas 959659a6 / aeneas-b59d5188-extended per PCWB/PCWC PINS')
+            common = dict(base, configuration=r.get('configuration'), required_configuration=r.get('required_configuration'), aeneas_tool=r.get('aeneas_tool'), theorem=r.get('theorem'), proving_file=r.get('proving_file'), receipt=r.get('receipt'), decided_by=r.get('decided_by'), pcqh_status=s)
+            if s == 'OPEN':
+                rs = r.get('open_reason') or ''
+                recs[n] = dict(common, status='OPEN', open_reason=rs, open_class=('WRONG_BASIS' if rs.startswith('WRONG_BASIS') else 'NO_FRESH_EMISSION' if rs.startswith('NO_FRESH_EMISSION') or 'NO_FRESH_EMISSION' in rs[:40] else 'NO_RECORD' if rs.startswith('no Lean equality') else 'FAILED_OR_OTHER'))
+            elif s in ('HAND_ADAPTED', 'NO_FROZEN_COUNTERPART'): recs[n] = dict(common, status=s, open_reason=r.get('open_reason'))
+            elif s == 'CONDITIONAL_ON_BINDING': recs[n] = dict(common, status='CONDITIONAL_ON_BINDING', condition=r.get('open_reason'), note=r.get('notes'))
+            elif s == 'EQUALITY_DOMAIN': recs[n] = dict(common, status='EQUALITY_DOMAIN', semantic_class='loop-return refinement (fresh Option-Bool loop return refines gate Bool loop), not a plain equality')
+            elif s == 'RECEIPTED': recs[n] = dict(common, status='RECEIPTED', configuration='per receipt (not re-derived)')
+            else: recs[n] = dict(common, status=s, binding_upgrade=r.get('binding_upgrade'), config_bridge=bool(r.get('config_bridge')), encoding_bridges=r.get('encoding_bridges'))
+        elif g['group'] == 'R':
+            recs[n] = dict(base, status='RECEIPTED', configuration='per receipt (not re-derived)', aeneas_tool='per receipt (not re-derived)', evidence=[x for cd in g['candidates'] for x in receipts(cd)][:3])
         else:
             sub = g['subgroup']
-            recs[n] = dict(base, status='OPEN', open_reason=f'no Lean equality record for this definition (module group {g["group"]}: {sub})', configuration='NA', aeneas_tool='NA')
+            recs[n] = dict(base, status='OPEN', open_class='NO_RECORD', open_reason=f'no Lean equality record for this definition (module group {g["group"]}: {sub})', configuration='NA', aeneas_tool='NA')
+        # ShrAmt: NPE_ (evidence/shramt-20261110, NPE_SHRAMT_CHECK.md) verified the bridge in the overflow-checks-OFF configuration; records that carried the encoding bridge are marked
+        if r and any('ShrAmt' in str(x) for x in (r.get('encoding_bridges') or [])) and recs[n]['status'] == 'EQUALITY_PROVED':
+            recs[n]['shramt_bridge'] = 'upgraded_from_conditional_on_ShrAmt_by_NPE_2026-11-10'
+        # P3e (PCVE_) overlay + NPE_ upgrade (lead addenda): transport row family
+        if m == 'RPz7_FIo_NativeFuns' and n.endswith(('transport.Variant.row_loop.body', 'transport.Variant.row_loop', 'transport.Variant.row')):
+            isrow = n.endswith('Variant.row')
+            recs[n] = dict(recs[n], status='EQUALITY_PROVED' if isrow else 'EQUALITY_DOMAIN', domain_hypothesis=None if isrow else 'iter.end <= 16',
+                           semantic_class=None if isrow else 'domain-restricted equality: the fresh OFF body and the gate body DIFFER for iter.end above the checked-shift bound; equal for iter.end <= 16',
+                           theorem='PCVE.transport.' + n.split('transport.')[1] + ('_dom' if 'row_loop' in n else ''), proving_file='prov-p3e-20261109/PRVEq_transport_row_P3.lean (PCVE_L006, research 3ba71246350; copy PRVEq_transport_row_P3.lean in this directory)',
+                           previous_status=s if r else 'OPEN', shramt_bridge='upgraded_from_conditional_on_ShrAmt_by_NPE_2026-11-10', configuration='OFF', required_configuration='OFF (mixed configuration inside the body: checked shifts in the gate, wrapping in the OFF emission)')
     cnt = collections.Counter(r['status'] for r in recs.values())
     if g['group'] == 'R': roll = 'RECEIPTED'
     elif not recs: roll = 'NO_ANNOTATED_DEFINITION_REACHED' if g['group'] != 'R' else 'RECEIPTED'
-    elif cnt['OPEN'] == 0: roll = 'EQUALITY_DOMAIN' if cnt['EQUALITY_DOMAIN'] else 'EQUALITY_PROVED'
-    else: roll = 'OPEN'
+    elif cnt['OPEN'] or cnt['HAND_ADAPTED'] or cnt['NO_FROZEN_COUNTERPART']: roll = 'OPEN'
+    elif cnt['CONDITIONAL_ON_BINDING']: roll = 'CONDITIONAL'
+    elif cnt['EQUALITY_DOMAIN']: roll = 'EQUALITY_DOMAIN'
+    else: roll = 'EQUALITY_PROVED'
     cfgs = collections.Counter(r.get('configuration', 'NA') for r in recs.values())
     out_mod[m] = dict(group=g['group'], subgroup=g['subgroup'], kind=g['kind'], rollup=roll, counts=dict(cnt), n_defs=len(recs), in_splitB_cone=bool(d['splitB_names']), in_CLOSED_root_cone=bool(d['closed_names']),
                       n_rows=g['n_rows'], module_configuration=dict(cfgs), compiled_source_ambiguous=g.get('compiled_source_ambiguous', False), candidates=[dict(sha256=cd['sha256'], status=cd['status']) for cd in g['candidates']],
@@ -100,7 +95,7 @@ for row in closed:
         if row in d:
             anyroot = True; ns = set(d[row]); recs = out_mod[m]['definitions']
             reached = [n for n in ns if n in recs]
-            nopen = sum(1 for n in reached if recs[n]['status'] == 'OPEN')
+            nopen = sum(1 for n in reached if recs[n]['status'] not in ('RECEIPTED', 'EQUALITY_PROVED', 'EQUALITY_DOMAIN'))
             if nopen: openmods[m] = nopen
             ms[m] = (len(reached), nopen)
     has_root = any(row in v for v in roots_rows.values()) 
