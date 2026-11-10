@@ -474,6 +474,7 @@ def generate(a):
         s1 = f'(trace "PRV-S1 {eqname(n)}"; rfl)'
         s2 = f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_q}.{n} {gate_ns}.{gname(n)}; try simp only [{", ".join(cal)}]; try rfl; done)' if cal else f'(trace "PRV-S2 {eqname(n)}"; delta {fresh_q}.{n} {gate_ns}.{gname(n)}; try rfl; done)'
         if p['status'] == 'proved': tac = s1 if p['stage'] == 1 else s2
+        elif n in __import__('os').environ.get('PCWJ_S2FIRST', '').split(','): tac = s2   # PCWJ change: callee-composition shape only (rfl-first exhausts the 200000 budget on big unfolds); recorded in the report by the caller
         else: tac = f'first | {s1} | {s2}'
         out.append('set_option maxHeartbeats 200000 in')   # PCUE change 6: LOWERED per-equality budget (never raised): a slow defeq check fails fast and becomes a recorded obligation
         out.append(f'theorem {eqname(n)} : {stmt} := by')
