@@ -34,13 +34,27 @@ namespace PCVU_Fresh
 abbrev field.M31 := AspisR1Stage2.aspis_core.field.M31
 abbrev field.CM31 := AspisR1Stage2.aspis_core.field.CM31
 abbrev field.QM31 := AspisR1Stage2.aspis_core.field.QM31
+-- HAND MODEL (trust row HM-C Option/Result): the Option Try branch and from_residual, text as in R1CandidateFieldParsers (see PCVU_HAND_MODELS.json);
+-- read_discriminant on Option Infallible resolves to AspisR1DecodeKHelperV7Bridge.optionInfallibleDiscriminantInst.
+def core.option.Option.Insts.CoreOpsTry_traitTry.branch
+  {T : Type} (self : Option T) :
+  Result (core.ops.control_flow.ControlFlow (Option core.convert.Infallible) T)
+  := do
+  match self with
+  | none => ok (core.ops.control_flow.ControlFlow.Break none)
+  | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+def core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+  (T : Type) (o : Option core.convert.Infallible) : Result (Option T) := do
+  let i := read_discriminant o
+  massert (i = 0#isize)
+  ok none
 EOF
 sed -n '/^@\[global_simps, irreducible\] def field.P/,/^end PCVU_qm31/p' "$F" | grep -v '^end PCVU_qm31'
 cat <<EOF
 end PCVU_Fresh
 
 open PCVU_Fresh AspisR1 AspisR1.CheckpointBytes3Word AspisR1.CheckpointBytes3ScalarShape AspisR1.CheckpointBytes3KDecode
-open OraclePortCkptAbi2Extracted MultiproofConeCanonical
+open OraclePortCkptAbi2Extracted AspisR1.OraclePortCkptAbi4Decode MultiproofConeCanonical
 
 def lm (a b c d : Std.U8) : Std.U32 := core.num.U32.from_le_bytes (Array.make 4#usize [a, b, c, d])
 def dec_cm (x y : Std.U32) : Option field.CM31 :=
@@ -49,7 +63,7 @@ def dec_qm (c d : Option field.CM31) : Option field.QM31 :=
   match c with | none => none | some c => match d with | none => none | some d => some { c0 := c, c1 := d }
 
 theorem fr_none (T : Type) : core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual T none = ok none := by
-  simp [core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, massert, optionTag, read_discriminant]
+  simp [core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual, massert, read_discriminant, AspisR1DecodeKHelperV7Bridge.optionInfallibleDiscriminant]
 
 theorem cm31_eq (b0 b1 b2 b3 b4 b5 b6 b7 : Std.U8) (h : [b0, b1, b2, b3, b4, b5, b6, b7].length ≤ Usize.max) :
     field.CM31.from_le_bytes ⟨[b0, b1, b2, b3, b4, b5, b6, b7], h⟩ = ok (dec_cm (lm b0 b1 b2 b3) (lm b4 b5 b6 b7)) := by
@@ -66,9 +80,9 @@ theorem qm31_eq (b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 : Std.U8)
 
 theorem lm_eq (a b c d : Std.U8) : lm a b c d = pack a b c d := PCVS_E32.lm_pack a b c d
 
-theorem ge_P (x : Std.U32) : (x >= field.P) ↔ ¬ x.val < 2147483647 := by
+theorem ge_P (x : Std.U32) : field.P.val ≤ x.val ↔ ¬ x.val < 2147483647 := by
   unfold field.P
-  constructor <;> intro h <;> scalar_tac
+  simp
 
 theorem dec_eq (w0 w1 w2 w3 : Std.U32) :
     dec_qm (dec_cm w0 w1) (dec_cm w2 w3) =
@@ -108,9 +122,9 @@ theorem qm31_16 (b : Slice Std.U8) (width : b.val.length = 16) :
   rw [fresh_shape b width, k_shape b _ _ _ _ h0 h1 h2 h3]
   split <;> simp
 
-/-- Window note: decode_k_spec carries no length check. For |b| <> 16 the frozen function indexes b[0..8] and b[8..16]
-and panics (Result.fail) when |b| < 16, and ignores bytes past 16 when |b| > 16; the deployed decoder's behaviour off the 16-byte window
-is not the frozen one (it reads word_spec at offsets 0,4,8,12 only), so only the window theorem is claimed. -/
+-- Window note: decode_k_spec carries no length check. For |b| <> 16 the frozen function indexes b[0..8] and b[8..16]
+-- and panics (Result.fail) when |b| < 16, and ignores bytes past 16 when |b| > 16; the deployed decoder's behaviour off the 16-byte window
+-- is not the frozen one (it reads word_spec at offsets 0,4,8,12 only), so only the window theorem is claimed.
 #print axioms lm_eq
 #print axioms ge_P
 #print axioms dec_eq
