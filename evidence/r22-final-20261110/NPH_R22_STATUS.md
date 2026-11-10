@@ -1288,3 +1288,108 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 17b. QA powers context, SC and R72 (same run)
+
+Four more scopes were used: L069, L070–L071 and L072. That makes 25 of this run's 40. All accepted
+modules use standard axioms only, with no sorry. L070 failed on one wrongly qualified lemma name,
+and the name was changed before L071.
+
+| Scope | Module | Wall | Peak RSS (KiB) | Axiom lines |
+|---|---|---:|---:|---:|
+| L069 | NPH_R22JoinQA2 | 3.11 s | 6,724,284 | 2 |
+| L071 | NPH_R22JoinSC1 | 2.76 s | 5,620,868 | 8 |
+| L072 | NPH_R22R72 | 1.98 s | 5,217,312 | 2 |
+
+**QA: the "CurrentWideMul WideExact.mul callers" context is closed (NPH_R22JoinQA2).**
+- The site's only direct caller is AspisR1PowersConcreteMul.sourceMul. Its only executing
+  caller is AspisR1LoopPowers.field.WideExact.mul, inside weights.early_powers_loop.body.
+- early_powers has exactly two executing callers (NPH_POWERS_REFS.json):
+  - ClaimPowers.powers, the concreteOps claim powers slot. `claim_powers_ok`: ok on a
+    canonical kappa, which NPH_R22JoinCW5.guarded_claim_sites gives at every executed claim.
+  - Tx2N_Powers.powers, the tx2 stage op17 slot. `tx2_powers_ok`: ok at p.gamma of the
+    Prepared that the tx2 resume returns (gamma canonical from
+    NPH_R22JoinCW2.entered_domain). tx2_common calls op17 only as op17 29 p.gamma.
+- early_powers is ok on canonical input, so every WideExact.mul call it executes returns ok.
+- QA is still not (b). Two contexts remain: the installer contexts outside 094, and NFN
+  op14/op15 under NFN_NEA_FieldProduct.ops.
+
+**SC moves to (b) (NPH_R22JoinSC1).**
+- `step_congr` and `rounds_congr`: RoundModel.step and rounds are unchanged when boundary and
+  value are replaced by functions that agree with them on the arguments the step actually
+  passes. Those arguments are:
+  - the Ok decode(28) coefficients;
+  - the alpha array returned by the SAME successful Array.update with the Ok
+    semantic_validated value;
+  - the round.
+
+  rounds is unrolled over rounds 0..9.
+- `deployed_rounds_guarded` has NO premise: rounds over `Rg` equals rounds over
+  AspisS1ExtractedRoundChildren.children. `Rg` runs generatedMainBoundary/Value only on
+  canonical coefficients, and value only for round < 10 with a canonical alpha[round].
+  - Producers: decodeMain_success_members_canonical, and
+    semantic_success_selected_canonical through `update_at` (NHI_ArrayCells).
+  - `finish_rounds_guarded` gives the same inside FinishModel.finish.
+- Site lemmas `guarded_boundary_site` and `guarded_value_site`: wherever Rg runs an entry, the
+  whole entry call is ok with canonical output (JFv_RoundArithmetic.boundary/value). So every
+  SC kernel call inside it returns ok.
+- NJM_RoundJoin.R is children by definition. The other referrers are proof-only
+  (NPH_SC_REFS.json through NPH_SC_REFS4.json):
+  - the RawGeneratedSemanticRoundPolynomialAdapter copy is used only by actualRoundBoundaries,
+    inside a Prop, a structure and theorems;
+  - NJM_RoundJoin.afterSemantic is used only under model definitions that take a parse
+    proof as an argument;
+  - NJM_RoundRoot.Cases is used only from the unreached NJM_RoundsClosed.Child;
+  - NNG_LegacySuffix136.f_r is used only from theorems.
+- Moved to PRECONDITION_B: SemanticCallExtraction CM31.mul, M31.add, M31.sub, and
+  r1_semantic.semantic_value_loop.body (previously OPEN: CALLER_DOMAIN_NOT_COMPOSED; it runs
+  only inside the guarded semantic_value_entry). Previous judgments are kept under
+  `nph_judgment_before_20261110_sc`.
+- **The proof-only classification of the non-deployed referrers is a textual screen, and I
+  flag it for lead review.**
+
+**R72 moves to (b) (NPH_R22R72).**
+- Every reached R72 kernel call lies inside AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+  (definition-level scan NPH_R72_REFS.json, plus the deployed_splitB REACHABLE list). Its
+  reached callers are the wrapper externals:
+  - the root-namespace circle.secure_ood_circle_point_from_parameter;
+  - the AspisR1CircleFallback copy, reached through root transcript.circle_fallback_point and
+    then AspisR1CircleFallback.transcript.circle_fallback_point.
+
+  Both run only inside AspisR1CircleSampleWrapper.sampler.circle_sample (its mapper and its
+  fallback closure). The R72-internal transcript loop is not reached.
+- `circle_sample_total`: circle_sample is ok for EVERY input
+  (RawCircleSampleActualPolicyUnconditionalV1.circle_sample_total_on_circle). So every executed
+  R72 kernel call returns ok, whatever its caller passes. `circle_source_total` states the same
+  for the deployed finish circle boundary F3M_CircleSource.source.
+- Moved to PRECONDITION_B: AspisR72Sampler CM31.mul, CM31.square, M31.add, M31.neg and M31.sub.
+  Previous judgments are kept under `nph_judgment_before_20261110_r72`. AspisR72Sampler
+  r24_canonical_mul stays OPEN: NO_FROZEN_COUNTERPART.
+
+**Counts (220 executed checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 14 (was 22) |
+| precondition proved from the callers (b) | 12 (was 3) |
+| open | 100 (was 101) |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 359 of 396** (was 363). These are the CLOSED rows that still depend on at least
+one open or domain-only definition; 37 rows are served only by TOTAL, DIRECT or (b)
+definitions. The recount script reproduces the recorded 363 before the change.
+
+Families at (b): CW, SC and R72. Not at (b):
+- SM: one link open, the stage1_owned ordering of 17a.
+- QA: two contexts open.
+- FIq: 238 sites, not started.
+
+The 345 body walk is not started; its first piece is the SM link.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found. 15 of the 40
+scopes remain unused.
+
+Target not yet established.
