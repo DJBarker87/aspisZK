@@ -1,0 +1,41 @@
+{"attempt": "PCVF_L003", "exit_status": 1, "wall_seconds": 2.23121466091834, "peak_rss_kib": "2641156", "swaps": "0", "print_axioms": []}
+PCVF_sources/PRVEq_AdapterRwModel_k1.lean:28:13: error(lean.unknownIdentifier): Unknown identifier `solana_hash.Hash`
+PCVF_sources/PRVEq_AdapterRwModel_k1.lean:31:42: error(lean.unknownIdentifier): Unknown identifier `solana_hash.Hash`
+PCVF_sources/PRVEq_AdapterRwModel_k1.lean:37:11: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  x
+has type `Ext` which does not have the necessary form.
+PCVF_sources/PRVEq_AdapterRwModel_k1.lean:43:8: error(lean.invalidField): Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression
+  x
+has type `Ext` whi
+...
+ual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    do
+    let p ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.owner account
+    let b ←
+      core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey ops) p program_id
+    if b = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if account.is_signer = true then
+          ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if account.executable = true then
+            ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if (account.is_writable != writable) = true then
+              ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+            else do
+              let r ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len ops account
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let i ← sorry aspis_r1_cost_probe.transport.Variant.S2
+                  if (val != i) = true then
+                      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                    else ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+
+Running as unit: run-r1a6d9a63e7dd4109a9a33c7b30bc98b9.scope; invocation ID: b1cd4047d879428c831c2050fd1f6fce
