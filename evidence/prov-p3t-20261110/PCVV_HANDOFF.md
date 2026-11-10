@@ -16,3 +16,6 @@ Per slot reasons in PCVV_STATUS.json. Main blocker: no frozen emission exists fo
 
 ## Failed shapes
 Client PCVV_L001 first attempt: olean of PRVEq_AdapterStage2_o1 not on LEAN_PATH, failed before any scope (client fixed, records of it were discarded when the attempts file was reset). L003: fresh_err used a fresh-namespace type name that does not exist (types are the gate's); fixed in L004. No scratch with sorry.
+
+## Update after lead messages
+Extraction shape changed per lead (cargo --jobs 4, citing PCWE_E003): E005 cleared the timeout (Charon done, 2m11s build) but the stager failed reading <run>_emitted/repro.llbc (stable --dest-file elsewhere). E006 with a symlink at that path: Charon ok, Aeneas extended crashed at InterpReduceCollapse.ml:1991 (exit 2). Extraction budget 6/6 spent; the LLBC remains in the host workspace for an original-Aeneas (959659a6) run. Lead rulings recorded in PCVV_CLASSIFICATIONS.json K6, K7: op21/op24 div-vs-Err and op44 missing msg! are model-fidelity notes; any op21/op24 equality must be stated on NNH_S1DecodeOk (none proved).
