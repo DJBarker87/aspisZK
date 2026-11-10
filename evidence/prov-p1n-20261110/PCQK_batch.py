@@ -28,8 +28,8 @@ for m in mods:
     r=subprocess.run(['python3','-B','PCQK_automap.py',gfiles,f'{fd}/Funs.lean,{fd}/Types.lean',f'gen/nm_{safe}_{tag}.json'],cwd=H,capture_output=True,text=True)
     cmd=['python3','-B','PCQK_gen_equalities.py','--module',m,'--tag','_'+tag,'--fresh-dir',fd,'--fresh-ns',ns,'--gate-source',gate,'--name-map',f'gen/nm_{safe}_{tag}.json',
          '--out',f'PRVEq_{safe}_{OT}.lean','--report',f'gen/{safe}_{OT}.report.json','--state-out',f'gen/{safe}_{OT}.state.json','--prune-fresh']
-    if tt:cmd+=['--gate-types-source',gt]
-    if len(set(re.findall(r'(?m)^namespace\s+(\S+)',open(f'{H}/{gate}').read())))>1:cmd+=['--gate-namespace',re.findall(r'(?m)^namespace\s+(\S+)',open(f'{H}/{gate}').read())[0]]
+    cmd+=['--gate-types-source',gt if tt else gate]
+    if len(re.findall(r'(?m)^namespace\s+(\S+)',open(f'{H}/{gate}').read()))>1:cmd+=['--gate-namespace',re.findall(r'(?m)^namespace\s+(\S+)',open(f'{H}/{gate}').read())[0]]
     prev=os.environ.get('PREV')
     if prev:
         import glob,lzma

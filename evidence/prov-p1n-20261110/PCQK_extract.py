@@ -78,7 +78,7 @@ for k in ['charon','aeneas']:
 for extra in ['charon-driver']:
  q=Path(spec['charon_command'][0]).parent/extra
  if q.exists():tools[extra]=sha(q.read_bytes())
-pins=dict(run=run,aeneas_tool=spec['aeneas_tool'],p1g_config=spec.get('p1g'),spec_id=spec.get('spec_id'),frozen_revision=m.REV,frozen_source_tree_git_hash=spec['frozen_source_tree_git_hash'],cargo_lock_sha256_before=pj.get('lock_before'),cargo_lock_sha256_after=pj.get('lock_after'),
+pins=dict(cargo_jobs=(spec.get('extra_env') or {}).get('CARGO_BUILD_JOBS','1'),rustc_zthreads=1,identity_by_class_receipt='PCWE_E003 (lead ruling 2026-11-10: cargo jobs up to 4 credited, -Zthreads=1)',warm_build_class='retired, not used',run=run,aeneas_tool=spec['aeneas_tool'],p1g_config=spec.get('p1g'),spec_id=spec.get('spec_id'),frozen_revision=m.REV,frozen_source_tree_git_hash=spec['frozen_source_tree_git_hash'],cargo_lock_sha256_before=pj.get('lock_before'),cargo_lock_sha256_after=pj.get('lock_after'),
  staging_manifest_sha256=pj.get('manifest_sha256'),stager_sha256=pin['sha256'],controller_sha256=sha(Path(__file__).read_bytes()),
  opacity_file='%s_spec.json'%run,opacity_file_sha256=sha((E/(run+'_spec.json')).read_bytes()),tools=tools,charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],
  environment=dict(RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_BUILD_JOBS=(spec.get('extra_env') or {}).get('CARGO_BUILD_JOBS','1'),RAYON_NUM_THREADS='1'),extra_env_appended_to_stager_env=spec.get('extra_env'),

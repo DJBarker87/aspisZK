@@ -1,0 +1,98 @@
+{
+ "run": "PCQK_E022",
+ "spec_id": "PCQK_E022",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::r1_pool_adapter::decode_checkpoint_box",
+  "--start-from",
+  "crate::r1_pool_adapter::decode_master_box",
+  "--start-from",
+  "crate::r1_pool_adapter::emit_result",
+  "--start-from",
+  "crate::r1_pool_adapter::pool_program_id",
+  "--start-from",
+  "crate::r1_pool_adapter::registry_program_id",
+  "--start-from",
+  "crate::r1_pool_adapter::scan_proof_buffer",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/PCQK_stable/prog.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/PCQK_workspace/programs/r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "pool-adapter,no-entrypoint"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCQK_prog",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/PCQK_E022_emitted/raw",
+  "-subdir",
+  "PCQK_prog",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/PCQK_E022_emitted/repro.llbc"
+ ],
+ "aeneas_tool": "original",
+ "opacity": [],
+ "configuration": {
+  "roots": [
+   "crate::r1_pool_adapter::decode_checkpoint_box",
+   "crate::r1_pool_adapter::decode_master_box",
+   "crate::r1_pool_adapter::emit_result",
+   "crate::r1_pool_adapter::pool_program_id",
+   "crate::r1_pool_adapter::registry_program_id",
+   "crate::r1_pool_adapter::scan_proof_buffer"
+  ],
+  "namespace": [
+   "PCQK_prog"
+  ],
+  "features": [
+   "pool-adapter,no-entrypoint"
+  ],
+  "opaque": [],
+  "manifest": "programs/r1-cost-probe/Cargo.toml"
+ },
+ "features_override": "prover,r1p-check,private-leaf-salts",
+ "llbc_stable": "/home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/PCQK_stable/prog.llbc",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "configuration_overflow_checks": "ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; -C overflow-checks=yes appended to the stager RUSTFLAGS)",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66"
+}
