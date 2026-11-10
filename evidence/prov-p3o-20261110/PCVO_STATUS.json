@@ -1,0 +1,65 @@
+{
+ "schema": "PCVO_STATUS/1",
+ "target_established": false,
+ "phase": "P3o",
+ "lean_scopes": "19 of 45 (L001-L019), extraction 0",
+ "peak_rss_kib_max": 6714524,
+ "verified_final": [
+  {
+   "item": "deployed_stage1_owned",
+   "file": "PRVEq_AdapterStage1Deployed_o1.lean",
+   "scope": "PCVO_L018",
+   "theorems": [
+    "PCVO_S1.bound",
+    "generic_stage1_owned",
+    "deployed_stage1_owned",
+    "deployed_stage1_owned_m0",
+    "deployed_stage1_owned_src",
+    "host_model1"
+   ]
+  },
+  {
+   "item": "deployed_stage2_owned",
+   "file": "PRVEq_AdapterStage2Deployed_o1.lean",
+   "scope": "PCVO_L019",
+   "theorems": [
+    "PCVO_S2.bound",
+    "generic_stage2_owned",
+    "generic_validate_asq8",
+    "deployed_stage2_owned",
+    "deployed_stage2_owned_m0",
+    "host_model2"
+   ]
+  },
+  {
+   "item": "deployed_prepare / deployed_tx1",
+   "file": "PRVEq_CallerPrepTx1Deployed_o1.lean",
+   "scope": "PCVO_L017",
+   "theorems": [
+    "PCVO_C.bound",
+    "generic_prepare",
+    "generic_tx1",
+    "deployed_prepare",
+    "deployed_tx1",
+    "deployed_prepare_m0",
+    "deployed_tx1_m0",
+    "packet_prepare",
+    "packet_tx1",
+    "njg_tx1",
+    "njg_prepare"
+   ]
+  },
+  {
+   "item": "PRVEq (PCVK) modules compile against the replay closure",
+   "files": "PRVEq_AdapterStage1_o1, PRVEq_AdapterStage2_o1, PRVEq_CallerPrepTx1_o1 (text copies of PRVEq_*_k4/k9/k3)",
+   "scopes": "PCVO_L001, L002, L003"
+  }
+ ],
+ "axioms": "every theorem: propext, Classical.choice, Quot.sound only (receipts in PCVO_Lnnn/receipt.json)",
+ "name_clash": "The three PRVEq modules cannot be imported together (tacticDelta_matchers and the PRVEq_* helper theorems are defined in each): each deployed file imports exactly one. No clash with the replay closure (NNH_*, NJG_*, NHL_*, NHW_*, RPx_Deployed) was found.",
+ "deployed_ops": {
+  "adapter": "NNH_CorrectConfiguration.sdk missing env err r (every missing; also NNH_Tx2SourceConfiguration.sdk for stage1; and NNH_HostCtx.sdk c via host_model1/host_model2)",
+  "current": "DrvC_Installation.currentInstalled (NNH_CorrectConfiguration.configuration ..) and the packet Ops of the credited emitted-tx1 chain NHL_DriverModel.preparedOps/txOps (every base, expected, reserved)"
+ },
+ "what_is_not_shown": "Every callee field of the fresh Ext is defined from the Ops (or the gate definition), so Bound holds by rfl/unfolding: that is organisation, not discharge. No callee slot is related to its frozen emission by this job (PCVO_UNRELATED.json)."
+}

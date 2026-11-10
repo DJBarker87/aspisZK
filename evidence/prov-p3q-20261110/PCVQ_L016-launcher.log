@@ -1,0 +1,54 @@
+{"attempt": "PCVQ_L016", "exit_status": 0, "wall_seconds": 3.6857341250870377, "peak_rss_kib": "5921732", "swaps": "0", "print_axioms": []}
+def AspisR1.OraclePortStdAllocation.filled : {T : Type} →
+  Usize → T → Bool → Result (Except OraclePortStdAllocation.AllocationError (alloc.vec.Vec T)) :=
+fun {T} n value reserved =>
+  if reserved = true then do
+    let v ← OraclePortCkptAbi2Vec.appendModel (alloc.vec.Vec.new T) (List.replicate (↑n) value)
+    ok (Except.ok v)
+  else ok (Except.error OraclePortStdAllocation.AllocationError.allocation)
+def AspisR1.OraclePortCkptAbi2Unwrap.unwrapWithPanic : {A E : Type} →
+  (E → Result A) → core.result.Result A E → Result A :=
+fun {A E} panic x =>
+  match x with
+  | core.result.Result.Ok value => ok value
+  | core.result.Result.Err err => panic err
+def AspisR1Stage2.verifier.Reader.rawWithUnw
+...
+self => do
+  let i ← self.at + N
+  let s ←
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) self.bytes
+        { start := self.at, «end» := i }
+  let r ← core.array.TryFromArrayCopySlice.try_from N core.marker.CopyU8 s
+  let b ← unwrap r
+  ok (b, { bytes := self.bytes, «at» := i })
+CheckpointBytes3Namespaces.fromK : OraclePortCkptAbi2Extracted.aspis_core.field.QM31 →
+  AspisR1Stage2.aspis_core.field.QM31
+OraclePortCkptAbi2Extracted.decode_k_spec : Slice U8 → Result (Option OraclePortCkptAbi2Extracted.aspis_core.field.QM31)
+@NIL_FreshOps.any : {T F : Type} →
+  core.ops.function.FnMut F T Bool → core.slice.iter.Iter T → F → Result (Bool × core.slice.iter.Iter T)
+@NIL_FreshOps.mapError : {T E F O : Type} →
+  core.ops.function.FnOnce O E F → core.result.Result T E → O → Result (core.result.Result T F)
+def VTop_Stages.PRVFresh_VTop_l1.core.option.Option.ok_or : {T E : Type} →
+  Option T → E → Result (core.result.Result T E) :=
+fun {T E} self err =>
+  match self with
+  | none => ok (core.result.Result.Err err)
+  | some v => ok (core.result.Result.Ok v)
+structure AspisR1Stage2.verifier.Reader : Type
+number of parameters: 0
+fields:
+  AspisR1Stage2.verifier.Reader.bytes : Slice U8
+  AspisR1Stage2.verifier.Reader.at : Usize
+constructor:
+  AspisR1Stage2.verifier.Reader.mk (bytes : Slice U8) («at» : Usize) : AspisR1Stage2.verifier.Reader
+def VTop_Stages.PRVFresh_VTop_l1.verifier.Reader.k : Ext →
+  verifier.Reader → Result (core.result.Result aspis_core.field.QM31 verifier.Error × verifier.Reader) :=
+fun x self => do
+  let (a, self1) ← verifier.Reader.raw 16#usize self
+  let s ← lift a.to_slice
+  let o ← x.aspis_core_field_QM31_from_le_bytes s
+  let r ← core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint
+  ok (r, self1)
+
+Running as unit: run-r6f6c8854d3484073a362e6e8792fc6e3.scope; invocation ID: 6ccc9e8af01e4cf29c5db7d0cdb82075

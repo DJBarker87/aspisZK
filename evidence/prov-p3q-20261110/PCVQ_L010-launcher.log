@@ -1,0 +1,59 @@
+{"attempt": "PCVQ_L010", "exit_status": 1, "wall_seconds": 7.158343690913171, "peak_rss_kib": "6035708", "swaps": "0", "print_axioms": []}
+PCVQ_sources/PRVEq_Resume_q8.lean:105:4: error: Type mismatch
+  sim_err ?m.31
+has type
+  Sim (@ok (core.result.Result ?m.32 VErr) (core.result.Result.Err (Port3_CheckpointInstall.error ?m.31)))
+    (ok (core.result.Result.Err ?m.31))
+but is expected to have type
+  Sim
+    (@ok (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)
+      (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))
+    (ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+PCVQ_sources/PRVEq_Resume_q8.lean:109:4: error: Type mismatch
+  sim_err ?m.64
+has type
+  Sim (@ok (core.result.Result ?m.65 VErr) (core.result.Result.Err (Port3_CheckpointInstall.er
+...
+ : Slice U8
+v : transport.Variant
+hash : H
+i1 : Usize
+hi1 : ops.checkpointSize v = ok i1
+hc✝ : ¬(bytes.len != i1) = true
+s : Slice U8
+x✝¹ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize } = ok s
+b : Bool
+x✝ : ops.ne core.cmp.PartialEqU8 s (Array.make 8#usize [82#u8, 49#u8, ⋯#u8, ⋯, ⋯] verifier.resume._proof_8) = ok b
+hc : ¬b = true
+⊢ Sim
+    (do
+      let i2 ← bytes.index_usize 8#usize
+      let i3 ← ops.tag v
+      if (i2 != i3) = true then ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+        else do
+          let i4 ← bytes.index_usize 9#usize
+          if i4 > ⋯#u8 then ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let i5 ← bytes.index_usize ⋯
+              if ⋯ then ⋯ else ⋯)
+    do
+    let i2 ← bytes.index_usize 8#usize
+    let i3 ← ops.tag v
+    if (i2 != i3) = true then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+      else do
+        let i4 ← bytes.index_usize 9#usize
+        if i4 > ⋯#u8 then ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+          else do
+            let i5 ← bytes.index_usize ⋯
+            if ⋯ then ⋯ else ⋯
+PCVQ_sources/PRVEq_Resume_q8.lean:101:69: warning: This simp argument is unused:
+  Slice.Insts.CoreCmpPartialEqArray
+
+Hint: Omit it from the simp argument list.
+  simp only [L.size, L.tag, L.ne, L.any, L.raw, L.k, L.e, L.validate, L.sem, L.weights, L.final,
+  ̲  ̲ ̲ ̲L.zero, L.filled, core.cmp.impls.PartialEqShared.ne, AspisR1Stage2.slicePartialEq,
+  ̲  ̲ ̲ ̲S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵A̵r̵r̵a̵y̵,̵VTop_Checkpoint.digest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+Running as unit: run-rf4be4f7eb09d41f8b4c62a42123ffe3d.scope; invocation ID: eea21e9a03034303865923d4325760f1

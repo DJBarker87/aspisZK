@@ -1,0 +1,60 @@
+{"attempt": "PCVQ_L022", "exit_status": 1, "wall_seconds": 3.3430188668426126, "peak_rss_kib": "5944004", "swaps": "0", "print_axioms": ["'PCVQ_Validate.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVQ_Validate.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVQ_Validate.validate_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVQ_sources/PRVEq_Validate_q1.lean:42:30: warning: This simp argument is unused:
+  duplicate
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵i̵g̵h̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵d̵u̵p̵l̵i̵c̵a̵t̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲i̲g̲h̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVQ_sources/PRVEq_Validate_q1.lean:57:65: error(lean.unknownIdentifier): Unknown identifier `pending`
+PCVQ_sources/PRVEq_Validate_q1.lean:49:7: error: unsolved goals
+case nil
+q : Std.Array U32 22#usize
+pre : List U32
+i : Usize
+shape : ↑q = pre ++ []
+index : ↑i = pre.length
+inactive : ¬i < q.to_slice.len
+⊢ ok (some (core.result.Result.Ok ())) = o
+...
+Q_sources/PRVEq_Validate_q1.lean:64:56: error(lean.unknownIdentifier): Unknown identifier `pending`
+PCVQ_sources/PRVEq_Validate_q1.lean:64:2: error: unsolved goals
+case pos
+q : Std.Array U32 22#usize
+x : U32
+tail : List U32
+ih :
+  ∀ (pre : List U32) (i : Usize),
+    ↑q = pre ++ tail →
+      ↑i = pre.length →
+        verifier.validate_checkpoint_queries_loop q i = ok (pendingF (CheckpointBytes4Ops.queryLoop pre tail))
+pre : List U32
+i : Usize
+shape : ↑q = pre ++ x :: tail
+index : ↑i = pre.length
+step :
+  verifier.validate_checkpoint_queries_loop.body q i =
+    if ↑x ≥ 262144 ∨ x ∈ pre then ok (done none) else ok (cont (i.wrapping_add 1#usize))
+bad : ↑x ≥ 262144 ∨ x ∈ pre
+⊢ ok none = ok (pendingF (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint))
+PCVQ_sources/PRVEq_Validate_q1.lean:56:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵VTop_Stages.PRVFresh_VTop_l1.verifier.validate_checkpoint_queries_loop.body,
+  ̵  ̵ ̵lift,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲if_neg inactive, ̲CheckpointBytes4Ops.queryLoop, ̲pending]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVQ_sources/PRVEq_Validate_q1.lean:62:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵t̵e̵p̵]̵[̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVQ_Validate.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVQ_Validate.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVQ_Validate.validate_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5fa02153848a4703bbc57313d1c0d0ef.scope; invocation ID: dd87b233bd5a4b068983ac1d919fb313

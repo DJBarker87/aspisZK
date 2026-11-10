@@ -1,0 +1,45 @@
+{"attempt": "PCVQ_L004", "exit_status": 1, "wall_seconds": 8.313644872047007, "peak_rss_kib": "6043544", "swaps": "0", "print_axioms": []}
+PCVQ_sources/PRVEq_Resume_q2.lean:53:2: error: unsolved goals
+x : Ext
+ops : AspisR1Stage2.ResumeOps
+L : Leaves x ops
+H : Type
+D : aspis_core.digest.Digest32 H
+bytes proof public1 : Slice U8
+v : transport.Variant
+hash : H
+⊢ (do
+      let i1 ← ops.checkpointSize v
+      if (bytes.len != i1) = true then
+          ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+        else do
+          let s ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize }
+          let b ←
+            ops.ne core.cmp.PartialEqU8 s
+                (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+...
+     (AspisR1Stage2.verifier.Prepared ×
+                                                          AspisR1Stage2.verifier.Accumulator)
+                                                        (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (AspisR1Stage2.verifier.Prepared ×
+                                                      AspisR1Stage2.verifier.Accumulator)
+                                                    (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (AspisR1Stage2.verifier.Prepared × AspisR1Stage2.verifier.Accumulator)
+                                                (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                        ok (phi out)
+PCVQ_sources/PRVEq_Resume_q2.lean:51:69: warning: This simp argument is unused:
+  Slice.Insts.CoreCmpPartialEqArray
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc, ite_bind', L.size, L.tag, L.ne, L.any, L.raw, L.k, L.e, L.validate, L.sem,
+  ̲  ̲ ̲ ̲L.weights, core.cmp.impls.PartialEqShared.ne, AspisR1Stage2.slicePartialEq,
+  ̲  ̲ ̲ ̲S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵A̵r̵r̵a̵y̵,̵VTop_Checkpoint.digest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+Running as unit: run-r324337fe36484e4294a653bb93cfe964.scope; invocation ID: 80fc34d9617b4c4cac909b5570549712
