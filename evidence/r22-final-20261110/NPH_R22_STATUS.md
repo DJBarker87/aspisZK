@@ -1854,3 +1854,119 @@ Four scopes were used (L083–L086 of this run's 40), all capped as in section 1
 No reachable input on which the wrapping binary accepts and the checked model rejects was found. NDH absorb_ref's `160 + row` would overflow for row ≥ 96, but the body is not executed by the deployed program (proof-only reference), so no such input follows.
 
 Target not yet established.
+
+## 21. Item 1: the dots, accumulate and residue bodies reach (b) (continuation worker, 2026-11-10, after L086)
+
+Five scopes were used: L087–L091 of this run's 40, all capped as in section 19. Three failed on proof-script details, and each was changed before the next scope:
+- L087 and L088: the existential witness of tail_total was left unassigned. The fix gives the explicit returned pair.
+- L090: pair projections were not reduced before omega, and `value 0` was not unfolded to `cursor 0`. The fix adds dsimp only and an explicit show.
+
+Swap was 0 throughout, and peak RSS was 5,979,468 KiB. Every accepted `#print axioms` line is within [propext, Classical.choice, Quot.sound], with no sorry. The lead decision holds: no ops interface, merged module, closed-row statement or field premise is changed.
+
+**21a. Accumulator/cadence family (NPH_R22Accum, L089).** Six bodies move to (b):
+- NEV_AccumulateRaw.accumulate_batched_with_node and its loop0.body, loop0_loop0.body and loop1.body;
+- NEI_PushRaw.update_residue_row_loop0.body and loop1.body.
+
+The invariant asked for is already a def predicate in the closure: S7JoinRowsTrace.Progress t 0 (toBW b), the per-row phase of term count t for all 64 residue rows.
+- **Preserved.** Each push and the flush on terms % 4 = 3 preserve it (NBF_Progress.body inside NBF_RowsTotal). A push leaves the term count unchanged. accumulate_batched_with_node adds one to it once per call, after all 64 rows have been visited once.
+- **Established.** The producers establish it: the pending constructor gives Progress 0 0 (NBF_FirstRows.constructor_progress), and NFS_QueryInvariant.Domain carries it at every reached query state.
+
+New Lean statements:
+- `rows_total`: the checked basis producer and the 64-row weights loop are ok, with the term count unchanged. This covers loop0 with its inner loop, and loop1 with BatchedWeights.push → update_residue_row → both residue loops.
+- `tail_total`: the checked terms + 1, a.next + 1 and the field callees are ok.
+- `acc_total`: the whole call is ok for every node on NFS_NEV_AccumPacket.Domain.
+- `acc_site` and `installed_ok`: the caller join. At every state of NFS_QueryInvariant.Domain inside the loop guard, with the canonical line value, the installed accumulate equals NFS_AccumInstall.run and is ok.
+
+The enclosing call is ok, so every execution of the five inner bodies inside it is ok.
+
+The earlier OPEN notes asked for "terms < MAX and a.next < finish" and "n ≤ 128". Both are subsumed:
+- the counters are < 22 by the query invariant;
+- the basis width is the literal 64, because rows_cut rewrites len a.weights to 64.
+
+**21b. Dots family (NPH_R22Dots, L091).** Three bodies move to (b): four_dots_one, four_dots_one_loop0.body and four_dots_one_loop0_loop0.body. Two new def predicates are introduced:
+- `InnerInv`: at most 4 terms per window, ending at or before 26, with sums ≤ (terms so far)·(P−1)².
+- `OuterInv`: after k ≤ 7 windows the StepBy iterator is at min(4k, 26), with limbs ≤ k·R.
+
+Each is entered by its caller and kept by every successful step:
+- inner_entry and inner_step;
+- outer_entry and outer_step.
+
+On them:
+- every checked operation is ok: slot_ops, read_arith, update_ok, outer_ops;
+- the inner body is ok whenever the current term's scalar read succeeds (inner_ok).
+
+read_arith proves that the read's only checked operations are the cursor arithmetic. The rest is the range index, try_from, unwraps and the M31 decode. These aborts happen in both profiles; this reading is textual and listed in FINAL_COUNTS section 4.
+
+The caller domain is slot < 4 and canonical g:
+- the slots are the literals of four_dots (adapter_calls);
+- on tx1, g comes from NFS_PacketRoot.Domain.gCanonical (tx1_g);
+- on tx2, g comes from NFW_PowersDomain.query_domain.
+
+**21c. Caller structure.** A new read-only backward screen, NPH_REFS5.json (NPH_refs4_host.py on NPH_REFS5_SPEC.json, MemoryHigh 3G / MemoryMax 4G), classifies all 12 targets COVERED_BY_TERMINAL:
+- every upward path meets NEV accumulate or NFS_AccumInstall.run (accumulate family);
+- every upward path meets FIp_DotsAdapter.dots (dots family);
+- the other tops are theorem-only.
+
+This screen is textual and flagged.
+
+**Counts (225 checked or mixed): 72 TOTAL, 42 DIRECT, 63 (b), 0 domain-only, 20 open, 28 NOT_EXECUTED; executed obligation 197.** Rows exposed: **73 of 393** (153 before). Of the exposed rows, 80 had no open dependency outside these nine, and 74 depended on exactly these nine.
+
+Next, item 2: the 7 caller-owed cursor bounds and the 2 caller-domain index bodies. Item 1 closed four_dots_one, so 1 index body is left (weights.field).
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 21d. Items 2 and 3 (same run, after commit b3fd3b3fbd7)
+
+Five more scopes were used: L092–L096, which makes 10 of the run's 40. Two failed on proof-script details and were changed before the next scope:
+- L092: a conjunct shape in frontier_ops/cc_ops.
+- L094: the bound proofs of widen_val and add_small_ops.
+
+Swap was 0 throughout, and every accepted `#print axioms` line is standard. One more read-only screen was run: NPH_REFS6.json, the direct referrers of the item-2 targets.
+
+**Item 2: NPH_R22Cursor (L093).** Six definitions moved.
+- **bytes32_loop.body and digest_loop.body → (b).** The cursor bound comes from the bodies' own point-read chains (BInv/DInv, word32_bound), so no caller length is needed.
+- **decode_frontier_loop.body → DIRECT.** Its guard is level < 20.
+- **expand_semantic_loop.body → DIRECT.** Each cursor add is followed by a range access: cursor_direct for reads, and the new mut_cursor_direct / range_mut_success for index_mut.
+- **decode_k_value → (b) on DK.** decode_k's own checked_mul and checked_add guards establish the domain (dk_guards, using the converses checked_mul_some and checked_add_some). The loop keeps end = N (dk_value, dk_step).
+- **copy_chunk_loop.body → (b).** The bound chunk·32 + 31 ≤ max comes from values_owned_reference's checked 2·len and count = len/16 (vo_guards, cc_domain).
+
+Two item-2 definitions stay open, with their producers located (FINAL_COUNTS section 3):
+- **weights.field.** The closure's NJU_FieldScalar.checked covers i < 64. The finish dot's j < len weights and the polynomial/claim-parser indices still need composing at the deployed finish.
+- **values_owned_reference.** Its 2·len needs len ≤ 1856, which comes from the compact row size through expandValues.
+
+**Item 3: NPH_R22Direct (L095) and NPH_R22Gamma (L096).**
+
+Moved to DIRECT:
+- parse_record and parse_record_at. Every row_shape size is ≤ 3712. For parse_record_at, get_cursor_direct covers offset + length; the Err/abort reading is flagged.
+- body_byte: a guarded subtraction chain with constant divisors.
+- qm31_div_pass_loop.body, low_base_p_digits_loop0.body and add_small_base_p_loop.body. Every checked operation is ok for every input under the guard, so the remainder and digit invariants named earlier are not needed.
+- write_parent and leaf_step: the increment follows a successful Array.update on a 16-entry array.
+
+Moved to (b): gamma_sample. The quotient is ≤ 256 on low_base_p_digits, and both closure helper records install it (flagged caller reading).
+
+Still open:
+- **binary_step.** I found a concrete reason it is not DIRECT. len(nodes) − s.at has no guard, and a wrapped difference below 32 takes the Stop branch, an accepting path, where the checked model aborts. That needs s.at > len(nodes) − 32 + 2^64, which no reached state is known to reach. The traversal invariant s.at ≤ len(nodes) closes it.
+- **prepare.** It needs the installed op15 constant.
+
+**Item 4.** r24_canonical_mul stays as recorded: a source-refinement obligation with no frozen counterpart.
+
+**Counts (225 checked or mixed): 72 TOTAL, 52 DIRECT, 68 (b), 0 domain-only, 5 open, 28 NOT_EXECUTED; executed obligation 197. Rows exposed: 55 of 393** (153 at the start of this run, 73 after item 1).
+
+New textual reliances, all listed in FINAL_COUNTS section 4:
+- NPH_REFS5.json and NPH_REFS6.json;
+- the parse_record_at Err/abort reading;
+- the gamma helper-record reading;
+- the read-failure reading of the dots inner body, under the checked-operation enumeration row.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found. binary_step's unguarded subtraction is the one place where such an input would need a reached state with s.at > len(nodes); none is known.
+
+Next concrete deliverables:
+1. binary_step: the s.at ≤ len(nodes) traversal invariant over level_rows.
+2. weights.field: compose the finish dot's weights length ≤ 64 and the polynomial/claim indices on the tx2 finish context (NPH_R22JoinCW2).
+3. values_owned_reference: the range-index length lemma plus the expandValues tie.
+4. prepare: the op15 value.
+5. r24_canonical_mul: provenance first.
+
+Target not yet established.
