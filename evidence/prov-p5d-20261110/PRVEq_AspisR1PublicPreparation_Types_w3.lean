@@ -67,6 +67,8 @@ structure r1_wire.SemanticTranscript (H : Type) where
 end PRVFresh_AspisR1PublicPreparation_Types_w3
 end AspisR1PublicPreparation
 
+set_option maxHeartbeats 200000
+
 set_option maxHeartbeats 200000 in
 theorem PRVEq.AspisR1PublicPreparation.Types_w3.aspis_core.field.M31 : @AspisR1PublicPreparation.PRVFresh_AspisR1PublicPreparation_Types_w3.aspis_core.field.M31 = @AspisR1PublicPreparation.aspis_core.field.M31 := by
   first | (trace "PRV-S1 PRVEq.AspisR1PublicPreparation.Types_w3.aspis_core.field.M31"; rfl) | (trace "PRV-S2 PRVEq.AspisR1PublicPreparation.Types_w3.aspis_core.field.M31"; delta AspisR1PublicPreparation.PRVFresh_AspisR1PublicPreparation_Types_w3.aspis_core.field.M31 AspisR1PublicPreparation.aspis_core.field.M31; try rfl; done)

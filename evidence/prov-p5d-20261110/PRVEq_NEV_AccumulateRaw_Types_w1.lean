@@ -93,6 +93,8 @@ structure Accumulator where
 end PRVFresh_NEV_AccumulateRaw_Types_w1
 end NEV_AccumulateRaw
 
+set_option maxHeartbeats 200000
+
 set_option maxHeartbeats 200000 in
 theorem PRVEq.NEV_AccumulateRaw.Types_w1.aspis_core.field.M31 : @NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types_w1.aspis_core.field.M31 = @NEV_AccumulateRaw.aspis_core.field.M31 := by
   first | (trace "PRV-S1 PRVEq.NEV_AccumulateRaw.Types_w1.aspis_core.field.M31"; rfl) | (trace "PRV-S2 PRVEq.NEV_AccumulateRaw.Types_w1.aspis_core.field.M31"; delta NEV_AccumulateRaw.PRVFresh_NEV_AccumulateRaw_Types_w1.aspis_core.field.M31 NEV_AccumulateRaw.aspis_core.field.M31; try rfl; done)
