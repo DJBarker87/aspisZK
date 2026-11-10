@@ -1,0 +1,35 @@
+{"attempt": "PCQJ_E001", "exit_status": 124, "wall_seconds": 180.01742911711335, "peak_rss_kib": "112728", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::fast_pairing::canonical::_::raw", "--start-from", "crate::fast_pairing::canonical::_::from_limbs", "--start-from", "crate::fast_pairing::canonical::_::limbs", "--start-from", "crate::fast_pairing::canonical::reduce", "--start-from", "crate::fast_pairing::canonical::_::push", "--start-from", "crate::fast_pairing::canonical::_::finish", "--start-from", "crate::verifier::accumulate_b
+...
+s = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-prover/src/state_only_hiding.rs:344:16
+    |
+344 |     #[cfg_attr(kani, kani::modifies(&mut self.counter, &mut self.block, &mut self.word))]
+    |                ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-prover/src/state_only_hiding.rs:345:16
+    |
+345 |     #[cfg_attr(kani, kani::ensures(|result| crate::prover_commit_reference::next_matches(
+    |                ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+
+Running as unit: run-raf3a5adecea84046bf6cf2db475332fe.scope; invocation ID: 90060ac4d03c49999aed247fdcd9127b
