@@ -5,6 +5,8 @@ sys.path.insert(0,'.')
 import mkbase,gen_loops,gen_p3
 P='pool_v1.pair_forest_semantic_terminal.'
 CFG={
+ 'RPu_FIq_Native11':dict(undrop=[P+'sum_high',P+'poseidon_selectors'],shims=[('field.QM31.ZERO','field.QM31')]),
+ 'RPu_FIq_Native07':dict(undrop=['state_only_poseidon.interpolate_three_constant_columns'],shims=[('field.QM31.ZERO','field.QM31')]),
  'RPu_FIq_CopyPrefix':dict(undrop=['pool_v1.pair_forest_copy_terminal.link_weight'],
      shims=[('field.M31.ONE','field.M31')]),
  'RPu_FIq_Native05':dict(undrop=['state_only_poseidon.interpolate_three_constant_columns'],
