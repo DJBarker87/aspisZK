@@ -13,3 +13,8 @@ case "$1" in
    export LEAN_PATH=$R/final/objs:$R/objs:$R/base_ref
    /usr/bin/time -v -o audit.time timeout 900 $T/bin/lean -j1 -M7000 -DElab.async=false $W/NPI_Audit.lean > audit.log 2>&1; echo exit=$? >> audit.log;;
 esac
+case "$1" in
+ f2) mkdir -p $W/f2; cd $W/f2; cp $W/NPI_cone_union.txt $W/f2_modules.txt $W/f2_names.tsv $W/f2/
+   export LEAN_PATH=$R/final/objs:$R/objs:$R/base_ref
+   /usr/bin/time -v -o f2.time timeout 900 $T/bin/lean -j1 -M7000 -DElab.async=false $W/NPI_F2.lean > f2.log 2>&1; echo exit=$? >> f2.log;;
+esac
