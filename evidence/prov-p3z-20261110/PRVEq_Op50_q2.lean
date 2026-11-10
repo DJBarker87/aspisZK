@@ -10,7 +10,7 @@ set_option autoImplicit false
 noncomputable section
 namespace PCVY_Op50
 open PCVV_LaneDecodeRef (sl le at' K Lane frontierLoop decodeLane)
-open AspisR1
+open AspisR1 AdapterRw NND_Carrier NNH_ModelCarrier
 
 /-- the typed host record that op50 returns for a reference result (as in NNH_LaneModel.decode) -/
 def laneOut (r : core.result.Result NCV_Reference.Lane Unit) :
