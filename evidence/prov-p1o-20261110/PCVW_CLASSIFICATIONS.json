@@ -1,0 +1,25 @@
+{
+ "schema": "PCVW_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "C1",
+   "topic": "admission share",
+   "decision": "Two brief texts conflict (Stream C scopes < 5 vs < 2). The copied admission check keeps < 2 (host < 6, disk >= 45 GB); < 2 satisfies both bounds."
+  },
+  {
+   "id": "C2",
+   "topic": "pinned setting",
+   "decision": "Pin = cargo --jobs 1 with the stager RUSTFLAGS -Zthreads=1 -C link-arg=-Wl,--threads=1 then -C overflow-checks=yes (no appended -Zthreads), identical to P1k and P1l E001-E011. Spec generator reproduces PCVT_E014_spec.json exactly with JOBS=3 THREADS=4 (only the PCVT/PCVW prefix and host path differ), so the identity spec differs from E014 only in --jobs 3->1 and the absent appended -Zthreads=4, plus the unavoidable workspace directory name (codex-pc-prov-p1o vs p1l)."
+  },
+  {
+   "id": "C3",
+   "topic": "warm W001 versus credited E001 (lead request: condition 1 diff)",
+   "decision": "Charon command line byte-identical (charon_command equal in both specs; TOOL_ATTEMPTS entries differ only in attempt id and start time); working directory (stager: workspace), --dest-file (PCVW_stable/stmtG.llbc), --manifest-path, --jobs 1, features, RUSTFLAGS (stager string plus extra_env, identical), CARGO_TARGET_DIR (stager: NHR_target in the host workspace), CARGO_BUILD_JOBS, toolchain all identical. The stager injects no run id into any of these. Observed instead: after E001 the target held a second set of workspace-crate unit directories (aspis-core x2, aspis-r0-poseidon-copy, aspis-r0-writer-copies, aspis-r0-block-writer-copies, aspis-statement) with different -C metadata hash suffixes, while the fingerprint JSON contents of old and new directories (rustc, features, profile, path, rustflags, config, compile_kind, deps) are identical (compared aspis-r0-poseidon-copy 6d17.. vs b040..). No third-party unit was rebuilt. So workspace crates (the ones built under Charon's RUSTC_WORKSPACE_WRAPPER) get a fresh metadata hash on every Charon invocation even with an identical command and environment, and are rebuilt every time; third-party crates are reused. The varying input is not visible in the command, env or fingerprint JSON; I could not identify it without running Charon outside a scope (not done). Consistent with P1k C2 and P1l C-notes (workspace crates rebuilt on every run). This is a finding about the warm-build class (it can warm only third-party dependencies), not something the stager's arguments control."
+  },
+  {
+   "id": "C4",
+   "topic": "consequence",
+   "decision": "Per the lead: identity check stopped (no further cold or warm 1/1 scope); the warm gave a third-party-only benefit, so E001 (aspis-statement chain, 180 s) timed out as the 1/1 builds of E005-E011 did. Jobs-identity verdict: NOT ESTABLISHED, not 'different'. No LLBC from W001 is compared or cited (its LLBC was written to the stable path; E001 did not touch it: size/mtime/sha unchanged before/after)."
+  }
+ ]
+}
