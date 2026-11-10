@@ -1,0 +1,55 @@
+{"attempt": "PCVE_L002", "exit_status": 1, "wall_seconds": 5.015940208919346, "peak_rss_kib": "3863208", "swaps": "0", "print_axioms": ["'PRVH.usize_shr_usize' depends on axioms: [propext, Quot.sound]", "'PRVH.usize_shl_usize' depends on axioms: [propext, Quot.sound]", "'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVH.loop_le_dom' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVH.loop_eq_dom' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVH.range_next_end' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.RPz7_FIo_NativeFuns_h2.transport.Variant.Insts.CoreCmpPartialEqVariant.eq' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.RPz7_FIo_NativeFuns_h2.transport.TAU' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'PRVH.usize_shr_usize' depends on axioms: [propext, Quot.sound]
+'PRVH.usize_shl_usize' depends on axioms: [propext, Quot.sound]
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVH.loop_le_dom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVH.loop_eq_dom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVH.range_next_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.RPz7_FIo_NativeFuns_h2.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+PCVE_sources/PCV
+...
+               (@lift (UScalar UScalarTy.Usize)
+                      (@HOr.hOr Usize (UScalar UScalarTy.Usize) (UScalar UScalarTy.Usize)
+                        (@instHOrUScalar UScalarTy.Usize) out i5))
+                    fun out1 =>
+                    @ok (ControlFlow (Prod (core.ops.range.Range Usize) Usize) Usize)
+                      (@cont (Prod (core.ops.range.Range Usize) Usize) Usize
+                        (@Prod.mk (core.ops.range.Range Usize) Usize iter1 out1)))
+case some
+j : Usize
+iter : core.ops.range.Range Usize
+out : Usize
+hend : ↑iter.end ≤ 16
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+d : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some d, iter1)
+hd : ↑d < 16
+hi : ↑(Usize.wrapping_mul 2#usize d) < 32
+e_shr :
+  j >>> Usize.wrapping_mul 2#usize d = ok (j.wrapping_shr (UScalar.cast UScalarTy.U32 (Usize.wrapping_mul 2#usize d)))
+⊢ (let (o, iter1) := (some d, iter1)
+    match o with
+    | none => ok (done out)
+    | some d => do
+      let i3 ← FIo_Native.PRVFresh_RPz7_FIo_NativeFuns_h2.transport.TAU.index_usize d
+      ok
+          (cont
+            (iter1,
+              out |||
+                FIo_Native.PRVFresh_RPz7_FIo_NativeFuns_h2.Std.Usize.wrapping_shl
+                  (FIo_Native.PRVFresh_RPz7_FIo_NativeFuns_h2.Std.Usize.wrapping_shr j
+                      (Usize.wrapping_mul 2#usize d) &&&
+                    3#usize)
+                  (Usize.wrapping_mul 2#usize i3)))) =
+    let (o, iter1) := (some d, iter1)
+    match o with
+    | none => ok (done out)
+    | some d => do
+      let i1 ← j >>> Usize.wrapping_mul 2#usize d
+      let i3 ← FIo_Native.transport.TAU.index_usize d
+      let i5 ← (i1 &&& 3#usize) <<< Usize.wrapping_mul 2#usize i3
+      ok (cont (iter1, out ||| i5))
+
+Running as unit: run-rc716d828f5ec466fb28b3af9a4cf1aa2.scope; invocation ID: c8912d72c8bb44f09e49994fd8b050a5
