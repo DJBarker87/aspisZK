@@ -1,0 +1,75 @@
+#!/bin/bash
+# PCXD_finalize.sh: PCXD_STATUS_LINE.md, PCXD_CLASSIFICATIONS.json, PCXD_TOOLS.json, the pinned-object table in PCXD_AUDIT.json, the delta section of PCXD_TRUST_PROPOSALS.md, notes in PCXD_ATTEMPTS.jsonl.
+cd /Users/dominic/ZK/.worktrees/pc-prov-p6r/evidence/prov-p6r-20261110
+python3 -I -B - <<'PY'
+import json, hashlib, glob, os
+N = json.load(open('PCXD_NUMBERS.json')); P = json.load(open('PCXD_PROVENANCE.json')); A = json.load(open('PCXD_AUDIT.json')); H = json.load(open('PCXD_HAND_MODELS.json')); X = json.load(open('PCXD_EXTERNALS.json'))
+sb = N['sb']
+# ---- pinned objects of the root scope
+r = json.load(open('PCXD_L005/receipt.json'))['deps_fingerprint']['selected_objects']
+A['import_objects'] = {p.replace('/home/dombarker/project-offloads/', ''): v['sha256'] for p, v in r.items() if 'PRVCmb' in p or 'WrapAdd' in p}
+A['axiom_note'] = 'PCXD_L005 audits every constant under PRV*/PCVE*/PCVB* (PCVB added in PCXD for the renamed P3b helper namespaces). Union of axioms over all audited targets: propext, Quot.sound, Classical.choice. No _native.decide.ax_N (PCXC_ removal of the Debug-fmt declaration carried). Local axiom declarations 0.'
+A['heartbeats_note'] = 'Generated files carry set_option maxHeartbeats 1000000 (Aeneas default) or 200000 (generator-lowered); the P3b V8R19 files (C17) carry maxHeartbeats 400000 on 3 theorems (the earlier credited bundles C05/C09/C12 carry 15 more), all below the Aeneas-generated default of 1000000; none raised by this job.'
+A['decide_note'] = 'C17 contains three `Nat.mod_lt _ (by decide)` over a small literal (0 < 2147483648); no decide, norm_num or simp over a large term was added; no native_decide in any credited file (PCXD_CREDITED_FILES.json has_native_decide false for all 251).'
+json.dump(A, open('PCXD_AUDIT.json', 'w'), indent=1)
+line = (f"# PCXD status line for the next ledger\n\nTarget not yet established. The ledger job consumes PCXD_PROVENANCE.json and PCXD_ROW_TABLES.json; no ledger row was edited.\n\n"
+ f"Provenance status (P6 refresh, PCXD_; ledger30 base 6ce07a6a593; frozen 4bb3b3f; Target not yet established). HEADLINE CONE AspisR1.TAS_FinalB.deployed_splitB (146370 constants): {sb['modules']} emitted gate modules reached, module rollups {sb['module_rollups']}; "
+ f"{sb['definitions_total']} reached definitions: {sb['definitions']}; OPEN split {N['opens']} (wrong-basis counted OPEN). CLOSED-row view (599, recomputed, row tables committed): {N['rows']}; {N['rows_relying_on_OPEN_module']} rows rely on a module whose rollup is OPEN. "
+ f"Combined import PRVCmb_ROOT (17 bundles + PRVH_WrapAdd, {json.load(open('PCXD_CREDITED_FILES.json'))['n_files']} credited files): {A['audited_theorems_per_item']} theorems audited one by one, standard axioms only (union {A['union_axioms']}), {A['credited_theorem_names_found']} of {A['credited_theorem_records']} credited records found by name; no native.decide axiom. "
+ f"Equality basis inside EQUALITY_PROVED (headline cone): 848 = 691 ON-configuration, 74 OFF, 2 OFF-default, 81 Types records with no arithmetic configuration (61 of the 848 are Equiv isomorphisms of Types declarations); 9 OFF_EMISSION_WRAPPING_CLOSURE and 2 OFF_EMISSION_WRAPPING_DECL are OFF by the per-definition wrapping ruling; 35 rest on the ShrAmt bridge (OFF only). "
+ f"Transport row family: row EQUALITY_PROVED, row_loop.body and row_loop EQUALITY_DOMAIN (iter.end <= 16), ShrAmt verified for OFF only. Hand models: {H['counts']['hand_written_gate_models']} hand-written gate models; externals without gate definition {X['n']} = {X['counts']}. "
+ f"Not covered: release replay, L187/L188 (reconciliation of sources only), source-to-ELF; R22 owns checked-vs-wrapping.\n")
+open('PCXD_STATUS_LINE.md', 'w').write(line)
+# ---- trust proposals: delta section
+t = open('PCXD_TRUST_PROPOSALS.md').read()
+t = t.replace('# PCXD_TRUST_PROPOSALS: proposed trust-row text for hand-written gate models', '# PCXD_TRUST_PROPOSALS: proposed trust-row text for hand-written gate models (delta against PCXB_ at the end of this file)', 1)
+t += ("\n\n## Delta against PCXB_TRUST_PROPOSALS.md\n\nP2i (PCUI_) and P2j (PCUJ_) added no hand model (PCUI_HAND_MODELS.json, PCUJ_HAND_MODELS.json list only the ShrAmt bridge and the gate-externals-as-variables note). Class texts above are therefore unchanged. What changed around them: "
+      "(1) ShrAmt now underlies 35 EQUALITY_PROVED and 2 EQUALITY_DOMAIN definitions (PCXD_SHRAMT_UPGRADED.json), including 2 PCUI_ NJS definitions (OFF_EMISSION_WRAPPING_DECL); restriction unchanged: overflow-checks-off only. "
+      "(2) The P3b full equalities for AspisV8R19 Complex/Guarded/Quartic M31.mul are equalities, not models; no proposal needed. "
+      "(3) The nine OFF wrapping-closure definitions use the OFF emission by the per-definition ruling; they add no trust text but they are the definitions an owner would look at first if the ruling is reversed. "
+      "(4) The cross-crate constant encoding assumption line is unchanged: a fresh external axiom of type Result X for a cross-crate constant is linked to a transparent value; proved equal only for M31 and QM31 ZERO/ONE.\n")
+open('PCXD_TRUST_PROPOSALS.md', 'w').write(t)
+# ---- classifications
+C = [
+ ('PCXD-C1', 'Credit rule = PCXB-C1 rerun on PCUJ_ALL_STATUS.json; 251 files (200 PCXB files + 51 new); no file lost.', 'Same principle as PCXB: the proving file of an EQUALITY_PROVED/EQUALITY_DOMAIN/CONDITIONAL_ON_BINDING record.'),
+ ('PCXD-C2', 'Correction 1 (brief): the three AspisV8R19 M31.mul records (Complex, Guarded, Quartic slices) were OPEN (P2f FAILED) in PCUJ_ALL_STATUS and are credited to P3b (PCVB_L041-L043).', 'Statement check: fresh = gate as functions M31 -> M31 -> Result M31, no hypotheses; the file header names the same fresh emission (sha256 3fe20d13... for Complex and Quartic, 04b39d85... for Guarded) as the P2f record, and the theorem is against the same gate constant (AspisR65Field/AspisR64Field/AspisR66Field .field.M31.mul). Configuration ON for both fresh and required. Credited, basis class ON_EMISSION_MATCHING_P3B_FULL_EQUALITY. Compiled in PCXD_L004 (C17) in the combined import with standard axioms.'),
+ ('PCXD-C3', 'PCUI/PCUJ records carry a stale proving_file basename (the superseded P5/P2 wrong-basis file); the credited file is found by theorem name inside the deciding phase directory (P2i or P2j).', 'The first run of PCXD_credited.sh credited 17 prov-p5 wrong-basis files through the stale basenames; caught because those files are wrong-basis, replaced by name lookup. Not an unchanged rerun.'),
+ ('PCXD-C4', 'Helper namespaces PCVB_M31/PCVB_QM/PCVB_R23 declared in all three P3b files collide inside one bundle; PCXD_rename.py suffixes any token PCVB_<word> with the file tag; audit predicate extended to PCVB*.', 'Textual rename of declared names only; statements unchanged; checked by compilation (PCXD_L004 exit 0).'),
+ ('PCXD-C5', 'Correction 2: the nine PCUJ_WRAPPING_CLOSURE definitions (3 NNG verify_finish closures; NJS batch_keys, batch_keys_loop, sort_batch_keys, sort_batch_keys_loop0, sort_batch_keys_loop0.body, sort_batch_keys_loop0_loop0) are EQUALITY_PROVED with configuration OFF recorded (basis class OFF_EMISSION_WRAPPING_CLOSURE).', 'Per-definition ruling: the gate carries wrapping_* on plain operators, so the OFF emission is the correct basis. Counted separately in every table; if the ruling is reversed they return to OPEN (the ON equality is false in the unfolded callee, PCUJ_L005/L009).'),
+ ('PCXD-C6', 'Correction 3: the 29 CONFIG_INDEPENDENT_BY_TEXT_OFF_EMISSION_ONLY definitions: 20 now EQUALITY_PROVED at ON (ON_EMISSION_MATCHING), 9 are the closure set above; the class is empty (no current record carries that basis note; the string occurs only in superseded history entries).', 'No separately counted residual class is needed.'),
+ ('PCXD-C7', 'Correction 4: the 10 PCUI_L029 theorems are credited only through PRVEq_O1clean.lean (PCUJ_L002 exit 0, 19 theorems incl. 9 siblings, 10 credited); PRVEq_bundle_O1 and the individual o1 files are in PCXD_SUPERSEDED.json.', 'Basis class O1_CLEAN_RECOMPILE_EXIT0 (8 ON, 2 OFF-default).'),
+ ('PCXD-C8', 'Correction 5: transport row EQUALITY_PROVED; row_loop.body and row_loop EQUALITY_DOMAIN for iter.end <= 16; ShrAmt verified for OFF only (NPE_). Carried as in PCXB with the P3e (PCVE_L006) file.', 'The bound 16 is a hand argument for sharpness, not machine-checked, as in PCXB.'),
+ ('PCXD-C9', 'Correction 6: Equiv Types records are flagged record_kind ISOMORPHISM_OF_TYPES_DECLARATIONS (theorem name ends .equiv): 61 in the headline cone; constant-binding and parametric-transport results remain CONDITIONAL_ON_BINDING (6); wrong-basis records stay OPEN (17 in the cone).', 'An Equiv of identical-text declarations is an isomorphism, not an equality of terms; nothing was upgraded because of it.'),
+ ('PCXD-C10', 'Reuse instead of rebuild: PRVCmb_C01..C12 and PRVH_WrapAdd are the PCXB objects (bundle sources byte-identical copies), C13 the PCXC corrected object, all pinned by sha256 in the root receipt (PCXD_AUDIT.json import_objects); only the four new bundles and the root were compiled here (5 of 14 scopes).', 'AGENTS rule 6 (reuse a pinned compiled cache between focused dependent targets). Cost: tags Ckk_Fjj for old files are unchanged; the new files are tagged C14..C17.'),
+ ('PCXD-C11', 'Receipts record source_tree_dirty true: the evidence directory of this job was untracked when the scopes ran. The uploaded sources are hashed in each receipt (source_hashes) and the committed bundles have the same hashes.', 'Not a source change; no rerun.'),
+ ('PCXD-C12', 'Reach, compose1 and the row table inputs were rerun and compared with the PCXB tables: PCXD_SPLITB_HITS modules identical (209 modules), compose1.json and closed_rows.json byte-identical to the PCXB scratch copies.', 'Reproducibility evidence for the method in PCXD_rowtables.sh.'),
+ ('PCXD-C13', 'Hand-model union (hm1, hm2) reran to the same 924 entries (PCUI/PCUJ add none); hm3 adds PCUI/PCUJ records to post_pcxa_records; externals 601 = 502 (a) + 0 (b) + 99 (c) unchanged.', 'Count of (c) separately as required: 99, an upper bound.'),
+ ('PCXD-C14', 'NO_FROZEN_COUNTERPART reach (8 definitions) carried unchanged from PCXC_NOFROZEN_REACH.json; not rerun.', 'All 8 reachable at constant level; NJT_claims_ref marked a hash-linked reference.'),
+ ('PCXD-C15', 'R22 split: the shift case is listed once as mixed_configuration_inside_one_body (RPz7_FIo_NativeFuns transport.Variant.row family).', 'Per the brief.'),
+ ('PCXD-C16', 'The 599-row view counts a row CONDITIONAL if any reached annotated definition is not RECEIPTED/EQUALITY_PROVED/EQUALITY_DOMAIN (so CONDITIONAL_ON_BINDING, HAND_ADAPTED and OPEN all make a row conditional). RECEIPTED keeps its PCXB meaning (hash-linked extraction receipt, configuration not re-derived).', 'Unchanged rule, so the 138 -> 163 movement is comparable.'),
+]
+json.dump(dict(schema='PCXD_CLASSIFICATIONS/1', items=[dict(id=a, classification=b, reason=c) for a, b, c in C]), open('PCXD_CLASSIFICATIONS.json', 'w'), indent=1)
+# ---- tools
+def sha(p): return hashlib.sha256(open(p, 'rb').read()).hexdigest()
+tools = []
+ch = {'PCXD_run.py': ('PCXC_run.py', 'prefix PCXC->PCXD; host workspace codex-pc-prov-p6r-20261110; LEAN_PATH = own PCXD_exports, then the P6x PCXC_exports (corrected C13), then the P6c PCXB_exports (C01..C12, PRVH_WrapAdd), then the ledger30 chain; admission unchanged (host scopes < 6, Stream C < 2, disk >= 40 GB, reservation barrier, one scope at a time)'),
+      'PCXD_run_host.py': ('PCXC_run_host.py', 'prefix only'), 'PCXD_lib.py': ('PCXB_lib.py', 'paths to this worktree and scratch partd; WRAPPING_CLOSURE table'), 'PCXD_rename.py': ('PCXB_rename.py', 'PCXD-C4: PCVB_ helper namespaces'),
+      'PCXD_credited.sh': ('PCXB_credited.sh', 'status = PCUJ_ALL_STATUS; P2i/P2j files by theorem name (PCXD-C3); P3b V8R19 overlay (PCXD-C2); new/removed relative to PCXB listed'), 'PCXD_make_bundles.sh': ('PCXB_make_bundles.sh', 'new bundles C14.. only (<= 200 kB each); C01..C12 copied from PCXB, C13 from PCXC; root imports 17 bundles; audit predicate PRV/PCVE/PCVB'),
+      'PCXD_compose2.sh': ('PCXB_compose2.sh', 'status = PCUJ_ALL_STATUS; overlays for P3b V8R19 M31.mul, nine OFF closures, basis_class, Equiv isomorphism flag; transport overlay kept'), 'PCXD_compose3.sh': ('PCXB_compose3.sh', 'schema 2; R22 mixed_configuration_inside_one_body'),
+      'PCXD_audit.sh': ('PCXC_audit.sh', 'statuses from PCUJ_ALL_STATUS + P3b overlay; writes PCXD_RENAMES.json'), 'PCXD_nonfrozen_final.sh': ('PCXB_nonfrozen_final.sh', 'statuses from PCUJ; reach results from PCXC_NOFROZEN_REACH.json; NJT_claims_ref hash-link note'),
+      'PCXD_hm3.sh': ('PCXB_hm3.sh', 'PCUI/PCUJ hand-model files added; EXTERNALS file renamed PCXD_EXTERNALS.json'), 'PCXD_final.sh': ('PCXB_final.sh', 'superseded rule text; EXTERNALS rename'),
+      'PCXD_reach.sh': ('PCXB_reach.sh', 'paths only; output identical modules'), 'PCXD_compose1.sh': ('PCXB_compose1.sh', 'paths only; output byte-identical'), 'PCXD_l187.sh': ('PCXB_l187.sh', 'status file PCUJ'), 'PCXD_nosource.sh': ('PCXB_nosource.sh', 'paths'), 'PCXD_trust.sh': ('PCXB_trust.sh', 'EXTERNALS rename'), 'PCXD_hm1.sh': ('PCXB_hm1.sh', 'paths'), 'PCXD_hm2.sh': ('PCXB_hm2.sh', 'paths')}
+for f in sorted(glob.glob('PCXD_*.sh') + glob.glob('PCXD_*.py') + ['run_scope.sh']):
+    d = dict(file=f, sha256=sha(f))
+    if f in ch: d.update(from_=ch[f][0], changes=ch[f][1])
+    else: d['purpose'] = 'new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)'
+    tools.append(d)
+json.dump(dict(schema='PCXD_TOOLS/1', rerun_order='PCXD_credited.sh, PCXD_make_bundles.sh, run_scope.sh per target (PCXD_chain1.sh for C15..C17; C14 and ROOT by run_scope.sh), PCXD_reach.sh, PCXD_compose1.sh, PCXD_compose2.sh, PCXD_compose3.sh, PCXD_nonfrozen_final.sh, PCXD_l187.sh, PCXD_nosource.sh, PCXD_shramt.sh, PCXD_hm3.sh, PCXD_trust.sh, PCXD_audit.sh, PCXD_final.sh, PCXD_delta.sh, PCXD_notattempted.sh, PCXD_rowtables.sh, PCXD_finalize.sh',
+     scratch_inputs='compose steps read the PCO partition tables (emods_decl, emod_hits, roots, lean_index, strictpins_hashes) from a scratch directory cloned from the PCXA/PCXB run; the row-relevant ones (roots, emod_hits, closed_rows) are now committed inside PCXD_ROW_TABLES.json', changes_relative_to_PCXB=tools), open('PCXD_TOOLS.json', 'w'), indent=1)
+with open('PCXD_ATTEMPTS.jsonl', 'a') as f:
+    for e in [dict(event='note', note='PCXD-C3: first PCXD_credited run credited 17 prov-p5 wrong-basis files via stale proving_file basenames; shape replaced by theorem-name lookup in the deciding phase directory (no scope used)'),
+              dict(event='note', note='Scopes: L001 C14, L002 C15, L003 C16, L004 C17, L005 ROOT, all exit 0; 5 of 14 Lean scopes used; 0 extraction; 0 Kani; no failure, no retry'),
+              dict(event='note', note='Reuse: C01..C12 and PRVH_WrapAdd (PCXB_exports), C13 (PCXC_exports); pinned by sha256 in PCXD_L005 receipt')]:
+        f.write(json.dumps(e) + '\n')
+print('ok')
+PY

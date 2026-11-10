@@ -1,0 +1,156 @@
+{
+ "schema": "PCXD_TOOLS/1",
+ "rerun_order": "PCXD_credited.sh, PCXD_make_bundles.sh, run_scope.sh per target (PCXD_chain1.sh for C15..C17; C14 and ROOT by run_scope.sh), PCXD_reach.sh, PCXD_compose1.sh, PCXD_compose2.sh, PCXD_compose3.sh, PCXD_nonfrozen_final.sh, PCXD_l187.sh, PCXD_nosource.sh, PCXD_shramt.sh, PCXD_hm3.sh, PCXD_trust.sh, PCXD_audit.sh, PCXD_final.sh, PCXD_delta.sh, PCXD_notattempted.sh, PCXD_rowtables.sh, PCXD_finalize.sh",
+ "scratch_inputs": "compose steps read the PCO partition tables (emods_decl, emod_hits, roots, lean_index, strictpins_hashes) from a scratch directory cloned from the PCXA/PCXB run; the row-relevant ones (roots, emod_hits, closed_rows) are now committed inside PCXD_ROW_TABLES.json",
+ "changes_relative_to_PCXB": [
+  {
+   "file": "PCXD_audit.sh",
+   "sha256": "f62e30adfcf93982de13dc94990c7ce93a1a67e52ce2df8c1702b4fa13094bf8",
+   "from_": "PCXC_audit.sh",
+   "changes": "statuses from PCUJ_ALL_STATUS + P3b overlay; writes PCXD_RENAMES.json"
+  },
+  {
+   "file": "PCXD_chain1.sh",
+   "sha256": "5a7eb262e1e434b46c33f854c427e4b66792f4cdc1f383e7533e72611bd65732",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_compose1.sh",
+   "sha256": "d016f342e9c38a0a4709448f9e8afd4b51910ce13d3b661f03fdca9d4423e836",
+   "from_": "PCXB_compose1.sh",
+   "changes": "paths only; output byte-identical"
+  },
+  {
+   "file": "PCXD_compose2.sh",
+   "sha256": "f26ca6e5d7717e96231006d74446b8693ab76fde674c1916883c35079f538bc5",
+   "from_": "PCXB_compose2.sh",
+   "changes": "status = PCUJ_ALL_STATUS; overlays for P3b V8R19 M31.mul, nine OFF closures, basis_class, Equiv isomorphism flag; transport overlay kept"
+  },
+  {
+   "file": "PCXD_compose3.sh",
+   "sha256": "92fb55fa71bf2f9ddb347964613bae563cbc4a8be493cccc4e821750dd6664c2",
+   "from_": "PCXB_compose3.sh",
+   "changes": "schema 2; R22 mixed_configuration_inside_one_body"
+  },
+  {
+   "file": "PCXD_credited.sh",
+   "sha256": "b3d0a2bf7cfc56c8614f9fe15473c4fa1952caa0ddd165abb0bc293a5aefc82b",
+   "from_": "PCXB_credited.sh",
+   "changes": "status = PCUJ_ALL_STATUS; P2i/P2j files by theorem name (PCXD-C3); P3b V8R19 overlay (PCXD-C2); new/removed relative to PCXB listed"
+  },
+  {
+   "file": "PCXD_delta.sh",
+   "sha256": "7eef4eeba2c7b3bca420633f079d2ee80c2f3912651bc391551363b1b1998cda",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_final.sh",
+   "sha256": "22b42c26fb36facf5006b94e908d1fa99180a118323a0af98b1ae401e6a85a4a",
+   "from_": "PCXB_final.sh",
+   "changes": "superseded rule text; EXTERNALS rename"
+  },
+  {
+   "file": "PCXD_finalize.sh",
+   "sha256": "8220d5f03f5a8bb8223636d502d03451c2cae831bf2c9ab46e94c78b84b1b1d4",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_hm1.sh",
+   "sha256": "8158d46094944918f5dd8112b6dbe51da36fc5a1b6565cc67bf202d46ae49d75",
+   "from_": "PCXB_hm1.sh",
+   "changes": "paths"
+  },
+  {
+   "file": "PCXD_hm2.sh",
+   "sha256": "4f7f1d90defaa9070e963b785b98f531a40be3bc6f4703e3026031e091f52dc1",
+   "from_": "PCXB_hm2.sh",
+   "changes": "paths"
+  },
+  {
+   "file": "PCXD_hm3.sh",
+   "sha256": "b009c5fc6df8659554db190ed619c47b79babd02e150b93ebc2c911549de2b19",
+   "from_": "PCXB_hm3.sh",
+   "changes": "PCUI/PCUJ hand-model files added; EXTERNALS file renamed PCXD_EXTERNALS.json"
+  },
+  {
+   "file": "PCXD_l187.sh",
+   "sha256": "90aa8c31701447560eb514325904ac0bbc6aa66c22312f160fde763d70969025",
+   "from_": "PCXB_l187.sh",
+   "changes": "status file PCUJ"
+  },
+  {
+   "file": "PCXD_lib.py",
+   "sha256": "6f9d12895085c90e7e55fc669a06342a67452de3a09d166a308d8d86661bd5cd",
+   "from_": "PCXB_lib.py",
+   "changes": "paths to this worktree and scratch partd; WRAPPING_CLOSURE table"
+  },
+  {
+   "file": "PCXD_make_bundles.sh",
+   "sha256": "6f34238f7c5588c2a52f342c663597036205caaddbd878fe4f19af498e72415a",
+   "from_": "PCXB_make_bundles.sh",
+   "changes": "new bundles C14.. only (<= 200 kB each); C01..C12 copied from PCXB, C13 from PCXC; root imports 17 bundles; audit predicate PRV/PCVE/PCVB"
+  },
+  {
+   "file": "PCXD_nonfrozen_final.sh",
+   "sha256": "582e8181c381080051459050edc6733cc8b47b8c2ce1819fac6ce88e3cef9b4d",
+   "from_": "PCXB_nonfrozen_final.sh",
+   "changes": "statuses from PCUJ; reach results from PCXC_NOFROZEN_REACH.json; NJT_claims_ref hash-link note"
+  },
+  {
+   "file": "PCXD_nosource.sh",
+   "sha256": "401a1f54a4306c02ed57db7c6cf3875b86b4fd647601302269c8054cdca5eef8",
+   "from_": "PCXB_nosource.sh",
+   "changes": "paths"
+  },
+  {
+   "file": "PCXD_notattempted.sh",
+   "sha256": "6299eda3841a0460a811cdc59cd861af66f736267cbaf071878f190a04481469",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_reach.sh",
+   "sha256": "67a6031c3fa0f5889c5064779a9e04f643eef54b5bd383612b91ed1e722c0247",
+   "from_": "PCXB_reach.sh",
+   "changes": "paths only; output identical modules"
+  },
+  {
+   "file": "PCXD_rename.py",
+   "sha256": "e37a8474219db487ea322bfd44b9c05560ee558d6b02e5321bf100a6a0a50dac",
+   "from_": "PCXB_rename.py",
+   "changes": "PCXD-C4: PCVB_ helper namespaces"
+  },
+  {
+   "file": "PCXD_rowtables.sh",
+   "sha256": "e7b117814a46fc4017095cfbd486ebfe2af777967a909d69cd04e7ad2b16e975",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_run.py",
+   "sha256": "0a1f835c7459b471644d4678eb418a04846c7115e819355484c58c90dd47eaac",
+   "from_": "PCXC_run.py",
+   "changes": "prefix PCXC->PCXD; host workspace codex-pc-prov-p6r-20261110; LEAN_PATH = own PCXD_exports, then the P6x PCXC_exports (corrected C13), then the P6c PCXB_exports (C01..C12, PRVH_WrapAdd), then the ledger30 chain; admission unchanged (host scopes < 6, Stream C < 2, disk >= 40 GB, reservation barrier, one scope at a time)"
+  },
+  {
+   "file": "PCXD_run_host.py",
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c",
+   "from_": "PCXC_run_host.py",
+   "changes": "prefix only"
+  },
+  {
+   "file": "PCXD_shramt.sh",
+   "sha256": "50c4d65b9e1af26219f63705e6fade6e19eb3dd2fea727b4519adb7116169a3a",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  },
+  {
+   "file": "PCXD_trust.sh",
+   "sha256": "e67e3a4565490241dea7428dd9001ac63b8e38061701dd50b39462150c6e1455",
+   "from_": "PCXB_trust.sh",
+   "changes": "EXTERNALS rename"
+  },
+  {
+   "file": "run_scope.sh",
+   "sha256": "ea73638823c3847b0f9f5d760b66d97dab0d7a6a2eac2256c911520425e21518",
+   "purpose": "new in PCXD_ (delta, row tables, shramt inventory, not-attempted list, finalize, chain, rerun helper)"
+  }
+ ]
+}

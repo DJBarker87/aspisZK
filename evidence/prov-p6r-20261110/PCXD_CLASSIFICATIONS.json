@@ -1,0 +1,85 @@
+{
+ "schema": "PCXD_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "PCXD-C1",
+   "classification": "Credit rule = PCXB-C1 rerun on PCUJ_ALL_STATUS.json; 251 files (200 PCXB files + 51 new); no file lost.",
+   "reason": "Same principle as PCXB: the proving file of an EQUALITY_PROVED/EQUALITY_DOMAIN/CONDITIONAL_ON_BINDING record."
+  },
+  {
+   "id": "PCXD-C2",
+   "classification": "Correction 1 (brief): the three AspisV8R19 M31.mul records (Complex, Guarded, Quartic slices) were OPEN (P2f FAILED) in PCUJ_ALL_STATUS and are credited to P3b (PCVB_L041-L043).",
+   "reason": "Statement check: fresh = gate as functions M31 -> M31 -> Result M31, no hypotheses; the file header names the same fresh emission (sha256 3fe20d13... for Complex and Quartic, 04b39d85... for Guarded) as the P2f record, and the theorem is against the same gate constant (AspisR65Field/AspisR64Field/AspisR66Field .field.M31.mul). Configuration ON for both fresh and required. Credited, basis class ON_EMISSION_MATCHING_P3B_FULL_EQUALITY. Compiled in PCXD_L004 (C17) in the combined import with standard axioms."
+  },
+  {
+   "id": "PCXD-C3",
+   "classification": "PCUI/PCUJ records carry a stale proving_file basename (the superseded P5/P2 wrong-basis file); the credited file is found by theorem name inside the deciding phase directory (P2i or P2j).",
+   "reason": "The first run of PCXD_credited.sh credited 17 prov-p5 wrong-basis files through the stale basenames; caught because those files are wrong-basis, replaced by name lookup. Not an unchanged rerun."
+  },
+  {
+   "id": "PCXD-C4",
+   "classification": "Helper namespaces PCVB_M31/PCVB_QM/PCVB_R23 declared in all three P3b files collide inside one bundle; PCXD_rename.py suffixes any token PCVB_<word> with the file tag; audit predicate extended to PCVB*.",
+   "reason": "Textual rename of declared names only; statements unchanged; checked by compilation (PCXD_L004 exit 0)."
+  },
+  {
+   "id": "PCXD-C5",
+   "classification": "Correction 2: the nine PCUJ_WRAPPING_CLOSURE definitions (3 NNG verify_finish closures; NJS batch_keys, batch_keys_loop, sort_batch_keys, sort_batch_keys_loop0, sort_batch_keys_loop0.body, sort_batch_keys_loop0_loop0) are EQUALITY_PROVED with configuration OFF recorded (basis class OFF_EMISSION_WRAPPING_CLOSURE).",
+   "reason": "Per-definition ruling: the gate carries wrapping_* on plain operators, so the OFF emission is the correct basis. Counted separately in every table; if the ruling is reversed they return to OPEN (the ON equality is false in the unfolded callee, PCUJ_L005/L009)."
+  },
+  {
+   "id": "PCXD-C6",
+   "classification": "Correction 3: the 29 CONFIG_INDEPENDENT_BY_TEXT_OFF_EMISSION_ONLY definitions: 20 now EQUALITY_PROVED at ON (ON_EMISSION_MATCHING), 9 are the closure set above; the class is empty (no current record carries that basis note; the string occurs only in superseded history entries).",
+   "reason": "No separately counted residual class is needed."
+  },
+  {
+   "id": "PCXD-C7",
+   "classification": "Correction 4: the 10 PCUI_L029 theorems are credited only through PRVEq_O1clean.lean (PCUJ_L002 exit 0, 19 theorems incl. 9 siblings, 10 credited); PRVEq_bundle_O1 and the individual o1 files are in PCXD_SUPERSEDED.json.",
+   "reason": "Basis class O1_CLEAN_RECOMPILE_EXIT0 (8 ON, 2 OFF-default)."
+  },
+  {
+   "id": "PCXD-C8",
+   "classification": "Correction 5: transport row EQUALITY_PROVED; row_loop.body and row_loop EQUALITY_DOMAIN for iter.end <= 16; ShrAmt verified for OFF only (NPE_). Carried as in PCXB with the P3e (PCVE_L006) file.",
+   "reason": "The bound 16 is a hand argument for sharpness, not machine-checked, as in PCXB."
+  },
+  {
+   "id": "PCXD-C9",
+   "classification": "Correction 6: Equiv Types records are flagged record_kind ISOMORPHISM_OF_TYPES_DECLARATIONS (theorem name ends .equiv): 61 in the headline cone; constant-binding and parametric-transport results remain CONDITIONAL_ON_BINDING (6); wrong-basis records stay OPEN (17 in the cone).",
+   "reason": "An Equiv of identical-text declarations is an isomorphism, not an equality of terms; nothing was upgraded because of it."
+  },
+  {
+   "id": "PCXD-C10",
+   "classification": "Reuse instead of rebuild: PRVCmb_C01..C12 and PRVH_WrapAdd are the PCXB objects (bundle sources byte-identical copies), C13 the PCXC corrected object, all pinned by sha256 in the root receipt (PCXD_AUDIT.json import_objects); only the four new bundles and the root were compiled here (5 of 14 scopes).",
+   "reason": "AGENTS rule 6 (reuse a pinned compiled cache between focused dependent targets). Cost: tags Ckk_Fjj for old files are unchanged; the new files are tagged C14..C17."
+  },
+  {
+   "id": "PCXD-C11",
+   "classification": "Receipts record source_tree_dirty true: the evidence directory of this job was untracked when the scopes ran. The uploaded sources are hashed in each receipt (source_hashes) and the committed bundles have the same hashes.",
+   "reason": "Not a source change; no rerun."
+  },
+  {
+   "id": "PCXD-C12",
+   "classification": "Reach, compose1 and the row table inputs were rerun and compared with the PCXB tables: PCXD_SPLITB_HITS modules identical (209 modules), compose1.json and closed_rows.json byte-identical to the PCXB scratch copies.",
+   "reason": "Reproducibility evidence for the method in PCXD_rowtables.sh."
+  },
+  {
+   "id": "PCXD-C13",
+   "classification": "Hand-model union (hm1, hm2) reran to the same 924 entries (PCUI/PCUJ add none); hm3 adds PCUI/PCUJ records to post_pcxa_records; externals 601 = 502 (a) + 0 (b) + 99 (c) unchanged.",
+   "reason": "Count of (c) separately as required: 99, an upper bound."
+  },
+  {
+   "id": "PCXD-C14",
+   "classification": "NO_FROZEN_COUNTERPART reach (8 definitions) carried unchanged from PCXC_NOFROZEN_REACH.json; not rerun.",
+   "reason": "All 8 reachable at constant level; NJT_claims_ref marked a hash-linked reference."
+  },
+  {
+   "id": "PCXD-C15",
+   "classification": "R22 split: the shift case is listed once as mixed_configuration_inside_one_body (RPz7_FIo_NativeFuns transport.Variant.row family).",
+   "reason": "Per the brief."
+  },
+  {
+   "id": "PCXD-C16",
+   "classification": "The 599-row view counts a row CONDITIONAL if any reached annotated definition is not RECEIPTED/EQUALITY_PROVED/EQUALITY_DOMAIN (so CONDITIONAL_ON_BINDING, HAND_ADAPTED and OPEN all make a row conditional). RECEIPTED keeps its PCXB meaning (hash-linked extraction receipt, configuration not re-derived).",
+   "reason": "Unchanged rule, so the 138 -> 163 movement is comparable."
+  }
+ ]
+}
