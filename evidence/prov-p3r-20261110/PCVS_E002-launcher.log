@@ -1,0 +1,28 @@
+{"attempt": "PCVS_E002", "exit_status": 0, "wall_seconds": 96.09308291901834, "peak_rss_kib": "549492", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::verifier::checkpoint_size", "--start-from", "crate::transport::_::final_len", "--start-from", "crate::transport::_::tag", "--start-from", "crate::transport::_::folds", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_E002_emitted/repro.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_workspace/crates/
+...
+^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 34s
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_E002_emitted/repro.llbc
+
+=== Translation time per function ===
+  aspis_r1_cost_probe::transport::{aspis_r1_cost_probe::transport::Variant}::folds: 0.0326s (size: 22, rank: 4)
+  aspis_r1_cost_probe::verifier::checkpoint_size: 0.0265s (size: 18, rank: 1)
+  aspis_r1_cost_probe::transport::{aspis_r1_cost_probe::transport::Variant}::tag: 0.0137s (size: 11, rank: 3)
+  aspis_r1_cost_probe::transport::{impl core::cmp::PartialEq<aspis_r1_cost_probe::transport::Variant> for aspis_r1_cost_probe::transport::Variant}::eq: 0.0072s (size: 15, rank: 5)
+  aspis_r1_cost_probe::verifier::CHECKPOINT_FIXED: 0.0007s (size: 40, rank: 6)
+  aspis_r1_cost_probe::transport::{aspis_r1_cost_probe::transport::Variant}::final_len: 0.0003s (size: 14, rank: 2)
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_E002_emitted/raw/PCVS_ckpt_small
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_E002_emitted/raw/PCVS_ckpt_small/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p3r-20261110/PCVS_E002_emitted/raw/PCVS_ckpt_small/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.229812 seconds
+{"attempt": "PCVS_E002", "exit": 0, "error": null}
+
+Running as unit: run-r5a0a15c8311847d9a2f6b7fdde544d7e.scope; invocation ID: 65cb0ab9dc3946218680b28a7bd40038
