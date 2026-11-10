@@ -1,0 +1,40 @@
+{"attempt": "PCWL_L013", "exit_status": 0, "wall_seconds": 4.031701349886134, "peak_rss_kib": "2595004", "swaps": "0", "print_axioms": []}
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop.body : Slice U8 →
+  Usize → Result (ControlFlow Usize (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError))) :=
+fun bytes index =>
+  have i := bytes.len;
+  if index < i then do
+    let i1 ← bytes.index_usize index
+    if (i1 != 0#u8) = true then
+        ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+      else do
+        let index1 ← lift (index.wrapping_add 1#usize)
+        ok (cont index1)
+  else ok (done none)
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop : Slice U8 →
+  Usize → Result (Option (core.result.Result Unit AdapterRw.solana_progr
+...
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop.body : Slice U8 →
+  Usize → Result (ControlFlow Usize (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError))) :=
+fun bytes index =>
+  have i := bytes.len;
+  if index < i then do
+    let i1 ← bytes.index_usize index
+    if (i1 != 0#u8) = true then
+        ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+      else do
+        let index1 ← lift (index.wrapping_add 1#usize)
+        ok (cont index1)
+  else ok (done none)
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop : Slice U8 →
+  Usize → Result (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)) :=
+fun bytes index => loop (fun index1 => AdapterRw.r1_pool_adapter.owned.require_zero_loop.body bytes index1) index
+def AdapterRw.r1_pool_adapter.owned.require_zero : Slice U8 →
+  Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun bytes => do
+  let pending_return ← AdapterRw.r1_pool_adapter.owned.require_zero_loop bytes 0#usize
+  match pending_return with
+    | none => ok (core.result.Result.Ok ())
+    | some r => ok r
+
+Running as unit: run-reb5322cc087d49249570b853b4e1cae6.scope; invocation ID: d6fa3b21d2724cb2b8f8b5d5d99b16a3

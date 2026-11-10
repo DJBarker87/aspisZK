@@ -1,0 +1,35 @@
+{"attempt": "PCWL_L011", "exit_status": 0, "wall_seconds": 5.14862187509425, "peak_rss_kib": "2594300", "swaps": "0", "print_axioms": []}
+@[reducible] def AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey : AdapterRw.Ops →
+  core.cmp.PartialEq AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.Pubkey :=
+fun ops => { eq := ops.op36, ne := fun self other => core.cmp.PartialEq.ne.default ops.op36 self other }
+def AdapterRw.r1_pool_adapter.readonly_meta_ok : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    AdapterRw.solana_pubkey.Pubkey →
+      Bool → Bool → Bool → Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun ops owner expected is_signer is_writable executable => do
+  let b ←
+    core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+...
+@[reducible] def AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey : AdapterRw.Ops →
+  core.cmp.PartialEq AdapterRw.solana_pubkey.Pubkey AdapterRw.solana_pubkey.Pubkey :=
+fun ops => { eq := ops.op36, ne := fun self other => core.cmp.PartialEq.ne.default ops.op36 self other }
+def AdapterRw.r1_pool_adapter.readonly_meta_ok : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    AdapterRw.solana_pubkey.Pubkey →
+      Bool → Bool → Bool → Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun ops owner expected is_signer is_writable executable => do
+  let b ←
+    core.cmp.impls.PartialEqShared.ne (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey ops) owner expected
+  if b = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if is_signer = true then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if is_writable = true then
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if executable = true then
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else ok (core.result.Result.Ok ())
+
+Running as unit: run-r550fd14a2ffe4f3bbf5f82c71bb899d2.scope; invocation ID: 9a4d864ed4f943febdad0ccdabba1df8
