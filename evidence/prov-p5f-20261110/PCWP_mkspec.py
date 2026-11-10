@@ -17,6 +17,7 @@ head=c[:c.index('--start-from')]
 for x in inc: head+=['--include',x]
 nc=head
 for r in roots.split(','): nc+=['--start-from',r]
+for o in [x for x in os.environ.get('PCWP_OPAQUE','').split(',') if x]: nc+=['--opaque',o]
 nc+=['--dest-file',HOST+'/'+run+'_repro.llbc','--','--manifest-path',HOST+'/PCWP_workspace/crates/'+crate+'/Cargo.toml','--locked','--offline','--release','--lib','--jobs','4','--features',feat]
 ae=[ORIG,'-diagnose-translation','-sequential','-no-progress-bar','-backend','lean','-namespace',ns,'-dest',HOST+'/'+run+'_emitted/raw','-subdir',ns,'-split-files',HOST+'/'+run+'_emitted/repro.llbc']
 for k in ('groups','members','bytes','basis','diagnostic_only'): d.pop(k,None)
@@ -27,5 +28,5 @@ d.update(run=run,spec_id=run,label='PCWP '+run,charon_command=nc,aeneas_command=
  pin_note='cargo --jobs 4, CARGO_BUILD_JOBS=4, rustc -Zthreads 1; identity by class receipt PCWE_E003',
  aeneas_sha256='959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3')
 d['frozen_source_tree_git_hash']=subprocess.check_output(['git','rev-parse',d['frozen_revision']+'^{tree}'],text=True,cwd='/Users/dominic/ZK').strip()
-d['configuration']=dict(start_from=roots.split(','),roots=roots.split(','),include=inc,opaque=[],features=feat,manifest='crates/'+crate+'/Cargo.toml',namespace=ns,crate=crate)
+d['configuration']=dict(start_from=roots.split(','),roots=roots.split(','),include=inc,opaque=[x for x in os.environ.get('PCWP_OPAQUE','').split(',') if x],features=feat,manifest='crates/'+crate+'/Cargo.toml',namespace=ns,crate=crate)
 json.dump(d,open(run+'_spec.json','w'),indent=1); print(run+'_spec.json',len(nc))
