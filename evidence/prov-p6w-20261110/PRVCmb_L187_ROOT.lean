@@ -55,6 +55,10 @@ import PRVEq_CallerPrepTx1DeployedNOC_o1
 import PRVEq_NocPrepTx1Compose_o1
 import PRVEq_NocCallerSlots_o1
 import PRVEq_NocCallerSlots2_o1
+import PRVEq_QM31_s3
+import PRVEq_Rd_s14
+import PRVEq_Tx2Frozen_s2
+import PRVEq_Headline_s2
 section PRVCmbAuditDef
 open Lean Elab Command
 namespace PRVCmbAudit
@@ -121,4 +125,4 @@ def auditRoot (label : String) (pred : Name → Bool) : CommandElabM Unit := do
 end PRVCmbAudit
 end PRVCmbAuditDef
 
-#eval PRVCmbAudit.auditRoot "PRV*/PCVE*/PCVB*" (fun n => let r := n.getRoot.toString; let s := n.toString; ["PCVN_","PCVP_","PCVQ_","PCVS_","PCVK_","PCVL_","PCVH_"].any (fun k => (s.splitOn k).length > 1) || r.startsWith "PRV" || r.startsWith "PCVE" || r.startsWith "PCVB" || (n.toString.splitOn ".PRVEq.").length > 1 || (n.toString.splitOn ".PRVFresh_").length > 1)
+#eval PRVCmbAudit.auditRoot "PRV*/PCVE*/PCVB*" (fun n => let r := n.getRoot.toString; let s := n.toString; ["PCVN_","PCVP_","PCVQ_","PCVS_","PCVK_","PCVL_","PCVH_","PCVU_"].any (fun k => (s.splitOn k).length > 1) || r.startsWith "PRV" || r.startsWith "PCVE" || r.startsWith "PCVB" || (n.toString.splitOn ".PRVEq.").length > 1 || (n.toString.splitOn ".PRVFresh_").length > 1)

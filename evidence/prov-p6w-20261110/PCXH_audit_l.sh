@@ -8,6 +8,7 @@ def log(a):
     p = f'PCXH_L021/{a}/stdout.log'
     return open(p).read() if os.path.exists(p) else lzma.open(p + '.xz').read().decode()
 EXP = {
+ 'PCXH_AUD_P3S': ['PCVU_QM31.qm31_16', 'PCVU_Rd.sem_eq', 'PCVU_Rd.weights_eq', 'PCVU_Rd.loop_claim', 'PCVU_Tx2Frozen.deployed_tx2_common_t', 'PCVU_Tx2Frozen.deployed_tx2_authenticated_t', 'PCVU_Head.constants_eq', 'PCVU_Head.stage_eq', 'PCVU_Head.query_headline', 'PCVU_Head.reserved_headline'],
  'PCXH_AUD_L1': ['PCVS_Tx2Deployed.deployed_tx2_common_s', 'PCVS_Tx2Deployed.deployed_tx2_authenticated_s', 'PCVS_Tx2Deployed.e32_deployed', 'PCVS_Tx2Deployed2.yMix_eq', 'PCVS_Tx2Deployed2.deployed_tx2_common_m', 'PCVS_Tx2Deployed2.deployed_tx2_authenticated_m',
    'PCVS_E32.e32_core', 'PCVS_Eq.bind_mul', 'PCVS_Eq.bind_zero', 'PCVS_Eq.bind_one', 'PCVS_Op17.op17_frozen_bound', 'PCVS_Ckpt.tag_eq', 'PCVS_Ckpt.final_len_eq', 'PCVS_Ckpt.fixed_eq', 'PCVS_Ckpt.checkpoint_size_eq', 'PCVS_Ckpt.zeroK_eq',
    'PCVQ_Tx2Deployed6.leaves', 'PCVQ_Tx2Deployed6.h18', 'PCVQ_Tx2Deployed6.h18_deployed', 'PCVQ_Tx2Deployed6.deployed_tx2_common_q', 'PCVQ_Tx2Deployed6.deployed_tx2_authenticated_q', 'PCVQ_Resumeq13.resume_sim',
