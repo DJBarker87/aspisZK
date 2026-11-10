@@ -1,0 +1,23 @@
+{
+ "schema": "PCWO_CANNOT_EXTRACT/1",
+ "target_established": false,
+ "tool": "third tool version",
+ "items": [
+  {
+   "item": "op50 decode_lane_from_pool_release",
+   "scope": "PCWO_E001 (Aeneas only, LLBC from PCWH_E005)",
+   "patch_effect": "Patch A removed the 'Early returns inside of loops' error: PrePasses accepts the loop.",
+   "new_error": "[Error] Could not match the contexts, r1_pool_adapter.rs 495:4-520:1 (symbolic interpreter, loop fixed-point, after the pre-pass transformation); body not translated; placeholder Funs.lean not committed (hash in PCWO_E001_emitted/raw.sha256)",
+   "status": "OPEN",
+   "next": "the duplicated continuation (StorageDead, Drop, Assign chain) now lives inside the loop's break arms; the interpreter cannot match contexts at the loop head (likely borrows of frontier / drop of locals moved into the loop). A flag-and-break encoding (return value kept in a local, continuation kept after the loop) is the alternative route; not attempted (one job only)."
+  },
+  {
+   "item": "semantic_boundary, claims, semantic_rounds",
+   "scope": "PCWO_E002 (Charon 3 roots exit 0, Aeneas exit 1)",
+   "patch_effect": "Patch B removed the CFailure at SymbolicToPureTypes.ml:1005; Aeneas now translates signatures and runs to completion with per-function errors.",
+   "new_error": "semantic_boundary (r1_semantic.rs 82-85): [Error] Arrow types are not supported yet; claims (47-55): [Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet; semantic_rounds not emitted (depends on claims). decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error.",
+   "status": "OPEN",
+   "next": "Aeneas features: arrow types in signatures, and join of shared loans containing borrows. Neither is covered by patch A or B."
+  }
+ ]
+}

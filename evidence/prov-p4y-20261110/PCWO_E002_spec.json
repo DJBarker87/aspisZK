@@ -1,0 +1,93 @@
+{
+ "run": "PCWO_E002",
+ "spec_id": "PCWO_E002",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_T001_out/bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::r1_semantic::semantic_boundary",
+  "--start-from",
+  "crate::r1_semantic::claims",
+  "--start-from",
+  "crate::r1_semantic::semantic_rounds",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_E002_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "private-leaf-salts,program-build"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_T001_out/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCWO_sem",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_E002_emitted/raw",
+  "-subdir",
+  "PCWO_sem",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_E002_emitted/repro.llbc"
+ ],
+ "aeneas_tool": "second",
+ "opacity": [],
+ "configuration": {
+  "roots": [
+   "crate::r1_semantic::semantic_boundary",
+   "crate::r1_semantic::claims",
+   "crate::r1_semantic::semantic_rounds"
+  ],
+  "namespace": [
+   "PCWO_sem"
+  ],
+  "features": [
+   "private-leaf-salts,program-build"
+  ],
+  "opaque": [],
+  "manifest": "crates/aspis-r1-cost-probe/Cargo.toml"
+ },
+ "features_override": "prover,r1p-check,private-leaf-salts",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "2"
+ },
+ "configuration_overflow_checks": "ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; -C overflow-checks=yes appended to the stager RUSTFLAGS)",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "aeneas_sha256": "6652776ad7ca03f78c9c9e7a396ed84120f4428bcb9f9eaac1926ee40745d28b",
+ "charon_sha256": "57aa2359bb3e9a84480f7e4802dcdc700ef05709de30ec0eb97581b3f9c5f851",
+ "charon_driver_sha256": "6a6552bce70d59e041fb96a67c08294377ef16d3f77a7876fea7f1250ee37845",
+ "tool_label": "second tool version: Aeneas 0d21a9ec + Charon 454586e9 (PCWO_TOOL_BUILD.json)",
+ "derived_from": "../prov-p4x-20261110/PCWH_E008_spec.json"
+}
