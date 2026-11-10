@@ -1,0 +1,35 @@
+{
+ "schema": "PCVX_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "K1",
+   "topic": "E002",
+   "decision": "Spec-generator defect (mkaen replaced the LLBC path too); exit 1 in 0.55 s before Aeneas ran. Not a shape failure; fixed in PCVX_mkaen.sh and reissued as E003."
+  },
+  {
+   "id": "K2",
+   "topic": "E011",
+   "decision": "Charon succeeded (40 s) but the spec carried the P3s stable --dest-file outside <run>_emitted, so the stager failed (FileNotFoundError). Not an Aeneas result; the LLBC was used by an Aeneas-only run E012 (PCVX_fixllbc.sh)."
+  },
+  {
+   "id": "K3",
+   "topic": "tool choice",
+   "decision": "Original Aeneas 959659a6 used first everywhere per the brief; extended b59d5188 tried only on saved LLBCs and crashed each time (E005, E008, E010)."
+  },
+  {
+   "id": "K4",
+   "topic": "op21/op24 domain",
+   "decision": "Equalities are stated for every statement/afterstate (total), plus slot21_on_decoded on the NNH_S1DecodeOk domain; off the success domain the deployed div versus frozen Err is the model-fidelity note from P3t K6, not an obligation."
+  },
+  {
+   "id": "K5",
+   "topic": "E013",
+   "decision": "Aeneas-only rerun of E012's input with only the controller changed (errors captured to aeneas.errors) because E012 kept only the last 20000 bytes of stdout; same exit, diagnostic purpose."
+  },
+  {
+   "id": "K6",
+   "topic": "supersession",
+   "decision": "The P3t entry NO_EMISSION for op21/op24 is superseded: C1 shows the gate validate and encode are equal to a fresh 4bb3b3f emission. This concerns the evidence, not the protocol or target."
+  }
+ ]
+}

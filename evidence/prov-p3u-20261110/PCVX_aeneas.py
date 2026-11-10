@@ -14,7 +14,9 @@ pins=dict(run=run,aeneas=str(tool),aeneas_sha256=sha(tool.read_bytes()),llbc=str
 t=time.time()
 r=subprocess.run(['/usr/bin/time','-v']+spec['aeneas_command'],capture_output=True,text=True,cwd=str(E))
 pins.update(exit=r.returncode,wall=time.time()-t)
-(out/'aeneas.stdout').write_text(r.stdout[-20000:]);(out/'aeneas.time').write_text(r.stderr[-6000:])
+import re
+errs=[l for l in re.sub(r'\x1b\[[0-9;]*m','',r.stdout).splitlines() if re.match(r'\[ *Error',l) or l.startswith('Source:') or 'Could not' in l or 'not supported' in l]
+(out/'aeneas.errors').write_text('\n'.join(errs)[:60000]);(out/'aeneas.stdout').write_text(r.stdout[-20000:]);(out/'aeneas.time').write_text(r.stderr[-6000:])
 (out/(run+'_PINS.json')).write_text(json.dumps(pins,indent=1))
 print(json.dumps(dict(attempt=run,exit=r.returncode)))
 sys.exit(r.returncode)

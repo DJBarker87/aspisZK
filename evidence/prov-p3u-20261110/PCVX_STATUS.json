@@ -1,0 +1,136 @@
+{
+ "schema": "PCVX_STATUS/1",
+ "target_established": false,
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "branch": "codex/pc-prov-p3u-20261110",
+ "difference_at_matching_configuration": "None found.",
+ "claims": [
+  {
+   "id": "C1",
+   "file": "PRVEq_AspisR1TerminalDecoder_Funs_u1.lean",
+   "scope": "PCVX_L003",
+   "exit": 0,
+   "statement": "fresh = gate (@PRVFresh_..._u1.f = @AspisR1TerminalDecoder.f) for 87 definitions of the gate module AspisR1TerminalDecoder.Funs, including pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_verified_afterstate_v1, decode_digest_canonical, the payment encoders/validators and snapshot/late-statement encoders. Fresh text = PCVX_E006 emission (4bb3b3f, overflow ON, original Aeneas 959659a6, cargo jobs 4). Types identical to the gate. 74 theorems report standard axioms, 13 do not depend on axioms; no sorryAx; maxHeartbeats is the generator default 1000000 carried by the file.",
+   "hypotheses": "none"
+  },
+  {
+   "id": "C2",
+   "file": "PRVEq_Slot24_u1.lean",
+   "scope": "PCVX_L002",
+   "exit": 0,
+   "statement": "PCVX_Slot24.slot24: the deployed op24 (AspisR1.NNH_S1HostCodec.encode a) equals the weak-Err mapping of the frozen emission encode_pool_v1_pair_verified_afterstate_v1 (PCQG pair_terminal_b, PRVEq ..._Funs_j1) at toT5 (afterCarrier a), for EVERY afterstate; slot24_ok: when the emission returns ok (Ok out) the deployed slot returns the same; slot24_err: when it returns ok (Err e) the deployed slot is div (model-fidelity note K6, not an equality).",
+   "hypotheses": "none (slot24); slot24_ok/err take the emission value as hypothesis h"
+  },
+  {
+   "id": "C3",
+   "file": "PRVEq_Slot21_u1.lean",
+   "scope": "PCVX_L005",
+   "exit": 0,
+   "statement": "PCVX_Slot21.slot21: the deployed op21 (NNH_S1HostCodec.validate st) equals the weak-Err mapping of the frozen emission validate_pool_v1_pair_forest_terminal_statement_v1 (PCVX_E006) at toT8 (NNH_S1DecodeOk.carrier st), for every statement; slot21_ok and slot21_err as above; slot21_on_decoded states it on the NNH_S1DecodeOk domain (successful S1 decode of public data yields native with carrier = st and validate native = weak-map of the emission at st).",
+   "hypotheses": "none (slot21 and slot21_on_decoded); _ok/_err take the emission value as hypothesis"
+  }
+ ],
+ "slots": [
+  {
+   "file": "stage1",
+   "slot": "op21",
+   "status": "PROVED_AGAINST_FROZEN_EMISSION",
+   "note": "C3. Supersedes the P3t entry NO_EMISSION: the gate validate is fresh=gate equal to a 4bb3b3f emission (C1). The off-domain divergence (deployed div where frozen returns Err) is the model-fidelity note, unchanged."
+  },
+  {
+   "file": "stage1",
+   "slot": "op24",
+   "status": "PROVED_AGAINST_FROZEN_EMISSION",
+   "note": "C2 (against PCQG emission via j1) and C1 (the same function also fresh=gate against PCVX_E006)."
+  },
+  {
+   "file": "stage2",
+   "slot": "op48 master decoder (raw aspis_statement::decode_pool_v1_pair_forest_master_v1)",
+   "status": "CANNOT_EXTRACT",
+   "note": "original Aeneas 959659a6: Could not match the contexts (pair_forest_accounts.rs 295-298, the iter_mut().enumerate() loop); extended: crash exit 2. P3t slot48 hypothesis h unchanged."
+  },
+  {
+   "file": "stage2",
+   "slot": "op49 checkpoint decoder",
+   "status": "CANNOT_EXTRACT",
+   "note": "same error at pair_forest_accounts.rs 463-482. slot49 hypothesis unchanged."
+  },
+  {
+   "file": "stage2",
+   "slot": "op47 statement decoder (decode_pool_v1_pair_forest_terminal_statement_v1)",
+   "status": "NOT_EXTRACTED_AENEAS_TIMEOUT",
+   "note": "whole-closure Aeneas runs including the boxed decoders (decode_*_boxed_v1, pair_tree_profile decoders) did not finish in 180 s (E001, E003 original; E004 afterstate decode). Separate root not attempted in the remaining budget. slot47 hypothesis unchanged."
+  },
+  {
+   "file": "stage2",
+   "slot": "op51 afterstate decode",
+   "status": "NOT_EXTRACTED_AENEAS_TIMEOUT",
+   "note": "E004 (encode+decode afterstate) timed out in Aeneas; decode afterstate with opaque cuts (PCQF_E005 shape) is the earlier gate pass and stays OPEN in PCXD. slot51 hypotheses unchanged except that encode afterstate is now fresh=gate (C1)."
+  },
+  {
+   "file": "stage2",
+   "slot": "op22 encode_pool_v1_pair_forest_terminal_statement_v1",
+   "status": "CANNOT_EXTRACT",
+   "note": "original: Could not match the contexts at pair_forest_terminal.rs 318-324; extended crash exit 2 (E009/E010)."
+  },
+  {
+   "file": "stage2",
+   "slot": "op23 decode_pool_v1_pair_forest_terminal_request_v1",
+   "status": "EMITTED_NOT_RELATED",
+   "note": "emitted in PCVX_E009 (Funs.lean line 3003, original Aeneas); the deployed slot is a reference decoder over a 320-byte array; no relation to AdapterRw types proved (no gate module holds this function; type bridge not built)."
+  },
+  {
+   "file": "stage2",
+   "slot": "op20 PoolV1PairForestTerminalPaymentV1::nullifier",
+   "status": "EMITTED_NOT_RELATED",
+   "note": "emitted in PCVX_E009 (two nullifier impls); deployed op20 is the hand model NMS_RequestModels.nullifier over AdapterRwTypes. Generator attempt against the NMS_RequestModels source found 0 common declarations (gate is not an Aeneas-format module); no theorem. Classified as obligation: field-by-field type bridge fresh PaymentV1 -> AdapterRw PaymentV1."
+  },
+  {
+   "file": "stage2",
+   "slot": "op16 POOL_V1_PAIR_FOREST_ALL_LANES_MASK",
+   "status": "NOT_ATTEMPTED",
+   "note": "constant 0xff; cross-crate constant encoding row; no scope."
+  },
+  {
+   "file": "stage2",
+   "slot": "op11 tx2_authenticated, op53",
+   "status": "NOT_ATTEMPTED",
+   "note": "op11 gate item open in PCXD; op53 not attempted (budget of context, not of scopes)."
+  },
+  {
+   "file": "tx2",
+   "slot": "op5 candidate::batch_merkle",
+   "status": "EMITTED_NOT_RELATED",
+   "note": "PCVX_E012/E013 Funs.lean line 1171. The P2j NJS gate comparison reports ON-vs-OFF configuration mismatches in the batch key closure (wrapping), so a relation needs the gate configuration decision (PCUJ-C3/C4); not attempted."
+  },
+  {
+   "file": "tx2",
+   "slot": "op9 BatchedWeights::finish",
+   "status": "EMITTED_NOT_RELATED",
+   "note": "PCVX_E012 Funs.lean line 3482 (finish_loop, finish). No relation proved."
+  },
+  {
+   "file": "tx2",
+   "slot": "op10 BatchedWeights::new",
+   "status": "EMITTED_NOT_RELATED",
+   "note": "PCVX_E012 Funs.lean line 3391 (new_loop, new). No relation proved."
+  },
+  {
+   "file": "tx2",
+   "slot": "op6 candidate::query_loop",
+   "status": "CANNOT_EXTRACT",
+   "note": "Arrow types are not supported yet (candidate.rs 239-252), original Aeneas only; extended not tried on this LLBC."
+  },
+  {
+   "file": "tx2",
+   "slot": "op19 verifier::finish_relation",
+   "status": "CANNOT_EXTRACT",
+   "note": "Arrow types are not supported yet (verifier.rs 309-322); Internal error."
+  }
+ ],
+ "composition": {
+  "deployed_tx2_common_t/authenticated_t": "unchanged from PCVU: slots QM31::from_le_bytes, read_checkpoint_semantic_alpha, read_checkpoint_weights are frozen emissions; op5, op9, op10 now have frozen emissions (PCVX_E012) but no relation; op6 and op19 cannot be extracted; reserved, query, geo, base, finish remain parameters.",
+  "stage1 body": "op21 and op24 are now related to frozen emissions (C2, C3).",
+  "stage2 body (P3t slots op44,47,48,49,51)": "hypotheses on the raw aspis_statement decoders are unchanged; the raw master/checkpoint decoders cannot be extracted by either Aeneas build."
+ }
+}

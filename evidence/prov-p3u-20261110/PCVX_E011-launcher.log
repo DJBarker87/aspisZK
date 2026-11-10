@@ -1,0 +1,45 @@
+{"attempt": "PCVX_E011", "exit_status": 1, "wall_seconds": 41.21490815398283, "peak_rss_kib": "602380", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::verifier::_::new", "--start-from", "crate::verifier::_::finish", "--start-from", "crate::verifier::finish_relation", "--start-from", "crate::verifier::candidate::batch_merkle", "--start-from", "crate::verifier::candidate::query_loop", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p3u-20261110/PCVU_stable/all.llbc", "--", "--manifest-path", "/home/dombarker/project
+...
+Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+warning: `aspis-statement` (lib) generated 112 warnings (run `cargo fix --lib -p aspis-statement` to apply 5 suggestions)
+    Finished `release` profile [optimized] target(s) in 40.15s
+{"attempt": "PCVX_E011", "exit": 1, "error": "FileNotFoundError(2, 'No such file or directory')"}
+
+Running as unit: run-r86ec14eb77d143fabee1681e14270137.scope; invocation ID: 40dd93af060545d79096244ec6fae1d1
