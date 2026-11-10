@@ -13,17 +13,17 @@
   "note": "225 checked or mixed definitions minus 5 NOT_EXECUTED proof-only references (AspisR65Field M31.add/neg, AspisR66Field M31.add/neg/sub), lead ruling 1 of 2026-11-10",
   "TOTAL_PROVED": 67,
   "DIRECT": 27,
-  "DOMAIN_LEMMA_PROVED": 14,
-  "PRECONDITION_B": 12,
+  "DOMAIN_LEMMA_PROVED": 6,
+  "PRECONDITION_B": 20,
   "OPEN": 100,
   "NOT_EXECUTED": 5
  },
  "counts_by_class": {
   "CHECKED/DIRECT": 26,
-  "CHECKED/DOMAIN_LEMMA_PROVED": 12,
+  "CHECKED/DOMAIN_LEMMA_PROVED": 4,
   "CHECKED/NOT_EXECUTED": 5,
   "CHECKED/OPEN": 98,
-  "CHECKED/PRECONDITION_B": 12,
+  "CHECKED/PRECONDITION_B": 20,
   "CHECKED/TOTAL_PROVED": 64,
   "MIXED/DIRECT": 1,
   "MIXED/DOMAIN_LEMMA_PROVED": 2,
@@ -32,8 +32,8 @@
  },
  "rows": {
   "touched_by_executed_checked_or_mixed": 396,
-  "with_at_least_one_open_or_domain_only_definition": 359,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 37,
+  "with_at_least_one_open_or_domain_only_definition": 309,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 87,
   "touched_including_NOT_EXECUTED": 396,
   "note_20261110_late": "served_only_by_TOTAL_or_DIRECT_definitions now counts rows served only by TOTAL, DIRECT or PRECONDITION_B definitions"
  },
@@ -4652,10 +4652,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "TOTAL (2021 current_mul_mod / multiply_R22, AspisR1Qm31ArithmeticProbe copy)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing QA site in NPH_SITES.json has a limb-bound lemma (23 W_LEMMA, 1 EVERY_INPUT) and every site context is composed. (1) CurrentWideMul WideExact.mul and its aliases: NPH_R22JoinQA2 (L069; early_powers callers ClaimPowers.powers and Tx2N_Powers.powers on canonical input). (2) Query installers (NBF_BasisInstall.install, LIBC_QueryOps.seed, NJJ_QueryOps.concrete, SAQ_Query.install, S7Kani3BasisOuter.double/t2): NPH_R22JoinQA3 (L077) query_sites/Dcon_sites/Dsel_sites/NBF_sites/t2_sites give W arguments at every QA call of the node pattern `op7 z z; op8; op6 . one` for EVERY z, the only pattern in which query_values and accumulate_batched_with_node_loop0.body call op6/op8 (op5 = one is passed unchanged through the loop; the other op7 call is M31.mul, TOTAL). (3) Geometry installers (SAQ_Geometry.install, NFN_NEB_GeometryPrimitives.install, R17 M31/CM31 operations, NFN_NEW_GeometryPolynomial.cohort): fip_geometry shows the configured geometry of every FIp-installed configuration (both host configurations, cfg_slots/host_slots) is SAQ_Constructor.install err g, whose op7-op10/op14/op15 are the SAQ slots; stage_geometry_sites (on Port5Q1_GeometryTerminal.install, the record Tx1Q_PrefixInstall.geometryBody runs) gives, for every input, W arguments at the `op9 x x; op10; op7; op8` pattern and, for every fibre index, op14/op15 ok with W output or an out-of-bounds TABLE_B read (bounds-checked in both profiles, no QA call executed); geometry_triple_W covers any GeometryM31W record; nea_line_W covers the NFN op14 under NFN_NEA_FieldProduct.ops. Textual screens, flagged: the call patterns of Port3_NativeQueryBody/Port3_NativeGeometryBody, the executed query dictionaries (Dcon/Dsel, section 14 plus NPH_R22Installers2), and the geometry stage path (Tx1Q_PrefixInstall.geometryBody).",
    "nph_theorems": [
     "AspisR1.NPH_R22CM31.QA_CM31_mul_total",
-    "AspisR1.NPH_R22Weak.QA_CM31_mul_weak"
+    "AspisR1.NPH_R22Weak.QA_CM31_mul_weak",
+    "AspisR1.NPH_R22JoinQA3.query_sites",
+    "AspisR1.NPH_R22JoinQA3.stage_geometry_sites",
+    "AspisR1.NPH_R22JoinQA3.fip_geometry",
+    "AspisR1.NPH_R22JoinQA3.nea_line_W",
+    "AspisR1.NPH_R22JoinQA2.claim_powers_ok"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "existing_closure_statements_screen": [
@@ -4731,7 +4736,8 @@
      "CurrentWideMulCanonical WideExact.mul callers"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_qa3": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -4875,11 +4881,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing QA site in NPH_SITES.json has a limb-bound lemma (23 W_LEMMA, 1 EVERY_INPUT) and every site context is composed. (1) CurrentWideMul WideExact.mul and its aliases: NPH_R22JoinQA2 (L069; early_powers callers ClaimPowers.powers and Tx2N_Powers.powers on canonical input). (2) Query installers (NBF_BasisInstall.install, LIBC_QueryOps.seed, NJJ_QueryOps.concrete, SAQ_Query.install, S7Kani3BasisOuter.double/t2): NPH_R22JoinQA3 (L077) query_sites/Dcon_sites/Dsel_sites/NBF_sites/t2_sites give W arguments at every QA call of the node pattern `op7 z z; op8; op6 . one` for EVERY z, the only pattern in which query_values and accumulate_batched_with_node_loop0.body call op6/op8 (op5 = one is passed unchanged through the loop; the other op7 call is M31.mul, TOTAL). (3) Geometry installers (SAQ_Geometry.install, NFN_NEB_GeometryPrimitives.install, R17 M31/CM31 operations, NFN_NEW_GeometryPolynomial.cohort): fip_geometry shows the configured geometry of every FIp-installed configuration (both host configurations, cfg_slots/host_slots) is SAQ_Constructor.install err g, whose op7-op10/op14/op15 are the SAQ slots; stage_geometry_sites (on Port5Q1_GeometryTerminal.install, the record Tx1Q_PrefixInstall.geometryBody runs) gives, for every input, W arguments at the `op9 x x; op10; op7; op8` pattern and, for every fibre index, op14/op15 ok with W output or an out-of-bounds TABLE_B read (bounds-checked in both profiles, no QA call executed); geometry_triple_W covers any GeometryM31W record; nea_line_W covers the NFN op14 under NFN_NEA_FieldProduct.ops. Textual screens, flagged: the call patterns of Port3_NativeQueryBody/Port3_NativeGeometryBody, the executed query dictionaries (Dcon/Dsel, section 14 plus NPH_R22Installers2), and the geometry stage path (Tx1Q_PrefixInstall.geometryBody).",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.QA_M31_add_eq",
     "AspisR1.NPH_R22FieldCopies.QA_M31_add_R22",
-    "AspisR1.NPH_R22Weak.add_R22_weak"
+    "AspisR1.NPH_R22Weak.add_R22_weak",
+    "AspisR1.NPH_R22JoinQA3.query_sites",
+    "AspisR1.NPH_R22JoinQA3.stage_geometry_sites",
+    "AspisR1.NPH_R22JoinQA3.fip_geometry",
+    "AspisR1.NPH_R22JoinQA3.nea_line_W",
+    "AspisR1.NPH_R22JoinQA2.claim_powers_ok"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -4945,7 +4956,8 @@
      "CurrentWideMulCanonical WideExact.mul callers"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_qa3": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -5288,11 +5300,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing QA site in NPH_SITES.json has a limb-bound lemma (23 W_LEMMA, 1 EVERY_INPUT) and every site context is composed. (1) CurrentWideMul WideExact.mul and its aliases: NPH_R22JoinQA2 (L069; early_powers callers ClaimPowers.powers and Tx2N_Powers.powers on canonical input). (2) Query installers (NBF_BasisInstall.install, LIBC_QueryOps.seed, NJJ_QueryOps.concrete, SAQ_Query.install, S7Kani3BasisOuter.double/t2): NPH_R22JoinQA3 (L077) query_sites/Dcon_sites/Dsel_sites/NBF_sites/t2_sites give W arguments at every QA call of the node pattern `op7 z z; op8; op6 . one` for EVERY z, the only pattern in which query_values and accumulate_batched_with_node_loop0.body call op6/op8 (op5 = one is passed unchanged through the loop; the other op7 call is M31.mul, TOTAL). (3) Geometry installers (SAQ_Geometry.install, NFN_NEB_GeometryPrimitives.install, R17 M31/CM31 operations, NFN_NEW_GeometryPolynomial.cohort): fip_geometry shows the configured geometry of every FIp-installed configuration (both host configurations, cfg_slots/host_slots) is SAQ_Constructor.install err g, whose op7-op10/op14/op15 are the SAQ slots; stage_geometry_sites (on Port5Q1_GeometryTerminal.install, the record Tx1Q_PrefixInstall.geometryBody runs) gives, for every input, W arguments at the `op9 x x; op10; op7; op8` pattern and, for every fibre index, op14/op15 ok with W output or an out-of-bounds TABLE_B read (bounds-checked in both profiles, no QA call executed); geometry_triple_W covers any GeometryM31W record; nea_line_W covers the NFN op14 under NFN_NEA_FieldProduct.ops. Textual screens, flagged: the call patterns of Port3_NativeQueryBody/Port3_NativeGeometryBody, the executed query dictionaries (Dcon/Dsel, section 14 plus NPH_R22Installers2), and the geometry stage path (Tx1Q_PrefixInstall.geometryBody).",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.QA_M31_sub_eq",
     "AspisR1.NPH_R22FieldCopies.QA_M31_sub_R22",
-    "AspisR1.NPH_R22Weak.sub_R22_weak"
+    "AspisR1.NPH_R22Weak.sub_R22_weak",
+    "AspisR1.NPH_R22JoinQA3.query_sites",
+    "AspisR1.NPH_R22JoinQA3.stage_geometry_sites",
+    "AspisR1.NPH_R22JoinQA3.fip_geometry",
+    "AspisR1.NPH_R22JoinQA3.nea_line_W",
+    "AspisR1.NPH_R22JoinQA2.claim_powers_ok"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -5363,7 +5380,8 @@
      "CurrentWideMulCanonical WideExact.mul callers"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_qa3": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -6141,10 +6159,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "TOTAL (2021 current_mul_mod / multiply_R22, AspisR1Qm31ArithmeticProbe copy)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing SM site in NPH_SITES.json has a limb-bound lemma (28 W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE, 4 SUBSUMED_CANONICAL_TOTAL), and every site context is composed from producers along the reached body: the tx1 094 query path (NPH_R22Join094/Join094Step, 3 JOINED_094), the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites), and the tx1 semantic finish. For the finish: NPH_R22JoinSM4/SM5 (mask/add/mul on canonical arguments at every public with the retained digest domain), NPH_R22JoinSM6 (the digest domain from the 345 op21 validate through the tx1 candidate), and NPH_R22JoinSM7 (L074): stage1_congr proves that r1_pool_adapter.owned.stage1_owned calls first_decoded only at the semantic public of a statement whose op21 returned Ok (both data branches), and stage1_guarded proves, with no premise, that the deployed 345 entry over S c equals the same entry over G c, whose tx1 op9 slot on release none is the guarded semantic installation over NPH_R22JoinSM5.Bslot. The SM-copy qm31_sum_products3_prepared site is NOT_EXECUTING (proof-only references, NPH_SUM3_REFS.json, textual screen, flagged); the call chain op9 <- candidate.prepare <- candidate.tx1 <- op10 <- first_decoded <- stage1_owned is a textual screen of the extracted sources (one op9 read, one prepare call, one op10 read, two first_decoded calls), flagged.",
    "nph_theorems": [
     "AspisR1.NPH_R22CM31.SM_CM31_mul_total",
-    "AspisR1.NPH_R22Weak.SM_CM31_mul_weak"
+    "AspisR1.NPH_R22Weak.SM_CM31_mul_weak",
+    "AspisR1.NPH_R22JoinSM7.stage1_congr",
+    "AspisR1.NPH_R22JoinSM7.stage1_guarded",
+    "AspisR1.NPH_R22JoinSM7.G_agree",
+    "AspisR1.NPH_R22JoinSM6.tx1_guarded",
+    "AspisR1.NPH_R22JoinSM5.slot_guarded"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "existing_closure_statements_screen": [
@@ -6200,7 +6223,8 @@
     "family_complete_for_b": false
    },
    "nph_sm_context_20261110_sm3": "judgment unchanged (not (b)): the deployed tx1 semantic-finish context is composed from producers (NPH_R22JoinSM3F/SM4/SM5, L061-L065) on every public with the retained digest domain; the 345 tie of that premise and the qm31_sum_products3_prepared right operands remain open",
-   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)"
+   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)",
+   "nph_judgment_before_20261110_sm7": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1SelectedMaskProbe.Funs",
@@ -6262,9 +6286,14 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower mul, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing SM site in NPH_SITES.json has a limb-bound lemma (28 W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE, 4 SUBSUMED_CANONICAL_TOTAL), and every site context is composed from producers along the reached body: the tx1 094 query path (NPH_R22Join094/Join094Step, 3 JOINED_094), the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites), and the tx1 semantic finish. For the finish: NPH_R22JoinSM4/SM5 (mask/add/mul on canonical arguments at every public with the retained digest domain), NPH_R22JoinSM6 (the digest domain from the 345 op21 validate through the tx1 candidate), and NPH_R22JoinSM7 (L074): stage1_congr proves that r1_pool_adapter.owned.stage1_owned calls first_decoded only at the semantic public of a statement whose op21 returned Ok (both data branches), and stage1_guarded proves, with no premise, that the deployed 345 entry over S c equals the same entry over G c, whose tx1 op9 slot on release none is the guarded semantic installation over NPH_R22JoinSM5.Bslot. The SM-copy qm31_sum_products3_prepared site is NOT_EXECUTING (proof-only references, NPH_SUM3_REFS.json, textual screen, flagged); the call chain op9 <- candidate.prepare <- candidate.tx1 <- op10 <- first_decoded <- stage1_owned is a textual screen of the extracted sources (one op9 read, one prepare call, one op10 read, two first_decoded calls), flagged.",
    "nph_theorems": [
-    "AspisR1.NPH_R22CM31.SM_CM31_square_total"
+    "AspisR1.NPH_R22CM31.SM_CM31_square_total",
+    "AspisR1.NPH_R22JoinSM7.stage1_congr",
+    "AspisR1.NPH_R22JoinSM7.stage1_guarded",
+    "AspisR1.NPH_R22JoinSM7.G_agree",
+    "AspisR1.NPH_R22JoinSM6.tx1_guarded",
+    "AspisR1.NPH_R22JoinSM5.slot_guarded"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "existing_closure_statements_screen": [
@@ -6310,7 +6339,8 @@
     "family_complete_for_b": false
    },
    "nph_sm_context_20261110_sm3": "judgment unchanged (not (b)): the deployed tx1 semantic-finish context is composed from producers (NPH_R22JoinSM3F/SM4/SM5, L061-L065) on every public with the retained digest domain; the 345 tie of that premise and the qm31_sum_products3_prepared right operands remain open",
-   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)"
+   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)",
+   "nph_judgment_before_20261110_sm7": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1SelectedMaskProbe.Funs",
@@ -6519,11 +6549,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing SM site in NPH_SITES.json has a limb-bound lemma (28 W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE, 4 SUBSUMED_CANONICAL_TOTAL), and every site context is composed from producers along the reached body: the tx1 094 query path (NPH_R22Join094/Join094Step, 3 JOINED_094), the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites), and the tx1 semantic finish. For the finish: NPH_R22JoinSM4/SM5 (mask/add/mul on canonical arguments at every public with the retained digest domain), NPH_R22JoinSM6 (the digest domain from the 345 op21 validate through the tx1 candidate), and NPH_R22JoinSM7 (L074): stage1_congr proves that r1_pool_adapter.owned.stage1_owned calls first_decoded only at the semantic public of a statement whose op21 returned Ok (both data branches), and stage1_guarded proves, with no premise, that the deployed 345 entry over S c equals the same entry over G c, whose tx1 op9 slot on release none is the guarded semantic installation over NPH_R22JoinSM5.Bslot. The SM-copy qm31_sum_products3_prepared site is NOT_EXECUTING (proof-only references, NPH_SUM3_REFS.json, textual screen, flagged); the call chain op9 <- candidate.prepare <- candidate.tx1 <- op10 <- first_decoded <- stage1_owned is a textual screen of the extracted sources (one op9 read, one prepare call, one op10 read, two first_decoded calls), flagged.",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.SM_M31_add_eq",
     "AspisR1.NPH_R22FieldCopies.SM_M31_add_R22",
-    "AspisR1.NPH_R22Weak.add_R22_weak"
+    "AspisR1.NPH_R22Weak.add_R22_weak",
+    "AspisR1.NPH_R22JoinSM7.stage1_congr",
+    "AspisR1.NPH_R22JoinSM7.stage1_guarded",
+    "AspisR1.NPH_R22JoinSM7.G_agree",
+    "AspisR1.NPH_R22JoinSM6.tx1_guarded",
+    "AspisR1.NPH_R22JoinSM5.slot_guarded"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -6564,7 +6599,8 @@
     "family_complete_for_b": false
    },
    "nph_sm_context_20261110_sm3": "judgment unchanged (not (b)): the deployed tx1 semantic-finish context is composed from producers (NPH_R22JoinSM3F/SM4/SM5, L061-L065) on every public with the retained digest domain; the 345 tie of that premise and the qm31_sum_products3_prepared right operands remain open",
-   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)"
+   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)",
+   "nph_judgment_before_20261110_sm7": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1SelectedMaskProbe.Funs",
@@ -6814,10 +6850,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing SM site in NPH_SITES.json has a limb-bound lemma (28 W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE, 4 SUBSUMED_CANONICAL_TOTAL), and every site context is composed from producers along the reached body: the tx1 094 query path (NPH_R22Join094/Join094Step, 3 JOINED_094), the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites), and the tx1 semantic finish. For the finish: NPH_R22JoinSM4/SM5 (mask/add/mul on canonical arguments at every public with the retained digest domain), NPH_R22JoinSM6 (the digest domain from the 345 op21 validate through the tx1 candidate), and NPH_R22JoinSM7 (L074): stage1_congr proves that r1_pool_adapter.owned.stage1_owned calls first_decoded only at the semantic public of a statement whose op21 returned Ok (both data branches), and stage1_guarded proves, with no premise, that the deployed 345 entry over S c equals the same entry over G c, whose tx1 op9 slot on release none is the guarded semantic installation over NPH_R22JoinSM5.Bslot. The SM-copy qm31_sum_products3_prepared site is NOT_EXECUTING (proof-only references, NPH_SUM3_REFS.json, textual screen, flagged); the call chain op9 <- candidate.prepare <- candidate.tx1 <- op10 <- first_decoded <- stage1_owned is a textual screen of the extracted sources (one op9 read, one prepare call, one op10 read, two first_decoded calls), flagged.",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.SM_M31_neg_eq",
-    "AspisR1.NPH_R22FieldCopies.SM_M31_neg_R22"
+    "AspisR1.NPH_R22FieldCopies.SM_M31_neg_R22",
+    "AspisR1.NPH_R22JoinSM7.stage1_congr",
+    "AspisR1.NPH_R22JoinSM7.stage1_guarded",
+    "AspisR1.NPH_R22JoinSM7.G_agree",
+    "AspisR1.NPH_R22JoinSM6.tx1_guarded",
+    "AspisR1.NPH_R22JoinSM5.slot_guarded"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -6863,7 +6904,8 @@
     "family_complete_for_b": false
    },
    "nph_sm_context_20261110_sm3": "judgment unchanged (not (b)): the deployed tx1 semantic-finish context is composed from producers (NPH_R22JoinSM3F/SM4/SM5, L061-L065) on every public with the retained digest domain; the 345 tie of that premise and the qm31_sum_products3_prepared right operands remain open",
-   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)"
+   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)",
+   "nph_judgment_before_20261110_sm7": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1SelectedMaskProbe.Funs",
@@ -7048,11 +7090,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing SM site in NPH_SITES.json has a limb-bound lemma (28 W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE, 4 SUBSUMED_CANONICAL_TOTAL), and every site context is composed from producers along the reached body: the tx1 094 query path (NPH_R22Join094/Join094Step, 3 JOINED_094), the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites), and the tx1 semantic finish. For the finish: NPH_R22JoinSM4/SM5 (mask/add/mul on canonical arguments at every public with the retained digest domain), NPH_R22JoinSM6 (the digest domain from the 345 op21 validate through the tx1 candidate), and NPH_R22JoinSM7 (L074): stage1_congr proves that r1_pool_adapter.owned.stage1_owned calls first_decoded only at the semantic public of a statement whose op21 returned Ok (both data branches), and stage1_guarded proves, with no premise, that the deployed 345 entry over S c equals the same entry over G c, whose tx1 op9 slot on release none is the guarded semantic installation over NPH_R22JoinSM5.Bslot. The SM-copy qm31_sum_products3_prepared site is NOT_EXECUTING (proof-only references, NPH_SUM3_REFS.json, textual screen, flagged); the call chain op9 <- candidate.prepare <- candidate.tx1 <- op10 <- first_decoded <- stage1_owned is a textual screen of the extracted sources (one op9 read, one prepare call, one op10 read, two first_decoded calls), flagged.",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.SM_M31_sub_eq",
     "AspisR1.NPH_R22FieldCopies.SM_M31_sub_R22",
-    "AspisR1.NPH_R22Weak.sub_R22_weak"
+    "AspisR1.NPH_R22Weak.sub_R22_weak",
+    "AspisR1.NPH_R22JoinSM7.stage1_congr",
+    "AspisR1.NPH_R22JoinSM7.stage1_guarded",
+    "AspisR1.NPH_R22JoinSM7.G_agree",
+    "AspisR1.NPH_R22JoinSM6.tx1_guarded",
+    "AspisR1.NPH_R22JoinSM5.slot_guarded"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -7093,7 +7140,8 @@
     "family_complete_for_b": false
    },
    "nph_sm_context_20261110_sm3": "judgment unchanged (not (b)): the deployed tx1 semantic-finish context is composed from producers (NPH_R22JoinSM3F/SM4/SM5, L061-L065) on every public with the retained digest domain; the 345 tie of that premise and the qm31_sum_products3_prepared right operands remain open",
-   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)"
+   "nph_sm_context_20261110_sm6": "judgment unchanged (not (b)): the SM finish context is composed from the 345 op21 validate through tx1 (NPH_R22JoinSM6.tx1_guarded, L068); the sum3 SM copy is proof-only; one link open: stage1_owned calls first_decoded only at the validated semantic public (not a Lean statement)",
+   "nph_judgment_before_20261110_sm7": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "AspisR1SelectedMaskProbe.Funs",
@@ -18868,5 +18916,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
+ "revision_note": "updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
 }

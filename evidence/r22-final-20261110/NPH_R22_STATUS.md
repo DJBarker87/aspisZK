@@ -1393,3 +1393,244 @@ input on which the wrapping binary accepts and the checked model rejects was fou
 scopes remain unused.
 
 Target not yet established.
+
+## 18. SM reaches (b); continuation (worker of 2026-11-10, after L072)
+
+Every scope in this run ran at MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with
+lean -j1 -M7000 -DElab.async=false and a 180 s timeout. NPH_COMPILE.tsv records every one.
+Swap was 0 throughout. No cap was raised, and no failed shape was rerun unchanged. The lead
+decision holds: no ops interface, merged module or closed-row statement is changed.
+
+### 18a. SM: the stage1_owned ordering link
+
+Two scopes were used, L073 and L074 (2 of this run's 40).
+- L073 failed in two places, and both were changed before L074.
+  - `stage1_congr` stopped in both branches at the bind of the irreducible
+    POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES. Unification cannot see through it to equate the
+    two records. The constant is now unfolded at that step.
+  - `G_agree` hit a whnf heartbeat timeout. `rw [NNH_Run5bCurrentInventory.adapter]` tried to
+    unify `G ?c` with the deployed sdk record. It was replaced by explicit `Eq.trans` steps
+    and a small `current_congr` lemma.
+- L074 accepted NPH_R22JoinSM7: 4.45 s, 6,782,664 KiB, swap 0, 11 `#print axioms` lines, all
+  within [propext, Classical.choice, Quot.sound]. There is no sorry.
+
+**NPH_R22JoinSM7 statements.**
+- `stage1_congr` holds for every adapter Ops record `ops` and every record `f`. Suppose f.op10
+  agrees with ops.op10 at every public p that is `Validated ops p`, meaning p is the
+  semantic_public of a statement whose ops.op21 returned Ok. Then
+  r1_pool_adapter.owned.stage1_owned over `{ ops with op10 := f.op10 }` equals stage1_owned
+  over ops, for every program, account slice and instruction data.
+  - The proof bind-steps both data branches of the extracted body ([3,10] and [3,11]).
+  - In each branch the only first_decoded call is at `p ← semantic_public val2`, after
+    `ops.op21 val2` returned Ok (`ok_of_map_err` inverts the map_err and branch).
+  - The premise is bundled into the def predicate `Validated`, following the L055–L060
+    lesson. The statement has four binders and one premise.
+- `fd10`: first_decoded reads op10 only at its own public, bytes, proof and split, with hash
+  () and observer none.
+- `slotM`, `slotM_guarded` and `tx1_guardedM` restate the SM5/SM6 slot and tx1 statements for
+  the record that the deployed adapter actually runs. That record is
+  NNH_Run5bCurrentShape.current m env err r, the one in NOC_Stage1Forward.fdLemma. SM5 and SM6
+  were stated for DrvC_Installation.currentInstalled (configuration c), which is a different
+  configuration term.
+  - `slotM` is rfl for every m, env, err and r. The boundaries and std of that configuration
+    depend only on the reservation (IDa_Deployed.selected_fields).
+- `G c` is NOC_Stage1Forward.S c with one change: op10 on observer `none` runs the tx1
+  candidate over `Og c`, whose op9 slot on release `none` is the guarded semantic installation
+  over NPH_R22JoinSM5.Bslot. In Bslot, mask, add and mul run only on canonical arguments.
+  - `G_op10_none` and `Og_op9_none` (both rfl) state this.
+  - Every other slot of G c is that of S c.
+- `G_agree`: at every Validated public, G c's op10 equals S c's op10. The proof chains
+  NOC_Stage1Forward.publicBinding, the rfl op21 = NNH_S1HostCodec.validate (as in ok345),
+  NPH_R22JoinSM6.digest_of_binding, NNH_Run5bCurrentInventory.adapter, current_congr and
+  tx1_guardedM.
+- `stage1_guarded` has **no premise**. For every host context c and every input,
+  stage1_owned (G c) program xs data = stage1_owned (S c) program xs data.
+
+**Call chain (textual screen of the extracted sources; flagged for lead review):**
+- op9 is read once, in verifier.candidate.prepare (CurrentCompactCallerModelV1).
+- prepare is called once, from verifier.candidate.tx1.
+- tx1 is reached through op10 = AspisS6CurrentFirstInstallation.current
+  (NNH_Run5bCurrentInventory.adapter).
+- op10 is read once in AdapterRwModel, by first_decoded.
+- first_decoded is called twice, both times in stage1_owned.
+
+So every op9 execution of the deployed 345 entry is an execution inside G c's guarded
+installation.
+
+**SM moves to (b).** Every executing SM site in NPH_SITES.json has a limb-bound lemma: 28
+W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE and 4 SUBSUMED_CANONICAL_TOTAL. Every site context is
+composed from producers along the reached body:
+- the tx1 094 query path (3 JOINED_094);
+- the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites);
+- the tx1 semantic finish (SM4–SM7, now down to the 345 entry).
+
+The SM-copy sum3 site stays NOT_EXECUTING. That classification rests on NPH_SUM3_REFS.json, a
+textual screen, and is flagged. Moved to PRECONDITION_B: AspisR1SelectedMaskProbe CM31.mul,
+CM31.square, M31.add, M31.neg and M31.sub. Their previous judgments are kept under
+`nph_judgment_before_20261110_sm7`.
+
+NPH_recount.py recounts the cone. It reproduces the recorded 67/27/14/12/100 and 359 before the
+change. NPH_move_family.py performs the move and the recount.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 9 (was 14) |
+| precondition proved from the callers (b) | 17 (was 12) |
+| open | 100 |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 328 of 396** (was 359). 68 rows are now served only by TOTAL, DIRECT or (b)
+definitions.
+
+Families at (b): CW, SC, R72 and SM. Not yet at (b): QA (two contexts) and FIq (238 sites).
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 18b. QA reaches (b)
+
+Three scopes were used, L075–L077 (5 of this run's 40).
+- L075 failed in three places, and each was changed before L076.
+  - In `mul_lt`, a rewrite could not see through the `QAmul` abbrev. Its dependents inherited
+    the error.
+  - `NOC_QueryLink.Dcon` does not exist. The name is `NPH_R22Join094.Dcon`.
+  - The configuration-geometry rfl hit whnf timeouts.
+- L076 accepted 21 of 26 statements. It also showed that the configured geometry is **not**
+  the seed's `NFN_NEW_GeometryDictionary.adopted`: Rc5_Install.seed passes through
+  SAQ_CompleteInstall.select, which replaces it by `SAQ_Constructor.install err g`. The
+  per-layer rfl through NNH_Tx2Configuration.select timed out in isDefEq, by argument
+  congruence on the adapter. These statements were changed to slot facts of
+  SAQ_Constructor.install over an abstract inner record, unfolded with dsimp only.
+- L077 accepted NPH_R22JoinQA3: 4.13 s, 6,710,132 KiB, swap 0, 25 `#print axioms` lines, all
+  standard, no sorry.
+
+**What NPH_R22JoinQA3 proves.** The QA kernels sit behind installer callbacks. Every QA call
+those callbacks make in the executed query and geometry bodies receives W arguments, for
+**every** input of the body. The call patterns come from a textual screen of
+Port3_NativeQueryBody and Port3_NativeGeometryBody, which is flagged.
+
+- **Query.**
+  - op6 and op8 are called only in the node pattern `op7 z z; op8; op6 · one`. That pattern
+    occurs in query_values and in accumulate_batched_with_node_loop0.body. In the latter,
+    `one` is the op5 output, passed unchanged through the loop.
+  - The other op7 call (`op7 m node`) is M31.mul, which is TOTAL.
+  - `query_sites` covers any record with op7 = M31.mul and W-preserving op6/op8.
+  - It is instantiated by `Dcon_sites`, `Dsel_sites` and `NBF_sites` (any NBF-installed
+    record).
+  - `t2_sites` gives the same for S7Kani3BasisOuter.t2, the context of basis_levels_owned and
+    levels.
+- **Geometry.**
+  - `fip_geometry` (dsimp only through FIp → Rc5 → Rc3 → SAP → release → Rc2.select →
+    Rc5.seed → SAQ_CompleteInstall.select → CPP_Install): the configured geometry of every
+    FIp-installed configuration is SAQ_Constructor.install err g.
+  - `constructor_slots`, `fip_slots`, `cfg_slots` (the S c configuration) and `host_slots`
+    (the host-context configuration): that record has op7 = ok 1, op8 = QA sub, op9 = QA mul,
+    op10 = QA double, op14 = SAQ_Geometry.line and op15 = SAQ_Geometry.point, whatever g is.
+  - `terminal_slots`: Port5Q1_GeometryTerminal.install keeps those slots. That is the record
+    Tx1Q_PrefixInstall.geometryBody runs.
+  - `stage_geometry_sites`:
+    - for every x, the pattern `op9 x x; op10; op7; op8` passes W arguments to QA double and
+      QA sub;
+    - for every fibre index, op14 and op15 are ok with W output, or the TABLE_B read is out of
+      bounds. That read is bounds-checked in both profiles, and no QA call executes.
+  - op8 and op10 occur only in that pattern. The suffix-loop op9 is M31.mul, which is TOTAL.
+  - `geometry_triple_W` gives the pattern for any GeometryM31W record whose op9 is M31.mul.
+    `SAQ_install_sites` and `NFN_install_sites` instantiate it.
+- **NFN op14/op15 under NFN_NEA_FieldProduct.ops.**
+  - `nea_fibre_point_W`: the NEA fibre point is a FIo_Native CM31 product of canonical table
+    entries (NFN_NEA_FieldProduct.geometric_cm), or an out-of-bounds read. It runs no QA
+    kernel.
+  - `nea_line_W`: line_node then runs the R17 M31 mul/double/sub (QA) on W arguments.
+- The WideExact.mul context was closed by NPH_R22JoinQA2 (17b).
+
+**QA moves to (b).** Every QA site has a lemma (23 W_LEMMA, 1 EVERY_INPUT), and every context
+is composed. Moved to PRECONDITION_B: AspisR1Qm31ArithmeticProbe CM31.mul, M31.add and M31.sub.
+Their previous judgments are kept under `nph_judgment_before_20261110_qa3`. Three items rest on
+textual screens and are flagged for lead review:
+- the call patterns of the two bodies;
+- the executed query dictionaries (Dcon/Dsel, section 14 plus NPH_R22Installers2);
+- the geometry stage path.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 6 (was 9) |
+| precondition proved from the callers (b) | 20 (was 17) |
+| open | 100 |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 309 of 396** (was 328). 87 rows are served only by TOTAL, DIRECT or (b)
+definitions.
+
+Families at (b): CW, SC, R72, SM and QA. The six remaining domain-only definitions are FIq
+kernels.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 18c. FIq: obligation located, not started as proofs; a failed screening approach
+
+No Lean scope was used for FIq. The run's scope total stays at 5 of 40.
+
+**The executing FIq core.** By textual reading, the FIq kernels execute inside the `terminal`
+slot of the tx1 semantic finish. IDa_Deployed.boundaries sets terminal := FIq_Terminal.terminal,
+which runs FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31. Three parts
+of FIq_Native sit inside it:
+- the pair-forest semantic terminal (52 of the 121 in-family sites);
+- the copy terminal (20);
+- the state-only Poseidon oracle and its rounds (about 25).
+
+The remaining in-family sites are the QM31/CM31 tower and the prepared multiplier. NPH_R22Towers
+already proves the tower W-lemmas. The prepared-multiplier family is not covered.
+
+**What is missing.** The terminal must be shown total on NLU_Terminal.InputDomain with canonical
+claims and alpha. Those are the inputs the SM work already establishes at every executed finish
+(NPH_R22JoinSM4.deployed_verify_guarded). No theorem in the closure gives this.
+- NLU_Terminal.source concludes `Outcome`, which is success-only: fail maps to True.
+- NLH_CompRoot.source, NLH_PartsRoot.source and NLH_WrapperRoot.source each carry an explicit
+  `fail err` branch.
+
+So no FIq kernel call is yet shown to receive W arguments at its executing sites. The four FIq
+kernels stay domain-only. The proof campaign is a W-invariant through:
+- the Poseidon permutation (round-constant add loops, pow5, the internal and external linear
+  layers);
+- the absorption of public-digest and claim lanes;
+- the digest-binding, value-lane, occupancy and path loops of the terminal.
+
+Each producer is available: the canonical claims and alpha, the public digest domain
+(NKR_DigestChildren.Domain), asset_id < P and the canonical challenges. They are not yet
+composed through those bodies.
+
+**Failed approach, kept as a record.** NPH_fiq_reach_host.py (output NPH_FIQ_REACH.json) is a
+read-only forward reachability scan over definition bodies. It starts from the adapter program
+and the deployed configuration records and reuses the NPH_sites_scan2 name resolution. It ran on
+the host in a capped scope.
+- Result: 122 of the 238 FIq sites are forward-reachable. Those are the 121 in-family sites and
+  FIq_Terminal.terminal. The 116 alias and outside sites, such as the RPv_FIx/FIy/FJ* `.run`
+  models, are not.
+- The scan **under-approximates execution**. It also reports NBO_FieldSemantics add/product/
+  power and NBF_BasisInstall.install as unreachable, yet NPH_R22Join094 proves the deployed
+  Dcon/Dsel run them. In this proof architecture the deployed path is tied to the installed
+  records partly through theorems (NOC_QueryLink.values_eq and others), not only through
+  definition references.
+- It therefore **cannot support any NOT_EXECUTING classification**, and none was made from it.
+  The 116 FIq model sites stay OPEN.
+- A sound classification needs a reachability notion that follows those theorem-level ties.
+  That is a question for the lead.
+
+**The other two domain-only definitions** are AspisR1CanonicalQRawUnified and FIo_QRaw
+canonical.Q.raw, with 121 rows each. They are called from the TX2 dot/push raw path
+(NHE_DotRaw, FJf_DotPushValue, FIo_NativeExternal). Section 11 recorded that the producer for the
+dots output, FIp_DotsOutputCanonical.all, lies outside the L187 closure. Their caller join is not
+attempted here.
+
+Counts are unchanged since 18b: 67/27/6/20/100 of 220; rows exposed 309 of 396.
+
+Target not yet established.
