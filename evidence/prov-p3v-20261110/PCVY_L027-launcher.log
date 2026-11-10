@@ -1,0 +1,54 @@
+{"attempt": "PCVY_L027", "exit_status": 1, "wall_seconds": 2.6349614618811756, "peak_rss_kib": "2600884", "swaps": "0", "print_axioms": ["'PCVY_Op50.set_take' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVY_Op50.frontier_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVY_Op50.frontier_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p10.lean:29:46: error: No goals to be solved
+PCVY_sources/PRVEq_Op50_p10.lean:65:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if (↑next >>> ↑level &&& 1 == 0 && val != K0.emptyRoots ↑level) = true then ?m.344 else ?m.345
+in the target expression
+  match
+    match some val with
+    | none => none
+    | some node =>
+      if (↑next >>> ↑level &&& 1 == 0 && node != K0.emptyRoots ↑level) = true then none
+      else
+        match PCVV_LaneDecodeRef.frontierLoop K0 (bytesOf tree) (↑next) k (↑level + 1) with
+        | none => none
+        | some rest => some (node :: rest) with
+  | none => NCV_Reference.decode_frontier_loop tree next F leve
+...
+t.Err ()))
+hc2 :
+  (↑next >>> ↑level &&& 1 == 0 && val != K0.emptyRoots ↑level) = false →
+    ∀ (c : Usize),
+      level + 1#usize = ok c →
+        NCV_Reference.decode_frontier_loop.body tree next F level = ok (cont (F.set level val, c))
+hcond : ¬(↑next >>> ↑level &&& 1 == 0 && val != K0.emptyRoots ↑level) = true
+hcond' : (↑next >>> ↑level &&& 1 == 0 && val != K0.emptyRoots ↑level) = false
+⊢ match
+    match some val with
+    | none => none
+    | some node =>
+      if (↑next >>> ↑level &&& 1 == 0 && node != K0.emptyRoots ↑level) = true then none
+      else
+        match PCVV_LaneDecodeRef.frontierLoop K0 (bytesOf tree) (↑next) k (↑level + 1) with
+        | none => none
+        | some rest => some (node :: rest) with
+  | none => NCV_Reference.decode_frontier_loop tree next F level = ok (core.result.Result.Err ())
+  | some rest =>
+    ∃ G,
+      NCV_Reference.decode_frontier_loop tree next F level = ok (core.result.Result.Ok G) ∧
+        ↑G = List.take ↑level ↑F ++ rest
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PCVY_Op50.set_take' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVY_Op50.frontier_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVY_Op50.frontier_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r98e68bd5abe3449080d3bc07b4a1445c.scope; invocation ID: 6f81c95d9a8e4e47a8a70081cdfde6ff
