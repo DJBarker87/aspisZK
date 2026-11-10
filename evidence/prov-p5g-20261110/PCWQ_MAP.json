@@ -1,0 +1,388 @@
+{
+ "schema": "PCWQ_MAP/1",
+ "target_established": false,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "pool_revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+ "op16": {
+  "installed_by": "WAdm_NativeInstall.on_run installs the native op16 (writer_slot, other_slots) (evidence/writer-adm-20261025/HANDOFF.md); the model WAdm_model.rs was checked by Kani against the unchanged shipped verifier::checkpoint (WAdm_KANI001)",
+  "frozen_function": "aspis_r1_cost_probe::verifier::checkpoint",
+  "file": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "lines": "326-341",
+  "helpers": {
+   "put": "crates/aspis-r1-cost-probe/src/verifier.rs:324",
+   "put_k": "crates/aspis-r1-cost-probe/src/verifier.rs:325",
+   "checkpoint_size": "crates/aspis-r1-cost-probe/src/verifier.rs:32",
+   "CHECKPOINT_FIXED": "crates/aspis-r1-cost-probe/src/verifier.rs:18",
+   "Variant::tag/folds/final_len": "crates/aspis-r1-cost-probe/src/transport.rs:6,8,9",
+   "QM31::write_le_bytes": "crates/aspis-core/src/field.rs:1028",
+   "M31::to_le_bytes": "crates/aspis-core/src/field.rs:248",
+   "WideExact::to_le_bytes": "crates/aspis-core/src/field/wide_exact.rs:273"
+  },
+  "call_chain": "programs/r1-cost-probe/src/lib.rs:42 first -> :49-50 first_decoded -> verifier::tx1 -> crates/aspis-r1-cost-probe/src/verifier/candidate.rs:288 `checkpoint(&p,&a,proof,public_bytes,hash)` (candidate.rs is mounted at verifier.rs:515)",
+  "other_callers": "crates/aspis-r1-cost-probe/src/eight_way.rs:113 (feature audit-eight-way, audit only, not the release entrypoint)",
+  "pool_b936275": "checked: programs/aspis-pool has no counterpart (only pair_cu_checkpoint CU markers and tests); op16 lives in crates/aspis-r1-cost-probe at 4bb3b3f"
+ },
+ "definitions": [
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_putK",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:28:0-30:1",
+   "frozen_counterpart": "verifier::put_k",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:325",
+   "class": "EQUALITY_PROVED",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_putK",
+    "WAdm_Fissioned.PRVQ.E_putK_fun",
+    "WAdm_Fissioned.PRVQ.E_wlb"
+   ],
+   "depends_on": [],
+   "note": "fresh put_k (with the fresh QM31::write_le_bytes and M31::to_le_bytes bodies, aspis-core field.rs 1028 and 248) equals the gate constant by rfl; leaf types TYPE_ISOMORPHISM in q2"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_early_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:21:4-21:60",
+   "frozen_counterpart": "verifier::checkpoint_loop1.body",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:331:4-331:71",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_body1"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "body-level function equality fresh = gate (same iterator-next constant on both sides)"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_early_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:21:4-21:60",
+   "frozen_counterpart": "verifier::checkpoint_loop1",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:331:4-331:71",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop1",
+    "WAdm_Fissioned.PRVQ.E_loop1_fun"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "function equality fresh loop = gate loop"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_early",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:20:0-22:1",
+   "frozen_counterpart": "(none: the frozen source writes the segment inline in checkpoint as `into_iter` of an array literal then the loop)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_early"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "model helper; cleared through the continuation-form equality of the frozen iterator-plus-loop prefix"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_tail_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:25:4-25:60",
+   "frozen_counterpart": "verifier::checkpoint_loop5.body",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:336:4-336:47",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_body5"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "body-level function equality fresh = gate (same iterator-next constant on both sides)"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_tail_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:25:4-25:60",
+   "frozen_counterpart": "verifier::checkpoint_loop5",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:336:4-336:47",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop5",
+    "WAdm_Fissioned.PRVQ.E_loop5_fun"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "function equality fresh loop = gate loop"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_tail",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:24:0-26:1",
+   "frozen_counterpart": "(none: the frozen source writes the segment inline in checkpoint as `into_iter` of an array literal then the loop)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_tail"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "model helper; cleared through the continuation-form equality of the frozen iterator-plus-loop prefix"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_queries_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:33:4-33:60",
+   "frozen_counterpart": "verifier::checkpoint_loop2.body",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:333:4-333:65",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_body2"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "body-level function equality fresh = gate (same iterator-next constant on both sides)"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_queries_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:33:4-33:60",
+   "frozen_counterpart": "verifier::checkpoint_loop2",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:333:4-333:65",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop2",
+    "WAdm_Fissioned.PRVQ.E_loop2_fun"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "function equality fresh loop = gate loop"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_queries",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:32:0-34:1",
+   "frozen_counterpart": "(none: the frozen source writes the segment inline in checkpoint as `into_iter` of an array literal then the loop)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_queries"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "model helper; cleared through the continuation-form equality of the frozen iterator-plus-loop prefix"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_semantic_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:37:4-37:44",
+   "frozen_counterpart": "verifier::checkpoint_loop3.body",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:334:4-334:100",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_body3"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "body-level function equality fresh = gate (same iterator-next constant on both sides)"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_semantic_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:37:4-37:44",
+   "frozen_counterpart": "verifier::checkpoint_loop3",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:334:4-334:100",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop3",
+    "WAdm_Fissioned.PRVQ.E_loop3_fun"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "function equality fresh loop = gate loop"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_semantic",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:36:0-38:1",
+   "frozen_counterpart": "(none: the frozen source writes the segment inline in checkpoint as `into_iter` of an array literal then the loop)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_semantic"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "model helper; cleared through the continuation-form equality of the frozen iterator-plus-loop prefix"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_roots_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:17:4-17:55",
+   "frozen_counterpart": "verifier::checkpoint_loop0.body (iterates `&p.roots`, a slice::Iter; the gate iterates the array by value)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:330:4-330:55",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.F_loop0",
+    "WAdm_Fissioned.PRVQ.G_roots"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "different iterator representation: related by closed form fold over the remaining list"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_roots_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:17:4-17:55",
+   "frozen_counterpart": "verifier::checkpoint_loop0",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:330:4-330:55",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop0"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "checkpoint_loop0 it out = WAdm_roots_loop (it.slice.val.drop it.i) out"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_roots",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:16:0-18:1",
+   "frozen_counterpart": "(none: inline `for root in &p.roots`)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_roots"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": ""
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:41:4-41:44",
+   "frozen_counterpart": "verifier::checkpoint_loop4.body / checkpoint_loop4_loop0.body (nested loops over SecureCirclePoint then [x,y]; the gate has one flat loop over four QM31)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:335:4-335:108",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.F_loop4",
+    "WAdm_Fissioned.PRVQ.F_loop4_0",
+    "WAdm_Fissioned.PRVQ.G_coord",
+    "WAdm_Fissioned.PRVQ.coord_fold"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": ""
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_coordinates_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:41:4-41:44",
+   "frozen_counterpart": "verifier::checkpoint_loop4",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:335:4-335:108",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop4"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": "checkpoint_loop4 pts out = WAdm_coordinates_loop (pts.flatMap (fun z => [z.x, z.y])) out"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_coordinates",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:40:0-42:1",
+   "frozen_counterpart": "(none: inline nested loop)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:335",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_coord",
+    "WAdm_Fissioned.PRVQ.arr2"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)"
+   ],
+   "note": ""
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_weights_loop.body",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:45:4-45:44",
+   "frozen_counterpart": "verifier::checkpoint_loop6.body (iterates `&a.weights`, slice::Iter; the gate iterates the Vec by value)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:338:4-338:45",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.F_loop6",
+    "WAdm_Fissioned.PRVQ.G_weights"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "alloc::vec::{impl IntoIterator for &Vec<T>}::into_iter (external in the fresh emission, no model in the Aeneas library; carried as the parameter SVI with premise hS; nearest row HM-B, row assignment is the lead decision)"
+   ],
+   "note": ""
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_weights_loop",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:45:4-45:44",
+   "frozen_counterpart": "verifier::checkpoint_loop6",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:338:4-338:45",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.E_loop6"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "alloc::vec::{impl IntoIterator for &Vec<T>}::into_iter (external in the fresh emission, no model in the Aeneas library; carried as the parameter SVI with premise hS; nearest row HM-B, row assignment is the lead decision)"
+   ],
+   "note": "premise v.val = it.slice.val.drop it.i"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_weights",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:44:0-46:1",
+   "frozen_counterpart": "(none: inline `for &x in &a.weights`)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:338",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.K_weights"
+   ],
+   "depends_on": [
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "alloc::vec::{impl IntoIterator for &Vec<T>}::into_iter (external in the fresh emission, no model in the Aeneas library; carried as the parameter SVI with premise hS; nearest row HM-B, row assignment is the lead decision)"
+   ],
+   "note": "premise hS on the parameter SVI"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_fields",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:10:0-14:1",
+   "frozen_counterpart": "(none: the frozen checkpoint reads the Prepared and Accumulator fields directly)",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "GATE_ONLY_HELPER",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.checkpoint_eq",
+    "WAdm_Fissioned.PRVQ.arr2"
+   ],
+   "depends_on": [],
+   "note": "record builder; unfolded inside checkpoint_eq"
+  },
+  {
+   "key": "WAdm_Fissioned.WAdm_model.WAdm_checkpoint",
+   "gate_source": "evidence/writer-adm-20261025/WAdm_NativeFixture/WAdm_model.rs:50:0-62:1",
+   "frozen_counterpart": "verifier::checkpoint",
+   "frozen_lines": "crates/aspis-r1-cost-probe/src/verifier.rs:326-341",
+   "class": "DEPENDS_ON_LIBRARY_TRUST",
+   "theorems": [
+    "WAdm_Fissioned.PRVQ.checkpoint_eq",
+    "WAdm_Fissioned.PRVQ.cs_S2"
+   ],
+   "depends_on": [
+    "HM-D (array: core::array::iter::{IntoIterator for [T;N]}::into_iter and {Iterator for IntoIter}::next; the gate gives them concrete list definitions, the fresh emission leaves them external)",
+    "HM-B (core slice iterator: core::slice::iter::{Iterator for Iter}::next and <&[T;N] as IntoIterator>::into_iter, both defined in the Aeneas library as slice+index)",
+    "alloc::vec::{impl IntoIterator for &Vec<T>}::into_iter (external in the fresh emission, no model in the Aeneas library; carried as the parameter SVI with premise hS; nearest row HM-B, row assignment is the lead decision)",
+    "aspis_core::field::wide_exact::WideExact::to_le_bytes (Aspis function, left external by the fresh emission; the gate gives it the hand model AspisR1.CheckpointBytesE.rawBytes; bound by name, CONDITIONAL_ON_BINDING)"
+   ],
+   "note": "restricted domain: variant = S2, a.next = 10, weights length 64 (the gate hard-codes them); not an all-input equality"
+  }
+ ]
+}

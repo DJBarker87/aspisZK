@@ -1,0 +1,54 @@
+
+/-! function-level equalities of the one-to-one pieces (independent of the iterator model: same `next` constant on both sides) -/
+theorem E_putK_fun : @PRVFresh_WAdm_q1.verifier.put_k = @WAdm_model.WAdm_putK := rfl
+
+theorem E_body1 : @PRVFresh_WAdm_q1.verifier.checkpoint_loop1.body = @WAdm_model.WAdm_early_loop.body := by
+  funext it out
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop1.body WAdm_model.WAdm_early_loop.body
+  first
+  | rfl
+  | (congr 1
+     funext r
+     obtain ⟨o, it1⟩ := r
+     cases o with
+     | none => rfl
+     | some x => simp only [PRVFresh_WAdm_q1.verifier.put, bind_assoc])
+
+theorem E_body5 : @PRVFresh_WAdm_q1.verifier.checkpoint_loop5.body = @WAdm_model.WAdm_tail_loop.body := by
+  funext it out
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop5.body WAdm_model.WAdm_tail_loop.body
+  first
+  | rfl
+  | (congr 1
+     funext r
+     obtain ⟨o, it1⟩ := r
+     cases o with
+     | none => rfl
+     | some x => simp only [PRVFresh_WAdm_q1.verifier.put, bind_assoc])
+
+theorem E_body2 : @PRVFresh_WAdm_q1.verifier.checkpoint_loop2.body = @WAdm_model.WAdm_queries_loop.body := rfl
+
+theorem E_body3 : @PRVFresh_WAdm_q1.verifier.checkpoint_loop3.body = @WAdm_model.WAdm_semantic_loop.body := by
+  funext it out
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop3.body WAdm_model.WAdm_semantic_loop.body
+  congr 1
+  funext r
+  obtain ⟨o, it1⟩ := r
+  cases o with
+  | none => rfl
+  | some x => simp [WAdm_model.WAdm_putK, lift, Array.to_slice_mut, E_wlb]
+
+theorem E_loop1_fun : @PRVFresh_WAdm_q1.verifier.checkpoint_loop1 = @WAdm_model.WAdm_early_loop := by
+  funext it out; exact E_loop1 it out
+theorem E_loop2_fun : @PRVFresh_WAdm_q1.verifier.checkpoint_loop2 = @WAdm_model.WAdm_queries_loop := by
+  funext it out; exact E_loop2 it out
+theorem E_loop3_fun : @PRVFresh_WAdm_q1.verifier.checkpoint_loop3 = @WAdm_model.WAdm_semantic_loop := by
+  funext it out; exact E_loop3 it out
+theorem E_loop5_fun : @PRVFresh_WAdm_q1.verifier.checkpoint_loop5 = @WAdm_model.WAdm_tail_loop := by
+  funext it out; exact E_loop5 it out
+
+/-- non-vacuity of the binding premise of `checkpoint_eq`: a parameter meeting it exists (the model that mirrors the
+library's `&[T; N]` case) -/
+theorem hS_satisfiable : ∃ S : {T : Type} → (A : Type) → alloc.vec.Vec T → Result (core.slice.iter.Iter T),
+    ∀ w : alloc.vec.Vec aspis_core.field.QM31, S Global w = ok ⟨⟨w.val, w.property⟩, 0⟩ :=
+  ⟨fun {_} _ w => ok ⟨⟨w.val, w.property⟩, 0⟩, fun _ => rfl⟩

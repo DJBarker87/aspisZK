@@ -1,0 +1,308 @@
+
+theorem vec_nx_nil {T : Type} (v : alloc.vec.into_iter.IntoIter T) (h : (v : alloc.vec.Vec T).val = []) :
+    alloc.vec.into_iter.IteratorIntoIter.next v = ok (none, v) := by
+  match v, h with
+  | ⟨[], _⟩, _ => rfl
+
+theorem vec_nx_cons {T : Type} (v : alloc.vec.into_iter.IntoIter T) (x : T) (xs : List T)
+    (h : (v : alloc.vec.Vec T).val = x :: xs) :
+    ∃ s' : alloc.vec.into_iter.IntoIter T, (s' : alloc.vec.Vec T).val = xs ∧
+      alloc.vec.into_iter.IteratorIntoIter.next v = ok (some x, s') := by
+  match v, h with
+  | ⟨hd :: tl, hp⟩, h =>
+    have hx : hd = x := (List.cons.inj h).1
+    have hxs : tl = xs := (List.cons.inj h).2
+    subst hx; subst hxs
+    exact ⟨⟨tl, by simp at hp; omega⟩, rfl, rfl⟩
+
+theorem arr_next_cons {T : Type} {N : Usize} (x : T) (xs : List T) :
+    core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next (N := N) (x :: xs) = ok (some x, xs) := rfl
+
+/-! step functions (the per-element bodies shared by both sides) -/
+def stepRoot (root : Array Std.U8 32#usize) (out : alloc.vec.Vec Std.U8) : Result (alloc.vec.Vec Std.U8) := do
+  let s ← lift (Array.to_slice root)
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+
+def stepE (x : aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    Result (alloc.vec.Vec Std.U8) := do
+  let a ← aspis_core.field.wide_exact.WideExact.to_le_bytes x
+  let s ← lift (Array.to_slice a)
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+
+def stepQ (x : Std.U32) (out : alloc.vec.Vec Std.U8) : Result (alloc.vec.Vec Std.U8) := do
+  let a ← lift (core.num.U32.to_le_bytes x)
+  let s ← lift (Array.to_slice a)
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+
+def stepK (x : aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) : Result (alloc.vec.Vec Std.U8) :=
+  WAdm_model.WAdm_putK out x
+
+def stepPt (z : aspis_core.circle.SecureCirclePoint) (out : alloc.vec.Vec Std.U8) :
+    Result (alloc.vec.Vec Std.U8) := do
+  let iter2 ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter (Array.make 2#usize [ z.x, z.y ])
+  PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0 iter2 out
+
+
+
+theorem E_wlb (x : aspis_core.field.QM31) (out : Slice Std.U8) :
+    PRVFresh_WAdm_q1.aspis_core.field.QM31.write_le_bytes x out = aspis_core.field.QM31.write_le_bytes x out := rfl
+
+theorem H3 (x : aspis_core.field.QM31) (o : alloc.vec.Vec Std.U8) (xs : List aspis_core.field.QM31) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop3.body (x :: xs) o = (do let o1 ← stepK x o; ok (cont (xs, o1))) := by
+  simp [PRVFresh_WAdm_q1.verifier.checkpoint_loop3.body, arr_next_cons, stepK,
+    WAdm_model.WAdm_putK, lift, Array.to_slice_mut, E_wlb]
+
+theorem H4 (x : aspis_core.field.QM31) (o : alloc.vec.Vec Std.U8) (xs : List aspis_core.field.QM31) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0.body (x :: xs) o = (do let o1 ← stepK x o; ok (cont (xs, o1))) := by
+  simp [PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0.body, arr_next_cons, stepK,
+    WAdm_model.WAdm_putK, lift, Array.to_slice_mut, E_wlb]
+
+/-! gate loops in closed form -/
+theorem G_roots (xs : List (Array Std.U8 32#usize)) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_roots_loop xs out = fold stepRoot xs out := by
+  unfold WAdm_model.WAdm_roots_loop
+  refine loop_fold_gen _ stepRoot (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_roots_loop.body, arr_next_cons, bind_tc_ok, stepRoot, bind_assoc] <;> rfl⟩
+
+theorem G_early (xs : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_early_loop xs out = fold stepE xs out := by
+  unfold WAdm_model.WAdm_early_loop
+  refine loop_fold_gen _ stepE (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_early_loop.body, arr_next_cons, bind_tc_ok, stepE, bind_assoc] <;> rfl⟩
+
+theorem G_tail (xs : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_tail_loop xs out = fold stepE xs out := by
+  unfold WAdm_model.WAdm_tail_loop
+  refine loop_fold_gen _ stepE (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_tail_loop.body, arr_next_cons, bind_tc_ok, stepE, bind_assoc] <;> rfl⟩
+
+theorem G_queries (xs : List Std.U32) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_queries_loop xs out = fold stepQ xs out := by
+  unfold WAdm_model.WAdm_queries_loop
+  refine loop_fold_gen _ stepQ (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_queries_loop.body, arr_next_cons, bind_tc_ok, stepQ, bind_assoc] <;> rfl⟩
+
+theorem G_semantic (xs : List aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_semantic_loop xs out = fold stepK xs out := by
+  unfold WAdm_model.WAdm_semantic_loop
+  refine loop_fold_gen _ stepK (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_semantic_loop.body, arr_next_cons, bind_tc_ok, stepK] <;> rfl⟩
+
+theorem G_coord (xs : List aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_coordinates_loop xs out = fold stepK xs out := by
+  unfold WAdm_model.WAdm_coordinates_loop
+  refine loop_fold_gen _ stepK (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by simp only [WAdm_model.WAdm_coordinates_loop.body, arr_next_cons, bind_tc_ok, stepK] <;> rfl⟩
+
+theorem G_weights (v : alloc.vec.Vec aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    WAdm_model.WAdm_weights_loop v out = fold stepK v.val out := by
+  unfold WAdm_model.WAdm_weights_loop
+  refine loop_fold_gen _ stepK (fun v => (v : alloc.vec.Vec aspis_core.field.QM31).val) ?_ ?_ _ v out rfl
+  · intro s out hs
+    simp only [WAdm_model.WAdm_weights_loop.body, vec_nx_nil s hs, bind_tc_ok] <;> rfl
+  · intro s out x xs hs
+    obtain ⟨s', h1, h2⟩ := vec_nx_cons s x xs hs
+    exact ⟨s', h1, by simp only [WAdm_model.WAdm_weights_loop.body, h2, bind_tc_ok, stepK] <;> rfl⟩
+
+/-! fresh (frozen 4bb3b3f emission) loops in closed form -/
+theorem F_loop0 (it : core.slice.iter.Iter (Array Std.U8 32#usize)) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop0 it out = fold stepRoot (it.slice.val.drop it.i) out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop0
+  refine loop_fold_gen _ stepRoot (fun it => it.slice.val.drop it.i) ?_ ?_ _ it out rfl
+  · intro s out hs
+    obtain ⟨sl, i⟩ := s
+    simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop0.body, sliceIter_nil sl i hs, bind_tc_ok] <;> rfl
+  · intro s out x xs hs
+    obtain ⟨sl, i⟩ := s
+    obtain ⟨h1, h2⟩ := sliceIter_cons sl i x xs hs
+    exact ⟨⟨sl, i + 1⟩, h2, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop0.body, h1, bind_tc_ok, stepRoot, bind_assoc] <;> rfl⟩
+
+theorem F_loop6 (it : core.slice.iter.Iter aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop6 it out = fold stepK (it.slice.val.drop it.i) out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop6
+  refine loop_fold_gen _ stepK (fun it => it.slice.val.drop it.i) ?_ ?_ _ it out rfl
+  · intro s out hs
+    obtain ⟨sl, i⟩ := s
+    simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop6.body, sliceIter_nil sl i hs, bind_tc_ok] <;> rfl
+  · intro s out x xs hs
+    obtain ⟨sl, i⟩ := s
+    obtain ⟨h1, h2⟩ := sliceIter_cons sl i x xs hs
+    exact ⟨⟨sl, i + 1⟩, h2, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop6.body, h1, bind_tc_ok, stepK, WAdm_model.WAdm_putK,
+        PRVFresh_WAdm_q1.verifier.put_k] <;> rfl⟩
+
+theorem F_loop1 (xs : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop1 xs out = fold stepE xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop1
+  refine loop_fold_gen _ stepE (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop1.body, arr_next_cons, bind_tc_ok, stepE,
+        PRVFresh_WAdm_q1.verifier.put] <;> rfl⟩
+
+theorem F_loop5 (xs : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop5 xs out = fold stepE xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop5
+  refine loop_fold_gen _ stepE (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop5.body, arr_next_cons, bind_tc_ok, stepE,
+        PRVFresh_WAdm_q1.verifier.put] <;> rfl⟩
+
+theorem F_loop2 (xs : List Std.U32) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop2 xs out = fold stepQ xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop2
+  refine loop_fold_gen _ stepQ (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop2.body, arr_next_cons, bind_tc_ok, stepQ, bind_assoc] <;> rfl⟩
+
+theorem F_loop3 (xs : List aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop3 xs out = fold stepK xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop3
+  refine loop_fold_gen _ stepK (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, H3 x out xs⟩
+
+theorem F_loop4_0 (xs : List aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0 xs out = fold stepK xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0
+  refine loop_fold_gen _ stepK (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, H4 x out xs⟩
+
+theorem F_loop4 (xs : List aspis_core.circle.SecureCirclePoint) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop4 xs out = fold stepPt xs out := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_loop4
+  refine loop_fold_gen _ stepPt (fun s => s) ?_ ?_ _ xs out rfl
+  · intro s out hs
+    have hs' : s = [] := hs
+    subst hs'
+    rfl
+  · intro s out x xs hs
+    have hs' : s = x :: xs := hs
+    subst hs'
+    exact ⟨xs, rfl, by
+      simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop4.body, arr_next_cons, bind_tc_ok, stepPt, bind_assoc] <;> rfl⟩
+
+/-! pointwise equalities -/
+theorem stepPt_eq (z : aspis_core.circle.SecureCirclePoint) (out : alloc.vec.Vec Std.U8) :
+    stepPt z out = fold stepK [z.x, z.y] out := by
+  unfold stepPt
+  rw [show Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter (Array.make 2#usize [ z.x, z.y ])
+      = ok [z.x, z.y] from rfl]
+  simp only [bind_tc_ok, F_loop4_0]
+
+theorem coord_fold (pts : List aspis_core.circle.SecureCirclePoint) (out : alloc.vec.Vec Std.U8) :
+    fold stepPt pts out = fold stepK (pts.flatMap (fun z => [z.x, z.y])) out := by
+  induction pts generalizing out with
+  | nil => rfl
+  | cons z zs ih =>
+    simp only [List.flatMap_cons, fold_append, fold, stepPt_eq, ih]
+
+theorem E_loop0 (it : core.slice.iter.Iter (Array Std.U8 32#usize)) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop0 it out
+      = WAdm_model.WAdm_roots_loop (it.slice.val.drop it.i) out := by
+  rw [F_loop0, G_roots]
+
+theorem E_loop1 (it : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop1 it out = WAdm_model.WAdm_early_loop it out := by
+  rw [F_loop1, G_early]
+
+theorem E_loop2 (it : List Std.U32) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop2 it out = WAdm_model.WAdm_queries_loop it out := by
+  rw [F_loop2, G_queries]
+
+theorem E_loop3 (it : List aspis_core.field.QM31) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop3 it out = WAdm_model.WAdm_semantic_loop it out := by
+  rw [F_loop3, G_semantic]
+
+theorem E_loop4 (it : List aspis_core.circle.SecureCirclePoint) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop4 it out
+      = WAdm_model.WAdm_coordinates_loop (it.flatMap (fun z => [z.x, z.y])) out := by
+  rw [F_loop4, coord_fold, G_coord]
+
+theorem E_loop5 (it : List aspis_core.field.wide_exact.WideExact) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop5 it out = WAdm_model.WAdm_tail_loop it out := by
+  rw [F_loop5, G_tail]
+
+theorem E_loop6 (it : core.slice.iter.Iter aspis_core.field.QM31) (v : alloc.vec.Vec aspis_core.field.QM31)
+    (hv : v.val = it.slice.val.drop it.i) (out : alloc.vec.Vec Std.U8) :
+    PRVFresh_WAdm_q1.verifier.checkpoint_loop6 it out = WAdm_model.WAdm_weights_loop v out := by
+  rw [F_loop6, G_weights, hv]
+
+theorem E_putK (out : alloc.vec.Vec Std.U8) (x : aspis_core.field.QM31) :
+    PRVFresh_WAdm_q1.verifier.put_k out x = WAdm_model.WAdm_putK out x := rfl
