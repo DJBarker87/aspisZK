@@ -335,3 +335,159 @@ items (i)–(iii) of the separate limb invariant, which keeps the ops records an
 statements unchanged.
 
 Target not yet established.
+
+## 9. Item (4) complete (continuation worker, 2026-11-10)
+
+Two scopes were used, L016 and L017, both accepted on the first attempt (17 of the job's
+scopes in total; this worker's budget is 45, 2 used). NPH_R22Loops2 took 2.75 s and
+5,425,672 KiB; NPH_R22Loops3 took 2.57 s and 5,647,324 KiB. Swap was 0 in both. All 31
+`#print axioms` lines are within [propext, Classical.choice, Quot.sound].
+
+All 30 remaining single-increment bodies are judged. Each one reuses the generic
+`NPH_R22Loops.usize_succ_ok` and has one lemma of its own.
+
+- **TOTAL (a), 5 bodies.** The bodies are NCX zero_loop, NCV zero_loop, NCV eq_digest_loop,
+  and NCV valid_sequences_loop and zero_sequences_loop. The last two are outside both top
+  cones. Each body is checked-ok on every input. Its indexing is in bounds under its own
+  guard, and its only arithmetic is the guarded `i + 1`.
+- **DIRECT (c), 25 bodies.** These are the Poseidon lane loops, array_from_fn_copy_loop,
+  finish_owned_loop.body, finish_query_dot_loop.body, the two samplers, semantic_boundary,
+  values_owned_reference, sort_rows, the NCX and NCV equal_loop bodies (an index into `v` can
+  fail when `v` is shorter, so they are not TOTAL), and the three claim range-iterator bodies.
+  Two pieces of evidence support each one:
+  1. A mechanical screen (NPH_loops_update.py, output NPH_LOOPS_SCREEN.json). It finds that
+     the body's only overflow-checked binding is one `x + 1#usize`. The screen is textual.
+  2. A Lean lemma `<name>_step`. It proves that increment safe under the guard as the body
+     writes it.
+
+  For the range-iterator bodies, the guard is the `some point` result of IteratorRange.next.
+  `NHI_RangeProgress.some_next`, which is in the replayed closure, gives `point < iter.end`.
+  semantic_initial_and_absorption has a different increment, `poseidon2.RATE + 1`. It is the
+  constant 9 (`semantic_initial_rate_succ_ok`).
+
+  The reasoning matches fibre_point. Indexing, update, comparisons and `&&` are not overflow
+  checks: bounds checks stay on in both profiles, so the two semantics agree on them.
+  Callees are separate cone definitions with their own R22 judgment. So when the callees
+  agree, the checked and wrapping executions of the body coincide.
+
+**Counts now (225 checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 (64 checked, 3 mixed) |
+| DIRECT (c) | 26 |
+| domain lemma proved, caller join open | 31 (28 checked, 3 mixed) |
+| precondition proved from the callers (b) | 0 |
+| open | 101 (99 checked, 2 mixed) |
+
+The checked and mixed definitions touch 396 CLOSED rows. 365 of them still depend on at least
+one open or domain-only definition, and 31 are served only by TOTAL or DIRECT definitions. The
+row gain is small because the field kernels (31 domain-only definitions, up to 186 rows
+each) and the accumulator families lie under almost every row.
+
+The `counts_by_class` block in NPH_R22_CONE.json had been left at the L009 values. It is now
+recomputed from the per-definition judgments.
+
+The eight definitions outside both top cones are unchanged in membership. Their judgments now
+stand as follows.
+- NCV_Reference valid_sequences_loop.body and zero_sequences_loop.body: TOTAL (this batch).
+- AspisR1BatchedWeightsExtraction BatchedWeights.push and push_loop.body: open.
+- S8Kani2MutableExtraction BatchedWeights.push and push_loop.body: open.
+- AspisR1FinishRelationCurrent.verifier.finish_relation_round: open.
+- NDH_TranscriptReference.absorb_ref: open.
+
+Next: items (i)–(iii) of the separate limb ≤ P invariant (lead decision of section 8).
+
+Target not yet established.
+
+## 10. Limb ≤ P invariant, items (i)–(iii), and row_loop (continuation worker, 2026-11-10)
+
+Five more scopes were used: L018–L022, 7 of this worker's 45. L020 and L021 failed on the
+reduction of a let-pair in the proof script. The script was changed after each failure.
+Every accepted module is within [propext, Classical.choice, Quot.sound]. Peak RSS was
+6,022,644 KiB (L018) and swap was 0. The lead decision holds: no ops interface and no merged
+module is changed. Each statement is a separate lemma about the existing definitions.
+
+**(ii) Installer lemmas, NPH_R22Installers (L018).** The weak domain is `W x := x.val ≤ P`.
+For the M31-level callbacks, each record's constants are W and each of its callbacks maps W
+inputs to an ok W output.
+- `QueryM31W` (op4–op8: constants 0 and 1, QA M31.sub, QA M31.mul, and add x x or
+  S7 double) for:
+  - NBF_BasisInstall.install (any ops)
+  - SAQ_Query.install (any ops)
+  - LIBC_QueryOps.seed
+  - NJJ_QueryOps.concrete
+- `GeometryM31W` (op7–op10) for SAQ_Geometry.install.
+- R17CurrentM31Semantics.operations: mul, double and sub.
+- R17CurrentCM31Semantics.operations: new and mul, the latter through QA_CM31_mul_weak.
+- S7Kani3BasisOuter.double and t2.
+
+Not covered:
+- query op1–op3 and op9–op21 (wide/extension callbacks: SAQ_Arithmetic.add/mulK,
+  SAQ_MixedSource.mulE, opening, line/circle queries, dots, decoder read, push);
+- geometry op14/op15 (SAQ_Geometry.line and point, through line_node and fibre_point);
+- NFN_NEW_GeometryContextGeneric.replace;
+- the RawExtractedSemanticCallOpsV20.resultMap glue;
+- the toQM conversions (NNU_QueryFieldBase, CurrentWideBaseBridge).
+
+**(i) Producer lemmas, NPH_R22Producers (L019).**
+- `decodeK_strict_limbs_lt` and `s8_strict_limbs_lt`: every QM31 that the DecodeKFullV10 or
+  S8OwnedP6 strict decoder returns has all four limbs < P. These follow from the closure
+  theorems success_has_strict_limbs.
+- For the CW and QA copies, M31.double, CM31.add/sub, mul_by_r and QM31.add/mul (plus CW
+  QM31.sub) map limbs ≤ P to ok limbs ≤ P. This extends NPH_R22Weak from the 28 kernels to
+  their field-module callers.
+- The `& P` mask producer is the existing `NPH_R22FieldRef.and_P_le`.
+
+Not done: producer lemmas for the samplers and the constants (beyond the 33 already TOTAL),
+and the same tower lemmas for the SM, SC, FIq and R72 copies. The pattern is identical: one
+templated block per copy.
+
+**(iii) Reached-execution invariant: not composed.** No kernel's precondition is yet proved at
+its reached call sites, so no definition moves from domain-only to (b). The hypotheses
+canonC/canonQ/canonE of NHV_NEB_FieldDomains are not yet discharged. Two findings bear on
+the walk.
+- The census lists 0 callers for AspisR65Field M31.add/neg and AspisR66Field M31.add/sub/neg
+  (22–25 rows each), yet they are in the cone. They must be reached through a path the
+  literal-name census does not see, for example a trait instance or a callback record. That
+  path has to be located before their join can be stated.
+- The wide/extension callbacks above sit between the decoders and the kernels on the
+  094/345 path. The join for SelectedMaskProbe/CurrentWide/QA M31.add/sub and CM31.mul
+  (110–186 rows each) needs the W statement for those callbacks first.
+
+**row_loop.body is DIRECT (NPH_R22RowLoop, L022).** transport.TAU is the constant
+[3,4,2,0,1]. Both semantics bounds-check the read TAU[d], so any iteration the wrapping
+program completes has d < 5. Under that condition `row_loop_body_ok` proves the checked body
+ok. For d ≥ 5 both semantics reject. So the reached-domain fact (iter.end ≤ 16) is not
+needed, and the judgment is DIRECT for every input.
+
+**Counts now (225 checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 (64 checked, 3 mixed) |
+| DIRECT (c) | 27 (26 checked, 1 mixed) |
+| domain lemma proved, caller join open | 30 (28 checked, 2 mixed) |
+| precondition proved from the callers (b) | 0 |
+| open | 101 (99 checked, 2 mixed) |
+
+Rows: 365 of 396 still depend on at least one open or domain-only definition, and 31 are
+served only by TOTAL or DIRECT definitions. row_loop's 24 rows all also depend on other
+non-closed definitions, so the row count does not move.
+
+The eight definitions outside both top cones: NCV valid_sequences_loop.body and
+zero_sequences_loop.body are TOTAL. The BatchedWeights push/push_loop.body pairs (×2),
+finish_relation_round and NDH absorb_ref remain open.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was
+found.
+
+Next concrete deliverables, in order:
+1. W lemmas for the wide/extension query callbacks (SAQ_Arithmetic.add/mulK, mulE) and the
+   tower lemmas for the SM/SC/FIq/R72 copies.
+2. Locate how the R65/R66 kernels are reached.
+3. The bind-stepping join along the 094 body (NOC_ConvLeaves/Semantic/094) for the
+   SelectedMaskProbe kernels, discharging canonC/canonQ/canonE of NHV_NEB_FieldDomains from
+   the decoder and installer lemmas.
+
+Target not yet established.
