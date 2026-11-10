@@ -54,5 +54,19 @@ add('D01a','prog','AdapterRw split a: all D01 roots except require_distinct_acco
  ['crate::first_decoded','crate::observer','crate::r1_pool_adapter::owned::require_readonly_buffer','crate::r1_pool_adapter::owned::require_verifier_checkpoint','crate::r1_pool_adapter::owned::require_zero','crate::r1_pool_adapter::readonly_buffer_meta_ok','crate::r1_pool_adapter::owned::_::data_len'],
  opaque=['aspis_r1_cost_probe::verifier::tx1','crate::error'],modules=['AdapterRwModel'],basis='Changed shape after E004 (extended Not_found) and E005 (original: returns inside nested loops in require_distinct_accounts).')
 add('D01b','prog','AdapterRw split b: require_distinct_accounts alone',['crate::r1_pool_adapter::owned::require_distinct_accounts'],modules=['AdapterRwModel'],basis='Changed shape after E004/E005.')
+add('D16a','core','field inverses without eq: M31::inv, CM31::inv/inv_with, QM31::try_inv, square_n',
+ ['crate::field::square_n','crate::field::_::inv','crate::field::_::inv_with','crate::field::_::try_inv'],include=[],modules=['AspisR72Sampler.Funs'],basis='Changed shape after E025 (Charon driver failure; _::eq selector suspected).')
+add('D14r','st','asq8_payment_reference (cfg aeneas_ref reference module of the frozen source, NOT in the shipped build)',
+ ['crate::pool_v1::pair_forest_terminal::asq8_payment_reference::encode_common','crate::pool_v1::pair_forest_terminal::asq8_reference_envelope'],modules=['NFY_Part043'],basis='E023: module is cfg(any(test,kani,aeneas_ref)) so absent from the shipped release build; this run adds --cfg aeneas_ref (a non-shipped configuration of the frozen source).')
+S[-1]['rustflags_extra']='--cfg aeneas_ref'
+add('D10a','cp','candidate batch fns with fast_pairing push opaque',
+ ['crate::verifier::candidate::batch_merkle','crate::verifier::candidate::batch_merkle_values','crate::verifier::candidate::batch_tree','crate::verifier::candidate::query_loop'],opaque=['crate::fast_pairing::canonical::_::push'],modules=['Port3_NativeBatchBody','Port3_NativeQueryBody'],basis='Changed shape after E019 (internal error at fast_pairing.rs 118-121).')
+add('D11a','cp','verifier BatchedWeights::new',['crate::verifier::_::new'],modules=['Port3_NativePendingBody'],basis='Split of D11 after E020.')
+add('D11b','cp','verifier read_checkpoint_weights',['crate::verifier::read_checkpoint_weights'],modules=['Port5Q2_ReaderWeights'],basis='Split of D11 after E020.')
+add('D08a','cp','transport Variant::folds',['crate::transport::_::folds'],modules=['NGN_Emitted'],basis='Split of D08 after E012.')
+add('D01c','prog','AdapterRw split c: observer, readonly_buffer_meta_ok, require_readonly_buffer, require_zero, data_len',
+ ['crate::observer','crate::r1_pool_adapter::readonly_buffer_meta_ok','crate::r1_pool_adapter::owned::require_readonly_buffer','crate::r1_pool_adapter::owned::require_zero','crate::r1_pool_adapter::owned::_::data_len'],modules=['AdapterRwModel'],basis='Split of D01a after E016.')
+add('D01d','prog','AdapterRw split d: first_decoded, require_verifier_checkpoint',
+ ['crate::first_decoded','crate::r1_pool_adapter::owned::require_verifier_checkpoint'],opaque=['aspis_r1_cost_probe::verifier::tx1','crate::error'],modules=['AdapterRwModel'],basis='Split of D01a after E016.')
 (E/'PCQD_extract_specs.json').write_text(json.dumps(dict(schema='PCQD_extract_specs/1',note='roots and opacity per group; extended Aeneas first. P1g.',specs=S),indent=1)+'\n')
 print(len(S))

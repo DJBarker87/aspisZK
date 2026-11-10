@@ -24,7 +24,7 @@ def render(s,run,note=None,overrides=None):
   configuration=dict(start_from=s['start_from'],include=s.get('include',[]),opaque=s.get('opaque',[]),features=s['features'],manifest=s['manifest'],namespace=ns,crate=s['crate']),
   covers=s.get('covers'),supersedes=s.get('supersedes'),frozen_revision=REV,frozen_source_tree_git_hash=tree,
   expected_limits={'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'},
-  extra_env={'CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C overflow-checks=yes'},
+  extra_env={'CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C overflow-checks=yes'+(' '+s['rustflags_extra'] if s.get('rustflags_extra') else '')},
   p1g=dict(note=note or '',basis=s.get('basis')))
 if __name__=='__main__':
  sid,run=sys.argv[1:3];note=sys.argv[3] if len(sys.argv)>3 else None

@@ -11,9 +11,14 @@ DECL=re.compile(r'^(?:@\[[^\]]*\]\s*)*(?:noncomputable\s+)?(def|axiom|structure|
 ENTRY=re.compile(r'^/- \[([^\]]*)\]',re.M)
 out={}
 for d in sorted(EV.glob('prov-p1[a-g]-*/*_emitted/raw/*')):
+    if '--no-g' in sys.argv and 'prov-p1g' in str(d):continue
     if not d.is_dir():continue
     run=d.parent.parent.name.replace('_emitted','');pfx=run.split('_')[0]
-    if pfx not in TOOL:continue
+    if pfx not in TOOL and pfx!='PCQD':continue
+    if pfx=='PCQD':
+        pj=json.loads((d.parent.parent/(run+'_emitted')/(run+'_PINS.json')).read_text()) if False else json.loads((d.parent.parent/(run+'_PINS.json')).read_text())
+        if pj.get('exit')!=0:continue
+        TOOL['PCQD']='aeneas-original-959659a6' if pj['aeneas_tool']=='original' else 'aeneas-b59d5188-extended'
     ns=d.name
     rec={'run':run,'dir':str(d.relative_to(EV)),'tool':TOOL[pfx],'superseded_by':sup.get(run),'defs':{}, 'axioms':[]}
     for f in ('Types.lean','Funs.lean'):
@@ -28,5 +33,5 @@ for d in sorted(EV.glob('prov-p1[a-g]-*/*_emitted/raw/*')):
     if pe.exists():
         for k,n in DECL.findall(pe.read_text()):rec['axioms'].append(n)
     out[str(d.relative_to(EV))]=rec
-Path(sys.argv[1] if len(sys.argv)>1 else 'PCQD_INDEX.json').write_text(json.dumps(out,indent=0)+'\n')
+Path(sys.argv[1]).write_text(json.dumps(out,indent=0)+'\n')
 print(len(out))

@@ -1,0 +1,35 @@
+{"attempt": "PCQD_E017", "exit_status": 2, "wall_seconds": 117.6209966589231, "peak_rss_kib": "549800", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::r1_pool_adapter::owned::require_distinct_accounts", "--include", "aspis_core::field::P", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E017_emitted/repro.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_workspace/programs/r1-cost-probe/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--
+...
+ter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: `aspis-r1-cost-probe-program` (lib) generated 15 warnings (run `cargo fix --lib -p aspis-r1-cost-probe-program` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 56s
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E017_emitted/repro.llbc
+[[91mError[39m] Nested-loop returns require exactly one Option language item
+Source: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 59:0-72:1
+Compiler source: PrePasses.ml, line 840
+
+Uncaught exception:
+  
+  (Failure
+    "Nested-loop returns require exactly one Option language item\
+   \nSource: 'programs/r1-cost-probe/src/r1_pool_adapter_owned.rs', lines 59:0-72:1\
+   \nCompiler source: PrePasses.ml, line 840")
+
+Raised at Aeneas__Errors.craise_opt_span in file "Errors.ml", line 120, characters 4-23
+Called from Aeneas__Errors.craise in file "Errors.ml" (inlined), line 126, characters 2-43
+Called from Aeneas__PrePasses.lower_nested_loop_returns in file "PrePasses.ml", lines 840-841, characters 14-78
+Called from Aeneas__PrePasses.apply_passes.apply_function_pass in file "PrePasses.ml", line 3307, characters 14-26
+Called from Stdlib__List.fold_left in file "list.ml", line 123, characters 24-34
+Called from Aeneas__PrePasses.apply_passes.(fun) in file "PrePasses.ml", lines 3336-3338, characters 14-33
+Called from Stdlib__Map.Make.map in file "map.ml", line 312, characters 19-22
+Called from Stdlib__Map.Make.map in file "map.ml", line 311, characters 19-26
+Called from Aeneas__PrePasses.apply_passes in file "PrePasses.ml", lines 3328-3342, characters 4-26
+Called from Dune__exe__Main in file "Main.ml", line 734, characters 14-45
+{"attempt": "PCQD_E017", "exit": 2, "error": null}
+
+Running as unit: run-r6191b8c72d0f4f7e8e26c737f5ec78b9.scope; invocation ID: 8f5f26c6b8b84e9a98a8eae1a189417b
