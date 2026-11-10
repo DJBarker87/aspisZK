@@ -1,0 +1,116 @@
+def AspisR72Sampler.field.r24_canonical_mul : AspisR72Sampler.field.QM31 →
+  AspisR72Sampler.field.QM31 → Result (Option AspisR72Sampler.field.QM31) :=
+fun left right =>
+  have a := left.c0.a;
+  have b := left.c0.b;
+  have c := left.c1.a;
+  have d := left.c1.b;
+  have e := right.c0.a;
+  have f := right.c0.b;
+  have g := right.c1.a;
+  have h := right.c1.b;
+  if a ≥ AspisR72Sampler.field.P then ok none
+  else
+    if b ≥ AspisR72Sampler.field.P then ok none
+    else
+      if c ≥ AspisR72Sampler.field.P then ok none
+      else
+        if d ≥ AspisR72Sampler.field.P then ok none
+        else
+          if e ≥ AspisR72Sampler.field.P then ok none
+          else
+            if f ≥ AspisR72Sampler.field.P then ok none
+            else
+              if g ≥ AspisR72Sampler.field.P then ok none
+              else
+                if h ≥ AspisR72Sampler.field.P then ok none
+                else do
+                  let a1 ← lift (UScalar.cast UScalarTy.U64 a)
+                  let b1 ← lift (UScalar.cast UScalarTy.U64 b)
+                  let c1 ← lift (UScalar.cast UScalarTy.U64 c)
+                  let d1 ← lift (UScalar.cast UScalarTy.U64 d)
+                  let e1 ← lift (UScalar.cast UScalarTy.U64 e)
+                  let f1 ← lift (UScalar.cast UScalarTy.U64 f)
+                  let g1 ← lift (UScalar.cast UScalarTy.U64 g)
+                  let h1 ← lift (UScalar.cast UScalarTy.U64 h)
+                  let i ← c1 * g1
+                  let i1 ← AspisR72Sampler.field.r24_canonical_mul.PP
+                  let i2 ← lift (core.num.U64.wrapping_add i i1)
+                  let i3 ← d1 * h1
+                  let i4 ← lift (core.num.U64.wrapping_sub i2 i3)
+                  let u ← AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call () i4
+                  let i5 ← c1 * h1
+                  let i6 ← d1 * g1
+                  let i7 ← lift (core.num.U64.wrapping_add i5 i6)
+                  let v ← AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call () i7
+                  let i8 ← a1 * e1
+                  let i9 ← lift (core.num.U64.wrapping_add i8 i1)
+                  let i10 ← b1 * f1
+                  let i11 ← lift (core.num.U64.wrapping_sub i9 i10)
+                  let i12 ← 2#u64 * u
+                  let i13 ← lift (core.num.U64.wrapping_add i11 i12)
+                  let i14 ← lift (core.convert.num.FromU64U32.from AspisR72Sampler.field.P)
+                  let i15 ← 3#u64 * i14
+                  let i16 ← lift (core.num.U64.wrapping_add i13 i15)
+                  let i17 ← lift (core.num.U64.wrapping_sub i16 v)
+                  let out0 ← AspisR72Sampler.field.M31.reduce_u64 i17
+                  let i18 ← a1 * f1
+                  let i19 ← b1 * e1
+                  let i20 ← lift (core.num.U64.wrapping_add i18 i19)
+                  let i21 ← lift (core.num.U64.wrapping_add i20 u)
+                  let i22 ← 2#u64 * v
+                  let i23 ← lift (core.num.U64.wrapping_add i21 i22)
+                  let out1 ← AspisR72Sampler.field.M31.reduce_u64 i23
+                  let i24 ← a1 * g1
+                  let i25 ← c1 * e1
+                  let i26 ← lift (core.num.U64.wrapping_add i24 i25)
+                  let i27 ← 2#u64 * i1
+                  let i28 ← lift (core.num.U64.wrapping_add i26 i27)
+                  let i29 ← b1 * h1
+                  let i30 ← lift (core.num.U64.wrapping_sub i28 i29)
+                  let i31 ← d1 * f1
+                  let i32 ← lift (core.num.U64.wrapping_sub i30 i31)
+                  let out2 ← AspisR72Sampler.field.M31.reduce_u64 i32
+                  let i33 ← a1 * h1
+                  let i34 ← b1 * g1
+                  let i35 ← lift (core.num.U64.wrapping_add i33 i34)
+                  let i36 ← c1 * f1
+                  let i37 ← lift (core.num.U64.wrapping_add i35 i36)
+                  let i38 ← d1 * e1
+                  let i39 ← lift (core.num.U64.wrapping_add i37 i38)
+                  let out3 ← AspisR72Sampler.field.M31.reduce_u64 i39
+                  let c2 ← AspisR72Sampler.field.CM31.new out0 out1
+                  let c3 ← AspisR72Sampler.field.CM31.new out2 out3
+                  ok (some { c0 := c2, c1 := c3 })
+@[irreducible] def AspisR72Sampler.field.r24_canonical_mul.PP : Result U64 :=
+do
+  let i ← lift (UScalar.cast UScalarTy.U64 AspisR72Sampler.field.P)
+  let i1 ← lift (UScalar.cast UScalarTy.U64 AspisR72Sampler.field.P)
+  i * i1
+core.num.U64.wrapping_add_val_eq : ∀ (x y : U64),
+  ↑(core.num.U64.wrapping_add x y) = (↑x + ↑y) % UScalar.size UScalarTy.U64
+@UScalar.wrapping_add_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty), ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size ty
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPS_src/NPS_Probe.lean:7:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+@UScalar.val_and : ∀ {ty : UScalarTy} (x y : UScalar ty), ↑(x &&& y) = ↑x &&& ↑y
+AspisR1.NPH_R22FieldCopies.shr31i_val : ∀ (x : U64), ∃ z, x >>> 31#i32 = ok z ∧ ↑z = ↑x / 2147483648
+AspisR1.NPH_R22CM31.from_val : ∀ (u : U32), ↑(core.convert.num.FromU64U32.from u) = ↑u
+AspisR1.NPH_R22CM31.R72_reduce_wrapper : ∀ (v : U64),
+  AspisR72Sampler.field.M31.reduce_u64 v = AspisR1.NPH_R22FieldRef.refReduce v
+       45.62 real         2.96 user         6.13 sys
+          4030693376  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              131302  page reclaims
+              249411  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               34515  voluntary context switches
+              264099  involuntary context switches
+         44852081280  instructions retired
+         28450076511  cycles elapsed
+           633207640  peak memory footprint
