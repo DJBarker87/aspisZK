@@ -1,0 +1,40 @@
+{
+ "schema": "PCVJ_STATUS/1",
+ "target_established": false,
+ "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "budget": {
+  "extraction_used": 6,
+  "extraction_max": 30,
+  "lean_used": 4,
+  "lean_max": 40,
+  "one_scope_at_a_time": true,
+  "caps_unraised": true
+ },
+ "items": {
+  "1 AdapterRwModel.stage1_owned / stage2_owned": {
+   "extraction": "EXTRACTED ON, extended (PCVJ_E004, PCVJ_E005), 28 opaque callees",
+   "fresh_eq_gate": "NOT ATTEMPTED (gate takes ops : Ops with 56 fields; the Ops-instance from the fresh callees is not written)",
+   "status": "OPEN"
+  },
+  "2 CurrentCompactCallerModelV1 candidate.tx1 / prepare": {
+   "extraction": "EXTRACTED ON, extended (PCVJ_E002), 23 opaque callees",
+   "fresh_eq_gate": "NOT ATTEMPTED (Ops 21 fields)",
+   "status": "OPEN"
+  },
+  "3 VTop_Stages tx2_common / tx2_authenticated": {
+   "extraction": "EXTRACTED ON, extended (PCVJ_E002; PCUJ_E001 earlier for tx2_common)",
+   "fresh_eq_gate": "NOT ATTEMPTED. Structural fact read from the texts: the gate treats resume as Ops field op18 and powers as op17, mark as op13; the fresh emission expands resume (its callees checkpoint_size, read_checkpoint_* stay opaque), so the equality is gate(ops) with op18 bound to the fresh resume, not fresh = gate outright.",
+   "status": "OPEN"
+  },
+  "4 AspisR1PublicPreparation semantic_validated, begin, public_transcript (+sampler)": {
+   "extraction": "EXTRACTED ON, extended (PCVJ_E006), no opaque callees",
+   "compiled_copy": "RESOLVED: committed s1-prepared-claim-carrier-bridge copy (sha 544b75b9) is the compiled copy, 87/87 self-copy rfl (PCVJ_L003 exit 0)",
+   "fresh_eq_gate": "NOT CLOSED. PCVJ_L004 exit 1: the fresh emission's type carriers differ in NAME from the gate probe crate (aspis_core.digest.Digest32 vs gate aspis_core.Digest32; aspis_core.state_only_prefix.r0.Challenges; pool_v1 Public path; fresh aspis_core.field.P is a Result constant where the gate P is U32), so the generator's same-Types assumption does not hold and the statements do not elaborate. This is a naming/carrier difference, not a shown semantic difference.",
+   "status": "OPEN"
+  }
+ },
+ "difference_at_matching_configuration": "none found (no matching comparison reached an evaluated body)",
+ "new_findings": [
+  "16 of 87 AspisR1PublicPreparation Funs definitions (Debug fmt functions and instances) depend on native-decide axioms inside the gate text; they cannot be credited under the proof rules."
+ ]
+}

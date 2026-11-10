@@ -1,0 +1,11 @@
+{"schema":"PCVJ_CANNOT_EXTRACT/1","target_established":false,
+ "summary":"Every function in the P1j scope was extracted with the extended Aeneas build (b59d5188-extended), overflow checks ON, frozen 4bb3b3f, exit 0. The original build 959659a6 was not needed and not run. No function is recorded as non-extractable.",
+ "extracted":[
+ {"scope":"PCVJ_E002","roots":["candidate::prepare","candidate::tx1","candidate::tx2_common","candidate::tx2_authenticated"],"opaque_callees":23,"emission":"PCVJ_E002_emitted/raw/PCVJ_top","wall_s":136.4,"peak_rss_kib":792000},
+ {"scope":"PCVJ_E004","roots":["r1_pool_adapter::owned::stage1_owned"],"opaque_callees":28,"emission":"PCVJ_E004_emitted/raw/PCVJ_adapter","wall_s":134.8},
+ {"scope":"PCVJ_E005","roots":["r1_pool_adapter::owned::stage2_owned"],"opaque_callees":28,"emission":"PCVJ_E005_emitted/raw/PCVJ_adapter2","wall_s":104.3},
+ {"scope":"PCVJ_E006","roots":["r1_wire::SemanticTranscript::semantic_validated","r1_wire::begin","r1_semantic::public_transcript"],"opaque_callees":0,"emission":"PCVJ_E006_emitted/raw/PCVJ_pubprep","wall_s":92.8}],
+ "failed_scopes":[
+ {"scope":"PCVJ_E001","error":"stager assertion: unmatched opacity entry crate::verifier::checkpoint_size (it is reachable only through resume, which the scope had made opaque)","class":"shape error, not a tool failure","replacement":"PCVJ_E002 without resume opaque"},
+ {"scope":"PCVJ_E003","error":"timeout 180 s during cold cargo build of the solana dependency tree","class":"build-warmup","replacement":"PCVJ_E004/E005 one root each on the warmed target"}],
+ "caveat":"Extraction success does not give fresh = gate. The emissions contain opaque callees (axioms in FunsExternal_Template.lean): tx1/prepare/tx2_* 23 (parse_shape, canonical_scan, wide_view, batch_merkle, query_loop, BatchedWeights new/finish, QueryGeometry::for_range, Prepared::new, Accumulator::new, verify_observed, checkpoint, expand_semantic/values, powers, finish_relation, read_checkpoint_*, checkpoint_size, final_len, tag, heap::filled, mark, WideExact/QM31 from_le_bytes); stage1/2 28 (SDK and cross-crate boundaries). Any equality over them is CONDITIONAL_ON_BINDING."}

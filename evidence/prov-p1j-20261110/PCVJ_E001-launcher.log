@@ -1,0 +1,44 @@
+{"attempt": "PCVJ_E001", "exit_status": 1, "wall_seconds": 127.83378055808134, "peak_rss_kib": "549612", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::verifier::candidate::tx1", "--start-from", "crate::verifier::candidate::prepare", "--start-from", "crate::verifier::candidate::tx2_common", "--start-from", "crate::verifier::candidate::tx2_authenticated", "--opaque", "crate::verifier::mark", "--opaque", "crate::verifier::candidate::batch_merkle", "--opaque", "crate::verifier::candidate::query_loop", "--opaque", "crate::verifier::_
+...
+.
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 2m 06s
+{"attempt": "PCVJ_E001", "exit": 1, "error": "AssertionError(('OWN INPUT: unmatched opacity', {'path': 'crate::verifier::checkpoint_size', 'why': 'Resume control body visible; retain scalar/raw/query/section/allocation packet boundary with explicit caller domains.'}))"}
+
+Running as unit: run-r8b3485a6e80145328edd1fc390e0d3a1.scope; invocation ID: 7f1ad06eba6b45bc8aa5880e764eccfb

@@ -1,0 +1,55 @@
+{
+  "exit": 0,
+  "allowed": true,
+  "reservation": {
+    "requested_bytes": 8589934592,
+    "allowed": true,
+    "utc": 1794319808.5440102,
+    "populated_scopes": [
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3cb1e67c56b344f6bd2652e563a93dba.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/bash -c cg=/sys/fs/cgroup$(cut -d: -f3 /proc/self/cgroup); echo $cg > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/cgroup.txt; for f in memory.high memory.max memory.swap.max pids.max; do echo \"$f $(cat $cg/$f)\"; done > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/limits.txt; /usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/time.log timeout 1800 \"$@\" > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/stdout.log 2> /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/stderr.log; rc=$?; echo $rc > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/exit; cat $cg/memory.peak > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/cgroup_memory_peak 2>/dev/null; cat $cg/memory.swap.peak > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/cgroup_swap_peak 2>/dev/null; cat $cg/memory.events > /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/memory_events 2>/dev/null; exit $rc _ ./NPK_build.sh NPK_B004 retarget",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-cone-20261110/receipts/NPK_B004/time.log timeout 1800 ./NPK_build.sh NPK_B004 retarget",
+          "timeout 1800 ./NPK_build.sh NPK_B004 retarget",
+          "/bin/bash ./NPK_build.sh NPK_B004 retarget",
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf --manifest-path /home/dombarker/project-offloads/codex-cx-cone-20261110/src-v/programs/r1-cost-probe/Cargo.toml --sbf-out-dir /home/dombarker/project-offloads/codex-cx-cone-20261110/out/NPK_B004/artifacts --features pool-adapter,private-leaf-salts --skip-tools-install --offline -j 4 -- --locked -v",
+          "/home/dombarker/.rustup/toolchains/1.89.0-sbpf-solana-v1.52/bin/cargo build --release --target sbpf-solana-solana --features pool-adapter,private-leaf-salts --jobs 4 --locked -v",
+          "/home/dombarker/.rustup/toolchains/1.89.0-sbpf-solana-v1.52/bin/rustc --crate-name aspis_core --edition=2021 crates/aspis-core/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature=\"r0\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"formal-verification\", \"insecure-test-framing\", \"insecure-test-ordering\", \"r0\", \"r0-e4-reference\", \"r0-hoist-reference\", \"r0-op-count\", \"r0-r91-audit\", \"v7-fixed-canonical-audit\", \"v7-fixed-canonical-exact-once-audit\", \"v7-gamma-four-slot-block-audit\")) -C metadata=3a33aa2d2fca2508 -C extra-filename=-4a3ed68d4a8243dc --out-dir /home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/sbpf-solana-solana/release/deps --target sbpf-solana-solana -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/sbpf-solana-solana/release/deps -L dependency=/home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/release/deps -C link-arg=--threads=4 -Zremap-cwd-prefix=",
+          "/home/dombarker/.rustup/toolchains/1.89.0-sbpf-solana-v1.52/bin/rustc --crate-name aspis_statement --edition=2021 crates/aspis-statement/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature=\"pool-v1-kernel\" --cfg feature=\"pool-v1-pair-forest-active-mask-basis-audit\" --cfg feature=\"pool-v1-pair-forest-binary-copy-weights-audit\" --cfg feature=\"pool-v1-pair-forest-copy-finish-dot-basis-audit\" --cfg feature=\"pool-v1-pair-forest-copy-pattern-basis-audit\" --cfg feature=\"pool-v1-pair-forest-copy-selector-tensor-basis-audit\" --cfg feature=\"pool-v1-pair-forest-copy-tag-dot-basis-audit\" --cfg feature=\"pool-v1-pair-forest-endpoint-selector-cache-audit\" --cfg feature=\"pool-v1-pair-forest-packed-digest-audit\" --cfg feature=\"pool-v1-pair-forest-packed-digest-selector-tensor-audit\" --cfg feature=\"pool-v1-pair-forest-packed-range-audit\" --cfg feature=\"pool-v1-pair-forest-pattern-window-audit\" --cfg feature=\"pool-v1-pair-forest-semantic-factor-audit\" --cfg feature=\"r0\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"insecure-test-logup-compression\", \"pool-v1-kernel\", \"pool-v1-pair-forest-active-mask-basis-audit\", \"pool-v1-pair-forest-binary-copy-weights-audit\", \"pool-v1-pair-forest-copy-finish-dot-basis-audit\", \"pool-v1-pair-forest-copy-pattern-basis-audit\", \"pool-v1-pair-forest-copy-selector-tensor-basis-audit\", \"pool-v1-pair-forest-copy-tag-dot-basis-audit\", \"pool-v1-pair-forest-endpoint-selector-cache-audit\", \"pool-v1-pair-forest-packed-digest-audit\", \"pool-v1-pair-forest-packed-digest-selector-tensor-audit\", \"pool-v1-pair-forest-packed-range-audit\", \"pool-v1-pair-forest-pattern-window-audit\", \"pool-v1-pair-forest-semantic-factor-audit\", \"pool-v1-pair-forest-writer-reference\", \"r0\", \"r0-e4-reference\", \"r0-hoist-reference\", \"r0-r91-audit\", \"spend-dynamic-rate512\")) -C metadata=002300ca108e21f9 -C extra-filename=-d03eaf1b5e276d25 --out-dir /home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/sbpf-solana-solana/release/deps --target sbpf-solana-solana -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/sbpf-solana-solana/release/deps -L dependency=/home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/release/deps --extern aspis_core=/home/dombarker/project-offloads/codex-cx-cone-20261110/target/NPK_B004/sbpf-solana-solana/release/deps/libaspis_core-4a3ed68d4a8243dc.rmeta -C link-arg=--threads=4 -Zremap-cwd-prefix="
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 1175359488
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re3a3c0cadfef44b0b29266a42f870b25.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 NPH_run_host.py NPH_L058.json",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-r22-20261110/NPH_L058/time.log timeout 180 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -DmaxErrors=100000 -R NPH_sources -o NPH_exports/NPH_R22JoinSM3D.olean NPH_sources/NPH_R22JoinSM3D.lean",
+          "timeout 180 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -DmaxErrors=100000 -R NPH_sources -o NPH_exports/NPH_R22JoinSM3D.olean NPH_sources/NPH_R22JoinSM3D.lean",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -DmaxErrors=100000 -R NPH_sources -o NPH_exports/NPH_R22JoinSM3D.olean NPH_sources/NPH_R22JoinSM3D.lean"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 6630334464
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/NPJ-client-build4.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/docker run --rm --name npj-client-build4 --network none --user 1000:1000 --memory=8g --memory-swap=8g --memory-reservation=6g --pids-limit=64 -v /usr:/usr:ro -v /usr/bin:/bin:ro -v /usr/lib:/lib:ro -v /usr/lib64:/lib64:ro -v /usr/sbin:/sbin:ro -v /etc:/etc:ro --tmpfs /tmp:rw,size=2g,exec -v /home/dombarker/project-offloads/codex-cx-client-20261110/cargo-home-4:/home/dombarker/.cargo -v /home/dombarker/.cargo/bin:/home/dombarker/.cargo/bin:ro -v /home/dombarker/.cargo/registry:/home/dombarker/.cargo/registry:ro -v /home/dombarker/.cargo/git:/home/dombarker/.cargo/git:ro -v /home/dombarker/.rustup:/home/dombarker/.rustup:ro -v /home/dombarker/project-offloads/codex-cx-client-20261110/NDZ_src:/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/NDZ_src:ro -v /home/dombarker/project-offloads/codex-cx-client-20261110/target-4:/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/NDZ_native-target -v /home/dombarker/project-offloads/codex-cx-client-20261110/receipts:/receipts -w /home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029 -e HOME=/home/dombarker -e PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin -e CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/NDZ_native-target sha256:b66e0ce64844f5c6435b0c4bfd965558199ab0f53270846861c979cb1ac29365 /usr/bin/bash -c rustc -vV > /receipts/NPJ_attempt4.rustc; cargo -vV > /receipts/NPJ_attempt4.cargo; env | grep -E \"^(RUST|CARGO)\" | sort > /receipts/NPJ_attempt4.env; /usr/bin/time -v -o /receipts/NPJ_attempt4.time /home/dombarker/.cargo/bin/cargo build --manifest-path NDZ_src/tools/r1-cost-probe/Cargo.toml --release --locked --offline -j ${JOBS:-1} --features r1p-check --bin devnet_spend > /receipts/NPJ_attempt4.log 2>&1; echo exit=$? > /receipts/NPJ_attempt4.exit"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 9383936
+      }
+    ],
+    "bounded_reserved_bytes": 25769803776,
+    "all_populated_scopes_bounded": true,
+    "safe_limit_bytes": 59055800320,
+    "print_axioms": "N/A: read-only resource preflight"
+  }
+}
