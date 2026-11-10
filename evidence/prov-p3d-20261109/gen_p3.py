@@ -20,6 +20,7 @@ theorem PRVC.Eq.{name} : @{F}{name} = @{G}{gn} := by
   | (delta {F}{name} {G}{gn}; with_reducible rfl)
   | (delta {F}{name} {G}{gn}; {sx}with_reducible rfl)
   | (delta {F}{name} {G}{gn}; {sx}done)
+  | (delta {F}{name} {G}{gn}; {sx}rfl)
   | (delta {F}{name} {G}{gn}; rfl)
 #print axioms PRVC.Eq.{name}
 '''
