@@ -1,0 +1,29 @@
+{"attempt": "PCQK_E002", "exit_status": 1, "wall_seconds": 118.37614199100062, "peak_rss_kib": "592448", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::fast_pairing::canonical::_::raw", "--start-from", "crate::fast_pairing::canonical::_::from_limbs", "--start-from", "crate::fast_pairing::canonical::_::limbs", "--start-from", "crate::fast_pairing::canonical::reduce", "--start-from", "crate::fast_pairing::canonical::_::push", "--start-from", "crate::fast_pairing::canonical::_::finish", "--start-from", "crate::verifier::accumulate_b
+...
+                ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (IterMut<'a, T>: Iterator<&'a T>)
+            got: impl_Iterator_for_IterMut<'a, T>: Iterator<IterMut<'a, T>, &'a mut T>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl12), TraitClause1: (@Adt15<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>: @TraitDecl1<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl14<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <'a, T>
+ --> /rustc/library/core/src/slice/iter/macros.rs:153:9
+
+warning: The extraction generated 1 warnings
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+warning: `aspis-statement` (lib) generated 102 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 54s
+{"attempt": "PCQK_E002", "exit": 1, "error": "AssertionError('Charon reported translation errors')"}
+
+Running as unit: run-re7e4b679d9414c80b2ab66dfef298a50.scope; invocation ID: d8d60c77cd0c473ab1b100d894d35d03

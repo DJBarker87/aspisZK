@@ -1,0 +1,13 @@
+# PCQK_ HANDOFF: phase P1n
+
+Target not yet established. Frozen 4bb3b3f. Branch codex/pc-prov-p1n-20261110. Host workspace /home/dombarker/project-offloads/codex-pc-prov-p1n-20261110/.
+
+First, differences (not counterexamples): the gate modules AspisR1CanonicalQRawUnified.Funs and FIo_QRawFuns define canonical.Q.raw with core.array.Array.map and three closures; the frozen 4bb3b3f Q::raw (fast_pairing.rs:82-93) builds the limb arrays from literals with indexing and one closure. Stage-1 rfl and stage-2 delta+rfl do not close Q.raw (PCQK_REMAINING.json semantic_obligations: also EbyKFinish Dot.finish, NEI update_residue_row_loop1). This is a source-shape difference of the gate (older source revision), not an encoding difference; no input showing different values was found and none was sought. The owner rule applies: replace by an equality proof, not kept as-is.
+
+Extraction (23/30): cold Charon+Aeneas now fits 180 s with cargo --jobs 4, CARGO_BUILD_JOBS 4 (rustc -Zthreads=1; identity by class receipt PCWE_E003). Emissions: E010 (aspis-core: qm31_m31_dot, state_only_selected_mask_value, C1_TAG, C2_TAG), E015 (cost-probe, 25 roots minus the slice-iterator roots plus slot_offset, payload, circle_validated), E019 (aspis-statement registry/policy/pair_forest items), E023 (programs/r1-cost-probe adapter: decode_checkpoint_box, decode_master_box, emit_result, scan_proof_buffer). E005/E006 equal the namespace PCQK_cp emission used for equalities (E006).
+Retired shapes: Charon type error on core slice iterator trait impls (IterMut/Enumerate), reached by any root using slice iter()/windows/chunks_exact/iter_mut/enumerate (E001 decode_k; E002/E003/E004/E007/E011/E012); Aeneas failures: r1_semantic::mark arrow type (E013/E014), iter_mut().enumerate() loop (E016/E017), terminal_request closure (E018), early return in loop (E021), deployment_ids (E022); aspis-core circle eq (E008, Charon 101).
+
+Lean (20/20): exit-0 scopes L009-L013 (n3b files): 13 theorems fresh = gate, standard axioms only, no sorry; see PCQK_credit_out.json and PCQK_STATUS.json (EMITTED+PROVED 13, in the first half). L001-L008, L014-L020 exit 1 (probes). The m1b files (7 modules) are generated but not compiled: not credited.
+Cross-crate caveat: the cost-probe emission leaves aspis-core bodies opaque; gate modules needing aspis_core types (WideExact, CM31, QM31) cannot compare against it (unknown identifier errors in L004, L005, L015, L018, L020).
+Externals: PCQK_EXTERNALS.json: of 41 names, 25 EMITTED_NOT_COMPILED (no gate relation was compiled), 12 CANNOT_EXTRACT, 2 NOT_ATTEMPTED, 1 DEPENDS_ON_LIBRARY_TRUST (derived WideExact eq), 1 not attempted separately.
+Non-frozen cone modules (item 3): no equality done; none credited.
