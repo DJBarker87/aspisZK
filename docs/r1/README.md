@@ -1,4 +1,4 @@
-# The R1 proof package
+# The proof package
 
 This folder holds the part of the evidence for the current version that
 fits on `main`. The full evidence, some 45 GB of Lean sources, compiled
