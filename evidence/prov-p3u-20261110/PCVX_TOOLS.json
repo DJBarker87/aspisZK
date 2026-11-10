@@ -1,0 +1,9 @@
+{
+ "schema": "PCVX_TOOLS/1",
+ "client": "PCVX_run.py PCVX_run_host.py PCVX_go.sh PCVX_goe.sh (from PCVV_*, admission host<6 and Stream C<5, disk 45 GB)",
+ "extraction": "PCVX_extract.py PCVX_mkspec.sh PCVX_patch.sh (cargo jobs 4 and CARGO_BUILD_JOBS=4, original Aeneas, no -abort-on-error) PCVX_mkaen.sh PCVX_fixllbc.sh PCVX_aeneas.py (Aeneas only; E013 adds aeneas.errors capture)",
+ "generator": "PCVX_gen_equalities.py PCVX_partition.py (renamed copies of PCUJ_*; no change)",
+ "cargo_jobs": "all extraction runs: cargo --jobs 4 and CARGO_BUILD_JOBS=4 (spec extra_env, PINS extra_env_appended_to_stager_env); rustc -Zthreads never above 1; identity by class receipt PCWE_E003. Note: the controller still prints environment.CARGO_BUILD_JOBS='1' in the PINS (a constant in PCVX_extract.py copied from PCVV); the effective value is the extra_env entry.",
+ "aeneas": "original 959659a6 (sha256 verified by the controller before each use); extended b59d5188 only on saved LLBCs (E005, E008, E010), always crashed, exit 2",
+ "admission": "every scope: host scope count < 6, Stream C scopes < 5, disk >= 45 GB, reservation barrier allowed:true; one scope at a time"
+}
