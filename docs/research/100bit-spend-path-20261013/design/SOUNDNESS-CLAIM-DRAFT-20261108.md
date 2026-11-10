@@ -732,4 +732,6 @@ These are stated so that the published version does not inherit them silently.
    - For NKR-RT-250/251, the certificate explicitly does not equate its reference with the cone's old `FIq_Native…public_digest_lanes`. The model the cone uses for that function therefore takes its link to the frozen code from extraction (D188) and provenance (gate row 7), not from this certificate.
    - Section 4.6 marks each entry accordingly.
 
+18. **One Rust model (owner decision 2026-11-10).** The soundness and privacy theorems were found to share only the mathematical core (R0C field, R0P Poseidon and protocol mathematics, SpendRelation, the sampler extraction) and to use different, unrelated constants for the verifier predicate, statement types and prover (evidence/model-intersection-20261110). The owner ruled that the single Rust model for both is the source that ran on devnet: 4bb3b3f (crates incl. aspis-prover, r1-cost-probe, Cargo.lock) and the Pool at b936275. Soundness is already at that pin; the privacy side regenerates its prover extraction and deployed models from it and re-proves its top over the soundness gate's verifier constants (or a model proved equal). Whether the proving client that produced the devnet proofs was built from 4bb3b3f is being established (lead check in progress).
+
 Target not yet established.
