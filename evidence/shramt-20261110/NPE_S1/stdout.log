@@ -1,0 +1,346 @@
+=== toolchain nightly-2026-09-17: rustc 1.100.0-nightly (923c95cdf 2026-09-16)
+--- bin_nightly-2026-09-17_ocon_O0
+overflow_checks_cfg=1
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: PANIC attempt to shift right with overflow
+shl usize by -1i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: PANIC attempt to shift right with overflow
+shl usize by 64i32: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: PANIC attempt to shift right with overflow
+shl usize by 65i32: PANIC attempt to shift left with overflow
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: PANIC attempt to shift right with overflow
+shl usize by -55i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: PANIC attempt to shift right with overflow
+shl usize by -2147483648i32: PANIC attempt to shift left with overflow
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: PANIC attempt to shift right with overflow
+shl usize by 64usize: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: PANIC attempt to shift right with overflow
+shl usize by 4294967299usize: PANIC attempt to shift left with overflow
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: PANIC attempt to shift right with overflow
+shl usize by 18446744073709551615usize: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: PANIC attempt to shift right with overflow
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_nightly-2026-09-17_ocon_O3
+overflow_checks_cfg=1
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: PANIC attempt to shift right with overflow
+shl usize by -1i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: PANIC attempt to shift right with overflow
+shl usize by 64i32: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: PANIC attempt to shift right with overflow
+shl usize by 65i32: PANIC attempt to shift left with overflow
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: PANIC attempt to shift right with overflow
+shl usize by -55i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: PANIC attempt to shift right with overflow
+shl usize by -2147483648i32: PANIC attempt to shift left with overflow
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: PANIC attempt to shift right with overflow
+shl usize by 64usize: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: PANIC attempt to shift right with overflow
+shl usize by 4294967299usize: PANIC attempt to shift left with overflow
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: PANIC attempt to shift right with overflow
+shl usize by 18446744073709551615usize: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: PANIC attempt to shift right with overflow
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_nightly-2026-09-17_ocoff_O0
+overflow_checks_cfg=0
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: ok 0x1
+shl usize by -1i32: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: ok 0xdeadbeef12345678
+shl usize by 64i32: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: ok 0x6f56df77891a2b3c
+shl usize by 65i32: ok 0xbd5b7dde2468acf0
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: ok 0x6f56df77891a2b
+shl usize by -55i32: ok 0x5b7dde2468acf000
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: ok 0xdeadbeef12345678
+shl usize by -2147483648i32: ok 0xdeadbeef12345678
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: ok 0xdeadbeef12345678
+shl usize by 64usize: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: ok 0x1bd5b7dde2468acf
+shl usize by 4294967299usize: ok 0xf56df77891a2b3c0
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: ok 0x1
+shl usize by 18446744073709551615usize: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: ok 0xdeadbe
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_nightly-2026-09-17_ocoff_O3
+overflow_checks_cfg=0
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: ok 0x1
+shl usize by -1i32: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: ok 0xdeadbeef12345678
+shl usize by 64i32: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: ok 0x6f56df77891a2b3c
+shl usize by 65i32: ok 0xbd5b7dde2468acf0
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: ok 0x6f56df77891a2b
+shl usize by -55i32: ok 0x5b7dde2468acf000
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: ok 0xdeadbeef12345678
+shl usize by -2147483648i32: ok 0xdeadbeef12345678
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: ok 0xdeadbeef12345678
+shl usize by 64usize: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: ok 0x1bd5b7dde2468acf
+shl usize by 4294967299usize: ok 0xf56df77891a2b3c0
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: ok 0x1
+shl usize by 18446744073709551615usize: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: ok 0xdeadbe
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+=== toolchain 1.94.1: rustc 1.94.1 (e408947bf 2026-03-25)
+--- bin_1.94.1_ocon_O0
+overflow_checks_cfg=1
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: PANIC attempt to shift right with overflow
+shl usize by -1i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: PANIC attempt to shift right with overflow
+shl usize by 64i32: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: PANIC attempt to shift right with overflow
+shl usize by 65i32: PANIC attempt to shift left with overflow
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: PANIC attempt to shift right with overflow
+shl usize by -55i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: PANIC attempt to shift right with overflow
+shl usize by -2147483648i32: PANIC attempt to shift left with overflow
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: PANIC attempt to shift right with overflow
+shl usize by 64usize: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: PANIC attempt to shift right with overflow
+shl usize by 4294967299usize: PANIC attempt to shift left with overflow
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: PANIC attempt to shift right with overflow
+shl usize by 18446744073709551615usize: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: PANIC attempt to shift right with overflow
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_1.94.1_ocon_O3
+overflow_checks_cfg=1
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: PANIC attempt to shift right with overflow
+shl usize by -1i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: PANIC attempt to shift right with overflow
+shl usize by 64i32: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: PANIC attempt to shift right with overflow
+shl usize by 65i32: PANIC attempt to shift left with overflow
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: PANIC attempt to shift right with overflow
+shl usize by -55i32: PANIC attempt to shift left with overflow
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: PANIC attempt to shift right with overflow
+shl usize by -2147483648i32: PANIC attempt to shift left with overflow
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: PANIC attempt to shift right with overflow
+shl usize by 64usize: PANIC attempt to shift left with overflow
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: PANIC attempt to shift right with overflow
+shl usize by 4294967299usize: PANIC attempt to shift left with overflow
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: PANIC attempt to shift right with overflow
+shl usize by 18446744073709551615usize: PANIC attempt to shift left with overflow
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: PANIC attempt to shift right with overflow
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_1.94.1_ocoff_O0
+overflow_checks_cfg=0
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: ok 0x1
+shl usize by -1i32: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: ok 0xdeadbeef12345678
+shl usize by 64i32: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: ok 0x6f56df77891a2b3c
+shl usize by 65i32: ok 0xbd5b7dde2468acf0
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: ok 0x6f56df77891a2b
+shl usize by -55i32: ok 0x5b7dde2468acf000
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: ok 0xdeadbeef12345678
+shl usize by -2147483648i32: ok 0xdeadbeef12345678
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: ok 0xdeadbeef12345678
+shl usize by 64usize: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: ok 0x1bd5b7dde2468acf
+shl usize by 4294967299usize: ok 0xf56df77891a2b3c0
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: ok 0x1
+shl usize by 18446744073709551615usize: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: ok 0xdeadbe
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
+--- bin_1.94.1_ocoff_O3
+overflow_checks_cfg=0
+usize_bits=64
+x=0xdeadbeef12345678
+shr usize by 9i32: ok 0x6f56df77891a2b
+shl usize by 9i32: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -1i32: ok 0x1
+shl usize by -1i32: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr usize by 40i32: ok 0xdeadbe
+shl usize by 40i32: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64i32: ok 0xdeadbeef12345678
+shl usize by 64i32: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 65i32: ok 0x6f56df77891a2b3c
+shl usize by 65i32: ok 0xbd5b7dde2468acf0
+  model(as u32=65) shr=0x6f56df77891a2b3c shl=0xbd5b7dde2468acf0
+shr usize by -55i32: ok 0x6f56df77891a2b
+shl usize by -55i32: ok 0x5b7dde2468acf000
+  model(as u32=4294967241) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by -2147483648i32: ok 0xdeadbeef12345678
+shl usize by -2147483648i32: ok 0xdeadbeef12345678
+  model(as u32=2147483648) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 9usize: ok 0x6f56df77891a2b
+shl usize by 9usize: ok 0x5b7dde2468acf000
+  model(as u32=9) shr=0x6f56df77891a2b shl=0x5b7dde2468acf000
+shr usize by 40usize: ok 0xdeadbe
+shl usize by 40usize: ok 0x3456780000000000
+  model(as u32=40) shr=0xdeadbe shl=0x3456780000000000
+shr usize by 64usize: ok 0xdeadbeef12345678
+shl usize by 64usize: ok 0xdeadbeef12345678
+  model(as u32=64) shr=0xdeadbeef12345678 shl=0xdeadbeef12345678
+shr usize by 4294967299usize: ok 0x1bd5b7dde2468acf
+shl usize by 4294967299usize: ok 0xf56df77891a2b3c0
+  model(as u32=3) shr=0x1bd5b7dde2468acf shl=0xf56df77891a2b3c0
+shr usize by 18446744073709551615usize: ok 0x1
+shl usize by 18446744073709551615usize: ok 0x0
+  model(as u32=4294967295) shr=0x1 shl=0x0
+shr u32 by 40i32: ok 0xdeadbe
+  model u32 (as u32=40) shr=0xdeadbe
+exit=0
