@@ -25,14 +25,13 @@ partial def unionLoop (env : Environment) (stack : Array Name) (seen : Std.HashS
   | none => axs
   | some c =>
     let stack := stack.pop
-    if seen.contains c then unionLoop env stack seen axs
-    else
-      let seen := seen.insert c
-      match env.find? c with
-      | some (.axiomInfo _) => unionLoop env stack seen (axs.push c)
-      | some ci => unionLoop env (stack ++ usedOf ci) seen axs
-      | none => unionLoop env stack seen axs
-def unionAxioms (env : Environment) (ns : Array Name) : Array Name := unionLoop env ns {} #[]
+    match env.find? c with
+    | some (.axiomInfo _) => unionLoop env stack seen (axs.push c)
+    | some ci =>
+      let (stack, seen) := (usedOf ci).foldl (fun (p : Array Name × Std.HashSet Name) u => if p.2.contains u then p else (p.1.push u, p.2.insert u)) (stack, seen)
+      unionLoop env stack seen axs
+    | none => unionLoop env stack seen axs
+def unionAxioms (env : Environment) (ns : Array Name) : Array Name := unionLoop env ns (ns.foldl (fun s n => s.insert n) {}) #[]
 /-- one audit pass: kind and axioms of every non-internal constant under `root`, then the shared-visited union. -/
 def auditRoot (label : String) (pred : Name → Bool) (doUnion : Bool) (k m : Nat) : CommandElabM Unit := do
   let env ← getEnv
