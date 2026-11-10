@@ -669,3 +669,150 @@ in order:
 4. The FIq Merkle/absorption family, which has the largest site count.
 
 Target not yet established.
+
+## 13. Tightened site checklist and the CW, SM and QA site lemmas (continuation worker, 2026-11-10 evening)
+
+Four scopes were used, L029–L032 (4 of this run's 32). L030 failed because `simp only` left
+witness metavariables for two closure results. The script was changed to give explicit
+witnesses, and L031 accepted the same module. Peak RSS was 6,021,140 KiB (L032) and swap was
+0. All 43 accepted `#print axioms` lines are within [propext, Classical.choice, Quot.sound],
+and there is no sorry. The lead decision holds: no ops interface, merged module or closed-row
+statement is changed.
+
+**Ruling 1 (proof-only references).** The five R65/R66 kernels (AspisR65Field M31.add/neg and
+AspisR66Field M31.add/neg/sub) are now NOT_EXECUTED in NPH_R22_CONE.json. Each keeps its
+`reach_path`, and the previous judgment is kept in `nph_judgment_before_20261110_evening`.
+They are excluded from the obligation, so **the denominator is now 220** (225 minus 5). Their
+execution sites are the AspisR72Sampler sites of the pointwise-equal kernels, and those keep
+their own judgment.
+
+**Step A, tightened screen (ruling 2).** NPH_sites_scan2.py replaces NPH_sites_scan.py, and
+NPH_sites_status.py annotates its output. The result is NPH_SITES.json. The screen changes in
+four ways:
+1. It reads the replayed L187 src tree (host codex-cx-replay-l187-20261109/src, from its
+   l187_src.tar.xz). The old screen took the first committed blob listed in
+   L187_CLOSURE.json. For 122 modules that list holds several distinct sources, and for
+   AspisR1SelectedMaskProbe.Funs the first blob is a 10 KB early probe with no CM31.mul.
+   The replayed file has sha256 4aa955ab…, which matches none of the listed blobs.
+2. It resolves names through the declaring namespace chain and every `open`. FIq_Native alone
+   is opened in 637 modules, so the old literal-prefix match missed most calls.
+3. It includes callers inside each family's own namespace, among them the hand-written
+   wrappers AspisR1CurrentWide.Proof.finishAdd/finishArithmetic/… and the extracted
+   state_only_hiding and sampler bodies. It also follows one alias level, such as the
+   AspisR1CurrentWideMul abbrevs of the QA tower.
+4. A site is counted only when its body reaches a **domain-only** kernel of the family. Sites
+   that call only TOTAL kernels (M31.mul, mul_m31, reduce_u64) or CM31.new carry no
+   precondition. They are listed under `_dropped_from_old_screen`: the 25 QA SAF_/SAP_ Outcome,
+   inverse, prefix and basis-level sites (M31.mul only), CW SAG_StageScale.mulM (mul_m31 only),
+   the 5 SM qm31_pack_base4 sites, and 18 FIq sites.
+
+The screen is textual. It cannot see calls made through notation, instance resolution or
+callback records, so it is the checklist, not a proof of completeness.
+
+| Family | Sites (new) | Old executing | Status after this run |
+|---|---:|---:|---|
+| CW | 26 | 6 | 21 W_LEMMA, 5 OPEN |
+| QA | 24 | 40 | 23 W_LEMMA, 1 EVERY_INPUT |
+| SM | 40 | 10 | 29 W_LEMMA, 2 EVERY_INPUT, 3 JOINED_094, 1 NOT_EXECUTING, 5 OPEN |
+| SC | 18 | 0 | 18 OPEN (not examined) |
+| R72 | 17 | 0 | 17 OPEN (not examined) |
+| FIq | 238 | 53 | 238 OPEN (not examined) |
+
+W_LEMMA means a Lean lemma shows that W inputs at the site give ok W outputs, so every kernel
+call inside receives W arguments. It is conditional on the site's own inputs, which come from
+the callers listed per site in `contexts_direct_callers`. EVERY_INPUT means the site is ok
+with W output for every input, so it is a frontier.
+
+**Step B, CurrentWide: NPH_R22JoinCW (L029, 11 statements).**
+- `FIn_field_W` (producer). Every successful FIn_Primitives.field read is W. It goes through
+  finishField_success_canonical.
+- `FIn_add_W`, `FIn_mul_W`, `finishAdd_W`, `claimAdd_W` and `claimMul_W` are the W-lemmas for
+  the FIn wrappers, the hand-written finishAdd and the CurrentClaimSumModel WideExact
+  add/mul copies.
+- `poly_step` and `poly_W` cover the extracted Horner FIn_reference.polynomial on
+  FIn_ExtractInstall.arithmetic. For a W point, every step is ok and W, and the whole
+  polynomial is ok and W when all seven reads succeed.
+- `round_sites` covers Stage2 finishRelationRoundWithOps on any FinishOps whose
+  field/add/mulM/polynomial slots are the deployed ones (those of IDa_Deployed.finish). The
+  lhs add is ok and W on successful reads, mulM is ok for every claim, and the polynomial is
+  ok and W for a W alpha.
+
+**CW is not complete. Its kernels stay domain-only.** These contexts are open:
+- the W bound of the finish Prepared p.alpha[0] and p.alpha[1], which round_sites assumes;
+- the finish dot SAG_DotAdapter.kernel (finish_query_dot under finishConcreteField);
+- FIn_Install.finishOps;
+- the three CurrentPreparedClaim sum loops;
+- every query dictionary other than the 094 Dcon/Dsel that installs line, circle or the
+  SAQ_Arithmetic/MixedSource callbacks: NJJ_Common.query, NNH_Tx2SourceConfiguration.fill,
+  NNH_HostSeed.m0, NNH_Run5bQuerySlots.model, NNX_QueryOutput.run, LIBC_QueryLoop.model,
+  NFS_QueryOps.base, SAQ_LineQuery.install, FIp_Install.select and SAQ_QuerySource.install.
+
+**Step C, SelectedMaskProbe: NPH_R22JoinSM (L031, 27 statements).**
+- `PM_new_ok`, `PM_mul_W` and their closures cover PreparedQm31Multiplier. mul is ok and W for
+  any prepared value and a W right operand, because the stored components enter only
+  M31.mul.
+- RPv QM31.sub.
+- state_only_hiding:
+  - cm31_mul_i/cm31_mul_r and mul_tower_basis, for coordinate < 4; `column &&& 3` < 4 is
+    proved;
+  - mask_power_26;
+  - one iteration of each kernel-calling loop body (`linears_body_site`, `coeff_site`,
+    `loop2_body_site`, stated over arrays whose every successful read is W);
+  - the straight-line tails `linears_tail` and `mask_tail_sites`.
+- FIp_SemanticArithmetic add/mul.
+- PoseidonPreparedProductCells.rightBuilder.
+- The qm31_sum_products3_prepared_loop0 step.
+- `karatsuba_W` and `karatsuba_closure_W`: qm31_from_karatsuba_channel_sums is ok with W output
+  for **every** input, because the limbs pass reduce_u64 first.
+
+**SM is not complete. Its kernels stay domain-only.** These are open:
+- the four loop wrappers (the loop compositions of the body lemmas);
+- the W invariant of the 27-entry coefficient array across the loop0/loop1 updates;
+- FIp_SemanticArithmetic.mask, whose inputs c1, mask_only_c1, g and point come from the
+  semantic-boundary installers IDa_Deployed.boundaries/NNG_*;
+- the right operands of qm31_sum_products3_prepared.
+
+**Step D, Qm31ArithmeticProbe: NPH_R22JoinQA (L032, 5 statements).**
+- The CurrentWideMulCanonical copies QM31.sub, mul_u and WideExact.mul are W-preserving.
+- NFN_NEB_GeometryPrimitives.install satisfies GeometryM31W on op7–op10.
+- NFN_NEW_GeometryPolynomial.cohort is ok and W for every input.
+
+The Outcome and inverse sites that the lead named for step D call only QA M31.mul, which is
+TOTAL. They impose no precondition and leave the checklist. Every QA site now has a lemma.
+**QA is still not complete**, because the installer W-lemmas are conditional on what the gate
+passes outside the 094 joins. These remain open:
+- the installer contexts outside 094;
+- NFN op14/op15 under NFN_NEA_FieldProduct.ops;
+- the callers of CurrentWideMul WideExact.mul.
+
+**Step E was not started**: the 345 body walk and FIq. The FIq checklist grew from 53 to 238
+sites once `open` resolution was added.
+
+**Counts (220 executed checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 25 |
+| precondition proved from the callers (b) | 0 |
+| open | 101 |
+| NOT_EXECUTED (excluded) | 5 |
+
+Rows: the executed checked or mixed definitions touch 396 CLOSED rows. 365 of them still
+depend on at least one open or domain-only definition, and 31 are served only by TOTAL or
+DIRECT definitions. The figure does not move, because the five excluded kernels' rows are all
+also served by other open definitions.
+
+No executing site was found that passes a value without a producer for its limb bound. No
+reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Next, in order:
+1. The finish Prepared alpha link, then the finish dot and the CurrentPreparedClaim sum loops.
+   With the non-094 query dictionaries, these close CW.
+2. The semantic-boundary operands and the coefficient-array invariant, which close SM.
+3. The QA installer contexts outside 094.
+4. SC/R72 (35 sites, mostly extracted towers and two sampler entry points).
+5. FIq (238).
+
+Target not yet established.
