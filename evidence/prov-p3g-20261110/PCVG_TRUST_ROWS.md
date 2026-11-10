@@ -22,7 +22,7 @@ Residual common to every row: the row says each Lean model matches the cited Rus
 
 **Statement.** The Lean definitions of Array::map, array/slice equality (PartialEq between slice and array), slice windows, slice first, and the RangeFull slice-index operations are accepted as the Rust core semantics at the pinned sysroot, for the instantiations Aeneas code uses. The `core.array.from_fn` stand-in is excluded: it is HM-M and stays a proof item.
 
-**Members.** `core.array.Array.map`; `FIq_Native.core.array.Array.map`; `Slice.Insts.CoreCmpPartialEqArray.eq`; `Slice.Insts.CoreCmpPartialEqArray.ne`; `core.slice.Slice.windows`; `core.slice.Slice.first`; `core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice.get`, `.get_mut`, `.get_unchecked`, `.get_unchecked_mut`, `.index`, `.index_mut` (the last seven from the unresolved externals, PCVG_EXTERNALS_BY_CRATE.json; the gate has no definition for them yet, so they are members of the row only once a gate model exists, otherwise open library obligations covered by the row's statement).
+**Members.** `core.array.Array.map`; `FIq_Native.core.array.Array.map`; `Slice.Insts.CoreCmpPartialEqArray.eq`; `Slice.Insts.CoreCmpPartialEqArray.ne`; `core.slice.Slice.windows`; `core.slice.Slice.first`; `core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice.get`, `.get_mut`, `.get_unchecked`, `.get_unchecked_mut`, `.index`, `.index_mut` (the six RangeFull ones and first come from the unresolved externals, PCVG_EXTERNALS_BY_CRATE.json; the gate has no definition for them yet, so they are members of the row only once a gate model exists, otherwise open library obligations covered by the row's statement).
 
 **Consumers.** NFN_ExtractedGeometry, NFY_Part042, NID_ResumeEmissionFuns, NJA_CountBody, NMT_stage1_owned.Funs, NMT_first.Funs, RPu_FIq_Native08, RPu_FIq_NativeExternal.
 
@@ -38,7 +38,7 @@ Residual common to every row: the row says each Lean model matches the cited Rus
 
 **Consumers.** NJA_CountBody, RPu_FIq_NativeExternal, NJS_Extract.Funs.
 
-**Differential check.** Feasible and cheap: count_ones and trailing_zeros on all 2^16 u16 values against a compiled Rust program (executable, finite). Not yet run; see PCVG_DIFFCHECK in this directory if it exists.
+**Differential check.** Feasible and cheap: count_ones and trailing_zeros on all 2^16 u16 values against a compiled Rust program (executable, finite). see PCVG_DIFFCHECK in this directory if it exists.
 
 **Removal condition.** Prove each against the Lean integer library, or re-extract through Aeneas library definitions.
 
