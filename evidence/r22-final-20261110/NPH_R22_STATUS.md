@@ -1854,3 +1854,65 @@ Four scopes were used (L083–L086 of this run's 40), all capped as in section 1
 No reachable input on which the wrapping binary accepts and the checked model rejects was found. NDH absorb_ref's `160 + row` would overflow for row ≥ 96, but the body is not executed by the deployed program (proof-only reference), so no such input follows.
 
 Target not yet established.
+
+## 21. Item 1: the dots, accumulate and residue bodies reach (b) (continuation worker, 2026-11-10, after L086)
+
+Five scopes were used: L087–L091 of this run's 40, all capped as in section 19. Three failed on proof-script details, and each was changed before the next scope:
+- L087 and L088: the existential witness of tail_total was left unassigned. The fix gives the explicit returned pair.
+- L090: pair projections were not reduced before omega, and `value 0` was not unfolded to `cursor 0`. The fix adds dsimp only and an explicit show.
+
+Swap was 0 throughout, and peak RSS was 5,979,468 KiB. Every accepted `#print axioms` line is within [propext, Classical.choice, Quot.sound], with no sorry. The lead decision holds: no ops interface, merged module, closed-row statement or field premise is changed.
+
+**21a. Accumulator/cadence family (NPH_R22Accum, L089).** Six bodies move to (b):
+- NEV_AccumulateRaw.accumulate_batched_with_node and its loop0.body, loop0_loop0.body and loop1.body;
+- NEI_PushRaw.update_residue_row_loop0.body and loop1.body.
+
+The invariant asked for is already a def predicate in the closure: S7JoinRowsTrace.Progress t 0 (toBW b), the per-row phase of term count t for all 64 residue rows.
+- **Preserved.** Each push and the flush on terms % 4 = 3 preserve it (NBF_Progress.body inside NBF_RowsTotal). A push leaves the term count unchanged. accumulate_batched_with_node adds one to it once per call, after all 64 rows have been visited once.
+- **Established.** The producers establish it: the pending constructor gives Progress 0 0 (NBF_FirstRows.constructor_progress), and NFS_QueryInvariant.Domain carries it at every reached query state.
+
+New Lean statements:
+- `rows_total`: the checked basis producer and the 64-row weights loop are ok, with the term count unchanged. This covers loop0 with its inner loop, and loop1 with BatchedWeights.push → update_residue_row → both residue loops.
+- `tail_total`: the checked terms + 1, a.next + 1 and the field callees are ok.
+- `acc_total`: the whole call is ok for every node on NFS_NEV_AccumPacket.Domain.
+- `acc_site` and `installed_ok`: the caller join. At every state of NFS_QueryInvariant.Domain inside the loop guard, with the canonical line value, the installed accumulate equals NFS_AccumInstall.run and is ok.
+
+The enclosing call is ok, so every execution of the five inner bodies inside it is ok.
+
+The earlier OPEN notes asked for "terms < MAX and a.next < finish" and "n ≤ 128". Both are subsumed:
+- the counters are < 22 by the query invariant;
+- the basis width is the literal 64, because rows_cut rewrites len a.weights to 64.
+
+**21b. Dots family (NPH_R22Dots, L091).** Three bodies move to (b): four_dots_one, four_dots_one_loop0.body and four_dots_one_loop0_loop0.body. Two new def predicates are introduced:
+- `InnerInv`: at most 4 terms per window, ending at or before 26, with sums ≤ (terms so far)·(P−1)².
+- `OuterInv`: after k ≤ 7 windows the StepBy iterator is at min(4k, 26), with limbs ≤ k·R.
+
+Each is entered by its caller and kept by every successful step:
+- inner_entry and inner_step;
+- outer_entry and outer_step.
+
+On them:
+- every checked operation is ok: slot_ops, read_arith, update_ok, outer_ops;
+- the inner body is ok whenever the current term's scalar read succeeds (inner_ok).
+
+read_arith proves that the read's only checked operations are the cursor arithmetic. The rest is the range index, try_from, unwraps and the M31 decode. These aborts happen in both profiles; this reading is textual and listed in FINAL_COUNTS section 4.
+
+The caller domain is slot < 4 and canonical g:
+- the slots are the literals of four_dots (adapter_calls);
+- on tx1, g comes from NFS_PacketRoot.Domain.gCanonical (tx1_g);
+- on tx2, g comes from NFW_PowersDomain.query_domain.
+
+**21c. Caller structure.** A new read-only backward screen, NPH_REFS5.json (NPH_refs4_host.py on NPH_REFS5_SPEC.json, MemoryHigh 3G / MemoryMax 4G), classifies all 12 targets COVERED_BY_TERMINAL:
+- every upward path meets NEV accumulate or NFS_AccumInstall.run (accumulate family);
+- every upward path meets FIp_DotsAdapter.dots (dots family);
+- the other tops are theorem-only.
+
+This screen is textual and flagged.
+
+**Counts (225 checked or mixed): 72 TOTAL, 42 DIRECT, 63 (b), 0 domain-only, 20 open, 28 NOT_EXECUTED; executed obligation 197.** Rows exposed: **73 of 393** (153 before). Of the exposed rows, 80 had no open dependency outside these nine, and 74 depended on exactly these nine.
+
+Next, item 2: the 7 caller-owed cursor bounds and the 2 caller-domain index bodies. Item 1 closed four_dots_one, so 1 index body is left (weights.field).
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.

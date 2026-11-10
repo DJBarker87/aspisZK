@@ -14,15 +14,15 @@
   "TOTAL_PROVED": 72,
   "DIRECT": 42,
   "DOMAIN_LEMMA_PROVED": 0,
-  "PRECONDITION_B": 54,
-  "OPEN": 29,
+  "PRECONDITION_B": 63,
+  "OPEN": 20,
   "NOT_EXECUTED": 28
  },
  "counts_by_class": {
   "CHECKED/DIRECT": 40,
   "CHECKED/NOT_EXECUTED": 28,
-  "CHECKED/OPEN": 28,
-  "CHECKED/PRECONDITION_B": 54,
+  "CHECKED/OPEN": 19,
+  "CHECKED/PRECONDITION_B": 63,
   "CHECKED/TOTAL_PROVED": 67,
   "MIXED/DIRECT": 2,
   "MIXED/OPEN": 1,
@@ -30,8 +30,8 @@
  },
  "rows": {
   "touched_by_executed_checked_or_mixed": 393,
-  "with_at_least_one_open_or_domain_only_definition": 153,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 240,
+  "with_at_least_one_open_or_domain_only_definition": 73,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 320,
   "touched_including_NOT_EXECUTED": 396,
   "note_20261110_late": "served_only_by_TOTAL_or_DIRECT_definitions now counts rows served only by TOTAL, DIRECT or PRECONDITION_B definitions"
  },
@@ -11324,10 +11324,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8FrozenRow.row_step_total)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "old + raw*coef per residue cell: needs the per-row term count bound (once-per-row cadence) of the accumulator push."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "old + raw*coef per residue cell: needs the per-row term count bound (once-per-row cadence) of the accumulator push.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NEI_PushRaw.Funs",
@@ -11441,10 +11449,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S8FrozenRow.row_step_total)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "limb fold (limb & P) + (limb >> 31): the add needs the stored limb bound carried by the push cadence invariant."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "limb fold (limb & P) + (limb >> 31): the add needs the stored limb bound carried by the push cadence invariant.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NFS_AccumPart00",
@@ -11558,10 +11574,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 S7: no production extraction)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "weights.terms + 1 and a.next + 1: needs terms < MAX and a.next < finish from NFS_QueryInvariant.Domain (reached states, NPH_R22JoinCW2.reach_domain) composed at this body."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "weights.terms + 1 and a.next + 1: needs terms < MAX and a.next < finish from NFS_QueryInvariant.Domain (reached states, NPH_R22JoinCW2.reach_domain) composed at this body.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NFS_AccumPart00",
@@ -11675,10 +11699,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 S7: no production extraction)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "n*2 basis width doubling: needs n <= 128 (row width <= 256) along the basis loop."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "n*2 basis width doubling: needs n <= 128 (row width <= 256) along the basis loop.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NFS_AccumPart00",
@@ -11792,10 +11824,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 S7: no production extraction)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "n + j with j < n: needs n <= 128 as above."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "n + j with j < n: needs n <= 128 as above.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NFS_AccumPart00",
@@ -11909,10 +11949,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "OTHER (2021 S7: no production extraction)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (enclosing-call totality on the accumulator/cadence predicate, NPH_R22Accum, L089): NEV_AccumulateRaw.accumulate_batched_with_node is ok for every node on NFS_NEV_AccumPacket.Domain (acc_total: width 64, raw length 64, a.next < 22, b.terms < 22, canonical value/rhs/power/rho, and the def predicate S7JoinRowsTrace.Progress b.terms 0 (toBW b), the per-row phase/cadence invariant preserved by every push and flush inside NBF_RowsTotal). Route: rows_total (NFS_NEV_BasisProducer.total for every node; NBF_RowsTotal.full; NFS_NEV_RowLoop.association, no success premise) and tail_total (terms + 1 and a.next + 1 with both counters < 22; NFS_NEV_PrimitiveBindings/PrimitiveTotal field callees). Caller join: acc_site/installed_ok give the Domain at every query state of NFS_QueryInvariant.Domain inside the loop guard (a.next < finish <= 22) with the canonical line value (NFS_AccumDomain.line), and the installed accumulate equals NFS_AccumInstall.run, whose only raw call this is; reached states: NPH_R22JoinCW2.reach_domain (tx2) and NFS_PacketRoot.Domain.invariant (tx1). Since the whole call is ok, every execution of this definition inside it is ok. Caller structure from the backward screen NPH_REFS5.json (textual, flagged: every upward path meets NFS_AccumInstall.run or NEV accumulate).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "i*width + j: needs i < rows, j < width <= 256 from the accumulator shape."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (enclosing-call totality on S7JoinRowsTrace.Progress + NFS_NEV_AccumPacket.Domain)",
+   "nph_open_next_step": "i*width + j: needs i < rows, j < width <= 256 from the accumulator shape.",
+   "nph_judgment_before_item1acc": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Accum.rows_total",
+    "AspisR1.NPH_R22Accum.tail_total",
+    "AspisR1.NPH_R22Accum.acc_total",
+    "AspisR1.NPH_R22Accum.acc_site",
+    "AspisR1.NPH_R22Accum.installed_ok"
+   ]
   },
   {
    "module": "NFY_Part043",
@@ -17287,10 +17335,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": true,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S4 fixed_success_calls_actual_helpers; source changed since)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (caller domain slot < 4, NPH_R22Dots, L091): slot_ops proves every checked operation of the body (slot*120, +104, +120, slot*32, 480+., 0*16, 1*16, +26, +16) ok for slot < 4; the only executing caller four_dots passes the literals 0..3 (adapter_calls) and is reached only through FIp_DotsAdapter.dots (op20) on toArray g (backward screen NPH_REFS5.json, textual, flagged; the NEI_FourWrapper copy is theorem-only). Its loops enter on the def-predicate invariants of NPH_R22Dots (outer_entry, inner_entry). The callees (M31.reduce_u64, from_limbs, EbyKDot.new/push/finish, WideExact.add) keep their own judgments.",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "INDEX_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "slot*120, +104/+120, slot*32, 480+..: ok for slot < 4; the only executing caller four_dots passes the literals 0..3 (NEI_FourWrapper copy is its own definition). One lemma for slot < 4 plus the four literal call sites closes it."
+   "nph_pattern_class": "INDEX_ARITHMETIC_ON_CALLER_DOMAIN (slot < 4 literal call sites)",
+   "nph_open_next_step": "slot*120, +104/+120, slot*32, 480+..: ok for slot < 4; the only executing caller four_dots passes the literals 0..3 (NEI_FourWrapper copy is its own definition). One lemma for slot < 4 plus the four literal call sites closes it.",
+   "nph_judgment_before_item1dots": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Dots.slot_ops",
+    "AspisR1.NPH_R22Dots.adapter_calls",
+    "AspisR1.NPH_R22Dots.outer_entry"
+   ]
   },
   {
    "module": "RPz7_FIp_NativeDots",
@@ -17417,10 +17471,17 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": true,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S4 fixed_success_calls_actual_helpers; source changed since)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (reached-domain loop invariant, NPH_R22Dots, L091): on the def predicate OuterInv (after k <= 7 windows the StepBy iterator is at min(4k,26) on end 26 with step 4 and every limb <= k*R, R = 10737418238) the body's checked start + 4 is ok, the inner loop is entered on InnerInv, and the fold (& P, >>> 31, two adds per limb) of any inner result is ok (outer_ops, JFs_TX2_FoldEight.source); a successful step keeps OuterInv (outer_step); four_dots_one enters with OuterInv (outer_entry: value 0 and zero limbs). The fold is ok for every u64 sum, so no caller fact beyond the invariant is needed. Caller structure from NPH_REFS5.json (textual, flagged).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "limbs[k] + fold(sums[k]) over the 7 StepBy windows of 0..26: needs limbs <= 7*(P+2^33) along the StepBy loop from Array.repeat 0 (loop invariant over core.iter StepBy)."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (OuterInv: window count and limb bound over the StepBy loop)",
+   "nph_open_next_step": "limbs[k] + fold(sums[k]) over the 7 StepBy windows of 0..26: needs limbs <= 7*(P+2^33) along the StepBy loop from Array.repeat 0 (loop invariant over core.iter StepBy).",
+   "nph_judgment_before_item1dots": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Dots.outer_ops",
+    "AspisR1.NPH_R22Dots.outer_step",
+    "AspisR1.NPH_R22Dots.outer_entry",
+    "AspisR1.NPH_R22Dots.inner_entry"
+   ]
   },
   {
    "module": "RPz7_FIp_NativeDots",
@@ -17547,10 +17608,21 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": true,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 S4 fixed_success_calls_actual_helpers; source changed since)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "PRECONDITION_B (reached-domain loop invariant with caller domain slot < 4 and canonical g, NPH_R22Dots, L091): on the def predicate InnerInv (window of at most 4 terms ending <= 26; every u64 sum <= (terms so far)*(P-1)^2) the body is ok whenever the scalar read of the current term succeeds, and a successful step keeps InnerInv (inner_ok, inner_step; update_ok: the 8 checked u64 products and adds on canonical coefficient limbs and a read scalar < P, read_canon); the outer body enters with InnerInv (inner_entry). read_arith proves the read's checked arithmetic (slot*120, term*4, two adds, +4) ok for slot < 4, term < 26 and shows that the rest of the read is the bounds-checked range index, try_from, two unwraps and the M31 decode, with no checked arithmetic: those non-arithmetic aborts happen in both profiles (bounds checks and panics are on in both; textual checked-op enumeration reliance). Canonical g at the reached op20 call: NFS_PacketRoot.Domain.gCanonical (tx1_g) and NFW_PowersDomain.query_domain (tx2); slot literals from four_dots (adapter_calls). Caller structure from NPH_REFS5.json (textual, flagged).",
    "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)",
-   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT",
-   "nph_open_next_step": "sums[k] + limb*scalar over at most 4 terms: needs canonical g limbs (< P; NFS_PacketRoot.Domain / NFW_PowersDomain.query_domain) and the from_le_bytes scalar < P, giving 4*(P-1)^2 < 2^64; plus term*4 + slot*120 index arithmetic (term < 26, slot < 4)."
+   "nph_pattern_class": "ACCUMULATOR_CADENCE_INVARIANT (InnerInv: term count <= 4 per window, sum bound; canonical g and scalar)",
+   "nph_open_next_step": "sums[k] + limb*scalar over at most 4 terms: needs canonical g limbs (< P; NFS_PacketRoot.Domain / NFW_PowersDomain.query_domain) and the from_le_bytes scalar < P, giving 4*(P-1)^2 < 2^64; plus term*4 + slot*120 index arithmetic (term < 26, slot < 4).",
+   "nph_judgment_before_item1dots": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Dots.read_arith",
+    "AspisR1.NPH_R22Dots.read_canon",
+    "AspisR1.NPH_R22Dots.update_ok",
+    "AspisR1.NPH_R22Dots.inner_ok",
+    "AspisR1.NPH_R22Dots.inner_step",
+    "AspisR1.NPH_R22Dots.inner_entry",
+    "AspisR1.NPH_R22Dots.tx1_g",
+    "AspisR1.NPH_R22Dots.adapter_calls"
+   ]
   },
   {
    "module": "S1ClaimBorrowedAbiNativeV1",
@@ -19389,5 +19461,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "pattern classes recorded for the 29 OPEN definitions (nph_pattern_class, nph_open_next_step), 2026-11-10 continuation. Previous: updated loops5: OraclePortCkptAbi2Extracted.e_byte -> DIRECT; counts 72/42/0/54/29 of 197; rows exposed 153 of 393. Previous: updated loops5: NCV_Reference.word32, NCV_Reference.word64, OraclePortCkptAbi2Extracted.word_spec -> DIRECT; counts 72/41/0/54/30 of 197; rows exposed 153 of 393. Previous: updated loops5: NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop.body -> DIRECT; counts 72/38/0/54/33 of 197; rows exposed 158 of 393. Previous: updated loops5: AspisR1PrefixAggregateParser.r1_wire.row_shape, AspisS1NativeCompact.r1_wire.row_shape -> TOTAL_PROVED; counts 72/37/0/54/34 of 197; rows exposed 159 of 393. Previous: updated proof_only_refs4: AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push, AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push_loop.body, AspisR1CanonicalDotFinish.canonical.reduce, AspisR1Qm31SamplerIndex.sampler.qm31_digits_loop0.body, AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body, AspisR1RecordParser.r1_wire.parse_record, AspisR1RecordParser.r1_wire.row_shape, AspisR1RowShape.r1_wire.row_shape, AspisR1WithdrawalCaller.encode_digest_canonical_loop.body, AspisR1FinishRelationCurrent.verifier.finish_relation_round, MultiproofParserRef.parser_reference.opening_rows, NDH_TranscriptReference.absorb_ref, NDI_BatchRef.batch_keys_ref_loop.body, NDI_BatchRef.batch_word_ref, NEG_PushActual.update_residue_row_loop0.body, NEG_PushActual.update_residue_row_loop1.body, Port23PUSH.verifier.update_residue_row_loop0.body, Port23PUSH.verifier.update_residue_row_loop1.body, AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0, AspisR1SelectedMaskProbe.field.qm31_pack_base4, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body, S8OwnedP6.check_values_owned_loop.body -> NOT_EXECUTED; counts 70/37/0/54/36 of 197; rows exposed 160 of 393. Previous: updated loops4: NCX_Reference.read32, NCX_Reference.word, NJC_ReaderEmission.verifier.Reader.raw -> DIRECT; counts 70/37/0/54/59 of 220; rows exposed 189 of 396. Previous: updated loops4: MultiproofSortRef.sort_reference.insert_step, MultiproofConeRef.reference.levels, Op4P_Extract.Op4P_reference.parser_reference.opening_rows, MultiproofConeRef.reference.valid_indices -> DIRECT; counts 70/34/0/54/62 of 220; rows exposed 195 of 396. Previous: updated loops4: AspisR1EbyKFinish.canonical.reduce -> TOTAL_PROVED; counts 70/30/0/54/66 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1DotPushLocal.canonical.Dot.push -> DIRECT; counts 69/30/0/54/67 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1, AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 -> DIRECT; counts 69/29/0/54/68 of 220; rows exposed 202 of 396. Previous: updated loops4: AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body -> PRECONDITION_B; counts 69/27/0/54/70 of 220; rows exposed 218 of 396. Previous: updated qraw_total: AspisR1CanonicalQRawUnified.canonical.Q.raw, FIo_QRaw.canonical.Q.raw -> TOTAL_PROVED; counts 69/27/0/53/71 of 220; rows exposed 255 of 396. Previous: updated fiq_terminal: FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight, FIq_Native.field.CM31.mul, FIq_Native.field.CM31.square, FIq_Native.field.M31.add, FIq_Native.field.M31.sub, FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0, FIq_Native.field.qm31_m31_dot_loop0, FIq_Native.field.qm31_m31_dot_loop1, FIq_Native.field.qm31_m31_dot_loop1_loop0, FIq_Native.field.qm31_m31_dot_loop1_loop1, FIq_Native.field.qm31_pack_base4, FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0, FIq_Native.state_only_poseidon.external_linear_packed_loop, FIq_Native.state_only_poseidon.external_local_packed_raw, FIq_Native.state_only_poseidon.interpolate_three_constant_limb, FIq_Native.state_only_poseidon.external_linear_lazy_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2, FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed, FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts moved to PRECONDITION_B; counts 67/27/2/53/71 of 220; rows exposed 259 of 396. Previous: updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
+ "revision_note": "updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body -> PRECONDITION_B; counts 72/42/0/63/20 of 197; rows exposed 73 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0.body -> PRECONDITION_B; counts 72/42/0/62/21 of 197; rows exposed 151 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one -> PRECONDITION_B; counts 72/42/0/61/22 of 197; rows exposed 151 of 393. Previous: updated item1acc: NEV_AccumulateRaw.accumulate_batched_with_node, NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body, NEI_PushRaw.update_residue_row_loop0.body, NEI_PushRaw.update_residue_row_loop1.body -> PRECONDITION_B; counts 72/42/0/60/23 of 197; rows exposed 151 of 393. Previous: pattern classes recorded for the 29 OPEN definitions (nph_pattern_class, nph_open_next_step), 2026-11-10 continuation. Previous: updated loops5: OraclePortCkptAbi2Extracted.e_byte -> DIRECT; counts 72/42/0/54/29 of 197; rows exposed 153 of 393. Previous: updated loops5: NCV_Reference.word32, NCV_Reference.word64, OraclePortCkptAbi2Extracted.word_spec -> DIRECT; counts 72/41/0/54/30 of 197; rows exposed 153 of 393. Previous: updated loops5: NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop.body -> DIRECT; counts 72/38/0/54/33 of 197; rows exposed 158 of 393. Previous: updated loops5: AspisR1PrefixAggregateParser.r1_wire.row_shape, AspisS1NativeCompact.r1_wire.row_shape -> TOTAL_PROVED; counts 72/37/0/54/34 of 197; rows exposed 159 of 393. Previous: updated proof_only_refs4: AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push, AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push_loop.body, AspisR1CanonicalDotFinish.canonical.reduce, AspisR1Qm31SamplerIndex.sampler.qm31_digits_loop0.body, AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body, AspisR1RecordParser.r1_wire.parse_record, AspisR1RecordParser.r1_wire.row_shape, AspisR1RowShape.r1_wire.row_shape, AspisR1WithdrawalCaller.encode_digest_canonical_loop.body, AspisR1FinishRelationCurrent.verifier.finish_relation_round, MultiproofParserRef.parser_reference.opening_rows, NDH_TranscriptReference.absorb_ref, NDI_BatchRef.batch_keys_ref_loop.body, NDI_BatchRef.batch_word_ref, NEG_PushActual.update_residue_row_loop0.body, NEG_PushActual.update_residue_row_loop1.body, Port23PUSH.verifier.update_residue_row_loop0.body, Port23PUSH.verifier.update_residue_row_loop1.body, AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0, AspisR1SelectedMaskProbe.field.qm31_pack_base4, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body, S8OwnedP6.check_values_owned_loop.body -> NOT_EXECUTED; counts 70/37/0/54/36 of 197; rows exposed 160 of 393. Previous: updated loops4: NCX_Reference.read32, NCX_Reference.word, NJC_ReaderEmission.verifier.Reader.raw -> DIRECT; counts 70/37/0/54/59 of 220; rows exposed 189 of 396. Previous: updated loops4: MultiproofSortRef.sort_reference.insert_step, MultiproofConeRef.reference.levels, Op4P_Extract.Op4P_reference.parser_reference.opening_rows, MultiproofConeRef.reference.valid_indices -> DIRECT; counts 70/34/0/54/62 of 220; rows exposed 195 of 396. Previous: updated loops4: AspisR1EbyKFinish.canonical.reduce -> TOTAL_PROVED; counts 70/30/0/54/66 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1DotPushLocal.canonical.Dot.push -> DIRECT; counts 69/30/0/54/67 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1, AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 -> DIRECT; counts 69/29/0/54/68 of 220; rows exposed 202 of 396. Previous: updated loops4: AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body -> PRECONDITION_B; counts 69/27/0/54/70 of 220; rows exposed 218 of 396. Previous: updated qraw_total: AspisR1CanonicalQRawUnified.canonical.Q.raw, FIo_QRaw.canonical.Q.raw -> TOTAL_PROVED; counts 69/27/0/53/71 of 220; rows exposed 255 of 396. Previous: updated fiq_terminal: FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight, FIq_Native.field.CM31.mul, FIq_Native.field.CM31.square, FIq_Native.field.M31.add, FIq_Native.field.M31.sub, FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0, FIq_Native.field.qm31_m31_dot_loop0, FIq_Native.field.qm31_m31_dot_loop1, FIq_Native.field.qm31_m31_dot_loop1_loop0, FIq_Native.field.qm31_m31_dot_loop1_loop1, FIq_Native.field.qm31_pack_base4, FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0, FIq_Native.state_only_poseidon.external_linear_packed_loop, FIq_Native.state_only_poseidon.external_local_packed_raw, FIq_Native.state_only_poseidon.interpolate_three_constant_limb, FIq_Native.state_only_poseidon.external_linear_lazy_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2, FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed, FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts moved to PRECONDITION_B; counts 67/27/2/53/71 of 220; rows exposed 259 of 396. Previous: updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
 }
