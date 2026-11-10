@@ -1,0 +1,80 @@
+def AspisR1.FIn_Primitives.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E :=
+fun bytes i => do
+  let x ← AspisR1CurrentWide.Proof.finishField bytes i
+  Aeneas.Std.Result.ok (SAG_DotAdapter.toStageE x)
+def AspisR1.FIn_ExtractInstall.polynomial : Aeneas.Std.Slice Aeneas.Std.U8 →
+  AspisR1Stage2.Stage2Finish.E → Aeneas.Std.Result AspisR1Stage2.Stage2Finish.E :=
+FIn_Extract.FIn_reference.polynomial FIn_ExtractInstall.arithmetic
+def AspisR1.Port4D_Round.round : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+                AspisR1Stage2.verifier.Error) :=
+fun {W} ops poly alpha claim round => do
+  let we ← ops.field poly 0#usize
+  let we1 ← ops.field poly 4#usize
+  let lhs ← ops.add we we1
+  let m ← ops.quarter
+  let rhs ← ops.mulM claim m
+  let i ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 3#usize round)
+  ops.trace 15#u16 i lhs
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 3#usize round)
+  let i2 ← Aeneas.Std.lift (i1.wrapping_add 1#usize)
+  ops.trace 15#u16 i2 rhs
+  let b ← ops.ne lhs rhs
+  if b = true then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← ops.polynomial poly alpha
+      let i3 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 3#usize round)
+      let i4 ← Aeneas.Std.lift (i3.wrapping_add 2#usize)
+      ops.trace 15#u16 i4 claim1
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claim1)
+def AspisR1Stage2.Stage2Finish.verifier.finishRelationRoundWithOps : {W : Type} →
+  AspisR1Stage2.Stage2Finish.FinishOps W →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+                AspisR1Stage2.verifier.Error) :=
+fun {W} ops poly alpha claim round => do
+  let we ← ops.field poly 0#usize
+  let we1 ← ops.field poly 4#usize
+  let lhs ← ops.add we we1
+  let m ← ops.quarter
+  let rhs ← ops.mulM claim m
+  let i ← 3#usize * round
+  ops.trace 15#u16 i lhs
+  let i1 ← i + 1#usize
+  ops.trace 15#u16 i1 rhs
+  let b ← ops.ne lhs rhs
+  if b = true then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+    else do
+      let claim1 ← ops.polynomial poly alpha
+      let i2 ← i + 2#usize
+      ops.trace 15#u16 i2 claim1
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claim1)
+       22.90 real         2.60 user         3.41 sys
+          5404475392  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              238989  page reclaims
+              166895  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               23663  voluntary context switches
+              144484  involuntary context switches
+         46362956288  instructions retired
+         18532856822  cycles elapsed
+           904920552  peak memory footprint
