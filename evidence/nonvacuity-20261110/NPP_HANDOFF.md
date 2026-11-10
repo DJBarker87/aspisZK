@@ -485,3 +485,115 @@ The three executable-only results are:
 - `tx1Value` (NPP_L074): ok, bytes equal to the checkpoint.
 
 Target not yet established.
+
+## 11. Last round (lead decisions of 2026-11-10, research 10bb5eaa420): NPP_L075 to NPP_L077
+
+Three scopes, one at a time, with the same checks. Peak RSS was at most 6,909,092 KiB and swap was
+0.
+
+### 11.1 A2 done (NPP_L075, NPP_src/NPP_RefineA2.lean)
+
+- **The inverse.** `NPP_RefineA2.unauth` inverts `NND_Carrier.auth` field by field. It uses the
+  existing `unkey`/`unbyte`/`unslot`/`unword` and a generic array inverse `unArr` with back lemma
+  `unArr_back`, and covers `undigest`, `unfrontier`, `unslots`, `unpoolIdentity`, `unpolicy`,
+  `unmaster`, `uncheckpoint`, `untree`, `unlane` and `unlive`. Each has a back roundtrip, and
+  together they give `unauth_back : unauth (auth r) = r`.
+- **The image test.** `DecidableEq` is derived for the eight RSL records.
+- **The copy.** `NPP_C.LIBB_AuthCarrier.raw a := if auth (unauth a) = a then some (unauth a) else none`.
+- **The equation.** `raw.npp_eq` is proved from `auth_injective` and `unauth_back`.
+- **Axioms.** All standard. Kernel-checked; it goes in the npp_eq column.
+
+### 11.2 tx2Value on record 36: no result within the 600 s budget
+
+- The executable generator, now importing NPP_RefineA2, produced 28 implementations on the
+  `tx2Value` path, all compiled (NPP_L076). The kernel accepted the unsafe block. No unrefined site
+  lies on this path: A4 and B1 are not reached by `tx2Value`.
+- The run `NPP_X.NNH_ReturnsBundle.tx2Value ⟨key program, accounts xs, bytes data, reply slot
+  current_slot⟩ env` (NPP_L077) used:
+  - the Pool's read-only CPI privileges;
+  - the saved 524-entry TX2 H table;
+  - the logged Lean `create_program_address`;
+  - clock ok 520606678.
+- It **timed out at 600 s** in the authorised interpreter scope, and the `#eval` output was lost
+  with the timeout. **So it is not known whether it returns the recorded `.ok ()`.**
+- It was not rerun. A follow-up would need a run with streamed progress output, to tell a slow
+  run from a non-terminating implementation, or a natively compiled executable instead of the
+  interpreter. Either needs the lead's authorisation.
+
+### 11.3 Final columns
+
+| Column | Count |
+|---|---:|
+| Kernel copies (sdk 62, hand 6 including A2 `raw`, model cone 252) | 320 |
+| **npp_eq proved** (kernel; the only column that counts as proof) | **241** |
+| **nov_eq proved** (kernel) | **20** |
+| **Executable-only results** (code generated from equation lemmas and values; not kernel-checked; never a theorem) | **3** |
+| **Record-only** | **0** |
+| **Blocked**: unrefined leaves (B1 `select`, A4 `R6.observation`) | 2 |
+| **Blocked**: tool blocks | 7 |
+| **Blocked**: dependents (as of NPP_L060) | 79 |
+
+The three executable-only results are:
+
+- TX1 `stage1_owned`: Ok, checkpoint equal;
+- TX2 `stage2_owned`: Ok (Ok ()), statement equal;
+- `tx1Value` on record 35: ok, bytes equal to the checkpoint (iff345's right-hand side).
+
+The `tx2Value` attempt timed out and is not counted.
+
+The model-cone stage A was not rerun after A2. Its kernel copies above `LIBB_AuthCarrier.raw` (the
+10 dependents on the `tx2Value` path) are still counted as blocked in the NPP_L060 olean. A rerun
+importing NPP_RefineA2 would propagate them: 1 scope.
+
+### 11.4 What a kernel-level witness of `Runs` still needs
+
+The copies and `npp_eq` give computable, provably equal versions of the model. They do not prove
+acceptance. A kernel witness of `NPP_Nov.…runs_of_residual`'s hypotheses (trace, ok1, out1, ok2)
+still needs the following.
+
+1. **B1, an owner decision.** `NNG_TypedEvents.select` branches on the constructor-field type
+   equality `A = Args` of `NMT_CallTree.Event.call`. It is reached from a variable event at
+   NNG_Events087 (lines 19–20), NNG_Events094 (lines 27–29) and NNG_Events137. It blocks I.entry
+   (`NNH_Run6Installed.implementation`) on TX1, plus 20 dependents.
+2. **A4, an owner decision.** `NMX_R6_NativeLive242.observation` chooses an observation of
+   `NMS_R2N_Native242Children.meaning`. That meaning admits two `RSL.Spec.alloc` outcomes,
+   `⟨.ret (), []⟩` or `⟨.abort, []⟩`, which `choices` does not resolve:
+   - at NMS_R2N_ScanSites.scan line 26 (op51, the Box::new in scan_proof_buffer);
+   - at two more sites in NMS_R2N_ReconstructSites.meaning (op52, r1_pool_adapter.rs:874,
+     asq8_common:814, statement_box:832/849).
+
+   It blocks I.entry on TX2 (16 dependents). NMX_R9_Live241 sits behind it.
+3. **`LIBC_BatchMerkle.returns`.**
+   - It has no 10 November clone to transport.
+   - The copies in its type have no stage-A equation: `LIBC_BatchMerkle.model`, `value` and
+     `child`, and the recursive `NLL_Parent.model._f`, whose kernel copy uses `brecOn` and has no
+     equation because the chain step fails for the recursion helper.
+   - Re-checking its proof exceeded kernel memory (NPP_L064).
+   - Needed: equations for those copies (a recursion-aware chain step through `brecOn`, or
+     equation-lemma-based copies with proved `npp_eq`), then transport. It blocks the kernel copy of
+     `NNH_Tx1Returns.values` and so of `tx1Value`.
+4. **The seven tool blocks (NPP_L060):**
+   - `LIB_VClaims.value._proof_2`: a proof inside a proof type. It is now moot, because
+     `LIB_VClaims.value` is copied by hand with `npp_eq`.
+   - `AspisR1.NNG_Native328.input` and `AspisR1.NNG_Input094.input`: kernel-rejected copies. There
+     is a type mismatch at the projection `a.public_` on `NNG_Input094.Args`, probably a structure
+     whose field types mention copied or id-dependent constants, which the tool does not copy.
+   - `AspisR1.NNG_Representation136.project._proof_7` and `._proof_1`: substitution failed, with the
+     same projection mismatch on `NNG_Representation136.Args` (`a.challenges`).
+   - `AspisR1.NNH_064SourceDetails.record`: kernel excessive memory on the copy.
+   - `NKE_CommonEval.source`: kernel excessive memory on the substitution copy.
+
+   The two projection cases need structure copies (inductive types whose fields mention dependents)
+   with their own equations. The two memory cases need the copy expressed through equations or
+   transport, instead of re-checking.
+5. **The remaining equations.** 66 copies without `npp_eq` or `nov_eq`: id-dependent copies whose
+   stage-B equations depend on NPP_SdkNovEq, which the model stage-B tool did not import, and copies
+   with proofs spanning two placeholder groups.
+6. **The acceptance proofs themselves.** ok1/out1 at I.entry (through iff345 and
+   `NNG_TotalProducer345.interpretation`), ok2, and the trace association remain to be proved. The
+   executable results (`stage1_owned`, `stage2_owned`, `tx1Value`) are evidence that the model accepts
+   the recorded pair, not proofs. The R2 per-call proof campaign (sections 5 and 6) is still the
+   route. Items 1 and 2 must be decided first, because I.entry cannot be evaluated or copied until
+   they are.
+
+Target not yet established.
