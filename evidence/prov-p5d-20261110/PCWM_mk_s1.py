@@ -54,5 +54,5 @@ theorem values_owned_reference (input output : alloc.vec.Vec Std.U8) :
 
 end PRVEq.{M}_w1
 '''
-proof=sys.argv[1] if len(sys.argv)>1 else 'sorry_placeholder'
+proof=sys.argv[1] if len(sys.argv)>1 else 'unproved_placeholder_placeholder'
 open(f'PRVEq_{M}_w1.lean','w').write((hdr+th).replace('VOR_PROOF',proof))
