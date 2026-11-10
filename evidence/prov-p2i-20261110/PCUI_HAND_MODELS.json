@@ -1,0 +1,32 @@
+{
+ "schema": "PCUI_HAND_MODELS/1",
+ "entries": [
+  {
+   "name": "ShrAmt",
+   "file": "prov-p2i-20261110/inputs/prelude_shramt_u64.lean",
+   "kind": "encoding bridge (hand model)",
+   "scope": "U64 wrapping_shl/wrapping_shr with an I32/Usize shift amount; overflow-checks-OFF only",
+   "verification": "evidence/shramt-20261110/NPE_SHRAMT_CHECK.md (OFF only; never for checked shifts with amounts wider than 32 bits)",
+   "used_in": "PRVEq_NJS_Extract_Funs_i2.lean (pass fresh = NMH_E010 NJS_Extract, OFF default environment)",
+   "credited_definitions_depending_on_it": [
+    [
+     "NJS_Extract.Funs",
+     "NJS_Extract.verifier.candidate.batch_keys"
+    ],
+    [
+     "NJS_Extract.Funs",
+     "NJS_Extract.verifier.candidate.batch_keys_loop"
+    ]
+   ],
+   "fresh_declarations_depending": [
+    "verifier.candidate.batch_keys",
+    "verifier.candidate.batch_keys_loop",
+    "verifier.candidate.batch_keys_loop.body"
+   ]
+  },
+  {
+   "name": "gate externals as variables",
+   "note": "NJS_Extract.Funs / NMP_prepare.Funs gate declarations that depend on the NJS_call_k / NMP_call_k variables have no text-identical emission (the fresh emission refers to the concrete external); they are NOT credited here (parametric transport, CONDITIONAL_ON_BINDING at best)."
+  }
+ ]
+}
