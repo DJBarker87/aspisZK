@@ -1,0 +1,46 @@
+{"attempt": "NPH_L001", "exit_status": 1, "wall_seconds": 1.3986608360428363, "peak_rss_kib": "2626772", "swaps": "0", "print_axioms": []}
+@UScalar.add_spec : ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑x + ↑y ≤ UScalar.max ty → x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+@UScalar.sub_spec : ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑y ≤ ↑x → x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+@UScalar.mul_spec : ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑x * ↑y ≤ UScalar.max ty → x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+@UScalar.ShiftRight_spec : ∀ {ty0 ty1 : UScalarTy} (x : UScalar ty0) (y : UScalar ty1),
+  ↑y < ty0.numBits → x >>> y ⦃ z => ↑z = ↑x >>> ↑y ∧ z.bv = x.bv >>> ↑y ⦄
+@UScalar.ShiftRight_IScalar_spec : ∀ {ty0 : UScalarTy} {ty1 : IScalarTy} (x : UScalar ty0) (y : IScalar ty1),
+  0 ≤ ↑y → ↑y < ↑ty0.numBits → x >>> y ⦃ z => ↑z = ↑x >>> y.toNat ∧ z.bv = x.bv >>> y.toNat ⦄
+...
+ax ty < ↑x * ↑y
+  | div => False
+@UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty
+@UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty)
+@UScalar.val_and : ∀ {ty : UScalarTy} (x y : UScalar ty), ↑(x &&& y) = ↑x &&& ↑y
+UScalar.max_USize_eq : UScalar.max UScalarTy.Usize = Usize.max
+core.convert.num.FromU64U32.from : U32 → U64
+core.num.U64.wrapping_add : U64 → U64 → U64
+@[irreducible] def AspisR1CurrentWide.field.P : U32 :=
+2147483647#u32
+@[reducible] def AspisR1CurrentWide.field.M31 : Type :=
+U32
+structure AspisR1CurrentWide.field.CM31 : Type
+number of parameters: 0
+fields:
+  AspisR1CurrentWide.field.CM31.a : AspisR1CurrentWide.field.M31
+  AspisR1CurrentWide.field.CM31.b : AspisR1CurrentWide.field.M31
+constructor:
+  AspisR1CurrentWide.field.CM31.mk (a b : AspisR1CurrentWide.field.M31) : AspisR1CurrentWide.field.CM31
+NPH_sources/NPH_Probe.lean:29:14: error: Tactic `rfl` failed: The left-hand side
+  x.add y
+is not definitionally equal to the right-hand side
+  AspisR1Qm31ArithmeticProbe.field.M31.add x y
+
+x y : AspisR1CurrentWide.field.M31
+⊢ x.add y = AspisR1Qm31ArithmeticProbe.field.M31.add x y
+NPH_sources/NPH_Probe.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  AspisR1CurrentWide.field.reduce_u64 x
+is not definitionally equal to the right-hand side
+  AspisR1Qm31ArithmeticProbe.field.reduce_u64 x
+
+x : U64
+⊢ AspisR1CurrentWide.field.reduce_u64 x = AspisR1Qm31ArithmeticProbe.field.reduce_u64 x
+NPH_sources/NPH_Probe.lean:35:2: warning: `progress` has been renamed to `step`. The `progress` syntax is deprecated and will be removed in a future version. Set `set_option Aeneas.Deprecated.progressWarning false` to silence this warning.
+NPH_sources/NPH_Probe.lean:35:2: error: Exists is not a supported spec statement
+
+Running as unit: run-rf633505fb468408c88f3ea02d98f94e9.scope; invocation ID: 3d7725aadc6b48969dab40385350f037
