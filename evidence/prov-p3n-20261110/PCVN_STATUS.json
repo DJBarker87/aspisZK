@@ -1,0 +1,53 @@
+{
+ "schema": "PCVN_STATUS/1",
+ "target_established": false,
+ "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "closure": "codex-cx-replay-l187-20261109 by reference (final/objs, objs, base_ref) then PCVH_exports for R1CandidateWideParserSource and PRVEq_PCVH k1",
+ "name_clash": "none: PRVEq_Tx2Deployed_m1 recompiled unchanged as n0 against the L187 closure, exit 0, standard axioms (PCVN_L001)",
+ "difference_at_matching_configuration": "none found",
+ "proved": {
+  "op2": {
+   "file": "PRVEq_Op2_p5.lean + PRVEq_Tx2Deployed_n1.lean",
+   "theorem": "PCVN_Op2.op2_frozen; PCVN_Tx2Deployed_n1.op2_deployed_frozen",
+   "scope": "PCVN_L009, PCVN_L016",
+   "statement": "deployed op2 (NJC_ClosedCalls.inactive = FIo_Native from_le_bytes behind AspisR1.FIo_Install.fromE) b = fresh PRVFresh_R1CandidateWideParserSource_j1 WideExact.from_le_bytes b mapped by the structural port PCVN_Op2.port. Agreement: yes, no difference. FIo_Native emission is the per-limb unrolled form, the fresh one is the from_limbs form; they agree at all inputs (all lengths, all rejection paths) under the nominal port; field constant P of the two universes proved equal (P_eq).",
+   "uses": "PRVEq.R1CandidateWideParserSource_k1 (PCVH_L008, fresh = gate), PCVH.wide_eq, PCVH.chain",
+   "assumptions": "none beyond library rows (core.num.U32.from_le_bytes HM-F, Slice indexing HM-D)"
+  },
+  "op13": {
+   "file": "PRVEq_Op13_p1.lean",
+   "theorem": "PCVN_Op13.op13_frozen; PCVN_Op13.fresh_eq_gate",
+   "scope": "PCVN_L010",
+   "statement": "NHV_ReleaseOps.mark obs p = fresh verifier::mark (4bb3b3f text, copied from PCQC_E011) at the ported observer and phase; fresh = gate by rfl",
+   "assumptions": "none; Phase ports toC/fromC with fromC_toC proved"
+  },
+  "op17": {
+   "file": "PRVEq_Op17_p2.lean",
+   "theorem": "PCVN_Op17.post_eq, powers_eq, op17_frozen",
+   "scope": "PCVN_L011, PCVN_L012",
+   "statement": "Tx2N_Powers.powers N x = fresh weights::powers (4bb3b3f text, pending_return form; loop induction on N-i) behind the nominal ports, via AspisR1LoopPowers.weights.early_powers = fresh powers",
+   "assumptions": "CONDITIONAL_ON_BINDING, stated in the definitions: fresh aspis_core WideExact.ZERO, ONE, mul are bound to gate field.WideExact.ZERO/ONE/mul (three Aspis-own callees, each its own row; gate field.WideExact.ONE is OPEN in PCXD)"
+  },
+  "op3": {
+   "file": "PRVEq_Tx2Deployed_n1.lean",
+   "theorem": "op3_deployed_shape",
+   "scope": "PCVN_L016",
+   "statement": "deployed op3 = Tx2I_Install.shape = port of the receipted Op3I_Source parse_shape at Op3I_Std.ops (definitional)",
+   "assumptions": "receipt of Op3I_Source (not re-verified here); Op3I_Std.ops contents not audited here"
+  }
+ },
+ "not_done": [
+  "h18 (op18 chain)",
+  "op5 batch_merkle",
+  "op6 query_loop",
+  "op9 flush (BatchedWeights.finish)",
+  "op10 BatchedWeights.new",
+  "op11 geometry (double install interface)",
+  "op19 finish_relation",
+  "PCVM_UNRELATED items checkpoint_size, final_len, read_checkpoint_*",
+  "derived Clone/PartialEq on QM31 and WideExact (item 4)"
+ ],
+ "result_for_deployed_tx2": "deployed_tx2_common / deployed_tx2_authenticated (PRVEq_Tx2Deployed_n0) still carry h18 and the unrelated slots; of the ten callee fields, op2, op13, op17 (conditional on three arithmetic bindings) and op3 (definitional wrapper of a receipted emission) are now related to frozen emissions",
+ "lean_scopes": "16/45",
+ "extraction_scopes": "0/4"
+}

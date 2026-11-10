@@ -1,0 +1,43 @@
+{
+ "schema": "PCVN_UNRELATED/1",
+ "target_established": false,
+ "items": [
+  {
+   "item": "op18/h18 resume",
+   "reason": "Bound op18 needs d.op18 = VTop fresh verifier.resume (xdep y d). Deployed op18 = Port4A_ReaderInstall.reader = port of Port4A_NativeReader.resume. Existing chain: NIL_FreshOps.resume instantiates NID_ResumeEmission.verifier.resume with native readers, NIL_ResumeComposition/NIY_ResumePort relate it to resumeWithOps, but those theorems as read fix the variant to .S2 and the missing link (NID_ResumeEmission.verifier.resume with ops = VTop fresh resume, across the NID and VTop_Stages type universes, 560-line body) is not proved. Also xdep leaves the other Ext fields (QM31 clone, QM31 ZERO, QM31.from_le_bytes, Slice PartialEq eq/ne) as arbitrary y, so h18 hides a dependence on them.",
+   "next": "state NID_ResumeEmission.verifier.resume ops = PRVFresh_VTop_l1.verifier.resume x under nominal ports; check all variants"
+  },
+  {
+   "item": "op5 batch_merkle",
+   "reason": "Port3_NativeBatchBody OPEN, NKV_FRef RECEIPTED; deployed Op5T_Install.stageBatch Port4B_Install.leaves is a wrapper over a hand-adapted body; no equality to the frozen emission"
+  },
+  {
+   "item": "op6 query_loop",
+   "reason": "Port3_NativeQueryBody RECEIPTED (16 rows) but the deployed slot is Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install NJJ_QueryOps.concrete)); the ops dictionary fields are hand models and are not related to frozen callees"
+  },
+  {
+   "item": "op9 BatchedWeights.finish",
+   "reason": "gate item S8Kani2MutableExtraction batched_weights is a different crate copy; frozen BatchedWeights is in candidate.rs; needs a fresh extraction at the matching configuration (not run)"
+  },
+  {
+   "item": "op10 BatchedWeights.new",
+   "reason": "no gate row by name; needs fresh extraction (not run)"
+  },
+  {
+   "item": "op11 geometry",
+   "reason": "deployed op11 = Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geo) with geo = NFN_NEW_GeometryDictionary.adopted, which is itself Port5Q1_GeometryTerminal.install (...). NJC_ClosedCalls.geometry_clause relates the frozen for_range wrapper to geometry adopted (single install). install adopted = adopted was tried twice and failed (PCVN_L013 with_unfolding_all rfl: max recursion; PCVN_L014 rfl: kernel memory); shape retired. Prop: GeometryInverse.install sets op13 := prefixCall ops, which depends on the input ops, so idempotence is not structural."
+  },
+  {
+   "item": "op19 finish_relation",
+   "reason": "gate AspisR1FinishRelationCurrent.verifier.finish_relation_round only (a different function); the deployed finish wraps Port3_NativeFinishBody with Port4D_Round.native; no emission of frozen finish_relation compared"
+  },
+  {
+   "item": "checkpoint_size, final_len, read_checkpoint_weights, read_checkpoint_semantic_alpha",
+   "reason": "gate has only NFQ_Reference reference copies (checkpoint_size_ref, final_len_ref); no emission of the frozen items; extraction at the matching configuration not run"
+  },
+  {
+   "item": "derived Clone and PartialEq on QM31, WideExact",
+   "reason": "Frozen derive(Clone, Copy, PartialEq) at field.rs:431 and wide_exact.rs:27. Deployed clone slot is (fun x => ok x) in NIL_FreshOps.resume. Proving it equals the frozen derived clone needs an emission of the derived impl (extraction, not run) or a library-trust decision; not decided here."
+  }
+ ]
+}
