@@ -1,0 +1,27 @@
+diff --git a/src/symbolic/SymbolicToPureTypes.ml b/src/symbolic/SymbolicToPureTypes.ml
+index 56dc6dc..cb7584c 100644
+--- a/src/symbolic/SymbolicToPureTypes.ml
++++ b/src/symbolic/SymbolicToPureTypes.ml
+@@ -1002,8 +1002,11 @@ and translate_fun_sigs (span : span option) (decls_ctx : C.decls_ctx)
+ 
+   let inst_sg : LlbcAst.inst_fun_sig =
+     let ({ T.inputs; output; _ } : T.fun_sig) = sg.item_binder_value in
+-    [%sanity_check_opt_span] span
+-      (sg.item_binder_params.trait_type_constraints = []);
++    (* PCWO patch B: the trait type constraints of the signature (for instance
++       [Iterator::copied], whose clause is [I::Item = &T]) are kept in the
++       instantiated signature instead of being asserted empty. They are already
++       translated into [preds] by [translate_generic_params] below, and the
++       field is not read afterwards. *)
+ 
+     let _, fresh_abs_id = V.AbsId.fresh_stateful_generator () in
+     let region_gr_id_abs_id_list =
+@@ -1027,7 +1030,7 @@ and translate_fun_sigs (span : span option) (decls_ctx : C.decls_ctx)
+     {
+       regions_hierarchy;
+       abs_regions_hierarchy;
+-      trait_type_constraints = [];
++      trait_type_constraints = sg.item_binder_params.trait_type_constraints;
+       inputs;
+       output;
+     }
