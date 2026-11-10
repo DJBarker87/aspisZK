@@ -7,3 +7,7 @@ Scope. PCQJ_ORDERED_OPEN.json lists the deployed_splitB-cone definitions that ar
 Tools: copies of the P1k PCVR_ controller/client/generator renamed PCQJ_ (see PCQJ_TOOLS.json). Admission: host scopes < 6 and Stream C scopes < 5 (brief preamble and job text; the lead's earlier "< 2" text conflicts and is superseded by the later "<5" statements, recorded in PCQJ_CLASSIFICATIONS.json), disk floor 45 GB.
 
 Status: in progress (see PCQJ_STATUS.json when present).
+
+## Result (final for this run)
+No definition reached EMITTED. Extraction scopes 8/30 (PCQJ_E001-E008), all exit 124 at 180 s in the cold Charon build of aspis-statement (cost-probe chain); Lean scopes 0/20. Per definition: 126 CANNOT_EXTRACT (timeout), 42 NO_FROZEN_COUNTERPART by name heuristic (PCQJ_NAMECHECK.json, PCQJ_STATUS.json). No equality proved, no claim changed. Not a semantic finding: no difference between gate and frozen was observed (nothing was compared).
+Next: see PCQJ_REMAINING.json.
