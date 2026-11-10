@@ -25,19 +25,23 @@ question is being answered definition by definition: the tools are run again
 on the frozen source in the configuration originally used, and each fresh
 translation is proved equal to the committed one.
 
-On 10 November 2026 (research commit `9fb1e206d7d`) the theorems' dependency
-cone held 1,707 translated definitions. Of these, 1,150 were settled, meaning
+On 10 November 2026 (research commit `6c8f7bb1b3d`) the theorems' dependency
+cone held 1,707 translated definitions. Of these, 1,127 were settled, meaning
 they are proved equal to a fresh translation of the frozen source or reproduced
-from archived input shown to be that source, and 428 were not yet settled, most
+from archived input shown to be that source, and 441 were not yet settled, most
 because the tools do not yet produce a fresh translation in the right
 configuration or because the archived input has not been tied to the frozen
-source. The remaining 129 are related to the frozen source in a weaker way that
+source. The remaining 139 are related to the frozen source in a weaker way that
 is recorded but not counted as settled, for instance an equality that holds
 only on the domain the verifier uses, one that rests on a named assumption about
 the standard library, or a type related to its fresh counterpart by a proved
 isomorphism. Counted by statement, 122 of the 599 verified statements rest only
-on settled definitions. These figures move several times a day, and from now on
-only the output of the counting script is cited.
+on settled definitions. The settled count fell slightly on this recount because 32 definitions that
+had been credited only through a reviewed transcription are now counted as not
+settled, in line with the rule on transcriptions described below. The functions
+the translation tool cannot yet handle block 6 statements on their own and 123
+alongside other items. These figures move several times a day, and only the
+output of the counting script is cited.
 
 The unsettled group includes the places where the committed Lean came from
 throwaway copies. When the tools could not handle a crate whole, the function
@@ -233,7 +237,7 @@ the claim.
 
 ## Where this comes from
 
-The provenance figures are those of research commit `9fb1e206d7d` on
+The provenance figures are those of research commit `6c8f7bb1b3d` on
 10 November 2026. Everything else on this page comes from the status document
 on the [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch
 at commit `90795727483`, which [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md) in

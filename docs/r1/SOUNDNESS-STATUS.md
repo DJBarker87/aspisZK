@@ -500,8 +500,8 @@ checks for this theorem, and the published claim must not present the row count
 as the size of the proof's dependency.
 
 Provenance has been worked through definition by definition. On 10 November
-2026 (research commit `9fb1e206d7d`), of the 1,707 translated definitions in the
-theorems' cone, 1,150 were settled, 428 were not, and 129 were related to the
+2026 (research commit `6c8f7bb1b3d`), of the 1,707 translated definitions in the
+theorems' cone, 1,127 were settled, 441 were not, and 139 were related to the
 frozen source in a weaker way that is recorded but not counted as settled (for example an equality that holds only on the domain used,
 one that depends on a named library assumption, or a type related by a proved
 isomorphism; any definition proved equal through a library assumption is
@@ -1018,7 +1018,7 @@ listed consumers' roots are outside the cones; and two rows record no root.
 | 10 | Missing removal conditions for several assumptions and the 36 transcriptions | Addressed in the reconciled inventory |
 | 11 | Checked versus wrapping arithmetic was absent from earlier drafts | Now tracked as the overflow obligation |
 | 12 | The inclusion lemma at the host is a restatement of the stand-in's over the current interface; non-vacuity was only definitional; the second theorem gives two separate facts and no single program mean | It has still to be confirmed that the restatement satisfies the section 1 wording; non-vacuity now partial with executable evidence |
-| 13, 14 and 14a to 14m | The provenance campaign, its counts, corrections and tool trials | Counts at research `9fb1e206d7d`, 10 November 2026, from the counting script: 1,150 settled, 428 not settled, 129 other of 1,707; 122 of 599 statements settled-only |
+| 13, 14 and 14a to 14m | The provenance campaign, its counts, corrections and tool trials | Counts at research `6c8f7bb1b3d`, 10 November 2026, from the counting script: 1,127 settled, 441 not settled, 139 other of 1,707; 122 of 599 statements settled-only |
 | 15 | Cached-closure coherence | The theorems are credited on the replayed closure |
 | 16 | 599 closed statements are not 599 dependencies | The published claim must not present the count as the dependency size |
 | 17 | Reviewed transcriptions outside the cones were checked one by one | Settled: 15 feed an installed model and are reached, 13 feed nothing |
