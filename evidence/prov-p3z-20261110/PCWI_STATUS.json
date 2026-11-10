@@ -1,0 +1,26 @@
+{
+ "schema": "PCWI_STATUS/1",
+ "target_established": false,
+ "job": "PCWI_ P3z op50 = transcription, reference-side simulation and decode_lane_ref_eq",
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "branch": "codex/pc-prov-p3z-20261110",
+ "lean_scopes_used": 4,
+ "lean_scopes_budget": 10,
+ "extraction_scopes": 0,
+ "op50_status": "OPEN until the owner accepts ReviewedTranscription-LaneDecode; the equality evidence is now complete, so the row is accept-on-sight on equality grounds",
+ "exit0_claims": [
+  {"scope": "PCWI_L002", "file": "PRVEq_Op50_q1.lean", "exit": 0, "wall_s": 6.7, "peak_rss_kib": 2639296, "swaps": 0,
+   "claim": "decode_lane_ref_eq: for every Slice U8 b, exists r, NCV_Reference.decode_lane_ref b = ok r and LCmp (decodeLane K0 (bytesOf b)) r, where LCmp relates none to Err () and some l to Ok r' with LRel (bump, master, lane id, next leaf index, root, frontier list equal field by field, bytes via bt). Supporting: sim1..sim5 (stage simulation), ref_pass (reference copy zT0.. equals the compiled definition after HdrOK), treeBad_false_iff, ref_tree_bad, ref_tree_ok, zs_iff.",
+   "axioms": "propext, Classical.choice, Quot.sound"},
+  {"scope": "PCWI_L004", "file": "PRVEq_Op50_q2.lean", "exit": 0, "wall_s": 10.1, "peak_rss_kib": 6728780, "swaps": 0,
+   "claim": "op50_eq_transcription: for every host context c and every b, exists r with (NOC_HostCtx.sdk c).op50 b = ok (laneOut r), decode_lane_ref b = ok r and LCmp (decodeLane K0 (bytesOf b)) r; laneOut is the carrier map of NNH_LaneModel.decode",
+   "axioms": "propext, Classical.choice, Quot.sound"}
+ ],
+ "failed_scopes": [
+  {"scope": "PCWI_L001", "exit": 1, "reason": "parse error: continuation line of a structure instance left of the first field; fixed by writing the instance on one line (formatting only)"},
+  {"scope": "PCWI_L003", "exit": 1, "reason": "unknown identifier for the two SDK type names in the laneOut signature; fixed by the same opens as NNH_LaneModel (AdapterRw NND_Carrier NNH_ModelCarrier)"}
+ ],
+ "no_sorry_axiom_native_decide_raised_heartbeats": true,
+ "no_ledger_trust_rsl_contract_shipped_source_touched": true,
+ "closure_note": "built against the L187 replay closure by reference; no RPz7-universe clash appeared (PCVY_exports p5..p13 import and compile against it)"
+}
