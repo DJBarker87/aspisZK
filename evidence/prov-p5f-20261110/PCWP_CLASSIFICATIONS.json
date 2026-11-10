@@ -1,0 +1,35 @@
+{
+ "schema": "PCWP_CLASSIFICATIONS/1",
+ "classifications": [
+  {
+   "id": "PCWP-C1",
+   "case": "from_fn model",
+   "classification": "core.array.from_fn is instantiated by the HM-D member (fromFn) in the fresh namespace through inputs/hmd_prelude.lean. The fresh emission's external axiom is not used. Definitions whose fresh closure reaches it (or core.array.Array.map, the HM-D array operations) are DEPENDS_ON_LIBRARY_TRUST HM-D per the lead's ruling; the semantic lemma PCWP_FromFnSem is a property of the gate model only."
+  },
+  {
+   "id": "PCWP-C2",
+   "case": "configuration",
+   "classification": "all three emissions overflow-checks ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true, -C overflow-checks=yes); the FIq gate models are checked (ON)."
+  },
+  {
+   "id": "PCWP-C3",
+   "case": "constants P and QM31.ZERO/ONE",
+   "classification": "fresh extractions include aspis_core::field::P, QM31::ZERO and QM31::ONE so they are definitions in the fresh text (U32 / QM31), not Result-valued externals; equalities field.P and field.QM31.ZERO are proved (no constant binding, so no CONDITIONAL_ON_BINDING)."
+  },
+  {
+   "id": "PCWP-C4",
+   "case": "shared boundary externals",
+   "classification": "fresh externals of the form aspis_core.field.* (M31.add, QM31.mul, ...) and state_only_poseidon.external_linear_lazy (opaque, as in the archived PCQG_E010) resolve by name to the gate constants through open FIq_Native, as in every earlier PCUF/PCWJ credit. They are listed per definition (shared_boundary_externals) and are not proved equal here. The lead should decide whether a definition reaching them keeps EQUALITY_PROVED."
+  },
+  {
+   "id": "PCWP-C5",
+   "case": "row for array iterator externals",
+   "classification": "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter and core.array.iter.IntoIter...fold are filed under HM-D (core array members) and core.ops.range.RangeInclusive...fold and Iterator.fold.default under HM-F; this mapping is mine and needs confirmation (only evaluate_state_only_poseidon_oracle_projected is affected)."
+  },
+  {
+   "id": "PCWP-C6",
+   "case": "Native09/10/11/14 and the sampler",
+   "classification": "not proved; causes in PCWP_REMAINING.json. No trust row or transcription proposed."
+  }
+ ]
+}

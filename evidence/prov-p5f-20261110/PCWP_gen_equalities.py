@@ -67,7 +67,7 @@ def parse_blocks(text):
         # PCUE change 2 (P2a PARSE-1): a declaration placed directly after a `namespace`/`section`/`open`/... line (no blank line between)
         # is one raw block; peel those header lines so the declaration is recognised. The peeled lines are not part of the declaration text.
         while True:
-            m0 = re.match(r'[ \t]*(?:namespace|section|open|set_option|variable|universe|noncomputable section)\b[^\n]*\n', rb)
+            m0 = re.match(r'[ \t]*(?:import|namespace|section|open|set_option|variable|universe|noncomputable section)\b[^\n]*\n', rb)
             if not m0 or '\n' not in rb[m0.end():] and not rb[m0.end():].strip(): break
             start += m0.end(); rb = rb[m0.end():]
         cb = clean[start:end]
