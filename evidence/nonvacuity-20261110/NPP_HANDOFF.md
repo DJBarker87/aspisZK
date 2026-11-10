@@ -597,3 +597,57 @@ still needs the following.
    they are.
 
 Target not yet established.
+
+### 11.5 Addendum (lead authorisation after research f15ee840903): propagation and the native run
+
+**Propagation of A2 (NPP_L079).**
+
+- The first attempt (NPP_L078) used the full 804-constant no-code closure for the `tx2Value` root.
+  It hit the `-M7000` interpreter memory limit and was abandoned.
+- The rerun (NPP_L079) drops the no-code expansion and imports NPP_RefineA2. It gives 163
+  definition copies and 138 `npp_eq` (NPP_ComputableTx2, overlapping the model cone), and reuses
+  `NPP_C.LIBB_AuthCarrier.raw` with its `npp_eq`.
+- The kernel copy of `tx2Value` is still blocked, by a theorem of the same class as item 3 of 11.4:
+  the substitution copy of **`LIBB_EnvValues.returns`** exceeded kernel memory. The chain is
+  `LIBB_ObservationModel.returns` → `LIBB_Tx2Auth.returns` → `LIBB_V2Lib.values` →
+  `LIBB_V2Star.values` → `NNH_Libraries.authValues` → `NNH_Libraries.tx2Value`.
+- **Add to the kernel-witness list (11.4):** `LIBB_EnvValues.returns`, which needs equations for the
+  copies in its type, then transport, like `LIBC_BatchMerkle.returns`.
+
+**Native tx2Value run: not established (not attempted).**
+
+- A native executable needs compiled code for every declaration reachable from `tx2Value`: Aeneas
+  and the project cone.
+- The host has no C or object files for any of those modules. The L187 replay produced oleans only
+  (13,681), and a search of the offload directories finds no `.c`/`.o` for the cone.
+- Lean 4.32's C emitter (`Lean.Compiler.LCNF.EmitC.emitCForDecls`) generates code only for the
+  current module's declarations. For imported ones the oleans keep signatures (`impureSigExt`), and
+  the internals that would let imported bodies be emitted as local ones (`main`, `impureExt`) are
+  private.
+- A native build would therefore mean one of two things:
+  - re-elaborating the whole import closure with `lean -c`, a full replay of thousands of modules,
+    well beyond one scope under the 8 GiB/600 s caps and the AGENTS resource policy;
+  - reimplementing the emitter.
+
+  Neither fits the single authorised attempt. Per the lead's rule there was no rerun, and the
+  interpreter result of NPP_L077 (timeout at 600 s, no result) stands.
+- **Whether the executable `tx2Value` copy returns the recorded `.ok ()` is not established.**
+
+**Final columns.** These are unchanged from 11.3, except that the blocked list gains
+`LIBB_EnvValues.returns` on the kernel side:
+
+| Column | Count |
+|---|---:|
+| Kernel copies | 320 |
+| npp_eq | 241 |
+| nov_eq | 20 |
+| Executable-only results | 3 (stage1_owned, stage2_owned, tx1Value) |
+| Record-only | 0 |
+| Blocked: unrefined leaves (B1, A4) | 2 |
+| Blocked: tool blocks (7, plus `LIBB_EnvValues.returns`) | 8 |
+| Blocked: dependents | 79 at the four-root run; 7 on the tx2Value-root run |
+
+The tx2Value-root run NPP_ComputableTx2 (163 copies, 138 `npp_eq`) overlaps the model cone and is
+not added to the totals.
+
+Target not yet established.
