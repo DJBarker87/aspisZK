@@ -30,7 +30,8 @@ for e in extra:
 c2=c2[:last+1]+ins+c2[last+1:]
 for e in inc:
     j=c2.index('--features');c2=c2[:j]+['--include',e]+c2[j:]
-def fix(cmd):return [x.replace(OLDH,HOST).replace(oldrun+'_emitted',run+'_emitted').replace('PCUJ_workspace','PCVJ_workspace') for x in cmd]
+import re
+def fix(cmd):return [re.sub(r'(PC[A-Z]{2}|PCQ|PCO)_workspace','PCVJ_workspace',re.sub(r'codex-pc-prov-[a-z0-9]+-2026[0-9]+',HOST.split('/')[-1],x.replace(oldrun+'_emitted',run+'_emitted'))) for x in cmd]
 d['charon_command']=fix(c2);a=fix(d['aeneas_command'])
 a[a.index('-namespace')+1]=ns;a[a.index('-subdir')+1]=ns
 TOOLS={'extended':'/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended','original':'/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas'}
