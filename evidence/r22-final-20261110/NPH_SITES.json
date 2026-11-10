@@ -1514,7 +1514,9 @@
     "AspisR1.IDa_Deployed.boundaries",
     "AspisR1.NNG_InstallArithmetic.add",
     "AspisR1.NNG_LegacyConfig136.boundaries"
-   ]
+   ],
+   "context_20261110_sm3": "Composed on the deployed tx1 semantic finish (NPH_R22JoinSM3F.finish_congr, NPH_R22JoinSM4.deployed_finish_guarded/deployed_verify_guarded, NPH_R22JoinSM5.slot_guarded): every call the op9 slot's finish executes receives canonical arguments from producers (claims FJa_ClaimsCanonical.value, alpha verifier_round_alpha_canonical, fromFn cells NPH_R22JoinSM3.fromFn_mem, eta FJn_BeginCanonical.value, val2 NLU_Terminal.source, val3[28] decodeMain_success_members_canonical, mask/mul/add outputs FIp_mask_site/FIp_SemanticValues), on every public with LIB_VPublicDomain.publicDigestDom (toRetainedPublic pub); that digest-domain premise is not yet tied to the 345 validate (L061-L065)",
+   "site_lemma_guarded_20261110_sm3": "AspisR1.NPH_R22JoinSM4.guarded_add_site"
   },
   {
    "site": "AspisR1.FIp_SemanticArithmetic.mask",
@@ -1534,7 +1536,9 @@
     "AspisR1.NNG_LegacyConfig136.boundaries",
     "AspisR1.NNG_ModelMask.call"
    ],
-   "status_before_20261110_late": "OPEN"
+   "status_before_20261110_late": "OPEN",
+   "context_20261110_sm3": "Composed on the deployed tx1 semantic finish (NPH_R22JoinSM3F.finish_congr, NPH_R22JoinSM4.deployed_finish_guarded/deployed_verify_guarded, NPH_R22JoinSM5.slot_guarded): every call the op9 slot's finish executes receives canonical arguments from producers (claims FJa_ClaimsCanonical.value, alpha verifier_round_alpha_canonical, fromFn cells NPH_R22JoinSM3.fromFn_mem, eta FJn_BeginCanonical.value, val2 NLU_Terminal.source, val3[28] decodeMain_success_members_canonical, mask/mul/add outputs FIp_mask_site/FIp_SemanticValues), on every public with LIB_VPublicDomain.publicDigestDom (toRetainedPublic pub); that digest-domain premise is not yet tied to the 345 validate (L061-L065)",
+   "site_lemma_guarded_20261110_sm3": "AspisR1.NPH_R22JoinSM4.guarded_mask_site"
   },
   {
    "site": "AspisR1.FIp_SemanticArithmetic.mul",
@@ -1553,7 +1557,9 @@
     "AspisR1.IDa_Deployed.boundaries",
     "AspisR1.NNG_InstallArithmetic.mul",
     "AspisR1.NNG_LegacyConfig136.boundaries"
-   ]
+   ],
+   "context_20261110_sm3": "Composed on the deployed tx1 semantic finish (NPH_R22JoinSM3F.finish_congr, NPH_R22JoinSM4.deployed_finish_guarded/deployed_verify_guarded, NPH_R22JoinSM5.slot_guarded): every call the op9 slot's finish executes receives canonical arguments from producers (claims FJa_ClaimsCanonical.value, alpha verifier_round_alpha_canonical, fromFn cells NPH_R22JoinSM3.fromFn_mem, eta FJn_BeginCanonical.value, val2 NLU_Terminal.source, val3[28] decodeMain_success_members_canonical, mask/mul/add outputs FIp_mask_site/FIp_SemanticValues), on every public with LIB_VPublicDomain.publicDigestDom (toRetainedPublic pub); that digest-domain premise is not yet tied to the 345 validate (L061-L065)",
+   "site_lemma_guarded_20261110_sm3": "AspisR1.NPH_R22JoinSM4.guarded_mul_site"
   },
   {
    "site": "AspisR1.PoseidonPreparedProductCells.rightBuilder",
@@ -6666,7 +6672,8 @@
     "EVERY_INPUT": 2,
     "JOINED_094": 3
    },
-   "family_complete_for_b": false
+   "family_complete_for_b": false,
+   "note_20261110_sm3": "finish site arguments composed except the digest-domain premise (see _contexts_open.SM); sum3 right operands open"
   },
   "SC": {
    "domain_kernels": [
@@ -6774,13 +6781,17 @@
  },
  "_contexts_open": {
   "SM": [
-   "FinishModel.finish (RPz7_S1SemanticFinishModelV1) mask call B.mask a a1 q alpha: canonicality of a = fromFn 16 closureFn9 claims, a1 = fromFn 10 closureFn5 claims, q = claims[0][27] (claims from the deployed B.claims decoder) and alpha (RoundModel.rounds output); then the same for B.mul challenges.eta val2 and B.add mask q1 / q2 val3[28]; and the identification of the deployed B (IDa_Deployed.boundaries) slots with FIp_SemanticArithmetic.install",
+   "FinishModel.finish SM calls (mask, mul eta val2, add mask q1, add q2 val3[28]) composed from producers on the op9 slot (NPH_R22JoinSM5.slot_guarded) EXCEPT one premise: LIB_VPublicDomain.publicDigestDom (toRetainedPublic pub) of the public the slot receives. Producer located at 345 (NOM_TerminalDomain.validated_digest at the installed op21 validate success; NOC_Stage1Forward.publicBinding; NOC_Op9Slot.pub_round); not composed through stage1_owned -> first_decoded -> NIS_Tx1Boundary.release -> NHL_EmittedTx1.tx1 -> NHL_EmittedPrepare (ops.op9 at the prepare's own public1, obs none). This is the one SM input whose bound has no composed producer.",
    "qm31_sum_products3_prepared (loop0 callers, FJe_Sum3IndexBridge.old, PoseidonPreparedIndex* loops): W of the right operands"
   ],
   "QA": [
    "NFN_NEB_GeometryPrimitives.install op14/op15 under NFN_NEA_FieldProduct.ops",
    "installer contexts outside 094 (the Installers W-lemmas are conditional on the arguments the gate passes)",
    "CurrentWideMulCanonical WideExact.mul callers"
+  ],
+  "SM_before_20261110_sm3": [
+   "FinishModel.finish (RPz7_S1SemanticFinishModelV1) mask call B.mask a a1 q alpha: canonicality of a = fromFn 16 closureFn9 claims, a1 = fromFn 10 closureFn5 claims, q = claims[0][27] (claims from the deployed B.claims decoder) and alpha (RoundModel.rounds output); then the same for B.mul challenges.eta val2 and B.add mask q1 / q2 val3[28]; and the identification of the deployed B (IDa_Deployed.boundaries) slots with FIp_SemanticArithmetic.install",
+   "qm31_sum_products3_prepared (loop0 callers, FJe_Sum3IndexBridge.old, PoseidonPreparedIndex* loops): W of the right operands"
   ]
  },
  "_dropped_from_old_screen": {
@@ -7162,5 +7173,6 @@
    "AspisR1.NPH_R22JoinCW6.candidate_op8_congr",
    "AspisR1.NPH_R22JoinCW6.installed_prepare_guarded"
   ]
- }
+ },
+ "_installer_statements_20261110": "NFS_QueryOps.base, SAQ_QuerySource.install, SAQ_LineQuery.install and FIp_Install.select are now Lean statements (NPH_R22Installers2, L067, rfl): every CW-executing query slot each installer sets (op2, op3, op9, op16, op17, op20) is the NJJ_QueryOps.concrete slot, every other slot is passed through, and each installer applied to concrete returns concrete. This replaces the source-reading classification of section 14."
 }

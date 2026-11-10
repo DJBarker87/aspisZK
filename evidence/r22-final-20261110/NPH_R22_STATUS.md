@@ -1123,3 +1123,120 @@ installers as Lean statements; QA, SC, R72, FIq and the 345 walk) were not start
 
 No reachable input on which the wrapping binary accepts and the checked model rejects was
 found. Target not yet established.
+
+## 17. SM finish context composed; four query installers as Lean statements (continuation worker, 2026-11-10, after the owner pause)
+
+Twenty scopes were used, L048–L067, of this run's 40 (NPH_COMPILE.tsv records every one). Each
+ran at MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with lean -j1 -M7000 and a
+180 s timeout. Swap was 0 in every scope. No cap was raised, and no failed shape was rerun
+unchanged.
+
+**The L048–L060 timeouts and their fix.** The first finish congruence timed out three times
+(L048–L050), stalled at MemoryHigh: about 23 s of user CPU, 16% CPU, no major page faults,
+and a cgroup peak of 6.6–6.8 GB.
+- L051 split the module and showed that `finish_congr` is the cause.
+- L055–L059 were uncredited diagnostics (bisection with `sorry`, then progress markers
+  written to a file in the attempt directory). They showed that elaborating the statement
+  alone hangs, and that the hang starts at the fourth hypothesis: 15 binders and 13 premises
+  in one ∀-chain.
+- L060 showed that bundling the reached premises into three `def` predicates elaborates in
+  0.38 s, while the original form still hangs with all linters off.
+- The cost therefore grows with the depth of the premise chain, not with the proof or a
+  linter. The accepted statement uses the bundled form.
+
+**Accepted modules (standard axioms only, no sorry):**
+
+| Scope | Module | Wall | Peak RSS (KiB) | Axiom lines |
+|---|---|---:|---:|---:|
+| L054 | NPH_R22JoinSM3 | 1.97 s | 3,841,916 | 11 |
+| L061 | NPH_R22JoinSM3F | 2.78 s | — | 1 |
+| L063 | NPH_R22JoinSM4 | 3.84 s | 6,674,812 | 18 |
+| L065 | NPH_R22JoinSM5 | 3.05 s | 6,742,856 | 4 |
+| L067 | NPH_R22Installers2 | 3.07 s | 5,910,312 | 8 |
+
+- NPH_R22JoinSM3 holds the helpers and the verify congruence:
+  - `verify_congr`: VerifyPrefix.verify F = VerifyPrefix.verify F' whenever F and F' agree at
+    the prefix, transcript and challenges returned by the SAME successful parse, public
+    transcript and begin calls;
+  - `fromFnLoop_mem`/`fromFn_mem`: the induction over OraclePortStdBuilder.fromFnLoop.
+    Every element of a successful fromFn output is a call_mut output on the unchanged
+    capture;
+  - `closure9_mem`/`closure5_mem`: closureFn6 and closureFn2 return an element of claims[0];
+  - `idx_mem`, `branch_cont`, `map_err11_cont`, `circle_eq`.
+- NPH_R22JoinSM3F holds `finish_congr`. FinishModel.finish with mask, add and mul replaced
+  equals the original whenever the replacements agree at the arguments the finish passes, on
+  the SAME successful earlier calls:
+  - Head: rounds and claims;
+  - Fill: the two fromFn calls and claims[0][27];
+  - the Ok terminal output;
+  - the mask and mul outputs;
+  - Tail: the first add, the row-25 record, its decode and entry 28.
+  The proof bind-steps every outcome of every later step.
+- NPH_R22JoinSM4 holds the producers and the guarded record.
+  - `Bd std r` is S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std
+    (IDa_Deployed.boundaries r)).
+  - `deployed_slots` and `deployed_install` (rfl) give the deployed mask/add/mul as
+    FIp_SemanticArithmetic.mask/add/mul. Bd is definitionally FIp_SemanticArithmetic.install
+    of itself, which settles item 3 of section 15b.
+  - `Bg` runs FIp mask only on canonical cells and FIp add/mul only on canonical operands,
+    and fails otherwise.
+  - Producers: `claims_canon` (claims_value, then FJa_ClaimsCanonical.value, for every
+    claims cell); `alpha_canon` (verifier_round_alpha_canonical); `fromFn9_canon`,
+    `fromFn5_canon` and `cell_canon`; `decode_canon` (decodeMain_success_members_canonical);
+    `terminal_canon` (NLU_Terminal.source under InputDomain); `mask_out_canon`
+    (NPH_R22JoinSM2.FIp_mask_site). The mul and first-add outputs come from
+    FIp_SemanticValues.mul/add.
+  - `deployed_finish_guarded`: finish over Bg = finish over Bd, given a canonical eta and
+    NLU_Terminal.InputDomain.
+  - `deployed_verify_guarded`: verify over the Bg finish = verify over the Bd finish for
+    every public with LIB_VPublicDomain.publicDigestDom. Inside, the begin challenges come
+    from FJn_BeginCanonical.value, and the asset half of InputDomain comes from
+    LIB_VPublicAsset.bytes_asset at the public_bytes of the SAME successful public transcript
+    (PreparationSuccess.public_transcript_success).
+  - Site lemmas `guarded_mask_site`, `guarded_add_site` and `guarded_mul_site`: wherever Bg
+    runs a kernel, its arguments are canonical, and the kernel is ok with a canonical (mask)
+    or W (add/mul) output.
+- NPH_R22JoinSM5 holds `slot_guarded`. For every host context and every public pub with
+  publicDigestDom (toRetainedPublic pub), the literal installed op9 slot on release `none`
+  equals S1SemanticInstallation.verify over `Bslot`, the Claims-unrolled deployed record
+  with the guarded mask/add/mul. The proof is NOC_Op9Slot.slot, then bd_eq/bg_eq (rfl), then
+  deployed_verify_guarded. The deployed boundary tie is rfl, as section 16 expected.
+- NPH_R22Installers2 replaces the source reading of section 14.
+  - For NFS_QueryOps.base, SAQ_QuerySource.install, SAQ_LineQuery.install and
+    FIp_Install.select, every CW-executing query slot the installer sets (op2, op3, op9,
+    op16, op17, op20) is the NJJ_QueryOps.concrete slot. Every other slot passes through.
+  - Each installer applied to concrete returns concrete (fip_select_concrete: whenever the
+    configuration's query is concrete).
+  - **The section 14 caveat on these four installers is removed.** The other caveat stands:
+    NPH_SITES.json is a textual screen.
+
+**SM is not moved to (b).** Two SM contexts remain open.
+1. **The digest-domain premise of `slot_guarded`.** This is the one SM input whose bound has
+   no composed producer. val2, the Ok terminal output that enters `B.mul challenges.eta
+   val2`, is canonical only under NLU_Terminal.InputDomain. Every field of InputDomain is now
+   produced inside the verify except the digest half, publicDigestDom of the public the op9
+   slot receives.
+   - Its producer is at 345: NOM_TerminalDomain.validated_digest, at the installed op21
+     validate's success on the decoded statement, carried by NOC_Stage1Forward.publicBinding
+     and NOC_Op9Slot.pub_round.
+   - The call path from that validate to the slot is located: stage1_owned →
+     first_decoded (sp) → (S c).op10 = NIS_Tx1Boundary.release (at_none, rfl) →
+     NHL_EmittedTx1.tx1 → prepareCall → NHL_EmittedPrepare, which calls ops.op9 at its own
+     public1 with obs from tx1. This is not yet composed.
+   - Every layer except stage1_owned passes the public through unchanged, so those layers
+     need only a rewrite congruence. stage1_owned needs a bind-stepping walk from the op21
+     success to the first_decoded call. Its premises must be bundled, given L055–L060.
+2. **The qm31_sum_products3_prepared right operands** (loop0 callers FJe_Sum3IndexBridge.old
+   and the PoseidonPreparedIndex* loops), unchanged from section 15b.
+
+**Counts: unchanged.** 67/27/22/3/101 of 220; rows exposed 363 of 396. NPH_SITES.json records
+the new SM contexts and the installer statements. NPH_R22_CONE.json keeps every judgment and
+records the SM context note on the five SM kernels.
+
+Not started in this run: QA, SC, R72, FIq and the 345 body walk. 20 of the 40 scopes remain.
+
+No executing site was found that passes a value whose bound no producer gives, other than the
+digest-domain premise named above, whose producer is located and only the tie is missing. No
+reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
