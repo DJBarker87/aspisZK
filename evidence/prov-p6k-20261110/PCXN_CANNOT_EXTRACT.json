@@ -1,0 +1,1653 @@
+{
+ "schema": "PCXN_CANNOT_EXTRACT/1",
+ "target_established": false,
+ "research_head": "6c8f7bb1b3d041b59e24f5c9b4bee7e4983a971a",
+ "statement": "Functions no tool has extracted (Charon + Aeneas, any recorded version) with the tool error, version, evidence, cone keys and rows. A failure is a tool failure, not a proof; every item is OPEN. No ledger row, trust row, RSL or contract was changed.",
+ "removed_from_cannot_extract": [
+  {
+   "item": "public_bytes",
+   "reason": "PCWN item1: fresh = gate EQUALITY_PROVED (PRVEq_PB_w3.lean, PCWN_L004); evidence/prov-p5e-20261110/PCWN_STATUS.json"
+  }
+ ],
+ "key_set": {
+  "consolidated_keys": 65,
+  "layers": {
+   "L1_pcxm_table2": 41,
+   "L2_added_from_status_cause": 24,
+   "consolidated": 65,
+   "L2_keys": [
+    "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum",
+    "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop",
+    "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0.body",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0.body",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_push",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_scalar",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
+    "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.prepared_claim_owned",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0.body",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0.body",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_push",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_scalar",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop",
+    "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body"
+   ]
+  },
+  "classes": {
+   "OPEN": 52,
+   "EQUALITY_PROVED": 6,
+   "RECEIPTED_TEXT_DIFFERS": 1,
+   "RECEIPTED_PIN_EQUAL": 3,
+   "CONDITIONAL_ON_BINDING": 2,
+   "OPEN_NOT_REDERIVABLE": 1
+  }
+ },
+ "blocking_on_final_map": {
+  "consolidated": {
+   "keys_in_set": 65,
+   "keys_not_settled": 56,
+   "rows_touched": 129,
+   "blocked_alone": 6,
+   "blocked_among_others": 123
+  },
+  "pcxm_41": {
+   "keys_in_set": 41,
+   "keys_not_settled": 32,
+   "rows_touched": 129,
+   "blocked_alone": 6,
+   "blocked_among_others": 123
+  }
+ },
+ "items": [
+  {
+   "id": "CE01",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release (op50)",
+   "t2": "op50 decode_lane_from_pool_release",
+   "rows_own": [
+    "TX2:217"
+   ],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "error": "[Error] Early returns inside of loops are not supported yet; Source r1_pool_adapter.rs 448:0-520:1; then [Error] Ignoring the body of ...decode_lane_from_pool_release (raised at PrePasses.ml:576)",
+     "scopes": "PCWH_E005 (Charon exit 0), PCWH_E007 (Aeneas on the saved LLBC)",
+     "tool_route": "Aeneas PrePasses.ml update_statement/decompose_after (lines ~571-581): `after` is only the remainder of the loop's own block, and the function raises when it reaches [] without a Return/Panic. Route: extend the pass so that, when the loop block's remainder is exhausted, the continuation is taken from the statements following the enclosing Switch statements in the parent blocks (apply transformations 2/3 at the enclosing statement), or generalise to a flag-and-break encoding of `return e` inside loops (loop exit with a ControlFlow-style result). This is a change to Aeneas, not to the source; no Aeneas revision up to 0d21a9ec (2026-11-09 main) has it.",
+     "evidence": "PCWH_llbc_loop_shape.py on PCWH_E005 LLBC: the `for (level,node) in frontier.iter_mut().enumerate()` loop sits inside 19 nested Switch arms (the `?`/return-Err guards), at index 33 of 35 in its block; the statements after the loop in that block are [StorageDead] only. Loop body has Break 4, Return 2, Continue 2."
+    },
+    {
+     "job": "PCVV",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVV_CANNOT_EXTRACT.json builds)",
+     "errors": [
+      "[Error] Early returns inside of loops are not supported yet\nSource: 'programs/r1-cost-probe/src/r1_pool_adapter.rs', lines 448:0-520:1\nCompiler source: PrePasses.ml, line 586",
+      "[Error] Ignoring the body of 'aspis_r1_cost_probe_program::r1_pool_adapter::decode_lane_from_pool_release' because of previous error"
+     ],
+     "builds": [
+      "original Aeneas 959659a6 (PCVV_E007 aborted, PCVV_E008 continued without -abort-on-error)",
+      "extended Aeneas b59d5188 (PCVV_E006 crashed at InterpReduceCollapse.ml:1991 on the same LLBC; the loop early-return error was not separately shown)"
+     ],
+     "routing": "source-refinement obligation (loop `for (level,node) in frontier.iter_mut().enumerate()` with `return Err` inside); deployed op50 is NCV_Reference.decode_lane_ref (RECEIPTED)"
+    },
+    {
+     "job": "PCWO",
+     "tool": "third tool version: fork of Aeneas 0d21a9ec + PCWO patches A,B (aeneas sha256 6652776a..., PCWO_TOOLS.json), Charon 454586e9",
+     "new_error": "[Error] Could not match the contexts, r1_pool_adapter.rs 495:4-520:1 (symbolic interpreter, loop fixed-point, after the pre-pass transformation); body not translated; placeholder Funs.lean not committed (hash in PCWO_E001_emitted/raw.sha256)",
+     "scope": "PCWO_E001 (Aeneas only, LLBC from PCWH_E005)",
+     "patch_effect": "Patch A removed the 'Early returns inside of loops' error: PrePasses accepts the loop.",
+     "next": "the duplicated continuation (StorageDead, Drop, Assign chain) now lives inside the loop's break arms; the interpreter cannot match contexts at the loop head (likely borrows of frontier / drop of locals moved into the loop). A flag-and-break encoding (return value kept in a local, continuation kept after the loop) is the alternative route; not attempted (one job only)."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p4y-20261110/PCWO_CANNOT_EXTRACT.json",
+    "evidence/prov-p3t-20261110/PCVV_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: op50 decode_lane_from_pool_release",
+     "layer": "L1",
+     "keys": [
+      "NCV_Reference.Funs|NCV_Reference.decode_lane_ref"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "NCV_Reference.Funs|NCV_Reference.decode_lane_ref",
+     "class_": "RECEIPTED_TEXT_DIFFERS"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:330",
+    "TX1:333",
+    "TX2:213",
+    "TX2:217",
+    "TX2:221",
+    "TX2:233",
+    "TX2:240",
+    "TX2:241",
+    "TX2:242"
+   ],
+   "unmapped": false,
+   "ot_item_specific_key_counts": {
+    "TX2:217": {
+     "ReviewedTranscription-TX2:217": 30,
+     "ReviewedTranscription-LaneDecode (REFUSED 2026-11-10)": 30
+    }
+   },
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE02",
+   "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::verify_in_place",
+   "t2": "verify_in_place",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "error": "[Error] Breaks to outer loops are not supported yet (multiproof.rs 138:0-194:1)",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas PrePasses.ml visit_Break/replace use [%cassert] (i = 0) 'Breaks to outer loops'; route: multi-level break/continue support (loop labels encoded as an exit-code or nested ControlFlow result)."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Unreachable verifier.rs 77:24-82:9 (Prepared::new body has sorry in the emission)",
+      "[Error] Returns inside of nested loops are not supported yet verifier.rs 53:0-68:1",
+      "[Error] Breaks to outer loops are not supported yet multiproof.rs 138:0-194:1"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: verify_in_place",
+     "layer": "L1",
+     "keys": []
+    }
+   ],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE03",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim and Prepared::new",
+   "t2": "Prepared::new / prepared_claim",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "error": "[Error] Returns inside of nested loops are not supported yet (verifier.rs 53:0-68:1, prepared_claim); [Error] Unreachable (verifier.rs 77:24-82:9) in Prepared::new, whose emitted body is a placeholder",
+     "scopes": "PCWH_E008, E010",
+     "tool_route": "Aeneas PrePasses.ml early-return elimination handles one loop level only (transformation 1-3 apply to a Loop whose body contains the Return directly); route: apply the transformation recursively from the innermost loop outwards, using the same continuation extension as op50."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Unreachable verifier.rs 77:24-82:9 (Prepared::new body has sorry in the emission)",
+      "[Error] Returns inside of nested loops are not supported yet verifier.rs 53:0-68:1",
+      "[Error] Breaks to outer loops are not supported yet multiproof.rs 138:0-194:1"
+     ],
+     "scope": "PCVX_E013"
+    },
+    {
+     "job": "PCWL",
+     "tool": "original Aeneas 959659a6 (E001, E006) and extended Aeneas b59d5188 (E002-E004) (PCWL_HANDOFF.md line 18)",
+     "error": "E001 original Aeneas on require_zero, require_readonly_*, require_distinct_accounts: partial output; require_distinct_accounts fails (\"Returns inside of nested loops are not supported yet\"). E002 extended Aeneas on the saved LLBC: exit 2 without message. E003 and E004 extended full runs: uncaught Not_found in InterpReduceCollapse.collapse_ctx_following_sequence (loop with return). E005: controller input assertion (unmatched opacity entry), spec fixed. E006 original Aeneas on verifier::prepared_claim with 9 opaque callees: the same nested-loop return error. The loop-return class is retired for these tools."
+    },
+    {
+     "job": "PCWN",
+     "tool": "per PCWL/PCWH E008/E010 (no new extraction scope; PCWN_STATUS cargo_jobs: not applicable)",
+     "error": "- CurrentClaimDotModel (6): CANNOT_EXTRACT, Aeneas \"Returns inside of nested loops are not supported yet\" (prepared_claim, verifier.rs 53-68; PCWH_E008/E010). prepared_claim_dot* is a gate-only decomposition of the same function. Route: the approved Aeneas patch for nested-loop returns."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json",
+    "evidence/prov-p5c-20261110/PCWL_HANDOFF.md",
+    "evidence/prov-p5c-20261110/PCWL_STATUS.json",
+    "evidence/prov-p5e-20261110/PCWN_HANDOFF.md"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: Prepared::new / prepared_claim",
+     "layer": "L1",
+     "keys": [
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body"
+     ]
+    },
+    {
+     "group": "CurrentClaimDotModel six (PCWN: gate-only decompositions of prepared_claim)",
+     "layer": "L1",
+     "keys": [
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop",
+      "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body"
+     ]
+    },
+    {
+     "group": "PCWL CurrentClaimSumModel prepared_claim_sum, _loop, _loop.body (CANNOT_EXTRACT cause)",
+     "layer": "L2",
+     "keys": [
+      "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum",
+      "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop",
+      "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body"
+     ]
+    },
+    {
+     "group": "PCWL S1ClaimBorrowedAbiNativeV1 + S1ClaimOwnedNestedModelV1 owned_* gate copies (cause CANNOT_EXTRACT / NO_FROZEN_COUNTERPART; frozen counterpart is prepared_claim)",
+     "layer": "L2",
+     "keys": [
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0.body",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0.body",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_push",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_scalar",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
+      "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.prepared_claim_owned",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0.body",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0.body",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_push",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_scalar",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop",
+      "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimDotModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "CurrentClaimSumModel|AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_claim_loops_loop0_loop0.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_push",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_scalar",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimBorrowedAbiNativeV1|AspisR1CurrentPreparedClaim.verifier.borrowed_abi.prepared_claim_owned",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_claim_loops_loop0_loop0.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_push",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_scalar",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "S1ClaimOwnedNestedModelV1|AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body",
+     "class_": "OPEN"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:087",
+    "TX1:094",
+    "TX1:158",
+    "TX1:160",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:179",
+    "TX1:186",
+    "TX1:193",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:213",
+    "TX2:221"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE04",
+   "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord::decode_k",
+   "t2": "decode_k",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "error": "[Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet (r1_wire.rs 158:8-165:5); body emitted as a placeholder",
+     "scopes": "PCWH_E010 (new Charon passes; Aeneas fails)",
+     "tool_route": "Aeneas symbolic interpreter loop join (InterpLoops/InterpJoin) does not support joining abstractions with shared loans whose value contains borrows; route: extend the join for nested shared borrows, or an Aeneas version with that case (none in 0d21a9ec)."
+    },
+    {
+     "job": "PCWO",
+     "tool": "third tool version: fork of Aeneas 0d21a9ec + PCWO patches A,B (aeneas sha256 6652776a..., PCWO_TOOLS.json), Charon 454586e9",
+     "error": "decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error (PCWO_E002: semantic_boundary (r1_semantic.rs 82-85): [Error] Arrow types are not supported yet; claims (47-55): [Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet; semantic_rounds not emitted (depends on claims). decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error.)"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p4y-20261110/PCWO_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: decode_k",
+     "layer": "L1",
+     "keys": [
+      "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k",
+      "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop",
+      "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body",
+      "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1DecodeKFullV10.Funs|AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value",
+     "class_": "OPEN"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:087",
+    "TX1:094",
+    "TX1:098",
+    "TX1:129",
+    "TX1:133",
+    "TX1:134",
+    "TX1:136",
+    "TX1:137",
+    "TX1:147",
+    "TX1:151",
+    "TX1:152",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:179",
+    "TX1:186",
+    "TX1:193",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:151",
+    "TX2:197",
+    "TX2:198",
+    "TX2:199",
+    "TX2:200",
+    "TX2:213",
+    "TX2:220",
+    "TX2:221",
+    "TX2:225"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE05",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated",
+   "t2": "tx2_authenticated",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; candidate.rs 239:0-252:1 (query_loop), 212:0-235:1 (query_values), verifier.rs 31:0-31:60 (mark)"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: tx2_authenticated",
+     "layer": "L1",
+     "keys": [
+      "VTop_Model|VTop_Stages.verifier.candidate.tx2_authenticated"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "VTop_Model|VTop_Stages.verifier.candidate.tx2_authenticated",
+     "class_": "CONDITIONAL_ON_BINDING"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:168",
+    "TX1:169",
+    "TX1:170"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE06",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_common",
+   "t2": "tx2_common",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; candidate.rs 239:0-252:1 (query_loop), 212:0-235:1 (query_values), verifier.rs 31:0-31:60 (mark)"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: tx2_common",
+     "layer": "L1",
+     "keys": [
+      "VTop_Model|VTop_Stages.verifier.candidate.tx2_common"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "VTop_Model|VTop_Stages.verifier.candidate.tx2_common",
+     "class_": "CONDITIONAL_ON_BINDING"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:168",
+    "TX1:169",
+    "TX1:170"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE07",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+   "t2": "mark",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; candidate.rs 239:0-252:1 (query_loop), 212:0-235:1 (query_values), verifier.rs 31:0-31:60 (mark)"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: mark",
+     "layer": "L1",
+     "keys": [
+      "CurrentCompactCallerModelV1|AspisR1CurrentCaller.verifier.mark"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "CurrentCompactCallerModelV1|AspisR1CurrentCaller.verifier.mark",
+     "class_": "EQUALITY_PROVED"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:186"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE08",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop (op6)",
+   "t2": "query_loop (op6)",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; candidate.rs 239:0-252:1 (query_loop), 212:0-235:1 (query_values), verifier.rs 31:0-31:60 (mark)"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: query_loop (op6)",
+     "layer": "L1",
+     "keys": [
+      "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop",
+      "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop_loop",
+      "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop",
+     "class_": "RECEIPTED_PIN_EQUAL"
+    },
+    {
+     "key": "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop_loop",
+     "class_": "RECEIPTED_PIN_EQUAL"
+    },
+    {
+     "key": "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop_loop.body",
+     "class_": "RECEIPTED_PIN_EQUAL"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:017",
+    "TX1:020",
+    "TX1:029",
+    "TX1:030",
+    "TX1:035",
+    "TX1:045",
+    "TX1:046",
+    "TX1:049",
+    "TX1:050",
+    "TX1:051",
+    "TX1:052",
+    "TX1:053",
+    "TX1:057",
+    "TX1:060",
+    "TX1:061",
+    "TX1:088",
+    "TX1:094",
+    "TX1:106",
+    "TX1:107",
+    "TX1:109",
+    "TX1:110",
+    "TX1:112",
+    "TX1:113",
+    "TX1:114",
+    "TX1:115",
+    "TX1:116",
+    "TX1:117",
+    "TX1:164",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:177",
+    "TX1:180",
+    "TX1:183",
+    "TX1:184",
+    "TX1:186",
+    "TX1:188",
+    "TX1:191",
+    "TX1:192",
+    "TX1:194",
+    "TX1:195",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:013",
+    "TX2:014",
+    "TX2:020",
+    "TX2:021",
+    "TX2:025",
+    "TX2:026",
+    "TX2:027",
+    "TX2:032",
+    "TX2:033",
+    "TX2:034",
+    "TX2:035",
+    "TX2:036",
+    "TX2:038",
+    "TX2:041",
+    "TX2:042",
+    "TX2:058",
+    "TX2:064",
+    "TX2:065",
+    "TX2:072",
+    "TX2:073",
+    "TX2:075",
+    "TX2:076",
+    "TX2:078",
+    "TX2:079",
+    "TX2:080",
+    "TX2:081",
+    "TX2:082",
+    "TX2:083",
+    "TX2:095",
+    "TX2:101",
+    "TX2:103",
+    "TX2:109",
+    "TX2:110",
+    "TX2:113",
+    "TX2:118",
+    "TX2:120",
+    "TX2:123",
+    "TX2:125",
+    "TX2:213",
+    "TX2:221"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE09",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
+   "t2": "query_values",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; candidate.rs 239:0-252:1 (query_loop), 212:0-235:1 (query_values), verifier.rs 31:0-31:60 (mark)"
+     ],
+     "scope": "PCVX_E013"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: query_values",
+     "layer": "L1",
+     "keys": [
+      "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values",
+      "Stage2ContinuationTypes|AspisR1Stage2.verifier.candidate.query_values.closure"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "Port3_NativeQueryBody|AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values",
+     "class_": "OPEN_NOT_REDERIVABLE"
+    },
+    {
+     "key": "Stage2ContinuationTypes|AspisR1Stage2.verifier.candidate.query_values.closure",
+     "class_": "EQUALITY_PROVED"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:017",
+    "TX1:020",
+    "TX1:029",
+    "TX1:030",
+    "TX1:035",
+    "TX1:045",
+    "TX1:046",
+    "TX1:049",
+    "TX1:050",
+    "TX1:051",
+    "TX1:052",
+    "TX1:053",
+    "TX1:057",
+    "TX1:060",
+    "TX1:061",
+    "TX1:087",
+    "TX1:088",
+    "TX1:089",
+    "TX1:094",
+    "TX1:106",
+    "TX1:107",
+    "TX1:109",
+    "TX1:110",
+    "TX1:112",
+    "TX1:113",
+    "TX1:114",
+    "TX1:115",
+    "TX1:116",
+    "TX1:117",
+    "TX1:136",
+    "TX1:137",
+    "TX1:164",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:177",
+    "TX1:180",
+    "TX1:183",
+    "TX1:184",
+    "TX1:186",
+    "TX1:188",
+    "TX1:191",
+    "TX1:192",
+    "TX1:194",
+    "TX1:195",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:013",
+    "TX2:014",
+    "TX2:020",
+    "TX2:021",
+    "TX2:025",
+    "TX2:026",
+    "TX2:027",
+    "TX2:032",
+    "TX2:033",
+    "TX2:034",
+    "TX2:035",
+    "TX2:036",
+    "TX2:038",
+    "TX2:041",
+    "TX2:042",
+    "TX2:058",
+    "TX2:059",
+    "TX2:064",
+    "TX2:065",
+    "TX2:072",
+    "TX2:073",
+    "TX2:075",
+    "TX2:076",
+    "TX2:078",
+    "TX2:079",
+    "TX2:080",
+    "TX2:081",
+    "TX2:082",
+    "TX2:083",
+    "TX2:095",
+    "TX2:101",
+    "TX2:103",
+    "TX2:109",
+    "TX2:110",
+    "TX2:113",
+    "TX2:118",
+    "TX2:120",
+    "TX2:123",
+    "TX2:125",
+    "TX2:213",
+    "TX2:221",
+    "TX2:240",
+    "TX2:241"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE10",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation (op19)",
+   "t2": "finish_relation (op19)",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for tx2_authenticated, tx2_common, mark, query_loop, query_values, finish_relation",
+     "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+     "scopes": "PCWH_E008",
+     "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec."
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Arrow types are not supported yet; Source verifier.rs 309:0-322:1",
+      "[Error] Internal error: please file an issue; verifier.rs 309:0-322:1"
+     ],
+     "scope": "PCVX_E013 (original, error capture)"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: finish_relation (op19)",
+     "layer": "L1",
+     "keys": []
+    }
+   ],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE11",
+   "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_boundary",
+   "t2": "semantic_boundary",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for the three functions",
+     "error": "Fatal error: exception Aeneas.Errors.CFailure; sanity check at symbolic/SymbolicToPureTypes.ml:1005-1006 in translate_fun_sigs ([%sanity_check_opt_span] span (sg.item_binder_params.trait_type_constraints = [])) while translating a method signature of core::iter::traits::iterator::Iterator (iterator.rs 42:0-42:24); no file emitted. The LLBC shows exactly one Iterator method with a trait type constraint (generics 'a, T, Clause1_Item; copied); semantic_boundary calls `polynomial.iter().copied()` (r1_semantic.rs:83) and claims and semantic_rounds call semantic_boundary.",
+     "scopes": "PCWH_E008 (all nine), PCWH_E009 (eight, without semantic_boundary as start root); contrast PCWH_E010 (without these three) does not crash",
+     "tool_route": "Aeneas SymbolicToPureTypes.translate_fun_sigs: support `trait_type_constraints` on trait-method signatures (substitute the constrained associated type, here Self::Item = &'a T), or skip extracting trait methods that are not called. Newer Aeneas than 0d21a9ec is not available; the check is at HEAD."
+    },
+    {
+     "job": "PCWO",
+     "tool": "third tool version: fork of Aeneas 0d21a9ec + PCWO patches A,B (aeneas sha256 6652776a..., PCWO_TOOLS.json), Charon 454586e9",
+     "note": "one record for the three functions",
+     "new_error": "semantic_boundary (r1_semantic.rs 82-85): [Error] Arrow types are not supported yet; claims (47-55): [Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet; semantic_rounds not emitted (depends on claims). decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error.",
+     "scope": "PCWO_E002 (Charon 3 roots exit 0, Aeneas exit 1)",
+     "patch_effect": "Patch B removed the CFailure at SymbolicToPureTypes.ml:1005; Aeneas now translates signatures and runs to completion with per-function errors.",
+     "next": "Aeneas features: arrow types in signatures, and join of shared loans containing borrows. Neither is covered by patch A or B."
+    },
+    {
+     "job": "PCWM",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCWM_E004/E005/E006, PCWM_STATUS.json definition notes)",
+     "error": "frozen r1_semantic.rs 82-90 uses iter().copied().fold(.., QM31::add) and iter().rev().fold(..., closure): original Aeneas 959659a6 [Error] Internal error at /rustc/library/core/src/iter/traits/iterator.rs 42:0-42:24; extended b59d5188 [Error] Arrow types are not supported yet at r1_semantic.rs 82:0-85:1. Tool route: Aeneas support for fn items and closures passed to Iterator::fold, or an opaque cut of fold with an HM-B model row (PCWH slice-iterator lane)"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p4y-20261110/PCWO_CANNOT_EXTRACT.json",
+    "evidence/prov-p5d-20261110/PCWM_STATUS.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: semantic_boundary",
+     "layer": "L1",
+     "keys": [
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_entry",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body"
+     ]
+    },
+    {
+     "group": "AspisR1SemanticCallExtraction eight (PCWM cause CANNOT_EXTRACT)",
+     "layer": "L1",
+     "keys": [
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_entry",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_entry",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop",
+      "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop.body"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_entry",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_entry",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1SemanticCallExtraction.Funs|AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop.body",
+     "class_": "OPEN"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:087",
+    "TX1:094",
+    "TX1:132",
+    "TX1:133",
+    "TX1:134",
+    "TX1:135",
+    "TX1:136",
+    "TX1:137",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:179",
+    "TX1:186",
+    "TX1:193",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:213",
+    "TX2:221"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE12",
+   "function": "crates/aspis-r1-cost-probe/src/candidate_claims.rs::claims",
+   "t2": "claims",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for the three functions",
+     "error": "Fatal error: exception Aeneas.Errors.CFailure; sanity check at symbolic/SymbolicToPureTypes.ml:1005-1006 in translate_fun_sigs ([%sanity_check_opt_span] span (sg.item_binder_params.trait_type_constraints = [])) while translating a method signature of core::iter::traits::iterator::Iterator (iterator.rs 42:0-42:24); no file emitted. The LLBC shows exactly one Iterator method with a trait type constraint (generics 'a, T, Clause1_Item; copied); semantic_boundary calls `polynomial.iter().copied()` (r1_semantic.rs:83) and claims and semantic_rounds call semantic_boundary.",
+     "scopes": "PCWH_E008 (all nine), PCWH_E009 (eight, without semantic_boundary as start root); contrast PCWH_E010 (without these three) does not crash",
+     "tool_route": "Aeneas SymbolicToPureTypes.translate_fun_sigs: support `trait_type_constraints` on trait-method signatures (substitute the constrained associated type, here Self::Item = &'a T), or skip extracting trait methods that are not called. Newer Aeneas than 0d21a9ec is not available; the check is at HEAD."
+    },
+    {
+     "job": "PCWO",
+     "tool": "third tool version: fork of Aeneas 0d21a9ec + PCWO patches A,B (aeneas sha256 6652776a..., PCWO_TOOLS.json), Charon 454586e9",
+     "note": "one record for the three functions",
+     "new_error": "semantic_boundary (r1_semantic.rs 82-85): [Error] Arrow types are not supported yet; claims (47-55): [Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet; semantic_rounds not emitted (depends on claims). decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error.",
+     "scope": "PCWO_E002 (Charon 3 roots exit 0, Aeneas exit 1)",
+     "patch_effect": "Patch B removed the CFailure at SymbolicToPureTypes.ml:1005; Aeneas now translates signatures and runs to completion with per-function errors.",
+     "next": "Aeneas features: arrow types in signatures, and join of shared loans containing borrows. Neither is covered by patch A or B."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p4y-20261110/PCWO_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: claims",
+     "layer": "L1",
+     "keys": [
+      "ClaimsUnrolledParentSource|AspisR1ClaimsUnrolledParent.candidate_claims.claims",
+      "ClaimsUnrolledParentTypes|AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure",
+      "ClaimsUnrolledParentTypes|AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure_1"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "ClaimsUnrolledParentSource|AspisR1ClaimsUnrolledParent.candidate_claims.claims",
+     "class_": "OPEN"
+    },
+    {
+     "key": "ClaimsUnrolledParentTypes|AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure",
+     "class_": "OPEN"
+    },
+    {
+     "key": "ClaimsUnrolledParentTypes|AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure_1",
+     "class_": "OPEN"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:087",
+    "TX1:094",
+    "TX1:129",
+    "TX1:136",
+    "TX1:137",
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:179",
+    "TX1:186",
+    "TX1:193",
+    "TX1:328",
+    "TX1:330",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:151",
+    "TX2:197",
+    "TX2:198",
+    "TX2:199",
+    "TX2:200",
+    "TX2:213",
+    "TX2:220",
+    "TX2:221",
+    "TX2:225"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE13",
+   "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_rounds",
+   "t2": "semantic_rounds",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWH",
+     "tool": "second tool version: Charon 454586e9 + Aeneas 0d21a9ec (main HEAD 2026-11-09; binary_sha256 230ee9f0..., PCWH_TOOLS.json)",
+     "note": "one record for the three functions",
+     "error": "Fatal error: exception Aeneas.Errors.CFailure; sanity check at symbolic/SymbolicToPureTypes.ml:1005-1006 in translate_fun_sigs ([%sanity_check_opt_span] span (sg.item_binder_params.trait_type_constraints = [])) while translating a method signature of core::iter::traits::iterator::Iterator (iterator.rs 42:0-42:24); no file emitted. The LLBC shows exactly one Iterator method with a trait type constraint (generics 'a, T, Clause1_Item; copied); semantic_boundary calls `polynomial.iter().copied()` (r1_semantic.rs:83) and claims and semantic_rounds call semantic_boundary.",
+     "scopes": "PCWH_E008 (all nine), PCWH_E009 (eight, without semantic_boundary as start root); contrast PCWH_E010 (without these three) does not crash",
+     "tool_route": "Aeneas SymbolicToPureTypes.translate_fun_sigs: support `trait_type_constraints` on trait-method signatures (substitute the constrained associated type, here Self::Item = &'a T), or skip extracting trait methods that are not called. Newer Aeneas than 0d21a9ec is not available; the check is at HEAD."
+    },
+    {
+     "job": "PCWO",
+     "tool": "third tool version: fork of Aeneas 0d21a9ec + PCWO patches A,B (aeneas sha256 6652776a..., PCWO_TOOLS.json), Charon 454586e9",
+     "note": "one record for the three functions",
+     "new_error": "semantic_boundary (r1_semantic.rs 82-85): [Error] Arrow types are not supported yet; claims (47-55): [Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet; semantic_rounds not emitted (depends on claims). decode_k (r1_wire.rs 158-165) pulled in by the closure fails with the same join error.",
+     "scope": "PCWO_E002 (Charon 3 roots exit 0, Aeneas exit 1)",
+     "patch_effect": "Patch B removed the CFailure at SymbolicToPureTypes.ml:1005; Aeneas now translates signatures and runs to completion with per-function errors.",
+     "next": "Aeneas features: arrow types in signatures, and join of shared loans containing borrows. Neither is covered by patch A or B."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p4x-20261110/PCWH_CANNOT_EXTRACT.json",
+    "evidence/prov-p4y-20261110/PCWO_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: semantic_rounds",
+     "layer": "L1",
+     "keys": []
+    }
+   ],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE14",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
+   "t2": "require_distinct_accounts",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCWL",
+     "tool": "original Aeneas 959659a6 (E001, E006) and extended Aeneas b59d5188 (E002-E004) (PCWL_HANDOFF.md line 18)",
+     "error": "frozen fn owned::require_distinct_accounts (r1_pool_adapter_owned.rs 59-72, nested while with `return Err`). PCWL_E001 original Aeneas 959659a6: \"Returns inside of nested loops are not supported yet\". PCWL_E002 (extended b59d5188 on the saved LLBC): exit 2, no message. PCWL_E003 (extended, full run with the roots): uncaught Not_found in InterpReduceCollapse.collapse_ctx_following_sequence. Shape class retired."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p5c-20261110/PCWL_STATUS.json",
+    "evidence/prov-p5c-20261110/PCWL_HANDOFF.md"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: require_distinct_accounts",
+     "layer": "L1",
+     "keys": [
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0.body",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0"
+     ]
+    },
+    {
+     "group": "PCWL_STATUS cause CANNOT_EXTRACT (require_distinct_accounts + 3 loop items)",
+     "layer": "L1",
+     "keys": [
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0.body",
+      "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0.body",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AdapterRwModel|AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0",
+     "class_": "OPEN"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:330",
+    "TX1:333",
+    "TX1:339",
+    "TX1:342",
+    "TX1:344",
+    "TX1:345",
+    "TX2:213",
+    "TX2:221",
+    "TX2:233",
+    "TX2:235",
+    "TX2:240",
+    "TX2:241",
+    "TX2:242"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE15",
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1 (op48) and ::decode_pool_v1_pair_forest_checkpoint_v1 (op49)",
+   "t2": "raw decoders op48/op49 (decode_pool_v1_pair_forest_master_v1 / checkpoint_v1)",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Could not match the contexts; Source pair_forest_accounts.rs lines 295:4-298:5",
+      "[Warn] Could not translate the body of function ...decode_pool_v1_pair_forest_master_v1 because of previous error",
+      "extended: exit 2, uncaught exception, backtrace through InterpStatements.eval_statement_list (message head truncated by the 6000-byte stderr tail the controller keeps)"
+     ],
+     "scope": "PCVX_E007 (original 959659a6), PCVX_E008 (extended b59d5188 on the saved LLBC)"
+    },
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Could not match the contexts; Source pair_forest_accounts.rs lines 463:4-482:1"
+     ],
+     "scope": "PCVX_E007, E008"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: raw decoders op48/op49 (decode_pool_v1_pair_forest_master_v1 / checkpoint_v1)",
+     "layer": "L1",
+     "keys": []
+    }
+   ],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE16",
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::encode_pool_v1_pair_forest_terminal_statement_v1 (op22)",
+   "t2": "op22 encode_pool_v1_pair_forest_terminal_statement_v1",
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "[Error] Could not match the contexts; Source pair_forest_terminal.rs lines 318:18-324:9",
+      "extended: exit 2 crash"
+     ],
+     "scope": "PCVX_E009 original, PCVX_E010 extended"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: op22 encode_pool_v1_pair_forest_terminal_statement_v1",
+     "layer": "L1",
+     "keys": []
+    }
+   ],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE17",
+   "function": "crates/aspis-statement decoders as one closure (decode_pool_v1_pair_forest_terminal_statement_v1, boxed decoders, decode_pool_v1_pair_verified_afterstate_v1)",
+   "t2": "other aspis_statement raw decoders (decode_pool_v1* name match)",
+   "rows_own": [],
+   "category": "TIMEOUT (no error text; not a construct error)",
+   "failures": [
+    {
+     "job": "PCVX",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVX_CANNOT_EXTRACT.json scopes)",
+     "errors": [
+      "no error: original Aeneas 959659a6 did not finish within the 180 s cap (exit 124, peak RSS 0.73 GB) on the LLBC of 366 / 104 declarations; extended crashes (E005, exit 2)"
+     ],
+     "scope": "PCVX_E001, E003 (Aeneas-only, original), E004"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p3u-20261110/PCVX_CANNOT_EXTRACT.json"
+   ],
+   "note": "cone keys are a name match (decode_pool_v1*), mechanical, as in PCXM Table 2",
+   "key_groups": [
+    {
+     "group": "PCXM Table 2 name match: other aspis_statement raw decoders (decode_pool_v1* name match)",
+     "layer": "L1",
+     "keys": [
+      "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+      "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+      "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
+      "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+      "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+      "NFY_Part043|AspisR20Request.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+      "NFY_Part043|AspisR20Request.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+     ]
+    }
+   ],
+   "cone_keys": [
+    {
+     "key": "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
+     "class_": "OPEN"
+    },
+    {
+     "key": "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+     "class_": "EQUALITY_PROVED"
+    },
+    {
+     "key": "AspisR1TerminalDecoder.Funs|AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+     "class_": "EQUALITY_PROVED"
+    },
+    {
+     "key": "NFY_Part043|AspisR20Request.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+     "class_": "EQUALITY_PROVED"
+    },
+    {
+     "key": "NFY_Part043|AspisR20Request.pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+     "class_": "EQUALITY_PROVED"
+    }
+   ],
+   "rows_reaching_keys": [
+    "TX1:168",
+    "TX1:169",
+    "TX1:170",
+    "TX1:269",
+    "TX1:270",
+    "TX1:271",
+    "TX1:272",
+    "TX1:273",
+    "TX1:277",
+    "TX1:281",
+    "TX1:282",
+    "TX1:283",
+    "TX1:284",
+    "TX1:290",
+    "TX1:291",
+    "TX1:330",
+    "TX1:332",
+    "TX1:333",
+    "TX1:344",
+    "TX1:345",
+    "TX2:163",
+    "TX2:171",
+    "TX2:180",
+    "TX2:181",
+    "TX2:213",
+    "TX2:221",
+    "TX2:226",
+    "TX2:233",
+    "TX2:234",
+    "TX2:240",
+    "TX2:241",
+    "TX2:242"
+   ],
+   "unmapped": false,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE18",
+   "function": "programs/r1-cost-probe/src/deployment_ids.rs::deployment_id (HM-A member, feeds op45, AUDIT_POOL_PROGRAM)",
+   "t2": null,
+   "rows_own": [],
+   "failures": [
+    {
+     "job": "PCVV",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVV_CANNOT_EXTRACT.json builds)",
+     "errors": [
+      "[Error] Early returns inside of loops are not supported yet\nSource: 'programs/r1-cost-probe/src/deployment_ids.rs', lines 3:0-44:1",
+      "[Error] Assertion failed: new value doesn't have the same type as its destination\nSource: 'programs/r1-cost-probe/src/deployment_ids.rs', lines 49:23-51:21",
+      "[Warn] Could not translate the body of function 'aspis_r1_cost_probe_program::r1_pool_adapter::deployment_ids::deployment_id because of previous error"
+     ],
+     "builds": [
+      "original Aeneas 959659a6 (PCVV_E008)"
+     ],
+     "routing": "source-refinement obligation; the emitted AUDIT_POOL_PROGRAM and pool_program_id depend on it, so op45 is also blocked"
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p3t-20261110/PCVV_CANNOT_EXTRACT.json"
+   ],
+   "note": "no cone key found by name matching (UNMAPPED); excluded from the owner-rule items as an HM-A SDK member by PCXM",
+   "key_groups": [],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE19",
+   "function": "crates/aspis-statement validate_pool_v1_pair_forest_terminal_statement_v1 and encode_pool_v1_pair_verified_afterstate_v1 (stage1 op21, op24)",
+   "t2": null,
+   "rows_own": [],
+   "category": "EXTRACTION_SHAPE_MISS (worker input defect, not a tool limitation)",
+   "failures": [
+    {
+     "job": "PCVV",
+     "tool": "original Aeneas 959659a6 and extended Aeneas b59d5188 (PCVV_CANNOT_EXTRACT.json builds)",
+     "errors": [
+      "PCVV_E009 (Charon with these two as --start-from, cargo jobs 4): Charon succeeded (llbc 89384 bytes, sha256 5dab6462609e01fa0940b91b42960e4037a10d959b14af3e57cb83e47a18f794) but the controller assertion failed: OWN INPUT: unmatched opacity decode_digest_canonical (spec carried an opacity list for the earlier roots)",
+      "PCVV_E010 (Aeneas-only, original 959659a6, exit 0): Funs.lean has no function definitions (18 lines, header only); Types.lean only. The foreign-crate bodies were not translated (Charon keeps bodies of items outside the root crate opaque unless they are included, e.g. an --include selector or the extract-opaque-bodies option; I did not pass one)."
+     ],
+     "builds": [
+      "Charon cargo --jobs 4; original Aeneas 959659a6"
+     ],
+     "routing": "Not a source-refinement obligation: an extraction-shape miss on my side. Retry needs an --include for the aspis_statement items; extraction budget (10 of 10) is spent, so op21/op24 have no emission and no equality is stated."
+    }
+   ],
+   "evidence": [
+    "evidence/prov-p3t-20261110/PCVV_CANNOT_EXTRACT.json"
+   ],
+   "note": "listed because no emission exists; a later job (PCVX_E012) emitted the aspis_statement closure, so this is NOT a tool-level CANNOT_EXTRACT and contributes no key to the CE set",
+   "key_groups": [],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "status": "EXTRACTION_SHAPE_MISS"
+  },
+  {
+   "id": "CE20",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
+   "t2": null,
+   "rows_own": [
+    "TX1:344"
+   ],
+   "category": "stage adapter (guard-holding SDK wrapper; ReviewedTranscription-TX1:344 via ruling (bn))",
+   "failures": [
+    {
+     "job": "NJN (entry-sdk)",
+     "tool": "extended Aeneas b59d5188, aeneas_sha256 c0cf4fcc..., charon_sha256 daad69be... (NJN_EXTRACTION_PINS.json)",
+     "error": "Aeneas exit 2 at InterpBorrows.ml:2731 on the guard drop's same-cell counter branch (NJN_reference.rs line 23); Charon exit 0; all twelve roots in one extraction; no Lean output. NJN_FAILING_STEP.md L001, verbatim: * L001: Charon exit 0, Aeneas exit 2, InterpBorrows.ml:2731 on NJN_reference.rs line 23 (guard drop's same-cell counter branch).",
+     "scope": "NJN_L001 (evidence/entry-sdk-20261108/NJN_FAILING_STEP.md L001)",
+     "note": "that scope extracted NJN_reference.rs (the SDK Ref/RefMut guard reference, twelve roots), not the frozen stage wrapper itself; C3-BIN (be)(2) and (bn)(1) record that the same guard-drop class blocks the two stage bodies"
+    },
+    {
+     "job": "NMV (stage-wrap)",
+     "tool": "Aeneas aeneas_sha256 c0cf4fcc... (same binary as NJN), charon_sha256 daad69be..., toolchain nightly-2026-09-17 (NMV_E003/NMV_FISSION_EXTRACTION_PINS.json)",
+     "error": "NMV-E1: Charon succeeds, Aeneas fails during field projection of opaque AccountInfo: \"Can't retrieve the variants of non-adt type ... solana_account_info::AccountInfo\" (actual snapshot; not a guard-drop diagnostic)",
+     "scope": "NMV_E001/E002 (evidence/stage-wrap-20261111/NMV_FINDINGS.md NMV-E1)"
+    },
+    {
+     "job": "NMV (stage-wrap)",
+     "tool": "Aeneas aeneas_sha256 c0cf4fcc... (same binary as NJN), charon_sha256 daad69be..., toolchain nightly-2026-09-17 (NMV_E003/NMV_FISSION_EXTRACTION_PINS.json)",
+     "error": "Charon PASS, Aeneas exit 2 with internal Not_found at InterpReduceCollapse.collapse_ctx_following_sequence while joining contexts, on the guard-free fission copy (E003/L081 both wrappers; E004/L082 stage2 alone). Two-extraction allowance spent; generic-log extraction family retired.",
+     "scope": "NMV_E003, NMV_E004 (evidence/stage-wrap-20261111/NMV_FINDINGS.md NMV-E2, NMV_HANDOFF.md L081/L082)"
+    }
+   ],
+   "evidence": [
+    "evidence/entry-sdk-20261108/NJN_FAILING_STEP.md",
+    "evidence/entry-sdk-20261108/NJN_EXTRACTION_PINS.json",
+    "evidence/stage-wrap-20261111/NMV_FINDINGS.md",
+    "evidence/stage-wrap-20261111/NMV_HANDOFF.md",
+    "evidence/stage-wrap-20261111/NMV_E003/NMV_FISSION_EXTRACTION_PINS.json",
+    "evidence/stage-wrap-20261111/NMV_E004/NMV_FISSION_EXTRACTION_PINS.json"
+   ],
+   "note": "no gate definition named stage1/stage2 exists in the cone (only stage1_owned/stage2_owned, which are different functions): UNMAPPED, no cone key; the ledger rows are the item rows. Other recorded failures in this class: NJH_ guard drop, NLD_ tx1-entry (C3-BIN lead note (be)(1)-(2)); NJM_ E001 add_shared_borrows InterpReduceCollapse.ml:1880 on the owned TX1:129 claims reference (an own reference, not a frozen function); NGA_ InterpBorrows.ml:2731 on qm31_accumulate_product_channels (slice-d-field2-20261104; certified by route (ah), not in the cone as an unextractable function).",
+   "key_groups": [],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "ot_item_specific_key_counts": {
+    "TX1:344": {
+     "ReviewedTranscription-TX1:344": 90
+    }
+   },
+   "status": "CANNOT_EXTRACT"
+  },
+  {
+   "id": "CE21",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2",
+   "t2": null,
+   "rows_own": [
+    "TX2:240"
+   ],
+   "category": "stage adapter (guard-holding SDK wrapper; ReviewedTranscription-TX2:240 via ruling (bn))",
+   "failures": [
+    {
+     "job": "NJN (entry-sdk)",
+     "tool": "extended Aeneas b59d5188, aeneas_sha256 c0cf4fcc..., charon_sha256 daad69be... (NJN_EXTRACTION_PINS.json)",
+     "error": "Aeneas exit 2 at InterpBorrows.ml:2731 on the guard drop's same-cell counter branch (NJN_reference.rs line 23); Charon exit 0; all twelve roots in one extraction; no Lean output. NJN_FAILING_STEP.md L001, verbatim: * L001: Charon exit 0, Aeneas exit 2, InterpBorrows.ml:2731 on NJN_reference.rs line 23 (guard drop's same-cell counter branch).",
+     "scope": "NJN_L001 (evidence/entry-sdk-20261108/NJN_FAILING_STEP.md L001)",
+     "note": "that scope extracted NJN_reference.rs (the SDK Ref/RefMut guard reference, twelve roots), not the frozen stage wrapper itself; C3-BIN (be)(2) and (bn)(1) record that the same guard-drop class blocks the two stage bodies"
+    },
+    {
+     "job": "NMV (stage-wrap)",
+     "tool": "Aeneas aeneas_sha256 c0cf4fcc... (same binary as NJN), charon_sha256 daad69be..., toolchain nightly-2026-09-17 (NMV_E003/NMV_FISSION_EXTRACTION_PINS.json)",
+     "error": "NMV-E1: Charon succeeds, Aeneas fails during field projection of opaque AccountInfo: \"Can't retrieve the variants of non-adt type ... solana_account_info::AccountInfo\" (actual snapshot; not a guard-drop diagnostic)",
+     "scope": "NMV_E001/E002 (evidence/stage-wrap-20261111/NMV_FINDINGS.md NMV-E1)"
+    },
+    {
+     "job": "NMV (stage-wrap)",
+     "tool": "Aeneas aeneas_sha256 c0cf4fcc... (same binary as NJN), charon_sha256 daad69be..., toolchain nightly-2026-09-17 (NMV_E003/NMV_FISSION_EXTRACTION_PINS.json)",
+     "error": "Charon PASS, Aeneas exit 2 with internal Not_found at InterpReduceCollapse.collapse_ctx_following_sequence while joining contexts, on the guard-free fission copy (E003/L081 both wrappers; E004/L082 stage2 alone). Two-extraction allowance spent; generic-log extraction family retired.",
+     "scope": "NMV_E003, NMV_E004 (evidence/stage-wrap-20261111/NMV_FINDINGS.md NMV-E2, NMV_HANDOFF.md L081/L082)"
+    }
+   ],
+   "evidence": [
+    "evidence/entry-sdk-20261108/NJN_FAILING_STEP.md",
+    "evidence/entry-sdk-20261108/NJN_EXTRACTION_PINS.json",
+    "evidence/stage-wrap-20261111/NMV_FINDINGS.md",
+    "evidence/stage-wrap-20261111/NMV_HANDOFF.md",
+    "evidence/stage-wrap-20261111/NMV_E003/NMV_FISSION_EXTRACTION_PINS.json",
+    "evidence/stage-wrap-20261111/NMV_E004/NMV_FISSION_EXTRACTION_PINS.json"
+   ],
+   "note": "no gate definition named stage1/stage2 exists in the cone (only stage1_owned/stage2_owned, which are different functions): UNMAPPED, no cone key; the ledger rows are the item rows. Other recorded failures in this class: NJH_ guard drop, NLD_ tx1-entry (C3-BIN lead note (be)(1)-(2)); NJM_ E001 add_shared_borrows InterpReduceCollapse.ml:1880 on the owned TX1:129 claims reference (an own reference, not a frozen function); NGA_ InterpBorrows.ml:2731 on qm31_accumulate_product_channels (slice-d-field2-20261104; certified by route (ah), not in the cone as an unextractable function).",
+   "key_groups": [],
+   "cone_keys": [],
+   "rows_reaching_keys": [],
+   "unmapped": true,
+   "ot_item_specific_key_counts": {
+    "TX2:240": {
+     "ReviewedTranscription-TX2:240": 58
+    }
+   },
+   "status": "CANNOT_EXTRACT"
+  }
+ ]
+}
