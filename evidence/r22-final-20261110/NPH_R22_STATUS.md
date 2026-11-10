@@ -1970,3 +1970,49 @@ Next concrete deliverables:
 5. r24_canonical_mul: provenance first.
 
 Target not yet established.
+
+## 22. Items 1–4 of the 2026-11-10 continuation (worker after commit 56b95b5c29e)
+
+Seven scopes were used, L097–L103 of this run's 30, one at a time. Each ran under the same caps as section 21. From L098 on, every launch also checked `free -g` available ≥ 12 GB, per the lead's instruction while Stream B runs extraction lanes. Three scopes failed on proof-script details, all on NPH_R22ValuesSite, and each was changed before the next scope (L099, L100, L101; see NPH_COMPILE.tsv). Swap was 0 throughout and peak RSS was 6,809,376 KiB. Every accepted `#print axioms` line is within [propext, Classical.choice, Quot.sound], with no sorry. One read-only screen was run, NPH_REFS7.json. The lead decision holds: no ops interface, merged module, closed-row statement or field premise is changed.
+
+**22a. binary_step → (b) (NPH_R22Binary, L097).** The traversal invariant is the def predicate AtInv nodes s := s.at ≤ len nodes, over the set Reached of traversal states.
+- **Entry.** Reached starts at {s with at := 0}, the levels entry used by verify_owned and by Port9OR_P6Verify.factored.
+- **Closure.** Reached is closed under a Next step of binary_step (step_next) and a Done result of level_rows (rows_done).
+- **Result.** reached_inv shows AtInv holds on every reached state. reached_ops shows every checked operation of binary_step is ok there with its mathematical value. So len(nodes) − s.at never wraps on a reached state, and the Stop test decides identically in both profiles.
+
+No hash totality or node-length premise is used. No reached state with s.at > len(nodes) exists, so there is no wrapping-accepts/checked-rejects input at this site.
+
+The earlier note was wrong to call the Stop branch accepting: Stop makes verify_owned return false. The call structure (only level_rows → levels → verify_owned/factored → Port4B_VerifyInstall.verify) is read from NPH_REFS7.json and the gate text, and is flagged.
+
+**22b. values_owned_reference → (b) (NPH_R22Values L098, NPH_R22ValuesSite L102).** The checked 2·len is ok for len ≤ 1856.
+- **Compact expand site.** The argument is input[i1, i1 + size/2), and size ≤ 3712 comes from the compact row_shape table (compact_site).
+- **Prepare op11 site.** At every installed configuration op11 is expandValues. The argument is proof[7031, 7495) of width 464: op12 = 16, op13 = 7015, op14 = 464, all by rfl for every cfg (installed_y1_site).
+- **Flagged.** The call-site bindings, and the coverage of NDO_JFw_Row.runRow, are textual.
+
+**22c. prepare → (b) (NPH_R22Values, L098).** op15 of currentInstalled cfg is 13831 for every cfg, by rfl, and the op8 replacement leaves it unchanged. LOGICAL_Y1 = 928, so the add gives 14759 and is ok. The executed-record reading is flagged.
+
+**22d. weights.field: OPEN → domain lemma proved, caller join open (NPH_R22FieldSites, L103).** The domain i < 64 is now stated at every located site:
+- the literals 0..6 (finish round, polynomial, FIn_ExtractFuns);
+- the finish dot, under len weights ≤ 64;
+- the claim dot, under l < 64.
+
+Two producers remain uncomposed:
+- **Finish weights length.** At the deployed tx2 finish the weights are {a1 with weights := deref_mut_back (op9 pending (deref_mut a1.weights))}. Composing their length needs two links: op6 returns a reached NPH_R22JoinCW2.Reach state, which carries NFS_QueryInvariant.Domain.width = 64, and the Port3_FlushInstall.flush length preservation. FIn_WeightLength.twelve gives 64 only on an accepted-run witness.
+- **Claim-dot iterator bound** l < 64.
+
+This is not fail/fail, because a wrapped window can be valid (i = 2^59 gives [0, 32)).
+
+**22e. r24_canonical_mul** is unchanged: a source-refinement obligation with no frozen counterpart.
+
+**Counts (225 checked or mixed): 72 TOTAL, 52 DIRECT, 71 (b), 1 domain-only, 1 open, 28 NOT_EXECUTED; executed obligation 197. Rows exposed: 44 of 393** (55 at the start of this run). Of these, 17 rows have weights.field as their only blocker and 7 have r24_canonical_mul.
+
+Proposed final row wording: FINAL_COUNTS section 5.
+
+Next concrete deliverables:
+1. weights.field producer (1): a Lean statement that the tx2 op6 result is a Reach state of NPH_R22JoinCW2, plus flush length preservation, composed to dot_site.
+2. weights.field producer (2): the claim-dot loop entry's iterator range bound, composed to claim_site.
+3. r24_canonical_mul: provenance first.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
