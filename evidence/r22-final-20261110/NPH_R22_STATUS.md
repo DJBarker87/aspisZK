@@ -290,10 +290,9 @@ respects it:
 This changes the statement of the ops interface. A lead or owner decision is needed before any
 module is re-pinned. No caps were raised, and nothing was re-run unchanged.
 
-**Item (4) is not started.** A body scan (in this section's working notes; the census bodies
-are in NPH_CENSUS_BODIES.json.xz) shows that 50 open loop bodies have, as their only checked
-arithmetic, one increment `x + 1#usize` guarded by `x < n`, or an iterator index below the
-range end. Examples: digest_is_canonical ×2 (51 and 32 rows), the NCV/NCX loops, the Poseidon
+**Item (4) is not started.** A body scan (of NPH_CENSUS_BODIES.json.xz) shows 32 open bodies whose only checked arithmetic is one increment
+`x + 1#usize`. In each case x is either guarded by `x < n` or an iterator index below the range
+end; this was checked per body by reading, not proved. Examples: digest_is_canonical ×2 (51 and 32 rows), the NCV/NCX loops, the Poseidon
 lane loops, array_from_fn_copy_loop and finish_owned_loop.body. These are arithmetic-safe for
 every input, by the same argument as fibre_point, once a generic `x < n → x + 1 ok` lemma and
 a per-body lemma are written. This is the next mechanical deliverable. The other 17 scopes
