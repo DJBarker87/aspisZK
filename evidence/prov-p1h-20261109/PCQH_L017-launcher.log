@@ -1,0 +1,45 @@
+{"attempt": "PCQH_L017", "exit_status": 1, "wall_seconds": 2.191079586977139, "peak_rss_kib": "2610876", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone
+...
+rRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+PCQH_sources/PCQH_probe_range.lean:5:7: error(lean.unknownIdentifier): Unknown constant `core.iter.range.IteratorRange`
+structure Aeneas.Std.core.iter.range.Step (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.range.Step.cloneInst : core.clone.Clone Self
+  Aeneas.Std.core.iter.range.Step.partialOrdInst : core.cmp.PartialOrd Self Self
+  Aeneas.Std.core.iter.range.Step.steps_between : Self → Self → Result (Usize × Option Usize)
+  Aeneas.Std.core.iter.range.Step.forward_checked : Self → Usize → Result (Option Self)
+  Aeneas.Std.core.iter.range.Step.backward_checked : Self → Usize → Result (Option Self)
+constructor:
+  Aeneas.Std.core.iter.range.Step.mk {Self : Type} (cloneInst : core.clone.Clone Self)
+    (partialOrdInst : core.cmp.PartialOrd Self Self) (steps_between : Self → Self → Result (Usize × Option Usize))
+    (forward_checked backward_checked : Self → Usize → Result (Option Self)) : core.iter.range.Step Self
+@core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A)
+
+Running as unit: run-r58c92eedde2446a2b851e2fb54e7dd8c.scope; invocation ID: b6740f5696714c64836566b40b534f69

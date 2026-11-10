@@ -1,0 +1,21 @@
+{
+ "schema": "PCQH_HAND_MODELS/1",
+ "note": "records only; no trust row proposed",
+ "models": [
+  {
+   "name": "ShrAmt / Std.Usize.wrapping_shr / wrapping_shl wrappers (inputs/PCQH_shr_prelude.lean)",
+   "kind": "ENCODING_BRIDGE",
+   "statement": "In the fresh namespace, `Std.Usize.wrapping_shr x y` with y : I32 or Usize means Aeneas.Std.Usize.wrapping_shr x (y as u32); wrapping_shl likewise",
+   "justification": "Rust semantics of unchecked `>>`/`<<` with overflow checks off: the right operand is converted and the amount masked by the word width; the library function masks. The emitted text is otherwise unchanged.",
+   "scope": "fresh text only; used by NFN_ExtractedGeometry_h1; not used in any claim about the deployed program beyond this correspondence",
+   "status": "assumption about the tool translation, to be audited against the Aeneas/Charon MIR translation of Shr; not a cryptographic assumption"
+  },
+  {
+   "name": "M31.ZERO/ONE binding (inputs/NFN_prelude.lean)",
+   "kind": "CONSTANT_BINDING",
+   "statement": "fresh external Result M31 constants bound to the gate constants",
+   "justification": "upgraded to EQUALITY_PROVED by PRVEq_const_bind (P2h L035/L037) against the transparent PCQF_E007 constants",
+   "scope": "NFN_ExtractedGeometry_h1"
+  }
+ ]
+}
