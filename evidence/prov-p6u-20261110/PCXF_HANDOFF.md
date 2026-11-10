@@ -1,0 +1,11 @@
+# PCXF_ HANDOFF: phase P6 refresh 3 (recount, combined import, source_revision audit)
+
+Target not yet established. No ledger row, trust row, RSL, security contract or shipped source changed; no trust row added; nothing pushed or merged. Branch codex/pc-prov-p6u-20261110 (base research b0d2832be47). Host workspace /home/dombarker/project-offloads/codex-pc-prov-p6u-20261110/.
+
+Read PCXF_REPORT.md first. Machine-readable: PCXF_SOURCE_REVISION_AUDIT.json (all 535 labelled records, 393 wrong), PCXF_DEPLOYED_SLOTS.json (per top body: slots related to frozen items, slots only instantiated), PCXF_ALL_STATUS.json, PCXF_PROVENANCE.json, PCXF_ROW_TABLES.json, PCXF_DELTA.json, PCXF_AUDIT.json (root), PCXF_AUDIT_L.json (by-reference audits), PCXF_UNIVERSES.json, PCXF_CLASSIFICATIONS.json, PCXF_TRUST_NAMING.json, PCXF_R22_SPLIT.json, PCXF_HAND_MODELS.json, PCXF_EXTERNALS.json, PCXF_NONFROZEN/NOSOURCE/L187_RECONCILE.json, PCXF_STATUS_LINE.md, PCXF_TOOLS.json, PCXF_ATTEMPTS.jsonl, receipts PCXF_Lnnn/receipt.json.
+
+Ran: 6 Lean scopes with a receipt (budget 14), 0 extraction, 0 Kani, one at a time, Stream C share 1 (admission host<6, Stream C<1; every launch found 0 scopes running). All exit 0, caps unraised, swap 0: L001 C22 45 s 2.56 GiB; L002 ROOT 40 s 5.93 GiB; L004 AUD_L1 5.9 s; L005 AUD_L2A 12.4 s; L006 AUD_L2B 8.6 s 6.53 GiB; L007 AUD_L2C 21.2 s 6.81 GiB. L003: client pre-check failure, nothing launched.
+
+Re-run: bash PCXF_overlay (python3 -I -B PCXF_overlay.py from evidence/), then the PCXF_*.sh steps of PCXE_rerun order (credited, make_bundles, make_laudit, reach, compose1-3, nonfrozen_final, l187, nosource, shramt, hm3, externals, trust, audit, audit_l, final, delta, notattempted, rowtables), then PCXF_finalize.sh. Host scopes: PCXF_chain1.sh (L001, L002; the L003 step failed), PCXF_chain2.sh (L004 to L007). The compose steps read the PCO tables from a scratch directory (partF, a copy of partE with a refreshed all_lean_paths.txt).
+
+Not established: see PCXF_REPORT.md section 6. Next deliverables: relate the unrelated tx2 slots (op5, op6, op9, op10, op19, reader helpers) and the callee slots of stage1/2/prepare/tx1 to frozen emissions; extractions for the 263 definitions without an overflow-correct emission; the lead's decision on upgrading the 38 SelectedMaskProbe records that have a fresh = gate proof.
