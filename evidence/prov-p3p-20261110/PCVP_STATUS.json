@@ -1,0 +1,78 @@
+{
+ "schema": "PCVP_STATUS/1",
+ "target_established": false,
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "closure": "codex-cx-replay-l187-20261109/objs (by reference)",
+ "corrected_seed": "AspisR1.NOC_HostCtx.sdk c / NOC_HostSeed.m0 (op1 = NOC_HostSeed.filled reserved; sdk op10 differs from NNH seed). P3o deployed_prepare/deployed_tx1 at NNH_HostSeed.m0 are NOT credited (op1 diverges there; PCVP_C.old_op1_div).",
+ "claims": [
+  {
+   "id": "C1",
+   "file": "PRVEq_CallerPrepTx1DeployedNOC_o1.lean",
+   "scope": "PCVP_L003",
+   "theorems": [
+    "noc_prepare",
+    "noc_tx1",
+    "seed_prepare",
+    "noc_op1",
+    "noc_op1_filled",
+    "noc_op1_ne_div",
+    "old_op1_div"
+   ],
+   "statement": "fresh frozen PCVK_C prepare/tx1 at xOf(currentInstalled(NOC_HostCtx.configuration c)) = gate prepare/tx1 at that Ops, for every host context c; seed-generic over the Uninstalled seed (seed_prepare). Non-vacuity: installed op1 = NOC_HostSeed.filled reserved, returns Ok(zeros n) on a granted reservation (NOC_PrepareFront.filled, cited) so not Result.div; old seed op1 is div.",
+   "status": "VERIFIED_CONDITIONAL_ON_BINDING (Bound callee fields instantiated from the Ops by rfl: organisation, not discharge)"
+  },
+  {
+   "id": "C2",
+   "file": "PRVEq_AdapterStage1DeployedNOC_o1.lean / PRVEq_AdapterStage2DeployedNOC_o1.lean",
+   "scope": "PCVP_L005, PCVP_L007",
+   "theorems": [
+    "PCVP_S1.noc_model1",
+    "PCVP_S2.noc_model2"
+   ],
+   "statement": "fresh frozen stage1_owned/stage2_owned at xOf(NOC_HostCtx.sdk c) = NOC_HostCtx.model1 c / model2 c (stage2 with hashv := LIB_Env.hashv (envOf c); NOC_HostCtx.hashv c = DGP_HostDigest.hashvInst c.sha256 is not identified with it here).",
+   "status": "VERIFIED_CONDITIONAL_ON_BINDING"
+  },
+  {
+   "id": "C3",
+   "file": "PRVEq_NocCallerSlots_o1.lean, PRVEq_NocCallerSlots2_o1.lean",
+   "scope": "PCVP_L009, PCVP_L010",
+   "theorems": [
+    "PCVP_NocSlots.cur_eq,op3,op4,op5,op7,op16,op17,op19,op20",
+    "PCVP_NocSlots2.op8,op10,op18"
+   ],
+   "statement": "existing installed-op = library-model theorems restated at the corrected seed (curN c; m := NOC_HostSeed.m0, defeq checked in PCVP_L008). Re-statements of NNV_/NNH_ theorems, no new mathematics. L010 also prints axioms of 17 cited NOC_ theorems (all standard).",
+   "status": "VERIFIED (relation to library model only)"
+  },
+  {
+   "id": "C4",
+   "file": "PRVEq_NocStage1Compose_o1.lean",
+   "scope": "PCVP_L011",
+   "theorems": [
+    "PCVP_S1Compose.fresh_stage1_iff"
+   ],
+   "statement": "fresh frozen stage1_owned at the headline sdk Ok-iff library tx1Value (composition of C2 with NOC_Stage1Iff.iff345), no domain hypothesis.",
+   "status": "VERIFIED_CONDITIONAL_ON_BINDING"
+  },
+  {
+   "id": "C5",
+   "file": "PRVEq_NocPrepTx1Compose_o1.lean",
+   "scope": "PCVP_L013",
+   "theorems": [
+    "PCVP_CComp.fresh_prepare_forward",
+    "fresh_prepare_converse",
+    "fresh_tx1_forward",
+    "fresh_tx1_converse"
+   ],
+   "statement": "the existing NOC_PrepareFront/NOC_PrepareConv/NOC_Tx1Forward/NOC_Tx1Conv theorems (stated at cur c) hold for the fresh frozen prepare/tx1 via C1.",
+   "status": "VERIFIED_CONDITIONAL_ON_BINDING"
+  }
+ ],
+ "scopes": {
+  "lean": "L001-L013 (13 of 45), extraction 0",
+  "peak_rss_kib_max": 6808172,
+  "failed": [
+   "PCVP_L002 (type mismatch: noc_op1 stated as (curN c).op1 with implicit args; fixed by stating @Ops.op1 form; receipt directory was removed by the worker, the failure is in PCVP_ATTEMPTS.jsonl)"
+  ]
+ },
+ "no_difference_at_matching_configuration": true
+}
