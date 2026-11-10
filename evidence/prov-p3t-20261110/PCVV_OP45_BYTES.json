@@ -1,0 +1,25 @@
+{
+ "schema": "PCVV_OP45_BYTES/1",
+ "note": "byte comparison receipt only, no proof; op45 stays OPEN (proposed trust row awaiting the owner); nothing credited through it",
+ "lean_literal": {
+  "source": "evidence/slice-d-entry3-20261106/NHJ_IdPacket.lean (research), def NHJ_IdPacket.poolDevnet / poolDefault; LIB_Deployed.ids uses NHJ_IdPacket.pool devnet",
+  "pool_devnet_hex": "a013622af0ca6d9adae9a2a7a9b0bb427a45be4bc32de932283a1a421a859134",
+  "registry_devnet_hex": "8309a3c9992d23debd688be0b9604887e2586a440a9c3c48521c3531e392e8ab",
+  "pool_default_hex": "4141414141414141414141414141414141414141414141414141414141414141",
+  "registry_default_hex": "4444444444444444444444444444444444444444444444444444444444444444"
+ },
+ "elf_slot": {
+  "source": "evidence/l188-20261109/host/analysis/NOX_ELF_AUDIT.json (Stream A NOX_, L188), diff_B002_default_vs_B003_devnet: .rodata bytes 1526640..1526703 of aspis_r1_cost_probe_program.so (B002 default plain sha256 f8c0ec72..., B003 devnet plain sha256 63ad3e9c...)",
+  "b002_default_hex": "41414141414141414141414141414141414141414141414141414141414141414444444444444444444444444444444444444444444444444444444444444444",
+  "b003_devnet_hex": "a013622af0ca6d9adae9a2a7a9b0bb427a45be4bc32de932283a1a421a8591348309a3c9992d23debd688be0b9604887e2586a440a9c3c48521c3531e392e8ab",
+  "b003_pool_slot_hex": "a013622af0ca6d9adae9a2a7a9b0bb427a45be4bc32de932283a1a421a859134",
+  "b003_registry_slot_hex": "8309a3c9992d23debd688be0b9604887e2586a440a9c3c48521c3531e392e8ab"
+ },
+ "comparison": {
+  "pool_devnet_lean_equals_elf_b003_pool_slot": true,
+  "registry_devnet_lean_equals_elf_b003_registry_slot": true,
+  "pool_default_lean_equals_elf_b002_pool_slot": true,
+  "registry_default_equals_elf_b002": true
+ },
+ "caveat": "The 64-byte run is the .rodata range that differs between the default and devnet builds; that it is the AUDIT_POOL_PROGRAM / AUDIT_REGISTRY_PROGRAM statics (pool first, registry second, matching the source order) is the NOX_ELF_AUDIT association by build provenance, not re-derived here. This compares the Lean literal with the bytes in the .so, not with the Rust source expression."
+}

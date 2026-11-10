@@ -1,0 +1,45 @@
+{
+ "schema": "PCVV_CANNOT_EXTRACT/1",
+ "target_established": false,
+ "llbc": "PCVV_E001_emitted/repro.llbc (host) sha256 9d82b7f3c9abff96304c78258f831d7a77e998116b2ee708f5ccd2791bf7bbaa, Charon run PCVV_E006 (cargo jobs 4)",
+ "items": [
+  {
+   "item": "r1_pool_adapter::decode_lane_from_pool_release (deployed op50)",
+   "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs lines 448:0-520:1",
+   "errors": [
+    "[Error] Early returns inside of loops are not supported yet\nSource: 'programs/r1-cost-probe/src/r1_pool_adapter.rs', lines 448:0-520:1\nCompiler source: PrePasses.ml, line 586",
+    "[Error] Ignoring the body of 'aspis_r1_cost_probe_program::r1_pool_adapter::decode_lane_from_pool_release' because of previous error"
+   ],
+   "builds": [
+    "original Aeneas 959659a6 (PCVV_E007 aborted, PCVV_E008 continued without -abort-on-error)",
+    "extended Aeneas b59d5188 (PCVV_E006 crashed at InterpReduceCollapse.ml:1991 on the same LLBC; the loop early-return error was not separately shown)"
+   ],
+   "routing": "source-refinement obligation (loop `for (level,node) in frontier.iter_mut().enumerate()` with `return Err` inside); deployed op50 is NCV_Reference.decode_lane_ref (RECEIPTED)"
+  },
+  {
+   "item": "r1_pool_adapter::deployment_ids::deployment_id (feeds AUDIT_POOL_PROGRAM, pool_program_id, deployed op45)",
+   "source": "programs/r1-cost-probe/src/deployment_ids.rs lines 3:0-44:1 and 49:23-51:21",
+   "errors": [
+    "[Error] Early returns inside of loops are not supported yet\nSource: 'programs/r1-cost-probe/src/deployment_ids.rs', lines 3:0-44:1",
+    "[Error] Assertion failed: new value doesn't have the same type as its destination\nSource: 'programs/r1-cost-probe/src/deployment_ids.rs', lines 49:23-51:21",
+    "[Warn] Could not translate the body of function 'aspis_r1_cost_probe_program::r1_pool_adapter::deployment_ids::deployment_id because of previous error"
+   ],
+   "builds": [
+    "original Aeneas 959659a6 (PCVV_E008)"
+   ],
+   "routing": "source-refinement obligation; the emitted AUDIT_POOL_PROGRAM and pool_program_id depend on it, so op45 is also blocked"
+  },
+  {
+   "item": "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1 and pair_terminal::encode_pool_v1_pair_verified_afterstate_v1 (deployed stage1 op21, op24)",
+   "source": "crates/aspis-statement",
+   "errors": [
+    "PCVV_E009 (Charon with these two as --start-from, cargo jobs 4): Charon succeeded (llbc 89384 bytes, sha256 5dab6462609e01fa0940b91b42960e4037a10d959b14af3e57cb83e47a18f794) but the controller assertion failed: OWN INPUT: unmatched opacity decode_digest_canonical (spec carried an opacity list for the earlier roots)",
+    "PCVV_E010 (Aeneas-only, original 959659a6, exit 0): Funs.lean has no function definitions (18 lines, header only); Types.lean only. The foreign-crate bodies were not translated (Charon keeps bodies of items outside the root crate opaque unless they are included, e.g. an --include selector or the extract-opaque-bodies option; I did not pass one)."
+   ],
+   "builds": [
+    "Charon cargo --jobs 4; original Aeneas 959659a6"
+   ],
+   "routing": "Not a source-refinement obligation: an extraction-shape miss on my side. Retry needs an --include for the aspis_statement items; extraction budget (10 of 10) is spent, so op21/op24 have no emission and no equality is stated."
+  }
+ ]
+}

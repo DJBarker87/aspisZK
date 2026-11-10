@@ -1,0 +1,46 @@
+{"attempt": "PCVV_E009", "exit_status": 1, "wall_seconds": 135.62279773806222, "peak_rss_kib": "597556", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "aspis_statement::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1", "--start-from", "aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1", "--opaque", "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry", "--opaque", "crate::r1_pool_adapter::owned::require_readonly_buffer", "--opaque", "crate::r1_pool_ad
+...
+^^^^^^^^^^^^^^^^^^
+
+warning: function `require_readonly_buffer` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:202:4
+    |
+202 | fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_verifier_checkpoint` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:210:4
+    |
+210 | fn require_verifier_checkpoint(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_distinct_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:224:4
+    |
+224 | fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_invariant_release_registry` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:523:4
+    |
+523 | fn authenticate_invariant_release_registry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: `aspis-r1-cost-probe-program` (lib) generated 15 warnings (run `cargo fix --lib -p aspis-r1-cost-probe-program` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 2m 12s
+{"attempt": "PCVV_E009", "exit": 1, "error": "AssertionError(('OWN INPUT: unmatched opacity', {'path': 'aspis_statement::atomic_statement::decode_digest_canonical', 'why': 'PCVV_ Ops-field boundary: callee modelled as an Ops field in the gate (or library trust)'}))"}
+
+Running as unit: run-r9d0f958359434ad5852b2f6587117fc9.scope; invocation ID: 98344c3af8b5417cb737a4dff04b0eda
