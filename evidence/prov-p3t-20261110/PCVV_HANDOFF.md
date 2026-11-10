@@ -1,0 +1,18 @@
+# PCVV_ HANDOFF: phase P3t (stage2 and stage1 adapter slots)
+
+Target not yet established. No ledger row, trust row, RSL, contract or shipped source changed; no trust row added; nothing pushed or merged. Branch codex/pc-prov-p3t-20261110. Frozen source 4bb3b3f. Lean scopes 5 of 40 (L001-L005), extraction 4 of 6 (E001-E004, all exit 124), one at a time, caps unraised, swap 0. Tables: PCVV_STATUS.json, PCVV_SCOPES.json, PCVV_REMAINING.json, PCVV_UNRELATED.json.
+
+## Difference at a matching configuration
+None established (no emission of the open callees exists to compare against). One observation that is not an encoding difference and needs the lead: deployed stage1 op21 and op24 map a callee Err to Result.div, while the frozen stage1_owned maps a validate error to Err(InvalidAccountData) (r1_pool_adapter.rs around lines 335/837). The slot equals the callee only where the callee cannot return Err (decoded-statement domain, NNH_S1DecodeOk). NOC_Stage1Iff.iff345 is an Ok-iff, which tolerates this; a per-slot equality would be false off that domain. Also op44: the frozen `error` executes msg!(...), the deployed model omits the log.
+
+## Claims (exit 0, propext/Classical.choice/Quot.sound only, no sorry/axiom/native_decide, heartbeats not raised)
+1. PRVEq_HashvNOC_t1.lean (L002): hashv_ident, hashv_ident_fun: LIB_Env.hashv (NOC_HostCtx.envOf c) = NOC_HostCtx.hashv c. This is not a restatement by rfl; it is DGP_HostDigest.op43_value at the context's own sha256/pda/clock/reservation. noc_model2_hashv, noc_validate_asq8_hashv: the P3p noc_model2 now at hashv := NOC_HostCtx.hashv c (h43 by hashv_ident). Hypotheses: none beyond c. The Bound fields remain rfl at the deployed Ops: organisation.
+2. PRVEq_Slot17_t1.lean (L004): slot17: (NOC_HostCtx.sdk c).op17 d = fresh output_lane d followed by the carrier conversion of the error; fresh_err: the emission's only error is NonCanonicalDigest. Uses the earlier PCQF_E002 emission and PRVP3f.output_lane_eq (gate = fresh). Gate-level, generic in c.
+3. PRVEq_Slot52_t1.lean (L005): slot52: op52 = carrier conversions around the frozen emission PRVFresh_AspisR1AdapterReconstruct_Funs (PCWE_E001), via the unconditional PRVEq.AspisR1AdapterReconstruct.Funs...reconstruct_asq8_statement.
+Neither 2 nor 3 says the carriers (JHf_Carrier, NFY_JHf_ProgramErrorCarrier) are faithful encodings; they are the deployed conversions stated verbatim.
+
+## Not done (12 of 14 stage2 slots, 3 of 3 stage1 slots)
+Per slot reasons in PCVV_STATUS.json. Main blocker: no frozen emission exists for the r1_pool_adapter.rs callees or the aspis-statement callees, and extraction cannot complete. PCVV_E001 (cold, reached solana deps) and E002-E004 (byte-identical args, stable --dest-file) all ended at 180 s while compiling aspis-statement under cargo --jobs 1 on a host at load 16-21 on 22 cores. Shape retired (four exit-124 runs); the timeout was not raised. PCVV_E001_spec.json (roots error, pool_program_id, decode_master_box, decode_checkpoint_box, decode_public_statement_box, scan_proof_buffer, decode_lane_from_pool_release; aspis-statement decoders opaque) is ready to run once the target can be warmed.
+
+## Failed shapes
+Client PCVV_L001 first attempt: olean of PRVEq_AdapterStage2_o1 not on LEAN_PATH, failed before any scope (client fixed, records of it were discarded when the attempts file was reset). L003: fresh_err used a fresh-namespace type name that does not exist (types are the gate's); fixed in L004. No scratch with sorry.
