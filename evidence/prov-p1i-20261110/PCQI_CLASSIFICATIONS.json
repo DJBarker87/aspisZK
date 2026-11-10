@@ -1,0 +1,71 @@
+{
+ "schema": "PCQI_CLASSIFICATIONS/1",
+ "target_established": false,
+ "classifications": [
+  {
+   "id": "PCQI-C1",
+   "kind": "TOOLING",
+   "text": "PCQI_L002 resubmitted the unchanged j2 file because a macOS `sed -i` without a backup suffix failed silently in a compound command; the scope failed exactly as PCQI_L001 (M31.mul dependency list). Counted as a wasted scope, not a new shape. The fix (j3, j4) changed the dependency lists; PCQI_L003 failed on CM31.mul (missing M31.reduce_u64 dependency), j4 (PCQI_L004) passed."
+  },
+  {
+   "id": "PCQI-C2",
+   "kind": "TYPES_BASIS",
+   "text": "CurrentWideMulCanonical declares abbrevs M31/CM31/QM31 onto AspisR1Qm31ArithmeticProbe.field.*, so the fresh emission elaborates against the probe types. The structural identity of fresh and gate types is a separate record: PCQI_L005 (PRVEq_AspisR1Qm31ArithmeticProbe_Types_t2) proves M31 = U32 (rfl), CM31 and QM31 Equiv, and the gate WideExact Equiv; standard axioms only."
+  },
+  {
+   "id": "PCQI-C3",
+   "kind": "EMISSION_REUSE",
+   "text": "Where a pinned overflow-ON emission of the frozen function already existed (PCUJ_E004, PCUJ_E005 from P2j; PCQD_E018, PCQD_E024, PCQD_E036 from P1g) and had not been compared with the gate, PCQI_ compared it and ran no new extraction. Their provenance is their own PINS/receipts (all exit 0, ON, extended Aeneas, frozen 4bb3b3f). PCQI_PROVED.json names the emission run per record."
+  },
+  {
+   "id": "PCQI-C4",
+   "kind": "NO_ROOT_PATH",
+   "text": "PartialEq::eq derived impls could not be named as Charon --start-from roots: `crate::field::_::eq` and `crate::field::wide_exact::_::eq` do not resolve (PCQI_E003, E004, exit 101), and `{impl core::cmp::PartialEq for crate::field::M31}::eq` is parsed as path `for` (PCQI_E005, exit 101). Three failed extraction scopes; shape class retired. The existing PCQD_E024 emission carries M31 and CM31 eq as callees and was used for Native01 M31.eq and V7 M31.eq/CM31.eq; QM31 and WideExact eq remain without an ON emission."
+  },
+  {
+   "id": "PCQI-C5",
+   "kind": "SHAPE_RETIRED",
+   "text": "PCQI_L021 (Port3_NativeBatchBody) and PCQI_L022 (NID_ResumeEmissionFuns) each failed once: the gate functions are parametric in a hand record (Ops) or call externals that are not gate constants. One failed shape each; not retried; recorded in PCQI_REMAINING.json."
+  },
+  {
+   "id": "PCQI-C6",
+   "kind": "DIFFERENT_BODY",
+   "text": "R1CandidateWideParserSource.field.wide_exact.WideExact.from_le_bytes (gate, source lines wide_exact.rs 254:4-261:5) composes QM31.from_le_bytes on the two 16-byte halves; frozen 4bb3b3f wide_exact.rs from_le_bytes decodes eight u32 limbs and calls from_limbs. The statement fresh = gate does not close by rfl or unfolding (PCQI_L012, exit 1, unsolved goal). Both are pure Option-valued functions with the same length and < P checks, so equality as functions is expected but is NOT proved; only BYTE_LEN is credited (PCQI_L013). Reported as a body difference at the matching ON configuration, not an encoding difference."
+  },
+  {
+   "id": "PCQI-C7",
+   "kind": "ON_COUNTERPART",
+   "text": "PCQI_E007 re-extracts the OFF PCQH_E001 shape (QueryGeometry::for_range, batch_prefix_products) with overflow checks ON so the Stage2ContinuationTypes for_range closure types have an ON receipt. Closure types carry no arithmetic; the equalities (PCQI_L017) are Unit/product type equalities."
+  },
+  {
+   "id": "PCQI-C8",
+   "kind": "LEMMA_REUSE",
+   "text": "V8R19 Guarded/Complex/Quartic M31.mul uses the P3b generic lemma PCVB_M31.fast_chain (copied text, same proof, transplanted by PCQI_patch_v8.py). inv, square_n, square_n_loop and its body are delta+callee-rewrite equalities against the E006 emission. Gate-only r23_product_u32_bounded (Quartic) has no frozen counterpart and is not covered."
+  },
+  {
+   "id": "PCQI-C9",
+   "kind": "TRANSPORT",
+   "text": "PCQI_L025 (AspisR1PublicPreparation.Types) was submitted and the ssh transport failed during collection (host unreachable from the client for the remainder of the session). Per rule it is never resubmitted; PCQI_recover.py is the read-only recovery. No result is credited unless a receipt with exit 0 is recovered. See PCQI_HANDOFF.md for the final state of L025-L027. UPDATE: host reachable again; PCQI_L025 recovered read-only (exit 0, 3 theorems, standard axioms) and credited; not resubmitted."
+  },
+  {
+   "id": "PCQI-C10",
+   "kind": "NOT_USED",
+   "text": "canonical.Q (five Types modules) matches PCQG_E017, which is an extraction of the reference crate NDE_Reference2 (roots lift_ref, extension_limbs_ref, extension_raw_ref), not a frozen shipped function. It is not used as a frozen counterpart."
+  },
+  {
+   "id": "PCQI-C11",
+   "kind": "NOT_COMPARABLE",
+   "text": "NJA_CountBody gate functions take the section variable NJA_well_formed as an extra argument. fresh = gate is not a plain function equality; this is parametric transport (CONDITIONAL_ON_BINDING class) and was not attempted."
+  },
+  {
+   "id": "PCQI-C12",
+   "kind": "SCOPE_BOUNDS",
+   "text": "Types equalities for modules whose fresh Types come from a different crate than the gate module (e.g. NID, Port3) were not attempted. QueryGeometryActual.Funs uses chunked table adapters (large literal tables); not attempted (AGENTS 2/3: no unfolding of large literal tables without a symbolic lemma)."
+  },
+  {
+   "id": "PCQI-C13",
+   "kind": "LIBRARY_TRUST",
+   "text": "Owner decision 2026-11-10 (trust boundary = frozen Aspis source): no scope was spent on library combinators. Definitions blocked only by core/alloc/std models are DEPENDS_ON_LIBRARY_TRUST in PCQI_REMAINING.json with the external name (derived PartialEq::eq; NID externals). Note L010/L011 equalities use gate-defined Option.branch/from_residual: library models, now trust by named row, not proved here."
+  }
+ ]
+}

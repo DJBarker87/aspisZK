@@ -1,0 +1,41 @@
+{"attempt": "PCQI_L012", "exit_status": 1, "wall_seconds": 2.7378200641833246, "peak_rss_kib": "2623880", "swaps": "0", "print_axioms": ["'PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.BYTE_LEN' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.from_le_bytes' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+PRV-S2 PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.BYTE_LEN
+PCQI_sources/PRVEq_R1CandidateWideParserSource_j1.lean:148:11: warning: 'trace "PRV-S1 PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.BYTE_LEN"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCQI_sources/PRVEq_R1CandidateWideParserSource_j1.lean:148:100: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCQI_sources/PRVEq_R1CandidateWideParserSource_j1.lean:148:108: warning: 'trace "PRV-S2 PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.BYTE_LEN"' tactic does nothin
+...
+1CandidateWideParserSource_j1.field.wide_exact.WideExact.from_limbs
+            (Array.make 8#usize [i5, i10, i15, i20, i25, i30, i35, i40] ⋯)) =
+    fun bytes =>
+    if (bytes.len != AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN) = true then ok none
+    else do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 0#usize, «end» := 16#usize }
+      let o ← AspisR1CandidateParser.field.QM31.from_le_bytes s
+      let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 16#usize, «end» := 32#usize }
+          let o1 ← AspisR1CandidateParser.field.QM31.from_le_bytes s1
+          let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                AspisR1CandidateParser.field.wide_exact.WideExact residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            AspisR1CandidateParser.field.wide_exact.WideExact residual
+'PRVEq.R1CandidateWideParserSource_j1.field.wide_exact.WideExact.from_le_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-rcbfdd8b287344a48869becac83ce0a21.scope; invocation ID: 6602a20ed8344dcd8e813dac7ebc6317
