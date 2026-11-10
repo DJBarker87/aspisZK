@@ -9,8 +9,8 @@
  "rows_input": "evidence/prov-p6r-20261110/PCXD_ROW_TABLES.json (row_to_module_to_definitions and row_to_module_to_reached_names, inverted)",
  "rule": "Every judgment is made at 4bb3b3f on the gate body in the L187 replayed closure. No 2021 judgment is carried over (carried_over_from_2021=false everywhere); the 2021 family judgment is informational. frozen_file_changed is by Rust file blob between b2727acd and 4bb3b3f; changed files (fast_dots.rs, fast_pairing.rs, weights.rs, r1_wire.rs, r1_pool_adapter.rs, pair_forest_*.rs, poseidon2.rs) are re-judged here, never inherited. The gate-body-to-4bb3b3f link is the definition provenance status (Stream C P6), not this packet.",
  "counts_checked_and_mixed": {
-  "TOTAL_PROVED": 60,
-  "OPEN": 133,
+  "TOTAL_PROVED": 62,
+  "OPEN": 131,
   "DOMAIN_LEMMA_PROVED": 31,
   "DIRECT": 1
  },
@@ -23,8 +23,8 @@
  },
  "rows": {
   "touched_by_checked_or_mixed": 396,
-  "with_at_least_one_open_or_domain_only_definition": 376,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 20
+  "with_at_least_one_open_or_domain_only_definition": 370,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 26
  },
  "screen_note": "existing_closure_statements_screen lists closure theorems whose statement names the exact definition next to an ok/spec conclusion; labels are a textual screen (NPH_existing_host.py), not certified judgments, except where nph_judgment cites them.",
  "definitions": [
@@ -7325,8 +7325,11 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops.pair_forest_accounts_digest_is_canonical_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "AspisR1TerminalDecoder.Funs",
@@ -7497,8 +7500,11 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)"
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops.pair_tree_profile_digest_is_canonical_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "AspisR1TerminalDecoder.Funs",
@@ -17749,5 +17755,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated after NPH_L013 (NPH_R22QRawShift): fibre_point DIRECT; both Q.raw copies and transport row_loop.body domain-lemma-proved"
+ "revision_note": "updated after NPH_L015 (NPH_R22Loops): both digest_is_canonical loop bodies TOTAL"
 }
