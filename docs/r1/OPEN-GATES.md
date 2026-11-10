@@ -26,12 +26,25 @@ translations have no receipt tying them to an archived input, so the question
 is being answered definition by definition: the tools are run again on the
 frozen source, in the configuration originally used, and each fresh translation
 is proved equal to the committed one. In the theorem's dependency cone there
-are 1,707 translated definitions; 920 are now proved equal to fresh
-extractions, 256 more are reproduced exactly from archived input, and 466 are
-still open, most of them because the tools do not yet produce a fresh
-translation in the right configuration. Counted by statement, 180 of the 599
-verified statements rest only on definitions whose provenance is settled, and
-405 are still conditional on it. Two genuine differences between committed and
+are 1,707 translated definitions. 993 are settled: 920 are proved equal to a
+fresh translation of the frozen source, and 73 are reproduced from archived
+input that is itself shown to be the frozen source. 649 are not: 466 have no
+fresh translation yet, most because the tools do not yet produce one in the
+right configuration, and 183 are reproduced from archived input whose own
+revision has not been tied to the frozen source. That last group is where the
+committed Lean came from throwaway copies: when the tools could not handle a
+crate whole, the function in question was copied into a small crate of its own
+or written out by hand, translated or proved there, and the revision was
+recorded by default rather than derived. The copies are almost certainly the
+frozen functions, and only 8 definitions have been found to differ textually
+from a fresh translation, but almost certainly is not a proof, so each one is
+being proved equal to a fresh translation in turn. Counted by statement, 114
+of the 599 verified statements rest only on settled definitions and 453 reach
+one that is not yet settled; an earlier figure of 180 counted archived input
+as settled and is withdrawn. Every one of these equality proofs has been
+recompiled, unchanged, in the cold-rebuilt closure that the theorem itself
+was checked in, so the provenance proofs and the theorem now live in one set
+of compiled objects. Two genuine differences between committed and
 fresh translations have turned up, and both have been settled as harmless: the
 loop that shifts a transport row is proved to give the same result wherever
 the verifier can reach it, and the conversion of a shift amount is proved equal
@@ -60,22 +73,22 @@ carry it over to the binary one has to show, on every path the verifier takes,
 that no checked operation can fail, so that the two agree. Of the 197
 definitions in the theorem's cone that execute checked arithmetic, 196 are
 settled: 72 cannot fail on any input, 52 have a single bounded increment or
-bounds-checked read as their only checked operation, and for 71 the condition
+bounds-checked read as their only checked operation, and for 72 the condition
 that rules out overflow is proved from their callers, among them `binary_step`,
 the step of the Merkle traversal that had been the one place where a concrete
 way for the two semantics to part was identified; its traversal invariant, that
 the position never passes the number of nodes, is now proved on every reached
-state, so the unguarded length difference never wraps there. What is left is
-`weights.field`, whose index operations are shown safe at every call site but
-whose two producers, the width of the weights at the deployed finish and the
-bound on the claim-dot iterator, are still to be composed, and
+state, so the unguarded length difference never wraps there. `weights.field`
+joined them on 10 November: the deployed second transaction is proved to run
+its finish only on weights of length 64, and the finish and claim dots call
+the field slot only inside that domain. What is left is
 `r24_canonical_mul`, which has no counterpart in the frozen source and is a
-refinement obligation rather than an overflow question. Those two still touch
-44 of the 393 verified statements these definitions serve. No input on which
+refinement obligation rather than an overflow question. It still touches
+27 of the 393 verified statements these definitions serve. No input on which
 the wrapping binary accepts while the checked model rejects is known anywhere.
 Some of the settled counts also lean on textual screening
 that still has to become Lean statements or be named for review. The item is
-finished when all five are settled, or when the owner records the difference as
+finished when that one is settled, or when the owner records the difference as
 a retained trust row and the claim names it in its first sentence. (Section
 4.4, row R22; section 6, item 16.)
 
