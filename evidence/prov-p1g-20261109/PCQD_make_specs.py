@@ -68,5 +68,11 @@ add('D01c','prog','AdapterRw split c: observer, readonly_buffer_meta_ok, require
  ['crate::observer','crate::r1_pool_adapter::readonly_buffer_meta_ok','crate::r1_pool_adapter::owned::require_readonly_buffer','crate::r1_pool_adapter::owned::require_zero','crate::r1_pool_adapter::owned::_::data_len'],modules=['AdapterRwModel'],basis='Split of D01a after E016.')
 add('D01d','prog','AdapterRw split d: first_decoded, require_verifier_checkpoint',
  ['crate::first_decoded','crate::r1_pool_adapter::owned::require_verifier_checkpoint'],opaque=['aspis_r1_cost_probe::verifier::tx1','crate::error'],modules=['AdapterRwModel'],basis='Split of D01a after E016.')
+add('D03a','cp','r1_wire without decode_k: payload, row_shape, CLAIMS, LANES, SemanticTranscript, Error',
+ ['crate::r1_wire::_::payload','crate::r1_wire::row_shape','crate::r1_wire::CLAIMS','crate::r1_wire::LANES','crate::r1_wire::SemanticTranscript','crate::r1_wire::Error'],modules=['AspisR1DecodeKFullV10.Funs','AspisS1NativeCompactModelV1'],basis='Changed shape after E007 (extended) and E015 (original): internal error in decode_k loop (r1_wire.rs 158-165).')
+add('D08b','cp','verifier Prepared::new (original)',['crate::verifier::_::new'],modules=['NGN_Emitted'],basis='Split of D08; E012 extended Not_found.',tool='original')
+add('D12b','st','pair_forest_terminal decoders with pair_tree_profile boxed decoders opaque',
+ ['crate::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1','crate::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1','crate::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1','crate::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1','crate::pool_v1::pair_forest_terminal::MASTER_OFFSET'],
+ opaque=['crate::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1','crate::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1','crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1'],modules=['AspisR1TerminalDecoder.Funs'],basis='Changed shape after E021 (extended: Unreachable at pair_tree_profile.rs 466-473) and E030 (original: memory growth 3.26 GB cgroup peak, timeout).')
 (E/'PCQD_extract_specs.json').write_text(json.dumps(dict(schema='PCQD_extract_specs/1',note='roots and opacity per group; extended Aeneas first. P1g.',specs=S),indent=1)+'\n')
 print(len(S))

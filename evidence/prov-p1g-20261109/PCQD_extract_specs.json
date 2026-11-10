@@ -705,6 +705,89 @@
    "crate": "aspis-r1-cost-probe-program",
    "manifest": "programs/r1-cost-probe/Cargo.toml",
    "features": "pool-adapter,private-leaf-salts"
+  },
+  {
+   "spec_id": "D03a",
+   "kind": "frozen",
+   "label": "r1_wire without decode_k: payload, row_shape, CLAIMS, LANES, SemanticTranscript, Error",
+   "start_from": [
+    "crate::r1_wire::_::payload",
+    "crate::r1_wire::row_shape",
+    "crate::r1_wire::CLAIMS",
+    "crate::r1_wire::LANES",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Error"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d03a",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1DecodeKFullV10.Funs",
+     "AspisS1NativeCompactModelV1"
+    ]
+   },
+   "basis": "Changed shape after E007 (extended) and E015 (original): internal error in decode_k loop (r1_wire.rs 158-165).",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D08b",
+   "kind": "frozen",
+   "label": "verifier Prepared::new (original)",
+   "start_from": [
+    "crate::verifier::_::new"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [],
+   "namespace": "PCQD_d08b",
+   "aeneas_tool": "original",
+   "covers": {
+    "modules": [
+     "NGN_Emitted"
+    ]
+   },
+   "basis": "Split of D08; E012 extended Not_found.",
+   "crate": "aspis-r1-cost-probe",
+   "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+   "features": "private-leaf-salts,optimized-terminal,program-build"
+  },
+  {
+   "spec_id": "D12b",
+   "kind": "frozen",
+   "label": "pair_forest_terminal decoders with pair_tree_profile boxed decoders opaque",
+   "start_from": [
+    "crate::pool_v1::pair_forest_terminal::decode_lane_transition_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_terminal_common_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_transfer_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::decode_withdrawal_statement_boxed_v1",
+    "crate::pool_v1::pair_forest_terminal::MASTER_OFFSET"
+   ],
+   "include": [
+    "aspis_core::field::P"
+   ],
+   "opaque": [
+    "crate::pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pair_live_snapshot_boxed_v1",
+    "crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_late_public_statement_boxed_v1"
+   ],
+   "namespace": "PCQD_d12b",
+   "aeneas_tool": "extended",
+   "covers": {
+    "modules": [
+     "AspisR1TerminalDecoder.Funs"
+    ]
+   },
+   "basis": "Changed shape after E021 (extended: Unreachable at pair_tree_profile.rs 466-473) and E030 (original: memory growth 3.26 GB cgroup peak, timeout).",
+   "crate": "aspis-statement",
+   "manifest": "crates/aspis-statement/Cargo.toml",
+   "features": "r0,pool-v1-kernel"
   }
  ]
 }
