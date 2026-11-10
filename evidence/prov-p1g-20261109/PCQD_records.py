@@ -52,7 +52,7 @@ cov=[]
 for e in need:
     g=e['gate_definition']
     if g in ALIAS:tail=ALIAS[g].split('.')
-    else:tail=g.split('.')[1:]
+    else:tail=g.split('.')[2:] if g.startswith('AspisR1.') else g.split('.')[1:]
     if g.startswith('AspisR1.') or g.startswith('AspisR1CurrentCaller'):pass
     f=find(fresh,tail);p=find(prior,tail)
     if g in NOFROZEN:st='NO_FROZEN_COUNTERPART';ev=NOFROZEN[g]
