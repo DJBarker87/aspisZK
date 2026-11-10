@@ -1,0 +1,1788 @@
+{
+ "schema": "NPI_TRUST_REACH/1",
+ "target_established": false,
+ "basis": {
+  "source_revision": "aceb08e73ed",
+  "cones": "evidence/replay-l187-20261109/final/L187_AX2_{splitB,charge}",
+  "cone_sha256": {
+   "cone_splitB.txt": "0b316cbba462874e984430db4c9ddcaa2d902053315934a8b608eaea48d30090",
+   "cone_charge.txt": "4ae9686fc22d0b46497f02c1730f121ff5045147dc3ef895f2fac188455d6a58"
+  },
+  "ledger": "evidence/ledger30-20261111/NNN_LEDGER.json.xz",
+  "census": "NPI_L004 (NPI_out_*.tsv)"
+ },
+ "method": "A row is reached when a Lean constant that carries it is in both raw ax2 cones (binder, run-frame conjunct, instantiated structure, window law or field constant), or when a ledger row that consumes it has a root (or an installed top-field restatement of its root) in the cones, or, for runtime and tool rows, when the frozen function that makes the call is on the deployed path whose model is in the cones (marked META). Cone membership is exact name membership in the L187 REACHABLE lists; the same-named-function column for RT items is a heuristic only.",
+ "ledger_rows_by_cone": {
+  "NOT_IN_CONE": 450,
+  "ROOT_IN_CONE": 140,
+  "NO_ROOT_RECORDED": 2,
+  "INSTALLED_FIELD": 7
+ },
+ "ledger_roots_total": 1840,
+ "trust_rows": [
+  {
+   "row": "Random-oracle model for SHA-256 (L194)",
+   "class_": "oracle model",
+   "enters": "statement (H universal; every probability over H)",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.F3T_RuntimeBound.failureModel",
+    "AspisV8R19.MemoizedProgramLaw.lazyMean"
+   ],
+   "note": "Not a Lean premise; the reading of H."
+  },
+  {
+   "row": "P1 ideal-oracle realization",
+   "class_": "oracle model",
+   "enters": "INSTANTIATED (sha256 := H, p1 := rfl, ruling (bt)); row is the physical reading",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2W_ExtractionBoundary.P1.mk",
+    "AspisR1.S2W_ExtractionBoundary.P1.realization"
+   ],
+   "note": "Lean premise discharged at the top; P1.mk built inside the cone."
+  },
+  {
+   "row": "RuntimeSyscall.returningValue",
+   "class_": "runtime",
+   "enters": "INSTANTIATED (DGP_HostDigest.syscall theorem at hashAdapter H); row is the physical reading of every returned digest in Runs",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2W_ExtractionBoundary.RuntimeSyscall",
+    "AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk",
+    "AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue",
+    "AspisR1.DGP_HostDigest.syscall",
+    "AspisR1.S2Z.Oracle.RuntimeSyscall"
+   ],
+   "note": ""
+  },
+  {
+   "row": "RuntimeSha256Value",
+   "class_": "runtime",
+   "enters": "META: physical reading of the SolanaDigest/hashv reply value as H; ledger retained-value uses TX1:327, TX2:210",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AdapterRw.SolanaDigest",
+    "AspisR1.DGP_HostDigest.hashvInst",
+    "RSL.Event.digest"
+   ],
+   "note": "The ledger lists no CLOSED consumer and the NGC_ roots of TX1:327/TX2:210 are not in the cones; the row is reached because every accepted run reads hashv replies as H (bt).",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "RuntimeEntrypointAdmission (verifier, 7 fields + 2 wrapper fields)",
+   "class_": "runtime",
+   "enters": "RUN_FRAME: conjuncts 1-2 of NOC_Run5bHost.retained inside S_host.GameFrame; deployed_splitB: hypothesis run.frame; deployed_charge: inside the event Runs (not a hypothesis)",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.NOC_Run5bHost.retained",
+    "AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission",
+    "AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry",
+    "AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related",
+    "AspisR1.AdapterRw.RuntimeEntrypointAdmission",
+    "AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid"
+   ],
+   "note": "Whole structure is assumed; only .valid, .entry, .related are projected inside the cones."
+  },
+  {
+   "row": "RuntimePersistence (CPR_DataPersistence.TwoTransactionLaw)",
+   "class_": "runtime",
+   "enters": "RUN_FRAME: conjunct 3 of NOC_Run5bHost.retained (ordinary := CPG_Projection.ordinary p (key 0), the System-program exclusion)",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.CPR_DataPersistence.TwoTransactionLaw",
+    "AspisR1.NOC_Run5bHost.retained"
+   ],
+   "note": "Ledger trust row lists no consumers (stale: consumed at the top through run.frame).",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "Allocator (data-only interface)",
+   "class_": "runtime",
+   "enters": "INSTANTIATED (allocator := NNE_AbortIndicator.allocator, ruling (bo)); physical reading falls under AllocatorABICompilerSourceToELF / NOX_ line 5",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2W_D189Wrappers.Allocator",
+    "AspisR1.S2W_D189Wrappers.Allocator.mk",
+    "NNE_AbortIndicator.allocator"
+   ],
+   "note": ""
+  },
+  {
+   "row": "RuntimeReturnData (nonempty, ruling (ab))",
+   "class_": "runtime",
+   "enters": "META on path: emit_result is called by stage2_owned (TX2:241, reached); RSL.Event.returnData in cone",
+   "reached": "YES (on path; its CLOSED consumer TX2:219 root is not in the cones)",
+   "lean_constants_in_both_cones": [
+    "RSL.Event.returnData",
+    "NNT_Field.r241"
+   ],
+   "note": "The theorem models return data as RSL events; the row is the physical reading of the nonempty emit.",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 1,
+     "reached": [],
+     "not_reached": [
+      "TX2:219"
+     ]
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD 2026-11-04 (ab); OWNER ACCEPTED 2026-11-04"
+  },
+  {
+   "row": "RuntimeReturnDataClear (ruling (am))",
+   "class_": "runtime",
+   "enters": "WINDOW LAW of the (bn) stage2 fission (set_return_data(&[]) at owned.rs:467), consumed by TX2:240 via NMV_ConcreteWindows.root240",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "NMV_ConcreteWindows.root240",
+    "NVR_TasRoots.field240",
+    "RSL.Event.returnData"
+   ],
+   "note": "Ledger still says used:false; stale against ruling (bn) and FIN_240.",
+   "ledger": {
+    "ledger_status": "ADDED-LEAD",
+    "ledger_consumers": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD 2026-11-06 (am); owner class authority 2026-11-04; individual confirmation not recorded"
+  },
+  {
+   "row": "RuntimeMemcmp (688-byte, ruling (ac))",
+   "class_": "runtime",
+   "enters": "META on path: scan_proof_buffer is called by validate_asq8 (TX2:242, NMX_R6_Validation.root in cone)",
+   "reached": "YES (on path; its CLOSED consumer TX2:226 root is not in the cones)",
+   "lean_constants_in_both_cones": [
+    "NMX_R6_Validation.root"
+   ],
+   "note": "The Lean model reads the 688-byte compare as byte equality; the row is the ELF-level reading of sol_memcmp_.",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 1,
+     "reached": [],
+     "not_reached": [
+      "TX2:226"
+     ]
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD 2026-11-04 (ac); OWNER ACCEPTED 2026-11-04"
+  },
+  {
+   "row": "RuntimeClockSlotBinding",
+   "class_": "runtime",
+   "enters": "WINDOW LAW (Clock::get at owned.rs:479) via NMV_WindowClock; RSL.Env.clock/Event.clock in cone",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "NMV_WindowClock.exact_clock",
+    "RSL.Env.clock",
+    "RSL.Event.clock",
+    "AspisR1.NNH8_Exec.clockFree"
+   ],
+   "note": "fx.clock is a universal Fixed field; NNH8_Exec.clockFree gives model/recorder clock-independence.",
+   "ledger": {
+    "ledger_status": "ADDED-LEAD",
+    "ledger_consumers": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD-20261105; owner class authority 2026-11-04; individual confirmation not recorded"
+  },
+  {
+   "row": "RuntimeCpiAccountView",
+   "class_": "runtime (Pool)",
+   "enters": "none",
+   "reached": "UNREACHED",
+   "lean_constants_in_both_cones": [],
+   "note": "Pool CPI sites only; no constant in either cone; would enter only if (aj)(a) puts Pool execution in the game.",
+   "ledger": {
+    "ledger_status": "ADDED-LEAD-20261110",
+    "ledger_consumers": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD-20261110 (Stream C (c-a)); owner confirmation not recorded"
+  },
+  {
+   "row": "RuntimeEntrypointAdmission-Pool",
+   "class_": "runtime (Pool)",
+   "enters": "none",
+   "reached": "UNREACHED",
+   "lean_constants_in_both_cones": [],
+   "note": "Pool entrypoint only.",
+   "ledger": {
+    "ledger_status": "ADDED-LEAD-20261107; carried read-only",
+    "ledger_consumers": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "ADDED-LEAD-20261107 (ap); owner confirmation not recorded"
+  },
+  {
+   "row": "RuntimeCpiReadonlyEntry7",
+   "class_": "runtime (pending)",
+   "enters": "none",
+   "reached": "UNREACHED",
+   "lean_constants_in_both_cones": [],
+   "note": "ADDED-PENDING-LEAD, unused.",
+   "ledger": {
+    "ledger_status": "ADDED-PENDING-LEAD",
+    "ledger_consumers": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 0,
+     "reached": [],
+     "not_reached": []
+    }
+   },
+   "added_under_delegation": "PENDING (never admitted)"
+  },
+  {
+   "row": "FixturePdaRuntime",
+   "class_": "runtime (non-vacuity)",
+   "enters": "none",
+   "reached": "UNREACHED",
+   "lean_constants_in_both_cones": [],
+   "note": "Zero JHs_/JHw_/JHt_ constants in either cone; op38 is quantified in the theorem.",
+   "added_under_delegation": "ADDED under the standing delegation 2026-10-28 late (non-vacuity only); owner confirmation not recorded"
+  },
+  {
+   "row": "S2TrustedSdkBorrow (15 fields)",
+   "class_": "library",
+   "enters": "BINDER: borrow : S2TrustedSdkBorrow L0 in both kernel statements",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2Trust.S2TrustedSdkBorrow",
+    "AspisR1.S2Trust.S2TrustedSdkBorrow.mk",
+    "AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell",
+    "AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload"
+   ],
+   "note": "All 15 fields are assumed (the structure is a hypothesis); only account_data_cell and cell_payload are projected inside the cones.",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 5,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX2:213",
+      "TX2:221",
+      "TX2:240"
+     ],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "TrustedStd (slice_copy_from_slice)",
+   "class_": "library",
+   "enters": "BINDER: std : TrustedStd copy in both kernel statements",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2W_TrustedStd.TrustedStd",
+    "AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice"
+   ],
+   "note": "W1 qualification applies at each use.",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 10,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX1:344",
+      "TX1:345",
+      "TX2:213",
+      "TX2:221",
+      "TX2:233",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 17,
+     "reached": [
+      "TX1:087",
+      "TX1:094",
+      "TX1:136",
+      "TX1:137",
+      "TX1:328",
+      "TX1:330",
+      "TX1:333",
+      "TX1:344",
+      "TX1:345",
+      "TX2:213",
+      "TX2:217",
+      "TX2:221",
+      "TX2:233",
+      "TX2:234",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "TrustedStd (Port1 option_ok_or, result_unwrap32)",
+   "class_": "library",
+   "enters": "none as a hypothesis: AspisR1.Port1_Library.TrustedStd is not in either cone; Port1_Library.std (an instance) is",
+   "reached": "NO as a premise (instantiated by Port1_Library.std); see note",
+   "lean_constants_in_both_cones": [
+    "AspisR1.Port1_Library.std",
+    "AspisR1.Port1_LibrarySource.okOr",
+    "AspisR1.Port1_LibrarySource.unwrap32"
+   ],
+   "note": "The Port1 structure itself is not reached; the cone uses the concrete okOr/unwrap32 models (PROPOSED-HM-C covers their std reading)."
+  },
+  {
+   "row": "AeneasExtraction (D188, trace fidelity, narrowed by D188-P3 and (bc))",
+   "class_": "tool",
+   "enters": "INSTANTIATED at the top (a0 := NOC_Run5bHost.a0, native := model) + TOOL: every emitted body in the cones",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2W_DigestExtraction.AeneasExtraction",
+    "AspisR1.S2W_DigestExtraction.AeneasExtraction.mk",
+    "AspisR1.S2W_ExtractionBoundary.AeneasExtraction",
+    "AspisR1.S2W_ExtractionBoundary.AeneasExtraction.mk",
+    "AspisR1.NNG_Candidate136.candidate",
+    "AspisR1.NNG_Candidate137.candidate",
+    "AspisR1.NNG_Candidate087.candidate",
+    "AspisR1.NNG_Candidate094.candidate",
+    "AspisR1.NNG_Candidate328.candidate",
+    "AspisR1.NNG_ActualCandidate345.candidate",
+    "NMX_R3_RegistryRoot.root",
+    "NMX_R4_Authentication.root",
+    "NMX_R6_Validation.root"
+   ],
+   "note": "(bm) emitted-body reclassifications for 136/137/087/094/328/345/234/233/242 have roots in the cones; 241/333/221/330/213 through installed fields."
+  },
+  {
+   "row": "P6 / Kani association (K-1 narrowing, (br))",
+   "class_": "tool",
+   "enters": "TOOL: native halves of every hybrid row that certifies a function on the deployed path",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [],
+   "note": "Not a Lean constant."
+  },
+  {
+   "row": "NativeContractSemanticTransport (amendment fifth)",
+   "class_": "tool",
+   "enters": "TOOL + LEDGER: consumes_trust of 17 composed rows; 380 direct CLOSED rows",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [
+    "NLT_CompleteRoot.root"
+   ],
+   "note": "NLT-TX2:065 root in cones; NMN-TX2:064 root (NMN_064.root) not in cones (TX2:064 dropped from the top by (bu)).",
+   "ledger": {
+    "ledger_status": "ACCEPTED retained trust",
+    "ledger_consumers": {
+     "n": 390,
+     "reached": [
+      "TX1:016",
+      "TX1:023",
+      "TX1:032",
+      "TX1:038",
+      "TX1:039",
+      "TX1:042",
+      "TX1:056",
+      "TX1:076",
+      "TX1:088",
+      "TX1:089",
+      "TX1:095",
+      "TX1:098",
+      "TX1:099",
+      "TX1:100",
+      "TX1:101",
+      "TX1:102",
+      "TX1:104",
+      "TX1:105",
+      "TX1:111",
+      "TX1:131",
+      "TX1:138",
+      "TX1:139",
+      "TX1:140",
+      "TX1:141",
+      "TX1:146",
+      "TX1:147",
+      "TX1:150",
+      "TX1:151",
+      "TX1:152",
+      "TX1:153",
+      "TX1:168",
+      "TX1:169",
+      "TX1:170",
+      "TX1:181",
+      "TX1:182",
+      "TX1:190",
+      "TX1:193",
+      "TX1:197",
+      "TX1:230",
+      "TX1:240",
+      "TX1:248",
+      "TX1:262",
+      "TX1:265",
+      "TX1:270",
+      "TX1:330",
+      "TX1:332",
+      "TX1:333",
+      "TX1:334",
+      "TX1:340",
+      "TX1:344",
+      "TX1:345",
+      "TX2:012",
+      "TX2:022",
+      "TX2:047",
+      "TX2:048",
+      "TX2:058",
+      "TX2:059",
+      "TX2:066",
+      "TX2:067",
+      "TX2:068",
+      "TX2:070",
+      "TX2:071",
+      "TX2:077",
+      "TX2:104",
+      "TX2:108",
+      "TX2:114",
+      "TX2:116",
+      "TX2:117",
+      "TX2:119",
+      "TX2:128",
+      "TX2:130",
+      "TX2:131",
+      "TX2:132",
+      "TX2:133",
+      "TX2:135",
+      "TX2:136",
+      "TX2:138",
+      "TX2:139",
+      "TX2:140",
+      "TX2:141",
+      "TX2:142",
+      "TX2:143",
+      "TX2:145",
+      "TX2:213",
+      "TX2:221",
+      "TX2:222",
+      "TX2:233",
+      "TX2:237",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": [
+      "TX1:001",
+      "TX1:002",
+      "TX1:003",
+      "TX1:004",
+      "TX1:005",
+      "TX1:006",
+      "TX1:007",
+      "TX1:008",
+      "TX1:009",
+      "TX1:010",
+      "TX1:011",
+      "TX1:012",
+      "TX1:013",
+      "TX1:014",
+      "TX1:015",
+      "TX1:017",
+      "TX1:018",
+      "TX1:019",
+      "TX1:020",
+      "TX1:021",
+      "TX1:022",
+      "TX1:024",
+      "TX1:025",
+      "TX1:026",
+      "TX1:027",
+      "TX1:028",
+      "TX1:029",
+      "TX1:030",
+      "TX1:031",
+      "TX1:033",
+      "TX1:034",
+      "TX1:035",
+      "TX1:037",
+      "TX1:045",
+      "TX1:046",
+      "TX1:047",
+      "TX1:048",
+      "TX1:049",
+      "TX1:050",
+      "TX1:051",
+      "TX1:052",
+      "TX1:053",
+      "TX1:054",
+      "TX1:055",
+      "TX1:057",
+      "TX1:058",
+      "TX1:059",
+      "TX1:060",
+      "TX1:061",
+      "TX1:062",
+      "TX1:063",
+      "TX1:064",
+      "TX1:071",
+      "TX1:072",
+      "TX1:073",
+      "TX1:074",
+      "TX1:075",
+      "TX1:085",
+      "TX1:096",
+      "TX1:097",
+      "TX1:103",
+      "TX1:106",
+      "TX1:107",
+      "TX1:108",
+      "TX1:109",
+      "TX1:110",
+      "TX1:112",
+      "TX1:113",
+      "TX1:114",
+      "TX1:115",
+      "TX1:116",
+      "TX1:117",
+      "TX1:130",
+      "TX1:132",
+      "TX1:135",
+      "TX1:143",
+      "TX1:144",
+      "TX1:145",
+      "TX1:148",
+      "TX1:149",
+      "TX1:154",
+      "TX1:161",
+      "TX1:162",
+      "TX1:163",
+      "TX1:164",
+      "TX1:171",
+      "TX1:172",
+      "TX1:173",
+      "TX1:174",
+      "TX1:175",
+      "TX1:177",
+      "TX1:178",
+      "TX1:179",
+      "TX1:180",
+      "TX1:183",
+      "TX1:184",
+      "TX1:185",
+      "TX1:186",
+      "TX1:187",
+      "TX1:188",
+      "TX1:191",
+      "TX1:192",
+      "TX1:194",
+      "TX1:195",
+      "TX1:196",
+      "TX1:198",
+      "TX1:199",
+      "TX1:200",
+      "TX1:205",
+      "TX1:206",
+      "TX1:207",
+      "TX1:236",
+      "TX1:238",
+      "TX1:239",
+      "TX1:241",
+      "TX1:243",
+      "TX1:249",
+      "TX1:252",
+      "TX1:253",
+      "TX1:254",
+      "TX1:255",
+      "TX1:257",
+      "TX1:258",
+      "TX1:259",
+      "TX1:266",
+      "TX1:267",
+      "TX1:269",
+      "TX1:271",
+      "TX1:272",
+      "TX1:273",
+      "TX1:274",
+      "TX1:275",
+      "TX1:276",
+      "TX1:277",
+      "TX1:278",
+      "TX1:279",
+      "TX1:280",
+      "TX1:281",
+      "TX1:282",
+      "TX1:283",
+      "TX1:284",
+      "TX1:285",
+      "TX1:286",
+      "TX1:287",
+      "TX1:288",
+      "TX1:289",
+      "TX1:290",
+      "TX1:291",
+      "TX1:292",
+      "TX1:293",
+      "TX1:294",
+      "TX1:295",
+      "TX1:296",
+      "TX1:297",
+      "TX1:298",
+      "TX1:299",
+      "TX1:300",
+      "TX1:301",
+      "TX1:310",
+      "TX1:322",
+      "TX1:326",
+      "TX1:327",
+      "TX1:337",
+      "TX1:338",
+      "TX1:342",
+      "TX1:NGB003",
+      "TX1:NGB005",
+      "TX1:NGB007",
+      "TX1:NGB008",
+      "TX2:001",
+      "TX2:002",
+      "TX2:003",
+      "TX2:004",
+      "TX2:005",
+      "TX2:006",
+      "TX2:007",
+      "TX2:008",
+      "TX2:009",
+      "TX2:010",
+      "TX2:011",
+      "TX2:013",
+      "TX2:014",
+      "TX2:015",
+      "TX2:016",
+      "TX2:017",
+      "TX2:018",
+      "TX2:019",
+      "TX2:020",
+      "TX2:021",
+      "TX2:023",
+      "TX2:024",
+      "TX2:025",
+      "TX2:026",
+      "TX2:027",
+      "TX2:028",
+      "TX2:029",
+      "TX2:030",
+      "TX2:031",
+      "TX2:032",
+      "TX2:033",
+      "TX2:034",
+      "TX2:035",
+      "TX2:036",
+      "TX2:037",
+      "TX2:038",
+      "TX2:039",
+      "TX2:040",
+      "TX2:041",
+      "TX2:042",
+      "TX2:043",
+      "TX2:044",
+      "TX2:045",
+      "TX2:046",
+      "TX2:056",
+      "TX2:064",
+      "TX2:069",
+      "TX2:072",
+      "TX2:073",
+      "TX2:074",
+      "TX2:075",
+      "TX2:076",
+      "TX2:078",
+      "TX2:079",
+      "TX2:080",
+      "TX2:081",
+      "TX2:082",
+      "TX2:083",
+      "TX2:095",
+      "TX2:096",
+      "TX2:097",
+      "TX2:098",
+      "TX2:101",
+      "TX2:103",
+      "TX2:109",
+      "TX2:110",
+      "TX2:111",
+      "TX2:112",
+      "TX2:113",
+      "TX2:118",
+      "TX2:120",
+      "TX2:123",
+      "TX2:125",
+      "TX2:127",
+      "TX2:134",
+      "TX2:137",
+      "TX2:144",
+      "TX2:146",
+      "TX2:147",
+      "TX2:148",
+      "TX2:154",
+      "TX2:155",
+      "TX2:156",
+      "TX2:158",
+      "TX2:159",
+      "TX2:160",
+      "TX2:161",
+      "TX2:162",
+      "TX2:163",
+      "TX2:164",
+      "TX2:165",
+      "TX2:166",
+      "TX2:167",
+      "TX2:168",
+      "TX2:169",
+      "TX2:170",
+      "TX2:171",
+      "TX2:172",
+      "TX2:173",
+      "TX2:174",
+      "TX2:175",
+      "TX2:176",
+      "TX2:177",
+      "TX2:178",
+      "TX2:179",
+      "TX2:180",
+      "TX2:181",
+      "TX2:182",
+      "TX2:183",
+      "TX2:184",
+      "TX2:185",
+      "TX2:186",
+      "TX2:187",
+      "TX2:188",
+      "TX2:189",
+      "TX2:190",
+      "TX2:191",
+      "TX2:210",
+      "TX2:215",
+      "TX2:219",
+      "TX2:224",
+      "TX2:226",
+      "TX2:227",
+      "TX2:228",
+      "TX2:231",
+      "TX2:232",
+      "TX2:NGB009",
+      "TX2:NGB010",
+      "TX2:NGB011",
+      "TX2:NGB012"
+     ]
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 17,
+     "reached": [
+      "TX1:087",
+      "TX1:094",
+      "TX1:136",
+      "TX1:137",
+      "TX1:328",
+      "TX1:330",
+      "TX1:333",
+      "TX1:344",
+      "TX1:345",
+      "TX2:213",
+      "TX2:217",
+      "TX2:221",
+      "TX2:233",
+      "TX2:234",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "P7 compiler/LLVM/platform and pinned Lean/Mathlib/Aeneas base",
+   "class_": "tool",
+   "enters": "TOOL: whole closure",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [],
+   "note": "NOX_ lines 1-4 are its concrete SBF instances."
+  },
+  {
+   "row": "AllocatorABICompilerSourceToELF",
+   "class_": "realization",
+   "enters": "LEDGER consumes_trust of 17 composed rows + ruling (bo) physical reading",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [],
+   "note": "NOX_ realization lines (PROPOSED split) make it concrete.",
+   "ledger": {
+    "ledger_status": "RETAINED ROOT REALIZATION OBLIGATION",
+    "ledger_consumers": {
+     "n": 10,
+     "reached": [
+      "TX1:330",
+      "TX1:333",
+      "TX1:344",
+      "TX1:345",
+      "TX2:213",
+      "TX2:221",
+      "TX2:233",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": []
+    },
+    "ledger_consumes_trust_rows": {
+     "n": 17,
+     "reached": [
+      "TX1:087",
+      "TX1:094",
+      "TX1:136",
+      "TX1:137",
+      "TX1:328",
+      "TX1:330",
+      "TX1:333",
+      "TX1:344",
+      "TX1:345",
+      "TX2:213",
+      "TX2:217",
+      "TX2:221",
+      "TX2:233",
+      "TX2:234",
+      "TX2:240",
+      "TX2:241",
+      "TX2:242"
+     ],
+     "not_reached": []
+    }
+   }
+  },
+  {
+   "row": "CheckedVsWrapping (R22)",
+   "class_": "realization",
+   "enters": "TOOL/META: every checked-configuration emitted body in the cones",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [],
+   "note": "OPEN; NOX_R22_CONFIG.json lists 24 checked gate modules."
+  },
+  {
+   "row": "Standard logical axioms",
+   "class_": "logic",
+   "enters": "KERNEL",
+   "reached": "YES",
+   "lean_constants_in_both_cones": [],
+   "note": "Walked = collected = {Classical.choice, Quot.sound, propext} for all four roots (L187 final)."
+  },
+  {
+   "row": "Historical checkpoint interfaces (S2X.CheckpointVersionBinding.*, S2W_AuthenticatedInputs...history)",
+   "class_": "historical",
+   "enters": "CONSTRUCTED inside the cones (CPR_DataBinding.binding, CPG_History.on_cuts from RuntimePersistence + game + source proofs); never a hypothesis",
+   "reached": "REACHED AS CONSTRUCTED TERMS, NOT ASSUMED",
+   "lean_constants_in_both_cones": [
+    "AspisR1.S2X.CheckpointVersionBinding",
+    "AspisR1.S2X.CheckpointVersionBinding.mk",
+    "AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding",
+    "AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.mk",
+    "AspisR1.CPR_DataBinding.binding",
+    "AspisR1.CPG_History.on_cuts"
+   ],
+   "note": "Matches appendix \"no additional trust\"."
+  }
+ ],
+ "reviewed_transcription": [
+  {
+   "item": "NJY-RT149",
+   "rows": [
+    "TX2:149"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/format.rs::decode_pool_identity_v1"
+   ],
+   "item_root": "NJY_Roots.identity",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option A RECLASSIFICATION"
+  },
+  {
+   "item": "NJY-RT152",
+   "rows": [
+    "TX2:152"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1"
+   ],
+   "item_root": "NJY_Roots.checkpoint",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option A RECLASSIFICATION"
+  },
+  {
+   "item": "NJY-RT153",
+   "rows": [
+    "TX2:153"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1"
+   ],
+   "item_root": "NJY_Roots.master",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option A RECLASSIFICATION"
+  },
+  {
+   "item": "NJY-RT201",
+   "rows": [
+    "TX2:201"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v1"
+   ],
+   "item_root": "NJY_Roots.entry",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option A RECLASSIFICATION"
+  },
+  {
+   "item": "NJY-RT203",
+   "rows": [
+    "TX2:203"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v1"
+   ],
+   "item_root": "NJY_Roots.registry",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option A RECLASSIFICATION"
+  },
+  {
+   "item": "NJZ-RT189",
+   "rows": [
+    "TX1:189"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/verifier.rs::echeck"
+   ],
+   "item_root": "NJZ_CodecSemantics.root",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION"
+  },
+  {
+   "item": "NJZ-RT201",
+   "rows": [
+    "TX1:201"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent"
+   ],
+   "item_root": "NJZ_TreeParent.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION"
+  },
+  {
+   "item": "NJZ-RT202",
+   "rows": [
+    "TX1:202"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default"
+   ],
+   "item_root": "NJZ_PoolRoot.default",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION"
+  },
+  {
+   "item": "NJZ-RT203",
+   "rows": [
+    "TX1:203"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty"
+   ],
+   "item_root": "NJZ_PoolRoot.empty",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION"
+  },
+  {
+   "item": "NJZ-RT204",
+   "rows": [
+    "TX1:204"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::pool_v1_empty_roots"
+   ],
+   "item_root": "NJZ_PoolRoot.roots",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION"
+  },
+  {
+   "item": "NKJ-RT036",
+   "rows": [
+    "TX1:036"
+   ],
+   "functions": [
+    "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels"
+   ],
+   "item_root": "NKJ_Root.accumulate",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION; never removal"
+  },
+  {
+   "item": "NKJ-RT044",
+   "rows": [
+    "TX1:044"
+   ],
+   "functions": [
+    "crates/aspis-core/src/field.rs::qm31_sum_products_small"
+   ],
+   "item_root": "NKJ_Root.small",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION; never removal"
+  },
+  {
+   "item": "NKJ-RT040",
+   "rows": [
+    "TX1:040"
+   ],
+   "functions": [
+    "crates/aspis-core/src/field.rs::qm31_sum_products2"
+   ],
+   "item_root": "NKJ_Root.sum2",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION; never removal"
+  },
+  {
+   "item": "NKJ-RT041",
+   "rows": [
+    "TX1:041"
+   ],
+   "functions": [
+    "crates/aspis-core/src/field.rs::qm31_sum_products3"
+   ],
+   "item_root": "NKJ_Root.sum3",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION; never removal"
+  },
+  {
+   "item": "NKJ-RT043",
+   "rows": [
+    "TX1:043"
+   ],
+   "functions": [
+    "crates/aspis-core/src/field.rs::qm31_sum_products4"
+   ],
+   "item_root": "NKJ_Root.sum4",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION; never removal"
+  },
+  {
+   "item": "NKM-RTNGB002",
+   "rows": [
+    "TX1:NGB002"
+   ],
+   "functions": [
+    "crates/aspis-core/src/transcript.rs::circle_fallback_point"
+   ],
+   "item_root": "NKM_Roots.fallback",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKM-RTNGB004",
+   "rows": [
+    "TX1:NGB004"
+   ],
+   "functions": [
+    "crates/aspis-core/src/circle.rs::secure_ood_circle_point_from_parameter"
+   ],
+   "item_root": "NKM_Roots.ood",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKM-RTNGB006",
+   "rows": [
+    "TX1:NGB006"
+   ],
+   "functions": [
+    "crates/aspis-core/src/circle.rs::secure_circle_point_from_parameter"
+   ],
+   "item_root": "NKM_Roots.circle",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKI-RT234",
+   "rows": [
+    "TX1:234"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_level_packed_selector_tensor"
+   ],
+   "item_root": "AspisR1.NKI_AppendRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NKI_AppendRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:234"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKI-RT260",
+   "rows": [
+    "TX1:260"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_initial_and_absorption"
+   ],
+   "item_root": "AspisR1.NKI_InitialRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NKI_InitialRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:260"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKI-RT233",
+   "rows": [
+    "TX1:233"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_value_lanes"
+   ],
+   "item_root": "AspisR1.NKI_ValueRoot.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKL-RT084",
+   "rows": [
+    "TX1:084"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/candidate.rs::canonical_scan"
+   ],
+   "item_root": "NKL_ScanRoot.deployed",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKU-RT124",
+   "rows": [
+    "TX2:124"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/verifier.rs::resume"
+   ],
+   "item_root": "NKU_ParentFold.source",
+   "item_root_or_consumer_in_cones": [
+    "NKU_ParentFold.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX2:124"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKY-RT235",
+   "rows": [
+    "TX1:235"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::append_levels_packed_selector_tensor"
+   ],
+   "item_root": "AspisR1.NKY_LevelsComplete.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKY-RT216",
+   "rows": [
+    "TX2:216"
+   ],
+   "functions": [
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box"
+   ],
+   "item_root": "AspisR1.NKY_BoxSource.checkpoint",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKY-RT218",
+   "rows": [
+    "TX2:218"
+   ],
+   "functions": [
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box"
+   ],
+   "item_root": "AspisR1.NKY_BoxSource.master",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-225",
+   "rows": [
+    "TX1:225"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::qm31_sum_products_up_to4"
+   ],
+   "item_root": "AspisR1.NKR_SumCarrier.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-232",
+   "rows": [
+    "TX1:232"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::add_schedule_lanes"
+   ],
+   "item_root": "AspisR1.NKR_ScheduleRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NKR_ScheduleRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:232"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-251",
+   "rows": [
+    "TX1:251"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed_selector_tensor"
+   ],
+   "item_root": "AspisR1.NKR_DigestComposed.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-250",
+   "rows": [
+    "TX1:250"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::public_digest_packed"
+   ],
+   "item_root": "AspisR1.NKR_DigestComposed.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-220",
+   "rows": [
+    "TX1:220"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::finish_selector_tensor_basis"
+   ],
+   "item_root": "AspisR1.NKR_SumFinishComposed.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKR-RT-218",
+   "rows": [
+    "TX1:218"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::evaluate_with_selectors"
+   ],
+   "item_root": "AspisR1.NKR_SumCopyRoot.source",
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [],
+   "reached": "UNREACHED",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NKL-RT-batch_tree",
+   "rows": [
+    "TX1:081",
+    "TX1:082",
+    "TX1:083",
+    "TX2:053",
+    "TX2:054",
+    "TX2:055"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
+    "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle_values",
+    "crates/aspis-r1-cost-probe/src/candidate.rs::batch_tree"
+   ],
+   "item_root": null,
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [
+    "TX2:053",
+    "TX2:054",
+    "TX2:055"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NLH-RT-261",
+   "rows": [
+    "TX1:261"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed"
+   ],
+   "item_root": "AspisR1.NLH_SemanticFold.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NLH_SemanticFold.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:261"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NLH-RT-237",
+   "rows": [
+    "TX1:237"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts"
+   ],
+   "item_root": "AspisR1.NLH_CompRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NLH_CompRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:237"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NLH-RT-263",
+   "rows": [
+    "TX1:263"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts"
+   ],
+   "item_root": "AspisR1.NLH_PartsRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NLH_PartsRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:263"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "NLH-RT-256",
+   "rows": [
+    "TX1:256"
+   ],
+   "functions": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31"
+   ],
+   "item_root": "AspisR1.NLH_WrapperRoot.source",
+   "item_root_or_consumer_in_cones": [
+    "AspisR1.NLH_WrapperRoot.source"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:256"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": null,
+   "ruling": "ReviewedTranscription; existing P6/D188 option-A RECLASSIFICATION, never removal"
+  },
+  {
+   "item": "ReviewedTranscription-TX1:344",
+   "rows": [],
+   "functions": [],
+   "item_root": null,
+   "item_root_or_consumer_in_cones": [
+    "NMV_ConcreteWindows.root344"
+   ],
+   "rows_with_root_in_cones": [],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": "a native certificate on the actual frozen function",
+   "ruling": "(bn)"
+  },
+  {
+   "item": "ReviewedTranscription-TX2:240",
+   "rows": [],
+   "functions": [],
+   "item_root": null,
+   "item_root_or_consumer_in_cones": [
+    "NMV_ConcreteWindows.root240"
+   ],
+   "rows_with_root_in_cones": [],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": "the same",
+   "ruling": "(bn)"
+  },
+  {
+   "item": "ReviewedTranscription-TX2:217",
+   "rows": [
+    "TX2:217"
+   ],
+   "functions": [
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release"
+   ],
+   "item_root": null,
+   "item_root_or_consumer_in_cones": [],
+   "rows_with_root_in_cones": [
+    "TX2:217"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ledger_removal_condition": "a native certificate on the actual frozen function paired with the same emitted reference without reviewed-transcription reliance",
+   "ruling": "(ah)"
+  },
+  {
+   "item": "ReviewedTranscription-prepared_claim",
+   "rows": [
+    "TX1:179",
+    "TX1:186",
+    "TX1:193"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:193"
+   ],
+   "roots_in_cones": [
+    "AspisR1.NGU_PreparedClaim.packet"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ruling": "(ah)"
+  },
+  {
+   "item": "ReviewedTranscription-polynomial",
+   "rows": [
+    "TX2:119"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial"
+   ],
+   "rows_with_root_in_cones": [
+    "TX2:119"
+   ],
+   "roots_in_cones": [
+    "NHE_Polynomial.cohort",
+    "NHE_WidePort.adopted"
+   ],
+   "reached": "YES",
+   "caveat": null,
+   "ruling": "(ah)"
+  },
+  {
+   "item": "ReviewedTranscription-queries_from_pairs",
+   "rows": [
+    "TX1:168",
+    "TX1:179",
+    "TX1:186"
+   ],
+   "functions": [
+    "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::queries",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint"
+   ],
+   "rows_with_root_in_cones": [
+    "TX1:168"
+   ],
+   "roots_in_cones": [
+    "AspisR1.RPx_Deployed.deployed"
+   ],
+   "reached": "YES",
+   "caveat": "only through the shared root AspisR1.RPx_Deployed.deployed",
+   "ruling": "(ah)"
+  },
+  {
+   "item": "ReviewedTranscription-POOL324",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  },
+  {
+   "item": "ReviewedTranscription-POOL345",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  },
+  {
+   "item": "ReviewedTranscription-POOL296",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  },
+  {
+   "item": "ReviewedTranscription-POOL320",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  },
+  {
+   "item": "ReviewedTranscription-POOL223",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  },
+  {
+   "item": "ReviewedTranscription-POOL332",
+   "rows": [],
+   "reached": "UNREACHED",
+   "caveat": "Pool rows only; no verifier CLOSED row; enters only if (aj)(a) puts Pool execution in the game"
+  }
+ ],
+ "axioms": {
+  "total": 108,
+  "standard": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ],
+  "nonstandard": 105,
+  "nonstandard_in_cones": []
+ }
+}
