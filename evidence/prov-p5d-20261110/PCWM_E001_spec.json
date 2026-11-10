@@ -1,0 +1,116 @@
+{
+ "run": "PCWM_E001",
+ "spec_id": "PCWM_E001",
+ "label": "aspis-core field: M31/CM31/QM31 leaf arithmetic",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::field::_::to_le_bytes",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p5d-20261110/PCWM_E001_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p5d-20261110/PCWM_workspace/crates/aspis-core/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "r0"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCWM_a",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p5d-20261110/PCWM_E001_emitted/raw",
+  "-subdir",
+  "PCWM_a",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p5d-20261110/PCWM_E001_emitted/repro.llbc"
+ ],
+ "opacity": [],
+ "configuration": {
+  "start_from": [
+   "crate::field::reduce_u64",
+   "crate::field::_::reduce_u62",
+   "crate::field::_::reduce_u64",
+   "crate::field::_::ZERO",
+   "crate::field::_::ONE",
+   "crate::field::_::new",
+   "crate::field::_::from_m31",
+   "crate::field::_::add",
+   "crate::field::_::sub",
+   "crate::field::_::mul",
+   "crate::field::_::square",
+   "crate::field::_::mul_m31",
+   "crate::field::_::double",
+   "crate::field::_::from_cm31"
+  ],
+  "include": [],
+  "opaque": [],
+  "features": "r0",
+  "manifest": "crates/aspis-core/Cargo.toml",
+  "namespace": [
+   "PCWM_a"
+  ],
+  "crate": "aspis-core",
+  "roots": [
+   "crate::field::_::to_le_bytes"
+  ]
+ },
+ "covers": {
+  "modules": [
+   "RPu_FIq_Native01",
+   "RPu_FIq_Native02"
+  ],
+  "definitions": [
+   "field.reduce_u64",
+   "field.M31.reduce_u62",
+   "field.CM31.*",
+   "field.QM31.*"
+  ],
+  "rust_symbols": []
+ },
+ "supersedes": null,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_BUILD_JOBS": "4"
+ },
+ "p1e": {
+  "note": "",
+  "basis": "P1e: frozen functions behind P2b NO_FRESH_EMISSION definitions."
+ },
+ "aeneas_tool": "original",
+ "derived_from": "PCWM_mkspec.sh from ../prov-p1e-20261109/PCQF_E007_spec.json",
+ "jobs_note": "cargo --jobs 4 and CARGO_BUILD_JOBS=4, rustc -Zthreads 1 (not used); identity by class receipt PCWE_E003"
+}
