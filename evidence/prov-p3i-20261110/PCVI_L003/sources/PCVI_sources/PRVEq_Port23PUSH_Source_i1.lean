@@ -1,0 +1,181 @@
+-- PCVI_ item 3 (Port23PUSH push, update_residue_row): derived from the P2f generated file; the two dropped definitions are restored with the library call
+-- MutAArray...into_iter replaced by the parameter arrayIntoIter (gate ArrayIntoIter). CONDITIONAL_ON_BINDING (HM-B/HM-D library row).
+-- GENERATED (base) by PCUF_gen_equalities.py for gate module Port23PUSH_Source. Statements are against the gate constants of Port23PUSH_Source.
+-- fresh emission: PCQF_aspis_r1_cost_probe_candidate -> PRVFresh_Port23PUSH_Source; fresh source sha256 04b39d856d9a1432f3b69a8875e808bbe4aad5fabb4f374314366435d7eb6884
+import Aeneas
+import Port23PUSH_Source
+open Aeneas Aeneas.Std Result ControlFlow Error
+set_option linter.dupNamespace false
+set_option linter.hashCommand false
+set_option linter.unusedVariables false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 2048
+noncomputable section
+
+namespace Port23PUSH
+namespace PRVFresh_Port23PUSH_Source
+/- PRVE name-map alias (recorded in the report; the Types pass of the same emission checks the identity): fresh type aspis_core.field.CM31 is the gate type field.CM31 -/
+abbrev aspis_core.field.CM31 := Port23PUSH.field.CM31
+/- PRVE name-map alias (recorded in the report; the Types pass of the same emission checks the identity): fresh type aspis_core.field.M31 is the gate type field.M31 -/
+abbrev aspis_core.field.M31 := Port23PUSH.field.M31
+/- PRVE name-map alias (recorded in the report; the Types pass of the same emission checks the identity): fresh type aspis_core.field.QM31 is the gate type field.QM31 -/
+abbrev aspis_core.field.QM31 := Port23PUSH.field.QM31
+
+/-- [aspis_r1_cost_probe::verifier::power_limb_at]:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 233:0-233:64 -/
+def verifier.power_limb_at
+  (limbs : Array Std.U32 4#usize) (index : Std.Usize) : Result Std.U32 := do
+  Array.index_usize limbs index
+
+/-- [aspis_r1_cost_probe::verifier::residue_limb_at]:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 231:0-231:62 -/
+def verifier.residue_limb_at
+  (row : Array Std.U64 4#usize) (index : Std.Usize) : Result Std.U64 := do
+  Array.index_usize row index
+
+/-- [aspis_r1_cost_probe::verifier::update_residue_row]: loop body 0:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 237:4-241:5 -/
+def verifier.update_residue_row_loop0.body
+  (limbs : Array Std.U32 4#usize) (iter : core.ops.range.Range Std.Usize)
+  (row : Array Std.U64 4#usize) (basis : aspis_core.field.M31) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Array Std.U64
+    4#usize) × aspis_core.field.M31) (Array Std.U64 4#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done row)
+  | some j =>
+    let old ← verifier.residue_limb_at row j
+    let limb ← verifier.power_limb_at limbs j
+    let i ← lift (core.convert.num.FromU64U32.from limb)
+    let i1 ← lift (core.convert.num.FromU64U32.from basis)
+    let i2 ← i * i1
+    let i3 ← old + i2
+    let row1 ← Array.update row j i3
+    ok (cont (iter1, row1, basis))
+
+/-- [aspis_r1_cost_probe::verifier::update_residue_row]: loop 0:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 237:4-241:5 -/
+def verifier.update_residue_row_loop0
+  (iter : core.ops.range.Range Std.Usize) (row : Array Std.U64 4#usize)
+  (basis : aspis_core.field.M31) (limbs : Array Std.U32 4#usize) :
+  Result (Array Std.U64 4#usize)
+  := do
+  loop
+    (fun (iter1, row1, basis1) => verifier.update_residue_row_loop0.body limbs
+      iter1 row1 basis1)
+    (iter, row, basis)
+
+/-- [aspis_r1_cost_probe::verifier::update_residue_row]: loop body 1:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 243:8-243:64 -/
+def verifier.update_residue_row_loop1.body
+  (iter : core.slice.iter.IterMut Std.U64)
+  (back : core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  :
+  Result (ControlFlow ((core.slice.iter.IterMut Std.U64) ×
+    (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64))
+    (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64))
+  := do
+  let (o, iter1, next_back) ← core.slice.iter.IteratorIterMut.next iter
+  match o with
+  | none => ok (done (fun im => let im1 := next_back im none
+                                back im1))
+  | some limb =>
+    let i ← lift (limb &&& 2147483647#u64)
+    let i1 ← limb >>> 31#i32
+    let limb1 ← i + i1
+    ok (cont (iter1, fun im => let im1 := next_back im (some limb1)
+                               back im1))
+
+/-- [aspis_r1_cost_probe::verifier::update_residue_row]: loop 1:
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 243:8-243:64 -/
+def verifier.update_residue_row_loop1
+  (iter : core.slice.iter.IterMut Std.U64)
+  (back : core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  :
+  Result (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  := do
+  loop
+    (fun (iter1, back1) => verifier.update_residue_row_loop1.body iter1 back1)
+    (iter, back)
+
+/-- [aspis_r1_cost_probe::verifier::update_residue_row]; the library call MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter is the parameter arrayIntoIter.
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 235:0-245:1 -/
+def verifier.update_residue_row (arrayIntoIter : Port23PUSH.ArrayIntoIter)
+  (row : Array Std.U64 4#usize) (power : aspis_core.field.QM31)
+  (basis : aspis_core.field.M31) (flush : Bool) :
+  Result (Array Std.U64 4#usize)
+  := do
+  let i := power.c0.a
+  let i1 := power.c0.b
+  let i2 := power.c1.a
+  let i3 := power.c1.b
+  let row1 ←
+    verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize }
+      row basis (Array.make 4#usize [ i, i1, i2, i3 ])
+  if flush
+  then
+    let (iter, into_iter_back) ← arrayIntoIter row1
+    let back ← verifier.update_residue_row_loop1 iter (fun im => im)
+    ok (into_iter_back back)
+  else ok row1
+
+/-- [aspis_r1_cost_probe::verifier::{aspis_r1_cost_probe::verifier::BatchedWeights}::push]
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 217:4-220:5 -/
+def verifier.BatchedWeights.push (arrayIntoIter : Port23PUSH.ArrayIntoIter)
+  (self : verifier.BatchedWeights) (index : Std.Usize)
+  (power : aspis_core.field.QM31) (basis : aspis_core.field.M31) :
+  Result verifier.BatchedWeights
+  := do
+  let i ← lift (self.terms &&& 3#usize)
+  let (a, index_mut_back) ←
+    alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Array
+      Std.U64 4#usize)) self.«raw» index
+  let a1 ← verifier.update_residue_row arrayIntoIter a power basis (i = 3#usize)
+  let v := index_mut_back a1
+  ok { self with «raw» := v }
+
+end PRVFresh_Port23PUSH_Source
+end Port23PUSH
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.power_limb_at : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.power_limb_at = @Port23PUSH.verifier.power_limb_at := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.power_limb_at"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.power_limb_at
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.residue_limb_at : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.residue_limb_at = @Port23PUSH.verifier.residue_limb_at := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.residue_limb_at"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.residue_limb_at
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0.body : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.update_residue_row_loop0.body = @Port23PUSH.verifier.update_residue_row_loop0.body := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0.body"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0.body
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0 : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.update_residue_row_loop0 = @Port23PUSH.verifier.update_residue_row_loop0 := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop0
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1.body : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.update_residue_row_loop1.body = @Port23PUSH.verifier.update_residue_row_loop1.body := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1.body"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1.body
+
+set_option maxHeartbeats 200000 in
+theorem PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1 : @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.update_residue_row_loop1 = @Port23PUSH.verifier.update_residue_row_loop1 := by
+  (trace "PRV-S1 PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1"; rfl)
+#print axioms PRVEq.Port23PUSH_Source.verifier.update_residue_row_loop1
+
+
+theorem PRVEq.Port23PUSH_Source.verifier.update_residue_row_i1 (f : Port23PUSH.ArrayIntoIter) :
+    @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.update_residue_row f = @Port23PUSH.verifier.update_residue_row f := by
+  rfl
+#print axioms PRVEq.Port23PUSH_Source.verifier.update_residue_row_i1
+
+theorem PRVEq.Port23PUSH_Source.verifier.BatchedWeights.push_i1 (f : Port23PUSH.ArrayIntoIter) :
+    @Port23PUSH.PRVFresh_Port23PUSH_Source.verifier.BatchedWeights.push f = @Port23PUSH.verifier.BatchedWeights.push f := by
+  rfl
+#print axioms PRVEq.Port23PUSH_Source.verifier.BatchedWeights.push_i1
