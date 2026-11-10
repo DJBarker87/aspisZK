@@ -1,0 +1,46 @@
+{"attempt": "PCWG_L023", "exit_status": 1, "wall_seconds": 39.086161635117605, "peak_rss_kib": "2640320", "swaps": "0", "print_axioms": ["'PRVEq.NCX_Reference.Funs_p3y.POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.NCX_Reference.Funs_p3y.required_binding_is_zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NCX_Reference.Funs_p3y.validate_verifier_registry_v2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NCX_Reference.Funs_p3y.validate_verifier_registry_entry_v2' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]", "'NCX_Reference.smap_left' does not depend on any axioms", "'NCX_Reference.smap_right' does not depend on any axioms"]}
+'PRVEq.NCX_Reference.Funs_p3y.POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PRVEq.NCX_Reference.Funs_p3y.required_binding_is_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.NCX_Reference.Funs_p3y.validate_verifier_registry_v2' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCWG_sources/PRVEq_NCX_Funs_p3y.lean:528:2: error: `simp` failed: maximum number of steps exceeded
+PCWG_sources/PRVEq_NCX_Funs_p3y.lean:528:2: error: `simp` failed: maximum number of steps exceeded
+PCWG_sources/PRVEq_NCX_Funs_p3y.lean:524:72: error: unsolved goals
+case pos
+e : PRVFresh_NCX_Funs_p3y.pool_v1.verifier_registry.VerifierRe
+...
+
+                ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+              else
+                if ∀ x ∈ ↑e.programdata_address, x = 0#u8 then
+                  ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+                else
+                  if ∀ x ∈ ↑e.executable_hash, x = 0#u8 then
+                    ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+                  else
+                    if ∀ x ∈ ↑e.policy_binding, x = 0#u8 then
+                      ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+                    else
+                      if ∀ x ∈ ↑e.expected_upgrade_authority, x = 0#u8 then
+                        if e.retirement_slot = core.num.U64.MAX then ok (core.result.Result.Ok ())
+                        else
+                          if ↑e.retirement_slot ≤ ↑e.activation_slot then
+                            ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.InvalidRetirementSlot)
+                          else ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.InvalidAuthorityMode)
+PCWG_sources/PRVEq_NCX_Funs_p3y.lean:527:58: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [frbz, PRVEq_P3Y.rbz_gate, fne, fhnr, entMap, l̵i̵f̵t̵,̵ ̵bind_tc_ok, ite_bind']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PRVEq.NCX_Reference.Funs_p3y.validate_verifier_registry_entry_v2' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'NCX_Reference.smap_left' does not depend on any axioms
+'NCX_Reference.smap_right' does not depend on any axioms
+
+Running as unit: run-r57604d6b3e9c41dd9869d65467fe4ed3.scope; invocation ID: 5ed603fe2078439280efca8ddb57d427

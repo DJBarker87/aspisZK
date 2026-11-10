@@ -1,0 +1,54 @@
+{"attempt": "PCWG_L011", "exit_status": 1, "wall_seconds": 1.2262953110039234, "peak_rss_kib": "2597496", "swaps": "0", "print_axioms": []}
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:16:16: error: unsolved goals
+case cons.false
+α : Type
+p : α → Bool
+a : α
+t : List α
+ih : List.allM (fun x => ok (p x)) t = ok (t.all p)
+⊢ pure false = ok (p a && t.all p)
+
+case cons.true
+α : Type
+p : α → Bool
+a : α
+t : List α
+ih : List.allM (fun x => ok (p x)) t = ok (t.all p)
+⊢ (∀ x ∈ t, p x = true) → p a = true
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:31:7: error(lean.unknownIdentifier): Unknown constant `core.cmp.PartialEqU8.ne`
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:34:24: error: Tactic `unfold` failed: expression core.cmp.PartialEqU8.ne is not a global or local constant
+
+x y : U8
+⊢ (do
+      let b ← core.cmp.PartialEqU8.ne x y
+      ok (decide ¬b = t
+...
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:16:16: error: unsolved goals
+case cons.false
+α : Type
+p : α → Bool
+a : α
+t : List α
+ih : List.allM (fun x => ok (p x)) t = ok (t.all p)
+⊢ pure false = ok (p a && t.all p)
+
+case cons.true
+α : Type
+p : α → Bool
+a : α
+t : List α
+ih : List.allM (fun x => ok (p x)) t = ok (t.all p)
+⊢ (∀ x ∈ t, p x = true) → p a = true
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:31:7: error(lean.unknownIdentifier): Unknown constant `core.cmp.PartialEqU8.ne`
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:34:24: error: Tactic `unfold` failed: expression core.cmp.PartialEqU8.ne is not a global or local constant
+
+x y : U8
+⊢ (do
+      let b ← core.cmp.PartialEqU8.ne x y
+      ok (decide ¬b = true)) =
+    ok (decide (x = y))
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:49:48: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+
+Running as unit: run-r510163d19ea3417a9814cc6a6c42bf54.scope; invocation ID: 300a6863edd84c31aa5eed46a194552c

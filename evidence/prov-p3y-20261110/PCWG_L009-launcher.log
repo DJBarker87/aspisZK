@@ -1,0 +1,47 @@
+{"attempt": "PCWG_L009", "exit_status": 1, "wall_seconds": 1.1700242599472404, "peak_rss_kib": "2585980", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else ok false
+def Aeneas.Std.core.array.equality.PartialEqArray.ne : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 => do
+  let b ← core.array.equality.PartialEqArray.eq partialEqInst a0 a1
+  ok (decide ¬b = true)
+...
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else ok false
+def Aeneas.Std.core.array.equality.PartialEqArray.ne : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 => do
+  let b ← core.array.equality.PartialEqArray.eq partialEqInst a0 a1
+  ok (decide ¬b = true)
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : core.cmp.PartialEq U8 U8 :=
+{ eq := liftFun2 core.cmp.impls.PartialEqU8.eq, ne := liftFun2 core.cmp.impls.PartialEqU8.ne }
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : core.cmp.PartialEq U8 U8 :=
+{ eq := liftFun2 core.cmp.impls.PartialEqU8.eq, ne := liftFun2 core.cmp.impls.PartialEqU8.ne }
+PCWG_sources/PRVEq_NCX_Probe2_p3y.lean:11:62: error: failed to synthesize
+  Decidable (1#u8 <<< 1#i32 = ok 2#u8)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NCX_Reference.required_binding_is_zero : Std.Array U8 32#usize → Result Bool
+
+Running as unit: run-rfc5d1be76fc34dc8b731711be033be2c.scope; invocation ID: bc492894af1b47c9a01efa56330a27c2

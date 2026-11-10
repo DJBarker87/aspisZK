@@ -1,0 +1,41 @@
+{
+ "value_differences_at_matching_configuration": [],
+ "note": "none found; no stop-and-report item",
+ "encoding_differences": [
+  {
+   "item": "NEG_PushActual loop1/loop1.body",
+   "kind": "loop-return type",
+   "detail": "gate drops the iterator from the done payload; fresh returns (iter, back). Proved as projection refinement."
+  },
+  {
+   "item": "NEG_PushActual update_residue_row, BatchedWeights.push",
+   "kind": "library model",
+   "detail": "into_iter back function type differs between the gate hand model and the fresh external shape"
+  },
+  {
+   "item": "NGD_AtG.shape",
+   "kind": "constant folding",
+   "detail": "gate literals 3712/928/896 versus fresh (CLAIMS+LANES)*32, LANES*32, 28*32 with CLAIMS=POINTS*LANES=87"
+  },
+  {
+   "item": "NGD_SlotRef.OFF_NODES",
+   "kind": "Result versus pure constant",
+   "detail": "fresh Result Usize chain evaluates to ok 28359; gate pure Usize"
+  },
+  {
+   "item": "NCX validate/required_binding_is_zero",
+   "kind": "namespace and helper encoding",
+   "detail": "fresh uses array equality and ne, gate uses the zero loop helper; error enum and structs are renamed copies (explicit maps)"
+  },
+  {
+   "item": "NCX VerifierEntryStatusV1",
+   "kind": "discriminant representation",
+   "detail": "gate @[discriminant isize], frozen repr(u8)"
+  },
+  {
+   "item": "NCX decode_*",
+   "kind": "reference reading helpers",
+   "detail": "gate read32/word return a default when a slice conversion fails (unreachable after the length check); the frozen code unwraps. Not proved; observation only."
+  }
+ ]
+}
