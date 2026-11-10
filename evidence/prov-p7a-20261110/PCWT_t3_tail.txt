@@ -1,0 +1,24 @@
+
+def x0 : PRVFresh_k1.Ext where
+  from_le_bytes := aspis_core.field.QM31.from_le_bytes
+  into_iter := AspisR1.Port5Q2_ReaderWeights.intoIter
+
+end PRVFresh_t3
+end AspisR1.Port5Q2_ReaderWeights
+
+namespace PRVEq.Port5Q2_t3
+open AspisR1.Port5Q2_ReaderWeights
+
+theorem weights_loop_frozen_decoder :
+    PRVFresh_k1.verifier.read_checkpoint_weights_loop PRVFresh_t3.x0 =
+    AspisR1.Port5Q2_ReaderWeights.weights_loop (PRVFresh_k1.verifier.Reader.k PRVFresh_t3.x0) :=
+  PRVEq.Port5Q2_k1.loop_eq PRVFresh_t3.x0
+
+theorem weights_frozen_decoder_and_iter :
+    PRVFresh_k1.verifier.read_checkpoint_weights PRVFresh_t3.x0 =
+    AspisR1.Port5Q2_ReaderWeights.weights (PRVFresh_k1.verifier.Reader.k PRVFresh_t3.x0) :=
+  PRVEq.Port5Q2_k1.weights_eq PRVFresh_t3.x0 rfl
+
+end PRVEq.Port5Q2_t3
+#print axioms PRVEq.Port5Q2_t3.weights_loop_frozen_decoder
+#print axioms PRVEq.Port5Q2_t3.weights_frozen_decoder_and_iter
