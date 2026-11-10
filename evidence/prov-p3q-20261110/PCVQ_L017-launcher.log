@@ -1,0 +1,56 @@
+{"attempt": "PCVQ_L017", "exit_status": 1, "wall_seconds": 3.3469241010025144, "peak_rss_kib": "5942928", "swaps": "0", "print_axioms": ["'PCVQ_Tx2Deployed.anyLoop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVQ_Tx2Deployed.leaf_any' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVQ_Tx2Deployed.leaf_raw' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVQ_Tx2Deployed.leaf_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVQ_Tx2Deployed.leaf_filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVQ_sources/PRVEq_Tx2Deployed_q1.lean:15:47: warning: Variable name `T` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+PCVQ_sources/PRVEq_Tx2Deployed_q1.lean:15:49: warning: Variable name `U` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+PCVQ_sources/PRVEq_Tx2Deployed_q1.lean:15:51: warning: Variable name `N` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+N
+...
+self1)) >>=
+      K =
+    do
+    let p ←
+      let (b, out) := (b, out)
+        do
+        let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+        ok (CheckpointBytes3Reader.optionK q, out)
+    K (phi p.1, p.2)
+PCVQ_sources/PRVEq_Tx2Deployed_q1.lean:111:2: error: 'change' tactic failed, pattern
+  (OraclePortStdAllocation.filled n q reserved >>= fun out =>
+      (match out with
+        | Except.ok v => ok (core.result.Result.Ok v)
+        | Except.error a => ok (core.result.Result.Err aspis_core.r0.Error.Allocation)) >>=
+        fun r =>
+        NIL_FreshOps.mapError (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r () >>= K) =
+    ?m.38
+is not definitionally equal to target
+  ((xdep (yDep reserved d) d).aspis_core_r0_heap_filled
+        (aspis_core.field.QM31.Insts.CoreMarkerCopy (xdep (yDep reserved d) d)) n q >>=
+      fun r =>
+      (xdep (yDep reserved d) d).core_result_Result_map_err
+          (verifier.resume.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r () >>=
+        K) =
+    do
+    let a ←
+      do
+        let out ← OraclePortStdAllocation.filled n q reserved
+        match out with
+          | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+          | Except.ok v => ok (core.result.Result.Ok v)
+    K (phi a)
+'PCVQ_Tx2Deployed.anyLoop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVQ_Tx2Deployed.leaf_any' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVQ_Tx2Deployed.leaf_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVQ_Tx2Deployed.leaf_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVQ_Tx2Deployed.leaf_filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r30c9f67e2a504b31b8166cc971627e67.scope; invocation ID: 53792b2aede04217b3794392f2eba95f
