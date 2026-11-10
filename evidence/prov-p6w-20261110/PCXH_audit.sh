@@ -22,7 +22,7 @@ def parse(t):
     for n, rest in re.findall(r"^'([^']+)' (does not depend on any axioms|depends on axioms: \[[^\]]*\])", t, re.M):
         ax[n] = [] if rest.startswith('does') else [x.strip() for x in rest[rest.index('[') + 1:-1].replace('\n', ' ').split(',')]
     return ax
-t = log(ROOT, 'PRVCmb_L187_ROOT'); ax = parse(t)
+t = log(ROOT, 'PCXH_AUD_B'); ax = parse(t)
 kinds = dict(re.findall(r'^PRVEQ_KIND (\S+) (\S+)$', t, re.M))
 un = re.search(r'PRVCMB_UNION_AXIOMS \[([^\]]*)\] ms=(\d+)', t); cnt = re.search(r'PRVEQ_AUDIT_COUNT (\d+) skipped_by_time_guard=(\d+) ms=(\d+)', t); loc = re.search(r'PRVEQ_LOCAL_AXIOM_DECLS (\d+) (.*)', t)
 skipped = re.findall(r'^PRVCMB_PERITEM_SKIPPED_TIME_GUARD (\S+)', t, re.M)
@@ -42,9 +42,9 @@ for m, d, th in cred:
     if hit: renames.append(dict(module=m, definition=d, credited_name=first(th), audited_constants=hit[0][1]))
     else: miss.append(dict(module=m, definition=d, theorem=th))
 json.dump(dict(schema='PCXH_CREDITED_NAMES/1', n=len(renames), records=renames), open('PCXH_CREDITED_NAMES.json', 'w'))
-aud = []
+aud = []; allax = {}
 for a, mod in AUDS:
-    tt = log(a, mod); x = parse(tt)
+    tt = log(a, mod); x = parse(tt); allax.update(x)
     tg = re.search(r'PRVCMB_AUDIT_TARGETS (.*) (\d+)$', tt, re.M); u2 = re.search(r'PRVCMB_UNION_AXIOMS \[([^\]]*)\]', tt); c2 = re.search(r'PRVEQ_AUDIT_COUNT (\d+) skipped_by_time_guard=(\d+)', tt)
     aud.append(dict(attempt=a, module=mod, audit_targets=int(tg[2]) if tg else None, per_item_audited=int(c2[1]) if c2 else None, skipped_by_time_guard=int(c2[2]) if c2 else None, union_axioms=u2[1] if u2 else None, nonstandard={k: sorted(set(v) - STD) for k, v in x.items() if set(v) - STD}, theorem_axiom_lines=len(x)))
 
@@ -53,9 +53,9 @@ dep = {}
 for a, names in EXPD.items():
     f = {}; m = []
     for nm in names:
-        h = [k for k in ax if k == nm or k.endswith('.' + nm)]
+        h = [k for k in allax if k == nm or k.endswith('.' + nm)]
         (f.__setitem__(nm, h[0]) if h else m.append(nm))
-    dep[a] = dict(n_expected=len(names), n_found=len(f), missing=m, nonstandard={k: sorted(set(ax[k]) - STD) for k in f.values() if set(ax[k]) - STD})
+    dep[a] = dict(n_expected=len(names), n_found=len(f), missing=m, found_as=f, nonstandard={k: sorted(set(allax[k]) - STD) for k in f.values() if set(allax[k]) - STD})
 out = dict(schema='PCXH_AUDIT/1', target_established=False, universe='L187 replayed closure (final/objs, objs, base_ref); no ledger30 chain', scopes=scopes, n_lean_steps=len(scopes), root_scope=ROOT,
            union_axioms=un[1] if un else None, union_ms=int(un[2]) if un else None, audited_constants=len(kinds), audited_theorems_per_item=int(cnt[1]) if cnt else None, per_item_skipped_by_time_guard=int(cnt[2]) if cnt else None, skipped_names=skipped[:20],
            per_constant_nonstandard=nonstd, local_axiom_decls=(int(loc[1]), loc[2][:300]) if loc else None, kinds=dict(collections.Counter(kinds.values())),
