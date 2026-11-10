@@ -1,0 +1,35 @@
+{"attempt": "PCVY_L004", "exit_status": 1, "wall_seconds": 4.717380593996495, "peak_rss_kib": "2562700", "swaps": "0", "print_axioms": []}
+def List.slice.{u_1} : {α : Type u_1} → ℕ → ℕ → List α → List α :=
+fun {α} start end_ ls => List.take (end_ - start) (List.drop start ls)
+PCVY_sources/PRVEq_Op50_p4.lean:8:8: error(lean.unknownIdentifier): Unknown constant `List.slice_eq`
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+PCVY_sources/PRVEq_Op50_p4.lean:10:8: error(lean.unknownIdentifier): Unknown constant `BitVec.fromLEBytes_cons`
+PCVY_sources/PRVEq_Op50_p4.lean:11:8: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_fromLEBytes`
+@Slice.len_val : ∀ {α : Type u_1} (v : Slice α), ↑v.len = v.length
+PCVY_sources/PRVEq_Op50_p4.lean:13:8: error(lean.unknown
+...
+.cMax UScalarTy.U8) UScalar.ofNat._auto_1 → UScalar UScalarTy.U8
+@Slice.drop : {α : Type u_1} → Slice α → Usize → Slice α
+def Aeneas.Std.Slice.drop.{u_1} : {α : Type u_1} → Slice α → Usize → Slice α :=
+fun {α} s i => ⟨List.drop ↑i ↑s, ⋯⟩
+@[reducible] def Aeneas.Std.Array.length.{u} : {α : Type u} → {n : Usize} → Std.Array α n → ℕ :=
+fun {α} {n} v => (↑v).length
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+PCVY_sources/PRVEq_Op50_p4.lean:26:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ofNat_val_eq`
+PCVY_sources/PRVEq_Op50_p4.lean:27:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_ofNat`
+@U64.ofNat : (x : ℕ) → autoParam (x ≤ UScalar.cMax UScalarTy.U64) UScalar.ofNat._auto_1 → UScalar UScalarTy.U64
+core.num.U64.from_le_bytes : Std.Array U8 8#usize → U64
+PCVY_sources/PRVEq_Op50_p4.lean:30:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.toNat`
+@UScalar.bv_toNat : ∀ {ty : UScalarTy} (x : UScalar ty), x.bv.toNat = ↑x
+PCVY_sources/PRVEq_Op50_p4.lean:32:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.lt`
+def Aeneas.Std.UScalar.shiftRight_UScalar : {ty tys : UScalarTy} → UScalar ty → UScalar tys → Result (UScalar ty) :=
+fun {ty tys} x s => x.shiftRight ↑s
+PCVY_sources/PRVEq_Op50_p4.lean:34:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.land`
+PCVY_sources/PRVEq_Op50_p4.lean:35:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.HShiftRight`
+PCVY_sources/PRVEq_Op50_p4.lean:36:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U64.ShiftRight_Usize`
+@Array.index_mut_usize_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (hbound : ↑i < v.length),
+  v.index_mut_usize i ⦃ x back => x = (↑v)[↑i] ∧ back = v.set i ⦄
+
+Running as unit: run-r06161b56f4ca48d2944fee90528bec43.scope; invocation ID: e6bf7629d9ee4d24af12af7d1483ecaf

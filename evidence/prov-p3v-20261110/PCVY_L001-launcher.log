@@ -1,0 +1,55 @@
+{"attempt": "PCVY_L001", "exit_status": 0, "wall_seconds": 13.49535291804932, "peak_rss_kib": "6686736", "swaps": "0", "print_axioms": ["'PCVY_Probe.op50_slot' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'PCVY_Probe.op50_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+@loop.eq_def : ∀ {α : Type u_1} {β : Type u_2} (body : α → Result (ControlFlow α β)) (x : α),
+  loop body x =
+    match body x with
+    | ok r =>
+      match r with
+      | cont x => loop body x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+@Slice.index_usize : {α : Type u_1} → Slice α → Usize → Result α
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some x => ok x
+@Slice.index_usize_spec : ∀ {α : Type u_1} (v : Slice α) (i : Usize) (hbound : ↑i < v.length),
+  v.index_usize i ⦃ x => x = 
+...
+→ U64
+def Aeneas.Std.core.num.U64.from_le_bytes : Std.Array U8 8#usize → U64 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r with
+  | core.result.Result.Ok x => core.convert.Infallible.casesOn (fun x => Result (core.result.Result T F)) x
+  | core.result.Result.Err e => do
+    let v ← convertFromInst.from e
+    ok (core.result.Result.Err v)
+structure NCV_Reference.Lane : Type
+number of parameters: 0
+fields:
+  NCV_Reference.Lane.bump : U8
+  NCV_Reference.Lane.master : Std.Array U8 32#usize
+  NCV_Reference.Lane.lane_id : U8
+  NCV_Reference.Lane.next_leaf_index : U64
+  NCV_Reference.Lane.root : Std.Array U32 8#usize
+  NCV_Reference.Lane.frontier : Std.Array (Std.Array U32 8#usize) 20#usize
+constructor:
+  NCV_Reference.Lane.mk (bump : U8) (master : Std.Array U8 32#usize) (lane_id : U8) (next_leaf_index : U64)
+    (root : Std.Array U32 8#usize) (frontier : Std.Array (Std.Array U32 8#usize) 20#usize) : NCV_Reference.Lane
+
+Running as unit: run-r052097abfb7749a7b3b9386b90e772ec.scope; invocation ID: 698fbe9f0e244c0b8e5b0e84d3fe16e7

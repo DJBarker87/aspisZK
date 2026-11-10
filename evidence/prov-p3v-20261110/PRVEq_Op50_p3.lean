@@ -1,0 +1,32 @@
+import Aeneas
+import NCV_Reference.Funs
+open Aeneas Aeneas.Std Result ControlFlow Error
+set_option autoImplicit false
+noncomputable section
+namespace PCVY_Probe3
+#print core.slice.index.SliceIndexRangeToUsizeSlice.index
+#print core.slice.index.SliceIndexRangeToUsizeSlice.get
+#print core.slice.index.SliceIndexRangeUsizeSlice.index
+#print core.slice.index.SliceIndexRangeUsizeSlice.get
+#print core.slice.index.SliceIndexRangeFromUsizeSlice.index
+#print core.slice.index.SliceIndexRangeFromUsizeSlice.get
+#check @core.slice.index.Slice.index_RangeTo_spec
+#print Slice.len
+#print Array.to_slice
+#print Array.repeat
+#print Array.index_mut_usize
+#print Slice.length
+#print UScalar.val
+#print UScalar.toNat
+#check @UScalar.val_eq_bv
+#check @Array.make
+#print Array.make
+#print core.result.Result.Insts.CoreOpsTry.branch
+#print Aeneas.Std.core.convert.FromSame
+#check @UScalar.ofNat
+#print Aeneas.Std.Usize.add
+#print Aeneas.Std.UScalar.add
+#print Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index
+#check @Aeneas.Std.Array.index_usize_spec
+#check @Aeneas.Std.Array.update_spec
+end PCVY_Probe3

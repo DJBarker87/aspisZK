@@ -1,0 +1,39 @@
+{"attempt": "PCVY_L003", "exit_status": 1, "wall_seconds": 6.907369222957641, "peak_rss_kib": "2529244", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Option (Slice T)) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok (some ⟨List.slice 0 ↑r.end ↑s, ⋯⟩) else ok none
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.st
+...
+UScalar.val_eq_bv`
+@Array.make : {α : Type u_1} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+@[reducible] def Aeneas.Std.core.convert.FromSame : (T : Type) → core.convert.From T T :=
+fun T => { «from» := fun x => ok (core.convert.FromSame.from x) }
+@UScalar.ofNat : {ty : UScalarTy} → (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty
+PCVY_sources/PRVEq_Op50_p3.lean:27:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.add`
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+@Array.index_usize_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (hbound : ↑i < v.length),
+  v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+@Array.update_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑i < v.length → v.update i x ⦃ nv => nv = v.set i x ⦄
+
+Running as unit: run-ra51c4dcffc6c44f482e63693d632eb0c.scope; invocation ID: 5911b2c2485c4f8fb532edaa63e63b83
