@@ -899,3 +899,35 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 14a. CW step 3: the deployed claim loop (same run)
+
+Two more scopes: L037 failed because `loop.eq_def` yields a match rather than a bind; the
+script was changed to case on the body result, and L038 accepted NPH_R22JoinCW4 (3.71 s,
+6,865,628 KiB, swap 0, 6 axiom lines, all standard). 8 of this run's 40 scopes are used.
+
+- The deployed claim is BorrowedClaimPrepared.claim = borrowed_abi.prepared_claim_owned on
+  AspisR1S5ClaimDotConcreteAdapter.concreteOps QRaw (RPz7_S1BorrowedClaimPreparedBoundaryV1).
+- `sums_eq`: borrowed_abi.owned_sum, owned_sum and prepared_claim_sum are one function (rfl).
+  So the three CurrentPreparedClaim sum-loop bodies are served by the same site lemma.
+- `owned_body_cont`, `owned_body_done` and `owned_loop_canon`: every successful run of the
+  outer owned loop from canonical parts returns canonical parts. This is a fuel induction
+  through `loop.eq_def`.
+- `concrete_finish`: the concreteOps finishDot output is canonical for every state
+  (finishFromPush_total). This discharges the finishDot producer hypothesis for the
+  deployed record.
+- `owned_claim_sites`: on concreteOps, from a canonical kappa and inactive, the exit-branch
+  owned_sum is ok with canonical output.
+
+**CW status.** Every CW site has a lemma, and every CW context but one is composed from
+producers. The remaining context is the walk of PreparedScratchModel.prepare
+(BorrowedClaimPrepared.boundaries) from its entry to the claim call. That walk would show
+that kappa is a PreparedModel.scalar output (producer
+AspisR1ClaimPreparedBridge.scalar_candidate_samplers_false_canonical) and that inactive is
+the inactive decoder output (producer F3M_InactiveCanonical.source). Until it is composed,
+the CW kernels stay domain-only. **Counts unchanged: 67/27/25/0/101 of 220; rows 365 of 396
+exposed.**
+
+Not started in this run: SM, QA, SC, R72, FIq and the 345 body walk.
+
+Target not yet established.
