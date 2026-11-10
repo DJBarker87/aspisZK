@@ -1840,3 +1840,17 @@ loops and the accumulator and push-residue loops. They are not kernel call-site 
 No reachable input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+## 20. Q.raw TOTAL; item 2 (loop and decoder bodies) by pattern; final counts (continuation worker, 2026-11-10, after L082)
+
+Four scopes were used (L083–L086 of this run's 40), all capped as in section 19; L084 failed on two proof-script details (an abbrev-level rewrite and two unassigned existential witnesses) and was changed before L085. Every accepted `#print axioms` line is within [propext, Classical.choice, Quot.sound]; no sorry; swap 0; peak RSS 5,398,568 KiB. The lead decision holds: no ops interface, merged module, closed-row statement or field premise is changed. The full account, the open list with pattern classes and rows, the proposed claim wording and the single list of textual-screen reliances are in **NPH_R22_FINAL_COUNTS.md**.
+
+**Item 1 (Q.raw) — route changed, target unchanged.** Section 19e planned three caller ties to move the two canonical.Q.raw copies to (b). They are not needed: NPH_R22QRawTotal (L083) proves both copies **TOTAL for every input**. The body's checked operations are products of u32 limbs widened to u64, each at most (2^32−1)^2 < 2^64, plus PP, 2u, 2v, 2·PP, 3·P and a shift by 31; every sum is an explicit wrapping_*. The proof is the closure proof qraw_total_of_canonical_limbs with the limb premise replaced by the u32 type bound. Counts then 69/27/0/53/71 of 220; rows exposed 255 of 396.
+
+**Item 2.** NPH_R22Loops4 (L085) and NPH_R22Loops5 (L086) close 19 bodies by pattern: TerminalDecoder encode_digest_canonical_loop.body to (b) on the reached cursor domain; EbyKFinish reduce and the two executing row_shape copies TOTAL; constant arithmetic, shift by a constant, guarded decrement/increment, cursor-then-range-read (T2Nat_RawBounds.range_success/no_wrap), point-read chains and e_byte index arithmetic DIRECT. The backward referrer screen of section 19c, generalised to arbitrary targets (NPH_refs4_host.py, output NPH_REFS4_A.json, positive controls all executing), finds 23 of the 71 bodies with no executing root; they are NOT_EXECUTED under lead ruling 1, flagged. The halfway point (36 open, rows exposed 160 of 393) was committed as d9109575dba. The remaining 29 carry `nph_pattern_class` and `nph_open_next_step` in NPH_R22_CONE.json.
+
+**Counts (225 checked or mixed): 72 TOTAL, 42 DIRECT, 54 (b), 0 domain-only, 29 open, 28 NOT_EXECUTED; executed obligation 197. Rows exposed: 153 of 393.** 74 of them depend on exactly the nine dots/accumulate/residue bodies.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found. NDH absorb_ref's `160 + row` would overflow for row ≥ 96, but the body is not executed by the deployed program (proof-only reference), so no such input follows.
+
+Target not yet established.
