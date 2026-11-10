@@ -102,7 +102,7 @@ else:
  paths=json.loads((E.parent/'ledger30-20261111/NNN_PATHS.json').read_text())
  command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCVV_sources','-o','PCVV_exports/'+target+'.olean',n]
  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'};scope_p=['-p','MemoryHigh=6G','-p','MemoryMax=8G']
- env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCVV_tmp',LEAN_PATH=':'.join([B+'/PCVV_exports','/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/objs','/home/dombarker/project-offloads/codex-pc-prov-p3p-20261110/PCVP_exports']+paths));collect=[]
+ env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCVV_tmp',LEAN_PATH=':'.join([B+'/PCVV_exports','/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/objs','/home/dombarker/project-offloads/codex-pc-prov-p3p-20261110/PCVP_exports']+paths+['/home/dombarker/project-offloads/codex-pc-prov-p2f-20261109/PCUF_exports','/home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_exports','/home/dombarker/project-offloads/codex-pc-prov-p4e-20261109/PCWE_exports']));collect=[]
  expected='Focused import elaboration of one generated equality module'
 config=dict(attempt=a,kind=kind,module=target or spec.get('spec_id'),sources=sources,command=command,env=env,timeout=180,expected_limits=limits,source_revision=src_rev,source_tree_dirty=dirty,deps_fingerprint={},expected_time=expected)
 files[a+'.json']=base64.b64encode(json.dumps(config).encode()).decode()
