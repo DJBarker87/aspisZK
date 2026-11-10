@@ -816,3 +816,118 @@ Next, in order:
 5. FIq (238).
 
 Target not yet established.
+
+## 14. CurrentWide contexts composed from producers on the tx2 body (continuation worker, 2026-11-10 night)
+
+Four scopes were used, L033–L036 (4 of this run's 40). L033 failed on an unqualified name
+(Stage2Finish.verifier.finishRelationWithOps) and on the fixed W of FIn_WeightsInstall; L035
+failed on one list-index goal in claim_initial. Each script was changed before the next scope.
+L034 accepted NPH_R22JoinCW2 (3.54 s, 6,881,052 KiB) and L036 accepted NPH_R22JoinCW3
+(3.57 s, 6,867,308 KiB). Swap was 0. All 28 accepted `#print axioms` lines are within
+[propext, Classical.choice, Quot.sound]; there is no sorry. The lead decision holds: no ops
+interface, merged module or closed-row statement is changed.
+
+**Producer for the finish Prepared.** VTop_Stages tx1 never calls op19; the finish runs only in
+tx2_common, on the pair (p, a) returned by the tx2 resume (op18, NJJ_Common.resume).
+`NPH_R22JoinCW2.entered_domain` derives NID_ResumeFields.Domain p a from the resume success
+alone, with the checkpoint width from the same success (NKE_ResumeWidth.checkpoint). The
+Domain comes from the strict checkpoint decoders: NJC_EReaderResults.naturalE returns Ok only
+under CanonicalWide. No later call's success is used, so the fact is available at every
+later site in execution order.
+
+**CW contexts closed by NPH_R22JoinCW2 (L034, 19 statements).**
+- Finish alpha: `resume_alpha_W` (both alpha reads are W). `tx2_finish_round`: on the tx2
+  native finish (NIG_Slots.installed r = finishRelationWithOps on Port3_FinishStage.release
+  (IDa_Deployed.finish r), `tx2_finish_body`), the lhs add is ok and W on successful reads,
+  mulM is ok for every claim, and every Horner step on the read alpha is ok and W.
+  `tx2_finish_round_entered` takes the Domain from the resume success itself.
+- Finish dot: `kernel_slots` proves by rfl that SAG_DotAdapter.kernel equals finish_query_dot
+  on the same record with add, mulM31 and quarter replaced by arbitrary functions. The dot
+  therefore executes no finishAdd or finishScale call, and no CW kernel.
+- Record builders: `finishConcreteField_slots`/`finishConcreteField_W` and `NHE_ops_W`
+  (add = finishAdd, W-preserving; mulM31 = finishScale, ok for every input).
+- FIn_Install.finishOps and FIn_WeightsInstall.install: `finishOps_round_slots` and
+  `finishOps_round_sites` (their round slots are the deployed ones).
+- Query dictionaries other than the 094 ones. tx2 NJJ_Common.query runs query_values on
+  Dcon (NFW_QueryResume.tx2). `Reach` is the set of tx2 query-loop states reached from the
+  resume state by successful steps. `reach_domain` gives NFS_QueryInvariant.Domain at every
+  reached state (NID_ResumeQuery.domain, preserved by NFS_QueryInvariant.step).
+  `Dcon_values_canon` gives the canonical opening values (SAQ_Decoder.read producer), and
+  `tx2_step_sites` gives the circle, line and three tail calls at every reached tx2 state.
+  The remaining named dictionaries are installers whose deployed instances carry the
+  concrete slots: fill, m0 and NNH_Run5bQuerySlots.model install NJJ_QueryOps.concrete;
+  LIBC_QueryLoop.model and NNX_QueryOutput.run run Dsel (094 join); NFS_QueryOps.base,
+  SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select reduce to the
+  concrete slots (NHW_DeployedStabilize.deployed). That last classification reads the
+  sources and is not a Lean statement.
+
+**NPH_R22JoinCW3 (L036, 9 statements).**
+- `concrete_tail_sites`: if the un-installed concrete op3/op2/op9 (SAQ_MixedSource.mulE,
+  SAQ_Arithmetic.add/mulK) run at a state with the query invariant, every CW call inside
+  receives W arguments. On the deployed paths these slots are replaced (Dcon_tail).
+- CurrentPreparedClaim (CurrentClaimDotModel prepared_claim). `ClaimReach` is the set of
+  claim-loop states. `claim_body_preserves`/`claim_reach_canon` keep the 7 parts canonical
+  along every successful iteration, from `claim_initial`. The coefficients come from the
+  concrete powers instance (`claim_powers`). `claim_sites`: at every reached state the
+  exit-branch prepared_claim_sum is ok with canonical output, so its CW mul/add receive
+  canonical arguments. Producer hypotheses are kept explicit: canonical kappa and inactive,
+  and canonical finishDot outputs of the ClaimDotOps.
+
+**CW checklist (NPH_SITES.json): 26 sites, 25 W_LEMMA, 1 NO_CW_CALL, 0 OPEN.** The site-level
+lemmas are complete. CW is **not** moved to (b), because two contexts remain open:
+1. the claim_sites producer hypotheses at the reached prepare (kappa from the sampler,
+   inactive, the installed ClaimDotOps finishDot), and which of the three sum loops the
+   deployed prepare executes;
+2. the S1ClaimOwnedNestedModelV1 owned_sum and S1ClaimBorrowedAbiNativeV1
+   borrowed_abi.owned_sum invariants through owned_claim_loops.
+
+**Counts (220 executed checked or mixed definitions): unchanged.**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 25 |
+| precondition proved from the callers (b) | 0 |
+| open | 101 |
+| NOT_EXECUTED (excluded) | 5 |
+
+Rows exposed: 365 of 396 CLOSED rows still depend on at least one open or domain-only
+definition; 31 are served only by TOTAL or DIRECT definitions.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 14a. CW step 3: the deployed claim loop (same run)
+
+Two more scopes: L037 failed because `loop.eq_def` yields a match rather than a bind; the
+script was changed to case on the body result, and L038 accepted NPH_R22JoinCW4 (3.71 s,
+6,865,628 KiB, swap 0, 6 axiom lines, all standard). 8 of this run's 40 scopes are used.
+
+- The deployed claim is BorrowedClaimPrepared.claim = borrowed_abi.prepared_claim_owned on
+  AspisR1S5ClaimDotConcreteAdapter.concreteOps QRaw (RPz7_S1BorrowedClaimPreparedBoundaryV1).
+- `sums_eq`: borrowed_abi.owned_sum, owned_sum and prepared_claim_sum are one function (rfl).
+  So the three CurrentPreparedClaim sum-loop bodies are served by the same site lemma.
+- `owned_body_cont`, `owned_body_done` and `owned_loop_canon`: every successful run of the
+  outer owned loop from canonical parts returns canonical parts. This is a fuel induction
+  through `loop.eq_def`.
+- `concrete_finish`: the concreteOps finishDot output is canonical for every state
+  (finishFromPush_total). This discharges the finishDot producer hypothesis for the
+  deployed record.
+- `owned_claim_sites`: on concreteOps, from a canonical kappa and inactive, the exit-branch
+  owned_sum is ok with canonical output.
+
+**CW status.** Every CW site has a lemma, and every CW context but one is composed from
+producers. The remaining context is the walk of PreparedScratchModel.prepare
+(BorrowedClaimPrepared.boundaries) from its entry to the claim call. That walk would show
+that kappa is a PreparedModel.scalar output (producer
+AspisR1ClaimPreparedBridge.scalar_candidate_samplers_false_canonical) and that inactive is
+the inactive decoder output (producer F3M_InactiveCanonical.source). Until it is composed,
+the CW kernels stay domain-only. **Counts unchanged: 67/27/25/0/101 of 220; rows 365 of 396
+exposed.**
+
+Not started in this run: SM, QA, SC, R72, FIq and the 345 body walk.
+
+Target not yet established.

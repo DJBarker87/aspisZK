@@ -237,11 +237,12 @@
    ],
    "uses_kernel_directly": [],
    "covered_before_this_run": false,
-   "status": "OPEN",
-   "lemma_or_reason": "record builder; its add slot is finishAdd (finishAdd_W); record-level statement not written",
+   "status": "W_LEMMA",
+   "lemma_or_reason": "AspisR1.NPH_R22JoinCW2.finishConcreteField_W / finishConcreteField_slots (add = finishAdd, W-preserving; mulM31 = finishScale, ok for every input)",
    "contexts_direct_callers": [
     "AspisR1CurrentWide.Proof.finishCheckedArithmetic"
-   ]
+   ],
+   "changed_20261110_night": true
   },
   {
    "site": "AspisR1CurrentWide.Proof.finishCheckedArithmetic",
@@ -253,11 +254,12 @@
    ],
    "uses_kernel_directly": [],
    "covered_before_this_run": false,
-   "status": "OPEN",
-   "lemma_or_reason": "record builder over finishArithmetic",
+   "status": "W_LEMMA",
+   "lemma_or_reason": "AspisR1.NPH_R22JoinCW2.finishConcreteField_W / finishConcreteField_slots",
    "contexts_direct_callers": [
     "AspisR1CurrentWide.Proof.finishConcreteField"
-   ]
+   ],
+   "changed_20261110_night": true
   },
   {
    "site": "AspisR1CurrentWide.Proof.finishConcreteField",
@@ -269,12 +271,13 @@
    ],
    "uses_kernel_directly": [],
    "covered_before_this_run": false,
-   "status": "OPEN",
-   "lemma_or_reason": "record builder over finishCheckedArithmetic",
+   "status": "W_LEMMA",
+   "lemma_or_reason": "AspisR1.NPH_R22JoinCW2.finishConcreteField_W / finishConcreteField_slots; field = finishField (producer, finishField_success_canonical)",
    "contexts_direct_callers": [
     "AspisR1.SAG_DotAdapter.kernel",
     "NHE_DotBody.ops"
-   ]
+   ],
+   "changed_20261110_night": true
   },
   {
    "site": "AspisR1.FIn_Polynomial.mul",
@@ -291,7 +294,8 @@
    "contexts_direct_callers": [
     "AspisR1.FIn_ExtractInstall.arithmetic",
     "AspisR1.FIn_Polynomial.go"
-   ]
+   ],
+   "context_join_20261110_night": "JOINED: as FIn_Primitives.add (Horner steps poly_step on the resumed alpha)"
   },
   {
    "site": "AspisR1.FIn_Primitives.add",
@@ -310,7 +314,8 @@
     "AspisR1.FIn_Install.finishOps",
     "AspisR1.FIn_Polynomial.go",
     "AspisR1.IDa_Deployed.finish"
-   ]
+   ],
+   "context_join_20261110_night": "JOINED: tx2 finish rounds (NPH_R22JoinCW2.tx2_finish_round, tx2_finish_round_entered: alpha from the tx2 resume, NID_ResumeFields.Domain), FIn_Install.finishOps / FIn_WeightsInstall.install (finishOps_round_sites); FIn_Polynomial.go steps are FIn_mul_W/FIn_add_W on the same alpha"
   },
   {
    "site": "AspisR1.FIp_CircleSource.circle",
@@ -328,7 +333,8 @@
    "lemma_or_reason": "AspisR1.NPH_R22Callbacks.CircleSource_circle_W",
    "contexts_direct_callers": [
     "AspisR1.FIp_CircleQuery.circle"
-   ]
+   ],
+   "context_join_20261110_night": "JOINED: tx1 (NPH_R22Join094Step.query_step_sites) and tx2 (NPH_R22JoinCW2.tx2_step_sites)"
   },
   {
    "site": "AspisR1.SAG_DotAdapter.kernel",
@@ -340,11 +346,12 @@
    ],
    "uses_kernel_directly": [],
    "covered_before_this_run": false,
-   "status": "OPEN",
-   "lemma_or_reason": "finish_query_dot under finishConcreteField: dot loop walk not done",
+   "status": "NO_CW_CALL",
+   "lemma_or_reason": "AspisR1.NPH_R22JoinCW2.kernel_slots: kernel equals finish_query_dot on the same record with add/mulM31/quarter replaced by ANY functions (rfl); the dot runs only field/newDot/pushDot/finishDot, none of which is a CW kernel",
    "contexts_direct_callers": [
     "AspisR1.SAG_DotAdapter.sourceDot"
-   ]
+   ],
+   "changed_20261110_night": true
   },
   {
    "site": "AspisR1.SAQ_Arithmetic.add",
@@ -362,7 +369,8 @@
     "AspisR1.SAQ_Arithmetic.install",
     "LIBC_QueryOps.seed",
     "NJJ_QueryOps.concrete"
-   ]
+   ],
+   "context_join_20261110_night": "not executed on the deployed query paths (NFS_QueryOps.installed replaces op2, NPH_R22Join094.Dcon_tail); if run un-installed at a state with the query invariant, args are W (NPH_R22JoinCW3.concrete_tail_sites)"
   },
   {
    "site": "AspisR1.SAQ_Arithmetic.mulK",
@@ -380,7 +388,8 @@
     "AspisR1.SAQ_Arithmetic.install",
     "LIBC_QueryOps.seed",
     "NJJ_QueryOps.concrete"
-   ]
+   ],
+   "context_join_20261110_night": "as SAQ_Arithmetic.add (op9; concrete_tail_sites)"
   },
   {
    "site": "AspisR1.SAQ_LineSource.line",
@@ -398,7 +407,8 @@
    "lemma_or_reason": "AspisR1.NPH_R22Callbacks.LineSource_line_W",
    "contexts_direct_callers": [
     "AspisR1.SAQ_LineQuery.line"
-   ]
+   ],
+   "context_join_20261110_night": "JOINED: tx1 (NPH_R22Join094Step.query_step_sites) and tx2 (NPH_R22JoinCW2.tx2_step_sites, every reached tx2 query state)"
   },
   {
    "site": "AspisR1.SAQ_MixedSource.source",
@@ -414,7 +424,8 @@
    "lemma_or_reason": "AspisR1.NPH_R22Callbacks.SAQ_MixedSource_source_W",
    "contexts_direct_callers": [
     "AspisR1.SAQ_MixedSource.mulE"
-   ]
+   ],
+   "context_join_20261110_night": "as SAQ_Arithmetic.add (op3 = SAQ_MixedSource.mulE; concrete_tail_sites)"
   },
   {
    "site": "AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.add",
@@ -432,7 +443,8 @@
     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
     "AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body",
     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body"
-   ]
+   ],
+   "context_join_20261110_night": "PARTIAL: the deployed claim is BorrowedClaimPrepared.claim = borrowed_abi.prepared_claim_owned on AspisR1S5ClaimDotConcreteAdapter.concreteOps QRaw (RPz7_S1BorrowedClaimPreparedBoundaryV1). NPH_R22JoinCW4.owned_claim_sites composes its loop and exit sum on that record (finishDot producer discharged: concrete_finish; powers: claim_powers); the three sum loops are one function (sums_eq, rfl). Open: canonical kappa and inactive at the claim call inside PreparedScratchModel.prepare (producers exist: AspisR1ClaimPreparedBridge.scalar_candidate_samplers_false_canonical, F3M_InactiveCanonical.source; the prepare-body walk to the claim call is not composed). NPH_R22JoinCW3.claim_sites covers the CurrentClaimDotModel prepared_claim copy."
   },
   {
    "site": "AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.mul",
@@ -450,7 +462,8 @@
     "AspisR1CurrentPreparedClaim.verifier.borrowed_abi.owned_sum_loop.body",
     "AspisR1CurrentPreparedClaim.verifier.owned_sum_loop.body",
     "AspisR1CurrentPreparedClaim.verifier.prepared_claim_sum_loop.body"
-   ]
+   ],
+   "context_join_20261110_night": "PARTIAL: the deployed claim is BorrowedClaimPrepared.claim = borrowed_abi.prepared_claim_owned on AspisR1S5ClaimDotConcreteAdapter.concreteOps QRaw (RPz7_S1BorrowedClaimPreparedBoundaryV1). NPH_R22JoinCW4.owned_claim_sites composes its loop and exit sum on that record (finishDot producer discharged: concrete_finish; powers: claim_powers); the three sum loops are one function (sums_eq, rfl). Open: canonical kappa and inactive at the claim call inside PreparedScratchModel.prepare (producers exist: AspisR1ClaimPreparedBridge.scalar_candidate_samplers_false_canonical, F3M_InactiveCanonical.source; the prepare-body walk to the claim call is not composed). NPH_R22JoinCW3.claim_sites covers the CurrentClaimDotModel prepared_claim copy."
   },
   {
    "site": "NHE_DotBody.ops",
@@ -462,9 +475,10 @@
    ],
    "uses_kernel_directly": [],
    "covered_before_this_run": false,
-   "status": "OPEN",
-   "lemma_or_reason": "record over finishConcreteField; no reached definition calls it",
-   "contexts_direct_callers": []
+   "status": "W_LEMMA",
+   "lemma_or_reason": "AspisR1.NPH_R22JoinCW2.NHE_ops_W (record over finishConcreteField); no reached definition executes it",
+   "contexts_direct_callers": [],
+   "changed_20261110_night": true
   }
  ],
  "QA": [
@@ -6586,25 +6600,9 @@
  ],
  "_summary": {
   "CW": {
-   "domain_kernels": [
-    "AspisR1CurrentWide.field.CM31.mul",
-    "AspisR1CurrentWide.field.M31.add",
-    "AspisR1CurrentWide.field.M31.sub"
-   ],
-   "family_defs_reaching_kernels": 18,
-   "aliases": [],
-   "sites": 26,
-   "by_class": {
-    "outside": 11,
-    "in_family_handwritten": 4,
-    "in_family_extracted": 11
-   },
-   "old_screen_executing": 6,
-   "status_counts": {
-    "W_LEMMA": 21,
-    "OPEN": 5
-   },
-   "family_complete_for_b": false
+   "W_LEMMA": 25,
+   "NO_CW_CALL": 1,
+   "sites": 26
   },
   "QA": {
    "domain_kernels": [
@@ -6764,11 +6762,7 @@
  },
  "_contexts_open": {
   "CW": [
-   "Stage2 finish round alpha = p.alpha[0], p.alpha[1] of the finish Prepared (round_sites needs WE alpha)",
-   "finish dot: SAG_DotClosed.source / SAG_DotAdapter.kernel (finish_query_dot under finishConcreteField)",
-   "FIn_Install.finishOps <- FIn_WeightsInstall.install",
-   "CurrentPreparedClaim sum loops (prepared_claim_sum, owned_sum, borrowed_abi.owned_sum): accumulator and term invariant",
-   "query dictionaries other than the 094 Dcon/Dsel: NJJ_Common.query, NNH_Tx2SourceConfiguration.fill, NNH_HostSeed.m0, NNH_Run5bQuerySlots.model, NNX_QueryOutput.run, LIBC_QueryLoop.model, NFS_QueryOps.base, SAQ_LineQuery.install, FIp_Install.select, SAQ_QuerySource.install (op16/op17 line/circle, op2/op3/op9 where not replaced by NFS_QueryOps.installed)"
+   "the walk of AspisR1PublicPreparation.PreparedScratchModel.prepare (boundaries = BorrowedClaimPrepared.boundaries) from entry to the claim call: kappa is a PreparedModel.scalar output (producer scalar_candidate_samplers_false_canonical) and inactive comes from the inactive decoder (producer F3M_InactiveCanonical.source); with that walk, NPH_R22JoinCW4.owned_claim_sites closes the last CW context"
   ],
   "SM": [
    "FIp_SemanticArithmetic.install / IDa_Deployed.boundaries / NNG_InstallArithmetic / NNG_LegacyConfig136.boundaries / NNG_ModelMask.call: W of the semantic-boundary operands and of the mask inputs c1, mask_only_c1, g, point",
@@ -7137,6 +7131,15 @@
     ],
     "reason": "calls only family functions that reach no domain-only kernel (M31.mul, mul_m31, reduce_u64, CM31.new, qm31_pack_base4 and similar are TOTAL or outside the 28 kernels), or is not a reached definition in the replayed source"
    }
+  ]
+ },
+ "_contexts_closed_20261110_night": {
+  "CW": [
+   "Stage2 finish alpha: NPH_R22JoinCW2.entered_domain/resume_alpha_W (the tx2 resume success alone; strict checkpoint decoders)",
+   "finish dot: NPH_R22JoinCW2.kernel_slots (no CW call)",
+   "FIn_Install.finishOps / FIn_WeightsInstall.install: NPH_R22JoinCW2.finishOps_round_slots/_sites",
+   "query dictionaries other than 094: tx2 NJJ_Common.query runs query_values on Dcon (NFW_QueryResume.tx2); NPH_R22JoinCW2.Reach/reach_domain/tx2_step_sites at every reached tx2 state; NNH_Tx2SourceConfiguration.fill, NNH_HostSeed.m0 and NNH_Run5bQuerySlots.model install NJJ_QueryOps.concrete (rfl in their sources); LIBC_QueryLoop.model and NNX_QueryOutput.run run NFS child on NFS_CallerDomains.select LIBC_QueryOps.seed = Dsel (094 join); NFS_QueryOps.base, SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select are record installers whose deployed instances have the concrete slots (NHW_DeployedStabilize.deployed); the un-installed op2/op3/op9 slots are covered by NPH_R22JoinCW3.concrete_tail_sites",
+   "CurrentPreparedClaim sum loops: all three are one function (NPH_R22JoinCW4.sums_eq); the deployed borrowed owned claim on concreteOps QRaw is composed up to its kappa/inactive inputs (owned_claim_sites, owned_loop_canon, concrete_finish)"
   ]
  }
 }
