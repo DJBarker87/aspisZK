@@ -1,0 +1,52 @@
+{"attempt": "PCVQ_L001", "exit_status": 0, "wall_seconds": 2.961658805143088, "peak_rss_kib": "5939184", "swaps": "0", "print_axioms": []}
+verifier.Reader.raw : (N : Usize) → verifier.Reader → Result (Std.Array U8 N × verifier.Reader)
+verifier.Reader.k : Ext →
+  verifier.Reader → Result (core.result.Result aspis_core.field.QM31 verifier.Error × verifier.Reader)
+verifier.Reader.e : Ext →
+  verifier.Reader → Result (core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error × verifier.Reader)
+verifier.validate_checkpoint_queries : Std.Array U32 22#usize → Result (core.result.Result Unit verifier.Error)
+def VTop_Stages.PRVFresh_VTop_l1.verifier.Reader.raw : (N : Usize) →
+  verifier.Reader → Result (Std.Array U8 N × verifier.Reader) :=
+fun N self => do
+  let i ← self.at + N
+  let s ←
+    core.slice.index.Slice.index (c
+...
+4#usize + weights
+def AspisR1.CheckpointBytes4Ops.tag : AspisR1Stage2.transport.Variant → Result U8 :=
+fun x =>
+  match x with
+  | AspisR1Stage2.transport.Variant.S1 => ok 1#u8
+  | AspisR1Stage2.transport.Variant.S2 => ok 2#u8
+  | AspisR1Stage2.transport.Variant.D => ok 3#u8
+CheckpointBytes4Ops.readSemanticAlpha : Slice U8 →
+  Usize →
+    Result (core.result.Result (Std.Array CheckpointBytes4Sections.K 10#usize × Usize) AspisR1Stage2.verifier.Error)
+Port4A_NativeReader.resume : AspisR1Stage2.ResumeOps →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Slice U8 →
+        Slice U8 →
+          Slice U8 →
+            AspisR1Stage2.transport.Variant →
+              H →
+                Result
+                  (core.result.Result (AspisR1Stage2.verifier.Prepared × AspisR1Stage2.verifier.Accumulator)
+                    AspisR1Stage2.verifier.Error)
+def AspisR1.CheckpointBytes3Allocation.filled : Bool →
+  Usize →
+    AspisR1Stage2.aspis_core.field.QM31 →
+      Result (core.result.Result (alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31) AspisR1Stage2.verifier.Error) :=
+fun reserved n value => do
+  let out ← OraclePortStdAllocation.filled n value reserved
+  match out with
+    | Except.error a => ok (core.result.Result.Err AspisR1Stage2.verifier.Error.Allocation)
+    | Except.ok v => ok (core.result.Result.Ok v)
+Port4A_ReaderNormalize.source : ∀ (ops : AspisR1Stage2.ResumeOps),
+  (∀ (v : AspisR1Stage2.transport.Variant) (n : Usize), ops.checkpointSize v = ok n → 32 ≤ ↑n) →
+    ∀ {H : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (bytes proof pub : Slice U8)
+      (v : AspisR1Stage2.transport.Variant),
+      Port4A_NativeReader.resume ops D bytes proof pub v hash =
+        AspisR1Stage2.verifier.resumeWithOps ops D bytes proof pub v hash
+
+Running as unit: run-rbbbb3ca15d8a4a72ad388dae5c0c3f10.scope; invocation ID: f8ed1374f4564e799f1b8f3fa326629e

@@ -1,0 +1,58 @@
+{"attempt": "PCVQ_L011", "exit_status": 1, "wall_seconds": 6.216683391947299, "peak_rss_kib": "6038784", "swaps": "0", "print_axioms": ["'PCVQ_Resumeq9.resume_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVQ_sources/PRVEq_Resume_q9.lean:95:25: error: Type mismatch: After simplification, term
+  h
+ has type
+  32 ≤ ↑n
+but is expected to have type
+  ↑?m.39 ≤ ↑?m.38
+PCVQ_sources/PRVEq_Resume_q9.lean:144:40: error: Type mismatch: After simplification, term
+  hc
+ has type
+  (↑bytes).length = ↑i1
+but is expected to have type
+  bytes.len = i1
+PCVQ_sources/PRVEq_Resume_q9.lean:177:2: error: Type mismatch
+  sim_try ?m.475 ?m.476 ?m.477 fun val => ?m.479
+has type
+  Sim
+    (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (phi ?m.475)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue v => ?m.476 v
+        | core.ops.control_flow.ControlFlow.Break res =>
+          core
+...
+        ⋯
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual)
+    (let (r3, r4) := (r3, r4)
+    do
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r5, r6) ← ops.readE r4
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let (r7, r8) ← ⋯
+            let cf2 ← ⋯
+            ⋯
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual ⋯ ⋯ residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (AspisR1Stage2.verifier.Prepared × AspisR1Stage2.verifier.Accumulator)
+          (core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+PCVQ_sources/PRVEq_Resume_q9.lean:118:69: warning: This simp argument is unused:
+  Slice.Insts.CoreCmpPartialEqArray
+
+Hint: Omit it from the simp argument list.
+  simp only [L.size, L.tag, L.ne, L.any, L.raw, L.k, L.e, L.validate, L.sem, L.weights, L.final,
+  ̲  ̲ ̲ ̲L.zero, L.filled, core.cmp.impls.PartialEqShared.ne, AspisR1Stage2.slicePartialEq,
+  ̲  ̲ ̲ ̲S̵l̵i̵c̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵A̵r̵r̵a̵y̵,̵VTop_Checkpoint.digest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCVQ_Resumeq9.resume_sim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb4d28ddd6ef241409478c75a429a8b9a.scope; invocation ID: 6459496f0cfc4010bc4ce50d1ca6b8d9
