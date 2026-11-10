@@ -1,0 +1,43 @@
+{"attempt": "PCWL_L007", "exit_status": 1, "wall_seconds": 3.0732306309510022, "peak_rss_kib": "2608876", "swaps": "0", "print_axioms": ["'PRVEq.AdapterRwModel_w4.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]", "'PRVEq.AdapterRwModel_w4.r1_pool_adapter.readonly_buffer_meta_ok' does not depend on any axioms", "'PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.OwnedAccount.impl.key' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.OwnedAccount.impl.owner' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_readonly_buffer' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:16:0: error: impl_def: could not resolve recursive fields: [eq, ne]
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:36:6: error: Application type mismatch: The argument
+  solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+has type
+  Ops → core.cmp.PartialEq solana_pubkey.Pubkey solana_pubkey.Pubkey
+of sort `Type 1` but is expected to have type
+  core.cmp.PartialEq ?m.2 ?m.3
+of sort `Type` in the application
+  core.cmp.impls.PartialEqShared.ne solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:163:85: error(lean.unknownIdentifier): Unknown identifier `AdapterRw.PRVFresh_AdapterRwModel_w4.solana_pubkey.Pubkey.Insts.Cor
+...
+189: error: Tactic `delta` failed: did not delta reduce [AdapterRw.PRVFresh_AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop.body,
+ AdapterRw.r1_pool_adapter.owned.require_zero_loop.body]
+
+⊢ sorry
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:200:14: error(lean.unknownIdentifier): Unknown constant `PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop.body`
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:203:154: error: Type mismatch
+  AdapterRw.r1_pool_adapter.owned.require_zero_loop
+has type
+  Slice U8 → Usize → Result (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError))
+but is expected to have type
+  Slice U8 → Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+PRV-S2 PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:204:179: error: Tactic `delta` failed: did not delta reduce [AdapterRw.PRVFresh_AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop,
+ AdapterRw.r1_pool_adapter.owned.require_zero_loop]
+
+⊢ sorry
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:205:14: error(lean.unknownIdentifier): Unknown constant `PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop`
+PRV-S2 PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero
+PCWL_sources/PRVEq_AdapterRwModel_w4.lean:208:193: error: unsolved goals
+⊢ (fun remaining => AdapterRw.PRVFresh_AdapterRwModel_w4.r1_pool_adapter.owned.require_zero_loop remaining) =
+    fun bytes => do
+    let pending_return ← AdapterRw.r1_pool_adapter.owned.require_zero_loop bytes 0#usize
+    match pending_return with
+      | none => ok (core.result.Result.Ok ())
+      | some r => ok r
+'PRVEq.AdapterRwModel_w4.r1_pool_adapter.owned.require_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-r4a932a122d3b4d789f406cfc13120334.scope; invocation ID: 033c8d892d5a4ca496944d60be96022c
