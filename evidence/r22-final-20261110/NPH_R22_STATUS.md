@@ -1026,3 +1026,52 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 15b. SM: the mask site closed; input producers open
+
+One more scope was used: L047, accepted on the first attempt (3.62 s, 5,888,908 KiB, swap 0,
+1 axiom line, standard). That makes 9 of this run's 40.
+
+**NPH_R22JoinSM2.FIp_mask_site (L047).** For every seed record, take inputs whose probe
+images are canonical: every c1 cell, every mask-only cell, every point cell, and g. Then
+(FIp_SemanticArithmetic.install seed).mask is ok, with canonical output. The proof is
+NHU_Mask.result, a theorem already in the closure, transported by NHU_Mask.adopted (rfl).
+NHU_Mask.result itself proves state_only_selected_mask_value ok and canonical on canonical
+inputs. It establishes all the loop invariants and the 27-entry coefficient array through
+the closure's coefficient, Horner and linear inductions. So every SM kernel call executed
+inside the mask returns ok. In NPH_SITES.json:
+- the four loop wrappers (selected_mask_linears_loop and state_only_selected_mask_value_loop0,
+  loop1 and loop2) are now SUBSUMED_CANONICAL_TOTAL;
+- FIp_SemanticArithmetic.mask is CANONICAL_SITE.
+
+The two SM items "loop compositions" and "coefficient-array invariant" are therefore
+discharged at the mask site, without new loop proofs.
+
+**SM is not moved to (b).** The mask is called only from FinishModel.finish
+(RPz7_S1SemanticFinishModelV1, the tx1 semantic finish) as `B.mask a a1 q alpha`. These are
+still open:
+1. canonicality of the arguments at that call:
+   - a = B.fromFn 16 closureFn9 claims and a1 = B.fromFn 10 closureFn5 claims;
+   - q = claims[0][27];
+   - claims comes from the deployed B.claims decoder;
+   - alpha is the RoundModel.rounds output;
+2. the same for the later B.mul challenges.eta val2, B.add mask q1 and B.add q2 val3[28];
+3. a Lean identification of the deployed B (IDa_Deployed.boundaries r) with
+   FIp_SemanticArithmetic.install. NNG_InstallArithmetic defines the transported add/mul;
+4. the right operands of qm31_sum_products3_prepared (loop0 callers, FJe_Sum3IndexBridge.old
+   and the PoseidonPreparedIndex* loops).
+
+NHS_FinishFields.source is a success-only inversion of FinishModel.finish, so it does not
+serve as a reach statement. The method that closed CW applies unchanged: a congruence
+theorem on FinishModel.finish with a guarded mask/add/mul boundary, plus producer lemmas
+for claims and alpha. The producers were not located in this run.
+
+**Counts: unchanged since 15a.** 67/27/22/3/101 of 220; rows exposed 363 of 396.
+
+Not started in this run: QA, SC, R72, FIq and the 345 body walk. 31 of the 40 scopes remain
+unused.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
