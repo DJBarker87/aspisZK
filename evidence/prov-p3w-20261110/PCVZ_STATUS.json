@@ -1,0 +1,83 @@
+{
+ "schema": "PCVZ_STATUS/1",
+ "target_established": false,
+ "note": "Target not yet established",
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "fresh_emission": "P1n PCQK_E-series (fresh source sha256 d2214abb4ff8e40cdfe5f7d1bf082e1d2c8e75ff972818c2556471c6460403d2); no new extraction scope was run",
+ "lean_scopes_used": 20,
+ "lean_budget": 30,
+ "extraction_scopes_used": 0,
+ "extraction_budget": 2,
+ "closure": "L187 replay closure prepended by reference (objs, base_ref, final/objs) before the ledger30 NNN_PATHS chain; PCVZ_L001 compiled the unchanged P1n n3b equality module against it exit 0, no name clash",
+ "configuration": "gate and fresh both overflow-checks ON (checked); Q.raw wrapping ops are explicit wrapping_add/sub on both sides",
+ "differences_at_matching_configuration": "none of value found; the only syntactic differences are (a) the gate shifts by 31#i32 and the frozen emission by 31#u32 (equal by rfl for any U64) and (b) the gate loop1 return type (see loop1)",
+ "proved": [
+  {
+   "item": "canonical.Q.raw (AspisR1CanonicalQRawUnified.Funs)",
+   "status": "EQUALITY_PROVED",
+   "kind": "function equality fresh = gate",
+   "theorem": "PRVEq.AspisR1CanonicalQRawUnified.Funs_n3.fast_pairing.canonical.Q.raw",
+   "file": "PRVEq_AspisR1CanonicalQRawUnified_Funs_p3w.lean",
+   "scope": "PCVZ_L006",
+   "helper": "PRVEq...Q.raw.closure_call (frozen closure.call = gate closure_2.call, pointwise)"
+  },
+  {
+   "item": "canonical.Q.raw (FIo_QRawFuns)",
+   "status": "EQUALITY_PROVED",
+   "kind": "function equality fresh = gate",
+   "theorem": "PRVEq.FIo_QRawFuns_n3.fast_pairing.canonical.Q.raw",
+   "file": "PRVEq_FIo_QRawFuns_p3w.lean",
+   "scope": "PCVZ_L007"
+  },
+  {
+   "item": "canonical.Dot.finish (AspisR1EbyKFinish.Funs)",
+   "status": "EQUALITY_PROVED",
+   "kind": "function equality fresh = gate (effectful callback, no totality of reduce assumed)",
+   "theorem": "PRVEq.AspisR1EbyKFinish.Funs_n3.fast_pairing.canonical.Dot.finish",
+   "file": "PRVEq_AspisR1EbyKFinish_Funs_p3w.lean",
+   "scope": "PCVZ_L009"
+  },
+  {
+   "item": "update_residue_row_loop1.body (NEI_PushRaw.Funs)",
+   "status": "LOOP_RETURN_REFINEMENT",
+   "kind": "gate body = fresh body with the done payload projected to its second component; constant equality is ill-typed (gate returns ControlFlow state back, frozen returns ControlFlow state (iter,back))",
+   "theorem": "PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop1.body_proj",
+   "file": "PRVEq_NEI_PushRaw_Funs_p3w.lean",
+   "scope": "PCVZ_L020"
+  },
+  {
+   "item": "update_residue_row_loop1 (NEI_PushRaw.Funs)",
+   "status": "LOOP_RETURN_REFINEMENT",
+   "kind": "gate loop1 iter back = fresh loop1 iter back >>= (fun p => ok p.2); unconditional, no domain bound",
+   "theorem": "PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop1.loop_proj",
+   "file": "PRVEq_NEI_PushRaw_Funs_p3w.lean",
+   "scope": "PCVZ_L020"
+  }
+ ],
+ "generic_lemmas": [
+  {
+   "file": "PRVEq_P3W_ArrayMap.lean",
+   "scope": "PCVZ_L005",
+   "names": "mapState_pure, map_pure, mapArr, getElem?_mapArr, idx_mapArr, idx_make4_0..3"
+  },
+  {
+   "file": "PRVEq_P3W_ArrayMapMon.lean",
+   "scope": "PCVZ_L008",
+   "names": "arr4, map_ok, map_fail, map_div, map4_mon"
+  },
+  {
+   "file": "PRVEq_P3W_LoopMap.lean",
+   "scope": "PCVZ_L016",
+   "names": "mapCF, mapR, loop_map, bind_assoc_R, loop_le_aux"
+  }
+ ],
+ "axioms": "every exit-0 scope: #print axioms standard only (propext, Classical.choice, Quot.sound); no sorry, no axiom, no native_decide, no raised maxHeartbeats; see PCVZ_SCOPES.json",
+ "library_model_dependency": "core.array.Array.map is the gate SelectorArrayMapRuntimeSlice definition and core.slice.iter.IteratorIterMut.next is used abstractly on both sides: trust rows HM-D and HM-B are used, none added",
+ "rows_freed": {
+  "rows_touching_cluster": 125,
+  "rows_whose_only_open_modules_are_the_cluster": 0,
+  "min_other_open_modules_per_row": 3,
+  "file": "PCVZ_ROWS.json",
+  "note": "no row table entry changes status from this job alone"
+ }
+}

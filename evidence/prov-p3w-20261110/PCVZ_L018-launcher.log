@@ -1,0 +1,58 @@
+{"attempt": "PCVZ_L018", "exit_status": 1, "wall_seconds": 1.5155479859095067, "peak_rss_kib": "2600516", "swaps": "0", "print_axioms": ["'PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop0.body' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.NEI_PushRaw.Funs_n3.verifier.update_residue_row_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at
+PCVZ_sources/PRVEq_P3W_Probe3.lean:148:3: warning: 'trace "PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.NEI_PushRaw.Funs_n3.verifier.power_limb_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at
+PCVZ_sources/PRVEq_P3W_Probe3.lean:153:3: warning: 'trace "PRV-S1 PRVEq.NEI_PushRaw.Funs_n3.verifier.residue_limb_at"' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PRVEq.NEI_PushRaw.Funs_n3.verifier.residu
+...
+     match o with
+        | none => ok (done (iter1, fun im => back (next_back im none)))
+        | some limb => do
+          let i1 ← limb >>> 31#u32
+          let limb1 ← (limb &&& 2147483647#u64) + i1
+          ok (cont (iter1, fun im => back (next_back im (some limb1))))
+    ok
+        (match cf with
+        | cont a => cont a
+        | done b => done b.2)
+iter : core.slice.iter.IterMut U64
+back : core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64
+limb : U64
+iter1 : core.slice.iter.IterMut U64
+nb : core.slice.iter.IterMut U64 → Option U64 → core.slice.iter.IterMut U64
+hn : core.slice.iter.IteratorIterMut.next iter = ok (some limb, iter1, nb)
+hsh : ∀ (x : U64), x >>> 31#i32 = x >>> 31#u32
+⊢ (let (o, iter1, next_back) := (some limb, iter1, nb)
+    match o with
+    | none => ok (done fun im => back (next_back im none))
+    | some limb => do
+      let i1 ← limb >>> 31#u32
+      let limb1 ← (limb &&& 2147483647#u64) + i1
+      ok (cont (iter1, fun im => back (next_back im (some limb1))))) =
+    do
+    let cf ←
+      let (o, iter1, next_back) := (some limb, iter1, nb)
+        match o with
+        | none => ok (done (iter1, fun im => back (next_back im none)))
+        | some limb => do
+          let i1 ← limb >>> 31#u32
+          let limb1 ← (limb &&& 2147483647#u64) + i1
+          ok (cont (iter1, fun im => back (next_back im (some limb1))))
+    ok
+        (match cf with
+        | cont a => cont a
+        | done b => done b.2)
+PCVZ_sources/PRVEq_P3W_Probe3.lean:198:25: warning: This simp argument is unused:
+  PRVEq_P3W.bind_assoc_R
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, P̵R̵V̵E̵q̵_̵P̵3̵W̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵R̵,̵ ̵hsh, Aeneas.Std.lift, PRVEq_P3W.mapCF]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+Running as unit: run-ra2f319be3e72422990ad9704add8b3ba.scope; invocation ID: 073976febb1140bdbde1c91f4ada2581

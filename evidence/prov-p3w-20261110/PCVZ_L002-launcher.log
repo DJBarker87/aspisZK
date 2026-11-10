@@ -1,0 +1,49 @@
+{"attempt": "PCVZ_L002", "exit_status": 1, "wall_seconds": 1.306247060885653, "peak_rss_kib": "2585912", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.Array.map : {T F U : Type} →
+  {N : Usize} → core.ops.function.FnMut F T U → Std.Array T N → F → Result (Std.Array U N) :=
+fun {T F U} {N} callback self f =>
+  match h : AspisV8R19.TraversalRuntime.mapState callback.call_mut (↑self) f with
+  | ok (ys, _last) => ok ⟨ys, ⋯⟩
+  | fail e => fail e
+  | div => div
+PCVZ_sources/PRVEq_P3W_Probe1.lean:6:8: error(lean.unknownIdentifier): Unknown identifier `Aeneas.Std.core.array.Array.map_success`
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.core.convert.num.FromU6
+...
+num.U64.wrapping_add i1 i2)
+@AspisV8R19.TraversalRuntime.mapState : {T U F : Type} → (F → T → Result (U × F)) → List T → F → Result (List U × F)
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+@bind_tc_ok : ∀ {α β : Type u_1} (x : α) (f : α → Result β),
+  (do
+      let y ← ok x
+      f y) =
+    f x
+@bind_assoc : ∀ {m : Type u_1 → Type u_2} {inst : Monad m} [self : LawfulMonad m] {α β γ : Type u_1} (x : m α)
+  (f : α → m β) (g : β → m γ), x >>= f >>= g = x >>= fun x => f x >>= g
+PCVZ_sources/PRVEq_P3W_Probe1.lean:17:72: warning: '(simp [HShiftRight.hShiftRight]; done)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:17:72: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:19:33: error(lean.unknownIdentifier): Unknown identifier `instHShiftRight_aeneas`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:22:110: warning: 'simp [Array.make, Array.index_usize]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:22:110: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:23:110: warning: 'simp [Array.make, Array.index_usize]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVZ_sources/PRVEq_P3W_Probe1.lean:23:110: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+
+Running as unit: run-r791e23b32f0843fd98c6a2fd1e6892a8.scope; invocation ID: 98df0dc501e645c7a6afbe529f6a2f73

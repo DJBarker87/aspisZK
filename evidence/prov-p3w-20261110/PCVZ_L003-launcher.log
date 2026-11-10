@@ -1,0 +1,75 @@
+{"attempt": "PCVZ_L003", "exit_status": 1, "wall_seconds": 1.697198922978714, "peak_rss_kib": "2585092", "swaps": "0", "print_axioms": ["'PRVEq_P3W.mapState_pure' depends on axioms: [propext, Quot.sound]", "'PRVEq_P3W.map_pure' depends on axioms: [propext, Quot.sound]", "'PRVEq_P3W.idx_mapped_v1' depends on axioms: [propext, sorryAx]", "'PRVEq_P3W.idx_mapped_v2' depends on axioms: [propext, sorryAx]"]}
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:42:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? { l // l.length = ↑N } Usize ?m.36 ?m.37
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:42:69: error: unsolved goals
+T U : Type
+N : Usize
+a : Std.Array T N
+g : T → U
+p : (List.map g ↑a).length = ↑N
+k : Usize
+β : Type
+cont : U → Result β
+⊢ sorry () = Option.map g (↑a)[↑k]?
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:43:10: warning: This simp argument is unused:
+  List.getElem?_map
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m
+...
+size instance of type class
+  GetElem? { l // l.length = ↑N } Usize ?m.36 ?m.37
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:42:69: error: unsolved goals
+T U : Type
+N : Usize
+a : Std.Array T N
+g : T → U
+p : (List.map g ↑a).length = ↑N
+k : Usize
+β : Type
+cont : U → Result β
+⊢ sorry () = Option.map g (↑a)[↑k]?
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:43:10: warning: This simp argument is unused:
+  List.getElem?_map
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:52:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? { l // l.length = ↑N } Usize ?m.36 ?m.37
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:65:3: error: unknown tactic
+PCVZ_sources/PRVEq_P3W_ArrayMap.lean:61:62: error: unsolved goals
+T U : Type
+N : Usize
+g : T → U
+k : Usize
+β : Type
+cont : U → Result β
+l : List T
+hl : l.length = ↑N
+p : (List.map g ↑⟨l, hl⟩).length = ↑N
+⊢ (do
+      let x ←
+        match ⟨List.map g l, p⟩[k]? with
+          | none => fail arrayOutOfBounds
+          | some x => ok x
+      cont x) =
+    do
+    let y ←
+      match ⟨l, hl⟩[k]? with
+        | none => fail arrayOutOfBounds
+        | some x => ok x
+    cont (g y)
+'PRVEq_P3W.mapState_pure' depends on axioms: [propext, Quot.sound]
+'PRVEq_P3W.map_pure' depends on axioms: [propext, Quot.sound]
+'PRVEq_P3W.idx_mapped_v1' depends on axioms: [propext, sorryAx]
+'PRVEq_P3W.idx_mapped_v2' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r5bf6128509be49f2bb8e8236469fc4b5.scope; invocation ID: d02829749f884fd4a99bed08e44f07f8
