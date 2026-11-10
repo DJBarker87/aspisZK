@@ -27,3 +27,20 @@ if prev:
     open(f'gen/{safe}_{prev}.lean-log','w').write(lzma.open(f'{a}/stdout.log.xz').read().decode())
     cmd+=['--state',f'gen/{safe}_{prev}.state.json','--lean-log',f'gen/{safe}_{prev}.lean-log']
 g=subprocess.run(cmd,capture_output=True,text=True);print(g.returncode,g.stdout.strip()[-300:],g.stderr.strip()[-400:])
+# PCQL change 1: constructor aliases for aliased inductive types (the generator aliases the type only; fresh code names constructors through the fresh type name)
+out=f'PRVEq_{safe}_{tag}.lean'
+if tt and os.path.exists(out):
+    ctors={}
+    for im in re.finditer(r'(?m)^inductive\s+(\S+).*?(?=^(?:inductive|structure|def|abbrev|end|namespace|/--|@\[)|\Z)',tt,re.S):
+        ctors[im.group(1)]=re.findall(r'(?m)^\|\s*(\w+)',im.group(0))
+    o=open(out).read();def_n=0
+    def rep(mm):
+        global def_n
+        fresh,gate=mm.group(1),mm.group(2)
+        g=gate.split('.',1)[-1] if gate.startswith(re.findall(r'(?m)^namespace\s+(\S+)',gs)[0]+'.') else gate
+        cs=ctors.get(g) or ctors.get(gate.split('.')[-1]) 
+        if not cs:return mm.group(0)
+        def_n+=1
+        return mm.group(0)+''.join(f'\n@[match_pattern] abbrev {fresh}.{c} := @{gate}.{c}' for c in cs)
+    o=re.sub(r'(?m)^abbrev (\S+) := (\S+)$',rep,o)
+    open(out,'w').write(o);print('ctor alias types',def_n)
