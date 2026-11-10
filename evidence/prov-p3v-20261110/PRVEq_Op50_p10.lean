@@ -12,13 +12,12 @@ abbrev FArr : Type := Std.Array (Std.Array U32 8#usize) 20#usize
 
 theorem K0_decodeDigest : K0.decodeDigest = decDig := rfl
 
-/-- the two `BEq` instances on digest arrays (Aeneas' and the one derived from the
-`DecidableEq` used by the transcription) agree on `!=` -/
-theorem bne_eq_bne (a b : Std.Array U32 8#usize) :
+/-- the two `BEq` instances (Aeneas' on digest arrays and the one derived from `DecidableEq`
+used by the transcription) agree on `!=`; generic in the type so no array literal is rewritten -/
+theorem bne_bridge {α : Type} [DecidableEq α] [BEq α] [LawfulBEq α] (a b : α) :
     (a != b) = @bne _ instBEqOfDecidableEq a b := by
-  first
-  | (rw [Bool.eq_iff_iff]; simp only [bne_iff_ne, ne_eq])
-  | (by_cases h : a = b <;> simp [h])
+  rw [Bool.eq_iff_iff]
+  simp only [bne_iff_ne, ne_eq]
 
 theorem set_take {α : Type} (l : List α) (n : Nat) (v : α) (h : n < l.length) :
     (l.set n v).take (n + 1) = l.take n ++ [v] := by
@@ -113,7 +112,7 @@ theorem frontier_loop_eq (tree : Slice U8) (hlen : 688 ≤ tree.val.length) (nex
       · have hcondI : ((next.val >>> level.val) &&& 1 == 0 &&
             @bne _ instBEqOfDecidableEq val (K0.emptyRoots level.val)) = true := by
           have h2 := hcond
-          rw [bne_eq_bne] at h2
+          rw [bne_bridge] at h2
           exact h2
         have hf := fl_cond K0 (bytesOf tree) next.val k level.val val hd' hcondI
         rw [hk', hf]
@@ -126,7 +125,7 @@ theorem frontier_loop_eq (tree : Slice U8) (hlen : 688 ≤ tree.val.length) (nex
         have hcondI' : ((next.val >>> level.val) &&& 1 == 0 &&
             @bne _ instBEqOfDecidableEq val (K0.emptyRoots level.val)) = false := by
           have h2 := hcond'
-          rw [bne_eq_bne] at h2
+          rw [bne_bridge] at h2
           exact h2
         obtain ⟨c, hc, hcv⟩ := add_ok level 1#usize (by scalar_tac)
         have hcv' : c.val = level.val + 1 := by rw [hcv, one_val]
@@ -165,10 +164,24 @@ theorem frontier_loop_eq (tree : Slice U8) (hlen : 688 ≤ tree.val.length) (nex
 #print axioms set_take
 #print axioms frontier_loop_eq
 
-/- OBLIGATION (not proved in this scope budget): decode_frontier is decode_frontier_loop at the all-zero
-frontier and level 0, so with `frontier_loop_eq` at k = 20, F = repeat 20 (repeat 8 0), level = 0:
-  match frontierLoop K0 (bytesOf tree) next.val 20 0 with
-  | none => decode_frontier tree next = ok (Err ())
-  | some rest => ∃ G, decode_frontier tree next = ok (Ok G) ∧ G.val = rest. -/
+theorem frontier_eq (tree : Slice U8) (hlen : 688 ≤ tree.val.length) (next : U64) :
+    match PCVV_LaneDecodeRef.frontierLoop K0 (bytesOf tree) next.val 20 0 with
+    | none => NCV_Reference.decode_frontier tree next = ok (core.result.Result.Err ())
+    | some rest => ∃ G : FArr,
+        NCV_Reference.decode_frontier tree next = ok (core.result.Result.Ok G) ∧ G.val = rest := by
+  have h := frontier_loop_eq tree hlen next 20
+    (Array.repeat 20#usize (Array.repeat 8#usize 0#u32)) 0#usize (by simp) (by simp)
+  have h0v : (0#usize).val = 0 := by simp
+  rw [h0v] at h
+  rw [Nat.sub_zero] at h
+  unfold NCV_Reference.decode_frontier
+  dsimp only
+  cases hr : PCVV_LaneDecodeRef.frontierLoop K0 (bytesOf tree) next.val 20 0 with
+  | none => rw [hr] at h; exact h
+  | some rest =>
+    rw [hr] at h
+    obtain ⟨G, hG, hGv⟩ := h
+    exact ⟨G, hG, by rw [hGv]; simp⟩
 
+#print axioms frontier_eq
 end PCVY_Op50
