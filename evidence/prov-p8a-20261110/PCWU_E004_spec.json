@@ -1,0 +1,92 @@
+{
+ "run": "PCWU_E004",
+ "spec_id": "PCWU_E004",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_T001_out/bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::verifier::prepared_claim",
+  "--opaque",
+  "crate::trace::value",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E004_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "private-leaf-salts,program-build"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4y-20261110/PCWO_T001_out/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCWU_pc",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E004_emitted/raw",
+  "-subdir",
+  "PCWU_pc",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E004_emitted/repro.llbc"
+ ],
+ "aeneas_tool": "TV3",
+ "opacity": [],
+ "configuration": {
+  "roots": [
+   "crate::verifier::prepared_claim"
+  ],
+  "namespace": [
+   "PCWU_pc"
+  ],
+  "features": [
+   "private-leaf-salts,program-build"
+  ],
+  "opaque": [
+   "crate::trace::value"
+  ],
+  "manifest": "crates/aspis-r1-cost-probe/Cargo.toml"
+ },
+ "features_override": "prover,r1p-check,private-leaf-salts",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "2"
+ },
+ "configuration_overflow_checks": "ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; -C overflow-checks=yes appended to the stager RUSTFLAGS)",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "aeneas_sha256": "6652776ad7ca03f78c9c9e7a396ed84120f4428bcb9f9eaac1926ee40745d28b",
+ "charon_sha256": "57aa2359bb3e9a84480f7e4802dcdc700ef05709de30ec0eb97581b3f9c5f851",
+ "charon_driver_sha256": "6a6552bce70d59e041fb96a67c08294377ef16d3f77a7876fea7f1250ee37845",
+ "tool_label": "TV3: fork of Aeneas 0d21a9ec + PCWO patches A,B; Charon 454586e9 (PCWO_TOOL_BUILD.json)",
+ "derived_from": "../prov-p4y-20261110/PCWO_E002_spec.json",
+ "tool_version": "TV3"
+}

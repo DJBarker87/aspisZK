@@ -1,0 +1,92 @@
+{
+ "schema": "PCWU_STATUS/1",
+ "target_established": false,
+ "credited": [
+  {
+   "module": "AspisR1DotPushLocal.Types",
+   "definition": "AspisR1DotPushLocal.canonical.Q",
+   "status": "EQUALITY_PROVED",
+   "theorem": "PRVEq.AspisR1DotPushLocal.Types.canonical.Q",
+   "file": "PRVEq_PCWU_AspisR1DotPushLocal.lean",
+   "receipt": "PCWU_L002/receipt.json",
+   "fresh_emission": "PCWU_E001 (original pair, ON)",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "module": "AspisR1DotPushLocal.Types",
+   "definition": "AspisR1DotPushLocal.canonical.Dot",
+   "status": "EQUALITY_PROVED (structure equiv)",
+   "theorem": "PRVEq.AspisR1DotPushLocal.Types.canonical.Dot.equiv",
+   "file": "PRVEq_PCWU_AspisR1DotPushLocal.lean",
+   "receipt": "PCWU_L002/receipt.json",
+   "fresh_emission": "PCWU_E001",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "module": "AspisR1DotPushLocal.Funs",
+   "definition": "AspisR1DotPushLocal.canonical.P",
+   "status": "EQUALITY_PROVED",
+   "theorem": "PRVEq.AspisR1DotPushLocal.Funs.canonical.P",
+   "file": "PRVEq_PCWU_AspisR1DotPushLocal.lean",
+   "receipt": "PCWU_L002/receipt.json",
+   "fresh_emission": "PCWU_E001",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "module": "AspisR1DotPushLocal.Funs",
+   "definition": "AspisR1DotPushLocal.canonical.Dot.push",
+   "status": "CONDITIONAL_ON_BINDING",
+   "binding": "rawFn := frozen fast_pairing::canonical::Q::raw (opaque in PCWU_E001; the gate's own rawFn parameter)",
+   "theorem": "PRVEq.AspisR1DotPushLocal.Funs.canonical.Dot.push",
+   "statement": "forall rawFn self a b, (fresh push rawFn self a b >>= ok . equiv) = gate push rawFn (equiv self) a b; fresh frozen 0..4 loop vs gate four literal steps (loop unrolled by proved lemmas; shift 31#u32 vs 31#i32 proved equal)",
+   "file": "PRVEq_PCWU_AspisR1DotPushLocal.lean",
+   "receipt": "PCWU_L002/receipt.json",
+   "fresh_emission": "PCWU_E001",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  }
+ ],
+ "not_credited": [
+  {
+   "item": "AspisR1DotPushLocal.Funs dot_push_entry, option_context_anchor",
+   "reason": "wrappers of the non-frozen candidate crate aspis_r1_stage2_adopted_caller; no frozen counterpart; OPEN (NO_FROZEN_COUNTERPART)"
+  },
+  {
+   "item": "r1_pool_adapter::owned::{snapshot,stage1,stage2}",
+   "reason": "extract under TV3 (PCWU_E003) and snapshot under the original pair (E002), but no gate function key exists; and the stage1 emission drops the RefCell account write (PCWU_ANALYSIS_1.md), so it must not discharge TX1:344"
+  },
+  {
+   "item": "verifier::prepared_claim",
+   "reason": "CANNOT_EXTRACT (PCWU_E004, returns inside nested loops); fix designed, not built"
+  }
+ ],
+ "limitations": {
+  "1_guard_drop_2731": {
+   "fixed": false,
+   "reproduced_on_frozen": false,
+   "roots_now_extracting": [
+    "fast_pairing::canonical::Dot::push (original pair)",
+    "r1_pool_adapter::owned::snapshot (original pair, TV3)",
+    "r1_pool_adapter::owned::stage1, stage2 (TV3, unpatched; write-back dropped)"
+   ],
+   "equalities_proved": [
+    "AspisR1DotPushLocal: Q, Dot, P (EQUALITY_PROVED); Dot.push (CONDITIONAL_ON_BINDING)"
+   ],
+   "tool_version": "original pair (E001/E002), TV3 (E003); no new version",
+   "upstreamable": "n/a (no patch)"
+  },
+  "2_nested_loop_returns": {
+   "fixed": false,
+   "reproduced_on_frozen": true,
+   "scope": "PCWU_E004",
+   "roots_now_extracting": [],
+   "equalities_proved": [],
+   "tool_version": "TV3 (reproduction only)",
+   "upstreamable": "designed fix plausibly upstreamable as an opt-in pre-pass (PCWU_ANALYSIS_2.md)"
+  }
+ },
+ "budget": {
+  "extraction": "4/16",
+  "lean": "2/16",
+  "tool_build": "0"
+ }
+}

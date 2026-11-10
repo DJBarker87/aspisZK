@@ -1,0 +1,21 @@
+# PCWU_ANALYSIS_1: limitation (1), the guard-drop failure (InterpBorrows.ml:2731)
+
+## Reproduction on frozen roots (4bb3b3f; ON; cargo --jobs 4; identity by class receipt PCWE_E003)
+| scope | tool | roots | result |
+|---|---|---|---|
+| PCWU_E001 | original (Charon XRa daad69be, Aeneas 959659a6) | fast_pairing::canonical::Dot::push (the XRg_009 2731 site), Q::raw opaque | exit 0, complete emission, no sorry |
+| PCWU_E002 | original | r1_pool_adapter::owned::{snapshot, stage1, stage2}; stage1_owned/stage2_owned opaque | snapshot translated (try_borrow_data, Ref guard drop). stage1/stage2 fail at Interp.ml:609 "Instantiating the type parameters of a function with types containing mutable borrows" on `accounts[i]` (SliceIndexShared<AccountInfo<'a>>, r1_pool_adapter_owned.rs 452:17, 471:17). This is not the guard drop. |
+| PCWU_E003 | TV3 (Charon 454586e9, Aeneas 0d21a9ec+A+B, 6652776a) | same as E002 | exit 0. snapshot, stage1 and stage2 all emitted, no sorry |
+
+The 2731 failure does not reproduce on any frozen root I tried. Its known reproducers are NJN_reference.rs, an owned specification rather than frozen source (NJN_FAILING_STEP L001), and older tools on non-frozen Dot.push candidates (dot-push-four-source-residues, aeneas d3bfce81).
+
+## Source reading (TV3 = 0d21a9ec+A+B)
+In TV3 the check sits at InterpBorrows.ml ~2514: `visit_ASharedLoan` in `simplify_dummy_values_useless_abs_aux` runs `[%sanity_check] span (pm = PNone)` on endable, parentless, non-frozen abstractions. Projection markers (PLeft/PRight) are only introduced by `join_ctxs` (InterpJoin.ml 858-859) and are removed by `collapse_ctx_aux`, which ends with `[%sanity_check] (not (eval_ctx_has_markers ctx))` (InterpReduceCollapse.ml ~1140) before its own call to simplify. A marked shared loan can therefore reach simplify only if a context with markers is simplified before collapse. In 0d21a9ec the remaining marker-preserving path is `eliminate_shared_loans`, which keeps a marked ASharedLoan whose shared value holds loans or borrows. `collapse_ctx` rejects that case early as recoverable ("Joining region abstractions containing shared loans whose shared value contains borrows"). In 0d21a9ec, then, the 2731 shape surfaces as limitation (5) (decode_k, claims), not as a sanity-check crash. This explains why the frozen adapters pass under TV3.
+
+## FIRST-ORDER FINDING: the stage1/stage2 emissions under TV3 drop the account write (not an encoding difference)
+PCWU_E003 Funs.lean (sha256 5f04439b...) lines 175-182 and 226-233 read: `let (r1, _, _) <- AccountInfo.try_borrow_mut_data ai2`, then `deref_mut`, then `let _ <- copy_from_slice s1 s2`. `ai2` comes from a shared index of `accounts: &[AccountInfo]`. Aeneas treats shared borrows as immutable, so the backward functions of `try_borrow_mut_data` return Unit (FunsExternal_Template 197-203). The checkpoint bytes written through `RefCell`/`RefMut` (r1_pool_adapter_owned.rs:457, `accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint)`) therefore do not appear in the pure model, which returns `Ok(())` and has no effect on the account. Input: any accounts/data reaching line 457. Call site: stage1, r1_pool_adapter_owned.rs 447-461. stage2 writes no account. Its `program::set_return_data(&[])` and `Clock::get` are opaque calls whose runtime effects (return data, sysvar read) are SDK behaviour, also outside the pure model.
+
+This is an Aeneas modelling limitation (interior mutability), not a Rust or tool encoding difference. The TV3 stage1 emission must NOT be used to discharge the stage1 ReviewedTranscription item (TX1:344): it is not a model of the write. There is no gate function key for snapshot/stage1/stage2, so nothing is credited.
+
+## Status
+Limitation (1) as briefed is not fixed and needs no fix on the frozen route. It does not reproduce, and the adapters extract under TV3. A new limitation (1') replaces it: interior mutability through `&AccountInfo` (RefCell) is unmodelled. Tool route: model AccountInfo data as an explicit heap (a state-passing translation of RefCell borrows), or an SDK trust row giving try_borrow_mut_data/RefMut a state effect. The trust-row option is the lead's decision and is not proposed here.

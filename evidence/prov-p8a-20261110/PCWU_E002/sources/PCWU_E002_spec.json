@@ -1,0 +1,122 @@
+{
+ "run": "PCWU_E002",
+ "spec_id": "PCWU_E002",
+ "label": "S903b",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::snapshot",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::stage1",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::stage2",
+  "--opaque",
+  "crate::r1_pool_adapter::owned::stage1_owned",
+  "--opaque",
+  "crate::r1_pool_adapter::owned::stage2_owned",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E002_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_workspace/programs/r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "4",
+  "--features",
+  "pool-adapter,private-leaf-salts"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCWU_adapt",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E002_emitted/raw",
+  "-subdir",
+  "PCWU_adapt",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p8a-20261110/PCWU_E002_emitted/repro.llbc"
+ ],
+ "opacity": [],
+ "configuration": {
+  "start_from": [
+   "crate::r1_pool_adapter::owned::stage1_owned",
+   "crate::r1_pool_adapter::owned::stage2_owned"
+  ],
+  "include": [],
+  "opaque": [
+   "crate::r1_pool_adapter::owned::stage1_owned",
+   "crate::r1_pool_adapter::owned::stage2_owned"
+  ],
+  "features": "pool-adapter,private-leaf-salts",
+  "manifest": "programs/r1-cost-probe/Cargo.toml",
+  "namespace": [
+   "PCWU_adapt"
+  ],
+  "crate": "aspis-r1-cost-probe-program",
+  "roots": [
+   "crate::r1_pool_adapter::owned::snapshot",
+   "crate::r1_pool_adapter::owned::stage1",
+   "crate::r1_pool_adapter::owned::stage2"
+  ]
+ },
+ "covers": {
+  "modules": [
+   "AdapterRwTypes"
+  ],
+  "definitions": [
+   "the 15 reached types of AdapterRwTypes (PCQC_PARTITION.json)"
+  ]
+ },
+ "p1_half": "P1b",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "basis": "Union of the receipted NMT_stage1_owned, NMS_stage2, NMS_validate and NMX_auth_cut configurations (roots authenticate_asq8_accounts, validate_asq8, stage1_owned, stage2_owned; union of their --opaque lists minus the roots); AdapterRwTypes draws its types from several emissions, so the per-module spec merges the roots.",
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes",
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "2"
+ },
+ "p1c": {
+  "kind": "retry",
+  "earlier_run": null,
+  "template_spec": "PCQC_E013_spec.json",
+  "note": "second half of the PCQC_E013 split"
+ },
+ "aeneas_tool": "original",
+ "derived_from": "../prov-p4x-20261110/PCWH_E005_spec.json",
+ "warm_note": "PCVV_E008: as E007 without -abort-on-error. E007 original Aeneas aborted on decode_lane_from_pool_release (r1_pool_adapter.rs 448-520: early return inside loop not supported, PrePasses.ml:586). The other functions are translated; decode_lane_from_pool_release (op50) stays untranslated.",
+ "warm_note2": "PCVV_E006: same shape as E005 (jobs 4). E005 Charon succeeded (build 2m11s, llbc written to the stable PCVV_E001_emitted/repro.llbc) but the stager reads <run>_emitted/repro.llbc (FileNotFoundError). E006 pre-creates PCVV_E008_emitted/repro.llbc as a symlink to the stable path in my host workspace.",
+ "aeneas_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+ "charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+ "charon_driver_sha256": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45",
+ "tool_label": "original pair (TV1): Charon XRa_bin + Aeneas 959659a6",
+ "tool_version": "original"
+}
