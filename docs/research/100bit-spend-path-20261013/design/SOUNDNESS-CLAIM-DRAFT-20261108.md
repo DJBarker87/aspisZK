@@ -623,6 +623,17 @@ Also proposed by PCXD_ and not decided: HM-C (Option/Result combinators), HM-D (
 3. The `RuntimeSha256Value` and `RuntimeReturnData`/`RuntimeMemcmp` consumers (TX1:327/TX2:210, TX2:219, TX2:226) are certificates whose roots are not in the cones. Their trust is reached as META, not through those roots.
 4. TX1:059 and TX2:040 have no recorded root (NKT-F3, still OPEN).
 
+### 4.9a Proposed, NOT yet accepted: two stage-2 callees the translator cannot extract (reported by Stream C 2026-11-10 evening; owner decision required)
+
+Neither the original Aeneas (959659a6) nor the extended build translates these two functions of r1_pool_adapter at 4bb3b3f; the LLBC (sha256 9d82b7f3) is from a cold Charon build. They are source-refinement obligations, not cryptographic assumptions, and they are not credited.
+
+| Function | Why no emission | Proposed row | What would discharge it |
+|---|---|---|---|
+| decode_lane_from_pool_release (stage-2 slot op50, r1_pool_adapter.rs lines 448-520) | "early returns inside of loops are not supported" (P3t E007/E008); the extended build crashes at InterpReduceCollapse.ml:1991 | ReviewedTranscription-LaneDecode: a hand transcription reviewed line by line against the quoted source, with the deployed op50 slot proved equal to it; verifier source untouched (owner rule) | A translator that handles early loop returns, or a proved equivalence between the function and a loop-free rewrite extracted at the matching configuration |
+| deployment_ids::deployment_id (pool_program_id, op45) | Aeneas assertion failure; op45 already CONDITIONAL_ON_BINDING as a deployment-id binding | ReviewedTranscription-DeploymentId: the constant equals the 32-byte id slot of the deployed ELF (the L188 slot already compared byte for byte) | An emission of the constant, or a direct byte comparison of the constant's bytes in the ELF against the Lean literal, recorded as evidence |
+
+Until the owner accepts these rows, op50 and op45 stay OPEN in the provenance cone and the headline is not credited through them.
+
 ### 4.10 Not trust, but stated parts of the theorem
 
 These are listed so they are not mistaken for discharged assumptions:
