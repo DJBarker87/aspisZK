@@ -36,6 +36,9 @@ d['charon_command']=fix(c2);a=fix(d['aeneas_command'])
 a[a.index('-namespace')+1]=ns;a[a.index('-subdir')+1]=ns
 TOOLS={'extended':'/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended','original':'/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas'}
 a[0]=TOOLS[tool];d['aeneas_command']=a;d['aeneas_tool']=tool
+cc=d['charon_command']
+if '--dest-file' in cc:cc[cc.index('--dest-file')+1]=HOST+'/'+run+'_emitted/repro.llbc'
+d.pop('llbc_stable',None);d.pop('features_override',None) if False else None
 d['run']=run;d['spec_id']=run;d['derived_from']='PCWM_mkspec.sh from '+base
 kept=[] if drop==['ALL'] else [o for o in d.get('opacity',[]) if o.get('selector',o['path']) not in drop and o['path'] not in drop]
 for e in extra:

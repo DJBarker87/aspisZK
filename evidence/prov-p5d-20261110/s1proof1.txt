@@ -1,0 +1,28 @@
+rw [values_owned_reference_loop]
+  simp only [bind_assoc_eq]
+  generalize alloc.vec.Vec.len input % 16#usize = r1
+  cases r1 with
+  | fail e => simp
+  | div => simp
+  | ok i1 =>
+    simp only []
+    by_cases hc : i1 != 0#usize
+    · simp [hc, mapRes, toFrozen]
+    · simp only [hc]
+      generalize 2#usize * alloc.vec.Vec.len input = r2
+      cases r2 with
+      | fail e => simp
+      | div => simp
+      | ok i4 =>
+        simp only []
+        by_cases hd : alloc.vec.Vec.len output != i4
+        · simp [hd, mapRes, toFrozen]
+        · simp only [hd]
+          generalize alloc.vec.Vec.len input / 16#usize = r3
+          cases r3 with
+          | fail e => simp
+          | div => simp
+          | ok count =>
+            simp only []
+            generalize values_owned_reference_loop input output count 0#usize = r4
+            cases r4 <;> simp [mapRes]

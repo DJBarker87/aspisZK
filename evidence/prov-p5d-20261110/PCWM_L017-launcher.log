@@ -1,0 +1,51 @@
+{"attempt": "PCWM_L017", "exit_status": 1, "wall_seconds": 5.268572560977191, "peak_rss_kib": "2606172", "swaps": "0", "print_axioms": ["'PRVEq.S1ValuesOwnedModelV1_w1.read_input' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.write_output' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference_loop.body' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+'PRVEq.S1ValuesOwnedModelV1_w1.read_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.write_output' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.copy_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference_loop.body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_ref
+...
+w1.copy_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference_loop.body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCWM_sources/PRVEq_S1ValuesOwnedModelV1_w1.lean:219:23: error: Function expected at
+  values_owned_reference_loop
+but this term has type
+  PRVFresh_S1ValuesOwnedModelV1_w1.values_owned_reference_loop = AspisS1ValuesOwned.values_owned_reference_loop
+
+Note: Expected a function because this term is being applied to the argument
+  input
+PCWM_sources/PRVEq_S1ValuesOwnedModelV1_w1.lean:220:12: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.224
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case ok.isFalse.ok.isFalse.ok
+input output : alloc.vec.Vec U8
+i1 : UScalar UScalarTy.Usize
+h✝¹ : ¬(i1 != 0#usize) = true
+i4 : UScalar UScalarTy.Usize
+h✝ : ¬(output.len != i4) = true
+count : UScalar UScalarTy.Usize
+r4 : ?m.224
+⊢ (do
+      let x ←
+        do
+          let (input1, output1) ← AspisS1ValuesOwned.values_owned_reference_loop input output count 0#usize
+          ok (core.result.Result.Ok (), input1, output1)
+      ok (mapRes x.1, x.2.1, x.2.2)) =
+    do
+    let (input1, output1) ← AspisS1ValuesOwned.values_owned_reference_loop input output count 0#usize
+    ok (core.result.Result.Ok (), input1, output1)
+'PRVEq.S1ValuesOwnedModelV1_w1.values_owned_reference' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-rbb8a134c93924df8aec7d5f6be2c6fc4.scope; invocation ID: 4188599bc06b4aae90f09ff23a60669b
