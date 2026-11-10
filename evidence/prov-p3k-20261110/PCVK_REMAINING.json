@@ -1,0 +1,16 @@
+{
+ "schema": "PCVK_REMAINING/1",
+ "target_established": false,
+ "conditional_on_binding": {
+  "AdapterStage1": "all 16 Ext fields are bound by hypothesis h_* to the gate counterpart (6 Ops fields op0,op1,op21,op24,op35,op47; 4 gate definitions at ops: AFTERSTATE_BYTES, require_verifier_checkpoint, require_distinct_accounts, first_decoded; 6 gate definitions: common, semantic_public, require_readonly_buffer, require_zero, Variant.tag, PROOF_BYTES). Not shown: that each equals the frozen Rust function (SDK/library ones fall under HM-A/HM-B/HM-D/HM-F rows; Aspis-own ones are separate fresh=gate items: require_verifier_checkpoint, require_distinct_accounts, require_readonly_buffer, require_zero, first_decoded, decode_public_statement_box, validate/encode statement functions, common, semantic_public, PROOF_BYTES, tag).",
+  "AdapterStage2": "all 38 fields + Hash bound likewise (28 Ops fields, 7 gate definitions at ops, 3 gate definitions, hashv/Hash.to_bytes through h43 and op42/op43 for the SolanaDigest instance). Not shown: each callee equals the frozen function (decode_master_box, decode_checkpoint_box, decode_lane_from_pool_release, scan_proof_buffer, reconstruct_asq8_statement, emit_result, pool_program_id, tx2_authenticated, authenticate_invariant_release_registry, request/statement codec, SDK Pubkey/hash).",
+  "CallerPrepTx1": "17 Ext fields bound (parse_shape op3, canonical_scan op4, wide_view op5, batch_merkle op6, query_loop op7, Prepared.new op8, verify_observed op9, expand_semantic op10, expand_values op11, checkpoint op16, BatchedWeights.finish op17 / new op18, for_range op19, Accumulator.new op20, heap.filled op1, WideExact.ZERO, mark) plus six Ops fields bound to fresh definitions: op2 (Error From CodecError), op12, op13, op14, op15, op21 (offset constants). Constant binding is CONDITIONAL_ON_BINDING by ruling; each of these callees is a separate fresh=gate item (many are P3b/P3d equalities already elsewhere)."
+ },
+ "not_attempted": [
+  "tx2_common/tx2_authenticated and PublicPreparation (sibling PCVL_)",
+  "relating any bound callee to its own frozen emission (needs the per-callee fresh=gate theorems, then instantiate Ext/Ops at those)",
+  "an overflow-OFF extraction of E004/E005 (not needed; see config_note)",
+  "resume expansion for VTop (op18 of the older VTop gate; not in this scope)"
+ ],
+ "next": "instantiate Ext with the proved fresh callee definitions where they exist and discharge the corresponding h_* fields one callee at a time; start with the Aspis-own ones in Stage1 (require_readonly_buffer, require_zero, common, semantic_public, PROOF_BYTES, Variant.tag)."
+}

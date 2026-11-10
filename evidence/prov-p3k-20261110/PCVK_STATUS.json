@@ -1,0 +1,321 @@
+{
+ "schema": "PCVK_STATUS/1",
+ "target_established": false,
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "branch": "codex/pc-prov-p3k-20261110",
+ "budget": {
+  "lean_scopes_used": "30 of 40 (PCVK_L001-L030; L024 a typo compile whose receipt was discarded)",
+  "extraction_scopes_used": "0 of 4"
+ },
+ "closed": [
+  {
+   "id": "AdapterStage1",
+   "target": "AdapterRw.r1_pool_adapter.owned.stage1_owned",
+   "file": "PRVEq_AdapterStage1_k4.lean",
+   "scope": "PCVK_L027",
+   "exit": 0,
+   "wall_s": 3.0,
+   "peak_rss_gib": 2.56,
+   "statement": "for all ops : AdapterRw.Ops and x : PCVK_S1.Ext with Bound ops x: PCVK_S1.stage1_owned x = AdapterRw.stage1_owned ops (theorem PRVEq.AdapterStage1_k1.r1_pool_adapter_owned_stage1_owned_eq); also OwnedAccount.data fresh = gate (data_eq).",
+   "class": "CONDITIONAL_ON_BINDING",
+   "fresh": "PCVJ_E004 emission, overflow ON",
+   "non_vacuity": "bound_exists: for every ops0 there are ops and x with Bound ops x",
+   "config_note": "Gate uses wrapping_add where the ON emission has a checked add (proof_start + 8, both branches). Not an OFF extraction: closed by PRVEq_usize_add_wrap plus PRVEq_after_ex (gate POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops evaluates to ok 688, proved from the gate constant 8 + 680), so the checked add cannot overflow; no extra hypothesis.",
+   "axioms": "propext, Classical.choice, Quot.sound (Quot.sound only for the ne_default lemma)"
+  },
+  {
+   "id": "AdapterStage2",
+   "target": "AdapterRw.r1_pool_adapter.owned.stage2_owned (with authenticate_asq8_accounts, validate_asq8, OwnedAccount.data, and the instances Pubkey eq, Option eq, RangeFull SliceIndex, SolanaDigest Digest32)",
+   "file": "PRVEq_AdapterStage2_k9.lean",
+   "scope": "PCVK_L026",
+   "exit": 0,
+   "wall_s": 3.9,
+   "peak_rss_gib": 2.6,
+   "statement": "for all ops and x with Bound ops x: the fresh text of stage2_owned, validate_asq8, authenticate_asq8_accounts, data and the five instances equals the gate at ops (PRVEq.AdapterStage2_k1.*_eq).",
+   "class": "CONDITIONAL_ON_BINDING",
+   "fresh": "PCVJ_E005 emission, overflow ON",
+   "non_vacuity": "bound_exists (Hash := Unit, hashv and to_bytes panic fields, op42/op43 set)",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "CallerPrepTx1",
+   "target": "AspisR1CurrentCaller.verifier.candidate.prepare and .tx1 (CurrentCompactCallerModelV1, 21-field Ops)",
+   "file": "PRVEq_CallerPrepTx1_k3.lean",
+   "scope": "PCVK_L030",
+   "exit": 0,
+   "wall_s": 3.0,
+   "peak_rss_gib": 2.55,
+   "statement": "for all ops and x with Bound ops x: fresh prepare x = gate prepare ops (all H), fresh tx1 x = gate tx1 ops (all H); also gate constants OFF_SEMANTIC/OFF_Y1/OFF_INACTIVE/LOGICAL_SEMANTIC/OFF_FOLDED_ROOT/OFF_ROUND1 at ops equal the fresh constants and the Error From instance equals.",
+   "class": "CONDITIONAL_ON_BINDING",
+   "fresh": "PCVJ_E002 emission, overflow ON (no config difference: both use checked arithmetic)",
+   "non_vacuity": "bound_exists",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  }
+ ],
+ "difference_at_matching_configuration": "none found. The only textual difference (stage1_owned/stage2 add) is a configuration difference (gate wrapping vs ON checked), proved harmless as above, not a semantic difference.",
+ "scopes": [
+  {
+   "attempt": "PCVK_L001",
+   "module": "PRVEq_AdapterStage1_k1",
+   "exit": 1,
+   "wall_s": 61.4,
+   "peak_rss_gib": 3.07,
+   "swaps": "0",
+   "source_revision": "f60e4c422a2a47ae96247f0db8acfe21d3af2fd4"
+  },
+  {
+   "attempt": "PCVK_L002",
+   "module": "PRVEq_AdapterStage1_k2",
+   "exit": 1,
+   "wall_s": 66.7,
+   "peak_rss_gib": 3.04,
+   "swaps": "0",
+   "source_revision": "f60e4c422a2a47ae96247f0db8acfe21d3af2fd4"
+  },
+  {
+   "attempt": "PCVK_L003",
+   "module": "PRVEq_probe_k1",
+   "exit": 1,
+   "wall_s": 2.8,
+   "peak_rss_gib": 2.54,
+   "swaps": "0",
+   "source_revision": "f60e4c422a2a47ae96247f0db8acfe21d3af2fd4"
+  },
+  {
+   "attempt": "PCVK_L004",
+   "module": "PRVEq_probe_k2",
+   "exit": 1,
+   "wall_s": 2.9,
+   "peak_rss_gib": 2.54,
+   "swaps": "0",
+   "source_revision": "f60e4c422a2a47ae96247f0db8acfe21d3af2fd4"
+  },
+  {
+   "attempt": "PCVK_L005",
+   "module": "PRVEq_AdapterStage1_k3",
+   "exit": 0,
+   "wall_s": 2.8,
+   "peak_rss_gib": 2.56,
+   "swaps": "0",
+   "source_revision": "f60e4c422a2a47ae96247f0db8acfe21d3af2fd4"
+  },
+  {
+   "attempt": "PCVK_L006",
+   "module": "PRVEq_AdapterStage2_k1",
+   "exit": 1,
+   "wall_s": 5.5,
+   "peak_rss_gib": 2.61,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L007",
+   "module": "PRVEq_AdapterStage2_k2",
+   "exit": 1,
+   "wall_s": 69.0,
+   "peak_rss_gib": 3.88,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L008",
+   "module": "PRVEq_AdapterStage2_k3",
+   "exit": 1,
+   "wall_s": 69.0,
+   "peak_rss_gib": 3.88,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L009",
+   "module": "PRVEq_AdapterStage2_k4",
+   "exit": 1,
+   "wall_s": 81.9,
+   "peak_rss_gib": 3.88,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L010",
+   "module": "PRVEq_AdapterStage2_k5",
+   "exit": 1,
+   "wall_s": 72.4,
+   "peak_rss_gib": 3.88,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L011",
+   "module": "PRVEq_AdapterStage2_k6",
+   "exit": 1,
+   "wall_s": 64.9,
+   "peak_rss_gib": 3.88,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L012",
+   "module": "PRVEq_probe_k3",
+   "exit": 1,
+   "wall_s": 39.2,
+   "peak_rss_gib": 3.35,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L013",
+   "module": "PRVEq_probe_k4",
+   "exit": 1,
+   "wall_s": 4.4,
+   "peak_rss_gib": 2.57,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L014",
+   "module": "PRVEq_probe_k5",
+   "exit": 1,
+   "wall_s": 4.7,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L015",
+   "module": "PRVEq_probe_k5",
+   "exit": 1,
+   "wall_s": 4.4,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L016",
+   "module": "PRVEq_probe_k6",
+   "exit": 124,
+   "wall_s": 180.0,
+   "peak_rss_gib": 0.1,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L017",
+   "module": "PRVEq_probe_k7",
+   "exit": 1,
+   "wall_s": 4.7,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L018",
+   "module": "PRVEq_probe_k8",
+   "exit": 1,
+   "wall_s": 20.4,
+   "peak_rss_gib": 2.99,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L019",
+   "module": "PRVEq_probe_k9",
+   "exit": 1,
+   "wall_s": 4.8,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L020",
+   "module": "PRVEq_AdapterStage2_k7",
+   "exit": 1,
+   "wall_s": 61.9,
+   "peak_rss_gib": 3.9,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L021",
+   "module": "PRVEq_AdapterStage2_k8",
+   "exit": 1,
+   "wall_s": 65.2,
+   "peak_rss_gib": 3.9,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L022",
+   "module": "PRVEq_probe_k10",
+   "exit": 1,
+   "wall_s": 4.1,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L023",
+   "module": "PRVEq_probe_k11",
+   "exit": 1,
+   "wall_s": 16.0,
+   "peak_rss_gib": 2.84,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L025",
+   "module": "PRVEq_probe_k12",
+   "exit": 1,
+   "wall_s": 4.1,
+   "peak_rss_gib": 2.58,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L026",
+   "module": "PRVEq_AdapterStage2_k9",
+   "exit": 0,
+   "wall_s": 3.9,
+   "peak_rss_gib": 2.6,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L027",
+   "module": "PRVEq_AdapterStage1_k4",
+   "exit": 0,
+   "wall_s": 3.0,
+   "peak_rss_gib": 2.56,
+   "swaps": "0",
+   "source_revision": "4ed40d690235d5dd9d95d3bfe55d4221c95aead0"
+  },
+  {
+   "attempt": "PCVK_L028",
+   "module": "PRVEq_CallerPrepTx1_k1",
+   "exit": 1,
+   "wall_s": 3.2,
+   "peak_rss_gib": 2.54,
+   "swaps": "0",
+   "source_revision": "d31630213f460047b6f25232d14d67e747b09b7f"
+  },
+  {
+   "attempt": "PCVK_L029",
+   "module": "PRVEq_CallerPrepTx1_k2",
+   "exit": 1,
+   "wall_s": 2.8,
+   "peak_rss_gib": 2.54,
+   "swaps": "0",
+   "source_revision": "d31630213f460047b6f25232d14d67e747b09b7f"
+  },
+  {
+   "attempt": "PCVK_L030",
+   "module": "PRVEq_CallerPrepTx1_k3",
+   "exit": 0,
+   "wall_s": 3.0,
+   "peak_rss_gib": 2.55,
+   "swaps": "0",
+   "source_revision": "d31630213f460047b6f25232d14d67e747b09b7f"
+  }
+ ],
+ "diagnostic_scopes_note": "PCVK_L016 ran one scratch rfl probe with maxHeartbeats 4000000 to see whether the shape terminated; it was killed by the 180 s scope timeout (exit 124). Not a verified result; the shape (rfl on authenticate_asq8_accounts without constant lemmas) is retired.",
+ "callee_tables": "PCVK_CALLEES.json"
+}
