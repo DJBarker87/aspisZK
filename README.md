@@ -47,7 +47,9 @@ translated from the Rust, returns the same result, fails in the same way and
 makes the same hash calls in the same order as the model, and every caller
 proves, rather than assumes, that it stays inside the domain of what it calls.
 All 599 are proved, none qualified, none open; the full table is in
-[`docs/r1/LEDGER-599.md`](docs/r1/LEDGER-599.md). For a handful of functions
+[`docs/r1/LEDGER-599.md`](docs/r1/LEDGER-599.md). The composed theorem above
+depends directly on 147 of them; the rest are verified statements about the
+same code that stand on their own. For a handful of functions
 whose translation the tools could not produce, the proof is against a
 transcription of the Rust checked by hand, and each of those is named in the
 proof package rather than hidden. The proofs also caught a model of the
@@ -78,7 +80,8 @@ secure, and I will not do so until the remaining checks are complete. The
 mathematics is in place; what remains is to tie the proofs to the deployed
 bytes with the same rigour. The Lean that the tools generated from the
 Rust is being regenerated and proved equal to the committed copies; the whole
-proof closure is being rebuilt cold rather than checked against cached builds;
+proof closure has now been rebuilt cold from source, all 14,101 modules, with
+the two theorems re-checked on the rebuilt objects;
 the translations use checked arithmetic where the deployed program wraps on
 overflow, and that bridge is proved in part; and the pool's actions in the
 recorded run are taken as given rather than brought inside the game. Each item,
