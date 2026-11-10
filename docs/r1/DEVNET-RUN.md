@@ -45,3 +45,34 @@ Each replay was rejected because its nullifier had already been consumed, and th
 The run shows that the exact release ELF, built from the frozen source, runs on a public Solana cluster within the compute limit, settles a transfer and a withdrawal through its two transactions, and rejects a replayed nullifier and a mutated proof. It is operational evidence about the deployed artifact, and it closes the obligation to associate the release ELF with a live deployment for this devnet instance; it is not a soundness theorem, and the soundness argument does not rely on it.
 
 Three limits should be read alongside it. The proofs were made for public test fixtures, so the run says nothing about privacy. The Pool program that ran on devnet is the build with ELF `121f3e29…1548`, which predates the removal of the legacy Pool instructions on 9 November 2026; the release Pool source on this branch (`programs/aspis-pool`, frozen at `b936275465600469312d1f058cdc91ea2a11f3dc`, ELF `e0e49c34…09dc`) has the same 427 pair-forest function bodies but a smaller dispatcher, and it has not yet been deployed. And the older Pool state on devnet, which still points at the historical verifier, was left untouched, so no continuity of its notes or custody is claimed. There is no mainnet deployment of R1.
+
+
+## Second run, 10 November 2026: frozen pool and frozen-source verifier together
+
+Source: research commit `af8f9fd2f9d`, evidence directory `evidence/devnet-frozen-20261109` (NPC_DEVNET_RESULT.md, NPC_TRANSACTIONS.json.xz with every account image, NPC_RENT_LEDGER.json, NPC_devnet_receipts/NPC_SUMMARY.json with all 69 signatures).
+
+The pool program `BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs` used on 29 October cannot be upgraded (its authority key was lost), and the verifier `CSnhzGdH…` bakes that address in, so the frozen pool was deployed at a new address and a verifier was rebuilt from the frozen source with only that address changed:
+
+| Program | Address | ELF SHA-256 | State |
+| --- | --- | --- | --- |
+| Pool (frozen, b936275) | `37hdATMkskKX1hiCWhz4nnzkD7GauYwX8EQwcpUDb3Zt` | `e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc` | upgradeable, authority held by the deployment payer |
+| Verifier (frozen 4bb3b3f source, pool address `37hdATMk…`) | `GqZzWuGTojfsxYnDzmyWKhdPGkce19xN1Txu9Vgnr5hy` | `2331ad8a2d97439a30329328c51f619a6b13be97e260ab1e1fd8aab22cb996ea` | immutable (finalized at slot 520604638) |
+
+The verifier ELF differs from the 29 October pin `63ad3e9c…` in 31 bytes, all inside the 32-byte pool-address slot at file offsets 0x174b70 to 0x174b8f; the rebuild was reproduced twice. A control build with the original address reproduced `63ad3e9c…` exactly on the same day.
+
+| Step | Program | Compute units | Result | Signature |
+| --- | --- | ---: | --- | --- |
+| pool-initialize | Pool | 124,374 | ok | `65nDh6VGuyG71NwSRcANcczGqbZiXXhuYUe9E4JggQKB5SCr4pK4rYSaK2FwMyzRc2ZV49JPxyFpiYk3hCaW2pK3` |
+| deposit-0 | Pool | 1,106,971 | ok | `37ev7k57r8okb1BhsXBFH6yNonn3TsMbBkADRYkL95o2hSdVqAKmhsNcZxeCg4RrxHg6zqd1YQayjKS5thxxaomR` |
+| deposit-1 | Pool | 1,106,966 | ok | `2HDZhFXWxWzR9kVrfBPffCFd11EbztaoVHYhFWBXfvEp6v5hAHcEv8YG9Wg3xoSoxo6KA7vEbagFpuJz396QXmCZ` |
+| forest-checkpoint | Pool | 1,153,927 | ok | `3GLEzr5YXQX24KhTJwrNRbt1B22XfmJPzG7u7hheU2aKYwgECbUvrSfk9URjshAbvsxt3F3j2DHbGnLysWkQ6c4F` |
+| transfer stage 1 | Verifier | 1,208,613 | ok, slot 520606640 | `pUEwuhuSNmr8PK159eVxZhwJGHAceLr8qLLcE4b3gdJ3qTuFz9NgoGXwhe6VrL646VhRj6AzmSXuyuQTq8Hz4i8` |
+| transfer stage 2 | Pool | 1,138,552 | ok, slot 520606678 | `5bPwiKGmcXgRQnEJfbUrxHU1kuQgu3Q4GMrZ8V76jCHTxmqr3zVKkjcsk5JNmP9PXtimkrQBzvf5SQ4Chq4UBmCt` |
+| transfer replay | Pool | 67,240 | rejected, NullifierAlreadyConsumed | `JjAbeFtzfWJ5JH6AyS6Gmz4Rh9dYyHjVtpyXfPzyCuDBwLSQ7Jb7ioPe9HC3AytHY8fgNTSwHyN3G2uVFJLqWzv` |
+| transfer mutated stage 1 | Verifier | 21,453 | rejected, InvalidInstructionData | `61R9NogGVvsjnjwwfiZUwwZ5wvYpLNBrEcrtXierLpiDDyzcji8kjydUQbU9NFYvUaHsdUA7fG3sMVQmSWCUzZL8` |
+| withdrawal stage 1 | Verifier | 1,211,252 | ok, slot 520607963 | `2QS4o2i1TpocPc4xeDh9KFBLuKaqBAbSTkiwiNbqecrNoTZvq1rjP8tVyu6BfBGuYFqJnpe4ueG3Ev5q7HvgjPpo` |
+| withdrawal stage 2 | Pool | 1,153,431 | ok, slot 520608000; vault 2000 to 1750, destination 0 to 250 | `54t54tQ14sNpUxU6cQJoi4e1Vpbb8bZhwMrDxmnrUk9fgEPBCmcZi3Qzwmc4F9SjmgoeTXfLDDZ7TfA8QBUjW8EM` |
+| withdrawal replay | Pool | 68,841 | rejected, NullifierAlreadyConsumed | `5LMwbEXuJXPkRphdcoDqRLEEVHFrZ23iobGiTm3Wxy1PXrammxR5EGci5gN9923UXh75kS4CZYQ2NYJLVahH64xW` |
+| withdrawal mutated stage 1 | Verifier | 21,395 | rejected, InvalidInstructionData | `4T6bRQT81VHiN573eeNmrUZxVPzPFoQSJ6d3B97AZpB2Xrza7pF5qniqVfBBUXKGoEu7TVTLiwpWhz1PGbC97r4e` |
+
+The same sequence was also run on a local validator (Agave 4.2.0 with devnet's feature set) with the 29 October verifier `63ad3e9c…` and the frozen pool at its original address, where both settled and all negative checks held; that local record, with full account images, is in the same evidence directory (NPC_LOCAL_RESULT.md).
