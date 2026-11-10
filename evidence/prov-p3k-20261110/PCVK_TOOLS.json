@@ -1,0 +1,20 @@
+{
+ "schema": "PCVK_TOOLS/1",
+ "changes_from_PCVJ": [
+  "PCVJ_run.py/run_host/extract/mkspec/STAGER_PIN copied with prefix PCVK_ and host workspace codex-pc-prov-p3k-20261110 (admission unchanged: host<6, Stream C<2, disk>=40GB, reservation allowed:true, one scope at a time)",
+  "PCVK_gen_ext.py: from an emission (Funs.lean + FunsExternal_Template.lean) generate the fresh text with externals as fields of Ext, (x : Ext) added to the blocks that mention them, call sites rewritten; handles impl_def self references, Hash type field",
+  "PCVK_mk_adapter.py (stage 1 and 2) and PCVK_mk_caller.py: assemble Bound, constant lemmas, equalities, bound_exists, #print axioms; outputs are reproducible (cmp checked against the three committed lean files)",
+  "PCVK_align.py: token alignment of fresh vs gate blocks (used to build the external -> Ops-field table)"
+ ],
+ "gate_inputs": {
+  "AdapterRwModel": "git research:docs/research/100bit-spend-path-20261013/lean/AdapterRwModel.lean (inputs/AdapterRwModel.lean)",
+  "CurrentCompactCallerModelV1": "git research:docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactCallerModelV1.lean (inputs/CurrentCompactCallerModelV1.lean)",
+  "sha256": "inputs.sha"
+ },
+ "lessons_for_generators": [
+  "constants emitted as @[irreducible] cannot be compared by rfl: emit a named cp lemma by unfold; rfl on the big body otherwise burns the whole heartbeat budget (diagnostics showed Array.make/PartialEqArray evaluation)",
+  "constant lemmas must sit outside any `variable ... include b` section or simp cannot discharge them",
+  "order x-blocks by file order, not alphabetically",
+  "anything with an implicit binder (closure instances with H) needs (H : Type) explicit in its cp lemma"
+ ]
+}

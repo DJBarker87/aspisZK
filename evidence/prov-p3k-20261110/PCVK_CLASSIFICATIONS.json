@@ -1,0 +1,29 @@
+{
+ "classifications": [
+  {
+   "item": "gate AdapterRwModel source lines",
+   "finding": "gate doc comments give r1_pool_adapter_owned.rs lines 377:0-415:1 for stage1_owned and closures at 393/433; the frozen emission gives 376:0-414:1 and 392/432. The Rust text of the functions is equal modulo callee binding (token alignment and Lean proof), so this is a line-number (encoding) difference: the gate module was extracted from an earlier version of that file with one more line before stage1_owned.",
+   "class": "encoding difference, recorded"
+  },
+  {
+   "item": "checked add vs wrapping_add in stage1_owned",
+   "finding": "two sites (stage1 branches) proof_start + 8: ON emission checked, gate lift(wrapping_add). Closed without an OFF extraction because proof_start is the gate constant 688.",
+   "class": "configuration difference, proved harmless"
+  },
+  {
+   "item": "Option PartialEq ne",
+   "finding": "gate spells ne out, emission uses trait_default; equal by PRVEq_partialEq_ne_default",
+   "class": "encoding difference"
+  },
+  {
+   "item": "constant binding",
+   "finding": "CCC op12-op15, op21, op2 and Stage1/2 constants are bound by hypothesis, not proved equal to a deployed instance",
+   "class": "CONDITIONAL_ON_BINDING (ruling)"
+  },
+  {
+   "item": "retired shape",
+   "finding": "AdapterStage2 authenticate_asq8_accounts: simp only [bounds]; delta_matchers; rfl without constant cp lemmas. L011, L020, L021 (heartbeat timeouts) and L016 (diagnostic with 4M heartbeats, scope timeout). Replacement: named cp lemmas by unfold for irreducible fresh constants, placed outside the include-b section (L026).",
+   "class": "two failures of one shape: retired, replaced"
+  }
+ ]
+}
