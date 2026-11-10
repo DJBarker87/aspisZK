@@ -1,0 +1,10 @@
+{"schema":"PCWW_MEMBERS v1","lemmas_proved":[],
+ "library_survey":{"scope":"PCWW_L001 and PCWW_L002 (import Aeneas against the L187 closure; exit 1 by design, probe output only)",
+  "Iterator_structure_fields":["next","step_by","enumerate","take"],
+  "missing_fields_fresh_emission_needs":["zip","fold","rev"],
+  "items":{
+   "Iterator::zip / Zip::next":{"gate":"PRESENT but different shape: Zip.next has no back continuation (returns Option (A,B) x Zip); Iterator.zip.trait_default returns Result Zip with no back; Iterator structure lacks the zip field","fresh_needs":"Zip.next returning (Option, Zip, back) and zip returning (iter, zip_back)","status":"OPEN: missing piece is library-side (mutable-continuation Zip.next); P6ChunksExactMutModelV3 has a specialised MutableIterator/zipNext only for array IntoIter on the right","semantics_lemma":"not proved"},
+   "slice::ChunksExactMut":{"gate":"PRESENT only in module P6ChunksExactMutModelV3 (type, chunks_exact_mut, next with back continuation), not in the Aeneas library; absent from the closure library","status":"model exists, lemma not yet proved (next: chunk at cursor, then None; back writes the chunk via setSlice!)","semantics_lemma":"not proved"},
+   "array IntoIter with fold and rev":{"gate":"IntoIter type, into_iter and next in P6ChunksExactMutModelV3 only; NO fold, NO rev, NO DoubleEndedIterator.next_back, NO Rev.fold (Rev.next exists)","status":"OPEN: fold, rev, next_back, Rev.fold, RangeInclusive.fold, Iterator.fold.default missing","semantics_lemma":"not proved"},
+   "<&Vec<T> as IntoIterator>::into_iter":{"gate":"ABSENT: no Vec IntoIterator model by any name (only SharedSlice ...SharedIter.into_iter and the &mut Vec axiom in NMH_checkpoint_weights)","status":"OPEN: missing","semantics_lemma":"not proved"}},
+  "report":"A library structure change (Iterator fields zip/fold/rev; Zip.next with back; fold/rev/next_back items) is out of scope and not made; the closure library was not edited."}}
