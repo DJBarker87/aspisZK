@@ -19,6 +19,7 @@ def build(src,out,names,bridge_inline=True,extra_done=()):
         txt+=t; done.append('PRVC.Eq.'+nm); report[nm]='generated'
     open(out,'w').write(txt)
     return report
+GNAME={}  # fresh def name -> gate def name (PCVD transport)
 HOIST={}  # fresh loop name -> {param: gate-constant expr}
 def one(base,name,done,F,G,NSF):
     m0=re.search(r'\ndef '+re.escape(name)+r'\n',base)
@@ -39,7 +40,7 @@ def one(base,name,done,F,G,NSF):
     gst=' '.join((proj(st.index(p)) if p in st else p) for p in params)
     pat_in=('⟨'+', '.join(st)+'⟩') if k>1 else st[0]
     xs=' '.join(params)
-    fa,ga=F+name,G+name
+    fa,ga=F+name,G+GNAME.get(name,name)
     fapp=fa+''.join(' ('+hoist[p]+')' for p in params_all if p in hoist)   # hoisted constant instantiated first (they lead the param list)
     assert all(p in hoist for p in params_all[:len(hoist)]),'hoisted params must lead'
     sc=''.join(', '+d for d in done)

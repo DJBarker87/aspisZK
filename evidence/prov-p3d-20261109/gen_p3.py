@@ -10,16 +10,17 @@ def fname(mod): return P2G+'PRVEq_'+mod.replace('.','_')+'.lean'
 def nonloop(base,name,done,F,G,NSF,consts):
     consts=consts+SHIMNAMES+(['Aeneas.Std.bind_tc_ok','Aeneas.Std.bind_ok'] if SHIMNAMES else [])
     sc=', '.join(done+consts)
+    gn=gen_loops.GNAME.get(name,name)
     sx=f"simp only [{sc}]; " if sc else ""
     return f'''
 set_option maxHeartbeats 100000 in
 open {NSF} in
-theorem PRVC.Eq.{name} : @{F}{name} = @{G}{name} := by
+theorem PRVC.Eq.{name} : @{F}{name} = @{G}{gn} := by
   first
-  | (delta {F}{name} {G}{name}; with_reducible rfl)
-  | (delta {F}{name} {G}{name}; {sx}with_reducible rfl)
-  | (delta {F}{name} {G}{name}; {sx}done)
-  | (delta {F}{name} {G}{name}; rfl)
+  | (delta {F}{name} {G}{gn}; with_reducible rfl)
+  | (delta {F}{name} {G}{gn}; {sx}with_reducible rfl)
+  | (delta {F}{name} {G}{gn}; {sx}done)
+  | (delta {F}{name} {G}{gn}; rfl)
 #print axioms PRVC.Eq.{name}
 '''
 def gen(mod,out,only=None,skip=()):
