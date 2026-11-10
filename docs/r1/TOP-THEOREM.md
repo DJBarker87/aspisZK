@@ -1,10 +1,49 @@
-# The top-level R1 soundness theorems
+# The soundness theorem
 
-Source: research commit `07123926e88273271344977a3fdc26d1780cde14`. The two statements below are copied character for character from `evidence/integrate-20261111/TAS_G0_AUDIT.json`, field `kernel_statements_verbatim`, which records the output of Lean with `set_option pp.all true` and `pp.proofs false` (compile attempt NNH_L941, 9 November 2026). The Lean source that proves them is [`TAS_FinalB.lean`](TAS_FinalB.lean), and the full audit record is [`TAS_G0_AUDIT.json`](TAS_G0_AUDIT.json), both copied here unchanged from the same directory.
+Soundness means that a false spend is not accepted. This page gives the formal
+statement of that property for Aspis, as Lean checked it, and explains how to
+read it. The statement covers a whole spend as the verifier on chain carries it
+out: the first transaction, which runs the opening stage of the proof and writes
+a checkpoint, the second, which picks up the checkpoint, finishes the
+verification and settles through the pool, and the handling of the checkpoint
+between the two.
 
-The two theorems are `AspisR1.TAS_FinalB.deployed_splitB` and `AspisR1.TAS_FinalB.deployed_charge`. The first says what holds of a single run of the two-transaction spend at a fixed oracle; the second turns that into the averaged bound over a random oracle. Both are proved at the corrected host model of 9 November 2026, described at the end of this page, and both are about the frozen R1 source at revision `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. They are a real step, but they are not yet the release claim: the gates listed in [`OPEN-GATES.md`](OPEN-GATES.md) stand between them and it, and the security target is not yet established.
+It comes as two Lean theorems, one building on the other.
 
-## `deployed_splitB`
+The first theorem, `deployed_splitB`, is about a single run of that spend with
+the hash function fixed. It says that if an attacker gets both transactions
+accepted, then either the run behaves as the security statement requires, or
+the hash queries recorded during the attacker's own run contain a collision of
+a kind whose probability is already counted in the bound. The second theorem,
+`deployed_charge`, averages over the hash function, which is modelled as a
+random oracle. It shows that, oracle by oracle, every accepted run that breaks
+the security statement lies in that collision event, and that the event has probability at most total(Q)
+for an attacker making Q hash queries, where total(Q) is a function given below
+that is about (Q+34)·2^-105.09.
+
+The attacker is arbitrary. It may query the oracle as often as it likes before
+choosing the first transaction, see the result, and query again before choosing
+the second, and nothing restricts how it uses what it has seen. An accepted
+false spend is a run in which both transactions are accepted but the
+knowledge extractor, reading the attacker's hash queries, cannot recover a
+witness for the spend, so that the acceptance is not backed by anyone who
+actually knew how to make the spend.
+
+Both theorems are proved in Lean with only its three standard axioms. They are
+mathematics about the model of the spend path and about the Lean translation of
+the frozen Rust source, and several items still stand between them and the
+release claim that the deployed version has 100-bit soundness. The most
+substantial are tying every committed Lean translation to a fresh translation
+of the frozen source, a handful of review items on the bridge between the
+checked arithmetic of the translations and the wrapping arithmetic of the
+deployed binary, and the treatment of the pool, whose actions the theorem's
+game takes as given instead of bringing them inside the proof. These and the
+smaller remaining items, with current figures, are in
+[`OPEN-GATES.md`](OPEN-GATES.md).
+
+## The first theorem
+
+Lean prints the statement of `deployed_splitB` as follows.
 
 ```
 @AspisR1.TAS_FinalB.deployed_splitB : ∀ {W Tx : Type}
@@ -45,29 +84,49 @@ The two theorems are `AspisR1.TAS_FinalB.deployed_splitB` and `AspisR1.TAS_Final
           (@AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx H)))
 ```
 
-### Reading the binders
+### How to read it
 
-`W` and `Tx` are the types of runtime worlds and of transactions. The theorem holds for every choice of them, so nothing about the shape of a Solana world or transaction is fixed beyond what the other binders say.
+The statement is one long "for every" followed by a conclusion, and its
+strength lies in how much it ranges over. It holds for every state the Solana
+runtime could be in, every pattern of memory allocations succeeding or failing,
+every hash function and every attacker, where the attacker is an arbitrary
+program that may query the hash function, choose the first transaction, see
+what happened and query again before choosing the second. The only things held
+fixed are the verifier's own code and its deployed configuration.
 
-`L0` is the model of the Solana account-information library the verifier calls to borrow account data, and `borrow` is the trust row `S2TrustedSdkBorrow`, which states the documented borrowing and `RefCell` guard behaviour of `solana-account-info` 2.3.0. `copy` is the slice-copy operation on the heap, and `std` is the trust row `TrustedStd`, which states the pinned standard-library behaviour of `copy_from_slice` and of the small `Option` and `Result` helpers the code uses. These four are where the theorem relies on the SDK and the standard library; they are listed with their scope in [`TRUST-INVENTORY.md`](TRUST-INVENTORY.md).
+Two hypotheses say what kind of run is being considered. One sets the
+attacker's budget, saying that it makes at most Q hash queries in total, with
+repeated queries and queries made before a rejection all counted. Q is the
+parameter of the bound and places no restriction on how the attacker behaves.
+The other describes the two-transaction game: the two transactions ran one
+after the other on the same chain history, both used the same checkpoint with
+nothing else touching it in between, and both returned successfully. This is
+also where the pool comes in, since everything in that history that is not the
+verifier's doing is taken to be what the pool and the runtime did, and the
+theorem proves nothing about the pool itself.
 
-`allocation217`, `allocation234`, `ch` and `alloc2` describe which heap allocations succeed during the second transaction: `allocation217` for `decode_lane_from_pool_release` (row TX2:217), `allocation234` for `authenticate_invariant_release_registry` (row TX2:234), `ch` for the three allocation decisions inside `authenticate_asq8_accounts` (row TX2:233; its fields are `sites`, `lane` and `registry`), and `alloc2` for the windows of the second stage. They are universally quantified, so the theorem holds whatever pattern of allocation success or failure occurs; a failed allocation aborts the program, and the theorem only speaks about runs that returned successfully. The allocation stream of the first stage is not a binder: it is fixed to `AspisR1.NNG_Candidate344.allocation` as part of the statement.
+The theorem relies on four stated assumptions about code outside Aspis. They
+are that the Solana account library lends out account data as documented, that
+the standard library's slice copy behaves as documented, that the runtime
+starts each program with a valid heap and consistent accounts, and that data
+written by a successful transaction is what the next transaction loads. Each is
+set out with its scope in [`TRUST-INVENTORY.md`](TRUST-INVENTORY.md).
 
-`fx` is the oracle-independent data of the experiment. Its most important field is `fx.a`, the adversary, which is an arbitrary two-phase adaptive program that may query the oracle as it likes before choosing the first transaction and again before choosing the second; it is never fixed to a particular strategy. The other fields of `fx` are the remaining inputs that do not depend on the oracle: the PDA derivation, the clock reply, the allocator reservation bit, the two query budgets `Q0` and `Q1` for the two phases, and fixed program data (an index-error code, a root and length, a prior program, transcript words and a decoder).
+The conclusion says three things. The first is the number: the model's failure
+probability is at most total(Q), the bound given below. The second is that
+every other part of the security statement holds, which covers the spend
+claims, the protection of the checkpoint and the facts that tie the model to
+the installed code. The third concerns the run in question, and says that
+either the outcome required by the security statement holds or the attacker's
+own run contains a hash collision. That collision event is already counted
+inside total(Q), so it adds nothing to the bound.
 
-`w` is the per-world data: the two runtime worlds, the saved checkpoint bytes, the heaps after each stage, the bank observations, the two transactions themselves and the list of runtime actions. Because `w` is universally quantified it may depend on the oracle in any way, which is what lets the theorem cover every world the runtime could produce.
+The table at the end of this page says what each named symbol in the statement
+stands for.
 
-`H` is the random oracle, a function from byte strings to hash states. SHA-256, as the program calls it through the runtime's hash syscall, is modelled by `H`; every probability in the second theorem is over a uniformly random `H`.
+## The second theorem
 
-`queries` is the query budget. It says that, for every oracle, the adversary issues at most `Q0 + Q1` digest queries across both phases, counting every repeated query and every query made before a rejection. It is taken on the adversary with its allocator outputs set to success, which is the adversary that actually reaches the verifier. This is the `Q` of the numeric bound; it is a parameter of the statement, not something assumed about the attacker's behaviour.
-
-`run` is the description of the run itself, and it is where the two-transaction game enters. It says that the two transactions were executed by the runtime one after the other on one bank lineage, that both named the same checkpoint account and nothing else touched it in between, that the first transaction's parent status was success, that the recorded checkpoint actions are the physical runtime actions, and that both stages returned `Ok` with their recorded outputs. It also carries the two runtime trust rows `RuntimeEntrypointAdmission` and `RuntimePersistence`, and it is where the Pool enters: the theorem takes the recorded non-verifier actions in the lineage to be what the Pool and the runtime did.
-
-### Reading the conclusion
-
-The conclusion has three parts. The first, `Sig.Bound`, is the numeric statement `failureModel ≤ total(Q)` for this run's runtime image, with `total` the bound of [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), section 3. The second, `NNH8_Split.rest`, is every other conjunct of the adopted headline theorem `AspisR1.RPx_Deployed.deployed` except its fourth: the boundary, driver and SDK equalities, the three spend claims, the copy facts, the event facts, the checkpoint protection, the trace and recorder facts and the installation. The third is a disjunction: either the outcome conjunct holds with its bad event set to `E_rec`, or the run lies in `E_rec`, the collision event among the recorded hash reads of the adversary's own run, which is already paid for inside `total(Q)`.
-
-## `deployed_charge`
+Lean prints the statement of `deployed_charge` as follows.
 
 ```
 @AspisR1.TAS_FinalB.deployed_charge : ∀ {W Tx : Type}
@@ -177,22 +236,121 @@ The conclusion has three parts. The first, `Sig.Bound`, is the numeric statement
               (AspisR1.NNH_HostCtx.Fixed.Q1 fx)))))
 ```
 
-### Reading the binders
+### How to read it
 
-`W`, `Tx`, `L0`, `borrow`, `copy`, `std`, `allocation217`, `allocation234`, `ch`, `alloc2`, `fx` and `queries` mean exactly what they mean above. There is no single world `w` and no single oracle `H`: instead `wOf` is an arbitrary function giving a world for each oracle, so the world may depend on the oracle in any way at all, and `anchor` is a fixed hash function used only as program data to build the one recorder program the event is evaluated on; it is not a condition on the sampled oracle.
+The second theorem has the same ingredients, with the hash function no longer
+fixed. The state of the world is allowed to depend on the hash function in any
+way, and the description of the run moves out of the hypotheses and into the
+event whose probability is being measured.
 
-### Reading the conclusion
+Its conclusion again says three things. For every hash function, a run in which
+both transactions are accepted but the security statement fails lies in the
+collision event. The probability of that collision event, taken over a random
+hash function, is at most total(Q). And for every hash function the model's
+failure probability is at most total(Q). Together these give the averaged
+claim, since a false spend always lies inside the collision event and the
+collision event is rare. The theorem states the two facts separately and does
+not itself write the average as a single quantity, which the
+[status document](SOUNDNESS-STATUS.md) records. The average is taken over all
+hash functions with nothing conditioned on, so every case counts with its full
+weight.
 
-The conclusion has three parts. The first says that, for every oracle, if the two transactions run as described and the outcome conjunct fails, then the recorder program `NNH8_RecorderFixed.fixedProgram copy fx anchor`, run against that oracle, lands in the collision event `BinRawByteCollisionTargets.event` at `Q0 + Q1 + 2965` recorded reads. The second says that the mean of that event's indicator over a lazily sampled random oracle, `lazyMean … FS.emptyTable …`, is at most `F3T_Numeric.total (Q0 + Q1)`. The third says that, for every oracle, `failureModel` of the run's runtime image is at most `total (Q0 + Q1)`. These are the two recorder facts and the model bound on which the averaged claim rests; the theorem states the pointwise domination and the mean bound separately, and it does not itself write the average of the failure indicator as a single program mean, which the status document records in section 7, item 12(c).
+## The bound
 
-## Proof discipline
+The function total(Q) is defined in Lean as
 
-`#print axioms` reports `[propext, Classical.choice, Quot.sound]` for both theorems, and for every field term installed in them (`AspisR1.NOQ_FinalCombined.field`, `AspisR1.NOF_A2FieldCorrected.field`, `AspisR1.NNH8_Rest.assemble`, `AspisR1.NNH8_NMF.nmfB`, `AspisR1.NNQ_HostDigest.o2`, `AspisR1.NNH_DigestSyntaxTransport.o1`); there is no `sorry`, no project-specific axiom and no `native_decide`. As an independent check on `#print axioms`, the proof terms were also walked directly by a separate pinned program (SHA-256 `46ee271b392729449147b978830b474e3fa4ecba2b45e03ad13c02490ba6ca3c`), which followed every edge from each root: it reached 146,370 constants over 6,981,053 edges from `deployed_splitB` and 146,551 constants over 6,993,492 edges from `deployed_charge`, and in each case the set of axioms it walked to equals the set Lean collects, namely the same three. A cross-reference scan of the whole closure, 20,019 modules and 883,431 declarations, found no dangling reference, no declaration owned twice and no import that differs from its recorded source (attempt NNH_L948, exit 0). The combined import that contains both theorems and all their fields compiled in 48.8 seconds with a peak resident memory of 6,881,368 KiB and no swap (attempt NNH_L945).
+```
+total(Q) = (Q+34)·B + 6·(Q+1161)²/2^256 + 6·(Q+2965)²/2^256 + 2^-126 + 2^-454
+B        = 15/2^109   (about 2^-105.09)
+```
 
-The audit also confirms in writing that the printed statements contain no hypothesis about the `Root0` digest, no hash-injectivity premise, no `Realizes` premise and no new trust row; that the adversary is universal and never a constant; and that the averaging conditions on nothing, so every oracle and every world counts with its full weight.
+where Q is the number of hash queries the attacker issues across both phases,
+counting duplicates and every query before a rejection. The first term charges
+each fresh transcript start, the attacker's Q queries together with the 34
+starts the submitted transcript itself reads before terminal authentication,
+with probability at most B of succeeding. The
+two squared terms are collision terms, one over the verifier's first reads and
+one over the reads recorded in the attacker's own run, and the last two are an
+allowance for the extractor aborting and for the query scan running out.
 
-Lean checks these proofs about the model the statements name. That the extracted Lean definitions are faithful to the deployed program, that the deployed binary computes what the source says, and that the trust rows hold of the real runtime are separate matters, and they are the open gates.
+For any feasible Q the first term dominates, so total(Q) is about
+(Q+34)·2^-105.09. Lean also proves that total(Q) is at
+most (Q+1)·2^-100 exactly when Q is at most about 2^152.37, and that with no
+attacker queries at all total(0) falls short of 2^-100 by about 2^-108. The
+figure takes no credit for proof-of-work or grinding. It bounds a single run of
+the spend experiment, in which repeated attempts within the run are fully
+counted; a bound across separately submitted attempts is one of the open items.
+The derivation of every term is in section 3 of
+[`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md).
 
-## The host-model correction of 9 November
+## The symbols in the statements
 
-Until 9 November the model of the host environment left one operation, the zero-filled buffer allocation at the start of the first stage, as a placeholder that never returns. Lean proved that consequence directly (`NOC_PrepareDiv.op1_div`): under the old model the first transaction could never be accepted, so a top theorem stated there would have been vacuous for real runs. The corrected model installs the allocation as the frozen source writes it (`heap::filled` at `4bb3b3f`, which returns a zeroed vector when the reservation succeeds and an allocation error otherwise), under the existing allocator trust row, and `NOC_SeedTransfer` proves by `rfl` that only that operation and one SDK slot changed. No contract text and no trust row changed. Both theorems above are stated at the corrected host `AspisR1.NOC_Run5bHost.S_host`.
+| Binder | Meaning |
+| --- | --- |
+| `W`, `Tx` | Types of runtime worlds and transactions, arbitrary |
+| `L0` | Model of the Solana account library the verifier borrows account data from |
+| `borrow` | Assumption that `solana-account-info` 2.3.0 lends account data and guards it as documented |
+| `copy` | The heap slice-copy operation |
+| `std` | Assumption that the pinned standard library's `copy_from_slice` behaves as documented |
+| `allocation217` | Allocation success while decoding the lane from the pool's release data |
+| `allocation234` | Allocation success while authenticating the release registry |
+| `ch` | Three allocation decisions while authenticating the second transaction's accounts |
+| `alloc2` | Allocation success for the working windows of the second stage |
+| `fx` | Everything that does not depend on the hash function: the adaptive attacker `fx.a`, the query budgets `Q0` and `Q1` for its two phases, the derivation of program addresses, the clock reading, the allocator's reservation bit and fixed program data |
+| `w` | The state of the run: the two runtime worlds, the saved checkpoint bytes, the heaps after each stage, the two transactions and the list of runtime actions (first theorem) |
+| `wOf` | A world for each oracle, arbitrary (second theorem) |
+| `H` | The random oracle modelling SHA-256 |
+| `anchor` | A fixed hash function used only to build the recorder program (second theorem) |
+| `queries` | The query budget: at most `Q0 + Q1` hash queries, whatever the oracle |
+| `run` | The two-transaction game, with the runtime assumptions and the pool's recorded actions (first theorem) |
+
+The numbers in three of the allocation binders are rows of the
+[function ledger](LEDGER-599.md).
+
+## How the proofs were checked
+
+`#print axioms` reports only `propext`, `Classical.choice` and `Quot.sound`
+for both theorems and for every term installed in them. There is no `sorry`, no
+project-specific axiom and no `native_decide`. As an independent check, a
+separate program walked the proof terms directly, following every edge from
+each theorem through roughly 146,000 constants, and reached exactly the same
+three axioms. A scan of the whole closure found no dangling reference, no
+declaration defined twice and no import that differs from its recorded source.
+
+The audit also confirms that the printed statements contain no hypothesis about
+the value of a particular digest, no assumption that the hash is injective, no
+premise asserting that the submitted transactions realise the attacker's
+choice (they are defined as the attacker's output), and no new trust
+assumption, and that the attacker is universally quantified and never a
+constant.
+
+Lean checks these proofs about the model the statements name. Whether the
+translated Lean definitions are faithful to the deployed program, whether the
+deployed binary computes what the source says, and whether the trusted
+assumptions hold of the real runtime are separate questions, and they are the
+open items listed in [`OPEN-GATES.md`](OPEN-GATES.md).
+
+## A correction to the host model
+
+Before 9 November 2026 the model of the host environment left one operation,
+the zero-filled buffer allocation at the start of the first stage, as a
+placeholder that never returns. Lean proved the consequence directly: under
+that model the first transaction could never be accepted, so a theorem stated
+there would have said nothing about real runs. The corrected model installs the
+allocation as the frozen source writes it, returning a zeroed buffer when the
+reservation succeeds and an allocation error otherwise, under the existing
+assumption about the allocator, and Lean proves that only that operation and
+one SDK slot changed. No contract text and no trust assumption changed. Both
+theorems on this page are stated at the corrected host.
+
+## Where this comes from
+
+The statements above are copied character for character from the audit record
+[`TAS_G0_AUDIT.json`](TAS_G0_AUDIT.json) (field `kernel_statements_verbatim`),
+which holds Lean's output with `set_option pp.all true` and `pp.proofs false`.
+The Lean source that proves them is [`TAS_FinalB.lean`](TAS_FinalB.lean). Both
+are copied unchanged from commit `07123926e88` of the
+[`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch, and
+the theorems are about the frozen source at revision `4bb3b3f`. Their full
+names are `AspisR1.TAS_FinalB.deployed_splitB` and
+`AspisR1.TAS_FinalB.deployed_charge`.

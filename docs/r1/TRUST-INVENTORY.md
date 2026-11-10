@@ -1,526 +1,176 @@
-# R1 trust inventory
-
-Every machine-checked proof rests on something it does not prove, and for R1 those things are written down as named trust rows: the random-oracle model of SHA-256, the behaviour of the Solana runtime at the points the verifier relies on it, the translation tools that turn Rust into Lean, the compiler, and a small number of reviewed hand transcriptions where a tool could not be used directly. This page collects them, reproduced from the research branch at commit `07123926e88273271344977a3fdc26d1780cde14`.
-
-Part 1 is section 4 of the status document (`docs/research/100bit-spend-path-20261013/design/SOUNDNESS-CLAIM-DRAFT-20261108.md`) as it stands there. It is the current table, and it includes the Solana runtime rows accepted under the owner's decision of 4 November 2026 and the row for checked versus wrapping arithmetic (R22) recorded on 9 November 2026. Part 2 is the trust inventory appendix approved on 27 October 2026 (`design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md`), with its later dated additions, which is the authority Part 1 cites. Both keep their internal row names, and their links point at the pinned research commit; only the headings have been moved down.
-
-A row in this inventory is a stated assumption, not a weakness found and hidden: the theorem says exactly where each one enters. Several rows still lack a recorded removal condition, and reconciling the inventory one to one with the final proof closure is one of the open gates ([`OPEN-GATES.md`](OPEN-GATES.md)).
-
----
-
-# Part 1. The current inventory (status document, section 4)
-
-### 4. Trust inventory the theorem relies on
-
-Authority: design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md, as approved 2026-10-27 and amended since, and the 25 trust rows plus the reviewed-transcription inventory in NNK_LEDGER.json (ledger27). "Used" names the consumer in the top or in CLOSED rows. Where the inventory records no removal condition, the table says so. That gap is itself a finding (section 7).
-
-#### 4.1 Oracle and cryptographic model
-
-| Row | Assumes | Used | Removal condition |
-|---|---|---|---|
-| Random-oracle model for SHA-256 (frozen3 security/oracle model, L194) | SHA-256 as invoked through the runtime behaves as a uniformly random function H; every probability is over H. | Every probability statement: failureModel, E_rec, deployed_charge. | None. A standard-model argument would be a different theorem. |
-| P1 ideal-oracle realization (`S2W_ExtractionBoundary.P1.realization`: ∀ bytes, sha256 bytes = H bytes) | The fixed native digest equals the sampled oracle at the supplied world. This is not a proof that SHA-256 is random. | After (bt), instantiated per world (`sha256 := H`, `p1 := rfl`). The row remains the justification for reading the physical hash replies in `Runs` as H's values. | None. Inherent to the ROM reading. |
-| RuntimeSyscall.returningValue | Successful returning digests satisfy `hashv parts = ok d → decodeState d = sha256 (flatten parts)`. No totality or termination is assumed. | After (bt), a theorem at `hashAdapter` (`DGP_HostDigest.syscall`). The row justifies the physical reading of every returned hash in `Runs`. | A proved realization of the pinned runtime's hash syscall. Not recorded in the inventory. |
-| RuntimeSha256Value | The SolanaDigest/hashv reply value realises H. Exact request slices and unchanged reply are separate bridge obligations. | Retained-value uses at TX1:327, TX2:210. | None recorded. |
-
-#### 4.2 Solana runtime behaviour (owner decision 2026-11-04)
-
-| Row | Assumes | Used | Removal condition |
-|---|---|---|---|
-| RuntimeEntrypointAdmission (verifier; 7 fields plus 2 wrapper fields) | Initial heap validity, fresh guards, zero counters and external borrows, live accounts, key/cell alias consistency at the two entries. | `admission1`, `admission2` (retained hypotheses). | None recorded. |
-| RuntimePersistence (`CPR_DataPersistence.TwoTransactionLaw`) | For the next transaction on the same bank lineage loading an ordinary account, data bytes equal the previous transaction's final bytes if its parent succeeded, else its starting bytes. Zero lamports means absent. Data bytes only. | Retained hypothesis. Consumed by game (b) and the persisted cut field of NMF_B (INP section 1.3). | None recorded. |
-| Allocator (data-only interface) | `allocate/cleanup` operations, with no success proposition. | Instantiated at `abortIndicator` by (bo). Physical justification: a failed allocation aborts the program, so a returned-Ok run had none. That reading falls under the AllocatorABICompilerSourceToELF realization obligation below. | Not applicable as a free binder after (bo). |
-| RuntimeReturnData (nonempty, 1 ≤ len ≤ 1024) | `set_return_data(b)` followed by an immediate `get_return_data()` with no intervening CPI returns `Some((P, b))`. | One CLOSED native use (`emit_result`). Pool-side association OPEN. | None recorded. |
-| RuntimeReturnDataClear | An empty `set_return_data` clears observable return data until a later set, within one instruction. | Window law of TX2:240 stage2. No CLOSED use yet. | A proved realization of the pinned runtime's return-data register. |
-| RuntimeMemcmp | `sol_memcmp_` on the same two valid 688-byte ranges: normal return, slot zero iff equal, no other effect. | scan_proof_buffer, one direct CLOSED row. | Trust-reduction packet on the pinned validator implementation (not commissioned). |
-| RuntimeClockSlotBinding (ADDED-LEAD-20261105) | `clockGet ctx = ok v → v = bankSlot ctx` in the same instruction context. Nothing about success, monotonicity or epochs. | `Clock::get()` in owned stage2 (r1_pool_adapter_owned.rs:479); NNE_Clock; the (bn) window NMV_WindowClock. | A proved realization of the pinned Clock sysvar. |
-| RuntimeCpiAccountView (Stream C, ADDED-LEAD-20261110) | One returning Pool CPI: unlisted admitted accounts unchanged; listed ones reflect the callee's final values. | Pool CPI sites only. No CLOSED use. Relevant only if Pool execution enters the claim. | A proved realization of the deployed runtime's CPI account update. |
-| RuntimeEntrypointAdmission-Pool | The same seven fields at the Pool entrypoint. | No CLOSED verifier row. | None recorded. |
-| RuntimeCpiReadonlyEntry7 | Pending, unused. | Not relied on. | — |
-| FixturePdaRuntime | PDA syscall agrees with the guarded model for seven fixture invocations. | Non-vacuity witness only. Never used by the soundness theorem. | — |
-
-#### 4.3 Translation, tool and library trust
-
-| Row | Assumes | Used | Removal condition |
-|---|---|---|---|
-| **Extraction item** (AeneasExtraction, D188), at trace fidelity, narrowed by D188-P3 and by **(bc)** | Trace fidelity: the pinned Charon/Aeneas translation of each associated frozen body preserves the accepted Result and the chronological attempted digest-call sequence, with rejected prefixes both rejecting. Narrowing (D188-P3): bodies that fail the dropped-restoration scan or native differential get no credit and are bridged natively. Narrowing (bc): "faithful except explicit returns or `?` in post-loop code merged into a loop exit; every emitted body relied on must be shown free of that pattern, or the affected exits certified natively." | Every CLOSED row on the emitted-body route. Under (bm), increased reliance for the emitted bodies of TX1:136, 137, 087 and TX2:234 (NNI/NNK extraction reclassifications). At the top, `extraction` at native := model holds by `rfl`, so the trust sits in the per-row emitted-body theorems. | For the tool, none. For release, every reached emission must be reproduced from an archived input, or re-extracted with per-definition equality theorems (note (bk)). |
-| P6 / Kani association, with the K-1 narrowing (2026-10-28) and (br) scope | Pinned Kani/CBMC as evidence for checked associations between the frozen body and its reference. Credit only without copy builtins, or with the KMX element-wise copy stubs (sha256 bcdf749b…a9a67) and a matched failing negative control. Timeouts earn nothing. | Native halves of the hybrid rows. TX2:217 contracts under (br). | None for the tool. |
-| NativeContractSemanticTransport (amendment fifth) | Kani's and Aeneas's interpretations of the enumerated frozen bodies and references denote the same Rust semantics under the certified common world. Also covers the recorded association of the Rust entries with `native1/native2`, the digest wrapper with `op43`, and the external digest with `hashv`. | 380 direct CLOSED rows; NLT-TX2:065; NMN-TX2:064. | None recorded. Clarification of P6/D188, not a removal. |
-| P7 compiler, LLVM, platform and release-pinned library base | The selected compiler/toolchain/ABI and the pinned Lean/Mathlib/Aeneas base, for the exact recorded source, features and toolchain. | Whole closure. | None for the tool. Source-to-ELF association is a separate obligation (L188). |
-| AllocatorABICompilerSourceToELF | Retained realization boundary: concrete final-artifact binding. | Root realization. | "RETAINED ROOT REALIZATION OBLIGATION". Discharged only by L188. |
-| S2TrustedSdkBorrow (15 fields; solana-account-info 2.3.0) | Documented data-borrow and RefCell guard semantics. No caller result. | `sdk` binder; the (bn) window laws. | None recorded. |
-| TrustedStd (`slice_copy_from_slice`, `option_ok_or`, `result_unwrap32`) | Pinned std semantics on valid references. W1: the abstract law quantifies all states, so each actual use needs justified validity. | `std` binder; std windows. | None recorded. W1 must be met at each use. |
-| **CheckedVsWrapping (R22, OPEN)** | The gate's emitted bodies are Aeneas translations compiled with overflow checks ON (historical extraction configuration `CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true`, `RUSTFLAGS=-C overflow-checks=yes`), so every integer operation is checked and an overflow is an error result. The deployed R1 ELFs were built by cargo-build-sbf with the plain release profile (receipts `evidence/finish-pair2-20261027/FJd_SBF_default.json`, `FJd_SBF_devnet.json`; the frozen Cargo.toml enables overflow-checks only for aspis-r1-cert-check and aspis-r1-cert-build), so the deployed code WRAPS. The theorem is about the checked semantics; its transfer to the deployed binary needs, on every reached path, either totality (no checked operation fails, so both semantics agree: `R22TotalCheckedComposition`) or the direction wrapping-acceptance implies checked-acceptance with the same result. Status per `design/R22-TOTAL-20261021.md`: general lemma proved; 35 cones TOTAL, 63 ACCEPTED-ONLY (caller precondition still owed), 48 OTHER; global R22 OPEN. | Every CLOSED row on the emitted-body route, through the source-to-ELF association (L188). | Discharged by the R22 totality audit closing on the final closure (every reached cone TOTAL or its precondition established by the caller join), or stated as a retained trust row by the owner. Recorded here 2026-11-09 after Stream C's provenance campaign found the configuration difference (checked gate versus wrapping fresh emissions). |
-| Standard logical axioms | `propext`, `Classical.choice`, `Quot.sound` only, for each new top and audited root. | Kernel. | None. F-AXIOM: 105 nonstandard imported axioms are unreachable from the tops and are not premises, but strict import-wide standard-only still fails. |
-
-#### 4.4 Reviewed transcriptions (class ReviewedTranscription; P6/D188 option-A reclassification, never removal)
-
-Named rows the brief singles out:
-
-| Row | Assumes | Used | Removal condition |
-|---|---|---|---|
-| ReviewedTranscription-TX1:344 ((bn), ADDED-LEAD-20261107) | The listed textual substitution in the source-fission copy of `r1_pool_adapter_owned.rs::stage1` (fission sha256 9824c8ff…ebbf; NMV_fission.py, NMV_ASSOCIATIONS.json) preserves the frozen body's behaviour. | `NMV_CandidateRoots.root344` / `NMV_TasRoots.field344`. Unused by CLOSED rows today; becomes consumed when TX1:344 closes. | A native certificate on the actual frozen function. |
-| ReviewedTranscription-TX2:240 ((bn), ADDED-LEAD-20261107) | The same, for `stage2`. | `NMV_CandidateRoots.root240` / `field240`. Unused by CLOSED rows today. | The same. |
-| ReviewedTranscription-TX2:217 ((ah), ADDED-LEAD-20261107) | The reviewed safe `NCV_reference.rs::decode_lane_ref`, with the segment associations of NMX_217_NATIVE_COMPOSITION.md, preserves the frozen `decode_lane_from_pool_release` behaviour on every input; the final Box allocation admits return or silent abort. | CLOSED TX2:217 (`NMX_R3_DecoderFold.root`). | A native certificate on the actual frozen function, paired with the same emitted reference, without reviewed-transcription reliance. |
-| ReviewedTranscription-prepared_claim ((ah)) | Hand transcription of f_ref, tied to the frozen function by Kani proof_for_contract. | TX1:193, 179, 186. | An emitted body proved equal to the transcription. |
-| ReviewedTranscription-queries_from_pairs ((ah)) | Reviewed transcription of the reference. | TX1:168; TRANSCRIPT.actual_queries; TX1:179/186. | The same. |
-| ReviewedTranscription-polynomial ((ah)) | NHE reverse-fold transcription. | One CLOSED row. | Not recorded in the ledger row. |
-| NKL-RT-batch_tree ((bc)(4)) | Transcription of explicit-Result f_ref with native segment contracts at every exit. | TX1:081-083, TX2:053-055. | Not recorded in the ledger row. |
-| Pool rows POOL324, POOL345, POOL296, POOL320, POOL223, POOL332 (Stream C, ADDED-LEAD-20261110) | Source-fission or hand-composition transcriptions of Pool functions (details in the appendix). | Pool rows only; 0 direct verifier CLOSED rows. Listed because the theorem's `TraceRep` names Pool actions, and because these rows would enter if (aj)(a) puts Pool execution inside the game. | A native certificate on the actual frozen function, or an emitted body proved equal. |
-
-The ledger lists 36 further verifier-side items, each consumed by the named CLOSED row: NJY-RT149/152/153/201/203 (TX2:149, 152, 153, 201, 203); NJZ-RT189/201/202/203/204 (TX1:189, 201-204); NKJ-RT036/044/040/041/043; NKM-RTNGB002/004/006; NKI-RT234/260/233; NKL-RT084; NKU-RT124 (TX2:124); NKY-RT235/216/218 (TX1:235, TX2:216, TX2:218); NKR-RT-225/232/251/250/220/218; NLH-RT-261/237/263/256. The ledger records no per-item removal condition for any of these. The class default under (ah) is "an emitted body from the pinned extractor (or an approved successor) proved equal to the transcription". The published inventory must state a removal condition per item.
-
-#### 4.5 Not trust, but stated parts of the theorem
-
-These are listed so they are not mistaken for discharged assumptions:
-
-- the query budget L154 (a statement parameter);
-- the two-transaction game (a)-(d) in `Runs.frame/trace` (classified G, a statement of the experiment);
-- the actual-run antecedent `Runs.ok1/ok2/out1/out2`;
-- the allocation streams `alloc1/alloc2`.
-
-The seven historical checkpoint interfaces (`S2X.CheckpointVersionBinding.*`, `…history`) are not relied on (appendix, "no additional trust").
-
-
----
-
-# Part 2. The approved trust inventory appendix of 27 October 2026, with later additions
-
-## Trust inventory appendix — 27 October 2026
-
-**APPROVED by the owner 2026-10-27 and incorporated into the binding contract (SECURITY-CONTRACT-20261021.md, "Owner-approved amendment, 2026-10-27"). The draft text below is retained verbatim; where it says "not adopted" or "candidate", the contract amendment controls. For the trust inventory, the TRACE-fidelity D188 column was selected.**
-
-This appendix proposes a literal inventory for the binding security contract.
-It changes no proof, premise ledger, implementation, artifact or accepted trust.
-The deployed 100-bit target is not yet established. ARX remains a candidate.
-
-### Sources, status and counting
-
-The authority is the [binding contract and owner amendment of 2026-10-26](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26).
-The fresh [L8a audit](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_TrustAudit.md),
-[field map](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_TrustFieldMap.json),
-[exact kernel types](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_structure.json), and
-[per-declaration classification](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_SurfaceClassification.json)
-identify the selected RPz8 Rc10/ARX closure. These are reused evidence, not a new replay.
-Acceptance citations refer to [C3-BIN](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/docs/research/100bit-spend-path-20261013/design/C3-BIN-20261021.md),
-[LOG](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/docs/research/v8-r0-zk-20261009/LOG.md) and the
-[2026-10-26 TRUST-AUDIT release trust table](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/design/TRUST-AUDIT-20261026.md#release-trust-table).
-C3-BIN's 2026-10-27 “l188-audit1 … F-CONTRACT” addendum adopts the audit's
-reconciliation finding, not new trust or ARX adoption.
-
-**NAMED-IN-CONTRACT** means the item is literally named in the current contract;
-it does not mean its individual fields are enumerated there.
-**ACCEPTED-ELSEWHERE** means the cited dated ruling already accepts the stated
-scope, while the contract lacks its literal item. **UNRECORDED** means no
-acceptance is inferred and the surface remains a finding, not proposed new trust.
-† marks historical interfaces recognized in earlier rulings: acceptance of their
-conditional use is not permission to assume their deployment instance. Seven
-such fields are retained for exhaustive indexing, not added to today's trust base.
-
-The 44 fields comprise 15 SDK, 9 admission, 7 historical checkpoint, 6 extraction,
-3 std, 2 allocator, 1 P1 and 1 syscall fields. The older extraction interface is
-derived by `S2W_DigestExtraction.sourceBoundary`; it is not three extra independent
-trust assumptions. Two admissions and repeated SDK uses explain why this field
-count differs from the inherited ledger's 83 actual T / 89 deployment-inclusive T.
-No recount is inferred from counting declarations.
-
-### One-to-one named-field inventory
-
-| Exact projection (one row per field) | Contract item now | Status | Dated authority / limit |
-|---|---|---|---|
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.counterZero` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.duplicateKeysShareCell` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `RuntimeEntrypointAdmission-Pool` (same seven fields as AdapterRw.RuntimeEntrypointAdmission, at the Pool program entrypoint) | Solana runtime entrypoint deserialization, Pool program | **ADDED-LEAD-20261107** | C3-BIN ruling (ap); owner decision 2026-11-04 (lead may add runtime rows of the same class); initial heap validity/alias/counter facts only; no CPI frame, token-program behaviour or success |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.freshGuards` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.liveAccount` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.noExternalBorrows` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.AdapterRw.RuntimeEntrypointAdmission.valid` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; LOG D189; initial heap validity/alias/counter facts only |
-| `AspisR1.Port1_Library.TrustedStd.option_ok_or` | No literal item; TrustedStd | **ACCEPTED-ELSEWHERE** | LOG D157 2026-10-22 08:35; C3-BIN 2026-10-23 18:05 and 2026-10-25 late; pure Option/Result interpretation; deployment library item, not fresh top proof dependency |
-| `AspisR1.Port1_Library.TrustedStd.result_unwrap32` | No literal item; TrustedStd | **ACCEPTED-ELSEWHERE** | LOG D157 2026-10-22 08:35; C3-BIN 2026-10-23 18:05 and 2026-10-25 late; pure Option/Result interpretation; deployment library item, not fresh top proof dependency |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok` | No literal item; S2TrustedSdkBorrow | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 01:20; LOG D189 (D189 2026-10-23 17:35); accepted fifteen-field SDK/RefCell interpretation; no caller result |
-| `AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding.history` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; history wrapper, not a second runtime trust item |
-| `AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | same runtime admission + LOG D189; wrapper entry and related; nested entry fields are listed separately |
-| `AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related` | RuntimeEntrypointAdmission (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | same runtime admission + LOG D189; wrapper entry and related; nested entry fields are listed separately |
-| `AspisR1.S2W_D189Wrappers.Allocator.allocate` | Allocator (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; data-only allocate/cleanup interface; no success or account-access proposition |
-| `AspisR1.S2W_D189Wrappers.Allocator.cleanup` | Allocator (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | C3-BIN 2026-10-23 02:40/18:05; data-only allocate/cleanup interface; no success or account-access proposition |
-| `AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; C3-BIN 2026-10-26 native Vec/Box ruling; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; source extraction association; not SBF equivalence; provenance finding D188-P below |
-| `AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; C3-BIN 2026-10-26 native Vec/Box ruling; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; source extraction association; not SBF equivalence; provenance finding D188-P below |
-| `AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; C3-BIN 2026-10-26 native Vec/Box ruling; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; source extraction association; not SBF equivalence; provenance finding D188-P below |
-| `AspisR1.S2W_ExtractionBoundary.AeneasExtraction.digest` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; S2W_DigestExtraction.sourceBoundary; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; older three-field derived interface, not independent additional trust |
-| `AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage1` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; S2W_DigestExtraction.sourceBoundary; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; older three-field derived interface, not independent additional trust |
-| `AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage2` | No literal item; AeneasExtraction | **ACCEPTED-ELSEWHERE** | LOG D188; S2W_DigestExtraction.sourceBoundary; D188 2026-10-23 16:40; native Vec/Box ruling 2026-10-26; older three-field derived interface, not independent additional trust |
-| `AspisR1.S2W_ExtractionBoundary.P1.realization` | No literal item; P1 | **ACCEPTED-ELSEWHERE** | existing P1; C3-BIN 2026-10-23 11:05/18:05; ideal-oracle realization, not a proof that SHA is random |
-| `AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue` | RuntimeSyscall (§3, 2026-10-26) | **NAMED-IN-CONTRACT** | existing P3; C3-BIN 2026-10-23 11:05/18:05; successful hash return only; no termination/totality premise |
-| `AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice` | No literal item; TrustedStd | **ACCEPTED-ELSEWHERE** | LOG D157; C3-BIN 2026-10-23 18:05; slice copy only; W1 total abstract-domain versus valid native references remains |
-| `AspisR1.S2X.CheckpointVersionBinding.events` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-| `AspisR1.S2X.CheckpointVersionBinding.key` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-| `AspisR1.S2X.CheckpointVersionBinding.ledger` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-| `AspisR1.S2X.CheckpointVersionBinding.loadedAtEntry` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-| `AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-| `AspisR1.S2X.CheckpointVersionBinding.savedAtCommit` | No literal item; historical checkpoint interface | **ACCEPTED-ELSEWHERE†** | TRUST-AUDIT 2026-10-26 historical-interface row; C3-BIN 2026-10-23 11:05/18:05; owner amendment 2026-10-26 supersedes independent history trust; not a new adopted top-level trust item; replaced by data persistence + game + source proofs |
-
-### Definition-level and external surfaces
-
-These supplement, rather than duplicate, the 44 projection rows.
-
-| Surface | Currently named contract item | Status | Authority and exact scope |
-|---|---|---|---|
-| `AspisR1.CPR_DataPersistence.TwoTransactionLaw` (definition) | RuntimePersistence | **NAMED-IN-CONTRACT** | Owner amendment 2026-10-26 §3; adjacent ordinary-key data-only law; zero lamports absent. The older `CPR_Persistence.TwoTransactionLaw` full-image candidate is not adopted. |
-| P6 / Kani shipped-to-owned-reference association, L190 | None literally named | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-23 02:40; LOG D188 2026-10-23 16:40; C3-BIN 2026-10-25 late §4 and 2026-10-26 native Vec/Box (b). Exact Result, effects and contents correspondence must actually be certified; no free Lean P6 trust field. |
-| P7 compiler/LLVM/platform and release-pinned library base, L189 | None literally named | **ACCEPTED-ELSEWHERE** | C3-BIN 2026-10-25 late §4 and 2026-10-26 coherent-replay scope ruling; LOG D188 separates source extraction from deployed binary association. Applies to exact selected pins, not arbitrary compiler/source changes. |
-| frozen3 security/oracle model, L194 | frozen3 headline and failure/work contract | **NAMED-IN-CONTRACT** | Owner amendment 2026-10-26 §1; same target and charged collision branch. No additional cryptographic assumption inferred from this inventory. P1 is separately indexed above. |
-| Game a–d; wrapper success antecedents | Two-transaction game §2 | **NAMED-IN-CONTRACT** (G, not external trust) | Owner amendment 2026-10-26 §2; TRUST-AUDIT G classification. Eleven expanded game clauses plus two success antecedents; no silent restriction on adaptive submissions. |
-| `propext`, `Classical.choice`, `Quot.sound` | No literal axiom list | **ACCEPTED-ELSEWHERE** | Job rules r1p-common §3 / local-lean §4, reaffirmed for this job 2026-10-27; TRUST-AUDIT 2026-10-26 and L8a clean audit 2026-10-27. Exactly the reachable axiom set for both tops; not operational assumptions. |
-| Each of 105 nonstandard imported axiom declarations | None; not approved security premises | **UNRECORDED** (F-AXIOM) | One exact row per declaration in [CIa_UnrecordedAxioms.tsv](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/contract-inventory1-20261027/CIa_UnrecordedAxioms.tsv), linked to L8a's exact classification. All unreachable from both top kernel traversals; 84 formatter and 21 other infrastructure/Aeneas names. Import-wide standard-only still fails. |
-| Each of 8,565 pinned library implementation surfaces | P7 / D188 base, not literal contract list | **ACCEPTED-ELSEWHERE** (pinned implementation base only) | C3-BIN 2026-10-25 late §4; 2026-10-26 replay-scope ruling. Exact names and per-root reachability are in L8a_SurfaceClassification.json. `opaque`/`partial`/`extern`/`implemented_by` flags do not themselves add a logical axiom; no blanket acceptance of external templates. |
-| Each of 551 repository implementation surfaces | No independent trust item | **UNRECORDED** as independent trust; no adoption proposed | All unreachable in both tops, per the exact 551 rows of L8a_SurfaceClassification.json. Logical values are kernel checked. A compiler-generated unsafe implementation is not its logical definition; no trust finding about a reachable theorem is manufactured from this flag. |
-| Unsafe MaybeUninit/uninit/raw-write source association; child joins, source-event traces, slot installations | None as trust | **UNRECORDED** as trust; retained proof obligations | C3-BIN 2026-10-25 late §4 and 2026-10-26 native Vec/Box (b) explicitly require proof. `ClaimsUnrolledFinish.StdCalls`, `NP6_StdModel.Reservation` and `MultiproofConeP6Frozen2Stage.P6Boundary` are not certificates of unsafe native equivalence. |
-
-The complete declaration table is incorporated by exact name from the linked
-L8a classification, not replaced by a new assumption per flag. Its disjoint
-counts are 8,565 + 551 + 105 + 3 = 9,224. All 105 unrecorded axioms are
-individually retained in the companion TSV so none disappear into P7/D188.
-The 551 unreachable repository implementation flags are not 551 extra T rows.
-This distinction preserves both the kernel dependency pass and the unresolved
-strict import-wide finding.
-
-### Proposed contract paragraphs
-
-Each paragraph below is proposed text for recording an already authorized scope.
-The D188 paragraph is chosen separately in the next section. None takes effect
-through this draft. Exact kernel quantifiers in L8a_008 remain authoritative.
-
-**S2TrustedSdkBorrow.** We trust the documented data-borrow semantics of the
-pinned `solana-account-info` 2.3.0 and production lock, together with its Rust
-RefCell/Ref/RefMut guard interpretation, exactly as the fifteen fields of
-`AspisR1.S2Trust.S2TrustedSdkBorrow`. The relation associates actual typed account
-cells, payloads and counters with valid abstract heaps and preserves reply and
-next heap under the fields' enabledness, lifetime and counter guards; it includes
-guard acquire, move, dereference and drop, error move/drop, framing and liveness.
-Authority is C3-BIN 2026-10-23 01:20 (D177), LOG D189 2026-10-23 17:35, and the
-fresh L8a_008 field prints. This trust supplies no caller success, output bytes,
-log, child join or complete execution refinement. Ref clone/map_split/leak,
-realloc, Rc clone/free, lamport borrows, CPI, reentrancy and concurrency are outside
-this item.
-
-**TrustedStd — slice copy, with W1.** We trust the pinned Rust standard-library
-`slice::copy_from_slice` semantics for valid exclusive/shared borrowed references:
-equal lengths copy the source contents into only the destination payload;
-unequal lengths panic. The exact abstract hypothesis is
-`AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice`, whose specification
-quantifies all abstract states and payloads. LOG D157 2026-10-22 08:35 and C3-BIN
-2026-10-23 18:05 authorize the native valid-reference interpretation; L8a_008 and
-TRUST-AUDIT W1 document the width mismatch. **W1 remains a qualification:** the
-total abstract extension does not assert native semantics for invalid references;
-every actual use must have justified validity/admission, or a restricted interface
-must be proved. This paragraph neither discharges nor widens that association.
-
-**TrustedStd — pure Option/Result.** We trust the pinned standard-library
-interpretations of `Option::ok_or` and the selected 32-byte Result unwrap operation,
-exactly `AspisR1.Port1_Library.TrustedStd.option_ok_or` and `result_unwrap32`,
-including their specified failure cases. Evidence is LOG D157 2026-10-22 08:35,
-C3-BIN 2026-10-23 18:05 and 2026-10-25 late trust separation, and TAu_030/L8a_008
-prints. These pure value laws do not imply native frame, ownership, allocation,
-unsafe-memory or whole-body effects correspondence, and do not import prover
-collection, entropy or I/O trust into the soundness theorem.
-
-**P1 ideal-oracle realization.** We retain the existing P1 boundary for the
-selected fixed native digest and the model oracle, exactly
-`AspisR1.S2W_ExtractionBoundary.P1.realization`:
-`∀ bytes, sha256 bytes = H bytes`. This is an explicit ideal-oracle interpretation
-condition at that supplied world, not a proof that native SHA-256 is random or
-that one fixed function equals every sampled oracle. Evidence is C3-BIN
-2026-10-23 11:05/18:05 and L8a_008's fresh definition. Query-restricted cylinder
-coverage in the ARX candidate is a separate theorem and does not weaken or remove
-this retained global field. This paragraph introduces no all-world native hash
-identity and no new cryptographic assumption.
-
-**P6/Kani association.** We trust the pinned Kani/CBMC tool route as evidence for
-an explicitly checked association between the exact shipped unsafe/non-extracted
-body and its owned safe reference, preserving Result at the required success
-boundary, ordered effects and buffer contents on the certified domains. We then
-use Aeneas extraction of that reference. Authority is C3-BIN 2026-10-23 02:40,
-LOG D188 2026-10-23 16:40, C3-BIN 2026-10-25 late §4 and 2026-10-26 native Vec/Box
-(b); the actual certificates and their pins must support each use. This accepts
-the tool boundary, not an unchecked association or an enlarged domain. Unsafe
-MaybeUninit/uninit/raw writes remain proof obligations. The returned mathematical
-`MultiproofConeP6Frozen2Stage.P6Boundary` is not evidence that a whole deployed
-batch was checked, and no new Lean P6 axiom is asserted.
-
-**P7 compiler and pinned implementation base.** We trust the selected compiler,
-LLVM/platform tools and ABI, and the release-pinned Lean/Mathlib/Aeneas library
-base, for the exact source/features/toolchain and artifact selection recorded by
-the release receipts, including the three H5 ELF pins listed below. Authority is
-C3-BIN 2026-10-25 late §4, the 2026-10-26 replay-scope ruling, and LOG D188
-2026-10-23 16:40; RPz8/L8a_HostPins identify the selected proof objects and the
-S10 re-pin3 evidence identifies the binary pins. Library cache reuse is not a
-fresh library replay. Tool trust does not itself prove a concrete source-to-ELF
-association; source hashes alone do not prove semantic lowering. This item does
-not approve arbitrary extern templates, nonstandard imported axioms, unsafe
-source refinements or changed source/features/toolchains.
-
-**Standard logical axioms.** The permitted logical base is exactly a subset of
-`propext`, `Classical.choice`, and `Quot.sound` for each new top theorem and for
-the audited roots. This follows the job's r1p-common §3 and local-lean §4 rules,
-reaffirmed 2026-10-27; L8a_006 prints exactly those three for both fresh roots and
-L8a_007 independently walks their kernel dependencies. This permission does not
-accept the 105 unreachable nonstandard imported axiom declarations: they remain
-UNRECORDED under the strict import-wide audit and need separate resolution or an
-explicitly scoped audit decision. No such decision is made by this appendix.
-
-**Historical checkpoint interfaces — no additional trust.** The seven indexed
-`S2X.CheckpointVersionBinding` and
-`S2W_AuthenticatedInputs.CheckpointVersionBinding.history` fields retain their
-historical conditional meanings (physical key, ledger, events, saved/loaded
-association and no intervening write), as recorded by C3-BIN 2026-10-23 11:05/18:05
-and TRUST-AUDIT 2026-10-26. They are not independent free trust arguments of the
-fresh tops. Today's required history must be derived from the approved game,
-data-only RuntimePersistence and source proofs; their presence in an imported
-or reachable interface neither authorizes assuming that deployment instance nor
-adds a full-account persistence item. The 2026-10-26 owner amendment controls.
-
-For the three **already named** runtime items, the exact scopes remain:
-RuntimeEntrypointAdmission supplies only the initial valid typed/abstract relation,
-fresh tracked guards, zero counters/external borrows, live accounts and key/cell
-alias consistency for the two entries; RuntimeSyscall constrains successful
-returning digests (`hashv parts = ok digest → decodeState digest = sha256 (flatten parts)`),
-without totality/termination; Allocator supplies private-state `allocate/cleanup`
-operations without a proposition guaranteeing success or account mutation rights.
-C3-BIN 2026-10-23 02:40/11:05/18:05 and LOG D189 fix these scopes. RuntimePersistence
-is exactly the owner-approved data-only `CPR_DataPersistence.TwoTransactionLaw`.
-The older [runtime proposal](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/design/RUNTIME-PERSISTENCE-ITEM-20261026.md) contains
-pre-adoption “no trust item adopted” text; the later binding owner amendment
-supersedes that status, not its narrow law or its source-association caveats.
-
-### D188 alternatives — separate owner decision
-
-These are alternative replacement paragraphs, not cumulative permissions.
-The left preserves the current Result-level reading; the right is the requested
-trace-level clarification/extension in [L166-DECISION](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/docs/research/100bit-spend-path-20261013/design/L166-DECISION-20261027.md).
-Owner approval of the inventory alone does **not** select the right column.
-
-| Result fidelity — current reading | Trace fidelity — proposed reading, not adopted |
-|---|---|
-| **AeneasExtraction (D188).** We trust the pinned Charon/Aeneas translation as the source semantics of the particular extracted Rust bodies and their recorded source/producer pins. At the owned-adapter interface this is exactly `S2W_DigestExtraction.AeneasExtraction.stage1`, `stage2` and `digestSource`, the latter deriving the older digest equality through `sourceBoundary`; it is not six independent extraction assumptions. These are Result-valued equalities, and alone assert no native attempted-call trace. Safe Vec/Box operations occurring in that extracted code use the pinned Aeneas standard-library model. Authority is LOG D188 2026-10-23 16:40, C3-BIN 2026-10-23 18:05 and the 2026-10-26 native Vec/Box (a) ruling, with L8a_008 exact prints. The known rejected batch error-to-panic discrepancy is retained: accepted results/effects must agree, while rejected prefixes must both reject and count earlier reads; identical rejection error kinds are not claimed. Non-extracted wrappers and unsafe construction require the P6 route, child/source trace joins remain proof obligations, and binary correspondence is separate P7/S10 work. The D188-P2 caveat below applies. | **AeneasExtraction (D188, trace reading).** We trust the pinned Charon/Aeneas translation of each specifically associated shipped Rust body to preserve both the accepted Result and the chronological attempted digest-call sequence of its monadic extracted execution, including duplicates and every issued call before rejection; rejected prefixes must both reject, with differing non-Ok error kinds allowed as already recorded. This trace guarantee applies to the SAME body, inputs, digest replies and source/producer pins, not an arbitrary recorder or caller. `S2W_DigestExtraction.AeneasExtraction.stage1`, `stage2` and `digestSource` retain their existing kernel types; Result equality alone is not the proof of this added operational guarantee. Safe extracted Vec/Box remains under the existing Aeneas library model. LOG D188 2026-10-23 16:40 and C3-BIN's 2026-10-26 native Vec/Box and rejected-path rulings support the existing portion; the attempted-trace scope is the separate owner decision requested by L166-DECISION 2026-10-27, not prior acceptance evidence. Non-extracted wrappers, unsafe construction and actual trace association/projection consumers still need proof; no new Lean axiom, compiler equivalence or arbitrary opaque-body semantics is licensed. The D188-P2 caveat below applies. |
-
-The rejected-path qualification comes from C3-BIN's “L166 finding and ruling;
-D188 fidelity note” (2026-10-26 evening): Rust `Err(Parse)` versus extracted
-`fail panic` after 10 of 12 leaf hashes. It prevents a misleading unconditional
-claim of identical Result constructors on every rejection. The printed adapter
-hypotheses are still exactly the existing Result-valued equalities, not silently
-rewritten to weaker statements in this document.
-
-On the left, L166 remains a Result/ordered-effects and rejected-prefix trace
-association obligation; output equality does not recover an attempted-call
-sequence. On the right, the scope of trusted source translation changes and
-L166 must still be proved from the extracted trace and connected to the concrete
-consumer. No theorem or ledger row closes by approving words. Both readings keep
-P1 separate, preserve the issued-query cost (adaptive choices and rejecting
-prefixes included), and neither repairs a producer from the wrong source path.
-
-### D188-P2 contract caveat
-
-**Proposed contract caveat (applies to either D188 reading).** The selected
-PublicPreparation / ExtractedTx1Model / S1 semantic-prefix cohort represents the
-retired `verifier.tx1` path at five preparation interfaces whose association with
-frozen release compiler input `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387` is not
-established: (1) `dot_type`, historical Dot sums plus count versus release sums;
-(2) `prepared_claim`, scalar gamma versus a 29-element powers array;
-(3) `query_geometry`, release `line_z` cache;
-(4) `tx1`, retired k≤22 eight-way dispatch versus release `candidate.tx1` at
-k=SPLIT with compact parsing, expansion, batched multiproofs/deferred weights
-and compact checkpoint bytes; (5) retired `tx1_finish`, with no release
-counterpart. The theorems remain valid about their selected model, but deployed
-attribution across this semantic-prefix/preparation/query/finish boundary is
-qualified until explicit association rows close against the SAME release
-source and carriers. Rebuilding a historical extraction byte-identically,
-compiling its adapted union, or accepting trace fidelity does not discharge
-those rows. This qualification is not an attack claim and does not invalidate
-the separately modelled compact/batched Op5T, multiproof, checkpoint-binding
-or finish subresults within their proved domains.
-
-Evidence and current route are [D188-PROVENANCE-FINDING, 2026-10-27](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/docs/research/100bit-spend-path-20261013/design/D188-PROVENANCE-FINDING-20261027.md),
-including its XRc_/XRd_ update, and
-[L8a producer provenance](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_ProducerProvenance.md).
-The selected fresh Types/Funs source hashes are respectively
-`b45ee7357278642101b81933252e81f5068c937487acfdebb4f82f991c91bb83` and
-`544b75b962ade326ff1069b6986805a175cc90db1c592b1c524dffcd94693d2d`;
-these are adapted producer sources, not raw release extraction or historical
-object hashes. L8a initially found eight differing source cuts; D188-P2 refines
-them: verifier_error is identical under release cfg, verify_observed is opaque
-in both, and the five genuine interface differences above remain the caveat.
-The earlier differing `prepared_new` source cut is not an added sixth interface
-finding in the lead's refined list.
-
-Reproduction recovered the historical tools, but the pinned translator fails on
-six exposed release functions: `compact::check_values`, `verifier::echeck`,
-`compact::expand_values`, `candidate::wide_view`, `checkpoint`, and
-`prepared_claim`. The lead's route C′ extracts the remaining release path with
-those six opaque leaves, handles those leaves via owned reference + Kani + Lean
-correspondence, then proves the association rows. Tool trust alone supplies
-neither the leaf proofs nor the cross-path associations. A translator change
-and repin (route A) would need separate approval; it is not adopted here.
-
-### Owner summary and unchanged result
-
-Approval of the reconciliation paragraphs would put the already relied-on
-SDK, std, extraction, oracle, P6/P7 and logical-base scopes into one explicit
-contract inventory beside the named runtime items. It would record existing
-trust and its qualifications, not adopt a new theorem or remove a premise.
-The historical-interface paragraph prevents accidental re-adoption of stronger
-checkpoint trust. W1, the 105 UNRECORDED import-only axioms, and D188-P2 remain
-visible qualifications/findings; the appendix does not waive them.
-
-There are three separable owner decisions: (1) record the existing inventory
-with its caveats; (2) select either Result or proposed trace fidelity for D188;
-(3) separately consider the [ARX statement amendment](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/design/SECURITY-CONTRACT-ARX-AMENDMENT-DRAFT-20261027.md).
-Approving (1) does not imply (2) or (3). Trace fidelity would change the stated
-operational trust scope even though it adds no kernel axiom. ARX adoption would
-change the admitted-game statement; neither is an inventory correction by itself.
-
-Before and after this job, the exact statements are unchanged:
-`AspisR1.Rc10_Top.deployed` and candidate `AspisR1.ARX_Root.deployed`.
-Their full kernel statements are retained in
-[L8a_Rc10_Top.kernel.txt](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_Rc10_Top.kernel.txt)
-and [L8a_ARX_Root.kernel.txt](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/l188-audit1-20261027/L8a_ARX_Root.kernel.txt).
-Using the ledger method (atomic conjunctive leaves and quantified law families;
-shared witnesses/guards preserved; aliases not double-counted), the actual Rc10
-baseline remains **83T/12P/13G/0C**, deployment-inclusive **89T/16P/13G/0C**.
-Removed 0, added 0, reclassified 0. Candidate ARX's proposed 83T/11P/13G/0C and
-89T/14P/13G/0C are not adopted totals or credit for this document.
-L159/L185 and L181 are not removed by this job; L166 is not closed by either
-wording draft. F-CONTRACT is prepared for owner review, not marked resolved;
-L188 is not marked closed.
-
-No non-vacuity theorem or joint real-byte accepted pair is constructed here.
-The candidate's `ARX_Nonvacuity.conditional` still requires a complete SAME
-installed accepted real-byte native pair and consistent cylinder; the checked
-`JFp_SeededFixture.inhabited`, `JFp_Query00Source.source`,
-`JFo_QueryFixture.inhabited`, `JFo_TX2.reader_on_saved` and
-`JFo_ResumeNative.source` are partial fixture predecessors, not a complete
-accepted-pair theorem. Their SAME installed extraction/runtime/game composition
-is still required. The exact conditional scope remains that of the ARX amendment
-and [ARX root comparison](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/account-rejoin9-20261026/ARX_ROOT_COMPARISON.md#conditional-non-vacuity-and-precise-fixture-waits).
-Unchanged definitions introduce no new restriction that could supply missing
-non-vacuity evidence.
-
-Frozen artifacts are inherited pins, **not freshly rebuilt**:
-
-- default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
-- devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`
-- Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
-
-Validation is offline field/declaration/receipt/link reconciliation only;
-**0/5 Lean attempts, 0 Kani**, no scope or build launched. No new theorem needs
-an axioms print; L8a_006/007/008 prints and exact pins are reused as evidence.
-No contract, ledger, Lean module, shipped file, session A candidate/worktree,
-wallet or key was changed. [CIa validation and receipt](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/evidence/contract-inventory1-20261027)
-record source hashes and checks. Commits are local; no push or merge.
-The next deliverable is the owner's explicit inventory/D188/ARX decision and
-the remaining association proofs, not a release-completion claim.
-
-### Status note (lead, 2026-10-27 15:30 UTC): D188 contradicted for one body
-
-Finding D188-P3 (docs/research/100bit-spend-path-20261013/design/
-D188-PROVENANCE-FINDING-20261027.md) shows the pinned emission of
-`sampler::low_base_p_digits` drops a write the frozen Rust performs. The D188
-row does not credit that body. Credit for multiproof::verify_in_place,
-verifier::update_residue_row, sampler::add_small_base_p and
-BatchedWeights::finish is suspended pending per-function checks. Repair route:
-owner decision, D188-FIDELITY-DECISION-20261027.md (recommended: narrow D188
-and bridge those bodies natively as opaque leaves). The inventory text above is
-otherwise unchanged.
-
-### Owner-approved clarification, 2026-10-28 (amendment fifth): native contract semantic transport
-
-Clarifies the existing P6 (Kani) and D188/AeneasExtraction (Charon/Aeneas) tool trust; it is not a new kind of trust. Text: "Native contract semantic transport (result projection). For only the frozen owned TX1 stage1, owned TX2 stage2 and SolanaDigest wrapper bodies, reference bodies, operation dictionaries, features, input/outcome encodings and tool versions enumerated by the accepted receipts, we trust that the Rust execution interpreted by Kani/CBMC and the reference execution interpreted by pinned Charon/Aeneas denote the same Rust language/primitive semantics under the certified common external world. We trust the explicitly recorded association of those Rust entries with the Lean function parameters native1/native2, of the digest wrapper with installed ops.op43, and of the external digest with hashv." Source: evidence/native-topspec-20261028/NCQ_TOPSPEC.md. Uses are reported as reclassification of the `extraction` premise, never as removal. FixturePdaRuntime (evidence/joint-pda-20261028/JHs_TRUST_PROPOSAL.md) is DEFERRED and not adopted.
-
-### Lead decision under the standing delegation, 2026-10-28 late: FixturePdaRuntime ADOPTED (non-vacuity only)
-
-Text as in evidence/joint-pda-20261028/JHs_TRUST_PROPOSAL.md: for the seven enumerated fixture PDA invocations, sol_create_program_address agrees with the guarded JHs_PDA.derive model (the SHA value comes from the existing runtime SHA row, and the curve check is the pinned curve25519-dalek 4.1.3 decompression). Scope: the concrete joint non-vacuity witness (JHw_Joint.source) ONLY. It is never used by the soundness theorem, which quantifies op38 under ruling (s). Kind: a runtime-behaviour row of the same kind as the existing RuntimeSyscall/SHA row. The seven off-curve facts are PROVED (JHt_OffCurve) and the seven digest equations are PROVED (JHs_), so the row covers only the syscall-equals-documented-algorithm correspondence.
-
-### Lead additions under the standing delegation, 2026-11-04: two runtime rows ADDED, pending owner confirmation
-
-Both rows were ADDED by the lead (C3-BIN rulings (ab) and (ac)), reported to the owner as additions, never as removals or reclassifications. The owner may reject either; the dependent slice S root then returns to OPEN. Neither is consumed by privacy (Stream B D598 for (ab)).
-
-| Surface | Currently named contract item | Status | Authority and exact scope |
-|---|---|---|---|
-| set_return_data / get_return_data semantics (emit_result; Pool readback) | RuntimeReturnData (ruling (ab), 2026-11-04) | **ACCEPTED (owner 2026-11-04)** | C3-BIN 'Lead rulings (aa) and (ab), 2026-11-04'. A set_return_data(b) by program P followed by the caller's get_return_data() in the same instruction context with no intervening CPI returns Some((P, b)) exactly, b within the runtime maximum. Native side must prove exact bytes at the model trace position and no later set; Pool side must prove immediate readback and program-id check separately. One CLOSED native use: emit_result (NFD_, merged f2a33ab0963). Scope clarified by ruling (ab'), 2026-11-04: nonempty replies only (1 <= len(b) <= 1024; SDK getter returns None at length 0); Pool consumer is pair_forest_dispatch.rs (792 bytes); Pool-side association OPEN (NFO_). |
-| sol_memcmp_ syscall at the scan_proof_buffer 688-byte compare (wrapper 0x1749d0 in both release ELFs) | RuntimeMemcmp (ruling (ac), 2026-11-04) | **ACCEPTED (owner 2026-11-04)** | C3-BIN 'Lead ruling (ac), 2026-11-04'; NFH_COMPARISON_FINDING.md. For the SAME two valid readable 688-byte ranges, normal return into the supplied i32 slot, zero iff all 688 bytes equal, no other observable effect; no ordering, sign or timing property. Native certificate must prove exact SAME buffers and length 688 passed and only the slot tested for zero; Lean uses the 688-only completion, never NFD_'s universal law verbatim. No CLOSED use yet (NFJ_ running). Trust-reduction route: outside-slice packet on the pinned validator implementation; not commissioned. |
-
-#### RuntimeClockSlotBinding (ADDED-LEAD-20261105, under the owner decision of 2026-11-04 on Solana runtime assumptions)
-
-Statement: for the same instruction execution context, `clockGet ctx = ok v -> v = bankSlot ctx` (the Clock sysvar's slot, when the call succeeds, is the bank slot of the executing transaction). Says nothing about success of the call, slot monotonicity, epochs or account retention. Consumer: programs/r1-cost-probe/src/r1_pool_adapter.rs:910 (Clock::get()?.slot) and every forwarded current_slot. Source: evidence/exp-premises-20261105/NGP_CANDIDATE_ROWS.md (NGP-R1). Removal condition: a proved realization of the pinned Clock sysvar implementation. Ruling (aj).
-
-#### ReviewedTranscription-prepared_claim (ruling (ah), ADDED-LEAD-20261106; reclassification, option A)
-
-Row TX1:193 crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim is CLOSED under ruling (ah) because Aeneas rejects its loop (Not_found at loop join). Trusted beyond the emitted-body route: the hand transcription of the prefix-owned reference f_ref into Lean (evidence/prepared-claim2-20261105/NGY_TRANSCRIPTION.md, line-by-line correspondence), with the frozen function proved equal to f_ref by Kani proof_for_contract with the Dot child as a logging oracle and a corruption control (NGY_ASSOCIATION.md, NGY_STUBS.md). Removal condition: an emitted body for prepared_claim from the pinned extractor (or an approved successor) proved equal to the transcription.
-
-#### ReviewedTranscription-queries_from_pairs (ruling (ah), ADDED-LEAD-20261106; reclassification, option A)
-
-Row TX1:168 crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::queries is CLOSED under ruling (ah) because Aeneas rejects the loop of aspis-core r0_transcript::queries_from_pairs (Not_found at loop join; evidence/aeneas-loops-20261105). Trusted beyond the emitted-body route: the reviewed transcription of the reference (evidence/transcript-queries3-20261106/NHK_TRANSCRIPTION.md, with the NHA_ outlined reference emission and the Query31 interfaces as corroboration), with the frozen function tied to it by per-length membership harnesses, window splits, a native word/block loop association and matched controls (NHK_ASSOCIATION.md, NHK_MEMBERSHIP.md). The event schedule (NGQ_EVENTS.md) matches the model; no ordering assumption is added. Removal condition: an emitted body for queries_from_pairs from the pinned extractor (or an approved successor) proved equal to the transcription.
-
-#### ReviewedTranscription-POOL324 (ruling (ah), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:324 programs/aspis-pool/src/pair_forest.rs::pool_v1_pair_forest_global_root_v1 (frozen body sha256 782c5b73…) is CLOSED as PCG_GlobalLaw.row_324 using source fission. Substitution: seven pool_v1_tree_parent calls -> parent_window(log); harness pair K072/K073. The child call(s) are replaced in the fission copy by a local logging window that receives the same arguments. PCG_ASSOCIATIONS.json mechanically checks that the copy equals the frozen body after whitespace and optional trailing commas, once the listed name substitutions are applied. Kani runs on the fission copy with matched failing controls; it does not run on the frozen function itself. Trusted beyond the emitted-body route: the claim that this textual substitution preserves the frozen body's behaviour. Removal condition: a native certificate on the actual frozen function (for example under the (bi)(3) cut-point pattern once adopted), proved equal to the same reference. Evidence: evidence/pc-helpers2-20261110 (merged research 7143c06d3da), PCG_CERTIFICATES.md, PCG_CORRESPONDENCE.md. Ruling (ah) and Stream C review of PCG_.
-
-#### ReviewedTranscription-POOL345 (ruling (ah), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:345 programs/aspis-pool/src/pair_forest_dispatch.rs::SolanaPairForestVerifierRuntimeV1::get_return_data (frozen body sha256 c11d47ef…) is CLOSED as PCG_ReturnBridge.row_345 using source fission. Substitution: program::get_return_data() -> reply_window(log); the actual function is also run on fixed None/Some replies K066/K068; harness pair K070/K071. The child call(s) are replaced in the fission copy by a local logging window that receives the same arguments. PCG_ASSOCIATIONS.json mechanically checks that the copy equals the frozen body after whitespace and optional trailing commas, once the listed name substitutions are applied. Kani runs on the fission copy with matched failing controls; it does not run on the frozen function itself. Trusted beyond the emitted-body route: the claim that this textual substitution preserves the frozen body's behaviour. Removal condition: a native certificate on the actual frozen function (for example under the (bi)(3) cut-point pattern once adopted), proved equal to the same reference. Evidence: evidence/pc-helpers2-20261110 (merged research 7143c06d3da), PCG_CERTIFICATES.md, PCG_CORRESPONDENCE.md. Ruling (ah) and Stream C review of PCG_.
-
-#### ReviewedTranscription-POOL296 (ruling (ah), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:296 programs/aspis-pool/src/nullifier.rs::pool_v1_pair_forest_marker_seed_v1 (frozen body sha256 7e6d2a27…) is CLOSED as PCG_MarkerSeed.row_296 using source fission. Substitution: solana_program::hash::hashv -> hash_window, pack_pool_v1_pair_forest_marker_seed_v1 -> pack_window (log); hash values via RuntimeSha256Value only; harness pair K095/K096. The child call(s) are replaced in the fission copy by a local logging window that receives the same arguments. PCG_ASSOCIATIONS.json mechanically checks that the copy equals the frozen body after whitespace and optional trailing commas, once the listed name substitutions are applied. Kani runs on the fission copy with matched failing controls; it does not run on the frozen function itself. Trusted beyond the emitted-body route: the claim that this textual substitution preserves the frozen body's behaviour. Removal condition: a native certificate on the actual frozen function (for example under the (bi)(3) cut-point pattern once adopted), proved equal to the same reference. Evidence: evidence/pc-helpers2-20261110 (merged research 7143c06d3da), PCG_CERTIFICATES.md, PCG_CORRESPONDENCE.md. Ruling (ah) and Stream C review of PCG_.
-
-#### ReviewedTranscription-POOL320 (ruling (ah)/(ay)(3), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:320 programs/aspis-pool/src/pair_forest.rs::next_pair_forest_lane_v1 is CLOSED as PCD_Row320.result_state_effects (PCD-RT-POOL320). Aeneas failed on the structured frozen body (E006/E007), which establishes (ay)(2) eligibility. The whole-loop composition is transcribed by hand from three extracted primitives (E002) through a generic loop induction (PCD_LaneBridge.result_state_effects). Native source-ordered segments with matched failing controls are K021/K022, K025/K026, K039/K040, K041/K042 and K027/K028. Trusted beyond the emitted-body route: the hand composition of the loop into the frozen body's order. Removal condition: an emitted body for next_pair_forest_lane_v1 from the pinned extractor (or an approved successor) proved equal to the composition. Evidence: evidence/pc-terminal-children1-20261110 (PCD_CLOSED.json, PCD_SOURCE_COVERAGE.json, PCD_CORRESPONDENCE.md).
-
-#### ReviewedTranscription-POOL223 (ruling (ah)/(ay)(3), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:223 crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::PoolV1PairLeafWitnessV1::validate is CLOSED as PCI_ValidatePacket.full. The native evidence runs on a mechanically diffed fission of the frozen body (fission sha256 3229f4b5...): each field multiplication is replaced by a logging window, and the any-loop over second_commitment is cut to its prefix plus one arbitrary iteration. PCI_validate_associate.py checks the fission against the frozen body after named erasure and rejects error-constructor and product-operand mutants. Native windows K021/K024/K026/K028 pass; their controls K022/K023/K025/K027/K029/K030 fail. No multiplication stub is admitted. Lean bridges each emitted multiply (PCI_Mul.value), derives each reached operand domain from the same witness, and proves the loop by induction (PCI_ValidateScan). Trusted beyond the emitted-body route: that the fission's windows are the frozen body's calls in order. Removal condition: an emitted body for validate from the pinned extractor (or an approved successor) proved equal to the composition. Evidence: evidence/pc-deposit-children2-20261110 (PCI_ASSOCIATIONS.json, PCI_CORRESPONDENCE.md, PCI_CLOSED.json).
-
-#### ReviewedTranscription-POOL332 (ruling (ah)/(ay)(3), ADDED-LEAD-20261110, Stream C; reclassification, option A)
-
-Row POOL:332 programs/aspis-pool/src/pair_forest.rs::require_exact_account_count is CLOSED as PCI_CountState.complete. The native evidence runs on a fission (sha256 37d5da9e...) whose only change replaces accounts.len() with a usize parameter; the body reads no account. PCI_associate.py checks the whole frozen body after whitespace and rejects comparison and error-arm mutants. K006/K008/K010 pass over the full usize pair domain; K007/K009/K011 fail. The relation accountCount = accounts.length is the representation of the same own slice under Stream C ruling (c-c), not a child result. Trusted beyond the emitted-body route: the single len substitution. Removal condition: a native harness on the unmodified body over all slice lengths, or an emitted body proved equal. Evidence: evidence/pc-deposit-children2-20261110 (PCI_ASSOCIATIONS.json, PCI_CORRESPONDENCE.md, PCI_CLOSED.json).
-
-#### RuntimeReturnDataClear (ADDED-LEAD-20261106, under the owner decision of 2026-11-04 on Solana runtime assumptions)
-
-Statement: within one instruction execution, a successful `set_return_data` call with an empty slice leaves the return-data register such that a subsequent `get_return_data` observes no return data until a later `set_return_data`; nothing is assumed about other programs, failure of the call, or persistence across instructions. Consumer: programs/r1-cost-probe/src/r1_pool_adapter_owned.rs stage2's empty return-data clear before the verifier result is emitted. Companion of RuntimeReturnData (nonempty 1..1024), which it does not extend. Source: evidence/slice-d-entry2-20261106 (NHD_) and slice-d-entry3-20261106 (NHJ_REMAINING.md, stage2 row). Removal condition: a proved realization of the pinned runtime's return-data register. Ruling (am).
-
-#### RuntimeCpiAccountView (ADDED-LEAD-20261110, Stream C, under the owner decision of 2026-11-04 on Solana runtime assumptions)
-
-Statement: for one invoke/invoke_signed by the Pool that RETURNS to the Pool, with instruction account metas M: (1) every admitted account whose key is not in M has the same data bytes (including length), lamports and owner in the caller's view after the return as immediately before the call; (2) for every key in M that is also in the passed AccountInfo list, the caller's view after the return of its data bytes, lamports and owner equals the callee's final value for that key, and nothing else is said about that value. Not covered: token- or system-program semantics, success of any CPI, what a callee does to the accounts it receives, readonly-on-entry (RuntimeCpiReadonlyEntry7 stays PENDING and unused), rent, rollback, stack height, key/flag/handle/Rc stability, RefCell borrow-counter preservation, return data (RuntimeReturnData). Key exclusion becomes cell exclusion only through RuntimeEntrypointAdmission-Pool plus the source's require_unique_accounts at the same accounts; the native bridge must prove the exact M and passed infos. Consumers: Pool CPI sites in POOL:328 (deposit token transfer, system creation) and POOL:330/POOL:348 (terminal verifier and withdrawal CPIs). Basis: Agave cpi.rs caller/callee account update. Soundness-side only; not in the privacy trust list. No CLOSED use yet. Removal condition: a proved realization of the deployed runtime's CPI account update. Ruling: C3-BIN 'Stream C ruling (c-a), 2026-11-10'.
-
-#### ReviewedTranscription-TX1:344 (ruling (bn), ADDED-LEAD-20261107; reclassification, option A)
-
-Row TX1:344 programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1 (frozen revision 4bb3b3f51e16) is to be certified by source fission: a prefix-owned copy in which snapshot (try_borrow_data and data.to_vec), stage1_owned, try_borrow_mut_data and copy_from_slice are replaced by calls on an explicit log/window parameter receiving the same arguments, mechanically checked equal to the frozen body after whitespace normalisation and the listed name substitutions. Trusted beyond the emitted-body route: the claim that this textual substitution preserves the frozen body's behaviour. Removal condition: a native certificate on the actual frozen function proved equal to the same fold. Pinned Aeneas cannot emit the frozen body (RefCell guard drop, ruling (be)(2)).
-
-USED (lead, 2026-11-08; ledger29, evidence/ledger29-20261111, NNM_, gate PASS 594/0/5 at branch tip 93207b7791e): row TX1:344 is CLOSED as `AspisR1.NNG_Candidate344.candidate` (NMV objects from NNG_WrapperR4_objects only, RSL rev4 statement), so this item is now consumed by a CLOSED row. The source fission and the mechanical copy equality (NMV_fission.py, NMV_ASSOCIATIONS.json) and the K063/K064 parent-call mutant controls were independently rechecked by the gate (NNM_CANDIDATE_REVIEW.json, NNM_WRAPPER_REVIEW.json). The credit lists this row in `consumes_trust`, with the SDK borrow law, the std item and the extraction item narrowed by (bc). Transitive consumers (ledger30, 2026-11-08): `FIN_333.candidate`/`FIN_221.candidate` (TX1:333/TX2:221) and `FIN_330.candidate`/`FIN_213.candidate` (TX1:330/TX2:213). Statement, class and removal condition unchanged.
-
-#### ReviewedTranscription-TX2:240 (ruling (bn), ADDED-LEAD-20261107; reclassification, option A)
-
-Row TX2:240 programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2 (frozen revision 4bb3b3f51e16) is to be certified by source fission: as for TX1:344, with set_return_data(&[]), the seven snapshots, Clock::get() and stage2_owned replaced by log/window calls receiving the same arguments; the window laws are the SDK borrow law ((be)(2)), the std item ((au)), RuntimeReturnDataClear and RuntimeClockSlotBinding (deployed consumer r1_pool_adapter_owned.rs:479). Trusted beyond the emitted-body route: the claim that this textual substitution preserves the frozen body's behaviour. Removal condition: a native certificate on the actual frozen function proved equal to the same fold.
-
-USED (lead, 2026-11-08; ledger30, evidence/ledger30-20261111, NNN_, gate PASS 599/0/0): row TX2:240 is CLOSED as `FIN_240.candidate` (NMV_ConcreteWindows.root240 at the ledger29-credited `NMX_R9_StageTwo.stage2`), so this item is now consumed by a CLOSED row, and transitively by the TX1:333/TX2:221 (`FIN_333.candidate`/`FIN_221.candidate`) and TX1:330/TX2:213 (`FIN_330.candidate`/`FIN_213.candidate`) instantiations. The fission certificate, mechanical equality and the K063/K064 parent-call, reply-dependence and write-footprint controls were rechecked by the gate (NNN_CANDIDATE_REVIEW.json). The credit's `consumes_trust` lists this row with the SDK borrow law, the std item, RuntimeClockSlotBinding (with the TGB-4 consumer addition below) and RuntimeReturnDataClear. Statement, class and removal condition unchanged.
-
-#### ReviewedTranscription-TX2:217 (ruling (ah), ADDED-LEAD-20261107; reclassification, option A)
-
-Row TX2:217 programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release (frozen 4bb3b3f51e16) is CLOSED in ledger27 under ruling (ah): the pinned Aeneas rejects the frozen body (loop-context collapse), so the model side is the NCV_ safe-Rust reference (evidence/native-decref-20261028), extracted by the pinned tools and proved against RowSpec_217 rev3 for every lane length (NMX_R3_DecoderFold.root); the native side is Kani proof_for_contract of the ACTUAL frozen decoder against that reference, split by length, with loop rule B and the ruling (t)/(br) controls (evidence/tx2-auth-20261111, tx2-217-controls-20261111). Trusted beyond the emitted-body route: the hand reference as the faithful transcription of the decoder's intended behaviour, tied to the actual code only through the Kani contract. Removal condition: an emitted body of the frozen decoder proved equal to the same fold.
-
-Addition to RuntimeClockSlotBinding (lead, 2026-11-08; TGB-4, addition only): the deployed TX2 consumer is programs/r1-cost-probe/src/r1_pool_adapter_owned.rs:479 (owned::stage2, Clock::get()), in addition to the previously listed r1_pool_adapter.rs:910 copy. On the deployed path the Clock sysvar read either returns the slot or returns an Err whose payload construction may allocate; that Err arm is covered by this row as a runtime reply (no new trust class), and an allocation failure there is an abort carrying only its event prefix under (bl)(3). The row's statement is otherwise unchanged.
+# Trust inventory
+
+Every machine-checked proof rests on something it does not prove. For the
+current version I draw the line at the frozen Aspis source: Aspis's own code is
+proved, and everything outside it is trusted through a named assumption with a
+precise statement. This page sets out those assumptions, says where each one
+enters the proof, and gives the condition under which it could be removed. Each
+is stated openly, and the theorems say exactly where it enters. Some I have
+confirmed, some were added by the lead under my standing decision on Solana
+runtime assumptions and await my individual confirmation, and some have no
+recorded removal condition yet.
+
+The first kind of assumption is cryptographic. All the probabilities in the
+soundness theorem are taken over SHA-256 modelled as a random oracle, a
+uniformly random function, as the program invokes it through the runtime's hash
+syscall. A few further assumptions connect the program's actual hash calls to
+that oracle, saying that a hash call that returns gives the SHA-256 of its
+inputs and that the value returned is the oracle's value. The random-oracle
+model itself has no removal condition, since an argument in the standard model
+would be a different theorem.
+
+The second kind concerns the Solana runtime. Following my decision of
+4 November 2026, the runtime is trusted at the specific points where the
+verifier relies on it: that each entry point starts with a valid heap and fresh
+borrow guards, that account data written by a successful transaction is what
+the next transaction on the same lineage loads, and that a handful of syscalls,
+for return data, memory comparison and the clock, behave as documented. Each
+assumption is stated narrowly; the clock assumption, for example, says only
+that a successful clock read reports the current bank slot, and nothing about
+when the read succeeds.
+
+The third kind concerns code and tools outside Aspis: the documented borrowing
+behaviour of the Solana account library and of Rust's `RefCell`, the standard
+library's slice copy, the Charon and Aeneas tools that
+translate Rust into Lean, the Kani model checker used where translation was not
+possible, and the compiler and pinned libraries. The translation is trusted to
+preserve each function's accepted result and the order of its hash calls, with
+narrowings for the patterns where the tools are known to go wrong. Tool trust
+does not by itself connect the source to the deployed binary; that connection,
+and the difference between the checked arithmetic of the translations and the
+wrapping arithmetic of the deployed program, are separate obligations tracked
+in [`OPEN-GATES.md`](OPEN-GATES.md). The logical base is Lean's three standard
+axioms.
+
+The last kind is the reviewed transcription. For some functions the pinned
+tools could not produce a translation, so a reviewed stand-in takes the place
+of the frozen body: either a hand transcription of a reference function, tied
+to the frozen code by Kani, or a copy of the frozen body in which named calls
+are replaced by logging windows and which is checked mechanically to equal the
+frozen body apart from those substitutions. What is trusted is the
+correspondence the stand-in asserts. These are recorded as a reclassification
+of the existing translation and Kani trust, never as a removal of anything.
+
+On 10 November 2026 I ruled that no trust assumption is accepted unless it is a
+standard Solana runtime or Rust library operation. A reviewed transcription of
+Aspis code is therefore not a permanent assumption: each is to be discharged by
+a translation proved equal to it, the statements that use it are conditional
+until then, and functions that no tool can yet translate stand as open
+obligations. Under the same rule the transcription of the public-preparation
+accessor was withdrawn as a trust item (its proofs stay as evidence, and the
+newer tool now translates the function, with its equality pending one lemma
+identifying two library names), the transcription of the compiler-derived clone
+and equality operations stays because those are compiler derives, and the
+deployment-id constant entered the SDK assumption with a receipt comparing it
+byte for byte with the deployed ELF. Whether this treatment also applies to the
+transcriptions accepted on 27 October 2026 is a question I have still to
+settle.
+
+Some things in the theorems look like conditions but are not trust. The query
+budget is a parameter of the statement, the Q of the bound; the two-transaction
+game and the requirement that both transactions succeeded describe the
+experiment; and the allocation streams are universally quantified data. The
+historical checkpoint interfaces from earlier versions are not relied on, since
+the history the theorems need is derived from the game, the persistence
+assumption and source proofs.
+
+This inventory was taken from the `research` branch before it was reconciled
+one to one with the final proof closure on 10 November 2026. The reconciled
+table, which gives a removal condition for every assumption the theorems reach
+and marks those they do not reach, is section 4 of
+[`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), and what remains to be confirmed
+is in [`OPEN-GATES.md`](OPEN-GATES.md). The tables below give the detail, under
+the names the ledger, the status document and the Lean sources use.
+
+## Reference: the oracle model
+
+| Assumption | What it says | Where it is used | Removal condition |
+| --- | --- | --- | --- |
+| Random-oracle model for SHA-256 | SHA-256, as invoked through the runtime's hash syscall, is a uniformly random function H; every probability is over H | Every probability statement in the theorems | None; a standard-model argument would be a different theorem |
+| P1, ideal-oracle realisation | The fixed native digest equals the sampled oracle at the world supplied; an interpretation of the model, and no proof that SHA-256 is random | Instantiated directly with the digest set to H; justifies reading the physical hash replies of a run as values of H | None; inherent to the random-oracle reading |
+| `RuntimeSyscall` | A hash call that returns successfully returns the SHA-256 of the concatenated input slices; nothing about totality or termination | Instantiated by a theorem; justifies the physical reading of every returned hash | A proof that the pinned runtime's hash syscall returns exactly that; not recorded in the inventory at the time |
+| `RuntimeSha256Value` | The value returned by the SDK's hash wrapper realises H; exact request slices and an unchanged reply are separate bridge obligations | Retained value uses in two verified statements | None recorded |
+
+## Reference: the Solana runtime
+
+| Assumption | What it says | Where it is used | Removal condition |
+| --- | --- | --- | --- |
+| `RuntimeEntrypointAdmission` | At each of the two verifier entries the heap is valid, borrow guards are fresh, counters and external borrows are zero, accounts are live, and keys and cells alias consistently | Part of the description of the run | None recorded |
+| `RuntimePersistence` | When the next transaction on the same bank lineage loads an ordinary account, its data bytes are the previous transaction's final bytes if that transaction succeeded, and its starting bytes otherwise; data bytes only, zero lamports meaning absent | Part of the description of the run; supports the checkpoint between the two transactions | None recorded |
+| `Allocator` | An allocate and clean-up interface carrying data only, with no promise of success | Instantiated so that a failed allocation aborts, so a run that returned had no failed allocation; that physical reading falls under the allocator, compiler and ELF realisation below | Not applicable as a free assumption |
+| `RuntimeReturnData` | Setting return data of length 1 to 1,024 and immediately reading it back in the same instruction, with no cross-program call between, returns exactly that data and program | One verified use, where the verifier emits its result; the pool's side of the readback is outside the theorem | None recorded; accepted by me on 4 November 2026 |
+| `RuntimeReturnDataClear` | Setting empty return data leaves nothing observable until a later set, within one instruction | The second stage clears return data before emitting its result | A proof of the pinned runtime's return-data register |
+| `RuntimeMemcmp` | The runtime's memory comparison of the same two valid 688-byte ranges returns normally, gives zero exactly when the bytes are equal, and has no other effect; nothing about ordering, sign or timing | The proof-buffer scan | A trust-reduction study of the pinned validator, recorded but not commissioned; accepted by me on 4 November 2026 |
+| `RuntimeClockSlotBinding` | When reading the clock succeeds, the slot it reports is the bank slot of the executing transaction; nothing about success, monotonicity or epochs. An error reply is covered as a runtime reply, and an allocation failure while building it is an abort | Both clock reads in the source, and every forwarded current slot | A proof of the pinned clock sysvar |
+| `RuntimeCpiAccountView` | After a cross-program call by the pool that returns, accounts not passed to the callee are unchanged and accounts passed show the callee's final values; nothing about token or system programs, success of the call, rent or rollback | The pool's cross-program calls only; relevant only if the pool's execution enters the claim | A proof of the deployed runtime's account update after a cross-program call |
+| `RuntimeEntrypointAdmission-Pool` | The same seven facts as entry-point admission, at the pool's entry point | No verified verifier statement | None recorded |
+| `RuntimeCpiReadonlyEntry7` | Pending | Not relied on | None |
+| `FixturePdaRuntime` | For seven fixed test invocations the runtime's program-address derivation agrees with the model; the off-curve facts and digest equations for those seven are proved, so only the syscall's agreement with its documented algorithm is assumed | The non-vacuity witness only; never used by the soundness theorem | None |
+
+The return-data, clock, account-view and pool-admission assumptions, and the
+fixture derivation assumption, were added by the lead under my delegation, and
+each is for me to confirm individually.
+
+## Reference: the SDK, the standard library and the tools
+
+| Assumption | What it says | Where it is used | Removal condition |
+| --- | --- | --- | --- |
+| `S2TrustedSdkBorrow` | The documented borrowing behaviour of `solana-account-info` 2.3.0 and of Rust's `RefCell`, `Ref` and `RefMut` guards, as fifteen fields covering acquisition, movement, dereference and drop of guards, error handling, framing and liveness. It supplies no caller result or output bytes, and does not cover reference cloning or splitting, reallocation, lamport borrows, cross-program calls, re-entrancy or concurrency | A binder of both theorems | None recorded; the pinned Aeneas cannot yet translate guard drop, so there is no tool route to a proof |
+| `TrustedStd`, slice copy | The pinned `copy_from_slice` on valid borrowed references: equal lengths copy into the destination only, unequal lengths panic. The abstract law is stated over all states, so every actual use must have its validity justified (qualification W1) | A binder of both theorems | None recorded; W1 must be met at each use |
+| `TrustedStd`, Option and Result | The pure meaning of `Option::ok_or` and a 32-byte `Result` unwrap, accepted on 22 October 2026 as separate items | Not reached by the theorems | None recorded |
+| `AeneasExtraction` (D188), trace fidelity | The pinned Charon and Aeneas translation of each associated frozen body preserves the accepted result and the chronological sequence of attempted hash calls, rejected prefixes rejecting on both sides. Bodies that fail the scan for dropped writes or the native differential test get no credit and are bridged natively. The translation is taken as faithful except for explicit returns or `?` in code after a loop that has been merged into the loop's exit, so each body relied on must be free of that pattern or have the affected exits certified natively | Every verified statement whose proof uses a translated body | None for the tool. For the release, every reached translation must be reproduced from an archived input or proved equal to a fresh one |
+| P6, Kani association | The pinned Kani model checker as evidence for checked associations between a frozen body and its reference. Credit only without copy built-ins, or with the recorded element-wise copy stubs and a matched failing negative control; timeouts earn nothing | The native halves of the hybrid statements | None for the tool |
+| `NativeContractSemanticTransport` | For the enumerated frozen stage bodies, the hash wrapper, their references and the recorded tool versions, Kani's and Aeneas's readings of the Rust denote the same semantics, and the recorded association of the Rust entry points and digest wrapper with the corresponding Lean parameters holds. A clarification I approved on 28 October 2026 of existing P6 and D188 trust, with no new kind | 380 verified statements | None recorded |
+| P7, compiler and pinned libraries | The compiler, LLVM, platform tools and ABI, and the release-pinned Lean, Mathlib and Aeneas libraries, for the exact source, features and toolchain recorded | The whole closure | None for the tool; the source-to-ELF association is a separate obligation |
+| `AllocatorABICompilerSourceToELF` | The binding of the proof to the concrete final artefact, including the physical reading of the allocator | The root realisation | Discharged only by the final audit |
+| `CheckedVsWrapping` (R22) | The translations were made with overflow checks on while the deployed program wraps, so the theorems are about the checked semantics; carrying them to the binary needs, on every reached path, that no checked operation fails or that wrapping acceptance implies checked acceptance with the same result | Every verified statement whose proof uses a translated body | Discharged when that audit closes on the final closure, or if I record it as a retained assumption; current state in [`OPEN-GATES.md`](OPEN-GATES.md) |
+| Standard logical axioms | `propext`, `Classical.choice` and `Quot.sound` only, for each top theorem and audited root | The kernel | None. The imported libraries also hold 105 nonstandard axiom declarations; none is reachable from the top theorems or is a premise, but a strict check that every import uses only standard axioms still fails |
+
+## Reference: reviewed transcriptions
+
+| Function | What is trusted | Removal condition |
+| --- | --- | --- |
+| `stage1` in the verifier's pool adapter | That replacing the snapshot, the call into the first stage, the mutable borrow and the slice copy by logging windows preserves the frozen body's behaviour; the pinned Aeneas cannot translate the frozen body because of `RefCell` guard drop | A native certificate on the frozen function, proved equal to the same fold |
+| `stage2` in the verifier's pool adapter | The same, with the return-data clear, the seven snapshots, the clock read and the call into the second stage replaced | The same |
+| `decode_lane_from_pool_release` | That the reviewed safe reference is a faithful transcription of the decoder, tied to the frozen code through a Kani contract checked against it for every lane length | A translation of the frozen decoder proved equal to the same fold |
+| `prepared_claim` | A hand transcription of the reference, with the frozen function proved equal to it by Kani | A translation from the pinned extractor, or an approved successor, proved equal to the transcription |
+| `queries_from_pairs` | A reviewed transcription of the reference, tied to the frozen function by membership harnesses and a native loop association | The same |
+| A polynomial fold | A reverse-fold transcription | Not recorded |
+| The batch tree | A transcription of the reference with native segment contracts at every exit | Not recorded |
+| Five pool functions (global root, return-data read, marker seed, next lane, leaf-witness validation) | Source-fission or hand-composition transcriptions | A native certificate on the frozen function, or a translation proved equal |
+| The pool's account-count check | Only the replacement of the slice length by a parameter | A native harness on the unmodified body over all slice lengths, or a translation proved equal |
+| 36 further verifier-side items, each used by the statement it names | Reviewed transcriptions of references | At the time this inventory was taken, none had its own; the class default is a translation from the pinned extractor, or an approved successor, proved equal to the transcription. The reconciled table now gives one for each |
+
+The pool transcriptions are used by pool statements only and by no verified
+verifier statement. They are listed because the theorems' description of a run
+names the pool's actions, and because they would enter if the pool's execution
+were brought inside the security game.
+
+## Reference: the approved appendix of 27 October 2026
+
+The inventory rests on a trust appendix that I approved on 27 October 2026 and
+incorporated into the security contract. It was written as a proposal
+and is retained verbatim at the source linked below; where its text says "not
+adopted" or "candidate", the contract amendment controls, and for the
+translation tool the trace-fidelity reading was chosen. Its main records and
+qualifications are these.
+
+| Topic | What the appendix records |
+| --- | --- |
+| Field inventory | All 44 fields of the trust structures, one to one: 15 for the SDK, 9 for entry-point admission, 7 for historical checkpoint interfaces, 6 for translation, 3 for the standard library, 2 for the allocator, 1 for the ideal oracle and 1 for the hash syscall. Each is marked as named in the contract, accepted by a cited earlier ruling though not literally named, or unrecorded, in which case no acceptance is inferred and the item stays a finding |
+| Wider surfaces | 8,565 pinned library implementation surfaces covered by the compiler and translation base; 551 repository implementation surfaces, unreachable from the theorems and not extra trust; the 105 nonstandard imported axioms, each kept individually so that none disappears into tool trust |
+| Proof obligations, not trust | Unsafe source code using uninitialised memory or raw writes, child joins and source-event traces |
+| Scope limits | The SDK assumption supplies no caller success, output bytes or complete execution refinement; the standard-library assumption keeps W1; the ideal-oracle realisation adds no identity between native hashing and every sampled oracle and no new cryptographic assumption; the Kani route accepts the tool boundary but neither an unchecked association nor an enlarged domain; the compiler base applies only to the exact pins and does not prove a source-to-ELF association; the three standard axioms are permitted without accepting the 105 nonstandard ones |
+| Rejected paths | On one rejection the Rust returns a parse error where the translation fails with a panic after ten of twelve leaf hashes, so identical error kinds on every rejection are not claimed; accepted results and effects must agree, and rejected prefixes must both reject and count the reads made before rejection |
+| First-transaction preparation (D188-P2) | The selected translated models represent a retired version of the first transaction at five preparation interfaces whose association with the frozen source is not established: the dot-product type (historical sums with a count against the release sums), the prepared claim (a scalar against a 29-element array of powers), the query geometry (the release caches a line coordinate), the first transaction itself (a retired eight-way dispatch against the release's compact, batched path) and a retired finishing step with no release counterpart. The theorems remain valid about their selected model, but attributing them to the deployed code across this boundary is qualified until association proofs close against the same release source. The pinned translator fails on six release functions on this path, and the chosen route extracts the rest with those six as opaque leaves handled through an owned reference, Kani and a Lean correspondence. The status document lists this attribution among the things not claimed unless the final audit shows the five interfaces covered by native bridges |
+| Dropped write (D188-P3) | The pinned translation of one sampler function drops a write the frozen Rust performs, so that body gets no credit; credit for four related bodies was suspended pending per-function checks, the recommended repair being to narrow the translation assumption and bridge those bodies natively |
+| Later additions | My clarification of 28 October 2026 on Kani and Aeneas semantics, the adoption of the fixture address-derivation assumption for the non-vacuity witness only, and the runtime and transcription assumptions added from 4 to 10 November 2026, all included in the tables above |
+
+## Where this comes from
+
+This page is written from the `research` branch at commit `07123926e88`. Its
+reference tables follow section 4 of the status document as it stood there,
+and the last table summarises the approved appendix,
+[`TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md`](https://github.com/DJBarker87/aspisZK/blob/07123926e88273271344977a3fdc26d1780cde14/design/TRUST-INVENTORY-APPENDIX-DRAFT-20261027.md),
+whose full text, field table and evidence links are at that link. The
+reconciled inventory is section 4 of [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md).
