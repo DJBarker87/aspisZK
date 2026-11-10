@@ -14,14 +14,14 @@ runs={}
 for l in (E/'PCQD_ATTEMPTS.jsonl').read_text().splitlines():
     x=json.loads(l)
     if x.get('event')=='result':
-        a=x['attempt'];sp=J(E/(a+'_spec.json'));pn=J(E/(a+'_emitted')/(a+'_PINS.json'))
+        a=x['attempt'];sp=J(E/(a+'_spec.json'));pp=E/(a+'_emitted')/(a+'_PINS.json');pn=J(pp) if pp.exists() else dict(tools={},frozen_revision=None)
         rc=J(E/a/'receipt.json')
         err=None
         if x['exit_status']!=0:
             try:log=lzma.decompress((E/a/'stdout.log.xz').read_bytes()).decode(errors='replace')
             except Exception:log=''
-            m=re.search(r'(Returns inside of nested loops[^\n]*|Markers remain after collapsing[^\n]*|Not_found|Internal error, please file an issue[^"]*?Source: \'[^\']*\', lines [0-9:\-]*|Unreachable[^"]*?Source: \'[^\']*\', lines [0-9:\-]*|Type error after transformations[^\n]*|Mismatched trait clause)',log.replace('\\n','\n'),re.S)
-            err=(m.group(1) if m else ('timeout 180 s (cold cargo build, cgroup peak %s bytes < MemoryHigh)'%rc.get('cgroup_memory_peak_bytes') if x['exit_status']==124 else 'charon/cargo failure exit %s'%x['exit_status']))[:300].replace('\n',' ')
+            m=re.search(r'(Name clash detected[^\n]*|Nested-loop returns require exactly one Option language item|Returns inside of nested loops[^\n]*|Markers remain after collapsing[^\n]*|Not_found|Internal error, please file an issue[^"]*?Source: \'[^\']*\', lines [0-9:\-]*|Unreachable[^"]*?Source: \'[^\']*\', lines [0-9:\-]*|Type error after transformations[^\n]*|Mismatched trait clause)',log.replace('\\n','\n'),re.S)
+            err=(m.group(1) if m else (('timeout 180 s; cgroup peak %s bytes (> MemoryHigh 3 GiB: memory growth / throttle)'%rc.get('cgroup_memory_peak_bytes') if int(rc.get('cgroup_memory_peak_bytes') or 0)>3221225472 else 'timeout 180 s; cgroup peak %s bytes (< MemoryHigh): cold cargo build or slow Aeneas, not memory'%rc.get('cgroup_memory_peak_bytes')) if x['exit_status']==124 else 'charon/cargo failure exit %s'%x['exit_status']))[:300].replace('\n',' ')
         runs[a]=dict(run=a,spec=sp['spec_id'],tool=sp.get('aeneas_tool'),exit=x['exit_status'],wall_seconds=round(rc['wall_seconds'],1),peak_rss_kib=rc['peak_rss_kib'],cgroup_peak_bytes=rc.get('cgroup_memory_peak_bytes'),swaps=rc['swaps'],
           overflow_checks='ON',features=sp['configuration']['features'],roots=sp['configuration']['start_from'],opaque=sp['configuration']['opaque'],include=sp['configuration']['include'],
           rustflags_extra=(sp.get('extra_env') or {}).get('RUSTFLAGS'),frozen_revision=pn.get('frozen_revision'),aeneas_sha256=[v for k,v in pn['tools'].items() if k.startswith('aeneas')],namespace=sp['configuration']['namespace'],error=err)

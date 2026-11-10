@@ -1,0 +1,53 @@
+{
+ "note": "P1g uses the extended Aeneas first (lead decision) and the rebuilt original only after an extended failure of the same spec. Charon and stager as P1e/P1f. Controller is the P1f copy renamed PCQD_ with the Aeneas binary chosen per spec (sha256 asserted before every use).",
+ "aeneas_extended": {
+  "path": "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+  "sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958"
+ },
+ "aeneas_original": {
+  "path": "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+  "build_hash": "b59d5188 (rebuilt original, record evidence/prov-p4c-20261109/PCWC_TOOL_BUILD.json)"
+ },
+ "aeneas_build_hash_extended": "b59d5188 (extended patch set, same tag as P1c/P1e)",
+ "charon": {
+  "sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+  "driver_sha256": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+ },
+ "stager_sha256": "365cdfc836535c0d77f3aa26edfa6216812b935851d4f710a36a02e4c9bb1de6",
+ "toolchain": {
+  "RUSTUP_TOOLCHAIN": "nightly-2026-09-17",
+  "CARGO_BUILD_JOBS": "1",
+  "RAYON_NUM_THREADS": "1"
+ },
+ "files": {
+  "PCQD_extract.py": {
+   "sha256": "0ff205d9b0736224d02b6de23881d329dc655a6a73128543b3819da550a75f6f"
+  },
+  "PCQD_run.py": {
+   "sha256": "e0f1fe47d151ad3e891c81487c22e510f986c1fb75099f65e493a94dd1061a9c"
+  },
+  "PCQD_run_host.py": {
+   "sha256": "f3fe8551d7a8627fa185448d4bbf3ed9396480175ea24dd5d54319c17994410c"
+  },
+  "PCQD_render_spec.py": {
+   "sha256": "10efe0b4627b73138b77dca8a8035619686784598b2717af9352c3a52e6bd9ac"
+  },
+  "PCQD_STAGER_PIN.json": {
+   "sha256": "5d8b84f9c7efbe34b0587a6a21ba21fc5348adf7a2a9cd4afddabd5b7e678f45"
+  },
+  "PCQD_chain.sh": {
+   "sha256": "31e9452acbcc63d604d1a9b220827deadd0610779ab245bf84c4390fa3536b8e"
+  },
+  "PCQD_make_specs.py": {
+   "sha256": "66f5479e387991e834c300ea7ceea9bdf13beed25352d34b8c41ae2058fc1f16"
+  },
+  "PCQD_index.py": {
+   "sha256": "26a91455612a2d6550020749efaa931ddbe7be6f4189350b1550f9f194f869fd"
+  },
+  "PCQD_records.py": {
+   "sha256": "ec2058fefb7cc8c0cdca4f3fe741e537d9ddd5caa3ddd5e74feec009a114b21d"
+  }
+ },
+ "changes_vs_P1f": "PCQG_ -> PCQD_; host base p1g; PCQD_extract.py asserts the Aeneas sha for the tool named in the spec (extended or original); PCQD_render_spec.py selects the tool per spec/override and allows an extra RUSTFLAGS suffix (used once, D14r --cfg aeneas_ref). Admission unchanged from P1f (host < 6, Stream C < 2, disk >= 40 GB, reservation barrier)."
+}

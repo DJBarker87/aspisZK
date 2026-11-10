@@ -1,0 +1,108 @@
+{
+ "run": "PCQD_E036",
+ "spec_id": "D03a",
+ "aeneas_tool": "extended",
+ "label": "r1_wire without decode_k: payload, row_shape, CLAIMS, LANES, SemanticTranscript, Error",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::r1_wire::_::payload",
+  "--start-from",
+  "crate::r1_wire::row_shape",
+  "--start-from",
+  "crate::r1_wire::CLAIMS",
+  "--start-from",
+  "crate::r1_wire::LANES",
+  "--start-from",
+  "crate::r1_wire::SemanticTranscript",
+  "--start-from",
+  "crate::r1_wire::Error",
+  "--include",
+  "aspis_core::field::P",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E036_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "1",
+  "--features",
+  "private-leaf-salts,optimized-terminal,program-build"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCQD_d03a",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E036_emitted/raw",
+  "-subdir",
+  "PCQD_d03a",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E036_emitted/repro.llbc"
+ ],
+ "opacity": [],
+ "configuration": {
+  "start_from": [
+   "crate::r1_wire::_::payload",
+   "crate::r1_wire::row_shape",
+   "crate::r1_wire::CLAIMS",
+   "crate::r1_wire::LANES",
+   "crate::r1_wire::SemanticTranscript",
+   "crate::r1_wire::Error"
+  ],
+  "include": [
+   "aspis_core::field::P"
+  ],
+  "opaque": [],
+  "features": "private-leaf-salts,optimized-terminal,program-build",
+  "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
+  "namespace": "PCQD_d03a",
+  "crate": "aspis-r1-cost-probe"
+ },
+ "covers": {
+  "modules": [
+   "AspisR1DecodeKFullV10.Funs",
+   "AspisS1NativeCompactModelV1"
+  ]
+ },
+ "supersedes": null,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "p1g": {
+  "note": "",
+  "basis": "Changed shape after E007 (extended) and E015 (original): internal error in decode_k loop (r1_wire.rs 158-165)."
+ }
+}

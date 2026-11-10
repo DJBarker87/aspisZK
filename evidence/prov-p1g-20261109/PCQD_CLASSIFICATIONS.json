@@ -1,0 +1,47 @@
+[
+ {
+  "id": "PCQD-C1",
+  "topic": "coverage check first",
+  "text": "17 of 130 entries had a def-kind name in an existing P1 emission (PCQD_cover.py); after the PCQD runs 12 remain ALREADY_COVERED (the rest were also freshly extracted or are partly aliased). Name-level only; superseded runs excluded. Tool of each prior emission is in PCQD_COVERAGE.json."
+ },
+ {
+  "id": "PCQD-C2",
+  "topic": "configuration",
+  "text": "Every run overflow ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true and -C overflow-checks=yes), because PCVB_NEED_EXTRACTION marks every entry required_configuration ON. The only known gate body with wrapping arithmetic (R72Sampler r24_canonical_mul) has no frozen counterpart, so no OFF extraction was requested. I did not rescan every gate module text for wrapping markers in this job; the ON basis is the P3b requirement."
+ },
+ {
+  "id": "PCQD-C3",
+  "topic": "cold-cache timeout E001",
+  "text": "E001 timed out at 180 s during the cold cargo build of the program crate (cgroup peak 1.43 GB, below MemoryHigh): not memory growth. The cache persisted, so E002 (a different root set, D02) and later runs started warm. No identical rerun of E001: D01 was rerun (E004) only after the cache existed, which is an environment change recorded here."
+ },
+ {
+  "id": "PCQD-C4",
+  "topic": "candidate_frozen_files in PCVB_NEED_EXTRACTION",
+  "text": "programs/adapter-reconstruct/lib.rs, r23_width.rs, r24_guarded_qm.rs and candidate_claims.rs do not exist in 4bb3b3f (git cat-file). The frozen counterpart of the AdapterReconstruct functions is programs/r1-cost-probe/src/r1_pool_adapter.rs (same function names); Port5Q2_ReaderValidate.validate = verifier::validate_checkpoint_queries, ReaderWeights.weights = verifier::read_checkpoint_weights, NGN folds/prepared/variantEq = Variant::folds, Prepared::new, Variant PartialEq::eq (rust paths read from the gate source doc comments)."
+ },
+ {
+  "id": "PCQD-C5",
+  "topic": "NO_FROZEN_COUNTERPART",
+  "text": "decode_k_value, r24_canonical_mul.closure, NJT_claims_ref and candidate_claims.claims have no function of that name in the frozen tree (PCQD_NO_FROZEN_COUNTERPART.json). For candidate_claims.claims the frozen role is r1_semantic::claims; its extraction failed on both tools (D05), so that role is NOT_OBTAINED."
+ },
+ {
+  "id": "PCQD-C6",
+  "topic": "cfg-gated reference module",
+  "text": "asq8_payment_reference.rs is compiled only under cfg(any(test,kani,aeneas_ref)); the shipped build lacks it (E023 Charon failure). E029 added --cfg aeneas_ref (a non-shipped configuration) and Charon still failed. Retired after two failures; the frozen reference module remains unextracted."
+ },
+ {
+  "id": "PCQD-C7",
+  "topic": "retired shapes",
+  "text": "require_distinct_accounts (nested-loop returns): extended E017 \"Nested-loop returns require exactly one Option language item\", original E005/E037-family \"Returns inside of nested loops\"; retired. r1_wire decode_k loop (r1_wire.rs 158-165): internal error on both tools (E007, E015), retired. r1_semantic::claims: internal error on both tools (E009, E014), retired. D12/D13 boxed decoders: original timed out with cgroup peak 3.26 GiB (E030, E031) = memory growth, not rerun; extended failed (E021 Unreachable, E022 Not_found); changed shape E038 (inner decoders opaque) hit an Aeneas name clash (LaneTransition variant vs function). candidate batch group: extended internal error at fast_pairing.rs (E019); with push opaque, timeout (E032)."
+ },
+ {
+  "id": "PCQD-C8",
+  "topic": "priority r0.transport.order",
+  "text": "A fresh frozen extraction exists: PCQE_E001 (P1d), original Aeneas 959659a6, overflow ON, features r0, 4bb3b3f. PCQD_E006 tried the extended Aeneas once (D17): Not_found; extended emission does not exist. Presence only; no equality claim."
+ },
+ {
+  "id": "PCQD-C9",
+  "topic": "budget",
+  "text": "38 of 40 extraction scopes used, 0 Lean; two spares unspent. Strictly one scope at a time; admission recorded per run (PCQD_Exxx-admission.json)."
+ }
+]
