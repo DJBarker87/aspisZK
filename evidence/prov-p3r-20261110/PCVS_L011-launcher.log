@@ -1,0 +1,60 @@
+{"attempt": "PCVS_L011", "exit_status": 1, "wall_seconds": 3.4035043478943408, "peak_rss_kib": "5990228", "swaps": "0", "print_axioms": ["'PCVS_Ckpt.tag_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCVS_Ckpt.final_len_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVS_Ckpt.fixed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVS_Ckpt.checkpoint_size_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCVS_Ckpt.zeroK_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PCVS_sources/PRVEq_CkptSmall_s1.lean:111:69: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      have self1 := PCVS_Fresh2.transport.Variant.S2.read_discriminant;
+        have other1 := PCVS_Fresh2.transport.Variant.S1.read_discriminant;
+        ok (decide (self1 = other1))
+    if b = true then ok 1#usize else ok 2#usize
+is not definitionally equal to the right-hand side
+  ok 2#usize
+
+⊢ (do
+      let b ←
+        have self1 := PCVS_Fresh2.transport.Variant.S2.read_discriminant;
+          have other1 := PCVS_Fresh2.transport.Variant.S1.read_discriminant;
+          ok (decide (self1 = other1))
+      if b = true then ok 1#usize else ok 2#usize) =
+    ok 2#usize
+PCVS_sources/PRV
+...
+failed: The left-hand side
+  do
+    let b ←
+      have self1 := PCVS_Fresh2.transport.Variant.D.read_discriminant;
+        have other1 := PCVS_Fresh2.transport.Variant.S1.read_discriminant;
+        ok (decide (self1 = other1))
+    if b = true then ok 1#usize else ok 2#usize
+is not definitionally equal to the right-hand side
+  ok 2#usize
+
+⊢ (do
+      let b ←
+        have self1 := PCVS_Fresh2.transport.Variant.D.read_discriminant;
+          have other1 := PCVS_Fresh2.transport.Variant.S1.read_discriminant;
+          ok (decide (self1 = other1))
+      if b = true then ok 1#usize else ok 2#usize) =
+    ok 2#usize
+PCVS_sources/PRVEq_CkptSmall_s1.lean:119:2: error: unsolved goals
+case S1
+⊢ ∃ x, 2#usize * 1#usize = ok x ∧ 1024#usize >>> x = ok 256#usize
+PCVS_sources/PRVEq_CkptSmall_s1.lean:120:2: error: unsolved goals
+case S2
+⊢ ∃ x, 2#usize * 2#usize = ok x ∧ 1024#usize >>> x = ok 64#usize
+PCVS_sources/PRVEq_CkptSmall_s1.lean:121:2: error: unsolved goals
+case D
+⊢ ∃ x, 2#usize * 2#usize = ok x ∧ 1024#usize >>> x = ok 64#usize
+PCVS_sources/PRVEq_CkptSmall_s1.lean:124:21: error: Tactic `rfl` failed: The left-hand side
+  PCVS_Fresh2.verifier.CHECKPOINT_FIXED
+is not definitionally equal to the right-hand side
+  ok 744#usize
+
+⊢ PCVS_Fresh2.verifier.CHECKPOINT_FIXED = ok 744#usize
+PCVS_sources/PRVEq_CkptSmall_s1.lean:132:4: error: No goals to be solved
+'PCVS_Ckpt.tag_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCVS_Ckpt.final_len_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVS_Ckpt.fixed_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVS_Ckpt.checkpoint_size_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCVS_Ckpt.zeroK_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5f612cbe12c54d7ebab8ab9771f36e76.scope; invocation ID: f8348737ddf24e288778e3f3b958a682
