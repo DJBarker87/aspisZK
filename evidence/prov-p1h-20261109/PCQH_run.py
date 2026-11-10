@@ -31,7 +31,7 @@ def ssh(code,data=None,submitted=False,tmo=300):
   if submitted:raise RuntimeError('Submitted: recover read-only, NEVER resubmit')
   if retry<10:time.sleep(60)
  raise RuntimeError('STOP transport exhausted')
-# ---- (1)+(2) scope counts: whole host < 6 and Stream C (codex-pc-*) < 3
+# ---- (1)+(2) scope counts: whole host < 6 and Stream C (codex-pc-*) < 2
 COUNT="""import subprocess,pathlib,json
 units=subprocess.check_output(['systemctl','--user','list-units','--type=scope','--state=running','--no-legend','--no-pager'],text=True).splitlines();found=[];c=[]
 for line in units:
@@ -50,7 +50,7 @@ print(json.dumps(dict(scopes=found,count=len(found),stream_c=c,stream_c_count=le
 for tries in range(30):
  r=ssh('python3',COUNT);assert r.returncode==0,r.stderr
  x=json.loads(r.stdout);ok=x['count']<6 and x['stream_c_count']<2
- event(dict(event='share_check' if ok else 'wait',reason='host<6 and StreamC<2',host=x))
+ event(dict(event='share_check' if ok else 'wait',reason='host<6 and StreamC<3',host=x))
  if ok:break
  time.sleep(180)
 else:raise RuntimeError('STOP share never below limit')
@@ -100,7 +100,7 @@ else:
  assert target and (E/(target+'.lean')).exists()
  n='PCQH_sources/'+target+'.lean';put(n,E/(target+'.lean'));sources=[n]
  paths=json.loads((E.parent/'ledger30-20261111/NNN_PATHS.json').read_text())
- command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCQH_sources','-o','PCQH_exports/'+target+'.olean',n]
+ command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCQH_sources','-o','PCQH_exports/'+target+'.olean',n]
  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'};scope_p=['-p','MemoryHigh=6G','-p','MemoryMax=8G']
  env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCQH_tmp',LEAN_PATH=':'.join([B+'/PCQH_exports']+paths));collect=[]
  expected='Focused import elaboration of one generated equality module'
