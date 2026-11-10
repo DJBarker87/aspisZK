@@ -20,10 +20,10 @@ while i<len(c):
             seen_sf=True
             for r in roots:c2+=['--start-from',r]
         i+=2;continue
-    if c[i]=='--opaque' and c[i+1] in drop:i+=2;continue
+    if c[i]=='--opaque' and (c[i+1] in drop or drop==['ALL']):i+=2;continue
     c2.append(c[i]);i+=1
 # insert extra opaque before first --include after the last --opaque
-last=max(j for j,x in enumerate(c2) if x=='--opaque')+1
+last=(max([j for j,x in enumerate(c2) if x=='--opaque'],default=-2)+1) if any(x=='--opaque' for x in c2) else c2.index('--include')-1
 ins=[]
 for e in extra:
     if e not in [c2[j+1] for j,x in enumerate(c2) if x=='--opaque']:ins+=['--opaque',e]
@@ -37,7 +37,7 @@ a[a.index('-namespace')+1]=ns;a[a.index('-subdir')+1]=ns
 TOOLS={'extended':'/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended','original':'/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas'}
 a[0]=TOOLS[tool];d['aeneas_command']=a;d['aeneas_tool']=tool
 d['run']=run;d['spec_id']=run;d['derived_from']='PCVJ_mkspec.sh from '+base
-kept=[o for o in d.get('opacity',[]) if o.get('selector',o['path']) not in drop and o['path'] not in drop]
+kept=[] if drop==['ALL'] else [o for o in d.get('opacity',[]) if o.get('selector',o['path']) not in drop and o['path'] not in drop]
 for e in extra:
     if not any(o.get('selector',o['path'])==e for o in kept):kept.append(dict(path=e,why='PCVJ_ Ops-field boundary: callee modelled as an Ops field in the gate (or library trust)'))
 d['opacity']=kept
