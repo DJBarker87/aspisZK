@@ -19,7 +19,10 @@ import PRVCmb_C14
 import PRVCmb_C15
 import PRVCmb_C16
 import PRVCmb_C17
-import PRVCmb_C18
+import PRVCmb_C18A
+import PRVCmb_C18B
+import PRVCmb_C18C
+import PRVCmb_C18D
 import PRVCmb_C19
 import PRVCmb_C20
 import PRVCmb_C21
