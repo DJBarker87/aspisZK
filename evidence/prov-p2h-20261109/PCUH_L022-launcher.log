@@ -1,0 +1,44 @@
+{"attempt": "PCUH_L022", "exit_status": 1, "wall_seconds": 2.4913204920012504, "peak_rss_kib": "2615076", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.shiftRight_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftRight s.toNat else fail integerOverflow
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+PCUH_sources/PRVEq_probe3.lean:7:108: error: Expected type must not contain free variables
+  x >>> 9#i32 = ok (x.wrapping_shr 9#u32)
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+PCUH_sources/PRVEq_p
+...
+def Aeneas.Std.UScalar.shiftRight_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftRight s.toNat else fail integerOverflow
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+PCUH_sources/PRVEq_probe3.lean:7:108: error: Expected type must not contain free variables
+  x >>> 9#i32 = ok (x.wrapping_shr 9#u32)
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+PCUH_sources/PRVEq_probe3.lean:10:8: error(lean.unknownIdentifier): Unknown identifier `instHShiftRight`
+PCUH_sources/PRVEq_probe3.lean:8:100: error: unsolved goals
+x : Usize
+⊢ instHShiftRightUScalarIScalarResult.1 x 9#i32 = ok (x.bv >>> (9 % System.Platform.numBits)#uscalar)
+PCUH_sources/PRVEq_probe3.lean:10:25: warning: This simp argument is unused:
+  UScalar.shiftRight_IScalar
+
+Hint: Omit it from the simp argument list.
+  simp [instHShiftRight, U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵R̵i̵g̵h̵t̵_̵I̵S̵c̵a̵l̵a̵r̵,̵ ̵Std.Usize.wrapping_shr, UScalar.wrapping_shr]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCUH_sources/PRVEq_probe3.lean:12:8: error: invalid `▸` notation, argument
+  ok.injEq
+has type
+  ∀ (v v_1 : ?m.16), (ok v = ok v_1) = (v = v_1)
+equality expected
+PCUH_sources/PRVEq_probe3.lean:13:2: error: No goals to be solved
+
+Running as unit: run-r4385b89480da4f7d876f62e437ae8ca3.scope; invocation ID: f628bcde198a47b9b4b29b90d5a7fa56

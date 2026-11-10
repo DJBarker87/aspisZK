@@ -1,0 +1,40 @@
+{"attempt": "PCUH_L001", "exit_status": 1, "wall_seconds": 2.381279301829636, "peak_rss_kib": "2637940", "swaps": "0", "print_axioms": []}
+@Array.update : {α : Type u_1} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n)
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+@Array.update_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑i < v.length → v.update i x ⦃ nv => nv = v.set i x ⦄
+@Array.index_usize : {α : Type u_1} → {n : Usize} → Std.Array α n → Usize → Result α
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? wi
+...
+@Array.update : {α : Type u_1} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n)
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+@Array.update_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑i < v.length → v.update i x ⦃ nv => nv = v.set i x ⦄
+@Array.index_usize : {α : Type u_1} → {n : Usize} → Std.Array α n → Usize → Result α
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some x => ok x
+@UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+@Usize.add_spec : ∀ {x y : Usize}, ↑x + ↑y ≤ Usize.max → x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+@UScalar.add_spec : ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑x + ↑y ≤ UScalar.max ty → x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+PCUH_sources/PRVEq_probe1.lean:13:7: error: overloaded, errors 
+  13:8 Unknown constant `Array.update_ok_iff`
+  
+  13:8 Unknown constant `Aeneas.Std.Array.update_ok_iff`
+PCUH_sources/PRVEq_probe1.lean:14:0: warning: declaration uses `sorry`
+
+Running as unit: run-rb27904acd17a44f3ab569e784ba9ae4c.scope; invocation ID: 4428f053f8ec4e3c9c9dbf5d3fee25e4

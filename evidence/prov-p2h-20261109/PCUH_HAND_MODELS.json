@@ -1,0 +1,46 @@
+{
+ "schema": "PCUH_HAND_MODELS/1",
+ "note": "Record only; no trust row is added or proposed. These are the hand-written gate structures that block a fresh = gate equality, and the instantiations used by this job.",
+ "hand_models": [
+  {
+   "module": "AdapterRwModel",
+   "name": "AdapterRw.Ops (boundary record)",
+   "effect": "gate functions first_decoded, observer, data_len, require_verifier_checkpoint, Insts.* take `ops`; fresh uses SDK/cross-crate externals as axioms; 9 comparisons not made (HAND_ADAPTED)"
+  },
+  {
+   "module": "Port3_NativeGeometryBody",
+   "name": "Ops (callbacks for field/domain operations)",
+   "effect": "23 for_range definitions parametric in Ops, carrier types CM31/M31/r0.Error/Point/QueryGeometry differ from the fresh ones"
+  },
+  {
+   "module": "Port4C_NativePrefix",
+   "name": "Leaves",
+   "effect": "batch_prefix_products(_loop(.body)) parametric in Leaves"
+  },
+  {
+   "module": "Port5Q2_ReaderWeights",
+   "name": "CheckpointBytes4Sections.ReadK + IterMut model",
+   "effect": "weights, weights_loop parametric; carrier types differ"
+  },
+  {
+   "module": "S1NativeCompactModelV1",
+   "name": "Ops (compact codec) and hand-written constants r1_wire.POINTS : Result Usize := ok 3#usize",
+   "effect": "expand_semantic(_loop(.body)) parametric in Ops and fresh does not elaborate (ChunksExactMut externals); POINTS/CLAIMS compared in the lifted form `ok fresh = gate`"
+  },
+  {
+   "module": "AspisR72Sampler.Funs",
+   "name": "r23_product_u32_bounded, r24_canonical_mul (+ PP, closure)",
+   "effect": "gate-only helpers with no frozen counterpart; behaviour proved in P3b (r23_gate reused here), not equated"
+  }
+ ],
+ "instantiations_recorded": [
+  {
+   "where": "PRVEq_NFN_ExtractedGeometry(_p2): fresh-namespace definitions aspis_core.field.M31.ZERO/ONE := ok <gate value> (inputs/NFN_prelude.lean)",
+   "effect": "external `Result M31` axiom of FunsExternal_Template instantiated; used by fast_domain.line_node; value now verified against the constant's own transparent fresh definition (PRVEq_const_bind.lean PRVEq.const.M31_ONE, PCUH_L037)"
+  },
+  {
+   "where": "external callees of the fresh closures (cross-crate M31.mul/sub/double, CM31.mul, FibreIndex.get, ...) resolve by name to the gate constants through the opened gate namespace",
+   "effect": "name-bound (as in P2g); the compile is the check; applies to NFN fibre_point/line_node/table_value"
+  }
+ ]
+}

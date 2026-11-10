@@ -1,0 +1,236 @@
+{
+ "module": "S1NativeCompactModelV1",
+ "kind": "funs",
+ "fresh_lines": {
+  "core.option.Option.ok_or": [
+   16,
+   26
+  ],
+  "core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice": [
+   28,
+   44
+  ],
+  "compact.SEMANTIC_ROWS": [
+   46,
+   49
+  ],
+  "verifier.SEMANTIC_BYTES": [
+   51,
+   57
+  ],
+  "compact.LOGICAL_SEMANTIC": [
+   59,
+   63
+  ],
+  "compact.SEMANTIC_COMPACT_VALUES": [
+   65,
+   74
+  ],
+  "compact.COMPACT_SEMANTIC": [
+   76,
+   84
+  ],
+  "compact.compact_row": [
+   86,
+   89
+  ],
+  "compact.expand_values_loop.body": [
+   91,
+   132
+  ],
+  "compact.expand_values_loop": [
+   134,
+   149
+  ],
+  "compact.expand_values": [
+   151,
+   181
+  ],
+  "r1_wire.POINTS": [
+   183,
+   186
+  ],
+  "r1_wire.LANES": [
+   188,
+   191
+  ],
+  "r1_wire.CLAIMS": [
+   193,
+   197
+  ],
+  "r1_wire.row_shape": [
+   199,
+   236
+  ],
+  "compact.expand_semantic_loop.body": [
+   238,
+   325
+  ],
+  "compact.expand_semantic_loop": [
+   327,
+   338
+  ],
+  "compact.expand_semantic": [
+   340,
+   369
+  ]
+ },
+ "dropped": [],
+ "defs": {
+  "core.option.Option.ok_or": {
+   "lines": [
+    374,
+    376
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.SEMANTIC_ROWS": {
+   "lines": [
+    379,
+    381
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "verifier.SEMANTIC_BYTES": {
+   "lines": [
+    384,
+    386
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.LOGICAL_SEMANTIC": {
+   "lines": [
+    389,
+    391
+   ],
+   "reached": false,
+   "callees": [
+    "verifier.SEMANTIC_BYTES"
+   ],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.SEMANTIC_COMPACT_VALUES": {
+   "lines": [
+    394,
+    396
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.COMPACT_SEMANTIC": {
+   "lines": [
+    399,
+    401
+   ],
+   "reached": false,
+   "callees": [
+    "compact.LOGICAL_SEMANTIC",
+    "compact.SEMANTIC_COMPACT_VALUES"
+   ],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.compact_row": {
+   "lines": [
+    404,
+    406
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "r1_wire.POINTS": {
+   "lines": null,
+   "reached": false,
+   "callees": [],
+   "status": "given",
+   "stage": null
+  },
+  "r1_wire.LANES": {
+   "lines": [
+    416,
+    418
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "pending",
+   "stage": null
+  },
+  "r1_wire.CLAIMS": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "r1_wire.POINTS",
+    "r1_wire.LANES"
+   ],
+   "status": "given",
+   "stage": null
+  },
+  "r1_wire.row_shape": {
+   "lines": [
+    428,
+    430
+   ],
+   "reached": false,
+   "callees": [
+    "r1_wire.LANES",
+    "r1_wire.CLAIMS"
+   ],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.expand_semantic_loop.body": {
+   "lines": [
+    433,
+    435
+   ],
+   "reached": false,
+   "callees": [
+    "core.option.Option.ok_or",
+    "compact.compact_row",
+    "r1_wire.row_shape"
+   ],
+   "status": "pending",
+   "stage": null
+  },
+  "compact.expand_semantic_loop": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "compact.expand_semantic_loop.body"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "NOT ATTEMPTED (PCUH change 2): fresh and gate bodies differ and the definition is, or calls, a loop whose defeq check diverged in the round-1 probe",
+   "class": "transport-needed"
+  },
+  "compact.expand_semantic": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "compact.SEMANTIC_ROWS",
+    "compact.LOGICAL_SEMANTIC",
+    "compact.COMPACT_SEMANTIC",
+    "compact.expand_semantic_loop"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "NOT ATTEMPTED (PCUH change 2): fresh and gate bodies differ and the definition is, or calls, a loop whose defeq check diverged in the round-1 probe",
+   "class": "transport-needed"
+  }
+ },
+ "probe": true
+}

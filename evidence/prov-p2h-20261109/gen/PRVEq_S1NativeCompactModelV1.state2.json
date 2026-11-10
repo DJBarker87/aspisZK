@@ -1,0 +1,217 @@
+{
+ "module": "S1NativeCompactModelV1",
+ "kind": "funs",
+ "fresh_lines": {
+  "core.option.Option.ok_or": [
+   16,
+   26
+  ],
+  "compact.SEMANTIC_ROWS": [
+   48,
+   51
+  ],
+  "verifier.SEMANTIC_BYTES": [
+   53,
+   59
+  ],
+  "compact.LOGICAL_SEMANTIC": [
+   61,
+   65
+  ],
+  "compact.SEMANTIC_COMPACT_VALUES": [
+   67,
+   76
+  ],
+  "compact.COMPACT_SEMANTIC": [
+   78,
+   86
+  ],
+  "compact.compact_row": [
+   88,
+   91
+  ],
+  "r1_wire.POINTS": [
+   191,
+   194
+  ],
+  "r1_wire.LANES": [
+   196,
+   199
+  ],
+  "r1_wire.CLAIMS": [
+   201,
+   205
+  ],
+  "r1_wire.row_shape": [
+   207,
+   244
+  ]
+ },
+ "dropped": [
+  "compact.expand_semantic",
+  "compact.expand_semantic_loop",
+  "compact.expand_semantic_loop.body",
+  "compact.expand_values",
+  "compact.expand_values_loop",
+  "compact.expand_values_loop.body",
+  "core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice"
+ ],
+ "defs": {
+  "core.option.Option.ok_or": {
+   "lines": null,
+   "reached": false,
+   "callees": [],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "compact.SEMANTIC_ROWS": {
+   "lines": [
+    391,
+    393
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "verifier.SEMANTIC_BYTES": {
+   "lines": [
+    396,
+    398
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "compact.LOGICAL_SEMANTIC": {
+   "lines": [
+    401,
+    403
+   ],
+   "reached": false,
+   "callees": [
+    "verifier.SEMANTIC_BYTES"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "compact.SEMANTIC_COMPACT_VALUES": {
+   "lines": [
+    406,
+    408
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "compact.COMPACT_SEMANTIC": {
+   "lines": [
+    411,
+    413
+   ],
+   "reached": false,
+   "callees": [
+    "compact.LOGICAL_SEMANTIC",
+    "compact.SEMANTIC_COMPACT_VALUES"
+   ],
+   "status": "proved",
+   "stage": 2
+  },
+  "compact.compact_row": {
+   "lines": [
+    416,
+    418
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "proved",
+   "stage": 1
+  },
+  "r1_wire.POINTS": {
+   "lines": null,
+   "reached": false,
+   "callees": [],
+   "status": "failed",
+   "stage": null,
+   "error": "Type mismatch",
+   "class": "semantic"
+  },
+  "r1_wire.LANES": {
+   "lines": [
+    424,
+    426
+   ],
+   "reached": false,
+   "callees": [],
+   "status": "proved",
+   "stage": 2
+  },
+  "r1_wire.CLAIMS": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "r1_wire.POINTS",
+    "r1_wire.LANES"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "unsolved goals",
+   "class": "semantic"
+  },
+  "r1_wire.row_shape": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "r1_wire.LANES",
+    "r1_wire.CLAIMS"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "blocked by failed callee equalities: r1_wire.CLAIMS",
+   "class": "semantic"
+  },
+  "compact.expand_semantic_loop.body": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "core.option.Option.ok_or",
+    "compact.compact_row",
+    "r1_wire.row_shape"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "fresh declaration (or a callee) did not elaborate against the gate environment",
+   "class": "transport-needed"
+  },
+  "compact.expand_semantic_loop": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "compact.expand_semantic_loop.body"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "fresh declaration (or a callee) did not elaborate against the gate environment",
+   "class": "transport-needed"
+  },
+  "compact.expand_semantic": {
+   "lines": null,
+   "reached": false,
+   "callees": [
+    "compact.SEMANTIC_ROWS",
+    "compact.LOGICAL_SEMANTIC",
+    "compact.COMPACT_SEMANTIC",
+    "compact.expand_semantic_loop"
+   ],
+   "status": "failed",
+   "stage": null,
+   "error": "fresh declaration (or a callee) did not elaborate against the gate environment",
+   "class": "transport-needed"
+  }
+ },
+ "probe": false
+}

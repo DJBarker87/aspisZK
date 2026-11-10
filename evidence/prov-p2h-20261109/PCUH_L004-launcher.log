@@ -1,0 +1,44 @@
+{"attempt": "PCUH_L004", "exit_status": 1, "wall_seconds": 2.265426753088832, "peak_rss_kib": "2627452", "swaps": "0", "print_axioms": ["'PRVH.usize_add_one_wrap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PRVH.update_ok_lt' depends on axioms: [propext]"]}
+PCUH_sources/PRVH_WrapAdd.lean:15:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑j + ↑1#usize = ↑(j.wrapping_add 1#usize)
+
+j : Usize
+h : ↑j < 1024
+hmax : ↑j + ↑1#usize ≤ Usize.max
+z : UScalar UScalarTy.Usize
+hz : j + 1#usize = ok z
+hv : ↑z = ↑j + ↑1#usize
+⊢ ↑j + ↑1#usize = ↑(j.wrapping_add 1#usize)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Fu
+...
+PCUH_sources/PRVH_WrapAdd.lean:15:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑j + ↑1#usize = ↑(j.wrapping_add 1#usize)
+
+j : Usize
+h : ↑j < 1024
+hmax : ↑j + ↑1#usize ≤ Usize.max
+z : UScalar UScalarTy.Usize
+hz : j + 1#usize = ok z
+hv : ↑z = ↑j + ↑1#usize
+⊢ ↑j + ↑1#usize = ↑(j.wrapping_add 1#usize)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PRVH.usize_add_one_wrap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PRVH.update_ok_lt' depends on axioms: [propext]
+
+Running as unit: run-r1c27b68587924ba49f70badb7c06d58b.scope; invocation ID: bd9be3d40a0d44dbbe1e34f4da3c293a
