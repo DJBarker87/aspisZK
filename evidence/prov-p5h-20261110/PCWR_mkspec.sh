@@ -29,7 +29,7 @@ for e in extra:
     if e not in [c2[j+1] for j,x in enumerate(c2) if x=='--opaque']:ins+=['--opaque',e]
 c2=c2[:last+1]+ins+c2[last+1:]
 for e in inc:
-    j=c2.index('--features');c2=c2[:j]+['--include',e]+c2[j:]
+    j=c2.index('--');c2=c2[:j]+['--include',e]+c2[j:]  # PCWR: before the cargo separator (PCWM_E003 defect)
 import re
 def fix(cmd):return [re.sub(r'(PC[A-Z]{2}|PCQ|PCO)_workspace','PCWR_workspace',re.sub(r'codex-pc-prov-[a-z0-9]+-2026[0-9]+',HOST.split('/')[-1],x.replace(oldrun+'_emitted',run+'_emitted'))) for x in cmd]
 d['charon_command']=fix(c2);a=fix(d['aeneas_command'])
@@ -38,8 +38,11 @@ TOOLS={'extended':'/home/dombarker/project-offloads/codex-cx-extraction-repro1-2
 a[0]=TOOLS[tool];d['aeneas_command']=a;d['aeneas_tool']=tool
 cc=d['charon_command']
 if '--dest-file' in cc:cc[cc.index('--dest-file')+1]=HOST+'/'+run+'_emitted/repro.llbc'
-d.pop('llbc_stable',None);d.pop('features_override',None) if False else None
-d['run']=run;d['spec_id']=run;d['derived_from']='PCWR_mkspec.sh from '+base
+import os
+d.pop('llbc_stable',None)
+if os.environ.get('STABLE') and '--dest-file' in cc:
+    cc[cc.index('--dest-file')+1]=HOST+'/PCWR_stable/'+os.environ['STABLE']+'.llbc';d['llbc_stable']=cc[cc.index('--dest-file')+1]
+d['jobs_note']='cargo --jobs 4 and CARGO_BUILD_JOBS=4, rustc -Zthreads 1 (not used); identity by class receipt PCWE_E003';d['run']=run;d['spec_id']=run;d['derived_from']='PCWR_mkspec.sh from '+base
 kept=[] if drop==['ALL'] else [o for o in d.get('opacity',[]) if o.get('selector',o['path']) not in drop and o['path'] not in drop]
 for e in extra:
     if not any(o.get('selector',o['path'])==e for o in kept):kept.append(dict(path=e,why='PCWR_ Ops-field boundary: callee modelled as an Ops field in the gate (or library trust)'))

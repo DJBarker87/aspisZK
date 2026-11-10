@@ -27,6 +27,7 @@ cg=Path('/sys/fs/cgroup')/rel
 want=spec.get('expected_limits',{'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'})
 assert {n:(cg/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')}==want,'not the admitted capped scope'
 out=E/(run+'_emitted');out.mkdir(exist_ok=True)
+if spec.get('llbc_stable'):Path(spec['llbc_stable']).parent.mkdir(exist_ok=True)
 m.options=lambda args,workspace,out:dict(charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],opacity=spec.get('opacity',[]),root=spec['configuration'].get('roots') or spec['configuration']['start_from'])
 original_run=subprocess.run
 def measured(cmd,*a,**kw):
@@ -42,6 +43,7 @@ def measured(cmd,*a,**kw):
    e2[k]=(e2.get(k,'')+' '+v).strip() if k=='RUSTFLAGS' else v
   kw['env']=e2;entry['env_effective']={k:e2.get(k) for k in xe}
  r=original_run(['/usr/bin/time','-v','-o',str(out/(tool+'.time'))]+cmd,*a,**kw)
+ if tool=='charon' and spec.get('llbc_stable') and r.returncode==0 and not (out/'repro.llbc').exists():os.symlink(spec['llbc_stable'],out/'repro.llbc')  # PCWR: stable --dest-file, <run>_emitted/repro.llbc symlinked to it
  entry.update(exit=r.returncode,wall_seconds=time.time()-entry['started_unix'],time_receipt=str(out/(tool+'.time')))
  (out/(tool+'_receipt.json')).write_text(json.dumps(entry,indent=2)+'\n')
  return r
@@ -72,7 +74,7 @@ for k in ['charon','aeneas']:
 for extra in ['charon-driver']:
  q=Path(spec['charon_command'][0]).parent/extra
  if q.exists():tools[extra]=sha(q.read_bytes())
-pins=dict(run=run,aeneas_tool=spec['aeneas_tool'],p1g_config=spec.get('p1g'),spec_id=spec.get('spec_id'),frozen_revision=m.REV,frozen_source_tree_git_hash=spec['frozen_source_tree_git_hash'],cargo_lock_sha256_before=pj.get('lock_before'),cargo_lock_sha256_after=pj.get('lock_after'),
+pins=dict(run=run,jobs_note=spec.get('jobs_note'),aeneas_tool=spec['aeneas_tool'],p1g_config=spec.get('p1g'),spec_id=spec.get('spec_id'),frozen_revision=m.REV,frozen_source_tree_git_hash=spec['frozen_source_tree_git_hash'],cargo_lock_sha256_before=pj.get('lock_before'),cargo_lock_sha256_after=pj.get('lock_after'),
  staging_manifest_sha256=pj.get('manifest_sha256'),stager_sha256=pin['sha256'],controller_sha256=sha(Path(__file__).read_bytes()),
  opacity_file='%s_spec.json'%run,opacity_file_sha256=sha((E/(run+'_spec.json')).read_bytes()),tools=tools,charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],
  environment=dict(RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_BUILD_JOBS='1',RAYON_NUM_THREADS='1'),extra_env_appended_to_stager_env=spec.get('extra_env'),
