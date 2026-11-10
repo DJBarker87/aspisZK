@@ -1,0 +1,50 @@
+{"attempt": "PCVH_L006", "exit_status": 0, "wall_seconds": 2.801316953031346, "peak_rss_kib": "2638708", "swaps": "0", "print_axioms": []}
+PCVH_sources/PRVEq_PCVHs6.lean:165:8: warning: declaration uses `sorry`
+b0 b1 b2 b3 b4 b5 b6 b7 : U8
+h : [b0, b1, b2, b3, b4, b5, b6, b7].length ≤ Usize.max
+⊢ (do
+      let o ←
+        if ↑field.P ≤ ↑(core.num.U32.from_le_bytes ⟨[b0, b1, b2, b3], ⋯⟩) then ok none
+          else ok (some (core.num.U32.from_le_bytes ⟨[b0, b1, b2, b3], ⋯⟩))
+      let cf ←
+        match o with
+          | none => ok (core.ops.control_flow.ControlFlow.Break none)
+          | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let o1 ←
+            if ↑field.P ≤ ↑(core.num.U32.from_le_bytes ⟨[b4, b5, b6, b7], ⋯⟩) th
+...
+s.control_flow.ControlFlow.Continue val => do
+          let o1 ←
+            if ↑field.P ≤ ↑(core.num.U32.from_le_bytes ⟨[b4, b5, b6, b7], ⋯⟩) then ok none
+              else ok (some (core.num.U32.from_le_bytes ⟨[b4, b5, b6, b7], ⋯⟩))
+          let cf1 ←
+            match o1 with
+              | none => ok (core.ops.control_flow.ControlFlow.Break none)
+              | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual field.CM31 residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual field.CM31 residual) =
+    ok
+      (if ↑field.P ≤ ↑(core.num.U32.from_le_bytes ⟨[b0, b1, b2, b3], ⋯⟩) then none
+      else
+        if ↑field.P ≤ ↑(core.num.U32.from_le_bytes ⟨[b4, b5, b6, b7], ⋯⟩) then none
+        else
+          some
+            { a := core.num.U32.from_le_bytes ⟨[b0, b1, b2, b3], ⋯⟩,
+              b := core.num.U32.from_le_bytes ⟨[b4, b5, b6, b7], ⋯⟩ })
+PCVH_sources/PRVEq_PCVHs6.lean:167:276: warning: This simp argument is unused:
+  fr_none
+
+Hint: Omit it from the simp argument list.
+  simp [field.CM31.from_le_bytes, field.M31.from_le_bytes, core.slice.index.Slice.index,
+  ̲  ̲ ̲ ̲core.slice.index.SliceIndexRangeUsizeSlice.index, core.array.TryFromArrayCopySlice.try_from,
+  ̲  ̲ ̲ ̲Aeneas.Std.lift, core.option.Option.Insts.CoreOpsTry_traitTry.branch, dec_cm, lm, Array.make,̵ ̵f̵r̵_̵n̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+Running as unit: run-r4147b029edfe4816ad742ebcdf87bf1f.scope; invocation ID: f2c8f7412e2548679ecad775cc1a8cbb
