@@ -1,0 +1,66 @@
+Usize.wrapping_shr : Usize → U32 → Usize
+Usize.wrapping_shl : Usize → U32 → Usize
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.Usize.wrapping_shl : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+def Aeneas.Std.IScalar.hcast : {src_ty : IScalarTy} → (tgt_ty : UScalarTy) → IScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.signExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.ushiftRight s#uscalar) else fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftRight_UScalar : {ty tys : UScalarTy} → UScalar ty → UScalar tys → Result (UScalar ty) :=
+fun {ty tys} x s => x.shiftRight ↑s
+def Aeneas.Std.UScalar.shiftRight_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftRight s.toNat else fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftLeft_UScalar : {ty tys : UScalarTy} → UScalar ty → UScalar tys → Result (UScalar ty) :=
+fun {ty tys} x s => x.shiftLeft ↑s
+def Aeneas.Std.UScalar.shiftLeft_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftLeft s.toNat else fail Error.integerOverflow
+@[implicit_reducible] def Aeneas.Std.UScalarTy.numBits : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => System.Platform.numBits
+  | UScalarTy.U8 => 8
+  | UScalarTy.U16 => 16
+  | UScalarTy.U32 => 32
+  | UScalarTy.U64 => 64
+  | UScalarTy.U128 => 128
+@[irreducible] def Aeneas.Std.Usize.numBits : ℕ :=
+wrapped✝.1
+instHShiftRightUScalarResult
+instHShiftRightUScalarIScalarResult
+instHShiftRightUScalarResult
+@IScalar.hcast_val_eq : ∀ {src_ty : IScalarTy} (tgt_ty : UScalarTy) (x : IScalar src_ty),
+  ↑(IScalar.hcast tgt_ty x) = (↑x % 2 ^ tgt_ty.numBits).toNat
+@UScalar.cast_val_eq : ∀ {src_ty : UScalarTy} (tgt_ty : UScalarTy) (x : UScalar src_ty),
+  ↑(UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits
+@IScalar.hcast_bv_eq : ∀ {src_ty : IScalarTy} (tgt_ty : UScalarTy) (x : IScalar src_ty),
+  (IScalar.hcast tgt_ty x).bv = BitVec.signExtend tgt_ty.numBits x.bv
+NPE_lean_probe.lean:28:31: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Neg (IScalar IScalarTy.I32)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NPE_lean_probe.lean:29:31: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Neg (IScalar IScalarTy.I32)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NPE_lean_probe.lean:31:54: error: Tactic `decide` failed for proposition
+  ↑(UScalar.cast UScalarTy.U32 9#usize) = 9
+because its `Decidable` instance
+  instDecidableEqNat (↑(UScalar.cast UScalarTy.U32 9#usize)) 9
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match h : (↑(UScalar.cast UScalarTy.U32 9#usize)).beq 9 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
