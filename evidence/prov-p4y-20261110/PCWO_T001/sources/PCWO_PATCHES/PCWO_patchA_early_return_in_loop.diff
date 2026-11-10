@@ -1,0 +1,70 @@
+diff --git a/src/PrePasses.ml b/src/PrePasses.ml
+index 95a0aaa..3bf572b 100644
+--- a/src/PrePasses.ml
++++ b/src/PrePasses.ml
+@@ -495,6 +495,16 @@ let update_loops (crate : crate) (f : fun_decl) : fun_decl =
+     object (self)
+       inherit [_] map_statement as super
+ 
++      (* PCWO patch A: [outer_after] is the list of statements which follow the
++         current statement in its own block ([stl]) followed by the statements
++         which follow the enclosing statements in the enclosing blocks, up to
++         the enclosing loop body or the function body. It is the continuation of
++         the current statement, used when a loop contains an early return and
++         the loop block itself ends without a [return] (for instance when the
++         loop is followed only by [StorageDead] inside the arm of a [switch]
++         whose continuation ends with the return). *)
++      val mutable outer_after : statement list = []
++
+       (* [after]: the list of statements coming *after* this one in this block.
+ 
+          We return:
+@@ -511,8 +521,20 @@ let update_loops (crate : crate) (f : fun_decl) : fun_decl =
+ 
+                Note that doing this will raise an exception if we find a loop with
+                an early return. *)
+-            try ([ { st with kind = self#visit_Loop (depth + 1) loop } ], after)
++            (* PCWO patch A: the continuation of the loop (its own block
++               remainder followed by the continuation of the enclosing blocks) *)
++            let saved_outer = outer_after in
++            (* inside the loop body, the continuation of the enclosing blocks is
++               not reachable by falling out of the body *)
++            outer_after <- [];
++            try
++              let res =
++                ([ { st with kind = self#visit_Loop (depth + 1) loop } ], after)
++              in
++              outer_after <- saved_outer;
++              res
+             with FoundStatement return_st ->
++              outer_after <- saved_outer;
+               (* An exception was raised: it means we found a return in the loop: attempt
+                  to replace it with a break.
+ 
+@@ -580,7 +602,9 @@ let update_loops (crate : crate) (f : fun_decl) : fun_decl =
+                       | Panic _ | UnwindTerminate | UndefinedBehavior -> [ st ]
+                       | _ -> st :: decompose_after after)
+                 in
+-                let after = decompose_after after in
++                (* PCWO patch A: [saved_outer] is [after] followed by the
++                   continuation of the enclosing statements *)
++                let after = decompose_after saved_outer in
+                 let replace (st : statement) : statement list =
+                   match st.kind with
+                   | Return ->
+@@ -624,11 +648,15 @@ let update_loops (crate : crate) (f : fun_decl) : fun_decl =
+         | _ -> ([ self#visit_statement depth st ], after)
+ 
+       method! visit_block depth (block : block) : block =
++        let block_outer = outer_after in
+         let rec update (stl : statement list) : statement list =
+           match stl with
+           | [] -> []
+           | st :: stl ->
++              (* PCWO patch A: continuation of [st] *)
++              outer_after <- stl @ block_outer;
+               let stl0, stl1 = self#update_statement depth st stl in
++              outer_after <- block_outer;
+               stl0 @ update stl1
+         in
+         { block with statements = update block.statements }
