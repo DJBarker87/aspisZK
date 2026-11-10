@@ -1574,3 +1574,63 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 18c. FIq: obligation located, not started as proofs; a failed screening approach
+
+No Lean scope was used for FIq. The run's scope total stays at 5 of 40.
+
+**The executing FIq core.** By textual reading, the FIq kernels execute inside the `terminal`
+slot of the tx1 semantic finish. IDa_Deployed.boundaries sets terminal := FIq_Terminal.terminal,
+which runs FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31. Three parts
+of FIq_Native sit inside it:
+- the pair-forest semantic terminal (52 of the 121 in-family sites);
+- the copy terminal (20);
+- the state-only Poseidon oracle and its rounds (about 25).
+
+The remaining in-family sites are the QM31/CM31 tower and the prepared multiplier. NPH_R22Towers
+already proves the tower W-lemmas. The prepared-multiplier family is not covered.
+
+**What is missing.** The terminal must be shown total on NLU_Terminal.InputDomain with canonical
+claims and alpha. Those are the inputs the SM work already establishes at every executed finish
+(NPH_R22JoinSM4.deployed_verify_guarded). No theorem in the closure gives this.
+- NLU_Terminal.source concludes `Outcome`, which is success-only: fail maps to True.
+- NLH_CompRoot.source, NLH_PartsRoot.source and NLH_WrapperRoot.source each carry an explicit
+  `fail err` branch.
+
+So no FIq kernel call is yet shown to receive W arguments at its executing sites. The four FIq
+kernels stay domain-only. The proof campaign is a W-invariant through:
+- the Poseidon permutation (round-constant add loops, pow5, the internal and external linear
+  layers);
+- the absorption of public-digest and claim lanes;
+- the digest-binding, value-lane, occupancy and path loops of the terminal.
+
+Each producer is available: the canonical claims and alpha, the public digest domain
+(NKR_DigestChildren.Domain), asset_id < P and the canonical challenges. They are not yet
+composed through those bodies.
+
+**Failed approach, kept as a record.** NPH_fiq_reach_host.py (output NPH_FIQ_REACH.json) is a
+read-only forward reachability scan over definition bodies. It starts from the adapter program
+and the deployed configuration records and reuses the NPH_sites_scan2 name resolution. It ran on
+the host in a capped scope.
+- Result: 122 of the 238 FIq sites are forward-reachable. Those are the 121 in-family sites and
+  FIq_Terminal.terminal. The 116 alias and outside sites, such as the RPv_FIx/FIy/FJ* `.run`
+  models, are not.
+- The scan **under-approximates execution**. It also reports NBO_FieldSemantics add/product/
+  power and NBF_BasisInstall.install as unreachable, yet NPH_R22Join094 proves the deployed
+  Dcon/Dsel run them. In this proof architecture the deployed path is tied to the installed
+  records partly through theorems (NOC_QueryLink.values_eq and others), not only through
+  definition references.
+- It therefore **cannot support any NOT_EXECUTING classification**, and none was made from it.
+  The 116 FIq model sites stay OPEN.
+- A sound classification needs a reachability notion that follows those theorem-level ties.
+  That is a question for the lead.
+
+**The other two domain-only definitions** are AspisR1CanonicalQRawUnified and FIo_QRaw
+canonical.Q.raw, with 121 rows each. They are called from the TX2 dot/push raw path
+(NHE_DotRaw, FJf_DotPushValue, FIo_NativeExternal). Section 11 recorded that the producer for the
+dots output, FIp_DotsOutputCanonical.all, lies outside the L187 closure. Their caller join is not
+attempted here.
+
+Counts are unchanged since 18b: 67/27/6/20/100 of 220; rows exposed 309 of 396.
+
+Target not yet established.
