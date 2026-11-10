@@ -19,7 +19,7 @@ E=Path(__file__).resolve().parent
 sha=lambda b:hashlib.sha256(b).hexdigest()
 spec=json.loads((E/(sys.argv[1]+'_spec.json')).read_text());run=spec['run']
 AENEAS_SHA={'original':'959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3','extended':'c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'}
-assert sha(Path(spec['aeneas_command'][0]).read_bytes())==AENEAS_SHA[spec['aeneas_tool']],'aeneas does not match the tool named in the spec'
+assert sha(Path(spec['aeneas_command'][0]).read_bytes())==(AENEAS_SHA.get(spec['aeneas_tool']) or spec['aeneas_sha256']),'aeneas does not match the tool named in the spec'
 p=E/'NHR_stage.py';pin=json.loads((E/'PCWH_STAGER_PIN.json').read_text());assert sha(p.read_bytes())==pin['sha256'],'stager drift'
 loader=importlib.util.spec_from_file_location('PCWH_private_NHR_stage',p);m=importlib.util.module_from_spec(loader);loader.loader.exec_module(m)
 rel=next(l.split(':',2)[2].strip().lstrip('/') for l in Path('/proc/self/cgroup').read_text().splitlines() if l.startswith('0:'))
@@ -75,7 +75,7 @@ for extra in ['charon-driver']:
 pins=dict(run=run,aeneas_tool=spec['aeneas_tool'],p1g_config=spec.get('p1g'),spec_id=spec.get('spec_id'),frozen_revision=m.REV,frozen_source_tree_git_hash=spec['frozen_source_tree_git_hash'],cargo_lock_sha256_before=pj.get('lock_before'),cargo_lock_sha256_after=pj.get('lock_after'),
  staging_manifest_sha256=pj.get('manifest_sha256'),stager_sha256=pin['sha256'],controller_sha256=sha(Path(__file__).read_bytes()),
  opacity_file='%s_spec.json'%run,opacity_file_sha256=sha((E/(run+'_spec.json')).read_bytes()),tools=tools,charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],
- environment=dict(RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_BUILD_JOBS='1',RAYON_NUM_THREADS='1'),extra_env_appended_to_stager_env=spec.get('extra_env'),
+ environment=dict(RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_BUILD_JOBS='1 (stager default; overridden by extra_env to 4)',RAYON_NUM_THREADS='1'),identity_note='identity by class receipt PCWE_E003; cargo --jobs 4 and CARGO_BUILD_JOBS=4; rustc -Zthreads=1; SECOND TOOL VERSION (Charon 454586e9 / Aeneas 0d21a9ec)',extra_env_appended_to_stager_env=spec.get('extra_env'),
  llbc_sha256=pj.get('llbc_sha256'),charon_exit=pj.get('charon_exit'),aeneas_exit=pj.get('aeneas_exit'),exit=pj.get('exit'),
  output_sha256=pj.get('outputs',{}),opaque_check=check,namespace=spec['configuration'].get('namespace'),start_from=spec['configuration'].get('roots') or spec['configuration']['start_from'],features=spec['configuration'].get('features'))
 (out/('%s_PINS.json'%run)).write_text(json.dumps(pins,indent=2,sort_keys=True)+'\n')

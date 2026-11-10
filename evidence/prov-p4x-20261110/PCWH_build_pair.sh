@@ -11,7 +11,9 @@ L=/work/pair-build; mkdir -p $L; exec > >(tee -a /work/pair-build.log) 2>&1
 echo "== start $(date -u +%FT%TZ)"
 ocamlopt -version; dune --version; opam --version
 sha256sum /home/opam/.opam/5.2/bin/ocamlopt /home/opam/.opam/5.2/bin/dune
+opam repo set-url default https://opam.ocaml.org 2>&1 | tail -3
 opam update 2>&1 | tail -5
+opam repo list
 opam install --dry-run visitors.20260520 ppx_deriving_hash.0.1.5 > $L/dry.log 2>&1; echo "dry exit $?"
 tail -40 $L/dry.log
 N=$(grep -c -E '(install|upgrade|recompile|downgrade|remove) ' $L/dry.log || true)

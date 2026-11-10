@@ -31,18 +31,25 @@ stgz=out/'minirust-exact-source.tar.gz';subprocess.check_call(['git','-C',str(sm
 rec['minirust_archive_sha256']=sha(stgz.read_bytes());rec['minirust_revision']=smh
 (work/'charon'/'crates'/'minirust').mkdir(parents=True,exist_ok=True);subprocess.check_call(['tar','xzf',str(stgz),'-C',str(work/'charon'/'crates'/'minirust'),'--no-same-owner'])
 # aeneas/src/charon is a symlink to ../charon in the repo; the recipe's layout is /work/aeneas and /work/charon
-# ---- phase 1: charon rust
-env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_HOME=str(E/'PCWH_cargo_home'),CARGO_TARGET_DIR=str(out/'charon-target'),CARGO_BUILD_JOBS='3',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin')
-t0=time.monotonic()
-with (out/'rust-build.log').open('w') as lg:
-    r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'rust-build.time'),'timeout','1500','cargo','build','--release','--locked'],cwd=str(work/'charon'/'charon'),env=env,stdout=lg,stderr=subprocess.STDOUT)
-rec['rust_phase']=dict(exit=r.returncode,wall_seconds=round(time.monotonic()-t0,3),peak_scope_bytes=(scg/'memory.peak').read_text().strip(),swap=(scg/'memory.swap.current').read_text().strip(),events=(scg/'memory.events').read_text().replace('\n',' | '))
-tm=(out/'rust-build.time').read_text() if (out/'rust-build.time').exists() else ''
-rec['rust_phase']['max_rss_kib']=next((l.split(':',1)[1].strip() for l in tm.splitlines() if 'Maximum resident' in l),None)
-if r.returncode!=0:
-    (out/'receipt.json').write_text(json.dumps(dict(rec,exit_status=r.returncode,phase='rust'),indent=2));print(json.dumps(rec));sys.exit(r.returncode)
-for b in ('charon','charon-driver'):
-    shutil.copy2(out/'charon-target'/'release'/b,out/'bin'/b);rec['sha256_'+b]=sha((out/'bin'/b).read_bytes())
+# ---- phase 1: charon rust (or reuse of an earlier attempt's verified binaries when the spec names one)
+if spec.get('reuse_rust_from'):
+    old=Path(spec['reuse_rust_from']);orc=json.loads((old/'receipt.json').read_text())
+    assert orc['charon_revision']==rec['charon_revision'] and orc['charon_archive_sha256']==rec['charon_archive_sha256'] and orc['minirust_archive_sha256']==rec['minirust_archive_sha256']
+    for b in ('charon','charon-driver'):
+        shutil.copy2(old/'bin'/b,out/'bin'/b);rec['sha256_'+b]=sha((out/'bin'/b).read_bytes());assert rec['sha256_'+b]==orc['sha256_'+b],b
+    rec['rust_phase']=dict(reused_from=str(old),original=orc['rust_phase'])
+else:
+ env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_HOME=str(E/'PCWH_cargo_home'),CARGO_TARGET_DIR=str(out/'charon-target'),CARGO_BUILD_JOBS='3',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin')
+ t0=time.monotonic()
+ with (out/'rust-build.log').open('w') as lg:
+     r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'rust-build.time'),'timeout','1500','cargo','build','--release','--locked'],cwd=str(work/'charon'/'charon'),env=env,stdout=lg,stderr=subprocess.STDOUT)
+ rec['rust_phase']=dict(exit=r.returncode,wall_seconds=round(time.monotonic()-t0,3),peak_scope_bytes=(scg/'memory.peak').read_text().strip(),swap=(scg/'memory.swap.current').read_text().strip(),events=(scg/'memory.events').read_text().replace('\n',' | '))
+ tm=(out/'rust-build.time').read_text() if (out/'rust-build.time').exists() else ''
+ rec['rust_phase']['max_rss_kib']=next((l.split(':',1)[1].strip() for l in tm.splitlines() if 'Maximum resident' in l),None)
+ if r.returncode!=0:
+     (out/'receipt.json').write_text(json.dumps(dict(rec,exit_status=r.returncode,phase='rust'),indent=2));print(json.dumps(rec));sys.exit(r.returncode)
+ for b in ('charon','charon-driver'):
+     shutil.copy2(out/'charon-target'/'release'/b,out/'bin'/b);rec['sha256_'+b]=sha((out/'bin'/b).read_bytes())
 # ---- phase 2: container
 name='pcwh-'+run.lower();img=spec['image']
 (work/'build-pair.sh').write_bytes((E/'PCWH_build_pair.sh').read_bytes());rec['build_pair_sh_sha256']=sha((work/'build-pair.sh').read_bytes())
