@@ -13,26 +13,29 @@
   "note": "225 checked or mixed definitions minus 5 NOT_EXECUTED proof-only references (AspisR65Field M31.add/neg, AspisR66Field M31.add/neg/sub), lead ruling 1 of 2026-11-10",
   "TOTAL_PROVED": 67,
   "DIRECT": 27,
-  "DOMAIN_LEMMA_PROVED": 25,
-  "PRECONDITION_B": 0,
+  "DOMAIN_LEMMA_PROVED": 22,
+  "PRECONDITION_B": 3,
   "OPEN": 101,
   "NOT_EXECUTED": 5
  },
  "counts_by_class": {
-  "CHECKED/TOTAL_PROVED": 64,
-  "CHECKED/OPEN": 99,
-  "CHECKED/DOMAIN_LEMMA_PROVED": 28,
   "CHECKED/DIRECT": 26,
+  "CHECKED/DOMAIN_LEMMA_PROVED": 20,
+  "CHECKED/NOT_EXECUTED": 5,
+  "CHECKED/OPEN": 99,
+  "CHECKED/PRECONDITION_B": 3,
+  "CHECKED/TOTAL_PROVED": 64,
+  "MIXED/DIRECT": 1,
   "MIXED/DOMAIN_LEMMA_PROVED": 2,
-  "MIXED/TOTAL_PROVED": 3,
   "MIXED/OPEN": 2,
-  "MIXED/DIRECT": 1
+  "MIXED/TOTAL_PROVED": 3
  },
  "rows": {
   "touched_by_executed_checked_or_mixed": 396,
-  "with_at_least_one_open_or_domain_only_definition": 365,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 31,
-  "touched_including_NOT_EXECUTED": 396
+  "with_at_least_one_open_or_domain_only_definition": 363,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 33,
+  "touched_including_NOT_EXECUTED": 396,
+  "note_20261110_late": "served_only_by_TOTAL_or_DIRECT_definitions now counts rows served only by TOTAL, DIRECT or PRECONDITION_B definitions"
  },
  "screen_note": "existing_closure_statements_screen lists closure theorems whose statement names the exact definition next to an ok/spec conclusion; labels are a textual screen (NPH_existing_host.py), not certified judgments, except where nph_judgment cites them.",
  "definitions": [
@@ -3221,10 +3224,17 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "TOTAL (2021 current_mul_mod / multiply_R22, AspisR1Qm31ArithmeticProbe copy)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing CW site in NPH_SITES.json (25 W_LEMMA + 1 NO_CW_CALL) has a limb-bound lemma, and every site context is composed from producers along the reached body: tx1 094 query path (NPH_R22Join094/Join094Step), tx2 finish and query (NPH_R22JoinCW2/CW3), the deployed claim loop (NPH_R22JoinCW4) and, closing the last context, the tx1 candidate.prepare walk to op8 and the PreparedScratchModel.prepare walk to the claim call (NPH_R22JoinCW5 L044, NPH_R22JoinCW6 L046): kappa canonical from scalar_candidate_samplers_false_canonical, inactive canonical from F3M_InactiveCanonical.source",
    "nph_theorems": [
     "AspisR1.NPH_R22CM31.CW_CM31_mul_total",
-    "AspisR1.NPH_R22Weak.CW_CM31_mul_weak"
+    "AspisR1.NPH_R22Weak.CW_CM31_mul_weak",
+    "AspisR1.NPH_R22JoinCW5.prepare_claim_congr",
+    "AspisR1.NPH_R22JoinCW5.deployed_kappa",
+    "AspisR1.NPH_R22JoinCW5.originalNew_guarded",
+    "AspisR1.NPH_R22JoinCW5.guarded_claim_sites",
+    "AspisR1.NPH_R22JoinCW6.candidate_op8_congr",
+    "AspisR1.NPH_R22JoinCW6.deployed_prepare_guarded",
+    "AspisR1.NPH_R22JoinCW6.installed_prepare_guarded"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only",
@@ -3277,7 +3287,9 @@
      "the walk of AspisR1PublicPreparation.PreparedScratchModel.prepare (boundaries = BorrowedClaimPrepared.boundaries) from entry to the claim call: kappa is a PreparedModel.scalar output (producer scalar_candidate_samplers_false_canonical) and inactive comes from the inactive decoder (producer F3M_InactiveCanonical.source); with that walk, NPH_R22JoinCW4.owned_claim_sites closes the last CW context"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_late_cw": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "caller_join_progress_20261110_late": "CW closed: candidate.prepare (currentInstalled cfg, every configuration) equals the same body with op8 replaced by guardedOp8, whose claim boundary runs the borrowed claim only on canonical kappa and inactive; guarded_claim_sites gives the exit owned_sum ok with canonical output on every successful claim-loop run. Caveat retained from section 14: the classification of NFS_QueryOps.base, SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select as reducing to the concrete slots reads the sources and is not a Lean statement."
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -3419,11 +3431,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing CW site in NPH_SITES.json (25 W_LEMMA + 1 NO_CW_CALL) has a limb-bound lemma, and every site context is composed from producers along the reached body: tx1 094 query path (NPH_R22Join094/Join094Step), tx2 finish and query (NPH_R22JoinCW2/CW3), the deployed claim loop (NPH_R22JoinCW4) and, closing the last context, the tx1 candidate.prepare walk to op8 and the PreparedScratchModel.prepare walk to the claim call (NPH_R22JoinCW5 L044, NPH_R22JoinCW6 L046): kappa canonical from scalar_candidate_samplers_false_canonical, inactive canonical from F3M_InactiveCanonical.source",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.CW_M31_add_eq",
     "AspisR1.NPH_R22FieldCopies.CW_M31_add_R22",
-    "AspisR1.NPH_R22Weak.add_R22_weak"
+    "AspisR1.NPH_R22Weak.add_R22_weak",
+    "AspisR1.NPH_R22JoinCW5.prepare_claim_congr",
+    "AspisR1.NPH_R22JoinCW5.deployed_kappa",
+    "AspisR1.NPH_R22JoinCW5.originalNew_guarded",
+    "AspisR1.NPH_R22JoinCW5.guarded_claim_sites",
+    "AspisR1.NPH_R22JoinCW6.candidate_op8_congr",
+    "AspisR1.NPH_R22JoinCW6.deployed_prepare_guarded",
+    "AspisR1.NPH_R22JoinCW6.installed_prepare_guarded"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only",
@@ -3476,7 +3495,9 @@
      "the walk of AspisR1PublicPreparation.PreparedScratchModel.prepare (boundaries = BorrowedClaimPrepared.boundaries) from entry to the claim call: kappa is a PreparedModel.scalar output (producer scalar_candidate_samplers_false_canonical) and inactive comes from the inactive decoder (producer F3M_InactiveCanonical.source); with that walk, NPH_R22JoinCW4.owned_claim_sites closes the last CW context"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_late_cw": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "caller_join_progress_20261110_late": "CW closed: candidate.prepare (currentInstalled cfg, every configuration) equals the same body with op8 replaced by guardedOp8, whose claim boundary runs the borrowed claim only on canonical kappa and inactive; guarded_claim_sites gives the exit owned_sum ok with canonical output on every successful claim-loop run. Caveat retained from section 14: the classification of NFS_QueryOps.base, SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select as reducing to the concrete slots reads the sources and is not a Lean statement."
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -3768,11 +3789,18 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (precondition proved from the callers): every executing CW site in NPH_SITES.json (25 W_LEMMA + 1 NO_CW_CALL) has a limb-bound lemma, and every site context is composed from producers along the reached body: tx1 094 query path (NPH_R22Join094/Join094Step), tx2 finish and query (NPH_R22JoinCW2/CW3), the deployed claim loop (NPH_R22JoinCW4) and, closing the last context, the tx1 candidate.prepare walk to op8 and the PreparedScratchModel.prepare walk to the claim call (NPH_R22JoinCW5 L044, NPH_R22JoinCW6 L046): kappa canonical from scalar_candidate_samplers_false_canonical, inactive canonical from F3M_InactiveCanonical.source",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.CW_M31_sub_eq",
     "AspisR1.NPH_R22FieldCopies.CW_M31_sub_R22",
-    "AspisR1.NPH_R22Weak.sub_R22_weak"
+    "AspisR1.NPH_R22Weak.sub_R22_weak",
+    "AspisR1.NPH_R22JoinCW5.prepare_claim_congr",
+    "AspisR1.NPH_R22JoinCW5.deployed_kappa",
+    "AspisR1.NPH_R22JoinCW5.originalNew_guarded",
+    "AspisR1.NPH_R22JoinCW5.guarded_claim_sites",
+    "AspisR1.NPH_R22JoinCW6.candidate_op8_congr",
+    "AspisR1.NPH_R22JoinCW6.deployed_prepare_guarded",
+    "AspisR1.NPH_R22JoinCW6.installed_prepare_guarded"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only",
@@ -3825,7 +3853,9 @@
      "the walk of AspisR1PublicPreparation.PreparedScratchModel.prepare (boundaries = BorrowedClaimPrepared.boundaries) from entry to the claim call: kappa is a PreparedModel.scalar output (producer scalar_candidate_samplers_false_canonical) and inactive comes from the inactive decoder (producer F3M_InactiveCanonical.source); with that walk, NPH_R22JoinCW4.owned_claim_sites closes the last CW context"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_20261110_late_cw": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "caller_join_progress_20261110_late": "CW closed: candidate.prepare (currentInstalled cfg, every configuration) equals the same body with op8 replaced by guardedOp8, whose claim boundary runs the borrowed claim only on canonical kappa and inactive; guarded_claim_sites gives the exit owned_sum ok with canonical output on every successful claim-loop run. Caveat retained from section 14: the classification of NFS_QueryOps.base, SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select as reducing to the concrete slots reads the sources and is not a Lean statement."
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -18819,5 +18849,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
+ "revision_note": "updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
 }

@@ -931,3 +931,147 @@ exposed.**
 Not started in this run: SM, QA, SC, R72, FIq and the 345 body walk.
 
 Target not yet established.
+
+## 15. CurrentWide reaches (b); continuation (worker of 2026-11-10, late)
+
+### 15a. CW: the prepare walk to the claim call
+
+Eight scopes were used, L039–L046 (8 of this run's 40). L039–L043 failed on proof-script
+details, and each script was changed before the next scope:
+- L039: `dsimp` made no progress, and guardedNew had no return type.
+- L040 and L041: the rewrite found no claim occurrence.
+- L042: a trace probe. It showed that the let-pattern match on (kappa, t2) is reduced only by
+  `refine` unification, not by `dsimp`.
+- L043: a pair-bind lemma did not unify with the matcher.
+- L045: a structure-instance parse error.
+
+L044 accepted NPH_R22JoinCW5 (5.34 s, 6,713,168 KiB), and L046 accepted NPH_R22JoinCW6
+(3.92 s, 6,725,872 KiB). Swap was 0 in all eight. All 17 accepted `#print axioms` lines are
+within [propext, Classical.choice, Quot.sound], and there is no sorry. The lead decision
+holds: no ops interface, merged module or closed-row statement is changed.
+
+**NPH_R22JoinCW5 (L044).**
+- `prepare_claim_congr`. Take any PreparedScratchModel.Boundaries B and any claim function c'.
+  Suppose c' agrees with B.claim at (v.y1, v.inactive, any scratch, any kappa returned by a
+  successful row-28 flag-false PreparedModel.scalar of B.sampling). Then prepare with B.claim
+  replaced by c' equals prepare B.
+  - This covers every outcome of the later steps and both fold branches.
+  - It is the formal form of "every claim call that prepare executes receives such a kappa,
+    and inactive = v.inactive".
+  - It is proved by bind-stepping through the prepare body.
+- `deployed_kappa`. On concreteBoundaries (installedBoundaries S e), every such kappa is
+  canonical. installed_as_candidate_samplers (rfl) gives installedBoundaries S e =
+  withCandidateSamplers (withSourceFromQm (withConcreteQueries S e)). The producer is then
+  scalar_candidate_samplers_false_canonical.
+- `originalNew_guarded`. Assume the retained inactive is canonical. Then
+  BorrowedClaimPrepared.originalNew S e equals guardedNew S e: the same transported prepare,
+  whose claim boundary guardedClaim runs the borrowed claim only when kappa and inactive are
+  canonical and fails otherwise.
+- `claim_body` (rfl). The borrowed claim is owned_claim_loops on concreteOps QRaw.
+- `guarded_claim_sites`. Wherever guardedClaim runs the borrowed claim, kappa and inactive are
+  canonical. Then, for every successful powers, initial update and claim loop, the exit
+  owned_sum is ok with canonical output (NPH_R22JoinCW4.owned_claim_sites).
+
+**NPH_R22JoinCW6 (L046).**
+- `candidate_op8_congr`. Take any Ops O whose op5 is InstalledPreparation.sourceView, and any
+  f that agrees with O.op8 on views v with sourceView p s y = ok (.Ok v). Then replacing op8
+  by f leaves verifier.candidate.prepare unchanged. So every op8 call that the tx1 prepare
+  executes is on a source-view output. The irreducible compact offsets are handled by
+  `ls_eq`/`os_eq`/`oy_eq`/`oi_eq`.
+- `deployed_prepare_guarded`. Take op5 = sourceView and op8 = originalNew
+  (withOriginalSerializer closedSampling) Total.embed. Then candidate.prepare equals the same
+  body with op8 := guardedOp8. The inactive comes from F3M_InactiveCanonical.source and the
+  kappa from deployed_kappa.
+- `installed_op5` (rfl), `installed_op8` (rfl to closedInstall, then
+  NNH_Run5bPreparedCore.installed) and `installed_prepare_guarded`. These give the same
+  equality for DrvC_Installation.currentInstalled cfg, for every configuration. That includes
+  NOC_PrepareFront.cur c, which is what tx1 runs.
+
+**CW moves to (b).** This was the last open CW context. Every executing CW site in
+NPH_SITES.json (25 W_LEMMA + 1 NO_CW_CALL) has a limb-bound lemma, and every site context is
+composed from producers along the reached body:
+- the tx1 094 query path (Join094/Join094Step);
+- the tx2 finish and query (CW2/CW3);
+- the deployed claim loop (CW4);
+- the tx1 prepare to the claim (CW5/CW6).
+
+AspisR1CurrentWide.field CM31.mul, M31.add and M31.sub are now PRECONDITION_B in
+NPH_R22_CONE.json. Each keeps its previous judgment under
+`nph_judgment_before_20261110_late_cw`.
+
+Two caveats carry over unchanged from section 14:
+- NFS_QueryOps.base, SAQ_LineQuery.install, SAQ_QuerySource.install and FIp_Install.select
+  are classified as reducing to the concrete slots. That classification reads the sources;
+  it is not a Lean statement.
+- The NPH_SITES.json checklist is a textual screen. It cannot see calls made through notation,
+  instances or callback records beyond the ones traced.
+
+**Counts (220 executed checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 22 |
+| precondition proved from the callers (b) | 3 |
+| open | 101 |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 363 of 396** CLOSED rows still depend on at least one open or domain-only
+definition (was 365). 33 are served only by TOTAL, DIRECT or (b) definitions. The row gain is
+small because the CW kernels' rows are also served by SM, QA and FIq kernels and by the
+accumulator families.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 15b. SM: the mask site closed; input producers open
+
+One more scope was used: L047, accepted on the first attempt (3.62 s, 5,888,908 KiB, swap 0,
+1 axiom line, standard). That makes 9 of this run's 40.
+
+**NPH_R22JoinSM2.FIp_mask_site (L047).** For every seed record, take inputs whose probe
+images are canonical: every c1 cell, every mask-only cell, every point cell, and g. Then
+(FIp_SemanticArithmetic.install seed).mask is ok, with canonical output. The proof is
+NHU_Mask.result, a theorem already in the closure, transported by NHU_Mask.adopted (rfl).
+NHU_Mask.result itself proves state_only_selected_mask_value ok and canonical on canonical
+inputs. It establishes all the loop invariants and the 27-entry coefficient array through
+the closure's coefficient, Horner and linear inductions. So every SM kernel call executed
+inside the mask returns ok. In NPH_SITES.json:
+- the four loop wrappers (selected_mask_linears_loop and state_only_selected_mask_value_loop0,
+  loop1 and loop2) are now SUBSUMED_CANONICAL_TOTAL;
+- FIp_SemanticArithmetic.mask is CANONICAL_SITE.
+
+The two SM items "loop compositions" and "coefficient-array invariant" are therefore
+discharged at the mask site, without new loop proofs.
+
+**SM is not moved to (b).** The mask is called only from FinishModel.finish
+(RPz7_S1SemanticFinishModelV1, the tx1 semantic finish) as `B.mask a a1 q alpha`. These are
+still open:
+1. canonicality of the arguments at that call:
+   - a = B.fromFn 16 closureFn9 claims and a1 = B.fromFn 10 closureFn5 claims;
+   - q = claims[0][27];
+   - claims comes from the deployed B.claims decoder;
+   - alpha is the RoundModel.rounds output;
+2. the same for the later B.mul challenges.eta val2, B.add mask q1 and B.add q2 val3[28];
+3. a Lean identification of the deployed B (IDa_Deployed.boundaries r) with
+   FIp_SemanticArithmetic.install. NNG_InstallArithmetic defines the transported add/mul;
+4. the right operands of qm31_sum_products3_prepared (loop0 callers, FJe_Sum3IndexBridge.old
+   and the PoseidonPreparedIndex* loops).
+
+NHS_FinishFields.source is a success-only inversion of FinishModel.finish, so it does not
+serve as a reach statement. The method that closed CW applies unchanged: a congruence
+theorem on FinishModel.finish with a guarded mask/add/mul boundary, plus producer lemmas
+for claims and alpha. The producers were not located in this run.
+
+**Counts: unchanged since 15a.** 67/27/22/3/101 of 220; rows exposed 363 of 396.
+
+Not started in this run: QA, SC, R72, FIq and the 345 body walk. 31 of the 40 scopes remain
+unused.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
