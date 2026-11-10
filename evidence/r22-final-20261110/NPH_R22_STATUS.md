@@ -1123,3 +1123,273 @@ installers as Lean statements; QA, SC, R72, FIq and the 345 walk) were not start
 
 No reachable input on which the wrapping binary accepts and the checked model rejects was
 found. Target not yet established.
+
+## 17. SM finish context composed; four query installers as Lean statements (continuation worker, 2026-11-10, after the owner pause)
+
+Twenty scopes were used, L048–L067, of this run's 40 (NPH_COMPILE.tsv records every one). Each
+ran at MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with lean -j1 -M7000 and a
+180 s timeout. Swap was 0 in every scope. No cap was raised, and no failed shape was rerun
+unchanged.
+
+**The L048–L060 timeouts and their fix.** The first finish congruence timed out three times
+(L048–L050), stalled at MemoryHigh: about 23 s of user CPU, 16% CPU, no major page faults,
+and a cgroup peak of 6.6–6.8 GB.
+- L051 split the module and showed that `finish_congr` is the cause.
+- L055–L059 were uncredited diagnostics (bisection with `sorry`, then progress markers
+  written to a file in the attempt directory). They showed that elaborating the statement
+  alone hangs, and that the hang starts at the fourth hypothesis: 15 binders and 13 premises
+  in one ∀-chain.
+- L060 showed that bundling the reached premises into three `def` predicates elaborates in
+  0.38 s, while the original form still hangs with all linters off.
+- The cost therefore grows with the depth of the premise chain, not with the proof or a
+  linter. The accepted statement uses the bundled form.
+
+**Accepted modules (standard axioms only, no sorry):**
+
+| Scope | Module | Wall | Peak RSS (KiB) | Axiom lines |
+|---|---|---:|---:|---:|
+| L054 | NPH_R22JoinSM3 | 1.97 s | 3,841,916 | 11 |
+| L061 | NPH_R22JoinSM3F | 2.78 s | — | 1 |
+| L063 | NPH_R22JoinSM4 | 3.84 s | 6,674,812 | 18 |
+| L065 | NPH_R22JoinSM5 | 3.05 s | 6,742,856 | 4 |
+| L067 | NPH_R22Installers2 | 3.07 s | 5,910,312 | 8 |
+
+- NPH_R22JoinSM3 holds the helpers and the verify congruence:
+  - `verify_congr`: VerifyPrefix.verify F = VerifyPrefix.verify F' whenever F and F' agree at
+    the prefix, transcript and challenges returned by the SAME successful parse, public
+    transcript and begin calls;
+  - `fromFnLoop_mem`/`fromFn_mem`: the induction over OraclePortStdBuilder.fromFnLoop.
+    Every element of a successful fromFn output is a call_mut output on the unchanged
+    capture;
+  - `closure9_mem`/`closure5_mem`: closureFn6 and closureFn2 return an element of claims[0];
+  - `idx_mem`, `branch_cont`, `map_err11_cont`, `circle_eq`.
+- NPH_R22JoinSM3F holds `finish_congr`. FinishModel.finish with mask, add and mul replaced
+  equals the original whenever the replacements agree at the arguments the finish passes, on
+  the SAME successful earlier calls:
+  - Head: rounds and claims;
+  - Fill: the two fromFn calls and claims[0][27];
+  - the Ok terminal output;
+  - the mask and mul outputs;
+  - Tail: the first add, the row-25 record, its decode and entry 28.
+  The proof bind-steps every outcome of every later step.
+- NPH_R22JoinSM4 holds the producers and the guarded record.
+  - `Bd std r` is S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std
+    (IDa_Deployed.boundaries r)).
+  - `deployed_slots` and `deployed_install` (rfl) give the deployed mask/add/mul as
+    FIp_SemanticArithmetic.mask/add/mul. Bd is definitionally FIp_SemanticArithmetic.install
+    of itself, which settles item 3 of section 15b.
+  - `Bg` runs FIp mask only on canonical cells and FIp add/mul only on canonical operands,
+    and fails otherwise.
+  - Producers: `claims_canon` (claims_value, then FJa_ClaimsCanonical.value, for every
+    claims cell); `alpha_canon` (verifier_round_alpha_canonical); `fromFn9_canon`,
+    `fromFn5_canon` and `cell_canon`; `decode_canon` (decodeMain_success_members_canonical);
+    `terminal_canon` (NLU_Terminal.source under InputDomain); `mask_out_canon`
+    (NPH_R22JoinSM2.FIp_mask_site). The mul and first-add outputs come from
+    FIp_SemanticValues.mul/add.
+  - `deployed_finish_guarded`: finish over Bg = finish over Bd, given a canonical eta and
+    NLU_Terminal.InputDomain.
+  - `deployed_verify_guarded`: verify over the Bg finish = verify over the Bd finish for
+    every public with LIB_VPublicDomain.publicDigestDom. Inside, the begin challenges come
+    from FJn_BeginCanonical.value, and the asset half of InputDomain comes from
+    LIB_VPublicAsset.bytes_asset at the public_bytes of the SAME successful public transcript
+    (PreparationSuccess.public_transcript_success).
+  - Site lemmas `guarded_mask_site`, `guarded_add_site` and `guarded_mul_site`: wherever Bg
+    runs a kernel, its arguments are canonical, and the kernel is ok with a canonical (mask)
+    or W (add/mul) output.
+- NPH_R22JoinSM5 holds `slot_guarded`. For every host context and every public pub with
+  publicDigestDom (toRetainedPublic pub), the literal installed op9 slot on release `none`
+  equals S1SemanticInstallation.verify over `Bslot`, the Claims-unrolled deployed record
+  with the guarded mask/add/mul. The proof is NOC_Op9Slot.slot, then bd_eq/bg_eq (rfl), then
+  deployed_verify_guarded. The deployed boundary tie is rfl, as section 16 expected.
+- NPH_R22Installers2 replaces the source reading of section 14.
+  - For NFS_QueryOps.base, SAQ_QuerySource.install, SAQ_LineQuery.install and
+    FIp_Install.select, every CW-executing query slot the installer sets (op2, op3, op9,
+    op16, op17, op20) is the NJJ_QueryOps.concrete slot. Every other slot passes through.
+  - Each installer applied to concrete returns concrete (fip_select_concrete: whenever the
+    configuration's query is concrete).
+  - **The section 14 caveat on these four installers is removed.** The other caveat stands:
+    NPH_SITES.json is a textual screen.
+
+**SM is not moved to (b).** Two SM contexts remain open.
+1. **The digest-domain premise of `slot_guarded`.** This is the one SM input whose bound has
+   no composed producer. val2, the Ok terminal output that enters `B.mul challenges.eta
+   val2`, is canonical only under NLU_Terminal.InputDomain. Every field of InputDomain is now
+   produced inside the verify except the digest half, publicDigestDom of the public the op9
+   slot receives.
+   - Its producer is at 345: NOM_TerminalDomain.validated_digest, at the installed op21
+     validate's success on the decoded statement, carried by NOC_Stage1Forward.publicBinding
+     and NOC_Op9Slot.pub_round.
+   - The call path from that validate to the slot is located: stage1_owned →
+     first_decoded (sp) → (S c).op10 = NIS_Tx1Boundary.release (at_none, rfl) →
+     NHL_EmittedTx1.tx1 → prepareCall → NHL_EmittedPrepare, which calls ops.op9 at its own
+     public1 with obs from tx1. This is not yet composed.
+   - Every layer except stage1_owned passes the public through unchanged, so those layers
+     need only a rewrite congruence. stage1_owned needs a bind-stepping walk from the op21
+     success to the first_decoded call. Its premises must be bundled, given L055–L060.
+2. **The qm31_sum_products3_prepared right operands** (loop0 callers FJe_Sum3IndexBridge.old
+   and the PoseidonPreparedIndex* loops), unchanged from section 15b.
+
+**Counts: unchanged.** 67/27/22/3/101 of 220; rows exposed 363 of 396. NPH_SITES.json records
+the new SM contexts and the installer statements. NPH_R22_CONE.json keeps every judgment and
+records the SM context note on the five SM kernels.
+
+Not started in this run: QA, SC, R72, FIq and the 345 body walk. 20 of the 40 scopes remain.
+
+No executing site was found that passes a value whose bound no producer gives, other than the
+digest-domain premise named above, whose producer is located and only the tie is missing. No
+reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 17a. SM: the digest premise carried to tx1; sum3 SM copy proof-only (same run)
+
+One more scope was used: L068 accepted NPH_R22JoinSM6 on the first attempt (3.27 s, 6,749,108
+KiB, swap 0, 11 axiom lines, all standard). That makes 21 of this run's 40.
+- `prepare_op9_congr` and `tx1_op9_congr`: verifier.candidate.prepare and verifier.candidate.tx1
+  are unchanged when op9 is replaced by any f that agrees with op9 at the candidate's OWN
+  public. The other arguments are free. The irreducible constants (LOGICAL_SEMANTIC,
+  OFF_SEMANTIC, OFF_Y1, OFF_INACTIVE, ZERO, OFF_FOLDED_ROOT, OFF_ROUND1) do not read op9.
+  So the candidate reads op9 only at its own public.
+- `digest_of_binding`: take a statement whose installed op21 validate returned Ok, and a
+  current public cp equal to toCurrentPublic of that statement's library semantic public.
+  Then publicDigestDom (toRetainedPublic cp) holds (NOC_Op9Slot.pub_round, then
+  NOM_TerminalDomain.validated_digest). NOC_Stage1Forward.publicBinding states exactly this
+  equality for the semantic public sp that stage1_owned computes, and fdLemma unfolds
+  first_decoded (S c) sp to this tx1 at that public, with hash () and obs none.
+- `tx1_guarded`: at every host context, for such a public, the deployed tx1 candidate equals
+  the same tx1 whose op9 slot on release `none` is the guarded semantic installation over
+  NPH_R22JoinSM5.Bslot.
+
+**SM sum3 right operands: not executing.** NPH_SUM3_REFS.json (NPH_sum3_refs_host.py, a
+read-only scan of the replayed src) lists every reference to the SM-copy
+qm31_sum_products3_prepared/_loop0 and to the model loops that call it. Apart from the
+copy's own definitions, every reference is one of two kinds:
+- nine proof-module abbrevs (the RPv_*Poseidon*Loop* and FJe_Sum3*Bridge Loop/old/native
+  abbrevs), which are themselves referenced only from theorems;
+- theorems.
+
+The executing sum3 is FIq_Native.field.qm31_sum_products3_prepared, in the FIq family
+(FJe_Sum3WrapperBridge.same relates the two copies). Under lead ruling 1 (proof-only
+references, the R65/R66 precedent), the SM site qm31_sum_products3_prepared_loop0 is
+NOT_EXECUTING. This is a textual screen, like the rest of NPH_SITES.json.
+
+**SM is still not moved to (b).** Every SM context is now composed or excluded except one
+link. stage1_owned must call first_decoded only at the semantic public of a statement whose
+op21 returned Ok. In the source this is the order of the body: op47 decode, then op21, then
+semantic_public, then first_decoded, in both data branches. NOC_Stage1Forward.body states it
+only as hypotheses, so it is not a Lean statement. Closing it needs a congruence over
+r1_pool_adapter.owned.stage1_owned (two branches of about 35 binds, with bundled premises
+after the lesson of L055–L060) and the record identity from (S c).op10 to the candidate tx1
+(the generic first steps of fdLemma). This is the first piece of the 345 body walk.
+
+**Counts: unchanged.** 67/27/22/3/101 of 220; rows exposed 363 of 396.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
+
+### 17b. QA powers context, SC and R72 (same run)
+
+Four more scopes were used: L069, L070–L071 and L072. That makes 25 of this run's 40. All accepted
+modules use standard axioms only, with no sorry. L070 failed on one wrongly qualified lemma name,
+and the name was changed before L071.
+
+| Scope | Module | Wall | Peak RSS (KiB) | Axiom lines |
+|---|---|---:|---:|---:|
+| L069 | NPH_R22JoinQA2 | 3.11 s | 6,724,284 | 2 |
+| L071 | NPH_R22JoinSC1 | 2.76 s | 5,620,868 | 8 |
+| L072 | NPH_R22R72 | 1.98 s | 5,217,312 | 2 |
+
+**QA: the "CurrentWideMul WideExact.mul callers" context is closed (NPH_R22JoinQA2).**
+- The site's only direct caller is AspisR1PowersConcreteMul.sourceMul. Its only executing
+  caller is AspisR1LoopPowers.field.WideExact.mul, inside weights.early_powers_loop.body.
+- early_powers has exactly two executing callers (NPH_POWERS_REFS.json):
+  - ClaimPowers.powers, the concreteOps claim powers slot. `claim_powers_ok`: ok on a
+    canonical kappa, which NPH_R22JoinCW5.guarded_claim_sites gives at every executed claim.
+  - Tx2N_Powers.powers, the tx2 stage op17 slot. `tx2_powers_ok`: ok at p.gamma of the
+    Prepared that the tx2 resume returns (gamma canonical from
+    NPH_R22JoinCW2.entered_domain). tx2_common calls op17 only as op17 29 p.gamma.
+- early_powers is ok on canonical input, so every WideExact.mul call it executes returns ok.
+- QA is still not (b). Two contexts remain: the installer contexts outside 094, and NFN
+  op14/op15 under NFN_NEA_FieldProduct.ops.
+
+**SC moves to (b) (NPH_R22JoinSC1).**
+- `step_congr` and `rounds_congr`: RoundModel.step and rounds are unchanged when boundary and
+  value are replaced by functions that agree with them on the arguments the step actually
+  passes. Those arguments are:
+  - the Ok decode(28) coefficients;
+  - the alpha array returned by the SAME successful Array.update with the Ok
+    semantic_validated value;
+  - the round.
+
+  rounds is unrolled over rounds 0..9.
+- `deployed_rounds_guarded` has NO premise: rounds over `Rg` equals rounds over
+  AspisS1ExtractedRoundChildren.children. `Rg` runs generatedMainBoundary/Value only on
+  canonical coefficients, and value only for round < 10 with a canonical alpha[round].
+  - Producers: decodeMain_success_members_canonical, and
+    semantic_success_selected_canonical through `update_at` (NHI_ArrayCells).
+  - `finish_rounds_guarded` gives the same inside FinishModel.finish.
+- Site lemmas `guarded_boundary_site` and `guarded_value_site`: wherever Rg runs an entry, the
+  whole entry call is ok with canonical output (JFv_RoundArithmetic.boundary/value). So every
+  SC kernel call inside it returns ok.
+- NJM_RoundJoin.R is children by definition. The other referrers are proof-only
+  (NPH_SC_REFS.json through NPH_SC_REFS4.json):
+  - the RawGeneratedSemanticRoundPolynomialAdapter copy is used only by actualRoundBoundaries,
+    inside a Prop, a structure and theorems;
+  - NJM_RoundJoin.afterSemantic is used only under model definitions that take a parse
+    proof as an argument;
+  - NJM_RoundRoot.Cases is used only from the unreached NJM_RoundsClosed.Child;
+  - NNG_LegacySuffix136.f_r is used only from theorems.
+- Moved to PRECONDITION_B: SemanticCallExtraction CM31.mul, M31.add, M31.sub, and
+  r1_semantic.semantic_value_loop.body (previously OPEN: CALLER_DOMAIN_NOT_COMPOSED; it runs
+  only inside the guarded semantic_value_entry). Previous judgments are kept under
+  `nph_judgment_before_20261110_sc`.
+- **The proof-only classification of the non-deployed referrers is a textual screen, and I
+  flag it for lead review.**
+
+**R72 moves to (b) (NPH_R22R72).**
+- Every reached R72 kernel call lies inside AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+  (definition-level scan NPH_R72_REFS.json, plus the deployed_splitB REACHABLE list). Its
+  reached callers are the wrapper externals:
+  - the root-namespace circle.secure_ood_circle_point_from_parameter;
+  - the AspisR1CircleFallback copy, reached through root transcript.circle_fallback_point and
+    then AspisR1CircleFallback.transcript.circle_fallback_point.
+
+  Both run only inside AspisR1CircleSampleWrapper.sampler.circle_sample (its mapper and its
+  fallback closure). The R72-internal transcript loop is not reached.
+- `circle_sample_total`: circle_sample is ok for EVERY input
+  (RawCircleSampleActualPolicyUnconditionalV1.circle_sample_total_on_circle). So every executed
+  R72 kernel call returns ok, whatever its caller passes. `circle_source_total` states the same
+  for the deployed finish circle boundary F3M_CircleSource.source.
+- Moved to PRECONDITION_B: AspisR72Sampler CM31.mul, CM31.square, M31.add, M31.neg and M31.sub.
+  Previous judgments are kept under `nph_judgment_before_20261110_r72`. AspisR72Sampler
+  r24_canonical_mul stays OPEN: NO_FROZEN_COUNTERPART.
+
+**Counts (220 executed checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 14 (was 22) |
+| precondition proved from the callers (b) | 12 (was 3) |
+| open | 100 (was 101) |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 359 of 396** (was 363). These are the CLOSED rows that still depend on at least
+one open or domain-only definition; 37 rows are served only by TOTAL, DIRECT or (b)
+definitions. The recount script reproduces the recorded 363 before the change.
+
+Families at (b): CW, SC and R72. Not at (b):
+- SM: one link open, the stage1_owned ordering of 17a.
+- QA: two contexts open.
+- FIq: 238 sites, not started.
+
+The 345 body walk is not started; its first piece is the SM link.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found. 15 of the 40
+scopes remain unused.
+
+Target not yet established.
