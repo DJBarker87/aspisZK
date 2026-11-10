@@ -1,0 +1,40 @@
+∀ {W Tx : Type} (L0 : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (borrow : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L0)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocation217 : RSL.Bytes → RSL.Env → Bool) (allocation234 : RSL.TX2_234.Args → RSL.Env → Nat → Bool)
+  (ch : NMX_R4_Authentication.Choices) (alloc2 : NMV_ConcreteWindows.Allocation) (fx : AspisR1.NOC_Run5bCtx.Fixed)
+  (w : AspisR1.NOC_Run5bCtx.World W Tx) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (queries :
+    @RSL.TASB.ExecB.QueriesF (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@NPO_Oct.AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@NPO_Oct.AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx)
+  (run :
+    @RSL.TASB.Runs (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) NNH_Libraries.L NNH_Libraries.V0
+      NNH_Libraries.VL
+      (NPO_Oct.AspisR1.NNH_Run6Installed.implementation allocation217 allocation234 ch
+        AspisR1.NNG_Candidate344.allocation alloc2)
+      (@RSL.TASB.ctxB (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+        (@NPO_Oct.AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@NPO_Oct.AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w
+        H)),
+  have c : RSL.TAS.Sig.Ctx (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) :=
+    @RSL.TASB.ctxB (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+      (@NPO_Oct.AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@NPO_Oct.AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx w H;
+  And
+    (RSL.TAS.Sig.Bound (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c
+      (RSL.TAS.Sig.model1 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+      (RSL.TAS.Sig.model2 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+    (And
+      (@NPO_Oct.AspisR1.NNH8_Split.rest W Tx L0 copy c
+        (RSL.TAS.Sig.model1 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+        (RSL.TAS.Sig.model2 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+      (Or
+        (@RSL.EVB.HeadlineB.OutcomeRec (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@NPO_Oct.AspisR1.NNH8_Exec.recSig W Tx L0 copy std)
+          (@NPO_Oct.AspisR1.NNH8_HeadlineB.headlineB W Tx L0 borrow copy std) c
+          (RSL.TAS.Sig.model1 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c)
+          (RSL.TAS.Sig.model2 (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std) c))
+        (@RSL.TASB.ExecB.ERec (@NPO_Oct.AspisR1.NOC_Run5bHost.S_host W Tx L0 copy std)
+          (@NPO_Oct.AspisR1.NNH8_Exec.recSig W Tx L0 copy std) (@NPO_Oct.AspisR1.NNH8_Exec.exec W Tx L0 copy std) fx
+          H)))
