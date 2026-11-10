@@ -1,0 +1,55 @@
+{
+ "schema": "PCXG_UNIVERSE_FINDINGS/1",
+ "target_established": false,
+ "universe": "L187 replayed closure /home/dombarker/project-offloads/codex-cx-replay-l187-20261109 (LEAN_PATH final/objs, objs, base_ref; read-only by reference)",
+ "result_summary": "All 22 bundles (293 credited files), PRVH_WrapAdd and the 28 deployed-body modules (chains PCVN/PCVQ/PCVS, PCVP) compile with exit 0 against the L187 closure; no credited file failed because a module differs between the ledger30 chain and L187. The findings below are about two named modules and about two shapes (timeout, import clash).",
+ "differing_modules": [
+  {
+   "module": "NHT_Constants",
+   "ledger30_chain_sha256_12": "845540b82bf9",
+   "l187_sha256_12": "1703ca3ffd3c",
+   "proved_against": "the ledger30 chain object (NII_flat/NHT_Constants.olean); the credited files that import it (PRVCmb_C15, C16, PRVEq_Tx2Deployed_n0) were proved there",
+   "differing_declarations": "none at declaration level: the chain object is the L187 closure current_object (the overlay object); L187 compared it with its replay object and labelled it DECL_IDENTICAL (final/L187_CONSOLIDATED.json); the byte difference is the embedded source path (olean sizes 123456 vs 123504, 338 differing bytes; the replay embeds .../codex-cx-replay-l187-20261109/src/NHT_Constants.lean)",
+   "equality_holds_against_L187": "yes: C15 (PCXG_L008), C16 (PCXG_L012) and PRVEq_Tx2Deployed_n0 (PCXG_L016) recompiled with exit 0 against the L187 object; no changed proof",
+   "constants_in_L187_top_cone": 18,
+   "note": "the L187 raw reachable list of deployed_splitB holds 18 non-internal NHT_Constants constants (compact.* and verifier.SEMANTIC_BYTES), 44 including eq_ and _proof lemmas"
+  },
+  {
+   "module": "CurrentCompactCallerModelV1",
+   "ledger30_chain_sha256_12": "e3fc15a43317",
+   "l187_sha256_12": "efabe1a49f02",
+   "proved_against": "the ledger30 chain object (pool-retarget-cache/CurrentCompactCallerModelV1.olean, equal to the L187 closure current_object); a third object (sound-int2, b6a752a92586) is on neither chain",
+   "differing_declarations": "none at declaration level: L187 label DECL_IDENTICAL; byte difference is the embedded source path (536720 vs 536776 bytes, 808 differing bytes)",
+   "equality_holds_against_L187": "yes: the credited files that import it (PRVCmb_C07, C18 as C18A..D, C19, C20, PRVEq_CallerPrepTx1_o1, PRVEq_Op13_p1) recompiled with exit 0 against the L187 object",
+   "constants_in_L187_top_cone": 0,
+   "note": "no constant named CurrentCompactCallerModelV1 in the L187 raw reachable lists of deployed_splitB, deployed_charge or NNH8_DeployedOuter"
+  }
+ ],
+ "generalisation": {
+  "table": "PCXG_IMPORT_VERSIONS.json",
+  "counts": {
+   "('chain_object_is_the_overlay_object', 'DECL_IDENTICAL')": 59,
+   "('same_object', None)": 1,
+   "('same_object', 'BYTE_IDENTICAL')": 96,
+   "('absent_in_ledger30_chain', 'BYTE_IDENTICAL')": 19,
+   "('absent_in_ledger30_chain', 'DECL_IDENTICAL')": 6,
+   "('absent_in_ledger30_chain', None)": 21
+  },
+  "limit": "the DECL_IDENTICAL label is the L187_Compare result over the overlay object; this job did not run a fresh object comparison"
+ },
+ "shape_findings": [
+  {
+   "id": "F1",
+   "what": "PRVCmb_C18 (23 files, 202 KB) exited 124 at the 180 s Lean timeout (PCXG_L012: 171 s user time, at line 1217 of 3471); it took 60 s in PCXE_L001",
+   "cause": "host speed (throttled host, other streams running) rather than a version difference",
+   "change": "shape changed, not rerun: split at file boundaries into PRVCmb_C18A..D (sections 0-6, 7-8, 9-13, 14-22; texts unchanged; PCXG_split.py); all four exit 0 (PCXG_L014, L015; C18A 165 s)",
+   "credited": "yes, the 23 file texts are unchanged"
+  },
+  {
+   "id": "F2",
+   "what": "the single all-in-one root PRVCmb_L187_ROOT (bundles plus the 28 deployed modules) failed at import: environment already contains PCVH.dec_qm from PRVCmb_C19 (PRVEq_PCVH_R1CandidateWideParserSource_k1 declares it again; PCXG_L019, 9 s)",
+   "cause": "independent credited modules that declare the same names cannot be imported together; same class as the PRVEq_AdapterStage1_o1 / AdapterStage2_o1 / CallerPrepTx1_o1 clash of PCXF_UNIVERSES.json; not a universe difference",
+   "change": "shape retired: root PRVCmb_L187_ROOTB over PRVH_WrapAdd and bundles C01..C22 (C18 as four parts), plus four separate audit modules PCXG_AUD_L1, L2A, L2B, L2C"
+  }
+ ]
+}
