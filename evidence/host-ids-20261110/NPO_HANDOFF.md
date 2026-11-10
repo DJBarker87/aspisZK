@@ -29,12 +29,14 @@ The kernel statements of the re-instantiated `deployed_splitB`, `deployed_charge
 constants are renamed back (Expr equality, 8/8). The pinned walker's axiom walk of all eight is
 standard.
 
-Two deliverables did not land.
+Continuation (section 8, after the lead merged the first round):
 
-1. **The textual restatement module `NPO_FinalB.lean` failed (exit 1).** It used the one authorised
-   16 GiB scope. The cause was three defects in my generator, not in the copies (section 4).
-2. **The executable check (task step 4) was not run.** The host dictionary and both model values are
-   noncomputable in Lean, and the copies carry no compiled code (section 5).
+- `leanchecker` replays NPO_CloneNov and NPO_CloneOct with exit 0. A negative control with one
+  unchecked, ill-typed theorem is rejected, so the replay has teeth.
+- The corrected restatement module NPO_FinalB.lean (v2, with the short alias names) compiled with exit
+  0 in the second authorised 16 GiB scope. Every alias has standard axioms.
+- The executable check (task step 4) is still not run. NPO_COMPUTABLE_SCOPING.md scopes the computable
+  host instance it needs.
 
 ## 1. Id map
 
@@ -133,8 +135,8 @@ The 29 October constants are the same with prefix `NPO_Oct.`.
 Each copy is the original declaration with the three id constants replaced and the dependents
 renamed. The theorems are therefore "assembled as TAS_FinalB did": the same `NNH8_Top.deployed_splitB_of`
 application, the same field terms, and the same 700-odd sub-proofs, re-checked by the kernel at the new
-ids. The short names in the left column were to be `abbrev`s in NPO_FinalB.lean, which did not compile
-(section 4). They do not exist as constants.
+ids. The short names in the left column now exist as aliases in out/NPO_FinalB.olean (v2, NPO_L031;
+section 8).
 
 **Kernel statements.** These are in NPO_L020/NPO_STMT_<Inst>_<root>.{orig,clone}.txt, printed with
 `pp.all` and `pp.proofs false`. The NPO_L020 reader found three things.
@@ -226,9 +228,10 @@ first: a computable sdk with H taken as a table, pda and clock as tables, and th
 Its agreement with `NOC_Run5bCtx.sdk` on the reached slots would have to be proved or checked. That
 cannot be done in 2 to 4 scopes.
 
-NPO_L024 tried to list the noncomputable leaves under these roots. Its list includes `List.flatten`,
-which is computable, so the tag lookup in a `loadExts := false` environment is not reliable. The list
-is indicative only and is not evidence. The recorded-pair data plumbing (NPN plan step 3) was not
+NPO_L024 listed the noncomputable leaves under these roots. That list included `List.flatten`, and I
+called it unreliable. That was wrong: `List.flatten` is declared `noncomputable` in Init/Prelude.lean
+and runs through a `@[csimp]` replacement. The full classification is NPO_L035 and
+NPO_COMPUTABLE_SCOPING.md (section 8). The recorded-pair data plumbing (NPN plan step 3) was not
 started.
 
 ## 6. Validation that ran
@@ -271,11 +274,8 @@ NPO_ATTEMPTS.jsonl. 25 capped scopes were used, out of a budget of 30.
   realization.
 - The statement change is the host's id constants.
 
-**Next deliverables.**
+**Next deliverables.** Items 1 and 2 of the first round are done (section 8).
 
-1. An independent kernel replay of NPO_CloneNov/Oct with the toolchain's `leanchecker`, run inside a
-   capped scope with `lean` on PATH. Estimate: 1 to 2 scopes.
-2. Optionally, the corrected textual NPO_FinalB in one 16 GiB scope, if the lead authorises it.
 3. Row 5 non-vacuity (NPN plan): NPN_RecordedHost should be re-pointed to the `NPO_Nov.` host. That
    means re-cloning NPN_RecordedFrame/RecordedHost with this tool, which is mechanical, and switching to
    the 10 November recording (devnet NPC_TRANSACTIONS.json.xz). The executable triage then needs the
@@ -288,5 +288,91 @@ Precisely: the kernel statement is TAS_FinalB's with six or seven host constants
 re-instantiated copies. Those copies differ from the originals only by the verifier program id
 (GqZz…) and the Pool/registry program ids (37hd…, 9pWw…). The registry id is the program 9pWwAcBg…,
 not the account Hnn3D6DS…. One literal-byte lemma was restated. A 29 October instance exists alongside.
+
+
+## 8. Continuation (lead instruction after the merge, budget 12 scopes; 10 used: NPO_L026 to NPO_L035)
+
+### 8.1 Independent kernel replay with leanchecker
+
+NPO_check.sh runs the toolchain's leanchecker (sha256 c7c51e29…). leanchecker uses
+`Lean.Environment.replay` to replay every constant of the target module into the module's import
+environment through the kernel. Each run was inside an 8G scope: MemoryHigh 6G, MemoryMax 8G, swap 0,
+TasksMax 64, 180 s. The environment was `env -i PATH=<toolchain>/bin:/usr/bin:/bin LEAN_SYSROOT=<toolchain>
+LEAN_PATH=out:L187 objs:L187 base_ref`, and the cwd was the log directory.
+
+| Label | Command | Olean sha256 | Exit | Wall | Peak RSS (KiB) | Swap |
+|---|---|---|---|---|---|---|
+| NPO_L026 | `leanchecker -v NPO_CloneNov` | ccdf4987… | 0 | 9.35 s | 6,404,212 | 0 |
+| NPO_L027 | `leanchecker -v NPO_CloneOct` | 40112a70… | 0 | 7.04 s | 6,422,700 | 0 |
+| NPO_L030 | `leanchecker -v NPO_Teeth` (negative control) | d961d759… | 1 | 0.89 s | 451,264 | 0 |
+
+The negative control was made in two steps. NPO_Teeth (built in L028, run in L029) writes a module
+that imports only Init. It holds one valid theorem and `NPO_Teeth.bad : False := 0`. The kernel
+rejected `bad` when it was added with checking, so it was then added with `addDeclWithoutChecking`.
+
+leanchecker rejected that module: "while replaying declaration 'NPO_Teeth.bad': (kernel) declaration
+type mismatch". So a pass of the replay is evidence. NPO_Teeth.olean was then deleted from out/, and
+nothing imports it.
+
+The first round's uncapped `leanchecker --help` (section 6) was, from the leanchecker source, a run
+with no target. It resolves the current module through a lake manifest, finds none, takes the
+anonymous name as a prefix, and so begins replaying every olean on the search path. That is why it did
+not return.
+
+### 8.2 Corrected restatement module (NPO_L031, the second authorised 16 GiB scope)
+
+NPO_gen_final2.py fixes the three generator defects of NPO_L018:
+
+1. `NNH8_RecorderFixed.fixedProgram` is renamed to its copy;
+2. TAS_FinalB's open order is kept, so the AspisV8R19/FS opens come only before `deployed_charge`
+   (the L018 "Ambiguous term" was `Bytes`: RSL vs AspisV8R19.DuplexFrames);
+3. `ctx_same` is dropped.
+
+It writes NPO_FinalB.lean (source sha256 af80a73d…). The v1 generator and the L018 file are retained
+under NPO_gen_final.py and NPO_FinalBNov/Oct.lean for the L018 receipt; the v1 combined file was
+overwritten by v2.
+
+The compile ran with MemoryHigh 14G, MemoryMax 16G, swap 0, TasksMax 64, `lean -j1 -M15000
+-DElab.async=false`, timeout 600. It finished in **exit 0**, 5.91 s, peak 6,871,932 KiB, swap 0, and
+wrote out/NPO_FinalB.olean. The 10 PANIC blocks in the log are compiler noise from `abbrev`s over the
+IR-less copies; there are no errors. `#print axioms` gives [propext, Classical.choice, Quot.sound] for
+every declaration below.
+
+| Name (10 November; the 29 October names carry the suffix Oct) | Definition or statement |
+|---|---|
+| `NPO_Program.verifier` | abbrev for `NPO_DeployedIds.verifierNov` |
+| `NPO_Instances.D` | abbrev for `NPO_Nov.LIB_Instances.D`; `NPO_Instances.D_eq : D = NPO_DeployedIds.DNov` (rfl) |
+| `NPO_InstancesOct.D_devnet` | `D = LIB_Deployed.devnet` (rfl) |
+| `NPO_Run5bHost.S_host` | abbrev for `@NPO_Nov.AspisR1.NOC_Run5bHost.S_host` |
+| `AspisR1.NPO_Run5bHostChecks.type_same` | the type is that of `NOC_Run5bHost.S_host` (rfl) |
+| `AspisR1.NPO_Run5bHostChecks.args1_at` / `args2_at` | `args1 c = NNE_EntryArgs.args c.i.entry 3 NPO_Program.verifier c.i.data`, and the same for args2 with `c.j`, 7 (rfl) |
+| `AspisR1.NPO_FinalB.deployed_splitB`, `fail_sub_rec`, `deployed_charge` | TAS_FinalB's run-7 text with the re-instantiated host constants, proved by the copies |
+| `NPO_FinalB.deployed_splitB`, `deployed_charge`, `fail_sub_rec`, `deployed_outer` | the short aliases (`type_of%` of the restatements; `deployed_outer` = `NPO_Nov.AspisR1.NNH8_DeployedOuter`) |
+
+### 8.3 Computable-host scoping (NPO_L032 to NPO_L035)
+
+The note is NPO_COMPUTABLE_SCOPING.md; the data are NPO_L035/NPO_NONCOMPUTABLE.json and
+NPO_NONCOMPUTABLE_BY_ROOT.json. NPO_L032 and NPO_L033 were a build and a refused run: `loadExts := true`
+requires `enableInitializersExecution` first. NPO_L034 rebuilt the tool and NPO_L035 ran it.
+
+In summary: 363 noncomputable constants are reachable from sdk, tx1Value, tx2Value, the TX1 producer
+and I. None of them is noncomputable through `partial_fixpoint` or opaque externals; the extracted
+Aeneas code is computable. There are 63 distinct leaves:
+
+- about 34 `Classical.propDecidable` and 2 `Classical.decEq`. These are easy: the refinement is
+  structural decidability, proved equal through the subsingleton property of `Decidable`.
+- about 16 `Classical.choose`. Some are total-Result choices, which are easy: a match on `ok`, with
+  injectivity giving equality. About 10 are existential selections that need uniqueness lemmas or a
+  reviewed restatement; this is the hard class.
+- 5 with no visible cause, needing compile probes.
+
+The host sdk alone has 12 propDecidable leaves. My estimate is 30 to 70 scopes for a computable host
+plus the executable run. I recommend the sdk refinements plus a 1-scope interpreter timing probe first.
+
+### 8.4 Budget and assumptions
+
+The first round used 25 scopes and this continuation used 10 of its 12. Nothing ran on the host
+outside a capped scope during the continuation. No assumption was discharged, added or changed. The
+statement change remains the host's id constants, as in section 3.
 
 Target not yet established.
