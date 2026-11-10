@@ -9,6 +9,7 @@ def boundex(path):
 HDR='''import Aeneas
 import NNH_CorrectConfiguration
 import NNH_HostSeed
+import NNH_HostCtx
 import NNH_Tx2SourceConfiguration
 import PRVEq_%s_o1
 open Aeneas Aeneas.Std Result ControlFlow Error
@@ -56,11 +57,17 @@ theorem deployed_stage1_owned_src (missing : IDa_Deployed.Uninstalled NFN_NEW_Ge
       AdapterRw.r1_pool_adapter.owned.stage1_owned (NNH_Tx2SourceConfiguration.sdk missing env err r) :=
   generic_stage1_owned _
 
+/-- The Adapter model of the credited host context (NNH_HostCtx.model1): fresh frozen stage1_owned at xOf = model1 c. -/
+theorem host_model1 {W Tx : Type} (c : AspisR1.NNH_HostCtx.Ctx W Tx) :
+    AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned (xOf (AspisR1.NNH_HostCtx.sdk c)) = AspisR1.NNH_HostCtx.model1 c :=
+  generic_stage1_owned _
+
 #print axioms bound
 #print axioms generic_stage1_owned
 #print axioms deployed_stage1_owned
 #print axioms deployed_stage1_owned_m0
 #print axioms deployed_stage1_owned_src
+#print axioms host_model1
 end PCVO_S1
 '''%(fields,tup)
 open('PRVEq_AdapterStage1Deployed_o1.lean','w').write(s)
@@ -122,11 +129,17 @@ theorem deployed_stage2_owned_m0 (env : RSL.Env) (err : NFN_NEW_GeometryDictiona
       AdapterRw.r1_pool_adapter.owned.stage2_owned (NNH_CorrectConfiguration.sdk NNH_HostSeed.m0 env err r) :=
   generic_stage2_owned _ _ rfl rfl
 
+theorem host_model2 {W Tx : Type} (c : AspisR1.NNH_HostCtx.Ctx W Tx) :
+    AdapterRw.PCVK_S2.r1_pool_adapter.owned.stage2_owned (xOf (AspisR1.NNH_HostCtx.sdk c) (LIB_Env.hashv (AspisR1.NNH_HostCtx.envOf c))) =
+      AspisR1.NNH_HostCtx.model2 c :=
+  generic_stage2_owned _ _ rfl rfl
+
 #print axioms bound
 #print axioms generic_stage2_owned
 #print axioms generic_validate_asq8
 #print axioms deployed_stage2_owned
 #print axioms deployed_stage2_owned_m0
+#print axioms host_model2
 end PCVO_S2
 '''%(fields,tup2)
 open('PRVEq_AdapterStage2Deployed_o1.lean','w').write(s)
@@ -143,6 +156,7 @@ lits=p3m[i:j]
 k=p3m.index('theorem v_OFF_Y1'); l=p3m.index('#print axioms v_OFF_ROUND1')
 rest=p3m[k:l]
 s=HDR%'CallerPrepTx1'
+s=s.replace('import NNH_HostSeed','import NNH_HostSeed\nimport NJG_CallerInstall')
 s+='''namespace PCVO_C
 open AspisR1CurrentCaller.PCVK_C
 
@@ -207,6 +221,61 @@ theorem deployed_tx1_m0 (env : RSL.Env) (err : NFN_NEW_GeometryDictionary.CE) (r
       @AspisR1CurrentCaller.verifier.candidate.tx1 (cur NNH_HostSeed.m0 env err r) H :=
   deployed_tx1 _ _ _ _ H
 
+/-- The packet Ops of the credited emitted-tx1 chain (NHL_DriverModel): every base/expected/reserved. -/
+theorem packet_prepare (base expected : AspisR1CurrentCaller.Ops) (reserved : Bool) (H : Type) :
+    @AspisR1CurrentCaller.PCVK_C.verifier.candidate.prepare (xOf (NHL_DriverModel.preparedOps base expected reserved)) H =
+      @AspisR1CurrentCaller.verifier.candidate.prepare (NHL_DriverModel.preparedOps base expected reserved) H :=
+  generic_prepare _ rfl rfl rfl rfl rfl rfl H
+
+theorem packet_tx1 (base expected : AspisR1CurrentCaller.Ops) (reserved : Bool) (H : Type) :
+    @AspisR1CurrentCaller.PCVK_C.verifier.candidate.tx1 (xOf (NHL_DriverModel.txOps base expected reserved)) H =
+      @AspisR1CurrentCaller.verifier.candidate.tx1 (NHL_DriverModel.txOps base expected reserved) H :=
+  generic_tx1 _ rfl rfl rfl rfl rfl rfl H
+
+/-- Composition with the existing NJG_CallerInstall.tx1 (emitted tx1 = gate tx1 at the packet Ops):
+the PCVK fresh frozen tx1 at xOf equals NHW_EmittedTx1.tx1 at the installed packet Ops. -/
+theorem njg_tx1 (base : AspisR1CurrentCaller.Ops) (reserved : Bool)
+    (seed : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+    (pubdata : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (publicBytes proof : Slice Std.U8) (k : Std.Usize) (hash : H) :
+    NHW_EmittedTx1.tx1
+      (NHL_Packets.installed
+        (NHW_DriverInstantiation.packetOps (NJG_CurrentEquation.ops base seed std)
+          (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std)) reserved)
+      (NHW_EmittedPrepare.prepare
+        (NHL_Packets.installed
+          (NHW_DriverInstantiation.packetOps (NJG_CurrentEquation.ops base seed std)
+            (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std)) reserved))
+      D pubdata publicBytes proof k hash none =
+    @AspisR1CurrentCaller.PCVK_C.verifier.candidate.tx1
+      (xOf (NHL_DriverModel.txOps
+        (NHW_DriverInstantiation.packetOps (NJG_CurrentEquation.ops base seed std)
+          (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std))
+        (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std) reserved)) H
+      D pubdata publicBytes proof k hash none := by
+  rw [packet_tx1]
+  exact NJG_CallerInstall.tx1 base reserved seed std D pubdata publicBytes proof k hash
+
+theorem njg_prepare (base : AspisR1CurrentCaller.Ops) (reserved : Bool)
+    (seed : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+    (pubdata : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (proof : Slice Std.U8) (hash : H) (g : NHL_PrepareStages.Scratch) :
+    NHL_EmittedPrepare.prepare
+      (NHL_Packets.installed (NHW_Prepare.nativeChildren (NJG_CurrentEquation.ops base seed std)) reserved)
+      D pubdata proof hash none g =
+    @AspisR1CurrentCaller.PCVK_C.verifier.candidate.prepare
+      (xOf (NHL_PrepareModel.children
+        (NHL_Packets.installed (NHW_Prepare.nativeChildren (NJG_CurrentEquation.ops base seed std)) reserved)
+        (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std))) H
+      D pubdata proof hash none g := by
+  have := packet_prepare (NHW_Prepare.nativeChildren (NJG_CurrentEquation.ops base seed std))
+    (RowShape_InstalledSlots.verifierOps (NJG_CurrentEquation.ops base seed std) (FIp_Install.boundaries seed) std) reserved H
+  unfold NHL_DriverModel.preparedOps at this
+  rw [this]
+  exact NJG_CallerInstall.prepare base reserved seed std D pubdata proof hash g
+
 #print axioms bound
 #print axioms generic_prepare
 #print axioms generic_tx1
@@ -214,6 +283,10 @@ theorem deployed_tx1_m0 (env : RSL.Env) (err : NFN_NEW_GeometryDictionary.CE) (r
 #print axioms deployed_tx1
 #print axioms deployed_prepare_m0
 #print axioms deployed_tx1_m0
+#print axioms packet_prepare
+#print axioms packet_tx1
+#print axioms njg_tx1
+#print axioms njg_prepare
 end PCVO_C
 '''%(fields,tup2)
 open('PRVEq_CallerPrepTx1Deployed_o1.lean','w').write(s)

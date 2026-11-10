@@ -1,6 +1,7 @@
 import Aeneas
 import NNH_CorrectConfiguration
 import NNH_HostSeed
+import NNH_HostCtx
 import NNH_Tx2SourceConfiguration
 import PRVEq_AdapterStage1_o1
 open Aeneas Aeneas.Std Result ControlFlow Error
@@ -58,9 +59,15 @@ theorem deployed_stage1_owned_src (missing : IDa_Deployed.Uninstalled NFN_NEW_Ge
       AdapterRw.r1_pool_adapter.owned.stage1_owned (NNH_Tx2SourceConfiguration.sdk missing env err r) :=
   generic_stage1_owned _
 
+/-- The Adapter model of the credited host context (NNH_HostCtx.model1): fresh frozen stage1_owned at xOf = model1 c. -/
+theorem host_model1 {W Tx : Type} (c : AspisR1.NNH_HostCtx.Ctx W Tx) :
+    AdapterRw.PCVK_S1.r1_pool_adapter.owned.stage1_owned (xOf (AspisR1.NNH_HostCtx.sdk c)) = AspisR1.NNH_HostCtx.model1 c :=
+  generic_stage1_owned _
+
 #print axioms bound
 #print axioms generic_stage1_owned
 #print axioms deployed_stage1_owned
 #print axioms deployed_stage1_owned_m0
 #print axioms deployed_stage1_owned_src
+#print axioms host_model1
 end PCVO_S1

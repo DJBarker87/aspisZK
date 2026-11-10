@@ -1,6 +1,7 @@
 import Aeneas
 import NNH_CorrectConfiguration
 import NNH_HostSeed
+import NNH_HostCtx
 import NNH_Tx2SourceConfiguration
 import PRVEq_AdapterStage2_o1
 open Aeneas Aeneas.Std Result ControlFlow Error
@@ -89,9 +90,15 @@ theorem deployed_stage2_owned_m0 (env : RSL.Env) (err : NFN_NEW_GeometryDictiona
       AdapterRw.r1_pool_adapter.owned.stage2_owned (NNH_CorrectConfiguration.sdk NNH_HostSeed.m0 env err r) :=
   generic_stage2_owned _ _ rfl rfl
 
+theorem host_model2 {W Tx : Type} (c : AspisR1.NNH_HostCtx.Ctx W Tx) :
+    AdapterRw.PCVK_S2.r1_pool_adapter.owned.stage2_owned (xOf (AspisR1.NNH_HostCtx.sdk c) (LIB_Env.hashv (AspisR1.NNH_HostCtx.envOf c))) =
+      AspisR1.NNH_HostCtx.model2 c :=
+  generic_stage2_owned _ _ rfl rfl
+
 #print axioms bound
 #print axioms generic_stage2_owned
 #print axioms generic_validate_asq8
 #print axioms deployed_stage2_owned
 #print axioms deployed_stage2_owned_m0
+#print axioms host_model2
 end PCVO_S2
