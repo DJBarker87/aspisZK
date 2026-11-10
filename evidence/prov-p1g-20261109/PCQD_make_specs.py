@@ -49,5 +49,6 @@ add('D15','core','circle: secure_circle_point_from_parameter, secure_ood_circle_
  ['crate::circle::secure_circle_point_from_parameter','crate::circle::secure_ood_circle_point_from_parameter','crate::circle::CirclePointError'],include=[],modules=['AspisR72Sampler.Funs','AspisR72Sampler.Types'])
 add('D16','core','field: M31::inv, CM31::inv/inv_with, QM31::try_inv, square_n, eq instances',
  ['crate::field::_::inv','crate::field::_::inv_with','crate::field::_::try_inv','crate::field::square_n','crate::field::_::eq'],include=[],modules=['AspisR72Sampler.Funs'])
+add('D17','core','r0::transport::order (priority: last unexamined SEMANTIC item)',['crate::r0::transport::order','core::option::_::ok_or'],include=[],modules=['FIo_Native'])
 (E/'PCQD_extract_specs.json').write_text(json.dumps(dict(schema='PCQD_extract_specs/1',note='roots and opacity per group; extended Aeneas first. P1g.',specs=S),indent=1)+'\n')
 print(len(S))

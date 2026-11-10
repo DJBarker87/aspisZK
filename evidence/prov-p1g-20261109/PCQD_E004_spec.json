@@ -1,0 +1,120 @@
+{
+ "run": "PCQD_E004",
+ "spec_id": "D01",
+ "aeneas_tool": "extended",
+ "label": "AdapterRw: first_decoded, observer, owned require_* helpers, readonly_buffer_meta_ok, OwnedAccount::data_len",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::first_decoded",
+  "--start-from",
+  "crate::observer",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::require_distinct_accounts",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::require_readonly_buffer",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::require_zero",
+  "--start-from",
+  "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+  "--start-from",
+  "crate::r1_pool_adapter::owned::_::data_len",
+  "--include",
+  "aspis_core::field::P",
+  "--opaque",
+  "aspis_r1_cost_probe::verifier::tx1",
+  "--opaque",
+  "crate::error",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E004_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_workspace/programs/r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "1",
+  "--features",
+  "pool-adapter,private-leaf-salts"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCQD_d01",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E004_emitted/raw",
+  "-subdir",
+  "PCQD_d01",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1g-20261109/PCQD_E004_emitted/repro.llbc"
+ ],
+ "opacity": [],
+ "configuration": {
+  "start_from": [
+   "crate::first_decoded",
+   "crate::observer",
+   "crate::r1_pool_adapter::owned::require_distinct_accounts",
+   "crate::r1_pool_adapter::owned::require_readonly_buffer",
+   "crate::r1_pool_adapter::owned::require_verifier_checkpoint",
+   "crate::r1_pool_adapter::owned::require_zero",
+   "crate::r1_pool_adapter::readonly_buffer_meta_ok",
+   "crate::r1_pool_adapter::owned::_::data_len"
+  ],
+  "include": [
+   "aspis_core::field::P"
+  ],
+  "opaque": [
+   "aspis_r1_cost_probe::verifier::tx1",
+   "crate::error"
+  ],
+  "features": "pool-adapter,private-leaf-salts",
+  "manifest": "programs/r1-cost-probe/Cargo.toml",
+  "namespace": "PCQD_d01",
+  "crate": "aspis-r1-cost-probe-program"
+ },
+ "covers": {
+  "modules": [
+   "AdapterRwModel"
+  ]
+ },
+ "supersedes": null,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "p1g": {
+  "note": "warm_cache_after_E001_timeout",
+  "basis": "Callees of first_decoded outside the gate definitions (verifier::tx1, error) opaque as P1c did for crate-level callees."
+ }
+}
