@@ -1,0 +1,129 @@
+def NLB_Parent.finish : NP6_StdModel.Reservation → NJU_CommonObserved.Finish :=
+fun r v p a x =>
+  NHT_ResultPort.action (Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none)
+NJJ_Common.run : NP6_StdModel.Reservation →
+  NP6_StdModel.Reservation →
+    NJJ_Common.Merkle →
+      NJJ_Common.Finish →
+        {H : Type} →
+          VTop_Stages.aspis_core.digest.Digest32 H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 →
+                  H →
+                    Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+                      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)
+@[irreducible] def NHT_Constants.compact.SPLIT : Aeneas.Std.Usize :=
+10#usize
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_Probe.lean:13:7: error(lean.unknownIdentifier): Unknown constant `alloc.vec.Vec.deref_mut`
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_Probe.lean:14:7: error(lean.unknownIdentifier): Unknown constant `alloc.vec.Vec.deref`
+def AspisR1.SAG_DotAdapter.mapSlice : {A B : Type} → (A → B) → Aeneas.Std.Slice A → Aeneas.Std.Slice B :=
+fun {A B} f xs => ⟨List.map f ↑xs, ⋯⟩
+NHI_RangeProgress.some_next : ∀ (r r' : NHI_RangeProgress.Range) (i : Aeneas.Std.Usize),
+  Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize r =
+      Aeneas.Std.Result.ok (some i, r') →
+    i = r.start ∧ r'.end = r.end ∧ ↑r'.start = ↑r.start + 1 ∧ ↑r.start < ↑r.end
+@Port3_PushFrame.bind_success : ∀ {A B : Type} (m : Aeneas.Std.Result A) (k : A → Aeneas.Std.Result B) (v : B),
+  (do
+        let x ← m
+        k x) =
+      Aeneas.Std.Result.ok v →
+    ∃ x, m = Aeneas.Std.Result.ok x ∧ k x = Aeneas.Std.Result.ok v
+def AspisR1.Port3_RowsInstall.toBW : Port3_RowsInstall.BW → S7Kani2AccumulatorLoop.BatchedWeights :=
+fun b => { raw := b.raw, terms := b.terms }
+NNU_Query.powersDomain : ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator),
+  NID_ResumeFields.Domain p a →
+    ∀ (g : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize),
+      NHT_PacketOps.powers 29#usize p.gamma = Aeneas.Std.Result.ok g →
+        NEV_DotInputs.Canonical (FIp_DotsAdapter.toArray g)
+NNH_Run5bQueryDomain.initial : ∀ (r : NP6_StdModel.Reservation) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (pending : AspisR1Stage2.verifier.BatchedWeights),
+  NID_ResumeFields.Domain p a →
+    a.next = 10#usize →
+      NJJ_Common.pending r a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) →
+        NFS_QueryInvariant.Domain p 10 22 a pending
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_Probe.lean:21:7: error(lean.unknownIdentifier): Unknown constant `core.iter.range.IteratorRange.next`
+def NIG_Slots.installed : NP6_StdModel.Reservation → Port3_NativeFinishBody.Ops NIG_Slots.W :=
+fun r => Port4D_Round.native (IDa_Deployed.finish r)
+@AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+          AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                Aeneas.Std.Usize →
+                  D →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                        AspisR1CurrentPreparedClaim.verifier.Error)
+@Aeneas.Std.loop.eq_def : ∀ {α : Type u_1} {β : Type u_2} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β))
+  (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+@[reducible] def NJJ_Common.Finish : Type :=
+VTop_Stages.verifier.View →
+  VTop_Stages.verifier.Prepared →
+    VTop_Stages.verifier.Accumulator →
+      Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit) →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)
+@NPH_R22FieldSites.dot_site : ∀ {T : Type} (weights : Aeneas.Std.Slice T),
+  ∀ j < weights.len, (↑weights).length ≤ 64 → NPH_R22FieldSites.Ok3 j
+def AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop.body : {W D : Type} →
+  AspisR1FinishRelationCurrent.FinishOps W D →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice AspisR1FinishRelationCurrent.aspis_core.field.QM31 →
+        D →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.ControlFlow (D × Aeneas.Std.Usize)
+                (D ×
+                  Option
+                    (Aeneas.Std.core.result.Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+                      AspisR1FinishRelationCurrent.verifier.Error))) :=
+fun {W D} ops final_message weights dot j =>
+  have i := weights.len;
+  if j < i then do
+    let we ← ops.field final_message j
+    let q ← weights.index_usize j
+    let (r, dot1) ← ops.pushDot dot we q
+    let r1 ←
+      AspisR1FinishRelationCurrent.core.result.Result.map_err
+          AspisR1FinishRelationCurrent.verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+    let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+        let j1 ← j + 1#usize
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (dot1, j1))
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+        let return_capture ←
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+              (Aeneas.Std.core.convert.FromSame AspisR1FinishRelationCurrent.verifier.Error) residual
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (dot1, some return_capture))
+  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (dot, none))
+       29.80 real         2.03 user         3.26 sys
+          5397790720  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              144310  page reclaims
+              261459  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               39082  voluntary context switches
+              217124  involuntary context switches
+         52476284259  instructions retired
+         19802584266  cycles elapsed
+           894910264  peak memory footprint

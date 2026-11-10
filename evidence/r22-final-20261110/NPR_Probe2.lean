@@ -1,0 +1,21 @@
+import NPR_R22WeightsWidth
+import NDO_JFw_Row
+import NPH_R22JoinCW6
+import NPH_R22Gamma
+import NPH_R22ValuesSite
+import LIBC_QueryLoop
+import NNX_QueryOutput
+import NNH_Run5bCurrentShape
+open AspisR1
+set_option pp.proofs false
+#check @AspisR1ClaimPreparedBridge.InstalledMeaning.installed_as_candidate_samplers
+#print AspisR1ClaimPreparedBridge.candidateGammaPublic
+#print AspisR1ClaimPreparedBridge.withCandidateSamplers
+#check @LIBC_QueryLoop.model
+#print LIBC_QueryLoop.model
+#check @NNX_QueryOutput.run
+#check @AspisR1.NNH_Run5bCurrentShape.current
+#print AspisR1.NNH_Run5bCurrentShape.current
+#check @AspisR1.JFw_Row.factor
+#check @AspisR1.NPH_R22ValuesSite.compact_site
+#check @AspisR1.NPH_R22ValuesSite.installed_y1_site

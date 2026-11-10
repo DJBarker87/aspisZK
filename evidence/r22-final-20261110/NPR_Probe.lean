@@ -1,0 +1,27 @@
+import NPH_R22JoinCW2
+import NPH_R22JoinCW4
+import NPH_R22FieldSites
+import NNU_Query
+import NNU_CommonCuts
+import LIBB_Tx2EnvCode
+import CurrentClaimDotModel
+open AspisR1
+set_option pp.proofs false
+#print NLB_Parent.finish
+#check @NJJ_Common.run
+#print NHT_Constants.compact.SPLIT
+#print alloc.vec.Vec.deref_mut
+#print alloc.vec.Vec.deref
+#print SAG_DotAdapter.mapSlice
+#check @NHI_RangeProgress.some_next
+#check @Port3_PushFrame.bind_success
+#print Port3_RowsInstall.toBW
+#check @NNU_Query.powersDomain
+#check @NNH_Run5bQueryDomain.initial
+#print core.iter.range.IteratorRange.next
+#print NIG_Slots.installed
+#check @AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop
+#check @Aeneas.Std.loop.eq_def
+#print NJJ_Common.Finish
+#check @AspisR1.NPH_R22FieldSites.dot_site
+#print AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop.body

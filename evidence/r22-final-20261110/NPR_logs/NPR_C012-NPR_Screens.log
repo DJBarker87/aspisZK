@@ -1,0 +1,148 @@
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_Screens.lean:51:31: error: Application type mismatch: The argument
+  d0
+has type
+  NFS_QueryInvariant.Domain (LIBC_QueryLoop.nativeP a) 0 10 (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.pending a)
+but is expected to have type
+  NFS_QueryLoopRoot.Valid ?m.27 0 ↑10#usize ?m.42
+in the application
+  NFS_QueryLoopRoot.finite (NFS_CallerDomains.select LIBC_QueryOps.seed) ?m.26 ?m.27 (LIBC_QueryLoop.nativeG a) ?m.29 0
+    0 0 10#usize ?m.39 canonical 10 ?m.42 d0
+/Users/dominic/ZK/.worktrees/cx-r22l/evidence/r22-final-20261110/NPR_Screens.lean:48:81: error: unsolved goals
+a : LIBC_QueryLoop.Args
+x : RSL.Env
+d0 : NFS_QueryInvariant.Domain (LIBC_QueryLoop.nativeP a) 0 10 (LIBC_QueryLoop.nativeA a) (LIBC_QueryLoop.pending a)
+canonical : NEV_DotInputs.Canonical (FIp_DotsAdapter.toArray (LIBC_QueryLoop.nativeG a))
+⊢ Port3_QueryInstall.result
+      (NFG_QueryLoopDefs.run
+        (NFS_QueryLoopRoot.child (NFS_CallerDomains.select LIBC_QueryOps.seed) (LIBC_Bytes.raw a.1)
+          (LIBC_QueryLoop.nativeP a) (LIBC_QueryLoop.nativeG a) (LIBC_QueryLoop.geo a) 0 0)
+        10#usize 10 (core.result.Result.Ok (LIBC_QueryLoop.nativeA a, LIBC_QueryLoop.pending a))) =
+    Port3_QueryInstall.result
+      (NFG_QueryLoopDefs.run
+        (fun a' b' =>
+          Port3_NativeQueryBody.verifier.candidate.query_values NPH_R22Join094.Dsel (LIBC_Bytes.raw a.1)
+            (LIBC_QueryLoop.nativeP a) a' (LIBC_QueryLoop.nativeG a) none (LIBC_QueryLoop.geo a) b')
+        10#usize 10 (core.result.Result.Ok (LIBC_QueryLoop.nativeA a, LIBC_QueryLoop.pending a)))
+def AspisR1CurrentCaller.verifier.candidate.prepare : AspisR1CurrentCaller.Ops →
+  {H : Type} →
+    AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Slice U8 →
+          H →
+            Option (AspisR1CurrentCaller.verifier.Phase → Result Unit) →
+              Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Result
+                  (core.result.Result AspisR1CurrentCaller.verifier.Prepared AspisR1CurrentCaller.verifier.Error ×
+                    Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize) :=
+fun ops {H} aspis_coredigestDigest32Inst public1 proof hash obs g => do
+  let i ← AspisR1CurrentCaller.compact.LOGICAL_SEMANTIC ops
+  let i1 ← AspisR1CurrentCaller.compact.LOGICAL_Y1
+  let i2 ← i + i1
+  let r ← ops.op1 core.marker.CopyU8 i2 0#u8
+  let r1 ←
+    AspisR1CurrentCaller.core.result.Result.map_err
+        (AspisR1CurrentCaller.verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          aspis_coredigestDigest32Inst)
+        r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let (s, deref_mut_back) ← lift val.deref_mut
+      let ((semantic, y1), split_at_mut_back) ← core.slice.Slice.split_at_mut s i
+      let i3 ← AspisR1CurrentCaller.compact.OFF_SEMANTIC ops
+      let i4 ← AspisR1CurrentCaller.compact.OFF_Y1 ops
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i3, «end» := i4 }
+      let (r2, semantic1) ← ops.op10 s1 semantic
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i5 ← AspisR1CurrentCaller.compact.OFF_INACTIVE ops
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i4, «end» := i5 }
+          let (r3, y11) ← ops.op11 s2 y1
+          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              have s3 := split_at_mut_back (semantic1, y11);
+              have val1 := deref_mut_back s3;
+              do
+              let s4 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) val1 { «end» := i }
+              let s5 ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) val1 { start := i }
+              let r4 ← ops.op5 proof s4 s5
+              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← ops.op9 aspis_coredigestDigest32Inst public1 v.semantic hash obs
+                  let r6 ←
+                    AspisR1CurrentCaller.core.result.Result.map_err
+                        (AspisR1CurrentCaller.verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          aspis_coredigestDigest32Inst)
+                        r5 ()
+                  let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      AspisR1CurrentCaller.verifier.mark obs AspisR1CurrentCaller.verifier.Phase.Semantic
+                      ops.op8 aspis_coredigestDigest32Inst val2 v hash g
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AspisR1CurrentCaller.verifier.Prepared
+                            (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+                      ok (r7, g)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r5 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        AspisR1CurrentCaller.verifier.Prepared
+                        (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+                  ok (r5, g)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1CurrentCaller.verifier.Prepared
+                    (AspisR1CurrentCaller.verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              ok (r4, g)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r3 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1CurrentCaller.verifier.Prepared
+                (AspisR1CurrentCaller.verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+          ok (r3, g)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            AspisR1CurrentCaller.verifier.Prepared (core.convert.FromSame AspisR1CurrentCaller.verifier.Error) residual
+      ok (r2, g)
+'AspisR1.NPR_Screens.tx2_query_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.tx2_query_Dcon' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.libc_model_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.libc_model_Dsel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.dot_record_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.finishField_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.claim_record_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.claimParser_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.current_is_installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.deployed_gamma' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.candidateGammaPublic_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.question_err' does not depend on any axioms
+'AspisR1.NPR_Screens.runRowG_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_Screens.compact_body_guarded' depends on axioms: [propext, Classical.choice, Quot.sound]
+       39.35 real         2.52 user         4.69 sys
+          5416583168  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              151518  page reclaims
+              262758  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               39337  voluntary context switches
+              237978  involuntary context switches
+         55774898856  instructions retired
+         24655346425  cycles elapsed
+           905332360  peak memory footprint

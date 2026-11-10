@@ -1,0 +1,129 @@
+def AspisR1.Port3_FinishStage.native : {W : Type} → Stage2Finish.FinishOps W → Port3_NativeFinishBody.Ops W :=
+fun {W} ops =>
+  { op0 := ops.trace, op1 := ops.mark, op2 := ops.pair, op3 := ops.newWeights, op4 := ops.dot,
+    op5 := Stage2Finish.verifier.finishRelationRoundWithOps ops, op6 := ops.folds, ne := ops.ne }
+def AspisR1FinishRelationCurrent.verifier.finish_query_dot : {W D : Type} →
+  AspisR1FinishRelationCurrent.FinishOps W D →
+    Slice U8 →
+      Slice AspisR1FinishRelationCurrent.aspis_core.field.QM31 →
+        Result
+          (core.result.Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+            AspisR1FinishRelationCurrent.verifier.Error) :=
+fun {W D} ops final_message weights => do
+  let dot ← ops.newDot
+  let (dot1, pending_return) ←
+    AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop ops final_message weights dot 0#usize
+  match pending_return with
+    | none => do
+      let we ← ops.finishDot dot1
+      ok (core.result.Result.Ok we)
+    | some r => ok r
+def AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop : {W D : Type} →
+  AspisR1FinishRelationCurrent.FinishOps W D →
+    Slice U8 →
+      Slice AspisR1FinishRelationCurrent.aspis_core.field.QM31 →
+        D →
+          Usize →
+            Result
+              (D ×
+                Option
+                  (core.result.Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+                    AspisR1FinishRelationCurrent.verifier.Error)) :=
+fun {W D} ops final_message weights dot j =>
+  loop
+    (fun x =>
+      match x with
+      | (dot1, j1) =>
+        AspisR1FinishRelationCurrent.verifier.finish_query_dot_loop.body ops final_message weights dot1 j1)
+    (dot, j)
+structure AspisR1FinishRelationCurrent.FinishOps (W D : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1FinishRelationCurrent.FinishOps.eq : AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact → Result Bool
+  AspisR1FinishRelationCurrent.FinishOps.add : AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+  AspisR1FinishRelationCurrent.FinishOps.mulM31 : AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+      AspisR1FinishRelationCurrent.aspis_core.field.M31 → Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+  AspisR1FinishRelationCurrent.FinishOps.quarter : Result AspisR1FinishRelationCurrent.aspis_core.field.M31
+  AspisR1FinishRelationCurrent.FinishOps.newWeights : AspisR1FinishRelationCurrent.transport.Variant →
+      Std.Array AspisR1FinishRelationCurrent.aspis_core.field.QM31 10#usize →
+        Std.Array AspisR1FinishRelationCurrent.aspis_core.circle.SecureCirclePoint 2#usize →
+          Result (core.result.Result W AspisR1FinishRelationCurrent.verifier.Error)
+  AspisR1FinishRelationCurrent.FinishOps.pair : W →
+      Slice AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        Slice U8 →
+          AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+            Result
+              (core.result.Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+                AspisR1FinishRelationCurrent.verifier.Error)
+  AspisR1FinishRelationCurrent.FinishOps.field : Slice U8 →
+      Usize → Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+  AspisR1FinishRelationCurrent.FinishOps.newDot : Result D
+  AspisR1FinishRelationCurrent.FinishOps.pushDot : D →
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        AspisR1FinishRelationCurrent.aspis_core.field.QM31 → Result (core.result.Result Unit Unit × D)
+  AspisR1FinishRelationCurrent.FinishOps.finishDot : D → Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+  AspisR1FinishRelationCurrent.FinishOps.polynomial : Slice U8 →
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+constructor:
+  AspisR1FinishRelationCurrent.FinishOps.mk {W D : Type}
+    (eq :
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        AspisR1FinishRelationCurrent.aspis_core.field.WideExact → Result Bool)
+    (add :
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+          Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact)
+    (mulM31 :
+      AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+        AspisR1FinishRelationCurrent.aspis_core.field.M31 →
+          Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact)
+    (quarter : Result AspisR1FinishRelationCurrent.aspis_core.field.M31)
+    (newWeights :
+      AspisR1FinishRelationCurrent.transport.Variant →
+        Std.Array AspisR1FinishRelationCurrent.aspis_core.field.QM31 10#usize →
+          Std.Array AspisR1FinishRelationCurrent.aspis_core.circle.SecureCirclePoint 2#usize →
+            Result (core.result.Result W AspisR1FinishRelationCurrent.verifier.Error))
+    (pair :
+      W →
+        Slice AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+          Slice U8 →
+            AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+              Result
+                (core.result.Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact
+                  AspisR1FinishRelationCurrent.verifier.Error))
+    (field : Slice U8 → Usize → Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact) (newDot : Result D)
+    (pushDot :
+      D →
+        AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+          AspisR1FinishRelationCurrent.aspis_core.field.QM31 → Result (core.result.Result Unit Unit × D))
+    (finishDot : D → Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact)
+    (polynomial :
+      Slice U8 →
+        AspisR1FinishRelationCurrent.aspis_core.field.WideExact →
+          Result AspisR1FinishRelationCurrent.aspis_core.field.WideExact) :
+    AspisR1FinishRelationCurrent.FinishOps W D
+'AspisR1.NPR_R22DotSite.finish_op4_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22DotSite.deref_length' depends on axioms: [propext]
+'AspisR1.NPR_R22DotSite.mapped_length' depends on axioms: [propext]
+       45.90 real         3.13 user         5.38 sys
+          5557469184  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              145840  page reclaims
+              269760  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               49055  voluntary context switches
+              280020  involuntary context switches
+         56169297063  instructions retired
+         28808415182  cycles elapsed
+           914767456  peak memory footprint

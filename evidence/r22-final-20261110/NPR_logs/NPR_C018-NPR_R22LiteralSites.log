@@ -1,0 +1,50 @@
+def FIn_Extract.FIn_reference.polynomial : {A Clause0_E : Type} →
+  FIn_Extract.FIn_reference.Arithmetic A Clause0_E → Slice U8 → Clause0_E → Result Clause0_E :=
+fun {A Clause0_E} ArithmeticInst bytes x => do
+  let t ← ArithmeticInst.zero
+  let t1 ← ArithmeticInst.mul t x
+  let t2 ← ArithmeticInst.field bytes 6#usize
+  let a ← ArithmeticInst.add t1 t2
+  let t3 ← ArithmeticInst.mul a x
+  let t4 ← ArithmeticInst.field bytes 5#usize
+  let a1 ← ArithmeticInst.add t3 t4
+  let t5 ← ArithmeticInst.mul a1 x
+  let t6 ← ArithmeticInst.field bytes 4#usize
+  let a2 ← ArithmeticInst.add t5 t6
+  let t7 ← ArithmeticInst.mul a2 x
+  let t8 ← ArithmeticInst.field bytes 3#usize
+  let a3 ← ArithmeticInst.add t7 t8
+  let t9 ← ArithmeticInst.mul a3 x
+  let t10 ← ArithmeticInst.field bytes 2#usize
+  let a4 ← ArithmeticInst.add t9 t10
+  let t11 ← ArithmeticInst.mul a4 x
+  let t12 ← ArithmeticInst.field bytes 1#usize
+  let a5 ← ArithmeticInst.add t11 t12
+  let t13 ← ArithmeticInst.mul a5 x
+  let t14 ← ArithmeticInst.field bytes 0#usize
+  ArithmeticInst.add t13 t14
+def AspisR1.FIn_ExtractInstall.arithmetic : FIn_Extract.FIn_reference.Arithmetic Unit Stage2Finish.E :=
+{ coremarkerCopyInst := { cloneInst := { clone := fun x => ok x } }, zero := ok FIn_Polynomial.zero,
+  mul := FIn_Polynomial.mul, add := FIn_Primitives.add, field := FIn_Primitives.field }
+'AspisR1.NPR_R22LiteralSites.round_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22LiteralSites.round_guarded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22LiteralSites.deployed_round_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NPR_R22LiteralSites.primitives_field_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+       14.39 real         2.68 user         2.44 sys
+          5550686208  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              345107  page reclaims
+               70222  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10412  voluntary context switches
+               61967  involuntary context switches
+         41692669384  instructions retired
+         15892532507  cycles elapsed
+           912391632  peak memory footprint
