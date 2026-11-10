@@ -40,6 +40,8 @@ CR=[
 ('L023','PRVEq_AspisR1DecodeKFullV10_Types_t1.lean','PRVEq.AspisR1DecodeKFullV10.Types_t1.','AspisR1DecodeKFullV10.Types','AspisR1DecodeKFullV10.',[('r1_wire.Error','r1_wire.Error.equiv'),('r1_wire.ValidatedRecord','r1_wire.ValidatedRecord.equiv')],D36,'PCQD_E036 (P1g, reused, ON)','extended','TYPES_EQUIV','Equiv isomorphism of Types declarations'),
 ('L024','PRVEq_ClaimsUnrolledParentTypes_t1.lean','PRVEq.ClaimsUnrolledParentTypes_t1.','ClaimsUnrolledParentTypes','AspisR1ClaimsUnrolledParent.',[('r1_wire.Prefix','r1_wire.Prefix.equiv'),('r1_wire.ValidatedRecord','r1_wire.ValidatedRecord.equiv')],D36,'PCQD_E036 (P1g, reused, ON)','extended','TYPES_EQUIV','Equiv isomorphism of Types declarations'),
 ('L025','PRVEq_AspisR1PublicPreparation_Types_t1.lean','PRVEq.AspisR1PublicPreparation.Types_t1.','AspisR1PublicPreparation.Types','AspisR1PublicPreparation.',[('r1_wire.Error','r1_wire.Error.equiv')],D36,'PCQD_E036 (P1g, reused, ON)','extended','TYPES_EQUIV','Equiv isomorphism of Types declarations'),
+('L026','PRVEq_AspisR1CircleFallback_Types_t1.lean','PRVEq.AspisR1CircleFallback.Types_t1.','AspisR1CircleFallback.Types','AspisR1CircleFallback.',[('circle.CirclePointError','circle.CirclePointError.equiv')],D24,'PCQD_E024 (P1g, reused, ON)','extended','TYPES_EQUIV','Equiv isomorphism of Types declarations'),
+('L027','PRVEq_AspisR1CircleSampleWrapper_Types_t1.lean','PRVEq.AspisR1CircleSampleWrapper.Types_t1.','AspisR1CircleSampleWrapper.Types','AspisR1CircleSampleWrapper.',[('circle.CirclePointError','circle.CirclePointError.equiv')],D24,'PCQD_E024 (P1g, reused, ON)','extended','TYPES_EQUIV','Equiv isomorphism of Types declarations'),
 ]
 # L023..: tuple arity fix (lists passed above for the target list)
 proved={}
