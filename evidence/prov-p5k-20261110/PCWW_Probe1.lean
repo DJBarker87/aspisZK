@@ -1,0 +1,31 @@
+import Aeneas
+open Aeneas Aeneas.Std Result
+set_option pp.universes false
+#print core.iter.traits.iterator.Iterator
+#print core.iter.traits.double_ended.DoubleEndedIterator
+#print core.iter.traits.collect.IntoIterator
+#check @core.iter.traits.iterator.Iterator.zip.trait_default
+#check @core.iter.traits.iterator.Iterator.rev.trait_default
+#check @core.iter.traits.iterator.Iterator.fold.default
+#check @core.iter.adapters.zip.Zip
+#check @core.iter.adapters.zip.Zip.Insts.CoreIterTraitsIteratorIteratorPair.next
+#check @core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+#check @core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold
+#check @core.slice.iter.ChunksExactMut
+#check @core.slice.iter.ChunksExact
+#check @core.slice.Slice.chunks_exact
+#check @core.slice.Slice.chunks_exact_mut
+#check @core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next
+#check @core.slice.iter.IteratorChunksExact
+#check @core.iter.traits.iterator.IteratorChunksExact
+#check @core.iter.traits.collect.IntoIterator.Blanket
+#check @core.array.iter.IntoIter
+#check @core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next
+#check @core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+#check @core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator.next_back
+#check @Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+#check @core.array.from_fn
+#check @Vec.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter
+#check @SharedVec.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter
+#check @core.slice.iter.Iter
+#check @core.slice.iter.IterMut

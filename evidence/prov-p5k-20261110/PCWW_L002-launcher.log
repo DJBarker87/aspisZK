@@ -1,0 +1,53 @@
+{"attempt": "PCWW_L002", "exit_status": 1, "wall_seconds": 1.7930659919511527, "peak_rss_kib": "2587764", "swaps": "0", "print_axioms": []}
+PCWW_sources/PCWW_Probe2.lean:9:22: error: Application type mismatch: The argument
+  s.drop 11
+has type
+  String.Slice
+but is expected to have type
+  String
+in the application
+  out.push (s.drop 11)
+structure Aeneas.Std.core.iter.adapters.zip.Zip.{u} (A B : Type u) : Type u
+number of parameters: 2
+fields:
+  Aeneas.Std.core.iter.adapters.zip.Zip.fst : A
+  Aeneas.Std.core.iter.adapters.zip.Zip.snd : B
+constructor:
+  Aeneas.Std.core.iter.adapters.zip.Zip.mk.{u} {A B : Type u} (fst : A) (snd : B) : core.iter.adapters.zip.Zip A B
+def Aeneas.Std.core.iter.adapters.zip.Zip.Insts.CoreIterTraitsIteratorIteratorPair.next : {A B Item_A Item_B : Type} →
+  core.iter.traits.iterator.Iterator A Item_A →
+  
+...
+.iter.adapters.zip.Zip Self IntoIter) :=
+fun {Self U Item0 Item1 IntoIter} _IteratorInst IntoIterInst =>
+  core.iter.traits.iterator.Iterator.zip.default IntoIterInst.into_iter
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default : {Self Item0 Item1 : Type} →
+  core.iter.traits.iterator.Iterator Self Item0 →
+    core.iter.traits.double_ended.DoubleEndedIterator Self Item1 → Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self Item0 Item1} _IteratorInst _DEInst => core.iter.traits.iterator.Iterator.rev.default
+structure Aeneas.Std.core.iter.adapters.rev.Rev.{u} (T : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.rev.Rev.iter : T
+constructor:
+  Aeneas.Std.core.iter.adapters.rev.Rev.mk.{u} {T : Type u} (iter : T) : core.iter.adapters.rev.Rev T
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => ok (o, { iter := it })
+structure Aeneas.Std.core.slice.iter.ChunksExact (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.ChunksExact.chunks : List (Slice T)
+  Aeneas.Std.core.slice.iter.ChunksExact.remainder : Slice T
+constructor:
+  Aeneas.Std.core.slice.iter.ChunksExact.mk {T : Type} (chunks : List (Slice T)) (remainder : Slice T) :
+    core.slice.iter.ChunksExact T
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact : (T : Type) →
+  core.iter.traits.iterator.Iterator (core.slice.iter.ChunksExact T) (Slice T) :=
+fun T => { next := core.slice.iter.IteratorChunksExact.next }
+
+Running as unit: run-rf5694b2297e6486185412eb21efe90d6.scope; invocation ID: 919b87e2f950466585efb9b3a261680b
