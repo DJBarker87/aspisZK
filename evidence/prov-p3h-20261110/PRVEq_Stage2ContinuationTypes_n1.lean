@@ -72,6 +72,12 @@ inductive verifier.Error where
 | Checkpoint : verifier.Error
 | Allocation : verifier.Error
 
+/-- [aspis_r1_cost_probe::verifier::BatchedWeights]
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 204:0-204:55 -/
+structure verifier.BatchedWeights where
+  «raw» : alloc.vec.Vec (Array Std.U64 4#usize)
+  terms : Std.Usize
+
 /-- [aspis_r1_cost_probe::verifier::QueryGeometry]
     Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 131:0-131:76 -/
 structure verifier.QueryGeometry where
@@ -202,6 +208,16 @@ def PRVEq.Stage2ContinuationTypes_n1.verifier.Error.equiv : AspisR1Stage2.PRVFre
 #print axioms PRVEq.Stage2ContinuationTypes_n1.verifier.Error.equiv
 
 set_option maxHeartbeats 200000 in
+def PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights.equiv : AspisR1Stage2.PRVFresh_Stage2ContinuationTypes_n1.verifier.BatchedWeights ≃ AspisR1Stage2.verifier.BatchedWeights where
+  toFun x := { raw := x.raw, terms := x.terms }
+  invFun y := { raw := y.raw, terms := y.terms }
+  left_inv x := by
+    first | (trace "PRV-S1 PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights"; cases x; rfl) | (trace "PRV-S2 PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights"; cases x; simp)
+  right_inv y := by
+    first | (trace "PRV-S1 PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights"; cases y; rfl) | (trace "PRV-S2 PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights"; cases y; simp)
+#print axioms PRVEq.Stage2ContinuationTypes_n1.verifier.BatchedWeights.equiv
+
+set_option maxHeartbeats 200000 in
 def PRVEq.Stage2ContinuationTypes_n1.verifier.QueryGeometry.equiv : AspisR1Stage2.PRVFresh_Stage2ContinuationTypes_n1.verifier.QueryGeometry ≃ AspisR1Stage2.verifier.QueryGeometry where
   toFun x := { start := x.start, inverses := x.inverses, line_z := x.line_z }
   invFun y := { start := y.start, inverses := y.inverses, line_z := y.line_z }
@@ -255,8 +271,8 @@ theorem PRVEq.Stage2ContinuationTypes_n1.verifier.resume.closure : @AspisR1Stage
 
 set_option maxHeartbeats 200000 in
 def PRVEq.Stage2ContinuationTypes_n1.verifier.Reader.equiv : AspisR1Stage2.PRVFresh_Stage2ContinuationTypes_n1.verifier.Reader ≃ AspisR1Stage2.verifier.Reader where
-  toFun x := { bytes := x.bytes }
-  invFun y := { bytes := y.bytes }
+  toFun x := { bytes := x.bytes, «at» := x.«at» }
+  invFun y := { bytes := y.bytes, «at» := y.«at» }
   left_inv x := by
     first | (trace "PRV-S1 PRVEq.Stage2ContinuationTypes_n1.verifier.Reader"; cases x; rfl) | (trace "PRV-S2 PRVEq.Stage2ContinuationTypes_n1.verifier.Reader"; cases x; simp)
   right_inv y := by

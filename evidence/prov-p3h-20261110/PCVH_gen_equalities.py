@@ -145,7 +145,7 @@ def parse_structure_fields(body):
     fields = []; cur = None
     for line in m.group(2).split('\n'):
         if not line.strip(): continue
-        fm = re.match(r'^  ([A-Za-z_][A-Za-z0-9_\']*)\s*:(.*)$', line)
+        fm = re.match(r'^  (?:\u00ab)?([A-Za-z_][A-Za-z0-9_\']*)(?:\u00bb)?\s*:(.*)$', line)
         if fm and not line.startswith('   '):
             cur = [fm.group(1), fm.group(2).strip()]; fields.append(cur)
         elif cur is not None and line.startswith('  '): cur[1] += ' ' + line.strip()

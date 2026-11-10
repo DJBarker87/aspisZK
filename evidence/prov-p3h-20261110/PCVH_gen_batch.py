@@ -36,11 +36,14 @@ for m,l in rem.items():
     for r in runs:
         cands+=glob.glob(f'{EV}/*/{r}_emitted/raw/*/{kind}')
     if not cands: res[m]='NO_EMISSION_DIR '+','.join(runs);continue
+    tm=m[:-5]+'.Types' if m.endswith('.Funs') else None
+    gts=gate(tm) if tm and tm in part else g
+    gts=gts or g
     json.dump(only,open(f'{H}/gen/only_{safe}_n1.json','w'))
     for i,c in enumerate(cands):
         fd=os.path.dirname(c);fns=re.findall(r'(?m)^namespace\s+(\S+)',open(c).read())[0]
         tag=f'_n{i+1}'
-        cmd=['python3','-B','PCVH_gen_equalities.py','--module',m,'--tag',tag,'--fresh-dir',fd,'--fresh-ns',fns,'--gate-source',g,'--gate-types-source',g,'--out',f'PRVEq_{safe}{tag}.lean','--report',f'gen/{safe}{tag}.report.json','--state-out',f'gen/{safe}{tag}.state.json','--prune-fresh','--only',f'gen/only_{safe}_n1.json']
+        cmd=['python3','-B','PCVH_gen_equalities.py','--module',m,'--tag',tag,'--fresh-dir',fd,'--fresh-ns',fns,'--gate-source',g,'--gate-types-source',gts,'--out',f'PRVEq_{safe}{tag}.lean','--report',f'gen/{safe}{tag}.report.json','--state-out',f'gen/{safe}{tag}.state.json','--prune-fresh','--only',f'gen/only_{safe}_n1.json']
         if len(set(ns))>1:
             dn=[n for n in ns if ds[0]['definition'].startswith(n+'.')]
             cmd+=['--gate-namespace',(dn or ns)[0]]

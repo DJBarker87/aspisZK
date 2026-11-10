@@ -110,8 +110,8 @@ def PRVEq.Stage2ContinuationTypes_n2.verifier.Error.equiv : AspisR1Stage2.PRVFre
 
 set_option maxHeartbeats 200000 in
 def PRVEq.Stage2ContinuationTypes_n2.verifier.Reader.equiv : AspisR1Stage2.PRVFresh_Stage2ContinuationTypes_n2.verifier.Reader ≃ AspisR1Stage2.verifier.Reader where
-  toFun x := { bytes := x.bytes }
-  invFun y := { bytes := y.bytes }
+  toFun x := { bytes := x.bytes, «at» := x.«at» }
+  invFun y := { bytes := y.bytes, «at» := y.«at» }
   left_inv x := by
     first | (trace "PRV-S1 PRVEq.Stage2ContinuationTypes_n2.verifier.Reader"; cases x; rfl) | (trace "PRV-S2 PRVEq.Stage2ContinuationTypes_n2.verifier.Reader"; cases x; simp)
   right_inv y := by
