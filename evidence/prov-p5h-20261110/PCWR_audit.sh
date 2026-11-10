@@ -1,0 +1,1 @@
+cd "$(dirname "$0")" && python3 PCWR_audit.py /private/tmp/claude-501/-Users-dominic-ZK/e51a42a3-64c9-4a23-9ea1-f7bf410e2db1/scratchpad/plan_map.json /Users/dominic/ZK/.worktrees/pc-prov-p5h /private/tmp/claude-501/-Users-dominic-ZK/e51a42a3-64c9-4a23-9ea1-f7bf410e2db1/scratchpad/leanfiles.txt
