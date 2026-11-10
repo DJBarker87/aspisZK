@@ -11,17 +11,18 @@
  "counts_checked_and_mixed": {
   "TOTAL_PROVED": 67,
   "OPEN": 101,
-  "DOMAIN_LEMMA_PROVED": 31,
-  "DIRECT": 26
+  "DOMAIN_LEMMA_PROVED": 30,
+  "DIRECT": 27
  },
  "counts_by_class": {
   "CHECKED/TOTAL_PROVED": 64,
   "CHECKED/OPEN": 99,
   "CHECKED/DOMAIN_LEMMA_PROVED": 28,
   "CHECKED/DIRECT": 26,
-  "MIXED/DOMAIN_LEMMA_PROVED": 3,
+  "MIXED/DOMAIN_LEMMA_PROVED": 2,
   "MIXED/TOTAL_PROVED": 3,
-  "MIXED/OPEN": 2
+  "MIXED/OPEN": 2,
+  "MIXED/DIRECT": 1
  },
  "rows": {
   "touched_by_checked_or_mixed": 396,
@@ -3220,7 +3221,8 @@
     "AspisR1.NPH_R22CM31.CW_CM31_mul_total",
     "AspisR1.NPH_R22Weak.CW_CM31_mul_weak"
    ],
-   "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021"
+   "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -3368,7 +3370,8 @@
     "AspisR1.NPH_R22FieldCopies.CW_M31_add_R22",
     "AspisR1.NPH_R22Weak.add_R22_weak"
    ],
-   "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter"
+   "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -3666,7 +3669,8 @@
     "AspisR1.NPH_R22FieldCopies.CW_M31_sub_R22",
     "AspisR1.NPH_R22Weak.sub_R22_weak"
    ],
-   "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter"
+   "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1CurrentWide.Funs",
@@ -4490,7 +4494,8 @@
      "file": "R17CurrentDomainCanonical.lean",
      "screen": "ACCEPTED_SCREEN"
     }
-   ]
+   ],
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -4652,7 +4657,8 @@
      "file": "ExtractedCurrentM31AddSub.lean",
      "screen": "DOMAIN_SCREEN"
     }
-   ]
+   ],
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -5018,7 +5024,8 @@
      "file": "R17CurrentDomainCanonical.lean",
      "screen": "ACCEPTED_SCREEN"
     }
-   ]
+   ],
+   "limb_invariant_progress": "items (i)/(ii) partial: NPH_R22Installers (M31-level installer callbacks preserve limbs <= P) and NPH_R22Producers (strict decoders < P; CW/QA tower kernels preserve <= P); item (iii), the reached-call-site join, is not composed, so the judgment stays domain-only"
   },
   {
    "module": "AspisR1Qm31ArithmeticProbe.Funs",
@@ -17890,11 +17897,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (caller join open): both checked shifts are safe when the loop index d < 16 and the TAU entry read is < 16 (row_shr_ok, row_shl_ok); the reached domain iter.end <= 16 is the PCQH-C5/NPE_ EQUALITY_DOMAIN fact and the TAU entry bound is a constant-table fact, neither composed here",
+   "nph_judgment": "DIRECT (c), every input, no caller domain: transport.TAU is the constant 5-entry array [3,4,2,0,1]; the TAU[d] read is bounds-checked in both semantics, so an iteration the wrapping program completes has d < 5, and then the checked body is ok (row_loop_body_ok: shift amounts 2d < 10 and 2*TAU[d] <= 8); for d >= 5 both semantics reject (checked: first shift or bounds check; wrapping: bounds check); next/wrapping_mul/&&&/||| are not overflow-checked",
    "nph_theorems": [
+    "AspisR1.NPH_R22RowLoop.row_loop_body_ok",
+    "AspisR1.NPH_R22RowLoop.row_loop_body_done",
+    "AspisR1.NPH_R22RowLoop.tau_entry_lt",
     "AspisR1.NPH_R22QRawShift.row_shr_ok",
     "AspisR1.NPH_R22QRawShift.row_shl_ok"
-   ]
+   ],
+   "previous_judgment": "DOMAIN_LEMMA_PROVED (caller join open): both checked shifts are safe when the loop index d < 16 and the TAU entry read is < 16 (row_shr_ok, row_shl_ok); the reached domain iter.end <= 16 is the PCQH-C5/NPE_ EQUALITY_DOMAIN fact and the TAU entry bound is a constant-table fact, neither composed here"
   }
  ],
  "outside_both_top_cones": [
@@ -17907,5 +17918,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated after NPH_L017 (NPH_R22Loops2, NPH_R22Loops3): item (4) complete, 5 more TOTAL and 25 more DIRECT single-increment bodies"
+ "revision_note": "updated after NPH_L022 (NPH_R22RowLoop): transport row_loop.body DIRECT for every input; NPH_R22Installers/NPH_R22Producers recorded as limb-invariant progress without judgment change"
 }
