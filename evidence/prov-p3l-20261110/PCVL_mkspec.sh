@@ -29,7 +29,7 @@ for e in extra:
     if e not in [c2[j+1] for j,x in enumerate(c2) if x=='--opaque']:ins+=['--opaque',e]
 c2=c2[:last+1]+ins+c2[last+1:]
 for e in inc:
-    j=c2.index('--features');c2=c2[:j]+['--include',e]+c2[j:]
+    j=c2.index('--dest-file');c2=c2[:j]+['--include',e]+c2[j:]
 import re
 def fix(cmd):return [re.sub(r'(PC[A-Z]{2}|PCQ|PCO)_workspace','PCVL_workspace',re.sub(r'codex-pc-prov-[a-z0-9]+-2026[0-9]+',HOST.split('/')[-1],x.replace(oldrun+'_emitted',run+'_emitted'))) for x in cmd]
 d['charon_command']=fix(c2);a=fix(d['aeneas_command'])
