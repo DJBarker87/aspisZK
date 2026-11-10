@@ -1,0 +1,4744 @@
+{
+ "schema": "PCXE_HAND_MODELS/1",
+ "target_established": false,
+ "note": "Per-module inventory of hand-written gate models (campaign union, 924 deduplicated entries from PCXA plus the post-PCXA jobs P1g/P1h/P2g/P2h/P3b-d/P4e). Record only: no trust row exists or is added. Named items first. The hand-written flag is a classification, not an audit of model bodies.",
+ "counts": {
+  "entries_union": 924,
+  "hand_written_gate_models": 245,
+  "hand_written_reached_by_splitB_cone_constant": 191,
+  "unresolved_externals": 601,
+  "a": 502,
+  "b": 0,
+  "c": 99
+ },
+ "named_items": [
+  {
+   "name": "ShrAmt (shift amount read as Rust `as u32`; Std.Usize.wrapping_shr/wrapping_shl fresh wrappers)",
+   "inventory_line": "ShrAmt bridge: verified against Rust semantics and the pinned translation, NPE_ 2026-11-10 (overflow-checks-off only; never reuse for checked shifts with amounts wider than 32 bits)",
+   "source": "prov-p1h-20261109/PCQH_HAND_MODELS.json PCQH-C2; evidence/shramt-20261110/NPE_SHRAMT_CHECK.md and NPE_ShrAmt.lean (research)",
+   "status": "VERIFIED_BY_NPE_ for the overflow-checks-OFF configuration; Lean proof with standard axioms for every I32 and every Usize amount, << and >>",
+   "residuals": [
+    "Not checked against an SBF-target build (the runtime tests were x86_64).",
+    "Relies on Lean's usize width equalling the target's, which every gate module already shares.",
+    "In CHECKED mode the bridge is NOT faithful for usize amounts >= 2^32 and must never be used there."
+   ],
+   "removal_condition_was": "MIR check of the Aeneas/Charon translation of Rust >> (now done by NPE_)",
+   "definitions_upgraded_by_it": "PCXE_SHRAMT_UPGRADED.json (35 records: NFN fast_domain/for_range family incl. fibre_point, plus the transport row family)"
+  },
+  {
+   "name": "array_from_fn_copy (gate hand model standing in for the opaque external core.array.from_fn)",
+   "kind": "hand model; the fresh original-Aeneas emission has core.array.from_fn as an unconstrained axiom, the gate carries array_from_fn_copy N CopyInst FnMutInst zero init (a defined loop)",
+   "pinned_crate": "Rust core library at the pinned nightly sysroot (core::array::from_fn)",
+   "bridge": "for each instantiation: core.array.from_fn N inst f = array_from_fn_copy N CopyT inst zero_T f; NOT assumed and NOT proved (needs per-element-type Copy and zero; PCVC)",
+   "blocked_dependants": [
+    {
+     "module": "RPu_FIq_Native04",
+     "definition": "state_only_poseidon.internal_linear_lazy"
+    },
+    {
+     "module": "RPu_FIq_Native04",
+     "definition": "state_only_poseidon.internal_linear_lazy_loop1"
+    },
+    {
+     "module": "RPu_FIq_Native04",
+     "definition": "state_only_poseidon.interpolated_internal_pair"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_linear_packed"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_linear_packed_loop"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_local_packed"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_local_packed_raw"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_local_packed_raw_loop0"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.external_local_packed_raw_loop0_loop0"
+    },
+    {
+     "module": "RPu_FIq_Native05",
+     "definition": "state_only_poseidon.full_round_packed"
+    },
+    {
+     "module": "RPu_FIq_Native07",
+     "definition": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected"
+    },
+    {
+     "module": "RPu_FIq_Native07",
+     "definition": "state_only_poseidon.full_round_m31_constants_packed"
+    },
+    {
+     "module": "RPu_FIq_Native07",
+     "definition": "state_only_poseidon.leading_pair_packed"
+    },
+    {
+     "module": "RPu_FIq_Native09",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes"
+    },
+    {
+     "module": "RPu_FIq_Native09",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_preweighted"
+    },
+    {
+     "module": "RPu_FIq_Native09",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_preweighted_loop"
+    },
+    {
+     "module": "RPu_FIq_Native09",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_value_lanes"
+    },
+    {
+     "module": "RPu_FIq_Native10",
+     "definition": "pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal"
+    },
+    {
+     "module": "RPu_FIq_Native10",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_path_lanes"
+    },
+    {
+     "module": "RPu_FIq_Native10",
+     "definition": "pool_v1.pair_forest_semantic_terminal.add_schedule_lanes"
+    },
+    {
+     "module": "RPu_FIq_Native10",
+     "definition": "pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption"
+    },
+    {
+     "module": "RPu_FIq_Native07",
+     "definition": "state_only_poseidon.interpolated_full_pair_packed"
+    },
+    {
+     "module": "RPu_FIq_Native11",
+     "definition": "pool_v1.pair_forest_semantic_terminal.semantic_packed"
+    }
+   ],
+   "n_dependants": 23
+  },
+  {
+   "name": "compact.OFF_* (Ops-instance constants of CurrentCompactCallerModelV1)",
+   "blocked_definitions": [
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.OFF_SEMANTIC"
+    },
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.LOGICAL_SEMANTIC"
+    },
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.OFF_Y1"
+    },
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.OFF_INACTIVE"
+    },
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT"
+    },
+    {
+     "module": "CurrentCompactCallerModelV1",
+     "definition": "AspisR1CurrentCaller.compact.OFF_ROUND1"
+    }
+   ],
+   "kind": "hand-written parametric constants; equalities stand only after binding"
+  },
+  {
+   "name": "Port3_NativeGeometryBody / Port4C_NativePrefix / Port5Q2_ReaderWeights / AdapterRwModel parametric records",
+   "kind": "gate functions are parametric in a hand-written record (Ops, Leaves, ReadK+IterMut model, AdapterRw.Ops); fresh calls the externals as axioms; carriers differ",
+   "status": "HAND_ADAPTED (23 + 3 + 2 + 9 definitions, PCUH_HAND_MODELS.json); no equality; counted HAND_ADAPTED, not EQUALITY_PROVED"
+  },
+  {
+   "name": "cross-crate constant encoding assumption",
+   "one_line": "A fresh external axiom of type Result X for a cross-crate constant is linked to a transparent value (ok <gate value>, or by name to the gate constant); the link between the Aeneas external axiom and the transparent value is itself an encoding assumption, proved only for M31.ZERO/ONE and QM31.ZERO/ONE (PRVEq_const_bind, PCUH_L035/L037) and open for the rest (state_only_hiding STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS, Native07 selected_claim, Native13 COPY_PATTERNS literal, parametric transports).",
+   "source": "PCUH item 4; PCVD cross-crate constant shims"
+  }
+ ],
+ "per_module": {
+  "AdapterRwModel": [
+   {
+    "name": "AdapterRw.Ops",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "not determined by the source job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.Ops"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 46,
+    "sources": [
+     "PCVA"
+    ]
+   }
+  ],
+  "AspisR1Post25SamplerIndexedAddSmallCandidate.Funs": [
+   {
+    "name": "core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+     "AspisR1.FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+     "S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+     "AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+     "AspisR1.FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitTry.branch"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisR1PrefixAggregateParser.Funs": [
+   {
+    "name": "core.option.Option.ok_or",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1DecodeKFullV10.core.option.Option.ok_or",
+     "AspisR1RecordParser.core.option.Option.ok_or",
+     "AspisS1NativeCompact.core.option.Option.ok_or"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.add",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.add",
+     "AspisR1Qm31ArithmeticProbe.field.QM31.add"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIn_WeightsExtract.field.QM31.mul",
+     "AspisR1CurrentWide.field.QM31.mul",
+     "NEV_AccumulateRaw.aspis_core.field.QM31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.square",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.square",
+     "AspisR1SelectedMaskProbe.field.QM31.square",
+     "FIo_Native.aspis_core.field.QM31.square"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.sub",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.sub",
+     "AspisR1SelectedMaskProbe.field.QM31.sub",
+     "AspisR72Sampler.field.QM31.sub"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.try_inv",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.try_inv"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "r1_wire.validate_record_fields",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PrefixAggregateParser.r1_wire.validate_record_fields",
+     "AspisR1RecordParser.r1_wire.validate_record_fields"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisR1SemanticCallExtraction.Funs": [
+   {
+    "name": "aspis_core.field.CM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.CM31.mul",
+     "FIo_Native.aspis_core.field.CM31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.double",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.double",
+     "NEI_LineFull.aspis_core.field.M31.double",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.double"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_InverseActual.aspis_core.field.M31.mul",
+     "FIo_Native.aspis_core.field.M31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.reduce_u64",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.reduce_u64",
+     "S8Kani2MutableExtraction.aspis_core.field.M31.reduce_u64",
+     "FIo_Native.aspis_core.field.M31.reduce_u64"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.sub",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.sub",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.sub",
+     "NEV_AccumulateRaw.aspis_core.field.M31.sub"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.P",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS6SourceCodec.aspis_core.field.P",
+     "S8Kani2MutableExtraction.aspis_core.field.P",
+     "AspisR1SemanticCallExtraction.aspis_core.field.P"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentPreparedClaim.aspis_core.field.QM31.ZERO",
+     "AspisS1M31Embedding.aspis_core.field.QM31.ZERO",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31.ZERO"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.add",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.add",
+     "FIo_Native.aspis_core.field.QM31.add"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.QM31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.mul",
+     "FIo_Native.aspis_core.field.QM31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "r1_semantic.semantic_boundary",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisR1TerminalDecoder.Funs": [
+   {
+    "name": "aspis_core.field.M31.from_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1TerminalDecoder.aspis_core.field.M31.from_le_bytes",
+     "AspisS6SourceCodec.aspis_core.field.M31.from_le_bytes",
+     "S8OwnedP6.aspis_core.field.M31.from_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.to_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1WithdrawalCaller.aspis_core.field.M31.to_le_bytes",
+     "AspisS6SourceCodec.aspis_core.field.M31.to_le_bytes",
+     "OraclePortCkptAbi2Extracted.aspis_core.field.M31.to_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.P",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS6SourceCodec.aspis_core.field.P",
+     "S8Kani2MutableExtraction.aspis_core.field.P",
+     "AspisR1SemanticCallExtraction.aspis_core.field.P"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "atomic_statement.encode_digest_canonical",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS6SourceCodec.aspis_statement.atomic_statement.encode_digest_canonical",
+     "AspisR1AdapterReconstruct.aspis_statement.atomic_statement.encode_digest_canonical",
+     "AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "pool_v1.pair_terminal.validate_verified_afterstate",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate",
+     "AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 92,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   }
+  ],
+  "AspisR1WideToBytesIndexedCandidate.FunsNoResourceOptions": [
+   {
+    "name": "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "WAdm_Fissioned.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.array.iter.IntoIter",
+     "FIq_Native.core.array.iter.IntoIter",
+     "WAdm_Fissioned.core.array.iter.IntoIter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "WAdm_Fissioned.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "Aeneas.Std.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.Slice.chunks_exact_mut",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.Slice.chunks_exact_mut"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.iter.ChunksExactMut",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.iter.ChunksExactMut"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   }
+  ],
+  "AspisR1WideToBytesSource.Funs": [
+   {
+    "name": "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "WAdm_Fissioned.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.array.iter.IntoIter",
+     "FIq_Native.core.array.iter.IntoIter",
+     "WAdm_Fissioned.core.array.iter.IntoIter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "WAdm_Fissioned.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "Aeneas.Std.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.Slice.chunks_exact_mut",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.Slice.chunks_exact_mut"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.iter.ChunksExactMut",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.iter.ChunksExactMut"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.slice.iter.ChunksExactMut.Insts.CoreIterTraitsIteratorIteratorMutASlice.next"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 18,
+    "sources": [
+     "PCQC",
+     "PCUD",
+     "PCUE"
+    ]
+   }
+  ],
+  "AspisR1WithdrawalCaller.Types": [
+   {
+    "name": "solana_pubkey.Pubkey",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMT_stage1_owned.solana_pubkey.Pubkey",
+     "AdapterRw.solana_pubkey.Pubkey"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisR72Sampler.Funs": [
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.add",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.add",
+     "AspisR1Qm31ArithmeticProbe.field.QM31.add"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIn_WeightsExtract.field.QM31.mul",
+     "AspisR1CurrentWide.field.QM31.mul",
+     "NEV_AccumulateRaw.aspis_core.field.QM31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.square",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.square",
+     "AspisR1SelectedMaskProbe.field.QM31.square",
+     "FIo_Native.aspis_core.field.QM31.square"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.sub",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.sub",
+     "AspisR1SelectedMaskProbe.field.QM31.sub",
+     "AspisR72Sampler.field.QM31.sub"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.try_inv",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.try_inv"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 34,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisV8R19.ComplexFieldSlice": [
+   {
+    "name": "field.CM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.CM31",
+     "NEI_PushRaw.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1RecordParser.field.M31",
+     "AdapterRw.aspis_core.field.M31",
+     "AspisC2HostEmbedding.field.M31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisV8R19.GuardedFieldSlice": [
+   {
+    "name": "field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1RecordParser.field.M31",
+     "AdapterRw.aspis_core.field.M31",
+     "AspisC2HostEmbedding.field.M31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 24,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "AspisV8R19.QuarticFieldSlice": [
+   {
+    "name": "field.CM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.CM31",
+     "NEI_PushRaw.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1RecordParser.field.M31",
+     "AdapterRw.aspis_core.field.M31",
+     "AspisC2HostEmbedding.field.M31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.QM31",
+     "AspisR1Post25Sampler.field.QM31",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "CurrentCompactCallerModelV1": [
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO",
+     "AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 11,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "FinishCandidateExplicitOps": [
+   {
+    "name": "trace.value",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.trace.value",
+     "AspisR1CurrentPreparedClaim.trace.value",
+     "AspisR1PublicPreparation.trace.value"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 22,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "LoopPowersCandidateModel": [
+   {
+    "name": "field.CM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.CM31",
+     "NEI_PushRaw.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1RecordParser.field.M31",
+     "AdapterRw.aspis_core.field.M31",
+     "AspisC2HostEmbedding.field.M31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.QM31",
+     "AspisR1Post25Sampler.field.QM31",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.add",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.add",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.add",
+     "AspisR1Qm31ArithmeticProbe.field.QM31.add"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIn_WeightsExtract.field.QM31.mul",
+     "AspisR1CurrentWide.field.QM31.mul",
+     "NEV_AccumulateRaw.aspis_core.field.QM31.mul"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.square",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.square",
+     "AspisR1SelectedMaskProbe.field.QM31.square",
+     "FIo_Native.aspis_core.field.QM31.square"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.sub",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentWide.field.QM31.sub",
+     "AspisR1SelectedMaskProbe.field.QM31.sub",
+     "AspisR72Sampler.field.QM31.sub"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31.try_inv",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR72Sampler.field.QM31.try_inv"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NEI_PushRaw.Funs": [
+   {
+    "name": "MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package; aspis-core field types per frozen tree",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEG_RowIsolated.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+     "NEI_PushRaw.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+     "FIq_Native.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 91,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NEV_AccumulateRaw.Types": [
+   {
+    "name": "transport.Variant discriminant instance (NEV_discriminantVariant)",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-r1-cost-probe transport::Variant (isolated copy, frozen tree)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 98,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NEV_AccumulateRaw.Types / NFS_AccumPart00": [
+   {
+    "name": "BatchedWeights.push",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEI_PushRaw.BatchedWeights.push",
+     "NEG_PushActual.BatchedWeights.push",
+     "NEV_AccumulateRaw.BatchedWeights.push"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.ONE",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.ONE",
+     "NEV_AccumulateRaw.aspis_core.field.M31.ONE"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.M31.ZERO",
+     "NEV_CodeFieldRaw.aspis_core.field.M31.ZERO",
+     "AspisS1M31Embedding.aspis_core.field.M31.ZERO"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.double",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.double",
+     "NEI_LineFull.aspis_core.field.M31.double",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.double"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_InverseActual.aspis_core.field.M31.mul",
+     "FIo_Native.aspis_core.field.M31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.mul"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.sub",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEW_GeometryActual.aspis_core.field.M31.sub",
+     "AspisR1SemanticCallExtraction.aspis_core.field.M31.sub",
+     "NEV_AccumulateRaw.aspis_core.field.M31.sub"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.mul",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.QM31.mul",
+     "AspisR1SemanticCallExtraction.aspis_core.field.QM31.mul",
+     "FIo_Native.aspis_core.field.QM31.mul"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.add",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.add",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact.add"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.from_qm31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS1M31Embedding.aspis_core.field.wide_exact.WideExact.from_qm31",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact.from_qm31",
+     "NEV_CodeFieldRaw.aspis_core.field.wide_exact.WideExact.from_qm31"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.mul_qm31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.mul_qm31",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact.mul_qm31"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "trace.value",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); trace module of aspis-r1-cost-probe; BatchedWeights::push of the same isolated crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.trace.value",
+     "AspisR1CurrentPreparedClaim.trace.value",
+     "AspisR1PublicPreparation.trace.value"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NFN_ExtractedGeometry": [
+   {
+    "name": "core.array.from_fn",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "rust core/alloc/std models of the Aeneas library",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1QueryScanUnrolled.core.array.from_fn",
+     "AspisR1SelectedMaskProbe.core.array.from_fn",
+     "core.array.from_fn"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 25,
+    "sources": [
+     "PCUF"
+    ]
+   }
+  ],
+  "NFY_Part042": [
+   {
+    "name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "workspace/unknown: Slice",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 10,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A"
+    ]
+   }
+  ],
+  "NFY_Part043": [
+   {
+    "name": "aspis_core.field.M31.from_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1TerminalDecoder.aspis_core.field.M31.from_le_bytes",
+     "AspisS6SourceCodec.aspis_core.field.M31.from_le_bytes",
+     "S8OwnedP6.aspis_core.field.M31.from_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 10,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31.to_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1WithdrawalCaller.aspis_core.field.M31.to_le_bytes",
+     "AspisS6SourceCodec.aspis_core.field.M31.to_le_bytes",
+     "OraclePortCkptAbi2Extracted.aspis_core.field.M31.to_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 10,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.P",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "crate aspis-core (workspace path crate, frozen 4bb3b3f5; Cargo.lock path dependency, no registry version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS6SourceCodec.aspis_core.field.P",
+     "S8Kani2MutableExtraction.aspis_core.field.P",
+     "AspisR1SemanticCallExtraction.aspis_core.field.P"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 10,
+    "sources": [
+     "PCUC"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust core library of rustc nightly-2026-06-01 sysroot (no crate version; tool pin in the PCQ/PCQC PINS files)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 10,
+    "sources": [
+     "PCQC",
+     "PCQF",
+     "PCQ_A",
+     "PCUC",
+     "PCUF"
+    ]
+   }
+  ],
+  "NGD_AtG.Types": [
+   {
+    "name": "import_union_discriminant (registration attribute) / ImportUnionNamedDiscriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nfu_reference 0.1.0 (reference crate, source sha256 a4cf8bb1...)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NGT_Emitted": [
+   {
+    "name": "block",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.state_only_poseidon.StateOnlyPoseidonSelectors.block",
+     "AspisR1.FJb_MatrixBlock.block",
+     "AspisR1.FJb_MatrixModel.block"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 2,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "scalar",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMX_R3_RegistryRun.scalar",
+     "AspisR1.FJk_PoseidonFamily.scalar",
+     "NMX_R6_Observation.scalar"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 2,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NHI_FilledExtracted": [
+   {
+    "name": "FIo_Native.Allocation (instance-implicit parameter)",
+    "class_": "e_alloc_and_allocator_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 1,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "alloc.vec.Vec.try_reserve_exact",
+    "class_": "e_alloc_and_allocator_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.alloc.vec.Vec.try_reserve_exact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 1,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 1,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NHI_FilledTypes": [
+   {
+    "name": "alloc.collections.TryReserveError",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError",
+     "FIo_Native.alloc.collections.TryReserveError"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 1,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NHJ_SnapshotReference.Funs": [
+   {
+    "name": "alloc.string.String.Insts.CoreCloneClone.clone",
+    "class_": "e_alloc_and_allocator_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std alloc::string::String::clone, nightly-2026-09-17 sysroot",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 2,
+    "sources": [
+     "PCT",
+     "PCWA"
+    ]
+   }
+  ],
+  "NHJ_SnapshotReference.Types": [
+   {
+    "name": "ProgramError (type, replaced by alias)",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nhj_snapshot_reference 0.1.0 (reference crate, source sha256 e8a85ac9...); alias target NGL_MetaReference.ProgramError (ngl_reference crate)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 2,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "NID_ResumeEmissionFuns": [
+   {
+    "name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "Slice.Insts.CoreCmpPartialEqArray.ne",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Slice.Insts.CoreCmpPartialEqArray.ne"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.Insts.CoreCloneClone.clone",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.QM31.Insts.CoreCloneClone.clone",
+     "NJT_ClaimsRef.aspis_core.field.QM31.Insts.CoreCloneClone.clone",
+     "AspisR1ClaimsUnrolledParent.aspis_core.field.QM31.Insts.CoreCloneClone.clone"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentPreparedClaim.aspis_core.field.QM31.ZERO",
+     "AspisS1M31Embedding.aspis_core.field.QM31.ZERO",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31.ZERO"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.from_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1DecodeKFullV10.aspis_core.field.QM31.from_le_bytes",
+     "S8OwnedP6.aspis_core.field.QM31.from_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.from_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_core.r0.heap.filled",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.r0.heap.filled",
+     "NJT_ClaimsRef.aspis_core.r0.heap.filled",
+     "AspisR1ClaimsUnrolledParent.aspis_core.r0.heap.filled"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "transport.Variant.final_len",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "transport.Variant.tag",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Op3I_Source.transport.Variant.tag",
+     "AdapterRw.aspis_r1_cost_probe.transport.Variant.tag",
+     "NJS_Extract.transport.Variant.tag"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.finish",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.new",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.QueryGeometry.for_range",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range",
+     "NEW_GeometryActual.verifier.QueryGeometry.for_range"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.batch_merkle",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NKV_FRef.verifier.candidate.batch_merkle",
+     "AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.query_loop",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop",
+     "AspisR1Stage2.verifier.candidate.query_loop"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.checkpoint_size",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.finish_relation",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeFinishBody.verifier.finish_relation"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.mark",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentCaller.verifier.mark"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.read_checkpoint_semantic_alpha",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.read_checkpoint_weights",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.validate_checkpoint_queries",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NJC_ValidateEmission.verifier.validate_checkpoint_queries"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "weights.powers",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.weights.powers"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 9,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NJA_CountBody": [
+   {
+    "name": "aspis_core.r0.merkle.parent_with_digest",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.iter.traits.iterator.Iterator.all.default",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NFU_Retarget.core.iter.traits.iterator.Iterator.all.default"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.Slice.windows",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.all",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT.all",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.iter.Windows",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.slice.iter.Windows.Insts.CoreIterTraitsIteratorIteratorSharedASlice.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "multiproof.binary_parent",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "multiproof.generate",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "multiproof.sort_dedup",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "multiproof.verify",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 23,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NJA_Multiproof.Types": [
+   {
+    "name": "core.slice.iter.Windows",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 35,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NMT_first.Funs": [
+   {
+    "name": "aspis_r1_cost_probe.verifier.candidate.tx1",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "error",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMX_R2_Carrier.error",
+     "NMX_R2_CloneTransport.error",
+     "NNH_Stage1Error.error"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "solana_hash.Hash",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMT_first.solana_hash.Hash"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "solana_hash.Hash.to_bytes",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "solana_sha256_hasher.hashv",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 7,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   }
+  ],
+  "NMT_stage1_owned.Funs": [
+   {
+    "name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "Slice.Insts.CoreCmpPartialEqArray.ne",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Slice.Insts.CoreCmpPartialEqArray.ne"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_r1_cost_probe.transport.Variant.tag",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.aspis_r1_cost_probe.transport.Variant.tag"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_r1_cost_probe.verifier.PROOF_BYTES",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common",
+     "AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common",
+     "AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES",
+     "AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES",
+     "AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "first_decoded",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.RepinS6First.first_decoded",
+     "AspisR1.GExq_OuterGoodFirst.first_decoded",
+     "NMT_first.first_decoded"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "r1_pool_adapter.decode_public_statement_box",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "r1_pool_adapter.owned.require_distinct_accounts",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.r1_pool_adapter.owned.require_distinct_accounts"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "r1_pool_adapter.owned.require_readonly_buffer",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.r1_pool_adapter.owned.require_readonly_buffer"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "r1_pool_adapter.owned.require_verifier_checkpoint",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "r1_pool_adapter.owned.require_zero",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.r1_pool_adapter.owned.require_zero"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "solana_program_error.ProgramError.Insts.CoreCloneClone.clone",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   },
+   {
+    "name": "solana_pubkey.Pubkey",
+    "class_": "a_sdk_type_models",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMT_stage1_owned.solana_pubkey.Pubkey",
+     "AdapterRw.solana_pubkey.Pubkey"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 6,
+    "sources": [
+     "PCUD",
+     "PCUE"
+    ]
+   }
+  ],
+  "NMT_tx1.Funs": [
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO",
+     "AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.Accumulator.new",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.finish",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.new",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.QueryGeometry.for_range",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range",
+     "NEW_GeometryActual.verifier.QueryGeometry.for_range"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.batch_merkle",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NKV_FRef.verifier.candidate.batch_merkle",
+     "AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.canonical_scan",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.parse_shape",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NJS_Extract.verifier.candidate.parse_shape",
+     "Op3I_Source.verifier.candidate.parse_shape"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.prepare",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMP_prepare.verifier.candidate.prepare",
+     "AspisR1CurrentCaller.verifier.candidate.prepare"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.query_loop",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop",
+     "AspisR1Stage2.verifier.candidate.query_loop"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.checkpoint",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.mark",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentCaller.verifier.mark"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 8,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "NNG_verify_finish, NMP_prepare": [
+   {
+    "name": "NNG_call_0..15 / NMP_call_0..11",
+    "class_": "j_proof_structure_or_toolchain_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "not determined by the source job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCVA"
+    ]
+   }
+  ],
+  "PRVEq_AspisR1TerminalDecoder_FunsLoop_P3.lean": [
+   {
+    "name": "H_P: PRVFresh_TD.aspis_core.field.P := ok gate.P",
+    "class_": "j_proof_structure_or_toolchain_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "not determined by the source job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCVA"
+    ]
+   }
+  ],
+  "Port23PUSH_Source": [
+   {
+    "name": "verifier.BatchedWeights",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "crate aspis-r1-cost-probe (programs/r1-cost-probe, frozen 4bb3b3f5)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Port23PUSH.verifier.BatchedWeights",
+     "AspisR1CurrentCaller.verifier.BatchedWeights",
+     "NMT_tx1.verifier.BatchedWeights"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 86,
+    "sources": [
+     "PCUC"
+    ]
+   }
+  ],
+  "Port5Q2_ReaderWeights": [
+   {
+    "name": "weights",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.FJs_RowAlignment.weights",
+     "NJU_ResumeObserved.Event.weights",
+     "AspisR1.NFS_QueryInvariant.Domain.weights"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 4,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "R1CandidateFieldParsers": [
+   {
+    "name": "core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+     "AspisR1.FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+     "S8OwnedP6.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 26,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+     "AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+     "AspisR1.FIp_DotDecode.core.option.Option.Insts.CoreOpsTry_traitTry.branch"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 26,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.CM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.CM31",
+     "NEI_PushRaw.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 26,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1RecordParser.field.M31",
+     "AdapterRw.aspis_core.field.M31",
+     "AspisC2HostEmbedding.field.M31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 26,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "field.QM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.QM31",
+     "AspisR1Post25Sampler.field.QM31",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 26,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "R1CandidateWideParserSource": [
+   {
+    "name": "field.wide_exact.WideExact",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SelectedWideViewV1.aspis_core.field.wide_exact.WideExact",
+     "AspisC2HostEmbedding.field.wide_exact.WideExact",
+     "AspisR1PrefixAggregateParser.field.wide_exact.WideExact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 16,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "RPu_FIq_Native04": [
+   {
+    "name": "state_only_poseidon.internal_linear_lazy",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-r1-cost-probe or aspis-statement (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.state_only_poseidon.internal_linear_lazy"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 46,
+    "sources": [
+     "PCQF",
+     "PCUF"
+    ]
+   }
+  ],
+  "RPu_FIq_Native08": [
+   {
+    "name": "FIq_Native.core.array.Array.map",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "not determined by the source job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.array.Array.map"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 51,
+    "sources": [
+     "PCVA"
+    ]
+   }
+  ],
+  "RPu_FIq_Native13": [
+   {
+    "name": "pool_v1.pair_forest_copy_terminal.constants.COPY_PATTERNS",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.constants.COPY_PATTERNS"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 29,
+    "sources": [
+     "PCUB"
+    ]
+   }
+  ],
+  "RPu_FIq_NativeExternal": [
+   {
+    "name": "MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEG_RowIsolated.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+     "NEI_PushRaw.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter",
+     "FIq_Native.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.array.Array.map",
+    "class_": "d_core_array_slice_ops",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.array.Array.map",
+     "AspisR1QueryScanUnrolled.core.array.Array.map",
+     "AspisR1SelectedMaskProbe.core.array.Array.map"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.count_ones",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.num.U16.count_ones"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.count_ones_aux",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.num.U16.count_ones_aux"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.count_ones_aux_le",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.count_ones_nat",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.num.U16.count_ones_nat"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.count_ones_nat_le",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.trailing_zeros",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.num.U16.trailing_zeros"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.trailing_zeros_aux_le",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.trailing_zeros_nat",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.num.U16.trailing_zeros_nat"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.num.U16.trailing_zeros_nat_le",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.ops.range.Range.Insts.CoreCloneClone.clone",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.ops.range.Range.Insts.CoreCloneClone.clone"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.fold",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.fold"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.option.Option.Insts.CoreCmpPartialEqOption.eq",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1TerminalDecoder.core.option.Option.Insts.CoreCmpPartialEqOption.eq",
+     "AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq",
+     "FIq_Native.core.option.Option.Insts.CoreCmpPartialEqOption.eq"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.result.Result.map",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.result.Result.map"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "rangeFold",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.rangeFold"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "range_clone_usize",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "revFold",
+    "class_": "f_core_num_ops_iter_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.revFold"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 53,
+    "sources": [
+     "PCUB"
+    ]
+   }
+  ],
+  "RPu_FIq_NativeTypes": [
+   {
+    "name": "core.array.iter.IntoIter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "nightly-2026-09-17 (rustc of the Charon/Aeneas stager, PCQC_E0nn_PINS.json environment); core/std items are not versioned by Cargo.lock",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.array.iter.IntoIter",
+     "FIq_Native.core.array.iter.IntoIter",
+     "WAdm_Fissioned.core.array.iter.IntoIter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.read_discriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.read_discriminant"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "pool_v1.pair_forest_semantic_terminal.CompiledVariant.read_discriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.read_discriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   },
+   {
+    "name": "state_only_prefix.r0.Error.read_discriminant",
+    "class_": "g_aeneas_discriminant_helpers",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 93,
+    "sources": [
+     "PCUB"
+    ]
+   }
+  ],
+  "RPv_PoseidonPreparedSum3Source": [
+   {
+    "name": "field.qm31_from_karatsuba_channel_sums.closure",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "in-tree helper of the probe crate / statement crate; frozen Cargo.lock path-crates (aspis-statement, aspis-core), no registry crate",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.field.qm31_from_karatsuba_channel_sums.closure",
+     "AspisR1PoseidonPreparedSum3Source.field.qm31_from_karatsuba_channel_sums.closure"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 27,
+    "sources": [
+     "PCUB"
+    ]
+   }
+  ],
+  "RPz7_AspisR1CircleSampleWrapper_Funs": [
+   {
+    "name": "sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CircleSampleWrapper.sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 24,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "RPz7_FIo_NativeFuns": [
+   {
+    "name": "alloc.collections.TryReserveError",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust alloc library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError",
+     "FIo_Native.alloc.collections.TryReserveError"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCQ_A",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "alloc.vec.Vec.try_reserve_exact",
+    "class_": "e_alloc_and_allocator_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust alloc library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.alloc.vec.Vec.try_reserve_exact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCQ_A",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SelectedWideViewV1.aspis_core.field.wide_exact.WideExact",
+     "WAdm_Fissioned.aspis_core.field.wide_exact.WideExact",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.to_limbs",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact.to_limbs",
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.to_limbs"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "aspis_core.r0.transport.COEFFICIENT_TO_ROW",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.r0.transport.COEFFICIENT_TO_ROW"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCQ_A",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "fast_pairing.canonical.Dot.push",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-r1-cost-probe (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.fast_pairing.canonical.Dot.push"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 179,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   }
+  ],
+  "RPz7_FIo_NativeTypes": [
+   {
+    "name": "alloc.collections.TryReserveError",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust alloc library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError",
+     "FIo_Native.alloc.collections.TryReserveError"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 192,
+    "sources": [
+     "PCQC"
+    ]
+   },
+   {
+    "name": "alloc.vec.Vec.try_reserve_exact",
+    "class_": "e_alloc_and_allocator_models",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust alloc library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.alloc.vec.Vec.try_reserve_exact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 192,
+    "sources": [
+     "PCQC"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SelectedWideViewV1.aspis_core.field.wide_exact.WideExact",
+     "WAdm_Fissioned.aspis_core.field.wide_exact.WideExact",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 192,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   },
+   {
+    "name": "core.result.Result.map_err",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust core library, rustc nightly-2026-06-01 sysroot (tool pin PCQ_*_PINS.json; no crate version)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1PublicPreparation.core.result.Result.map_err",
+     "AspisR1CurrentCaller.core.result.Result.map_err",
+     "FIq_Native.core.result.Result.map_err"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 192,
+    "sources": [
+     "PCQC"
+    ]
+   }
+  ],
+  "RPz7_WAdm_Fissioned_Funs": [
+   {
+    "name": "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "WAdm_Fissioned.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+     "FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31.write_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.QM31.write_le_bytes",
+     "OraclePortCkptAbi2Extracted.aspis_core.field.QM31.write_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.to_le_bytes",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.wide_exact.WideExact.to_le_bytes"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "wadm_native_fixture (cut crate); core/alloc std from the original toolchain",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIq_Native.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "WAdm_Fissioned.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+     "Aeneas.Std.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 3,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "RPz7_WAdm_Fissioned_Types": [
+   {
+    "name": "aspis_core.circle.SecureCirclePoint",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1FinishRelationCurrent.aspis_core.circle.SecureCirclePoint",
+     "AspisR1CurrentCaller.aspis_core.circle.SecureCirclePoint",
+     "OraclePortCkptAbi2Extracted.aspis_core.circle.SecureCirclePoint"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.digest.Digest32",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentCaller.aspis_core.digest.Digest32",
+     "NMT_tx1.aspis_core.digest.Digest32",
+     "NMP_prepare.aspis_core.digest.Digest32"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.CM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NEV_AccumulateRaw.aspis_core.field.CM31",
+     "NEI_PushRaw.aspis_core.field.CM31",
+     "AspisR1SemanticCallExtraction.aspis_core.field.CM31"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.M31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AdapterRw.aspis_core.field.M31",
+     "AspisS6FullForestEncoderNamed.aspis_core.field.M31",
+     "NMT_first.aspis_core.field.M31"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.QM31",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "WAdm_Fissioned.aspis_core.field.QM31",
+     "NEV_CodeFieldRaw.aspis_core.field.QM31",
+     "NEG_PushActual.aspis_core.field.QM31"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_core.field.wide_exact.WideExact",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SelectedWideViewV1.aspis_core.field.wide_exact.WideExact",
+     "WAdm_Fissioned.aspis_core.field.wide_exact.WideExact",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_r1_cost_probe.transport.Variant",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant",
+     "AdapterRw.aspis_r1_cost_probe.transport.Variant"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "aspis_r1_cost_probe.verifier.Prepared",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core 0.1.0 (frozen path crate, workspace revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387); aliases target OraclePortCkptAbi2Extracted / AspisR1Stage2 extractions",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared",
+     "WAdm_Fissioned.aspis_r1_cost_probe.verifier.Prepared"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   },
+   {
+    "name": "core.array.iter.IntoIter",
+    "class_": "b_core_slice_iterator_model",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust core::array::IntoIter",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "Aeneas.Std.core.array.iter.IntoIter",
+     "FIq_Native.core.array.iter.IntoIter",
+     "WAdm_Fissioned.core.array.iter.IntoIter"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "S1NativeCompactModelV1": [
+   {
+    "name": "core.option.Option.ok_or",
+    "class_": "c_core_option_result_combinators",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "Rust std/core, toolchain-pinned",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1DecodeKFullV10.core.option.Option.ok_or",
+     "AspisR1RecordParser.core.option.Option.ok_or",
+     "AspisS1NativeCompact.core.option.Option.ok_or"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 22,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "S8OwnedP6.Funs": [
+   {
+    "name": "Discriminant (Option T) Isize (local instance optionDiscriminant)",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "Rust std (core/alloc) at the nightly-2026-09-17 sysroot of the pinned Charon; not a crates.io package (core::option::Option residual); tools/s8-kani-20261021 crate",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 30,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "S8OwnedP6.Types": [
+   {
+    "name": "Types.lean adaptation (ImportUnionNamedDiscriminant)",
+    "class_": "k_other",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "tools/s8-kani-20261021 (s8-owned-correspondence 0.1.0)",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 32,
+    "sources": [
+     "PCWA"
+    ]
+   }
+  ],
+  "Stage2ContinuationTypes": [
+   {
+    "name": "aspis_core.field.wide_exact.WideExact",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "aspis-core (workspace member of the frozen tree 4bb3b3f)",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1SelectedWideViewV1.aspis_core.field.wide_exact.WideExact",
+     "WAdm_Fissioned.aspis_core.field.wide_exact.WideExact",
+     "NEV_AccumulateRaw.aspis_core.field.wide_exact.WideExact"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 173,
+    "sources": [
+     "PCQC",
+     "PCUA",
+     "PCUE",
+     "PCUF"
+    ]
+   }
+  ],
+  "VTop_Model": [
+   {
+    "name": "aspis_core.field.wide_exact.WideExact.ZERO",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO",
+     "AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.Accumulator.new",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.finish",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.BatchedWeights.new",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.QueryGeometry.for_range",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range",
+     "NEW_GeometryActual.verifier.QueryGeometry.for_range"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.batch_merkle",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NKV_FRef.verifier.candidate.batch_merkle",
+     "AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.canonical_scan",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.parse_shape",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NJS_Extract.verifier.candidate.parse_shape",
+     "Op3I_Source.verifier.candidate.parse_shape"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.prepare",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "NMP_prepare.verifier.candidate.prepare",
+     "AspisR1CurrentCaller.verifier.candidate.prepare"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.candidate.query_loop",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop",
+     "AspisR1Stage2.verifier.candidate.query_loop"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.checkpoint",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": false,
+    "splitB_cone_constants_matching": [],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   },
+   {
+    "name": "verifier.mark",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL_BY_TEXT",
+    "pinned_crate": "not determined in this job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CurrentCaller.verifier.mark"
+    ],
+    "reached_by_CLOSED_module": true,
+    "n_CLOSED_rows_via_module": 17,
+    "sources": [
+     "PCUD"
+    ]
+   }
+  ],
+  "gate FunsExternal (evidence/native-tx2k-20261028/NBX_imports/AspisR1CircleFallback/FunsExternal.lean)": [
+   {
+    "name": "AspisR1CircleFallback.circle.secure_ood_circle_point_from_parameter",
+    "class_": "i_frozen_crate_item_models_and_gate_side_adaptations",
+    "category": "HAND_WRITTEN_GATE_MODEL",
+    "pinned_crate": "not determined by the source job",
+    "reached_by_splitB_cone_constant": true,
+    "splitB_cone_constants_matching": [
+     "AspisR1CircleFallback.circle.secure_ood_circle_point_from_parameter"
+    ],
+    "reached_by_CLOSED_module": false,
+    "n_CLOSED_rows_via_module": 0,
+    "sources": [
+     "PCVA"
+    ]
+   }
+  ]
+ },
+ "post_pcxa_records": {
+  "PCQH": {
+   "schema": "PCQH_HAND_MODELS/1",
+   "note": "records only; no trust row proposed",
+   "models": [
+    {
+     "name": "ShrAmt / Std.Usize.wrapping_shr / wrapping_shl wrappers (inputs/PCQH_shr_prelude.lean)",
+     "kind": "ENCODING_BRIDGE",
+     "statement": "In the fresh namespace, `Std.Usize.wrapping_shr x y` with y : I32 or Usize means Aeneas.Std.Usize.wrapping_shr x (y as u32); wrapping_shl likewise",
+     "justification": "Rust semantics of unchecked `>>`/`<<` with overflow checks off: the right operand is converted and the amount masked by the word width; the library function masks. The emitted text is otherwise unchanged.",
+     "scope": "fresh text only; used by NFN_ExtractedGeometry_h1; not used in any claim about the deployed program beyond this correspondence",
+     "status": "assumption about the tool translation, to be audited against the Aeneas/Charon MIR translation of Shr; not a cryptographic assumption"
+    },
+    {
+     "name": "M31.ZERO/ONE binding (inputs/NFN_prelude.lean)",
+     "kind": "CONSTANT_BINDING",
+     "statement": "fresh external Result M31 constants bound to the gate constants",
+     "justification": "upgraded to EQUALITY_PROVED by PRVEq_const_bind (P2h L035/L037) against the transparent PCQF_E007 constants",
+     "scope": "NFN_ExtractedGeometry_h1"
+    }
+   ]
+  },
+  "PCUH": {
+   "schema": "PCUH_HAND_MODELS/1",
+   "note": "Record only; no trust row is added or proposed. These are the hand-written gate structures that block a fresh = gate equality, and the instantiations used by this job.",
+   "hand_models": [
+    {
+     "module": "AdapterRwModel",
+     "name": "AdapterRw.Ops (boundary record)",
+     "effect": "gate functions first_decoded, observer, data_len, require_verifier_checkpoint, Insts.* take `ops`; fresh uses SDK/cross-crate externals as axioms; 9 comparisons not made (HAND_ADAPTED)"
+    },
+    {
+     "module": "Port3_NativeGeometryBody",
+     "name": "Ops (callbacks for field/domain operations)",
+     "effect": "23 for_range definitions parametric in Ops, carrier types CM31/M31/r0.Error/Point/QueryGeometry differ from the fresh ones"
+    },
+    {
+     "module": "Port4C_NativePrefix",
+     "name": "Leaves",
+     "effect": "batch_prefix_products(_loop(.body)) parametric in Leaves"
+    },
+    {
+     "module": "Port5Q2_ReaderWeights",
+     "name": "CheckpointBytes4Sections.ReadK + IterMut model",
+     "effect": "weights, weights_loop parametric; carrier types differ"
+    },
+    {
+     "module": "S1NativeCompactModelV1",
+     "name": "Ops (compact codec) and hand-written constants r1_wire.POINTS : Result Usize := ok 3#usize",
+     "effect": "expand_semantic(_loop(.body)) parametric in Ops and fresh does not elaborate (ChunksExactMut externals); POINTS/CLAIMS compared in the lifted form `ok fresh = gate`"
+    },
+    {
+     "module": "AspisR72Sampler.Funs",
+     "name": "r23_product_u32_bounded, r24_canonical_mul (+ PP, closure)",
+     "effect": "gate-only helpers with no frozen counterpart; behaviour proved in P3b (r23_gate reused here), not equated"
+    }
+   ],
+   "instantiations_recorded": [
+    {
+     "where": "PRVEq_NFN_ExtractedGeometry(_p2): fresh-namespace definitions aspis_core.field.M31.ZERO/ONE := ok <gate value> (inputs/NFN_prelude.lean)",
+     "effect": "external `Result M31` axiom of FunsExternal_Template instantiated; used by fast_domain.line_node; value now verified against the constant's own transparent fresh definition (PRVEq_const_bind.lean PRVEq.const.M31_ONE, PCUH_L037)"
+    },
+    {
+     "where": "external callees of the fresh closures (cross-crate M31.mul/sub/double, CM31.mul, FibreIndex.get, ...) resolve by name to the gate constants through the opened gate namespace",
+     "effect": "name-bound (as in P2g); the compile is the check; applies to NFN fibre_point/line_node/table_value"
+    }
+   ]
+  },
+  "PCVC": {
+   "schema": "PCVC_HAND_MODELS/1",
+   "items": [
+    {
+     "name": "core.array.from_fn",
+     "kind": "external axiom in original Aeneas emission (FunsExternal_Template: axiom core.array.from_fn ... : F -> Result (Array T N))",
+     "gate": "array_from_fn_copy N CopyInst FnMutInst zero init (defined loop)",
+     "bridge_statement": "for each instantiation (T,F,inst): core.array.from_fn N inst f = array_from_fn_copy N CopyT inst (zero_T) f. Needs a fact about the hand model (the fresh side is an unconstrained axiom); NOT assumed, NOT proved here. Cannot be stated as one generic theorem: array_from_fn_copy needs Copy and zero per element type (U64: 0#u64, QM31: field.QM31.ZERO).",
+     "blocks": "dropped fresh declarations in Native04/05/07/09/10/11 (internal_linear_lazy, internal_round, interpolated_internal_pair, external_local_packed_raw, ... ) and their callers",
+     "for": "P6"
+    },
+    {
+     "name": "hoisted constant parameter",
+     "note": "Native10 path_lanes_literal_loop and Native13 pattern_values_literal_loop1: fresh loop has an extra parameter q (the monadic constant ZERO bound by the caller) where gate inlines the constant. Equality holds at q = Gate ZERO only; caller passes exactly that constant. Not proved (needs constant-binding lemma Fresh.ZERO = ok Gate.ZERO)."
+    }
+   ]
+  },
+  "PCVD": {
+   "schema": "PCVD_HAND_MODELS/1",
+   "target_established": false,
+   "hand_models": [
+    {
+     "name": "core.array.from_fn / array_from_fn_copy",
+     "why": "axiom in the original-Aeneas emission; the gate carries array_from_fn_copy",
+     "blocked_definitions": [
+      {
+       "module": "RPu_FIq_Native04",
+       "definition": "state_only_poseidon.internal_linear_lazy"
+      },
+      {
+       "module": "RPu_FIq_Native04",
+       "definition": "state_only_poseidon.internal_linear_lazy_loop1"
+      },
+      {
+       "module": "RPu_FIq_Native04",
+       "definition": "state_only_poseidon.interpolated_internal_pair"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_linear_packed"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_linear_packed_loop"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_local_packed"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_local_packed_raw"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_local_packed_raw_loop0"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.external_local_packed_raw_loop0_loop0"
+      },
+      {
+       "module": "RPu_FIq_Native05",
+       "definition": "state_only_poseidon.full_round_packed"
+      },
+      {
+       "module": "RPu_FIq_Native07",
+       "definition": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected"
+      },
+      {
+       "module": "RPu_FIq_Native07",
+       "definition": "state_only_poseidon.full_round_m31_constants_packed"
+      },
+      {
+       "module": "RPu_FIq_Native07",
+       "definition": "state_only_poseidon.leading_pair_packed"
+      },
+      {
+       "module": "RPu_FIq_Native09",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes"
+      },
+      {
+       "module": "RPu_FIq_Native09",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_preweighted"
+      },
+      {
+       "module": "RPu_FIq_Native09",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_preweighted_loop"
+      },
+      {
+       "module": "RPu_FIq_Native09",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_value_lanes"
+      },
+      {
+       "module": "RPu_FIq_Native10",
+       "definition": "pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal"
+      },
+      {
+       "module": "RPu_FIq_Native10",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_path_lanes"
+      },
+      {
+       "module": "RPu_FIq_Native10",
+       "definition": "pool_v1.pair_forest_semantic_terminal.add_schedule_lanes"
+      },
+      {
+       "module": "RPu_FIq_Native10",
+       "definition": "pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption"
+      },
+      {
+       "module": "RPu_FIq_Native07",
+       "definition": "state_only_poseidon.interpolated_full_pair_packed"
+      },
+      {
+       "module": "RPu_FIq_Native11",
+       "definition": "pool_v1.pair_forest_semantic_terminal.semantic_packed"
+      }
+     ]
+    },
+    {
+     "name": "compact.OFF_* (Ops-instance constants)",
+     "blocked_definitions": [
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.OFF_SEMANTIC"
+      },
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.LOGICAL_SEMANTIC"
+      },
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.OFF_Y1"
+      },
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.OFF_INACTIVE"
+      },
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT"
+      },
+      {
+       "module": "CurrentCompactCallerModelV1",
+       "definition": "AspisR1CurrentCaller.compact.OFF_ROUND1"
+      }
+     ]
+    },
+    {
+     "name": "external opaque types/functions abstracted as parameters",
+     "items": [
+      "aspis_core.field.wide_exact.WideExact and from_le_bytes (weights.field)",
+      "MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter (Port23PUSH ArrayIntoIter)",
+      "aspis_core.field.wide_exact.WideExact as the gate structure (trace.value)"
+     ]
+    },
+    {
+     "name": "cross-crate constant shims",
+     "items": [
+      "field.QM31.ZERO",
+      "field.QM31.ONE",
+      "field.M31.ONE",
+      "state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS"
+     ]
+    }
+   ]
+  },
+  "PCWE": {
+   "schema": "pcwe-hand-models-v1",
+   "note": "Differences between a reproduced generated file and the gate module compiled from it. None removes or adds a gate hand model that the equalities rely on beyond what is listed; the equalities are stated against the compiled gate constants.",
+   "entries": [
+    {
+     "module": "AspisR1AdapterReconstruct.Types",
+     "gate_blob": "f494d5f8",
+     "archive_blob": "c60d3e70",
+     "difference": "attribute `discriminant` replaced by `import_union_discriminant` on 5+ declarations and one added import (ImportUnionNamedDiscriminant); no type or field change",
+     "kind": "mechanical hand edit of generated Lean (Aeneas library naming)",
+     "equalities": "12 common definitions PROVED (rfl); the 23 other fresh declarations are structures/inductives compared by the identity check only"
+    },
+    {
+     "module": "AspisR1PrefixAggregateParser.Funs",
+     "gate_blob": "49dc9889",
+     "archive_blob": "4e04e863",
+     "difference": "declarations r1_wire.Error.Insts.CoreFmtDebug and r1_wire.Error.Insts.CoreFmtDebug.fmt deleted (DFm_remove-debug.patch, evidence/debug-fmt-20261026)",
+     "kind": "deletion of generated declarations; the Debug impl is not reached by the spend path per DFm",
+     "equalities": "39 common definitions PROVED; the two deleted declarations have no gate constant and no equality"
+    },
+    {
+     "module": "AspisR1PrefixAggregateParser.Types",
+     "gate_blob": "0989c292 or bridge 5146eb19 (compiled one not identified from sources)",
+     "archive_blob": "0989c292",
+     "difference": "bridge 5146eb19 drops the discriminant attribute and adds a hand-written r1_wire.Error.read_discriminant naming adapter (constructor order 0..10)",
+     "kind": "hand-written adapter if the bridge is the compiled gate",
+     "equalities": "6 PROVED against the compiled gate module"
+    },
+    {
+     "module": "AspisR1CircleSampleWrapper.Types",
+     "gate_blob": "169861d3",
+     "archive_blob": "d9b61e93",
+     "difference": "naming-only expansion of the generated discriminant reader and instance (CirclePointError.read_discriminant, CircleRow.read_discriminant, instDiscriminant) and the closure alias sampler.circle_sample.closure absent from the gate Types (carried in FunsExternal)",
+     "kind": "documented hand edit (packet README) + one fresh-only declaration",
+     "equalities": "4 common definitions PROVED; sampler.circle_sample.closure is fresh-only"
+    },
+    {
+     "module": "AspisR72Sampler.Funs",
+     "gate_blob": "b693c4bc",
+     "archive_blob": "e0022c79",
+     "difference": "three import lines (import Aeneas -> Aeneas.Std, Aeneas.Data.Discriminant, Aeneas.Tactic.RustAttributes)",
+     "kind": "header edit; extraction not reproduced (tool absent)",
+     "equalities": "none in P4e"
+    }
+   ]
+  },
+  "PCQD": {
+   "schema": "PCQD_HAND_MODELS/1",
+   "note": "Record-only obligations. No trust row proposed; a missing source refinement is not a cryptographic assumption.",
+   "obligations": [
+    {
+     "item": "require_distinct_accounts (r1_pool_adapter_owned.rs 59-72)",
+     "reason": "nested-loop return unsupported by both Aeneas builds",
+     "statement": "A hand model must be proved equal to the Rust double loop returning InvalidArgument on the first equal key pair."
+    },
+    {
+     "item": "ValidatedRecord::decode_k",
+     "reason": "internal error on both tools",
+     "statement": "Hand/loop-rewritten model with a source-refinement proof against r1_wire.rs 139-170."
+    },
+    {
+     "item": "r1_semantic::claims",
+     "reason": "internal error on both tools",
+     "statement": "Same, for the frozen counterpart of candidate_claims.claims / NJT_claims_ref."
+    },
+    {
+     "item": "pair_forest_terminal boxed decoders, pair_tree_profile boxed decoders and live snapshot encode/validate",
+     "reason": "memory growth (original) / Unreachable, Not_found, name clash (extended)",
+     "statement": "Needs opaque-callee extraction with a stated contract, or hand models."
+    },
+    {
+     "item": "candidate batch_merkle/batch_tree/query_loop, QueryGeometry::for_range, accumulate",
+     "reason": "internal error at fast_pairing.rs; timeout",
+     "statement": "Hand models or a further opaque split."
+    },
+    {
+     "item": "asq8_payment_reference (cfg aeneas_ref)",
+     "reason": "not in shipped build; Charon fails even with the cfg",
+     "statement": "Frozen reference module; counterpart only by hand."
+    },
+    {
+     "item": "Prepared::new, BatchedWeights::new, observer-side require_readonly_buffer/require_zero/readonly_buffer_meta_ok",
+     "reason": "Not_found / nested-return failures",
+     "statement": "Split further or hand model."
+    }
+   ]
+  },
+  "PCUG": {
+   "schema": "PCUG_HAND_MODELS/1",
+   "target_established": false,
+   "note": "Record only. No hand model written, no trust row added or proposed. A missing source refinement is not a cryptographic assumption.",
+   "entries": [
+    {
+     "name": "aspis_statement::state_only_poseidon::external_linear_lazy",
+     "source": "crates/aspis-statement/src/state_only_poseidon.rs lines 139-190 (frozen 4bb3b3f5)",
+     "reason": "PCQG_E004, PCQG_E016: Aeneas \"Unimplemented\" InterpMatchCtxs.ml:419 at 156:8-172:9 (from_fn closure matching on mutable counter inside while loop)",
+     "obligation_comment": "-- OBLIGATION (not proved): for state : [QM31;16], external_linear_lazy(state) = for each group g in 0..4, with input = map extension_limbs state[4g..4g+4] and for output o in 0..4: raw[limb] = M_o . (input[0..4][limb]) (rows (2,3,1,1),(1,2,3,1),(1,1,2,3),(3,1,1,2) over u64), state[4g+o] := extension_from_raw_limbs raw; then sums[column][limb] = sum_{r in 0..4} limb of state[4r+column]; finally state[i] := extension_from_raw_limbs (limbs(state[i])[limb] + sums[i&3][limb]). No overflow failure under canonical (< P) limbs; checked arithmetic on u64.",
+     "obtained_instead": "opaque axiom in PCQG_E010/E015 (aspis_statement.state_only_poseidon.external_linear_lazy); callers emitted"
+    },
+    {
+     "name": "aspis_statement::pool_v1::pair_forest_semantic_terminal::empty_root",
+     "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs line 189-192",
+     "reason": "PCQG_E006/E011/E013: Aeneas name clash for the constructor value M31 in `.map(M31)`",
+     "obligation_comment": "-- OBLIGATION (not proved): empty_root level = Array.map M31.mk (constants.POOL_V1_PAIR_EMPTY_ROOTS_V1[level]) with checked index (fails when level >= 21); the b59d5188-extended emission is `core.array.Array.map (BuiltinFnMut Std.U32 field.M31) a (field.M31_constructor)`.",
+     "obtained_instead": "opaque axiom in PCQG_E014/E015"
+    },
+    {
+     "name": "loop encoding bridge (original Aeneas `loop` vs gate recursive loop definitions)",
+     "reason": "PCUG-C3(a): 47 records",
+     "obligation_comment": "-- OBLIGATION (not proved): for each loop definition f of a gate module, the gate recursive definition f (inlined iterator/range step, recursion through f itself) equals fresh f := loop (fun st => f.body args st) st0 as Result values. Generic form: fix-point/`loop` equality lemma PRV_fix_congr (PCVA, MultiproofSortRef) instantiated per loop; the generator must not emit rfl for these cells (non-terminating defeq)."
+    },
+    {
+     "name": "monadic vs pure constants (field.QM31.ZERO/ONE, ok field.M31.ONE arms)",
+     "reason": "PCUG-C3(b)",
+     "obligation_comment": "-- OBLIGATION (not proved): fresh `let q <- field.QM31.ZERO` / `ok field.M31.ONE` equals the gate pure constant use; one lemma per constant (const_bind: (do let q <- c; k q) = k c when c is the ok-wrapped def) plus one rewriting step in each affected body."
+    },
+    {
+     "name": "core.array.from_fn vs array_from_fn_copy",
+     "reason": "PCUG-C3(c)",
+     "obligation_comment": "-- OBLIGATION (not proved): the original-Aeneas `core.array.from_fn N closure` is not defined in the gate library (Unknown identifier); the extended build uses array_from_fn_copy N CopyInst closure init. Needs the library constant or a statement of equality at the Rust-semantics level; not a trust row."
+    },
+    {
+     "name": "aspis_core.field.P external axiom (TerminalDecoder pair_terminal / digest_is_canonical)",
+     "reason": "PCUG-C3(d); 6 records",
+     "obligation_comment": "-- OBLIGATION (not proved): PCQG_E005 emits `axiom aspis_core.field.P : Result Std.U32` while the gate has `def aspis_core.field.P : Std.U32 := 2147483647#u32`; P2f solved the same shape for first_canonical_byte by a transparent P from PCQF_E002 (PRVEq_TD_HP_P3f.lean, P_eq). The pair_terminal and digest_is_canonical equalities need the same restatement against an emission with transparent P."
+    },
+    {
+     "name": "Native14 E015 fresh closure does not elaborate in 180 s",
+     "reason": "PCUG-C5; 7 records FRESH_ELABORATION_TIMEOUT",
+     "obligation_comment": "-- OBLIGATION (not proved): terminal_parts/composition_parts/equality_value/terminal_qm31 (PCQG_E015 closure). Needs a split of the fresh text into separately elaborated chunks or a different tool; the Lean statement is the one recorded in PCUG_PLAN.json pass RPu_FIq_Native14_p2."
+    }
+   ]
+  },
+  "PCUI": {
+   "schema": "PCUI_HAND_MODELS/1",
+   "entries": [
+    {
+     "name": "ShrAmt",
+     "file": "prov-p2i-20261110/inputs/prelude_shramt_u64.lean",
+     "kind": "encoding bridge (hand model)",
+     "scope": "U64 wrapping_shl/wrapping_shr with an I32/Usize shift amount; overflow-checks-OFF only",
+     "verification": "evidence/shramt-20261110/NPE_SHRAMT_CHECK.md (OFF only; never for checked shifts with amounts wider than 32 bits)",
+     "used_in": "PRVEq_NJS_Extract_Funs_i2.lean (pass fresh = NMH_E010 NJS_Extract, OFF default environment)",
+     "credited_definitions_depending_on_it": [
+      [
+       "NJS_Extract.Funs",
+       "NJS_Extract.verifier.candidate.batch_keys"
+      ],
+      [
+       "NJS_Extract.Funs",
+       "NJS_Extract.verifier.candidate.batch_keys_loop"
+      ]
+     ],
+     "fresh_declarations_depending": [
+      "verifier.candidate.batch_keys",
+      "verifier.candidate.batch_keys_loop",
+      "verifier.candidate.batch_keys_loop.body"
+     ]
+    },
+    {
+     "name": "gate externals as variables",
+     "note": "NJS_Extract.Funs / NMP_prepare.Funs gate declarations that depend on the NJS_call_k / NMP_call_k variables have no text-identical emission (the fresh emission refers to the concrete external); they are NOT credited here (parametric transport, CONDITIONAL_ON_BINDING at best)."
+    }
+   ]
+  },
+  "PCUJ": {
+   "schema": "PCUJ_HAND_MODELS/1",
+   "entries": [
+    {
+     "name": "ShrAmt",
+     "file": "prov-p2i-20261110/inputs/prelude_shramt_u64.lean",
+     "kind": "encoding bridge (hand model)",
+     "scope": "U64 wrapping_shl/wrapping_shr with an I32/Usize shift amount; overflow-checks-OFF only",
+     "verification": "evidence/shramt-20261110/NPE_SHRAMT_CHECK.md (OFF only; never for checked shifts with amounts wider than 32 bits)",
+     "used_in": "PRVEq_NJS_Extract_Funs_i2.lean (pass fresh = NMH_E010 NJS_Extract, OFF default environment)",
+     "credited_definitions_depending_on_it": [
+      [
+       "NJS_Extract.Funs",
+       "NJS_Extract.verifier.candidate.batch_keys"
+      ],
+      [
+       "NJS_Extract.Funs",
+       "NJS_Extract.verifier.candidate.batch_keys_loop"
+      ]
+     ],
+     "fresh_declarations_depending": [
+      "verifier.candidate.batch_keys",
+      "verifier.candidate.batch_keys_loop",
+      "verifier.candidate.batch_keys_loop.body"
+     ]
+    },
+    {
+     "name": "gate externals as variables",
+     "note": "NJS_Extract.Funs / NMP_prepare.Funs gate declarations that depend on the NJS_call_k / NMP_call_k variables have no text-identical emission (the fresh emission refers to the concrete external); they are NOT credited here (parametric transport, CONDITIONAL_ON_BINDING at best)."
+    }
+   ],
+   "pcuj_note": "Unchanged from PCUI_HAND_MODELS.json; P2j added no hand model. The ShrAmt bridge (OFF only) is no longer needed by any P2j-credited definition; the 2 PCUI definitions that depend on it (OFF_EMISSION_WRAPPING_DECL) are unchanged."
+  },
+  "PCQI": {
+   "schema": "PCQI_HAND_MODELS/1",
+   "target_established": false,
+   "note": "No hand model added and no trust row added or proposed by PCQI_. The equalities rely on the following existing gate-side models, recorded not trusted:",
+   "models": [
+    {
+     "name": "gate abbrevs of CurrentWideMulCanonical onto AspisR1Qm31ArithmeticProbe",
+     "use": "L004",
+     "discharged_by": "PCQI_L005 Types Equiv records and L004 callee equalities"
+    },
+    {
+     "name": "Option.branch / Option.from_residual / optionTag defined as gate defs in RPz7_FIp_DotDecode and R1CandidateFieldParsers",
+     "use": "L010, L011",
+     "status": "fresh externals resolve by name to these gate defs through `open`; equality conditional on those gate defs being the intended model of core::option try-branch; unchanged hand models of PCXD_HAND_MODELS.json"
+    },
+    {
+     "name": "FIo_Native.aspis_core.field Types for FIp_DotDecode abbrevs",
+     "use": "L010",
+     "status": "EQUALITY_PROVED Types records exist (RPz7_FIo_NativeTypes)"
+    },
+    {
+     "name": "core.num.U32.from_le_bytes, Slice/Array indexing externals",
+     "use": "L010, L011, L013",
+     "status": "Aeneas std model, unchanged"
+    }
+   ]
+  },
+  "PCVF": {
+   "schema": "PCVF_HAND_MODELS/1",
+   "note": "no hand model added; no trust row added",
+   "items": [
+    {
+     "name": "array_from_fn_copy",
+     "status": "unchanged hand model; bridge to the emission's axiom core.array.from_fn unprovable; fact stated as PCVF_FromFn.FromFnBridge; erasure and builder identity proved (PCVF_L002)"
+    },
+    {
+     "name": "gate Ops / NMT_call_k boundary (AdapterRw, NMT)",
+     "status": "binding to the frozen externals remains the instantiation obligation; fresh=gate proved for all externals"
+    },
+    {
+     "name": "Vec IterMut model (Port5Q2 intoIter)",
+     "status": "hypothesis hInto in weights_eq; this is the core slice iterator model class the owner decision admits as a trust row"
+    },
+    {
+     "name": "gate models of core.result.Result.map_err, Result clone, Try.branch",
+     "status": "used in place of the emission's axioms in AdapterRw; recorded, no trust row"
+    }
+   ]
+  },
+  "PCVG": {
+   "schema": "PCVG_HAND_MODELS/1",
+   "items": []
+  },
+  "PCVH": {
+   "schema": "PCVH_HAND_MODELS/1",
+   "hand_models": [],
+   "note": "No hand-written model replaced a frozen emission. Helper lemmas in PRVEq_PCVH_R1CandidateWideParserSource_k1.lean (lm, dec_cm, dec_qm, dec_w, cm31_eq, qm31_eq, wide_eq, chain) are proof-internal and describe gate behaviour; they are not trusted."
+  },
+  "PCVI": {
+   "schema": "PCVI_HAND_MODELS/1",
+   "note": "no new hand model introduced; hand-adapted gate definitions touched: S1NativeCompactModelV1 (Ops parameter, Result-wrapped POINTS), Port23PUSH_Source (ArrayIntoIter parameter), NMT_stage1_owned (NMT_call_k parameters), RPz7_FIp_NativeDots/FIo_Native (wrapping callees reduce, push)"
+  },
+  "PCVJ": {
+   "schema": "PCVJ_HAND_MODELS/1",
+   "note": "gate modules with Ops structures (hand-parameterised callees); no new hand model written by this job",
+   "modules": {
+    "AdapterRwModel": "Ops op0..op55",
+    "CurrentCompactCallerModelV1": "Ops op0..op20",
+    "VTop_Model": "Ops op0..op23 + unwrap32",
+    "AspisR1PublicPreparation.Funs": "probe-crate Aeneas emission (no Ops); committed copy 544b75b9 is the compiled one"
+   }
+  },
+  "PCVK": {
+   "schema": "PCVK_HAND_MODELS/1",
+   "hand_models_introduced": [
+    {
+     "name": "PRVEq_partialEq_ne_default",
+     "kind": "generic lemma (copied from PRVEq_NMP_prepare_Funs_P3.lean)",
+     "use": "gate Option PartialEq instance has ne spelled out; fresh uses trait_default",
+     "axioms": "Quot.sound"
+    },
+    {
+     "name": "delta_matchers",
+     "kind": "tactic (meta code in file, no axiom)",
+     "use": "unfold matcher aux constants (separate constants in fresh and gate with equal bodies) before rfl"
+    },
+    {
+     "name": "Ext / Bound",
+     "kind": "parametric record (as PRVEq_AdapterRwModel_k1): externals of the emission are fields of Ext, Bound states each equals its gate counterpart",
+     "status": "CONDITIONAL_ON_BINDING"
+    }
+   ],
+   "retained_assumptions": [
+    "fresh Types read as the gate's declarations of the same name (checked equal by text for all used types; doc-comment source lines differ)",
+    "core.result.Result.map_err/Try.branch/clone resolve to the gate's definitions (HM-C), as in PCVF",
+    "gate modules AdapterRwModel and CurrentCompactCallerModelV1 are used as compiled; their source copies are in inputs/ for the generator"
+   ],
+   "trust_rows_added": []
+  },
+  "PCVL": {
+   "schema": "PCVL_HAND_MODELS/1",
+   "hand_adapted": [
+    {
+     "what": "fresh text of the closure of tx2_common/tx2_authenticated rewritten mechanically by PCVL_gen_vtop.py: (x : Ext) added to the 8 definitions that depend on an external; each external name replaced by x.<field>; three constructor prefixes renamed (verifier.Error., verifier.Phase., transport.Variant.) to the gate carriers' names",
+     "file": "PRVEq_VTop_l1.lean",
+     "class": "mechanical, same shape as PCVF_ AdapterRw (Ext/Bound/bound_exists)"
+    },
+    {
+     "what": "prelude abbrevs verifier.Reader, verifier.resume.closure, closure_1 to the AspisR1Stage2 constants (text-identical in Stage2ContinuationTypes lines 192-203/201); aspis_core.r0.Error declared as in the fresh Types (no gate counterpart; occurs only in resume)",
+     "file": "inputs/vtop_prelude.lean"
+    },
+    {
+     "what": "PublicPreparation: textual carrier map by --rename-fresh (Digest32 trait path, Challenges path, aspis_statement.pool_v1. prefix, one parenthesization '(Slice (Slice Std.U8))')",
+     "file": "PCVL_gen_pp3.sh"
+    }
+   ],
+   "no_sorry_no_axiom_no_native_decide": true
+  }
+ }
+}
