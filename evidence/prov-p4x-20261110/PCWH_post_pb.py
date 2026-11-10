@@ -13,6 +13,7 @@ abbrev core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
 end Aeneas.Std
 
 '''
-i=s.index('namespace AspisR1PublicPreparation\n')
+import re as _re
+i=_re.search(r'(?m)^namespace (?!Aeneas\.Std)',s).start()
 s=s[:i]+shim+s[i:]
 open(sys.argv[2],'w').write(s)
