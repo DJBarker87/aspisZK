@@ -30,6 +30,7 @@ def build(infile,out,undrop=(),insert=(),steps=(),extra='',insert_before=None,br
     res=txt.rstrip()+'\n'
     for kind,name,*opt in steps:
         if kind=='loop': t=gen_loops.one(res,name,done,F,G,NSF); assert t,name
+        elif kind=='simp': t=gen_p3.nonloop_simp(res,name,done,F,G,NSF,[])
         else: t=gen_p3.nonloop(res,name,done,F,G,NSF,[])
         res+=t; done.append('PRVC.Eq.'+name)
     res+=extra
