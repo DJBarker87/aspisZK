@@ -1,0 +1,84 @@
+{
+ "run": "PCVR_E001",
+ "spec_id": "PCVR_E001",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::weights::_::new",
+  "--start-from",
+  "crate::weights::_::materialize",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1k-20261110/PCVR_E001_emitted/repro.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1k-20261110/PCVR_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "1",
+  "--features",
+  "prover,r1p-check,private-leaf-salts"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCVR_weights",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1k-20261110/PCVR_E001_emitted/raw",
+  "-subdir",
+  "PCVR_weights",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1k-20261110/PCVR_E001_emitted/repro.llbc"
+ ],
+ "aeneas_tool": "original",
+ "opacity": [],
+ "configuration": {
+  "roots": [
+   "crate::weights::_::new",
+   "crate::weights::_::materialize"
+  ],
+  "namespace": [
+   "PCVR_weights"
+  ],
+  "features": [
+   "prover,r1p-check,private-leaf-salts"
+  ],
+  "opaque": [],
+  "manifest": "crates/aspis-r1-cost-probe/Cargo.toml"
+ },
+ "features_override": "prover,r1p-check,private-leaf-salts",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "configuration_overflow_checks": "ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; -C overflow-checks=yes appended to the stager RUSTFLAGS)",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66"
+}
