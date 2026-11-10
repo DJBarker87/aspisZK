@@ -91,9 +91,9 @@ if kind=='extract':
  man=ES/'emission-repro-20261110/NMH_STAGING_MANIFEST.json';pay=ES/'emission-repro-20261110/NMH_FROZEN_PAYLOAD.json.xz';psha=ES/'emission-repro-20261110/NMH_FROZEN_PAYLOAD.json.sha256'
  assert hashlib.sha256(lzma.decompress(pay.read_bytes())).hexdigest()==psha.read_text().strip()
  put('NHR_stage.py',stager);put('PCVV_STAGER_PIN.json',E/'PCVV_STAGER_PIN.json');put('NHR_STAGING_MANIFEST.json',man);put('NHR_FROZEN_PAYLOAD.json.xz',pay);put('NHR_FROZEN_PAYLOAD.json.sha256',psha)
- put('PCVV_extract.py',E/'PCVV_extract.py');put(a+'_spec.json',E/(a+'_spec.json'))
- sources=['PCVV_extract.py','NHR_stage.py','PCVV_STAGER_PIN.json','NHR_STAGING_MANIFEST.json','NHR_FROZEN_PAYLOAD.json.sha256',a+'_spec.json']
- command=['python3','PCVV_extract.py',a];limits={'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'}
+ ex='PCVV_aeneas.py' if spec.get('aeneas_only') else 'PCVV_extract.py';put(ex,E/ex);put(a+'_spec.json',E/(a+'_spec.json'))
+ sources=[ex,'NHR_stage.py','PCVV_STAGER_PIN.json','NHR_STAGING_MANIFEST.json','NHR_FROZEN_PAYLOAD.json.sha256',a+'_spec.json']
+ command=['python3',ex,a];limits={'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'}
  scope_p=['-p','MemoryHigh=3G','-p','MemoryMax=4G'];env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin');collect=[a+'_emitted','PCVV_TOOL_ATTEMPTS.jsonl']
  expected='Pinned optimized Charon extraction then one sequential Aeneas emission'
 else:
