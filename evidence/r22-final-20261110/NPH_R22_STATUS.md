@@ -1393,3 +1393,100 @@ input on which the wrapping binary accepts and the checked model rejects was fou
 scopes remain unused.
 
 Target not yet established.
+
+## 18. SM reaches (b); continuation (worker of 2026-11-10, after L072)
+
+Every scope in this run ran at MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with
+lean -j1 -M7000 -DElab.async=false and a 180 s timeout. NPH_COMPILE.tsv records every one.
+Swap was 0 throughout. No cap was raised, and no failed shape was rerun unchanged. The lead
+decision holds: no ops interface, merged module or closed-row statement is changed.
+
+### 18a. SM: the stage1_owned ordering link
+
+Two scopes were used, L073 and L074 (2 of this run's 40).
+- L073 failed in two places, and both were changed before L074.
+  - `stage1_congr` stopped in both branches at the bind of the irreducible
+    POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES. Unification cannot see through it to equate the
+    two records. The constant is now unfolded at that step.
+  - `G_agree` hit a whnf heartbeat timeout. `rw [NNH_Run5bCurrentInventory.adapter]` tried to
+    unify `G ?c` with the deployed sdk record. It was replaced by explicit `Eq.trans` steps
+    and a small `current_congr` lemma.
+- L074 accepted NPH_R22JoinSM7: 4.45 s, 6,782,664 KiB, swap 0, 11 `#print axioms` lines, all
+  within [propext, Classical.choice, Quot.sound]. There is no sorry.
+
+**NPH_R22JoinSM7 statements.**
+- `stage1_congr` holds for every adapter Ops record `ops` and every record `f`. Suppose f.op10
+  agrees with ops.op10 at every public p that is `Validated ops p`, meaning p is the
+  semantic_public of a statement whose ops.op21 returned Ok. Then
+  r1_pool_adapter.owned.stage1_owned over `{ ops with op10 := f.op10 }` equals stage1_owned
+  over ops, for every program, account slice and instruction data.
+  - The proof bind-steps both data branches of the extracted body ([3,10] and [3,11]).
+  - In each branch the only first_decoded call is at `p ← semantic_public val2`, after
+    `ops.op21 val2` returned Ok (`ok_of_map_err` inverts the map_err and branch).
+  - The premise is bundled into the def predicate `Validated`, following the L055–L060
+    lesson. The statement has four binders and one premise.
+- `fd10`: first_decoded reads op10 only at its own public, bytes, proof and split, with hash
+  () and observer none.
+- `slotM`, `slotM_guarded` and `tx1_guardedM` restate the SM5/SM6 slot and tx1 statements for
+  the record that the deployed adapter actually runs. That record is
+  NNH_Run5bCurrentShape.current m env err r, the one in NOC_Stage1Forward.fdLemma. SM5 and SM6
+  were stated for DrvC_Installation.currentInstalled (configuration c), which is a different
+  configuration term.
+  - `slotM` is rfl for every m, env, err and r. The boundaries and std of that configuration
+    depend only on the reservation (IDa_Deployed.selected_fields).
+- `G c` is NOC_Stage1Forward.S c with one change: op10 on observer `none` runs the tx1
+  candidate over `Og c`, whose op9 slot on release `none` is the guarded semantic installation
+  over NPH_R22JoinSM5.Bslot. In Bslot, mask, add and mul run only on canonical arguments.
+  - `G_op10_none` and `Og_op9_none` (both rfl) state this.
+  - Every other slot of G c is that of S c.
+- `G_agree`: at every Validated public, G c's op10 equals S c's op10. The proof chains
+  NOC_Stage1Forward.publicBinding, the rfl op21 = NNH_S1HostCodec.validate (as in ok345),
+  NPH_R22JoinSM6.digest_of_binding, NNH_Run5bCurrentInventory.adapter, current_congr and
+  tx1_guardedM.
+- `stage1_guarded` has **no premise**. For every host context c and every input,
+  stage1_owned (G c) program xs data = stage1_owned (S c) program xs data.
+
+**Call chain (textual screen of the extracted sources; flagged for lead review):**
+- op9 is read once, in verifier.candidate.prepare (CurrentCompactCallerModelV1).
+- prepare is called once, from verifier.candidate.tx1.
+- tx1 is reached through op10 = AspisS6CurrentFirstInstallation.current
+  (NNH_Run5bCurrentInventory.adapter).
+- op10 is read once in AdapterRwModel, by first_decoded.
+- first_decoded is called twice, both times in stage1_owned.
+
+So every op9 execution of the deployed 345 entry is an execution inside G c's guarded
+installation.
+
+**SM moves to (b).** Every executing SM site in NPH_SITES.json has a limb-bound lemma: 28
+W_LEMMA, 2 EVERY_INPUT, 1 CANONICAL_SITE and 4 SUBSUMED_CANONICAL_TOTAL. Every site context is
+composed from producers along the reached body:
+- the tx1 094 query path (3 JOINED_094);
+- the tx2 query tail (NPH_R22JoinCW2.tx2_step_sites);
+- the tx1 semantic finish (SM4–SM7, now down to the 345 entry).
+
+The SM-copy sum3 site stays NOT_EXECUTING. That classification rests on NPH_SUM3_REFS.json, a
+textual screen, and is flagged. Moved to PRECONDITION_B: AspisR1SelectedMaskProbe CM31.mul,
+CM31.square, M31.add, M31.neg and M31.sub. Their previous judgments are kept under
+`nph_judgment_before_20261110_sm7`.
+
+NPH_recount.py recounts the cone. It reproduces the recorded 67/27/14/12/100 and 359 before the
+change. NPH_move_family.py performs the move and the recount.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 9 (was 14) |
+| precondition proved from the callers (b) | 17 (was 12) |
+| open | 100 |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 328 of 396** (was 359). 68 rows are now served only by TOTAL, DIRECT or (b)
+definitions.
+
+Families at (b): CW, SC, R72 and SM. Not yet at (b): QA (two contexts) and FIq (238 sites).
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
