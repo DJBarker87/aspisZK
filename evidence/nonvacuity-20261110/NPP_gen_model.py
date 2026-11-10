@@ -25,6 +25,7 @@ closure = [n for n in seen if not skip(n)]
 leaves = [n for n in closure if rows[n]['cause'] in ('classical', 'no_ir_other')]
 # the compiler's view (NPP_L063): every definition without code in the roots' value closure
 ncset = {r['n'] for r in nocode}
+if os.environ.get('NPP_NO_NOCODE'): nocode = []
 for r in nocode:
     if r['n'] not in closure: closure.append(r['n'])
     deps_in = False
@@ -53,6 +54,7 @@ end NPP2.Inputs
 hdr = '''import Lean
 import NPP_ComputableSdk
 import NPP_Refine
+import NPP_RefineA2
 import NNH_ReturnsBundle
 import NNG_TotalProducer345
 import NNH_Run6Installed
