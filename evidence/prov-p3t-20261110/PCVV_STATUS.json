@@ -22,6 +22,12 @@
    "file": "PRVEq_Slot52_t1.lean",
    "scope": "PCVV_L005",
    "statement": "op52 per-slot theorem (see slots)"
+  },
+  {
+   "id": "C4",
+   "file": "PRVEq_AdapterCallees_t1.lean/t2.lean/t3.lean",
+   "scope": "PCVV_L007,L008,L019",
+   "statement": "fresh E008 decode_master_box, decode_checkpoint_box, decode_public_statement_box value lemmas; slot44, slot47, slot48, slot49 (t2), slot51 (t3); axioms standard only"
   }
  ],
  "slots": [
@@ -71,8 +77,8 @@
    "file": "stage2",
    "slot": "op50",
    "callee": "decode_lane_from_pool_release",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = NCV_Reference.decode_lane_ref (RECEIPTED reference extraction, not re-derived) with carrier; frozen item is r1_pool_adapter.rs:448, not emitted"
+   "status": "TRANSCRIPTION_ONLY_PENDING_OWNER",
+   "note": "PCVV_LaneDecodeRef.lean (L021) compiles: line-numbered transcription of r1_pool_adapter.rs 448-520, quoting each Rust line. The equality deployed op50 = transcription is NOT proved (needs loop-by-loop proofs against NCV_Reference equal/zero/bytes32/digest/decode_frontier). Label REVIEWED_TRANSCRIPTION_PENDING_OWNER; op50 stays OPEN; nothing credited."
   },
   {
    "file": "stage2",
@@ -85,29 +91,29 @@
    "file": "stage2",
    "slot": "op49",
    "callee": "decode_checkpoint_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = NKF_BoxModel.outer (NJQ_Canonical.checkpoint b); NKF_BoxModel.tail is a hand transcription of the Box::new + map_err(InvalidAccountData) tail; frozen r1_pool_adapter.rs:~437 not emitted; raw aspis-statement decoder also not emitted"
+   "status": "PROVED_CONDITIONAL",
+   "note": "slot49 (L008): as op48 with decode_checkpoint and NJQ_Canonical.checkpoint."
   },
   {
    "file": "stage2",
    "slot": "op48",
    "callee": "decode_master_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "as op49 with NJQ_Canonical.master"
+   "status": "PROVED_CONDITIONAL",
+   "note": "slot48 (L008): fresh E008 decode_master_box x = deployed op48 given h: x.decode_master = NJQ_Canonical.master. Remaining: raw aspis_statement::decode_pool_v1_pair_forest_master_v1 not emitted/related (carrier equality of the type is by elaboration)."
   },
   {
    "file": "stage2",
    "slot": "op51",
    "callee": "scan_proof_buffer",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = inline hand model (checked_add 688+57607, length check, header slice, gate decode/encode afterstate, tag check); frozen r1_pool_adapter.rs:780 not emitted"
+   "status": "PROVED_CONDITIONAL",
+   "note": "slot51 (L019, PRVEq_AdapterCallees_t3.lean): fresh E008 scan_proof_buffer x = deployed op51 given hP, hA, hT (constants 57607, 688, tag 2), hd/he (x.decode/encode afterstate are the gate AspisR1TerminalDecoder decode/encode composed with the S6 carrier equivalence, error values arbitrary via kd/ke) and hlaw (library slice-ne law, HM-D). Remaining: relation of those raw decoder/encoder to the frozen aspis_statement items (encode has fresh=gate in PRVEq AspisR1TerminalDecoder.Funs_j1; decode afterstate is OPEN)."
   },
   {
    "file": "stage2",
    "slot": "op45",
    "callee": "pool_program_id",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = ok (NND_Carrier.unkey LIB_Deployed.deployed.pool); frozen item reads static AUDIT_POOL_PROGRAM (deployment_id of option_env ASPIS_R1_POOL_PROGRAM_ID, default [0x41;32]); equality is a deployment binding, CONDITIONAL_ON_BINDING"
+   "status": "BLOCKED_BYTE_RECEIPT_ONLY",
+   "note": "PCVV_OP45_BYTES.json: Lean literal bytes equal the L188 ELF slot bytes (devnet and default); no proof; deployment_id not extractable; op45 stays OPEN."
   },
   {
    "file": "stage2",
@@ -120,29 +126,29 @@
    "file": "stage2",
    "slot": "op44",
    "callee": "error",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = fun _ => ok InvalidInstructionData; frozen crate::error (lib.rs:40) also executes msg!(\"r1:error:{:?}\", e), a log syscall the deployed model omits (SDK log, HM-A)"
+   "status": "PROVED_CONDITIONAL",
+   "note": "PRVEq_AdapterCallees_t2.lean slot44 (L008): deployed op44 e = frozen emission `error` x e given the library behaviours of core fmt/format/must_use/deref/sol_log (each = ok); the msg! log is the effect the deployed model omits (model-fidelity note; HM-A/core fmt). Hypotheses left: h1-h6 library calls."
   },
   {
    "file": "stage1",
    "slot": "op21",
    "callee": "validate_pool_v1_pair_forest_terminal_statement_v1",
-   "status": "BLOCKED_NO_FROZEN_EMISSION_AND_DOMAIN_RESTRICTED",
-   "note": "deployed = NMT_345.validateCall (NNH_S1DecodeOk.carrier st) with callee Err mapped to Result.div, whereas frozen stage1_owned maps a validate error to Err(InvalidAccountData). Slot equals the callee only where validate cannot return Err (decoded-statement domain); not proved here"
+   "status": "NO_EMISSION",
+   "note": "PCVV_E009/E010: Charon roots validate/encode afterstate emitted no function bodies; extraction budget spent; no equality stated (any would be on NNH_S1DecodeOk)."
   },
   {
    "file": "stage1",
    "slot": "op24",
    "callee": "encode_pool_v1_pair_verified_afterstate_v1",
-   "status": "BLOCKED_DOMAIN_RESTRICTED",
-   "note": "deployed = NMT_345.encodeCall (NNH_S1HostCodec.afterCarrier a) with Err mapped to Result.div. Gate encode afterstate has a fresh=gate theorem (PRVEq.AspisR1TerminalDecoder.Funs_j1...encode_pool_v1_pair_verified_afterstate_v1) but the deployed slot is NMT_345 model, not that gate item; relation not proved here"
+   "status": "NO_EMISSION",
+   "note": "as op21."
   },
   {
    "file": "stage1",
    "slot": "op47",
    "callee": "decode_public_statement_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = AspisS6CurrentBoxedDecoderSource.decode_public_statement_box AspisS6CurrentCodecInstallation.boxOps bytes (RPz7_S6 module), outside the PCXD gate-definition provenance; frozen r1_pool_adapter.rs:237 not emitted"
+   "status": "PROVED_CONDITIONAL",
+   "note": "slot47 (L008): fresh E008 decode_public_statement_box x = deployed op47 (earlier S6 emission of the same thin wrapper) given h: x.decode_statement = AspisS6CurrentCodecInstallation.boxOps.decode. Remaining: that raw decoder (frozen aspis_statement::decode_pool_v1_pair_forest_terminal_statement_v1) is not emitted/related."
   }
  ],
  "counts": {
@@ -153,10 +159,10 @@
   "stage1_proved": 0
  },
  "scopes_used": {
-  "lean": 5,
-  "extraction": 8,
+  "lean": 21,
+  "extraction": 10,
   "lean_budget": 40,
-  "extraction_budget": "6 + 4 more granted by lead (2 used)"
+  "extraction_budget": "6 + 4 granted, all used"
  },
  "deployed_stage1_owned": "no new theorem: existing PCVP noc_model1 / fresh_stage1_iff stand; Bound is rfl for every Ops; op21/op24/op47 per-slot theorems not obtained",
  "deployed_stage2_owned": "PCVV_Hashv.noc_model2_hashv (all c, hashv := NOC_HostCtx.hashv c). Hypotheses left: none in the statement; what the statement does not give: relation of 12 of 14 slots to frozen callee emissions (listed), and the relation of the gate counterparts of op17/op52 to the deployed carriers beyond the stated wrapper form"

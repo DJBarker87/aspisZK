@@ -41,36 +41,15 @@
    "file": "stage2",
    "slot": "op50",
    "callee": "decode_lane_from_pool_release",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = NCV_Reference.decode_lane_ref (RECEIPTED reference extraction, not re-derived) with carrier; frozen item is r1_pool_adapter.rs:448, not emitted"
-  },
-  {
-   "file": "stage2",
-   "slot": "op49",
-   "callee": "decode_checkpoint_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = NKF_BoxModel.outer (NJQ_Canonical.checkpoint b); NKF_BoxModel.tail is a hand transcription of the Box::new + map_err(InvalidAccountData) tail; frozen r1_pool_adapter.rs:~437 not emitted; raw aspis-statement decoder also not emitted"
-  },
-  {
-   "file": "stage2",
-   "slot": "op48",
-   "callee": "decode_master_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "as op49 with NJQ_Canonical.master"
-  },
-  {
-   "file": "stage2",
-   "slot": "op51",
-   "callee": "scan_proof_buffer",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = inline hand model (checked_add 688+57607, length check, header slice, gate decode/encode afterstate, tag check); frozen r1_pool_adapter.rs:780 not emitted"
+   "status": "TRANSCRIPTION_ONLY_PENDING_OWNER",
+   "note": "PCVV_LaneDecodeRef.lean (L021) compiles: line-numbered transcription of r1_pool_adapter.rs 448-520, quoting each Rust line. The equality deployed op50 = transcription is NOT proved (needs loop-by-loop proofs against NCV_Reference equal/zero/bytes32/digest/decode_frontier). Label REVIEWED_TRANSCRIPTION_PENDING_OWNER; op50 stays OPEN; nothing credited."
   },
   {
    "file": "stage2",
    "slot": "op45",
    "callee": "pool_program_id",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = ok (NND_Carrier.unkey LIB_Deployed.deployed.pool); frozen item reads static AUDIT_POOL_PROGRAM (deployment_id of option_env ASPIS_R1_POOL_PROGRAM_ID, default [0x41;32]); equality is a deployment binding, CONDITIONAL_ON_BINDING"
+   "status": "BLOCKED_BYTE_RECEIPT_ONLY",
+   "note": "PCVV_OP45_BYTES.json: Lean literal bytes equal the L188 ELF slot bytes (devnet and default); no proof; deployment_id not extractable; op45 stays OPEN."
   },
   {
    "file": "stage2",
@@ -80,32 +59,18 @@
    "note": "deployed = LIBB_PoolEmit.code then carrier; frozen item r1_pool_adapter.rs:923 not emitted; sol_set_return_data is SDK trust (HM-A)"
   },
   {
-   "file": "stage2",
-   "slot": "op44",
-   "callee": "error",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = fun _ => ok InvalidInstructionData; frozen crate::error (lib.rs:40) also executes msg!(\"r1:error:{:?}\", e), a log syscall the deployed model omits (SDK log, HM-A)"
-  },
-  {
    "file": "stage1",
    "slot": "op21",
    "callee": "validate_pool_v1_pair_forest_terminal_statement_v1",
-   "status": "BLOCKED_NO_FROZEN_EMISSION_AND_DOMAIN_RESTRICTED",
-   "note": "deployed = NMT_345.validateCall (NNH_S1DecodeOk.carrier st) with callee Err mapped to Result.div, whereas frozen stage1_owned maps a validate error to Err(InvalidAccountData). Slot equals the callee only where validate cannot return Err (decoded-statement domain); not proved here"
+   "status": "NO_EMISSION",
+   "note": "PCVV_E009/E010: Charon roots validate/encode afterstate emitted no function bodies; extraction budget spent; no equality stated (any would be on NNH_S1DecodeOk)."
   },
   {
    "file": "stage1",
    "slot": "op24",
    "callee": "encode_pool_v1_pair_verified_afterstate_v1",
-   "status": "BLOCKED_DOMAIN_RESTRICTED",
-   "note": "deployed = NMT_345.encodeCall (NNH_S1HostCodec.afterCarrier a) with Err mapped to Result.div. Gate encode afterstate has a fresh=gate theorem (PRVEq.AspisR1TerminalDecoder.Funs_j1...encode_pool_v1_pair_verified_afterstate_v1) but the deployed slot is NMT_345 model, not that gate item; relation not proved here"
-  },
-  {
-   "file": "stage1",
-   "slot": "op47",
-   "callee": "decode_public_statement_box",
-   "status": "BLOCKED_NO_FROZEN_EMISSION",
-   "note": "deployed = AspisS6CurrentBoxedDecoderSource.decode_public_statement_box AspisS6CurrentCodecInstallation.boxOps bytes (RPz7_S6 module), outside the PCXD gate-definition provenance; frozen r1_pool_adapter.rs:237 not emitted"
+   "status": "NO_EMISSION",
+   "note": "as op21."
   }
  ]
 }
