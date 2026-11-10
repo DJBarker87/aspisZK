@@ -27,6 +27,7 @@ cg=Path('/sys/fs/cgroup')/rel
 want=spec.get('expected_limits',{'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'})
 assert {n:(cg/n).read_text().strip() for n in ('memory.high','memory.max','memory.swap.max','pids.max')}==want,'not the admitted capped scope'
 out=E/(run+'_emitted');out.mkdir(exist_ok=True)
+if spec.get('llbc_stable'):Path(spec['llbc_stable']).parent.mkdir(exist_ok=True)
 m.options=lambda args,workspace,out:dict(charon_command=spec['charon_command'],aeneas_command=spec['aeneas_command'],opacity=spec.get('opacity',[]),root=spec['configuration'].get('roots') or spec['configuration']['start_from'])
 original_run=subprocess.run
 def measured(cmd,*a,**kw):
@@ -42,6 +43,8 @@ def measured(cmd,*a,**kw):
    e2[k]=(e2.get(k,'')+' '+v).strip() if k=='RUSTFLAGS' else v
   kw['env']=e2;entry['env_effective']={k:e2.get(k) for k in xe}
  r=original_run(['/usr/bin/time','-v','-o',str(out/(tool+'.time'))]+cmd,*a,**kw)
+ if tool=='charon' and spec.get('llbc_stable') and r.returncode==0:
+  import shutil;shutil.copyfile(spec['llbc_stable'],out/'repro.llbc')  # PCVU change (from PCVR_extract.py): stable --dest-file so cargo fingerprints are reused across scopes
  entry.update(exit=r.returncode,wall_seconds=time.time()-entry['started_unix'],time_receipt=str(out/(tool+'.time')))
  (out/(tool+'_receipt.json')).write_text(json.dumps(entry,indent=2)+'\n')
  return r

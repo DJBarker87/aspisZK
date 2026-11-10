@@ -1,0 +1,74 @@
+{
+ "schema": "PCVU_STATUS/1",
+ "target_established": false,
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "difference_at_matching_configuration": "none found",
+ "closed": [
+  {
+   "id": "item1_QM31_from_le_bytes",
+   "file": "PRVEq_QM31_s3.lean",
+   "scope": "PCVU_L005",
+   "theorem": "PCVU_QM31.qm31_16",
+   "statement": "for every Slice U8 b with b.val.length = 16: frozen QM31::from_le_bytes b (fresh emission PCVU_E001, 4bb3b3f, overflow ON, with the two Option Try externals as hand model HM-C) = (do q <- decode_k_spec b; ok (Option.map fromK q)). Canonicality rejection included. No length hypothesis other than 16.",
+   "off_window": "decode_k_spec has no length check: for |b| < 16 the frozen function panics at its first or second range index; for |b| > 16 it ignores the tail; deployed reads word_spec at offsets 0,4,8,12 only. Only the 16-byte window is claimed; it is exactly where Reader.k applies the slot (Array.to_slice of a 16-array).",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "item2_read_checkpoint_semantic_alpha",
+   "file": "PRVEq_Rd_s4.lean (and s14)",
+   "scope": "PCVU_L009, PCVU_L021",
+   "theorem": "PCVU_Rd.sem_eq",
+   "statement": "frozen read_checkpoint_semantic_alpha (emission PCVU_E002, text with QM31::from_le_bytes as parameter) at the frozen QM31 function = deployed CheckpointBytes4Ops.readSemanticAlpha followed by the error map phi, all inputs (no bound, no canonicality hypothesis).",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "item2_read_checkpoint_weights",
+   "file": "PRVEq_Rd_s14.lean",
+   "scope": "PCVU_L021",
+   "theorem": "PCVU_Rd.weights_eq (via loop_claim)",
+   "statement": "frozen read_checkpoint_weights (deferred-writeback mutable iterator loop) with the into_iter external instantiated by the hand model intoIterM (HM-B) = deployed CheckpointBytes4Ops.readWeights followed by phi, all inputs. The frozen deferred-writeback order and the deployed write-through order are proved to give the same slice (owS = dwS).",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "composition",
+   "file": "PRVEq_Tx2Frozen_s2.lean",
+   "scope": "PCVU_L022",
+   "theorems": [
+    "PCVU_Tx2Frozen.deployed_tx2_common_t",
+    "PCVU_Tx2Frozen.deployed_tx2_authenticated_t"
+   ],
+   "statement": "deployed_tx2_common and deployed_tx2_authenticated with Ext := yFrozen (the three slots QM31::from_le_bytes, read_checkpoint_semantic_alpha, read_checkpoint_weights are the frozen emission functions) and the E32 hypothesis discharged (PCVS_Tx2Deployed.e32_deployed). Remaining parameters: reserved, query, geo, base, finish. No new hypothesis.",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "headline_dictionary_partial",
+   "file": "PRVEq_Headline_s2.lean",
+   "scope": "PCVU_L026",
+   "theorems": [
+    "constants_eq",
+    "stage_eq",
+    "query_headline",
+    "reserved_headline"
+   ],
+   "statement": "NHT_Tx2CommonModel.constants = PCVN_Tx2Deployed.constants (the P3m text copy is the closure constant; the P3m import clash does not occur against the L187 closure), NNH_Tx2SourceConfiguration.stage = stageNNH inact mk, (NNH_HostCtx.configuration c).query = NJJ_QueryOps.concrete, (NNH_HostCtx.configuration c).reserved = (envOf c).reservation. Restatement by unfolding; no frozen relation.",
+   "axioms": "propext, Classical.choice, Quot.sound"
+  },
+  {
+   "id": "closure_compatibility",
+   "file": "PRVEq_Probe_s2.lean",
+   "scope": "PCVU_L002",
+   "statement": "The P3 PRVEq objects (RPz7 DrvI chain) import together with NNH_HostCtx / NNH_Tx2SourceConfiguration from the L187 closure; DrvC_Installation.stage returns VTop_Stages.Ops, the type of PCVN_Tx2Deployed.Dep. No name clash. Peak RSS 6.8 GB for the imports alone."
+  }
+ ],
+ "not_closed": [
+  "op5 batch_merkle",
+  "op6 query_loop",
+  "op9 BatchedWeights::finish",
+  "op10 BatchedWeights::new",
+  "op19 finish_relation",
+  "op11 geometry",
+  "heap::filled (emitted, library-blocked)",
+  "geometry/stageBase/finish equalities at the headline seed",
+  "dictionary base and finish"
+ ]
+}

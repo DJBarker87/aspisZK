@@ -1,0 +1,35 @@
+{
+ "schema": "PCVU_TOOLS/1",
+ "tools": [
+  {
+   "file": "PCVU_run.py, PCVU_run_host.py, PCVU_go.sh, PCVU_xrun.py",
+   "from_": "prov-p3r-20261110/PCVS_*",
+   "changes": "rename PCVS->PCVU, host workspace codex-pc-prov-p3s-20261110, Stream C share < 5, disk floor 45 GB, LEAN_PATH: own exports, then the P3r exports (PCVS_exports), then the P3r chain unchanged (p3q, p3n, p3l, p3k, L187 final/objs, objs, base_ref, p3h)"
+  },
+  {
+   "file": "PCVU_extract.py, PCVU_STAGER_PIN.json",
+   "from_": "prov-p3r-20261110/PCVS_extract.py, prov-p1k-20261110/PCVR_extract.py",
+   "changes": "rename; llbc_stable support ported from PCVR_extract.py (stable --dest-file, copy to out/repro.llbc); stager pin unchanged (same sha256)"
+  },
+  {
+   "file": "PCVU_mkspec.py",
+   "from_": "new",
+   "changes": "renders PCVU_Exxx_spec.json from PCVS_E001/E002 specs (BASE=E001 aspis-core r0, BASE=E002 cost-probe), replacing roots and namespace"
+  },
+  {
+   "file": "gen_qm31.sh",
+   "from_": "new",
+   "changes": "generates PRVEq_QM31_s*.lean from the PCVU_E001 emission"
+  },
+  {
+   "file": "gen_rd_fresh.sh, gen_rd.sh, PCVU_Rd_proof_*.inc, PCVU_Rd_weights.inc",
+   "from_": "new",
+   "changes": "generate PRVEq_Rd_s*.lean from the PCVU_E002 emission (fle and into_iter as parameters)"
+  },
+  {
+   "file": "chain_ext.sh, finalize.sh",
+   "from_": "new",
+   "changes": "serial extraction chain and scope summary"
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "schema": "PCVU_UNRELATED/1",
+ "target_established": false,
+ "items": [
+  {
+   "item": "op5 batch_merkle",
+   "reason": "no frozen emission (extraction timeouts E004-E008, 180 s cap, cold cargo/Charon under host contention). Instantiated by a deployed field only (organisation, not discharge)."
+  },
+  {
+   "item": "op6 query_loop",
+   "reason": "as op5"
+  },
+  {
+   "item": "op9 BatchedWeights::finish, op10 BatchedWeights::new",
+   "reason": "as op5. Frozen source (verifier.rs:204-250) uses Vec<[u64;4]>, heap::filled and iter_mut/enumerate; library rows needed beyond HM-A..HM-G: alloc Vec."
+  },
+  {
+   "item": "op19 finish_relation",
+   "reason": "as op5"
+  },
+  {
+   "item": "op11 QueryGeometry::for_range",
+   "reason": "not attempted"
+  },
+  {
+   "item": "aspis_core::r0::heap::filled",
+   "reason": "emitted; blocked only by Vec::try_reserve_exact (no trust row); see PCVU_REMAINING.json"
+  }
+ ]
+}
