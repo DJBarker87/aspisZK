@@ -1,41 +1,179 @@
-# Open release gates
+# What remains before the soundness claim
 
-Source: research commit `07123926e88273271344977a3fdc26d1780cde14`; the authority is section 6 of [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), with the figures for extraction provenance taken from `evidence/ledger30-20261111/NNN_LEDGER.json.xz` (field `NNN_extraction_provenance`) and the run-7 audit [`TAS_G0_AUDIT.json`](TAS_G0_AUDIT.json) (field `release_blockers`).
+This page sets out what still stands between the assembled theorem and the
+claim I intend to make for the current version: that its spend path, as it
+actually runs, has 100-bit classical soundness per attempt, with no
+proof-of-work or grinding credit. That target is not yet established. The facts
+below come from the status document as it stands on the `research` branch at
+commit `85627fe4eca` (10 November 2026), which is newer than the copy in this
+folder, [`SOUNDNESS-STATUS.md`](SOUNDNESS-STATUS.md), taken at `abda96330df`;
+each paragraph ends with the section of that document it rests on.
 
-The release target is 100-bit classical soundness per attempt for the actual frozen R1 spend path, with no proof-of-work or grinding credit, and it is not yet established. The first four gates of the status document, which ask for every row to be closed, for every slot of the top-level statement to be filled by a proved term, for the two top theorems to compile with standard axioms only, and for their printed statements to be audited, have all been met; what follows are the gates that remain, each with what would close it.
+Several of the earlier items are done. The two theorems compile with only
+Lean's three standard axioms; the whole closure, 14,101 modules, has been
+rebuilt cold from committed sources and both theorems re-checked on the rebuilt
+objects alone; both release ELFs have been rebuilt byte for byte from the frozen
+source; and an axiom audit of the rebuilt closure finds 105 nonstandard axiom
+declarations in it, none of them reachable from either theorem (section 6,
+items 3, 8 and 9). What follows is what is not done.
 
-## Extraction provenance
+## Provenance of the Lean translations
 
-The 599 verified statements are proved about Lean definitions that the Charon and Aeneas tools produced from the frozen Rust, and a release claim needs a receipt showing that each such definition really is what those tools produce from that source. An audit found 336 generated Lean files without such a receipt; 18 were reproduced exactly from archived input, 317 could not be reproduced, and 2 differ semantically outside the domain the proofs use. None of this is a counterexample and no statement was reopened, but by a conservative name-matching count 578 of the 599 rows reach at least one unreproduced file. Later work found that fresh translations differ from the historical ones in their arithmetic because the historical translations were run with overflow checks on; the status document's reading is that re-running the tools with that recorded configuration restores provenance, and that campaign is under way. The gate closes when every generated definition reached by a credited proof is either reproduced from an archived input with the pinned tools, or re-generated and proved equal, definition by definition, to the committed one; any definition left without such an equality keeps its rows conditional.
-
-## Cold replay of the final closure
-
-The two top theorems were compiled in one combined import against cached objects, and a scan of the whole closure of 20,019 modules found it coherent, but that is not the same as rebuilding everything from source. The gate closes with one coherent cold replay of the final dependency closure in the pinned workspace, under capped resources, recording the target, exit status, wall time, peak memory, swap, source revision and the printed axioms.
-
-## Source-to-binary audit
-
-The proofs are about the frozen Rust source, and the native cross-checks were run on that source as compiled for the Kani model checker, not on the deployed ELF. The deployed ELF has been rebuilt bit for bit from the same source with the pinned recipe ([`BUILD.md`](BUILD.md)), and it has been tied to the live devnet program ([`DEVNET-RUN.md`](DEVNET-RUN.md)); what remains is the final trust and axiom audit of the closure together with the association between the source and the release ELFs (`f8c0ec72…43d4` and `63ad3e9c…4299`), including the allocator and ABI realisation row. Compiler semantic preservation stays a named trust row whatever this audit finds.
+The theorem is about Lean definitions that Charon and Aeneas produced from the
+frozen Rust, and a reader is entitled to ask whether the committed Lean really
+is what those tools produce from that source. Many of the committed
+translations have no receipt tying them to an archived input, so the question
+is being answered definition by definition: the tools are run again on the
+frozen source, in the configuration originally used, and each fresh translation
+is proved equal to the committed one. In the theorem's dependency cone there
+are 1,707 translated definitions; 920 are now proved equal to fresh
+extractions, 256 more are reproduced exactly from archived input, and 466 are
+still open, most of them because the tools do not yet produce a fresh
+translation in the right configuration. Counted by statement, 180 of the 599
+verified statements rest only on definitions whose provenance is settled, and
+405 are still conditional on it. Two genuine differences between committed and
+fresh translations have turned up, and both have been settled as harmless: the
+loop that shifts a transport row is proved to give the same result wherever
+the verifier can reach it, and the conversion of a shift amount is proved equal
+to Rust's own wrapping shift in the configuration that is deployed. The
+hand-written Lean models of library code, among them the Solana SDK's key and
+hash types and the core slice iterators, are now accepted as named trust rows,
+following the owner's ruling of 10 November that Aspis's own code is proved and
+everything outside it is trusted by a named row with a precise statement. The
+six top verifier bodies, which are the two stages, the candidate preparation
+and first transaction, the second transaction and the public-preparation
+transcript, now each have an equality with a fresh extraction stated for
+arbitrary callees, with its hypotheses shown satisfiable; the next round
+discharges those callee bindings against the deployed operations. The item is
+finished when every translated definition the theorem reaches is either
+reproduced or proved equal; any definition left without that keeps the
+statements that use it conditional. (Section 7, items 14 and 14b; section
+4.7a.)
 
 ## Checked versus wrapping arithmetic
 
-The Lean translations behind the verified statements were made with overflow checks on, so every integer operation in them either gives the true result or an error; the deployed program is built with Cargo's plain release profile, so its arithmetic wraps. The theorems therefore describe the checked program, and transferring them to the binary needs, on every reached path, either a proof that no checked operation can fail (so the two agree) or a proof that wrapping acceptance implies checked acceptance with the same result. The general lemma is proved, and of the arithmetic cones audited so far 35 are total, 63 are total only under a precondition their callers still have to supply, and 48 are in neither class. The gate closes when every reached cone of the final closure is shown total or has its caller precondition proved, or, failing that, when the owner records this as a retained trust row and the claim names it in its first sentence.
+The translations were made with Rust's overflow checks switched on, so in the
+Lean every integer operation either gives the true result or fails, whereas the
+deployed program is built with the ordinary release profile, in which
+arithmetic wraps. The theorem is therefore about the checked program, and to
+carry it over to the binary one has to show, on every path the verifier takes,
+that no checked operation can fail, so that the two agree. Of the 197
+definitions in the theorem's cone that execute checked arithmetic, 192 are
+settled: 72 cannot fail on any input, 52 have a single bounded increment or
+bounds-checked read as their only checked operation, and for 68 the condition
+that rules out overflow is proved from their callers. Five are left,
+`binary_step`, `weights.field`, `values_owned_reference`, `prepare` and
+`r24_canonical_mul`, and between them they still touch 55 of the 393 verified
+statements these definitions serve. `binary_step`, a step of the Merkle
+traversal, is the one where a concrete way for the two semantics to part has
+been identified: it computes a length difference without a guard, and if that
+difference wrapped to a value below 32 the deployed code would take the
+accepting branch where the checked model aborts. The traversal invariant that
+the position never passes the number of nodes rules this out, and that
+invariant is being proved now; no reachable state violating it is known, and no
+input on which the wrapping binary accepts while the checked model rejects is
+known anywhere. The other four need an index bound at the deployed finish, a
+length bound of 1,856, the value of one installed constant and, for
+`r24_canonical_mul`, which has no counterpart in the frozen source, a
+refinement proof. Some of the settled counts also lean on textual screening
+that still has to become Lean statements or be named for review. The item is
+finished when all five are settled, or when the owner records the difference as
+a retained trust row and the claim names it in its first sentence. (Section
+4.4, row R22; section 6, item 16.)
 
-## The Pool boundary
+## A run that meets the hypotheses
 
-The theorem proves nothing about the Pool program. It takes, as part of the description of the run, that every non-verifier action in the recorded transaction lineage is what the Pool and the runtime did, so settlement itself is not covered. The owner has still to decide between bringing the Pool's execution inside the security game, which would mean proving the Pool's consumer association, and reporting the claim as conditional on that association. Once the decision is recorded, the gate closes either with the proof or with the condition stated in the claim's first sentence.
+A theorem whose hypotheses can never be met says nothing, so the release needs
+a witness: a real run that satisfies the theorem's description of a run. From
+the transfer recorded on devnet on 10 November, Lean now proves that the game
+frame, the trace association, both outputs, both entrypoint admissions, the
+persistence of state between the two transactions, the query bound and the
+retained trust facts are exactly the recorded physical facts, rather than
+something that could never hold. What remains is stated exactly by one theorem:
+the trace itself, the acceptance and output of the first transaction, and the
+acceptance of the second, all of which need the reference verifier's
+acceptance of the recorded bytes. That became possible once the host model was
+moved to the deployed program addresses, described next. The first step is a
+computable version of the host, since the host's SDK and reference models are
+noncomputable, and that work is under way; after it the acceptance is shown
+either by an executable check or by evaluating each call symbolically with the
+oracle fixed to the run's own table of queries. (Section 6, item 5; section 7,
+item 19.)
+
+## The host model at the deployed addresses
+
+Until 10 November the host model under the theorem carried the program address
+of the July 2026 V7 devnet verifier and placeholder addresses for the pool and
+registry, so as written it would have rejected every recorded run of the
+current version. A walk over the rebuilt closure found 718 of its 146,554
+reachable constants depending on those three addresses; each was cloned with
+the addresses of the 10 November deployment, the verifier `GqZzWuGT…`, the pool
+`37hdATMk…` and the registry program `9pWwAcBg…`, and sent to the kernel with
+full checking, 717 of them going through with their original proofs and one, a
+comparison of first bytes, restated. The two verified statements that compare
+addresses were proved for arbitrary addresses. The resulting theorems have the
+same kernel statements as before apart from the host constants that carry the
+addresses, use only the standard axioms, and have been replayed independently
+by Lean's separate checker, `leanchecker`; a second instance at the 29 October
+addresses exists as well. The 10 November instance is the one the release
+credits, and with its replay done this item needs nothing further of its own;
+it counts towards the claim through the witness of the previous paragraph.
+(Section 6, item 5; section 7, item 19.)
+
+## The pool boundary
+
+The theorem proves nothing about the pool program. It takes, as part of its
+description of a run, that every action in the recorded transaction lineage
+that is not the verifier's is what the pool and the runtime did, so settlement
+itself is outside it. The owner has still to decide between bringing the pool's
+execution inside the security game, which would mean proving the association
+between the verifier's result and the pool's use of it, and stating the claim
+as conditional on that association. Once the decision is recorded, the item is
+finished either with that proof or with the condition named in the claim's
+first sentence. (Section 5; section 6, item 11.)
 
 ## Repeated attempts
 
-Within one experiment repeated attempts are fully covered, because the query budget counts every query the adversary makes, including repeats and every query made before a rejection. Across separately submitted spend attempts no theorem in the closure yet states a campaign bound. A stand-in theorem compiles (`RSL.MAT.campaign_charge`), giving a sum of the per-attempt bounds in which each attempt is charged for the verifier's hash calls of the earlier ones, at most 2,322 per attempt, with a factor of two for the current two-phase adversary; its three host obligations are not discharged, and whether the campaign corollary is published in these units is a decision on the scope of the contract. The gate closes when that reduction is proved at the host, or when the claim is worded per attempt only.
+Within one run of the experiment, repeated attempts are fully covered: the
+query budget counts every hash query the adversary makes, duplicates and the
+queries made before a rejection included, across both transactions. Across
+separately submitted spend attempts no theorem yet states a bound. A compiled
+stand-in, `RSL.MAT.campaign_charge`, gives the natural form, a sum of the
+per-attempt bounds in which each attempt is charged for the verifier's hash
+calls in the earlier attempts, at most 2,322 for each, with a factor of two
+because the current adversary recomputes its first phase in its second; its
+three obligations at the host are not yet discharged. Whether the campaign
+figure is published in these units, with the verifier's own hashing charged to
+the attacker's count, is a decision for the owner about the contract rather
+than a question of proof. The item is finished when the reduction is proved at
+the host and its units approved, or when the claim is worded per attempt only.
+(Section 3.5; section 6, item 13.)
 
-## Non-vacuity witness
+## Trust rows awaiting confirmation
 
-A theorem whose hypotheses can never hold says nothing, so the release needs a witness that the description of the run can be met by a real run. Part of this is done: Lean shows that the game frame, the trace association and the first output are exactly the recorded facts, not `False`, and that the first output is inhabited. What is missing is a full inhabitant of the run description built from an actual accepted pair of deployed transactions; the devnet transactions are the natural source for it, and constructing it closes the gate.
+The trust inventory has now been reconciled one to one with the rebuilt
+closure: every row the theorem reaches has a removal condition, so does each of
+the 36 reviewed transcriptions that previously lacked one, and rows the theorem
+does not reach are marked as such. That reconciled table is section 4 of the
+status document; the separate [`TRUST-INVENTORY.md`](TRUST-INVENTORY.md) in this
+folder was taken before it, at `07123926e88`. What is outstanding is
+confirmation. The owner has still to confirm or reject five rows about the
+Solana runtime (`RuntimeClockSlotBinding`, `RuntimeReturnDataClear`,
+`RuntimeEntrypointAdmission-Pool`, `RuntimeCpiAccountView` and
+`FixturePdaRuntime`) and the reviewed transcriptions added under the owner's
+standing delegation, and each proposed row has still to be classified as a
+trust row, a proof task or discharged. The item is finished when every row is
+confirmed, or is named in the claim as unconfirmed. (Section 4; section 6,
+item 10.)
 
-## Trust reconciliation
+## One library panic path
 
-Every trust row the theorem relies on is listed in [`TRUST-INVENTORY.md`](TRUST-INVENTORY.md), but the list has not yet been reconciled one to one with the final closure, several rows (among them the SDK borrow, standard-library, entrypoint-admission, persistence and SHA-256 value rows) have no recorded removal condition, 36 reviewed transcriptions lack a per-item removal condition, and rows added under the lead's standing delegation still need the owner's confirmation. The gate closes when the inventory matches the closure exactly, every row has its removal condition, and every row is either confirmed by the owner or named as unconfirmed.
-
-## Smaller items
-
-Three further items are recorded in the status document. One runtime-formatted panic path in the standard library's `RefCell` (`core/cell.rs:898`) has neither its reachability nor its exclusion proved; it can only abort a transaction, never make a false spend accepted, so it is a liveness caveat rather than a soundness one, and it closes with a proof either way or with the caveat stated. Parts of the work were compiled under Lean 4.31.0 and parts under 4.32.0, so the final build must name one pinned toolchain and recompile under it. And two readings in the run-7 assembly await the lead's confirmation: that the condition-(4) inclusion, restated over the current interface rather than the older one, satisfies the wording it was asked to meet, and that the averaged bound is acceptable in its present form of two separate facts (status document, section 7, item 12).
+One panic in the Rust standard library, the runtime-formatted message raised
+when a `RefCell` that is already mutably borrowed is borrowed again
+(`core/cell.rs:898`), is a form the tools do not support, and neither its
+reachability in production nor its exclusion is proved. It can only abort a
+transaction. Soundness is a statement about accepted runs, and an abort cannot
+make a false spend accepted, so this is a question of liveness rather than
+soundness, and no credit is taken for it either way. The item is finished with
+a proof that the path is unreachable, a record that it is reachable, or the
+liveness caveat stated in the claim. (Section 5; section 6, item 12.)
