@@ -1,0 +1,3962 @@
+import Lean
+set_option autoImplicit false
+/-! NPP_ (Stream A, gate row 5, step 1). Target not yet established.
+
+Kernel-checked computable copies ("refinements") of a definition cone, with an equation
+`copy = reference` per copied definition.
+
+* A *site* is an occurrence `@Classical.propDecidable p` inside a leaf's value. Its
+  refinement is the structural instance found by `synthInstance (Decidable p)` (rejected if it
+  mentions `Classical` or a noncomputable constant). With `xs` the binders `p` depends on, the
+  site is abstracted as `h xs` with `h : ∀ xs, Decidable p`, and its equation is
+  `Subsingleton.elim` at that Pi type (`Pi.instSubsingleton`, `instSubsingletonDecidable`).
+* A *dependency* occurrence `.const y us` of a copied constant `y` is abstracted the same way;
+  its equation is the already-built equation of `y`.
+* With `F` the value with every site and dependency abstracted, the copy's value is `F lhs` and
+  the equation is the congruence chain `F lhs = F rhs`, stated as `copy = reference`. The kernel
+  checks it by delta/beta only.
+Nothing here evaluates a model term. -/
+open Lean Meta
+
+namespace NPP
+universe u v
+
+-- (okOf/okOkOf and their lemmas live in the Lean modules; the tool refers to them by name only)
+/-- set to true locally to log every visited proof -/
+def debugOn : Bool := false
+
+
+theorem choose_congr {α : Sort u} {P Q : α → Prop} (e : P = Q) (hp : ∃ a, P a) (hq : ∃ a, Q a) :
+    Classical.choose hp = Classical.choose hq := by subst e; rfl
+
+/-- A proof placeholder of a choose site: `pty` (mentions the value placeholder `ph`) is its type;
+`pnew` its refined proof (transported along `new = orig`), `porig` the original proof. -/
+structure PSite where
+  pph : FVarId
+  pty : Expr
+  pnew : Expr
+  porig : Expr
+  /-- number of placeholder groups its type mentions (> 1: no equation is claimed) -/
+  groups : Nat := 1
+
+/-- A refined site. `kind = 0`: a decidability instance (equation by `Subsingleton.elim`).
+`kind = 1`: a total-Result `Classical.choose h` (`new = okOf …`, equation `eq : new = orig`), with
+the proof placeholders `proofs` of every proof term whose type mentions the chosen value. -/
+structure Site where
+  ph : FVarId
+  ty : Expr
+  orig : Expr
+  new : Expr
+  kind : Nat := 0
+  eq : Expr := .sort .zero
+  key : Expr := .sort .zero
+  scope : Array Expr := #[]
+  newpt : Expr := .sort .zero
+  eqpt : Expr := .sort .zero
+  proofs : Array PSite := #[]
+
+instance : Inhabited Site := ⟨{ ph := ⟨.anonymous⟩, ty := .sort .zero, orig := .sort .zero, new := .sort .zero }⟩
+
+def log (j : Json) : IO Unit := do IO.println j.compress; (← IO.getStdout).flush
+
+/-- constants of an expression, including projection structure names -/
+def usedNames (es : List Expr) : MetaM NameSet := do
+  let r ← IO.mkRef ({} : NameSet)
+  for e in es do
+    e.forEach fun x => match x with
+      | .const c _ => r.modify (·.insert c)
+      | .proj sn _ _ => r.modify (·.insert sn)
+      | _ => pure ()
+  r.get
+
+def depsOf (ci : ConstantInfo) : MetaM NameSet :=
+  match ci.value? (allowOpaque := true) with
+  | some v => usedNames [ci.type, v]
+  | none => usedNames [ci.type]
+
+/-- (name, levels) occurrences of constants satisfying `p` -/
+def constOccs (e : Expr) (p : Name → Bool) : MetaM (Array (Name × List Level)) := do
+  let r ← IO.mkRef (#[] : Array (Name × List Level))
+  e.forEach fun x => match x with
+    | .const c us => do if p c && !(← r.get).contains (c, us) then r.modify (·.push (c, us))
+    | _ => pure ()
+  r.get
+
+/-- constants from library modules (core, Std, Mathlib, Batteries): never copied as leaves -/
+def isLibConst (env : Environment) (n : Name) : Bool :=
+  match env.getModuleIdxFor? n with
+  | some i =>
+    let m := env.header.moduleNames[i.toNat]!
+    [`Init, `Lean, `Std, `Mathlib, `Batteries].contains m.getRoot
+  | none => false
+
+/-- the compiler's view: a computationally relevant definition without compiled code -/
+def lacksCode (env : Environment) (n : Name) : MetaM Bool := do
+  if isLibConst env n then return false
+  let some (.defnInfo d) := env.find? n | return false
+  if (Lean.IR.findEnvDecl env n).isSome then return false
+  if ← isTypeFormerType d.type then return false
+  if ← isProp d.type then return false
+  return true
+
+/-- Post-order walk from `root` restricted to `cand ∪ ids`; `dep n` iff `n` is a leaf, an id
+target, or mentions a dependent. Returns the dependents in post-order (id targets excluded). -/
+def walk (env : Environment) (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) :
+    MetaM (Array Name × Std.HashMap Name Bool) := do
+  let mut dep : Std.HashMap Name Bool := {}
+  let mut started : Std.HashSet Name := {}
+  let mut order : Array Name := #[]
+  let mut stack : Array (Name × Bool) := #[(root, false)]
+  while h : stack.size > 0 do
+    let (n, ex) := stack.back
+    stack := stack.pop
+    if dep.contains n then continue
+    if ids.contains n then dep := dep.insert n true; continue
+    match env.find? n with
+    | none => dep := dep.insert n false
+    | some ci =>
+      -- any noncomputable constant reached is a candidate leaf as well (the scan's list may be partial)
+      let mut ds : List Name := []
+      for d in (← depsOf ci).toList do
+        if cand.contains d || ids.contains d || (← lacksCode env d) then ds := d :: ds
+      if !ex then
+        if started.contains n then continue
+        started := started.insert n
+        stack := stack.push (n, true)
+        for d in ds do
+          if !dep.contains d then stack := stack.push (d, false)
+      else
+        let b := leaves.contains n || (!cand.contains n && (← lacksCode env n)) || ds.any (fun d => dep.getD d false)
+        dep := dep.insert n b
+        if b then order := order.push n
+  -- a constant referenced by a dependent whose TYPE mentions a dependent must be copied as well
+  -- (auxiliary proofs and matchers); it is placed before its first user. Fixpoint.
+  for _ in [0:8] do
+    let mut changed := false
+    let mut newOrder : Array Name := #[]
+    let mut placed : NameSet := {}
+    for n in order do
+      let some ci := env.find? n | continue
+      if let some v := ci.value? (allowOpaque := true) then
+        for c in (← usedNames [v]).toList do
+          if dep.getD c false || ids.contains c || placed.contains c then continue
+          let some cc := env.find? c | continue
+          match cc with
+          | .ctorInfo _ | .inductInfo _ | .recInfo _ | .quotInfo _ => continue
+          | _ => pure ()
+          if (← usedNames [cc.type]).toList.any (fun d => dep.getD d false && !ids.contains d) then
+            dep := dep.insert c true; newOrder := newOrder.push c; placed := placed.insert c; changed := true
+      if !placed.contains n then newOrder := newOrder.push n; placed := placed.insert n
+    order := newOrder
+    if !changed then break
+  -- final topological order over types and values (an auxiliary constant may mention, in its
+  -- type, a dependent that is placed after its first user)
+  let inOrder : NameSet := order.foldl (·.insert ·) {}
+  let mut sorted : Array Name := #[]
+  let mut done : NameSet := {}
+  let mut onStack : NameSet := {}
+  for root in order do
+    let mut st : Array (Name × Bool) := #[(root, false)]
+    while h : st.size > 0 do
+      let (n, ex) := st.back
+      st := st.pop
+      if done.contains n then continue
+      if ex then
+        done := done.insert n; sorted := sorted.push n; continue
+      if onStack.contains n then continue
+      onStack := onStack.insert n
+      st := st.push (n, true)
+      if let some ci := env.find? n then
+        for d in (← depsOf ci).toList do
+          if inOrder.contains d && !done.contains d then st := st.push (d, false)
+  return (sorted, dep)
+
+/-- fvars that `e` depends on, closed under their types, in local-context order -/
+def scopeOf (e : Expr) : MetaM (Array Expr) := do
+  let lctx ← getLCtx
+  let mut set : FVarIdSet := (collectFVars {} e).fvarSet
+  let mut changed := true
+  while changed do
+    changed := false
+    for f in set.toList do
+      let some d := lctx.find? f | continue
+      for g in (collectFVars {} d.type).fvarSet.toList do
+        if !set.contains g then set := set.insert g; changed := true
+  let mut out := #[]
+  for d in lctx do
+    if set.contains d.fvarId then
+      if d.isLet then throwError "site depends on a let-bound variable {d.userName}"
+      out := out.push (.fvar d.fvarId)
+  return out
+
+def badConst (env : Environment) (e : Expr) : Option Name :=
+  e.getUsedConstants.find? fun c => c.getRoot == `Classical || isNoncomputable env c
+
+/-- Recursive structural `Decidable p`: instance search; ∧/∨/¬/↔ by the core combinators;
+equality with its carrier unfolded (`whnfR`, `whnf`); otherwise `p` delta-unfolded. A result
+mentioning `Classical` or a noncomputable constant is rejected. The instance's type is
+`Decidable p'` with `p'` definitionally equal to `p`. -/
+partial def decideRec (env : Environment) (p : Expr) (fuel : Nat) : MetaM (Option Expr) := do
+  if fuel == 0 then return none
+  let ok (i : Expr) : MetaM (Option Expr) := do
+    let i ← instantiateMVars i
+    return if (badConst env i).isNone then some i else none
+  if let some i ← synthInstance? (mkApp (mkConst ``Decidable) p) then
+    if let some i ← ok i then return some i
+  let p ← instantiateMVars p
+  let bin (c : Name) (a b : Expr) : MetaM (Option Expr) := do
+    let some da ← decideRec env a (fuel - 1) | return none
+    let some db ← decideRec env b (fuel - 1) | return none
+    ok (← mkAppOptM c #[a, b, da, db])
+  if p.isAppOfArity ``And 2 then return ← bin ``instDecidableAnd p.appFn!.appArg! p.appArg!
+  if p.isAppOfArity ``Or 2 then return ← bin ``instDecidableOr p.appFn!.appArg! p.appArg!
+  if p.isAppOfArity ``Iff 2 then return ← bin ``instDecidableIff p.appFn!.appArg! p.appArg!
+  if p.isAppOfArity ``Not 1 then
+    let some da ← decideRec env p.appArg! (fuel - 1) | return none
+    return ← ok (← mkAppOptM ``instDecidableNot #[p.appArg!, da])
+  if let some (ty, a, b) := p.eq? then
+    let u ← getLevel ty
+    for ty' in [← whnfR ty, ← whnf ty] do
+      if let some i ← synthInstance? (mkApp (mkConst ``Decidable) (mkApp3 (mkConst ``Eq [u]) ty' a b)) then
+        if let some i ← ok i then return some i
+  match ← unfoldDefinition? p with
+  | some q => decideRec env (← whnfR q) (fuel - 1)
+  | none =>
+    let q ← whnf p
+    if q != p then decideRec env q (fuel - 1) else return none
+
+/-- As `findInst`, for an arbitrary decidability class type `cls` (`Decidable p`,
+`DecidableEq α`, `DecidablePred q`, ...). -/
+partial def findInstTy (env : Environment) (cls : Expr) : MetaM (Option Expr) := do
+  let fn := cls.getAppFn
+  let args := cls.getAppArgs
+  if fn.isConstOf ``Decidable && args.size == 1 then
+    return ← decideRec env args[0]! 10
+  let mut cands : Array Expr := #[cls]
+  for a' in [← args.mapM whnfR, ← args.mapM whnf] do
+    cands := cands.push (mkAppN fn a')
+  for c in cands do
+    if let some i ← synthInstance? c then
+      let i ← instantiateMVars i
+      if (badConst env i).isNone then return some i
+  return none
+
+/-- A structural `Decidable p`: instance search at `p`, then at `p` with the equality's carrier
+unfolded (`whnfR`, `whnf`), then at `p` delta-unfolded (up to three steps). The result must not
+mention `Classical` or a noncomputable constant. The instance's type is `Decidable p'` with `p'`
+definitionally equal to `p`. -/
+def findInst (env : Environment) (p : Expr) : MetaM (Option Expr) := do
+  findInstTy env (mkApp (mkConst ``Decidable) p)
+
+/-- Field types of a structure type (for the diagnostic of an unrefined site). -/
+def fieldTypes (ty : Expr) : MetaM (Array String) := do
+  let ty ← whnf ty
+  let some S := ty.getAppFn.constName? | return #[]
+  let env ← getEnv
+  let some info := getStructureInfo? env S | return #[s!"{S}: not a structure"]
+  let mut out := #[s!"structure {S}"]
+  for f in info.fieldNames do
+    let some pf := env.find? (S ++ f) | continue
+    out := out.push s!"{f} : {← ppExpr pf.type}"
+  return out
+
+/-- Classical decidability constants whose applications are refined as instance sites. -/
+def decConsts : List Name := [``Classical.propDecidable, `Classical.decEq, `Classical.dec,
+  `Classical.decPred, `Classical.decRel]
+
+/-- For `P` (a predicate on `α`) find a conjunct `r = ok a` or `r = ok (Ok a)` of `P a`, with `r`
+independent of `a`. Returns `(r, shape, proj)` where `proj : ∀ a, P a → r = K a` (`shape` 1 for
+`ok`, 2 for `ok ∘ Ok`). -/
+def okConjunct (α P : Expr) : MetaM (Option (Expr × Nat × Expr)) := do
+  withLocalDeclD `a α fun a => do
+    let pa ← whnfR (← instantiateMVars (Expr.headBeta (mkApp P a)))
+    let rec go (t : Expr) (hp : Expr) (fuel : Nat) : MetaM (Option (Expr × Nat × Expr)) := do
+      match fuel with
+      | 0 => return none
+      | fuel+1 =>
+      if t.isAppOfArity ``And 2 then
+        if let some r ← go t.appFn!.appArg! (← mkAppM ``And.left #[hp]) fuel then return some r
+        return ← go t.appArg! (← mkAppM ``And.right #[hp]) fuel
+      if let some (_, l, rhs) := t.eq? then
+        if l.containsFVar a.fvarId! then return none
+        let f := rhs.getAppFn
+        if f.isConst && f.constName!.getString! == "ok" && rhs.getAppNumArgs == 2 && rhs.appArg! == a then
+          return some (l, 1, hp)
+        if f.isConst && f.constName!.getString! == "ok" && rhs.getAppNumArgs == 2 then
+          let inner := rhs.appArg!
+          let g := inner.getAppFn
+          if g.isConst && g.constName!.getString! == "Ok" && inner.appArg! == a then
+            return some (l, 2, hp)
+      return none
+    withLocalDeclD `hp pa fun hp => do
+      let some (l, shape, pr) ← go pa hp 8 | return none
+      return some (l, shape, ← mkLambdaFVars #[a, hp] pr)
+
+/-- nested `funext` over `xs` of a pointwise proof -/
+def funextN (xs : Array Expr) (pt : Expr) : MetaM Expr := do
+  let mut p := pt
+  for x in xs.reverse do
+    p ← mkFunExt (← mkLambdaFVars #[x] p)
+  return p
+
+/-- the first `Classical.choose`/`Exists.choose` application in `e` -/
+def findChoose (e : Expr) : Option Expr :=
+  e.find? fun x => (x.isAppOfArity ``Classical.choose 3 || x.isAppOfArity ``Exists.choose 3)
+
+/-- `fun w => ∀ ys[w], ty[w]`, where `repl w x` rewrites subterms (binder types of `ys` included) -/
+partial def motiveFor (ys : Array Expr) (ty : Expr) (wTy : Expr) (repl : Expr → Expr → Option Expr) :
+    MetaM Expr := do
+  withLocalDeclD `w wTy fun w => do
+    let rec go (i : Nat) (newYs : Array Expr) : MetaM Expr := do
+      if h : i < ys.size then
+        let y := ys[i]
+        let yty ← inferType y
+        let yty' := (yty.replace (repl w)).replaceFVars (ys.extract 0 i) newYs
+        withLocalDeclD `y yty' fun y' => go (i + 1) (newYs.push y')
+      else
+        let ty' := (ty.replace (repl w)).replaceFVars ys newYs
+        mkForallFVars newYs ty'
+    mkLambdaFVars #[w] (← go 0 #[])
+
+def depPhId (n : Name) (us : List Level) : FVarId := ⟨Name.mkNum (`_npp_dep ++ n) (hash us).toNat⟩
+
+/-- arguments `ts` with `orig ts ≡ e` (reducible unification) for a decidability site -/
+def matchDecSite (st : Site) (e : Expr) : MetaM (Option (Array Expr)) := do
+  if st.kind != 2 then return none
+  let (mvs, _, _) ← forallMetaTelescope st.ty
+  let pat := st.orig.beta mvs
+  if ← withReducible (isDefEq pat e) then
+    let ts ← mvs.mapM instantiateMVars
+    if ts.any (·.hasExprMVar) then return none
+    return some ts
+  return none
+
+/-- `x` with every classical decidability instance matching a site rewritten to `rw i ts` -/
+def rewriteDec (sites : Array Site) (x : Expr) (rw : Nat → Array Expr → Expr) : MetaM (Expr × Array Nat) := do
+  let used ← IO.mkRef (#[] : Array Nat)
+  let out ← transform x (post := fun e => do
+    let some k := e.getAppFn.constName? | return .done e
+    if !(decConsts.contains k && e.getAppNumArgs ≥ 1) then return .done e
+    for i in [0:sites.size] do
+      if let some ts ← matchDecSite sites[i]! e then
+        if !(← used.get).contains i then used.modify (·.push i)
+        return .done (rw i ts)
+    return .done e)
+  return (out, ← used.get)
+
+/-- Transport a proof `e : ty` (free variables `ys`) along equations `eq_i : new_i = old_i`
+(`old_i` closed terms of type `wTy_i`), giving a proof of `∀ ys[new], ty[new]` (closed). -/
+def transportAll (ys : Array Expr) (e ty : Expr) (reps : Array (Expr × Expr × Expr × Expr)) : MetaM Expr := do
+  let mut p ← mkLambdaFVars ys e
+  let mut cur ← mkForallFVars ys ty
+  for (old, new, eq, wTy) in reps do
+    let u ← getLevel wTy
+    let motive ← motiveFor #[] cur wTy fun w x => if x == old then some w else none
+    p := mkAppN (mkConst ``Eq.subst [u]) #[wTy, motive, old, new, ← mkEqSymm eq, p]
+    cur := cur.replace fun x => if x == old then some new else none
+  return p
+
+/-- Replace every classical decidability instance, every total-Result `choose` (built over the
+copies of its dependencies), and every proof whose type mentions such a `choose` or a copied
+dependency (transported along their equations), by placeholder applications. -/
+def refineSites (v : Expr) (leaf : Bool := true) (isDep : Name → Bool := fun _ => false)
+    (eqName : Name → Name := id) (copyName : Name → Name := (`NPP_C ++ ·)) :
+    MetaM (Expr × Array Site × Nat × Array ((Name × List Level) × PSite)) := do
+  let sites ← IO.mkRef (#[] : Array Site)
+  let depProofs ← IO.mkRef (#[] : Array ((Name × List Level) × PSite))
+  let unrefined ← IO.mkRef 0
+  let env ← getEnv
+  let toCopy (x : Expr) : Expr := x.replace fun y => match y with
+    | .const c us => if isDep c then some (.const (copyName c) us) else none
+    | _ => none
+  -- copied definitions only: copied theorems need no equation (proof irrelevance)
+  let depsOf' (x : Expr) : MetaM (Array (Name × List Level)) := do
+    let env ← getEnv
+    constOccs x fun c => isDep c && !(match env.find? c with | some (.thmInfo _) => true | _ => false)
+  -- replacements (old, new, eq : new = old, type) for the dependencies occurring in x
+  let depReps (x : Expr) : MetaM (Option (Array (Expr × Expr × Expr × Expr))) := do
+    let mut out := #[]
+    for (n, us) in ← depsOf' x do
+      if !(← getEnv).contains (eqName n) then return none
+      let some dci := (← getEnv).find? n | return none
+      out := out.push (.const n us, .const (copyName n) us, .const (eqName n) us, dci.instantiateTypeLevelParams us)
+    return some out
+  let norm (x : Expr) : MetaM Expr := do
+    if x.isAppOfArity ``Exists.choose 3 then
+      let args := x.getAppArgs
+      return mkApp3 (mkConst ``Classical.choose [← getLevel args[0]!]) args[0]! args[1]! args[2]!
+    return x
+  let siteOf (c : Expr) : MetaM (Option Nat) := do
+    let c ← norm c
+    for i in [0:(← sites.get).size] do
+      if (← sites.get)[i]!.kind == 1 && (← sites.get)[i]!.key == c then return some i
+    let args := c.getAppArgs
+    let (α, P, h) := (args[0]!, args[1]!, args[2]!)
+    if !(← depsOf' α).isEmpty then return none
+    let some reps ← depReps (mkApp P h) | return none
+    -- copy-world predicate and existence proof
+    let P' := toCopy P
+    let h' := toCopy h
+    let some (r, shape, proj) ← okConjunct α P' | return none
+    let xs ← scopeOf c
+    let u ← getLevel α
+    let c' := mkApp3 (mkConst ``Classical.choose [u]) α P' h'
+    let hx ← mkAppM ``Exists.imp #[proj, h']
+    let newv ← mkAppM (if shape == 1 then `NPP2.okOf else `NPP2.okOkOf) #[r, hx]
+    let spec ← mkAppM ``Classical.choose_spec #[h']
+    let pe := Expr.headBeta (mkApp proj c')
+    let eq1 ← mkAppM (if shape == 1 then `NPP2.okOf_eq else `NPP2.okOkOf_eq) #[hx, mkApp pe spec]
+    -- P' = P, by the dependencies' equations
+    let mut eP ← mkEqRefl P'
+    let mut cur := P'
+    for (old, new, eq, wTy) in reps do
+      let motive ← withLocalDeclD `w wTy fun w => do
+        mkLambdaFVars #[w] (cur.replace fun x => if x == new then some w else none)
+      let step ← mkCongrArg motive eq
+      eP ← mkEqTrans eP step
+      cur := cur.replace fun x => if x == new then some old else none
+    let eq2 ← mkAppOptM ``NPP.choose_congr #[α, P', P, eP, h', h]
+    let eqpt ← mkEqTrans eq1 eq2
+    let ph ← mkFreshFVarId
+    let ty ← mkForallFVars xs α
+    let origL ← mkLambdaFVars xs c
+    let newL ← mkLambdaFVars xs newv
+    let eqf ← funextN xs eqpt
+    let i := (← sites.get).size
+    let site : Site := { ph, ty, orig := origL, new := newL, kind := 1, eq := eqf, key := c, scope := xs, newpt := newv, eqpt }
+    sites.modify (·.push site)
+    return some i
+  -- pass 1: decidability sites at value positions (proofs skipped)
+  if leaf then
+    let _ ← transform v
+      (pre := fun e => do
+        if e.hasLooseBVars then return .continue
+        if ← isProof e then return .done e
+        return .continue)
+      (post := fun e => do
+        let some k := e.getAppFn.constName? | return .done e
+        if !(decConsts.contains k && e.getAppNumArgs ≥ 1) then return .done e
+        for st in ← sites.get do
+          if (← matchDecSite st e).isSome then return .done e
+        let cls ← inferType e
+        let xs ← scopeOf e
+        let some inst ← findInstTy env cls | do
+          let carrier ← match (if e.getAppNumArgs ≥ 1 then e.appArg!.eq? else none) with
+            | some (ty, _, _) => pure (toString (← ppExpr ty))
+            | none => pure ""
+          log <| Json.mkObj [("site_unrefined", toJson (← ppExpr e).pretty), ("class", toJson (← ppExpr cls).pretty), ("eq_carrier", toJson carrier)]
+          unrefined.modify (· + 1); return .done e
+        let ph ← mkFreshFVarId
+        let ty ← mkForallFVars xs cls
+        let origL ← mkLambdaFVars xs e
+        let newL ← mkLambdaFVars xs inst
+        let eqf ← mkAppM ``Subsingleton.elim #[newL, origL]
+        let site : Site := { ph, ty, orig := origL, new := newL, kind := 2, eq := eqf, key := origL, scope := #[] }
+        sites.modify (·.push site)
+        return .done e)
+  let out ← transform v
+    (pre := fun e => do
+      if e.hasLooseBVars then return .continue
+      -- total-Result choice: handled before its arguments are visited
+      if leaf && (e.isAppOfArity ``Classical.choose 3 || e.isAppOfArity ``Exists.choose 3) then
+        let some i ← siteOf e | do
+          log <| Json.mkObj [("choose_unrefined", toJson (← ppExpr e.appFn!.appArg!).pretty), ("carrier", toJson (← ppExpr e.appFn!.appFn!.appArg!).pretty)]
+          unrefined.modify (· + 1); return .done e
+        let st := (← sites.get)[i]!
+        return .done (mkAppN (.fvar st.ph) st.scope)
+      if !(← isProof e) then return .continue
+      let ty ← instantiateMVars (← inferType e)
+      let ys ← scopeOf e
+      let c? := if leaf then findChoose ty else none
+      if leaf && c?.isNone then
+        let sts ← sites.get
+        let (_, used) ← rewriteDec sts ty fun i ts => mkAppN (.fvar sts[i]!.ph) ts
+        if !used.isEmpty then
+          -- transport along each matched site in turn; the type keeps only placeholders
+          let mut p ← mkLambdaFVars ys e
+          for i in used do
+            let st := sts[i]!
+            let Q ← withLocalDeclD `w st.ty fun w => do
+              let cur := (← inferType p)
+              let (body, _) ← rewriteDec #[st] cur fun _ ts => mkAppN w ts
+              mkLambdaFVars #[w] body
+            let u ← getLevel st.ty
+            p := mkAppN (mkConst ``Eq.subst [u]) #[st.ty, Q, st.orig, st.new, ← mkEqSymm st.eq, p]
+            -- the transported type now mentions `st.new`; later sites match on the rewritten type
+          let pty0 ← mkForallFVars ys ty
+          let (pty, _) ← rewriteDec sts pty0 fun i ts => mkAppN (.fvar sts[i]!.ph) ts
+          let pph ← mkFreshFVarId
+          let porig ← mkLambdaFVars ys e
+          let ps : PSite := { pph, pty, pnew := p, porig, groups := used.size }
+          if used.size == 1 then
+            sites.modify fun a => a.modify used[0]! fun st => { st with proofs := st.proofs.push ps }
+          else
+            depProofs.modify (·.push ((`_npp_multi, []), ps))
+          return .done (mkAppN (.fvar pph) ys)
+      let mut reps : Array (Expr × Expr × Expr × Expr) := #[]
+      let mut phRepl : Array (Expr × Expr) := #[]   -- (old term, placeholder term)
+      let mut groups := 0
+      let mut site? : Option Nat := none
+      if let some c := c? then
+        let some i ← siteOf c | do
+          log <| Json.mkObj [("choose_unrefined", toJson (← ppExpr c).pretty), ("in_proof_type", toJson (← ppExpr ty).pretty)]
+          unrefined.modify (· + 1); return .done e
+        let st := (← sites.get)[i]!
+        let c ← norm c
+        reps := reps.push (st.orig, st.new, st.eq, st.ty)
+        phRepl := phRepl.push (c, mkAppN (.fvar st.ph) st.scope)
+        groups := groups + 1
+        site? := some i
+      let docc ← depsOf' ty
+      for (n, us) in docc do
+        phRepl := phRepl.push (.const n us, .fvar (depPhId n us))
+      if site?.isNone && docc.isEmpty then return .done e
+      let some dreps ← depReps ty | do
+        log <| Json.mkObj [("dep_proof_untransported", toJson (docc.map (·.1.toString))), ("reason", toJson "no equation yet")]
+        return .done e
+      groups := groups + docc.size
+      -- the site occurrence `c` is rewritten by beta-reducing `st.orig xs` back; use the closed function form
+      let sitesNow ← sites.get
+      let ty' := match site? with
+        | some i =>
+          let st := sitesGet! sitesNow i
+          let c0 := phRepl[0]!.1
+          ty.replace fun x => if x == c0 then some (mkAppN st.orig st.scope) else none
+        | none => ty
+      let pnew ← try transportAll ys e ty' (reps ++ dreps) catch _ => do
+        log <| Json.mkObj [("dep_proof_untransported", toJson (docc.map (·.1.toString))), ("reason", toJson "transport ill-typed")]
+        return .done e
+      -- the choose occurrence (open term) before abstraction; constants also in the binder types after
+      let pty0 ← mkForallFVars ys (ty.replace fun x => (phRepl.find? (·.1 == x)).map (·.2))
+      let pty := pty0.replace fun x => if x.isConst then (phRepl.find? (·.1 == x)).map (·.2) else none
+      let pph ← mkFreshFVarId
+      let porig ← mkLambdaFVars ys e
+      let ps : PSite := { pph, pty, pnew, porig, groups }
+      match site?, docc.toList with
+      | some i, [] => sites.modify fun a => a.modify i fun st => { st with proofs := st.proofs.push ps }
+      | none, [(n, us)] => depProofs.modify (·.push ((n, us), ps))
+      | _, _ =>
+        -- several groups: kept for the copy; no equation is claimed for the enclosing definition
+        depProofs.modify (·.push ((`_npp_multi, []), ps))
+      return .done (mkAppN (.fvar pph) ys))
+    (post := fun e => do
+      let fn := e.getAppFn
+      let some c := fn.constName? | return .done e
+      if leaf && decConsts.contains c && e.getAppNumArgs ≥ 1 then
+        for st in ← sites.get do
+          if let some ts ← matchDecSite st e then return .done (mkAppN (.fvar st.ph) ts)
+        return .done e
+      return .done e)
+  if leaf && (← unrefined.get) == 0 && (out.getUsedConstants.any fun c => decConsts.contains c || c == ``Classical.choose) then
+    throwError "an unrefined classical constant remains"
+  return (out, ← sites.get, ← unrefined.get, ← depProofs.get)
+where
+  sitesGet! (a : Array Site) (i : Nat) : Site := a[i]!
+
+/-- One congruence step of the chain. -/
+inductive Step where
+  | single (lhs rhs : Expr) (pf : Option Expr)
+  /-- a choose value placeholder followed by its proof placeholders -/
+  | multi (vl vr e : Expr) (ph : FVarId) (T : Expr) (ptys : Array Expr) (pls prs : Array Expr)
+
+structure Built where
+  value : Expr
+  F : Expr
+  steps : Array Step
+  nsites : Nat
+  depNames : Array Name
+  unrefined : Nat := 0
+
+/-- create locals for placeholders in order (types may mention earlier placeholders) -/
+partial def withPlaceholders {β : Type} (phs : List (FVarId × Expr)) (done : Array (FVarId × Expr) → MetaM β)
+    (acc : Array (FVarId × Expr) := #[]) : MetaM β := do
+  match phs with
+  | [] => done acc
+  | (f, ty) :: rest =>
+    let ty' := ty.replaceFVars (acc.map (.fvar ·.1)) (acc.map (·.2))
+    withLocalDeclD `_h ty' fun x => withPlaceholders rest done (acc.push (f, x))
+
+/-- Abstract sites (if `leaf`) and dependency constants. -/
+def build (ci : ConstantInfo) (leaf : Bool) (isDep : Name → Bool) (ids : Std.HashMap Name Name)
+    (copyName refName eqName : Name → Name) : MetaM (Built × Bool) := do
+  let env ← getEnv
+  let some v := ci.value? (allowOpaque := true) | throwError "no value"
+  let (v1, sites, unref, depProofs) ← refineSites v leaf isDep eqName copyName
+  let mut eqOk := true
+  let body := v1.replace fun x => match x with
+    | .const n us =>
+      if let some m := ids[n]? then some (.const m us)
+      else if isDep n then some (.fvar (depPhId n us))
+      else none
+    | _ => none
+  let fvs := (collectFVars {} body).fvarSet
+  let mut occ ← constOccs v1 fun n => isDep n && !ids.contains n
+  for (g, _) in depProofs do
+    if g.1 != `_npp_multi && !occ.contains g then occ := occ.push g
+  let mut phs : Array (FVarId × Expr) := #[]
+  let mut lhs : Array Expr := #[]
+  let mut steps : Array Step := #[]
+  let mut depNames : Array Name := #[]
+  for st in sites do
+    phs := phs.push (st.ph, st.ty); lhs := lhs.push st.new
+    if st.kind == 0 || (st.kind == 2 && st.proofs.isEmpty) then
+      steps := steps.push (.single st.new st.orig none)
+    else
+      for ps in st.proofs do
+        phs := phs.push (ps.pph, ps.pty); lhs := lhs.push ps.pnew
+      steps := steps.push (.multi st.new st.orig st.eq st.ph st.ty (st.proofs.map (·.pty))
+        (st.proofs.map (·.pnew)) (st.proofs.map (·.porig)))
+  -- theorem dependencies whose type mentions exactly one other dependency: proof placeholders of that group
+  let mut thmAttach : Array ((Name × List Level) × PSite) := #[]
+  let mut attached : Array (Name × List Level) := #[]
+  for (n, us) in occ do
+    let some (.thmInfo tci) := env.find? n | continue
+    let tdeps ← constOccs (tci.type.instantiateLevelParams tci.levelParams us) fun c => isDep c && !ids.contains c
+    if tdeps.size != 1 then continue
+    let (d, dus) := tdeps[0]!
+    if !occ.contains (d, dus) then continue
+    let tty := tci.type.instantiateLevelParams tci.levelParams us
+    let pty := tty.replace fun x => if x == .const d dus then some (.fvar (depPhId d dus)) else none
+    thmAttach := thmAttach.push ((d, dus), { pph := depPhId n us, pty, pnew := .const (copyName n) us, porig := .const (refName n) us })
+    attached := attached.push (n, us)
+  let depProofs := depProofs ++ thmAttach
+  occ := occ.filter (!attached.contains ·)
+  for (n, us) in occ do
+    let f : FVarId := ⟨Name.mkNum (`_npp_dep ++ n) (hash us).toNat⟩
+    let _ := fvs.contains f
+    let some dci := env.find? n | throwError "unknown {n}"
+    let ty := dci.instantiateTypeLevelParams us
+    phs := phs.push (f, ty); lhs := lhs.push (.const (copyName n) us)
+    depNames := depNames.push n
+    let dps := (depProofs.filter (·.1 == (n, us))).map (·.2)
+    if !dps.isEmpty then
+      for ps in dps do
+        phs := phs.push (ps.pph, ps.pty); lhs := lhs.push ps.pnew
+      steps := steps.push (.multi (.const (copyName n) us) (.const (refName n) us) (.const (eqName n) us) f ty
+        (dps.map (·.pty)) (dps.map (·.pnew)) (dps.map (·.porig)))
+      continue
+    match dci with
+    | .thmInfo _ =>
+      match env.find? (copyName n) with
+      | some cc => if cc.instantiateTypeLevelParams us == ty then
+                     steps := steps.push (.single (.const (copyName n) us) (.const (refName n) us)
+                       (some (mkApp2 (mkConst ``Eq.refl [Level.zero]) ty (.const (copyName n) us))))
+                   else eqOk := false; steps := steps.push (.single (.const (copyName n) us) (.const (refName n) us) (some (mkConst ``True)))
+      | none => eqOk := false; steps := steps.push (.single (.const (copyName n) us) (.const (refName n) us) (some (mkConst ``True)))
+    | _ => steps := steps.push (.single (.const (copyName n) us) (.const (refName n) us) (some (.const (eqName n) us)))
+  for (g, ps) in depProofs do
+    if g.1 == `_npp_multi then
+      phs := phs.push (ps.pph, ps.pty); lhs := lhs.push ps.pnew
+      eqOk := false
+  let F ← withPlaceholders phs.toList fun locals => do
+    let body' := body.replaceFVars (locals.map (.fvar ·.1)) (locals.map (·.2))
+    mkLambdaFVars (locals.map (·.2)) body'
+  let value ← Core.betaReduce (F.beta lhs)
+  return ({ value, F, steps, nsites := sites.size, depNames, unrefined := unref }, eqOk)
+
+/-- the congruence chain `F lhs = F rhs` -/
+def chain (b : Built) : MetaM Expr := do
+  let mut h ← mkEqRefl b.F
+  -- the two sides, kept as explicit (unreduced) applications of F
+  let mut G1 := b.F
+  let mut G2 := b.F
+  for st in b.steps do
+    match st with
+    | .single l r pf =>
+      let pf ← match pf with
+        | some p => pure p
+        | none => mkAppM ``Subsingleton.elim #[l, r]
+      h ← mkCongr h pf
+      G1 := mkApp G1 l; G2 := mkApp G2 r
+    | .multi vl vr e ph T ptys pls prs =>
+      -- h1 : G1 vl pls = G2 vl pls
+      let mut h1 := h
+      h1 ← mkCongrFun h1 vl
+      for pl in pls do h1 ← mkCongrFun h1 pl
+      let G2vl := mkAppN G2 (#[vl] ++ pls)
+      -- h2 : G2 vl pls = G2 vr prs, by Eq.rec on e : vl = vr (proof arguments by irrelevance)
+      let u ← getLevel T
+      let motive ← withLocalDeclD `v' T fun v' => do
+        let eqT ← mkEq vl v'
+        withLocalDeclD `he eqT fun he => do
+          let qtys := ptys.map fun t => t.replaceFVar (.fvar ph) v'
+          let body ← withQs qtys.toList #[] fun qs => do
+            mkForallFVars qs (← mkEq G2vl (mkAppN G2 (#[v'] ++ qs)))
+          mkLambdaFVars #[v', he] body
+      let base ← withQs (ptys.map fun t => t.replaceFVar (.fvar ph) vl).toList #[] fun qs => do
+        mkLambdaFVars qs (← mkEqRefl G2vl)
+      let h2 := mkAppN (mkConst ``Eq.rec [Level.zero, u]) (#[T, vl, motive, base, vr, e] ++ prs)
+      h := mkAppN (mkConst ``Eq.trans [← getLevel (← inferType G2vl)])
+        #[← inferType G2vl, mkAppN G1 (#[vl] ++ pls), G2vl, mkAppN G2 (#[vr] ++ prs), h1, h2]
+      G1 := mkAppN G1 (#[vl] ++ pls); G2 := mkAppN G2 (#[vr] ++ prs)
+  return h
+where
+  withQs (tys : List Expr) (acc : Array Expr) (k : Array Expr → MetaM Expr) : MetaM Expr := do
+    match tys with
+    | [] => k acc
+    | t :: rest => withLocalDeclD `q t fun q => withQs rest (acc.push q) k
+
+/-- Stage A: add the copies `pre ++ n` of the dependents of `root` (leaves refined, ids replaced),
+compile the copied definitions, and add `copy = original` for every copied definition that is
+not id-dependent (`idDep`) and whose dependencies all have equations. -/
+def stageA (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) (idDep : NameSet)
+    (pre : Name) : MetaM (Array Name × Array Name) := do
+  let env ← getEnv
+  let (order, dep) ← walk env root cand leaves ids
+  log <| Json.mkObj [("event","walk"),("dependents", toJson order.size),
+    ("order", toJson (order.map toString))]
+  let isDep (n : Name) := dep.getD n false && !ids.contains n
+  let copyName (n : Name) := pre ++ n
+  let eqName (n : Name) := (pre ++ n).str "npp_eq"
+  let mut eqs : Array Name := #[]
+  let mut hasEq : NameSet := {}
+  let mut copied : Array Name := #[]
+  let mut blocked : NameSet := {}
+  for n in order do
+    let some ci := env.find? n | continue
+    -- reuse a copy (and its equation) made earlier or by hand (checked before blocking)
+    if (← getEnv).contains (copyName n) then
+      if (← getEnv).contains (eqName n) then hasEq := hasEq.insert (copyName n)
+      log <| Json.mkObj [("n", toJson n.toString),("status","reused"),("eq", toJson ((← getEnv).contains (eqName n)))]
+      continue
+    -- a dependent of a blocked constant (an unrefined leaf) stays noncomputable and is not copied
+    let ds ← depsOf ci
+    if let some b := ds.toList.find? (blocked.contains ·) then
+      blocked := blocked.insert n
+      log <| Json.mkObj [("n", toJson n.toString),("status","blocked"),("by", toJson b.toString)]
+      continue
+    let leaf := leaves.contains n || (!cand.contains n && (← lacksCode env n))
+    match ci with
+    | .defnInfo dv =>
+      if dv.safety != .safe then throwError "{n}: unsafe/partial definition in the cone"
+      let res ← try some <$> build ci leaf isDep ids copyName id eqName catch e => do
+        log <| Json.mkObj [("n", toJson n.toString),("k","def"),("status","blocked (build failed)"),("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+        pure none
+      let some (b, thmOk) := res | blocked := blocked.insert n; continue
+      if b.unrefined > 0 then
+        blocked := blocked.insert n
+        log <| Json.mkObj [("n", toJson n.toString),("status","blocked (unrefined leaf)"),("unrefined_sites", toJson b.unrefined)]
+        continue
+      let ty := dv.type.replace fun x => match x with
+        | .const c us => if let some m := ids[c]? then some (.const m us) else if isDep c then some (.const (copyName c) us) else none
+        | _ => none
+      let decl := Declaration.defnDecl { dv with «name» := copyName n, type := ty, value := b.value, all := [copyName n] }
+      try addDecl decl
+      catch e =>
+        blocked := blocked.insert n
+        log <| Json.mkObj [("n", toJson n.toString),("k","def"),("status","blocked (kernel rejected copy)"),("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+        continue
+      try compileDecls #[copyName n] (logErrors := false)
+      catch e => log <| Json.mkObj [("compile_failed", toJson n.toString), ("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+      copied := copied.push (copyName n)
+      let st ← getReducibilityStatus n
+      setReducibilityStatus (copyName n) st
+      -- equation (references = originals), only off the id-dependent part
+      let depsOk := b.depNames.all fun c => hasEq.contains (copyName c) ||
+          (match env.find? c with | some (.thmInfo _) => true | _ => false)
+      if !idDep.contains n && depsOk && thmOk && ty == dv.type then
+        let lv := dv.levelParams.map Level.param
+        let ty ← mkEq (.const (copyName n) lv) (.const n lv)
+        try
+          let pf ← chain b
+          addDecl (.thmDecl { «name» := eqName n, levelParams := dv.levelParams, type := ty, value := pf })
+          eqs := eqs.push (eqName n); hasEq := hasEq.insert (copyName n)
+        catch e =>
+          log <| Json.mkObj [("n", toJson n.toString),("eq_failed", toJson ((← e.toMessageData.toString).take 600).toString)]
+      log <| Json.mkObj [("n", toJson n.toString),("k","def"),("sites", toJson b.nsites),
+        ("deps", toJson b.depNames.size),("eq", toJson (hasEq.contains (copyName n)))]
+    | .thmInfo tv =>
+      let ty := tv.type.replace fun x => match x with
+        | .const c us => if let some m := ids[c]? then some (.const m us) else if isDep c then some (.const (copyName c) us) else none
+        | _ => none
+      -- copied theorems in the type need no equation (proof irrelevance)
+      let tdeps ← constOccs tv.type fun c => isDep c && !ids.contains c &&
+        !(match env.find? c with | some (.thmInfo _) => true | _ => false)
+      let hasIds := (← usedNames [tv.type]).toList.any ids.contains
+      let lv := tv.levelParams.map Level.param
+      if !hasIds && !tdeps.isEmpty && tdeps.all (fun (c, _) => (hasEq.contains (copyName c))) then
+        -- transport the original theorem along the equations of the dependents in its type
+        let mut p : Expr := .const n lv
+        let mut cur := tv.type
+        for (c, us) in tdeps do
+          let some dci := env.find? c | continue
+          let α := dci.instantiateTypeLevelParams us
+          let u ← getLevel α
+          let motive ← motiveFor #[] cur α fun w x => if x == .const c us then some w else none
+          p := mkAppN (mkConst ``Eq.subst [u]) #[α, motive, .const c us, .const (copyName c) us,
+            ← mkEqSymm (.const (eqName c) us), p]
+          cur := cur.replace fun x => if x == .const c us then some (.const (copyName c) us) else none
+        try
+          addDecl (.thmDecl { tv with «name» := copyName n, type := ty, value := p, all := [copyName n] })
+          copied := copied.push (copyName n)
+          log <| Json.mkObj [("n", toJson n.toString),("k","thm"),("by","transport"),("deps_in_type", toJson tdeps.size)]
+        catch e =>
+          blocked := blocked.insert n
+          log <| Json.mkObj [("n", toJson n.toString),("k","thm"),("status","blocked (transport failed)"),("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+      else
+        try
+          let (b, _) ← build ci false isDep ids copyName id eqName
+          addDecl (.thmDecl { tv with «name» := copyName n, type := ty, value := b.value, all := [copyName n] })
+          copied := copied.push (copyName n)
+          log <| Json.mkObj [("n", toJson n.toString),("k","thm"),("by","substitution"),("type_changed", toJson (ty != tv.type))]
+        catch e =>
+          blocked := blocked.insert n
+          log <| Json.mkObj [("n", toJson n.toString),("k","thm"),("status","blocked (substitution failed)"),("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+    | _ => throwError "{n}: dependent of kind other than def/thm (inductive or opaque); not supported"
+  return (copied, eqs)
+
+
+/-- Stage B: for every id-dependent copied definition `n` (post-order), add
+`(pre ++ n).nov_eq : pre ++ n = refPre ++ n`, where `refPre ++ n` is the NPO_ re-instantiated
+constant. Dependencies use their `nov_eq` (id-dependent) or stage A's `npp_eq`. -/
+def stageB (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) (idDep : NameSet)
+    (pre refPre : Name) : MetaM (Array Name × Array Name) := do
+  let env ← getEnv
+  let (order, dep) ← walk env root cand leaves ids
+  let isDep (n : Name) := dep.getD n false && !ids.contains n
+  let copyName (n : Name) := pre ++ n
+  let refName (n : Name) := if idDep.contains n then refPre ++ n else n
+  let eqName (n : Name) := if idDep.contains n then (pre ++ n).str "nov_eq" else (pre ++ n).str "npp_eq"
+  let mut eqs : Array Name := #[]
+  let mut failed : Array Name := #[]
+  for n in order do
+    if !idDep.contains n then continue
+    -- only constants that stage A actually copied
+    if !env.contains (copyName n) then continue
+    let some ci := env.find? n | continue
+    match ci with
+    | .defnInfo dv =>
+      let res ← try some <$> build ci (leaves.contains n) isDep ids copyName refName eqName catch e => do
+        log <| Json.mkObj [("n", toJson n.toString),("status","build failed"),("error", toJson ((← e.toMessageData.toString).take 400).toString)]
+        pure none
+      let some (b, thmOk) := res | failed := failed.push n; continue
+      let missing := b.depNames.toList.map eqName |>.filter fun c => !(env.contains c) && !eqs.contains c
+      if !thmOk || !missing.isEmpty then
+        failed := failed.push n
+        log <| Json.mkObj [("n", toJson n.toString),("status","skipped"),("missing", toJson (missing.map toString))]
+        continue
+      let lv := dv.levelParams.map Level.param
+      let ty ← mkEq (.const (copyName n) lv) (.const (refName n) lv)
+      let pf ← chain b
+      try
+        addDecl (.thmDecl { «name» := eqName n, levelParams := dv.levelParams, type := ty, value := pf })
+        eqs := eqs.push (eqName n)
+        log <| Json.mkObj [("n", toJson n.toString),("status","ok"),("deps", toJson b.depNames.size)]
+      catch e =>
+        failed := failed.push n
+        log <| Json.mkObj [("n", toJson n.toString),("status","FAIL"),("error", toJson ((← e.toMessageData.toString).take 1500).toString)]
+    | _ => pure ()
+  return (eqs, failed)
+
+/-- `NPP_C.T` from the 10 November `NPO_Nov.T`, transported along the `nov_eq` (id-dependent) and
+`npp_eq` (other) equations of the copied definitions in its type. Kernel-checked by `addDecl`. -/
+def transportNov (T : Name) (dep : Name → Bool) (idDep : NameSet) : MetaM (Option Name) := do
+  let env ← getEnv
+  let src := `NPO_Nov ++ T
+  let some sci := env.find? src | log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "no NPO_Nov theorem")]; return none
+  let lv := sci.levelParams.map Level.param
+  let isThm (c : Name) := match env.find? c with | some (.thmInfo _) => true | _ => false
+  let mut reps : Array (Expr × Expr × Expr × Expr) := #[]
+  for (c, us) in ← constOccs sci.type (fun _ => true) do
+    if isThm c then continue
+    -- NPO_Nov.X (id-dependent) or an original X with a stage-A copy
+    let (orig, eqn) := if (`NPO_Nov).isPrefixOf c then
+        (c.replacePrefix `NPO_Nov .anonymous, ((`NPP_C ++ c.replacePrefix `NPO_Nov .anonymous).str "nov_eq"))
+      else (c, ((`NPP_C ++ c).str "npp_eq"))
+    if !(dep orig || idDep.contains orig) then continue
+    if !env.contains (`NPP_C ++ orig) then continue
+    if !env.contains eqn then
+      log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "missing equation"), ("for", toJson orig.toString)]
+      return none
+    let some dci := env.find? c | continue
+    reps := reps.push (.const c us, .const (`NPP_C ++ orig) us, .const eqn us, dci.instantiateTypeLevelParams us)
+  let p ← transportAll #[] (.const src lv) sci.type reps
+  let ty ← inferType p
+  let ty ← instantiateMVars ty
+  try
+    addDecl (.thmDecl { «name» := `NPP_C ++ T, levelParams := sci.levelParams, type := (← whnfR ty), value := p })
+    log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "ok"), ("rewrites", toJson reps.size)]
+    return some (`NPP_C ++ T)
+  catch e =>
+    log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "FAIL"), ("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+    return none
+
+end NPP
+
+namespace NPP.Inputs
+def cand : Array String := #["AdapterRw.Ops.op0",
+  "AdapterRw.Ops.op1",
+  "AdapterRw.Ops.op10",
+  "AdapterRw.Ops.op11",
+  "AdapterRw.Ops.op12",
+  "AdapterRw.Ops.op13",
+  "AdapterRw.Ops.op14",
+  "AdapterRw.Ops.op15",
+  "AdapterRw.Ops.op16",
+  "AdapterRw.Ops.op17",
+  "AdapterRw.Ops.op18",
+  "AdapterRw.Ops.op19",
+  "AdapterRw.Ops.op2",
+  "AdapterRw.Ops.op20",
+  "AdapterRw.Ops.op21",
+  "AdapterRw.Ops.op22",
+  "AdapterRw.Ops.op23",
+  "AdapterRw.Ops.op24",
+  "AdapterRw.Ops.op25",
+  "AdapterRw.Ops.op26",
+  "AdapterRw.Ops.op27",
+  "AdapterRw.Ops.op28",
+  "AdapterRw.Ops.op29",
+  "AdapterRw.Ops.op3",
+  "AdapterRw.Ops.op30",
+  "AdapterRw.Ops.op31",
+  "AdapterRw.Ops.op32",
+  "AdapterRw.Ops.op33",
+  "AdapterRw.Ops.op34",
+  "AdapterRw.Ops.op35",
+  "AdapterRw.Ops.op36",
+  "AdapterRw.Ops.op37",
+  "AdapterRw.Ops.op38",
+  "AdapterRw.Ops.op39",
+  "AdapterRw.Ops.op4",
+  "AdapterRw.Ops.op40",
+  "AdapterRw.Ops.op41",
+  "AdapterRw.Ops.op42",
+  "AdapterRw.Ops.op43",
+  "AdapterRw.Ops.op44",
+  "AdapterRw.Ops.op45",
+  "AdapterRw.Ops.op46",
+  "AdapterRw.Ops.op47",
+  "AdapterRw.Ops.op48",
+  "AdapterRw.Ops.op49",
+  "AdapterRw.Ops.op5",
+  "AdapterRw.Ops.op50",
+  "AdapterRw.Ops.op51",
+  "AdapterRw.Ops.op52",
+  "AdapterRw.Ops.op53",
+  "AdapterRw.Ops.op6",
+  "AdapterRw.Ops.op7",
+  "AdapterRw.Ops.op8",
+  "AdapterRw.Ops.op9",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.flags",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.policy_binding",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.registry_authority",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.registry_program",
+  "Aeneas.Std.Result.casesOn",
+  "Aeneas.Std.UScalar.casesOn",
+  "Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn",
+  "Aeneas.Std.core.result.Result.casesOn",
+  "AspisR1.ARQ_BankCut.checkpoint",
+  "AspisR1.ARS_Coverage.SupportedEntry",
+  "AspisR1.ARS_Coverage.SupportedEntry.RuntimePersistence",
+  "AspisR1.ARS_Coverage.SupportedEntry.accepted1",
+  "AspisR1.ARS_Coverage.SupportedEntry.accepted2",
+  "AspisR1.ARS_Coverage.SupportedEntry.actions",
+  "AspisR1.ARS_Coverage.SupportedEntry.admission1",
+  "AspisR1.ARS_Coverage.SupportedEntry.admission2",
+  "AspisR1.ARS_Coverage.SupportedEntry.final1",
+  "AspisR1.ARS_Coverage.SupportedEntry.final2",
+  "AspisR1.ARS_Coverage.SupportedEntry.game",
+  "AspisR1.ARS_Coverage.SupportedEntry.mk",
+  "AspisR1.ARS_Coverage.SupportedEntry.p",
+  "AspisR1.ARS_Coverage.SupportedEntry.post1",
+  "AspisR1.ARS_Coverage.SupportedEntry.post2",
+  "AspisR1.ARS_Coverage.SupportedEntry.saved",
+  "AspisR1.ARS_Coverage.SupportedEntry.t",
+  "AspisR1.ARS_Coverage.SupportedEntry.u",
+  "AspisR1.ARS_Coverage.SupportedEntry.w1",
+  "AspisR1.ARS_Coverage.SupportedEntry.w2",
+  "AspisR1.ARU_CutsOrigin.selected",
+  "AspisR1.ARU_Factory.deployed",
+  "AspisR1.ARU_PartialAccepted.accepted",
+  "AspisR1.ARU_PartialFactory.original",
+  "AspisR1.ARU_Replies.accepted",
+  "AspisR1.ARU_Selector.selected",
+  "AspisR1.ARU_SourceResults.accepted",
+  "AspisR1.ARU_Support.At",
+  "AspisR1.ARU_Support.At.entry",
+  "AspisR1.ARU_Support.At.firstAgrees",
+  "AspisR1.ARU_Support.At.mk",
+  "AspisR1.ARU_Support.At.secondAgrees",
+  "AspisR1.ARV_FirstPartial.accepted",
+  "AspisR1.ARW_AdmittedBudget.issued",
+  "AspisR1.ARW_AdmittedQueries.admitted",
+  "AspisR1.ARX_AdmittedRuntime.evaluation",
+  "AspisR1.ARX_AdmittedRuntime.on_admitted",
+  "AspisR1.ARX_AdmittedRuntime.outside",
+  "AspisR1.ARX_AdmittedRuntime.permitted",
+  "AspisR1.ARX_AdmittedRuntime.permitted_iff",
+  "AspisR1.ARX_AdmittedRuntime.runtime",
+  "AspisR1.ARX_SourceAlternative.accepted",
+  "AspisR1.CPH_Program.not_system",
+  "AspisR1.DGP_HostDigest.O1",
+  "AspisR1.DGP_HostDigest.O2",
+  "AspisR1.DGP_HostDigest.digestSource",
+  "AspisR1.FIs_Rc7_Native.accepted",
+  "AspisR1.FJp_ARCore.observations",
+  "AspisR1.FJp_AccountJoin.accepted",
+  "AspisR1.FJp_Domination.pointwise",
+  "AspisR1.FJp_Mass.bounded",
+  "AspisR1.FJp_Observations.observations",
+  "AspisR1.FJp_Residual.numeric",
+  "AspisR1.FJp_Ret_Rc7Native.accepted",
+  "AspisR1.FJv_DFinalSource.source",
+  "AspisR1.FJv_DFinalSource.source.match_1",
+  "AspisR1.FJv_DNativeAccepted.accepted",
+  "AspisR1.FJv_Observations.observations",
+  "AspisR1.FJv_Top.deployed",
+  "AspisR1.IDa_Deployed.finish",
+  "AspisR1.MultiproofConeLeafContent.next",
+  "AspisR1.MultiproofConeRootGuard.sourceRoot",
+  "AspisR1.MultiproofConeVerifyState.finishState",
+  "AspisR1.MultiproofConeVerifyState.finishState._sparseCasesOn_1",
+  "AspisR1.MultiproofConeVerifyState.finishState.match_1",
+  "AspisR1.MultiproofConeVerifyState.verifyState",
+  "AspisR1.NIT_Cuts.Ref.value",
+  "AspisR1.NIT_PairControl.Context.alpha",
+  "AspisR1.NIT_PairControl.Context.ap0",
+  "AspisR1.NIT_PairControl.Context.ap1",
+  "AspisR1.NIT_PairControl.Context.f",
+  "AspisR1.NIT_PairControl.Context.w",
+  "AspisR1.NIW_AlignAllocatorPhase.run",
+  "AspisR1.NIW_AlignAllocatorPhase.run.match_1",
+  "AspisR1.NIW_AlignFinishComposed.Locations.alpha",
+  "AspisR1.NIW_AlignFinishComposed.Locations.ap0",
+  "AspisR1.NIW_AlignFinishComposed.Locations.ap1",
+  "AspisR1.NIW_AlignFinishComposed.Locations.common",
+  "AspisR1.NIW_AlignFinishComposed.Locations.low",
+  "AspisR1.NIW_AlignFinishComposed.Locations.message",
+  "AspisR1.NIW_AlignFinishComposed.Locations.owner",
+  "AspisR1.NIW_AlignFinishComposed.Locations.parts",
+  "AspisR1.NIW_AlignFinishComposed.Locations.scratch",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.alpha",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.kappa",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.locations",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.message",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.native",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.owner",
+  "AspisR1.NIW_AlignFinishComposed.detail",
+  "AspisR1.NIW_AlignPairInstalled.observed",
+  "AspisR1.NIW_AlignPairPhase.Input.alpha",
+  "AspisR1.NIW_AlignPairPhase.run",
+  "AspisR1.NIW_AlignPairPhase.run.match_1",
+  "AspisR1.NIW_AlignRegularPhase.run",
+  "AspisR1.NIW_AlignRegularPhase.run.match_1",
+  "AspisR1.NJF_AllocatorInstantiation.G",
+  "AspisR1.NJF_AllocatorInstantiation.G.match_1",
+  "AspisR1.NJF_FinishObserved.G",
+  "AspisR1.NJF_FinishObserved.detailG",
+  "AspisR1.NJF_PairInstantiation.G",
+  "AspisR1.NJF_PairInstantiation.G.match_1",
+  "AspisR1.NJF_RegularInstantiation.instantiate",
+  "AspisR1.NJF_RegularInstantiation.instantiate._sparseCasesOn_1",
+  "AspisR1.NJF_RegularInstantiation.instantiate._sparseCasesOn_2",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_1",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_2",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_3",
+  "AspisR1.NJF_RegularInstantiation.regularReply",
+  "AspisR1.NJM_CircleCode.dispatch",
+  "AspisR1.NJM_CircleCode.dispatch.match_1",
+  "AspisR1.NJM_CircleCode.source",
+  "AspisR1.NJM_CircleJoin.after",
+  "AspisR1.NJM_CircleJoin.after.match_1",
+  "AspisR1.NJM_CircleJoin.point",
+  "AspisR1.NMT_CallTree.Event.casesOn",
+  "AspisR1.NNC_ActualChoices.selected",
+  "AspisR1.NNC_RecSelect.selects",
+  "AspisR1.NNG_BatchCall094.call",
+  "AspisR1.NNG_BatchCall094.events",
+  "AspisR1.NNG_Calls345.calls",
+  "AspisR1.NNG_Calls345.calls.match_1",
+  "AspisR1.NNG_CheckpointCall094.call",
+  "AspisR1.NNG_CheckpointCall094.events",
+  "AspisR1.NNG_ChildSource345.call",
+  "AspisR1.NNG_ChildSource345.events",
+  "AspisR1.NNG_ConcreteCalls094.calls",
+  "AspisR1.NNG_ConcreteCalls094.calls.match_1",
+  "AspisR1.NNG_ConcreteCalls136.calls",
+  "AspisR1.NNG_Context137.Calls.begin_",
+  "AspisR1.NNG_Context137.Calls.finish",
+  "AspisR1.NNG_Context137.Calls.mark",
+  "AspisR1.NNG_Context137.Calls.parse",
+  "AspisR1.NNG_Context137.Calls.publicTranscript",
+  "AspisR1.NNG_Context137.calls",
+  "AspisR1.NNG_Error328.events",
+  "AspisR1.NNG_Error328.message",
+  "AspisR1.NNG_Events087.events",
+  "AspisR1.NNG_Events087.observed",
+  "AspisR1.NNG_Events094.batch",
+  "AspisR1.NNG_Events094.checkpoint",
+  "AspisR1.NNG_Events094.events",
+  "AspisR1.NNG_Events094.prepare",
+  "AspisR1.NNG_Events137.events",
+  "AspisR1.NNG_Events137.finish",
+  "AspisR1.NNG_Events345.child",
+  "AspisR1.NNG_Events345.events",
+  "AspisR1.NNG_ExpandSemantic087.call",
+  "AspisR1.NNG_FinalEvents136.events",
+  "AspisR1.NNG_FinalEvents136.events.match_1",
+  "AspisR1.NNG_FinishAdapter137.call",
+  "AspisR1.NNG_FinishAdapter137.oldFinish",
+  "AspisR1.NNG_FlushCall094.call",
+  "AspisR1.NNG_FlushCall094.output",
+  "AspisR1.NNG_Input094.input",
+  "AspisR1.NNG_InstalledCalls094.calls",
+  "AspisR1.NNG_LIBArrays.projectArray",
+  "AspisR1.NNG_LIBArrays.projectChallenges",
+  "AspisR1.NNG_LIBArrays.projectClaims",
+  "AspisR1.NNG_LIBEvents136.events",
+  "AspisR1.NNG_LIBScalar.project",
+  "AspisR1.NNG_ModelCircle.call",
+  "AspisR1.NNG_ModelCircle.model",
+  "AspisR1.NNG_Native328.Args.k",
+  "AspisR1.NNG_Native328.Args.proof",
+  "AspisR1.NNG_Native328.Args.publicBytes",
+  "AspisR1.NNG_Native328.Args.public_",
+  "AspisR1.NNG_Native328.body",
+  "AspisR1.NNG_Native328.call1",
+  "AspisR1.NNG_Native328.input",
+  "AspisR1.NNG_Native345.producer",
+  "AspisR1.NNG_Output137.decode",
+  "AspisR1.NNG_ParseCall094.call",
+  "AspisR1.NNG_PrepareAdapter094.call",
+  "AspisR1.NNG_PrepareEmission087.calls",
+  "AspisR1.NNG_Producer087.producer",
+  "AspisR1.NNG_Producer136.events",
+  "AspisR1.NNG_Producer136.producer",
+  "AspisR1.NNG_Producer137.producer",
+  "AspisR1.NNG_Producer328.producer",
+  "AspisR1.NNG_ProducerFull094.producer",
+  "AspisR1.NNG_ProjectionFallback137.representation",
+  "AspisR1.NNG_ReifyAccounts345.bytes",
+  "AspisR1.NNG_ReifyAccounts345.bytes.match_1",
+  "AspisR1.NNG_ReifyCore345.input",
+  "AspisR1.NNG_ReifyCore345.raw",
+  "AspisR1.NNG_Representation136.VL",
+  "AspisR1.NNG_Representation136.calls",
+  "AspisR1.NNG_Representation136.project",
+  "AspisR1.NNG_ScanCall094.call",
+  "AspisR1.NNG_StateCalls094.queryLoop",
+  "AspisR1.NNG_TotalProducer345.producer",
+  "AspisR1.NNG_Tree328.child",
+  "AspisR1.NNG_Tree328.childEvents",
+  "AspisR1.NNG_Tree328.events",
+  "AspisR1.NNG_Tree328.tree",
+  "AspisR1.NNG_TypedEvents.select",
+  "AspisR1.NNG_TypedEvents.select.match_1",
+  "AspisR1.NNH8_Acceptance.a3",
+  "AspisR1.NNH8_Acceptance.a4",
+  "AspisR1.NNH8_Acceptance.a5",
+  "AspisR1.NNH8_ChargeOf.deployed_charge_of",
+  "AspisR1.NNH8_DeployedOuter",
+  "AspisR1.NNH8_DeployedOuterOf",
+  "AspisR1.NNH8_Exec.ERec",
+  "AspisR1.NNH8_Exec.clockFree",
+  "AspisR1.NNH8_Exec.exec",
+  "AspisR1.NNH8_Exec.exec._proof_1",
+  "AspisR1.NNH8_Exec.exec._proof_2",
+  "AspisR1.NNH8_Exec.exec._proof_3",
+  "AspisR1.NNH8_Exec.recSelect",
+  "AspisR1.NNH8_Exec.recSig",
+  "AspisR1.NNH8_FirstWriter.oracle",
+  "AspisR1.NNH8_FirstWriter.owned",
+  "AspisR1.NNH8_FirstWriter.writer",
+  "AspisR1.NNH8_FullSpace.same_event",
+  "AspisR1.NNH8_Headline.headline",
+  "AspisR1.NNH8_HeadlineB.headlineB",
+  "AspisR1.NNH8_HeadlineB.headlineB._proof_1",
+  "AspisR1.NNH8_HeadlineB.outcomeRec",
+  "AspisR1.NNH8_HostCharge.bound",
+  "AspisR1.NNH8_HostCharge.event_fixed",
+  "AspisR1.NNH8_NMF.Associated",
+  "AspisR1.NNH8_NMF.S",
+  "AspisR1.NNH8_NMF.eventImage",
+  "AspisR1.NNH8_NMF.nmfB",
+  "AspisR1.NNH8_NMF.recSig",
+  "AspisR1.NNH8_NMF.rootImage",
+  "AspisR1.NNH8_NMF.selected",
+  "AspisR1.NNH8_NMF.selected.match_1",
+  "AspisR1.NNH8_NativeCuts.Packet",
+  "AspisR1.NNH8_NativeCuts.Packet.cuts",
+  "AspisR1.NNH8_NativeCuts.Packet.domain",
+  "AspisR1.NNH8_NativeCuts.Packet.events",
+  "AspisR1.NNH8_NativeCuts.Packet.f",
+  "AspisR1.NNH8_NativeCuts.Packet.mk",
+  "AspisR1.NNH8_NativeCuts.Packet.native",
+  "AspisR1.NNH8_NativeCuts.Packet.origin",
+  "AspisR1.NNH8_NativeCuts.Packet.persisted",
+  "AspisR1.NNH8_NativeCuts.Packet.records",
+  "AspisR1.NNH8_NativeCuts.Packet.s",
+  "AspisR1.NNH8_NativeCuts.Packet.writerHeader",
+  "AspisR1.NNH8_NativeCuts.Packet.writerRoot",
+  "AspisR1.NNH8_NativeCuts.produce",
+  "AspisR1.NNH8_Numeric.host_bound",
+  "AspisR1.NNH8_Outer.inclusion",
+  "AspisR1.NNH8_Packet.Cut",
+  "AspisR1.NNH8_Packet.cuts",
+  "AspisR1.NNH8_Packet.packet",
+  "AspisR1.NNH8_Packet.packet._proof_1",
+  "AspisR1.NNH8_Packet.packet._proof_2",
+  "AspisR1.NNH8_Packet.packet._proof_3",
+  "AspisR1.NNH8_Packet.packet._proof_4",
+  "AspisR1.NNH8_Packet.packet._proof_5",
+  "AspisR1.NNH8_Packet.packet._proof_6",
+  "AspisR1.NNH8_Packet.packet._proof_7",
+  "AspisR1.NNH8_Packet.packet._proof_8",
+  "AspisR1.NNH8_Packet.select",
+  "AspisR1.NNH8_Packet.source",
+  "AspisR1.NNH8_Persistence.key",
+  "AspisR1.NNH8_Persistence.persisted",
+  "AspisR1.NNH8_Physical.deployed_splitB_of",
+  "AspisR1.NNH8_Producers.accepted",
+  "AspisR1.NNH8_Producers.game",
+  "AspisR1.NNH8_Producers.origin",
+  "AspisR1.NNH8_Producers.produce",
+  "AspisR1.NNH8_ProtCells.produce",
+  "AspisR1.NNH8_ProtLamports.produce",
+  "AspisR1.NNH8_ProtMarker.produce",
+  "AspisR1.NNH8_ProtOwner.produce",
+  "AspisR1.NNH8_ProtPositive.produce",
+  "AspisR1.NNH8_ProtPreserves.produce",
+  "AspisR1.NNH8_Protection.produce",
+  "AspisR1.NNH8_RecorderFixed.base",
+  "AspisR1.NNH8_RecorderFixed.fixed",
+  "AspisR1.NNH8_RecorderFixed.fixedProgram",
+  "AspisR1.NNH8_RecorderFixed.program",
+  "AspisR1.NNH8_Rest.Delivered",
+  "AspisR1.NNH8_Rest.assemble",
+  "AspisR1.NNH8_RestClaims.Goal",
+  "AspisR1.NNH8_RestClaims.produce",
+  "AspisR1.NNH8_RestCopy.CopyFacts",
+  "AspisR1.NNH8_RestCopy.produce",
+  "AspisR1.NNH8_RestEvents.produce",
+  "AspisR1.NNH8_RestInstallation.produce",
+  "AspisR1.NNH8_RestRecorder.produce",
+  "AspisR1.NNH8_RestSetup.Goal",
+  "AspisR1.NNH8_RestSetup.produce",
+  "AspisR1.NNH8_RestTrace.produce",
+  "AspisR1.NNH8_Retime.first",
+  "AspisR1.NNH8_Retime.missing",
+  "AspisR1.NNH8_Retime.sdk_same",
+  "AspisR1.NNH8_Retime.second",
+  "AspisR1.NNH8_Split.conclusion_iff",
+  "AspisR1.NNH8_Split.outcome",
+  "AspisR1.NNH8_Split.rest",
+  "AspisR1.NNH8_Top.deployed_splitB_of",
+  "AspisR1.NNH8_TopHost.R",
+  "AspisR1.NNH8_TopHost.RestLaw",
+  "AspisR1.NNH8_TopHost.S",
+  "AspisR1.NNH8_TopHost.X",
+  "AspisR1.NNH8_TopHost.g1a",
+  "AspisR1.NNH8_TopHost.nmfB",
+  "AspisR1.NNH8_TopHost.split",
+  "AspisR1.NNH8_Weak241.inputs",
+  "AspisR1.NNH_064CommonRecords.program",
+  "AspisR1.NNH_064CommonRecords.record",
+  "AspisR1.NNH_064CommonRecords.records",
+  "AspisR1.NNH_064CommonTrace.trace",
+  "AspisR1.NNH_064Execute.common",
+  "AspisR1.NNH_064Execute.observation",
+  "AspisR1.NNH_064Execute.outcome",
+  "AspisR1.NNH_064Execute.outcome.match_1",
+  "AspisR1.NNH_064Execute.trace",
+  "AspisR1.NNH_064Execute.trace._sparseCasesOn_1",
+  "AspisR1.NNH_064Execute.trace._sparseCasesOn_2",
+  "AspisR1.NNH_064Execute.trace.match_1",
+  "AspisR1.NNH_064Install.f064",
+  "AspisR1.NNH_064SourceDetails.detail",
+  "AspisR1.NNH_064SourceDetails.record",
+  "AspisR1.NNH_064SourceDetails.trace",
+  "AspisR1.NNH_064SourceDetails.trace._sparseCasesOn_1",
+  "AspisR1.NNH_064SourceDetails.trace.match_1",
+  "AspisR1.NNH_DigestSyntaxTransport.o1",
+  "AspisR1.NNH_HostCtx.base",
+  "AspisR1.NNH_HostCtx.configuration",
+  "AspisR1.NNH_HostCtx.missing",
+  "AspisR1.NNH_HostCtx.missingLit",
+  "AspisR1.NNH_HostCtx.sdk",
+  "AspisR1.NNH_HostWeak241.reference",
+  "AspisR1.NNH_MerkleBatchExecute.calls",
+  "AspisR1.NNH_MerkleBatchExecute.calls._f",
+  "AspisR1.NNH_MerkleBatchExecute.calls.match_1",
+  "AspisR1.NNH_MerkleBatchExecute.calls.match_2",
+  "AspisR1.NNH_MerkleBatchExecute.run",
+  "AspisR1.NNH_MerkleBatchTrace.calls",
+  "AspisR1.NNH_MerkleBatchTrace.calls._f",
+  "AspisR1.NNH_MerkleBatchTrace.calls.match_1",
+  "AspisR1.NNH_MerkleBatchTrace.calls.match_2",
+  "AspisR1.NNH_MerkleLevelsExecute.entry",
+  "AspisR1.NNH_MerkleLoopExecute.run",
+  "AspisR1.NNH_MerkleLoopExecute.run._f",
+  "AspisR1.NNH_MerkleLoopExecute.run.match_1",
+  "AspisR1.NNH_MerkleLoopExecute.run.match_2",
+  "AspisR1.NNH_MerkleTerminalExecute.count",
+  "AspisR1.NNH_MerkleTerminalExecute.padded",
+  "AspisR1.NNH_MerkleTerminalExecute.run",
+  "AspisR1.NNH_MerkleTerminalFinish.result",
+  "AspisR1.NNH_MerkleTreeExecute.initial",
+  "AspisR1.NNH_MerkleTreeExecute.run",
+  "AspisR1.NNH_OutcomeRecAccepted.accepted",
+  "AspisR1.NNH_RecordedCharge.bound",
+  "AspisR1.NNH_RecordedCharge.recorder",
+  "AspisR1.NNH_RecordedCharge.source",
+  "AspisR1.NNH_ResultPortTransport.finish",
+  "AspisR1.NNH_Run5bCtx.configuration",
+  "AspisR1.NNH_Run5bCtx.sdk",
+  "AspisR1.NNH_Run5bCurrentExpand.semantic",
+  "AspisR1.NNH_Run5bCurrentExpand.semantic_slot",
+  "AspisR1.NNH_Run5bCurrentInitial.returned",
+  "AspisR1.NNH_Run5bCurrentInitial.slot",
+  "AspisR1.NNH_Run5bCurrentInventory.adapter",
+  "AspisR1.NNH_Run5bCurrentPending.source",
+  "AspisR1.NNH_Run5bCurrentShape.current",
+  "AspisR1.NNH_Run5bCurrentShape.parse",
+  "AspisR1.NNH_Run5bCurrentShape.slot",
+  "AspisR1.NNH_Run5bCurrentView.returned",
+  "AspisR1.NNH_Run5bCurrentView.slot",
+  "AspisR1.NNH_Run5bFinishEdge.selected",
+  "AspisR1.NNH_Run5bGeometryMap.source",
+  "AspisR1.NNH_Run5bGeometryReverse.selected",
+  "AspisR1.NNH_Run5bGeometrySlots.double",
+  "AspisR1.NNH_Run5bGeometrySlots.inverse",
+  "AspisR1.NNH_Run5bGeometrySlots.line",
+  "AspisR1.NNH_Run5bGeometrySlots.multiply",
+  "AspisR1.NNH_Run5bGeometrySlots.one",
+  "AspisR1.NNH_Run5bGeometrySlots.ops",
+  "AspisR1.NNH_Run5bGeometrySlots.point",
+  "AspisR1.NNH_Run5bGeometrySlots.subtract",
+  "AspisR1.NNH_Run5bPreparedModel.source",
+  "AspisR1.NNH_Run5bPreparedSlot.fixed",
+  "AspisR1.NNH_Run5bQuerySlots.actual",
+  "AspisR1.NNH_Run5bQuerySlots.circle",
+  "AspisR1.NNH_Run5bQuerySlots.decode",
+  "AspisR1.NNH_Run5bQuerySlots.dots",
+  "AspisR1.NNH_Run5bQuerySlots.geometry",
+  "AspisR1.NNH_Run5bQuerySlots.line",
+  "AspisR1.NNH_Run6Fields.I",
+  "AspisR1.NNH_Run6Fields.children",
+  "AspisR1.NNH_Run6Fields.install",
+  "AspisR1.NNH_Run6Fields.nmm",
+  "AspisR1.NNH_Run6Fields.nmo",
+  "AspisR1.NNH_Run6Fields.nmp",
+  "AspisR1.NNH_Run6Fields.nms",
+  "AspisR1.NNH_Run6Fields.nmt",
+  "AspisR1.NNH_Run6Fields.nmv",
+  "AspisR1.NNH_Run6Fields.nmw",
+  "AspisR1.NNH_Run6Fields.nmx",
+  "AspisR1.NNH_Run6Installed.implementation",
+  "AspisR1.NNH_Run6ReaderNative.native",
+  "AspisR1.NNH_StateSelect.selects",
+  "AspisR1.NNH_Tx2LiteralSlots.constants",
+  "AspisR1.NNH_Tx2LiteralSlots.pending",
+  "AspisR1.NNH_Tx2LiteralSlots.powers",
+  "AspisR1.NNH_Tx2SlotTransport.finish_slot",
+  "AspisR1.NNH_Tx2SlotTransport.geometry_slot",
+  "AspisR1.NNH_Tx2SlotTransport.stage",
+  "AspisR1.NNH_Weak241Prefix.Packet",
+  "AspisR1.NNH_Weak241Prefix.Packet.encode_ok",
+  "AspisR1.NNH_Weak241Prefix.Packet.mk",
+  "AspisR1.NNH_Weak241Prefix.Packet.n_eq",
+  "AspisR1.NNH_Weak241Prefix.Packet.reads",
+  "AspisR1.NNH_Weak241Prefix.Packet.validate_ok",
+  "AspisR1.NNH_Weak241Prefix.Packet.validated",
+  "AspisR1.NNH_Weak241Prefix.produce",
+  "AspisR1.NNH_WeakReaderCuts.produce",
+  "AspisR1.NNH_WeakTx2Inputs.Packet",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpointAccount",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_index",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_read",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.encode",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.encoded",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.extent",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.logical",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.mk",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proofAccount",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_index",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_read",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.public_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.validate",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.validated",
+  "AspisR1.NNH_WeakTx2Inputs.produce",
+  "AspisR1.NNQ_HostDigest.o2",
+  "AspisR1.NNQ_HostDigest.split",
+  "AspisR1.NNR_ClockFree.modelSlots",
+  "AspisR1.NNU_Geometry.source",
+  "AspisR1.NNU_GeometrySelected.gather",
+  "AspisR1.NNU_GeometrySelected.prefixCall",
+  "AspisR1.NNU_GeometrySelected.zero",
+  "AspisR1.NNU_GeometryTraversal.selected_loop",
+  "AspisR1.NNU_GeometryTraversal.selected_step",
+  "AspisR1.NNU_MerkleSlots.installed",
+  "AspisR1.NNU_Query.source",
+  "AspisR1.NNU_QueryAccum.power",
+  "AspisR1.NNU_QueryAccum.product",
+  "AspisR1.NNU_QueryAccum.slots",
+  "AspisR1.NNU_QueryAccum.source",
+  "AspisR1.NNU_QueryAccum.sum",
+  "AspisR1.NNU_QueryLoop.finite",
+  "AspisR1.NNU_QueryLoop.source",
+  "AspisR1.NNU_QueryValues.source",
+  "AspisR1.NNU_Stage2Tail.emitPacket",
+  "AspisR1.NNU_Stage2Tail.returnedCuts",
+  "AspisR1.NNV_AdapterEncodeHost.slot",
+  "AspisR1.NNV_CheckpointDigest.source",
+  "AspisR1.NNV_CurrentCheckpoint.slot",
+  "AspisR1.NNV_CurrentCheckpoint.source",
+  "AspisR1.NNV_CurrentFlush.returned",
+  "AspisR1.NNV_CurrentFlush.slot",
+  "AspisR1.NNV_CurrentGeometry.returned",
+  "AspisR1.NNV_CurrentGeometry.slot",
+  "AspisR1.NNV_CurrentGeometry.source",
+  "AspisR1.NNV_CurrentQuerySource.slot",
+  "AspisR1.NNV_CurrentQuerySource.source",
+  "AspisR1.NNV_CurrentScan.returned",
+  "AspisR1.NNV_CurrentScan.slot",
+  "AspisR1.NNV_CurrentScan.source",
+  "AspisR1.NNV_GeometryBody.source",
+  "AspisR1.NNV_GeometryEq.source",
+  "AspisR1.NNV_GeometryIndexPorts.first",
+  "AspisR1.NNV_GeometryOuter.loop",
+  "AspisR1.NNV_GeometryOuter.source",
+  "AspisR1.NNV_GeometryOuter.stage",
+  "AspisR1.NNV_GeometryPrefixSelected.source",
+  "AspisR1.NNV_GeometryQuery.fibre",
+  "AspisR1.NNV_GeometryQuery.source",
+  "AspisR1.NNV_GeometrySelectedStd.any",
+  "AspisR1.NNV_GeometrySelectedStd.array",
+  "AspisR1.NNV_GeometrySelectedStd.base",
+  "AspisR1.NNV_GeometrySelectedStd.empty",
+  "AspisR1.NNV_GeometrySelectedStd.iterator",
+  "AspisR1.NNV_GeometrySelectedStd.mapped",
+  "AspisR1.NNV_GeometrySelectedStd.zero",
+  "AspisR1.NNV_GeometryTerminal.source",
+  "AspisR1.NNV_PrepareView.returned",
+  "AspisR1.NNV_PreparedAtHost.digest",
+  "AspisR1.NNV_PreparedAtHost.source",
+  "AspisR1.NNX_CommonEncode.source",
+  "AspisR1.NNX_CurrentQuery.actual",
+  "AspisR1.NNX_CurrentQuery.slots",
+  "AspisR1.NNX_CurrentQuery.source",
+  "AspisR1.NNX_Flush.source",
+  "AspisR1.NNX_LeafAgreement.source",
+  "AspisR1.NNX_PreparedValue.source",
+  "AspisR1.NNY_NNUParent.parent",
+  "AspisR1.NNY_ParserAssociation.source",
+  "AspisR1.NNY_Stage2PacketResidual.returned",
+  "AspisR1.NOC_Conv094.accNew",
+  "AspisR1.NOC_Conv094.geometry",
+  "AspisR1.NOC_Conv094.scan",
+  "AspisR1.NOC_Conv094.weightsNew",
+  "AspisR1.NOC_ConvLeaves.cur",
+  "AspisR1.NOC_ConvLeaves.filled",
+  "AspisR1.NOC_ConvLeaves.parse",
+  "AspisR1.NOC_ConvLeaves.prepared",
+  "AspisR1.NOC_ConvLeaves.view",
+  "AspisR1.NOC_HostCtx.Exhibited",
+  "AspisR1.NOC_HostCtx.base",
+  "AspisR1.NOC_HostCtx.configuration",
+  "AspisR1.NOC_HostCtx.extraction",
+  "AspisR1.NOC_HostCtx.missing",
+  "AspisR1.NOC_HostCtx.missingLit",
+  "AspisR1.NOC_HostCtx.model1",
+  "AspisR1.NOC_HostCtx.model2",
+  "AspisR1.NOC_HostCtx.sdk",
+  "AspisR1.NOC_MerkleBounded.host",
+  "AspisR1.NOC_MerkleBounded.hostNode",
+  "AspisR1.NOC_MerkleBounded.hostParent",
+  "AspisR1.NOC_Op9.op9",
+  "AspisR1.NOC_Op9Slot.digest",
+  "AspisR1.NOC_Op9Slot.slot",
+  "AspisR1.NOC_PrepareConv.cur",
+  "AspisR1.NOC_PrepareConv.prepare",
+  "AspisR1.NOC_PrepareFront.cur",
+  "AspisR1.NOC_PrepareFront.filled",
+  "AspisR1.NOC_PrepareFront.logical_semantic",
+  "AspisR1.NOC_PrepareFront.off_inactive",
+  "AspisR1.NOC_PrepareFront.off_semantic",
+  "AspisR1.NOC_PrepareFront.off_y1",
+  "AspisR1.NOC_PrepareFront.source",
+  "AspisR1.NOC_QueryLink.current",
+  "AspisR1.NOC_Run5bClaims.conclusion",
+  "AspisR1.NOC_Run5bCtx.Exhibited",
+  "AspisR1.NOC_Run5bCtx.base",
+  "AspisR1.NOC_Run5bCtx.configuration",
+  "AspisR1.NOC_Run5bCtx.extraction",
+  "AspisR1.NOC_Run5bCtx.missing",
+  "AspisR1.NOC_Run5bCtx.model1",
+  "AspisR1.NOC_Run5bCtx.model2",
+  "AspisR1.NOC_Run5bCtx.sdk",
+  "AspisR1.NOC_Run5bHost.S_host",
+  "AspisR1.NOC_Run5bHost.S_host._proof_1",
+  "AspisR1.NOC_Run5bHost.a0",
+  "AspisR1.NOC_Run5bHost.bound",
+  "AspisR1.NOC_Run5bHost.data",
+  "AspisR1.NOC_Run5bHost.envSig",
+  "AspisR1.NOC_Run5bHost.event",
+  "AspisR1.NOC_Run5bHost.r0",
+  "AspisR1.NOC_Run5bHost.record",
+  "AspisR1.NOC_Run5bHost.runtime",
+  "AspisR1.NOC_Run5bHost.seed",
+  "AspisR1.NOC_SeedTransfer.newCfg",
+  "AspisR1.NOC_SeedTransfer.op9",
+  "AspisR1.NOC_SemConv.op9",
+  "AspisR1.NOC_Stage1Iff.clockFree",
+  "AspisR1.NOC_Stage1Iff.iff345",
+  "AspisR1.NOC_Stage1Iff.sameSdk",
+  "AspisR1.NOC_Stage1Iff.sdk_at_slot",
+  "AspisR1.NOC_Tx1Conv.batch",
+  "AspisR1.NOC_Tx1Conv.cur",
+  "AspisR1.NOC_Tx1Conv.query",
+  "AspisR1.NOC_Tx1Conv.tx1",
+  "AspisR1.NOC_Tx1Forward.batch",
+  "AspisR1.NOC_Tx1Forward.cur",
+  "AspisR1.NOC_Tx1Forward.off_folded",
+  "AspisR1.NOC_Tx1Forward.off_round1",
+  "AspisR1.NOC_Tx1Forward.query",
+  "AspisR1.NOC_Tx1Forward.source",
+  "AspisR1.NOC_Tx1Forward.zero",
+  "AspisR1.NOF_A2FieldCorrected.clockFree",
+  "AspisR1.NOF_A2FieldCorrected.field",
+  "AspisR1.NOF_A2FieldCorrected.sdk_at_slot",
+  "AspisR1.NOF_CommonConverse.common",
+  "AspisR1.NOF_CommonConverse.source",
+  "AspisR1.NOF_CommonConverse.source_run",
+  "AspisR1.NOF_CommonConverse.tail_transport",
+  "AspisR1.NOF_Tx2Op11.tx2Op11",
+  "AspisR1.NOM_MerkleParent.hostParent",
+  "AspisR1.NOQ_A1Assembly.IFF",
+  "AspisR1.NOQ_A1Assembly.errT",
+  "AspisR1.NOQ_A1Assembly.field_of",
+  "AspisR1.NOQ_A1Assembly.okT",
+  "AspisR1.NOQ_FinalCombined.field",
+  "AspisR1.NOQ_WeakErrHost.modelRet1",
+  "AspisR1.OraclePortFrozenOrder.countLevel",
+  "AspisR1.OraclePortFrozenOrder.countLevel._f",
+  "AspisR1.OraclePortFrozenOrder.countLevel.match_1",
+  "AspisR1.OraclePortFrozenOrder.countLevel.match_2",
+  "AspisR1.OraclePortFrozenOrder.nodeCount",
+  "AspisR1.OraclePortFrozenOrder.nodeCount._f",
+  "AspisR1.OraclePortFrozenOrder.nodeCount.match_1",
+  "AspisR1.Port3_BatchStd.sameLeaf",
+  "AspisR1.Port3_FinishStage.ne",
+  "AspisR1.Port3_FinishStage.release",
+  "AspisR1.Port3_NativeBatchBody.Ops.op2",
+  "AspisR1.Port3_NativeBatchBody.Ops.op3",
+  "AspisR1.Port3_NativeBatchBody.Ops.op4",
+  "AspisR1.Port3_NativeBatchBody.Ops.op5",
+  "AspisR1.Port3_NativeBatchBody.multiproof.Arity.casesOn",
+  "AspisR1.Port3_NativeFinishBody.Ops.ne",
+  "AspisR1.Port3_NativeFinishBody.Ops.op0",
+  "AspisR1.Port3_NativeFinishBody.Ops.op1",
+  "AspisR1.Port3_NativeFinishBody.Ops.op2",
+  "AspisR1.Port3_NativeFinishBody.Ops.op3",
+  "AspisR1.Port3_NativeFinishBody.Ops.op4",
+  "AspisR1.Port3_NativeFinishBody.Ops.op6",
+  "AspisR1.Port4D_Round.native",
+  "AspisR1.RPx_Deployed.deployed",
+  "AspisR1.TAS_FinalB.deployed_charge",
+  "AspisR1.TAS_FinalB.deployed_splitB",
+  "AspisR1.TAS_FinalB.fail_sub_rec",
+  "AspisR1PublicPreparation.r1_wire.ValidatedRecord.framed",
+  "AspisR1PublicPreparation.r1_wire.ValidatedRecord.row",
+  "AspisR1PublicPreparation.verifier.Accumulator.next",
+  "AspisR1PublicPreparation.verifier.Accumulator.power",
+  "AspisR1PublicPreparation.verifier.Accumulator.rhs",
+  "AspisR1Stage2.Stage2Finish.FinishOps.add",
+  "AspisR1Stage2.Stage2Finish.FinishOps.dot",
+  "AspisR1Stage2.Stage2Finish.FinishOps.field",
+  "AspisR1Stage2.Stage2Finish.FinishOps.mulM",
+  "AspisR1Stage2.Stage2Finish.FinishOps.newWeights",
+  "AspisR1Stage2.Stage2Finish.FinishOps.pair",
+  "AspisR1Stage2.Stage2Finish.FinishOps.polynomial",
+  "AspisR1Stage2.Stage2Finish.FinishOps.quarter",
+  "AspisR1Stage2.verifier.Accumulator.next",
+  "AspisR1Stage2.verifier.Accumulator.power",
+  "AspisR1Stage2.verifier.Accumulator.rhs",
+  "AspisR1Stage2.verifier.Accumulator.weights",
+  "AspisR1Stage2.verifier.BatchedWeights.raw",
+  "AspisR1Stage2.verifier.Prepared.alpha",
+  "AspisR1Stage2.verifier.Prepared.claim",
+  "AspisR1Stage2.verifier.Prepared.gamma",
+  "AspisR1Stage2.verifier.Prepared.kappa",
+  "AspisR1Stage2.verifier.Prepared.queries",
+  "AspisR1Stage2.verifier.Prepared.semantic_alpha",
+  "AspisR1Stage2.verifier.Prepared.variant",
+  "AspisR1Stage2.verifier.Prepared.z",
+  "AspisR1Stage2.verifier.View.final_message",
+  "AspisR1Stage2.verifier.View.round0",
+  "AspisR1Stage2.verifier.View.round1",
+  "FIo_Native.weights.Weights.variant",
+  "LIBB_AccountDecoderReuse.checkpoint",
+  "LIBB_AccountDecoderReuse.master",
+  "LIBB_AuthCarrier.raw",
+  "LIBB_EnvValues.evaluator",
+  "LIBB_EnvValues.evaluator._sparseCasesOn_1",
+  "LIBB_EnvValues.evaluator.match_1",
+  "LIBB_NullifierBytes.digest",
+  "LIBB_PolicyValue.validate",
+  "LIBB_PoolAccounts.decodeCheckpoint",
+  "LIBB_PoolAccounts.decodeMaster",
+  "LIBB_PoolDecoders.outputLane",
+  "LIBB_PoolDecoders.outputLane.match_1",
+  "LIBB_PoolEffects.emitResult",
+  "LIBB_PoolEffects.encodeStatement",
+  "LIBB_PoolEffects.reconstruct",
+  "LIBB_PoolEffects.scanProof",
+  "LIBB_PoolEmit.emitResult",
+  "LIBB_PoolEncode.encodeStatement",
+  "LIBB_PoolLib.deployed",
+  "LIBB_PoolLib.library",
+  "LIBB_PoolLib.values",
+  "LIBB_PoolReconstruct.evaluator",
+  "LIBB_PoolReconstruct.reconstruct",
+  "LIBB_PoolReconstruct.reconstruct.match_1",
+  "LIBB_PoolRegistry.decodeEntryV1",
+  "LIBB_PoolRegistry.decodeEntryV2",
+  "LIBB_PoolRegistry.decodeRegistryV1",
+  "LIBB_PoolRegistry.decodeRegistryV2",
+  "LIBB_PoolRegistry.validatePolicy",
+  "LIBB_PoolScan.scanProof",
+  "LIBB_ResultTotal.value",
+  "LIBB_Tx2Auth.value",
+  "LIBB_Tx2EnvCode.code",
+  "LIBB_Tx2EnvCode.code.match_1",
+  "LIBB_Tx2EnvCode.common",
+  "LIBB_Tx2EnvCode.observed",
+  "LIBB_Tx2EnvTrace.common",
+  "LIBB_Tx2EnvTrace.event",
+  "LIBB_Tx2EnvTrace.event._sparseCasesOn_1",
+  "LIBB_Tx2EnvTrace.event.match_1",
+  "LIBB_Tx2EnvTrace.events",
+  "LIBB_Tx2EnvTrace.events._sparseCasesOn_1",
+  "LIBB_Tx2EnvTrace.events._sparseCasesOn_2",
+  "LIBB_Tx2EnvTrace.events.match_1",
+  "LIBB_Tx2EnvTrace.observation",
+  "LIBB_Tx2EnvTrace.observation.match_1",
+  "LIBB_V1DecoderValues.entry",
+  "LIBB_V1DecoderValues.registry",
+  "LIBB_V2DecoderValues.entry",
+  "LIBB_V2DecoderValues.registry",
+  "LIBB_V2Lib.values",
+  "LIBB_V2Star.values",
+  "LIBC_BatchMerkle.history",
+  "LIBC_BatchMerkle.model",
+  "LIBC_BatchMerkle.parsed",
+  "LIBC_BatchMerkle.value",
+  "LIBC_Bytes.raw",
+  "LIBC_CanonicalScan.good",
+  "LIBC_CanonicalScan.value",
+  "LIBC_Checkpoint.body",
+  "LIBC_Checkpoint.calls",
+  "LIBC_Checkpoint.checksumParts",
+  "LIBC_Checkpoint.events",
+  "LIBC_Checkpoint.output",
+  "LIBC_Checkpoint.proofParts",
+  "LIBC_Checkpoint.publicParts",
+  "LIBC_Checkpoint.value",
+  "LIBC_ExpandSemantic.child",
+  "LIBC_ExpandSemantic.value",
+  "LIBC_ExpandSemanticModel.Row",
+  "LIBC_ExpandSemanticModel.byte",
+  "LIBC_ExpandSemanticModel.output",
+  "LIBC_ExpandValues.child",
+  "LIBC_ExpandValues.value",
+  "LIBC_Finish.child",
+  "LIBC_Finish.value",
+  "LIBC_ParseShape.model",
+  "LIBC_ParseShape.value",
+  "LIBC_QueryLoop.model",
+  "LIBC_QueryLoop.value",
+  "LIBC_S1.decode",
+  "LIBC_S1.decode._sparseCasesOn_1",
+  "LIBC_S1.decode._sparseCasesOn_2",
+  "LIBC_S1.decode.match_1",
+  "LIBC_S1.library",
+  "LIBC_S1.reaches",
+  "LIBC_VPrepare.expandSemantic",
+  "LIBC_VPrepare.expandValues",
+  "LIBC_VPrepare.wideView",
+  "LIBC_VTx1A.finish",
+  "LIBC_WideView.child",
+  "LIBC_WideView.value",
+  "LIB_Deployed.deployed",
+  "LIB_Deployed.ids",
+  "LIB_Instances.C",
+  "LIB_Instances.D",
+  "LIB_Instances.P",
+  "LIB_Instances.VL",
+  "LIB_Prepared.child",
+  "LIB_Prepared.value",
+  "LIB_S1.library",
+  "LIB_VArithmetic.qadd",
+  "LIB_VArithmetic.qmul",
+  "LIB_VCarriers.Challenges.eta",
+  "LIB_VCarriers.pDec",
+  "LIB_VCarriers.qDec",
+  "LIB_VCircle.code",
+  "LIB_VCircle.eval",
+  "LIB_VClaims.eval",
+  "LIB_VClaims.parent",
+  "LIB_VClaims.value",
+  "LIB_VDecode.decodeK29",
+  "LIB_VField.maskValue",
+  "LIB_VField.qadd",
+  "LIB_VField.qmul",
+  "LIB_VLib.batchMerkleValue",
+  "LIB_VLib.canonicalScanValue",
+  "LIB_VLib.checkpointValue",
+  "LIB_VLib.circleValue",
+  "LIB_VLib.claimsValue",
+  "LIB_VLib.expandSemanticValue",
+  "LIB_VLib.expandValuesValue",
+  "LIB_VLib.finishValue",
+  "LIB_VLib.library",
+  "LIB_VLib.parseShapeValue",
+  "LIB_VLib.queryLoopValue",
+  "LIB_VLib.terminalQm31Value",
+  "LIB_VLib.wideViewValue",
+  "LIB_VMask.maskValue",
+  "LIB_VRecords.payload",
+  "LIB_VRecords.validatedRecord",
+  "LIB_VRecordsAll.decodeK29",
+  "LIB_VRecordsAll.payload",
+  "LIB_VRecordsAll.validatedRecord",
+  "LIB_VScalarCarriers.qDec",
+  "LIB_VTerminal.eval",
+  "LIB_VTerminal.model",
+  "List.flatMap",
+  "MultiproofConeRef.reference.Level.casesOn",
+  "MultiproofConeRef.reference.Scratch.at",
+  "MultiproofConeRef.reference.Scratch.idx",
+  "MultiproofConeRef.reference.Scratch.n",
+  "MultiproofConeRef.reference.Scratch.val",
+  "NFY_NBN_OutputLane.result",
+  "NGL_CheckpointModel.install",
+  "NGL_CheckpointModel.install._sparseCasesOn_1",
+  "NGL_CheckpointModel.install.match_1",
+  "NGL_ReadonlyModel.install",
+  "NGM_GuardExact.guard",
+  "NHJ_IdPacket.pool",
+  "NHJ_IdPacket.registry",
+  "NHY_PolicyModel.policy",
+  "NIG_Slots.installed",
+  "NJE_CountPacket.source",
+  "NJE_WellFrozen.emitted",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.asset_mint",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.deployment_domain",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.pool",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.token_program",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.has_checkpoint",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.identity",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.last_checkpoint_lane_sequences",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.next_checkpoint_sequence",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.verifier_policy",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.activation_slot",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.policy_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.pool",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.profile_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.release_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.retirement_slot",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.statement_version",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.verifier_program",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.authority",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.flags",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.minimum_activation_delay_slots",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.policy_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.pool",
+  "NJI_MasterModel.model",
+  "NJI_MasterModel.model.match_1",
+  "NJI_MasterModel.terminal",
+  "NJI_PolicyParser.body",
+  "NJI_PolicyPort.validator",
+  "NJI_V1Models.Z",
+  "NJI_V1Models.entry",
+  "NJI_V1Models.registry",
+  "NJJ_Flush.cell",
+  "NJJ_Flush.output",
+  "NJP_RowModel.Scratch.indices",
+  "NJP_RowModel.Scratch.n",
+  "NJP_RowModel.Scratch.values",
+  "NJQ_Canonical.checkpoint",
+  "NJQ_Canonical.entry",
+  "NJQ_Canonical.master",
+  "NJQ_Canonical.registry",
+  "NJQ_Checkpoint.model",
+  "NJQ_Checkpoint.reference.match_1",
+  "NJQ_Checkpoint.reference.match_2",
+  "NJQ_Checkpoint.reference.match_3",
+  "NJQ_CheckpointCut.Cut.match_1",
+  "NJQ_CheckpointCut.Cut.match_2",
+  "NJQ_CheckpointCut.Cut.match_3",
+  "NJQ_CheckpointCut.pipeline",
+  "NJQ_CheckpointCut.prefixResult",
+  "NJQ_CheckpointCut.prefixResult.match_1",
+  "NJQ_ChildTotal.identity",
+  "NJQ_ChildTotal.master",
+  "NJQ_ChildTotal.policy",
+  "NJQ_Entry.model",
+  "NJQ_Entry.model.match_1",
+  "NJQ_Entry.reference.match_1",
+  "NJQ_Master.model",
+  "NJQ_Master.model.match_1",
+  "NJQ_Master.model.match_2",
+  "NJQ_Master.reference.match_1",
+  "NJQ_Master.reference.match_2",
+  "NJQ_Master.reference.match_3",
+  "NJQ_MasterCut.Cut.match_1",
+  "NJQ_MasterCut.Cut.match_2",
+  "NJQ_MasterCut.Cut.match_3",
+  "NJQ_MasterCut.Cut.match_4",
+  "NJQ_MasterCut.pipeline",
+  "NJQ_MasterCut.prefixResult",
+  "NJQ_MasterCut.prefixResult.match_1",
+  "NJQ_Registry.model",
+  "NJQ_Registry.model.match_1",
+  "NJU_CommonObserved.Event.casesOn",
+  "NJU_Log.Run.events",
+  "NJU_Log.Run.result",
+  "NJV_TX2Returning.endpoint",
+  "NKE_CommonCodec.finish",
+  "NKE_CommonCodec.finish._sparseCasesOn_1",
+  "NKE_CommonCodec.finish.match_1",
+  "NKE_CommonCodec.flush",
+  "NKE_CommonCodec.flush._sparseCasesOn_1",
+  "NKE_CommonCodec.flush.match_1",
+  "NKE_CommonCodec.geometry",
+  "NKE_CommonCodec.geometry._sparseCasesOn_1",
+  "NKE_CommonCodec.geometry.match_1",
+  "NKE_CommonCodec.merkle",
+  "NKE_CommonCodec.merkle._sparseCasesOn_1",
+  "NKE_CommonCodec.merkle.match_1",
+  "NKE_CommonCodec.pending",
+  "NKE_CommonCodec.pending._sparseCasesOn_1",
+  "NKE_CommonCodec.pending.match_1",
+  "NKE_CommonCodec.powers",
+  "NKE_CommonCodec.powers._sparseCasesOn_1",
+  "NKE_CommonCodec.powers.match_1",
+  "NKE_CommonCodec.query",
+  "NKE_CommonCodec.query._sparseCasesOn_1",
+  "NKE_CommonCodec.query.match_1",
+  "NKE_CommonProgram.run",
+  "NKE_CommonProgram.run.match_1",
+  "NKE_CommonProgram.run.match_2",
+  "NKE_CommonProgram.run.match_3",
+  "NKE_CommonProgram.run.match_4",
+  "NKE_CommonProgram.run.match_5",
+  "NKE_CommonProgram.run.match_6",
+  "NKE_CommonProgram.run.match_7",
+  "NKE_CommonProgram.run.match_8",
+  "NKE_CommonProgram.run.match_9",
+  "NKE_FlushNative.states",
+  "NKE_QueryInput.Args.accumulator",
+  "NKE_QueryInput.Args.geometry",
+  "NKE_QueryInput.Args.pending",
+  "NKE_QueryInput.Args.powers",
+  "NKE_QueryInput.Args.prepared",
+  "NKE_QueryInput.Args.proof",
+  "NKF_CheckpointBox.reference",
+  "NKF_MasterBox.reference",
+  "NKL_CanonicalKCarrier.selected",
+  "NKL_Checks.Check.casesOn",
+  "NKL_Checks.test",
+  "NKL_Checks.test._sparseCasesOn_1",
+  "NKL_Checks.test.match_1",
+  "NKL_Checks.test.match_2",
+  "NKV_ConcreteChildren.count",
+  "NKV_ConcreteChildren.count.match_1",
+  "NKV_ConcreteChildren.ops",
+  "NKV_ConcreteChildren.verify",
+  "NKV_QueryPlan.plan",
+  "NKV_QueryPlan.plan._sparseCasesOn_1",
+  "NKV_QueryPlan.plan._sparseCasesOn_2",
+  "NKV_QueryPlan.plan.match_1",
+  "NKV_QueryPlan.tail",
+  "NLB_NativeFlush.G",
+  "NLB_Parent.finish",
+  "NLL.Frame.position",
+  "NLL.Frame.scratch",
+  "NLL.digest",
+  "NLL.entryKeys",
+  "NLL.entryKeys.match_1",
+  "NLL.event",
+  "NLL.nodeView",
+  "NLL.view",
+  "NLL.view._sparseCasesOn_1",
+  "NLL.view.match_1",
+  "NLL_Parent.model",
+  "NLL_Parent.model._f",
+  "NLL_Parent.model.match_1",
+  "NLL_Parent.plan",
+  "NLL_Parent.plan._f",
+  "NLL_Parent.plan._sparseCasesOn_1",
+  "NLL_Parent.plan._sparseCasesOn_2",
+  "NLL_Parent.plan.match_1",
+  "NLP_C04Chronology.atEvent",
+  "NLP_C04Chronology.atEvent._sparseCasesOn_1",
+  "NLP_C04Chronology.atEvent.match_1",
+  "NLP_NativeMerkle.action",
+  "NLT_NativeWindows.window",
+  "NLT_NativeWindows.window.match_1",
+  "NLT_ParentCuts.Query.observation",
+  "NMS_R2AfterAuth242.factor",
+  "NMS_R2AfterAuthEq242.factor",
+  "NMS_R2Gated242.source",
+  "NMS_R2N_Interpreted.liftResult",
+  "NMS_R2N_Interpreted.liftResult.match_1",
+  "NMS_R2N_Native242Children.children",
+  "NMS_R2N_Native242Children.meaning",
+  "NMS_R2N_ReconstructSites.meaning",
+  "NMS_R2N_ScanSites.interpreted",
+  "NMS_R2RequestBindings.pool",
+  "NMS_R2RequestGuards.actual",
+  "NMS_R2RequestGuards.bad",
+  "NMS_R2RequestGuards.full",
+  "NMS_R2RequestGuards.source",
+  "NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.casesOn",
+  "NMX_CheckpointValue.decoded",
+  "NMX_CheckpointValue.raw",
+  "NMX_LeafInstall.install",
+  "NMX_MasterValue.decoded",
+  "NMX_MasterValue.raw",
+  "NMX_Program.Command.casesOn",
+  "NMX_R2_DecoderLibrary.checkpoint",
+  "NMX_R2_DecoderLibrary.checkpoint.match_1",
+  "NMX_R2_DecoderLibrary.master",
+  "NMX_R2_DecoderLibrary.master.match_1",
+  "NMX_R2_DecoderLibrary.master.match_2",
+  "NMX_R2_NativeExecution.Allocations.checkpoint",
+  "NMX_R2_NativeExecution.Allocations.clone",
+  "NMX_R2_NativeExecution.Allocations.master",
+  "NMX_R2_NativeExecution.Allocations.snapshot",
+  "NMX_R2_NativeExecution.command",
+  "NMX_R2_NativeExecution.command.match_1",
+  "NMX_R2_NativeExecution.command.match_2",
+  "NMX_R2_PrimitiveInstall.install",
+  "NMX_R2_PrimitiveInstall.install.match_1",
+  "NMX_R2_StdOps.install",
+  "NMX_R3_Instantiated233.native",
+  "NMX_R3_Instantiated233.registry_packet",
+  "NMX_R3_Instantiated233.represented",
+  "NMX_R3_RegistryInput.Input.entry",
+  "NMX_R3_RegistryInput.Input.master",
+  "NMX_R3_RegistryInput.Input.masterAccount",
+  "NMX_R3_RegistryInput.Input.pool",
+  "NMX_R3_RegistryInput.Input.registry",
+  "NMX_R3_RegistryInput.Input.slot",
+  "NMX_R3_RegistryInput.Input.verifier",
+  "NMX_R3_RegistryNativeFold.execution",
+  "NMX_R3_RegistryOps.install",
+  "NMX_R3_RegistryRoot.authenticate",
+  "NMX_R3_RegistryRoot.root",
+  "NMX_R4_AllArgs.execution",
+  "NMX_R4_AllArgs.operational",
+  "NMX_R4_Authentication.Choices.lane",
+  "NMX_R4_Authentication.Choices.registry",
+  "NMX_R4_Authentication.Choices.sites",
+  "NMX_R4_Authentication.authenticate",
+  "NMX_R4_Authentication.context",
+  "NMX_R4_Authentication.observed",
+  "NMX_R4_Authentication.root",
+  "NMX_R4_BoxAction.checkpoint",
+  "NMX_R4_BoxAction.master",
+  "NMX_R4_CallContext.ops",
+  "NMX_R4_CallProgram.Command.casesOn",
+  "NMX_R4_CallProgram.Program.brecOn",
+  "NMX_R4_CallProgram.Program.brecOn.go",
+  "NMX_R4_CallProgram.Program.casesOn",
+  "NMX_R4_CallRun.Context.allocations",
+  "NMX_R4_CallRun.Context.env",
+  "NMX_R4_CallRun.Context.failure",
+  "NMX_R4_CallRun.Context.lane",
+  "NMX_R4_CallRun.Context.owners",
+  "NMX_R4_CallRun.Context.registry",
+  "NMX_R4_CallRun.command",
+  "NMX_R4_CallRun.command.match_1",
+  "NMX_R4_CallRun.command.match_2",
+  "NMX_R4_CallRun.nativeCommand",
+  "NMX_R4_CallRun.nativeCommand._sparseCasesOn_1",
+  "NMX_R4_CallRun.nativeCommand.match_1",
+  "NMX_R4_CallRun.observe",
+  "NMX_R4_CallRun.run",
+  "NMX_R4_CallRun.run._f",
+  "NMX_R4_CallRun.run.match_1",
+  "NMX_R4_NMS233.packet",
+  "NMX_R4_NMS233.typed",
+  "NMX_R4_NMS242Instantiation.fold",
+  "NMX_R5_AfterAuth242.L",
+  "NMX_R5_AfterAuth242.full",
+  "NMX_R5_AfterAuth242.value",
+  "NMX_R5_Decode242.full",
+  "NMX_R5_Decode242.model",
+  "NMX_R5_Decode242.source",
+  "NMX_R5_Guards242.factor",
+  "NMX_R5_Guards242.full",
+  "NMX_R5_Guards242.model",
+  "NMX_R5_Native242.full",
+  "NMX_R5_PrefixSource242.body",
+  "NMX_R5_PrefixSource242.full",
+  "NMX_R5_Request242.D",
+  "NMX_R5_Request242.L",
+  "NMX_R5_Request242.bad",
+  "NMX_R5_Request242.full",
+  "NMX_R5_Request242.model",
+  "NMX_R5_Slot242.D",
+  "NMX_R5_Slot242.full",
+  "NMX_R5_Slot242.model",
+  "NMX_R5_Slot242.source",
+  "NMX_R6_Args242.Native.accounts",
+  "NMX_R6_Args242.Native.data",
+  "NMX_R6_Args242.Native.program",
+  "NMX_R6_Args242.Native.slot",
+  "NMX_R6_Children.reconstruct",
+  "NMX_R6_Children.reconstruct.match_1",
+  "NMX_R6_NativeLive242.live",
+  "NMX_R6_NativeLive242.observation",
+  "NMX_R6_NativeLive242.source_member",
+  "NMX_R6_Nonempty.auth",
+  "NMX_R6_Port242.D",
+  "NMX_R6_Port242.L",
+  "NMX_R6_Port242.replay_member",
+  "NMX_R6_Port242.suffix",
+  "NMX_R6_Port242.validate",
+  "NMX_R6_Validation.root",
+  "NMX_R6_Validation.validate",
+  "NMX_R7_Port241.L",
+  "NMX_R7_Port241.afterPublic",
+  "NMX_R7_Port241.afterReads",
+  "NMX_R7_Port241.afterValidate",
+  "NMX_R7_Port241.stage2",
+  "NMX_R7_PortLaw241.replay_member",
+  "NMX_R7_Std241.ops",
+  "NMX_R7_Verify241.verify",
+  "NMX_R8_After241.full",
+  "NMX_R8_AfterFactor241.factor",
+  "NMX_R8_AfterFactor241.source",
+  "NMX_R8_Children241.grouped",
+  "NMX_R8_Children241.original",
+  "NMX_R8_Children241.validate",
+  "NMX_R8_Encoded241.full",
+  "NMX_R8_EncodedFactor241.factor",
+  "NMX_R8_GroupEncode241.source",
+  "NMX_R8_GroupReads241.source",
+  "NMX_R8_GroupValidate241.source",
+  "NMX_R8_Reads241.full",
+  "NMX_R8_ReadsFactor241.factor",
+  "NMX_R8_ReadsFactor241.source",
+  "NMX_R8_Std241.ops",
+  "NMX_R9_After241.fixed",
+  "NMX_R9_After241.full",
+  "NMX_R9_After241.grouped",
+  "NMX_R9_Children241.grouped",
+  "NMX_R9_Children241.original",
+  "NMX_R9_Children241.validate",
+  "NMX_R9_Children241.validate_full",
+  "NMX_R9_GroupHead241.source",
+  "NMX_R9_Head241.full",
+  "NMX_R9_HeaderFactor241.factor",
+  "NMX_R9_HeaderFactor241.later",
+  "NMX_R9_HeaderFactor241.source",
+  "NMX_R9_Live241.grouped",
+  "NMX_R9_Live241.live",
+  "NMX_R9_Live241.observation",
+  "NMX_R9_Live241.source_member",
+  "NMX_R9_Live241.validate",
+  "NMX_R9_Native241.meaning",
+  "NMX_R9_RelReplay241.D",
+  "NMX_R9_RelReplay241.replay",
+  "NMX_R9_StageTwo.D",
+  "NMX_R9_StageTwo.stage2",
+  "NMX_R9_ValidateUse241.full",
+  "NMX_R9_ValidateUse241.source",
+  "NMX_RowSpec_233.Args.accounts",
+  "NMX_RowSpec_233.Args.lane",
+  "NMX_RowSpec_233.Args.pool",
+  "NMX_RowSpec_233.Args.program",
+  "NMX_RowSpec_233.Args.slot",
+  "NMX_SourceModel.Owners.checkpoint",
+  "NMX_SourceModel.Owners.lane",
+  "NMX_SourceModel.Owners.master",
+  "NMX_SourceModel.Owners.snapshot",
+  "NND_DecoderSlots.install",
+  "NND_Tx2Values.Values.auth",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.chi",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.eta",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.lambda",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.mu",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.theta",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.zc",
+  "NNH_AuthCheckpointInputs.Packet",
+  "NNH_AuthCheckpointInputs.Packet.checkpoint",
+  "NNH_AuthCheckpointInputs.Packet.data",
+  "NNH_AuthCheckpointInputs.Packet.decode",
+  "NNH_AuthCheckpointInputs.Packet.domain_eq",
+  "NNH_AuthCheckpointInputs.Packet.mk",
+  "NNH_AuthCheckpointInputs.Packet.next",
+  "NNH_AuthCheckpointInputs.Packet.pda",
+  "NNH_AuthCheckpointInputs.Packet.pool_eq",
+  "NNH_AuthCheckpointInputs.Packet.read",
+  "NNH_AuthCheckpointInputs.produce",
+  "NNH_AuthCheckpointPort.value",
+  "NNH_AuthCheckpointStep.source",
+  "NNH_AuthGuardPorts.data",
+  "NNH_AuthGuardPorts.readonly",
+  "NNH_AuthLaneInputs.Packet",
+  "NNH_AuthLaneInputs.Packet.data",
+  "NNH_AuthLaneInputs.Packet.decode",
+  "NNH_AuthLaneInputs.Packet.lane_eq",
+  "NNH_AuthLaneInputs.Packet.mk",
+  "NNH_AuthLaneInputs.Packet.output",
+  "NNH_AuthLaneInputs.Packet.pda",
+  "NNH_AuthLaneInputs.Packet.pool_eq",
+  "NNH_AuthLaneInputs.Packet.read",
+  "NNH_AuthLaneInputs.Packet.state",
+  "NNH_AuthLaneInputs.produce",
+  "NNH_AuthLanePort.value",
+  "NNH_AuthLaneStep.source",
+  "NNH_AuthMasterInputs.Packet",
+  "NNH_AuthMasterInputs.Packet.data",
+  "NNH_AuthMasterInputs.Packet.decode",
+  "NNH_AuthMasterInputs.Packet.mask_eq",
+  "NNH_AuthMasterInputs.Packet.master",
+  "NNH_AuthMasterInputs.Packet.mk",
+  "NNH_AuthMasterInputs.Packet.next",
+  "NNH_AuthMasterInputs.Packet.pda",
+  "NNH_AuthMasterInputs.Packet.pool_eq",
+  "NNH_AuthMasterInputs.Packet.read",
+  "NNH_AuthMasterInputs.Packet.registry",
+  "NNH_AuthMasterInputs.produce",
+  "NNH_AuthMasterPort.value",
+  "NNH_AuthMasterStep.source",
+  "NNH_AuthNativeGuards.produce",
+  "NNH_AuthSdkBodyPort.value",
+  "NNH_AuthSdkDistinct.value",
+  "NNH_AuthSdkGuards.produce",
+  "NNH_AuthSdkPort.value",
+  "NNH_AuthSdkTail.checkpoint",
+  "NNH_AuthSdkTail.lane",
+  "NNH_AuthSdkTail.master",
+  "NNH_AuthSdkTail.registry",
+  "NNH_AuthSlotFacts.ne_self",
+  "NNH_CorrectCallInputs.produce",
+  "NNH_CorrectConfiguration.configuration",
+  "NNH_CorrectConfiguration.sdk",
+  "NNH_CorrectExtents.value",
+  "NNH_CorrectReads.source",
+  "NNH_CorrectTx2Inputs.Packet",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint",
+  "NNH_CorrectTx2Inputs.Packet.checkpointAccount",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_eq",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_index",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_read",
+  "NNH_CorrectTx2Inputs.Packet.encode",
+  "NNH_CorrectTx2Inputs.Packet.encoded",
+  "NNH_CorrectTx2Inputs.Packet.extent",
+  "NNH_CorrectTx2Inputs.Packet.logical",
+  "NNH_CorrectTx2Inputs.Packet.mk",
+  "NNH_CorrectTx2Inputs.Packet.proof",
+  "NNH_CorrectTx2Inputs.Packet.proofAccount",
+  "NNH_CorrectTx2Inputs.Packet.proof_eq",
+  "NNH_CorrectTx2Inputs.Packet.proof_index",
+  "NNH_CorrectTx2Inputs.Packet.proof_read",
+  "NNH_CorrectTx2Inputs.Packet.public_eq",
+  "NNH_CorrectTx2Inputs.Packet.validate",
+  "NNH_CorrectTx2Inputs.Packet.validated",
+  "NNH_CorrectTx2Inputs.Packet.validated_eq",
+  "NNH_CorrectTx2Inputs.getters",
+  "NNH_CorrectTx2Inputs.produce",
+  "NNH_CorrectTx2Inputs.sdk",
+  "NNH_DistinctPort.value",
+  "NNH_EncodeOk.sdk",
+  "NNH_ExactRemainingTypes.tx2Op11",
+  "NNH_FinishReturns.V",
+  "NNH_FinishReturns.value",
+  "NNH_FinishReturns.value.match_1",
+  "NNH_GetterOk.value",
+  "NNH_Libraries.C",
+  "NNH_Libraries.D",
+  "NNH_Libraries.L",
+  "NNH_Libraries.P",
+  "NNH_Libraries.VL",
+  "NNH_Libraries.authValues",
+  "NNH_Libraries.tx2Value",
+  "NNH_ObservedReturns.V",
+  "NNH_ObservedReturns.value",
+  "NNH_PdaOk.native",
+  "NNH_PrepareReturns.V",
+  "NNH_PrepareReturns.frontValue",
+  "NNH_PrepareReturns.value",
+  "NNH_PrepareReturns.value.match_1",
+  "NNH_RequestGuards.value",
+  "NNH_ReturnsBundle.tx1Value",
+  "NNH_ReturnsBundle.tx2Value",
+  "NNH_S1CodecOk.decode",
+  "NNH_Stage2Cut.Packet",
+  "NNH_Stage2Cut.Packet.auth_ok",
+  "NNH_Stage2Cut.Packet.checkpoint_account",
+  "NNH_Stage2Cut.Packet.checkpoint_data",
+  "NNH_Stage2Cut.Packet.checkpoint_index",
+  "NNH_Stage2Cut.Packet.checkpoint_ok",
+  "NNH_Stage2Cut.Packet.emit_ok",
+  "NNH_Stage2Cut.Packet.encode_ok",
+  "NNH_Stage2Cut.Packet.guards",
+  "NNH_Stage2Cut.Packet.mk",
+  "NNH_Stage2Cut.Packet.proof_account",
+  "NNH_Stage2Cut.Packet.proof_data",
+  "NNH_Stage2Cut.Packet.proof_index",
+  "NNH_Stage2Cut.Packet.proof_length",
+  "NNH_Stage2Cut.Packet.proof_ok",
+  "NNH_Stage2Cut.Packet.public_bytes",
+  "NNH_Stage2Cut.Packet.validate_ok",
+  "NNH_Stage2Cut.Packet.validated",
+  "NNH_Stage2GuardedCut.Packet",
+  "NNH_Stage2GuardedCut.Packet.cut",
+  "NNH_Stage2GuardedCut.Packet.domain",
+  "NNH_Stage2GuardedCut.Packet.mk",
+  "NNH_Stage2GuardedCut.produce",
+  "NNH_Stage2GuardedEval.returned",
+  "NNH_Stage2GuardedEval.value",
+  "NNH_Stage2HeadGuard.equal",
+  "NNH_Stage2HeadPort.source",
+  "NNH_Stage2To064.source",
+  "NNH_Tx1Returns.P",
+  "NNH_Tx1Returns.V",
+  "NNH_Tx1Returns.preparedValue",
+  "NNH_Tx1Returns.preparedValue.match_1",
+  "NNH_Tx1Returns.value",
+  "NNH_Tx1Returns.value.match_1",
+  "NNH_Tx1Returns.values",
+  "NNH_Tx1RouteCompare.source",
+  "NNH_Tx2CheckpointPort.reinstall",
+  "NNH_Tx2CheckpointPort.value",
+  "NNH_Tx2Configuration.configuration",
+  "NNH_Tx2Configuration.readonly",
+  "NNH_Tx2Configuration.sdk",
+  "NNH_Tx2Configuration.select",
+  "NNH_Tx2ModelSlots.install",
+  "NNH_Tx2RegistryPort.same",
+  "NNH_Tx2RegistryPort.value",
+  "NNH_ValidateScanStep.source",
+  "NNH_ValidateSdkHeadStep.source",
+  "NNH_ValidateSdkPort.value",
+  "NNH_ValidateSdkTail.source",
+  "NNH_ValidateTailPort.value",
+  "NNH_ValidatedExtent.value",
+  "NNS_Fold241.D",
+  "NNS_Fold241.fold",
+  "NNS_PortLaw241.replay_same",
+  "NNS_PortLaw241.root",
+  "NNT_Field.Required",
+  "NNT_Field.r241",
+  "NNT_Native241.D",
+  "NNT_Native241.full",
+  "NNT_Port241.root",
+  "NNT_RelReplay241.fold",
+  "NNT_Root241.parametric",
+  "NOC_Stage1Conv.child",
+  "NOC_Stage1Conv.codec",
+  "NOC_Stage1Conv.conv",
+  "NOC_Stage1Conv.fd11",
+  "NOC_Stage1Conv.gate",
+  "NOC_Stage1Conv.guards",
+  "NOC_Stage1Conv.kOf",
+  "NOC_Stage1Conv.routeData",
+  "NOC_Stage1Conv.shapeOf",
+  "NOC_Stage1Forward.S",
+  "NOC_Stage1Forward.body",
+  "NOC_Stage1Forward.ckLemma",
+  "NOC_Stage1Forward.cmpLemma",
+  "NOC_Stage1Forward.fdLemma",
+  "NOC_Stage1Forward.gateLemma",
+  "NOC_Stage1Forward.ok345",
+  "NOC_Stage1Inv.Facts",
+  "NOC_Stage1Inv.Facts.cb",
+  "NOC_Stage1Inv.Facts.cka",
+  "NOC_Stage1Inv.Facts.d1v",
+  "NOC_Stage1Inv.Facts.enc",
+  "NOC_Stage1Inv.Facts.h21",
+  "NOC_Stage1Inv.Facts.hcb",
+  "NOC_Stage1Inv.Facts.hck",
+  "NOC_Stage1Inv.Facts.hcmp",
+  "NOC_Stage1Inv.Facts.hd1",
+  "NOC_Stage1Inv.Facts.hdec",
+  "NOC_Stage1Inv.Facts.hdist",
+  "NOC_Stage1Inv.Facts.hfd",
+  "NOC_Stage1Inv.Facts.hkk",
+  "NOC_Stage1Inv.Facts.hl",
+  "NOC_Stage1Inv.Facts.hlen",
+  "NOC_Stage1Inv.Facts.hne",
+  "NOC_Stage1Inv.Facts.hpb",
+  "NOC_Stage1Inv.Facts.hrbP",
+  "NOC_Stage1Inv.Facts.hrbU",
+  "NOC_Stage1Inv.Facts.hs0",
+  "NOC_Stage1Inv.Facts.hs1",
+  "NOC_Stage1Inv.Facts.hsp",
+  "NOC_Stage1Inv.Facts.hsv",
+  "NOC_Stage1Inv.Facts.htag",
+  "NOC_Stage1Inv.Facts.htv",
+  "NOC_Stage1Inv.Facts.hub",
+  "NOC_Stage1Inv.Facts.hz",
+  "NOC_Stage1Inv.Facts.i0",
+  "NOC_Stage1Inv.Facts.i1",
+  "NOC_Stage1Inv.Facts.i2",
+  "NOC_Stage1Inv.Facts.kk",
+  "NOC_Stage1Inv.Facts.mk",
+  "NOC_Stage1Inv.Facts.nat",
+  "NOC_Stage1Inv.Facts.pa",
+  "NOC_Stage1Inv.Facts.pb",
+  "NOC_Stage1Inv.Facts.pba",
+  "NOC_Stage1Inv.Facts.s0",
+  "NOC_Stage1Inv.Facts.s1",
+  "NOC_Stage1Inv.Facts.sp",
+  "NOC_Stage1Inv.Facts.st",
+  "NOC_Stage1Inv.Facts.t",
+  "NOC_Stage1Inv.Facts.ub",
+  "NOC_Stage1Inv.S",
+  "NOC_Stage1Inv.invert",
+  "RSL.DeployedIds.pool",
+  "RSL.DeployedIds.registry",
+  "RSL.Env.pda",
+  "RSL.Env.reservation",
+  "RSL.Env.sha256",
+  "RSL.Obs.events",
+  "RSL.Obs.exit",
+  "RSL.OwnedAccount.bytes",
+  "RSL.OwnedAccount.executable",
+  "RSL.OwnedAccount.is_signer",
+  "RSL.OwnedAccount.is_writable",
+  "RSL.OwnedAccount.key",
+  "RSL.OwnedAccount.length",
+  "RSL.OwnedAccount.owner",
+  "RSL.PoolLib.decodeRequest",
+  "RSL.PoolLib.outputLane",
+  "RSL.PoolLib.reqNullifier",
+  "RSL.PoolLib.reqPoolProgram",
+  "RSL.PoolLib.reqProfile",
+  "RSL.PoolLib.reqRelease",
+  "RSL.Spec.alloc",
+  "RSL.Spec.bind",
+  "RSL.Spec.map",
+  "RSL.Spec.panic",
+  "RSL.Spec.pure",
+  "RSL.TX1_087.Args.g",
+  "RSL.TX1_087.Args.proof",
+  "RSL.TX1_087.Args.public_",
+  "RSL.TX1_094.Args.k",
+  "RSL.TX1_094.Args.proof",
+  "RSL.TX1_094.Args.public_",
+  "RSL.TX1_094.Args.public_bytes",
+  "RSL.TX1_136.Args.challenges",
+  "RSL.TX1_136.Args.prefix_",
+  "RSL.TX1_136.Args.public_",
+  "RSL.TX1_136.Args.transcript",
+  "RSL.TX1_137.Args.bytes",
+  "RSL.TX1_137.Args.public_",
+  "RSL.TX1_345.Args.accounts",
+  "RSL.TX1_345.Args.data",
+  "RSL.TX1_345.Args.program_id",
+  "RSL.TX2_233.Args.accounts",
+  "RSL.TX2_241.Args.accounts",
+  "RSL.TX2_241.Args.current_slot",
+  "RSL.TX2_241.Args.data",
+  "RSL.TX2_241.Args.program_id",
+  "RSL.TX2_242.Args.accounts",
+  "RSL.TX2_242.Args.current_slot",
+  "RSL.TX2_242.Args.instruction_data",
+  "RSL.TX2_242.Args.verifier_program",
+  "RSL.TX2_242.Validated.proof_length",
+  "RSL.TX2_242.Validated.statement",
+  "RSL.VLib.at28",
+  "RSL.VLib.c1Root",
+  "RSL.VLib.codecToV",
+  "RSL.VLib.debugV",
+  "RSL.VLib.decodeK29",
+  "RSL.VLib.eta",
+  "RSL.VLib.maskValue",
+  "RSL.VLib.origChallenges",
+  "RSL.VLib.pDec",
+  "RSL.VLib.payload",
+  "RSL.VLib.qDec",
+  "RSL.VLib.qadd",
+  "RSL.VLib.qmul",
+  "RSL.VLib.state",
+  "RSL.VLib.vAllocation",
+  "RSL.VLib.vParse",
+  "RSL.VLib.vSemantic",
+  "RSL.VLib.validatedRecord",
+  "RSL.VLib.viewSemantic",
+  "RSL.VLib.wEqualCirclePoints",
+  "RSL.VLib.wPublic",
+  "RSL.VLib.wTerminal",
+  "RSL.VLib.zeroE29",
+  "S8OwnedP6Finish.modelValue"]
+def leaves : Array String := #["LIBC_Bytes.raw",
+  "LIBC_ExpandSemanticModel.Row",
+  "LIB_VRecords.payload",
+  "LIB_VArithmetic.qmul",
+  "LIB_VArithmetic.qadd",
+  "LIB_VDecode.decodeK29",
+  "LIB_VRecords.validatedRecord",
+  "LIB_VMask.maskValue",
+  "LIB_VCarriers.pDec",
+  "LIB_VScalarCarriers.qDec",
+  "AspisR1.NJM_CircleJoin.point",
+  "LIB_VTerminal.model",
+  "LIB_VClaims.parent",
+  "NKL_CanonicalKCarrier.selected",
+  "LIBB_Tx2Auth.value",
+  "AspisR1.Port3_FinishStage.ne",
+  "NJE_WellFrozen.emitted",
+  "AspisR1.MultiproofConeVerifyState.verifyState",
+  "AspisR1.MultiproofConeRootGuard.sourceRoot",
+  "AspisR1.Port3_BatchStd.sameLeaf",
+  "NLP_C04Chronology.atEvent",
+  "LIBB_AuthCarrier.raw",
+  "LIBB_ResultTotal.value",
+  "NJI_V1Models.Z",
+  "NHY_PolicyModel.policy",
+  "NJQ_CheckpointCut.prefixResult",
+  "NJQ_ChildTotal.master",
+  "NJI_MasterModel.model",
+  "NJI_MasterModel.terminal",
+  "NJQ_ChildTotal.policy",
+  "NJQ_ChildTotal.identity",
+  "NJQ_MasterCut.prefixResult",
+  "NFY_NBN_OutputLane.result",
+  "LIBB_NullifierBytes.digest",
+  "AspisR1.NNG_FinalEvents136.events",
+  "AspisR1.NNG_TypedEvents.select",
+  "NGL_ReadonlyModel.install",
+  "NGL_CheckpointModel.install",
+  "AspisR1.NNG_LIBScalar.project",
+  "NMX_R9_StageTwo.stage2",
+  "NMX_R7_Verify241.verify",
+  "NMX_R6_Validation.validate",
+  "NMX_R4_CallRun.observe",
+  "NMX_R3_RegistryOps.install",
+  "NJQ_Checkpoint.model",
+  "NJQ_Master.model",
+  "NMX_R6_NativeLive242.observation",
+  "NMX_R9_Live241.observation",
+  "AspisR1.NNH_064Install.f064",
+  "NKE_CommonCodec.finish",
+  "NKE_CommonCodec.flush",
+  "NKE_CommonCodec.query",
+  "NKE_CommonCodec.pending",
+  "NKE_CommonCodec.geometry",
+  "NKE_CommonCodec.merkle",
+  "NKE_CommonCodec.powers",
+  "AspisR1.NNH_064SourceDetails.trace",
+  "AspisR1.NNH_MerkleBatchExecute.run",
+  "AspisR1.NJF_FinishObserved.G",
+  "NGM_GuardExact.guard",
+  "AspisR1.NNH_Run6Installed.implementation",
+  "AspisR1.NNG_TotalProducer345.producer",
+  "AspisR1.NNG_ReifyCore345.input",
+  "RSL.TX1_345.Args.data",
+  "RSL.TX1_345.Args.accounts",
+  "AspisR1.NNG_ReifyCore345.raw",
+  "RSL.OwnedAccount.bytes",
+  "AspisR1.NNG_ReifyAccounts345.bytes",
+  "AspisR1.NNG_ReifyAccounts345.bytes.match_1",
+  "RSL.OwnedAccount.length",
+  "RSL.OwnedAccount.executable",
+  "RSL.OwnedAccount.is_writable",
+  "RSL.OwnedAccount.is_signer",
+  "RSL.OwnedAccount.owner",
+  "RSL.OwnedAccount.key",
+  "RSL.TX1_345.Args.program_id",
+  "AspisR1.NNG_Native345.producer",
+  "AspisR1.NNG_Events345.events",
+  "AspisR1.NNG_Events345.child",
+  "AspisR1.NNG_ChildSource345.events",
+  "AspisR1.NNG_Producer328.producer",
+  "AspisR1.NNG_Tree328.tree",
+  "AspisR1.NNG_Tree328.child",
+  "AspisR1.NNG_Native328.Args.k",
+  "AspisR1.NNG_Native328.Args.proof",
+  "AspisR1.NNG_Native328.Args.publicBytes",
+  "AspisR1.NNG_Native328.Args.public_",
+  "AspisR1.NNG_Native328.call1",
+  "AspisR1.NNG_Input094.input",
+  "RSL.TX1_094.Args.k",
+  "RSL.TX1_094.Args.proof",
+  "RSL.TX1_094.Args.public_bytes",
+  "LIB_Instances.VL",
+  "LIB_VLib.library",
+  "LIBC_VTx1A.finish",
+  "LIBC_Finish.child",
+  "LIBC_Finish.value",
+  "AspisR1PublicPreparation.verifier.Accumulator.next",
+  "AspisR1PublicPreparation.verifier.Accumulator.power",
+  "AspisR1PublicPreparation.verifier.Accumulator.rhs",
+  "NJJ_Flush.output",
+  "AspisR1Stage2.verifier.BatchedWeights.raw",
+  "NJJ_Flush.cell",
+  "S8OwnedP6Finish.modelValue",
+  "LIBC_VPrepare.wideView",
+  "LIBC_WideView.child",
+  "LIBC_WideView.value",
+  "LIBC_VPrepare.expandValues",
+  "LIBC_ExpandValues.child",
+  "LIBC_ExpandValues.value",
+  "LIBC_VPrepare.expandSemantic",
+  "LIBC_ExpandSemantic.child",
+  "LIBC_ExpandSemantic.value",
+  "LIBC_ExpandSemanticModel.output",
+  "LIBC_ExpandSemanticModel.byte",
+  "LIB_VRecordsAll.payload",
+  "LIB_VField.qmul",
+  "LIB_VField.qadd",
+  "LIB_VRecordsAll.decodeK29",
+  "LIB_VRecordsAll.validatedRecord",
+  "LIB_VField.maskValue",
+  "LIB_VCarriers.qDec",
+  "RSL.TX1_094.Args.public_",
+  "AspisR1.NNG_InstalledCalls094.calls",
+  "AspisR1.NNG_CheckpointCall094.call",
+  "LIBC_Checkpoint.output",
+  "LIBC_Checkpoint.checksumParts",
+  "LIBC_Checkpoint.body",
+  "LIBC_Checkpoint.publicParts",
+  "LIBC_Checkpoint.proofParts",
+  "AspisR1.NNG_ConcreteCalls094.calls",
+  "AspisR1.NNG_ConcreteCalls094.calls.match_1",
+  "AspisR1.NNG_FlushCall094.call",
+  "AspisR1.NNG_FlushCall094.output",
+  "AspisR1.NNG_PrepareAdapter094.call",
+  "AspisR1.NNG_PrepareEmission087.calls",
+  "AspisR1.NNG_ExpandSemantic087.call",
+  "AspisR1.NNG_Context137.Calls.publicTranscript",
+  "AspisR1.NNG_Context137.Calls.mark",
+  "AspisR1.NNG_Context137.Calls.finish",
+  "AspisR1.NNG_Context137.Calls.parse",
+  "AspisR1.NNG_Context137.calls",
+  "AspisR1.NNG_FinishAdapter137.call",
+  "AspisR1.NNG_FinishAdapter137.oldFinish",
+  "AspisR1.NNG_ConcreteCalls136.calls",
+  "AspisR1.NNG_ModelCircle.call",
+  "AspisR1.NNG_ModelCircle.model",
+  "AspisR1.NJM_CircleCode.source",
+  "AspisR1PublicPreparation.r1_wire.ValidatedRecord.row",
+  "AspisR1.NJM_CircleCode.dispatch",
+  "AspisR1.NJM_CircleJoin.after",
+  "AspisR1.NJM_CircleJoin.after.match_1",
+  "Aeneas.Std.core.result.Result.casesOn",
+  "AspisR1PublicPreparation.r1_wire.ValidatedRecord.framed",
+  "AspisR1.NJM_CircleCode.dispatch.match_1",
+  "Aeneas.Std.UScalar.casesOn",
+  "AspisR1.NNG_Context137.Calls.begin_",
+  "AspisR1.NNG_StateCalls094.queryLoop",
+  "LIBC_QueryLoop.model",
+  "AspisR1.NNG_BatchCall094.call",
+  "LIBC_BatchMerkle.model",
+  "AspisR1Stage2.verifier.Prepared.queries",
+  "NLL_Parent.model",
+  "NLL_Parent.model._f",
+  "NKV_ConcreteChildren.ops",
+  "NKV_ConcreteChildren.count",
+  "NJE_CountPacket.source",
+  "NKV_ConcreteChildren.count.match_1",
+  "AspisR1.Port3_NativeBatchBody.multiproof.Arity.casesOn",
+  "NKV_ConcreteChildren.verify",
+  "MultiproofConeRef.reference.Scratch.val",
+  "MultiproofConeRef.reference.Scratch.idx",
+  "NJV_TX2Returning.endpoint",
+  "AspisR1.MultiproofConeVerifyState.finishState",
+  "MultiproofConeRef.reference.Scratch.at",
+  "MultiproofConeRef.reference.Scratch.n",
+  "AspisR1.MultiproofConeVerifyState.finishState.match_1",
+  "MultiproofConeRef.reference.Level.casesOn",
+  "AspisR1.MultiproofConeVerifyState.finishState._sparseCasesOn_1",
+  "NLL_Parent.model.match_1",
+  "AspisR1.NNG_ScanCall094.call",
+  "LIBC_CanonicalScan.good",
+  "NKL_Checks.test",
+  "NKL_Checks.test.match_1",
+  "NKL_Checks.test._sparseCasesOn_1",
+  "NKL_Checks.test.match_2",
+  "NKL_Checks.Check.casesOn",
+  "AspisR1.NNG_ParseCall094.call",
+  "LIBC_ParseShape.model",
+  "AspisR1.NNG_Tree328.events",
+  "AspisR1.NNG_Error328.events",
+  "AspisR1.NNG_Error328.message",
+  "RSL.VLib.debugV",
+  "AspisR1.NNG_Tree328.childEvents",
+  "AspisR1.NNG_ProducerFull094.producer",
+  "AspisR1.NNG_Events094.events",
+  "AspisR1.NNG_Events094.checkpoint",
+  "AspisR1.NNG_CheckpointCall094.events",
+  "LIBC_Checkpoint.events",
+  "LIBC_Checkpoint.calls",
+  "AspisR1.NNG_Events094.batch",
+  "AspisR1.NNG_BatchCall094.events",
+  "LIBC_BatchMerkle.history",
+  "LIBC_BatchMerkle.parsed",
+  "NLL_Parent.plan",
+  "NLL_Parent.plan._f",
+  "NLL_Parent.plan.match_1",
+  "NLL_Parent.plan._sparseCasesOn_2",
+  "NLL_Parent.plan._sparseCasesOn_1",
+  "NLL.nodeView",
+  "AspisR1.Port3_NativeBatchBody.Ops.op3",
+  "NLL.view.match_1",
+  "NLL.view._sparseCasesOn_1",
+  "NKV_QueryPlan.plan",
+  "NKV_QueryPlan.tail",
+  "AspisR1.OraclePortFrozenOrder.nodeCount",
+  "AspisR1.OraclePortFrozenOrder.nodeCount._f",
+  "AspisR1.OraclePortFrozenOrder.countLevel",
+  "AspisR1.OraclePortFrozenOrder.countLevel._f",
+  "AspisR1.OraclePortFrozenOrder.countLevel.match_2",
+  "AspisR1.OraclePortFrozenOrder.countLevel.match_1",
+  "AspisR1.OraclePortFrozenOrder.nodeCount.match_1",
+  "NKV_QueryPlan.plan.match_1",
+  "NKV_QueryPlan.plan._sparseCasesOn_2",
+  "NKV_QueryPlan.plan._sparseCasesOn_1",
+  "AspisR1.NNG_Events094.prepare",
+  "AspisR1.NNG_Events087.events",
+  "AspisR1.NNG_Events087.observed",
+  "AspisR1.NNG_Events137.events",
+  "AspisR1.NNG_Events137.finish",
+  "AspisR1.NNG_LIBEvents136.events",
+  "AspisR1.NNG_TypedEvents.select.match_1",
+  "AspisR1.NMT_CallTree.Event.casesOn",
+  "AspisR1.NNG_FinalEvents136.events.match_1",
+  "RSL.Obs.events",
+  "AspisR1.NNG_Native328.input",
+  "AspisR1.NNG_Native328.body",
+  "AspisR1.NNG_Calls345.calls",
+  "AdapterRw.Ops.op53",
+  "AdapterRw.Ops.op52",
+  "AdapterRw.Ops.op51",
+  "AdapterRw.Ops.op50",
+  "AdapterRw.Ops.op49",
+  "AdapterRw.Ops.op48",
+  "AdapterRw.Ops.op47",
+  "AdapterRw.Ops.op46",
+  "AdapterRw.Ops.op45",
+  "AdapterRw.Ops.op44",
+  "AdapterRw.Ops.op43",
+  "AdapterRw.Ops.op42",
+  "AdapterRw.Ops.op41",
+  "AdapterRw.Ops.op40",
+  "AdapterRw.Ops.op39",
+  "AdapterRw.Ops.op38",
+  "AdapterRw.Ops.op37",
+  "AdapterRw.Ops.op35",
+  "AdapterRw.Ops.op34",
+  "AdapterRw.Ops.op33",
+  "AdapterRw.Ops.op32",
+  "AdapterRw.Ops.op31",
+  "AdapterRw.Ops.op30",
+  "AdapterRw.Ops.op29",
+  "AdapterRw.Ops.op28",
+  "AdapterRw.Ops.op27",
+  "AdapterRw.Ops.op26",
+  "AdapterRw.Ops.op25",
+  "AdapterRw.Ops.op24",
+  "AdapterRw.Ops.op23",
+  "AdapterRw.Ops.op22",
+  "AdapterRw.Ops.op21",
+  "AdapterRw.Ops.op20",
+  "AdapterRw.Ops.op19",
+  "AdapterRw.Ops.op18",
+  "AdapterRw.Ops.op17",
+  "AdapterRw.Ops.op16",
+  "AdapterRw.Ops.op15",
+  "AdapterRw.Ops.op14",
+  "AdapterRw.Ops.op13",
+  "AdapterRw.Ops.op12",
+  "AdapterRw.Ops.op11",
+  "AdapterRw.Ops.op10",
+  "AdapterRw.Ops.op9",
+  "AdapterRw.Ops.op8",
+  "AdapterRw.Ops.op7",
+  "AdapterRw.Ops.op6",
+  "AdapterRw.Ops.op5",
+  "AdapterRw.Ops.op4",
+  "AdapterRw.Ops.op3",
+  "AdapterRw.Ops.op2",
+  "AdapterRw.Ops.op1",
+  "AdapterRw.Ops.op0",
+  "NGL_CheckpointModel.install.match_1",
+  "NGL_CheckpointModel.install._sparseCasesOn_1",
+  "AspisR1.NNG_ChildSource345.call",
+  "AspisR1.NNG_Calls345.calls.match_1",
+  "NMT_stage1_owned.aspis_r1_cost_probe.transport.Variant.casesOn",
+  "AspisR1.NNG_Producer087.producer",
+  "AspisR1.NNG_Producer137.producer",
+  "AspisR1.NNG_Output137.decode",
+  "AspisR1.NNG_ProjectionFallback137.representation",
+  "AspisR1.NNG_LIBArrays.projectClaims",
+  "AspisR1.NNG_LIBArrays.projectArray",
+  "AspisR1.NNG_LIBArrays.projectChallenges",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.eta",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.mu",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.zc",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.theta",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.chi",
+  "NNG_verify_finish.aspis_core.state_only_prefix.r0.Challenges.lambda",
+  "AspisR1.NNG_Representation136.VL",
+  "AspisR1.NNG_Producer136.producer",
+  "AspisR1.NNG_Producer136.events",
+  "AspisR1.NNG_Representation136.calls",
+  "AspisR1.NNG_Representation136.project",
+  "RSL.TX1_136.Args.challenges",
+  "LIB_VCarriers.Challenges.eta",
+  "NMX_R7_Port241.stage2",
+  "NMX_R7_Port241.afterValidate",
+  "NMX_R7_Port241.afterReads",
+  "NMX_R7_Port241.afterPublic",
+  "RSL.TX2_242.Validated.statement",
+  "RSL.TX2_242.Validated.proof_length",
+  "LIBB_Tx2EnvTrace.observation",
+  "LIBB_Tx2EnvCode.code",
+  "LIBB_Tx2EnvCode.common",
+  "NLB_Parent.finish",
+  "NIG_Slots.installed",
+  "AspisR1.IDa_Deployed.finish",
+  "AspisR1.Port4D_Round.native",
+  "AspisR1.Port3_NativeFinishBody.Ops.ne",
+  "AspisR1.Port3_NativeFinishBody.Ops.op6",
+  "AspisR1.Port3_NativeFinishBody.Ops.op4",
+  "AspisR1.Port3_NativeFinishBody.Ops.op3",
+  "AspisR1.Port3_NativeFinishBody.Ops.op2",
+  "AspisR1.Port3_NativeFinishBody.Ops.op1",
+  "AspisR1.Port3_NativeFinishBody.Ops.op0",
+  "AspisR1.Port3_FinishStage.release",
+  "AspisR1Stage2.Stage2Finish.FinishOps.dot",
+  "AspisR1Stage2.Stage2Finish.FinishOps.pair",
+  "AspisR1Stage2.Stage2Finish.FinishOps.newWeights",
+  "AspisR1Stage2.Stage2Finish.FinishOps.polynomial",
+  "AspisR1Stage2.Stage2Finish.FinishOps.mulM",
+  "AspisR1Stage2.Stage2Finish.FinishOps.add",
+  "AspisR1Stage2.Stage2Finish.FinishOps.quarter",
+  "AspisR1Stage2.Stage2Finish.FinishOps.field",
+  "NLP_NativeMerkle.action",
+  "LIBB_Tx2EnvCode.code.match_1",
+  "LIBB_Tx2EnvTrace.events",
+  "LIBB_Tx2EnvTrace.common",
+  "LIBB_Tx2EnvCode.observed",
+  "NJU_Log.Run.events",
+  "LIBB_Tx2EnvTrace.event",
+  "NLP_C04Chronology.atEvent.match_1",
+  "NLP_C04Chronology.atEvent._sparseCasesOn_1",
+  "LIBB_Tx2EnvTrace.event.match_1",
+  "LIBB_Tx2EnvTrace.event._sparseCasesOn_1",
+  "LIBB_Tx2EnvTrace.events.match_1",
+  "LIBB_Tx2EnvTrace.events._sparseCasesOn_2",
+  "LIBB_Tx2EnvTrace.events._sparseCasesOn_1",
+  "LIBB_Tx2EnvTrace.observation.match_1",
+  "NMX_R7_Port241.L",
+  "LIBB_PoolLib.library",
+  "LIBB_PoolEffects.emitResult",
+  "LIBB_PoolEmit.emitResult",
+  "LIBB_PoolEffects.encodeStatement",
+  "LIBB_PoolEncode.encodeStatement",
+  "NMS_R2N_Interpreted.liftResult",
+  "RSL.Spec.panic",
+  "RSL.Spec.pure",
+  "NMS_R2N_Interpreted.liftResult.match_1",
+  "Aeneas.Std.Result.casesOn",
+  "RSL.Spec.map",
+  "RSL.Spec.bind",
+  "RSL.Obs.exit",
+  "LIBB_PoolEffects.reconstruct",
+  "LIBB_PoolReconstruct.reconstruct",
+  "NMS_R2N_ReconstructSites.meaning",
+  "RSL.Spec.alloc",
+  "LIBB_PoolReconstruct.reconstruct.match_1",
+  "LIBB_PoolEffects.scanProof",
+  "LIBB_PoolScan.scanProof",
+  "NMS_R2N_ScanSites.interpreted",
+  "LIBB_PoolRegistry.decodeEntryV2",
+  "LIBB_V2DecoderValues.entry",
+  "LIBB_PoolRegistry.decodeEntryV1",
+  "LIBB_V1DecoderValues.entry",
+  "NJQ_Canonical.entry",
+  "NJQ_Entry.model",
+  "NJQ_Entry.model.match_1",
+  "NJI_V1Models.entry",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.activation_slot",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.retirement_slot",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.policy_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.release_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.profile_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.verifier_program",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.pool",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.statement_version",
+  "NJQ_Entry.reference.match_1",
+  "LIBB_PoolRegistry.decodeRegistryV2",
+  "LIBB_V2DecoderValues.registry",
+  "LIBB_PoolRegistry.decodeRegistryV1",
+  "LIBB_V1DecoderValues.registry",
+  "NJQ_Canonical.registry",
+  "NJQ_Registry.model",
+  "NJQ_Registry.model.match_1",
+  "NJI_V1Models.registry",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.minimum_activation_delay_slots",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.authority",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.policy_binding",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.pool",
+  "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.flags",
+  "LIBB_PoolRegistry.validatePolicy",
+  "LIBB_PolicyValue.validate",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.policy_binding",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.registry_authority",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.registry_program",
+  "AdapterRw.aspis_statement.pool_v1.format.VerifierPolicyV1.flags",
+  "LIBB_PoolAccounts.decodeCheckpoint",
+  "LIBB_AccountDecoderReuse.checkpoint",
+  "NMX_R2_DecoderLibrary.checkpoint",
+  "NMX_CheckpointValue.decoded",
+  "NMX_CheckpointValue.raw",
+  "NJQ_CheckpointCut.pipeline",
+  "NJQ_CheckpointCut.Cut.match_1",
+  "NJQ_CheckpointCut.Cut.match_2",
+  "NJQ_CheckpointCut.prefixResult.match_1",
+  "NJQ_CheckpointCut.Cut.match_3",
+  "NMX_R2_DecoderLibrary.checkpoint.match_1",
+  "NMX_R2_DecoderLibrary.master.match_2",
+  "LIBB_PoolAccounts.decodeMaster",
+  "LIBB_AccountDecoderReuse.master",
+  "NMX_R2_DecoderLibrary.master",
+  "NMX_MasterValue.decoded",
+  "NMX_MasterValue.raw",
+  "NJQ_MasterCut.pipeline",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.last_checkpoint_lane_sequences",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.next_checkpoint_sequence",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.has_checkpoint",
+  "NJI_MasterModel.model.match_1",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.verifier_policy",
+  "NJI_PolicyPort.validator",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.deployment_domain",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.token_program",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.asset_mint",
+  "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1.identity",
+  "NJI_Extracted.aspis_statement.pool_v1.format.PoolIdentityV1.pool",
+  "NJQ_MasterCut.Cut.match_1",
+  "NJI_PolicyParser.body",
+  "NJQ_MasterCut.Cut.match_2",
+  "NJQ_MasterCut.Cut.match_3",
+  "NJQ_MasterCut.prefixResult.match_1",
+  "NJQ_MasterCut.Cut.match_4",
+  "NMX_R2_DecoderLibrary.master.match_1",
+  "LIBB_PoolDecoders.outputLane",
+  "LIBB_PoolDecoders.outputLane.match_1",
+  "RSL.TX2_241.Args.accounts",
+  "RSL.TX2_241.Args.current_slot",
+  "RSL.TX2_241.Args.program_id",
+  "NMX_R6_Port242.validate",
+  "NMX_R6_Port242.suffix",
+  "NMX_R6_Children.reconstruct",
+  "NMX_R6_Children.reconstruct.match_1",
+  "NMX_R6_Port242.L",
+  "RSL.PoolLib.reqPoolProgram",
+  "RSL.TX2_242.Args.accounts",
+  "RSL.TX2_242.Args.verifier_program",
+  "NMX_R4_Authentication.authenticate",
+  "NMX_RowSpec_233.Args.slot",
+  "NMX_RowSpec_233.Args.lane",
+  "NMX_RowSpec_233.Args.pool",
+  "NMX_RowSpec_233.Args.accounts",
+  "NMX_RowSpec_233.Args.program",
+  "NMX_R4_CallContext.ops",
+  "NMX_R4_CallRun.Context.failure",
+  "NMX_R4_CallRun.Context.allocations",
+  "NMX_R2_NativeExecution.Allocations.clone",
+  "NMX_R4_CallRun.Context.env",
+  "NMX_R2_StdOps.install",
+  "AdapterRw.Ops.op36",
+  "NMX_R2_PrimitiveInstall.install",
+  "RSL.Env.pda",
+  "NMX_R2_PrimitiveInstall.install.match_1",
+  "NMX_LeafInstall.install",
+  "NMX_R4_CallRun.Context.owners",
+  "NMX_R4_CallRun.run",
+  "NMX_R4_CallRun.run._f",
+  "NMX_R4_CallRun.command",
+  "NMX_SourceModel.Owners.snapshot",
+  "NMX_R2_NativeExecution.Allocations.snapshot",
+  "NMX_R4_CallRun.command.match_1",
+  "NMX_R4_CallRun.nativeCommand",
+  "NMX_R4_CallRun.Context.registry",
+  "NMX_R4_CallRun.Context.lane",
+  "NMX_R2_NativeExecution.command",
+  "NMX_R2_NativeExecution.command.match_1",
+  "NMX_SourceModel.Owners.checkpoint",
+  "NMX_R2_NativeExecution.Allocations.checkpoint",
+  "NMX_SourceModel.Owners.master",
+  "NMX_R2_NativeExecution.Allocations.master",
+  "NMX_R2_NativeExecution.command.match_2",
+  "NMX_Program.Command.casesOn",
+  "NMX_R4_BoxAction.checkpoint",
+  "NJQ_Canonical.checkpoint",
+  "NJQ_Checkpoint.reference.match_3",
+  "NJQ_Checkpoint.reference.match_2",
+  "NJQ_Checkpoint.reference.match_1",
+  "NMX_R4_BoxAction.master",
+  "NJQ_Canonical.master",
+  "NJQ_Master.model.match_2",
+  "NJQ_Master.model.match_1",
+  "NJQ_Master.reference.match_3",
+  "NJQ_Master.reference.match_2",
+  "NJQ_Master.reference.match_1",
+  "NMX_R4_CallRun.nativeCommand.match_1",
+  "NMX_R4_CallRun.nativeCommand._sparseCasesOn_1",
+  "NMX_R4_CallRun.command.match_2",
+  "NMX_R4_CallProgram.Command.casesOn",
+  "NMX_R4_CallRun.run.match_1",
+  "NMX_R4_CallProgram.Program.casesOn",
+  "NMX_R4_CallProgram.Program.brecOn",
+  "NMX_R4_CallProgram.Program.brecOn.go",
+  "NMX_R4_Authentication.context",
+  "NMX_R4_Authentication.Choices.registry",
+  "NMX_R3_RegistryRoot.authenticate",
+  "NMX_R3_RegistryInput.Input.slot",
+  "NMX_R3_RegistryInput.Input.entry",
+  "NMX_R3_RegistryInput.Input.registry",
+  "NMX_R3_RegistryInput.Input.master",
+  "NMX_R3_RegistryInput.Input.masterAccount",
+  "NMX_R3_RegistryInput.Input.pool",
+  "NMX_R3_RegistryInput.Input.verifier",
+  "NMX_R3_RegistryNativeFold.execution",
+  "RSL.DeployedIds.registry",
+  "RSL.DeployedIds.pool",
+  "NND_DecoderSlots.install",
+  "NKF_CheckpointBox.reference",
+  "NKF_MasterBox.reference",
+  "NMX_R4_Authentication.Choices.lane",
+  "NMX_SourceModel.Owners.lane",
+  "NMX_R4_Authentication.Choices.sites",
+  "RSL.TX2_233.Args.accounts",
+  "RSL.TX2_242.Args.current_slot",
+  "RSL.PoolLib.reqNullifier",
+  "RSL.PoolLib.outputLane",
+  "NMX_R5_Request242.bad",
+  "RSL.PoolLib.reqRelease",
+  "NMX_R5_Request242.L",
+  "RSL.PoolLib.reqProfile",
+  "RSL.PoolLib.decodeRequest",
+  "RSL.TX2_242.Args.instruction_data",
+  "NMX_R6_Args242.Native.slot",
+  "NMX_R6_Args242.Native.data",
+  "NMX_R6_Args242.Native.accounts",
+  "NMX_R6_Args242.Native.program",
+  "NMX_R4_NMS233.typed",
+  "NMS_R2N_Native242Children.meaning",
+  "NMX_R5_AfterAuth242.value",
+  "NMX_R5_AfterAuth242.L",
+  "RSL.TX2_241.Args.data",
+  "NMX_R9_Native241.meaning",
+  "NMX_R8_Std241.ops",
+  "NMX_R7_Std241.ops",
+  "RSL.Env.sha256",
+  "AspisR1.NNH_064Execute.observation",
+  "AspisR1.NNH_064Execute.trace",
+  "AspisR1.NNH_064CommonTrace.trace",
+  "AspisR1.NNH_064CommonRecords.program",
+  "NKE_CommonProgram.run",
+  "NKE_CommonCodec.finish.match_1",
+  "NKE_CommonCodec.finish._sparseCasesOn_1",
+  "AspisR1Stage2.verifier.Accumulator.power",
+  "AspisR1Stage2.verifier.Accumulator.rhs",
+  "NKE_CommonCodec.flush.match_1",
+  "NKE_CommonCodec.flush._sparseCasesOn_1",
+  "NKE_CommonProgram.run.match_1",
+  "NKE_CommonProgram.run.match_2",
+  "NKE_CommonProgram.run.match_3",
+  "Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn",
+  "NKE_CommonCodec.query.match_1",
+  "NKE_CommonCodec.query._sparseCasesOn_1",
+  "NKE_CommonProgram.run.match_4",
+  "NKE_CommonCodec.pending.match_1",
+  "NKE_CommonCodec.pending._sparseCasesOn_1",
+  "AspisR1Stage2.verifier.Accumulator.weights",
+  "NKE_CommonProgram.run.match_5",
+  "NKE_CommonCodec.geometry.match_1",
+  "NKE_CommonCodec.geometry._sparseCasesOn_1",
+  "NKE_CommonProgram.run.match_6",
+  "NKE_CommonCodec.merkle.match_1",
+  "NKE_CommonCodec.merkle._sparseCasesOn_1",
+  "NKE_CommonProgram.run.match_7",
+  "AspisR1Stage2.verifier.Prepared.gamma",
+  "NKE_CommonCodec.powers.match_1",
+  "NKE_CommonCodec.powers._sparseCasesOn_1",
+  "AspisR1Stage2.verifier.Accumulator.next",
+  "NKE_CommonProgram.run.match_8",
+  "NKE_CommonProgram.run.match_9",
+  "AspisR1.NNH_MerkleBatchTrace.calls",
+  "AspisR1.NNH_MerkleBatchTrace.calls._f",
+  "AspisR1.NNH_MerkleBatchTrace.calls.match_1",
+  "AspisR1.NNH_MerkleTreeExecute.run",
+  "NLL.entryKeys",
+  "AspisR1.Port3_NativeBatchBody.Ops.op5",
+  "AspisR1.Port3_NativeBatchBody.Ops.op4",
+  "NLL.entryKeys.match_1",
+  "AspisR1.NNH_MerkleTreeExecute.initial",
+  "AspisR1.NNH_MerkleLoopExecute.run",
+  "AspisR1.NNH_MerkleLoopExecute.run._f",
+  "NLL.event",
+  "NLL.digest",
+  "NLL.view",
+  "AspisR1.Port3_NativeBatchBody.Ops.op2",
+  "NLL.Frame.position",
+  "AspisR1.MultiproofConeLeafContent.next",
+  "AspisR1.NNH_MerkleLoopExecute.run.match_1",
+  "NLL.Frame.scratch",
+  "AspisR1.NNH_MerkleTerminalExecute.run",
+  "AspisR1.NNH_MerkleTerminalFinish.result",
+  "AspisR1.NNH_MerkleLevelsExecute.entry",
+  "NJP_RowModel.Scratch.n",
+  "NJP_RowModel.Scratch.values",
+  "NJP_RowModel.Scratch.indices",
+  "AspisR1.NNH_MerkleTerminalExecute.padded",
+  "AspisR1.NNH_MerkleTerminalExecute.count",
+  "AspisR1.NNH_MerkleLoopExecute.run.match_2",
+  "AspisR1.NNH_MerkleBatchTrace.calls.match_2",
+  "AspisR1.NNH_064SourceDetails.trace.match_1",
+  "AspisR1.NNH_064SourceDetails.trace._sparseCasesOn_1",
+  "AspisR1.NNH_064Execute.trace.match_1",
+  "AspisR1.NNH_064Execute.trace._sparseCasesOn_2",
+  "AspisR1.NNH_064Execute.trace._sparseCasesOn_1",
+  "AspisR1.NNH_064Execute.outcome",
+  "AspisR1.NNH_064Execute.common",
+  "AspisR1.NNH_064CommonRecords.records",
+  "AspisR1.NNH_064CommonRecords.record",
+  "AspisR1.NNH_064SourceDetails.record",
+  "AspisR1.NNH_064SourceDetails.detail",
+  "AspisR1.NNH_MerkleBatchExecute.calls",
+  "AspisR1.NNH_MerkleBatchExecute.calls._f",
+  "AspisR1.NNH_MerkleBatchExecute.calls.match_1",
+  "AspisR1.NNH_MerkleBatchExecute.calls.match_2",
+  "NLT_NativeWindows.window",
+  "AspisR1Stage2.verifier.Prepared.kappa",
+  "AspisR1Stage2.verifier.View.final_message",
+  "AspisR1Stage2.verifier.Prepared.alpha",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.native",
+  "AspisR1.NJF_FinishObserved.detailG",
+  "AspisR1.NJF_PairInstantiation.G",
+  "AspisR1.NJF_AllocatorInstantiation.G",
+  "AspisR1.NJF_RegularInstantiation.instantiate",
+  "AspisR1.NIT_PairControl.Context.ap1",
+  "AspisR1.NIT_PairControl.Context.ap0",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_1",
+  "AspisR1.NJF_RegularInstantiation.instantiate._sparseCasesOn_2",
+  "AspisR1.NJF_RegularInstantiation.instantiate._sparseCasesOn_1",
+  "AspisR1.NIT_PairControl.Context.f",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_2",
+  "AspisR1.NIT_PairControl.Context.w",
+  "AspisR1.NIT_Cuts.Ref.value",
+  "FIo_Native.weights.Weights.variant",
+  "AspisR1.NJF_RegularInstantiation.instantiate.match_3",
+  "AspisR1.NJF_RegularInstantiation.regularReply",
+  "AspisR1.NIT_PairControl.Context.alpha",
+  "AspisR1.NJF_AllocatorInstantiation.G.match_1",
+  "AspisR1.NJF_PairInstantiation.G.match_1",
+  "AspisR1.NIW_AlignPairPhase.Input.alpha",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.locations",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.kappa",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.message",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.alpha",
+  "AspisR1.NIW_AlignFinishComposed.PairInfo.owner",
+  "AspisR1.NIW_AlignFinishComposed.detail",
+  "AspisR1.NIW_AlignFinishComposed.Locations.parts",
+  "AspisR1.NIW_AlignFinishComposed.Locations.scratch",
+  "AspisR1.NIW_AlignFinishComposed.Locations.low",
+  "AspisR1.NIW_AlignFinishComposed.Locations.common",
+  "AspisR1.NIW_AlignFinishComposed.Locations.ap1",
+  "AspisR1.NIW_AlignFinishComposed.Locations.ap0",
+  "AspisR1.NIW_AlignPairInstalled.observed",
+  "AspisR1.NIW_AlignPairPhase.run",
+  "AspisR1.NIW_AlignAllocatorPhase.run",
+  "AspisR1.NIW_AlignRegularPhase.run",
+  "AspisR1.NIW_AlignRegularPhase.run.match_1",
+  "AspisR1.NIW_AlignAllocatorPhase.run.match_1",
+  "AspisR1.NIW_AlignPairPhase.run.match_1",
+  "AspisR1.NIW_AlignFinishComposed.Locations.message",
+  "AspisR1.NIW_AlignFinishComposed.Locations.alpha",
+  "AspisR1.NIW_AlignFinishComposed.Locations.owner",
+  "AspisR1Stage2.verifier.Prepared.z",
+  "AspisR1Stage2.verifier.Prepared.semantic_alpha",
+  "AspisR1Stage2.verifier.Prepared.variant",
+  "AspisR1Stage2.verifier.View.round1",
+  "AspisR1Stage2.verifier.Prepared.claim",
+  "AspisR1Stage2.verifier.View.round0",
+  "NLB_NativeFlush.G",
+  "NKE_FlushNative.states",
+  "NKE_QueryInput.Args.pending",
+  "NKE_QueryInput.Args.geometry",
+  "NKE_QueryInput.Args.powers",
+  "NKE_QueryInput.Args.accumulator",
+  "NKE_QueryInput.Args.prepared",
+  "NKE_QueryInput.Args.proof",
+  "NLT_ParentCuts.Query.observation",
+  "NLT_NativeWindows.window.match_1",
+  "NJU_CommonObserved.Event.casesOn",
+  "NJU_Log.Run.result",
+  "AspisR1.NNH_064Execute.outcome.match_1",
+  "NNH_Libraries.VL",
+  "NNH_Libraries.L",
+  "NNH_ReturnsBundle.tx2Value",
+  "NNH_Libraries.tx2Value",
+  "NNH_Libraries.authValues",
+  "LIBB_V2Star.values",
+  "LIBB_V2Lib.values",
+  "LIBB_EnvValues.evaluator",
+  "LIBB_EnvValues.evaluator.match_1",
+  "LIBB_EnvValues.evaluator._sparseCasesOn_1",
+  "NND_Tx2Values.Values.auth",
+  "LIBB_PoolLib.values",
+  "LIBB_PoolReconstruct.evaluator",
+  "NNH_ReturnsBundle.tx1Value",
+  "NNH_Libraries.C",
+  "LIB_Instances.C",
+  "LIB_S1.library",
+  "LIBC_S1.library",
+  "LIBC_S1.reaches",
+  "LIBC_S1.decode",
+  "LIBC_S1.decode.match_1",
+  "LIBC_S1.decode._sparseCasesOn_2",
+  "LIBC_S1.decode._sparseCasesOn_1",
+  "NNH_Tx1Returns.values",
+  "NNH_Tx1Returns.value",
+  "LIB_VLib.checkpointValue",
+  "LIBC_Checkpoint.value",
+  "LIB_VLib.finishValue",
+  "LIB_VLib.queryLoopValue",
+  "LIBC_QueryLoop.value",
+  "LIB_VLib.batchMerkleValue",
+  "LIBC_BatchMerkle.value",
+  "NNH_Tx1Returns.value.match_1",
+  "RSL.VLib.zeroE29",
+  "NNH_Tx1Returns.preparedValue",
+  "NNH_Tx1Returns.preparedValue.match_1",
+  "NNH_PrepareReturns.V",
+  "NNH_PrepareReturns.value",
+  "LIB_Prepared.value",
+  "RSL.TX1_087.Args.g",
+  "NNH_PrepareReturns.frontValue",
+  "RSL.VLib.viewSemantic",
+  "RSL.TX1_087.Args.public_",
+  "NNH_ObservedReturns.value",
+  "NNH_FinishReturns.V",
+  "NNH_FinishReturns.value",
+  "RSL.VLib.c1Root",
+  "NNH_FinishReturns.value.match_1",
+  "RSL.VLib.payload",
+  "RSL.VLib.wEqualCirclePoints",
+  "RSL.VLib.pDec",
+  "LIB_VLib.circleValue",
+  "LIB_VCircle.eval",
+  "LIB_VCircle.code",
+  "RSL.VLib.state",
+  "RSL.VLib.wTerminal",
+  "RSL.VLib.qDec",
+  "RSL.VLib.at28",
+  "RSL.VLib.eta",
+  "RSL.VLib.qmul",
+  "RSL.VLib.qadd",
+  "RSL.VLib.decodeK29",
+  "RSL.VLib.validatedRecord",
+  "RSL.VLib.maskValue",
+  "RSL.TX1_136.Args.public_",
+  "LIB_VLib.terminalQm31Value",
+  "LIB_VTerminal.eval",
+  "RSL.VLib.wPublic",
+  "RSL.VLib.origChallenges",
+  "LIB_VLib.claimsValue",
+  "LIB_VClaims.eval",
+  "LIB_VClaims.value",
+  "RSL.Env.reservation",
+  "RSL.TX1_136.Args.transcript",
+  "RSL.TX1_136.Args.prefix_",
+  "RSL.TX1_137.Args.public_",
+  "RSL.TX1_137.Args.bytes",
+  "NNH_ObservedReturns.V",
+  "RSL.VLib.vSemantic",
+  "LIB_VLib.wideViewValue",
+  "LIB_VLib.expandValuesValue",
+  "RSL.TX1_087.Args.proof",
+  "LIB_VLib.expandSemanticValue",
+  "RSL.VLib.codecToV",
+  "RSL.VLib.vAllocation",
+  "NNH_PrepareReturns.value.match_1",
+  "NNH_Tx1Returns.V",
+  "LIB_VLib.canonicalScanValue",
+  "LIBC_CanonicalScan.value",
+  "LIB_VLib.parseShapeValue",
+  "LIBC_ParseShape.value",
+  "RSL.VLib.vParse",
+  "NNH_Tx1Returns.P",
+  "LIB_Instances.P",
+  "LIB_Prepared.child",
+  "NNH_Libraries.P"]
+def idDep : Array String := #["AspisR1.ARQ_BankCut.checkpoint",
+  "AspisR1.ARS_Coverage.SupportedEntry",
+  "AspisR1.ARS_Coverage.SupportedEntry.RuntimePersistence",
+  "AspisR1.ARS_Coverage.SupportedEntry.accepted1",
+  "AspisR1.ARS_Coverage.SupportedEntry.accepted2",
+  "AspisR1.ARS_Coverage.SupportedEntry.actions",
+  "AspisR1.ARS_Coverage.SupportedEntry.admission1",
+  "AspisR1.ARS_Coverage.SupportedEntry.admission2",
+  "AspisR1.ARS_Coverage.SupportedEntry.final1",
+  "AspisR1.ARS_Coverage.SupportedEntry.final2",
+  "AspisR1.ARS_Coverage.SupportedEntry.game",
+  "AspisR1.ARS_Coverage.SupportedEntry.mk",
+  "AspisR1.ARS_Coverage.SupportedEntry.p",
+  "AspisR1.ARS_Coverage.SupportedEntry.post1",
+  "AspisR1.ARS_Coverage.SupportedEntry.post2",
+  "AspisR1.ARS_Coverage.SupportedEntry.saved",
+  "AspisR1.ARS_Coverage.SupportedEntry.t",
+  "AspisR1.ARS_Coverage.SupportedEntry.u",
+  "AspisR1.ARS_Coverage.SupportedEntry.w1",
+  "AspisR1.ARS_Coverage.SupportedEntry.w2",
+  "AspisR1.ARU_CutsOrigin.selected",
+  "AspisR1.ARU_Factory.deployed",
+  "AspisR1.ARU_PartialAccepted.accepted",
+  "AspisR1.ARU_PartialFactory.original",
+  "AspisR1.ARU_Replies.accepted",
+  "AspisR1.ARU_Selector.selected",
+  "AspisR1.ARU_SourceResults.accepted",
+  "AspisR1.ARU_Support.At",
+  "AspisR1.ARU_Support.At.entry",
+  "AspisR1.ARU_Support.At.firstAgrees",
+  "AspisR1.ARU_Support.At.mk",
+  "AspisR1.ARU_Support.At.secondAgrees",
+  "AspisR1.ARV_FirstPartial.accepted",
+  "AspisR1.ARW_AdmittedBudget.issued",
+  "AspisR1.ARW_AdmittedQueries.admitted",
+  "AspisR1.ARX_AdmittedRuntime.evaluation",
+  "AspisR1.ARX_AdmittedRuntime.on_admitted",
+  "AspisR1.ARX_AdmittedRuntime.outside",
+  "AspisR1.ARX_AdmittedRuntime.permitted",
+  "AspisR1.ARX_AdmittedRuntime.permitted_iff",
+  "AspisR1.ARX_AdmittedRuntime.runtime",
+  "AspisR1.ARX_SourceAlternative.accepted",
+  "AspisR1.CPH_Program.not_system",
+  "AspisR1.DGP_HostDigest.O1",
+  "AspisR1.DGP_HostDigest.O2",
+  "AspisR1.DGP_HostDigest.digestSource",
+  "AspisR1.FIs_Rc7_Native.accepted",
+  "AspisR1.FJp_ARCore.observations",
+  "AspisR1.FJp_AccountJoin.accepted",
+  "AspisR1.FJp_Domination.pointwise",
+  "AspisR1.FJp_Mass.bounded",
+  "AspisR1.FJp_Observations.observations",
+  "AspisR1.FJp_Residual.numeric",
+  "AspisR1.FJp_Ret_Rc7Native.accepted",
+  "AspisR1.FJv_DFinalSource.source",
+  "AspisR1.FJv_DFinalSource.source.match_1",
+  "AspisR1.FJv_DNativeAccepted.accepted",
+  "AspisR1.FJv_Observations.observations",
+  "AspisR1.FJv_Top.deployed",
+  "AspisR1.NNC_ActualChoices.selected",
+  "AspisR1.NNC_RecSelect.selects",
+  "AspisR1.NNH8_Acceptance.a3",
+  "AspisR1.NNH8_Acceptance.a4",
+  "AspisR1.NNH8_Acceptance.a5",
+  "AspisR1.NNH8_ChargeOf.deployed_charge_of",
+  "AspisR1.NNH8_DeployedOuter",
+  "AspisR1.NNH8_DeployedOuterOf",
+  "AspisR1.NNH8_Exec.ERec",
+  "AspisR1.NNH8_Exec.clockFree",
+  "AspisR1.NNH8_Exec.exec",
+  "AspisR1.NNH8_Exec.exec._proof_1",
+  "AspisR1.NNH8_Exec.exec._proof_2",
+  "AspisR1.NNH8_Exec.exec._proof_3",
+  "AspisR1.NNH8_Exec.recSelect",
+  "AspisR1.NNH8_Exec.recSig",
+  "AspisR1.NNH8_FirstWriter.oracle",
+  "AspisR1.NNH8_FirstWriter.owned",
+  "AspisR1.NNH8_FirstWriter.writer",
+  "AspisR1.NNH8_FullSpace.same_event",
+  "AspisR1.NNH8_Headline.headline",
+  "AspisR1.NNH8_HeadlineB.headlineB",
+  "AspisR1.NNH8_HeadlineB.headlineB._proof_1",
+  "AspisR1.NNH8_HeadlineB.outcomeRec",
+  "AspisR1.NNH8_HostCharge.bound",
+  "AspisR1.NNH8_HostCharge.event_fixed",
+  "AspisR1.NNH8_NMF.Associated",
+  "AspisR1.NNH8_NMF.S",
+  "AspisR1.NNH8_NMF.eventImage",
+  "AspisR1.NNH8_NMF.nmfB",
+  "AspisR1.NNH8_NMF.recSig",
+  "AspisR1.NNH8_NMF.rootImage",
+  "AspisR1.NNH8_NMF.selected",
+  "AspisR1.NNH8_NMF.selected.match_1",
+  "AspisR1.NNH8_NativeCuts.Packet",
+  "AspisR1.NNH8_NativeCuts.Packet.cuts",
+  "AspisR1.NNH8_NativeCuts.Packet.domain",
+  "AspisR1.NNH8_NativeCuts.Packet.events",
+  "AspisR1.NNH8_NativeCuts.Packet.f",
+  "AspisR1.NNH8_NativeCuts.Packet.mk",
+  "AspisR1.NNH8_NativeCuts.Packet.native",
+  "AspisR1.NNH8_NativeCuts.Packet.origin",
+  "AspisR1.NNH8_NativeCuts.Packet.persisted",
+  "AspisR1.NNH8_NativeCuts.Packet.records",
+  "AspisR1.NNH8_NativeCuts.Packet.s",
+  "AspisR1.NNH8_NativeCuts.Packet.writerHeader",
+  "AspisR1.NNH8_NativeCuts.Packet.writerRoot",
+  "AspisR1.NNH8_NativeCuts.produce",
+  "AspisR1.NNH8_Numeric.host_bound",
+  "AspisR1.NNH8_Outer.inclusion",
+  "AspisR1.NNH8_Packet.Cut",
+  "AspisR1.NNH8_Packet.cuts",
+  "AspisR1.NNH8_Packet.packet",
+  "AspisR1.NNH8_Packet.packet._proof_1",
+  "AspisR1.NNH8_Packet.packet._proof_2",
+  "AspisR1.NNH8_Packet.packet._proof_3",
+  "AspisR1.NNH8_Packet.packet._proof_4",
+  "AspisR1.NNH8_Packet.packet._proof_5",
+  "AspisR1.NNH8_Packet.packet._proof_6",
+  "AspisR1.NNH8_Packet.packet._proof_7",
+  "AspisR1.NNH8_Packet.packet._proof_8",
+  "AspisR1.NNH8_Packet.select",
+  "AspisR1.NNH8_Packet.source",
+  "AspisR1.NNH8_Persistence.key",
+  "AspisR1.NNH8_Persistence.persisted",
+  "AspisR1.NNH8_Physical.deployed_splitB_of",
+  "AspisR1.NNH8_Producers.accepted",
+  "AspisR1.NNH8_Producers.game",
+  "AspisR1.NNH8_Producers.origin",
+  "AspisR1.NNH8_Producers.produce",
+  "AspisR1.NNH8_ProtCells.produce",
+  "AspisR1.NNH8_ProtLamports.produce",
+  "AspisR1.NNH8_ProtMarker.produce",
+  "AspisR1.NNH8_ProtOwner.produce",
+  "AspisR1.NNH8_ProtPositive.produce",
+  "AspisR1.NNH8_ProtPreserves.produce",
+  "AspisR1.NNH8_Protection.produce",
+  "AspisR1.NNH8_RecorderFixed.base",
+  "AspisR1.NNH8_RecorderFixed.fixed",
+  "AspisR1.NNH8_RecorderFixed.fixedProgram",
+  "AspisR1.NNH8_RecorderFixed.program",
+  "AspisR1.NNH8_Rest.Delivered",
+  "AspisR1.NNH8_Rest.assemble",
+  "AspisR1.NNH8_RestClaims.Goal",
+  "AspisR1.NNH8_RestClaims.produce",
+  "AspisR1.NNH8_RestCopy.CopyFacts",
+  "AspisR1.NNH8_RestCopy.produce",
+  "AspisR1.NNH8_RestEvents.produce",
+  "AspisR1.NNH8_RestInstallation.produce",
+  "AspisR1.NNH8_RestRecorder.produce",
+  "AspisR1.NNH8_RestSetup.Goal",
+  "AspisR1.NNH8_RestSetup.produce",
+  "AspisR1.NNH8_RestTrace.produce",
+  "AspisR1.NNH8_Retime.first",
+  "AspisR1.NNH8_Retime.missing",
+  "AspisR1.NNH8_Retime.sdk_same",
+  "AspisR1.NNH8_Retime.second",
+  "AspisR1.NNH8_Split.conclusion_iff",
+  "AspisR1.NNH8_Split.outcome",
+  "AspisR1.NNH8_Split.rest",
+  "AspisR1.NNH8_Top.deployed_splitB_of",
+  "AspisR1.NNH8_TopHost.R",
+  "AspisR1.NNH8_TopHost.RestLaw",
+  "AspisR1.NNH8_TopHost.S",
+  "AspisR1.NNH8_TopHost.X",
+  "AspisR1.NNH8_TopHost.g1a",
+  "AspisR1.NNH8_TopHost.nmfB",
+  "AspisR1.NNH8_TopHost.split",
+  "AspisR1.NNH8_Weak241.inputs",
+  "AspisR1.NNH_DigestSyntaxTransport.o1",
+  "AspisR1.NNH_HostCtx.base",
+  "AspisR1.NNH_HostCtx.configuration",
+  "AspisR1.NNH_HostCtx.missing",
+  "AspisR1.NNH_HostCtx.missingLit",
+  "AspisR1.NNH_HostCtx.sdk",
+  "AspisR1.NNH_HostWeak241.reference",
+  "AspisR1.NNH_OutcomeRecAccepted.accepted",
+  "AspisR1.NNH_RecordedCharge.bound",
+  "AspisR1.NNH_RecordedCharge.recorder",
+  "AspisR1.NNH_RecordedCharge.source",
+  "AspisR1.NNH_ResultPortTransport.finish",
+  "AspisR1.NNH_Run5bCtx.configuration",
+  "AspisR1.NNH_Run5bCtx.sdk",
+  "AspisR1.NNH_Run5bCurrentExpand.semantic",
+  "AspisR1.NNH_Run5bCurrentExpand.semantic_slot",
+  "AspisR1.NNH_Run5bCurrentInitial.returned",
+  "AspisR1.NNH_Run5bCurrentInitial.slot",
+  "AspisR1.NNH_Run5bCurrentInventory.adapter",
+  "AspisR1.NNH_Run5bCurrentPending.source",
+  "AspisR1.NNH_Run5bCurrentShape.current",
+  "AspisR1.NNH_Run5bCurrentShape.parse",
+  "AspisR1.NNH_Run5bCurrentShape.slot",
+  "AspisR1.NNH_Run5bCurrentView.returned",
+  "AspisR1.NNH_Run5bCurrentView.slot",
+  "AspisR1.NNH_Run5bFinishEdge.selected",
+  "AspisR1.NNH_Run5bGeometryMap.source",
+  "AspisR1.NNH_Run5bGeometryReverse.selected",
+  "AspisR1.NNH_Run5bGeometrySlots.double",
+  "AspisR1.NNH_Run5bGeometrySlots.inverse",
+  "AspisR1.NNH_Run5bGeometrySlots.line",
+  "AspisR1.NNH_Run5bGeometrySlots.multiply",
+  "AspisR1.NNH_Run5bGeometrySlots.one",
+  "AspisR1.NNH_Run5bGeometrySlots.ops",
+  "AspisR1.NNH_Run5bGeometrySlots.point",
+  "AspisR1.NNH_Run5bGeometrySlots.subtract",
+  "AspisR1.NNH_Run5bPreparedModel.source",
+  "AspisR1.NNH_Run5bPreparedSlot.fixed",
+  "AspisR1.NNH_Run5bQuerySlots.actual",
+  "AspisR1.NNH_Run5bQuerySlots.circle",
+  "AspisR1.NNH_Run5bQuerySlots.decode",
+  "AspisR1.NNH_Run5bQuerySlots.dots",
+  "AspisR1.NNH_Run5bQuerySlots.geometry",
+  "AspisR1.NNH_Run5bQuerySlots.line",
+  "AspisR1.NNH_Run6Fields.I",
+  "AspisR1.NNH_Run6Fields.children",
+  "AspisR1.NNH_Run6Fields.install",
+  "AspisR1.NNH_Run6Fields.nmm",
+  "AspisR1.NNH_Run6Fields.nmo",
+  "AspisR1.NNH_Run6Fields.nmp",
+  "AspisR1.NNH_Run6Fields.nms",
+  "AspisR1.NNH_Run6Fields.nmt",
+  "AspisR1.NNH_Run6Fields.nmv",
+  "AspisR1.NNH_Run6Fields.nmw",
+  "AspisR1.NNH_Run6Fields.nmx",
+  "AspisR1.NNH_Run6Installed.implementation",
+  "AspisR1.NNH_Run6ReaderNative.native",
+  "AspisR1.NNH_StateSelect.selects",
+  "AspisR1.NNH_Tx2LiteralSlots.constants",
+  "AspisR1.NNH_Tx2LiteralSlots.pending",
+  "AspisR1.NNH_Tx2LiteralSlots.powers",
+  "AspisR1.NNH_Tx2SlotTransport.finish_slot",
+  "AspisR1.NNH_Tx2SlotTransport.geometry_slot",
+  "AspisR1.NNH_Tx2SlotTransport.stage",
+  "AspisR1.NNH_Weak241Prefix.Packet",
+  "AspisR1.NNH_Weak241Prefix.Packet.encode_ok",
+  "AspisR1.NNH_Weak241Prefix.Packet.mk",
+  "AspisR1.NNH_Weak241Prefix.Packet.n_eq",
+  "AspisR1.NNH_Weak241Prefix.Packet.reads",
+  "AspisR1.NNH_Weak241Prefix.Packet.validate_ok",
+  "AspisR1.NNH_Weak241Prefix.Packet.validated",
+  "AspisR1.NNH_Weak241Prefix.produce",
+  "AspisR1.NNH_WeakReaderCuts.produce",
+  "AspisR1.NNH_WeakTx2Inputs.Packet",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpointAccount",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_index",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.checkpoint_read",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.encode",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.encoded",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.extent",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.logical",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.mk",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proofAccount",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_index",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.proof_read",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.public_eq",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.validate",
+  "AspisR1.NNH_WeakTx2Inputs.Packet.validated",
+  "AspisR1.NNH_WeakTx2Inputs.produce",
+  "AspisR1.NNQ_HostDigest.o2",
+  "AspisR1.NNQ_HostDigest.split",
+  "AspisR1.NNR_ClockFree.modelSlots",
+  "AspisR1.NNU_Geometry.source",
+  "AspisR1.NNU_GeometrySelected.gather",
+  "AspisR1.NNU_GeometrySelected.prefixCall",
+  "AspisR1.NNU_GeometrySelected.zero",
+  "AspisR1.NNU_GeometryTraversal.selected_loop",
+  "AspisR1.NNU_GeometryTraversal.selected_step",
+  "AspisR1.NNU_MerkleSlots.installed",
+  "AspisR1.NNU_Query.source",
+  "AspisR1.NNU_QueryAccum.power",
+  "AspisR1.NNU_QueryAccum.product",
+  "AspisR1.NNU_QueryAccum.slots",
+  "AspisR1.NNU_QueryAccum.source",
+  "AspisR1.NNU_QueryAccum.sum",
+  "AspisR1.NNU_QueryLoop.finite",
+  "AspisR1.NNU_QueryLoop.source",
+  "AspisR1.NNU_QueryValues.source",
+  "AspisR1.NNU_Stage2Tail.emitPacket",
+  "AspisR1.NNU_Stage2Tail.returnedCuts",
+  "AspisR1.NNV_AdapterEncodeHost.slot",
+  "AspisR1.NNV_CheckpointDigest.source",
+  "AspisR1.NNV_CurrentCheckpoint.slot",
+  "AspisR1.NNV_CurrentCheckpoint.source",
+  "AspisR1.NNV_CurrentFlush.returned",
+  "AspisR1.NNV_CurrentFlush.slot",
+  "AspisR1.NNV_CurrentGeometry.returned",
+  "AspisR1.NNV_CurrentGeometry.slot",
+  "AspisR1.NNV_CurrentGeometry.source",
+  "AspisR1.NNV_CurrentQuerySource.slot",
+  "AspisR1.NNV_CurrentQuerySource.source",
+  "AspisR1.NNV_CurrentScan.returned",
+  "AspisR1.NNV_CurrentScan.slot",
+  "AspisR1.NNV_CurrentScan.source",
+  "AspisR1.NNV_GeometryBody.source",
+  "AspisR1.NNV_GeometryEq.source",
+  "AspisR1.NNV_GeometryIndexPorts.first",
+  "AspisR1.NNV_GeometryOuter.loop",
+  "AspisR1.NNV_GeometryOuter.source",
+  "AspisR1.NNV_GeometryOuter.stage",
+  "AspisR1.NNV_GeometryPrefixSelected.source",
+  "AspisR1.NNV_GeometryQuery.fibre",
+  "AspisR1.NNV_GeometryQuery.source",
+  "AspisR1.NNV_GeometrySelectedStd.any",
+  "AspisR1.NNV_GeometrySelectedStd.array",
+  "AspisR1.NNV_GeometrySelectedStd.base",
+  "AspisR1.NNV_GeometrySelectedStd.empty",
+  "AspisR1.NNV_GeometrySelectedStd.iterator",
+  "AspisR1.NNV_GeometrySelectedStd.mapped",
+  "AspisR1.NNV_GeometrySelectedStd.zero",
+  "AspisR1.NNV_GeometryTerminal.source",
+  "AspisR1.NNV_PrepareView.returned",
+  "AspisR1.NNV_PreparedAtHost.digest",
+  "AspisR1.NNV_PreparedAtHost.source",
+  "AspisR1.NNX_CommonEncode.source",
+  "AspisR1.NNX_CurrentQuery.actual",
+  "AspisR1.NNX_CurrentQuery.slots",
+  "AspisR1.NNX_CurrentQuery.source",
+  "AspisR1.NNX_Flush.source",
+  "AspisR1.NNX_LeafAgreement.source",
+  "AspisR1.NNX_PreparedValue.source",
+  "AspisR1.NNY_NNUParent.parent",
+  "AspisR1.NNY_ParserAssociation.source",
+  "AspisR1.NNY_Stage2PacketResidual.returned",
+  "AspisR1.NOC_Conv094.accNew",
+  "AspisR1.NOC_Conv094.geometry",
+  "AspisR1.NOC_Conv094.scan",
+  "AspisR1.NOC_Conv094.weightsNew",
+  "AspisR1.NOC_ConvLeaves.cur",
+  "AspisR1.NOC_ConvLeaves.filled",
+  "AspisR1.NOC_ConvLeaves.parse",
+  "AspisR1.NOC_ConvLeaves.prepared",
+  "AspisR1.NOC_ConvLeaves.view",
+  "AspisR1.NOC_HostCtx.Exhibited",
+  "AspisR1.NOC_HostCtx.base",
+  "AspisR1.NOC_HostCtx.configuration",
+  "AspisR1.NOC_HostCtx.extraction",
+  "AspisR1.NOC_HostCtx.missing",
+  "AspisR1.NOC_HostCtx.missingLit",
+  "AspisR1.NOC_HostCtx.model1",
+  "AspisR1.NOC_HostCtx.model2",
+  "AspisR1.NOC_HostCtx.sdk",
+  "AspisR1.NOC_MerkleBounded.host",
+  "AspisR1.NOC_MerkleBounded.hostNode",
+  "AspisR1.NOC_MerkleBounded.hostParent",
+  "AspisR1.NOC_Op9.op9",
+  "AspisR1.NOC_Op9Slot.digest",
+  "AspisR1.NOC_Op9Slot.slot",
+  "AspisR1.NOC_PrepareConv.cur",
+  "AspisR1.NOC_PrepareConv.prepare",
+  "AspisR1.NOC_PrepareFront.cur",
+  "AspisR1.NOC_PrepareFront.filled",
+  "AspisR1.NOC_PrepareFront.logical_semantic",
+  "AspisR1.NOC_PrepareFront.off_inactive",
+  "AspisR1.NOC_PrepareFront.off_semantic",
+  "AspisR1.NOC_PrepareFront.off_y1",
+  "AspisR1.NOC_PrepareFront.source",
+  "AspisR1.NOC_QueryLink.current",
+  "AspisR1.NOC_Run5bClaims.conclusion",
+  "AspisR1.NOC_Run5bCtx.Exhibited",
+  "AspisR1.NOC_Run5bCtx.base",
+  "AspisR1.NOC_Run5bCtx.configuration",
+  "AspisR1.NOC_Run5bCtx.extraction",
+  "AspisR1.NOC_Run5bCtx.missing",
+  "AspisR1.NOC_Run5bCtx.model1",
+  "AspisR1.NOC_Run5bCtx.model2",
+  "AspisR1.NOC_Run5bCtx.sdk",
+  "AspisR1.NOC_Run5bHost.S_host",
+  "AspisR1.NOC_Run5bHost.S_host._proof_1",
+  "AspisR1.NOC_Run5bHost.a0",
+  "AspisR1.NOC_Run5bHost.bound",
+  "AspisR1.NOC_Run5bHost.data",
+  "AspisR1.NOC_Run5bHost.envSig",
+  "AspisR1.NOC_Run5bHost.event",
+  "AspisR1.NOC_Run5bHost.r0",
+  "AspisR1.NOC_Run5bHost.record",
+  "AspisR1.NOC_Run5bHost.runtime",
+  "AspisR1.NOC_Run5bHost.seed",
+  "AspisR1.NOC_SeedTransfer.newCfg",
+  "AspisR1.NOC_SeedTransfer.op9",
+  "AspisR1.NOC_SemConv.op9",
+  "AspisR1.NOC_Stage1Iff.clockFree",
+  "AspisR1.NOC_Stage1Iff.iff345",
+  "AspisR1.NOC_Stage1Iff.sameSdk",
+  "AspisR1.NOC_Stage1Iff.sdk_at_slot",
+  "AspisR1.NOC_Tx1Conv.batch",
+  "AspisR1.NOC_Tx1Conv.cur",
+  "AspisR1.NOC_Tx1Conv.query",
+  "AspisR1.NOC_Tx1Conv.tx1",
+  "AspisR1.NOC_Tx1Forward.batch",
+  "AspisR1.NOC_Tx1Forward.cur",
+  "AspisR1.NOC_Tx1Forward.off_folded",
+  "AspisR1.NOC_Tx1Forward.off_round1",
+  "AspisR1.NOC_Tx1Forward.query",
+  "AspisR1.NOC_Tx1Forward.source",
+  "AspisR1.NOC_Tx1Forward.zero",
+  "AspisR1.NOF_A2FieldCorrected.clockFree",
+  "AspisR1.NOF_A2FieldCorrected.field",
+  "AspisR1.NOF_A2FieldCorrected.sdk_at_slot",
+  "AspisR1.NOF_CommonConverse.common",
+  "AspisR1.NOF_CommonConverse.source",
+  "AspisR1.NOF_CommonConverse.source_run",
+  "AspisR1.NOF_CommonConverse.tail_transport",
+  "AspisR1.NOF_Tx2Op11.tx2Op11",
+  "AspisR1.NOM_MerkleParent.hostParent",
+  "AspisR1.NOQ_A1Assembly.IFF",
+  "AspisR1.NOQ_A1Assembly.errT",
+  "AspisR1.NOQ_A1Assembly.field_of",
+  "AspisR1.NOQ_A1Assembly.okT",
+  "AspisR1.NOQ_FinalCombined.field",
+  "AspisR1.NOQ_WeakErrHost.modelRet1",
+  "AspisR1.RPx_Deployed.deployed",
+  "AspisR1.TAS_FinalB.deployed_charge",
+  "AspisR1.TAS_FinalB.deployed_splitB",
+  "AspisR1.TAS_FinalB.fail_sub_rec",
+  "LIBB_PoolLib.deployed",
+  "LIB_Deployed.deployed",
+  "LIB_Deployed.ids",
+  "LIB_Instances.D",
+  "NHJ_IdPacket.pool",
+  "NHJ_IdPacket.registry",
+  "NMS_R2AfterAuth242.factor",
+  "NMS_R2AfterAuthEq242.factor",
+  "NMS_R2Gated242.source",
+  "NMS_R2N_Native242Children.children",
+  "NMS_R2N_Native242Children.meaning",
+  "NMS_R2RequestBindings.pool",
+  "NMS_R2RequestGuards.actual",
+  "NMS_R2RequestGuards.bad",
+  "NMS_R2RequestGuards.full",
+  "NMS_R2RequestGuards.source",
+  "NMX_R3_Instantiated233.native",
+  "NMX_R3_Instantiated233.registry_packet",
+  "NMX_R3_Instantiated233.represented",
+  "NMX_R3_RegistryRoot.authenticate",
+  "NMX_R3_RegistryRoot.root",
+  "NMX_R4_AllArgs.execution",
+  "NMX_R4_AllArgs.operational",
+  "NMX_R4_Authentication.authenticate",
+  "NMX_R4_Authentication.context",
+  "NMX_R4_Authentication.observed",
+  "NMX_R4_Authentication.root",
+  "NMX_R4_NMS233.packet",
+  "NMX_R4_NMS233.typed",
+  "NMX_R4_NMS242Instantiation.fold",
+  "NMX_R5_AfterAuth242.full",
+  "NMX_R5_Decode242.full",
+  "NMX_R5_Decode242.model",
+  "NMX_R5_Decode242.source",
+  "NMX_R5_Guards242.factor",
+  "NMX_R5_Guards242.full",
+  "NMX_R5_Guards242.model",
+  "NMX_R5_Native242.full",
+  "NMX_R5_PrefixSource242.body",
+  "NMX_R5_PrefixSource242.full",
+  "NMX_R5_Request242.D",
+  "NMX_R5_Request242.bad",
+  "NMX_R5_Request242.full",
+  "NMX_R5_Request242.model",
+  "NMX_R5_Slot242.D",
+  "NMX_R5_Slot242.full",
+  "NMX_R5_Slot242.model",
+  "NMX_R5_Slot242.source",
+  "NMX_R6_NativeLive242.live",
+  "NMX_R6_NativeLive242.observation",
+  "NMX_R6_NativeLive242.source_member",
+  "NMX_R6_Nonempty.auth",
+  "NMX_R6_Port242.D",
+  "NMX_R6_Port242.replay_member",
+  "NMX_R6_Port242.validate",
+  "NMX_R6_Validation.root",
+  "NMX_R6_Validation.validate",
+  "NMX_R7_Port241.stage2",
+  "NMX_R7_PortLaw241.replay_member",
+  "NMX_R8_After241.full",
+  "NMX_R8_AfterFactor241.factor",
+  "NMX_R8_AfterFactor241.source",
+  "NMX_R8_Children241.grouped",
+  "NMX_R8_Children241.original",
+  "NMX_R8_Children241.validate",
+  "NMX_R8_Encoded241.full",
+  "NMX_R8_EncodedFactor241.factor",
+  "NMX_R8_GroupEncode241.source",
+  "NMX_R8_GroupReads241.source",
+  "NMX_R8_GroupValidate241.source",
+  "NMX_R8_Reads241.full",
+  "NMX_R8_ReadsFactor241.factor",
+  "NMX_R8_ReadsFactor241.source",
+  "NMX_R9_After241.fixed",
+  "NMX_R9_After241.full",
+  "NMX_R9_After241.grouped",
+  "NMX_R9_Children241.grouped",
+  "NMX_R9_Children241.original",
+  "NMX_R9_Children241.validate",
+  "NMX_R9_Children241.validate_full",
+  "NMX_R9_GroupHead241.source",
+  "NMX_R9_Head241.full",
+  "NMX_R9_HeaderFactor241.factor",
+  "NMX_R9_HeaderFactor241.later",
+  "NMX_R9_HeaderFactor241.source",
+  "NMX_R9_Live241.grouped",
+  "NMX_R9_Live241.live",
+  "NMX_R9_Live241.observation",
+  "NMX_R9_Live241.source_member",
+  "NMX_R9_Live241.validate",
+  "NMX_R9_Native241.meaning",
+  "NMX_R9_RelReplay241.D",
+  "NMX_R9_RelReplay241.replay",
+  "NMX_R9_StageTwo.D",
+  "NMX_R9_StageTwo.stage2",
+  "NMX_R9_ValidateUse241.full",
+  "NMX_R9_ValidateUse241.source",
+  "NNH_AuthCheckpointInputs.Packet",
+  "NNH_AuthCheckpointInputs.Packet.checkpoint",
+  "NNH_AuthCheckpointInputs.Packet.data",
+  "NNH_AuthCheckpointInputs.Packet.decode",
+  "NNH_AuthCheckpointInputs.Packet.domain_eq",
+  "NNH_AuthCheckpointInputs.Packet.mk",
+  "NNH_AuthCheckpointInputs.Packet.next",
+  "NNH_AuthCheckpointInputs.Packet.pda",
+  "NNH_AuthCheckpointInputs.Packet.pool_eq",
+  "NNH_AuthCheckpointInputs.Packet.read",
+  "NNH_AuthCheckpointInputs.produce",
+  "NNH_AuthCheckpointPort.value",
+  "NNH_AuthCheckpointStep.source",
+  "NNH_AuthGuardPorts.data",
+  "NNH_AuthGuardPorts.readonly",
+  "NNH_AuthLaneInputs.Packet",
+  "NNH_AuthLaneInputs.Packet.data",
+  "NNH_AuthLaneInputs.Packet.decode",
+  "NNH_AuthLaneInputs.Packet.lane_eq",
+  "NNH_AuthLaneInputs.Packet.mk",
+  "NNH_AuthLaneInputs.Packet.output",
+  "NNH_AuthLaneInputs.Packet.pda",
+  "NNH_AuthLaneInputs.Packet.pool_eq",
+  "NNH_AuthLaneInputs.Packet.read",
+  "NNH_AuthLaneInputs.Packet.state",
+  "NNH_AuthLaneInputs.produce",
+  "NNH_AuthLanePort.value",
+  "NNH_AuthLaneStep.source",
+  "NNH_AuthMasterInputs.Packet",
+  "NNH_AuthMasterInputs.Packet.data",
+  "NNH_AuthMasterInputs.Packet.decode",
+  "NNH_AuthMasterInputs.Packet.mask_eq",
+  "NNH_AuthMasterInputs.Packet.master",
+  "NNH_AuthMasterInputs.Packet.mk",
+  "NNH_AuthMasterInputs.Packet.next",
+  "NNH_AuthMasterInputs.Packet.pda",
+  "NNH_AuthMasterInputs.Packet.pool_eq",
+  "NNH_AuthMasterInputs.Packet.read",
+  "NNH_AuthMasterInputs.Packet.registry",
+  "NNH_AuthMasterInputs.produce",
+  "NNH_AuthMasterPort.value",
+  "NNH_AuthMasterStep.source",
+  "NNH_AuthNativeGuards.produce",
+  "NNH_AuthSdkBodyPort.value",
+  "NNH_AuthSdkDistinct.value",
+  "NNH_AuthSdkGuards.produce",
+  "NNH_AuthSdkPort.value",
+  "NNH_AuthSdkTail.checkpoint",
+  "NNH_AuthSdkTail.lane",
+  "NNH_AuthSdkTail.master",
+  "NNH_AuthSdkTail.registry",
+  "NNH_AuthSlotFacts.ne_self",
+  "NNH_CorrectCallInputs.produce",
+  "NNH_CorrectConfiguration.configuration",
+  "NNH_CorrectConfiguration.sdk",
+  "NNH_CorrectExtents.value",
+  "NNH_CorrectReads.source",
+  "NNH_CorrectTx2Inputs.Packet",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint",
+  "NNH_CorrectTx2Inputs.Packet.checkpointAccount",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_eq",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_index",
+  "NNH_CorrectTx2Inputs.Packet.checkpoint_read",
+  "NNH_CorrectTx2Inputs.Packet.encode",
+  "NNH_CorrectTx2Inputs.Packet.encoded",
+  "NNH_CorrectTx2Inputs.Packet.extent",
+  "NNH_CorrectTx2Inputs.Packet.logical",
+  "NNH_CorrectTx2Inputs.Packet.mk",
+  "NNH_CorrectTx2Inputs.Packet.proof",
+  "NNH_CorrectTx2Inputs.Packet.proofAccount",
+  "NNH_CorrectTx2Inputs.Packet.proof_eq",
+  "NNH_CorrectTx2Inputs.Packet.proof_index",
+  "NNH_CorrectTx2Inputs.Packet.proof_read",
+  "NNH_CorrectTx2Inputs.Packet.public_eq",
+  "NNH_CorrectTx2Inputs.Packet.validate",
+  "NNH_CorrectTx2Inputs.Packet.validated",
+  "NNH_CorrectTx2Inputs.Packet.validated_eq",
+  "NNH_CorrectTx2Inputs.getters",
+  "NNH_CorrectTx2Inputs.produce",
+  "NNH_CorrectTx2Inputs.sdk",
+  "NNH_DistinctPort.value",
+  "NNH_EncodeOk.sdk",
+  "NNH_ExactRemainingTypes.tx2Op11",
+  "NNH_GetterOk.value",
+  "NNH_Libraries.D",
+  "NNH_PdaOk.native",
+  "NNH_RequestGuards.value",
+  "NNH_S1CodecOk.decode",
+  "NNH_Stage2Cut.Packet",
+  "NNH_Stage2Cut.Packet.auth_ok",
+  "NNH_Stage2Cut.Packet.checkpoint_account",
+  "NNH_Stage2Cut.Packet.checkpoint_data",
+  "NNH_Stage2Cut.Packet.checkpoint_index",
+  "NNH_Stage2Cut.Packet.checkpoint_ok",
+  "NNH_Stage2Cut.Packet.emit_ok",
+  "NNH_Stage2Cut.Packet.encode_ok",
+  "NNH_Stage2Cut.Packet.guards",
+  "NNH_Stage2Cut.Packet.mk",
+  "NNH_Stage2Cut.Packet.proof_account",
+  "NNH_Stage2Cut.Packet.proof_data",
+  "NNH_Stage2Cut.Packet.proof_index",
+  "NNH_Stage2Cut.Packet.proof_length",
+  "NNH_Stage2Cut.Packet.proof_ok",
+  "NNH_Stage2Cut.Packet.public_bytes",
+  "NNH_Stage2Cut.Packet.validate_ok",
+  "NNH_Stage2Cut.Packet.validated",
+  "NNH_Stage2GuardedCut.Packet",
+  "NNH_Stage2GuardedCut.Packet.cut",
+  "NNH_Stage2GuardedCut.Packet.domain",
+  "NNH_Stage2GuardedCut.Packet.mk",
+  "NNH_Stage2GuardedCut.produce",
+  "NNH_Stage2GuardedEval.returned",
+  "NNH_Stage2GuardedEval.value",
+  "NNH_Stage2HeadGuard.equal",
+  "NNH_Stage2HeadPort.source",
+  "NNH_Stage2To064.source",
+  "NNH_Tx1RouteCompare.source",
+  "NNH_Tx2CheckpointPort.reinstall",
+  "NNH_Tx2CheckpointPort.value",
+  "NNH_Tx2Configuration.configuration",
+  "NNH_Tx2Configuration.readonly",
+  "NNH_Tx2Configuration.sdk",
+  "NNH_Tx2Configuration.select",
+  "NNH_Tx2ModelSlots.install",
+  "NNH_Tx2RegistryPort.same",
+  "NNH_Tx2RegistryPort.value",
+  "NNH_ValidateScanStep.source",
+  "NNH_ValidateSdkHeadStep.source",
+  "NNH_ValidateSdkPort.value",
+  "NNH_ValidateSdkTail.source",
+  "NNH_ValidateTailPort.value",
+  "NNH_ValidatedExtent.value",
+  "NNS_Fold241.D",
+  "NNS_Fold241.fold",
+  "NNS_PortLaw241.replay_same",
+  "NNS_PortLaw241.root",
+  "NNT_Field.Required",
+  "NNT_Field.r241",
+  "NNT_Native241.D",
+  "NNT_Native241.full",
+  "NNT_Port241.root",
+  "NNT_RelReplay241.fold",
+  "NNT_Root241.parametric",
+  "NOC_Stage1Conv.child",
+  "NOC_Stage1Conv.codec",
+  "NOC_Stage1Conv.conv",
+  "NOC_Stage1Conv.fd11",
+  "NOC_Stage1Conv.gate",
+  "NOC_Stage1Conv.guards",
+  "NOC_Stage1Conv.kOf",
+  "NOC_Stage1Conv.routeData",
+  "NOC_Stage1Conv.shapeOf",
+  "NOC_Stage1Forward.S",
+  "NOC_Stage1Forward.body",
+  "NOC_Stage1Forward.ckLemma",
+  "NOC_Stage1Forward.cmpLemma",
+  "NOC_Stage1Forward.fdLemma",
+  "NOC_Stage1Forward.gateLemma",
+  "NOC_Stage1Forward.ok345",
+  "NOC_Stage1Inv.Facts",
+  "NOC_Stage1Inv.Facts.cb",
+  "NOC_Stage1Inv.Facts.cka",
+  "NOC_Stage1Inv.Facts.d1v",
+  "NOC_Stage1Inv.Facts.enc",
+  "NOC_Stage1Inv.Facts.h21",
+  "NOC_Stage1Inv.Facts.hcb",
+  "NOC_Stage1Inv.Facts.hck",
+  "NOC_Stage1Inv.Facts.hcmp",
+  "NOC_Stage1Inv.Facts.hd1",
+  "NOC_Stage1Inv.Facts.hdec",
+  "NOC_Stage1Inv.Facts.hdist",
+  "NOC_Stage1Inv.Facts.hfd",
+  "NOC_Stage1Inv.Facts.hkk",
+  "NOC_Stage1Inv.Facts.hl",
+  "NOC_Stage1Inv.Facts.hlen",
+  "NOC_Stage1Inv.Facts.hne",
+  "NOC_Stage1Inv.Facts.hpb",
+  "NOC_Stage1Inv.Facts.hrbP",
+  "NOC_Stage1Inv.Facts.hrbU",
+  "NOC_Stage1Inv.Facts.hs0",
+  "NOC_Stage1Inv.Facts.hs1",
+  "NOC_Stage1Inv.Facts.hsp",
+  "NOC_Stage1Inv.Facts.hsv",
+  "NOC_Stage1Inv.Facts.htag",
+  "NOC_Stage1Inv.Facts.htv",
+  "NOC_Stage1Inv.Facts.hub",
+  "NOC_Stage1Inv.Facts.hz",
+  "NOC_Stage1Inv.Facts.i0",
+  "NOC_Stage1Inv.Facts.i1",
+  "NOC_Stage1Inv.Facts.i2",
+  "NOC_Stage1Inv.Facts.kk",
+  "NOC_Stage1Inv.Facts.mk",
+  "NOC_Stage1Inv.Facts.nat",
+  "NOC_Stage1Inv.Facts.pa",
+  "NOC_Stage1Inv.Facts.pb",
+  "NOC_Stage1Inv.Facts.pba",
+  "NOC_Stage1Inv.Facts.s0",
+  "NOC_Stage1Inv.Facts.s1",
+  "NOC_Stage1Inv.Facts.sp",
+  "NOC_Stage1Inv.Facts.st",
+  "NOC_Stage1Inv.Facts.t",
+  "NOC_Stage1Inv.Facts.ub",
+  "NOC_Stage1Inv.S",
+  "NOC_Stage1Inv.invert"]
+def roots : Array String := #["NNH_ReturnsBundle.tx1Value",
+  "NNH_ReturnsBundle.tx2Value",
+  "AspisR1.NNG_TotalProducer345.producer",
+  "AspisR1.NNH_Run6Installed.implementation"]
+def toSet (xs : Array String) : NameSet := xs.foldl (fun s x => s.insert x.toName) {}
+def ids : Std.HashMap Name Name := Std.HashMap.ofList [
+  (`AspisR1.CPH_Program.verifier, `NPO_DeployedIds.verifierNov),
+  (`NHJ_IdPacket.poolDefault, `NPO_DeployedIds.poolNov),
+  (`NHJ_IdPacket.registryDefault, `NPO_DeployedIds.registryNov)]
+end NPP.Inputs
+
+/-! Stage B for the model cone (native tool). Imports NPO_CloneNov and NPP_ComputableModel (the
+four-root stage-A olean of NPP_L060); adds `nov_eq : NPP_C.X = NPO_Nov.X` for the id-dependent
+copies (kernel-checked by `addDecl`), and `NPP_C.LIBC_BatchMerkle.returns` transported from
+`NPO_Nov.LIBC_BatchMerkle.returns` along the equations (not re-checked). Writes NPP_ModelNovEq.olean. -/
+open Lean Meta in
+unsafe def NPP.modelNovMain (outDir : String) : IO UInt32 := do
+  initSearchPath (← findSysroot)
+  enableInitializersExecution
+  let env ← importModules #[{module := `NPO_CloneNov}, {module := `NPP_ComputableModel}] {} (trustLevel := 1024) (loadExts := true)
+  let ctx : Core.Context := { fileName := "NPP_ModelNovEq", fileMap := default, maxHeartbeats := 0 }
+  let st : Core.State := { env := env.setMainModule `NPP_ModelNovEq }
+  let act : MetaM UInt32 := do
+    let mut all : Array Name := #[]
+    for r in NPP.Inputs.roots do
+      let (eqs, failed) ← NPP.stageB r.toName (NPP.Inputs.toSet NPP.Inputs.cand)
+        (NPP.Inputs.toSet NPP.Inputs.leaves) NPP.Inputs.ids (NPP.Inputs.toSet NPP.Inputs.idDep) `NPP_C `NPO_Nov
+      NPP.log <| Json.mkObj [("event","stageB"),("root", toJson r),("eqs", toJson eqs.size),("failed", toJson (failed.map toString))]
+      all := all ++ eqs
+    let (_, dep) ← NPP.walk (← getEnv) `NNH_ReturnsBundle.tx1Value (NPP.Inputs.toSet NPP.Inputs.cand)
+      (NPP.Inputs.toSet NPP.Inputs.leaves) NPP.Inputs.ids
+    let tr ← NPP.transportNov `LIBC_BatchMerkle.returns (dep.getD · false) (NPP.Inputs.toSet NPP.Inputs.idDep)
+    let names := all ++ (tr.map (#[·])).getD #[]
+    let mut axs : Std.HashSet String := {}
+    for n in names do
+      for a in ← collectAxioms n do axs := axs.insert a.toString
+    NPP.log <| Json.mkObj [("event","done"),("nov_eq", toJson all.size),("transported", toJson (tr.map toString)),("axioms", toJson axs.toList)]
+    return 0
+  let (code, st') ← (act.run' {} {}).toIO ctx st
+  if code != 0 then return code
+  writeModule st'.env s!"{outDir}/NPP_ModelNovEq.olean" (writeIR := false)
+  NPP.log <| Json.mkObj [("event","written"),("module","NPP_ModelNovEq")]
+  return 0
+
+unsafe def main (args : List String) : IO UInt32 := NPP.modelNovMain (args.headD "out")

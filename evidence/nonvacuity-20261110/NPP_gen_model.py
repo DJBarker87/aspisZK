@@ -181,3 +181,14 @@ run_meta do
 '''
 open(os.path.join(out, 'NPP_src/' + (sys.argv[4] if len(sys.argv) > 4 else 'NPP_ComputableModel') + '.lean'), 'w').write(hdr + lib + names + derive + body)
 print(len(cand), len(leaves), len(closure))
+
+# the stage-B native tool for the model cone (namespace NPP, inputs as above)
+libB = open(os.path.join(out, 'NPP_src/NPP_Lib.lean')).read().replace('import Lean\n', '').replace('import Aeneas\n', '')
+namesB = names.replace('NPP2.Inputs', 'NPP.Inputs')
+import re as _re
+a = libB.index('/-- computable extraction from a total Result -/')
+b = libB.index('/-- set to true locally to log every visited proof -/')
+libB = libB[:a] + '-- (okOf/okOkOf and their lemmas live in the Lean modules; the tool refers to them by name only)\n' + libB[b:]
+libB = libB.replace('``NPP.okOf', '`NPP2.okOf').replace('``NPP.okOkOf', '`NPP2.okOkOf')
+mainB = open(os.path.join(out, 'NPP_src/NPP_ModelNovMain.inc')).read()
+open(os.path.join(out, 'NPP_src/NPP_ModelNovTool.lean'), 'w').write('import Lean\nset_option autoImplicit false\n' + libB + namesB + mainB)
