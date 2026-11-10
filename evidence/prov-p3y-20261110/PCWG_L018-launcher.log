@@ -1,0 +1,61 @@
+{"attempt": "PCWG_L018", "exit_status": 1, "wall_seconds": 3.915594290010631, "peak_rss_kib": "2612048", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some x => ok x
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:35:8: warning: This simp argument is unused:
+  Aeneas.Std.core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵l̵i̵f̵t̵F̵u̵n̵2̵,̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲l̲i̲f̲t̲F̲u̲n̲2̲,̲ Aeneas.Std.core.cmp.impls.PartialEqU8.ne]
+
+Note: This linter can be disabled with `set_o
+...
+g of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:135:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ∀ x ∈ ↑s, x = 0#u8 then ?m.53 else ?m.54
+in the target expression
+  (do
+      let pending_return ← ok (if ∀ x ∈ List.drop ↑0#usize ↑s, x = 0#u8 then none else some false)
+      match pending_return with
+        | none => ok true
+        | some b1 => ok b1) =
+    ok (decide (∀ x ∈ ↑s, x = 0#u8))
+
+case neg
+s : Slice U8
+h : ¬∀ x ∈ ↑s, x = 0#u8
+⊢ (do
+      let pending_return ← ok (if ∀ x ∈ List.drop ↑0#usize ↑s, x = 0#u8 then none else some false)
+      match pending_return with
+        | none => ok true
+        | some b1 => ok b1) =
+    ok (decide (∀ x ∈ ↑s, x = 0#u8))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+PCWG_sources/PRVEq_NCX_Lemmas_p3y.lean:148:36: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+
+Running as unit: run-rd8f0535b506e4e89891a60bcfc36d3d0.scope; invocation ID: f76a2c79e8204c65a7fe443c545e75a0

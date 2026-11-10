@@ -1,0 +1,47 @@
+{"attempt": "PCWG_L004", "exit_status": 1, "wall_seconds": 6.514279296156019, "peak_rss_kib": "2996252", "swaps": "0", "print_axioms": []}
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:4:75: error: failed to synthesize
+  Decidable (28#usize * 32#usize = ok 896#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:5:75: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @E
+...
+ces/PRVEq_NGD_Probe1_p3y.lean:4:75: error: failed to synthesize
+  Decidable (28#usize * 32#usize = ok 896#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:5:75: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:7:28: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.mul`
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:7:43: warning: Possibly looping simp theorem: `UScalar.mul.eq_1`
+
+Note: Possibly caused by: `UScalar.tryMk`, `ofOption`, `HMul.hMul`, `Mul.mul`, and `Nat.mul_eq`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:7:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Try this:
+  [apply] exact a1
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+PCWG_sources/PRVEq_NGD_Probe1_p3y.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.mul`
+
+Running as unit: run-r8e7816b5241047cc96dde6ae55e988c4.scope; invocation ID: 35640e82668549e18dfd2c17b4424ddc
