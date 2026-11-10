@@ -19,3 +19,13 @@ Estimated need: 4 to 6 further Lean scopes. Until then the row cannot be called 
 
 ## Failed shapes (recorded, not repeated)
 `interval_cases` is not available in this toolchain (replaced by `obtain rfl | ...` from omega); `simp`/`rw` with a mvar-typed `if_pos` inside goals that carry `Std.Array U32 8#usize` types fails (the literal's proof does not check at instances transparency): replaced by generic lemmas over a type variable Dig; `decide (a = b)` on Aeneas arrays has no instance (use `a.val = b.val`). Scopes L003-L009, L011, L013-L017, L019-L020, L022-L024, L026-L029 were development iterations that ended exit 1; each source change followed the printed error.
+
+
+## Update after lead message (8 more Lean scopes, L031-L038; total 38)
+Label: REVIEWED_TRANSCRIPTION_PENDING_OWNER. op50 stays OPEN. Target not yet established.
+Exit 0, standard axioms only:
+- L032 (p10): bridge fixed by a generic `bne_bridge` (the earlier failure was the array-typed statement, changed shape, not a rerun); `frontier_loop_eq` and the `frontier_eq` wrapper (decode_frontier) are proved.
+- L034 (p11): the transcription factored into stages hdrBad, S1..S5 (verbatim fragments; `decodeLane_fact` is rfl) with bad/ok lemmas; ref-side slice lemmas.
+- L036 (p12): `hdrBad_false_iff`: the transcription's header guard passes iff HdrOK b (eight conditions on the Aeneas bytes: length 768, magic, version, lane id < 8, count 8, depth 20, binding, zero reserved bytes).
+- L038 (p13): `ref_hdr_bad`: if HdrOK b fails, decode_lane_ref b = ok (Err ()). Together with `dl_bad` and `hdrBad_false_iff` the reference and the transcription agree on every input failing a header guard.
+Not done (scopes exhausted): ref-side simulation after the header (master zero test via bytes32_eq/zero_eq, tree guards, word64_eq for next_leaf_index, digest_eq for root, frontier_loop_eq, last root check via eq_digest_eq), which feeds S1..S5 with `S*_bad/ok`; `decode_lane_ref_eq` (planned LaneRel/Cmp statement above); composition with `op50_slot`. Every ingredient lemma it needs is now proved; what remains is the sequential case analysis, about the size of p13 times two, plus a tree-guard analogue of hdrBad_false_iff (treeBad). Recommend 4 to 6 more scopes.
