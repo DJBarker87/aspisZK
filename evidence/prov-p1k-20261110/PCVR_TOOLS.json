@@ -1,10 +1,17 @@
 {
  "schema": "PCVR_TOOLS/1",
- "changes_from_PCUJ": [
-  "PCUJ_* copied with the prefix and workspace renamed to PCVR_ / codex-pc-prov-p1k-20261110 (run, run_host, extract, gen_equalities, partition, gen_all, render, plan, ingest, STAGER_PIN)",
-  "PCVR_mkspec.sh: clones an existing ON spec (default PCUJ_E001) and changes only run name, roots, added/dropped opaque, tool, namespace, host paths",
-  "admission unchanged: host scopes < 6, Stream C scopes < 2, disk >= 40 GB, reservation allowed:true, one scope at a time"
+ "changes_from_PCVJ": [
+  "PCVJ_* copied with prefix and host workspace renamed to PCVR_ / codex-pc-prov-p1k-20261110 (run, run_host, extract, gen_equalities, partition, STAGER_PIN, run_extract.sh, run_scope.sh)",
+  "PCVR_extract.py: (a) spec.features_override replaces the stager FEATURES global (stager file unchanged, sha 365cdfc8) so the client feature set is used for the stager's cargo metadata graph check; (b) spec.llbc_stable: Charon --dest-file is one stable path PCVR_stable/<name>.llbc and is copied to <run>_emitted/repro.llbc after Charon exits 0, because cargo fingerprints for workspace crates differ between runs with different --dest-file (two aspis-core fingerprint dirs after E001/E002)",
+  "PCVR_mkspec2.sh: writes a spec directly (no base spec); env MANIFEST (Charon manifest, default cost-probe) and CLIENT_FEAT (stager graph-check features)",
+  "PCVR_s2only.py: rewrites named theorems of a generated PRVEq file to the stage-2 arm only (stage-1 rfl hits a deterministic heartbeat timeout, which `first` does not catch)",
+  "admission unchanged: host scopes < 6, Stream C scopes < 2, disk >= 40 GB, reservation allowed:true, one scope at a time; caps and 180 s unchanged"
  ],
  "stager": "NHR_stage.py sha 365cdfc8 unchanged",
- "aeneas": "aeneas-b59d5188-extended (sha c0cf4fcc...)"
+ "aeneas": {
+  "original": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3 (codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas, sha verified by PCVR_extract.py before every use)",
+  "extended_not_used": "aeneas-b59d5188-extended"
+ },
+ "charon": "daad69be... (XRa_bin/charon), charon-driver efdbe5b8...",
+ "toolchain": "nightly-2026-09-17, CARGO_BUILD_JOBS=1"
 }

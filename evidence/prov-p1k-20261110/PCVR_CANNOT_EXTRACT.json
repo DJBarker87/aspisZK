@@ -1,0 +1,56 @@
+{
+ "schema": "PCVR_CANNOT_EXTRACT/1",
+ "target_not_yet_established": true,
+ "summary": "Nothing in the P1k scope failed to extract with the original Aeneas 959659a6 (tried first per the Stream B update; the extended build was not run). Two limits of the cost-probe-crate view are recorded.",
+ "limits": [
+  {
+   "item": "aspis_core::state_only_hiding::state_only_selected_mask_value and aspis_core::state_only_prefix::r0::statement_points",
+   "scope": "PCVR_E004 (Charon on aspis-r1-cost-probe, client features)",
+   "result": "Charon translates these cross-crate, non-inline aspis-core functions as Opaque declarations (bodies are not available from the cost-probe compilation); Weights::new therefore calls statement_points as an external in the PCVR_E004 emission.",
+   "replacement": "extracted from the aspis-core crate itself: PCVR_E005 (selected mask value, its three loops, statement_points) and PCVR_E006 (QM31/WideExact arithmetic, heap::filled, opening::inactive, COEFFICIENT_TO_ROW, statement_points)"
+  }
+ ],
+ "failed_scopes": [
+  {
+   "scope": "PCVR_E001",
+   "error": "timeout 180 s (exit 124) during the Charon cargo build of the workspace chain with cold registry dependencies",
+   "class": "cold build, not a shape failure"
+  },
+  {
+   "scope": "PCVR_E002",
+   "error": "timeout 180 s (exit 124) in the workspace-crate build (registry dependencies warm, workspace crates rebuilt under the Charon driver)",
+   "class": "cold build; cause found: workspace-crate cargo fingerprints depend on --dest-file, so E001's work was not reused"
+  },
+  {
+   "scope": "PCVR_E003",
+   "error": "timeout 180 s (exit 124), first run with the stable --dest-file",
+   "class": "warm-up for the identical spec PCVR_E004 (all three roots, same Charon arguments)"
+  }
+ ],
+ "extracted": [
+  {
+   "scope": "PCVR_E004",
+   "roots": [
+    "Weights::new",
+    "Weights::materialize"
+   ],
+   "emission": "PCVR_E004_emitted/raw/PCVR_all",
+   "note": "the spec also listed aspis_core::state_only_hiding::state_only_selected_mask_value as a root; it is Opaque there (see limits)"
+  },
+  {
+   "scope": "PCVR_E005",
+   "roots": [
+    "state_only_selected_mask_value",
+    "statement_points"
+   ],
+   "emission": "PCVR_E005_emitted/raw/PCVR_core"
+  },
+  {
+   "scope": "PCVR_E006",
+   "roots": [
+    "aspis-core field/heap/opening/transport items used by Weights"
+   ],
+   "emission": "PCVR_E006_emitted/raw/PCVR_core2"
+  }
+ ]
+}
