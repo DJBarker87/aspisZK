@@ -315,3 +315,88 @@ stage-B run (NPP_SdkNovTool pattern) has not been made for it, because every roo
    check of `ok1`/`ok2` at the RSL implementation. The R2 proof work after that is as in section 6.
 
 Target not yet established.
+
+## 9. Second continuation (lead decisions on NPP_SELECTIONS.md): NPP_L050 to NPP_L064
+
+Fifteen scopes, one at a time, with the same checks. Peak RSS was at most 7,250,260 KiB and swap was
+0. The per-item outcome is in NPP_SELECTIONS.md ("Outcome of the lead's decisions").
+
+### 9.1 Hand refinements (NPP_src/NPP_Refine.lean; NPP_L055 exit 0)
+
+These are five new copies, each with a kernel-checked `npp_eq`:
+
+- `LIBC_ExpandSemanticModel.Row`;
+- `NJE_WellFrozen.emitted`;
+- `LIB_VClaims.parent` and `LIB_VClaims.value`;
+- `LIBB_NullifierBytes.digest`.
+
+The module also adds two computable decision procedures, each with its characterization lemma:
+`NGO_CallerDomains.Call` and `NKR_DigestChildren.Domain`.
+
+### 9.2 Tool changes
+
+- Hand copies are reused before blocking is checked.
+- A final topological sort over types and values. NPP_L056 placed `NNH_PrepareReturns.returned`
+  before `P`.
+- The no-code closure, which uses the compiler's criterion. A diagnostic (NPP_L059) found that
+  `LIBC_VTx1A.finish` and `NLL_Parent.model` lack code without carrying the noncomputable tag that
+  the NPO_L035 scan used. The native scan NPP_NoCode (NPP_L063) gives 804 code-less definitions in
+  the four roots' closure. Making every code-less definition a candidate inside the walk
+  (NPP_L061) timed out and was replaced by that scan.
+
+### 9.3 Final counts
+
+| Column | Count | Where |
+|---|---:|---|
+| Copies of definitions: sdk stage | 62 | NPP_ComputableSdk |
+| Copies of definitions: hand-written | 5 | NPP_Refine |
+| Copies of definitions: four-root stage A2 | 252 | NPP_L060 olean dc2de959… |
+| Theorem copies (transport 49, substitution 36) | 85 | NPP_L060 |
+| **npp_eq proved** | 50 + 5 + 185 = **240** | NPP_ComputableSdk, NPP_Refine, NPP_L060 |
+| nov_eq to the 10 November NPO_Nov constants | 12 | NPP_SdkNovEq (stage B for the sdk cone only) |
+| Copies without an equation: id-dependent, waiting for stage B, or with multi-group proofs | 67 | NPP_L060 |
+| **Record-only** | **0** | none made |
+| Copies with compiled IR (four-root stage A2) | 183 of 337 | NPP_L060 |
+| **Blocked**: unrefined leaves | 3 distinct (select, AuthCarrier.raw, R6 observation) | NPP_L060 |
+| **Blocked**: tool blocks | 7 | NPP_L060 |
+| **Blocked**: dependents | 79 | NPP_L060 |
+
+The NPP_L060 source was overwritten by the NPP_L061 attempt. Its sha256 is 1248e5c7…, and its
+library is NPP_Lib as of NPP_L060, before the `lacksCode` change.
+
+### 9.4 The two I.entry results
+
+**Not run.** `NNH_Run6Installed.implementation` (I) stays blocked on both transactions:
+
+- on the TX1 event path at B1 (`NNG_TypedEvents.select`, where `A` is a variable);
+- on TX2 additionally at A4 (allocation nondeterminism) and A2 (auth inverse, not done).
+
+Under your rule, neither can be refined without a restatement, so no executable I.entry exists to
+run.
+
+The closest executable target is `tx1Value`, which `iff345` relates to `stage1_owned`. NPP_L064 ran
+stage A2 for it with the no-code closure: 174 definition copies, 131 `npp_eq`, and
+`LIB_VLib.library` now compiles. Two structural obstacles remain:
+
+- **Recursive copies have no code.** Copies of structurally recursive definitions (`LIBC_S1.decode`,
+  `NLL_Parent.model._f`, and their matchers and `casesOn` helpers) are compiled from kernel values
+  that use `brecOn`, which the code generator cannot run. The originals were compiled from their
+  pre-definitions. A fix would generate code from the equation lemmas through `implemented_by`. That
+  is a code-level trust step for the executable route only, and needs your approval.
+- **One theorem cannot be copied.** `LIBC_BatchMerkle.returns` can only be copied by substitution,
+  because its type mentions id-dependent constants that have no stage-A equation. Re-checking its
+  proof exceeded kernel memory; it was caught and blocked. It blocks `NNH_Tx1Returns.values` and so
+  `tx1Value`. Stage B equations for the id-dependent part would let it be transported instead.
+
+### 9.5 Next
+
+1. Lead decisions:
+   - `implemented_by` for recursive copies (executable route only);
+   - restatement or not for B1 (and A4);
+   - whether to fund A2 (the auth inverse).
+2. Stage B (`nov_eq`) for the id-dependent copies of the model cone: 2 to 3 scopes. Transport then
+   replaces substitution for theorems such as `LIBC_BatchMerkle.returns`.
+3. Then the executable `tx1Value` on record 35, which is the iff345 partner of the probe that
+   already accepts. `I.entry` only after B1.
+
+Target not yet established.

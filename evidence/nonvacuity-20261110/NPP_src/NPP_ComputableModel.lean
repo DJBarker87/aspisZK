@@ -1,5 +1,6 @@
 import Lean
 import NPP_ComputableSdk
+import NPP_Refine
 import NNH_ReturnsBundle
 import NNG_TotalProducer345
 import NNH_Run6Installed
@@ -107,6 +108,23 @@ def constOccs (e : Expr) (p : Name → Bool) : MetaM (Array (Name × List Level)
     | _ => pure ()
   r.get
 
+/-- constants from library modules (core, Std, Mathlib, Batteries): never copied as leaves -/
+def isLibConst (env : Environment) (n : Name) : Bool :=
+  match env.getModuleIdxFor? n with
+  | some i =>
+    let m := env.header.moduleNames[i.toNat]!
+    [`Init, `Lean, `Std, `Mathlib, `Batteries].contains m.getRoot
+  | none => false
+
+/-- the compiler's view: a computationally relevant definition without compiled code -/
+def lacksCode (env : Environment) (n : Name) : MetaM Bool := do
+  if isLibConst env n then return false
+  let some (.defnInfo d) := env.find? n | return false
+  if (Lean.IR.findEnvDecl env n).isSome then return false
+  if ← isTypeFormerType d.type then return false
+  if ← isProp d.type then return false
+  return true
+
 /-- Post-order walk from `root` restricted to `cand ∪ ids`; `dep n` iff `n` is a leaf, an id
 target, or mentions a dependent. Returns the dependents in post-order (id targets excluded). -/
 def walk (env : Environment) (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) :
@@ -123,7 +141,10 @@ def walk (env : Environment) (root : Name) (cand leaves : NameSet) (ids : Std.Ha
     match env.find? n with
     | none => dep := dep.insert n false
     | some ci =>
-      let ds := (← depsOf ci).toList.filter fun d => cand.contains d || ids.contains d
+      -- any noncomputable constant reached is a candidate leaf as well (the scan's list may be partial)
+      let mut ds : List Name := []
+      for d in (← depsOf ci).toList do
+        if cand.contains d || ids.contains d || (← lacksCode env d) then ds := d :: ds
       if !ex then
         if started.contains n then continue
         started := started.insert n
@@ -131,7 +152,7 @@ def walk (env : Environment) (root : Name) (cand leaves : NameSet) (ids : Std.Ha
         for d in ds do
           if !dep.contains d then stack := stack.push (d, false)
       else
-        let b := leaves.contains n || ds.any (fun d => dep.getD d false)
+        let b := leaves.contains n || (!cand.contains n && (← lacksCode env n)) || ds.any (fun d => dep.getD d false)
         dep := dep.insert n b
         if b then order := order.push n
   -- a constant referenced by a dependent whose TYPE mentions a dependent must be copied as well
@@ -154,7 +175,27 @@ def walk (env : Environment) (root : Name) (cand leaves : NameSet) (ids : Std.Ha
       if !placed.contains n then newOrder := newOrder.push n; placed := placed.insert n
     order := newOrder
     if !changed then break
-  return (order, dep)
+  -- final topological order over types and values (an auxiliary constant may mention, in its
+  -- type, a dependent that is placed after its first user)
+  let inOrder : NameSet := order.foldl (·.insert ·) {}
+  let mut sorted : Array Name := #[]
+  let mut done : NameSet := {}
+  let mut onStack : NameSet := {}
+  for root in order do
+    let mut st : Array (Name × Bool) := #[(root, false)]
+    while h : st.size > 0 do
+      let (n, ex) := st.back
+      st := st.pop
+      if done.contains n then continue
+      if ex then
+        done := done.insert n; sorted := sorted.push n; continue
+      if onStack.contains n then continue
+      onStack := onStack.insert n
+      st := st.push (n, true)
+      if let some ci := env.find? n then
+        for d in (← depsOf ci).toList do
+          if inOrder.contains d && !done.contains d then st := st.push (d, false)
+  return (sorted, dep)
 
 /-- fvars that `e` depends on, closed under their types, in local-context order -/
 def scopeOf (e : Expr) : MetaM (Array Expr) := do
@@ -699,18 +740,18 @@ def stageA (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) (
   let mut blocked : NameSet := {}
   for n in order do
     let some ci := env.find? n | continue
+    -- reuse a copy (and its equation) made earlier or by hand (checked before blocking)
+    if (← getEnv).contains (copyName n) then
+      if (← getEnv).contains (eqName n) then hasEq := hasEq.insert (copyName n)
+      log <| Json.mkObj [("n", toJson n.toString),("status","reused"),("eq", toJson ((← getEnv).contains (eqName n)))]
+      continue
     -- a dependent of a blocked constant (an unrefined leaf) stays noncomputable and is not copied
     let ds ← depsOf ci
     if let some b := ds.toList.find? (blocked.contains ·) then
       blocked := blocked.insert n
       log <| Json.mkObj [("n", toJson n.toString),("status","blocked"),("by", toJson b.toString)]
       continue
-    -- reuse a copy (and its equation) made by an earlier stage-A run
-    if (← getEnv).contains (copyName n) then
-      if (← getEnv).contains (eqName n) then hasEq := hasEq.insert (copyName n)
-      log <| Json.mkObj [("n", toJson n.toString),("status","reused"),("eq", toJson ((← getEnv).contains (eqName n)))]
-      continue
-    let leaf := leaves.contains n
+    let leaf := leaves.contains n || (!cand.contains n && (← lacksCode env n))
     match ci with
     | .defnInfo dv =>
       if dv.safety != .safe then throwError "{n}: unsafe/partial definition in the cone"

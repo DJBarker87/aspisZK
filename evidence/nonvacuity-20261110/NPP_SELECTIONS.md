@@ -149,3 +149,50 @@ Every total-Result choice in the cone was refined through the tool extension. Ea
     groups. The copies are valid, but no equation is claimed for them.
 
 Target not yet established.
+
+## Outcome of the lead's decisions (NPP_L050 to NPP_L064)
+
+The governing rule was that no original definition is restated and every copy carries a
+kernel-checked `npp_eq`. Proofs are in NPP_src/NPP_Refine.lean (sha256 d162515d…, NPP_L055 exit 0). All
+listed axioms are standard or a subset.
+
+| Item | Decision | Result |
+|---|---|---|
+| A1 `Row` | approved | **Done.** `NPP_C.LIBC_ExpandSemanticModel.Row` is the first match in `List.range 27`. `Row.npp_eq` follows from `row_unique`, whose disjointness comes from monotonicity of `dst`, derived by induction from the existing per-row fact `NGD_SemanticSchedule.advance` (`dst (r+1) = dst r + 5 + payloadSize r`). No `decide` over the schedule is used. |
+| A2 `AuthCarrier.raw` | approved | **Not done.** `NND_Carrier.auth` is a record of five field carriers (`key`, `master`, `checkpoint`, `lane`, `live`), each a composite with its own `eq_iff`. The field-wise inverse needs an inverse and roundtrip for each, which is beyond this round. It blocks `tx2Value` (10 dependents). |
+| A3 `NullifierBytes.digest` | approved | **Done.** `NPP_Refine.decodeDigest` decodes eight little-endian words. `decode_key : decodeDigest (key d) = d` is proved word by word from `NFY_JFt_DigestInjective.from_to`, and `digest.npp_eq` from injectivity of `key`. |
+| A4 `NativeLive242.observation` | route 1 | **Route 1 fails; left unrefined, as instructed.** See the branch below. |
+| B1 `NNG_TypedEvents.select` | tag copy at concrete instantiations | **Stop.** `A` is a variable at every occurrence; see below. |
+| B2 `WellFrozen.emitted` | one inspection | **Done.** The inspection (NPP_L050) shows that `reject : Prop` is lambda-bound from `ok True` or `ok (len > 16)`. Both instantiations are concrete. `NPP_C.NJE_WellFrozen.emitted` binds the same values as Booleans (`decide`), and `emitted.npp_eq` is proved by cases on `is_empty` and on `len > 16`. |
+| C1 `decodeK29` (Domain / `Call`) | work item | **Done.** `NPP_Refine.call_iff` characterizes the five constructors, and `decCall` is the computable instance (axioms [propext, Quot.sound]). The choice site is then refined by the tool; its equation is still blocked by a two-group proof (`liftResult … ⋯`). |
+| C2 `LIB_VTerminal.model` (Domain) | work item | **Done.** `NPP_Refine.domain_iff` turns the structure into its field conjunction, and `decDomain` is the instance. |
+| E `LIB_VClaims.value._proof_2` | work item | **Done by hand.** `NPP_C.LIB_VClaims.parent` (okOkOf, `npp_eq` from `parent_exact`) and `NPP_C.LIB_VClaims.value` (= `valueGen parent canonical`, with `npp_eq` by substituting the variable `P`). |
+
+**A4, the exact branch.** `NMS_R2N_Native242Children.meaning devnet authenticate` is the 242 body in
+`RSL.Spec`, with the child dictionary `children devnet`. `choices` reaches only `authenticate`
+(through `NMX_R4_NMS233.typed`). Two children call the allocation site `RSL.Spec.alloc`, defined by
+`fun _ o => o = ⟨.ret (), []⟩ ∨ o = ⟨.abort, []⟩`. It is not resolved by `choices`:
+
+- `op51 := NMS_R2N_ScanSites.interpreted` is `scan RSL.Spec.alloc`, where line 26, `let _ ← allocate`,
+  is the Box::new in scan_proof_buffer, after decoding and before encoding;
+- `op52 := NMS_R2N_ReconstructSites.meaning` contains `RSL.Spec.bind RSL.Spec.alloc (fun _ =>
+  RSL.Spec.bind RSL.Spec.alloc …)` when `reaches_boxes r a c` holds (r1_pool_adapter.rs:874,
+  asq8_common:814, statement_box:832/849).
+
+So for one input and one `choices`, `meaning` admits two observations that differ at the op51
+allocation:
+
+- the continuing run `⟨.ret (Ok validated), evs⟩`;
+- `⟨.abort, e₁⟩`, where `e₁` is the event prefix before op51.
+
+op52 adds two more abort points of the same kind. The functionality lemma is therefore false as
+stated, and `observation` (= `Classical.choose (live …)`) stays unrefined. NMX_R9_Live241 follows the
+same rule; it was not reached, because it sits behind A4.
+
+**B1, why we stop.** `select {Args} site effects event` matches
+`event = @NMT_CallTree.Event.call A _ tag args _` and branches on `A = Args`. `A` is the event's own
+constructor field. Every occurrence in the cone (NNG_Events087 lines 19–20, NNG_Events094 lines 27–29,
+and NNG_Events137) applies `select` to a variable `event`. So `A` is a variable at every
+instantiation, and by your rule I stop here. A copy keyed on the value-level `tag` would agree with
+`select` only on traces whose `tag = site` events carry `A = Args`. That is a property of the traces,
+not an equality of functions, so it would be a record-only copy, and I have not made one.

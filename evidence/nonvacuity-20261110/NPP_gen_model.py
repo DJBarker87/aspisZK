@@ -11,6 +11,8 @@ nc = json.load(open(os.path.join(ev, 'host-ids-20261110/NPO_L035/NPO_NONCOMPUTAB
 rows = {r['n']: r for r in nc['constants']}
 roots = ['NNH_ReturnsBundle.tx1Value', 'NNH_ReturnsBundle.tx2Value', 'AspisR1.NNG_TotalProducer345.producer',
          'AspisR1.NNH_Run6Installed.implementation']
+if len(sys.argv) > 3: roots = sys.argv[3].split(',')
+nocode = json.load(open(os.path.join(out, 'NPP_L063/NPP_NOCODE.json')))
 seen = []
 for root in roots:
     st = [root]
@@ -21,6 +23,12 @@ for root in roots:
 skip = lambda n: n.startswith('Classical.') or n.startswith('Exists.') or n == 'List.flatten'
 closure = [n for n in seen if not skip(n)]
 leaves = [n for n in closure if rows[n]['cause'] in ('classical', 'no_ir_other')]
+# the compiler's view (NPP_L063): every definition without code in the roots' value closure
+ncset = {r['n'] for r in nocode}
+for r in nocode:
+    if r['n'] not in closure: closure.append(r['n'])
+    deps_in = False
+    if r['n'] not in leaves: leaves.append(r['n'])   # every no-code definition is copied
 iddep = sorted(d['name'] for d in dep)
 cand = sorted(set(iddep) | set(closure))
 json.dump({'roots': roots, 'closure': closure, 'leaves': leaves, 'cand_count': len(cand)},
@@ -44,6 +52,7 @@ end NPP2.Inputs
 '''
 hdr = '''import Lean
 import NPP_ComputableSdk
+import NPP_Refine
 import NNH_ReturnsBundle
 import NNG_TotalProducer345
 import NNH_Run6Installed
@@ -170,5 +179,5 @@ run_meta do
     NPP2.log <| Json.mkObj [("copy", toJson c.toString), ("noncomputable", toJson (isNoncomputable (← getEnv) c)),
       ("ir", toJson ((Lean.IR.findEnvDecl (← getEnv) c).isSome))]
 '''
-open(os.path.join(out, 'NPP_src/NPP_ComputableModel.lean'), 'w').write(hdr + lib + names + derive + body)
+open(os.path.join(out, 'NPP_src/' + (sys.argv[4] if len(sys.argv) > 4 else 'NPP_ComputableModel') + '.lean'), 'w').write(hdr + lib + names + derive + body)
 print(len(cand), len(leaves), len(closure))
