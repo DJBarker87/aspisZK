@@ -1,0 +1,79 @@
+{
+ "schema": "PCXP_EMISSIONS/1",
+ "target_established": false,
+ "emissions": [
+  {
+   "emission": "evidence/prov-p8a-20261110/PCWU_E003_emitted/raw/PCWU_adapt3/Funs.lean",
+   "tool": "TV3 Charon/Aeneas",
+   "credited": false,
+   "source": "r1_pool_adapter_owned.rs:457 (stage1)",
+   "call_sites": [
+    {
+     "lines": "175-181",
+     "arm": "data==[3,10]",
+     "classification": "WRITE_DROPPED",
+     "evidence": "let (r1,_,_) <- try_borrow_mut_data ai2; let (s1,_,_,_) <- RefMut deref_mut val1; let _ <- copy_from_slice s1 s2; ok (Ok ()) with all backward functions discarded"
+    },
+    {
+     "lines": "226-233",
+     "arm": "data==[3,11]",
+     "classification": "WRITE_DROPPED",
+     "evidence": "identical pattern"
+    }
+   ]
+  },
+  {
+   "emission": "PCWU_E003 stage2 (same file, line ~250-290)",
+   "credited": false,
+   "source": "r1_pool_adapter_owned.rs:467 set_return_data",
+   "call_sites": [
+    {
+     "classification": "GLOBAL_EFFECT_UNMODELLED (not an account write)",
+     "evidence": "solana_program.program.set_return_data s1 as an external unit-valued call; no state threaded"
+    }
+   ]
+  },
+  {
+   "emission": "evidence/prov-p8a-20261110/PCWU_E002_emitted/raw/PCWU_adapt (original pair)",
+   "credited": false,
+   "call_sites": [
+    {
+     "classification": "NOT_PRESENT",
+     "evidence": "stage1/stage2 failed to extract under the original pair (Interp.ml:609); only FunsExternal_Template declares the try_borrow_mut_data axiom; no Funs call site"
+    }
+   ]
+  },
+  {
+   "emission": "evidence/entry-wrap-20261111/NMW_process_emitted, NMW_entry_emitted; evidence/slice-d-entry7-20261107/NIV_extracted/entry",
+   "credited": "feeds Stream A deployed-slot chain (not a cone gate module)",
+   "call_sites": [
+    {
+     "sites": "stage1 x4, stage2 x2, lifecycle_init/write/finalize x1 each (process, both cfg arms)",
+     "classification": "NOT_PRESENT_IN_EMISSION (callee external/opaque; cannot carry an account write)",
+     "evidence": "calls with signature Slice AccountInfo -> Result only; effect is supplied by the callee model outside the emission"
+    }
+   ]
+  },
+  {
+   "emission": "host L187 gate modules (209 cone modules, src/)",
+   "credited": true,
+   "call_sites": [
+    {
+     "classification": "NOT_PRESENT",
+     "evidence": "no try_borrow_mut/RefCell/realloc/assign/set_owner token in any cone module; 14 modules contain copy_from_slice on local slices only (index_mut_back threaded, e.g. AspisR1TerminalDecoder/Funs.lean:468-470) = WRITE_MODELLED"
+    }
+   ]
+  },
+  {
+   "emission": "all other committed *Funs*.lean on research (git grep over 3819 Funs files incl. PRVEq inputs fresh_*)",
+   "credited": "mixed",
+   "call_sites": [
+    {
+     "classification": "NOT_PRESENT",
+     "evidence": "no try_borrow_mut_*/AccountInfo.assign/realloc/set_owner call; deref_mut with _back on local Vec/slice (797 deref_mut_back, 332 Vec.deref_mut) = WRITE_MODELLED; core.cell appears only as type declarations in older pool-era aeneas-verif emissions (different pin)"
+    }
+   ]
+  }
+ ],
+ "caveat": "Classification of call sites by pattern over committed text; no tool run. A shared-reference write that Aeneas drops but that appears under another name (for example a callback with interior mutability, an Observer trait method) is not detected by the name patterns used; observer/trace sites are native-only per PCXP_WRITES non_account_refcell note."
+}
