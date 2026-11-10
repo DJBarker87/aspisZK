@@ -12,17 +12,17 @@
   "denominator": 220,
   "note": "225 checked or mixed definitions minus 5 NOT_EXECUTED proof-only references (AspisR65Field M31.add/neg, AspisR66Field M31.add/neg/sub), lead ruling 1 of 2026-11-10",
   "TOTAL_PROVED": 72,
-  "DIRECT": 42,
+  "DIRECT": 52,
   "DOMAIN_LEMMA_PROVED": 0,
-  "PRECONDITION_B": 63,
-  "OPEN": 20,
+  "PRECONDITION_B": 68,
+  "OPEN": 5,
   "NOT_EXECUTED": 28
  },
  "counts_by_class": {
-  "CHECKED/DIRECT": 40,
+  "CHECKED/DIRECT": 50,
   "CHECKED/NOT_EXECUTED": 28,
-  "CHECKED/OPEN": 19,
-  "CHECKED/PRECONDITION_B": 63,
+  "CHECKED/OPEN": 4,
+  "CHECKED/PRECONDITION_B": 68,
   "CHECKED/TOTAL_PROVED": 67,
   "MIXED/DIRECT": 2,
   "MIXED/OPEN": 1,
@@ -30,8 +30,8 @@
  },
  "rows": {
   "touched_by_executed_checked_or_mixed": 393,
-  "with_at_least_one_open_or_domain_only_definition": 73,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 320,
+  "with_at_least_one_open_or_domain_only_definition": 55,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 338,
   "touched_including_NOT_EXECUTED": 396,
   "note_20261110_late": "served_only_by_TOTAL_or_DIRECT_definitions now counts rows served only by TOTAL, DIRECT or PRECONDITION_B definitions"
  },
@@ -4063,10 +4063,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": true,
    "r22_total_2021_family_judgment": "TOTAL fixed 16-byte parser (2021 S5 strict parser); outer framing ACCEPTED-ONLY",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (domain established by the enclosing decode_k, NPH_R22Cursor, L093): on the def predicate DK (value < N, byte_offset + 32*N and offset_values + N within usize) every checked operation is ok: value*32, byte_offset + value*32, start + k for k <= 15 and offset_values + value (dk_ops). DK holds at every call: the only executing caller decode_k_loop.body is run only by decode_k, which enters the loop on {0, N} with byte_offset = val after its own checked_mul offset_values 32, checked_mul N 32 and checked_add val val1 returned Some (dk_guards via checked_mul_some/checked_add_some); the iterator keeps end = N and hands value < end (dk_value, dk_step). Caller structure from NPH_REFS6.json (textual, flagged; AspisR1DecodeKFullLoopReadback.decodedAt is a theorem-side readback definition).",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "value*32 and byte_offset + i, start + 1..31 point reads: the point-read chain (NPH_R22Loops5.point_step) covers start+k after the first read; value*32 and byte_offset + value*32 need value < 29 and the record offset bound from decode_k_loop."
+   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN (enclosing guards)",
+   "nph_open_next_step": "value*32 and byte_offset + i, start + 1..31 point reads: the point-read chain (NPH_R22Loops5.point_step) covers start+k after the first read; value*32 and byte_offset + value*32 need value < 29 and the record offset bound from decode_k_loop.",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.dk_ops",
+    "AspisR1.NPH_R22Cursor.dk_guards",
+    "AspisR1.NPH_R22Cursor.checked_mul_some",
+    "AspisR1.NPH_R22Cursor.checked_add_some",
+    "AspisR1.NPH_R22Cursor.dk_value",
+    "AspisR1.NPH_R22Cursor.dk_step"
+   ]
   },
   {
    "module": "AspisR1EbyKFinish.Funs",
@@ -4168,10 +4177,14 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (guarded index arithmetic, NPH_R22Direct, L095): under the body's guard i < 8 the checked 4*i, start + 1, start + 2, start + 3 and i + 1 are ok for every input (low_digits_ops); the block reads are bounds-checked in both profiles.",
    "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)",
-   "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "4*i, start + 1..3 and i + 1 with i < 8: guarded index arithmetic once the loop guard i < 8 is read (DIRECT pattern expected)."
+   "nph_pattern_class": "LOOP_INVARIANT -> GUARDED_ARITHMETIC (DIRECT)",
+   "nph_open_next_step": "4*i, start + 1..3 and i + 1 with i < 8: guarded index arithmetic once the loop guard i < 8 is read (DIRECT pattern expected).",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.low_digits_ops"
+   ]
   },
   {
    "module": "AspisR1Post25Sampler.Funs",
@@ -4258,7 +4271,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (guarded decrement, constant shift and constant divisor, NPH_R22Direct, L095): under the body's guard j > 0 the checked j - 1, remainder <<< 32 on u64, dividend / P and dividend % P (P widened to u64, value 2147483647, nonzero) are ok for every input (div_pass_ops). No remainder < P invariant is needed: the u64 shift by 32 is checked only on its amount.",
    "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)",
    "existing_closure_statements_screen": [
     {
@@ -4267,8 +4280,16 @@
      "screen": "DOMAIN_SCREEN"
     }
    ],
-   "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "j - 1 (needs j > 0 guard), remainder <<< 32 (ok), dividend / P and % P (nonzero constant): DIRECT expected once the j guard is read; remainder < P invariant for the shift-or."
+   "nph_pattern_class": "LOOP_INVARIANT -> GUARDED_ARITHMETIC (DIRECT, no invariant needed)",
+   "nph_open_next_step": "j - 1 (needs j > 0 guard), remainder <<< 32 (ok), dividend / P and % P (nonzero constant): DIRECT expected once the j guard is read; remainder < P invariant for the shift-or.",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.div_pass_ops",
+    "AspisR1.NPH_R22Direct.shl64_ok",
+    "AspisR1.NPH_R22Direct.divrem_ok",
+    "AspisR1.NPH_R22Direct.post25P",
+    "AspisR1.NPH_R22Direct.widen_val"
+   ]
   },
   {
    "module": "AspisR1Post25SamplerIndexedAddSmallCandidate.Funs",
@@ -4308,10 +4329,17 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (widened sum and constant divisor, NPH_R22Direct, L095): the u64 sum of two widened u32 values is at most 2*(2^32 - 1) < 2^64, % P and / P are by the nonzero constant P = 2147483647, and i + 1 runs under the guard i < 8, so every checked operation is ok for every input (add_small_ops). No base-P digit invariant is needed.",
    "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)",
-   "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "sum = digit + carry needs digit < P and carry small (base-P digit invariant); % and / by the nonzero base; i + 1 guarded."
+   "nph_pattern_class": "LOOP_INVARIANT -> GUARDED_ARITHMETIC (DIRECT, no invariant needed)",
+   "nph_open_next_step": "sum = digit + carry needs digit < P and carry small (base-P digit invariant); % and / by the nonzero base; i + 1 guarded.",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.add_small_ops",
+    "AspisR1.NPH_R22Direct.addSmallP",
+    "AspisR1.NPH_R22Direct.widen_val",
+    "AspisR1.NPH_R22Direct.divrem_ok"
+   ]
   },
   {
    "module": "AspisR1PrefixAggregateParser.Funs",
@@ -4357,7 +4385,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (constant table bound, NPH_R22Direct, L095): the body's only checked operation is 5 + size on the Continue branch of row_shape row = ok (some (tag, size)), and every row_shape size is <= 3712 (prefix_shape_size via NCO_ParserShape.source_shape and ExtractedRowShape.row_shape_eq_table, table_size), so it is ok for every input (record_size_ok). The point reads and the payload index are bounds-checked in both profiles; validate_record_fields keeps its own judgment.",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "existing_closure_statements_screen": [
     {
@@ -4391,8 +4419,14 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "PRODUCER_BOUND",
-   "nph_open_next_step": "5 + size with size from row_shape (ok (table row), sizes <= 3712 by the ExtractedRowShape table): one table-bound lemma closes it."
+   "nph_pattern_class": "PRODUCER_BOUND (constant table, DIRECT)",
+   "nph_open_next_step": "5 + size with size from row_shape (ok (table row), sizes <= 3712 by the ExtractedRowShape table): one table-bound lemma closes it.",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.table_size",
+    "AspisR1.NPH_R22Direct.prefix_shape_size",
+    "AspisR1.NPH_R22Direct.record_size_ok"
+   ]
   },
   {
    "module": "AspisR1PrefixAggregateParser.Funs",
@@ -4438,7 +4472,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (constant table bound plus cursor add then Slice.get, NPH_R22Direct, L095; FLAGGED reading): 5 + i is ok for every input (record_size_ok, sizes <= 3712). offset + length is followed by Slice.get [offset, offset + length): if the wrapping program's get at the wrapped end returns Some, the checked add is ok with the same value (get_cursor_direct via get_success). On the wrapped-end path the wrapping get returns None and the wrapping program returns Err(Length) where the checked model aborts at the add: both are rejections only because the executing caller r1_wire.Prefix.parse passes every parse_record_at result through ? and propagates the Err (textual reading of the gate body, listed in NPH_R22_FINAL_COUNTS.md section 4). parse_record keeps its own judgment.",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "existing_closure_statements_screen": [
     {
@@ -4452,8 +4486,14 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "PRODUCER_BOUND + CURSOR_ADD_THEN_RANGE_GET",
-   "nph_open_next_step": "5 + size as above; offset + length is followed by Slice.get [offset, offset+length) whose none result becomes Err(Length): needs a Slice.get success lemma (the analogue of T2Nat_RawBounds.range_success) to give Err/Err agreement."
+   "nph_pattern_class": "PRODUCER_BOUND + CURSOR_ADD_THEN_RANGE_GET (DIRECT, Err/abort reading flagged)",
+   "nph_open_next_step": "5 + size as above; offset + length is followed by Slice.get [offset, offset+length) whose none result becomes Err(Length): needs a Slice.get success lemma (the analogue of T2Nat_RawBounds.range_success) to give Err/Err agreement.",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.record_size_ok",
+    "AspisR1.NPH_R22Direct.get_success",
+    "AspisR1.NPH_R22Direct.get_cursor_direct"
+   ]
   },
   {
    "module": "AspisR1PrefixAggregateParser.Funs",
@@ -9460,7 +9500,7 @@
     }
    ],
    "nph_pattern_class": "PRODUCER_BOUND",
-   "nph_open_next_step": "one checked i + i1 (compact offsets): needs the offset producers (CurrentCompact layout constants, NPH_R22JoinCW6 ls_eq/os_eq) composed at this add."
+   "nph_open_next_step": "one checked i + i1 with i = compact.LOGICAL_SEMANTIC ops = ops.op15 (an irreducible callback constant) and i1 = compact.LOGICAL_Y1 = 29*32 = 928: needs the value of op15 in the installed prepare record at the reached caller (CurrentCompact layout; NPH_R22JoinCW6 ls_eq/os_eq show the slot is unchanged by op8 replacement), then one add_ok."
   },
   {
    "module": "FinishCandidateExplicitOps",
@@ -9611,7 +9651,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (producer bound, NPH_R22Gamma, L096): the body's only checked operation quotient + 1 (u32) takes quotient from ops.low; on the producer AspisR1Post25Sampler.sampler.low_base_p_digits the quotient is rank block / P^8 <= 256 (GammaCallerDigitsModel low_candidate_refines, SamplerMachineBounds.rank_div_P8_le_256 with rank_lt), so the add is ok for every block (gamma_increment_ok). Both helper records of the closure (candidateHelpers, candidateGammaHelpers) install exactly that low (helpers_low, rfl). FLAGGED: that the executed gamma_sample runs on one of these two records is a textual reading of the closure (no backward screen was run for this target). ops.add and ops.decode keep their own judgments.",
    "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)",
    "existing_closure_statements_screen": [
     {
@@ -9635,8 +9675,13 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "PRODUCER_BOUND",
-   "nph_open_next_step": "quotient + 1 (u32): needs quotient < 2^32 - 1 from the ops.low producer (the sampler low digits)."
+   "nph_pattern_class": "PRODUCER_BOUND (quotient <= 256)",
+   "nph_open_next_step": "quotient + 1 (u32): needs quotient < 2^32 - 1 from the ops.low producer (the sampler low digits).",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Gamma.gamma_increment_ok",
+    "AspisR1.NPH_R22Gamma.helpers_low"
+   ]
   },
   {
    "module": "MultiproofConeRef.Funs",
@@ -9676,7 +9721,7 @@
    "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
    "open_reason": "Merkle multiproof frontier/sort arithmetic: needs live-prefix sorting, w<=i<n<=16 and level induction (2021 Kani body checks are single-step)",
    "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "i + 1, i + 2, i4 - s.at, s.at + 32: needs i < s.n <= 16 and s.at <= i from the level loop."
+   "nph_open_next_step": "i + 1 follows a bounds-checked read s.idx[i] (16 entries) and i + 2 runs after a read at i + 1, so both are DIRECT by NPH_R22Direct.update_lt-style reads; but len(nodes) - s.at has no guard, and if s.at > len the wrapped difference can be < 32 so the wrapping program takes the Stop branch (accepting path) where the checked model aborts. Needs the traversal invariant s.at <= len(nodes) (s.at starts at 0 and only advances to s.at + 32 after a successful read of nodes[s.at, s.at + 32)) composed over the level loop."
   },
   {
    "module": "MultiproofConeRef.Funs",
@@ -9723,10 +9768,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "DIRECT (guarded decrement and increment after a bounds-checked update, NPH_R22Direct, L095): s.n - 1 runs under the body's guard s.n > 0 (NPH_R22Loops4.usize_pos_pred_ok); on both branches s.n + 1 follows the successful Array.update s.idx s.n on the 16-entry Scratch array, so s.n < 16 and the add is ok (NPH_R22Direct.update_lt and write_parent_ops with w = s.n). If the update fails both profiles abort. No Lean statement was added for this body; the lemmas of L095 apply as stated.",
    "open_reason": "Merkle multiproof frontier/sort arithmetic: needs live-prefix sorting, w<=i<n<=16 and level induction (2021 Kani body checks are single-step)",
-   "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "s.n - 1 is guarded by s.n > 0 (DIRECT pattern); s.n + 1 needs s.n < 16 (Scratch capacity) along the leaf fold."
+   "nph_pattern_class": "LOOP_INVARIANT -> INCREMENT_AFTER_BOUNDS_CHECKED_UPDATE (DIRECT)",
+   "nph_open_next_step": "s.n - 1 is guarded by s.n > 0 (DIRECT pattern); s.n + 1 needs s.n < 16: if the following write is a bounds-checked update at s.n on the 16-entry Scratch arrays, NPH_R22Direct.update_lt gives it DIRECT; otherwise the leaf-fold invariant s.n <= 16. Not yet read in full.",
+   "nph_judgment_before_item3": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops4.usize_pos_pred_ok",
+    "AspisR1.NPH_R22Direct.update_lt",
+    "AspisR1.NPH_R22Direct.write_parent_ops"
+   ]
   },
   {
    "module": "MultiproofConeRef.Funs",
@@ -9851,10 +9902,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_judgment": "DIRECT (increment after a bounds-checked update, NPH_R22Direct, L095): index / 2 is ok for every u32; w + 1 follows the successful Array.update s.idx w on the 16-element Scratch array, so w < 16 and the add is ok (update_lt, write_parent_ops). If that update fails both profiles abort. The digest callback keeps its own judgment.",
    "open_reason": "Merkle multiproof frontier/sort arithmetic: needs live-prefix sorting, w<=i<n<=16 and level induction (2021 Kani body checks are single-step)",
-   "nph_pattern_class": "LOOP_INVARIANT",
-   "nph_open_next_step": "index / 2 is ok for every input; w + 1 needs w < 16 (Scratch row width) from level_rows/binary_step."
+   "nph_pattern_class": "LOOP_INVARIANT -> INCREMENT_AFTER_BOUNDS_CHECKED_UPDATE (DIRECT)",
+   "nph_open_next_step": "index / 2 is ok for every input; w + 1 needs w < 16 (Scratch row width) from level_rows/binary_step.",
+   "nph_judgment_before_item3": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.update_lt",
+    "AspisR1.NPH_R22Direct.write_parent_ops"
+   ]
   },
   {
    "module": "MultiproofParserRef.Funs",
@@ -10020,7 +10076,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (reached-cursor loop invariant, NPH_R22Cursor, L093): on the def predicate BInv (i = 0, or s + i <= len b because every earlier point read b[s + k] succeeded) the checked s + i and i + 1 are ok under the guard i < 32 (bytes32_ops); a cont step keeps BInv (bytes32_step: the read at s + i succeeded, so s + i + 1 <= len); the only caller bytes32 enters at i = 0 (bytes32_entry). No caller length bound is needed. Caller structure from NPH_REFS6.json (textual, flagged).",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "existing_closure_statements_screen": [
     {
@@ -10034,8 +10090,14 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "s + i with i < 32 before a point read: needs s + 32 <= len from the callers (decode_* readers)."
+   "nph_pattern_class": "LOOP_INVARIANT (point-read cursor chain)",
+   "nph_open_next_step": "s + i with i < 32 before a point read: needs s + 32 <= len from the callers (decode_* readers).",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.bytes32_ops",
+    "AspisR1.NPH_R22Cursor.bytes32_step",
+    "AspisR1.NPH_R22Cursor.bytes32_entry"
+   ]
   },
   {
    "module": "NCV_Reference.Funs",
@@ -10067,7 +10129,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (guarded index arithmetic, NPH_R22Cursor, L093): every checked operation of the body (32*level, 48 + ., next >>> level on u64, level + 1) is ok for every input under the body's own guard level < 20 (frontier_ops); the digest, eq_digest and index_mut callees keep their own judgments. The open note's \"level < 64\" was the shift width; the guard is 20.",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "existing_closure_statements_screen": [
     {
@@ -10101,8 +10163,12 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "32*level, 48 + .., next >>> level, level + 1: needs level < 64 (frontier depth) from the loop guard."
+   "nph_pattern_class": "GUARDED_INDEX_ARITHMETIC (DIRECT)",
+   "nph_open_next_step": "32*level, 48 + .., next >>> level, level + 1: needs level < 64 (frontier depth) from the loop guard.",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.frontier_ops"
+   ]
   },
   {
    "module": "NCV_Reference.Funs",
@@ -10134,7 +10200,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (reached-cursor loop invariant, NPH_R22Cursor, L093): on the def predicate DInv (i = 0, or s + 4i <= len b because every earlier word32 succeeded; word32_bound: a successful word32 at t reads t + 3, so t + 4 <= len) the checked 4*i, s + 4i and i + 1 are ok under the guard i < 8 (digest_ops); a cont step keeps DInv (digest_step); the only caller digest enters at i = 0 (digest_entry). No caller length bound is needed. Caller structure from NPH_REFS6.json (textual, flagged).",
    "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
    "existing_closure_statements_screen": [
     {
@@ -10153,8 +10219,15 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "4*i, s + 4i with i < 8: needs s + 32 <= len from the callers."
+   "nph_pattern_class": "LOOP_INVARIANT (word32 cursor chain)",
+   "nph_open_next_step": "4*i, s + 4i with i < 8: needs s + 32 <= len from the callers.",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.word32_bound",
+    "AspisR1.NPH_R22Cursor.digest_ops",
+    "AspisR1.NPH_R22Cursor.digest_step",
+    "AspisR1.NPH_R22Cursor.digest_entry"
+   ]
   },
   {
    "module": "NCV_Reference.Funs",
@@ -13342,7 +13415,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (guarded subtraction chain, NPH_R22Direct, L095): every subtraction i - c of the body runs on the else branch of i < c, so it is ok (guarded_sub); every / and % is by a nonzero constant (divrem_ok); the queries branch (i1 / 4, i1 % 4, 8 * (i1 % 4), u32 shift by it) is the e_byte pattern (NPH_R22Loops5.ebyte_ops). Every checked operation is ok for every input; the array reads are bounds-checked in both profiles; e_byte/k_byte keep their own judgments.",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "existing_closure_statements_screen": [
     {
@@ -13366,8 +13439,14 @@
      "screen": "TOTAL_SCREEN"
     }
    ],
-   "nph_pattern_class": "GUARDED_SUBTRACTION_CHAIN",
-   "nph_open_next_step": "i - c under the body range guards (i >= c on each branch), / 32 and % 32 by constants: expected DIRECT by per-branch guard reading; not yet written."
+   "nph_pattern_class": "GUARDED_SUBTRACTION_CHAIN (DIRECT)",
+   "nph_open_next_step": "i - c under the body range guards (i >= c on each branch), / 32 and % 32 by constants: expected DIRECT by per-branch guard reading; not yet written.",
+   "nph_judgment_before_item3": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Direct.guarded_sub",
+    "AspisR1.NPH_R22Direct.divrem_ok",
+    "AspisR1.NPH_R22Loops5.ebyte_ops"
+   ]
   },
   {
    "module": "OraclePortCkptAbi2Extracted.Funs",
@@ -17800,10 +17879,17 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "TOTAL (2021 R22TotalStage2Constants on AspisR1Stage2 constants)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "DIRECT (cursor add then bounds-checked range access, NPH_R22Cursor, L093): every checked add of the body is immediately followed by a range access at [p, p + n) that is bounds-checked in both profiles: src + 5, i1 + size/2 and i1 + size by Slice.index on input (NPH_R22Loops4.cursor_direct), dst + 5 and i + size by Slice.index_mut on out (mut_cursor_direct via range_mut_success). If the wrapping program's access at the wrapped end succeeds, the checked add is ok with the same value; otherwise both profiles abort. size / 2 is ok for every size (half_ok); src1 = i1 + size/2 repeats the add already shown ok. row_shape (TOTAL), compact_row and the expandValues callback keep their own judgments. No caller bound is needed.",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "dst + 5, src + 5, size/2, src + size: needs the compact-record length bound (sizes from row_shape <= 3712, src/dst within the 57607-byte proof)."
+   "nph_pattern_class": "CURSOR_ADD_THEN_RANGE_ACCESS (DIRECT)",
+   "nph_open_next_step": "dst + 5, src + 5, size/2, src + size: needs the compact-record length bound (sizes from row_shape <= 3712, src/dst within the 57607-byte proof).",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.mut_cursor_direct",
+    "AspisR1.NPH_R22Cursor.range_mut_success",
+    "AspisR1.NPH_R22Cursor.half_ok",
+    "AspisR1.NPH_R22Loops4.cursor_direct"
+   ]
   },
   {
    "module": "S1NativeCompactModelV1",
@@ -17944,10 +18030,16 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (domain established by the enclosing values_owned_reference, NPH_R22Cursor, L093): on chunk*32 + 31 <= usize max every checked operation is ok under the guard byte < 16: chunk*16 + byte, chunk*32 + byte, chunk*32 + 16 + byte and byte + 1 (cc_ops). The domain holds at every call: copy_chunk runs only from values_owned_reference_loop.body under its guard chunk < count, the loop is entered only by values_owned_reference with count = len input / 16 after its checked 2*len succeeded (vo_guards), and these give the domain (cc_domain). The read_input/write_output accesses are bounds-checked in both profiles. Caller structure from NPH_REFS6.json (textual, flagged).",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
-   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "chunk*16 + byte, chunk*32 + 16 + byte with byte < 16: needs chunk < count (values loop guard) and count <= len/32."
+   "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN (enclosing guards)",
+   "nph_open_next_step": "chunk*16 + byte, chunk*32 + 16 + byte with byte < 16: needs chunk < count (values loop guard) and count <= len/32.",
+   "nph_judgment_before_item2": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Cursor.cc_ops",
+    "AspisR1.NPH_R22Cursor.vo_guards",
+    "AspisR1.NPH_R22Cursor.cc_domain"
+   ]
   },
   {
    "module": "S1ValuesOwnedModelV1",
@@ -17980,7 +18072,7 @@
    "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
    "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)",
    "nph_pattern_class": "CURSOR_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "i % 16 (ok), 2*i3, i5 / 16 (ok): 2*i3 needs i3 <= len bound from the caller expandValues."
+   "nph_open_next_step": "i % 16 and i5 / 16 are ok for every input; 2 * len(input) needs len(input) <= usize max / 2 at the call. Located producer (not composed): the only executing caller AspisS1ValuesOwnedInstallation.expandValues is the expandValues callback of expand_semantic_loop.body, called on s3 = input[i1, i1 + size/2) with size <= 3712 (NPH_R22Direct.prefix_shape_size pattern on the compact row_shape), so len(s3) <= 1856; needs the range-index length lemma (NGV_ByteWindow.read/select_length) and the installed-ops tie."
   },
   {
    "module": "S1ValuesOwnedModelV1",
@@ -18536,7 +18628,7 @@
     }
    ],
    "nph_pattern_class": "INDEX_ARITHMETIC_ON_CALLER_DOMAIN",
-   "nph_open_next_step": "i*32, i+1, (i+1)*32 before the range read: a multiplication can wrap onto a valid range, so this is not fail/fail; needs i < len/32 from the finishField callers (CurrentWide.Proof.finishField loop indices)."
+   "nph_open_next_step": "i*32, i+1, (i+1)*32 before the range read: a wrapped window can be valid, so this is not fail/fail. Domain lemma exists in the closure: NJU_FieldScalar.checked (all three ops ok for i < 64). Located callers (via AspisR1CurrentWide.Proof.finishField, NPH_REFS6.json): finish_relation_round reads the literals 0 and 4; finish_query_dot_loop.body reads j < len weights; the polynomial and AspisR1CurrentPreparedClaim.ClaimParser.field indices. Needs len weights <= 64 at the reached finish dot (and the polynomial/claim-parser index bounds) composed at the deployed finish (NPH_R22JoinCW2.tx2_finish_round context)."
   },
   {
    "module": "AspisR1CanonicalQRawUnified.Funs",
@@ -19461,5 +19553,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body -> PRECONDITION_B; counts 72/42/0/63/20 of 197; rows exposed 73 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0.body -> PRECONDITION_B; counts 72/42/0/62/21 of 197; rows exposed 151 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one -> PRECONDITION_B; counts 72/42/0/61/22 of 197; rows exposed 151 of 393. Previous: updated item1acc: NEV_AccumulateRaw.accumulate_batched_with_node, NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body, NEI_PushRaw.update_residue_row_loop0.body, NEI_PushRaw.update_residue_row_loop1.body -> PRECONDITION_B; counts 72/42/0/60/23 of 197; rows exposed 151 of 393. Previous: pattern classes recorded for the 29 OPEN definitions (nph_pattern_class, nph_open_next_step), 2026-11-10 continuation. Previous: updated loops5: OraclePortCkptAbi2Extracted.e_byte -> DIRECT; counts 72/42/0/54/29 of 197; rows exposed 153 of 393. Previous: updated loops5: NCV_Reference.word32, NCV_Reference.word64, OraclePortCkptAbi2Extracted.word_spec -> DIRECT; counts 72/41/0/54/30 of 197; rows exposed 153 of 393. Previous: updated loops5: NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop.body -> DIRECT; counts 72/38/0/54/33 of 197; rows exposed 158 of 393. Previous: updated loops5: AspisR1PrefixAggregateParser.r1_wire.row_shape, AspisS1NativeCompact.r1_wire.row_shape -> TOTAL_PROVED; counts 72/37/0/54/34 of 197; rows exposed 159 of 393. Previous: updated proof_only_refs4: AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push, AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push_loop.body, AspisR1CanonicalDotFinish.canonical.reduce, AspisR1Qm31SamplerIndex.sampler.qm31_digits_loop0.body, AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body, AspisR1RecordParser.r1_wire.parse_record, AspisR1RecordParser.r1_wire.row_shape, AspisR1RowShape.r1_wire.row_shape, AspisR1WithdrawalCaller.encode_digest_canonical_loop.body, AspisR1FinishRelationCurrent.verifier.finish_relation_round, MultiproofParserRef.parser_reference.opening_rows, NDH_TranscriptReference.absorb_ref, NDI_BatchRef.batch_keys_ref_loop.body, NDI_BatchRef.batch_word_ref, NEG_PushActual.update_residue_row_loop0.body, NEG_PushActual.update_residue_row_loop1.body, Port23PUSH.verifier.update_residue_row_loop0.body, Port23PUSH.verifier.update_residue_row_loop1.body, AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0, AspisR1SelectedMaskProbe.field.qm31_pack_base4, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body, S8OwnedP6.check_values_owned_loop.body -> NOT_EXECUTED; counts 70/37/0/54/36 of 197; rows exposed 160 of 393. Previous: updated loops4: NCX_Reference.read32, NCX_Reference.word, NJC_ReaderEmission.verifier.Reader.raw -> DIRECT; counts 70/37/0/54/59 of 220; rows exposed 189 of 396. Previous: updated loops4: MultiproofSortRef.sort_reference.insert_step, MultiproofConeRef.reference.levels, Op4P_Extract.Op4P_reference.parser_reference.opening_rows, MultiproofConeRef.reference.valid_indices -> DIRECT; counts 70/34/0/54/62 of 220; rows exposed 195 of 396. Previous: updated loops4: AspisR1EbyKFinish.canonical.reduce -> TOTAL_PROVED; counts 70/30/0/54/66 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1DotPushLocal.canonical.Dot.push -> DIRECT; counts 69/30/0/54/67 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1, AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 -> DIRECT; counts 69/29/0/54/68 of 220; rows exposed 202 of 396. Previous: updated loops4: AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body -> PRECONDITION_B; counts 69/27/0/54/70 of 220; rows exposed 218 of 396. Previous: updated qraw_total: AspisR1CanonicalQRawUnified.canonical.Q.raw, FIo_QRaw.canonical.Q.raw -> TOTAL_PROVED; counts 69/27/0/53/71 of 220; rows exposed 255 of 396. Previous: updated fiq_terminal: FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight, FIq_Native.field.CM31.mul, FIq_Native.field.CM31.square, FIq_Native.field.M31.add, FIq_Native.field.M31.sub, FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0, FIq_Native.field.qm31_m31_dot_loop0, FIq_Native.field.qm31_m31_dot_loop1, FIq_Native.field.qm31_m31_dot_loop1_loop0, FIq_Native.field.qm31_m31_dot_loop1_loop1, FIq_Native.field.qm31_pack_base4, FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0, FIq_Native.state_only_poseidon.external_linear_packed_loop, FIq_Native.state_only_poseidon.external_local_packed_raw, FIq_Native.state_only_poseidon.interpolate_three_constant_limb, FIq_Native.state_only_poseidon.external_linear_lazy_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2, FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed, FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts moved to PRECONDITION_B; counts 67/27/2/53/71 of 220; rows exposed 259 of 396. Previous: updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
+ "revision_note": "updated item3: MultiproofConeRef.reference.leaf_step -> DIRECT; counts 72/52/0/68/5 of 197; rows exposed 55 of 393. Previous: updated item3: AspisR1GammaCaller.sampler.gamma_sample -> PRECONDITION_B; counts 72/51/0/68/6 of 197; rows exposed 55 of 393. Previous: updated item3: MultiproofConeRef.reference.write_parent -> DIRECT; counts 72/51/0/67/7 of 197; rows exposed 55 of 393. Previous: updated item3: AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body -> DIRECT; counts 72/50/0/67/8 of 197; rows exposed 56 of 393. Previous: updated item3: AspisR1Post25Sampler.sampler.low_base_p_digits_loop0.body -> DIRECT; counts 72/49/0/67/9 of 197; rows exposed 57 of 393. Previous: updated item3: AspisR1Post25Sampler.sampler.qm31_div_pass_loop.body -> DIRECT; counts 72/48/0/67/10 of 197; rows exposed 59 of 393. Previous: updated item3: OraclePortCkptAbi2Extracted.body_byte -> DIRECT; counts 72/47/0/67/11 of 197; rows exposed 59 of 393. Previous: updated item3: AspisR1PrefixAggregateParser.r1_wire.parse_record_at -> DIRECT; counts 72/46/0/67/12 of 197; rows exposed 65 of 393. Previous: updated item3: AspisR1PrefixAggregateParser.r1_wire.parse_record -> DIRECT; counts 72/45/0/67/13 of 197; rows exposed 69 of 393. Previous: updated item2: AspisS1ValuesOwned.copy_chunk_loop.body -> PRECONDITION_B; counts 72/44/0/67/14 of 197; rows exposed 69 of 393. Previous: updated item2: AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value -> PRECONDITION_B; counts 72/44/0/66/15 of 197; rows exposed 69 of 393. Previous: updated item2: AspisS1NativeCompact.compact.expand_semantic_loop.body -> DIRECT; counts 72/44/0/65/16 of 197; rows exposed 70 of 393. Previous: updated item2: NCV_Reference.decode_frontier_loop.body -> DIRECT; counts 72/43/0/65/17 of 197; rows exposed 70 of 393. Previous: updated item2: NCV_Reference.digest_loop.body -> PRECONDITION_B; counts 72/42/0/65/18 of 197; rows exposed 73 of 393. Previous: updated item2: NCV_Reference.bytes32_loop.body -> PRECONDITION_B; counts 72/42/0/64/19 of 197; rows exposed 73 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body -> PRECONDITION_B; counts 72/42/0/63/20 of 197; rows exposed 73 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one_loop0.body -> PRECONDITION_B; counts 72/42/0/62/21 of 197; rows exposed 151 of 393. Previous: updated item1dots: AspisR1.FIp_NativeDots.fast_dots.four_dots_one -> PRECONDITION_B; counts 72/42/0/61/22 of 197; rows exposed 151 of 393. Previous: updated item1acc: NEV_AccumulateRaw.accumulate_batched_with_node, NEV_AccumulateRaw.accumulate_batched_with_node_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop0_loop0.body, NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body, NEI_PushRaw.update_residue_row_loop0.body, NEI_PushRaw.update_residue_row_loop1.body -> PRECONDITION_B; counts 72/42/0/60/23 of 197; rows exposed 151 of 393. Previous: pattern classes recorded for the 29 OPEN definitions (nph_pattern_class, nph_open_next_step), 2026-11-10 continuation. Previous: updated loops5: OraclePortCkptAbi2Extracted.e_byte -> DIRECT; counts 72/42/0/54/29 of 197; rows exposed 153 of 393. Previous: updated loops5: NCV_Reference.word32, NCV_Reference.word64, OraclePortCkptAbi2Extracted.word_spec -> DIRECT; counts 72/41/0/54/30 of 197; rows exposed 153 of 393. Previous: updated loops5: NJC_ValidateEmission.verifier.validate_checkpoint_queries_loop.body -> DIRECT; counts 72/38/0/54/33 of 197; rows exposed 158 of 393. Previous: updated loops5: AspisR1PrefixAggregateParser.r1_wire.row_shape, AspisS1NativeCompact.r1_wire.row_shape -> TOTAL_PROVED; counts 72/37/0/54/34 of 197; rows exposed 159 of 393. Previous: updated proof_only_refs4: AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push, AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.push_loop.body, AspisR1CanonicalDotFinish.canonical.reduce, AspisR1Qm31SamplerIndex.sampler.qm31_digits_loop0.body, AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body, AspisR1RecordParser.r1_wire.parse_record, AspisR1RecordParser.r1_wire.row_shape, AspisR1RowShape.r1_wire.row_shape, AspisR1WithdrawalCaller.encode_digest_canonical_loop.body, AspisR1FinishRelationCurrent.verifier.finish_relation_round, MultiproofParserRef.parser_reference.opening_rows, NDH_TranscriptReference.absorb_ref, NDI_BatchRef.batch_keys_ref_loop.body, NDI_BatchRef.batch_word_ref, NEG_PushActual.update_residue_row_loop0.body, NEG_PushActual.update_residue_row_loop1.body, Port23PUSH.verifier.update_residue_row_loop0.body, Port23PUSH.verifier.update_residue_row_loop1.body, AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0, AspisR1SelectedMaskProbe.field.qm31_pack_base4, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push, S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body, S8OwnedP6.check_values_owned_loop.body -> NOT_EXECUTED; counts 70/37/0/54/36 of 197; rows exposed 160 of 393. Previous: updated loops4: NCX_Reference.read32, NCX_Reference.word, NJC_ReaderEmission.verifier.Reader.raw -> DIRECT; counts 70/37/0/54/59 of 220; rows exposed 189 of 396. Previous: updated loops4: MultiproofSortRef.sort_reference.insert_step, MultiproofConeRef.reference.levels, Op4P_Extract.Op4P_reference.parser_reference.opening_rows, MultiproofConeRef.reference.valid_indices -> DIRECT; counts 70/34/0/54/62 of 220; rows exposed 195 of 396. Previous: updated loops4: AspisR1EbyKFinish.canonical.reduce -> TOTAL_PROVED; counts 70/30/0/54/66 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1DotPushLocal.canonical.Dot.push -> DIRECT; counts 69/30/0/54/67 of 220; rows exposed 197 of 396. Previous: updated loops4: AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1, AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 -> DIRECT; counts 69/29/0/54/68 of 220; rows exposed 202 of 396. Previous: updated loops4: AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body -> PRECONDITION_B; counts 69/27/0/54/70 of 220; rows exposed 218 of 396. Previous: updated qraw_total: AspisR1CanonicalQRawUnified.canonical.Q.raw, FIo_QRaw.canonical.Q.raw -> TOTAL_PROVED; counts 69/27/0/53/71 of 220; rows exposed 255 of 396. Previous: updated fiq_terminal: FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight, FIq_Native.field.CM31.mul, FIq_Native.field.CM31.square, FIq_Native.field.M31.add, FIq_Native.field.M31.sub, FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0, FIq_Native.field.qm31_m31_dot_loop0, FIq_Native.field.qm31_m31_dot_loop1, FIq_Native.field.qm31_m31_dot_loop1_loop0, FIq_Native.field.qm31_m31_dot_loop1_loop1, FIq_Native.field.qm31_pack_base4, FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0, FIq_Native.state_only_poseidon.external_linear_packed_loop, FIq_Native.state_only_poseidon.external_local_packed_raw, FIq_Native.state_only_poseidon.interpolate_three_constant_limb, FIq_Native.state_only_poseidon.external_linear_lazy_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2, FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed, FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts moved to PRECONDITION_B; counts 67/27/2/53/71 of 220; rows exposed 259 of 396. Previous: updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
 }

@@ -1916,3 +1916,57 @@ Next, item 2: the 7 caller-owed cursor bounds and the 2 caller-domain index bodi
 No reachable input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 21d. Items 2 and 3 (same run, after commit b3fd3b3fbd7)
+
+Five more scopes were used: L092–L096, which makes 10 of the run's 40. Two failed on proof-script details and were changed before the next scope:
+- L092: a conjunct shape in frontier_ops/cc_ops.
+- L094: the bound proofs of widen_val and add_small_ops.
+
+Swap was 0 throughout, and every accepted `#print axioms` line is standard. One more read-only screen was run: NPH_REFS6.json, the direct referrers of the item-2 targets.
+
+**Item 2: NPH_R22Cursor (L093).** Six definitions moved.
+- **bytes32_loop.body and digest_loop.body → (b).** The cursor bound comes from the bodies' own point-read chains (BInv/DInv, word32_bound), so no caller length is needed.
+- **decode_frontier_loop.body → DIRECT.** Its guard is level < 20.
+- **expand_semantic_loop.body → DIRECT.** Each cursor add is followed by a range access: cursor_direct for reads, and the new mut_cursor_direct / range_mut_success for index_mut.
+- **decode_k_value → (b) on DK.** decode_k's own checked_mul and checked_add guards establish the domain (dk_guards, using the converses checked_mul_some and checked_add_some). The loop keeps end = N (dk_value, dk_step).
+- **copy_chunk_loop.body → (b).** The bound chunk·32 + 31 ≤ max comes from values_owned_reference's checked 2·len and count = len/16 (vo_guards, cc_domain).
+
+Two item-2 definitions stay open, with their producers located (FINAL_COUNTS section 3):
+- **weights.field.** The closure's NJU_FieldScalar.checked covers i < 64. The finish dot's j < len weights and the polynomial/claim-parser indices still need composing at the deployed finish.
+- **values_owned_reference.** Its 2·len needs len ≤ 1856, which comes from the compact row size through expandValues.
+
+**Item 3: NPH_R22Direct (L095) and NPH_R22Gamma (L096).**
+
+Moved to DIRECT:
+- parse_record and parse_record_at. Every row_shape size is ≤ 3712. For parse_record_at, get_cursor_direct covers offset + length; the Err/abort reading is flagged.
+- body_byte: a guarded subtraction chain with constant divisors.
+- qm31_div_pass_loop.body, low_base_p_digits_loop0.body and add_small_base_p_loop.body. Every checked operation is ok for every input under the guard, so the remainder and digit invariants named earlier are not needed.
+- write_parent and leaf_step: the increment follows a successful Array.update on a 16-entry array.
+
+Moved to (b): gamma_sample. The quotient is ≤ 256 on low_base_p_digits, and both closure helper records install it (flagged caller reading).
+
+Still open:
+- **binary_step.** I found a concrete reason it is not DIRECT. len(nodes) − s.at has no guard, and a wrapped difference below 32 takes the Stop branch, an accepting path, where the checked model aborts. That needs s.at > len(nodes) − 32 + 2^64, which no reached state is known to reach. The traversal invariant s.at ≤ len(nodes) closes it.
+- **prepare.** It needs the installed op15 constant.
+
+**Item 4.** r24_canonical_mul stays as recorded: a source-refinement obligation with no frozen counterpart.
+
+**Counts (225 checked or mixed): 72 TOTAL, 52 DIRECT, 68 (b), 0 domain-only, 5 open, 28 NOT_EXECUTED; executed obligation 197. Rows exposed: 55 of 393** (153 at the start of this run, 73 after item 1).
+
+New textual reliances, all listed in FINAL_COUNTS section 4:
+- NPH_REFS5.json and NPH_REFS6.json;
+- the parse_record_at Err/abort reading;
+- the gamma helper-record reading;
+- the read-failure reading of the dots inner body, under the checked-operation enumeration row.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found. binary_step's unguarded subtraction is the one place where such an input would need a reached state with s.at > len(nodes); none is known.
+
+Next concrete deliverables:
+1. binary_step: the s.at ≤ len(nodes) traversal invariant over level_rows.
+2. weights.field: compose the finish dot's weights length ≤ 64 and the polynomial/claim indices on the tx2 finish context (NPH_R22JoinCW2).
+3. values_owned_reference: the range-index length lemma plus the expandValues tie.
+4. prepare: the op15 value.
+5. r24_canonical_mul: provenance first.
+
+Target not yet established.
