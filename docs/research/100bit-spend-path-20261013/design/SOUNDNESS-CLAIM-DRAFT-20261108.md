@@ -554,8 +554,6 @@ The 36 unnamed verifier items, each with its own removal condition. Reachability
 | NLH-RT-263 | TX1:263 | terminal_parts | frozen native parent/child cuts with abort association | YES: AspisR1.NLH_PartsRoot.source | An emitted body of terminal_parts from the pinned extractor (or an approved successor) proved equal to the transcription, or one native certificate on the actual frozen function covering the whole body without cuts or fission. |
 | NLH-RT-256 | TX1:256 | r0::Public<'a>::terminal_qm31 | frozen native parent/child cuts with abort association | YES: AspisR1.NLH_WrapperRoot.source | An emitted body of r0::Public<'a>::terminal_qm31 from the pinned extractor (or an approved successor) proved equal to the transcription, or one native certificate on the actual frozen function covering the whole body without cuts or fission. |
 
-This count was made before F2. The settled count is the next line.
-
 Of the 37 inventory entries (36 items plus batch_tree), 24 are reached and 13 are not. Nine are reached through a certificate root in the cones and 15 through F2. The 13 not reached are NJZ-RT201/202/203/204, NKJ-RT036/040/041/043/044 and NKR-RT-220/225/250/251.
 
 ### 4.7 Kept and marked UNREACHED
