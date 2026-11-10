@@ -1490,3 +1490,87 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 18b. QA reaches (b)
+
+Three scopes were used, L075–L077 (5 of this run's 40).
+- L075 failed in three places, and each was changed before L076.
+  - In `mul_lt`, a rewrite could not see through the `QAmul` abbrev. Its dependents inherited
+    the error.
+  - `NOC_QueryLink.Dcon` does not exist. The name is `NPH_R22Join094.Dcon`.
+  - The configuration-geometry rfl hit whnf timeouts.
+- L076 accepted 21 of 26 statements. It also showed that the configured geometry is **not**
+  the seed's `NFN_NEW_GeometryDictionary.adopted`: Rc5_Install.seed passes through
+  SAQ_CompleteInstall.select, which replaces it by `SAQ_Constructor.install err g`. The
+  per-layer rfl through NNH_Tx2Configuration.select timed out in isDefEq, by argument
+  congruence on the adapter. These statements were changed to slot facts of
+  SAQ_Constructor.install over an abstract inner record, unfolded with dsimp only.
+- L077 accepted NPH_R22JoinQA3: 4.13 s, 6,710,132 KiB, swap 0, 25 `#print axioms` lines, all
+  standard, no sorry.
+
+**What NPH_R22JoinQA3 proves.** The QA kernels sit behind installer callbacks. Every QA call
+those callbacks make in the executed query and geometry bodies receives W arguments, for
+**every** input of the body. The call patterns come from a textual screen of
+Port3_NativeQueryBody and Port3_NativeGeometryBody, which is flagged.
+
+- **Query.**
+  - op6 and op8 are called only in the node pattern `op7 z z; op8; op6 · one`. That pattern
+    occurs in query_values and in accumulate_batched_with_node_loop0.body. In the latter,
+    `one` is the op5 output, passed unchanged through the loop.
+  - The other op7 call (`op7 m node`) is M31.mul, which is TOTAL.
+  - `query_sites` covers any record with op7 = M31.mul and W-preserving op6/op8.
+  - It is instantiated by `Dcon_sites`, `Dsel_sites` and `NBF_sites` (any NBF-installed
+    record).
+  - `t2_sites` gives the same for S7Kani3BasisOuter.t2, the context of basis_levels_owned and
+    levels.
+- **Geometry.**
+  - `fip_geometry` (dsimp only through FIp → Rc5 → Rc3 → SAP → release → Rc2.select →
+    Rc5.seed → SAQ_CompleteInstall.select → CPP_Install): the configured geometry of every
+    FIp-installed configuration is SAQ_Constructor.install err g.
+  - `constructor_slots`, `fip_slots`, `cfg_slots` (the S c configuration) and `host_slots`
+    (the host-context configuration): that record has op7 = ok 1, op8 = QA sub, op9 = QA mul,
+    op10 = QA double, op14 = SAQ_Geometry.line and op15 = SAQ_Geometry.point, whatever g is.
+  - `terminal_slots`: Port5Q1_GeometryTerminal.install keeps those slots. That is the record
+    Tx1Q_PrefixInstall.geometryBody runs.
+  - `stage_geometry_sites`:
+    - for every x, the pattern `op9 x x; op10; op7; op8` passes W arguments to QA double and
+      QA sub;
+    - for every fibre index, op14 and op15 are ok with W output, or the TABLE_B read is out of
+      bounds. That read is bounds-checked in both profiles, and no QA call executes.
+  - op8 and op10 occur only in that pattern. The suffix-loop op9 is M31.mul, which is TOTAL.
+  - `geometry_triple_W` gives the pattern for any GeometryM31W record whose op9 is M31.mul.
+    `SAQ_install_sites` and `NFN_install_sites` instantiate it.
+- **NFN op14/op15 under NFN_NEA_FieldProduct.ops.**
+  - `nea_fibre_point_W`: the NEA fibre point is a FIo_Native CM31 product of canonical table
+    entries (NFN_NEA_FieldProduct.geometric_cm), or an out-of-bounds read. It runs no QA
+    kernel.
+  - `nea_line_W`: line_node then runs the R17 M31 mul/double/sub (QA) on W arguments.
+- The WideExact.mul context was closed by NPH_R22JoinQA2 (17b).
+
+**QA moves to (b).** Every QA site has a lemma (23 W_LEMMA, 1 EVERY_INPUT), and every context
+is composed. Moved to PRECONDITION_B: AspisR1Qm31ArithmeticProbe CM31.mul, M31.add and M31.sub.
+Their previous judgments are kept under `nph_judgment_before_20261110_qa3`. Three items rest on
+textual screens and are flagged for lead review:
+- the call patterns of the two bodies;
+- the executed query dictionaries (Dcon/Dsel, section 14 plus NPH_R22Installers2);
+- the geometry stage path.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 6 (was 9) |
+| precondition proved from the callers (b) | 20 (was 17) |
+| open | 100 |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 309 of 396** (was 328). 87 rows are served only by TOTAL, DIRECT or (b)
+definitions.
+
+Families at (b): CW, SC, R72, SM and QA. The six remaining domain-only definitions are FIq
+kernels.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
