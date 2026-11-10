@@ -394,7 +394,7 @@ def generate(a):
     out.append(f'import {M}')
     for xi in (getattr(a, 'extra_import', None) or []): out.append(f'import {xi}')
     out.append('open Aeneas Aeneas.Std Result ControlFlow Error')
-    for so in fh['set_options']: out.append(so)
+    for so in fh['set_options']: out.append('set_option maxHeartbeats 200000' if so.startswith('set_option maxHeartbeats') else so)   # PCWJ change: the Aeneas header's file-wide raised limit is never emitted
     if fh['noncomputable']: out.append('noncomputable section')
     out.append('')
     # PCUE change 1 (= PCWA change 1): fresh declarations live in a namespace NESTED INSIDE the gate namespace, so bare names resolve
