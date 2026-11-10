@@ -34,7 +34,7 @@ a[a.index('-namespace')+1]=ns;a[a.index('-subdir')+1]=ns
 if len(sys.argv)>6 and sys.argv[6]=='noabort' and '-abort-on-error' in a:a.remove('-abort-on-error')
 d.update(run=run,spec_id=run,charon_command=c2,aeneas_command=a,aeneas_tool='second',aeneas_sha256=T['sha256_aeneas'],charon_sha256=T['sha256_charon'],charon_driver_sha256=T['sha256_charon_driver'],
  tool_label='second tool version: Aeneas 0d21a9ec + Charon 454586e9 (PCWH_TOOL_BUILD.json)',derived_from=base)
-d.pop('llbc_stable',None)
+[d.pop(k,None) for k in ('llbc_stable','aeneas_only','llbc','llbc_produced_by')]
 d['configuration'].update(roots=roots,namespace=[ns])
 d['expected_limits']={'memory.high':'3221225472','memory.max':'4294967296','memory.swap.max':'0','pids.max':'64'}
 json.dump(d,open(run+'_spec.json','w'),indent=1);print(run,len(roots),'roots',ns)
