@@ -1,0 +1,21 @@
+# PCXC_ HANDOFF: phase P6x (combined-import clean-up, reachability of the NO_FROZEN_COUNTERPART definitions)
+
+Target not yet established. No ledger row, trust row, RSL, security contract or shipped source changed; nothing pushed or merged; evidence/prov-p4e-20261109 untouched. Branch codex/pc-prov-p6x-20261110 (base research a64b1f4c7c6). Host workspace /home/dombarker/project-offloads/codex-pc-prov-p6x-20261110/.
+
+## Task 1: native.decide axioms removed from the combined import (done)
+PCXC_NATIVE_DECIDE_EDIT.json has file, sha256 before/after, exact removed text (PCXC_native_decide_removed_text.txt, 50 lines), and the axiom unions before and after.
+* Removed from a corrected copy of PRVEq_AspisR1PrefixAggregateParser_Funs_S3.lean: the Aeneas-generated `r1_wire.Error.Insts.CoreFmtDebug.fmt` and, with it, the 3-line instance `r1_wire.Error.Insts.CoreFmtDebug` that only wraps it (PCXC_CLASSIFICATIONS.json C001: the instance cannot elaborate without .fmt and nothing uses it; reverse the reading if you want the stop rule applied literally).
+* Bundle PRVCmb_C13 regenerated from the corrected copy; script asserts the original regenerates byte-identical to PCXB's bundle and the new one differs by removed lines only. PRVCmb_C13 compiles (PCXC_L001: exit 0, 28 s, peak 5.9 GiB). PRVCmb_ROOT unchanged, recompiled with the audit (PCXC_L002: exit 0, 34 s, peak 6.0 GiB).
+* Union of axioms over all audited targets: propext, Quot.sound, Classical.choice. Before: those three plus 16 `_native.decide.ax_N`. 2121 theorems audited one by one, none with a nonstandard axiom; all 766 credited theorem records found (n_not_found 0); audited constants 2777 (was 2779: the two removed declarations); local axiom declarations 0. See PCXC_AUDIT.json.
+* Reused, not rebuilt: C01..C12, PRVH_WrapAdd and the gate objects (read-only LEAN_PATH reference to the P6c workspace objects).
+
+## Task 2: reachability of the 8 NO_FROZEN_COUNTERPART definitions (done)
+PCXC_NOFROZEN_REACH.md (plain language) and .json. All 8 are reachable from AspisR1.TAS_FinalB.deployed_splitB and from at least one CLOSED row root (12 to 40 roots, 12 to 31 rows each; row ids in the json). None is unreachable. Witness paths (shortest, 1 to 12 hops, constants marked thm/def) from deployed_splitB come from PCXC_L006; from the closed-row roots AspisR1.NHS_CheckpointPacket.source (covers 7 of 8) and AspisR1.NKA_ClaimsRoot.claims (decode_k_value, candidate_claims.claims, NJT_claims_ref) from PCXC_L006 and again on the exact ledger30 gate chain in PCXC_L007. Attribution to the other roots is list-level over the pinned reachable lists.
+Not seen by this check: constant-level reachability is not semantic use (a definition may sit only in a statement, proof term or unused branch); it says nothing about whether the Rust function it models runs in the ELF; only two ledger roots were walked on the objects, the rest rest on pinned ledger29 lists; the walker relation reaches 0.25 to 1.3 percent fewer constants than the pinned lists (146018/146370 etc.).
+
+## Scopes (8 Lean budget; 7 used; 0 extraction)
+L001 PRVCmb_C13 ok; L002 PRVCmb_ROOT ok; L003 import-based walker, killed at -M7000 (7.17 GB); L004 read-all-modules walker, killed at -M7000; L005 streaming walker, segfault in 2.5 s (free ordering); L006 streaming walker (splitB, NHS, NKA) ok, 40 s, 1.8 GB; L007 ledger30-chain repeat ok, 19 s, 1.7 GB. Each admitted with host scopes < 6, Stream C < 2, disk >= 40 GB (host showed 42 GB free at start: close to the floor); caps never raised; the failed shapes were changed (PCXC_CLASSIFICATIONS.json C005), not rerun. Receipts PCXC_Lnnn/receipt.json, PCXC_ATTEMPTS.jsonl.
+
+## Notes for the lead
+* The lean -M7000 limit tracks resident pages: importing TAS_FinalB (Mathlib closure) alone reaches it. The streaming reader (PCXC_ConeWalk.lean.in) is a reusable memory-light cone walker with paths; validated locally against the environment-based walker on a toy and on Init (same 36-node cone and paths).
+* Nothing here changes any provenance verdict except removing the native.decide artefact; the 8 definitions remain NO_FROZEN_COUNTERPART and are now known to be in the cone, which is an owner-visible fact about the combined import and the headline.

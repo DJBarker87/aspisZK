@@ -1,0 +1,168 @@
+import Lean
+open Lean
+
+/-! PCXC cone walker, streaming variant. History: the import-based shape (PCXC_WalkTemplate, L003) and the first read-all-modules shape (L004)
+    both died at the -M7000 limit, whose accounting follows resident pages (peak RSS = 7000 MiB): the gate closure (Mathlib, Aeneas, gate) is about
+    the whole budget on its own. This shape does NOT import the gate. It reads the .olean files of the import closure one module at a time with
+    `readModuleData` (memory-mapped), copies out only the constants whose name is in the given pinned cone list(s) into a compact interned adjacency
+    (names deep-copied, edges as indices), and frees the mapped region before the next module.
+    Edge relation: constants used by the type and by the value (opaque values included), the same as PCWD_ReachMeta2. -/
+namespace PCXC
+
+def parseName (s : String) : Name :=
+  (s.splitOn ".").foldl (fun n c => if !c.isEmpty && c.all Char.isDigit then Name.mkNum n c.toNat! else Name.mkStr n c) Name.anonymous
+
+def copyName : Name → Name
+  | .anonymous => .anonymous
+  | .str p s => .str (copyName p) (s.foldl (fun acc c => acc.push c) "")  -- real copy (String.ofList s.toList is eta-reduced to s by the compiler and would keep pointing into the freed region)
+  | .num p n => .num (copyName p) n
+
+def kindCode (ci : ConstantInfo) : UInt8 :=
+  match ci with
+  | .thmInfo _ => 1 | .defnInfo _ => 2 | .axiomInfo _ => 0 | .inductInfo _ => 3
+  | .ctorInfo _ => 4 | .recInfo _ => 5 | .opaqueInfo _ => 6 | .quotInfo _ => 7
+
+def kindStr (k : UInt8) : String :=
+  match k with
+  | 0 => "ax" | 1 => "thm" | 2 => "def" | 3 => "ind" | 4 => "ctor" | 5 => "rec" | 6 => "op" | 7 => "quot" | _ => "?"
+
+def depsOf (ci : ConstantInfo) : Array Name :=
+  let t := ci.type.getUsedConstants
+  match ci.value? (allowOpaque := true) with
+  | some e => t ++ e.getUsedConstants
+  | none => t
+
+structure G where
+  idx : Std.HashMap Name Nat := {}
+  names : Array Name := #[]
+  adj : Array (Array Nat) := #[]
+  kind : Array UInt8 := #[]
+  has : Array Bool := #[]
+
+def G.intern (g : G) (n : Name) : G × Nat :=
+  match g.idx[n]? with
+  | some i => (g, i)
+  | none =>
+    let c := copyName n
+    let i := g.names.size
+    ({ idx := g.idx.insert c i, names := g.names.push c, adj := g.adj.push #[], kind := g.kind.push 255, has := g.has.push false }, i)
+
+unsafe def freeR (r : CompactedRegion) : IO Unit := CompactedRegion.free r
+
+unsafe def scanAll (hs : Std.HashMap UInt64 String) (roots : List Name) : IO (G × Nat × Nat) := do
+  let mut g : G := {}
+  let mut seen : Std.HashSet Name := {}
+  let mut stack : List Name := roots.map copyName
+  let mut nmods := 0
+  let mut nconst := 0
+  let mut pending : Array CompactedRegion := #[]
+  while !stack.isEmpty do
+    match stack with
+    | [] => pure ()
+    | m :: rest =>
+      stack := rest
+      if !seen.contains m then
+        seen := seen.insert m
+        -- free the PREVIOUS module's regions only now: the previous iteration's locals (ModuleData, arrays) are already dead, so no reference
+        -- (including the runtime's own drops at end of scope) touches freed memory (freeing at the end of the same iteration segfaulted)
+        for r in pending do
+          freeR r
+        pending := #[]
+        nmods := nmods + 1
+        let fn ← findOLean m
+        let (data, reg) ← readModuleData fn
+        let mut regs : Array CompactedRegion := #[reg]
+        let mut dsets : Array ModuleData := #[data]
+        if data.isModule then
+          let parts ← readModuleDataParts #[fn, OLeanLevel.server.adjustFileName fn, OLeanLevel.private.adjustFileName fn]
+          for (d, r) in parts do
+            regs := regs.push r
+          if let some p := parts.back? then dsets := dsets.push p.1
+        for d in dsets do
+          for ci in d.constants do
+            nconst := nconst + 1
+            if hs.contains ci.name.hash then
+              let k := kindCode ci
+              let (g1, i) := g.intern ci.name
+              g := g1
+              -- a weakened `axiom` entry (public part of a module-system theorem) never overwrites a fuller entry
+              if !g.has[i]! || k != 0 then
+                let mut out : Array Nat := #[]
+                for dn in depsOf ci do
+                  let (g2, j) := g.intern dn
+                  g := g2
+                  out := out.push j
+                g := { g with adj := g.adj.set! i out, kind := g.kind.set! i k, has := g.has.set! i true }
+        for i in data.imports do
+          stack := (copyName i.module) :: stack
+        pending := regs
+  for r in pending do
+    freeR r
+  return (g, nmods, nconst)
+
+def pathTo (par : Array Nat) (v : Nat) : List Nat := Id.run do
+  let mut acc : List Nat := []
+  let mut cur := v
+  let mut fuel := 1000000
+  while fuel > 0 do
+    fuel := fuel - 1
+    acc := cur :: acc
+    if par[cur]! == cur then return acc
+    cur := par[cur]!
+  return acc
+
+unsafe def run (listFiles : List String) (rootMods : List Name) (roots : List Name) (targets : List Name) : IO Unit := do
+  let mut hs : Std.HashMap UInt64 String := {}
+  let mut nlist := 0
+  for f in listFiles do
+    for l in (← IO.FS.readFile f).splitOn "\n" do
+      let s := l.trimAscii.toString
+      if !s.isEmpty then
+        hs := hs.insert (parseName s).hash s
+        nlist := nlist + 1
+  IO.println s!"PCXC_LIST_NAMES {nlist} distinct_hashes {hs.size}"
+  let (g, nmods, nconst) ← scanAll hs rootMods
+  let matched := g.has.foldl (fun a b => if b then a + 1 else a) 0
+  IO.println s!"PCXC_MODULES_READ {nmods} CONSTANTS_SCANNED {nconst} INTERNED {g.names.size} MATCHED_LIST_NAMES {matched}"
+  let mut shown := 0
+  for (_, s) in hs.toList do
+    if shown < 5 then
+      let found := match g.idx[parseName s]? with
+        | some i => g.has[i]!
+        | none => false
+      if !found then
+        IO.println s!"PCXC_LIST_NAME_NOT_FOUND {s}"
+        shown := shown + 1
+  for root in roots do
+    IO.println s!"PCXC_ROOT {root}"
+    match g.idx[root]? with
+    | none => IO.println "PCXC_ROOT_NOT_FOUND"
+    | some r =>
+      let mut par : Array Nat := Array.replicate g.names.size g.names.size
+      par := par.set! r r
+      let mut q : Array Nat := #[r]
+      let mut h := 0
+      let mut missing := 0
+      while h < q.size do
+        let u := q[h]!
+        h := h + 1
+        if !g.has[u]! then missing := missing + 1
+        for v in g.adj[u]! do
+          if par[v]! == g.names.size then
+            par := par.set! v u
+            q := q.push v
+      IO.println s!"PCXC_REACHABLE_TOTAL {root} {q.size} nodes_without_adjacency {missing}"
+      for t in targets do
+        match g.idx[t]? with
+        | none => IO.println s!"PCXC_TARGET {t} NOT_REACHED_FROM {root} (never mentioned)"
+        | some ti =>
+          if par[ti]! == g.names.size then IO.println s!"PCXC_TARGET {t} NOT_REACHED_FROM {root}"
+          else
+            let p := pathTo par ti
+            let nthm := (p.filter (fun x => g.kind[x]! == 1)).length
+            IO.println s!"PCXC_TARGET {t} REACHED_FROM {root} hops={p.length - 1} theorem_nodes_on_path={nthm}"
+            IO.println s!"PCXC_PATH {t} :: {root} :: {", ".intercalate (p.map fun x => s!"{g.names[x]!}[{kindStr g.kind[x]!}]")}"
+
+end PCXC
+
+#eval show IO Unit from unsafe PCXC.run [@@LISTS@@] [@@ROOTMODS@@] [@@ROOTS@@] [@@TARGETS@@]

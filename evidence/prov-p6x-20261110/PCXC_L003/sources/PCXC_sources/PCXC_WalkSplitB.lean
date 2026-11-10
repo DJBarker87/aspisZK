@@ -1,0 +1,70 @@
+import Lean
+import TAS_FinalB
+open Lean Meta Elab
+
+namespace PCXC
+
+def kindOf (ci : ConstantInfo) : String :=
+  match ci with
+  | .thmInfo _ => "thm" | .defnInfo _ => "def" | .axiomInfo _ => "ax" | .inductInfo _ => "ind"
+  | .ctorInfo _ => "ctor" | .recInfo _ => "rec" | .opaqueInfo _ => "op" | .quotInfo _ => "quot"
+
+/-- constants used by the type and by the value (opaque values included) of `n`: the same edge relation as PCWD_ReachMeta2. -/
+def allDeps (env : Environment) (n : Name) : Array Name :=
+  match env.find? n with
+  | none => #[]
+  | some ci =>
+    let t := ci.type.getUsedConstants
+    match ci.value? (allowOpaque := true) with
+    | some e => t ++ e.getUsedConstants
+    | none => t
+
+/-- BFS from `root`: parent map (root maps to itself) and visit order count. No adjacency is stored. -/
+partial def walk (env : Environment) (root : Name) : Std.HashMap Name Name × Nat := Id.run do
+  let mut par : Std.HashMap Name Name := ({} : Std.HashMap Name Name).insert root root
+  let mut q : Array Name := #[root]
+  let mut h := 0
+  while h < q.size do
+    let u := q[h]!
+    h := h + 1
+    for v in allDeps env u do
+      if !par.contains v then
+        par := par.insert v u
+        q := q.push v
+  return (par, q.size)
+
+def pathTo (par : Std.HashMap Name Name) (v : Name) : List Name := Id.run do
+  let mut acc : List Name := []
+  let mut cur := v
+  let mut fuel := 100000
+  while fuel > 0 do
+    fuel := fuel - 1
+    acc := cur :: acc
+    match par[cur]? with
+    | some p => if p == cur then return acc else cur := p
+    | none => return acc
+  return acc
+
+def analyse (env : Environment) (root : Name) (targets : List Name) : IO Unit := do
+  IO.println s!"PCXC_ROOT {root}"
+  if (env.find? root).isNone then
+    IO.println "PCXC_ROOT_NOT_FOUND"; return
+  let (par, n) := walk env root
+  IO.println s!"PCXC_REACHABLE_TOTAL {root} {n}"
+  for t in targets do
+    match par[t]? with
+    | none => IO.println s!"PCXC_TARGET {t} NOT_REACHED_FROM {root}"
+    | some _ =>
+      let p := pathTo par t
+      let kinds := p.map (fun x => match env.find? x with | some ci => kindOf ci | none => "?")
+      let nthm := kinds.filter (· == "thm") |>.length
+      IO.println s!"PCXC_TARGET {t} REACHED_FROM {root} hops={p.length - 1} theorem_nodes_on_path={nthm}"
+      IO.println s!"PCXC_PATH {t} :: {root} :: {", ".intercalate (p.map fun x => s!"{x}[{match env.find? x with | some ci => kindOf ci | none => "?"}]")}"
+
+end PCXC
+
+open PCXC in
+#eval show MetaM Unit from do
+  let env ← getEnv
+  let targets : List Name := [`AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value, `AspisR72Sampler.field.r23_product_u32_bounded, `AspisR72Sampler.field.r24_canonical_mul, `AspisR72Sampler.field.r24_canonical_mul.PP, `AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call, `AspisR72Sampler.field.r24_canonical_mul.closure, `AspisR1ClaimsUnrolledParent.candidate_claims.claims, `NJT_ClaimsRef.r1_semantic.NJT_claims_ref]
+  analyse env `AspisR1.TAS_FinalB.deployed_splitB targets

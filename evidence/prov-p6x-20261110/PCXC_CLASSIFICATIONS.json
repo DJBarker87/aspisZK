@@ -1,0 +1,41 @@
+{
+ "schema": "PCXC_CLASSIFICATIONS/1",
+ "classifications": [
+  {
+   "id": "C001",
+   "case": "The Debug instance wrapper r1_wire.Error.Insts.CoreFmtDebug uses the removed .fmt definition.",
+   "ruling": "Removed together with .fmt (the brief says to remove exactly .fmt and to stop if another declaration needed it).",
+   "reason": "The wrapper is a 3-line instance structure, is not used by any other declaration, theorem statement or proof, and would be the only thing left importing the 16 native_decide axioms. The brief's intent is that no credited theorem depends on the removed text; that holds. Leaving the instance would not elaborate. Recorded in PCXC_NATIVE_DECIDE_EDIT.json (scope_note) so the lead can reverse the reading."
+  },
+  {
+   "id": "C002",
+   "case": "Which file to correct: the credited file or the bundle.",
+   "ruling": "Corrected copy of the credited file PRVEq_AspisR1PrefixAggregateParser_Funs_S3.lean in this evidence dir, and the bundle PRVCmb_C13 regenerated from it with the unchanged PCXB rename rule.",
+   "reason": "evidence/prov-p4e-20261109 must not be edited; the bundle is derived. The script asserts the regenerated original equals the PCXB bundle byte-for-byte and that the corrected bundle differs by removed lines only."
+  },
+  {
+   "id": "C003",
+   "case": "The 6 other bundles and PRVH_WrapAdd were not rebuilt.",
+   "ruling": "Reused by reference from the P6c host workspace objects (LEAN_PATH, read-only).",
+   "reason": "Unchanged sources; AGENTS item 6. PRVCmb_ROOT was recompiled (it imports every bundle) so the audit is a fresh pass over the new C13."
+  },
+  {
+   "id": "C004",
+   "case": "Task 2 reachability: how to answer in one capped scope.",
+   "ruling": "List-level membership in the pinned reachable lists answers reachability for all 1099 ledger roots and deployed_splitB; one Lean scope (PCXC_L006) adds witness paths for deployed_splitB, NHS_CheckpointPacket.source and NKA_ClaimsRoot.claims; a second (PCXC_L007) repeats the two ledger roots on the exact ledger30 gate path chain.",
+   "reason": "Walking 1099 roots in Lean is not needed: the two walked roots cover all eight definitions, and their agreement with the pinned lists validates the list-level attribution for the rest."
+  },
+  {
+   "id": "C005",
+   "case": "Import-based walker (PCWD_ReachMeta2 shape) cannot import TAS_FinalB within -M7000.",
+   "ruling": "Streaming olean reader (PCXC_ConeWalk) that does not build the environment; shapes PCXC_L003 (import) and PCXC_L004 (read all modules, keep mapped) retired after one failure each, PCXC_L005 (free regions at end of iteration) retired after a segfault and fixed (free the previous module only at the start of the next iteration; real string copy).",
+   "reason": "Lean -M accounting follows resident pages (peak RSS equals 7000 MiB at both kills); the gate import alone is about the whole budget. No cap or timeout was raised; the walker needs 1.8 GB."
+  },
+  {
+   "id": "C006",
+   "case": "Walker relation vs pinned lists.",
+   "ruling": "The walker reaches 146018 constants from deployed_splitB against 146370 in the pinned list (and 27696/28064, 9736/9862 for the two ledger roots). Reported as a difference; verdicts rest on membership in the pinned lists plus the independent walker hit.",
+   "reason": "The pinned NNM_ProofDriver is a native binary with its own auxiliary edges; the PCWD type/value relation is a subset. Not a decision about the gate."
+  }
+ ]
+}
