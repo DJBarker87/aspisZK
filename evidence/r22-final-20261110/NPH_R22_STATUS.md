@@ -1772,3 +1772,71 @@ on which the wrapping binary accepts and the checked model rejects was found. 4 
 (L078–L081), 36 of this run's 40 remain.
 
 Target not yet established.
+
+### 19e. The two canonical.Q.raw copies (item 2): producers located, one context composed, Q.raw stays domain-only
+
+One scope was used: L082 accepted NPH_R22QRawPush on the first attempt (2.30 s, 5,373,304 KiB,
+swap 0, 3 axiom lines, standard, no sorry). The task now stands at 5 of the run's 40 scopes.
+
+**Where the copies execute** (backward screen NPH_QRAW_REFS.json, the same script with the Q.raw
+names as controls; textual):
+- FIo copy: FIo_Native.fast_pairing.canonical.Q.raw (the NativeExternal wrapper of FIo_QRaw) is
+  called only by canonical.Dot.push. Dot.push is called only by EbyKDot.push, apart from the model
+  NGM_DotInduction.walk.
+- EbyKDot.push has two kinds of deployed caller:
+  - FIp_NativeDots.fast_dots.four_dots_one. Its three tail pushes push g[28], g[26] and g[27], with
+    scalars decoded from the proof bytes. This is the op20 dots.
+  - The FIo_Native.weights high_dot_loop, partial_dot_loop and push_byte_products_loop bodies.
+    They push weights.field = WideExact.from_le_bytes … unwrap. These bodies are NOT_R22 wrapping
+    gate bodies, but the Q.raw they reach is a checked/mixed cone definition.
+- Unified copy: AspisR1CanonicalQRawUnified.canonical.Q.raw is reached through raw_entry and
+  AspisR1QRawGeneratedPushConnectionV2.sourceRawFn. That is the rawFn of the claim-dot concreteOps
+  pushDot (pushWithDotBackend → checked-Q push → dotViaRaw), the record of NPH_R22JoinCW4.
+
+So the dots output producer FIp_DotsOutputCanonical.all (outside L187, section 11) is not the
+producer the caller join needs. Q.raw receives the **pushed value** and the **scalar**, not the dots
+output.
+
+**Proved (NPH_R22QRawPush):**
+- `checked_none`: checked_q rejects a scalar with a limb ≥ P before any Dot.push.
+- `push_total`: EbyKDot.push self v x is ok for **every** state and scalar whenever the pushed value
+  v is canonical.
+  - At the term limit, it returns Err before any push.
+  - On a non-canonical scalar, checked_q rejects first.
+  - Otherwise both Dot.push calls, and so both Q.raw calls, run on canonical limbs
+    (NFE_NFC_CalleeDomains.total, in the closure).
+  - So the scalar side of every Q.raw call needs no caller producer.
+- `g_push_site`: on NEV_DotInputs.Canonical g, every four_dots_one push is ok.
+
+**What is missing before either copy can move to (b):**
+1. Canonical g at every executed op20 dots call. The producer is located: g is a field of
+   NFS_PacketRoot.Domain on the 094 path, and of NFS_QueryInvariant.Domain at every reached tx2
+   query state (NPH_R22JoinCW2.reach_domain). The tie from the installed op20 slot through
+   FIp_DotsAdapter.dots and four_dots to four_dots_one at the same g is not composed.
+2. A canonical pushed value in the three FIo weights loop bodies. The located producer is
+   WideExact.from_le_bytes success (NFS_ReadCanonical); it is not composed through those loops.
+3. A canonical pushed value at the claim-dot pushDot calls of the Unified copy, inside
+   owned_claim_loops on concreteOps. NPH_R22JoinCW4.owned_loop_canon keeps the parts canonical, but
+   the pushed values are not yet tied to it or to the ClaimParser field reads.
+
+No value without a producer was found. Each pushed value has a located producer, and only the ties
+are missing. The two Q.raw copies stay DOMAIN_LEMMA_PROVED. Their cone entries carry
+`caller_join_progress_20261110_fiq` with the path and the three missing ties.
+
+### 19f. Item 3 (the rest of the 345 body walk)
+
+Item 3 asked for the 345 walk for kernels that 094 does not reach. With FIq at (b), every field
+family's domain-only kernels are at (b) (CW, SC, R72, SM, QA, FIq). Their contexts on the 345 entry
+are composed by NPH_R22JoinSM7.stage1_guarded and NPH_R22JoinFIq.stage1_guardedT. The only
+domain-only definitions left are the two Q.raw copies, which run on the tx2 and claim-dot paths
+(19e), not inside the 345 body. So no kernel is waiting on more of the 345 walk. The 71 OPEN
+definitions are a separate obligation: non-field loop and decoder bodies such as the samplers'
+digit/div loops, TerminalDecoder encode loops, the DecodeK and record parsers, the FIp_NativeDots
+loops and the accumulator and push-residue loops. They are not kernel call-site joins.
+
+**Counts (220 executed checked or mixed definitions): 67/27/2/53/71**, as in 19d. Rows exposed:
+259 of 396.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.

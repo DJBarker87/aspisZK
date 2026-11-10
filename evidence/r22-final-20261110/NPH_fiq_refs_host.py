@@ -110,6 +110,6 @@ for e in sites['FIq']:
   else: r=classify(s)
   cnt[r['cls']]+=1
   out.append(dict(site=s,module=e['module'],site_class=e['site_class'],**r))
-controls=[dict(control=c,known=c in names,**(classify(c) if c in names else {})) for c in sys.argv[3:]]
+controls=[dict(control=c,known=c in names,direct=sorted({D[k]['name'] for k in rev.get(c,()) if D[k]['kind'] in DEFK}),**(classify(c) if c in names else {})) for c in sys.argv[3:]]
 json.dump(dict(note=__doc__.strip().splitlines()[0],n_decls=len(D),counts=dict(cnt),stop=sorted(STOP),roots=ROOTS,tie_words=TIE_WORDS,
-  controls=[dict(control=c['control'],known=c['known'],cls=c.get('cls'),roots=c.get('roots',[])[:5],tie_tops=[t['top'] for t in c.get('tops',[]) if t['tie_candidates']][:5]) for c in controls],sites=out),sys.stdout,indent=1)
+  controls=[dict(control=c['control'],known=c['known'],direct=c['direct'][:40],cls=c.get('cls'),roots=c.get('roots',[])[:5],tie_tops=[t['top'] for t in c.get('tops',[]) if t['tie_candidates']][:5]) for c in controls],sites=out),sys.stdout,indent=1)
