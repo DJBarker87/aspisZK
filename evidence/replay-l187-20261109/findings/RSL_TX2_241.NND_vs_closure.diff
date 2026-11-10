@@ -1,0 +1,39 @@
+24c24,25
+< Effects, in order: TX2:242's events; the encoder's allocation; TX2:064's
+---
+> Effects, in order: TX2:242's events; the encoder (CLOSED law; the frozen
+> encoder returns an array); TX2:064's
+26a28,32
+> Revision 2 (RSL_REVISION2.md): the two `data()?` clones are allocation sites for
+> a heap-carrying deferred error (`RS.ofCloned`, NMT-S1 shape), and the `error`
+> path has its `format!` allocation before the log line.  At the only caller,
+> TX2:240, every snapshot satisfies `OwnedAccount.SnapshotErrs`
+> (RSL_TX1_344.snapAll_errs), so the clone arms are unreachable there.
+42c48,52
+<   its complete law (NMN_064.RowSpec: Law + chronology, abort = prefix only). -/
+---
+>   its complete law (NMN_064.RowSpec: Law + chronology, abort = prefix only).
+>   Revision 3 (ruling (bq), LIB0_ F1): the heap::filled reservations reached
+>   through `resume` (verifier.rs:428) read `Env.reservation`
+>   (`Spec.tryReserve`), so on `Dom064` the law is a function of the arguments
+>   and Env (`Spec.Functional (tx2auth x.1 x.2.1 x.2.2)`, required at the gate). -/
+50,51c60,62
+< /-- `.map_err(super::super::error)?` (lib.rs:40): one log line, then
+< InvalidInstructionData. -/
+---
+> /-- `.map_err(super::super::error)?` (lib.rs:40): the `format!` String
+> allocation of `msg!("r1:error:{:?}", e)` (Revision 2; abort = prefix so far),
+> one log line, then InvalidInstructionData. -/
+55c66,67
+<   | .error e => RS.seq (RS.lift (Spec.emit (.log ("r1:error:" ++ V.debug e))))
+---
+>   | .error e => RS.seq (RS.lift Spec.alloc) <|   -- format! builds the message String
+>                RS.seq (RS.lift (Spec.emit (.log ("r1:error:" ++ V.debug e))))
+73c85
+<   RS.bind (RS.ofExcept acc0.data) fun proofData =>
+---
+>   RS.bind acc0.data fun proofData =>
+75c87
+<   RS.bind (RS.ofExcept acc6.data) fun checkpointData =>
+---
+>   RS.bind acc6.data fun checkpointData =>
