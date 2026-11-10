@@ -310,3 +310,28 @@ deployed_splitB and deployed_charge raw cones):
 No reachable input on which wrapping accepts and checked rejects was found.
 
 Target not yet established.
+
+## 8. Item (4), first batch (lead decision 2026-11-10: no ops-interface change; limb bound as a separate invariant)
+
+Two more scopes were used: L014 failed on an unqualified type name, and L015 accepted
+NPH_R22Loops (2.40 s, 5,451,088 KiB, swap 0, standard axioms). That makes 15 of the 60 used.
+- `usize_succ_ok` (generic): `x + 1#usize` succeeds whenever x < n for a machine usize n.
+- `pair_forest_accounts_digest_is_canonical_body_total` and
+  `pair_tree_profile_digest_is_canonical_body_total`: both AspisR1TerminalDecoder
+  digest_is_canonical loop bodies are checked-total for every input.
+
+**Counts now:** 62 TOTAL, 1 DIRECT, 31 domain-only, 0 (b), 131 open. Rows: 370 of 396 still
+depend on a definition that is neither TOTAL nor DIRECT; 26 are served only by TOTAL or DIRECT
+definitions.
+
+**Remaining.** 30 of the 32 single-increment bodies are not yet done, largest fan-out first:
+- the Poseidon lane loops (28–34 rows);
+- array_from_fn_copy_loop (31);
+- finish_owned_loop.body (21);
+- the NCV/NCX reference loops (9–20).
+
+Each needs its own guard read and one per-body lemma in the same pattern. After that come
+items (i)–(iii) of the separate limb invariant, which keeps the ops records and closed-row
+statements unchanged.
+
+Target not yet established.
