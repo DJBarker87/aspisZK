@@ -1,0 +1,39 @@
+{
+ "schema": "PCUH_TOOLS/1",
+ "note": "P2h ran 0 extraction scopes; the fresh emissions are P1g/P1d outputs (tool per run below). Lean scopes: the ledger30 gate environment, one scope at a time, caps 6G/8G swap 0, 180 s, -j1 -M7000 -DElab.async=false.",
+ "lean": {
+  "toolchain": "leanprover--lean4---v4.32.0 (GATE_T in PCUH_run.py)",
+  "gate_export": "codex-cx-ledger8-cache-20261104/NNN_20261111/NNN_exports with LEAN_PATH list from evidence/ledger30-20261111/NNN_PATHS.json",
+  "launcher": "PCUH_run.py / PCUH_run_host.py (copies of PCVD_run*.py with prefix and workspace renamed; admission host<6, Stream C<2, disk>=40GB, reservation barrier)"
+ },
+ "aeneas": {
+  "original": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3 (rebuilt original, rev b59d5188): PCQD_E003 (AdapterReconstruct), PCQD_E013 (compact/S1), PCQE_E001 (r0.transport.order)",
+  "extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958 (aeneas-b59d5188-extended): all other PCQD_ runs used here (E010,E011,E018,E024,E027,E028,E034,E035,E036)",
+  "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+ },
+ "overflow_checks": "ON in every fresh emission used (PCQD-C2; the gate module text was NOT used to re-derive the fresh configuration, but each definition is scanned for wrapping_ operators: PCUH_EQ_STATUS gate_requires_wrapping_ops)",
+ "generator": {
+  "file": "PCUH_gen_equalities.py (copy of PCUG_gen_equalities.py + --preamble, --fresh-prelude, --given, --extra-import)",
+  "sha256": "097aa95e14695c36c283a487a9d492219d1fc64a47f6f703b5cecc2460af9f84",
+  "driver": "PCUH_gen.py, PCUH_plan.py, PCUH_ingest.py, PCUH_bundle.py"
+ },
+ "hand_written_inputs": {
+  "R72_preamble.lean": "ca92699698decf58e2486dac265b7add8f5a1e1cdb1172b2fab5f9e3eda74472",
+  "R72_given.json": "7a39f6eca65514fc99d7e91355541a16e2831e52d4b0b69cbcd64ee21f5602da",
+  "NFN_prelude.lean": "667f01754945b5fda882070b80d23993470dc619d7300c4e7281a024aaa9e359",
+  "NFN_given.json": "17e86fd2d1a8ff9864d9bf86915d713ee620f2a349907c85ce0c047cb8a38495",
+  "NFN_p2_given.json": "c0eb8b7db4acfc5d82aa5ce978fc541ce04b43eefee4e041984a70fb835be6e2",
+  "S1_given.json": "1366a2b31be476ee6fd632f1d8b62a7a28883fbe838013de0592c617bcb74646"
+ },
+ "generic_lemmas": {
+  "file": "PRVH_WrapAdd.lean",
+  "sha256": "3ce9d2a60e2028c248c96455c28c89fce880f9e7bed88e8e735c30a9b3fdd153",
+  "theorems": [
+   "PRVH.usize_add_one_wrap",
+   "PRVH.usize_add_one_of_lt",
+   "PRVH.usize_shr9",
+   "PRVH.update_ok_lt"
+  ],
+  "scope": "PCUH_L029 (final), axioms propext/Classical.choice/Quot.sound (update_ok_lt: propext)"
+ }
+}

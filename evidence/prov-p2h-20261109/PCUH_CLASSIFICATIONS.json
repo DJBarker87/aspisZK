@@ -1,0 +1,53 @@
+{
+ "schema": "PCUH_CLASSIFICATIONS/1",
+ "entries": [
+  {
+   "id": "PCUH-C1",
+   "topic": "r0.transport.order",
+   "classification": "SOURCE_SHAPE (configuration): fresh PCQE_E001 uses checked `j + 1`, `r + 1`; gate FIo_Native uses `wrapping_add`",
+   "result": "EQUALITY_PROVED as functions on all inputs; no caller domain needed: the gate body is the fresh body because overflow cannot occur (r < PIVOT = 1023 guard; j+1 follows Array.update out j i, whose success certifies j < 1024). order is a constant function (no arguments). No reachable disagreement.",
+   "also": "constants PADS, PIVOT, PAD_ROWS: fresh transparent definitions proved equal to the gate constants (unfold; rfl), so no CONDITIONAL_ON_BINDING",
+   "config_note": "fresh ON vs gate wrapping on plain operators. Under the ruling (wrong basis counts OPEN) a plain ON=OFF match would not count; here the equation itself is proved across the two configurations, which is the stronger statement. R22 (checked-to-wrapping) is not discharged by this: it applies only to these 8 definitions."
+  },
+  {
+   "id": "PCUH-C2",
+   "topic": "which fresh emissions were compared",
+   "rule": "every FRESH_PRESENT_PCQD entry of PCQD_COVERAGE whose gate source is available; one generator pass per (gate module, emission directory, kind) in PCUH_PLAN.json; ALREADY_COVERED, NOT_OBTAINED and NO_FROZEN_COUNTERPART entries are not re-run (reported in PCUH_COVERAGE_RESULT.json)"
+  },
+  {
+   "id": "PCUH-C3",
+   "topic": "hand-adapted (parametric) gate models",
+   "rule": "when the gate definition takes a hand-written record (Ops, Leaves, ReadK) and its carriers differ from the fresh ones, fresh = gate has no meaning as an equation; recorded HAND_ADAPTED, not OPEN-failed, not credited"
+  },
+  {
+   "id": "PCUH-C4",
+   "topic": "config mismatch",
+   "rule": "gate body with wrapping_ operators vs fresh checked, no overflow-freedom argument found: CONFIG_MISMATCH, OPEN. NJA_CountBody (6) and the NFN closure/for_range family (11) are in this class. Counterexample candidates (not claimed reachable): NFN closure_4.closure call_mut computes `5#usize * i + tupled_args`; for i >= 2^64/5 the fresh body fails with an arithmetic-overflow error where the gate wraps. The caller domain of i (query index in QueryGeometry.for_range) was not proved bounded in this job."
+  },
+  {
+   "id": "PCUH-C5",
+   "topic": "given blocks",
+   "rule": "R72 M31.mul, CM31.mul, CM31.square, QM31.mul reuse the P3b proofs (PRVEq_AspisR72Sampler_Funs_P3.lean) verbatim: the fresh text of those definitions in PCQD_E024 is identical to PCQF_aspis_core_field_a (checked in PCUH session by normalized-text comparison for M31.mul, CM31.mul, CM31.square, QM31.mul, QM31.square, reduce_u64, mul_by_r, CM31.add/sub/double), so the proofs apply unchanged. The block is compiled in PCUH_L032 with the new emission. NFN fibre_point/line_node and batch_prefix_products_loop(.body) and S1 POINTS/CLAIMS are P2h hand-written blocks."
+  },
+  {
+   "id": "PCUH-C6",
+   "topic": "constant binding upgrade (item 4)",
+   "rule": "The constants' own transparent fresh definitions (PCQF_E007: M31.ZERO/ONE, QM31.ZERO/ONE) equal the gate constants (limbwise for QM31): PRVEq_const_bind.lean, PCUH_L035/L037. P3d records that used QM31.ZERO/ONE or FIq_Native M31.ONE (11) and the NFN line_node pass are upgraded to EQUALITY_PROVED with `binding_upgrade`; the cross-crate link external axiom = transparent value remains a property of the Aeneas encoding of constants and is recorded. Not upgraded: Native07 selected_claim (STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS, no transparent emission located), Native13 COPY_PATTERNS (retired shape), parametric-transport rows."
+  },
+  {
+   "id": "PCUH-C7",
+   "topic": "failed shapes",
+   "rule": "PCUH_L002-L009: PRVH_WrapAdd lemma development (identifier/arith lemma names); PCUH_L012/L013: r0.transport.order first drafts (abbrev G := namespace is not a term; apply on a bind whose first argument differs); PCUH_L015-L018 probes, L025 (CM31 proofs lacked r23_gate), L027 (docstring before set_option; fibre_point table equalities missing; line_node kernel excessive memory in the stage-2 `try rfl` fallback, replaced by explicit `simp only [fibre_point, bind_tc_ok]`). None repeated unchanged. Two shapes (S1 stage-1 rfl, S2 delta+simp+rfl) both timed out at 200000 heartbeats for AspisR72Sampler circle.secure_ood_circle_point_from_parameter: retired."
+  },
+  {
+   "id": "PCUH-C8",
+   "topic": "scratch files with sorry",
+   "rule": "PRVEq_probe1.lean and PRVEq_probe3.lean contained sorry; deleted from the tree, and the source copies in PCUH_L001/L022/L023 were removed. They carry no credit. PRVEq_probe2.lean/probe4.lean have no sorry."
+  },
+  {
+   "id": "PCUH-C9",
+   "topic": "NJA_CountBody loop0_loop0_loop0.body",
+   "rule": "present in the gate and the fresh emission but not parsed as a common declaration by the generator (6 of 7 compared); config mismatch class anyway"
+  }
+ ]
+}

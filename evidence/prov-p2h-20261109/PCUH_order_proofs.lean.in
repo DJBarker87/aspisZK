@@ -1,0 +1,114 @@
+namespace PRVEq.order
+open PRVFresh_PCQE_E001_order
+
+theorem bind_congr_ok {α β : Type _} {m : Result α} {f g : α → Result β}
+    (h : ∀ x, m = ok x → f x = g x) : (m >>= f) = (m >>= g) := by
+  cases hm : m with
+  | ok x => exact h x hm
+  | fail e => rfl
+  | div => rfl
+
+theorem arr1024_len {α : Type _} (v : Std.Array α 1024#usize) : v.length = 1024 := by
+  first
+  | (have := v.property; simpa using this)
+  | (have := v.property; simp [Std.Array.length] at this ⊢; omega)
+  | simp
+
+theorem upd_lt {α : Type _} (v : Std.Array α 1024#usize) (i : Std.Usize) (x : α) (a : Std.Array α 1024#usize)
+    (h : Std.Array.update v i x = ok a) : i.val < 1024 := by
+  have h1 := PRVH.update_ok_lt v i x a h
+  have h2 := arr1024_len v
+  omega
+
+theorem PADS_eq : r0.transport.PADS = FIo_Native.aspis_core.r0.transport.PADS := by
+  unfold r0.transport.PADS FIo_Native.aspis_core.r0.transport.PADS; rfl
+theorem PIVOT_eq : r0.transport.PIVOT = FIo_Native.aspis_core.r0.transport.PIVOT := by
+  unfold r0.transport.PIVOT FIo_Native.aspis_core.r0.transport.PIVOT; rfl
+theorem PAD_ROWS_eq : r0.transport.PAD_ROWS = FIo_Native.aspis_core.r0.transport.PAD_ROWS := by
+  unfold r0.transport.PAD_ROWS FIo_Native.aspis_core.r0.transport.PAD_ROWS; rfl
+
+theorem PIVOT_val : FIo_Native.aspis_core.r0.transport.PIVOT.val = 1023 := by
+  unfold FIo_Native.aspis_core.r0.transport.PIVOT; rfl
+
+theorem order_loop0_loop0_body_eq (used : Array Bool 1024#usize) (out : Array Std.U16 1024#usize)
+    (j r : Std.Usize) :
+    r0.transport.order_loop0_loop0.body used out j r
+      = FIo_Native.aspis_core.r0.transport.order_loop0_loop0.body used out j r := by
+  unfold r0.transport.order_loop0_loop0.body FIo_Native.aspis_core.r0.transport.order_loop0_loop0.body
+  rw [PIVOT_eq]
+  by_cases hr : r < FIo_Native.aspis_core.r0.transport.PIVOT
+  · have hr1 : r.val < 1023 := by
+      have : r.val < FIo_Native.aspis_core.r0.transport.PIVOT.val := by scalar_tac
+      rw [PIVOT_val] at this; exact this
+    rw [if_pos hr, if_pos hr, PRVH.usize_add_one_wrap r (by omega)]
+    apply bind_congr_ok; intro b _
+    cases b
+    · simp only [Bool.false_eq_true, ↓reduceIte]
+      have hin : (do
+          let i ← lift (UScalar.cast UScalarTy.U16 r)
+          let a ← Std.Array.update out j i
+          let j2 ← j + 1#usize
+          ok (a, j2) : Result ((Std.Array Std.U16 1024#usize) × Std.Usize)) =
+        (do
+          let i ← lift (UScalar.cast UScalarTy.U16 r)
+          let a ← Std.Array.update out j i
+          let j2 ← lift (Std.Usize.wrapping_add j 1#usize)
+          ok (a, j2)) := by
+        apply bind_congr_ok; intro i _
+        apply bind_congr_ok; intro a ha
+        have hj := upd_lt out j i a ha
+        rw [PRVH.usize_add_one_wrap j hj]
+        rfl
+      rw [hin]
+      rfl
+    · simp only [↓reduceIte]
+      rfl
+  · rw [if_neg hr, if_neg hr]
+
+theorem order_loop0_loop0_eq (out : Array Std.U16 1024#usize) (used : Array Bool 1024#usize)
+    (j r : Std.Usize) :
+    r0.transport.order_loop0_loop0 out used j r
+      = FIo_Native.aspis_core.r0.transport.order_loop0_loop0 out used j r := by
+  unfold r0.transport.order_loop0_loop0 FIo_Native.aspis_core.r0.transport.order_loop0_loop0
+  simp only [order_loop0_loop0_body_eq]
+
+theorem order_loop0_body_eq (out : Array Std.U16 1024#usize) (used : Array Bool 1024#usize)
+    (j : Std.Usize) :
+    r0.transport.order_loop0.body out used j = FIo_Native.aspis_core.r0.transport.order_loop0.body out used j := by
+  unfold r0.transport.order_loop0.body FIo_Native.aspis_core.r0.transport.order_loop0.body
+  rw [PADS_eq, PIVOT_eq, PAD_ROWS_eq]
+  by_cases hj : j < FIo_Native.aspis_core.r0.transport.PADS
+  · rw [if_pos hj, if_pos hj]
+    apply bind_congr_ok; intro i _
+    apply bind_congr_ok; intro r _
+    apply bind_congr_ok; intro _ _
+    apply bind_congr_ok; intro _ _
+    apply bind_congr_ok; intro b _
+    apply bind_congr_ok; intro _ _
+    apply bind_congr_ok; intro a ha
+    have hj1 := upd_lt out j i a ha
+    apply bind_congr_ok; intro a1 _
+    rw [PRVH.usize_add_one_wrap j hj1]
+    rfl
+  · rw [if_neg hj, if_neg hj]
+    simp only [order_loop0_loop0_eq]
+
+theorem order_loop0_eq (out : Array Std.U16 1024#usize) (used : Array Bool 1024#usize) (j : Std.Usize) :
+    r0.transport.order_loop0 out used j = FIo_Native.aspis_core.r0.transport.order_loop0 out used j := by
+  unfold r0.transport.order_loop0 FIo_Native.aspis_core.r0.transport.order_loop0
+  simp only [order_loop0_body_eq]
+
+theorem order_eq : r0.transport.order = FIo_Native.aspis_core.r0.transport.order := by
+  unfold r0.transport.order FIo_Native.aspis_core.r0.transport.order
+  rw [PAD_ROWS_eq, PADS_eq, order_loop0_eq]
+
+end PRVEq.order
+
+#print axioms PRVEq.order.PADS_eq
+#print axioms PRVEq.order.PIVOT_eq
+#print axioms PRVEq.order.PAD_ROWS_eq
+#print axioms PRVEq.order.order_loop0_loop0_body_eq
+#print axioms PRVEq.order.order_loop0_loop0_eq
+#print axioms PRVEq.order.order_loop0_body_eq
+#print axioms PRVEq.order.order_loop0_eq
+#print axioms PRVEq.order.order_eq

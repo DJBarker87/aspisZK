@@ -1,0 +1,25 @@
+{"attempt": "PCUH_L023", "exit_status": 0, "wall_seconds": 2.471194352954626, "peak_rss_kib": "2625592", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.ushiftRight s#uscalar) else fail integerOverflow
+Usize.wrapping_shr : Usize → U32 → Usize
+System.Platform.numBits_eq : System.Platform.numBits = 32 ∨ System.Platform.numBits = 64
+PCUH_sources/PRVEq_probe3.lean:6:0: warning: declaration uses `sorry`
+x : Usize
+⊢ (if ↑9#i32 ≥ 0 then UScalar.shiftRight x 9#i32.toNat else fail integerOverflow) = ok (x.wrapping_shr 9#u32)
+x : Usize
+⊢ (if 9 < System.Platform.numBits then ok (x.bv >>> 9#uscalar) else fail integerOverflow) =
+    ok (x.bv >>> (9 % System.Platform.numBits)#uscalar)
+
+...
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.ushiftRight s#uscalar) else fail integerOverflow
+Usize.wrapping_shr : Usize → U32 → Usize
+System.Platform.numBits_eq : System.Platform.numBits = 32 ∨ System.Platform.numBits = 64
+PCUH_sources/PRVEq_probe3.lean:6:0: warning: declaration uses `sorry`
+x : Usize
+⊢ (if ↑9#i32 ≥ 0 then UScalar.shiftRight x 9#i32.toNat else fail integerOverflow) = ok (x.wrapping_shr 9#u32)
+x : Usize
+⊢ (if 9 < System.Platform.numBits then ok (x.bv >>> 9#uscalar) else fail integerOverflow) =
+    ok (x.bv >>> (9 % System.Platform.numBits)#uscalar)
+
+Running as unit: run-r4fc0c1e37686400197455f5ec202725d.scope; invocation ID: adf6fdd0f744434d986f88622f5bb95e
