@@ -138,12 +138,16 @@ def callees(body, names, self_name):
     return [n for n in names if n != self_name and n in toks]
 
 
+STRUCT_PARAMS = {}; STRUCT_PARAM_TEXT = {}; FTYPE_NAMES = set(); IDENT_OK = set()  # PCWL change 4
+
 def parse_structure_fields(body):
     """Fields of a parameterless `structure T where` block: [(name, type_text)] or None if the shape is not simple."""
-    m = re.match(r'structure\s+(\S+)\s+where\s*\n(.*)$', body.strip(), re.S)
+    m = re.match(r'structure\s+(\S+)\s*((?:\([^)]*\)\s*)*)where\s*\n(.*)$', body.strip(), re.S)  # PCWL change 4: optional `(H : Type)` parameters
     if not m: return None
+    STRUCT_PARAMS[m.group(1)] = [x for g in re.findall(r'\(([^)]*)\)', m.group(2)) for x in g.split(':', 1)[0].split()]
+    STRUCT_PARAM_TEXT[m.group(1)] = ' '.join(m.group(2).split())
     fields = []; cur = None
-    for line in m.group(2).split('\n'):
+    for line in m.group(3).split('\n'):
         if not line.strip(): continue
         fm = re.match(r'^  ([A-Za-z_][A-Za-z0-9_\']*|\u00ab[^\u00bb]+\u00bb)\s*:(.*)$', line)  # PCWL change 3: guillemet field names
         if fm and not line.startswith('   '):
@@ -260,6 +264,7 @@ def generate(a):
     fnames = [b['name'] for b in fblocks]
     ext_set = set(ext_types) | set(ext_funs)
     ftype_names = set(fnames)
+    FTYPE_NAMES.update(ftype_names)
     type_info = {}
     if kind == 'funs':
         common = [b for b in fblocks if gname(b['name']) in gate_names and b['dkind'] not in ('structure', 'inductive', 'axiom', 'opaque', 'class')]
@@ -277,10 +282,11 @@ def generate(a):
             ident = ren(norm_decl(b)) == norm_decl(gblocks[gname(n)])
             toks = set(lean_ident_tokens(b['body'].split(':=', 1)[-1] if b['dkind'] in ('def', 'abbrev') else b['body']))
             if b['dkind'] in ('def', 'abbrev') and not (toks & compound):
-                common.append(b); type_info[n] = dict(cls='rfl_candidate', identical=ident)
+                common.append(b); type_info[n] = dict(cls='rfl_candidate', identical=ident); IDENT_OK.add(n)
             elif b['dkind'] == 'structure':
                 fl = parse_structure_fields(b['body'])
                 def field_ok(t):
+                    if conv_term(t, set(n2 for n2, i2 in type_info.items() if i2.get('cls') in ('equiv_candidate', 'ind_equiv_candidate')), ftype_names, lambda c: c) is not False: return True  # PCWL change 4
                     hit = set(lean_ident_tokens(t)) & ftype_names
                     if not hit: return True
                     # PCUH change 3 (= PCUB change 4): a field type mentioning only alias types already classed rfl_candidate is copied field-by-field; Lean checks the defeq
@@ -320,7 +326,7 @@ def generate(a):
         n = b['name']
         if kind == 'types' and type_info.get(n, {}).get('cls') == 'equiv_candidate':
             fl = type_info[n]['fields']
-            deps = sorted({t.strip() for _, t in fl if t.strip() in type_info and type_info[t.strip()].get('cls') in ('equiv_candidate', 'ind_equiv_candidate')})
+            deps = sorted({h for _, t in fl for h in set(lean_ident_tokens(t)) if h in type_info and type_info[h].get('cls') in ('equiv_candidate', 'ind_equiv_candidate') and h != n})
             plan[n] = dict(name=n, dkind='structure-equiv', reached=n in reached, callees=deps, mentions_differing_types=[], body_identical=type_info[n]['identical'], status='pending', stage=None, fields=fl)
     for b in fblocks:
         n = b['name']
@@ -535,6 +541,53 @@ def split_top_arrows(t):
         cur += ch; i += 1
     parts.append(cur.strip()); return parts
 
+
+def split_top_ws(t):
+    parts = []; depth = 0; cur = ''
+    for ch in t:
+        if ch in '([{': depth += 1
+        if ch in ')]}': depth -= 1
+        if ch.isspace() and depth == 0:
+            if cur: parts.append(cur); cur = ''
+        else: cur += ch
+    if cur: parts.append(cur)
+    return parts
+
+def strip_parens(t):
+    t = t.strip()
+    while t.startswith('(') and t.endswith(')'):
+        d = 0; ok = True
+        for i, ch in enumerate(t):
+            if ch == '(': d += 1
+            if ch == ')':
+                d -= 1
+                if d == 0 and i < len(t) - 1: ok = False; break
+        if not ok: break
+        t = t[1:-1].strip()
+    return t
+
+def conv_term(t, eqset, ftype_names, eqname):
+    """PCWL change 4: Lean Equiv term between a fresh field type and the gate field type, None if the two are the same type (no same-file type mentioned), False if unsupported."""
+    t = strip_parens(' '.join(t.split()))
+    hits_ = set(lean_ident_tokens(t)) & ftype_names
+    if not hits_ or hits_ <= IDENT_OK: return None  # alias types (rfl_candidate) are the same type on both sides
+    toks = split_top_ws(t); head = toks[0]
+    def inner(x):
+        r = conv_term(x, eqset, ftype_names, eqname)
+        return r
+    if head in eqset:
+        if any(set(lean_ident_tokens(a)) & ftype_names for a in toks[1:]): return False
+        return f'{eqname(head)}.equiv' + ''.join(' ' + a for a in toks[1:])
+    if head == 'Array' and len(toks) == 3:
+        r = inner(toks[1]); return False if r is False or r is None else f'PRVEq_PCWL.arrEquiv ({r})'
+    if head in ('alloc.vec.Vec', 'Std.alloc.vec.Vec') and len(toks) == 2:
+        r = inner(toks[1]); return False if r is False or r is None else f'PRVEq_PCWL.vecEquiv ({r})'
+    if head in ('Slice', 'Std.Slice') and len(toks) == 2:
+        r = inner(toks[1]); return False if r is False or r is None else f'PRVEq_PCWL.sliceEquiv ({r})'
+    if head == 'Option' and len(toks) == 2:
+        r = inner(toks[1]); return False if r is False or r is None else f'Equiv.optionCongr ({r})'
+    return False
+
 CTOR_ARGS = {}  # PCWL change 2: (type, ctor) -> argument type texts
 
 def parse_ctors(body, tname):
@@ -616,7 +669,8 @@ def emit_ind_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, 
     defs_state[n] = dict(lines=[start, end])
 
 def emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M, gname=lambda x: x):
-    T = f'{fresh_ns}.{n} \u2243 {gate_ns}.{gname(n)}'
+    prm = STRUCT_PARAMS.get(n, []); ptxt = STRUCT_PARAM_TEXT.get(n, ''); pa = (' ' + ' '.join(prm)) if prm else ''
+    T = f'{fresh_ns}.{n}{pa} \u2243 {gate_ns}.{gname(n)}{pa}'
     if p['status'] == 'failed':
         out.append(f'/- PRV-OBLIGATION (transport-needed; P3): {eqname(n)}.equiv : {T}'); out.append(f'   last probe error: {p.get("error","")[:200]!r} -/'); out.append('')
         p['class'] = 'transport-needed'; commented.append(n); defs_state[n] = dict(lines=None); return
@@ -624,11 +678,11 @@ def emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M, g
         t = t.strip()
         if t in {c.split('.')[-1] for c in []}: pass
         return x
-    fl = p['fields']; eq_for = {c: f'{eqname(c)}.equiv' for c in p['callees']}
+    fl = p['fields']; eqset = set(p['callees'])
     def val(fname, t, src, inv):
-        t = t.strip()
-        if t in eq_for: return f'({eq_for[t]}.symm {src}.{qf(fname)})' if inv else f'({eq_for[t]} {src}.{qf(fname)})'
-        return f'{src}.{qf(fname)}'
+        e = conv_term(t, eqset, set(), eqname) if False else conv_term(t, eqset, FTYPE_NAMES, eqname)
+        if e is None: return f'{src}.{qf(fname)}'
+        return f'(({e}).symm {src}.{qf(fname)})' if inv else f'(({e}) {src}.{qf(fname)})'
     tof = ', '.join(f'{qf(f)} := {val(f, t, "x", False)}' for f, t in fl)
     inv = ', '.join(f'{qf(f)} := {val(f, t, "y", True)}' for f, t in fl)
     s1 = f'(trace "PRV-S1 {eqname(n)}"; cases x; rfl)'; s2 = f'(trace "PRV-S2 {eqname(n)}"; cases x; simp)'
@@ -637,7 +691,7 @@ def emit_equiv(out, defs_state, commented, p, n, fresh_ns, gate_ns, eqname, M, g
     tr = ('first | ' + r1 + ' | ' + r2) if p['status'] == 'pending' else (r1 if p['stage'] == 1 else r2)
     start = len('\n'.join(out).split('\n')) + 1
     out.append('set_option maxHeartbeats 200000 in')
-    out.append(f'def {eqname(n)}.equiv : {T} where')
+    out.append(f'def {eqname(n)}.equiv {ptxt} : {T} where')
     out.append(f'  toFun x := {{ {tof} }}')
     out.append(f'  invFun y := {{ {inv} }}')
     out.append(f'  left_inv x := by')
