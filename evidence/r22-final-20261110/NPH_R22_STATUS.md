@@ -1075,3 +1075,51 @@ No executing site was found that passes a value whose bound no producer gives. N
 input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+## 16. Paused (owner pause relayed by the lead, 2026-11-10)
+
+No scope was launched in this run. NPH_COMPILE.tsv still ends at L047, and 31 of the 40 scopes
+are unused. NPH_R22_CONE.json and NPH_SITES.json are unchanged. Counts stay at
+67/27/22/3/101 of 220, with 363 of 396 rows exposed. SM is not at (b).
+
+**Producers located for the SM finish join (source reading only; not yet composed in Lean).**
+1. The deployed B slots. IDa_Deployed.boundaries r sets mask/add/mul :=
+   FIp_SemanticArithmetic.mask/add/mul. The tx1 op9 slot runs S1SemanticInstallation.verify
+   children (ClaimsUnrolledFinish.install (calls r) (IDa_Deployed.boundaries r))
+   (NOC_Op9Slot.slot, rfl). So the tie to FIp_SemanticArithmetic.install should be rfl
+   (item 3).
+2. alpha: SemanticRoundAlphaSelectedCanonical.verifier_round_alpha_canonical. It holds for
+   any RoundModel.Boundaries on a successful rounds call. Its predicate is
+   ExtractedMaskTowerAdd.CanonicalQM ∘ toSelected, and toSelected has the same shape as
+   toProbe.
+3. claims: ClaimsUnrolledFinish.claims_value, then FJa_ClaimsReference.reached (gives
+   decodeRows on the same record), then LIB_VClaimsCanonical.source_canonical (gives
+   decodeMain_success_members_canonical) on each of the three rows.
+4. fromFn: OraclePortStdBuilder.fromFn/fromFnLoop. A short induction is still needed: if every
+   successful call_mut output satisfies Q, then every array element does.
+   closureFn6/closureFn2 return val1[0][i] and val1[0][16+i].
+5. val3 = R.decode 29 vr 87: decodeMain_success_members_canonical
+   (RawActualDecodeKMainAdapter).
+6. eta and the terminal inputs: FJn_BeginCanonical.value (the successful r1_wire.begin in
+   VerifyPrefix.verify). So the congruence must start at VerifyPrefix.verify, not at
+   FinishModel.finish alone.
+7. val2 = terminal output: NLU_Terminal.source gives a canonical output under
+   NLU_Terminal.InputDomain pub c, plus canonical claims and alpha. InputDomain also needs the
+   public digest domain and asset_id < P. Those come from pub, not from begin. Their producer
+   has not been located. **This is the one SM input whose bound has no located producer
+   yet.**
+
+**Exact next step.** Write NPH_R22JoinSM3, in four parts:
+- `finish_congr`: bind-stepping in the style of NPH_R22JoinCW5.prepare_claim_congr, with
+  mask/add/mul replaced by functions that agree at the reached arguments;
+- `verify_congr` over VerifyPrefix.verify, which supplies the begin challenges;
+- the producer lemmas 2–5;
+- a guarded B whose mask/add/mul run only on canonical (or W) arguments.
+
+Then locate the producer for item 7 (public digest domain and asset bound), or report it as a
+site without a producer. After that comes item 4 of section 15b (the
+qm31_sum_products3_prepared right operands). Tasks 2 and 3 of the brief (the four query
+installers as Lean statements; QA, SC, R72, FIq and the 345 walk) were not started.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was
+found. Target not yet established.
