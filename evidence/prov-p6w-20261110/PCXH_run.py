@@ -78,6 +78,10 @@ def put(name,path):files[name]=base64.b64encode(Path(path).read_bytes()).decode(
 src_rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();dirty=bool(subprocess.check_output(['git','status','--porcelain','--','.'],text=True).strip())
 imports=set()
 for t in targets:
+ if (E/(t+'.py')).exists() and not (E/(t+'.lean')).exists():
+  n='PCXH_sources/'+t+'.py';put(n,E/(t+'.py'));sources.append(n)
+  for ex in sorted(E.glob('PCXH_NNN_PATHS.json')):put('PCXH_sources/'+ex.name,ex);sources.append('PCXH_sources/'+ex.name)
+  steps.append(dict(module=t,source=n,olean=B+'/PCXH_exports/'+t+'.olean',command=['/usr/bin/python3','-I',n]));continue
  assert (E/(t+'.lean')).exists(),t
  n='PCXH_sources/'+t+'.lean';put(n,E/(t+'.lean'));sources.append(n)
  imports.update(re.findall(r'^import ([\w.]+)',(E/(t+'.lean')).read_text(),re.M))
