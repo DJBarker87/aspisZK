@@ -15,6 +15,24 @@ limits={n:(rel/n).read_text().strip() for n in ['memory.high','memory.max','memo
 assert limits=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},limits
 overlay=json.loads((W/'overlay_sha.json').read_text())
 env=dict(PATH='/usr/bin:/bin',LEAN_SYSROOT=T,LEAN_PATH=str(W/'objs')+':'+str(W/'base_ref'),TMPDIR=str(W/'tmp'))
+
+AUX_RULE=("DIVERGENT_AUX_ONLY: every differing constant, in both directions, is an auto-generated equation lemma or "
+  "match splitter (<f>.eq_def, <f>.eq_unfold, <f>.match_N.eq_M, <f>.match_N.splitter), constant names agree after "
+  "normalising the module prefix inside _private.<module>.0., and imports are equal; these lemmas are generated on "
+  "demand by the elaborator and are not part of the module's stated content")
+def _is_aux(n):
+  parts=n.split('.')
+  last=parts[-1]
+  if last in ('eq_def','eq_unfold'): return True
+  if len(parts)>=2 and re.fullmatch(r'match_\d+',parts[-2]) and (last=='splitter' or re.fullmatch(r'eq_\d+',last)): return True
+  return False
+def _norm(n): return re.sub(r'^_private\.(.*?)\.0\.','_private.0.',n)
+def aux_only(fwd,rev):
+  dif=set(fwd.get('all_differing',[]))|set(rev.get('all_differing',[]))
+  if not dif or not fwd.get('imports_equal'): return None
+  if not all(_is_aux(n) for n in dif): return None
+  if sorted(_norm(n) for n in fwd.get('all_differing',[]) if n.startswith('_private'))!=sorted(_norm(n) for n in rev.get('all_differing',[]) if n.startswith('_private')): return None
+  return sorted(dif)
 res=open(bd/'results.jsonl','a'); start=time.monotonic()
 def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
 def metric(t,name): return next((l.split(':',1)[1].strip() for l in t.splitlines() if name in l),None)
@@ -65,7 +83,17 @@ for k,m in enumerate(cfg['modules']):
       # statements frozen: only theorem proofs may differ from the overlay object
       row['coherence_repair']=dict(statements_identical=bool(res_.get('identical_except_theorem_proofs')),proofs_identical=bool(res_.get('identical_declarations')))
       if not res_.get('identical_except_theorem_proofs'): row['status']='DIVERGENT'
-    elif not res_.get('identical_declarations'): row['status']='DIVERGENT'
+    elif not res_.get('identical_declarations'):
+      cf2=W/'tmp'/(b+'_'+str(k)+'.rcmp.tsv'); co2=W/'tmp'/(b+'_'+str(k)+'.rcmp.jsonl')
+      cf2.write_text(m['module']+'\t'+str(out)+'\t'+m['overlay']+'\n')
+      subprocess.run(['timeout','120',str(W/'tools'/'L187_Compare'),str(cf2),str(co2)],capture_output=True,text=True)
+      try: rev=json.loads(co2.read_text().splitlines()[0]).get('result',{})
+      except Exception: rev={}
+      for x in (cf2,co2):
+        if x.is_file(): x.unlink()
+      ao=aux_only(res_,rev)
+      if ao is not None: row['divergent_aux_only']=dict(constants=ao,rule=AUX_RULE)
+      else: row['status']='DIVERGENT'; row['decl_compare_reverse']=rev
     for x in (cf,co):
       if x.is_file(): x.unlink()
   elif r.returncode==0 and row.get('object_identical_to_overlay'):
