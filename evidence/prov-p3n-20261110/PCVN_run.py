@@ -100,7 +100,7 @@ else:
  assert target and (E/(target+'.lean')).exists()
  n='PCVN_sources/'+target+'.lean';put(n,E/(target+'.lean'));sources=[n]
  L187='/home/dombarker/project-offloads/codex-cx-replay-l187-20261109'
- paths=[L187+'/final/objs',L187+'/objs',L187+'/base_ref']
+ paths=[L187+'/final/objs',L187+'/objs',L187+'/base_ref','/home/dombarker/project-offloads/codex-pc-prov-p3h-20261110/PCVH_exports']
  command=[GATE_T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-DmaxErrors=100000','-R','PCVN_sources','-o','PCVN_exports/'+target+'.olean',n]
  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'};scope_p=['-p','MemoryHigh=6G','-p','MemoryMax=8G']
  env=dict(LEAN_SYSROOT=GATE_T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCVN_tmp',LEAN_PATH=':'.join([B+'/PCVN_exports','/home/dombarker/project-offloads/codex-pc-prov-p3l-20261110/PCVL_exports','/home/dombarker/project-offloads/codex-pc-prov-p3k-20261110/PCVK_exports']+paths));collect=[]
