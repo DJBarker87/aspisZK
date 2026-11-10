@@ -4,9 +4,10 @@ cd "$(dirname "$0")"
 R=PCVV_E008_ext_fragment.lean
 {
 echo "-- PCVV_ AdapterRw callees: fresh text from PCVV_E008 (original Aeneas 959659a6, overflow ON, frozen 4bb3b3f, LLBC PCVV_E006), externals as fields of Ext."
-cat <<'H'
+cat <<H
 import Aeneas
 import AdapterRwModel
+${EXTRA_IMPORTS}
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false
 set_option linter.hashCommand false
