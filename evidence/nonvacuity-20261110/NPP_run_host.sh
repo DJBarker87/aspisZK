@@ -1,7 +1,7 @@
 #!/bin/bash
 # NPP_ capped Lean scope launcher (build host). Usage: NPP_run_host.sh <label> <Module> [timeout_s]
 # Gates (lead, 2026-11-10): host lean count < 6; at most 1 NPP scope at a time; `free -g` available >= 12;
-#   < 6 populated capped scopes, sum(MemoryMax)+8G <= 55 GiB; >= 40 GB disk free.
+#   sum(MemoryMax of populated capped scopes)+8G <= 55 GiB; >= 40 GB disk free.
 # Scope: MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64; lean -j1 -M7000 -DElab.async=false;
 #   timeout 180 s (600 s only for the one labelled timing probe).
 # LEAN_PATH (by reference, read-only): own out/, NPO_ out/, the L187 replayed objs/ and base_ref/.
@@ -13,7 +13,7 @@ T=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0
 L=$1; M=$2; TO=${3:-180}; D=$W/logs/$L; mkdir -p $D
 [ "$TO" -le 600 ] || { echo "TIMEOUT ABOVE 600 REFUSED"; exit 5; }
 [ "$(pgrep -c -x lean)" -lt 6 ] || { echo "HOST LEAN COUNT >= 6"; exit 4; }
-pgrep -f "$W/src/" >/dev/null && { echo "ANOTHER NPP SCOPE RUNNING"; exit 6; }
+pgrep -f "$W/(src|native)/|leanchecker"  >/dev/null && { echo "ANOTHER NPP SCOPE RUNNING"; exit 6; }
 avail=$(free -g | awk '/^Mem:/{print $7}')
 [ "$avail" -ge 12 ] || { echo "AVAILABLE MEMORY ${avail}G < 12G"; exit 7; }
 python3 - "$D" "$avail" <<'PY' || { echo "RESERVATION REFUSED"; cat "$1/reservation.json" 2>/dev/null; exit 3; }
@@ -28,7 +28,7 @@ for s in glob.glob(base+'/*.scope'):
         scopes.append({'scope':s,'memory_max':int(mm)})
     except Exception: pass
 tot=sum(x['memory_max'] for x in scopes); free=shutil.disk_usage('/home').free
-ok=len(scopes)<6 and tot+8*2**30<=55*2**30 and free>=40*10**9
+ok=tot+8*2**30<=55*2**30 and free>=40*10**9  # 2026-11-10: scope-count heuristic dropped (owner slot allocation: Stream C 5, Stream A 1); memory sum, disk, lean count, free memory, one NPP scope kept
 json.dump({'utc':time.time(),'free_g_available':int(sys.argv[2]),'populated_capped_scopes':len(scopes),'sum_memory_max':tot,
   'requested':8*2**30,'disk_free':free,'allowed':ok,'scopes':scopes},open(d+'/reservation.json','w'),indent=1)
 sys.exit(0 if ok else 1)
