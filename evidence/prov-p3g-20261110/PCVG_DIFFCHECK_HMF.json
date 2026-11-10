@@ -1,0 +1,7 @@
+{"schema":"PCVG_DIFFCHECK/1","row":"HM-F","members_covered":["core.num.U16.count_ones (via count_ones_aux/_nat)","core.num.U16.trailing_zeros (via trailing_zeros_aux/_nat)"],
+"method":"all 65536 u16 inputs; fold v=count_ones*32+trailing_zeros into a mod 2^64 polynomial hash; Lean #eval of the gate Nat definitions versus compiled rustc -O u16::count_ones/trailing_zeros",
+"result":"EQUAL","lean_hash":6695208107298219413,"rust_hash":6695208107298219413,
+"files":["PCVG_DIFF_HMF/hmf.lean","PCVG_DIFF_HMF/hmf.rs"],
+"run":"local development machine, lean -M1000 peak RSS 410 MB, rustc 1.93.0 (not the pinned sysroot; u16 bit ops are not toolchain dependent, but this is a test, not a pinned-toolchain result), exit 0; no host scope used",
+"limits":"covers only the two functions on u16; the Nat definitions are the copy in terminal-v4-funs-external-countones-v5 (same text shape as the gate FIq_Native); not a proof; Range/Rev folds, Iterator::all/any not covered; the Result wrapper (.ok) and U32 conversion are not exercised",
+"rows_with_check":["HM-F (partial)"],"rows_without":["HM-C","HM-D","HM-G"]}
