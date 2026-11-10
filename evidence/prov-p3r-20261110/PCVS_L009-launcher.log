@@ -1,0 +1,70 @@
+{"attempt": "PCVS_L009", "exit_status": 1, "wall_seconds": 1.4971813361626118, "peak_rss_kib": "3919332", "swaps": "0", "print_axioms": ["'PCVS_Op17.op17_frozen_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVS_sources/PRVEq_Op17_s1.lean:51:108: error: unsolved goals
+N : Usize
+x : W
+⊢ (do
+      let we ← ok field.WideExact.ZERO
+      have out : Std.Array W N := Array.repeat N we
+      let p ← ok field.WideExact.ONE
+      let (out1, pending_return) ←
+        loop
+            (fun x_1 =>
+              match x_1 with
+              | (out1, p1, i1) =>
+                if i1 < N then do
+                  let (_, index_mut_back) ← out1.index_mut_usize i1
+                  let i1 ← i1 + 1#usize
+                  if i1 = N then
+                      have out1 := index_mut_back p1;
+                      ok (done (out1, some out1))
+                    else do
+                      let p1_1 ← field.WideExa
+...
+.WideExact.ONE
+      let (out1, pending_return) ←
+        loop
+            (fun x_1 =>
+              match x_1 with
+              | (out1, p1, i1) =>
+                if i1 < N then do
+                  let (_, index_mut_back) ← out1.index_mut_usize i1
+                  let i1 ← i1 + 1#usize
+                  if i1 = N then
+                      have out1 := index_mut_back p1;
+                      ok (done (out1, some out1))
+                    else do
+                      let p1_1 ← field.WideExact.mul p1 x
+                      have out1 : Std.Array W N := index_mut_back p1
+                      ok (cont (out1, p1_1, i1))
+                else ok (done (out1, none)))
+            (out, p, 0#usize)
+      match pending_return with
+        | none => ok out1
+        | some out2 => ok out2) =
+    do
+    let we ← ok field.WideExact.ZERO
+    have out : Std.Array field.WideExact N := Array.repeat N we
+    let p ← ok field.WideExact.ONE
+    let (out1, pending_return) ←
+      loop
+          (fun x_1 =>
+            match x_1 with
+            | (out1, p1, i1) =>
+              if i1 < N then do
+                let (_, index_mut_back) ← out1.index_mut_usize i1
+                let i1 ← i1 + 1#usize
+                if i1 = N then
+                    have out1 := index_mut_back p1;
+                    ok (done (out1, some out1))
+                  else do
+                    let p1_1 ← field.WideExact.mul p1 x
+                    have out1 : Std.Array PCVN_FreshPowers.W N := index_mut_back p1
+                    ok (cont (out1, p1_1, i1))
+              else ok (done (out1, none)))
+          (out, p, 0#usize)
+    match pending_return with
+      | none => ok out1
+      | some out2 => ok out2
+'PCVS_Op17.op17_frozen_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2c4f8a78a7d348febe9101053b8ec5cb.scope; invocation ID: b84831c148224154baeb063b0ebb7253

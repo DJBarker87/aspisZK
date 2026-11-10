@@ -1,0 +1,40 @@
+{
+ "schema": "PCVS_STATUS/1",
+ "target_established": false,
+ "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "proved": [
+  {
+   "id": "E32",
+   "theorem": "PCVS_E32.e32_core (PRVEq_E32_s4.lean, PCVS_L005); PCVS_Tx2Deployed.e32_deployed (PRVEq_Tx2Deployed_s1.lean, PCVS_L006)",
+   "claim": "For every 32-byte window b: NJC_ClosedCalls.inactive b = decode_e_spec b followed by Option.map fromE, with decode_e_spec the checkpoint reader decoder. NJC_ClosedCalls.inactive is the op2 slot (frozen WideExact::from_le_bytes through PCVN_Op2.op2_frozen).",
+   "route": "Direct (not through the R1Candidate parser refinements): decode_e_spec by the existing e_shape/word_total (CheckpointBytes3EShape/Word), FIo_Native from_le_bytes by lm_pack (U32.from_le_bytes = pack) plus a shape lemma for FIo_Native from_limbs; both reduce to the same CanonicalWide conditional. The PCVH short route was not needed.",
+   "difference_at_matching_configuration": "none"
+  },
+  {
+   "id": "deployed_tx2_common_s / deployed_tx2_authenticated_s",
+   "theorem": "PCVS_Tx2Deployed.deployed_tx2_common_s, deployed_tx2_authenticated_s (PRVEq_Tx2Deployed_s1.lean, PCVS_L006)",
+   "claim": "The q6 theorems at inact := NJC_ClosedCalls.inactive, mk := NHV_ReleaseOps.mark with hypothesis hE removed. No hypothesis other than the free parameters reserved, query, geo, base, finish (the deployed stage dictionaries) remains."
+  },
+  {
+   "id": "op17 bindings",
+   "theorem": "PCVS_Eq.bind_mul, bind_zero, bind_one (PRVEq_WideBind_s2.lean, PCVS_L008); PCVS_Op17.op17_frozen_bound (PRVEq_Op17_s2.lean, PCVS_L010)",
+   "claim": "Frozen aspis-core WideExact::mul/ZERO/ONE (fresh emission PCVS_E001, overflow ON, features r0) equal the gate field.WideExact.mul/ZERO/ONE used by op17 behind the nominal port toF/fromF; 16 fresh=gate equalities (reduce_u64 .. WideExact.mul) all by rfl at stage 1. op17 is restated with the frozen callees and no binding hypothesis. Gate ONE is now related.",
+   "note": "the emitted text uses core.convert.num.FromU64U32.from (HM-F library row), identical in the gate"
+  },
+  {
+   "id": "helpers",
+   "theorem": "PCVS_Ckpt.tag_eq, final_len_eq, fixed_eq, checkpoint_size_eq, zeroK_eq (PRVEq_CkptSmall_s4.lean, PCVS_L014)",
+   "claim": "Frozen Variant::tag, final_len (with folds), CHECKPOINT_FIXED = 744, checkpoint_size (emission PCVS_E002, ON) equal the deployed CheckpointBytes4Ops.tag/finalLen/checkpointSize for every variant; QM31::ZERO (PCVS_E001) equals ops.zeroK. read_discriminant on the Aeneas inductive is evaluated (disc_s1/s2/d), the HM-G attribute row only supplies its existence."
+  },
+  {
+   "id": "composition",
+   "theorem": "PCVS_Tx2Deployed2.yMix_eq, deployed_tx2_common_m, deployed_tx2_authenticated_m (PRVEq_Tx2Deployed_s2.lean, PCVS_L015)",
+   "claim": "The deployed tx2 theorems with the externals tag, final_len, checkpoint_size and QM31::ZERO being the frozen emissions (yMix); the rest of yDep and the op slots are deployed fields."
+  }
+ ],
+ "not_done": [
+  "op5, op6, op9, op10, op19 (PCVS_UNRELATED.json)",
+  "read_checkpoint_semantic_alpha, read_checkpoint_weights, QM31::from_le_bytes, heap::filled",
+  "stage2 adapter slots (item 4)"
+ ]
+}
