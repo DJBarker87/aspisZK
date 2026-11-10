@@ -1240,3 +1240,51 @@ digest-domain premise named above, whose producer is located and only the tie is
 reachable input on which the wrapping binary accepts and the checked model rejects was found.
 
 Target not yet established.
+
+### 17a. SM: the digest premise carried to tx1; sum3 SM copy proof-only (same run)
+
+One more scope was used: L068 accepted NPH_R22JoinSM6 on the first attempt (3.27 s, 6,749,108
+KiB, swap 0, 11 axiom lines, all standard). That makes 21 of this run's 40.
+- `prepare_op9_congr` and `tx1_op9_congr`: verifier.candidate.prepare and verifier.candidate.tx1
+  are unchanged when op9 is replaced by any f that agrees with op9 at the candidate's OWN
+  public. The other arguments are free. The irreducible constants (LOGICAL_SEMANTIC,
+  OFF_SEMANTIC, OFF_Y1, OFF_INACTIVE, ZERO, OFF_FOLDED_ROOT, OFF_ROUND1) do not read op9.
+  So the candidate reads op9 only at its own public.
+- `digest_of_binding`: take a statement whose installed op21 validate returned Ok, and a
+  current public cp equal to toCurrentPublic of that statement's library semantic public.
+  Then publicDigestDom (toRetainedPublic cp) holds (NOC_Op9Slot.pub_round, then
+  NOM_TerminalDomain.validated_digest). NOC_Stage1Forward.publicBinding states exactly this
+  equality for the semantic public sp that stage1_owned computes, and fdLemma unfolds
+  first_decoded (S c) sp to this tx1 at that public, with hash () and obs none.
+- `tx1_guarded`: at every host context, for such a public, the deployed tx1 candidate equals
+  the same tx1 whose op9 slot on release `none` is the guarded semantic installation over
+  NPH_R22JoinSM5.Bslot.
+
+**SM sum3 right operands: not executing.** NPH_SUM3_REFS.json (NPH_sum3_refs_host.py, a
+read-only scan of the replayed src) lists every reference to the SM-copy
+qm31_sum_products3_prepared/_loop0 and to the model loops that call it. Apart from the
+copy's own definitions, every reference is one of two kinds:
+- nine proof-module abbrevs (the RPv_*Poseidon*Loop* and FJe_Sum3*Bridge Loop/old/native
+  abbrevs), which are themselves referenced only from theorems;
+- theorems.
+
+The executing sum3 is FIq_Native.field.qm31_sum_products3_prepared, in the FIq family
+(FJe_Sum3WrapperBridge.same relates the two copies). Under lead ruling 1 (proof-only
+references, the R65/R66 precedent), the SM site qm31_sum_products3_prepared_loop0 is
+NOT_EXECUTING. This is a textual screen, like the rest of NPH_SITES.json.
+
+**SM is still not moved to (b).** Every SM context is now composed or excluded except one
+link. stage1_owned must call first_decoded only at the semantic public of a statement whose
+op21 returned Ok. In the source this is the order of the body: op47 decode, then op21, then
+semantic_public, then first_decoded, in both data branches. NOC_Stage1Forward.body states it
+only as hypotheses, so it is not a Lean statement. Closing it needs a congruence over
+r1_pool_adapter.owned.stage1_owned (two branches of about 35 binds, with bundled premises
+after the lesson of L055–L060) and the record identity from (S c).op10 to the candidate tx1
+(the generic first steps of fdLemma). This is the first piece of the 345 body walk.
+
+**Counts: unchanged.** 67/27/22/3/101 of 220; rows exposed 363 of 396.
+
+No executing site was found that passes a value whose bound no producer gives. No reachable
+input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.
