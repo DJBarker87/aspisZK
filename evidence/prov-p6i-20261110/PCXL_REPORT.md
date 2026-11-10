@@ -26,6 +26,6 @@ m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)   # run from t
 m.rows_settled_only_if(keys)            # keys: iterable of cone keys 'module|definition' treated as SETTLED
 # -> {'rows_settled_only': int, 'rows': [...], 'baseline_rows': 120}
 ```
-CLI: `--assume-settled keys.json` (JSON list) prints the same count. `m.cls` is the final class map, `m.cone` the 1707 keys, `m.NOTSET`/`m.SET` the class sets. Sanity (before P3y): all 437 not-settled keys settled gives 258 rows.
+CLI: `--assume-settled keys.json` (JSON list) prints the same count. `m.cls` is the final class map, `m.cone` the 1707 keys, `m.NOTSET`/`m.SET` the class sets. Sanity: all 420 not-settled keys settled gives 257 rows (258 before P3y).
 
 Target not yet established.
