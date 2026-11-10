@@ -24,9 +24,15 @@ for k in ('aeneas','charon'):
     subprocess.check_call(['git','-C',str(src),'archive','--format=tar.gz','-o',str(tgz),head])
     rec[k+'_archive_sha256']=sha(tgz.read_bytes());rec[k+'_revision']=head
     (work/k).mkdir();subprocess.check_call(['tar','xzf',str(tgz),'-C',str(work/k),'--no-same-owner'])
+# charon submodule crates/minirust (not in git archive): archive its pinned commit separately and unpack in place
+sm=Path(spec['src']['charon'])/'crates'/'minirust';smh=R(['git','-C',str(sm),'rev-parse','HEAD']);assert smh==spec['rev']['charon_minirust'],smh
+assert R(['git','-C',str(sm),'status','--porcelain'])==''
+stgz=out/'minirust-exact-source.tar.gz';subprocess.check_call(['git','-C',str(sm),'archive','--format=tar.gz','-o',str(stgz),smh])
+rec['minirust_archive_sha256']=sha(stgz.read_bytes());rec['minirust_revision']=smh
+(work/'charon'/'crates'/'minirust').mkdir(parents=True,exist_ok=True);subprocess.check_call(['tar','xzf',str(stgz),'-C',str(work/'charon'/'crates'/'minirust'),'--no-same-owner'])
 # aeneas/src/charon is a symlink to ../charon in the repo; the recipe's layout is /work/aeneas and /work/charon
 # ---- phase 1: charon rust
-env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_HOME=str(E/'PCWH_cargo_home'),CARGO_TARGET_DIR=str(out/'charon-target'),CARGO_BUILD_JOBS='3',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin')
+env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_HOME=str(E/'PCWH_cargo_home'),CARGO_TARGET_DIR=str(out/'charon-target'),CARGO_BUILD_JOBS='3',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin')
 t0=time.monotonic()
 with (out/'rust-build.log').open('w') as lg:
     r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'rust-build.time'),'timeout','1500','cargo','build','--release','--locked'],cwd=str(work/'charon'/'charon'),env=env,stdout=lg,stderr=subprocess.STDOUT)
