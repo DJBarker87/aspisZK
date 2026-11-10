@@ -1,0 +1,15 @@
+# PCWJ_ handoff (job pc-prov-p5a, phase P5a)
+
+Target not yet established. No shipped source, ledger row, trust row, RSL or contract changed; no trust row added; nothing pushed or merged.
+Frozen 4bb3b3f. Objects: L187 replay closure by reference. Lean scopes 11 of 35, extraction 8 of 10, one at a time, caps 6G/8G and 3G/4G, swap 0, no timeout raised. Peak RSS 2.7 GiB (Lean), 0.6 GiB (extraction); longest wall 86 s.
+
+Difference at a matching configuration that is not an encoding difference (reported first): AspisR1Post25Sampler.Funs low_base_p_digits (gate lib.rs 107-125, two explicit loops) versus frozen crates/aspis-r1-cost-probe/src/sampler.rs 56-73 (core::array::from_fn with an iter_mut closure). Call site: sampler.ordinary_sample -> low_base_p_digits. Six gate definitions stay open (low_base_p_digits and its loops, ordinary_sample).
+
+Claims (exit 0, standard axioms, 200000 heartbeats, no sorry): PCWJ_L006 (PRVEq_AspisR1Post25Sampler_Funs_a6.lean): field.WideExact.new, field.canonical_qm31 and its closure call, sampler.decode8, sampler.qm31_div_pass (+loop, +body), also field.P and field.CM31.new, fresh ON (PCWJ_E005) = gate: 7 of the 13 OPEN definitions. PCWJ_L010 (PRVEq_FIn_WeightsFuns_b5.lean): all 32 definitions of FIn_WeightsFuns (the 19 OPEN keys included), fresh OFF (PCWJ_E008) = gate; the gate is a wrapping model. Configuration reasons in PCWJ_CLASSIFICATIONS.json (C3, C4). Settled list with theorem names: PCWJ_STATUS.json.
+
+Triage: PCWJ_TRIAGE.json (465 of 484: 18 already proved by P2k/P3u/P3w/P3v/P3x, 1 sibling-owned), table PCWJ_TRIAGE_TABLE.md. Causes: NO_FRESH_EMISSION 257 (upper bound), TYPES 122, COMPARE_FAILED 59, EMITTED_NOT_COMPARED 26, GATE_ONLY_HELPER 1, CANNOT_EXTRACT 0.
+
+Not done and why (PCWJ_REMAINING.json): RPu_FIq_Native04-14 and NativeExternal: gate hand-models core::array::from_fn; frozen emissions call external core.array.from_fn, absent from the Aeneas library; HM-D excludes it: DEPENDS_ON_LIBRARY_TRUST naming core::array::from_fn (decision for the lead). RPz7_WAdm_Fissioned_Funs (24): source is the WAdm fixture, absent from frozen 4bb3b3f: NO_FROZEN_COUNTERPART. RPu_FIq_NativeTypes (19): generator compares only non-nested shapes; needs composed Equiv (PCWJ_L011 evidence). All other modules: triage only.
+
+Failed shapes (PCWJ_ATTEMPTS.jsonl, PCWJ_TOOL_ATTEMPTS.jsonl): E002 (WideExact opaque, Aeneas Invalid_argument; fixed by --include of the type in E003); L001/L002 (from_fn closures and library iterator names not in the closure; restricted by --only); L003/L004 (rfl-first on decode8 times out at 200000; manual rewrite shape); L005 (fresh CM31.new was a boundary name resolved to the gate; E005 includes it); L007 (QM31.ONE/ZERO and P were Result-valued externals; E007 includes them); L008 (ON emission vs wrapping gate; E008 OFF); L009 (rfl-first timeout on three callers; PCWJ_S2FIRST shape).
+Receipts: PCWJ_L0nn/receipt.json, PCWJ_SCOPES.json. Host workspace /home/dombarker/project-offloads/codex-pc-prov-p5a-20261110/, nothing running.
