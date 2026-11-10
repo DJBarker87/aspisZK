@@ -71,12 +71,26 @@ def build(key,run):
           input_tar=dict(local=f'sources/{key}/adapter_input.tar.gz',sha256=tgz,source=EV+arch+' member prefix input/ (blob sha256 %s)'%ablob,deterministic='sorted names, mtime 0, uid/gid 0, mode 0644, gzip mtime 0 level 9'),
           charon_command=[CH,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','aspis_statement','--include','aspis_core::field','--include','solana_program_error','--include','core::option','--include','core::result::Result','--include','core::result::_::map_err','--start-from','crate::r1_pool_adapter::reconstruct_asq8_statement','--dest-file','{OUT}/repro.llbc','--','--locked','--offline','--release','-p','aspis-r1-adapter-reconstruct','--lib','--no-default-features','--features','pool-adapter,private-leaf-salts'],
           aeneas_command=aeneas_cmd(AE,'AspisR1AdapterReconstruct'),
-          env=env('nightly-2026-06-01','adapter',{'CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL':'3'}),namespace='AspisR1AdapterReconstruct',
+          env=env('nightly-2026-06-01','adapter',{'CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL':'3','CARGO_BUILD_JOBS':'4'}),namespace='AspisR1AdapterReconstruct',
           expected_tool_sha256={CH:CH_SHA,AE:AE_SHA},
           archive=dict(archive=EV+arch,llbc='extraction-a/AdapterReconstruct.llbc',generated='extraction-a/generated/AspisR1AdapterReconstruct/{Funs,Types,FunsExternal_Template}.lean',receipts='runs/charon-a, runs/aeneas-a'),
           recorded_original_tools=dict(charon='aspis-r1-r18-tools-20261016/charon-target/release/charon',aeneas='aspis-r1-r18-tools-20261016/bin/aeneas (959659a6 rebuilt by P4c)'),
+          deviation='PCWE_E002 (jobs 1) hit the 180 s timeout while compiling aspis-statement (exit 124, no memory event); shape changed to CARGO_BUILD_JOBS=4, which does not influence the LLBC; the archive recorded jobs 1',
           recorded_original_environment='runs/charon-a/environment.json: RUSTUP_TOOLCHAIN nightly-2026-06-01, CARGO_BUILD_JOBS 1, CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS true (ON), CARGO_TARGET_DIR native-target, CHARON_TOOLCHAIN_IS_IN_PATH unset by env -u, CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3 set on the charon command line; cwd = input workspace root',
           files=files)
+    elif key=='circle':
+        arch='actual-circle-wrapper-emission-20261019/frozen-packet.tar.gz'
+        ablob,fl=arch_member(arch,'r1-circle-emitted-wrapper-publication-20261019/actual-emission/')
+        b=fl['CircleSample.llbc'];(d).mkdir(parents=True,exist_ok=True);(d/'CircleSample.llbc').write_bytes(b)
+        assert sha(b)=='a19e2bcbca71a3751cdfb67a48212f98f062632d633476bd24f4bb03588715b7'
+        files={'CircleSample.llbc':dict(sha256=sha(b),local=f'sources/{key}/CircleSample.llbc',git=EV+arch+':...actual-emission/CircleSample.llbc')}
+        spec=dict(run=run,spec_id=key,frozen_workspace=False,crate_dir='crate',
+          charon_command=['/usr/bin/cp','{CRATE}/CircleSample.llbc','{OUT}/repro.llbc'],
+          aeneas_command=aeneas_cmd(AE,'AspisR1CircleSampleWrapper'),
+          env=env('nightly-2026-06-01','circle'),namespace='AspisR1CircleSampleWrapper',
+          expected_tool_sha256={AE:AE_SHA},
+          note='LLBC-ONLY: the Rust input kit of the archived Charon run (lib.rs, Cargo.*) is not in the archive, so Charon cannot be re-run; the archived LLBC (sha a19e2bcb) is the Aeneas input. The archived Aeneas was NOT 959659a6: it is a patched build (joinfix patch, sha d037bd2d, base b59d5188, original command plan names aeneas-b59d5188-lean432-extended-static 4632746d); neither is on the host. 959659a6 is used here as a recorded substitute.',
+          archive=dict(archive=EV+arch,generated='actual-emission/Types.lean (raw-generated-Types.lean, sha d9b61e93)'),files=files)
     else:
         raise SystemExit('unknown key '+key)
     (E/(run+'_spec.json')).write_text(json.dumps(spec,indent=1)+'\n')
