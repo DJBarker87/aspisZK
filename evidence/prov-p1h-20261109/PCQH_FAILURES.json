@@ -1,0 +1,45 @@
+{
+ "schema": "PCQH_FAILURES/1",
+ "failures": [
+  {
+   "id": "F1",
+   "run": "PCQH_L002/L004",
+   "what": "fresh OFF text does not elaborate against the library: Std.Usize.wrapping_shr index 9#i32 (library: Usize -> U32 -> Usize)",
+   "class_": "TOOL_ENCODING",
+   "fix": "ShrAmt bridge in the fresh prelude (inputs/PCQH_shr_prelude.lean), amount converted as Rust `as u32`",
+   "result": "closed for NFN (PCQH_L008)"
+  },
+  {
+   "id": "F2",
+   "run": "PCQH_L004/L005/L006",
+   "what": "for_range_loop0.body: stage-1/2 rfl kernel memory; delta+simp leaves a goal; with_reducible rfl fails",
+   "class_": "PROOF_SHAPE",
+   "diagnosis": "after callee rewriting the two bodies differ only in auxiliary matcher/proof constants (match_1, match_2, _proof_1) and binder names (pp.explicit diff, PCQH_L007)",
+   "fix": "delta + callee simp + bind_tc_ok + default rfl (PCQH_L008)",
+   "result": "closed"
+  },
+  {
+   "id": "F3",
+   "run": "PCQH_L002/L009",
+   "what": "NJA node_count: fresh well_formed needs core.slice.iter.Windows, Slice.windows, Iterator.all.default; gate node_count takes the callback as a parameter",
+   "class_": "LIBRARY_GAP_AND_HAND_ADAPTED",
+   "result": "node_count OPEN; the five loops proved with only_fresh restricted (PCQH_L010/L011)"
+  },
+  {
+   "id": "F4",
+   "run": "PCQH_L016..L025",
+   "what": "transport row_loop.body: bodies differ on inputs with range end > 16 (gate checked shifts fail with integerOverflow; fresh masks)",
+   "class_": "SEMANTIC (gate model of Rust `>>`/`<<` under overflow-checks OFF)",
+   "detail": "Not an encoding difference. The difference is unreachable from `row` (fixed range 0..5, TAU entries <= 4), so `row` should be equal for all arguments and row_loop equal on end <= 16. Helper lemmas range_next_usize_lt, TAU_le, wmul2_lt, body_end, bind_congr_ok, loop_eq_dom, range_next_end, usize_shr_usize, usize_shl_usize compile (PRVH_Shift.lean, PRVH_LoopDom.lean exit 0; the others in the L025 log); the gate-side rewrite of `j >>> wmul` by usize_shr_usize does not fire in body_dom (simp reports e_shr unused) and the Lean budget ended. Four shapes tried (L022-L025). Stopped per brief (two failed shapes).",
+   "result": "OPEN"
+  },
+  {
+   "id": "F5",
+   "run": "PCQH_E005",
+   "what": "extended Aeneas on r0::transport::order OFF: exit 2",
+   "class_": "TOOL",
+   "fix": "original Aeneas (PCQH_E006) succeeded",
+   "result": "emission obtained"
+  }
+ ]
+}

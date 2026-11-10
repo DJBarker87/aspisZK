@@ -1,0 +1,42 @@
+[
+ {
+  "id": "PCQH-C1",
+  "topic": "configuration",
+  "text": "All gate bodies in scope use wrapping_* on plain operators; each is compared with a fresh OFF emission (stager default environment, no overflow flags). PINS extra_env_appended_to_stager_env = {} and charon env_effective records the absence. Deployed wrapping is not analysed (R22)."
+ },
+ {
+  "id": "PCQH-C2",
+  "topic": "shift-amount type",
+  "text": "TOOL_ENCODING difference, not a semantic one: the extended Aeneas passes the shift amount at its own Rust type to wrapping_shr/shl. Bridged by ShrAmt (hand model PCQH_HAND_MODELS)."
+ },
+ {
+  "id": "PCQH-C3",
+  "topic": "existing OFF emissions",
+  "text": "PCQ_E410 (transport row), PCQ_E402 (EbyKDot.push), PCQ_E001 (field neg, mul_by_r) and the NMT stage1_owned emission are OFF and were reused, not re-extracted."
+ },
+ {
+  "id": "PCQH-C4",
+  "topic": "cold build",
+  "text": "Unlike P1g PCQD_E001 the first run (PCQH_E001) did not time out on the cold cargo build (68.5 s wall)."
+ },
+ {
+  "id": "PCQH-C5",
+  "topic": "row_loop.body semantic finding",
+  "text": "The gate model uses CHECKED shifts in row_loop.body while the other gate bodies of the module use wrapping_*; at the matching OFF configuration the fresh body masks the amount, so the two differ for out-of-range amounts. Reachable amounts are at most 8, so the difference is not observable from `row`. Not hidden: row_loop.body is not claimed equal; only a domain-restricted statement (range end <= 16) is stated, and it is not yet proved."
+ },
+ {
+  "id": "PCQH-C6",
+  "topic": "NJA node_count",
+  "text": "Excluded from only_fresh: the fresh text requires library items that do not exist (Windows, Slice.windows, Iterator.all.default); this is the same gap as P2h FRESH_NOT_ELABORATED, independent of the overflow configuration."
+ },
+ {
+  "id": "PCQH-C7",
+  "topic": "budget",
+  "text": "25 Lean scopes used (L001-L025); 6 of 15 extraction scopes (E001-E006). Several scopes were probes and iterations on the transport family. Remaining proofs were not attempted for lack of Lean scopes: FIn_WeightsFuns QM31, fast_pairing reduce/finish, r0.transport.order, NMT stage1_owned."
+ },
+ {
+  "id": "PCQH-C8",
+  "topic": "credit rule",
+  "text": "A definition is credited only if its theorem is printed with standard axioms in a scope that exited 0 (PCQH_L008, PCQH_L011). PRVEq_RPz7_FIo_NativeFuns_h2.lean did not compile clean and earns no credit."
+ }
+]

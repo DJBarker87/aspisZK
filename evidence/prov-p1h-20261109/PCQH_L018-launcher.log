@@ -1,0 +1,99 @@
+{"attempt": "PCQH_L018", "exit_status": 1, "wall_seconds": 2.6486101469490677, "peak_rss_kib": "2636892", "swaps": "0", "print_axioms": ["'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PRVH.loop_le_dom' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PRVH.loop_eq_dom' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PRVH.range_next_end' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'PRVC.loop_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PRVC.loop_eq_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+PCQH_sources/PRVH_LoopDom.lean:173:17: error: Type mismatch
+  hf x' (hpres x x' hx hFx)
+has type
+  f x' ⊑ loop G x'
+but is expected to have type
+  (fun x =>
+        match F x with
+        | ok r =>
+          match r with
+          | cont x => f x
+          | done x => ok x
+        | fail e => fail e
+        | div => div)
+      x ⊑
+    match ok (cont x') with
+    | ok r =>
+      match r with
+      | cont x' => loop G x'
+      | done y => ok y
+    | fail e => fail e
+...
+k r =>
+      match r with
+      | cont x' => loop G x'
+      | done y => ok y
+    | fail e => fail e
+    | div => div
+PCQH_sources/PRVH_LoopDom.lean:174:16: error: Type mismatch
+  PartialOrder.rel_refl
+has type
+  ?m.149 ⊑ ?m.149
+but is expected to have type
+  (fun x =>
+        match F x with
+        | ok r =>
+          match r with
+          | cont x => f x
+          | done x => ok x
+        | fail e => fail e
+        | div => div)
+      x ⊑
+    match ok (done y) with
+    | ok r =>
+      match r with
+      | cont x' => loop G x'
+      | done y => ok y
+    | fail e => fail e
+    | div => div
+PCQH_sources/PRVH_LoopDom.lean:175:14: error: Type mismatch
+  PartialOrder.rel_refl
+has type
+  ?m.164 ⊑ ?m.164
+but is expected to have type
+  (fun x =>
+        match F x with
+        | ok r =>
+          match r with
+          | cont x => f x
+          | done x => ok x
+        | fail e => fail e
+        | div => div)
+      x ⊑
+    match fail e with
+    | ok r =>
+      match r with
+      | cont x' => loop G x'
+      | done y => ok y
+    | fail e => fail e
+    | div => div
+PCQH_sources/PRVH_LoopDom.lean:176:11: error: Type mismatch
+  PartialOrder.rel_refl
+has type
+  ?m.177 ⊑ ?m.177
+but is expected to have type
+  (fun x =>
+        match F x with
+        | ok r =>
+          match r with
+          | cont x => f x
+          | done x => ok x
+        | fail e => fail e
+        | div => div)
+      x ⊑
+    match div with
+    | ok r =>
+      match r with
+      | cont x' => loop G x'
+      | done y => ok y
+    | fail e => fail e
+    | div => div
+'PRVH.loop_le_dom' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PRVH.loop_eq_dom' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PRVH.range_next_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r35c131dece5c4ef69fd396cadc1c227f.scope; invocation ID: b0400ae8b5ab4ffd9bc6836a5a8a277b

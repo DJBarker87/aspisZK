@@ -1,0 +1,38 @@
+{"attempt": "PCQH_L020", "exit_status": 0, "wall_seconds": 5.295239093946293, "peak_rss_kib": "3826428", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : UScalarTy) →
+  core.clone.Clone (UScalar ty) → core.cmp.PartialOrd (UScalar ty) (UScalar ty) → core.iter.range.Step (UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := core.iter.range.UScalarStep.steps_between,
+    forward_checked := core.iter.range.UScalarStep.forward_checked,
+    backward_checked := core.iter.range.UScalarStep.backward_checked }
+@[reducible] def Aeneas.Std.core.cmp.PartialOrdUsize : core.cmp.PartialOrd Usize Usize :=
+{ partialEqInst := core.cmp.PartialEqUsize, partial_cmp := liftFun2 core.cmp.impls.PartialOrdUsize.partial_cmp,
+  lt := liftFun
+...
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : UScalarTy) →
+  core.clone.Clone (UScalar ty) → core.cmp.PartialOrd (UScalar ty) (UScalar ty) → core.iter.range.Step (UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := core.iter.range.UScalarStep.steps_between,
+    forward_checked := core.iter.range.UScalarStep.forward_checked,
+    backward_checked := core.iter.range.UScalarStep.backward_checked }
+@[reducible] def Aeneas.Std.core.cmp.PartialOrdUsize : core.cmp.PartialOrd Usize Usize :=
+{ partialEqInst := core.cmp.PartialEqUsize, partial_cmp := liftFun2 core.cmp.impls.PartialOrdUsize.partial_cmp,
+  lt := liftFun2 core.cmp.impls.PartialOrdUsize.lt, le := liftFun2 core.cmp.impls.PartialOrdUsize.le,
+  gt := liftFun2 core.cmp.impls.PartialOrdUsize.gt, ge := liftFun2 core.cmp.impls.PartialOrdUsize.ge }
+@[reducible] def Aeneas.Std.core.clone.CloneUsize : core.clone.Clone Usize :=
+{ clone := liftFun1 core.clone.impls.CloneUsize.clone }
+@Array.getElem?_Usize_eq : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize), v[i]? = (↑v)[↑i]?
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail arrayOutOfBounds
+  | some x => ok x
+Usize.wrapping_mul_val_eq : ∀ (x y : Usize), ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size UScalarTy.Usize
+@[irreducible] def FIo_Native.transport.TAU : Std.Array Usize 5#usize :=
+Array.make 5#usize [3#usize, 4#usize, 2#usize, 0#usize, 1#usize] FIo_Native.transport.TAU._proof_1
+@Array.index_usize_spec : ∀ {α : Type u_1} {n : Usize} (v : Std.Array α n) (i : Usize) (hbound : ↑i < v.length),
+  v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+
+Running as unit: run-ra22c63e2017740abb2745f921018e092.scope; invocation ID: 9eea9be1d5564f21abb8c40fe60238bf

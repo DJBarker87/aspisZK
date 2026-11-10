@@ -15,3 +15,5 @@ instance : ShrAmt Std.I32 := ⟨fun y => IScalar.hcast .U32 y⟩
 instance : ShrAmt Std.Usize := ⟨fun y => UScalar.cast .U32 y⟩
 def Std.Usize.wrapping_shr {α : Type} [ShrAmt α] (x : Std.Usize) (y : α) : Std.Usize :=
   _root_.Aeneas.Std.Usize.wrapping_shr x (ShrAmt.toU32 y)
+def Std.Usize.wrapping_shl {α : Type} [ShrAmt α] (x : Std.Usize) (y : α) : Std.Usize :=
+  _root_.Aeneas.Std.Usize.wrapping_shl x (ShrAmt.toU32 y)
