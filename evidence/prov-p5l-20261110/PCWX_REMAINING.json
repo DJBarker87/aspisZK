@@ -1,0 +1,22 @@
+{
+ "schema": "PCWX_REMAINING/1",
+ "target_established": false,
+ "items": [
+  {
+   "id": "X1",
+   "what": "Domain coverage of checkpoint_eq (S2, next=10, 64 weights) at every executed call. Callers found at 4bb3b3f: crates/aspis-r1-cost-probe/src/candidate.rs:288 in tx1 (reached from programs/r1-cost-probe lib.rs:42 first); crates/aspis-r1-cost-probe/src/eight_way.rs:113 (feature audit-eight-way, audit only, to be shown outside the release cone). Facts to prove at candidate.rs:288: p.variant = S2 (via wide_view -> View.variant -> Prepared::new, verifier.rs:88); a = Accumulator::new(Variant::S2) so weights.len = S2.final_len = 64 and pending.finish (verifier.rs:226) rewrites in place via iter_mut so length is preserved; a.next = 10 = SPLIT (compact.rs:27) because query_loop (candidate.rs:243-254) returns Ok only when a.next >= end = 10, requiring each query_values step to raise a.next by exactly 1 from 0 (check accumulate_batched_with_node, verifier.rs:277). Not yet checked: the existing Lean-side proved facts for tx1 (a grep for query_loop in research .lean files was started and not read)."
+  },
+  {
+   "id": "X2",
+   "what": "WideExact::to_le_bytes (crates/aspis-core/src/field/wide_exact.rs:273, a loop over bytes.chunks_exact_mut(4).zip(self.to_limbs()) with copy_from_slice(limb.to_le_bytes())) fresh = gate AspisR1.CheckpointBytesE.rawBytes. Needs a fresh emission with --include for WideExact::to_limbs and to_le_bytes (P5g E002 showed to_limbs/chunks_exact_mut as externals); chunks_exact_mut/zip/copy_from_slice are core library (HM-D/HM-B/HM-F), to be named, not proved. Extraction shape: cargo --jobs 4 and CARGO_BUILD_JOBS=4, -Zthreads=1."
+  },
+  {
+   "id": "X3",
+   "what": "<&Vec<T> as IntoIterator>::into_iter semantics lemma is PCWW_ (P5k); check whether merged on research at resume, cite it; else leave named."
+  },
+  {
+   "id": "X4",
+   "what": "Report which of the 23 conditional keys move to which class after X1-X3."
+  }
+ ]
+}
