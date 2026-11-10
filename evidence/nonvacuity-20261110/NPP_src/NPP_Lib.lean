@@ -837,10 +837,15 @@ def stageB (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) (
   let mut failed : Array Name := #[]
   for n in order do
     if !idDep.contains n then continue
+    -- only constants that stage A actually copied
+    if !env.contains (copyName n) then continue
     let some ci := env.find? n | continue
     match ci with
     | .defnInfo dv =>
-      let (b, thmOk) ← build ci (leaves.contains n) isDep ids copyName refName eqName
+      let res ← try some <$> build ci (leaves.contains n) isDep ids copyName refName eqName catch e => do
+        log <| Json.mkObj [("n", toJson n.toString),("status","build failed"),("error", toJson ((← e.toMessageData.toString).take 400).toString)]
+        pure none
+      let some (b, thmOk) := res | failed := failed.push n; continue
       let missing := b.depNames.toList.map eqName |>.filter fun c => !(env.contains c) && !eqs.contains c
       if !thmOk || !missing.isEmpty then
         failed := failed.push n
@@ -858,5 +863,38 @@ def stageB (root : Name) (cand leaves : NameSet) (ids : Std.HashMap Name Name) (
         log <| Json.mkObj [("n", toJson n.toString),("status","FAIL"),("error", toJson ((← e.toMessageData.toString).take 1500).toString)]
     | _ => pure ()
   return (eqs, failed)
+
+/-- `NPP_C.T` from the 10 November `NPO_Nov.T`, transported along the `nov_eq` (id-dependent) and
+`npp_eq` (other) equations of the copied definitions in its type. Kernel-checked by `addDecl`. -/
+def transportNov (T : Name) (dep : Name → Bool) (idDep : NameSet) : MetaM (Option Name) := do
+  let env ← getEnv
+  let src := `NPO_Nov ++ T
+  let some sci := env.find? src | log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "no NPO_Nov theorem")]; return none
+  let lv := sci.levelParams.map Level.param
+  let isThm (c : Name) := match env.find? c with | some (.thmInfo _) => true | _ => false
+  let mut reps : Array (Expr × Expr × Expr × Expr) := #[]
+  for (c, us) in ← constOccs sci.type (fun _ => true) do
+    if isThm c then continue
+    -- NPO_Nov.X (id-dependent) or an original X with a stage-A copy
+    let (orig, eqn) := if (`NPO_Nov).isPrefixOf c then
+        (c.replacePrefix `NPO_Nov .anonymous, ((`NPP_C ++ c.replacePrefix `NPO_Nov .anonymous).str "nov_eq"))
+      else (c, ((`NPP_C ++ c).str "npp_eq"))
+    if !(dep orig || idDep.contains orig) then continue
+    if !env.contains (`NPP_C ++ orig) then continue
+    if !env.contains eqn then
+      log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "missing equation"), ("for", toJson orig.toString)]
+      return none
+    let some dci := env.find? c | continue
+    reps := reps.push (.const c us, .const (`NPP_C ++ orig) us, .const eqn us, dci.instantiateTypeLevelParams us)
+  let p ← transportAll #[] (.const src lv) sci.type reps
+  let ty ← inferType p
+  let ty ← instantiateMVars ty
+  try
+    addDecl (.thmDecl { «name» := `NPP_C ++ T, levelParams := sci.levelParams, type := (← whnfR ty), value := p })
+    log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "ok"), ("rewrites", toJson reps.size)]
+    return some (`NPP_C ++ T)
+  catch e =>
+    log <| Json.mkObj [("transport", toJson T.toString), ("status", toJson "FAIL"), ("error", toJson ((← e.toMessageData.toString).take 600).toString)]
+    return none
 
 end NPP

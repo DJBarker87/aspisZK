@@ -400,3 +400,88 @@ stage A2 for it with the no-code closure: 174 definition copies, 131 `npp_eq`, a
    already accepts. `I.entry` only after B1.
 
 Target not yet established.
+
+## 10. Third continuation (lead decisions of 2026-11-10): NPP_L065 to NPP_L074
+
+Ten of the 15 authorised scopes were used, one at a time, with the same checks. Peak RSS was at most
+6,947,728 KiB and swap was 0.
+
+### 10.1 Stage B for the model cone (NPP_L068)
+
+The native tool NPP_ModelNovTool imports NPO_CloneNov and the four-root olean of NPP_L060. It adds
+**8 `nov_eq`**: 6 on the tx2Value path and 2 on the implementation path. Each is kernel-checked
+with standard axioms, and they are written to NPP_ModelNovEq.olean.
+
+- The implementation path's D/registry pieces still fail, because their dependencies' `nov_eq` live
+  in NPP_SdkNovEq, which this tool did not import.
+- **`LIBC_BatchMerkle.returns` was not transported.** No `NPO_Nov.LIBC_BatchMerkle.returns` exists,
+  because it is not id-dependent in NPO's sense. The copies in its type (`LIBC_BatchMerkle.model`,
+  `value` and `child`, and the recursive `NLL_Parent.model._f`) have no stage-A equation either.
+  Re-checking it is what exceeded kernel memory (NPP_L064), so it stays blocked on the kernel side.
+
+### 10.2 Executable route (lead approval: executable only, never a theorem)
+
+NPP_src/NPP_ExecTx1.lean (generator NPP_src/NPP_ExecGen.inc) walks from `tx1Value` through
+definition values.
+
+- **Reuse.** It uses every `NPP_C` copy that has code.
+- **Generated implementations.** For each remaining constant without code, and each id-dependent
+  constant without a compiled copy, it generates an unsafe implementation `NPP_X.c`:
+  - the body is the equation lemma when the kernel value uses `brecOn`, `binductionOn`, `below`
+    or `WellFounded.fix`, and the value otherwise;
+  - classical sites are refined exactly as in the kernel copies;
+  - proofs are erased to `unsafeCast True.intro`;
+  - ids map to the 10 November ones;
+  - auxiliary recursors and matchers are left to the code generator.
+- **Result.** 33 implementations, which the kernel accepted as a mutual unsafe block (no unchecked
+  fallback was needed); all compiled (NPP_L072).
+
+**tx1Value on record 35 (NPP_L074): the executable copy returns the recorded value.**
+
+- The call is `NPP_X.NNH_ReturnsBundle.tx1Value ⟨key program, accounts xs, bytes data⟩
+  (envInst H pda clock res)`. The arguments are `NOC_Stage1Iff.iff345`'s left form, at the recorded
+  program, the three accounts and data 03 0a.
+- It returns **ok, 1,768 bytes, equal to `bytes saved.deref`** for the recorded checkpoint
+  post-image. That is exactly iff345's right-hand side.
+- It took 164,284 ms interpreted (2:57 wall in the 180 s scope).
+- H looked up the saved 568-entry TX1 table, with 0 misses, so the run is deterministic.
+- Column: executable-only (code generated from equation lemmas and values, not kernel-checked).
+
+**tx2Value on record 36: not run.** It is blocked at `LIBB_AuthCarrier.raw` (A2).
+
+### 10.3 A2, B1 and A4
+
+- **A2 (funded) was not completed** in the remaining budget. `NND_Carrier.auth` is a record of five
+  carriers, which themselves nest about 13 more (`poolIdentity`, `policy`, `byte`, `slot`, `slots`,
+  `key`, `digest`, `frontier`, …). Each needs an inverse with a roundtrip proof. Estimate: 4 to 8
+  scopes, then the tx2Value executable generator and run, 2 to 3 scopes; the run may need a 600 s
+  scope.
+- **B1 and A4 go to the owner as a decision point, with no restatement.**
+  - A4: the two `RSL.Spec.alloc` abort observations at NMS_R2N_ScanSites.scan line 26 (op51), and
+    two more in NMS_R2N_ReconstructSites.meaning (op52).
+  - B1: the constructor-field type equality `A = Args` in NNG_TypedEvents.select, reached from a
+    variable event at NNG_Events087, NNG_Events094 and NNG_Events137.
+  - I.entry (`NNH_Run6Installed.implementation`) stays blocked on both transactions.
+
+### 10.4 Final columns
+
+| Column | Count |
+|---|---:|
+| Kernel copies (sdk 62, hand 5, model cone 252) | 319 |
+| … plus a tx1Value-root stage-A run (NPP_ComputableTx1: 174 definition copies, 131 `npp_eq`), overlapping the model cone | |
+| **npp_eq proved** (kernel, the only column that counts as proof): 50 + 5 + 185 | **240** |
+| **nov_eq proved** (kernel): 12 (sdk) + 8 (model) | **20** |
+| **Executable-only results** (not theorems) | **3** |
+| **Record-only** | **0** |
+| **Blocked**: unrefined leaves (B1 `select`, A2 `AuthCarrier.raw`, A4 `R6.observation`) | 3 |
+| **Blocked**: tool blocks | 7 |
+| **Blocked**: dependents | 79 |
+
+The three executable-only results are:
+
+- the TX1 `stage1_owned` probe (NPP_L012): Ok, checkpoint equal;
+- the TX2 `stage2_owned` probe (NPP_L037): Ok (Ok ()), returned statement equal to TX1's statement
+  account;
+- `tx1Value` (NPP_L074): ok, bytes equal to the checkpoint.
+
+Target not yet established.
