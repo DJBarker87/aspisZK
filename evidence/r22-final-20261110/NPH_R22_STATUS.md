@@ -491,3 +491,78 @@ Next concrete deliverables, in order:
    the decoder and installer lemmas.
 
 Target not yet established.
+
+## 11. R65/R66 reach path and step-2 W-lemmas (continuation worker, 2026-11-10)
+
+Three scopes were used, L023–L025, all accepted on the first attempt (3 of this worker's 38).
+Peak RSS was 6,863,864 KiB (L025) and swap was 0. All 83 `#print axioms` lines are within
+[propext, Classical.choice, Quot.sound]. The lead decision holds: no ops interface and no
+merged module is changed.
+
+**Step 1: how the R65/R66 kernels are reached.** A textual screen over the L187 closure
+sources (NPH_r6x_scan.py, output NPH_R6X_REFERRERS.json) lists every declaration whose body
+names AspisR65Field/AspisR66Field `field.M31.add/sub/neg`. There are 23 referrers. The 13
+reached ones are all theorems: the definitional transport lemmas
+AspisV8R19.SamplerClosureCircleScalarTransport.add_eq/sub_eq/neg_eq
+(`AspisR72Sampler.field.M31.op = AspisR66Field.field.M31.op`, by simp on the two bodies),
+AspisV8R19.QuarticBaseExecution.add_eq/neg_eq (R66 = R65) and the R19
+add_encode/add_success/neg_encode/sub_encode lemmas. The 10 definition referrers
+(R65/R66 CM31.inv_with, CM31.sub/neg/mul, M31.double, mul_by_r) are not in the REACHABLE
+list. So no reached definition body executes an R65 or R66 kernel. They are in the cone as
+proof-level references for the AspisR72Sampler kernels, which are pointwise equal to them.
+Their execution sites are therefore the R72 sites, and their caller join is the R72 join.
+The path is recorded as `reach_path` on the five definitions in NPH_R22_CONE.json. Their
+judgment stays domain-only. Deciding whether a proof-only reference needs any R22
+judgment at all is left to the lead. The screen is textual, not a Lean-level constant walk.
+
+**Step 2: W-lemmas (W x := x.val ≤ P).**
+- NPH_R22Callbacks (L023, 23 statements).
+  - The CW tower above QM31 (WideExact add/sub/mul, mul_u, and M31/CM31/QM31/WideExact
+    mul_m31) maps W inputs to an ok W output. mul_m31 does this for any M31 operand, since
+    the operand goes through `% P` or M31.mul, which is total.
+  - The query callbacks: op2 SAQ_Arithmetic.add and op9 mulK; op3 SAQ_MixedSource.mulE
+    (W wide operand, any power, since canonicalQ reduces it); op1 fromK and op10 fromM;
+    op16 SAQ_LineQuery.line and op17 FIp_CircleQuery.circle (W alpha and values, any
+    inverse array, ok W). op21 SAQ_Decoder.read is a producer: every successful output has
+    all eight limbs < P (ExtractedRecordByteCanonicality.slice_success).
+- NPH_R22Towers (L024, 48 statements). These are the SM, SC, FIq and R72 tower lemmas in the
+  NPH_R22Producers pattern: M31 mul/double/neg; CM31 add/sub/neg/double/new/mul_m31/square
+  (the weak Karatsuba bound (2P)^2 < 2^64; for R72 through r23_product_u32_bounded);
+  mul_by_r; and QM31 add/sub/mul/mul_m31/square. Not covered: R72 QM31.mul, whose first
+  step r24_canonical_mul is OPEN (NO_FROZEN_COUNTERPART), and the FIq prepared-multiplier
+  family.
+- NPH_R22Callbacks2 (L025, 12 statements).
+  - fibre_point under the installed R17 CM31 operations: for every fibre index, either the
+    checked body is ok with both coordinates W, or the TABLE_B index `index >>> 9` is
+    ≥ 512. That is an out-of-bounds read, bounds-checked in both profiles. The table entries
+    are < P by NEA_TableCanonical.readA/readB, which is in the cone.
+  - The same disjunction gives geometry op15 SAQ_Geometry.point and op14 SAQ_Geometry.line
+    (line_node with the R17 M31 operations).
+  - NFN_NEW_GeometryContextGeneric.replace preserves the GeometryM31W record whenever the
+    installed sub/double preserve W.
+  - The conversion glue (NNU_QueryFieldBase.toQM, CurrentWideBaseBridge toQM, the
+    RawExtractedSemanticCallOpsV20 resultMap and its genQ/probeC copies) copies limbs
+    unchanged, so W transfers.
+
+Not covered by step 2:
+- op14 push (S7Kani2OwnedPush.push_owned);
+- op20 dots, whose output canonicality is proved in FIp_DotsOutputCanonical.all, but that
+  module is outside the L187 closure and is not imported;
+- op11 opening, op12/op13 index and op18 forQuery (no field arithmetic, or values that feed
+  only the M31.mul of line/circle, which is total);
+- producer lemmas for the samplers (their digit and div loops are OPEN).
+
+**Counts: unchanged.** Step 2 proves interface lemmas only. No kernel's precondition is yet
+established at its reached call sites, so no definition moves.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 30 |
+| precondition proved from the callers (b) | 0 |
+| open | 101 |
+
+Rows: 365 of 396 still depend on at least one open or domain-only definition.
+
+Target not yet established.
