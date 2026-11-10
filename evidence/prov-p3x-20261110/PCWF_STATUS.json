@@ -1,0 +1,109 @@
+{
+ "schema": "PCWF_STATUS/1",
+ "target_established": false,
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "object_closure": "/home/dombarker/project-offloads/codex-cx-replay-l187-20261109/objs (read-only by reference) then ledger30 NNN_PATHS chain",
+ "compile_against_L187": "PRVEq files compiled against the L187 closure with no name clash (PCWF_L001, L003, L005, L006, L012 exit 0)",
+ "source_files_sha256": {
+  "PRVEq_AspisR1Qm31ArithmeticProbe_Funs_f1.lean": "21bab8d84b0c479b123f8b475084ef15f5aef3df37072345352f0f63be830a20",
+  "PRVEq_Op3I_Source_g2.lean": "406d72934417fee0ea864a10edb5fdbaef0fd440d420bd46db242c48a2b448cc",
+  "PRVEq_AspisR72Sampler_Funs_A2.lean": "1aa64e98404777e14ba5a1fff552b465bf59262433801104080d90478cc03d65",
+  "PRVEq_NGD_SlotRef_Funs_s2.lean": "048c462e79c5911ae7f5fc6d92bec5d11d84fb17271921d7aa727bb6cf20e5a8",
+  "PRVEq_NCX_Reference_Types_n2.lean": "8dbce0d2e46ab32135bd24d991a3fd8f41004ab9bdfd5d8cb77caa441b65cef8"
+ },
+ "scopes": {
+  "lean": "15 of 35 (L001-L015). exit 0: L001 L003 L005 L006 L009 L012 L013 L014 L015; exit 1 (failed shapes): L002 L004 L007 L008 L010 L011. Credited: L001 (f1), L005 (g2), L013 (s2), L014 (n2), L015 (A2).",
+  "extraction": "2 of 4 (E001 E002), both exit 0, cargo --jobs 4, rustc -Zthreads not used, identity by class receipt PCWE_E003"
+ },
+ "items": {
+  "A_r24_canonical_mul": {
+   "verdict": "EQUALITY_DOMAIN",
+   "settled": true,
+   "scope": "PCWF_L015",
+   "file": "PRVEq_AspisR72Sampler_Funs_A2.lean",
+   "domain": "D(l,r): the eight limbs l.c0.a l.c0.b l.c1.a l.c1.b r.c0.a r.c0.b r.c1.a r.c1.b each have val < 2147483647 (= P)",
+   "theorems": [
+    "PRVEq.AspisR72Sampler.Funs.field.r24_canonical_mul.eq_frozen_on_domain: on D, r24_canonical_mul l r = ok (some res) and PRVFresh_AspisR72Sampler_Funs.field.QM31.mul l r = ok res (same res)",
+    "PRVEq.AspisR72Sampler.Funs.field.r24_canonical_mul.none_off_domain: off D, r24_canonical_mul l r = ok none",
+    "PRVEq.AspisR72Sampler.Funs.field.r24_canonical_mul.some_implies_frozen: any ok (some res) output equals the fresh frozen QM31.mul output"
+   ],
+   "axioms": "propext, Classical.choice, Quot.sound only",
+   "callers": "the only caller of r24_canonical_mul in the gate module is the gate QM31.mul (field line 515 of AspisR72Sampler.Funs); it returns the helper result only on `some` (domain D) and otherwise runs the frozen Karatsuba chain; P3b's PRVEq...QM31.mul (fresh = gate on all inputs, re-compiled in this file) is therefore unconditional.",
+   "frozen_counterpart": "No standalone frozen function (absent from crates/ at 4bb3b3f); its frozen counterpart is QM31::mul (fresh emission PCQF_aspis_core_field_a, field.rs 935:4-945:5), which it equals on D.",
+   "built_on": "PCVB_R72.qm31_mul_gate_eq_fresh / r24_canon / r24_none / chain_spec / comp0..3 from P3b, copied verbatim into the file; closure.call and PP are covered inside r24_canon (clos_spec, PP_spec).",
+   "counts_as": "other (EQUALITY_DOMAIN), not SETTLED"
+  },
+  "B_covered_differs": {
+   "Qm31ArithmeticProbe_7": {
+    "verdict": "EQUALITY_PROVED",
+    "settled": true,
+    "scope": "PCWF_L001",
+    "file": "PRVEq_AspisR1Qm31ArithmeticProbe_Funs_f1.lean",
+    "definitions": [
+     "field.reduce_u64",
+     "field.M31.add",
+     "field.M31.sub",
+     "field.M31.mul",
+     "field.CM31.mul",
+     "field.QM31.add",
+     "field.QM31.mul"
+    ],
+    "also_proved_same_file": [
+     "field.P",
+     "field.M31.reduce_u64",
+     "field.M31.double",
+     "field.CM31.add",
+     "field.CM31.sub",
+     "field.mul_by_r"
+    ],
+    "fresh": "PCQF_E007_emitted PCQF_aspis_core_field_a (frozen aspis-core field.rs, overflow-checks ON, src sha 3fe20d13...)",
+    "all_closed_at_stage": "PRV-S2 (delta both sides, rewrite with callee equalities, rfl); 13 theorems, no obligation, axioms propext, Classical.choice, Quot.sound only",
+    "reading": "the receipted gate emission is checked-arithmetic (config ON); the earlier PCO COVERED_DIFFERS verdict compared against an overflow-OFF fresh emission (wrapping_* text, e.g. NMH_E008 NFG_InverseRef), which is a different configuration; at the matching configuration there is no difference."
+   },
+   "Op3I_Source_parse_shape": {
+    "verdict": "DEPENDS_ON_LIBRARY_TRUST",
+    "settled": "proved relative to named library externals; counting is the lead's",
+    "scope": "PCWF_L005",
+    "file": "PRVEq_Op3I_Source_g2.lean",
+    "theorem": "PRVEq.Op3I_Source.verifier.candidate.parse_shape.bound: for every ParseShapeOps, gate parse_shape ops = fresh 4bb3b3f emission (PCUJ_E003, ON) with externals bound to the ops fields (eq/ne/any)",
+    "externals": [
+     "Slice.Insts.CoreCmpPartialEqArray.eq/.ne (core::array::equality PartialEq<[U;N]> for [T]; HM-D)",
+     "core.slice.iter.Iter...Iterator::any (HM-B)"
+    ],
+    "why_not_plain_equality": "the Aeneas library of the closure does not define those items, so the fresh text only elaborates with them abstracted; the gate abstracts them as ParseShapeOps. 28 callee equalities (compact chain, MAGIC, PROOF_BYTES, Variant.tag, closure instances) proved fresh = gate.",
+    "axioms": "propext, Classical.choice, Quot.sound only",
+    "counts_as": "other (DEPENDS_ON_LIBRARY_TRUST, HM-B, HM-D)"
+   }
+  },
+  "C_callee_differs": {
+   "NGD_SlotRef_slot_offset_3": {
+    "verdict": "EQUALITY_PROVED",
+    "settled": true,
+    "scope": "PCWF_L013",
+    "file": "PRVEq_NGD_SlotRef_Funs_s2.lean",
+    "fresh": "PCWF_E001 (aspis-r1-cost-probe compact.rs, overflow-checks OFF, root compact::slot_offset)",
+    "definitions": [
+     "NGD_SlotRef.slot_offset",
+     "NGD_SlotRef.slot_offset_loop",
+     "NGD_SlotRef.slot_offset_loop.body"
+    ],
+    "callee": "OFF_NODES: gate is the literal 28359#usize; frozen is the checked Result chain (OFF_OPENINGS + QUERIES*OPENING); PRVEq.NGD_SlotRef.Funs.OFF_NODES: fresh compact.OFF_NODES = ok NGD_SlotRef.OFF_NODES, proved by 14 stepwise literal lemmas (no kernel reduction); SLOT_NODES fresh = gate by rfl. This also settles the NGD_SlotRef.OFF_NODES TEXT_DIFFERS record as a value equality (not in the 12).",
+    "config": "OFF (gate bodies use wrapping_*; consistent with the per-definition rule); ON would differ only by overflow panics, unreachable for i<=6 but the equality is stated for OFF",
+    "axioms": "propext, Classical.choice, Quot.sound only"
+   },
+   "NCX_VerifierRegistryEntryV2_1": {
+    "verdict": "ISOMORPHISM (distinct Lean inductives/structures; not definitional equality)",
+    "settled": true,
+    "scope": "PCWF_L014",
+    "file": "PRVEq_NCX_Reference_Types_n2.lean",
+    "fresh": "PCWF_E002 (aspis-statement verifier_registry.rs, ON, root validate_verifier_registry_entry_v2)",
+    "callee": "VerifierEntryStatusV1: frozen has #[repr(u8)] (fresh @[discriminant u8]); the reference crate has none (gate @[discriminant isize]); same four constructors in the same order. Proved: statusToFresh/statusToGate mutually inverse; status_discriminant: gate isize discriminant = fresh u8 discriminant for every constructor; entryToFresh/entryToGate mutually inverse on VerifierRegistryEntryV2 (fields identical, status mapped).",
+    "limit": "proves the types correspond; it does not prove the gate NCX Funs equal the frozen verifier_registry functions (the other NCX_Reference records stay TEXT_DIFFERS/NO_FROZEN_COUNTERPART). The gate Funs never read the status discriminant (status maps u8 by match).",
+    "axioms": "propext, Classical.choice, Quot.sound only",
+    "counts_as": "other (type isomorphism), not SETTLED"
+   }
+  },
+  "difference_at_matching_configuration": "none found"
+ },
+ "hygiene_fix": "Lead review: A1/s1/n1 compiled under a file-wide maxHeartbeats 1000000 (A1 also 400000/1000000 per theorem). Superseded by A2/s2/n2 (all maxHeartbeats 200000, no raised limit anywhere): PCWF_L015 (A2), L013 (s2), L014 (n2), all exit 0, standard axioms only. Old files removed; scopes L003/L006/L012 are history only."
+}
