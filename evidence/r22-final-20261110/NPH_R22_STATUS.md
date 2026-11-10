@@ -1634,3 +1634,209 @@ attempted here.
 Counts are unchanged since 18b: 67/27/6/20/100 of 220; rows exposed 309 of 396.
 
 Target not yet established.
+
+## 19. FIq reaches (b): the terminal never fails on its input domain (continuation worker, 2026-11-10, after L077)
+
+Every scope in this run ran at MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with
+lean -j1 -M7000 -DElab.async=false and a 180 s timeout. NPH_COMPILE.tsv records every one. Swap
+was 0 throughout. No cap was raised, and no failed shape was rerun unchanged. The lead decision
+holds: no ops interface, merged module or closed-row statement is changed. The host screens ran
+read-only in their own scopes (MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64).
+
+### 19a. The terminal invariant (NPH_R22FIqTerminal, L078)
+
+L078 accepted the module on the first attempt: 3.01 s, 6,451,476 KiB, swap 0, 5 `#print axioms`
+lines, all within [propext, Classical.choice, Quot.sound], no sorry.
+
+The W-invariant campaign planned in 18c (one lemma per Poseidon round, linear layer and lane loop)
+was not needed. The closure already proves every part of the terminal ok on its domain except one
+child, and that child is total for every input:
+- NLH_CompRoot.source carries a fail/div branch only for `validate_transition`.
+  NHU_TransitionTotal.result (in the replayed closure) proves validate_transition ok for **every**
+  public.
+- With that, NLH_CompTailFold.source returns `ok (Ok final)` for the whole composition tail: the
+  gathers, selectors, Poseidon selectors, the state-only Poseidon oracle and its rounds, the semantic
+  absorption, h1, the variant, the copy terminal, the prepared products, the 28 Horner steps and g.
+  It also gives canonical composition, h and active.
+- NKR_TermTail.result gives the arithmetic suffix ok, and NLH_TermWrapperFactor.source gives the
+  84-cell gather, the semantic public and the map/map_err arms.
+
+Statements:
+- `composition_ok`: composition_parts is ok, with canonical outputs on Ok. The invalid-amount branch
+  is NLH_TermAmount.rejected.
+- `parts_ok`: terminal_parts is ok.
+- `qm31_ok`: terminal_qm31 is ok on the digest domain, asset_id < P, canonical claims, point and
+  challenges.
+- `terminal_total`: on NLU_Terminal.InputDomain pub c with canonical claims and alpha,
+  FIq_Terminal.terminal pub claims alpha c = ok out for some out. The result is an Ok value or an
+  Err rejection, never Aeneas fail or div. So every checked FIq operation the terminal executes
+  returns ok, including every call of the four FIq kernels.
+- `deployed_terminal` (rfl): (IDa_Deployed.boundaries r).terminal = FIq_Terminal.terminal.
+
+### 19b. Composed to the deployed 345 entry (NPH_R22JoinFIq, L079–L080)
+
+L079 failed on one goal. In `finish_term_congr`, the last goal after `rw [hterm]` is the same bind
+up to structure-update projections, and the rewrite's rfl did not close it; dependents inherited
+the error. An explicit `rfl` was added. L080 accepted the module: 3.37 s, 6,766,868 KiB, swap 0,
+12 axiom lines, all standard, no sorry.
+- `finish_term_congr` (generic): FinishModel.finish with the terminal replaced by t' equals the
+  original whenever t' agrees at the public, the claims of the SAME successful claims call and the
+  alpha of the SAME successful rounds call (NPH_R22JoinSM3.Head).
+- `gterm` runs FIq_Terminal.terminal only on `TermDom` (InputDomain, canonical claims and alpha),
+  and fails otherwise. `term_site`: wherever gterm runs the terminal, the terminal is ok.
+- `deployed_finish_guardedT` and `deployed_verify_guardedT` reuse NPH_R22JoinSM4: claims_canon,
+  alpha_canon and the InputDomain built from FJn_BeginCanonical, LIB_VPublicAsset.bytes_asset and
+  the digest premise.
+- `BslotT r` = NPH_R22JoinSM5.Bslot r with terminal := gterm. So mask/add/mul stay guarded as for
+  SM. The chain then mirrors NPH_R22JoinSM7: `slotM_guardedT`, `op9gT`, `tx1_guardedMT`, `GT`,
+  `GT_agree` (digest from NPH_R22JoinSM6.digest_of_binding) and `stage1_guardedT`.
+- **`stage1_guardedT` has no premise.** For every host context and input, stage1_owned (GT c) =
+  stage1_owned (S c). So every execution of the deployed 345 entry runs the FIq terminal only on
+  its input domain, where it is ok.
+
+The op9 → finish → terminal call chain is the one recorded for SM in 18a, since the terminal is a
+slot of the same finish record. It rests on the same textual screen, which is flagged.
+
+### 19c. Site coverage of the 238 FIq sites (NPH_fiq_refs_host.py, NPH_FIQ_REFS.json; NPH_R22FIqSites, L081)
+
+The forward scan of 18c stays unused. The new screen walks **backward**. From each site it walks
+upward through the definitions that reference it, and it never passes the two composed terminal
+nodes (terminal_qm31 and FIq_Terminal.terminal). A definition with no definition referrer is a
+top. Each top is classified:
+- a deployed root: a definition of AdapterRwModel or a configuration or program record;
+- referenced from theorems only;
+- a tie candidate: a theorem that references it also names a deployed record (tie words widened
+  to NNH_/NOC_/NHW_/NNG_/LIB_/Stage1/Run5/Run6/Host/Tx1/Tx2/adapter), so that theorem might make it
+  executed.
+
+The screen resolves names over all 13,681 replayed modules, with namespaces and opens. **Positive
+controls:** NBO_FieldSemantics add/product/power, NBF_BasisInstall.install, NJJ_QueryOps.concrete,
+FIp_SemanticArithmetic.mask, NFS_QueryOps.installed and the R72 circle sampler are all known to
+execute. The forward scan missed NBO and NBF. Every control is classified as executing (a root
+reached or a tie candidate), and none as proof-only. The screen is textual and flagged for lead
+review.
+
+| Screen class | Sites | NPH_SITES.json status |
+|---|---:|---|
+| COVERED_BY_TERMINAL (all in-family extracted) | 120 | TERMINAL_TOTAL |
+| STOP_NODE (terminal_qm31, FIq_Terminal.terminal) | 2 | TERMINAL_TOTAL |
+| PROOF_ONLY (78 outside models, 36 aliases) | 114 | NOT_EXECUTING (flagged) |
+| TIE_CANDIDATE (LIB_VTerminal.native, NNG_ModelTerminal.native) | 2 | W_LEMMA |
+
+NPH_R22FIqSites (L081, first attempt, 3.06 s, 6,669,884 KiB, 3 axiom lines, standard):
+- `lib_native_ok`: LIB_VTerminal.native is ok under LIB_VTerminal.Domain. The library carriers are
+  canonical by type.
+- `lib_model_site`: LIB_VTerminal.model, the only definition referrer of native, runs it only under
+  Domain and fails before it otherwise.
+- `nng_native_ok`: at the lowered LIB arguments, NNG_ModelTerminal.native is LIB_VTerminal.native
+  (NNG_LIBTerminal.native), so it is ok under Domain.
+
+Flagged: the NNG 136 model callers of NNG_ModelTerminal.call (the c7 slot of
+NNG_ConcreteCalls136.calls) are model-layer records. They are tied to the headline only by
+theorems (NNH_Run6Installed.implementation and similar), and their arguments are not composed
+here.
+
+### 19d. Moved to PRECONDITION_B (tag fiq_terminal)
+
+The same screen run on every open FIq cone definition puts all 33 of them in COVERED_BY_TERMINAL:
+- the four kernels: FIq_Native.field M31.add, M31.sub, CM31.mul and CM31.square;
+- 29 definitions that were OPEN: CALLER_DOMAIN_NOT_COMPOSED: the Poseidon linear layers and
+  constant interpolation, the qm31_m31_dot and sum3 loops, qm31_pack_base4, the digest-binding,
+  value-lane, path, preweighted and public-digest lane loops, semantic_packed, selected_claim,
+  bounded_append_carry_loop, validate_transition_loop, composition_parts, and the copy-terminal
+  selectors, link_weight and mask sum.
+
+Each of them executes only inside the terminal, and the terminal is ok at every deployed
+execution. So every checked operation in them returns ok on every reached input. The precedent
+is SC's semantic_value_loop.body (17b). Previous judgments are kept under
+`nph_judgment_before_fiq_terminal`. NPH_move_family.py gained an `NPH_ALLOW_OPEN` switch for the
+29 OPEN definitions. NPH_recount.py reproduced 67/27/6/20/100 and 309 before the change.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 2 (was 6) |
+| precondition proved from the callers (b) | 53 (was 20) |
+| open | 71 (was 100) |
+| NOT_EXECUTED (excluded) | 5 |
+
+**Rows exposed: 259 of 396** (was 309). 137 rows are served only by TOTAL, DIRECT or (b)
+definitions.
+
+Families at (b): CW, SC, R72, SM, QA and FIq. The two remaining domain-only definitions are the
+canonical.Q.raw copies (item 2 below).
+
+No executing site was found that passes a value whose bound no producer gives. No reachable input
+on which the wrapping binary accepts and the checked model rejects was found. 4 scopes used so far
+(L078–L081), 36 of this run's 40 remain.
+
+Target not yet established.
+
+### 19e. The two canonical.Q.raw copies (item 2): producers located, one context composed, Q.raw stays domain-only
+
+One scope was used: L082 accepted NPH_R22QRawPush on the first attempt (2.30 s, 5,373,304 KiB,
+swap 0, 3 axiom lines, standard, no sorry). The task now stands at 5 of the run's 40 scopes.
+
+**Where the copies execute** (backward screen NPH_QRAW_REFS.json, the same script with the Q.raw
+names as controls; textual):
+- FIo copy: FIo_Native.fast_pairing.canonical.Q.raw (the NativeExternal wrapper of FIo_QRaw) is
+  called only by canonical.Dot.push. Dot.push is called only by EbyKDot.push, apart from the model
+  NGM_DotInduction.walk.
+- EbyKDot.push has two kinds of deployed caller:
+  - FIp_NativeDots.fast_dots.four_dots_one. Its three tail pushes push g[28], g[26] and g[27], with
+    scalars decoded from the proof bytes. This is the op20 dots.
+  - The FIo_Native.weights high_dot_loop, partial_dot_loop and push_byte_products_loop bodies.
+    They push weights.field = WideExact.from_le_bytes … unwrap. These bodies are NOT_R22 wrapping
+    gate bodies, but the Q.raw they reach is a checked/mixed cone definition.
+- Unified copy: AspisR1CanonicalQRawUnified.canonical.Q.raw is reached through raw_entry and
+  AspisR1QRawGeneratedPushConnectionV2.sourceRawFn. That is the rawFn of the claim-dot concreteOps
+  pushDot (pushWithDotBackend → checked-Q push → dotViaRaw), the record of NPH_R22JoinCW4.
+
+So the dots output producer FIp_DotsOutputCanonical.all (outside L187, section 11) is not the
+producer the caller join needs. Q.raw receives the **pushed value** and the **scalar**, not the dots
+output.
+
+**Proved (NPH_R22QRawPush):**
+- `checked_none`: checked_q rejects a scalar with a limb ≥ P before any Dot.push.
+- `push_total`: EbyKDot.push self v x is ok for **every** state and scalar whenever the pushed value
+  v is canonical.
+  - At the term limit, it returns Err before any push.
+  - On a non-canonical scalar, checked_q rejects first.
+  - Otherwise both Dot.push calls, and so both Q.raw calls, run on canonical limbs
+    (NFE_NFC_CalleeDomains.total, in the closure).
+  - So the scalar side of every Q.raw call needs no caller producer.
+- `g_push_site`: on NEV_DotInputs.Canonical g, every four_dots_one push is ok.
+
+**What is missing before either copy can move to (b):**
+1. Canonical g at every executed op20 dots call. The producer is located: g is a field of
+   NFS_PacketRoot.Domain on the 094 path, and of NFS_QueryInvariant.Domain at every reached tx2
+   query state (NPH_R22JoinCW2.reach_domain). The tie from the installed op20 slot through
+   FIp_DotsAdapter.dots and four_dots to four_dots_one at the same g is not composed.
+2. A canonical pushed value in the three FIo weights loop bodies. The located producer is
+   WideExact.from_le_bytes success (NFS_ReadCanonical); it is not composed through those loops.
+3. A canonical pushed value at the claim-dot pushDot calls of the Unified copy, inside
+   owned_claim_loops on concreteOps. NPH_R22JoinCW4.owned_loop_canon keeps the parts canonical, but
+   the pushed values are not yet tied to it or to the ClaimParser field reads.
+
+No value without a producer was found. Each pushed value has a located producer, and only the ties
+are missing. The two Q.raw copies stay DOMAIN_LEMMA_PROVED. Their cone entries carry
+`caller_join_progress_20261110_fiq` with the path and the three missing ties.
+
+### 19f. Item 3 (the rest of the 345 body walk)
+
+Item 3 asked for the 345 walk for kernels that 094 does not reach. With FIq at (b), every field
+family's domain-only kernels are at (b) (CW, SC, R72, SM, QA, FIq). Their contexts on the 345 entry
+are composed by NPH_R22JoinSM7.stage1_guarded and NPH_R22JoinFIq.stage1_guardedT. The only
+domain-only definitions left are the two Q.raw copies, which run on the tx2 and claim-dot paths
+(19e), not inside the 345 body. So no kernel is waiting on more of the 345 walk. The 71 OPEN
+definitions are a separate obligation: non-field loop and decoder bodies such as the samplers'
+digit/div loops, TerminalDecoder encode loops, the DecodeK and record parsers, the FIp_NativeDots
+loops and the accumulator and push-residue loops. They are not kernel call-site joins.
+
+**Counts (220 executed checked or mixed definitions): 67/27/2/53/71**, as in 19d. Rows exposed:
+259 of 396.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was found.
+
+Target not yet established.

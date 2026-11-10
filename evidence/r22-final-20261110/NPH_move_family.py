@@ -10,7 +10,7 @@ J=lambda e:(e.get('nph_judgment') or '').split(' ')[0].rstrip(':')
 hit=0
 for e in c['definitions']:
     if e['definition'] in defs:
-        assert J(e)=='DOMAIN_LEMMA_PROVED',(e['definition'],J(e))
+        assert J(e) in (('DOMAIN_LEMMA_PROVED','OPEN') if __import__('os').environ.get('NPH_ALLOW_OPEN') else ('DOMAIN_LEMMA_PROVED',)),(e['definition'],J(e))
         e['nph_judgment_before_'+tag]=e['nph_judgment'];e['nph_judgment']=text
         e['nph_theorems']=list(dict.fromkeys(e.get('nph_theorems',[])+ths));hit+=1
 assert hit==len(defs),(hit,defs)

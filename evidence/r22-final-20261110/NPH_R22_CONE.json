@@ -13,17 +13,16 @@
   "note": "225 checked or mixed definitions minus 5 NOT_EXECUTED proof-only references (AspisR65Field M31.add/neg, AspisR66Field M31.add/neg/sub), lead ruling 1 of 2026-11-10",
   "TOTAL_PROVED": 67,
   "DIRECT": 27,
-  "DOMAIN_LEMMA_PROVED": 6,
-  "PRECONDITION_B": 20,
-  "OPEN": 100,
+  "DOMAIN_LEMMA_PROVED": 2,
+  "PRECONDITION_B": 53,
+  "OPEN": 71,
   "NOT_EXECUTED": 5
  },
  "counts_by_class": {
   "CHECKED/DIRECT": 26,
-  "CHECKED/DOMAIN_LEMMA_PROVED": 4,
   "CHECKED/NOT_EXECUTED": 5,
-  "CHECKED/OPEN": 98,
-  "CHECKED/PRECONDITION_B": 20,
+  "CHECKED/OPEN": 69,
+  "CHECKED/PRECONDITION_B": 53,
   "CHECKED/TOTAL_PROVED": 64,
   "MIXED/DIRECT": 1,
   "MIXED/DOMAIN_LEMMA_PROVED": 2,
@@ -32,8 +31,8 @@
  },
  "rows": {
   "touched_by_executed_checked_or_mixed": 396,
-  "with_at_least_one_open_or_domain_only_definition": 309,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 87,
+  "with_at_least_one_open_or_domain_only_definition": 259,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 137,
   "touched_including_NOT_EXECUTED": 396,
   "note_20261110_late": "served_only_by_TOTAL_or_DIRECT_definitions now counts rows served only by TOTAL, DIRECT or PRECONDITION_B definitions"
  },
@@ -13514,8 +13513,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native01",
@@ -13599,10 +13605,14 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "TOTAL (2021 current_mul_mod / multiply_R22, AspisR1Qm31ArithmeticProbe copy)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "nph_theorems": [
     "AspisR1.NPH_R22CM31.FIq_CM31_mul_total",
-    "AspisR1.NPH_R22Weak.FIq_CM31_mul_weak"
+    "AspisR1.NPH_R22Weak.FIq_CM31_mul_weak",
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "caller_join_progress": {
@@ -13674,7 +13684,8 @@
      "every site OPEN: not examined in this run"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_fiq_terminal": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "RPu_FIq_Native01",
@@ -13733,9 +13744,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower mul, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "nph_theorems": [
-    "AspisR1.NPH_R22CM31.FIq_CM31_square_total"
+    "AspisR1.NPH_R22CM31.FIq_CM31_square_total",
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ],
    "r22_composition": "checked totality only; wrapping = checked through R22TotalCheckedComposition.extracted_total_R22 needs the P6 operational interpretation (Translation), as in 2021",
    "caller_join_progress": {
@@ -13807,7 +13822,8 @@
      "every site OPEN: not examined in this run"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_fiq_terminal": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "RPu_FIq_Native01",
@@ -13904,11 +13920,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.FIq_M31_add_eq",
     "AspisR1.NPH_R22FieldCopies.FIq_M31_add_R22",
-    "AspisR1.NPH_R22Weak.add_R22_weak"
+    "AspisR1.NPH_R22Weak.add_R22_weak",
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -13997,7 +14017,8 @@
      "every site OPEN: not examined in this run"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_fiq_terminal": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "RPu_FIq_Native01",
@@ -14176,11 +14197,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "ACCEPTED-ONLY (2021 tower add/sub, canonicality hypotheses)",
    "carried_over_from_2021": false,
-   "nph_judgment": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "nph_theorems": [
     "AspisR1.NPH_R22FieldCopies.FIq_M31_sub_eq",
     "AspisR1.NPH_R22FieldCopies.FIq_M31_sub_R22",
-    "AspisR1.NPH_R22Weak.sub_R22_weak"
+    "AspisR1.NPH_R22Weak.sub_R22_weak",
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ],
    "r22_composition": "explicit operational tree (NPH_R22FieldRef *Code), no Translation parameter",
    "existing_closure_statements_screen": [
@@ -14259,7 +14284,8 @@
      "every site OPEN: not examined in this run"
     ],
     "family_complete_for_b": false
-   }
+   },
+   "nph_judgment_before_fiq_terminal": "DOMAIN_LEMMA_PROVED (b, caller join open): checked total on canonical limbs and on the weak domain limbs <= P (closed under every kernel); the proof that every limb reaching it on the deployed path is <= P is not yet composed"
   },
   {
    "module": "RPu_FIq_Native01",
@@ -14307,7 +14333,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
    "existing_closure_statements_screen": [
     {
@@ -14315,6 +14341,13 @@
      "file": "RPv_FJe_Sum3ChannelEdges.lean",
      "screen": "ACCEPTED_SCREEN"
     }
+   ],
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ]
   },
   {
@@ -14469,8 +14502,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native02",
@@ -14520,8 +14560,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native02",
@@ -14571,8 +14618,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native02",
@@ -14622,8 +14676,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native02",
@@ -14680,8 +14741,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native04",
@@ -14796,8 +14864,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native05",
@@ -14850,8 +14925,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native05",
@@ -14906,7 +14988,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
    "existing_closure_statements_screen": [
     {
@@ -14919,6 +15001,13 @@
      "file": "NDN_PackedFrame.lean",
      "screen": "DOMAIN_SCREEN"
     }
+   ],
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ]
   },
   {
@@ -15155,8 +15244,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native06",
@@ -15210,8 +15306,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native06",
@@ -15318,8 +15421,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native08",
@@ -15373,7 +15483,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
    "existing_closure_statements_screen": [
     {
@@ -15381,6 +15491,13 @@
      "file": "NDE_RowBridge.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ]
   },
   {
@@ -15442,8 +15559,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native08",
@@ -15496,8 +15620,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native08",
@@ -15549,7 +15680,7 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
    "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
    "existing_closure_statements_screen": [
     {
@@ -15567,6 +15698,13 @@
      "file": "NKR_DigestOldPack.lean",
      "screen": "DOMAIN_SCREEN"
     }
+   ],
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
    ]
   },
   {
@@ -15619,8 +15757,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native09",
@@ -15674,8 +15819,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native09",
@@ -15724,8 +15876,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native09",
@@ -15829,8 +15988,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native09",
@@ -15879,8 +16045,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native10",
@@ -15935,8 +16108,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native10",
@@ -16041,8 +16221,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native11",
@@ -16089,8 +16276,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native13",
@@ -16312,8 +16506,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native14",
@@ -16363,8 +16564,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native14",
@@ -16414,8 +16622,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native14",
@@ -16520,8 +16735,15 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "PRECONDITION_B (FIq terminal, 2026-11-10): every execution of this definition lies inside FIq_Native...terminal_qm31, run only by FIq_Terminal.terminal (backward referrer screen NPH_FIQ_REFS.json: COVERED_BY_TERMINAL, textual, flagged; 8 positive controls of known-executing records all detected). NPH_R22FIqTerminal.terminal_total proves the terminal ok (never fail/div) on NLU_Terminal.InputDomain with canonical claims and alpha, so every checked operation it executes returns ok; NPH_R22JoinFIq.stage1_guardedT (no premise) shows every execution of the deployed 345 entry runs the terminal only on that domain (gterm over BslotT), with the producers of NPH_R22JoinSM4 (claims, alpha, begin challenges, asset bound) and the digest domain from NPH_R22JoinSM6.digest_of_binding. Model-layer wrappers LIB_VTerminal.native / NNG_ModelTerminal.native: NPH_R22FIqSites.",
+   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment_before_fiq_terminal": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22FIqTerminal.terminal_total",
+    "AspisR1.NPH_R22JoinFIq.stage1_guardedT",
+    "AspisR1.NPH_R22JoinFIq.term_site",
+    "AspisR1.NPH_R22FIqSites.lib_model_site"
+   ]
   },
   {
    "module": "RPu_FIq_Native14",
@@ -18206,8 +18428,19 @@
     }
    ],
    "nph_theorems": [
-    "AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs (existing, in the TAS_FinalB closure)"
-   ]
+    "AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs (existing, in the TAS_FinalB closure)",
+    "AspisR1.NPH_R22QRawPush.push_total",
+    "AspisR1.NPH_R22QRawPush.g_push_site"
+   ],
+   "caller_join_progress_20261110_fiq": {
+    "executing_path": "FIo copy: FIo_Native.fast_pairing.canonical.Q.raw (NativeExternal) <- canonical.Dot.push <- EbyKDot.push <- {FIp_NativeDots.fast_dots.four_dots_one (tail pushes of g[28], g[26], g[27]; deployed op20 dots), FIo_Native.weights high_dot_loop/partial_dot_loop/push_byte_products_loop bodies (pushed value = weights.field = WideExact.from_le_bytes unwrap)}; Unified copy: raw_entry / AspisR1QRawGeneratedPushConnectionV2.sourceRawFn, the rawFn of the claim-dot concreteOps pushDot (pushWithDotBackend -> checked-Q push -> dotViaRaw) (backward screen NPH_QRAW_REFS.json)",
+    "proved_20261110": "NPH_R22QRawPush (L082): EbyKDot.push is ok for every state and scalar on a canonical pushed value (the scalar is checked in the body: checked_q rejects limbs >= P before any Dot.push); g_push_site: on NEV_DotInputs.Canonical g every four_dots_one push is ok",
+    "missing": [
+     "canonical g at every executed op20 dots call (producer located: NFS_PacketRoot.Domain g on 094, NFS_QueryInvariant.Domain on tx2; the op20 slot to FIp_DotsAdapter.dots -> four_dots -> four_dots_one tie is not composed)",
+     "canonical pushed value in the three FIo weights loop bodies (producer located: WideExact.from_le_bytes success, NFS_ReadCanonical; not composed; these bodies are NOT_R22 wrapping gate bodies but their Q.raw call is checked)",
+     "canonical pushed value at the claim-dot pushDot calls of the Unified copy (owned_claim_loops on concreteOps; the parts invariant is NPH_R22JoinCW4.owned_loop_canon, the pushed values are not yet tied to it)"
+    ]
+   }
   },
   {
    "module": "AspisR1CanonicalQRawUnified.Funs",
@@ -18692,8 +18925,19 @@
    ],
    "nph_theorems": [
     "AspisR1.NPH_R22QRawShift.qraw_eq",
-    "AspisR1.NPH_R22QRawShift.fio_qraw_total_of_canonical_limbs"
-   ]
+    "AspisR1.NPH_R22QRawShift.fio_qraw_total_of_canonical_limbs",
+    "AspisR1.NPH_R22QRawPush.push_total",
+    "AspisR1.NPH_R22QRawPush.g_push_site"
+   ],
+   "caller_join_progress_20261110_fiq": {
+    "executing_path": "FIo copy: FIo_Native.fast_pairing.canonical.Q.raw (NativeExternal) <- canonical.Dot.push <- EbyKDot.push <- {FIp_NativeDots.fast_dots.four_dots_one (tail pushes of g[28], g[26], g[27]; deployed op20 dots), FIo_Native.weights high_dot_loop/partial_dot_loop/push_byte_products_loop bodies (pushed value = weights.field = WideExact.from_le_bytes unwrap)}; Unified copy: raw_entry / AspisR1QRawGeneratedPushConnectionV2.sourceRawFn, the rawFn of the claim-dot concreteOps pushDot (pushWithDotBackend -> checked-Q push -> dotViaRaw) (backward screen NPH_QRAW_REFS.json)",
+    "proved_20261110": "NPH_R22QRawPush (L082): EbyKDot.push is ok for every state and scalar on a canonical pushed value (the scalar is checked in the body: checked_q rejects limbs >= P before any Dot.push); g_push_site: on NEV_DotInputs.Canonical g every four_dots_one push is ok",
+    "missing": [
+     "canonical g at every executed op20 dots call (producer located: NFS_PacketRoot.Domain g on 094, NFS_QueryInvariant.Domain on tx2; the op20 slot to FIp_DotsAdapter.dots -> four_dots -> four_dots_one tie is not composed)",
+     "canonical pushed value in the three FIo weights loop bodies (producer located: WideExact.from_le_bytes success, NFS_ReadCanonical; not composed; these bodies are NOT_R22 wrapping gate bodies but their Q.raw call is checked)",
+     "canonical pushed value at the claim-dot pushDot calls of the Unified copy (owned_claim_loops on concreteOps; the parts invariant is NPH_R22JoinCW4.owned_loop_canon, the pushed values are not yet tied to it)"
+    ]
+   }
   },
   {
    "module": "FIo_QRawFuns",
@@ -18916,5 +19160,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
+ "revision_note": "updated fiq_terminal: FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight, FIq_Native.field.CM31.mul, FIq_Native.field.CM31.square, FIq_Native.field.M31.add, FIq_Native.field.M31.sub, FIq_Native.field.qm31_sum_products3_prepared_loop0_loop0_loop0, FIq_Native.field.qm31_m31_dot_loop0, FIq_Native.field.qm31_m31_dot_loop1, FIq_Native.field.qm31_m31_dot_loop1_loop0, FIq_Native.field.qm31_m31_dot_loop1_loop1, FIq_Native.field.qm31_pack_base4, FIq_Native.state_only_poseidon.internal_linear_lazy_loop0_loop0, FIq_Native.state_only_poseidon.external_linear_packed_loop, FIq_Native.state_only_poseidon.external_local_packed_raw, FIq_Native.state_only_poseidon.interpolate_three_constant_limb, FIq_Native.state_only_poseidon.external_linear_lazy_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.selected_claim, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_digest_binding_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1, FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2, FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal_loop, FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed, FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0, FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0, FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts moved to PRECONDITION_B; counts 67/27/2/53/71 of 220; rows exposed 259 of 396. Previous: updated 20261110_qa3: AspisR1Qm31ArithmeticProbe.field.CM31.mul, AspisR1Qm31ArithmeticProbe.field.M31.add, AspisR1Qm31ArithmeticProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/6/20/100 of 220; rows exposed 309 of 396. Previous: updated 20261110_sm7: AspisR1SelectedMaskProbe.field.CM31.mul, AspisR1SelectedMaskProbe.field.CM31.square, AspisR1SelectedMaskProbe.field.M31.add, AspisR1SelectedMaskProbe.field.M31.neg, AspisR1SelectedMaskProbe.field.M31.sub moved to PRECONDITION_B; counts 67/27/9/17/100 of 220; rows exposed 328 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation, SC): SemanticCallExtraction CM31.mul/M31.add/M31.sub and semantic_value_loop.body moved to PRECONDITION_B (NPH_R22JoinSC1); counts 67/27/14/12/100 of 220; rows exposed 359 of 396. Previous: updated after NPH_L072 (2026-11-10, continuation): R72 CM31.mul/square, M31.add/neg/sub moved to PRECONDITION_B (NPH_R22R72); counts 67/27/17/8/101 of 220; rows exposed 359 of 396. Previous: updated after NPH_L068: SM context through tx1 (NPH_R22JoinSM6); sum3 SM copy proof-only; counts unchanged 67/27/22/3/101; rows exposed 363 of 396. Previous: updated after NPH_L067 (2026-11-10, continuation): SM finish context composed except the digest-domain premise (NPH_R22JoinSM3/SM3F/SM4/SM5); four query installers as Lean statements (NPH_R22Installers2); counts unchanged 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L046 (2026-11-10, late): CW CM31.mul, M31.add, M31.sub moved to PRECONDITION_B (NPH_R22JoinCW5/CW6); counts 67/27/22/3/101 of 220; rows exposed 363 of 396. Previous: updated after NPH_L028: step 3 site joins on the tx1 (094) query path (NPH_R22Join094, NPH_R22Join094Step) recorded per kernel as caller_join_progress; no kernel has every reached site discharged, so no judgment change | 2026-11-10 evening (L029-L032): R65/R66 NOT_EXECUTED (ruling 1); tightened site checklist NPH_SITES.json (ruling 2); CW/SM/QA site lemmas NPH_R22JoinCW/JoinSM/JoinQA; no family complete, no move to (b)."
 }
