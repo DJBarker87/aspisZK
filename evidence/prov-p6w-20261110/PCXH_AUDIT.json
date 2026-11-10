@@ -611,5 +611,39 @@
   }
  },
  "deployed_names_expected": 80,
- "deployed_names_found": 80
+ "deployed_names_found": 80,
+ "single_root": {
+  "module": "PRVCmb_L187_ROOT",
+  "source": "PRVCmb_L187_ROOT.lean",
+  "scope": "PCXH_L009",
+  "exit": 0,
+  "imports": "PRVH_WrapAdd, PRVCmb_C01..C22 (C18 as C18A-D), the 28 deployed-body PRVEq modules (renamed where PCXH_RENAMES.json says) and the four P3s modules PRVEq_QM31_s3, Rd_s14, Tx2Frozen_s2, Headline_s2; all import together, no declaration clash",
+  "earlier_root_without_P3s": "PCXH_L005 (same imports minus P3s, with the audit in the same process): exit 0, 5445 theorems audited one by one, union propext, Quot.sound, Classical.choice, 0 local axioms, 1058 of 1058 credited names found",
+  "failed_shapes": [
+   {
+    "scope": "PCXH_L008",
+    "shape": "root with P3s plus in-process audit",
+    "exit": 134,
+    "why": "Lean -M7000 interpreter memory exception; the imported environment alone is about 6.88 GiB RSS (L009)"
+   },
+   {
+    "scope": "PCXH_L010",
+    "shape": "separate module importing the root, union traversal",
+    "exit": 134,
+    "why": "same cap"
+   },
+   {
+    "scope": "PCXH_L011",
+    "shape": "same with a traversal that pushes only unseen constants",
+    "exit": 134,
+    "why": "same cap; shape class (audit in a process that imports the full root) retired after two failures"
+   }
+  ],
+  "audit_shape_used": "the axiom audit of the full root environment does not fit under -M7000, so every credited theorem is audited one by one in sub-environment modules built from the very same objects: PCXH_AUD_B (bundles root, L012), PCXH_AUD_DL1/DL2A/DL2B/DL2C (deployed modules, L013) and PCXH_AUD_DP3S (P3s, L013); theorem axioms do not depend on which other modules are loaded. Coexistence is shown by L009, the audit by these modules. This is a different shape from a single in-process root audit and is stated as such."
+ },
+ "p1n_replay": "PCXH_L014 exit 0: the five n3b modules (13 theorems) compile against the L187 closure, standard axioms only (print_axioms in PCXH_L014/receipt.json)",
+ "credited_theorems_by_one_pass": {
+  "bundles": 4867,
+  "deployed": 304
+ }
 }
