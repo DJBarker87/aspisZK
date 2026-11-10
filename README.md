@@ -87,22 +87,35 @@ Privacy has its own contract and its own theorems and is a separate story.
 
 ## On Solana
 
-The verifier on devnet is program `CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ`;
-its 1,563,728-byte ELF, SHA-256 `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
-was rebuilt bit for bit from the frozen source, and it has no upgrade authority.
-The private transfer is
-[`53pTHDf…m2hhvR`](https://explorer.solana.com/tx/53pTHDfJBmqX7hdxPofSfajURpMhCiB6ceAdMw9ftf3RAXZ6k8D26WaW4MGito2Ty3kRQrAXQSDJ5QBNFsm2hhvR?cluster=devnet)
-(stage 1, 1,214,746 compute units) followed by
-[`FNLSBxj…PCFxF`](https://explorer.solana.com/tx/FNLSBxjiJ8jPYzE2E25BCgzJ6rm9yrSXnRMgwhj3E5yxwU4wYPfs9vugucr6cVrgnhem2b6TbqPCe3PKjPRFCxF?cluster=devnet)
-(stage 2 and settlement, 1,145,305); the withdrawal, which moved 250 test tokens
-out of the vault, is
-[`3C6fKwt…5ut4F7L`](https://explorer.solana.com/tx/3C6fKwts7pAaTko8kJvBJk4weuUc9y7dfbLTGjRiKuqXo6fWr7xvNoG7w19Nb8V9yY6erAda5jt65khHY5ut4F7L?cluster=devnet)
-(1,206,747) and
-[`46bYP2B…cES3wn2`](https://explorer.solana.com/tx/46bYP2Bz1sTiwNDSFxYVumN1kPYa4TARupv8ptAMMx7ixwSNCZwU59WLNDz1zv5V97qgKFp6NtY4njs9rcES3wn2?cluster=devnet)
-(1,154,975). The proofs used public test fixtures, so this is the verifier
-working on a public cluster rather than a private payment of mine; the full
-record, with every signature and account, is in
-[`docs/r1/DEVNET-RUN.md`](docs/r1/DEVNET-RUN.md).
+On 10 November 2026 the frozen pool and the verifier built from the frozen
+source ran together on Solana devnet. The pool program is
+`37hdATMkskKX1hiCWhz4nnzkD7GauYwX8EQwcpUDb3Zt`, its 345,648-byte ELF
+`e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc` rebuilt bit
+for bit from the frozen source; the verifier is the immutable program
+`GqZzWuGTojfsxYnDzmyWKhdPGkce19xN1Txu9Vgnr5hy`, whose ELF
+`2331ad8a2d97439a30329328c51f619a6b13be97e260ab1e1fd8aab22cb996ea` is the
+frozen build with that pool's address in its one address slot and is otherwise
+identical, byte for byte, to the earlier pin. It settled a private transfer in
+[`pUEwuhuS…Hz4i8`](https://explorer.solana.com/tx/pUEwuhuSNmr8PK159eVxZhwJGHAceLr8qLLcE4b3gdJ3qTuFz9NgoGXwhe6VrL646VhRj6AzmSXuyuQTq8Hz4i8?cluster=devnet)
+(stage 1, 1,208,613 compute units) and
+[`5bPwiKGm…UBmCt`](https://explorer.solana.com/tx/5bPwiKGmcXgRQnEJfbUrxHU1kuQgu3Q4GMrZ8V76jCHTxmqr3zVKkjcsk5JNmP9PXtimkrQBzvf5SQ4Chq4UBmCt?cluster=devnet)
+(stage 2 and settlement, 1,138,552), and a withdrawal of 250 test tokens in
+[`2QS4o2i1…gjPpo`](https://explorer.solana.com/tx/2QS4o2i1TpocPc4xeDh9KFBLuKaqBAbSTkiwiNbqecrNoTZvq1rjP8tVyu6BfBGuYFqJnpe4ueG3Ev5q7HvgjPpo?cluster=devnet)
+(1,211,252) and
+[`54t54tQ1…jW8EM`](https://explorer.solana.com/tx/54t54tQ14sNpUxU6cQJoi4e1Vpbb8bZhwMrDxmnrUk9fgEPBCmcZi3Qzwmc4F9SjmgoeTXfLDDZ7TfA8QBUjW8EM?cluster=devnet)
+(1,153,431); a replay of each settlement was rejected because its nullifier was
+already spent, and a tampered stage-1 proof for each was rejected with the
+checkpoint untouched. Every one of the run's 69 transactions is recorded with
+its full account images in the proof package.
+
+The first devnet run, on 29 October 2026, used the same frozen verifier source
+as program `CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ` (ELF
+`63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`) against the
+pool build that preceded the frozen one, and settled a transfer and a
+withdrawal the same way; its signatures and both runs' full records are in
+[`docs/r1/DEVNET-RUN.md`](docs/r1/DEVNET-RUN.md). The proofs in both runs used
+public test fixtures, so they show the verifier working on a public cluster
+rather than a private payment of mine.
 
 And Aspis has already been to mainnet. On 24 July 2026 the earlier V5 verifier
 checked a 75,358-byte private-spend proof on Solana mainnet-beta, advanced the
