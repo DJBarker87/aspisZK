@@ -1,0 +1,51 @@
+{
+ "schema": "PCWH_CANNOT_EXTRACT/1",
+ "target_established": false,
+ "tool": "second tool version (Charon 454586e9 + Aeneas 0d21a9ec, PCWH_TOOL_BUILD.json)",
+ "counting": "every item below is OPEN; no transcription and no trust row is proposed; library-only blockers name the EXISTING row HM-B",
+ "items": [
+  {
+   "item": "r1_pool_adapter::decode_lane_from_pool_release (op50, programs/r1-cost-probe, r1_pool_adapter.rs 448:0-520:1)",
+   "scopes": "PCWH_E005 (Charon exit 0), PCWH_E007 (Aeneas on the saved LLBC)",
+   "error": "[Error] Early returns inside of loops are not supported yet; Source r1_pool_adapter.rs 448:0-520:1; then [Error] Ignoring the body of ...decode_lane_from_pool_release (raised at PrePasses.ml:576)",
+   "evidence": "PCWH_llbc_loop_shape.py on PCWH_E005 LLBC: the `for (level,node) in frontier.iter_mut().enumerate()` loop sits inside 19 nested Switch arms (the `?`/return-Err guards), at index 33 of 35 in its block; the statements after the loop in that block are [StorageDead] only. Loop body has Break 4, Return 2, Continue 2.",
+   "tool_route": "Aeneas PrePasses.ml update_statement/decompose_after (lines ~571-581): `after` is only the remainder of the loop's own block, and the function raises when it reaches [] without a Return/Panic. Route: extend the pass so that, when the loop block's remainder is exhausted, the continuation is taken from the statements following the enclosing Switch statements in the parent blocks (apply transformations 2/3 at the enclosing statement), or generalise to a flag-and-break encoding of `return e` inside loops (loop exit with a ControlFlow-style result). This is a change to Aeneas, not to the source; no Aeneas revision up to 0d21a9ec (2026-11-09 main) has it.",
+   "status": "OPEN"
+  },
+  {
+   "item": "verifier::Prepared::new / prepared_claim",
+   "scopes": "PCWH_E008, E010",
+   "error": "[Error] Returns inside of nested loops are not supported yet (verifier.rs 53:0-68:1, prepared_claim); [Error] Unreachable (verifier.rs 77:24-82:9) in Prepared::new, whose emitted body is a placeholder",
+   "tool_route": "Aeneas PrePasses.ml early-return elimination handles one loop level only (transformation 1-3 apply to a Loop whose body contains the Return directly); route: apply the transformation recursively from the innermost loop outwards, using the same continuation extension as op50.",
+   "status": "OPEN"
+  },
+  {
+   "item": "multiproof::verify_in_place",
+   "scopes": "PCWH_E008",
+   "error": "[Error] Breaks to outer loops are not supported yet (multiproof.rs 138:0-194:1)",
+   "tool_route": "Aeneas PrePasses.ml visit_Break/replace use [%cassert] (i = 0) 'Breaks to outer loops'; route: multi-level break/continue support (loop labels encoded as an exit-code or nested ControlFlow result).",
+   "status": "OPEN"
+  },
+  {
+   "item": "r1_wire::ValidatedRecord::decode_k",
+   "scopes": "PCWH_E010 (new Charon passes; Aeneas fails)",
+   "error": "[Error] Joining region abstractions containing shared loans whose shared value contains borrows is not supported yet (r1_wire.rs 158:8-165:5); body emitted as a placeholder",
+   "tool_route": "Aeneas symbolic interpreter loop join (InterpLoops/InterpJoin) does not support joining abstractions with shared loans whose value contains borrows; route: extend the join for nested shared borrows, or an Aeneas version with that case (none in 0d21a9ec).",
+   "status": "OPEN"
+  },
+  {
+   "item": "verifier::candidate::tx2_authenticated (and tx2_common, mark, query_loop, query_values, finish_relation in its closure)",
+   "scopes": "PCWH_E008",
+   "error": "[Error] Arrow types are not supported yet (candidate.rs 327:0-331:1 tx2_authenticated; 294:0-322:1 tx2_common; verifier.rs 31:0-31:60 mark; candidate.rs 239:0-252:1; 212:0-235:1; verifier.rs 309:0-322:1); signatures not translated",
+   "tool_route": "Aeneas pure translation has no arrow (function-pointer / closure-typed parameter) types; route: arrow-type support in SymbolicToPureTypes (higher-order parameters as Lean functions), which is a feature of Aeneas not present at 0d21a9ec.",
+   "status": "OPEN"
+  },
+  {
+   "item": "r1_semantic::semantic_boundary, r1_semantic::claims, r1_semantic::semantic_rounds",
+   "scopes": "PCWH_E008 (all nine), PCWH_E009 (eight, without semantic_boundary as start root); contrast PCWH_E010 (without these three) does not crash",
+   "error": "Fatal error: exception Aeneas.Errors.CFailure; sanity check at symbolic/SymbolicToPureTypes.ml:1005-1006 in translate_fun_sigs ([%sanity_check_opt_span] span (sg.item_binder_params.trait_type_constraints = [])) while translating a method signature of core::iter::traits::iterator::Iterator (iterator.rs 42:0-42:24); no file emitted. The LLBC shows exactly one Iterator method with a trait type constraint (generics 'a, T, Clause1_Item; copied); semantic_boundary calls `polynomial.iter().copied()` (r1_semantic.rs:83) and claims and semantic_rounds call semantic_boundary.",
+   "tool_route": "Aeneas SymbolicToPureTypes.translate_fun_sigs: support `trait_type_constraints` on trait-method signatures (substitute the constrained associated type, here Self::Item = &'a T), or skip extracting trait methods that are not called. Newer Aeneas than 0d21a9ec is not available; the check is at HEAD.",
+   "status": "OPEN"
+  }
+ ]
+}

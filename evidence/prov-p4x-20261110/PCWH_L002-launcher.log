@@ -1,0 +1,39 @@
+{"attempt": "PCWH_L002", "exit_status": 0, "wall_seconds": 3.330056207953021, "peak_rss_kib": "2592488", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r w
+...
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  core.result.Result T E →
+    Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T) :=
+fun {T E} x =>
+  match x with
+  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r with
+  | core.result.Result.Ok x => core.convert.Infallible.casesOn (fun x => Result (core.result.Result T F)) x
+  | core.result.Result.Err e => do
+    let v ← convertFromInst.from e
+    ok (core.result.Result.Err v)
+core.convert.FromSame : (T : Type) → core.convert.From T T
+structure Aeneas.Std.core.convert.From (Self T : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.convert.From.from : T → Result Self
+constructor:
+  Aeneas.Std.core.convert.From.mk {Self T : Type} («from» : T → Result Self) : core.convert.From Self T
+
+Running as unit: run-re38f7fb0d2304dad8b95b9899126bb3d.scope; invocation ID: 16ffd277d79048c0b732808686968c2d
