@@ -335,3 +335,67 @@ items (i)–(iii) of the separate limb invariant, which keeps the ops records an
 statements unchanged.
 
 Target not yet established.
+
+## 9. Item (4) complete (continuation worker, 2026-11-10)
+
+Two scopes were used, L016 and L017, both accepted on the first attempt (17 of the job's
+scopes in total; this worker's budget is 45, 2 used). NPH_R22Loops2 took 2.75 s and
+5,425,672 KiB; NPH_R22Loops3 took 2.57 s and 5,647,324 KiB. Swap was 0 in both. All 31
+`#print axioms` lines are within [propext, Classical.choice, Quot.sound].
+
+All 30 remaining single-increment bodies are judged. Each one reuses the generic
+`NPH_R22Loops.usize_succ_ok` and has one lemma of its own.
+
+- **TOTAL (a), 5 bodies.** The bodies are NCX zero_loop, NCV zero_loop, NCV eq_digest_loop,
+  and NCV valid_sequences_loop and zero_sequences_loop. The last two are outside both top
+  cones. Each body is checked-ok on every input. Its indexing is in bounds under its own
+  guard, and its only arithmetic is the guarded `i + 1`.
+- **DIRECT (c), 25 bodies.** These are the Poseidon lane loops, array_from_fn_copy_loop,
+  finish_owned_loop.body, finish_query_dot_loop.body, the two samplers, semantic_boundary,
+  values_owned_reference, sort_rows, the NCX and NCV equal_loop bodies (an index into `v` can
+  fail when `v` is shorter, so they are not TOTAL), and the three claim range-iterator bodies.
+  Two pieces of evidence support each one:
+  1. A mechanical screen (NPH_loops_update.py, output NPH_LOOPS_SCREEN.json). It finds that
+     the body's only overflow-checked binding is one `x + 1#usize`. The screen is textual.
+  2. A Lean lemma `<name>_step`. It proves that increment safe under the guard as the body
+     writes it.
+
+  For the range-iterator bodies, the guard is the `some point` result of IteratorRange.next.
+  `NHI_RangeProgress.some_next`, which is in the replayed closure, gives `point < iter.end`.
+  semantic_initial_and_absorption has a different increment, `poseidon2.RATE + 1`. It is the
+  constant 9 (`semantic_initial_rate_succ_ok`).
+
+  The reasoning matches fibre_point. Indexing, update, comparisons and `&&` are not overflow
+  checks: bounds checks stay on in both profiles, so the two semantics agree on them.
+  Callees are separate cone definitions with their own R22 judgment. So when the callees
+  agree, the checked and wrapping executions of the body coincide.
+
+**Counts now (225 checked or mixed definitions):**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 (64 checked, 3 mixed) |
+| DIRECT (c) | 26 |
+| domain lemma proved, caller join open | 31 (28 checked, 3 mixed) |
+| precondition proved from the callers (b) | 0 |
+| open | 101 (99 checked, 2 mixed) |
+
+The checked and mixed definitions touch 396 CLOSED rows. 365 of them still depend on at least
+one open or domain-only definition, and 31 are served only by TOTAL or DIRECT definitions. The
+row gain is small because the field kernels (31 domain-only definitions, up to 186 rows
+each) and the accumulator families lie under almost every row.
+
+The `counts_by_class` block in NPH_R22_CONE.json had been left at the L009 values. It is now
+recomputed from the per-definition judgments.
+
+The eight definitions outside both top cones are unchanged in membership. Their judgments now
+stand as follows.
+- NCV_Reference valid_sequences_loop.body and zero_sequences_loop.body: TOTAL (this batch).
+- AspisR1BatchedWeightsExtraction BatchedWeights.push and push_loop.body: open.
+- S8Kani2MutableExtraction BatchedWeights.push and push_loop.body: open.
+- AspisR1FinishRelationCurrent.verifier.finish_relation_round: open.
+- NDH_TranscriptReference.absorb_ref: open.
+
+Next: items (i)–(iii) of the separate limb ≤ P invariant (lead decision of section 8).
+
+Target not yet established.

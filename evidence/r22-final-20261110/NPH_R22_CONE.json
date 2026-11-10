@@ -9,22 +9,24 @@
  "rows_input": "evidence/prov-p6r-20261110/PCXD_ROW_TABLES.json (row_to_module_to_definitions and row_to_module_to_reached_names, inverted)",
  "rule": "Every judgment is made at 4bb3b3f on the gate body in the L187 replayed closure. No 2021 judgment is carried over (carried_over_from_2021=false everywhere); the 2021 family judgment is informational. frozen_file_changed is by Rust file blob between b2727acd and 4bb3b3f; changed files (fast_dots.rs, fast_pairing.rs, weights.rs, r1_wire.rs, r1_pool_adapter.rs, pair_forest_*.rs, poseidon2.rs) are re-judged here, never inherited. The gate-body-to-4bb3b3f link is the definition provenance status (Stream C P6), not this packet.",
  "counts_checked_and_mixed": {
-  "TOTAL_PROVED": 62,
-  "OPEN": 131,
+  "TOTAL_PROVED": 67,
+  "OPEN": 101,
   "DOMAIN_LEMMA_PROVED": 31,
-  "DIRECT": 1
+  "DIRECT": 26
  },
  "counts_by_class": {
-  "CHECKED/TOTAL_PROVED": 57,
-  "CHECKED/OPEN": 132,
+  "CHECKED/TOTAL_PROVED": 64,
+  "CHECKED/OPEN": 99,
   "CHECKED/DOMAIN_LEMMA_PROVED": 28,
-  "MIXED/OPEN": 5,
-  "MIXED/TOTAL_PROVED": 3
+  "CHECKED/DIRECT": 26,
+  "MIXED/DOMAIN_LEMMA_PROVED": 3,
+  "MIXED/TOTAL_PROVED": 3,
+  "MIXED/OPEN": 2
  },
  "rows": {
   "touched_by_checked_or_mixed": 396,
-  "with_at_least_one_open_or_domain_only_definition": 370,
-  "served_only_by_TOTAL_or_DIRECT_definitions": 26
+  "with_at_least_one_open_or_domain_only_definition": 365,
+  "served_only_by_TOTAL_or_DIRECT_definitions": 31
  },
  "screen_note": "existing_closure_statements_screen lists closure theorems whose statement names the exact definition next to an ok/spec conclusion; labels are a textual screen (NPH_existing_host.py), not certified judgments, except where nph_judgment cites them.",
  "definitions": [
@@ -4007,8 +4009,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (i < 8#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.low_base_p_digits_loop1_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "AspisR1Post25Sampler.Funs",
@@ -5287,8 +5294,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "TOTAL for the 2021 fixed-block sampler (sample_total); these loop bodies were not audited",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "sampler digit/division loop counters and limb arithmetic: needs the loop index and canonical-limb invariant of the caller (2021 sample_total covers a different fixed-block sampler)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (i < 4#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.qm31_digits_loop1_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "AspisR1Qm31SamplerIndex.Funs",
@@ -7134,8 +7146,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "not analysed in NPH_ budget"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (index < 28#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.semantic_boundary_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "AspisR1SemanticCallExtraction.Funs",
@@ -8604,8 +8621,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (some point from IteratorRange.next (point < iter.end by NHI_RangeProgress.some_next)); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.prepared_claim_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "CurrentCompactCallerModelV1",
@@ -8700,8 +8722,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (j < Slice.len weights); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.finish_query_dot_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "FinishCandidateExplicitOps",
@@ -9126,14 +9153,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "Merkle multiproof frontier/sort arithmetic: needs live-prefix sorting, w<=i<n<=16 and level induction (2021 Kani body checks are single-step)",
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (not (at1 >= n)); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "sorted_batch",
      "file": "MultiproofConeLiveFold.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.sort_rows_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -9326,8 +9358,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)"
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncv_eq_digest_loop_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "NCV_Reference.Funs",
@@ -9359,14 +9396,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (i < Slice.len b); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "terminal",
      "file": "NCV_EqualStep.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncv_equal_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -9399,9 +9441,14 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
-   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "open_reason": null,
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)",
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncv_valid_sequences_loop_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "NCV_Reference.Funs",
@@ -9548,14 +9595,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "terminal",
      "file": "NCV_ZeroStep.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncv_zero_loop_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -9588,9 +9640,14 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
-   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)"
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "open_reason": null,
+   "served_by": "CLOSED rows only, not by the headline (absent from both deployed_splitB and deployed_charge raw cones)",
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncv_zero_sequences_loop_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "NCX_Reference.Funs",
@@ -9631,14 +9688,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (i < Slice.len b); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "terminal",
      "file": "NHY_EqualStep.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncx_equal_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -9794,14 +9856,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "loop index i < len on a fixed-length array; totality expected for every input once Array/Slice length lemmas are applied (not yet written)",
+   "nph_judgment": "TOTAL_PROVED (a): checked body returns ok on every input (guarded i + 1 via usize_succ_ok; in-bounds index)",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "terminal",
      "file": "NHY_ZeroStep.lean",
      "screen": "TOTAL_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.ncx_zero_loop_body_total",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -13660,14 +13727,19 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered",
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (lane < poseidon2.POSEIDON2_WIDTH); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
    "existing_closure_statements_screen": [
     {
      "theorem": "source_success",
      "file": "RPv_FJh_InternalAccumulatorModel.lean",
      "screen": "DOMAIN_SCREEN"
     }
+   ],
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.internal_linear_lazy_loop0_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
    ]
   },
   {
@@ -13897,8 +13969,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (output < 4#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.external_local_packed_raw_loop0_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native05",
@@ -13953,8 +14030,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (limb < 4#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.external_local_packed_raw_loop0_loop0_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native05",
@@ -14011,8 +14093,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (lane < poseidon2.POSEIDON2_WIDTH); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.interpolate_three_constant_columns_loop_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native05",
@@ -14172,8 +14259,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (index < poseidon2.POSEIDON2_WIDTH); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.external_linear_lazy_loop1_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native07",
@@ -14677,8 +14769,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (index < 10#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.add_value_lanes_loop0_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native09",
@@ -14884,8 +14981,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (none (constant poseidon2.RATE + 1 = 9)); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.semantic_initial_rate_succ_ok",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native11",
@@ -15033,8 +15135,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (block < 64#usize); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.active_literal_loop_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native13",
@@ -15086,8 +15193,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (limb < poseidon2.POSEIDON2_WIDTH); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.pattern_values_literal_loop0_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native13",
@@ -15139,8 +15251,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (pattern_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.pattern_values_literal_loop1_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native13",
@@ -15345,8 +15462,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (link_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.evaluate_with_selectors_loop_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPu_FIq_Native14",
@@ -15441,8 +15563,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": false,
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "Poseidon/pair-forest lane or dot loop: needs loop-index bounds and canonical (or <= P) limb invariant for its lanes; field kernels it calls are covered"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (index < Slice.len (Array.to_slice left)); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.equality_value_loop_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPv_ArrayFromFnCopySlice",
@@ -15496,8 +15623,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (i < N); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops2.array_from_fn_copy_loop_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "RPv_PoseidonPreparedSum3Source",
@@ -16024,8 +16156,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (some point from IteratorRange.next); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.borrowed_abi_owned_claim_loops_loop0_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "S1ClaimOwnedNestedModelV1",
@@ -16052,8 +16189,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (some point from IteratorRange.next); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.owned_claim_loops_loop0_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "S1NativeCompactModelV1",
@@ -16363,8 +16505,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
-   "open_reason": "byte-offset/cursor/index arithmetic: needs the buffer length, cursor sequencing or index bound the caller establishes (2021 R22Stage2ReaderTotal/R22DecodeLoopTotal are unwrap- or bound-parametric)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (chunk < count); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_DOMAIN_NOT_COMPOSED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.values_owned_reference_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "S8Kani2MutableSource",
@@ -16638,8 +16785,13 @@
    "frozen_file_changed_b2727acd_to_4bb3b3f": "UNMAPPED (probe/cut crate path; function identity is the provenance row)",
    "r22_total_2021_family_judgment": "none (not in the 2021 146-statement audit)",
    "carried_over_from_2021": false,
-   "nph_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
-   "open_reason": "accumulator/cadence arithmetic: needs canonical operands, term/phase count and once-per-row traversal from the callers (2021 Kani/Lean local bounds exist, conditional)"
+   "nph_judgment": "DIRECT (c): its only overflow-checked operation (body screen NPH_LOOPS_SCREEN.json) is one `+ 1#usize`, proved safe under the guard the body states (index < Vec.len weights); indexing, update, comparisons and && are not overflow-checks (bounds checks are on in both profiles), and callees are separate cone definitions with their own R22 judgment, so checked and wrapping executions of the body coincide given agreeing callees",
+   "open_reason": null,
+   "previous_judgment": "OPEN: CALLER_INVARIANT_NOT_CHARACTERISED",
+   "nph_theorems": [
+    "AspisR1.NPH_R22Loops3.finish_owned_loop_body_step",
+    "AspisR1.NPH_R22Loops.usize_succ_ok"
+   ]
   },
   {
    "module": "SelectedWideViewFunsV1",
@@ -17755,5 +17907,5 @@
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push",
   "S8Kani2MutableExtraction.batched_weights.BatchedWeights.push_loop.body"
  ],
- "revision_note": "updated after NPH_L015 (NPH_R22Loops): both digest_is_canonical loop bodies TOTAL"
+ "revision_note": "updated after NPH_L017 (NPH_R22Loops2, NPH_R22Loops3): item (4) complete, 5 more TOTAL and 25 more DIRECT single-increment bodies"
 }
