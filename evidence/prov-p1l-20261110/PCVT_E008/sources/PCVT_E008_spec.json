@@ -1,0 +1,90 @@
+{
+ "run": "PCVT_E008",
+ "spec_id": "PCVT_E008",
+ "charon_command": [
+  "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "cargo",
+  "--preset",
+  "aeneas",
+  "--mir",
+  "built",
+  "--sysroot",
+  "default",
+  "--include",
+  "core::option::Option",
+  "--include",
+  "core::result::Result",
+  "--include",
+  "core::option::_::ok_or",
+  "--start-from",
+  "crate::state_only_semantic::state_only_copy_helper_sum",
+  "--start-from",
+  "crate::constraints_v4::sparse_eq_weights",
+  "--start-from",
+  "crate::state_only_poseidon::internal_linear_lazy",
+  "--start-from",
+  "crate::state_only_poseidon::external_linear_lazy",
+  "--dest-file",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_stable/stmtA.llbc",
+  "--",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_workspace/crates/aspis-statement/Cargo.toml",
+  "--locked",
+  "--offline",
+  "--release",
+  "--lib",
+  "--jobs",
+  "1",
+  "--features",
+  "r0,pool-v1-kernel"
+ ],
+ "aeneas_command": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-diagnose-translation",
+  "-sequential",
+  "-no-progress-bar",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCVT_stmB",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_E008_emitted/raw",
+  "-subdir",
+  "PCVT_stmB",
+  "-split-files",
+  "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_E008_emitted/repro.llbc"
+ ],
+ "aeneas_tool": "original",
+ "opacity": [],
+ "configuration": {
+  "roots": [
+   "crate::state_only_semantic::state_only_copy_helper_sum",
+   "crate::constraints_v4::sparse_eq_weights",
+   "crate::state_only_poseidon::internal_linear_lazy",
+   "crate::state_only_poseidon::external_linear_lazy"
+  ],
+  "namespace": [
+   "PCVT_stmB"
+  ],
+  "features": [
+   "r0,pool-v1-kernel"
+  ],
+  "opaque": [],
+  "manifest": "crates/aspis-statement/Cargo.toml"
+ },
+ "features_override": "prover,r1p-check,private-leaf-salts",
+ "llbc_stable": "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_stable/stmtA.llbc",
+ "expected_limits": {
+  "memory.high": "3221225472",
+  "memory.max": "4294967296",
+  "memory.swap.max": "0",
+  "pids.max": "64"
+ },
+ "extra_env": {
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C overflow-checks=yes"
+ },
+ "configuration_overflow_checks": "ON (CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; -C overflow-checks=yes appended to the stager RUSTFLAGS)",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_source_tree_git_hash": "d461fbc56cec8ba29678d6613fc38e6c795d6a66"
+}

@@ -1,0 +1,56 @@
+{"attempt": "PCVT_E020", "exit_status": 124, "wall_seconds": 180.02256014803424, "peak_rss_kib": "112400", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::trace::value", "--start-from", "crate::sampler::circle_sample", "--start-from", "crate::r1_wire::validate_record_fields", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_stable/probeD.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_workspace/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--off
+...
+       ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: function `tail_samples` is never used
+  --> crates/aspis-r1-cost-probe/src/prover.rs:40:4
+   |
+40 | fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {
+   |    ^^^^^^^^^^^^
+
+warning: fields `challenges` and `state_before_z0` are never read
+  --> crates/aspis-r1-cost-probe/src/host_semantic.rs:19:13
+   |
+16 |     pub struct BuiltSemantics<H: Digest32> {
+   |                -------------- fields in this struct
+...
+19 |         pub challenges: Challenges,
+   |             ^^^^^^^^^^
+...
+23 |         pub state_before_z0: [u8; 32],
+   |             ^^^^^^^^^^^^^^^
+
+warning: function `build` is never used
+   --> crates/aspis-r1-cost-probe/src/host_semantic.rs:207:8
+    |
+207 | pub fn build<H: Digest32>(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,mask_only:&[Vec<M31>;10],d:&[QM31;1024]...
+    |        ^^^^^
+
+warning: field `messages` is never read
+   --> crates/aspis-r1-cost-probe/src/host_commitment.rs:102:5
+    |
+ 99 | pub struct Commitment {
+    |            ---------- field in this struct
+...
+102 |     messages: Vec<Message<E>>,
+    |     ^^^^^^^^
+
+warning: method `matches` is never used
+   --> crates/aspis-r1-cost-probe/src/host_commitment.rs:223:8
+    |
+127 | impl Commitment {
+    | --------------- method in this implementation
+...
+223 |     fn matches(&self, messages: &[Message<E>]) -> bool {
+    |        ^^^^^^^
+
+warning: `aspis-statement` (lib) generated 102 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+warning: `aspis-prover` (lib) generated 29 warnings
+
+Running as unit: run-ra3d0e6f3c2d441408d4671439ac82884.scope; invocation ID: c5c5fce726c44d4988771dba4dfb92fe

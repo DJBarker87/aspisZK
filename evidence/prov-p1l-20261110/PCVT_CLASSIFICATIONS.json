@@ -1,0 +1,55 @@
+{
+ "schema": "PCVT_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "C1",
+   "topic": "feature sets",
+   "decision": "cost-probe prover,r1p-check,private-leaf-salts; aspis-core r0; aspis-statement r0,pool-v1-kernel (as PCVR C1). The 18 soundness-match emissions (PCQE/PCQG) used other feature sets (aspis-statement r0,pool-v1-kernel plus audit features; cost-probe private-leaf-salts,optimized-terminal,program-build), so the 18 existing constants correspond to those feature sets, not the devnet client's; recorded in PCVT_SOUNDNESS_MATCH.json emission_runs.features."
+  },
+  {
+   "id": "C2",
+   "topic": "diagnostic runs without -abort-on-error",
+   "decision": "PCVT_E001, E005-E012, E017-E020 used NOABORT (spec only) to see every failing body in one scope; never used as an emission. Emission credit only for abort-mode exit-0 runs E002 and E014."
+  },
+  {
+   "id": "C3",
+   "topic": "controller fix (E003)",
+   "decision": "The stager rewrote a non-cost-probe --opaque selector and asserted before Aeneas. PCVT_extract.py now passes opacity=[] to the stager (as its docstring says); the post-check PCVT_OPAQUE_CHECK.json verifies each selector. Tool fix, not a shape failure."
+  },
+  {
+   "id": "C4",
+   "topic": "Charon --jobs and -Zthreads (E012-E020)",
+   "decision": "The statement crate Charon build took 160-180 s at the pinned --jobs 1 / -Zthreads=1 on the loaded host (E007, E009, E011 timed out). From E012 the specs use --jobs 3 and RUSTFLAGS -Zthreads=4 (E018 tried 6/8 and failed in the linker: thread creation under pids.max 64; E020 4/4). Charon output is expected to be independent of build parallelism (one crate per Charon process, MIR extraction), but equality of llbc across the two settings was NOT checked; E005/E006/E008 (jobs 1) and E012 (jobs 3) agree on the Charon type-error vs clean split only through different root sets. Treat the E012-E016 emissions as pinned to their own PINS."
+  },
+  {
+   "id": "C5",
+   "topic": "warm-up reruns",
+   "decision": "E008 (rerun of E007 args) and E019 (rerun of E017 args) were byte-identical Charon argument reruns after a 180 s kill, permitted by the brief; no workspace-crate reuse was observed (aspis-core and the aux crates were rebuilt each time), so the warm-up gave no gain."
+  },
+  {
+   "id": "C6",
+   "topic": "Aeneas-only scope E010",
+   "decision": "Ran the sha-verified original Aeneas on the llbc from E005 (Charon exit 0, has_errors true) in a capped scope, via a spec flag aeneas_only in PCVT_extract.py. Diagnostic only: Aeneas crashed in translate_fun_sigs; no emission."
+  },
+  {
+   "id": "C7",
+   "topic": "second shape for loop-control failures",
+   "decision": "Six roots fail on Aeneas loop-control limits inside their own body (breaks/continue to outer loops, early returns in loops). Opaquing a callee cannot change that, so no second shape was spent (budget kept for the Charon-dependent items). These are single-shape FAILED verdicts, stated as such."
+  },
+  {
+   "id": "C8",
+   "topic": "row_eq_weight closure",
+   "decision": "The Stream B item row_eq_weight closure call_mut (Nested borrows, extended Aeneas) is emitted inside r0.opening.row_eq_weight by the original Aeneas; no separate closure def."
+  },
+  {
+   "id": "C9",
+   "topic": "trust boundary",
+   "decision": "copy_helper_sum is blocked by the core Iterator model (Iterator::copied trait-impl mismatch in Charon, then an Aeneas internal error on the Iterator trait signature): DEPENDS_ON_LIBRARY_TRUST candidate, not proof work. No trust row added."
+  },
+  {
+   "id": "C10",
+   "topic": "diagnostic outputs removed",
+   "decision": "Aeneas partial output of non-abort diagnostic runs (E001 coreD, E012 stmE) contains sorry for failed bodies; those Lean files were deleted before commit (rule: no committed sorry). Their logs, PINS and NHR_DECLARATIONS remain; the exit-0 emissions E002 and E014 contain no sorry."
+  }
+ ]
+}

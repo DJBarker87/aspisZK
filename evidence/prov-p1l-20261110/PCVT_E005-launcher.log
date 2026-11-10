@@ -1,0 +1,27 @@
+{"attempt": "PCVT_E005", "exit_status": 1, "wall_seconds": 159.19633396808058, "peak_rss_kib": "671268", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::state_only_semantic::state_only_copy_helper_sum", "--start-from", "crate::logup::build_copy_logup_helper", "--start-from", "crate::pool_v1::pair_forest_trace::pool_v1_pair_forest_copy_rows_v1", "--start-from", "crate::logup::compress_tagged_tuple", "--start-from", "crate::pool_v1::pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1", "--start-from", "crate::pool_v1::pair
+...
+ound(2, 0)), missing(TraitClauseBound(2, 1))]::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <A, B, Clause0_Item, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl2<missing(@TypeBound(1, 2))>), TraitClause1: (missing(@TypeBound(1, 1)): @TraitDecl2<missing(@TypeBound(1, 3))>)>
+ --> /rustc/library/core/src/iter/adapters/zip.rs:74:1
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (IterMut<'a, T>: Iterator<&'a T>)
+            got: impl_Iterator_for_IterMut<'a, T>: Iterator<IterMut<'a, T>, &'a mut T>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl20), TraitClause1: (@Adt46<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>: @TraitDecl2<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl58<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <'a, T>
+ --> /rustc/library/core/src/slice/iter/macros.rs:153:9
+
+warning: The extraction generated 3 warnings
+warning: `aspis-statement` (lib) generated 102 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 2m 37s
+{"attempt": "PCVT_E005", "exit": 1, "error": "AssertionError('Charon reported translation errors')"}
+
+Running as unit: run-rb63a8ff65aaf43c0aa007408a4020aff.scope; invocation ID: 1f30a5a552e94a0bb9813b15a7856af1

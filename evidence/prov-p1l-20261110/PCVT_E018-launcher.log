@@ -1,0 +1,30 @@
+{"attempt": "PCVT_E018", "exit_status": 101, "wall_seconds": 5.945403101854026, "peak_rss_kib": "339928", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::trace::value", "--start-from", "crate::sampler::circle_sample", "--start-from", "crate::r1_wire::validate_record_fields", "--dest-file", "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_stable/probeD.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-prov-p1l-20261110/PCVT_workspace/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--off
+...
+out symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf7525a7 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) + 39
+          1  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf752e9d
+          2  libc.so.6                           0x00007c9cd9445330
+          3  libc.so.6                           0x00007c9cd949ec0c pthread_kill + 284
+          4  libc.so.6                           0x00007c9cd944527e gsignal + 30
+          5  libc.so.6                           0x00007c9cd94288ff abort + 223
+          6  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf5e0da5 __gnu_cxx::__verbose_terminate_handler() + 245
+          7  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf5e0506 __cxxabiv1::__terminate(void (*)()) + 6
+          8  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf5e0571
+          9  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf5e06c5
+          10 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf3de3d5 std::__throw_system_error(int) + 129
+          11 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf65f949
+          12 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf6fa66c
+          13 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf6fa0df
+          14 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007c9cdf65f6b0
+          15 libc.so.6                           0x00007c9cd949cb84
+          16 libc.so.6                           0x00007c9cd9529ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+ERROR Code failed to compile
+error: could not compile `aspis-core` (build script) due to 1 previous error
+{"attempt": "PCVT_E018", "exit": 101, "error": null}
+
+Running as unit: run-rac7d6e5447e6434f9e023d36b90f1954.scope; invocation ID: c272629c870142c9a43b25c4968407d0
