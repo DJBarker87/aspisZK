@@ -1,6 +1,5 @@
 -- PCXF audit module PCXF_AUD_L1 (tx2 chain PCVN/PCVQ/PCVS): imports the credited modules by reference, then one audit pass over every constant whose name contains one of: "PCVN_", "PCVQ_", "PCVS_"
 import Aeneas
-import Lean
 import PRVEq_Tx2Deployed_n0
 import PRVEq_Op2_p5
 import PRVEq_Op13_p1

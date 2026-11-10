@@ -6,7 +6,7 @@ DEF=PCXF_audit_def.lean.in
 mk() { # name label infixes imports...
   local name=$1 label=$2 infix=$3; shift 3
   { echo "-- PCXF audit module $name ($label): imports the credited modules by reference, then one audit pass over every constant whose name contains one of: $infix"
-    echo "import Aeneas"; echo "import Lean"
+    echo "import Aeneas"
     for m in "$@"; do echo "import $m"; done
     cat $DEF
     local pred="fun n => let s := n.toString; [$infix].any (fun k => (s.splitOn k).length > 1)"

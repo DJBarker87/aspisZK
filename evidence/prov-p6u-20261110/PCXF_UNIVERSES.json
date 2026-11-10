@@ -1,0 +1,51 @@
+{
+ "schema": "PCXF_UNIVERSES/1",
+ "target_established": false,
+ "finding": "The ledger30 chain (645 directories, PCXF_ROOT) and the L187 replay closure (final/objs, objs, base_ref) are two module universes. They hold different objects under the same module name, so one root module cannot import both without a silent version mix: Lean does not check an imported object against the version its importers were compiled with.",
+ "host_probe": "ssh sha256 of <module>.olean over the NNN_PATHS chain and the L187 directories, 2026-11-10 (PCXF session)",
+ "same_name_different_object": [
+  {
+   "module": "NHT_Constants",
+   "ledger30_chain_sha256_12": "845540b82bf9",
+   "l187_objs_sha256_12": "1703ca3ffd3c"
+  },
+  {
+   "module": "CurrentCompactCallerModelV1",
+   "ledger30_chain_sha256_12": "e3fc15a43317",
+   "l187_objs_sha256_12": "efabe1a49f02",
+   "sound_int2_objects_sha256_12": "b6a752a92586"
+  },
+  {
+   "module": "PRVEq_AdapterStage1_o1",
+   "pcvp_exports_sha256_12": "8961ecb8d8",
+   "pcvo_exports_sha256_12": "27bd8fe83b",
+   "note": "identical source text (PRVEq text copy of k4), different object bytes"
+  },
+  {
+   "module": "PRVEq_AdapterStage2_o1",
+   "pcvp_exports_sha256_12": "f3130deb13",
+   "pcvo_exports_sha256_12": "09e22eb2f5"
+  }
+ ],
+ "same_name_same_object": [
+  "RPz7_DrvI_Installation 825a2ca4f7bd",
+  "NJC_ClosedCalls 853ee0491ed4",
+  "NHV_ReleaseOps 613d9ea31412",
+  "NHT_Tx2CommonModel 9a6dac7d8eb0",
+  "Tx2N_Powers 9f8e67d463c4",
+  "PRVEq_CallerPrepTx1_o1 9ff673f185"
+ ],
+ "only_in_l187_objs": [
+  "NNH_HostSeed",
+  "NNH_Tx2SourceConfiguration",
+  "NOC_Run5bHost",
+  "NOC_PrepareFront"
+ ],
+ "base_modules_clash": "PRVEq_AdapterStage1_o1, PRVEq_AdapterStage2_o1, PRVEq_CallerPrepTx1_o1 cannot be imported together (tacticDelta_matchers and PRVEq_* helper theorems are declared in each; PCVO_STATUS name_clash), so the three NOC deployed modules need three audit modules.",
+ "consequence": "PRVCmb_ROOT (ledger30 chain, bundles C01..C22, one root) covers every credited file whose proof compiles in the ledger30 universe. The deployed-top-body files (P3n, P3q, P3r in the L187 closure universe; P3p in the L187-objs-over-ledger30 universe) are audited by four by-reference audit modules (PCXF_AUD_L1, L2A, L2B, L2C). That is two roots plus three, not the one combined import the brief asks for; the reason is the universe mismatch, not a failed proof.",
+ "chains": {
+  "L1": "PCXF_LP_L1.json (PCVS_exports, PCVQ, PCVN, PCVL, PCVK, L187 final/objs, objs, base_ref, PCVH)",
+  "L2": "PCXF_LP_L2.json (PCVP_exports, PCVO_exports, L187 objs, ledger30 chain)"
+ },
+ "p3m_note": "PRVEq_Tx2Deployed_m1 (P3m, gate chain) is the same text as PRVEq_Tx2Deployed_n0, recompiled and audited in the L187 universe (PCVN_L001, PCXF_L004)."
+}

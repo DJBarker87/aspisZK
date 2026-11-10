@@ -1,6 +1,5 @@
 -- PCXF audit module PCXF_AUD_L2A (stage1 NOC PCVP): imports the credited modules by reference, then one audit pass over every constant whose name contains one of: "PCVP_"
 import Aeneas
-import Lean
 import PRVEq_AdapterStage1DeployedNOC_o1
 import PRVEq_NocStage1Compose_o1
 section PRVCmbAuditDef
