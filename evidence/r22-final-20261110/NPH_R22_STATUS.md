@@ -491,3 +491,181 @@ Next concrete deliverables, in order:
    the decoder and installer lemmas.
 
 Target not yet established.
+
+## 11. R65/R66 reach path and step-2 W-lemmas (continuation worker, 2026-11-10)
+
+Three scopes were used, L023–L025, all accepted on the first attempt (3 of this worker's 38).
+Peak RSS was 6,863,864 KiB (L025) and swap was 0. All 83 `#print axioms` lines are within
+[propext, Classical.choice, Quot.sound]. The lead decision holds: no ops interface and no
+merged module is changed.
+
+**Step 1: how the R65/R66 kernels are reached.** A textual screen over the L187 closure
+sources (NPH_r6x_scan.py, output NPH_R6X_REFERRERS.json) lists every declaration whose body
+names AspisR65Field/AspisR66Field `field.M31.add/sub/neg`. There are 23 referrers. The 13
+reached ones are all theorems: the definitional transport lemmas
+AspisV8R19.SamplerClosureCircleScalarTransport.add_eq/sub_eq/neg_eq
+(`AspisR72Sampler.field.M31.op = AspisR66Field.field.M31.op`, by simp on the two bodies),
+AspisV8R19.QuarticBaseExecution.add_eq/neg_eq (R66 = R65) and the R19
+add_encode/add_success/neg_encode/sub_encode lemmas. The 10 definition referrers
+(R65/R66 CM31.inv_with, CM31.sub/neg/mul, M31.double, mul_by_r) are not in the REACHABLE
+list. So no reached definition body executes an R65 or R66 kernel. They are in the cone as
+proof-level references for the AspisR72Sampler kernels, which are pointwise equal to them.
+Their execution sites are therefore the R72 sites, and their caller join is the R72 join.
+The path is recorded as `reach_path` on the five definitions in NPH_R22_CONE.json. Their
+judgment stays domain-only. Deciding whether a proof-only reference needs any R22
+judgment at all is left to the lead. The screen is textual, not a Lean-level constant walk.
+
+**Step 2: W-lemmas (W x := x.val ≤ P).**
+- NPH_R22Callbacks (L023, 23 statements).
+  - The CW tower above QM31 (WideExact add/sub/mul, mul_u, and M31/CM31/QM31/WideExact
+    mul_m31) maps W inputs to an ok W output. mul_m31 does this for any M31 operand, since
+    the operand goes through `% P` or M31.mul, which is total.
+  - The query callbacks: op2 SAQ_Arithmetic.add and op9 mulK; op3 SAQ_MixedSource.mulE
+    (W wide operand, any power, since canonicalQ reduces it); op1 fromK and op10 fromM;
+    op16 SAQ_LineQuery.line and op17 FIp_CircleQuery.circle (W alpha and values, any
+    inverse array, ok W). op21 SAQ_Decoder.read is a producer: every successful output has
+    all eight limbs < P (ExtractedRecordByteCanonicality.slice_success).
+- NPH_R22Towers (L024, 48 statements). These are the SM, SC, FIq and R72 tower lemmas in the
+  NPH_R22Producers pattern: M31 mul/double/neg; CM31 add/sub/neg/double/new/mul_m31/square
+  (the weak Karatsuba bound (2P)^2 < 2^64; for R72 through r23_product_u32_bounded);
+  mul_by_r; and QM31 add/sub/mul/mul_m31/square. Not covered: R72 QM31.mul, whose first
+  step r24_canonical_mul is OPEN (NO_FROZEN_COUNTERPART), and the FIq prepared-multiplier
+  family.
+- NPH_R22Callbacks2 (L025, 12 statements).
+  - fibre_point under the installed R17 CM31 operations: for every fibre index, either the
+    checked body is ok with both coordinates W, or the TABLE_B index `index >>> 9` is
+    ≥ 512. That is an out-of-bounds read, bounds-checked in both profiles. The table entries
+    are < P by NEA_TableCanonical.readA/readB, which is in the cone.
+  - The same disjunction gives geometry op15 SAQ_Geometry.point and op14 SAQ_Geometry.line
+    (line_node with the R17 M31 operations).
+  - NFN_NEW_GeometryContextGeneric.replace preserves the GeometryM31W record whenever the
+    installed sub/double preserve W.
+  - The conversion glue (NNU_QueryFieldBase.toQM, CurrentWideBaseBridge toQM, the
+    RawExtractedSemanticCallOpsV20 resultMap and its genQ/probeC copies) copies limbs
+    unchanged, so W transfers.
+
+Not covered by step 2:
+- op14 push (S7Kani2OwnedPush.push_owned);
+- op20 dots, whose output canonicality is proved in FIp_DotsOutputCanonical.all, but that
+  module is outside the L187 closure and is not imported;
+- op11 opening, op12/op13 index and op18 forQuery (no field arithmetic, or values that feed
+  only the M31.mul of line/circle, which is total);
+- producer lemmas for the samplers (their digit and div loops are OPEN).
+
+**Counts: unchanged.** Step 2 proves interface lemmas only. No kernel's precondition is yet
+established at its reached call sites, so no definition moves.
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 30 |
+| precondition proved from the callers (b) | 0 |
+| open | 101 |
+
+Rows: 365 of 396 still depend on at least one open or domain-only definition.
+
+Target not yet established.
+
+## 12. Step 3: call-site joins on the tx1 (094) query path (continuation worker, 2026-11-10)
+
+Three more scopes were used, L026–L028, for 6 of this worker's 38. L026 failed because
+alpha_sites lost the read value after `cases` on an ok-equality. The script was changed to
+`subst`. L027 and L028 were accepted. Peak RSS was 6,868,148 KiB and swap was 0. All 16
+accepted `#print axioms` lines are within [propext, Classical.choice, Quot.sound].
+
+**Which dictionary 094 actually runs.** The tx1 query loop executes
+Port3_NativeQueryBody.verifier.candidate.query_values on two dictionaries:
+- Dcon = NFS_QueryOps.installed NJJ_QueryOps.concrete;
+- Dsel = NFS_QueryOps.installed (select LIBC_QueryOps.seed).
+
+The two agree on reached steps (NOC_QueryLink.values_eq). `installed` replaces op2/op3/op9
+with NBO_FieldSemantics.add/product/power (the SelectedMaskProbe QM31 tower) and op4–op8
+with NBF_BasisInstall (QA M31 sub, mul and add x x). So the SAQ_Arithmetic/MixedSource
+callbacks of section 11 are not the ones 094 runs at op2/op3/op9. The CurrentWide tower
+enters 094 through op16 line and op17 circle.
+
+The input packet NFS_PacketRoot.Domain carries canonicality for alpha[0] and alpha[1], the
+inverses, line_z, the dots inputs g, and the accumulator rhs, power and rho. At 094 it is
+produced by NOC_QueryDomain.domain on the 57607-byte proof.
+
+**NPH_R22Join094 (L027) and NPH_R22Join094Step (L028).** Sites discharged; each kernel call
+there is ok with canonical or W output:
+- Node sites, for every input: in query_values, `op7 z z; op8; op5; op6 · one`; in
+  accumulate_batched_with_node_loop0.body, the same with m = op5 = 1. These are the QA
+  M31.mul, M31.add (doubling) and M31.sub calls. They hold for every input because the
+  arguments are fresh mul outputs (< P) and the constant 1.
+- Line and circle sites: op16 on alpha[1] and op17 on alpha[0]. Both alphas come from the
+  Domain (alpha_sites). Every CurrentWide kernel call inside line/circle receives W
+  arguments, and the outputs are canonical.
+- Accumulate tail sites: op3/op2/op9 = NBO product/add/power on the Domain rhs/power/rho and
+  on a WideCanonical value. This covers every SelectedMaskProbe QM31/CM31/M31 call inside
+  them, through the existing NBO_FieldSemantics *_total lemmas.
+- `query_step_sites` composes the step. The op21 opening values are canonical
+  (NFS_CallerDomains.fields) and the op20 dots are canonical (NFS_CallerDomains.dots). From
+  them, the circle and line calls are ok. The line output is WideCanonical
+  (NFS_AccumDomain.line), so the three tail calls are ok. All of this rests on the packet
+  Domain alone.
+
+**Every other reached site: not composed.** NPH_sites_scan.py (output NPH_SITES.json) is a
+textual screen. It lists every reached definition outside a family's own namespace whose body
+calls a function of that family:
+
+| Family | Executing sites | Covered here | Uncovered (examples) |
+|---|---:|---:|---|
+| CW | 6 | 3 | FIn_Polynomial.mul, FIn_Primitives.add, SAG_StageScale.mulM |
+| QA | 40 | 9 | the SAF_/SAP_ Outcome families, Port4C_InverseExecution, SAQ_Inverse.source, NFN geometry prefix/polynomial, S7Kani2PrefixLoop, AspisR1CurrentWideMul tower |
+| SM | 10 | 3 | FIp_SemanticArithmetic add/mul, NJB_PackLaw.reference, ExtractedMaskQmPackBase4 |
+| FIq | 53 | 0 | the NJL_/NJX_/NKI_ Merkle and absorption references, FJe_Sum3 bridges, FIv_FoldsTotal.body |
+| SC | 0 | 0 | none outside its namespace (the callers are inside AspisR1SemanticCallExtraction.r1_semantic) |
+| R72 | 0 | 0 | none outside its namespace (the callers are the sampler bodies) |
+
+Callers inside a family's own namespace are not in this list and are also open, for example
+SM state_only_hiding, FIq pool_v1/state_only_poseidon and the R72 sampler. So no kernel has
+its precondition established at every reached site, and no definition moves to (b).
+NPH_R22_CONE.json records, per domain-only kernel, the sites discharged and the uncovered
+sites (`caller_join_progress`).
+
+**The NHV_NEB_FieldDomains canonC/canonQ/canonE discharge was not done, and it would not
+change the R22 counts.**
+- NEB_FieldDomains (module NHV_NEB_FieldDomains) is not in any L187 replay REACHABLE list:
+  not deployed_splitB, deployed_charge, NNH8_DeployedOuter or fail_sub_rec. It is the root
+  of the separately replayed rows TX1:001/TX2:001 (NKT_ROOT_REACHABILITY.json).
+- Its kernels are the FIo_Native M31/CM31 copies. FIo_Native.aspis_core.field.reduce_u64 is
+  WRAPPING in the cone, and the FIo_Native add/sub/mul are not among the 225 checked or mixed
+  definitions (PCXD_R22_SPLIT).
+- So discharging canonC at FIo_Native call sites would discharge a premise of those
+  functional rows. It does not move any R22 judgment.
+
+No such instance theorem was stated. The 094 joins above discharge the analogous canonicality
+for the checked tower copies that 094 actually executes.
+
+**Counts (225 checked or mixed definitions): unchanged.**
+
+| Judgment | Definitions |
+|---|---:|
+| TOTAL (a) | 67 |
+| DIRECT (c) | 27 |
+| domain lemma proved, caller join open | 30 |
+| precondition proved from the callers (b) | 0 |
+| open | 101 |
+
+Rows: 365 of 396 still depend on at least one open or domain-only definition, and 31 are
+served only by TOTAL or DIRECT definitions.
+
+No reachable input on which the wrapping binary accepts and the checked model rejects was
+found. No site was found where the limb bound cannot come from a producer: every 094
+query-path value traced here starts at a strict decoder, a canonical table, the Domain, or a
+fresh M31.mul output.
+
+**Not reached in this run (scope budget unused: 32 of 38).** These are the 345 body, the
+tx2 common body (NOF_CommonConverse), and the uncovered sites above. The next deliverables,
+in order:
+1. Site joins for the remaining CW sites (FIn_Polynomial.mul, FIn_Primitives.add,
+   SAG_StageScale.mulM) and the remaining SM sites. With these, CW and SM are the closest to
+   (b).
+2. The QA SAF_/SAP_ Outcome families and the inverse executions.
+3. The in-namespace callers (state_only_hiding, pool_v1, the samplers).
+4. The FIq Merkle/absorption family, which has the largest site count.
+
+Target not yet established.
