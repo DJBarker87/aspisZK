@@ -1,0 +1,53 @@
+{
+ "schema": "PCWL_CLASSIFICATIONS/1",
+ "items": [
+  {
+   "id": "C1",
+   "subject": "AspisR1AdapterReconstruct.Types and CurrentCompactCallerTypesV1 inductive/structure types",
+   "classification": "TYPES; was TEXT_IDENTICAL_ONLY / TEXT_ONLY_NOT_COMPARED",
+   "reason": "generator limits (multi-line constructors, constructor arguments that are earlier same-file types, parametric structures, Array/Vec/Slice/Option fields, guillemet field names); fixed in PCWL_gen_equalities.py changes 1 to 4; the claim is an Equiv between the fresh and gate types, proved by cases/rfl or simp"
+  },
+  {
+   "id": "C2",
+   "subject": "types of PCWL_E001 fresh Funs text",
+   "classification": "types by name resolution to the gate namespace",
+   "reason": "established convention of all Funs equalities: fresh Funs text is placed in the gate namespace so its type names resolve to the gate types; the type isomorphisms are separate items (AdapterRwTypes is not in this batch)"
+  },
+  {
+   "id": "C3",
+   "subject": "CurrentClaimSumModel types WideExact and Challenges",
+   "classification": "encoding difference (crate path), name map",
+   "reason": "the gate module is a cut of the archived crate aspis_r1_verify_prepared_prefix where WideExact lives at aspis_core.field.WideExact and Challenges at r1_wire.Challenges; the frozen crate has aspis_core.field.wide_exact.WideExact and aspis_core.state_only_prefix.r0.Challenges; fields identical, Equiv proved"
+  },
+  {
+   "id": "C4",
+   "subject": "AdapterRwModel.owned.require_zero",
+   "classification": "source difference with proved extensional equality",
+   "reason": "gate index loop vs frozen slice loop; not an encoding difference, so reported first; equality proved for every slice"
+  },
+  {
+   "id": "C5",
+   "subject": "readonly_meta_ok, require_readonly_account",
+   "classification": "CONDITIONAL_ON_BINDING",
+   "reason": "parametric over Ops; fresh external Pubkey eq bound to ops.op36"
+  },
+  {
+   "id": "C6",
+   "subject": "compiled AdapterRwModel vs repository source",
+   "classification": "provenance discrepancy reported to the lead",
+   "reason": "the compiled gate (L187 objects) has Pubkey PartialEq with eq := ops.op36 and ne := PartialEq.ne.default; the repository source with sha 11679ad2 (evidence/adapter-rw-20261023/lean-024 and the generator inputs) has eq := ops.op38 and ne := trait_default; so the compiled module is not that source text (the statements here are against the compiled constants)"
+  },
+  {
+   "id": "C7",
+   "subject": "S1ClaimBorrowedAbiNativeV1, S1ClaimOwnedNestedModelV1, CurrentClaimSumModel loop items",
+   "classification": "CANNOT_EXTRACT (frozen prepared_claim) / NO_FROZEN_COUNTERPART for the owned_* names",
+   "reason": "see PCWL_REMAINING.json"
+  },
+  {
+   "id": "C8",
+   "subject": "extended-Aeneas emission PCVJ_E002 used for types",
+   "classification": "tool identity recorded",
+   "reason": "the declaration text of types does not depend on the loop translation; not re-emitted with the original tool (the original tool cannot translate the nested-loop returns of tx1 in the same crate, an Aeneas-only rerun was not spent)"
+  }
+ ]
+}
