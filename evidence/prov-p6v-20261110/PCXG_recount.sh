@@ -16,6 +16,7 @@ ok = {};
 for e in att:
     if e.get('event') == 'result':
         for s in e['steps']: ok[s['module']] = ok.get(s['module'], False) or s['exit_status'] == 0
+ok['PRVCmb_C18'] = all(ok.get(x, False) for x in ('PRVCmb_C18A', 'PRVCmb_C18B', 'PRVCmb_C18C', 'PRVCmb_C18D'))  # C18 compiled as four parts after the 180 s timeout (PCXG_L012)
 notfound = {(x['module'], x['definition']) for x in A['credited_not_found']}
 tag = {}
 for r in RN['records']:

@@ -1,0 +1,62 @@
+{
+ "schema": "PCXG_TOOLS/1",
+ "rerun_order": "bash PCXG_chain_bundles.sh; bash PCXG_chain_deployed.sh; bash run_scope.sh PCXG_L019 PRVCmb_L187_ROOT is retired (import clash); bash PCXG_chain_root.sh; bash PCXG_audit.sh PCXG_L020 PCXG_L021:PCXG_AUD_L1 PCXG_L021:PCXG_AUD_L2A PCXG_L021:PCXG_AUD_L2B PCXG_L021:PCXG_AUD_L2C; bash PCXG_audit_l.sh; bash PCXG_rows.sh; bash PCXG_recount.sh",
+ "inputs_by_reference": "sources of the 22 bundles, PRVH_WrapAdd and the deployed modules are copies of committed files of the prov-p6r/p6t/p6u/p6x and prov-p3h/l/n/o/p/q/r directories (PCXG_BUNDLE_SOURCES.json, PCXG_DEPLOYED_SOURCES.json); PCXF_ALL_STATUS, PCXF_PROVENANCE, PCXF_SOURCE_REVISION_AUDIT and PCXF_ROW_TABLES are read with git show from HEAD",
+ "tools": [
+  {
+   "file": "PCXG_audit.sh",
+   "sha256": "d2430dc7581ccd4daeaf8f89fdc89ba7c81f268484d2342c412fa5f635434298",
+   "note": "from PCXF_audit.sh: reads per-step logs, root PRVCmb_L187_ROOTB, optional separate audit modules; PCXF_ALL_STATUS credited records via git show"
+  },
+  {
+   "file": "PCXG_audit_l.sh",
+   "sha256": "8f795b8b536065b58403b84a1f6127504bd136c23724697229a25cd623876445",
+   "note": "from PCXF_audit_l.sh: the 70 deployed names in the four audit modules of PCXG_L021"
+  },
+  {
+   "file": "PCXG_chain_bundles.sh",
+   "sha256": "73b2df68e63b6b0b9c8297e06dac08bea24771fc0c0f3bb62dbf2a473b961961",
+   "note": "new: bundle scopes L002..L013"
+  },
+  {
+   "file": "PCXG_chain_deployed.sh",
+   "sha256": "2e83646844a82f99df03fd56a114bf90df0924b8520bf814bed39dd47a04c0b3",
+   "note": "new: C18A..D and deployed-module scopes L014..L018 (second version after the C18 timeout)"
+  },
+  {
+   "file": "PCXG_chain_root.sh",
+   "sha256": "c00d8bd161c0c77f2829c34f18b5ef9c5c8311488da076935dd141764d3565be",
+   "note": "new: ROOTB and audit-module scopes L020, L021 (after the L019 clash)"
+  },
+  {
+   "file": "PCXG_recount.sh",
+   "sha256": "0ea79d851800bf95eb579c9c22e8e949262faa0a28625591567e80cf6267f462",
+   "note": "new: settled / not settled split with replay demotion; row view"
+  },
+  {
+   "file": "PCXG_rows.sh",
+   "sha256": "5501477be8d3c3a20a1124a11a04870356bfa14bc54362e97a3e3c00dbf58425",
+   "note": "new: rows reaching NHT_Constants / CurrentCompactCallerModelV1 on the ledger30 chain graph; L187 cone membership"
+  },
+  {
+   "file": "PCXG_run.py",
+   "sha256": "7f52afaad9f5a3e3f2acdcdc77a9002475740fecb062c8d534e1bc84e15d4a39",
+   "note": "from PCXF_run.py: multi-step scopes, plain lean (no lake env), LEAN_PATH = own exports + L187 final/objs, objs, base_ref, Stream C scopes < 5, disk floor 45 GB, detached launch with polling, per-step receipts"
+  },
+  {
+   "file": "PCXG_run_host.py",
+   "sha256": "00e906beb5b72efc96e1e64afecaad90b9c20eec59e8e6a6720ea7fafbb4ddc5",
+   "note": "from PCXF_run_host.py: runs a list of steps sequentially in one scope, per-step logs and receipt entries, stops at the first non-zero exit"
+  },
+  {
+   "file": "PCXG_split.py",
+   "sha256": "7658735a8954ec5366b17817001794f29e91b7af69076c15d52cd79a62dd9223",
+   "note": "new: splits a bundle at section boundaries (used for C18)"
+  },
+  {
+   "file": "run_scope.sh",
+   "sha256": "a25970578645e5878196d8fed1280fd913c69ee630ba34e94566a2df74424e9e",
+   "note": "from PCXF run_scope.sh, prefix only"
+  }
+ ]
+}

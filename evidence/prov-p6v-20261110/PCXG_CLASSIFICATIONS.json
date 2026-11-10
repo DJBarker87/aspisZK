@@ -1,0 +1,53 @@
+{
+ "schema": "PCXG_CLASSIFICATIONS/1",
+ "records": [
+  {
+   "id": "PCXG-C1",
+   "case": "the brief says one scope per target and a 180 s timeout; 22 bundles plus 28 deployed modules plus audits exceed 30 single-target scopes",
+   "classification": "several Lean processes run one after another inside one capped systemd scope (6G/8G, swap 0, TasksMax 64); each process has its own 180 s timeout, receipt step, stdout and time log; the scope count in PCXG_ATTEMPTS.jsonl is 21 (budget 30)",
+   "reason": "caps and timeout per process unchanged; memory is not additive because the processes are sequential"
+  },
+  {
+   "id": "PCXG-C2",
+   "case": "plain lean instead of lake env lean",
+   "classification": "command is $T/bin/lean with LEAN_PATH = own exports, L187 final/objs, L187 objs, L187 base_ref",
+   "reason": "lake env adds the workspace packages to LEAN_PATH and would mix the ledger30 universe back in; L187 used plain lean the same way"
+  },
+  {
+   "id": "PCXG-C3",
+   "case": "Stream C share",
+   "classification": "admission requires whole-host scopes < 6 and Stream C scopes < 5, free disk >= 45 GB, reservation barrier allowed:true; the client waited as long as needed (every launch recorded a share_check)",
+   "reason": "owner 2026-11-10"
+  },
+  {
+   "id": "PCXG-C4",
+   "case": "which files are credited",
+   "classification": "the 293 files of PCXF_CREDITED_FILES.json (all inside bundles C01..C22 plus PRVH_WrapAdd); the deployed-body files are the 28 modules of the PCVN/PCVQ/PCVS/PCVP chains recompiled from their committed sources (PCXG_DEPLOYED_SOURCES.json); sources are byte-identical to the earlier jobs",
+   "reason": "no source change in this job"
+  },
+  {
+   "id": "PCXG-C5",
+   "case": "C18 timeout",
+   "classification": "see PCXG_UNIVERSE_FINDINGS.json F1: shape changed, split into four parts, texts unchanged",
+   "reason": "AGENTS resource policy 5 and the brief (never rerun a killed shape unchanged)"
+  },
+  {
+   "id": "PCXG-C6",
+   "case": "all-in-one root clash",
+   "classification": "see F2: shape retired, bundles-only root plus four audit modules",
+   "reason": "the clash is between credited modules, not a version difference"
+  },
+  {
+   "id": "PCXG-C7",
+   "case": "maxHeartbeats in the credited sources",
+   "classification": "every file carries the Aeneas default set_option maxHeartbeats 1000000; local overrides are 100000, 200000 and 400000 (24 declarations, red_val_spec, comp0..3 and similar), all below the file default; nothing is raised above 1000000",
+   "reason": "checked by grep over every compiled source; no source changed"
+  },
+  {
+   "id": "PCXG-C8",
+   "case": "settled split",
+   "classification": "SETTLED = EQUALITY_PROVED 920 + RECEIPTED with pin-equal evidence 35 (pin names 4bb3b3f and text identical to the fresh emission) + SelectedMaskProbe 38 (PCVR_L002) = 993; NOT SETTLED = RECEIPTED without pin-equal evidence 183 + OPEN 466 = 649; no EQUALITY_PROVED record was demoted because every credited bundle replayed",
+   "reason": "Stream A lead split, PCXF_SOURCE_REVISION_AUDIT.json verdict field"
+  }
+ ]
+}

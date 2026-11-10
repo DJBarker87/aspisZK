@@ -22,7 +22,7 @@ def parse(t):
     for n, rest in re.findall(r"^'([^']+)' (does not depend on any axioms|depends on axioms: \[[^\]]*\])", t, re.M):
         ax[n] = [] if rest.startswith('does') else [x.strip() for x in rest[rest.index('[') + 1:-1].replace('\n', ' ').split(',')]
     return ax
-t = log(ROOT, 'PRVCmb_L187_ROOT'); ax = parse(t)
+t = log(ROOT, 'PRVCmb_L187_ROOTB'); ax = parse(t)
 kinds = dict(re.findall(r'^PRVEQ_KIND (\S+) (\S+)$', t, re.M))
 un = re.search(r'PRVCMB_UNION_AXIOMS \[([^\]]*)\] ms=(\d+)', t); cnt = re.search(r'PRVEQ_AUDIT_COUNT (\d+) skipped_by_time_guard=(\d+) ms=(\d+)', t); loc = re.search(r'PRVEQ_LOCAL_AXIOM_DECLS (\d+) (.*)', t)
 skipped = re.findall(r'^PRVCMB_PERITEM_SKIPPED_TIME_GUARD (\S+)', t, re.M)
