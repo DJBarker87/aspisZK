@@ -1,0 +1,81 @@
+
+/-! conversions between the fresh (frozen) record types and the gate types of the model -/
+def toGateVariant : PRVFresh_WAdm_q1.transport.Variant →
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant
+  | .S1 => .S1
+  | .S2 => .S2
+  | .D => .D
+
+def ofGateVariant : OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant →
+    PRVFresh_WAdm_q1.transport.Variant
+  | .S1 => .S1
+  | .S2 => .S2
+  | .D => .D
+
+def toGatePrepared (p : PRVFresh_WAdm_q1.verifier.Prepared) :
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared :=
+  { variant := toGateVariant p.variant, roots := p.roots, gamma := p.gamma, kappa := p.kappa,
+    alpha := p.alpha, rho := p.rho, queries := p.queries, semantic_alpha := p.semantic_alpha,
+    z := p.z, claim := p.claim, state := p.state }
+
+def ofGatePrepared (p : OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared) :
+    PRVFresh_WAdm_q1.verifier.Prepared :=
+  { variant := ofGateVariant p.variant, roots := p.roots, gamma := p.gamma, kappa := p.kappa,
+    alpha := p.alpha, rho := p.rho, queries := p.queries, semantic_alpha := p.semantic_alpha,
+    z := p.z, claim := p.claim, state := p.state }
+
+def toGateAccumulator (a : PRVFresh_WAdm_q1.verifier.Accumulator) :
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Accumulator :=
+  { weights := a.weights, rhs := a.rhs, power := a.power, next := a.next }
+
+def ofGateAccumulator (a : OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Accumulator) :
+    PRVFresh_WAdm_q1.verifier.Accumulator :=
+  { weights := a.weights, rhs := a.rhs, power := a.power, next := a.next }
+
+def variantEquiv : PRVFresh_WAdm_q1.transport.Variant ≃
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant where
+  toFun := toGateVariant
+  invFun := ofGateVariant
+  left_inv := by intro x; cases x <;> rfl
+  right_inv := by intro x; cases x <;> rfl
+
+def preparedEquiv : PRVFresh_WAdm_q1.verifier.Prepared ≃
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared where
+  toFun := toGatePrepared
+  invFun := ofGatePrepared
+  left_inv := by
+    intro p
+    obtain ⟨v, r, g, k, a, rho, q, s, z, c, st⟩ := p
+    cases v <;> rfl
+  right_inv := by
+    intro p
+    obtain ⟨v, r, g, k, a, rho, q, s, z, c, st⟩ := p
+    cases v <;> rfl
+
+def accumulatorEquiv : PRVFresh_WAdm_q1.verifier.Accumulator ≃
+    OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Accumulator where
+  toFun := toGateAccumulator
+  invFun := ofGateAccumulator
+  left_inv := by intro a; rfl
+  right_inv := by intro a; rfl
+
+/-- main bridge: the frozen `verifier::checkpoint` (op16 writer) at the S2 / next = 10 / 64-weight domain
+equals the gate fissioned model `WAdm_fields` then `WAdm_checkpoint`. -/
+theorem checkpoint_eq
+    (S : {T : Type} → (A : Type) → alloc.vec.Vec T → Result (core.slice.iter.Iter T))
+    (hS : ∀ (w : alloc.vec.Vec aspis_core.field.QM31), S Global w = ok ⟨⟨w.val, w.property⟩, 0⟩)
+    {H : Type} (inst : aspis_core.digest.Digest32 H)
+    (p : PRVFresh_WAdm_q1.verifier.Prepared) (a : PRVFresh_WAdm_q1.verifier.Accumulator)
+    (proof public1 : Slice Std.U8) (hash : H)
+    (hv : p.variant = PRVFresh_WAdm_q1.transport.Variant.S2) (hn : a.next = 10#usize)
+    (hw : alloc.vec.Vec.len a.weights = 64#usize) :
+    PRVFresh_WAdm_q1.verifier.checkpoint S inst p a proof public1 hash
+      = (do let f ← WAdm_model.WAdm_fields (toGatePrepared p) a.rhs a.power
+            WAdm_model.WAdm_checkpoint inst f a.weights proof public1 hash) := by
+  obtain ⟨a0, a1, ha, ha0, ha1⟩ := arr2 p.alpha
+  obtain ⟨z0, z1, hz, hz0, hz1⟩ := arr2 p.z
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint WAdm_model.WAdm_fields WAdm_model.WAdm_checkpoint
+  simp only [toGatePrepared, hv, hn, hw, cs_S2, cast_u8_10, ha0, ha1, hz0, hz1, massert_True, lift, bind_tc_ok,
+    PRVFresh_WAdm_q1.transport.Variant.tag]
+  simp only [K_roots, K_early, K_queries, K_semantic, K_coord p.z z0 z1 hz, K_tail, K_weights S a.weights (hS a.weights)]
+  rfl

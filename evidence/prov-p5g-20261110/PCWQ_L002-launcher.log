@@ -1,0 +1,71 @@
+{"attempt": "PCWQ_L002", "exit_status": 1, "wall_seconds": 3.358718591975048, "peak_rss_kib": "2612920", "swaps": "0", "print_axioms": []}
+def T0.transport.Variant.read_discriminant : transport.Variant → Isize :=
+fun x =>
+  match x with
+  | transport.Variant.S1 => 0#isize
+  | transport.Variant.S2 => 1#isize
+  | transport.Variant.D => 2#isize
+PCWQ_sources/PCWQ_scratch1.lean:88:118: error: Tactic `decide` failed for proposition
+  decide (transport.Variant.S2.read_discriminant = transport.Variant.S1.read_discriminant) = false
+because its `Decidable` instance
+  instDecidableEqBool (decide (transport.Variant.S2.read_discriminant = transport.Variant.S1.read_discriminant)) false
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decEq`, `instDecidableEqBool`, `Bool.decEq`, `Int.decEq`, `Int.instDecidableEq`, `Nat
+...
+     let i1 ← 16#usize + i
+          let i2 ← i1 + 64#usize
+          let i3 ← 32#usize * 4#usize
+          let i4 ← i2 + i3
+          let i5 ← i4 + 16#usize
+          let i6 ← i5 + 88#usize
+          let i7 ← i6 + 160#usize
+          let i8 ← i7 + 64#usize
+          let i9 ← 32#usize * 2#usize
+          let i10 ← i8 + i9
+          let i11 ← i10 + 16#usize
+          i11 + 32#usize
+      i2 + i1) =
+    ok 1768#usize
+
+hd : decide (transport.Variant.S2.read_discriminant = transport.Variant.S1.read_discriminant) = false
+⊢ (do
+      let i ←
+        do
+          let i ←
+            do
+              let b ← ok false
+              if b = true then ok 1#usize else ok 2#usize
+          let i1 ← 2#usize * i
+          1024#usize >>> i1
+      let i1 ← 16#usize * i
+      let i2 ←
+        do
+          let i ← 32#usize * 3#usize
+          let i1 ← 16#usize + i
+          let i2 ← i1 + 64#usize
+          let i3 ← 32#usize * 4#usize
+          let i4 ← i2 + i3
+          let i5 ← i4 + 16#usize
+          let i6 ← i5 + 88#usize
+          let i7 ← i6 + 160#usize
+          let i8 ← i7 + 64#usize
+          let i9 ← 32#usize * 2#usize
+          let i10 ← i8 + i9
+          let i11 ← i10 + 16#usize
+          i11 + 32#usize
+      i2 + i1) =
+    ok 1768#usize
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1768 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+
+Running as unit: run-r640f900a431140c09560953f0cac6ce3.scope; invocation ID: cb5dc635bc62482b9b1f9bc356ede296

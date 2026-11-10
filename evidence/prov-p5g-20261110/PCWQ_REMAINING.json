@@ -1,0 +1,44 @@
+{
+ "schema": "PCWQ_REMAINING/1",
+ "target_established": false,
+ "items": [
+  {
+   "id": "R1",
+   "what": "WideExact::to_le_bytes: fresh emission (PCWQ_E002) is a loop over to_limbs/chunks_exact_mut externals; the gate uses the hand model AspisR1.CheckpointBytesE.rawBytes. Early/tail loops, put and WAdm_checkpoint stay conditional on that binding until a fresh body is proved equal to rawBytes (needs models for core::slice::chunks_exact_mut and WideExact::to_limbs, library externals).",
+   "blocks": [
+    "early",
+    "tail",
+    "checkpoint"
+   ]
+  },
+  {
+   "id": "R2",
+   "what": "array IntoIter (HM-D) and slice Iter (HM-B) models: the loop equalities hold with the gate list model for array IntoIter and the Aeneas library model for slice Iter; the fresh extraction leaves the array functions external, so they are bound by name. Row coverage is the lead decision.",
+   "blocks": [
+    "all loops, bodies and checkpoint"
+   ]
+  },
+  {
+   "id": "R3",
+   "what": "<&Vec<T> as IntoIterator>::into_iter has no model in the Aeneas library: carried as parameter SVI with premise hS (non-vacuous). The lead assigns it to HM-B or another row, or a proof of an Aeneas library definition is added.",
+   "blocks": [
+    "weights",
+    "checkpoint"
+   ]
+  },
+  {
+   "id": "R4",
+   "what": "domain: the gate WAdm_checkpoint hard-codes variant S2, next 10 and 64 weights, so the equality holds only there; frozen checkpoint is general. Whether the release argument needs more than the S2 / next 10 domain is a security-contract question, not decided here.",
+   "blocks": [
+    "checkpoint"
+   ]
+  },
+  {
+   "id": "R5",
+   "what": "fresh Types of Prepared/Accumulator use the leaf types by name; the composed isomorphism with the fresh leaf types (Array of fresh WideExact etc.) is not formalised (nested Equiv, same class as PCWJ TYPES_NESTED_EQUIV_NOT_GENERATED); the leaf isomorphisms (q2) and the record isomorphisms over shared leaves (q1) are proved.",
+   "blocks": [
+    "types"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+{"attempt": "PCWQ_L008", "exit_status": 1, "wall_seconds": 15.382965176133439, "peak_rss_kib": "5194436", "swaps": "0", "print_axioms": []}
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:741:2: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:754:2: e
+...
+slice_mut_back) := ((Array.repeat 16#usize 0#u8).to_slice, (Array.repeat 16#usize 0#u8).from_slice)
+        do
+        let s1 ← x.write_le_bytes s
+        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (to_slice_mut_back s1).to_slice
+    ok (cont (xs, o1))
+
+xs✝ : List aspis_core.field.QM31
+out✝ out : alloc.vec.Vec U8
+x : aspis_core.field.QM31
+xs : List aspis_core.field.QM31
+hs : x :: xs = x :: xs
+⊢ (let (o, iter1) := (some x, xs)
+    match o with
+    | none => ok (done out)
+    | some x =>
+      let (s, to_slice_mut_back) := ((Array.repeat 16#usize 0#u8).to_slice, (Array.repeat 16#usize 0#u8).from_slice)
+      do
+      let s1 ← PRVFresh_WAdm_q1.aspis_core.field.QM31.write_le_bytes x s
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (to_slice_mut_back s1).to_slice
+      ok (cont (iter1, out1))) =
+    do
+    let o1 ←
+      let (s, to_slice_mut_back) := ((Array.repeat 16#usize 0#u8).to_slice, (Array.repeat 16#usize 0#u8).from_slice)
+        do
+        let s1 ← x.write_le_bytes s
+        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (to_slice_mut_back s1).to_slice
+    ok (cont (xs, o1))
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:956:36: warning: This simp argument is unused:
+  bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [PRVFresh_WAdm_q1.verifier.checkpoint_loop4_loop0.body, arr_next_cons, bind_tc_ok,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲stepK,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵WAdm_model.WAdm_putK, lift, b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵ ̵Array.to_slice_mut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:970:113: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+
+Running as unit: run-rfec24354a0eb4c61b4e6ed6d0be90c15.scope; invocation ID: 179cf6ca42b64922a411242cc82dca7e

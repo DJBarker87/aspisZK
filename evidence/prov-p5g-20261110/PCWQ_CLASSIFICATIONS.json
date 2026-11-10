@@ -1,0 +1,45 @@
+{
+ "schema": "PCWQ_CLASSIFICATIONS/1",
+ "classifications": [
+  {
+   "id": "PCWQ-C1",
+   "case": "what the 24 definitions are",
+   "classification": "RPz7_WAdm_Fissioned_Funs is the compiled emission of the proof-only writer-admission model WAdm_model.rs (fixture crate wadm_native_fixture), which is a fissioned rewrite of the frozen verifier::checkpoint. Per the Stream A lead route 1 the counterpart is the frozen op16 writer path: verifier::checkpoint (crates/aspis-r1-cost-probe/src/verifier.rs:326-341 at 4bb3b3f) with put and put_k. Pool b936275 has no counterpart. Frozen functions were extracted fresh (PCWQ_E003) and related to the gate definitions by kernel-checked theorems."
+  },
+  {
+   "id": "PCWQ-C2",
+   "case": "classes per definition",
+   "classification": "EQUALITY_PROVED only where a frozen function corresponds one-to-one and nothing but the Aeneas std library and the leaf types is shared by name (WAdm_putK). Loops and bodies that invoke an array or slice iterator constant are DEPENDS_ON_LIBRARY_TRUST naming HM-D or HM-B even where the function equality itself does not use a model (the fresh extraction leaves the array iterator functions external, so the equality is relative to their binding to the gate list model); early/tail also bind WideExact::to_le_bytes by name. Wrappers (WAdm_roots, early, tail, queries, semantic, coordinates, weights) and WAdm_fields have no frozen function: GATE_ONLY_HELPER, cleared through the continuation-form theorems K_* and checkpoint_eq. WAdm_checkpoint is DEPENDS_ON_LIBRARY_TRUST (domain restricted)."
+  },
+  {
+   "id": "PCWQ-C3",
+   "case": "iterator representation difference (reported as encoding)",
+   "classification": "The frozen loops over `&p.roots` and `&a.weights` use core::slice::iter::Iter (Aeneas library model: slice and index); the gate loops iterate the array/Vec by value. Related by a closed form: both loops equal a monadic fold over the remaining list (loop_fold_gen). The nested frozen loop over SecureCirclePoint then [x, y] equals the gate flat loop over the four QM31 by coord_fold. These are encoding differences, not semantic ones."
+  },
+  {
+   "id": "PCWQ-C4",
+   "case": "domain restriction",
+   "classification": "The gate hard-codes variant S2 (tag 2), next = 10 and a 64-weight vector, and asserts length 1768; the frozen function is general. checkpoint_eq therefore has premises p.variant = S2, a.next = 10, length a.weights = 64. This is a specialisation of the frozen function to the Kani/S2 domain the writer model was built for, not an equality of the two functions on all inputs. No difference was found at that domain that is not an encoding difference."
+  },
+  {
+   "id": "PCWQ-C5",
+   "case": "external <&Vec<T> as IntoIterator>::into_iter",
+   "classification": "The fresh emission leaves it as an axiom in the template and the Aeneas library has no definition. It is carried as the section variable SVI (the only textual change to emitted code: the constant name inside checkpoint) with premise hS; hS_satisfiable shows the premise is satisfiable. Classed DEPENDS_ON_LIBRARY_TRUST, row assignment left to the lead. No trust row proposed."
+  },
+  {
+   "id": "PCWQ-C6",
+   "case": "configuration",
+   "classification": "ON emission (gate module has no NOX_R22_CONFIG record). The gate body has no arithmetic; the frozen checkpoint_size arithmetic (CHECKPOINT_FIXED etc.) is checked and evaluated by cs_S2 = 1768 using Usize mul/add/shr specification lemmas with the value bounds taken from the result values, no kernel reduction of numerals."
+  },
+  {
+   "id": "PCWQ-C7",
+   "case": "failed shapes (never rerun unchanged)",
+   "classification": "L001/L002: rfl/decide/simp on Usize literal arithmetic and Isize discriminant equality failed (numBits is opaque); replaced by usz_mul/usz_add/usz_shr lemmas and simp on read_discriminant. L003: dotted name as variable binder is invalid (parametrisation by textual name SVI instead); generic loop lemma by simp only left unreduced `let (o, it) := (none, s)` matches. L004/L005: `exact`/`refine`/`apply` of per-shape wrapper lemmas with an explicit bodySome lambda did not unify with the emitted loop body (two shapes failed, retired); replaced by loop_fold_gen with the loop function left abstract and unified from the goal. L006: simp only closes left reducible lets (fixed with a closing rfl). L007/L008: simp only plus rfl on the inline put_k arm of loops 3 and 4_0 failed because of the pattern bind over to_slice_mut (H3a, H3c, H3d failed); full simp on that small arm (H3, H4) passes. L010: `congr 1` already closed E_body1/E_body5 (no goals error); fixed with `first | rfl | ...`."
+  },
+  {
+   "id": "PCWQ-C8",
+   "case": "wrong-basis counts",
+   "classification": "None used. The first Lean attempts ran against the L187 closure without any name clash (RPz7_WAdm_Fissioned_Funs and OraclePortCkptAbi2Extracted resolve; the fresh declarations live in the nested namespaces WAdm_Fissioned.PRVFresh_WAdm_q1 and PRVFreshT_WAdm_q2)."
+  }
+ ]
+}

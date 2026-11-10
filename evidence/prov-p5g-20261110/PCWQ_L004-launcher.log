@@ -1,0 +1,58 @@
+{"attempt": "PCWQ_L004", "exit_status": 1, "wall_seconds": 15.658833059016615, "peak_rss_kib": "5238968", "swaps": "0", "print_axioms": []}
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:776:2: error: Type mismatch
+  loop_arr_fold
+    (fun root out iter1 => do
+      let s ← lift root.to_slice
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      ok (cont (iter1, out1)))
+    stepRoot (fun x => ?m.30) xs out
+has type
+  loop
+      (fun x =>
+        match x with
+        | (iter1, out1) => do
+          let (o, iter2) ← core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next iter1
+          match o with
+            | none => ok (done out1)
+            | some x => do
+              let s ← lift x.to_slice
+              let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s
+        
+...
+dm_model.WAdm_coordinates out10 (Array.make 4#usize [z0.x, z0.y, z1.x, z1.y] ⋯)
+    let out12 ← WAdm_model.WAdm_tail out11 (Array.make 2#usize [p.claim, a.rhs] ⋯)
+    let out13 ← WAdm_model.WAdm_putK out12 a.power
+    let out14 ← WAdm_model.WAdm_weights out13 a.weights
+    let sum ←
+      inst.digest hash
+          (Array.make 2#usize
+              [(Array.make 22#usize
+                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                      101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                    WAdm_model.WAdm_checkpoint._proof_32).to_slice,
+                out14.deref]
+              ⋯).to_slice
+    let out15 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out14 sum.to_slice
+    massert (out15.len = 1768#usize)
+    ok out15
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1768 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+PCWQ_sources/PRVEq_RPz7_WAdm_Fissioned_Funs_q1.lean:1192:80: warning: This simp argument is unused:
+  massert_self
+
+Hint: Omit it from the simp argument list.
+  simp only [toGatePrepared, hv, hn, hw, cs_S2, cast_u8_10, ha0, ha1, hz0, hz1, m̵a̵s̵s̵e̵r̵t̵_̵s̵e̵lf̵,̵ ̵l̵ift, bind_tc_ok,
+      PRVFresh_WAdm_q1.transport.Variant.tag]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+
+Running as unit: run-r0b820c055e074364848a2d1d2df2182e.scope; invocation ID: 50b705b7f5834b27a4a8c9f4e7981df4

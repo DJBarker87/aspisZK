@@ -1,0 +1,159 @@
+
+end PRVFresh_WAdm_q1
+
+namespace PRVQ
+
+/-- one step of the Aeneas `loop` functional (copy of PRVC.bs, evidence/prov-p1h-20261109/PRVC_LoopBridge.lean) -/
+def bs {α β : Type _} (body : α → Result (ControlFlow α β)) (h : α → Result β) (x : α) : Result β :=
+  match body x with
+  | ok r => match r with
+    | ControlFlow.cont x' => h x'
+    | ControlFlow.done y => ok y
+  | fail e => fail e
+  | div => div
+
+theorem loop_unfold {α β : Type _} (body : α → Result (ControlFlow α β)) (x : α) :
+    loop body x = bs body (loop body) x := by
+  rw [loop]; rfl
+
+/-- right fold of a Result-valued step over a list -/
+def fold {α V : Type} (step : α → V → Result V) : List α → V → Result V
+  | [], out => ok out
+  | x :: xs, out => do
+      let out' ← step x out
+      fold step xs out'
+
+theorem fold_append {α V : Type} (step : α → V → Result V) (l1 l2 : List α) (out : V) :
+    fold step (l1 ++ l2) out = (do let o ← fold step l1 out; fold step l2 o) := by
+  induction l1 generalizing out with
+  | nil => simp [fold]
+  | cons x xs ih =>
+    simp only [List.cons_append, fold, bind_assoc, ih]
+
+theorem loop_fold_gen {σ α V : Type} (F : σ × V → Result (ControlFlow (σ × V) V))
+    (step : α → V → Result V) (view : σ → List α)
+    (hnil : ∀ s out, view s = [] → F (s, out) = ok (done out))
+    (hcons : ∀ s out x xs, view s = x :: xs →
+       ∃ s', view s' = xs ∧ F (s, out) = (do let o1 ← step x out; ok (cont (s', o1)))) :
+    ∀ (n : Nat) (s : σ) (out : V), (view s).length = n → loop F (s, out) = fold step (view s) out := by
+  intro n
+  induction n with
+  | zero =>
+    intro s out h
+    have hv : view s = [] := List.eq_nil_of_length_eq_zero h
+    rw [loop_unfold]
+    unfold bs
+    rw [hnil s out hv, hv]
+    rfl
+  | succ n ih =>
+    intro s out h
+    cases hv : view s with
+    | nil => rw [hv] at h; simp at h
+    | cons x xs =>
+      obtain ⟨s', hs', hb⟩ := hcons s out x xs hv
+      rw [hv] at h
+      have hlen : (view s').length = n := by rw [hs']; simpa using h
+      rw [loop_unfold]
+      unfold bs
+      rw [hb]
+      cases hst : step x out with
+      | ok o =>
+        have := ih s' o hlen
+        rw [hs'] at this
+        simp only [fold, hst, bind_tc_ok]
+        exact this
+      | fail e => simp [fold, hst]
+      | div => simp [fold, hst]
+
+theorem loop_next_fold {σ α V : Type}
+    (nx : σ → Result (Option α × σ)) (view : σ → List α)
+    (bodySome : α → V → σ → Result (ControlFlow (σ × V) V))
+    (step : α → V → Result V)
+    (hnil : ∀ s, view s = [] → nx s = ok (none, s))
+    (hcons : ∀ s x xs, view s = x :: xs → ∃ s', view s' = xs ∧ nx s = ok (some x, s'))
+    (hsome : ∀ x o it1, bodySome x o it1 = (do let o1 ← step x o; ok (cont (it1, o1)))) :
+    ∀ (n : Nat) (s : σ) (out : V), (view s).length = n →
+      loop (fun (iter1, out1) => do
+        let (o, iter2) ← nx iter1
+        match o with
+        | none => ok (done out1)
+        | some x => bodySome x out1 iter2) (s, out) = fold step (view s) out := by
+  intro n s out hl
+  refine loop_fold_gen _ step view ?_ ?_ n s out hl
+  · intro s out hs
+    show (do
+      let (o, iter2) ← nx s
+      match o with
+      | none => ok (done out)
+      | some x => bodySome x out iter2) = _
+    rw [hnil s hs]
+    rfl
+  · intro s out x xs hs
+    obtain ⟨s', hs', hnx⟩ := hcons s x xs hs
+    refine ⟨s', hs', ?_⟩
+    show (do
+      let (o, iter2) ← nx s
+      match o with
+      | none => ok (done out)
+      | some x => bodySome x out iter2) = _
+    rw [hnx]
+    exact hsome x out s'
+
+theorem bind_ok_id {α : Type} (m : Result α) : (m >>= fun x => ok x) = m := by
+  cases m <;> rfl
+
+/-- generic facts for the owned array iterator model of the gate (a list) -/
+theorem arr_nx_nil {T : Type} {N : Usize} (s : core.array.iter.IntoIter T N) (h : s = []) :
+    core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next s = ok (none, s) := by
+  subst h; rfl
+
+theorem arr_nx_cons {T : Type} {N : Usize} (s : core.array.iter.IntoIter T N) (x : T) (xs : List T)
+    (h : s = x :: xs) :
+    ∃ s' : core.array.iter.IntoIter T N, s' = xs ∧
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next s = ok (some x, s') :=
+  ⟨xs, rfl, by subst h; rfl⟩
+
+/-- the shared-slice iterator model of the Aeneas library (slice and index) -/
+theorem sliceIter_nil {T : Type} (sl : Slice T) (i : Nat) (h : sl.val.drop i = []) :
+    core.slice.iter.IteratorSliceIter.next (⟨sl, i⟩ : core.slice.iter.Iter T) = ok (none, ⟨sl, i⟩) := by
+  have hle : sl.val.length ≤ i := by
+    by_contra hc
+    have hl : (sl.val.drop i).length = sl.val.length - i := List.length_drop
+    rw [h] at hl
+    simp at hl
+    omega
+  unfold core.slice.iter.IteratorSliceIter.next
+  have hl2 := Slice.len_val sl
+  split
+  · next hlt =>
+    exfalso
+    dsimp only at hlt
+    simp only [Slice.length] at hl2
+    omega
+  · rfl
+
+theorem sliceIter_cons {T : Type} (sl : Slice T) (i : Nat) (x : T) (xs : List T)
+    (h : sl.val.drop i = x :: xs) :
+    core.slice.iter.IteratorSliceIter.next (⟨sl, i⟩ : core.slice.iter.Iter T) = ok (some x, ⟨sl, i + 1⟩) ∧
+      sl.val.drop (i + 1) = xs := by
+  have hlt : i < sl.val.length := by
+    by_contra hc
+    have hl : (sl.val.drop i).length = sl.val.length - i := List.length_drop
+    rw [h] at hl
+    simp at hl
+    omega
+  have hd := List.drop_eq_getElem_cons hlt
+  rw [h] at hd
+  have hx : x = sl.val[i] := (List.cons.inj hd).1
+  have hxs : sl.val.drop (i + 1) = xs := (List.cons.inj hd).2.symm
+  refine ⟨?_, hxs⟩
+  unfold core.slice.iter.IteratorSliceIter.next
+  have hl2 := Slice.len_val sl
+  have hc : (⟨sl, i⟩ : core.slice.iter.Iter T).i < (⟨sl, i⟩ : core.slice.iter.Iter T).slice.len := by
+    dsimp only
+    simp only [Slice.length] at hl2
+    omega
+  rw [dif_pos hc]
+  subst hx
+  rfl
+

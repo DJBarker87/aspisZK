@@ -1,0 +1,154 @@
+
+/-! small arithmetic facts on Usize literals (no kernel reduction of numerals: bounds come from the values) -/
+theorem usz_mul (x y z : Std.Usize) (h : x.val * y.val = z.val) : (x * y : Result Std.Usize) = ok z := by
+  have := Std.Usize.mul_spec (x := x) (y := y) (by scalar_tac)
+  obtain ⟨w, hw, hwv⟩ := WP.spec_imp_exists this
+  rw [hw]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  omega
+
+theorem usz_add (x y z : Std.Usize) (h : x.val + y.val = z.val) : (x + y : Result Std.Usize) = ok z := by
+  have := Std.Usize.add_spec (x := x) (y := y) (by scalar_tac)
+  obtain ⟨w, hw, hwv⟩ := WP.spec_imp_exists this
+  rw [hw]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  omega
+
+theorem usz_shr (x i z : Std.Usize) (hi : i.val < 32) (h : x.val / 2 ^ i.val = z.val) :
+    (x >>> i : Result Std.Usize) = ok z := by
+  show UScalar.shiftRight_UScalar x i = _
+  unfold UScalar.shiftRight_UScalar UScalar.shiftRight
+  have hn : i.val < UScalarTy.Usize.numBits := by
+    rcases System.Platform.numBits_eq with hb | hb <;> simp [UScalarTy.numBits, hb] <;> omega
+  rw [if_pos hn]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  show (x.bv >>> i.val).toNat = z.val
+  rw [BitVec.toNat_ushiftRight, Nat.shiftRight_eq_div_pow]
+  exact h
+
+theorem cast_u8_10 : UScalar.cast .U8 (10#usize) = 10#u8 := by
+  apply UScalar.eq_of_val_eq
+  rw [UScalar.cast_val_eq]
+  simp
+
+theorem massert_self (n : Std.Usize) : (massert (n = n)) = ok () := by
+  simp [massert]
+
+theorem massert_True : (massert True) = ok () := by
+  simp [massert]
+
+/-- the frozen `checkpoint_size` at the S2 variant is 1768 -/
+theorem cs_S2 : PRVFresh_WAdm_q1.verifier.checkpoint_size PRVFresh_WAdm_q1.transport.Variant.S2
+    = ok 1768#usize := by
+  unfold PRVFresh_WAdm_q1.verifier.checkpoint_size PRVFresh_WAdm_q1.transport.Variant.final_len
+    PRVFresh_WAdm_q1.transport.Variant.folds
+    PRVFresh_WAdm_q1.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+    PRVFresh_WAdm_q1.verifier.CHECKPOINT_FIXED
+  have hd : (decide (PRVFresh_WAdm_q1.transport.Variant.S2.read_discriminant
+      = PRVFresh_WAdm_q1.transport.Variant.S1.read_discriminant)) = false := by
+    simp [PRVFresh_WAdm_q1.transport.Variant.read_discriminant]
+  simp only [hd, bind_tc_ok, Bool.false_eq_true, ↓reduceIte,
+    usz_mul 2#usize 2#usize 4#usize (by simp),
+    usz_shr 1024#usize 4#usize 64#usize (by simp) (by simp),
+    usz_mul 16#usize 64#usize 1024#usize (by simp),
+    usz_mul 32#usize 3#usize 96#usize (by simp),
+    usz_add 16#usize 96#usize 112#usize (by simp),
+    usz_add 112#usize 64#usize 176#usize (by simp),
+    usz_mul 32#usize 4#usize 128#usize (by simp),
+    usz_add 176#usize 128#usize 304#usize (by simp),
+    usz_add 304#usize 16#usize 320#usize (by simp),
+    usz_add 320#usize 88#usize 408#usize (by simp),
+    usz_add 408#usize 160#usize 568#usize (by simp),
+    usz_add 568#usize 64#usize 632#usize (by simp),
+    usz_mul 32#usize 2#usize 64#usize (by simp),
+    usz_add 632#usize 64#usize 696#usize (by simp),
+    usz_add 696#usize 16#usize 712#usize (by simp),
+    usz_add 712#usize 32#usize 744#usize (by simp),
+    usz_add 744#usize 1024#usize 1768#usize (by simp)]
+
+theorem arr2 {T : Type} (z : Array T 2#usize) :
+    ∃ z0 z1, z.val = [z0, z1] ∧ Array.index_usize z 0#usize = ok z0 ∧ Array.index_usize z 1#usize = ok z1 := by
+  obtain ⟨l, hl⟩ := z
+  have hlen : l.length = 2 := by simpa using hl
+  match l, hlen with
+  | [z0, z1], _ => exact ⟨z0, z1, rfl, by simp [Array.index_usize], by simp [Array.index_usize]⟩
+
+/-! continuation-form wrappers: a fresh iterator-plus-loop prefix equals the gate helper -/
+theorem K_roots {β : Type} (roots : Array (Array Std.U8 32#usize) 2#usize) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter roots
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop0 iter out
+        k o) = (do let o ← WAdm_model.WAdm_roots out roots
+                   k o) := by
+  unfold WAdm_model.WAdm_roots
+  simp only [SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter,
+    Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter, bind_tc_ok, E_loop0, List.drop_zero]
+
+theorem K_early {β : Type} (xs : Array aspis_core.field.wide_exact.WideExact 4#usize) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter xs
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop1 iter out
+        k o) = (do let o ← WAdm_model.WAdm_early out xs
+                   k o) := by
+  unfold WAdm_model.WAdm_early
+  simp only [bind_assoc, E_loop1]
+
+theorem K_tail {β : Type} (xs : Array aspis_core.field.wide_exact.WideExact 2#usize) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter xs
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop5 iter out
+        k o) = (do let o ← WAdm_model.WAdm_tail out xs
+                   k o) := by
+  unfold WAdm_model.WAdm_tail
+  simp only [bind_assoc, E_loop5]
+
+theorem K_queries {β : Type} (xs : Array Std.U32 22#usize) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter xs
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop2 iter out
+        k o) = (do let o ← WAdm_model.WAdm_queries out xs
+                   k o) := by
+  unfold WAdm_model.WAdm_queries
+  simp only [bind_assoc, E_loop2]
+
+theorem K_semantic {β : Type} (xs : Array aspis_core.field.QM31 10#usize) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter xs
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop3 iter out
+        k o) = (do let o ← WAdm_model.WAdm_semantic out xs
+                   k o) := by
+  unfold WAdm_model.WAdm_semantic
+  simp only [bind_assoc, E_loop3]
+
+theorem K_coord {β : Type} (z : Array aspis_core.circle.SecureCirclePoint 2#usize)
+    (z0 z1 : aspis_core.circle.SecureCirclePoint) (hz : z.val = [z0, z1]) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter z
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop4 iter out
+        k o) = (do let o ← WAdm_model.WAdm_coordinates out (Array.make 4#usize [z0.x, z0.y, z1.x, z1.y])
+                   k o) := by
+  unfold WAdm_model.WAdm_coordinates
+  have h1 : Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter z = ok [z0, z1] := by
+    show ok z.val = ok [z0, z1]
+    rw [hz]
+  have h2 : Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+      (Array.make 4#usize [z0.x, z0.y, z1.x, z1.y]) = ok [z0.x, z0.y, z1.x, z1.y] := rfl
+  simp only [h1, h2, bind_tc_ok, E_loop4, List.flatMap_cons, List.flatMap_nil, List.append_nil, List.cons_append,
+    List.nil_append]
+
+theorem K_weights {β : Type}
+    (S : {T : Type} → (A : Type) → alloc.vec.Vec T → Result (core.slice.iter.Iter T))
+    (w : alloc.vec.Vec aspis_core.field.QM31)
+    (hS : S Global w = ok ⟨⟨w.val, w.property⟩, 0⟩) (out : alloc.vec.Vec Std.U8)
+    (k : alloc.vec.Vec Std.U8 → Result β) :
+    (do let iter ← S Global w
+        let o ← PRVFresh_WAdm_q1.verifier.checkpoint_loop6 iter out
+        k o) = (do let o ← WAdm_model.WAdm_weights out w
+                   k o) := by
+  unfold WAdm_model.WAdm_weights
+  rw [hS]
+  simp only [alloc.vec.IntoIteratorVec.into_iter, bind_tc_ok]
+  rw [E_loop6 ⟨⟨w.val, w.property⟩, 0⟩ w (by simp) out]
