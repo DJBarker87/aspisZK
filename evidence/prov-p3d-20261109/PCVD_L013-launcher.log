@@ -1,0 +1,37 @@
+{"attempt": "PCVD_L013", "exit_status": 1, "wall_seconds": 2.2931533160153776, "peak_rss_kib": "2612816", "swaps": "0", "print_axioms": []}
+def AspisR1SelectedMaskProbe.field.M31.reduce_u64 : U64 → Result AspisR1SelectedMaskProbe.field.M31 :=
+fun value => do
+  let i ← AspisR1SelectedMaskProbe.field.reduce_u64 value
+  ok i
+def AspisR1SelectedMaskProbe.field.reduce_u64 : U64 → Result U32 :=
+fun x => do
+  let i ← lift (UScalar.cast UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i1 ← lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← lift (UScalar.cast UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i4 ← lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+  if x3 ≥ AspisR1SelectedMaskProbe.field.P then x3 - AspisR1SelectedMaskProbe.field.P else o
+...
+def AspisR1SelectedMaskProbe.field.M31.reduce_u64 : U64 → Result AspisR1SelectedMaskProbe.field.M31 :=
+fun value => do
+  let i ← AspisR1SelectedMaskProbe.field.reduce_u64 value
+  ok i
+def AspisR1SelectedMaskProbe.field.reduce_u64 : U64 → Result U32 :=
+fun x => do
+  let i ← lift (UScalar.cast UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i1 ← lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← lift (UScalar.cast UScalarTy.U64 AspisR1SelectedMaskProbe.field.P)
+  let i4 ← lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+  if x3 ≥ AspisR1SelectedMaskProbe.field.P then x3 - AspisR1SelectedMaskProbe.field.P else ok x3
+PCVD_sources/PRVD_probe1.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1SelectedMaskProbe.field.M31.reduce_u62`
+
+Running as unit: run-rffbb0c9da11f47bfb6972305c84a568d.scope; invocation ID: 1c4f421e4ce84194930ba1583948e622

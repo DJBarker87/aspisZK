@@ -1,0 +1,42 @@
+{
+ "schema": "PCVD_TOOLS/1",
+ "inherited": "PCVC_ tools copied and renamed (PCVD_run.py, PCVD_run_host.py: Stream C share < 2, host < 6, disk >= 40 GB, reservation barrier, 6G/8G swap 0, 180 s, -M7000, ledger30 PATHS); PRVC_LoopBridge.lean unchanged",
+ "changes": [
+  {
+   "id": "PCVD-1",
+   "file": "mkbase.py",
+   "content": "UNDROP (restore named PRV-FRESH-DROPPED blocks) and SHIMS (constant-binding defs inserted after `namespace PRVFresh_*`)"
+  },
+  {
+   "id": "PCVD-2",
+   "file": "gen_loops.py",
+   "content": "HOIST (fresh loop with leading hoisted constant parameters: statement `@fresh (gate const) = @gate`), GNAME/gq (fresh->gate name map, `!` = absolute gate name)"
+  },
+  {
+   "id": "PCVD-3",
+   "file": "gen_p3.py",
+   "content": "SHIMNAMES unfolded in nonloop proofs, nonloop alternative `simp only [...]; rfl`, nonloop_simp (simp-first, no with_reducible rfl, for heartbeat-limited bodies), multi-line `def\\n  name` recognised"
+  },
+  {
+   "id": "PCVD-4",
+   "file": "ext.py",
+   "content": "extend an existing P2f/P2g/P3 file: undrop, insert transparent fresh blocks, generated theorems (loop / nonloop / simp)"
+  },
+  {
+   "id": "PCVD-5",
+   "file": "gen_d1.py gen_d13.py gen_wc.py gen_p23.py gen_nom.py gen_hb.py gen_ps3.py gen_bw.py gen_n02.py gen_n07b.py",
+   "content": "per-module drivers; gen_d13.py slices the Native13 fresh section (COPY_PATTERNS literal replaced by a leading parameter)"
+  },
+  {
+   "id": "PCVD-6",
+   "file": "runl.sh showl.sh errsl.sh proved.py check_sources.py final_d.py final2_d.py final3_d.py listdropped.py showdef.py undrop.py",
+   "content": "bash drivers and status writers"
+  },
+  {
+   "id": "PCVD-7",
+   "file": "PRVD_ConstBind.lean",
+   "content": "generic constant-binding lemmas (const_bind, const_bind_of_eq, hoisted_param_eq, const_bind_unique)"
+  }
+ ],
+ "lean_policy": "no raised heartbeats (file default 1000000 only; nonloop lowered to 100000, WC encode_* 400000); only propext, Classical.choice, Quot.sound"
+}
