@@ -1,0 +1,61 @@
+{"attempt": "PCVY_L019", "exit_status": 1, "wall_seconds": 3.292937739053741, "peak_rss_kib": "2621024", "swaps": "0", "print_axioms": ["'PCVY_Op50.digest_loop_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCVY_sources/PRVEq_Op50_p8.lean:20:26: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.val,̵ ̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCVY_sources/PRVEq_Op50_p8.lean:25:25: warning: '(have := x.hBounds; simpa using this)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PCVY_sources/PRVEq_Op50_p8.lean:25:25: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PCVY_sources/PRVEq_Op50_p8.lean:131:15: error(lean.unknownIde
+...
+loop b s out 0#usize
+    match pending_return with
+      | none => ok (core.result.Result.Ok out1)
+      | some r => ok r) =
+    ok
+      (match decDig (sl (bytesOf b) (↑s) (↑s + 32)) with
+      | some d => core.result.Result.Ok d
+      | none => core.result.Result.Err ())
+
+b : Slice U8
+s : Usize
+hs : ↑s + 32 ≤ (↑b).length
+hw : ∀ j < 8, dw (sl (bytesOf b) (↑s) (↑s + 32)) j = dwAt (bytesOf b) (↑s) j
+out' : Std.Array U32 8#usize
+r : Option (core.result.Result (Std.Array U32 8#usize) Unit)
+hr : NCV_Reference.digest_loop b s (Array.repeat 8#usize 0#u32) 0#usize = ok (out', r)
+h0v : ↑0#usize = 0
+hcases :
+  (r = none ∧
+      (∀ (j : ℕ), 0 ≤ j → j < 8 → dwAt (bytesOf b) (↑s) j < 2147483647) ∧
+        ∀ j < 8, ∃ y, (↑out')[j]? = some y ∧ ↑y = dwAt (bytesOf b) (↑s) j) ∨
+    r = some (core.result.Result.Err ()) ∧ ∃ j, 0 ≤ j ∧ j < 8 ∧ ¬dwAt (bytesOf b) (↑s) j < 2147483647
+⊢ (have out := Array.repeat 8#usize 0#u32;
+    do
+    let (out1, pending_return) ← NCV_Reference.digest_loop b s out 0#usize
+    match pending_return with
+      | none => ok (core.result.Result.Ok out1)
+      | some r => ok r) =
+    ok
+      (match decDig (sl (bytesOf b) (↑s) (↑s + 32)) with
+      | some d => core.result.Result.Ok d
+      | none => core.result.Result.Err ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+
+Running as unit: run-r60553668e8e84e8f9bd11820ad5286d8.scope; invocation ID: 5cd78455bb2540ce88b7912b9abb0c92
