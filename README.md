@@ -13,7 +13,9 @@ translated into Lean automatically, and every function it uses is proved to
 behave as the mathematics says. The same work is under way for the prover.
 
 The proofs are Circle STARKs over the Mersenne-31 field, checked inside
-ordinary Solana transactions.
+ordinary Solana transactions. Verifying one takes two transactions of about
+1.2 million compute units each, inside Solana's limit of 1.4 million per
+transaction, with no precompile and no off-chain helper.
 
 [A plain-language introduction is at aspis.djbmaths.uk](https://aspis.djbmaths.uk/).
 
