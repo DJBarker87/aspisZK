@@ -1,0 +1,39 @@
+{"attempt": "PCUJ_E008", "exit_status": 0, "wall_seconds": 117.31393313105218, "peak_rss_kib": "553648", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--include", "crate::verifier::Prepared", "--include", "crate::verifier::Accumulator", "--include", "crate::verifier::BatchedWeights", "--include", "crate::verifier::View", "--include", "crate::verifier::Error", "--include", "crate::verifier::Variant", "--include", "crate::verifier::Phase", "--include", "crate::verifier::QueryGeometry", "--include", "crate::r1_semantic::Verified", "--include", "crate::r1
+...
+ half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 55s
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_E008_emitted/repro.llbc
+
+=== Translation time per function ===
+  aspis_r1_cost_probe::compact::LOGICAL_Y1: 0.0668s (size: 4, rank: 1)
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_E008_emitted/raw/NMP_logical
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_E008_emitted/raw/NMP_logical/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-pc-prov-p2j-20261110/PCUJ_E008_emitted/raw/NMP_logical/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.455086 seconds
+{"attempt": "PCUJ_E008", "exit": 0, "error": null}
+
+Running as unit: run-rc79ab78feef44e4192203db886f04773.scope; invocation ID: 9889eb5bcba247bfa38a1b914c0f45f4
