@@ -484,3 +484,75 @@ sums, which is a change to about 2,500 lines of pinned statement code, with
 no measured basis yet for its yield. The one non-exact candidate with a
 budget of the right size is the terminal-relation sumcheck (the relation is
 262k instructions). Neither has been measured, so neither is counted.
+
+## Round 3: one verifying transaction (owner direction, 11 November: push for a single transaction that does all verification)
+
+### Stage D: one sumcheck over the final message (design and pre-registration, committed before the code)
+
+**What it replaces.** After the two relation round checks the pinned verifier
+makes two checks against the 64 final-message values `f_j`:
+
+- the relation pairing `sum_j f_j W_j = claim`, where `W_j` is the folded
+  weight vector of the seven functionals combined with powers of `kappa`
+  (`Weights::pair`, about 213k instructions);
+- the query check `sum_j f_j w_j = rhs`, where `w_j = sum_i rho^i b_j(x_i)` is
+  accumulated over the 22 queries (about 86k) and then contracted (about 18k).
+
+Both are inner products of `f` with a public, structured vector. Stage D proves
+both with one six-round sumcheck over the 64 coefficient positions.
+
+**Protocol addition.** After `rho`, on a transcript seeded from the post-`rho`
+state (new rows 33 to 39, domain-separated by the existing row byte):
+
+1. Row 33 absorbs the two claimed sums (`claim` and the batched second-fold sum
+   `rhs2`, 64 bytes) and yields `lambda` in QM31. The combined claim is
+   `C = claim + lambda * rhs2` and the combined vector `u_j = W_j + lambda * w_j`.
+2. For rounds `b = 0..5` the prover sends two WideExact values `(c0, c2)`, the
+   constant and quadratic coefficients of the round polynomial
+   `s_b(X) = sum over the remaining positions of f~ * u~`. The verifier derives
+   the linear coefficient from the running claim (`s_b(0) + s_b(1) = C_b`),
+   draws `r_b` in QM31 from row `34 + b` over those 64 bytes, and sets
+   `C_{b+1} = s_b(r_b)`. Variable `b` is bit `b` of the coefficient index.
+3. The verifier accepts if `C_6 = f~(r) * (W~(r) + lambda * w~(r))`, computing
+   the three multilinear extensions itself: `f~(r)` from the 64 final-message
+   values; `W~(r)` from the weight structure (five product rows over three
+   base-four digits, the inactive row's twelve groups, the Libra row's four
+   positions); `w~(r) = sum_i rho^i prod_b (1 + r_b (t_{i,b} - 1))` with
+   `t_{i,0}` the query's node and `t_{i,b+1} = 2 t_{i,b}^2 - 1`.
+
+The certificate is 12 WideExact values, 384 bytes, canonical encodings
+required. It is a deterministic function of data already public in the proof,
+so it adds nothing to the privacy argument's view beyond a function of that
+view; this is stated, not proved here. It fits the 1.9 KB free in the last
+upload transaction.
+
+**Soundness accounting (sketch, to be turned into rows before any claim).** If
+either pinned equality fails, the combined claim is false unless `lambda` is
+the one bad value: at most `1/|K|`. A false combined claim survives six
+degree-two rounds with probability at most `12/|K|`. Seven new Fiat-Shamir
+rows, each far below the present largest row (the query row, about
+`2^-105.14`), total at most `13/|K|`, about `2^-120.3` per transcript before
+the oracle-query factor. `rhs2` is fixed before `lambda` on the same binding
+hypothesis as the `rho` row. Not proved: the rows, their placement in the
+adaptive argument, the sampler statement for rows 33 to 39, and source
+correspondence of the new evaluator.
+
+**Pre-registration.**
+
+- Baseline W9: 1,438,749 to 1,442,350 CU (ELF `52b05716…c229e19`).
+- Build W10 = W9 features with the stage D path (measurement tag 13), plain
+  build, six fixtures, honest certificates generated on the host from the
+  public proof data.
+- Prediction: saving of about 150k (348k of instructions replaced by about
+  195k: rounds 15k, the 64-entry equality table 11k, `f~` 17k, `W~` 30k plus
+  the retained weight preparation 55k, `w~` 33k, rest retained). My estimates
+  for my own kernels were high by two to six times in round 2.
+- Kept if it saves at least 3,000 on every fixture.
+- Tests required before measurement counts: acceptance of the six fixtures;
+  the three extensions equal the direct sums over explicit 64-entry vectors
+  at random points; every single-byte change of the certificate is rejected;
+  an honest-prover certificate for a false relation claim and for a false
+  query claim is rejected.
+- Outcome wording: if W10 exceeds 1,275,000 on any fixture, "one transaction
+  not yet supported; gap N"; if within, "fits the hard-cap budget on six
+  fixtures", which is not an all-input bound and not a release claim.
