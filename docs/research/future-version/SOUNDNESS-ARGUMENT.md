@@ -162,6 +162,15 @@ sumcheck its own domain string. Rows 0 to 32 are byte-identical to R1, so R1
 proofs re-pack into the one-transaction format; a release should decide
 version separation of the transcript domain.
 
+**Resolved in source, 2026-11-11 (owner decision "1 yes").** The final sumcheck now continues
+the opening transcript (`Transcript::resume`, no start frame), and the proof format magic is
+`ASPIS` + two zero bytes + format number 2. At the branch head the Aspis transcript therefore has
+41 starts (34 as in R1 plus the seven new rows) and no frame that reads two ways. The verifier
+deployed on devnet (source 8a4059c8bc2, magic `R1F1SM22`) is immutable and keeps the earlier
+frame and 42 starts; its proofs and the new format's proofs are not valid for each other. No new
+ELF has been built or measured for this change. Finding 1 is unaffected in kind: 41 starts at
+the common envelope are `615/2^109`, about `1.2 · 2^-100`.
+
 ### Finding 5: envelopes
 
 The verifier core issues at most 1,112 digest calls (section 6.3), below

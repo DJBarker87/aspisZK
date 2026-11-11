@@ -518,7 +518,8 @@ pub fn verify_summed<H: Digest32>(public: Public<'_>, proof: &[u8], certificate:
 /// through the certificate.
 #[inline(never)]
 fn summed_final_checks<H: Digest32>(p: &Prepared, final_message: &[u8], claim: E, rhs2: E, geometry: &QueryGeometry, certificate: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
-    let mut t = Transcript::new(hash, p.state, Variant::S2);
+    // The final sumcheck continues the opening transcript after rho; it does not start a new one.
+    let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
     let mut current = claim.add(rhs2.mul_qm31(lambda));
     let mut r = [K::ZERO; 6];
@@ -674,7 +675,8 @@ fn stage_d_vectors<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Re
 /// transcript the verifier uses, given the claims the verifier will bind.
 #[cfg(any(test, feature = "prover"))]
 fn stage_d_rounds<H: Digest32>(p: &Prepared, claim: E, rhs2: E, mut f: Vec<E>, relation: &[E], query: &[K], hash: H) -> Vec<u8> {
-    let mut t = Transcript::new(hash, p.state, Variant::S2);
+    // The final sumcheck continues the opening transcript after rho; it does not start a new one.
+    let mut t = Transcript::resume(hash, p.state);
     let lambda = t.scalar_k(ROW_CLAIMS, &claims_bytes(claim, rhs2));
     let mut u: Vec<E> = (0..64).map(|j| relation[j].add(E::from_qm31(query[j].mul(lambda)))).collect();
     let half = M31(1 << 30);
@@ -711,7 +713,12 @@ pub fn final_message_certificate<H: Digest32>(public: Public<'_>, proof: &[u8], 
 /// certificate. Design, slot bounds and status: the experiment note.
 pub mod summed_format {
     use crate::compact;
-    pub const MAGIC: &[u8; 8] = b"R1F1SM22";
+    /// "ASPIS", two reserved zero bytes, proof format number 2 (the one-transaction
+    /// format whose final sumcheck continues the opening transcript). The devnet
+    /// verifier deployed on 2026-11-11 (source 8a4059c8bc2) used the experiment's
+    /// earlier magic `R1F1SM22` and a fresh transcript start for the final sumcheck;
+    /// its proofs are not valid here and these are not valid there.
+    pub const MAGIC: &[u8; 8] = b"ASPIS\x00\x00\x02";
     /// Worst-case supplied nodes: C1, C2 (22 leaves at depth 18) and the
     /// folded tree (at most 22 leaves below 2^16 at depth 18).
     pub const SLOT_NODES: [usize; 3] = [296, 296, 254];

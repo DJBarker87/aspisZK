@@ -112,7 +112,9 @@ confirm this independently.
 From 11 November the one-transaction version is called Aspis in prose. Identifiers that still
 carry experiment labels are listed here so they are renamed at the next build and not before (the
 devnet verifier is immutable and its source must stay as recorded): the proof format magic
-`R1F1SM22`; the module `fused` and its `*_summed_format` functions; the `future-*` cargo features;
+`R1F1SM22` (done at the branch head on 11 November: it is now `ASPIS` + two zero bytes + format
+number 2, together with the owner-approved change that the final sumcheck continues the opening
+transcript); the module `fused` and its `*_summed_format` functions; the `future-*` cargo features;
 the crate and program names ending in `cost-probe`; the transcript domain, which should be decided
 together with version separation. Directory and script names under `future-version` and `FV_`
 stay as labels of this evidence.

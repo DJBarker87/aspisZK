@@ -286,7 +286,7 @@ for n, label in enumerate(['transfer', 'withdrawal']):
     assert p['one_tx'] is True, 'planner did not take the one-transaction route'
     proof = (root / 'proof' / 'proof.bin').read_bytes()
     assert len(proof) == p['proof_bytes'] == L.AFTERSTATE_BYTES + 55815, 'summed proof length'
-    assert proof[L.AFTERSTATE_BYTES:L.AFTERSTATE_BYTES + 8] == b'R1F1SM22', 'summed format magic'
+    assert proof[L.AFTERSTATE_BYTES:L.AFTERSTATE_BYTES + 8] == b'ASPIS\x00\x00\x02', 'Aspis one-transaction proof format magic'
     proof_entry = lay['proof_attempts'][attempt['index']]; cpe = lay['checkpoint']; verifiercp = cpe['address']
     # 2. Open: both accounts and the tail in one transaction, then the 15 full chunks.
     full = (len(proof) // L.CHUNK) * L.CHUNK

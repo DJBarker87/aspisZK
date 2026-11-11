@@ -11,6 +11,11 @@ impl<H: Digest32> Transcript<H> {
         let domain: &[u8] = b"UNPROVED:R1:PRIVATE-SALTED:P3";
         Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }
     }
+    /// Continue a transcript from its current state. No start frame is hashed:
+    /// the rows that follow extend the same chain. Used by the Aspis
+    /// one-transaction verifier for the final sumcheck (owner decision,
+    /// 2026-11-11), so that it adds no transcript start.
+    pub fn resume(hash:H, state:[u8;32]) -> Self { Self { state, hash } }
     pub fn absorb(&mut self, row:u8, payload:&[u8]) {
         self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);
     }
