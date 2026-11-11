@@ -203,6 +203,45 @@ fn stage1_accepts_foreign_readonly_raw_buffers_and_only_writes_checkpoint() {
 }
 
 #[test]
+fn stage1_on_closed_then_recreated_checkpoint_matches_fresh() {
+    // Fresh: the fixture's zero-filled, verifier-owned checkpoint.
+    let mut fresh = Stage1Fixture::new();
+    let fresh_result = fresh.run(10);
+    // Closed: an occupied checkpoint at create_with_seed(base, seed, program).
+    let mut closed = Stage1Fixture::new();
+    let seed = "aspis-ckpt-reuse";
+    let mut base = TestAccount::new(Pubkey::new_unique(), vec![], true);
+    base.signer = true;
+    let checkpoint = &mut closed.accounts[2];
+    checkpoint.key = Pubkey::create_with_seed(&base.key, seed, &closed.program).unwrap();
+    checkpoint.data.fill(0x55);
+    let mut data = vec![7, seed.len() as u8];
+    data.extend_from_slice(seed.as_bytes());
+    crate::process_r1_cost_probe_instruction(
+        &closed.program,
+        &[closed.accounts[2].info(), base.info()],
+        &data,
+    )
+    .unwrap();
+    assert_eq!(closed.accounts[2].lamports, 0);
+    assert_eq!(base.lamports, 2);
+    // Recreated: create_account_with_seed re-funds the same address; the
+    // runtime hands over zeroed data of the same size and owner.
+    closed.accounts[2].lamports = 1;
+    assert_eq!(closed.accounts[2].data, fresh_initial_checkpoint());
+    let closed_result = closed.run(10);
+    assert_eq!(closed_result, fresh_result);
+    for index in 0..3 {
+        assert_eq!(closed.accounts[index].data, fresh.accounts[index].data, "account {index}");
+        assert_eq!(closed.accounts[index].lamports, fresh.accounts[index].lamports);
+    }
+}
+
+fn fresh_initial_checkpoint() -> Vec<u8> {
+    Stage1Fixture::new().accounts[2].data.clone()
+}
+
+#[test]
 fn stage1_rejects_occupied_checkpoint() {
     for offset in [0, 80, 1_767] {
         let mut fixture = Stage1Fixture::new();

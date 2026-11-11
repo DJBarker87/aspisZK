@@ -25,23 +25,42 @@ fn eligible(c: usize, r: usize) -> bool {
     if r < 912 {
         return r % 16 >= 13;
     }
+    // pv-rw-d: the `(0..n).any(closure)` predicates as flag loops over named
+    // per-index predicates (pure, total: same booleans as the short-circuit any).
     if r < 1008 {
-        return !(0..24).any(|l| {
-            let b = 912 + 16 * (l / 4) + 1 + 4 * (l % 4);
-            (r == b && c <= 8) || r == b + 1
-        });
+        return !any_index(24, c, r, 0);
     }
     let r = r - 48;
-    !((0..21).any(|l| {
-        let b = 864 + 16 * (l / 4) + 1 + 2 * (l % 4);
-        (r == b && c <= 8) || r == b + 1 || (r == (b ^ 12) && c < 8)
-    }) || (0..3).any(|v| {
-        let b = 960 + 2 * v;
-        (r == b || r == b + 1 || r == (b ^ 12)) && c <= 10
-    }) || (r == 966 && c < 3)
+    !(any_index(21, c, r, 1) || any_index(3, c, r, 2) || (r == 966 && c < 3)
         || (r == 967 && c < 2)
         || (r == 969 && c <= 10)
         || (r == 970 && c < 10))
+}
+/// The per-index predicates of `eligible` (kind 0: rows 912..1008; 1: the
+/// shifted high rows; 2: the three v groups).
+fn eligible_hit(kind: usize, c: usize, r: usize, l: usize) -> bool {
+    if kind == 0 {
+        let b = 912 + 16 * (l / 4) + 1 + 4 * (l % 4);
+        (r == b && c <= 8) || r == b + 1
+    } else if kind == 1 {
+        let b = 864 + 16 * (l / 4) + 1 + 2 * (l % 4);
+        (r == b && c <= 8) || r == b + 1 || (r == (b ^ 12) && c < 8)
+    } else {
+        let b = 960 + 2 * l;
+        (r == b || r == b + 1 || r == (b ^ 12)) && c <= 10
+    }
+}
+/// exists l < n with eligible_hit(kind, c, r, l).
+fn any_index(n: usize, c: usize, r: usize, kind: usize) -> bool {
+    let mut hit = false;
+    let mut l = 0;
+    while l < n {
+        if !hit && eligible_hit(kind, c, r, l) {
+            hit = true;
+        }
+        l += 1;
+    }
+    hit
 }
 fn q(n: u32) -> QM31 {
     QM31::from_cm31(CM31::from_m31(M31(n)))
@@ -83,13 +102,15 @@ impl Rng {
     }
 }
 fn eq(a: &[QM31; 10], r: usize) -> QM31 {
-    a.iter().enumerate().fold(QM31::ONE, |v, (i, x)| {
-        v.mul(if r >> (9 - i) & 1 == 1 {
-            *x
-        } else {
-            QM31::ONE.sub(*x)
-        })
-    })
+    // pv-rw-d: index loop (former enumerate().fold closure); same product order.
+    let mut v = QM31::ONE;
+    let mut i = 0;
+    while i < 10 {
+        let x = a[i];
+        v = v.mul(if r >> (9 - i) & 1 == 1 { x } else { QM31::ONE.sub(x) });
+        i += 1;
+    }
+    v
 }
 fn points(a: &[QM31; 10]) -> [[QM31; 10]; 3] {
     let mut b = *a;
@@ -260,7 +281,28 @@ fn ext_raw(a: &[QM31; 10], z: &[Point<QM31>; 2], queries: &[usize], ood: bool) -
 }
 // Exact coefficients of f_c(alpha_prefix,X,Boolean_suffix)*eq(prefix,row)*(X or 1-X).
 fn round_row(a: &[QM31; 10], r: usize, c: usize) -> Vec<QM31> {
-    let (family, e, rot) = if c == 10 {
+    // pv-rw-d: helpers with one small loop each and a per-j step threading
+    // (out, pref) by value; the former single body took Aeneas minutes and its
+    // list literals failed.  Same values, same operation order.
+    let (family, e, rot) = round_params(c);
+    let w = round_w(family);
+    let initial = rot.mul_m31(boolean_sum(&w, r).pow(e as u64));
+    let initial = if c == 10 { initial.add(QM31::ONE) } else { initial };
+    let mut out: Vec<QM31> = Vec::new();
+    out.push(initial);
+    let mut pref = QM31::ONE;
+    let mut j = 0;
+    while j < 10 {
+        let (o2, p2) = round_row_step(a, &w, r, c, e, rot, j, pref, out);
+        out = o2;
+        pref = p2;
+        j += 1;
+    }
+    out
+}
+/// (family, degree e, rotation) of column c.
+fn round_params(c: usize) -> (usize, usize, QM31) {
+    if c == 10 {
         (16, 26, QM31::ONE)
     } else if c < 10 {
         (0, EXP[c], tower(c % 4))
@@ -268,76 +310,124 @@ fn round_row(a: &[QM31; 10], r: usize, c: usize) -> Vec<QM31> {
         (0, c - 12, tower((c - 12) % 4))
     } else {
         let col = c - 38;
-        (
-            0,
-            if col < 14 {
-                2 * col
-            } else if col == 14 {
-                13
-            } else {
-                25
-            },
-            tower(col % 4),
-        )
-    };
-    let w: Vec<M31> = (0..10)
-        .map(|i| M31((3 + 22 * i + family * (17 + 8 * i)) as u32))
-        .collect();
+        (0, if col < 14 { 2 * col } else if col == 14 { 13 } else { 25 }, tower(col % 4))
+    }
+}
+/// w[i] = 3 + 22 i + family (17 + 8 i), i < 10.
+fn round_w(family: usize) -> [M31; 10] {
+    let mut w = [M31::ZERO; 10];
+    let mut i = 0;
+    while i < 10 {
+        w[i] = M31((3 + 22 * i + family * (17 + 8 * i)) as u32);
+        i += 1;
+    }
+    w
+}
+/// sum of w[i] over the set bits r >> (9 - i) & 1.
+fn boolean_sum(w: &[M31; 10], r: usize) -> M31 {
     let mut boolean = M31::ZERO;
-    for i in 0..10 {
+    let mut i = 0;
+    while i < 10 {
         if r >> (9 - i) & 1 == 1 {
-            boolean = boolean.add(w[i])
+            boolean = boolean.add(w[i]);
         }
+        i += 1;
     }
-    let initial = rot.mul_m31(boolean.pow(e as u64));
-    let initial = if c == 10 {
-        initial.add(QM31::ONE)
-    } else {
-        initial
-    };
-    let mut out = vec![initial];
-    let mut pref = QM31::ONE;
-    for j in 0..10 {
-        let mut b = QM31::ZERO;
-        for i in 0..j {
-            b = b.add(a[i].mul_m31(w[i]))
-        }
-        for i in j + 1..10 {
-            if r >> (9 - i) & 1 == 1 {
-                b = b.add(QM31::from_m31(w[i]))
-            }
-        }
-        let mut p = vec![QM31::ONE];
-        for _ in 0..e {
-            let mut t = vec![QM31::ZERO; p.len() + 1];
-            for d in 0..p.len() {
-                t[d] = t[d].add(p[d].mul(b));
-                t[d + 1] = t[d + 1].add(p[d].mul_m31(w[j]));
-            }
-            p = t;
-        }
-        if c == 10 {
-            p[0] = p[0].add(QM31::ONE)
-        }
-        let mut full = vec![QM31::ZERO; 28];
-        let bit = r >> (9 - j) & 1;
-        for d in 0..p.len() {
-            let v = p[d].mul(pref).mul(rot);
-            if bit == 1 {
-                full[d + 1] = full[d + 1].add(v)
-            } else {
-                full[d] = full[d].add(v);
-                full[d + 1] = full[d + 1].sub(v)
-            }
-        }
-        out.push(full[0]);
-        out.extend(&full[2..]);
-        pref = pref.mul(if bit == 1 { a[j] } else { QM31::ONE.sub(a[j]) });
+    boolean
+}
+/// b = sum_{i<j} a[i] w[i] + sum_{i>j, bit i of r} w[i].
+fn round_b(a: &[QM31; 10], w: &[M31; 10], r: usize, j: usize) -> QM31 {
+    let mut b = QM31::ZERO;
+    let mut i = 0;
+    while i < j {
+        b = b.add(a[i].mul_m31(w[i]));
+        i += 1;
     }
+    let mut i = j + 1;
+    while i < 10 {
+        if r >> (9 - i) & 1 == 1 {
+            b = b.add(QM31::from_m31(w[i]));
+        }
+        i += 1;
+    }
+    b
+}
+/// p * (b + wj X): t[d] += p[d] b, t[d + 1] += p[d] wj.
+fn poly_mul_linear(p: &[QM31], b: QM31, wj: M31) -> Vec<QM31> {
+    let mut t = vec![QM31::ZERO; p.len() + 1];
+    let mut d = 0;
+    while d < p.len() {
+        t[d] = t[d].add(p[d].mul(b));
+        t[d + 1] = t[d + 1].add(p[d].mul_m31(wj));
+        d += 1;
+    }
+    t
+}
+/// (b + wj X)^e, starting from [1].
+fn poly_power(b: QM31, wj: M31, e: usize) -> Vec<QM31> {
+    let mut p: Vec<QM31> = Vec::new();
+    p.push(QM31::ONE);
+    let mut k = 0;
+    while k < e {
+        p = poly_mul_linear(&p, b, wj);
+        k += 1;
+    }
+    p
+}
+/// The 28 coefficients of p * pref * rot times X (bit 1) or (1 - X) (bit 0).
+fn spread(p: &[QM31], pref: QM31, rot: QM31, bit: usize) -> Vec<QM31> {
+    let mut full = vec![QM31::ZERO; 28];
+    let mut d = 0;
+    while d < p.len() {
+        let v = p[d].mul(pref).mul(rot);
+        if bit == 1 {
+            full[d + 1] = full[d + 1].add(v);
+        } else {
+            full[d] = full[d].add(v);
+            full[d + 1] = full[d + 1].sub(v);
+        }
+        d += 1;
+    }
+    full
+}
+/// out ++ [full[0]] ++ full[2..].
+fn push_round(mut out: Vec<QM31>, full: &[QM31]) -> Vec<QM31> {
+    out.push(full[0]);
+    out.extend_from_slice(&full[2..]);
     out
 }
+/// Round j of `round_row`: returns (out, pref) after the round.
+fn round_row_step(a: &[QM31; 10], w: &[M31; 10], r: usize, c: usize, e: usize, rot: QM31, j: usize, pref: QM31, out: Vec<QM31>) -> (Vec<QM31>, QM31) {
+    let b = round_b(a, w, r, j);
+    let p = bump_first(poly_power(b, w[j], e), c == 10);
+    let bit = r >> (9 - j) & 1;
+    let full = spread(&p, pref, rot, bit);
+    let out = push_round(out, &full);
+    (out, next_pref(pref, a[j], bit))
+}
+/// p[0] += 1 when `yes` (by value; the in-place branch crashed 1991).
+fn bump_first(mut p: Vec<QM31>, yes: bool) -> Vec<QM31> {
+    if yes {
+        p[0] = p[0].add(QM31::ONE);
+    }
+    p
+}
+fn next_pref(pref: QM31, aj: QM31, bit: usize) -> QM31 {
+    pref.mul(if bit == 1 { aj } else { QM31::ONE.sub(aj) })
+}
 fn flatten(v: &[QM31]) -> Vec<M31> {
-    v.iter().flat_map(|x| limbs(*x)).collect()
+    // pv-rw-d: index loop (former flat_map closure).
+    let mut out: Vec<M31> = Vec::with_capacity(4 * v.len());
+    let mut i = 0;
+    while i < v.len() {
+        let l = limbs(v[i]);
+        out.push(l[0]);
+        out.push(l[1]);
+        out.push(l[2]);
+        out.push(l[3]);
+        i += 1;
+    }
+    out
 }
 fn query_sets(rng: &mut Rng) -> Vec<(&'static str, Vec<usize>)> {
     let mut rand = vec![];
@@ -1832,17 +1922,58 @@ fn repaired_last_round(a: &[QM31; 10]) -> Ech<M31> {
     e
 }
 fn last_coeff(v: &[QM31], a: &[QM31; 10]) -> Vec<QM31> {
-    let mut prev = v[0];
+    // pv-rw-d: index loops (copy_from_slice / fold / rev().fold crashed Aeneas
+    // at InterpReduceCollapse.ml:1991).  Same reads; a short `v` panics at the
+    // same first missing index range as the former slice.
+    last_coeff_from(v, a, v[0])
+}
+/// pv-rw-d: `last_coeff` with the accumulator seed `v[0]` passed in by value
+/// (lane C pattern R5: an indexed seed read before the loop crashed 1991).
+fn last_coeff_from(v: &[QM31], a: &[QM31; 10], seed: QM31) -> Vec<QM31> {
+    let mut prev = seed;
     let mut co = vec![QM31::ZERO; 28];
-    for j in 0..10 {
-        co[0] = v[1 + 27 * j];
-        co[2..].copy_from_slice(&v[2 + 27 * j..28 + 27 * j]);
-        co[1] = prev
-            .sub(co[0].add(co[0]))
-            .sub(co[2..].iter().fold(QM31::ZERO, |v, x| v.add(*x)));
-        prev = co.iter().rev().fold(QM31::ZERO, |v, x| v.mul(a[j]).add(*x));
+    let mut j = 0;
+    while j < 10 {
+        let (co2, p2) = last_coeff_step(v, a[j], j, prev, co);
+        co = co2;
+        prev = p2;
+        j += 1;
     }
     co
+}
+/// Round j of `last_coeff` (pv-rw-d: by value; the in-place loops crashed 1991).
+fn last_coeff_step(v: &[QM31], aj: QM31, j: usize, prev: QM31, co: Vec<QM31>) -> (Vec<QM31>, QM31) {
+    let mut co = load_round(co, v, j);
+    let sum = sum_from2(&co);
+    co[1] = prev.sub(co[0].add(co[0])).sub(sum);
+    let h = horner_rev(&co, aj);
+    (co, h)
+}
+/// co[0] = v[1 + 27 j], co[t] = v[27 j + t] for t = 2..28.
+fn load_round(co: Vec<QM31>, v: &[QM31], j: usize) -> Vec<QM31> {
+    copy_round(set_first(co, v[1 + 27 * j]), v, 27 * j)
+}
+fn set_first(mut co: Vec<QM31>, x: QM31) -> Vec<QM31> {
+    co[0] = x;
+    co
+}
+/// co[t] = v[base + t], t = 2..28 (base passed by value; lane C R5).
+fn copy_round(mut co: Vec<QM31>, v: &[QM31], base: usize) -> Vec<QM31> {
+    let mut t = 2;
+    while t < 28 {
+        co[t] = v[base + t];
+        t += 1;
+    }
+    co
+}
+fn sum_from2(co: &[QM31]) -> QM31 {
+    let mut sum = QM31::ZERO;
+    let mut t = 2;
+    while t < 28 {
+        sum = sum.add(co[t]);
+        t += 1;
+    }
+    sum
 }
 fn z4b_main() {
     if std::env::args().any(|x| x == "--z4a") {
@@ -2215,46 +2346,86 @@ fn raw_c_with_transport(
     a: &[QM31; 10], z: &[Point<QM31>; 2], queries: &[usize],
     row_to_coefficient: &[u16; N],
 ) -> (Vec<Vec<M31>>, Vec<Vec<QM31>>) {
+    // pv-rw-d: one helper per row (row coefficient passed by value), list
+    // literals as pushes, loops over borrowed slices in small helpers.
     let pts = points(a);
+    raw_c_rows(a, z, queries, &pts, row_to_coefficient)
+}
+/// pv-rw-d: the row loop, borrowed inputs only.
+fn raw_c_rows(a: &[QM31; 10], z: &[Point<QM31>; 2], queries: &[usize], pts: &[[QM31; 10]; 3], row_to_coefficient: &[u16; N]) -> (Vec<Vec<M31>>, Vec<Vec<QM31>>) {
     let mut base = Vec::new();
     let mut ext = Vec::new();
-    for r in 0..N {
-        let co = usize::from(row_to_coefficient[r]);
-        let mut b = vec![if inactive(r) { M31::ONE } else { M31::ZERO }];
-        let mut e = vec![if inactive(r) { QM31::ONE } else { QM31::ZERO }];
-        for p in pts {
-            let x = eq(&p, r);
-            b.extend(limbs(x));
-            e.push(x);
-        }
-        let h = h_weight(a, co);
-        b.extend(limbs(h));
-        e.push(h);
-        for p in z {
-            let x = evalrow(co, *p);
-            b.extend(limbs(x));
-            e.push(x);
-        }
-        for &u in queries {
-            for slot in 0..4 {
-                let point = stored_point::<M31>(child_index(
-                    FibreIndex::new(u).unwrap(),
-                    SlotIndex::new(slot).unwrap(),
-                ));
-                let x = evalrow(co, point);
-                b.push(x);
-                e.push(QM31::from_m31(x));
-            }
-        }
-        assert_eq!(b.len(), 113);
-        assert_eq!(e.len(), 95);
+    let mut r = 0;
+    while r < N {
+        let (b, e) = raw_c_row(a, z, queries, pts, r, usize::from(row_to_coefficient[r]));
         base.push(b);
         ext.push(e);
+        r += 1;
     }
     (base, ext)
 }
+fn push_limbs(b: &mut Vec<M31>, x: QM31) {
+    let l = limbs(x);
+    b.push(l[0]);
+    b.push(l[1]);
+    b.push(l[2]);
+    b.push(l[3]);
+}
+/// pv-rw-d: the stored-point columns of the queries for coefficient `co`.
+fn raw_c_query_cols(queries: &[usize], co: usize, b: &mut Vec<M31>, e: &mut Vec<QM31>) {
+    let mut qi = 0;
+    while qi < queries.len() {
+        let u = queries[qi];
+        let mut slot = 0;
+        while slot < 4 {
+            let point = stored_point::<M31>(child_index(FibreIndex::new(u).unwrap(), SlotIndex::new(slot).unwrap()));
+            let x = evalrow(co, point);
+            b.push(x);
+            e.push(QM31::from_m31(x));
+            slot += 1;
+        }
+        qi += 1;
+    }
+}
+fn raw_c_row(a: &[QM31; 10], z: &[Point<QM31>; 2], queries: &[usize], pts: &[[QM31; 10]; 3], r: usize, co: usize) -> (Vec<M31>, Vec<QM31>) {
+    let ia = inactive(r);
+    let mut b: Vec<M31> = Vec::new();
+    let mut e: Vec<QM31> = Vec::new();
+    b.push(if ia { M31::ONE } else { M31::ZERO });
+    e.push(if ia { QM31::ONE } else { QM31::ZERO });
+    let x0 = eq(&pts[0], r);
+    push_limbs(&mut b, x0);
+    e.push(x0);
+    let x1 = eq(&pts[1], r);
+    push_limbs(&mut b, x1);
+    e.push(x1);
+    let x2 = eq(&pts[2], r);
+    push_limbs(&mut b, x2);
+    e.push(x2);
+    let h = h_weight(a, co);
+    push_limbs(&mut b, h);
+    e.push(h);
+    let y0 = evalrow(co, z[0]);
+    push_limbs(&mut b, y0);
+    e.push(y0);
+    let y1 = evalrow(co, z[1]);
+    push_limbs(&mut b, y1);
+    e.push(y1);
+    raw_c_query_cols(queries, co, &mut b, &mut e);
+    assert_eq!(b.len(), 113);
+    assert_eq!(e.len(), 95);
+    (b, e)
+}
 fn tail_row(a: &[QM31; 10], row: usize) -> Vec<QM31> {
-    let co = usize::from(z5::transport()[row]);
+    tail_row_with(a, row, z5::transport())
+}
+/// pv-rw-d: `tail_row` with the row-to-coefficient transport passed in.
+fn tail_row_with(a: &[QM31; 10], row: usize, transport: &[u16; N]) -> Vec<QM31> {
+    tail_row_co(a, usize::from(transport[row]))
+}
+/// pv-rw-d: `tail_row` for row coefficient `co`, passed by value (lane C
+/// pattern R5: the indexed read before the loop crashed 1991).
+fn tail_row_co(a: &[QM31; 10], co: usize) -> Vec<QM31> {
     let mut out = vec![QM31::ZERO; 271];
     if co >= 56 {
         return out;
@@ -2277,10 +2448,18 @@ fn tail_row(a: &[QM31; 10], row: usize) -> Vec<QM31> {
     out
 }
 fn final_value(v: &[QM31], a: &[QM31; 10]) -> QM31 {
-    last_coeff(v, a)
-        .iter()
-        .rev()
-        .fold(QM31::ZERO, |sum, x| sum.mul(a[9]).add(*x))
+    // pv-rw-d: reverse index loop (former iter().rev().fold closure).
+    horner_rev(&last_coeff(v, a), a[9])
+}
+/// sum over co reversed: sum = sum * x + co[t] (the former rev().fold).
+fn horner_rev(co: &[QM31], x: QM31) -> QM31 {
+    let mut sum = QM31::ZERO;
+    let mut t = co.len();
+    while t > 0 {
+        t -= 1;
+        sum = sum.mul(x).add(co[t]);
+    }
+    sum
 }
 fn phi0(v: &[QM31], explicit_mask_at_alpha: QM31, extra_d_claim: QM31, a: &[QM31; 10]) -> QM31 {
     final_value(v, a)
@@ -2915,4 +3094,39 @@ fn main() {
     else if std::env::args().any(|x| x == "--z5-search") { z5::search(); }
     else if std::env::args().any(|x| x == "--z5-gate") { z5::gate(); }
     else { z4c_main(); }
+}
+
+/// pv-rw-d: exhaustive check of the rewritten `eligible` against the pinned body (copied verbatim).
+#[cfg(test)]
+mod pv_rw_d_unit {
+    fn eligible_pinned(c: usize, r: usize) -> bool {
+        if r < 912 {
+            return r % 16 >= 13;
+        }
+        if r < 1008 {
+            return !(0..24).any(|l| {
+                let b = 912 + 16 * (l / 4) + 1 + 4 * (l % 4);
+                (r == b && c <= 8) || r == b + 1
+            });
+        }
+        let r = r - 48;
+        !((0..21).any(|l| {
+            let b = 864 + 16 * (l / 4) + 1 + 2 * (l % 4);
+            (r == b && c <= 8) || r == b + 1 || (r == (b ^ 12) && c < 8)
+        }) || (0..3).any(|v| {
+            let b = 960 + 2 * v;
+            (r == b || r == b + 1 || r == (b ^ 12)) && c <= 10
+        }) || (r == 966 && c < 3)
+            || (r == 967 && c < 2)
+            || (r == 969 && c <= 10)
+            || (r == 970 && c < 10))
+    }
+    #[test]
+    fn eligible_matches_pinned_exhaustively() {
+        for c in 0..64 {
+            for r in 0..super::N {
+                assert_eq!(super::eligible(c, r), eligible_pinned(c, r), "c={c} r={r}");
+            }
+        }
+    }
 }

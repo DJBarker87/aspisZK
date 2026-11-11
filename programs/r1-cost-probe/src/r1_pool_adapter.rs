@@ -946,6 +946,51 @@ fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult
 mod owned;
 use owned::{stage1, stage2};
 
+/// Close a verifier checkpoint, `[7, seed_len, seed...]` with 1..=32 seed
+/// bytes, accounts `[checkpoint (writable, verifier-owned, not executable),
+/// base (signer)]`. The checkpoint address must equal
+/// `create_with_seed(base, seed, program_id)`, so only the account that
+/// created it with `create_account_with_seed` can close it.
+///
+/// This instruction never writes a non-zero byte into a checkpoint: it sets
+/// every data byte to zero and moves all lamports to `base`, and touches no
+/// other state. An all-zero checkpoint is the stage-1 precondition, not a
+/// stage-2-acceptable checkpoint.
+#[inline(never)]
+fn close_checkpoint(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo<'_>],
+    data: &[u8],
+) -> ProgramResult {
+    if !crate::pool_route::is_close_checkpoint(data) {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let [checkpoint, base] = accounts else {
+        return Err(ProgramError::NotEnoughAccountKeys);
+    };
+    if checkpoint.owner != program_id || !checkpoint.is_writable || checkpoint.executable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    if !base.is_signer {
+        return Err(ProgramError::MissingRequiredSignature);
+    }
+    let seed = core::str::from_utf8(&data[2..])
+        .map_err(|_| ProgramError::InvalidInstructionData)?;
+    if Pubkey::create_with_seed(base.key, seed, program_id)? != *checkpoint.key {
+        return Err(ProgramError::InvalidSeeds);
+    }
+    // Checked before any write, so a rejected close leaves both accounts as
+    // they were even outside the runtime's rollback.
+    let total = base
+        .try_lamports()?
+        .checked_add(checkpoint.try_lamports()?)
+        .ok_or(ProgramError::ArithmeticOverflow)?;
+    checkpoint.try_borrow_mut_data()?.fill(0);
+    **checkpoint.try_borrow_mut_lamports()? = 0;
+    **base.try_borrow_mut_lamports()? = total;
+    Ok(())
+}
+
 #[inline(never)]
 pub(super) fn process(
     program_id: &Pubkey,
@@ -956,6 +1001,7 @@ pub(super) fn process(
         Some(4) => lifecycle_init(program_id, accounts, data),
         Some(5) => lifecycle_write(program_id, accounts, data),
         Some(6) => lifecycle_finalize(program_id, accounts, data),
+        Some(crate::pool_route::CLOSE_CHECKPOINT_TAG) => close_checkpoint(program_id, accounts, data),
         _ if data == &[3, 10] || data == &[3, 11] => stage1(program_id, accounts, data),
         _ => stage2(program_id, accounts, data),
     }
@@ -971,3 +1017,7 @@ mod deployment_ids;
 #[cfg(all(test, feature = "private-leaf-salts"))]
 #[path = "adapter_rw_tests.rs"]
 mod rw_tests;
+
+#[cfg(test)]
+#[path = "close_checkpoint_tests.rs"]
+mod close_checkpoint_tests;

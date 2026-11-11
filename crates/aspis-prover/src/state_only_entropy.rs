@@ -66,6 +66,7 @@ const PROFILE21_SOURCE_EXPAND_DOMAIN: &[u8] = b"aspis:state-only:profile21:sourc
 const LEAF_SALT_DOMAIN: &[u8] = b"aspis:state-only:private-leaf-salt:v1";
 const RESERVATION_MAGIC: &[u8; 16] = b"ASPIS-MASK-V1\0\0\0";
 const ENTROPY_RETRY_LIMIT: usize = 16;
+const LOWER_HEX_DIGITS: [u8; 16] = *b"0123456789abcdef";
 
 #[derive(Debug)]
 pub enum StateOnlyAttemptEntropyError {
@@ -100,6 +101,109 @@ pub struct ReservedStateOnlyAttemptSecrets {
 }
 
 struct SensitiveQm31Vec(Vec<aspis_core::field::QM31>);
+
+/// pv-rw-a: appends the lower-case two-digit hex of each digest byte, in byte
+/// order (the pin's `write!(name, "{byte:02x}")` loop). Public data only.
+fn push_lower_hex(name: &mut String, digest: &[u8; 32]) {
+    let mut index = 0;
+    while index < 32 {
+        push_lower_hex_byte(name, digest[index]);
+        index += 1;
+    }
+}
+
+/// pv-rw-a: one byte of `push_lower_hex`.
+fn push_lower_hex_byte(name: &mut String, byte: u8) {
+    name.push(char::from(LOWER_HEX_DIGITS[usize::from(byte >> 4)]));
+    name.push(char::from(LOWER_HEX_DIGITS[usize::from(byte & 0x0f)]));
+}
+
+/// pv-rw-a: the zero-factor D source draw. Appends `count` (= 1024 at the
+/// only call site) `Profile21SourceExpander::qm31` draws to `values`, in
+/// order; on the first sampling error it returns that error with the draws
+/// made so far left in `values` (the caller's drop guard clears them, as with
+/// the pin's `?`).
+fn sample_source_d(
+    expander: &mut Profile21SourceExpander,
+    values: &mut Vec<aspis_core::field::QM31>,
+    count: usize,
+) -> Result<(), StateOnlyMaskBuildError> {
+    let mut index = 0;
+    while index < count {
+        let value = expander.qm31()?;
+        values.push(value);
+        index += 1;
+    }
+    Ok(())
+}
+
+/// pv-rw-a: sum, in row order, of `values[row]` over rows that are inactive
+/// and not `dependent` (the pin's enumerate/filter/fold). `values` has
+/// `STATE_ONLY_POSEIDON_TRACE_ROWS` entries.
+fn inactive_qm31_sum_except(
+    values: &[aspis_core::field::QM31],
+    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
+    dependent: usize,
+) -> aspis_core::field::QM31 {
+    let mut sum = aspis_core::field::QM31::ZERO;
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        sum = inactive_qm31_sum_except_step(sum, active[row], row, dependent, values[row]);
+        row += 1;
+    }
+    sum
+}
+
+/// pv-rw-a: one row of `inactive_qm31_sum_except`; the branch lives here so
+/// the loop body is straight-line (Aeneas 1991 workaround).
+fn inactive_qm31_sum_except_step(
+    sum: aspis_core::field::QM31,
+    is_active: bool,
+    row: usize,
+    dependent: usize,
+    value: aspis_core::field::QM31,
+) -> aspis_core::field::QM31 {
+    if !is_active && row != dependent {
+        sum.add(value)
+    } else {
+        sum
+    }
+}
+
+/// pv-rw-a: counted-loop form of
+/// `array::from_fn(|row| masks[row >> 4] & (1 << (row & 15)) != 0)`.
+/// The masks are the public compiled copy layout.
+fn pool_v1_active_rows_from_masks(masks: &[u16; 64]) -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
+    let mut active = [false; STATE_ONLY_POSEIDON_TRACE_ROWS];
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        active[row] = masks[row >> 4] & (1 << (row & 15)) != 0;
+        row += 1;
+    }
+    active
+}
+
+/// pv-rw-a: counted-loop form of `active.iter().position(|a| !*a)`, with
+/// `STATE_ONLY_POSEIDON_TRACE_ROWS` standing for `None`. Scans every row (no
+/// early exit); the layout is public.
+fn first_inactive_row_or_rows(active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]) -> usize {
+    let mut found = STATE_ONLY_POSEIDON_TRACE_ROWS;
+    let mut row = 0;
+    while row < STATE_ONLY_POSEIDON_TRACE_ROWS {
+        found = first_inactive_row_step(found, row, active[row]);
+        row += 1;
+    }
+    found
+}
+
+/// pv-rw-a: one row of `first_inactive_row_or_rows` (branch outside the loop).
+fn first_inactive_row_step(found: usize, row: usize, is_active: bool) -> usize {
+    if found == STATE_ONLY_POSEIDON_TRACE_ROWS && !is_active {
+        row
+    } else {
+        found
+    }
+}
 
 impl Drop for SensitiveQm31Vec {
     fn drop(&mut self) {
@@ -652,6 +756,52 @@ impl ReservedStateOnlyAttemptSecrets {
                 self.source_mask_seed.as_ref(),
             ]),
         );
+        // pv-rw-a (extraction rewrite, behaviour unchanged): every loop is a
+        // counted loop in its own helper (no loop in this body).
+        // DRAW ORDER (unchanged from the pin): exactly
+        // STATE_ONLY_POSEIDON_TRACE_ROWS = 1024 `Profile21SourceExpander::qm31`
+        // draws (each four rejection-sampled m31 words) from the expander
+        // seeded by hash(POOL_V1_D_SEED_DOMAIN, attempt binding, source seed),
+        // one per row in row order 0..1023, *including* the dependent row
+        // whose draw is then discarded and overwritten by the balancing value.
+        // The first sampling error is returned. Then: the same rows summed in
+        // the same order, the same dependent row (first inactive row).
+        let mut d = SensitiveQm31Vec(Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS));
+        sample_source_d(&mut expander, &mut d.0, STATE_ONLY_POSEIDON_TRACE_ROWS)?;
+        let active = pool_v1_active_rows_from_masks(active_masks);
+        let dependent = first_inactive_row_or_rows(&active);
+        if dependent == STATE_ONLY_POSEIDON_TRACE_ROWS {
+            return Err(StateOnlyMaskBuildError::Layout);
+        }
+        let sum = inactive_qm31_sum_except(&d.0, &active, dependent);
+        d.0[dependent] = aspis_core::field::QM31::ZERO.sub(sum);
+        Ok(core::mem::take(&mut d.0))
+    }
+
+    /// Pin body of `derive_pool_v1_zero_factor_d` (4bb3b3f), kept only for the
+    /// rewrite-equivalence test.
+    #[cfg(test)]
+    fn derive_pool_v1_zero_factor_d_pin(
+        &self,
+        hash: HashFn,
+        context: StateOnlyHidingContext,
+        expected_factor_fingerprint: u64,
+        active_masks: &[u16; 64],
+    ) -> Result<Vec<aspis_core::field::QM31>, StateOnlyMaskBuildError> {
+        self.validate_pool_v1_context(context)?;
+        if context.layout_factor_fingerprint != expected_factor_fingerprint {
+            return Err(StateOnlyMaskBuildError::Layout);
+        }
+        let attempt_binding =
+            pool_v1_private_attempt_binding(hash, &self.precommit_binding, context);
+        let mut expander = Profile21SourceExpander::new(
+            hash,
+            hash(&[
+                POOL_V1_D_SEED_DOMAIN,
+                &attempt_binding,
+                self.source_mask_seed.as_ref(),
+            ]),
+        );
         let mut d = SensitiveQm31Vec(Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS));
         for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
             d.0.push(expander.qm31()?);
@@ -905,6 +1055,28 @@ impl DurableStateOnlyMaskNonceStore {
     fn reservation_path(&self, mask_nonce: &[u8; 32]) -> PathBuf {
         // The nonce is burned globally within this wallet ledger, even if a
         // caller tries to reuse it under a different statement digest.
+        // pv-rw-a (extraction rewrite): the digest is the pin's direct sha2
+        // call, unchanged. (Routing it through `crate::HOST_HASH`, which is
+        // byte-equal, was tried in run r3 and blocks extraction: see
+        // evidence/pv-rw-a-20261110/REPORT.md, request R4.) The hex is
+        // lower-case two-digit by table, byte for byte the pin's `{byte:02x}`,
+        // in a counted loop in `push_lower_hex`. The file name is unchanged, so
+        // nonces burned by the pin build stay recognised (test
+        // `pv_rw_a_reservation_path_matches_pin_body`, with golden names).
+        let mut hasher = Sha256::new();
+        hasher.update(ATTEMPT_RESERVATION_DOMAIN);
+        hasher.update(mask_nonce);
+        let digest: [u8; 32] = hasher.finalize().into();
+        let mut name = String::with_capacity(69);
+        push_lower_hex(&mut name, &digest);
+        name.push_str(".burn");
+        self.directory.join(name)
+    }
+
+    /// Pin body of `reservation_path` (4bb3b3f), kept only for the
+    /// rewrite-equivalence test.
+    #[cfg(test)]
+    fn reservation_path_pin(&self, mask_nonce: &[u8; 32]) -> PathBuf {
         let mut hasher = Sha256::new();
         hasher.update(ATTEMPT_RESERVATION_DOMAIN);
         hasher.update(mask_nonce);
@@ -1249,6 +1421,167 @@ mod tests {
             .filter(|won| *won)
             .count();
         assert_eq!(winners, 1);
+        fs::remove_dir_all(directory).unwrap();
+    }
+
+    /// pv-rw-a: host hash with the top bit forced on in words 0..3 of every
+    /// output, so the rejection-sampling retry path is exercised.
+    fn pv_rw_a_partly_rejecting_hash(inputs: &[&[u8]]) -> [u8; 32] {
+        let mut out = crate::HOST_HASH(inputs);
+        for word in 0..3 {
+            out[4 * word + 3] |= 0x80;
+            out[4 * word] |= 0xff;
+            out[4 * word + 1] |= 0xff;
+            out[4 * word + 2] |= 0xff;
+        }
+        out
+    }
+
+    /// pv-rw-a: every 31-bit candidate equals P, so sampling is exhausted.
+    fn pv_rw_a_rejecting_hash(_inputs: &[&[u8]]) -> [u8; 32] {
+        [0xff; 32]
+    }
+
+    #[test]
+    fn pv_rw_a_zero_factor_d_matches_pin_body() {
+        let hashes: [HashFn; 3] = [
+            crate::HOST_HASH,
+            pv_rw_a_partly_rejecting_hash,
+            pv_rw_a_rejecting_hash,
+        ];
+        let forest_masks = pool_v1_pair_forest_copy_active_row_masks_v1().unwrap();
+        for trial in 0..24u8 {
+            let mut seeds = [0u8; 96];
+            getrandom::fill(&mut seeds).unwrap();
+            let mut nonce = [0u8; 32];
+            nonce.copy_from_slice(&seeds[..32]);
+            nonce[0] |= 1;
+            let mut field = [0u8; 32];
+            field.copy_from_slice(&seeds[32..64]);
+            field[0] |= 1;
+            let mut leaf = [0u8; 32];
+            leaf.copy_from_slice(&seeds[64..]);
+            leaf[0] |= 1;
+            let variant = trial % 3;
+            let context = match variant {
+                0 => StateOnlyHidingContext::pool_v1_private_transfer([0x73; 32], nonce),
+                1 => StateOnlyHidingContext::pool_v1_withdrawal([0x73; 32], nonce),
+                _ => StateOnlyHidingContext::pool_v1_pair_forest_v1([0x73; 32], nonce),
+            };
+            let attempt = StateOnlyAttemptSecrets::deterministic_spend_fixture(nonce, field, leaf);
+            let mut store = crate::state_only_hiding::InMemoryStateOnlyMaskNonceStore::default();
+            let reserved = match variant {
+                0 => {
+                    attempt
+                        .reserve_and_build_pool_v1_private_transfer_mask_material_v1(
+                            crate::HOST_HASH,
+                            [trial; 32],
+                            context,
+                            &mut store,
+                        )
+                        .unwrap()
+                        .0
+                }
+                1 => {
+                    attempt
+                        .reserve_and_build_pool_v1_withdrawal_mask_material_v1(
+                            crate::HOST_HASH,
+                            [trial; 32],
+                            context,
+                            &mut store,
+                        )
+                        .unwrap()
+                        .0
+                }
+                _ => {
+                    attempt
+                        .reserve_and_build_pool_v1_pair_forest_mask_material_v1(
+                            crate::HOST_HASH,
+                            [trial; 32],
+                            context,
+                            &mut store,
+                        )
+                        .unwrap()
+                        .0
+                }
+            };
+            let mut random_masks = [0u16; 64];
+            let mut mask_bytes = [0u8; 128];
+            getrandom::fill(&mut mask_bytes).unwrap();
+            for (index, mask) in random_masks.iter_mut().enumerate() {
+                *mask = u16::from_le_bytes([mask_bytes[2 * index], mask_bytes[2 * index + 1]]);
+            }
+            let fingerprints = [
+                PINNED_POOL_V1_PRIVATE_TRANSFER_HIDING_LAYOUT_FACTOR_FINGERPRINT,
+                PINNED_POOL_V1_WITHDRAWAL_HIDING_LAYOUT_FACTOR_FINGERPRINT,
+                PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1,
+            ];
+            let mask_sets: [&[u16; 64]; 6] = [
+                pool_v1_private_transfer_copy_active_row_masks_compiled_v1(),
+                pool_v1_withdrawal_copy_active_row_masks_compiled_v1(),
+                &forest_masks,
+                &random_masks,
+                &[0xffff; 64],
+                &[0; 64],
+            ];
+            for hash in hashes {
+                for fingerprint in fingerprints {
+                    for masks in mask_sets {
+                        assert_eq!(
+                            reserved.derive_pool_v1_zero_factor_d(hash, context, fingerprint, masks),
+                            reserved.derive_pool_v1_zero_factor_d_pin(
+                                hash,
+                                context,
+                                fingerprint,
+                                masks
+                            ),
+                        );
+                    }
+                }
+                // A context other than the reserved one is rejected identically.
+                let other = StateOnlyHidingContext::pool_v1_private_transfer([0x74; 32], nonce);
+                assert_eq!(
+                    reserved.derive_pool_v1_zero_factor_d(hash, other, fingerprints[0], mask_sets[0]),
+                    reserved.derive_pool_v1_zero_factor_d_pin(
+                        hash,
+                        other,
+                        fingerprints[0],
+                        mask_sets[0]
+                    ),
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn pv_rw_a_reservation_path_matches_pin_body() {
+        let directory = temporary_ledger("pv-rw-a-path");
+        let store = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();
+        let mut fixed = vec![[0u8; 32], [0xff; 32], [0x0f; 32], [0xf0; 32]];
+        for _ in 0..256 {
+            let mut nonce = [0u8; 32];
+            getrandom::fill(&mut nonce).unwrap();
+            fixed.push(nonce);
+        }
+        for nonce in &fixed {
+            assert_eq!(store.reservation_path(nonce), store.reservation_path_pin(nonce));
+        }
+        // Fixed-nonce burn-file names, computed independently with Python
+        // hashlib: sha256(b"aspis:state-only:attempt-reservation:v1" || nonce).
+        let mut counting = [0u8; 32];
+        for (index, byte) in counting.iter_mut().enumerate() {
+            *byte = index as u8;
+        }
+        let golden: [([u8; 32], &str); 4] = [
+            ([0; 32], "ff050d8be9672ba59db1dac8d8850a71fae7056b53919636473dae72c3c8f5ee.burn"),
+            ([0xff; 32], "b18b8f55dee2bff8816d1fd921bef43ba8431e5a014009a7aec0e6ba7edbbf5d.burn"),
+            (counting, "efb1f38646d97aacc1de40856b2a27bc5e20b181e77b172ae53c3b2a93e43723.burn"),
+            ([0x7b; 32], "f2a7382c2b831bbd30a9baf3804ae105fe6a4b3113bab3c2ee5240acdc34d9f3.burn"),
+        ];
+        for (nonce, name) in golden {
+            assert_eq!(store.reservation_path(&nonce), directory.join(name));
+            assert_eq!(store.reservation_path_pin(&nonce), directory.join(name));
+        }
         fs::remove_dir_all(directory).unwrap();
     }
 }
