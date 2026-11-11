@@ -650,3 +650,76 @@ exact.
 | G4 stage D scale factors through the dot accumulator | ten calls at about 1.9k, four WideExact-by-QM31 products each | 7k |
 | G5 claim dots over one copied row per point | 174 pushes at about 340, of which the per-term match and bounds work is about 40 | 7k |
 | G6 second fold with the two edge products shared | per query two WideExact-by-M31 products and four pushes in place of six pushes and five coefficient products | 7k |
+
+### Round 3, third set: result
+
+Cumulative program CU of the summed verifier (source `263f67ed05c`):
+
+| Build | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 | Saving on the previous build |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| W13 | 1,226,151 | 1,229,212 | 1,227,553 | 1,226,317 | 1,227,376 | 1,227,416 | |
+| + G1 lean record validation | 1,226,065 | 1,229,126 | 1,227,467 | 1,226,231 | 1,227,290 | 1,227,330 | 86 |
+| + G2 fused multiply-add | 1,218,626 | 1,221,723 | 1,220,070 | 1,218,787 | 1,219,832 | 1,219,870 | 7,397 to 7,460 |
+| + G3 word-wise scan | 1,223,800 | 1,226,897 | 1,225,244 | 1,223,961 | 1,225,006 | 1,225,044 | regression of 5,174 |
+| + G4 scale factors through the dot | 1,222,316 | 1,225,432 | 1,223,777 | 1,222,504 | 1,223,543 | 1,223,574 | 1,457 to 1,484 |
+| + G5 claim rows | 1,221,758 | 1,224,874 | 1,223,219 | 1,221,946 | 1,222,985 | 1,223,016 | 558 |
+| + G6 shared second-fold products | 1,210,972 | 1,214,075 | 1,212,445 | 1,211,173 | 1,212,212 | 1,212,259 | 10,757 to 10,799 |
+
+Predicted 7k, 8k, 6k, 7k, 7k, 7k. Kept: G2 and G6. Dropped under the 3,000
+rule: G1, G4, G5 (too small) and G3 (regression). The kept set is W13 + G2 +
+G6; it was not measured as a non-adapter build of its own and is measured
+below inside the adapter.
+
+## One transaction through the Pool: replay of the recorded devnet settlements
+
+**What was run.** The two settlement transactions of the 11 November devnet
+run (transfer `4QKVyJYb…`, slot 520963524; withdrawal `4pQ2aWTw…`, slot
+520964933) were replayed in LiteSVM from their recorded pre-state: every
+account of the transaction with its recorded data, the deployed Pool ELF
+(`e0e49c34…8cfe09dc`), the recorded slot, the recorded instruction data and
+account list, and the real 1,400,000 CU limit with a 256 KiB heap. Signature
+verification is off because the recorded payer's key is not available;
+nothing else is changed. Tool: `tools/r1-cost-probe/src/bin/one_tx_replay.rs`.
+
+**Control.** With the deployed verifier ELF (`2284239e…0fbd6278`) the replay
+reproduces the recorded Pool compute units exactly: 1,139,872 (transfer) and
+1,155,430 (withdrawal), with nested verifier 1,043,169 and 1,049,326.
+
+**One transaction.** The verifier at the same address is replaced by the
+adapter build with `future-one-tx` and the kept feature set (ELF
+`99daf718…48a5ed5`, source `edafb9f09c7`, built with the devnet pool and
+registry identifiers). Its settlement entry does not resume a checkpoint: it
+validates the reconstructed statement and verifies the whole proof in this
+invocation (stage C and stage D), reading the 384-byte certificate from the
+start of the verifier-owned seventh account. Stage 1 never runs. The
+certificate is computed by the tool from the recorded public statement and
+proof.
+
+| | Transfer | Withdrawal |
+|---|---:|---:|
+| Whole transaction | 1,328,287 | 1,337,700 |
+| Pool program (inclusive) | 1,327,931 | 1,337,344 |
+| Nested verifier | 1,231,228 | 1,231,240 |
+| Margin to 1,400,000 | 71,713 | 62,300 |
+| Recorded two-transaction total, for comparison | 2,351,586 | 2,360,824 |
+
+Both complete and return the same result bytes the recorded settlement
+returned. With one certificate byte changed the transaction fails; with the
+recorded checkpoint bytes in place of a certificate it fails.
+
+**What this is and is not.** It is one transaction that performs all
+verification and the Pool settlement inside the real limit, on the two
+recorded devnet payments, in a local replay. It is not:
+
+- a devnet or mainnet transaction, or a signed one;
+- an all-input result: two payments, both on a young Pool; the Pool's own
+  cost grows with history (the October fixtures showed up to about 50k more),
+  and the margin here is 62k to 72k;
+- a soundness result: stage C and stage D are unproved protocol changes, and
+  none of the changed kernels has a source-correspondence proof;
+- a complete product path: the prover and client do not yet produce or carry
+  the certificate (it would travel with the proof; here it sits in the
+  account the checkpoint used), and the two-transaction programs deployed on
+  devnet are unchanged.
+
+The release target stays as it was: not yet established.
