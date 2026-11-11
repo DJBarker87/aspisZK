@@ -598,6 +598,36 @@ model file was renamed to its module name (content unchanged), so the hashes of
 from their earlier receipts. Scripts: `evidence/future-version-20261111/host/fv_replay_aspis.sh`
 and `fv_replay_order.py`.
 
-Not yet done on this result: the soundness lead's reviewer has read the chain up to the restated
-hypothesis (06fb221ac96) and has not read the final files (the follow, the bridge, the final
-decoding, the model theorem).
+**Review of the final chain** (soundness lead's reviewer, on 0f062df765f, from the source). All
+seven groups of files faithful. In its words, what holds at model level: for every prover making
+at most `Q` queries, the mass of "the 40-row model verifier accepts and R1's extractor returns no
+witness" is at most `kappa(Q+1111) + Q·capMax + verifierCharge40 + 2^-126 + 2^-454`, and at most
+`(Q+1)/2^100` for `Q ≤ 2^150`, with no open premise. Its answers to the four questions put to it:
+1. `FollowClaim` is the statement the decoder needs, not one shaped to what could be proved: its
+   conclusion is fixed by `Final.decode`'s output, which was committed before the claim, and it
+   is consumed directly in `AspisRec40FinalAddr`. Its premises are R1's eight, with the trace
+   lengthened to 40 rows.
+2. The qualification about literal `.c2`/`.second` rows is met: `final_decodes` takes the literal
+   late-row form from `FinalLiteral.base_literal`, which rests on canonicalisation.
+3. Every hypothesis on the chain is discharged and none circularly. `hit_in_prefix_of` derives
+   the format, the tag, the two trace premises and `LatePayload` from acceptance and
+   no-collision, as antecedents of an implication that is proved. Nothing derives `FinalDecodes`
+   from acceptance, from the hit or from itself. `hq_of_done` shows satisfiability of `hq` only;
+   joint satisfiability of R1's four premises with `LatePayload` is argued, not compiled.
+4. The left side is the same failure mass as R1's bound, on R1's relation. With no compiled
+   completeness and no refinement of `dV_aspis` or its row order to the Rust, the bound formally
+   says nothing about an accepted real run and is true but empty for a verifier accepting
+   nothing. (This section says so above; RECORDED-EXPERIMENT-40.md section 14.5 overstated it
+   and is corrected.)
+It also confirmed the right-hand side is the five terms of section 4 and that `AspisNumeric.rhs`
+is the same term; no `sorry`, axiom, `opaque`, `native_decide` or raised limit; the renamed
+model file has the same content as before.
+
+One evidence gap it named is closed: the per-theorem axiom result of the rebuild is now in the
+repository for every theorem of the 80 modules
+(`evidence/future-version-20261111/replay-c1/axioms_all.tsv`, 513 lines; the four theorems of
+`AspisFailureBoundModel` each read `[propext, Classical.choice, Quot.sound]`).
+
+Not established, as the reviewer lists it and as above: completeness, refinement to the Rust or
+the deployed program, the account term and the payout conjunct, the binding to the
+one-transaction game, campaign accounting.

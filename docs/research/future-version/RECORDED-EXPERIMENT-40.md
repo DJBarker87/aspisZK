@@ -1574,8 +1574,17 @@ is reached at constant level.
 oracle queries in every oracle world. Any prover whose query count is bounded
 by `Q` satisfies it, adaptive or not, whatever statement and proof it outputs.
 `hq_of_done` compiles the simplest case: a prover that makes no query
-satisfies `hq` at every `Q`. So the model theorems are not vacuous, and the
-per-query form applies to every such prover with `Q ≤ 2^150`.
+satisfies `hq` at every `Q`. So the HYPOTHESIS of the model theorems can
+hold, and the per-query form applies to every such prover with `Q ≤ 2^150`.
+
+Correction (lead, after the reviewer's verdict on 0f062df765f): the sentence
+that stood here said `hq_of_done` makes the theorems not vacuous. That
+overstated it. `hq_of_done` shows only that `hq` is satisfiable. It does not
+show that the model verifier accepts anything. No completeness of the model
+verifier is compiled, and nothing ties `dV_aspis` to the Rust, so formally the
+bound is true but empty for a verifier that accepts nothing, and it says
+nothing yet about an accepted run of the real program. ASPIS-FAILURE-BOUND.md
+section 8 states this.
 
 Every `def … : Prop` in my files that is used as a hypothesis anywhere, and
 how it is now discharged:
