@@ -222,3 +222,32 @@ impl EbyEDot {
         E::new(ac.add(bd.mul(E::U)), ad.add(bc))
     }
 }
+
+/// FUTURE-VERSION EXPERIMENT (not part of the pinned verifier): exact
+/// accumulator for sums of `QM31 * QM31`, on the same private delayed-reduction
+/// accumulator as `EbyKDot`. Both operands are checked canonical at push.
+pub struct KbyKDot {
+    dot: canonical::Dot,
+    count: usize,
+}
+
+impl KbyKDot {
+    pub fn new() -> Self {
+        Self { dot: canonical::Dot::new(), count: 0 }
+    }
+
+    #[inline(always)]
+    pub fn push(&mut self, left: QM31, right: QM31) -> Result<(), ()> {
+        if self.count >= MAX_TERMS { return Err(()); }
+        let left = checked_q(left)?;
+        let right = checked_q(right)?;
+        self.dot.push(left, right);
+        self.count += 1;
+        Ok(())
+    }
+
+    #[inline(always)]
+    pub fn finish(self) -> QM31 {
+        qm31_of(self.dot.finish())
+    }
+}

@@ -338,3 +338,8 @@ pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], ha
     mark(obs, Phase::Parsed);
     tx2_common(public_bytes, proof, checkpoint, hash, obs)
 }
+
+// FUTURE-VERSION EXPERIMENT (branch `future-version`): single-invocation
+// verifiers. Unproved, not adopted, not reachable from the pinned entrypoints.
+#[path = "fused.rs"]
+pub mod fused;

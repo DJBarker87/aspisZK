@@ -66,7 +66,7 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
 
     #[cfg(not(feature="pool-adapter"))]
     {
-    if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]) {return Err(ProgramError::InvalidInstructionData);}
+    if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]|[8]|[9]|[10]) {return Err(ProgramError::InvalidInstructionData);}
     for (i,a) in accounts.iter().enumerate(){if a.owner!=program_id||a.executable||a.is_writable!=(i==2){return Err(ProgramError::InvalidAccountData);}}
     let proof=accounts[0].try_borrow_data()?;let public=accounts[1].try_borrow_data()?;let mut checkpoint=accounts[2].try_borrow_mut_data()?;
     msg!("UNPROVED R1 COST PROBE");msg!("r1:begin");sol_log_compute_units();
@@ -75,6 +75,17 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
         let bytes=first(&public,&proof,data[1]as usize)?;
         if checkpoint.len()!=bytes.len(){return Err(ProgramError::InvalidAccountData);}
         checkpoint.copy_from_slice(&bytes);
+    } else if data[0]==10 {
+        // FUTURE-VERSION EXPERIMENT: cost probe only, verifies nothing.
+        let value=verifier::candidate::fused::input_evaluation_probe(&proof,observer()).map_err(error)?;
+        let mut bytes=[0u8;16];value.write_le_bytes(&mut bytes);solana_program::program::set_return_data(&bytes);
+    } else if data[0]==8||data[0]==9 {
+        // FUTURE-VERSION EXPERIMENT (measurement build only; the Pool release
+        // surface rejects these tags): one invocation, no checkpoint. Tag 8 is
+        // the pinned mathematics, tag 9 the batched first fold.
+        let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|_|ProgramError::InvalidAccountData)?;
+        if data[0]==8 {verifier::candidate::fused::verify(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
+        else {verifier::candidate::fused::verify_batched(statement.semantic_public(),&proof,SolanaDigest,observer()).map_err(error)?;}
     } else {
         verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;
         checkpoint[10]=2;let end=checkpoint.len()-32;let sum=hashv(&[b"UNPROVED:R1:checkpoint",&checkpoint[..end]]).to_bytes();checkpoint[end..].copy_from_slice(&sum);
