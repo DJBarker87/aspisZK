@@ -138,6 +138,39 @@ rebuilds the statement from the request and the authenticated accounts in the ca
 the proof, and the Pool pays the destination in that same request. It needs its own source-level
 statement for the entry and for the Pool's payout.
 
+**Soundness lead's exact answer (2026-11-11, source reading; its references are in its note
+DESTINATION-BINDING-CHECK.md).** For R1 at PIN2:
+
+- The headline `deployed_splitB` concludes a bound, a list of other facts and an outcome. The
+  outcome is quantified over a public object that has the pool, the deployment domain and the
+  destination as fields and as bytes. No conjunct of the headline constrains them: the relation
+  is absorb-only for these three fields ("no residual family reads them").
+- The headline does not reach the Pool's payment. None of the Pool settlement models is among the
+  constants it depends on; the Pool consumer association (L159) is "specification only, open
+  producer obligation". That the Pool pays the statement's destination is tied to the proof only
+  outside Lean, by the checkpoint hash between the two transactions.
+- Route of the binding: the extracted `public_bytes` with the appended fields, bridge lemmas, the
+  PIN2 serialization as the transcript seed, the public parser with its option-shape check
+  (destination if and only if withdrawal), and a join theorem concluding that the model public
+  value equals the parsed transcript public value, destination included. The endpoint takes that
+  only as a premise.
+- Status: the transcript binding is restated at model level and awaits the coherent replay. The
+  Pool's payment of the three fields is the owner decision L159, pending since 5 November (the
+  Pool inside the game, or a stated condition).
+
+**What may be said about Aspis, and nothing stronger:** the destination, the pool and the
+deployment domain are bound into the transcript and present in the public object; the relation
+does not constrain them; the account that is paid is tied to them by the entry rebuilding the
+statement from the request the Pool pays on, and that tie is outside the relation unless L159 is
+decided for Aspis. Tests show a redirect is rejected (above). A proved statement that "an
+accepted withdrawal pays the destination in the public statement" exists for neither version.
+
+**Decision put to the owner (2026-11-11):** for Aspis, bring the Pool's payout into the proved
+game, so that the destination is a conjunct of the headline. Lead's recommendation: yes. It
+strengthens the statement, changes no code and touches nothing published. Its cost is a model and
+a source-level proof of the Pool's withdrawal path, and one new trust row of the runtime class
+for the SPL Token transfer the Pool calls.
+
 ## V8 soundness failures and Aspis
 
 | V8 failure | Where it could recur in Aspis | Status |
