@@ -366,7 +366,7 @@ the 13 are imported and none of their constants is used by the composed
 bound, in its statement or in its proof. The reviewer counted 1,346 modules
 in the closure by a different rule; the two counts are not reconciled here,
 and the 13 names agree. The module list is in `headline-measure.tsv`
-(1,478 lines, sha256 f799261777cf5d38cac3da9356ad2691b6fcea891a04336793afbdd71e887f1d).
+(1,479 lines, sha256 f799261777cf5d38cac3da9356ad2691b6fcea891a04336793afbdd71e887f1d).
 
 The same run checks the one declaration in the Aspis files that raises an
 option, `AspisFuture.StageD.perKind_margin` (`exponentiation.threshold 600`,
