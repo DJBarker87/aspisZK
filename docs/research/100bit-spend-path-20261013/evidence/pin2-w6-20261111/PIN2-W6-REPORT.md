@@ -1,8 +1,8 @@
-# PIN2 W6: the joint accepted fixture at the PIN2 pin (interim, host paused on RPz7_PAln_Public)
+# PIN2 W6: the joint accepted fixture at the PIN2 pin
 
 Worker W6, branch `fix/pin2-lean-20261110`, worktree `/Users/dominic/ZK/.worktrees/pin2-lean`. The evidence directory is `docs/research/100bit-spend-path-20261013/evidence/pin2-w6-20261111/`, and the compile table is `PIN2-W6-COMPILE.tsv` in that directory. Every credited compile was one local `lean -M7000 -DElab.async=false` process under a 180 s alarm, through `PIN2W6_compile.sh`, started only when no other Lean process was running. The search path was `overlay-PIN2-W4 : overlay-PIN2 : overlay-HOST-P1 : objs : base`. overlay-HOST-P1 only appeared from batch A onward; it is the lead's read-only copy of the host phase-1 PASS objects. Objects were written only into `overlay-PIN2-W4`, through a temporary file and a rename. Nothing was written to objs, base, overlay-PIN2 or overlay-HOST-P1. Nothing was deleted and nothing was pushed. Superseded files are in `quarantine/`.
 
-This report is interim. The host is paused on the one real phase-1 failure, `RPz7_PAln_Public`, which W7 is restating. Every fixture module still uncompiled waits on a host module inside that cone.
+This is the final report. The lead stopped the local compile watcher at 13:05 UTC. The 172 fixture modules still uncompiled on the Mac wait on host modules at plan layers 276–293. According to the lead, none of those host modules has failed; they sit behind long unbuilt chains (FIn_Primitives…FIp_DotDecode, DrvC, CPP/P2P). The host now compiles every regenerated fixture module from the sources listed in §9, so the remaining compile checks are the host's.
 
 ## 1. Step 1: stale objects after the r0 clash fix
 
@@ -131,7 +131,7 @@ The statement bytes are W4's `inputs/transfer-statement.bin` (sha256 `64eb9b43�
 | RPt_JFr_TX2_ScalarCanon | 15 |
 | RPt_FIo_WideValues | 14 |
 
-A few more modules block fewer fixture modules each: the tier-2 JFy builders, RPu_JFs_TX2_Reduce and RPt_FIo_*. The lead reports all of these inside the cone of `RPz7_PAln_Public` (the phase-1 failure, with W7).
+A few more modules block fewer fixture modules each: the tier-2 JFy builders, RPu_JFs_TX2_Reduce and RPt_FIo_*. At 12:51 UTC the lead checked these on the host: none had failed, and they sit at plan layers 276–293 behind unbuilt chains.
 
 By family, the 172 are:
 - 48 `RPt_JFr_TX2_Slot` (sources regenerated);
@@ -151,7 +151,7 @@ No in-closure module contains a 26 October native limb (`CLASSIFY.json`, plus th
 
 ## 6. overlay-PIN2-W4 state
 
-`overlay-PIN2-W4` holds 563 regular files and no links; the hash list is `OVERLAY-PIN2-W4.interim.sha256`.
+`overlay-PIN2-W4` holds 563 regular files and no links; the hash list is `OVERLAY-PIN2-W4.final.sha256`. It is unchanged since the interim list.
 
 - **Coherence** (`tools/PIN2W6_coherence.py`, `COHERENCE-*.json`): across the 563 objects and their closure of 4,374 modules, no local overlay object is older than one of its imports, and no release object in the closure imports an overlay object. One object is older than an import only because of copy times: `PIN2_SerializerLengths` (overlay-PIN2) is older than the overlay-HOST-P1 copy of `JFs_SerializerLengths`, and that copy is byte-identical to objs (`138567fe…`).
 - **Quarantine:** C0091's `RPz8_JFx_DataProof14.olean` is byte-identical to the release object (`27a36f99…`; W4 found the PIN2 text identical). It was moved to `quarantine/overlay-PIN2-W4/` and recorded in `KEEP-RELEASE.tsv`, so that W4's `RPz8_JFx_NativeBytes` remains newer than its import.
@@ -160,9 +160,49 @@ No in-closure module contains a 26 October native limb (`CLASSIFY.json`, plus th
 
 `HOST-NEED.tsv` lists 1,614 modules in import order: tier 1 has 1,570, for the statement layer and the 30 W5-blocked modules. It is computed on the object import graph. 47 of the listed modules are generic JF modules with no data dependence; the lead narrowed the phase-1 exclusion so the host builds them.
 
-## 8. Next concrete deliverable
+## 8. Axiom audit (whole log)
 
-When overlay-HOST-P1 refreshes past the `RPz7_PAln_Public` cone, run `tools/PIN2W6_cycle.sh` (or `PIN2W6_waitcycle.sh`) until the 172 fixture modules and the 51 direct consumers are compiled, in-closure first. A failure stops the cycle for isolation; a failed compile is never rerun unchanged. If `validate_common` or any restated module fails, stop on it and report the failing statement and the native value.
+W7 found that the W-series wrappers read only the first line of a wrapped `#print axioms` list. I re-audited every Mac-side compile log with a whole-log parser (`tools/PIN2W6_axiom_audit.py`, `tools/PIN2W6_axiom_audit_all.py`). It reads each list across its continuation lines and also searches for `sorryAx`, `declaration uses 'sorry'` and error lines anywhere in the log. Each log is classified by the exit code in its worker's compile table.
+
+| Worker | Logs | Credited (exit 0) | `#print axioms` results | Hits in credited logs | Uncredited logs with hits |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| W4 | 153 | 151 | 10,441 | 0 | 2 |
+| W5 | 98 | 98 | 40,312 | 0 | 0 |
+| W3a | 761 | 736 | 2,513 | 0 | 25 |
+| W3b | 37 | 31 | 236 | 0 | 6 |
+| W3c | 2,553 | 2,518 | 12,335 | 0 | 34 |
+| W6 | 403 | 403 | 7,079 | 0 | 0 |
+
+The uncredited hits are the failed compiles each worker already recorded, whose errors elaborate to `sorryAx`. None of them left an object. The per-log results are in `AXIOM-AUDIT.json` (W6) and `AXIOM-AUDIT-ALL.json`.
+
+`PIN2W6_compile.sh` now uses the whole-log check: any non-standard axiom name, including `sorryAx`, or any sorry forces exit 99. A positive test on probe P001 gives BAD=1, SORRY=3, EXIT=99.
+
+## 9. Final regenerated sources (host handover)
+
+`SOURCE-MANIFEST.json` gives every regenerated or new fixture module, with its final source path and sha256. There are 491 modules, each with exactly one file and no name in two directories. All 491 differ from the release text or are new.
+
+| Directory | Modules | Compiled on the Mac (overlay-PIN2-W4) | Not yet compiled |
+| --- | ---: | ---: | ---: |
+| `evidence/pin2-w4-20261111/sources` | 141 (140 changed + `NDO_JFp_SHABlock25` new) | 141 | 0 |
+| `evidence/pin2-w5-20261111/sources` | 179 | 96 | 83 (W5 BLOCKED.json; 53 outside the release closure) |
+| `evidence/pin2-w6-20261111/sources` | 171 (169 changed + `PIN2W6_SerializerProgram`, `PIN2W6_TranscriptSeed` new) | 117 | 54 |
+
+No regenerated module source lives anywhere else. Three locations hold files that are not module sources:
+
+- `pin2-w5-20261111/generated/` holds generator data (JSON) and the archived row-25/26 monolith drafts (`JFm_UNCHECKED/*.lean.txt`). Those drafts are superseded by W5's compiled split modules and are not modules.
+- `pin2-w5-20261111/handwritten/`, `pin2-w6-20261111/generated/` and `pin2-w6-20261111/handwritten/` do not exist. W6's handwritten-module generator writes into `sources/`.
+- W4's two handwritten edits (`NDO_JFu_PublicHeader`, `NDO_JFu_PublicIndices`) are in W4's `sources/`.
+
+`RPz8_JFx_DataProof14` is not regenerated. Its PIN2 text is identical to the release (`KEEP-RELEASE.tsv`).
+
+## 10. Next concrete deliverable
+
+The host compiles the 137 uncompiled regenerated sources (83 from W5 and 54 from W6) and the rest of the fixture-downstream closure from the sources in §9.
+
+- If the host fails on a W6 module, isolate the declaration and change the generator or the restatement; never rerun it unchanged.
+- The restated `NDO_JFu_OracleSeed`, `NDO_JFs_ExactInitialization` and `NDO_JFp_SHADigest` have one step not yet checked by Lean: the `rfl` equating `(pin2Digest D0).digest` with `rawOracle`.
+- If that `rfl` fails, the likely fix is a `simp only [PIN2W6_TranscriptSeed.pin2Digest]` before it; this is a proof change, not a literal change.
+- `NDO_JFu_TransitionArithmetic` (n = 1) and `NDO_JFr_SeedBoundary` are also unchecked by Lean.
 
 This job closes no premise of the security statement. It restores the fixture so that the replay can run.
 
