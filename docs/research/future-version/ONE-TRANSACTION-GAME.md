@@ -273,7 +273,13 @@ leaves + capacity − 1 parents per slot) at the merged capacities 296/296/254.
 SOUNDNESS-ARGUMENT.md section 6.3 reached the same 909 by summing distinct
 parents per level. **The 1,112 on paper stands for the devnet source. At the
 branch head it is 1,111.** Both are below 1,161, and the adapter adds nothing.
-Status: PAPER COUNT. To make it a theorem, an Aspis model decision is needed
+**Update (section 8):** the merged-slot part is now PROVED.
+`AspisOneTx.mergedAll_budget` shows that the three merged slot programs issue at
+most 975 digest calls on every input, rejections included (66 leaf hashes plus
+at most 909 parents; 339/339/297 per tree). The 40-row sampler prefix (136) and
+the verifier total (1,111) remain paper counts.
+
+Status before section 8: PAPER COUNT. To make it a theorem, an Aspis model decision is needed
 (section 4, items M3 and M5), with a budget lemma `≤ 975` for the decision and a
 40-row sampler-prefix lemma `≤ 136`. R1's `OracleDecisionPrereqSampler` counts
 115 for 33 rows. Aspis can keep 1,161 as an upper bound without changing the
@@ -695,7 +701,192 @@ quarters of them are copies.
 
 ## 7. Next deliverable
 
-M1–M3 and M6 (merged in-place slot, its budget and recovery), compiled on the
-host against L187. That turns the 975 and the merged recovery into theorems in
-the chain R1's bound actually uses. Then M4/M8, once the acceptance-link agent
-has fixed `AspisChecks`.
+Done in section 8: M1–M3 and M6 (merged in-place slot, its budget and recovery),
+compiled on the host against L187. Next: M4/M8, once the acceptance-link agent
+has fixed `AspisChecks`. M5 and M7 can go before them where they do not need
+`AspisChecks`: the decision skeleton without its arithmetic, and the roots and
+reached-run plumbing on PSD's 40-row run.
+
+## 8. M1–M3 and M6: the merged in-place slot, its budget and the recovery (COMPILED)
+
+Four modules in docs/research/future-version/lean/, compiled on the build host
+against the L187 objects with Lean 4.32.0. Each ran in its own scope (MemoryHigh
+6G, MemoryMax 8G, MemorySwapMax 0, TasksMax 64, 180 s limit). Kind of result: model
+definitions and model theorems in R1's stored-proof and binary commitment model.
+None is a source refinement or a composed security theorem. Every `#print
+axioms` is a subset of `[propext, Classical.choice, Quot.sound]`. There is no
+`sorry`, `axiom`, `native_decide` or raised heartbeats, and no warnings in the
+final compiles.
+
+| Attempt | Module | sha256 (source) | Exit | Wall | Peak RSS (time -v) | cgroup peak | Swaps |
+|---|---|---|---|---|---|---|---|
+| PSE-01 | AspisOneTxSummedLayout | 081883a4…4927b9 | 0 | 3.20 s | 4.22 GB | 0.44 GB | 0 |
+| PSE-02 | AspisOneTxMergedSlot | 22d342ec…be22149 | 0 | 3.84 s | 4.23 GB | 0.44 GB | 0 |
+| PSE-03 | AspisOneTxMergedBudget (first version) | 960590879…e9e351 | 1 | 3.19 s | 4.21 GB | 0.43 GB | 0 |
+| PSE-04 | AspisOneTxMergedBudget | 72d277dc…2527f | 0 | 2.62 s | 4.24 GB | 0.45 GB | 0 |
+| PSE-05 | AspisOneTxMergedRecovery | 3cbbf64e…2cd029f | 0 | 3.72 s | 4.22 GB | 0.43 GB | 0 |
+
+PSE-03 failed in its last step, `mergedAll_budget`: `omega` saw
+`short (mergedPrograms p q)` and its unfolded list as different terms. The fix
+unfolds `mergedPrograms` in the goal as well as in the hypothesis. It is not a
+mathematical change, and the same commit removed a redundant lemma and an unused
+simp argument. "Peak RSS" includes the mapped L187 objects; the cgroup peak is
+the scope's charged memory. Source revision: these four files are untracked on
+`future-version` at 96c5cf266de; the local hashes equal the compiled ones.
+
+### 8.1 The construction: R1's slot program with four constants made parameters
+
+R1's frozen-order slot program (OraclePortFrozenOrderSlot.lean) is
+`verifySlot_frozen p q batch kind`. It hashes every leaf of
+`sortedPositions q batch kind` (`hashLeaves`, rejecting an unequal duplicate
+digest at once). It then checks well-formedness (`wellFormed`: nonempty,
+**length ≤ 16**, strictly increasing, below 2^18), the node count against
+**`capacity (3*batch+kind)`**, and zero padding of the slot at
+**`slotStart (3*batch+kind)`**. Finally it runs `runLevels 18` (in place, level
+by level). The four constants in bold are the only parts specific to R1's
+two-batch split. `AspisOneTx.slotB n cap start ps` is the same program with
+`n`, `cap`, `start` and the position list `ps` as parameters. `hashLeaves`,
+`runLevels`, `nodeCount`, `committedRoot`, `leaf` and `index` are R1's
+definitions, used unchanged.
+
+- **R1 instance.** `r1_slot_instance` proves `verifySlot_frozen p q batch kind =
+  slotB 16 (capacity (3*batch+kind)) (slotStart (3*batch+kind)) (sortedPositions
+  q batch kind) p q kind` by `rfl`. R1's slot program is literally an instance,
+  so every generic theorem below is also a theorem about R1's slot. This is how
+  the R1 checks are obtained.
+- **Aspis merged slot.** `verifyMerged p q kind := slotB 22 (mergedCapacity kind)
+  (mergedStart kind) (sortedAll q kind) p q kind`, where:
+  - `sortedAll` is all 22 positions in R1's key order (index, then position),
+    the order of `merged_keys`;
+  - `mergedCapacity` is 296/296/254 (`SLOT_NODES`, fused.rs:724);
+  - `mergedStart` is 28359 plus the earlier slots.
+
+  `verifyMergedAll` short-circuits the three trees in the order C1, C2, folded,
+  as `merged_merkle` does (fused.rs:800-806).
+
+### 8.2 Statements next to the R1 statements they copy
+
+**M1, layout (AspisOneTxSummedLayout).**
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `acceptsSummed proof`: length 55815, magic `[65,83,80,73,83,0,0,2]`, byte 8 = 2, bytes 9..15 zero | `OraclePortHeader.accepts`: length 57607, magic `R1P3CB18` | length and magic only |
+| `parseSummed b` | `OraclePortCompactDraft.parse b` | `acceptsSummed` in place of `accepts`; `scan` and `semanticRows` unchanged (they read only below 28359) |
+| `parseSummed_header : parseSummed b = some p → acceptsSummed b = true ∧ p.wire = b` | `parse_header` | same proof |
+| `parsedSummed_length : … → p.wire.length = 55815` | `OraclePortStoredWidthsC4.parsed_length` (57607) | number |
+| `opening_fields_summed` (six widths 480/128/32/32/128/32 of opening `pos < 22`) | `OraclePortStoredWidthsC4.opening_fields` | same statement, summed parser |
+| `mergedStart_values` (28359, 37831, 47303), `certificateStart_eq` (55431), `summed_total` (55431 + 384 = 55815), `merged_slot_within` | `OraclePortSelectedDraft.capacity`/`slotStart` (146/146/128/172/172/150 from 28359) | three slots in place of six |
+
+**M2, path (AspisOneTxMergedSlot).**
+
+| Aspis (generic, then merged) | R1 | Difference |
+|---|---|---|
+| `inPlaceB_success n`, `inPlaceB_path n` | `inPlace_success`, `inPlace_path` | bound `n` in place of 16; same proof |
+| `slotB_path n cap start ps … (member : pos ∈ ps) (accepted : (eval H (slotB …)).2 = true) : ∃ path : Path (BinMultiproof.slots 18 (index q kind pos)), foldPath H path (H (leaf p kind pos)) = committedRoot p kind ∧ ∀ a ∈ fullTrace H path (leaf p kind pos), Read (eval H (slotB …)).1 a` | `slot_path … (member : pos ∈ batchPositions batch)` | membership in `ps` in place of `batchPositions batch`; conclusion identical |
+| `r1_slot_path_check`: R1's `slot_path`, exact statement, re-derived from `slotB_path` | — | check |
+| `slotB_recovery_at_index n cap start ps … : recoverAt tag width (cut tr frame) (slots 18 (index q kind pos)) (committedRoot p kind) = some (packed, salt)`, hypotheses `consistent`, `contains`, `bound : firstReads emptyTable tr ≤ Q`, `clean : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q) …`, `frameRead`, `rootRead`, `leafBytes`, widths | `OraclePortFrozenOrder.recovery_at_index` | the slot program only; same hypotheses, same exceptional event, same conclusion |
+| `r1_recovery_at_index_check`: R1's `recovery_at_index`, exact statement, re-derived | — | check |
+| `merged_recovery_at_index … (posBound : pos < 22) (accepted : (eval H (verifyMerged p q kind)).2 = true) …` | as above | every position `< 22` is in the single slot |
+
+**M3, budget (AspisOneTxMergedBudget).**
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `inPlaceB_bound n` : `… .length + 1 ≤ live.length + nodes.length / 32` | `OraclePortFrozen2Resource.inPlace` | bound `n`; same proof via R1's `levels` |
+| `tailB_bound_strict` (`0 < cap`) : `… + 1 ≤ live.length + cap` | `OraclePortFrozen2Resource.tail` | parameters |
+| `slotB_bound` : `(eval H (slotB n cap start ps p q kind)).1.length + 1 ≤ 2*ps.length + cap` | `OraclePortFrozen2Resource.slot` (`2*(batchPositions batch).length + capacity …`) | parameters; via R1's `leaves_bound` |
+| `r1_slot_bound_check`: R1's `slot`, exact statement, re-derived | — | check |
+| `merged_bound` : `+ 1 ≤ 44 + mergedCapacity kind`; `merged_bound_values`: ≤ 339, 339, 297 | R1 batch bounds 477 (= 165+165+147), 563 (= 195+195+173) | 22 positions, merged capacities |
+| `short_length`: a short-circuited list issues at most the sum of its members' calls | inline in R1's `OraclePortFrozen2.batch_bound` | generic |
+| **`mergedAll_budget : (eval H (verifyMergedAll p q)).1.length ≤ 975`**, for every H, p, q | `batch0_bound` ≤ 477, `batch1_bound` ≤ 563 | three slots, one transaction; no checkpoint term |
+
+**M6, recovery (AspisOneTxMergedRecovery).**
+
+| Aspis | R1 | Difference |
+|---|---|---|
+| `short_accepted`, `short_read` (any short-circuited list) | `OraclePortFrozenOrder.slots_accepted`, `slots_read` (for `slotPrograms p q ss`) | generalised to any list |
+| `leaf_fields_summed` | `OraclePortAllSelectedRecoveryC6.leaf_fields` | `parseSummed` |
+| **`authenticated_merged`** (below) | **`OraclePortFrozenOrder.authenticated`** (OraclePortFrozenOrderSelectedRecovery.lean:49) | `short (slotPrograms p q slots)` → `verifyMergedAll p q`; `parse` → `parseSummed`; `batchOf` removed. Conclusion, objects and exceptional event identical |
+| `no_second_opening_merged` | — (corollary) | two accepted merged runs in one clean log, same root, same index ⇒ same payload |
+
+```lean
+theorem authenticated_merged (H : Bytes → State) (stored : Bytes) (p : Parsed)
+    (parsed : parseSummed stored = some p) (q : Fin 22 → Fin 262144)
+    (accepted : (eval H (verifyMergedAll p q)).2 = true)
+    (log : List (Bytes × State)) (Q : Nat)
+    (consistent : ∀ a ∈ log, a.2 = H a.1)
+    (contains : ∀ a, Read (eval H (verifyMergedAll p q)).1 a → Read log a)
+    (bound : firstReads emptyTable log ≤ Q)
+    (clean : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred Q) emptyTable log)
+    (kind : Nat) (kindBound : kind < 3) (frame : Bytes) (j : Fin 5)
+    (frameRead : Read log frame)
+    (rootRead : BinRawByteCollisionTargets.pred j frame = some (committedRoot p kind)) :
+    ∀ pos, pos < 22 → recovered log frame p kind (index q kind pos) =
+      some (OraclePortPackedChoiceC4.payload p kind pos)
+```
+
+On the R1 check for M6: R1's `authenticated` is about six slots and the Aspis
+theorem about three, so neither is an instance of the other. Its single-slot
+core, `recovery_at_index`, is re-derived exactly (`r1_recovery_at_index_check`),
+and the remaining step is the same five-line proof in both.
+
+### 8.3 Relation to the pair-binding agent's merged-multiproof theorems
+
+`AspisPairResidual.Merkle.{merged_member_recovery, merged_query_recovery,
+no_second_opening}` prove the same conclusion,
+`recoverAt tag width (cut tr frame) (slots depth i) root = some (packed, salt)`,
+under the same exceptional event at the same budget. They reach it by a different
+route: their hypothesis is `BinMultiproof.Accept H root depth active v nodes trace`,
+an abstract level-at-a-time acceptance relation, and they go through
+`BinMultiproof.accepted_path`. The theorems here start from acceptance of a
+concrete oracle program (`verifyMerged`, R1's in-place slot program with merged
+constants) and go through R1's `slot_path` route (`levels_path`,
+`leaves_retained`). That is the route of `OraclePortFrozenOrder.authenticated`,
+which R1's bound uses. Both routes end in `recover_at_first_commitment`.
+
+- **Supersede?** For the acceptance chain, yes. The Aspis copies of
+  `OraclePortFrozenOrderChecks.accepted_checks` and its consumers (M9) take
+  `authenticated_merged`, because the model decision's Merkle part is the slot
+  program, not `BinMultiproof.Accept`. Their files are not edited and stay
+  correct as theorems about `BinMultiproof.Accept`.
+- **Reused?** No. Nothing here imports `AspisPairResidualMerkle`.
+- **Same conclusion?** Yes, by the route the bound uses.
+  `no_second_opening_merged` is the slot-program form of their
+  `no_second_opening`.
+
+Linking the two, by showing that an accepted `verifyMerged` gives
+`BinMultiproof.Accept`, is not needed and was not done.
+
+### 8.4 Counts: what is proved and what is still paper
+
+| Count | Status |
+|---|---|
+| 339 / 339 / 297 per merged tree (2·22 + cap − 1) | PROVED (`merged_bound_values`), all inputs |
+| 975 for the three merged multiproofs (66 leaves + ≤ 909 parents) | PROVED (`mergedAll_budget`), all inputs, rejections included |
+| R1's per-slot formula | re-derived from the generic proof (`r1_slot_bound_check`) |
+| 136 for the 40-row sampler prefix (115 + 21) | PAPER; needs PSD's 40-row sampler and a copy of `OracleDecisionPrereqSampler` |
+| 1,111 for the Aspis model verifier (head) | PAPER; needs the 136 and the Aspis decision M5 (Merkle part 975 plus no other digest) |
+| 1,112 (devnet source) | PAPER |
+
+A consequence for M5: R1's `OraclePortExperiment.Budget` is the decision budget
+1,046. The merged Merkle part, 975, fits under it. If the Aspis decision issues
+no other digest (it has no checkpoint), the R1 constant 1,046, and with a 136
+sampler prefix the envelope 1,161, remain valid upper bounds. That still has to
+be proved for M5.
+
+### 8.5 What is not established by these four modules
+
+- **Source refinement.** That `merged_tree`, `verify_counting_merged` and
+  `merkle_verdict` compute `verifyMerged`. In particular, the Rust well-formedness
+  bound (`MAX_MERGED = 22`) has to match `wellFormedB 22`, and the
+  duplicate-leaf rule (fused.rs:783-787) has to match `hashLeaves`. This is
+  source refinement, as R1's slot program is for R1's batch trees.
+- **Canonical scan.** That `parse_shape_summed` and `canonical_scan` compute
+  `acceptsSummed` and `scan`.
+- **Roots and reached run (M7).** That the three roots are read from the frames
+  of rows 0, 2 and 30 of the 40-row run. This is `targets`, item M7.
+- **Rest of the chain.** M4, M5 and M7–M9.
+
+Nothing here touches the verifier, the prover or anything published. No
+compute-unit, adversary, metric, failure-event or trust change is involved.
