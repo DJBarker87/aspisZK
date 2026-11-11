@@ -705,6 +705,203 @@ pub fn final_message_certificate<H: Digest32>(public: Public<'_>, proof: &[u8], 
     Ok(stage_d_rounds(&p, claim, rhs2, f, &relation, &query, hash))
 }
 
+/// FUTURE-VERSION EXPERIMENT: the summed proof format. The pinned compact
+/// layout up to the end of the 22 openings (same offsets), then one multiproof
+/// per tree over all 22 queries in a fixed zero-padded slot, then the stage D
+/// certificate. Design, slot bounds and status: the experiment note.
+pub mod summed_format {
+    use crate::compact;
+    pub const MAGIC: &[u8; 8] = b"R1F1SM22";
+    /// Worst-case supplied nodes: C1, C2 (22 leaves at depth 18) and the
+    /// folded tree (at most 22 leaves below 2^16 at depth 18).
+    pub const SLOT_NODES: [usize; 3] = [296, 296, 254];
+    pub const OFF_NODES: usize = compact::OFF_NODES;
+    pub const fn slot_offset(slot: usize) -> usize {
+        let mut at = OFF_NODES;
+        let mut i = 0;
+        while i < slot {
+            at += 32 * SLOT_NODES[i];
+            i += 1;
+        }
+        at
+    }
+    pub const OFF_CERTIFICATE: usize = slot_offset(3);
+    pub const PROOF_BYTES: usize = OFF_CERTIFICATE + super::CERTIFICATE_BYTES;
+    const _: () = assert!(PROOF_BYTES == 55_815);
+}
+
+/// Shape of a summed-format proof: fixed length, magic, variant S2, zero
+/// header tail.
+#[inline(never)]
+pub fn parse_shape_summed(proof: &[u8]) -> Result<(), Error> {
+    if proof.len() != summed_format::PROOF_BYTES
+        || &proof[..8] != summed_format::MAGIC
+        || proof[8] != Variant::S2.tag()
+        || proof[9..16].iter().any(|&x| x != 0)
+    {
+        return Err(Error::Parse);
+    }
+    Ok(())
+}
+
+/// Query keys `(index << 8) | position`, sorted by index.
+#[inline(always)]
+fn merged_keys(queries: &[u32; 22], folded: bool) -> [u64; 22] {
+    let mut keys = [0u64; 22];
+    for j in 0..22 {
+        let index = if folded { queries[j] / 4 } else { queries[j] };
+        keys[j] = (u64::from(index) << 8) | j as u64;
+    }
+    for i in 1..22 {
+        let mut j = i;
+        while j > 0 && keys[j - 1] > keys[j] {
+            keys.swap(j - 1, j);
+            j -= 1;
+        }
+    }
+    keys
+}
+
+/// One merged multiproof: the leaves of `tree` in key order (equal folded
+/// indices must carry identical leaves and are merged, as in the pinned
+/// batches), then the single-pass in-place traversal over the tree's slot.
+#[inline(always)]
+fn merged_tree<H: Digest32>(proof: &[u8], keys: &[u64; 22], root: &[u8; 32], tree: usize, hash: H) -> Result<(), Error> {
+    let mut idx = [0u32; multiproof::MAX_MERGED];
+    let mut val = [[0u8; 32]; multiproof::MAX_MERGED];
+    let mut d = 0;
+    for key in keys {
+        let index = (key >> 8) as u32;
+        let leaf = batch_leaf(hash, tree, opening(proof, (key & 0xff) as usize));
+        if d > 0 && idx[d - 1] == index {
+            if val[d - 1] != leaf {
+                return Err(Error::Merkle);
+            }
+            continue;
+        }
+        idx[d] = index;
+        val[d] = leaf;
+        d += 1;
+    }
+    let nodes = &proof[summed_format::slot_offset(tree)..summed_format::slot_offset(tree + 1)];
+    merkle_verdict(multiproof::verify_counting_merged(hash, root, &mut idx, &mut val, d, nodes), nodes)
+}
+
+/// The three merged multiproofs. C1 and C2 are opened at the same indices and
+/// share one sorted schedule.
+#[inline(never)]
+fn merged_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32], hash: H) -> Result<(), Error> {
+    let keys = merged_keys(&p.queries, false);
+    merged_tree(proof, &keys, &p.roots[0], 0, hash)?;
+    merged_tree(proof, &keys, &p.roots[1], 1, hash)?;
+    let keys = merged_keys(&p.queries, true);
+    merged_tree(proof, &keys, folded_root, 2, hash)
+}
+
+/// The future verifier over the summed format: one invocation, stage C,
+/// stage D with the certificate carried in the proof, one multiproof per tree.
+/// UNPROVED (see `SOUNDNESS-ROWS.md`).
+#[inline(never)]
+pub fn verify_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+    parse_shape_summed(proof)?;
+    canonical_scan(proof)?;
+    mark(obs, Phase::Parsed);
+    let mut g = [E::ZERO; 29];
+    let p = prepare(public, proof, hash, obs, &mut g)?;
+    mark(obs, Phase::Prepare);
+    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+    merged_merkle(proof, &p, &folded_root, hash)?;
+    mark(obs, Phase::Merkle(0));
+    let geometry = QueryGeometry::for_range(&p.queries, 0, QUERIES)?;
+    let openings = &proof[compact::OFF_OPENINGS..compact::OFF_NODES];
+    let sums = fold_sums(openings, &p.queries, p.rho, &p.alpha, &g, &geometry, obs)?;
+    if sums.lhs1 != sums.rhs1 {
+        return Err(Error::Query);
+    }
+    let v = relation_view(proof)?;
+    let mut claim = finish_relation_round(v.round0, p.alpha[0], p.claim, 0)?;
+    claim = finish_relation_round(v.round1, p.alpha[1], claim, 1)?;
+    mark(obs, Phase::QueryPart(5, 0));
+    summed_final_checks(&p, v.final_message, claim, sums.rhs2, &geometry, &proof[summed_format::OFF_CERTIFICATE..], hash, obs)?;
+    mark(obs, Phase::Final);
+    Ok(())
+}
+
+/// The supplied sibling positions of a binary multiproof over the strictly
+/// increasing `indices`, as `(level, index)` in the canonical stream order
+/// (level 0 is the leaves).
+#[cfg(any(test, feature = "prover"))]
+fn supplied_positions(indices: &[u32]) -> Vec<(u32, u32)> {
+    let mut out = Vec::new();
+    let mut level: Vec<u32> = indices.to_vec();
+    for depth in 0..multiproof::LEAF_BITS {
+        let mut next = Vec::new();
+        let mut i = 0;
+        while i < level.len() {
+            if i + 1 < level.len() && level[i + 1] == level[i] ^ 1 {
+                i += 2;
+            } else {
+                out.push((depth, level[i] ^ 1));
+                i += 1;
+            }
+            next.push(level[i - 1] >> 1);
+        }
+        level = next;
+    }
+    out
+}
+
+#[cfg(any(test, feature = "prover"))]
+fn distinct_sorted(queries: &[u32], folded: bool) -> Vec<u32> {
+    let mut out: Vec<u32> = queries.iter().map(|&u| if folded { u / 4 } else { u }).collect();
+    out.sort_unstable();
+    out.dedup();
+    out
+}
+
+/// Re-pack a pinned compact proof into the summed format. A function of the
+/// proof and the public statement only: each merged multiproof's nodes are
+/// among the two batches' supplied nodes (a sibling the merged traversal needs
+/// is unoccupied by every query, so the batch holding its occupied sibling
+/// supplied it), and the certificate is the honest stage D certificate. This
+/// is also the prover's publish step for the summed format.
+#[cfg(any(test, feature = "prover"))]
+pub fn to_summed_format<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H) -> Result<Vec<u8>, Error> {
+    let (p, claim, rhs2, f, relation, query) = stage_d_vectors(public, proof, hash)?;
+    let certificate = stage_d_rounds(&p, claim, rhs2, f, &relation, &query, hash);
+    let mut out = Vec::with_capacity(summed_format::PROOF_BYTES);
+    out.extend_from_slice(&proof[..compact::OFF_NODES]);
+    out[..8].copy_from_slice(summed_format::MAGIC);
+    for tree in 0..3 {
+        let mut known: Vec<((u32, u32), [u8; 32])> = Vec::new();
+        for batch in 0..2 {
+            let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+            let positions = supplied_positions(&distinct_sorted(&p.queries[lo..hi], tree == 2));
+            let nodes = slot(proof, 3 * batch + tree);
+            if 32 * positions.len() > nodes.len() {
+                return Err(Error::Merkle);
+            }
+            for (k, position) in positions.into_iter().enumerate() {
+                known.push((position, nodes[32 * k..32 * k + 32].try_into().unwrap()));
+            }
+        }
+        let merged = supplied_positions(&distinct_sorted(&p.queries, tree == 2));
+        if merged.len() > summed_format::SLOT_NODES[tree] {
+            return Err(Error::Merkle);
+        }
+        for position in &merged {
+            let node = known.iter().find(|(at, _)| at == position).ok_or(Error::Merkle)?;
+            out.extend_from_slice(&node.1);
+        }
+        out.resize(summed_format::slot_offset(tree + 1), 0);
+    }
+    out.extend_from_slice(&certificate);
+    if out.len() != summed_format::PROOF_BYTES {
+        return Err(Error::Parse);
+    }
+    Ok(out)
+}
+
 /// MEASUREMENT PROBE ONLY: it verifies nothing and its result has no meaning.
 ///
 /// Cost of binding the opening section and the final message to one QM31
@@ -1484,5 +1681,96 @@ mod tests {
             }
         }
         assert!(rejected > 100);
+    }
+
+    fn summed(index: usize) -> (Vec<u8>, &'static [u8]) {
+        let (_, proof, public) = FIXTURES[index];
+        (to_summed_format(decode(public).semantic_public(), proof, Sha).unwrap(), public)
+    }
+
+    #[test]
+    fn summed_format_accepts_the_six_repacked_fixtures_and_the_two_formats_reject_each_other() {
+        for index in 0..6 {
+            let (name, proof, public) = FIXTURES[index];
+            let (packed, _) = summed(index);
+            assert_eq!(packed.len(), summed_format::PROOF_BYTES);
+            let statement = decode(public);
+            verify_summed_format(statement.semantic_public(), &packed, Sha, None).unwrap_or_else(|e| panic!("{name} summed format {e:?}"));
+            // The pinned proof is not a summed-format proof, and the reverse.
+            assert_eq!(verify_summed_format(statement.semantic_public(), proof, Sha, None), Err(Error::Parse));
+            assert!(tx1(statement.semantic_public(), public, &packed, SPLIT, Sha, None).is_err());
+            assert!(verify(statement.semantic_public(), &packed, Sha, None).is_err());
+            // Everything before the multiproofs is the pinned proof apart from the magic.
+            assert_eq!(&packed[8..compact::OFF_NODES], &proof[8..compact::OFF_NODES]);
+            // Node counts: the pinned count function on the merged sets, within the slots.
+            let (p, _) = prepared(proof, public);
+            for (tree, folded) in [(0usize, false), (1, false), (2, true)] {
+                let merged = distinct_sorted(&p.queries, folded);
+                let count = multiproof::node_count_merged(&merged).unwrap();
+                assert_eq!(count, supplied_positions(&merged).len());
+                assert!(count <= summed_format::SLOT_NODES[tree]);
+                let slot = &packed[summed_format::slot_offset(tree)..summed_format::slot_offset(tree + 1)];
+                assert!(slot[32 * count..].iter().all(|&b| b == 0), "{name} tree {tree} padding");
+            }
+        }
+    }
+
+    #[test]
+    fn summed_format_rejects_a_change_in_every_region() {
+        let (packed, public) = summed(2);
+        let statement = decode(public);
+        let (p, _) = prepared(FIXTURES[2].1, public);
+        let mut offsets = mutation_offsets().into_iter().filter(|&at| at < compact::OFF_NODES).collect::<Vec<_>>();
+        offsets.extend([0usize, 7, 8, 9, 15]);
+        for (tree, folded) in [(0usize, false), (1, false), (2, true)] {
+            let count = multiproof::node_count_merged(&distinct_sorted(&p.queries, folded)).unwrap();
+            let start = summed_format::slot_offset(tree);
+            offsets.extend([start, start + 32 * (count / 2) + 3, start + 32 * count - 1]);
+            // Padding: first, middle and last padding byte of the slot.
+            let end = summed_format::slot_offset(tree + 1);
+            assert!(start + 32 * count < end, "fixture leaves padding in tree {tree}");
+            offsets.extend([start + 32 * count, (start + 32 * count + end) / 2, end - 1]);
+        }
+        for at in (summed_format::OFF_CERTIFICATE..summed_format::PROOF_BYTES).step_by(13) {
+            offsets.push(at);
+        }
+        offsets.push(summed_format::PROOF_BYTES - 1);
+        for at in offsets {
+            let mut bad = packed.clone();
+            bad[at] ^= 1;
+            assert!(verify_summed_format(statement.semantic_public(), &bad, Sha, None).is_err(), "accepted a change at {at}");
+        }
+        assert!(verify_summed_format(statement.semantic_public(), &packed[..packed.len() - 1], Sha, None).is_err());
+        let mut longer = packed.clone();
+        longer.push(0);
+        assert!(verify_summed_format(statement.semantic_public(), &longer, Sha, None).is_err());
+    }
+
+    #[test]
+    fn merged_slot_bounds_are_attained_by_the_bit_reversed_index_sets() {
+        // 22 leaves spread as widely as possible in the 2^18-leaf tree.
+        let mut wide: Vec<u32> = (0..22u32).map(|j| j.reverse_bits() >> (32 - multiproof::LEAF_BITS)).collect();
+        wide.sort_unstable();
+        assert_eq!(multiproof::node_count_merged(&wide), Some(summed_format::SLOT_NODES[0]));
+        // 22 folded leaves spread as widely as possible below 2^16.
+        let mut folded: Vec<u32> = (0..22u32).map(|j| j.reverse_bits() >> 16).collect();
+        folded.sort_unstable();
+        assert_eq!(multiproof::node_count_merged(&folded), Some(summed_format::SLOT_NODES[2]));
+        // Random sets never exceed the bounds; the count agrees with the 16-capacity function on small sets.
+        let mut state = 0x9e3779b97f4a7c15u64;
+        for case in 0..2_000 {
+            let n = 1 + case % 22;
+            let mut set: Vec<u32> = (0..n).map(|_| (next(&mut state) % (1 << 18)) as u32).collect();
+            set.sort_unstable();
+            set.dedup();
+            let count = multiproof::node_count_merged(&set).unwrap();
+            assert!(count <= summed_format::SLOT_NODES[0]);
+            if set.len() <= multiproof::MAX_BATCH {
+                assert_eq!(Some(count), multiproof::node_count(Arity::Two, &set));
+            }
+            let mut low: Vec<u32> = set.iter().map(|u| u / 4).collect();
+            low.dedup();
+            assert!(multiproof::node_count_merged(&low).unwrap() <= summed_format::SLOT_NODES[2]);
+        }
     }
 }

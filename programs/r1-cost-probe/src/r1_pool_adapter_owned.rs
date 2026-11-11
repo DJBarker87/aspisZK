@@ -429,27 +429,23 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
         return Err(ProgramError::InvalidAccountData);
     }
     // FUTURE-VERSION EXPERIMENT (default off): one transaction. No checkpoint is
-    // resumed. The statement reconstructed from the request and the
-    // authenticated accounts is validated here (stage 1 does this on the
-    // two-transaction path), and the whole proof is verified in this
-    // invocation with the stage D certificate read from the first bytes of the
-    // seventh account. Its candidate prefix is the one the statement was
+    // resumed and the seventh account is not read. The statement reconstructed
+    // from the request and the authenticated accounts is validated here
+    // (stage 1 does this on the two-transaction path), and the whole
+    // summed-format proof, which carries the stage D certificate, is verified
+    // in this invocation. The candidate prefix is the one the statement was
     // reconstructed from, so no separate prefix comparison is needed.
     #[cfg(feature = "future-one-tx")]
     {
+        let _ = &checkpoint_data;
         validate_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
             .map_err(|_| ProgramError::InvalidAccountData)?;
-        let certificate_bytes = verifier::candidate::fused::CERTIFICATE_BYTES;
-        if validated.proof_length != verifier::PROOF_BYTES
-            || proof_data[proof_start + 8] != Variant::S2.tag()
-            || checkpoint_data.len() < certificate_bytes
-        {
+        if validated.proof_length != verifier::candidate::fused::summed_format::PROOF_BYTES {
             return Err(ProgramError::InvalidAccountData);
         }
-        verifier::candidate::fused::verify_summed(
+        verifier::candidate::fused::verify_summed_format(
             validated.statement.semantic_public(),
             &proof_data[proof_start..proof_end],
-            &checkpoint_data[..certificate_bytes],
             super::super::SolanaDigest,
             super::super::observer(),
         )

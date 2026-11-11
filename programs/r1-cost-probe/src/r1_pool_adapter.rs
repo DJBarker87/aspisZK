@@ -778,6 +778,10 @@ fn authenticate_asq8_accounts(
 
 #[inline(never)]
 fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
+    // FUTURE-VERSION EXPERIMENT: the one-transaction entry reads the summed format.
+    #[cfg(feature = "future-one-tx")]
+    let proof_length = verifier::candidate::fused::summed_format::PROOF_BYTES;
+    #[cfg(not(feature = "future-one-tx"))]
     let proof_length = verifier::PROOF_BYTES;
     let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
         .checked_add(proof_length)

@@ -295,6 +295,93 @@ pub fn verify_counting_direct<H: Digest32>(
     Counted::Done { root_ok: n == 1 && idx[0] == 0 && cur[0] == *root, used: at }
 }
 
+/// FUTURE-VERSION EXPERIMENT (summed format): largest index set of one merged
+/// multiproof, all 22 queries of a tree.
+pub const MAX_MERGED: usize = 22;
+
+/// Strictly increasing, inside the leaf domain, at most `MAX_MERGED` entries.
+fn well_formed_merged(indices: &[u32]) -> bool {
+    !indices.is_empty()
+        && indices.len() <= MAX_MERGED
+        && indices.windows(2).all(|w| w[0] < w[1])
+        && indices.iter().all(|&i| i < 1 << LEAF_BITS)
+}
+
+/// `node_count` for a binary tree and an index set of up to `MAX_MERGED`
+/// entries: the number of supplied sibling nodes, a function of the index set
+/// alone.
+pub fn node_count_merged(indices: &[u32]) -> Option<usize> {
+    if !well_formed_merged(indices) {
+        return None;
+    }
+    let mut level = [0u32; MAX_MERGED];
+    level[..indices.len()].copy_from_slice(indices);
+    let mut n = indices.len();
+    let mut count = 0;
+    for _ in 0..Arity::Two.levels() {
+        let mut w = 0;
+        let mut i = 0;
+        while i < n {
+            if i + 1 < n && level[i + 1] == level[i] ^ 1 {
+                level[w] = level[i] >> 1;
+                i += 2;
+            } else {
+                count += 1;
+                level[w] = level[i] >> 1;
+                i += 1;
+            }
+            w += 1;
+        }
+        n = w;
+    }
+    Some(count)
+}
+
+/// `verify_counting_direct` for an index set of up to `MAX_MERGED` entries.
+/// Same node grammar, same canonical order, same verdict type.
+#[inline(always)]
+pub fn verify_counting_merged<H: Digest32>(
+    hash: H,
+    root: &[u8; 32],
+    idx: &mut [u32; MAX_MERGED],
+    val: &mut [[u8; 32]; MAX_MERGED],
+    mut n: usize,
+    slot: &[u8],
+) -> Counted {
+    if n == 0 || n > MAX_MERGED || !well_formed_merged(&idx[..n]) {
+        return Counted::Malformed;
+    }
+    let mut other = [[0u8; 32]; MAX_MERGED];
+    let (mut cur, mut nxt): (&mut [[u8; 32]; MAX_MERGED], &mut [[u8; 32]; MAX_MERGED]) = (val, &mut other);
+    let tag = [BINARY_NODE_TAG];
+    let mut at = 0usize;
+    for _ in 0..Arity::Two.levels() {
+        let mut w = 0;
+        let mut i = 0;
+        while i < n {
+            let index = idx[i];
+            if i + 1 < n && idx[i + 1] == index ^ 1 {
+                hash.digest_into(&[&tag, &cur[i], &cur[i + 1]], &mut nxt[w]);
+                i += 2;
+            } else {
+                let Some(sibling) = slot.get(at..at + 32) else { return Counted::Short };
+                at += 32;
+                if index & 1 == 0 {
+                    hash.digest_into(&[&tag, &cur[i], sibling], &mut nxt[w]);
+                } else {
+                    hash.digest_into(&[&tag, sibling, &cur[i]], &mut nxt[w]);
+                }
+                i += 1;
+            }
+            idx[w] = index >> 1;
+            w += 1;
+        }
+        n = w;
+        core::mem::swap(&mut cur, &mut nxt);
+    }
+    Counted::Done { root_ok: n == 1 && idx[0] == 0 && cur[0] == *root, used: at }
+}
+
 /// Prover side: emit the canonical node sequence. `node(level, index)` returns
 /// the stored digest of node `index` at `level` (0 = leaves).
 pub fn generate(

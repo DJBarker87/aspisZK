@@ -5,9 +5,10 @@
 //! - control: the deployed verifier ELF and the recorded accounts; the Pool's
 //!   compute units must equal the recorded ones, which validates the replay;
 //! - one transaction: the one-transaction verifier ELF at the same address,
-//!   with the stage D certificate (computed here from the public proof data)
-//!   placed at the start of the verifier-owned seventh account. Stage 1 never
-//!   runs; this single transaction verifies the whole proof and settles.
+//!   with the recorded proof re-packed into the summed format (one multiproof
+//!   per tree and the stage D certificate inside the proof, computed here from
+//!   public data) in the proof buffer. Stage 1 never runs; this single
+//!   transaction verifies the whole proof and settles.
 //!
 //! Signature verification is off (the recorded payer's key is not available);
 //! nothing else about the transaction or the accounts is changed.
@@ -138,17 +139,20 @@ fn main() -> Result<()> {
     let checkpoint = accounts2.iter().find(|a| a.account.owner == verifier && a.account.data.len() == 1768).context("verifier account")?;
     let prefix = aspis_statement::pool_v1::POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
     let statement = aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public.account.data).map_err(|e| anyhow!("statement: {e:?}"))?;
-    let certificate = aspis_r1_cost_probe::verifier::candidate::fused::final_message_certificate(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("certificate: {e:?}"))?;
+    // The recorded proof re-packed into the summed format, behind the recorded candidate prefix.
+    let packed = aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format(statement.semantic_public(), &proof.account.data[prefix..], Sha).map_err(|e| anyhow!("re-pack: {e:?}"))?;
+    let mut buffer = proof.account.data[..prefix].to_vec();
+    buffer.extend_from_slice(&packed);
 
-    let run = |verifier_elf: &[u8], seventh: Option<Vec<u8>>| -> Result<Outcome> {
+    let run = |verifier_elf: &[u8], proof_buffer: Option<Vec<u8>>| -> Result<Outcome> {
         let mut svm = LiteSVM::new().with_sigverify(false);
         svm.warp_to_slot(slot);
         svm.add_program(address(&pool_id)?, &pool_elf).map_err(|e| anyhow!("load pool: {e:?}"))?;
         svm.add_program(verifier, verifier_elf).map_err(|e| anyhow!("load verifier: {e:?}"))?;
         for a in &accounts2 {
             let mut account = a.account.clone();
-            if a.key == checkpoint.key {
-                if let Some(data) = &seventh {
+            if a.key == proof.key {
+                if let Some(data) = &proof_buffer {
                     account.data = data.clone();
                 }
             }
@@ -169,13 +173,13 @@ fn main() -> Result<()> {
     let control = run(&deployed_elf, None)?;
     let recorded_pool = consumed(&stage2["meta"]["logMessages"].as_array().unwrap().iter().map(|l| l.as_str().unwrap().to_string()).collect::<Vec<_>>(), &pool_id);
     let control_ok = control.error.is_none() && consumed(&control.logs, &pool_id) == recorded_pool;
-    // One transaction: certificate at the start of the seventh account, rest zero.
-    let mut seventh = vec![0u8; checkpoint.account.data.len()];
-    seventh[..certificate.len()].copy_from_slice(&certificate);
-    let one = run(&one_tx_elf, Some(seventh.clone()))?;
-    // Negatives: one changed certificate byte; the deployed checkpoint bytes in place of a certificate.
-    let mut bad = seventh.clone();
-    bad[77] ^= 1;
+    // One transaction: the summed-format proof buffer; the seventh account is left as recorded and is not read.
+    let _ = checkpoint;
+    let one = run(&one_tx_elf, Some(buffer.clone()))?;
+    // Negatives: one changed certificate byte; the recorded pinned-format buffer.
+    let mut bad = buffer.clone();
+    let last = bad.len() - 9;
+    bad[last] ^= 1;
     let changed = run(&one_tx_elf, Some(bad))?;
     let stale = run(&one_tx_elf, None)?;
     let summary = json!({
@@ -189,17 +193,18 @@ fn main() -> Result<()> {
         "one_tx_transaction_cu": one.transaction_cu,
         "one_tx_completes_at_1400000": one.error.is_none(),
         "changed_certificate_rejected": changed.error.is_some(),
-        "checkpoint_bytes_as_certificate_rejected": stale.error.is_some(),
+        "pinned_format_buffer_rejected": stale.error.is_some(),
+        "proof_buffer_bytes": buffer.len(),
     });
     println!("{summary}");
     let value = json!({
         "label": "FUTURE-VERSION EXPERIMENT — UNPROVED. Replay of a recorded devnet settlement in LiteSVM, signature verification off, real 1,400,000 CU limit",
         "source_revision": env::var("ASPIS_SOURCE_REVISION")?,
         "pool_elf_sha256": sha(&pool_elf), "deployed_verifier_elf_sha256": sha(&deployed_elf), "one_tx_verifier_elf_sha256": sha(&one_tx_elf),
-        "recorded_signature": stage2["signature"], "recorded_slot": slot, "certificate_sha256": sha(&certificate),
+        "recorded_signature": stage2["signature"], "recorded_slot": slot, "summed_proof_sha256": sha(&packed),
         "runtime": {"litesvm": "0.16.0", "agave": "4.2.1", "heap_bytes": 262144},
         "summary": summary,
-        "runs": [record("control-deployed-verifier", &control), record("one-transaction", &one), record("one-transaction-changed-certificate", &changed), record("one-transaction-checkpoint-bytes", &stale)],
+        "runs": [record("control-deployed-verifier", &control), record("one-transaction", &one), record("one-transaction-changed-certificate", &changed), record("one-transaction-pinned-format-buffer", &stale)],
     });
     fs::write(out, serde_json::to_string_pretty(&value)? + "\n")?;
     ensure!(control_ok, "control did not reproduce the recorded compute units");

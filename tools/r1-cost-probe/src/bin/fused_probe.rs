@@ -46,19 +46,20 @@ fn main()->Result<()> {
     let checkpoint_len=744+16*64;
     let program=Address::new_from_array([0xa1;32]);let proof_key=Address::new_from_array([0xa2;32]);let public_key=Address::new_from_array([0xa3;32]);let checkpoint_key=Address::new_from_array([0xa4;32]);
     let payer=Keypair::new();
-    let send=|data:Vec<u8>,checkpoint:Vec<u8>,diagnostic:bool|->Result<Run> {
+    let send_with=|proof_data:&[u8],data:Vec<u8>,checkpoint:Vec<u8>,diagnostic:bool|->Result<Run> {
         let mut svm=LiteSVM::new();
         if diagnostic {let nesting=LiteSVM::mainnet_feature_set().is_active(&agave_feature_set::raise_cpi_nesting_limit_to_8::ID);svm=svm.with_compute_budget(ComputeBudget{compute_unit_limit:DIAGNOSTIC,heap_size:256*1024,..ComputeBudget::new_with_defaults(nesting)});}
         svm.airdrop(&payer.pubkey(),1_000_000_000).map_err(|e|anyhow!("airdrop: {e:?}"))?;svm.add_program(program,&elf).map_err(|e|anyhow!("load: {e:?}"))?;
-        for (key,data) in [(proof_key,proof.clone()),(public_key,public.clone()),(checkpoint_key,checkpoint)]{svm.set_account(key,Account{lamports:100_000_000,data,owner:program,executable:false,rent_epoch:0})?;}
+        for (key,data) in [(proof_key,proof_data.to_vec()),(public_key,public.clone()),(checkpoint_key,checkpoint)]{svm.set_account(key,Account{lamports:100_000_000,data,owner:program,executable:false,rent_epoch:0})?;}
         let ix=Instruction{program_id:program,accounts:vec![AccountMeta::new_readonly(proof_key,false),AccountMeta::new_readonly(public_key,false),AccountMeta::new(checkpoint_key,false)],data};
         let instructions=[ComputeBudgetInstruction::set_compute_unit_limit(LIMIT),ComputeBudgetInstruction::request_heap_frame(256*1024),ix];
         let tx=Transaction::new_signed_with_payer(&instructions,Some(&payer.pubkey()),&[&payer],svm.latest_blockhash());
         let (error,meta)=match svm.send_transaction(tx){Ok(m)=>(None,m),Err(e)=>(Some(format!("{:?}",e.err)),e.meta)};
-        ensure!(svm.get_account(&proof_key).unwrap().data==proof&&svm.get_account(&public_key).unwrap().data==public,"read-only inputs changed");
+        ensure!(svm.get_account(&proof_key).unwrap().data==proof_data&&svm.get_account(&public_key).unwrap().data==public,"read-only inputs changed");
         let program_cu=meta.logs.iter().find_map(|l|l.strip_prefix(&format!("Program {program} consumed "))?.split_whitespace().next()?.parse::<u64>().ok());
         Ok(Run{error,cu:meta.compute_units_consumed,program_cu,logs:meta.logs,checkpoint:svm.get_account(&checkpoint_key).unwrap().data})
     };
+    let send=|data:Vec<u8>,checkpoint:Vec<u8>,diagnostic:bool|->Result<Run> {send_with(&proof,data,checkpoint,diagnostic)};
     let record=|name:&str,run:&Run,diagnostic:bool|->Value {
         json!({"mode":name,"budget":if diagnostic {"DIAGNOSTIC elevated compute limit"}else{"acceptance at 1,400,000 CU"},"error":run.error,"transaction_cu":run.cu,"program_cu":run.program_cu,"phases":phases(&run.logs,if diagnostic {DIAGNOSTIC}else{LIMIT as u64}),"logs":run.logs})
     };
@@ -81,6 +82,28 @@ fn main()->Result<()> {
     // Cost probe for binding the opening inputs to one QM31 value (verifies nothing).
     let probe=send(vec![10],zero.clone(),false)?;ensure!(probe.error.is_none(),"input probe failed: {:?}",probe.error);
     summary["input_evaluation_probe_cu"]=json!(probe.program_cu);runs.push(record("input-evaluation-probe",&probe,false));
+    // The summed format: the proof re-packed (one multiproof per tree, certificate inside).
+    {
+        #[derive(Clone,Copy)] struct Sha2;
+        impl aspis_core::Digest32 for Sha2 { fn digest(&self,parts:&[&[u8]])->[u8;32]{let mut d=Sha256::new();for p in parts {d.update(p);}d.finalize().into()} }
+        let statement=aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(&public).map_err(|e|anyhow!("statement: {e:?}"))?;
+        let packed=aspis_r1_cost_probe::verifier::candidate::fused::to_summed_format(statement.semantic_public(),&proof,Sha2).map_err(|e|anyhow!("re-pack: {e:?}"))?;
+        let diagnostic=send_with(&packed,vec![14],zero.clone(),true)?;
+        if diagnostic.error.is_none() {
+            let acceptance=send_with(&packed,vec![14],zero.clone(),false)?;
+            let mut bad=packed.clone();let last=bad.len()-5;bad[last]^=1;
+            let rejected=send_with(&bad,vec![14],zero.clone(),true)?;ensure!(rejected.error.is_some(),"summed format accepted a changed certificate byte");
+            let pinned=send_with(&proof,vec![14],zero.clone(),true)?;ensure!(pinned.error.is_some(),"summed format accepted a pinned-format proof");
+            summary["summed_format_cu"]=json!(diagnostic.program_cu);
+            summary["summed_format_completes_at_1400000"]=json!(acceptance.error.is_none());
+            summary["summed_format_proof_bytes"]=json!(packed.len());
+            summary["summed_format_proof_sha256"]=json!(sha(&packed));
+            runs.push(record("summed-format-diagnostic",&diagnostic,true));runs.push(record("summed-format-acceptance",&acceptance,false));
+            std::println!("{label} summed format: program CU {:?}; completes inside 1,400,000: {}; proof bytes {}",diagnostic.program_cu,acceptance.error.is_none(),packed.len());
+        } else {
+            summary["summed_format_cu"]=json!(null);runs.push(record("summed-format-diagnostic",&diagnostic,true));
+        }
+    }
     // Stage D: the honest certificate is a function of the public proof data; it is
     // computed here on the host and placed at the start of the third account.
     {
