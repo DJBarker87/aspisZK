@@ -123,11 +123,11 @@ component pub a : Nat :=            -- the dispatch of UnifiedDecoder.decode, as
        | some (_, label, _) => UnifiedLabels.row label
        | none => 33
 
-classCap n : ℚ :=
+classCap n : ℚ :=                  -- as compiled (AspisRowCharge.classCap)
   n = 0         ⇒ LiteralClassifier.budget 0
-  1 ≤ n ≤ 25    ⇒ max_{1≤i≤25} LiteralClassifier.budget i
+  1 ≤ n ≤ 25    ⇒ LiteralClassifier.budget 1        (the largest of rows 1–25; sem_le)
   n = 26        ⇒ LiteralClassifier.budget 26
-  27 ≤ n ≤ 30   ⇒ max_{27≤i≤30} LiteralClassifier.budget i
+  27 ≤ n ≤ 30   ⇒ OpeningSamplerBound.openingCap    (the SUM of the four opening budgets; open_le)
   n = 31, 32    ⇒ LiteralClassifier.budget n
   n ≥ 33        ⇒ 0
 
@@ -145,11 +145,22 @@ Why classes, not rows, for rows 1–25 and 27–30. `UnifiedDecoder.component`
 sends every label 1–25 to the same semantic decoder and every label 27–30 to
 the same opening decoder; the row those decoders decode is
 `ctx.records.length`, parsed from the table, not the label. No lemma in the
-tree says the two agree. So within those two classes the charge is the class
-maximum. This is the only place where the per-step form is coarser than "each
-start its own row's cap"; its cost is small (section 3) and the smallest
-change that would remove it is one lemma per decoder: the parsed
-`ctx.records.length` equals `UnifiedLabels.row label` of the address.
+tree says the two agree. So within those two classes one charge covers every
+row of the class.
+
+**The three coarsenings** (the only places where the compiled per-step form
+charges more than "each start its own row's cap"; all conservative):
+
+1. rows 1–25 are charged the class maximum, `LiteralClassifier.budget 1`;
+2. rows 27–30 are charged the SUM of the four opening budgets,
+   `OpeningSamplerBound.openingCap` (about 2^-199.66), not their maximum;
+3. the reseed frame read by row 26 is charged the largest cap `capMax`
+   (piece (c)), because its decoded row is not determined here.
+
+Their cost is small (section 3). Optional tightening for 1 and 2: one lemma
+per decoder saying the parsed `ctx.records.length` equals
+`UnifiedLabels.row label` of the address; for 3, a lemma fixing the reseed
+frame's component.
 
 Why (b) needs no change to R1 files. `RawUnifiedDecoder.decoded_bound` and
 `UnifiedDecoderBound.decoded_bound` take one bound `B` for all 33 rows
@@ -264,6 +275,45 @@ What extends and what is new for rows 33–39:
 | pieces (a), trace bridge | reused unchanged (generic) |
 | the classifier's D1/D2/D3 and the extractor link for the 40-row protocol | new (the composition obligation of SOUNDNESS-ARGUMENT.md) |
 
+### Check of the composition against R1 — COMPILED
+
+`AspisPerStep.ChargedHitMassCheck` (lean/AspisChargedHitMassCheck.lean, a new
+file; the files the reviewer read are unchanged): `capMax_le_B`,
+`verifierCharge_le : verifierCharge ≤ 34 · B` (from `classCap_le_B` over the
+33-term list, `List.sum_le_card_nsmul`, and `capMax_le_B`; no budget numeral
+evaluated), `weighted_le_uniform : Q · capMax + verifierCharge ≤ (Q+34) · B`,
+and `restricted_union_bound_via_weighted`, which re-derives R1's
+`Frozen2StartChargeProbability.restricted_union_bound` (same hypotheses,
+same conclusion) from the weighted theorem. This checks the generalisation;
+it does not tighten or replace R1's theorem.
+
+### Independent review (soundness lead's reviewer, 2026-11-11, commit 01f06debd00, source reading, nothing compiled)
+
+Verdict per file: `AspisWeightedFirstRead`, `AspisRowCharge`,
+`AspisRowStarts`, `AspisChargedWeight` faithful; `AspisChargedHitMass`
+faithful with a caveat (no lemma stated its domination by R1's `(Q+34) · B`
+or re-derived R1's theorem from it; added since as
+`AspisChargedHitMassCheck`, above). The reviewer's references:
+
+- `decoded_first_read_bound_via_weighted` (AspisWeightedFirstRead.lean:194–203)
+  matches `DecodedFirstReadUnionBound.lean:29–35` token for token;
+- `adaptive_decoded_classifier_le_via_charge` (AspisRowCharge.lean:493–500)
+  has the hypotheses and conclusion of `RawAdaptiveClassifierHitDensity.lean:55–60`;
+- dropping the nonnegativity hypothesis is sound, because `hbad` forces every
+  charge actually used to be nonnegative;
+- `sem_le` (:65–89), `open_le` (:98–117), `wt_le_capMax`
+  (AspisRowStarts.lean:123), `wt_absorb`/`wt_init` (:136–197) are proved upper
+  bounds;
+- `component_bound_class` is a faithful copy of
+  `UnifiedDecoderBound.component_bound` (:26–184), the only change being the
+  conjunct `cls i = cls n` in `hfixed` (:211), discharged at the six call
+  sites; `decode_component` (:176–198) is new;
+- nothing feeds `failure_bound` or `F3T_Numeric.total`, so the R1 headline is
+  unchanged;
+- not established: the Aspis 40-row instance, the 2,965 account term for one
+  transaction, and the 0.1507·2^-100 figure;
+- the provenance of the L187 objects was not rechecked by the reviewer.
+
 ## 2. Validation
 
 All compiles on the build host against the L187 objects (scope MemoryHigh 6G,
@@ -290,6 +340,7 @@ are exactly `[propext, Classical.choice, Quot.sound]`; no `sorry`, `admit`,
 | PSA-c-05 | AspisChargedWeight | 7fedf4f1…5f5dfd | 1 | 3.07 s | 4,202,980 KB | 417,923,072 | unresolved placeholders in a `have` |
 | PSA-c-06 | AspisChargedWeight | cbaad801…db3c37 | 0 | 2.98 s | 4,226,960 KB | 434,352,128 | 1 axiom line |
 | PSA-c-07 | AspisChargedHitMass | 17848dff…c31c7d | 0 | 2.00 s | 4,221,664 KB | 429,301,760 | 1 axiom line |
+| PSA-c-08 | AspisChargedHitMassCheck | 7afab2bb…69d7 | 0 | 2.42 s | 4,230,180 KB | 428,130,304 | 4 axiom lines |
 
 The two kernel memory failures were not retried unchanged (AGENTS.md
 resource rule 5): in both the proof was asking the kernel to reduce terms
