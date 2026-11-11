@@ -965,3 +965,37 @@ the recorded devnet settlements (`replays-v4/`):
 Final state equal to the control in both; a changed certificate byte is rejected with no state
 change. Neither change raises compute units on these two payments. A6 is not deployed.
 
+
+## Round 7: what the extraction rewrites cost (predictions committed before measurement)
+
+The extraction probe (EXTRACTION-PROBE.md) found that nine functions of the one-transaction
+verifier do not go through the translator as written, and produced a rewritten copy of seven of
+them that does (`extraction-probe/rewrites-tested.patch`, 6 files, +343 −212 lines, applies to the
+branch head). The owner's rule for Aspis is that a change passes only if it does not raise compute
+units, lower soundness or put privacy at risk. The rewrites do not touch the proof format, the
+transcript or the prover's output. Their compute cost is not known. This round measures it.
+
+Baseline: build A6, replay of the two recorded devnet settlements: transfer 1,314,308 CU,
+withdrawal 1,320,803 CU.
+
+Builds, same recipe and feature set as A6, same replay tool and recorded transactions:
+- **X1**: the branch head with the patch applied.
+- **X2**: X1 with `SolanaDigest::digest_into` written as `*out = hashv(parts).to_bytes()` on
+  chain too (the SDK call the translator can see), instead of the direct `sol_sha256` call.
+
+Predictions, written before any build:
+
+| Build | Predicted difference from A6, each payment | Point guess |
+|---|---|---|
+| X1 | 0 to +20,000 CU. The merged Merkle check runs about 850 node steps and the record decoder several hundred element steps; a rewrite that replaces an early exit by a carried flag costs a few units per step. | +8,000 |
+| X2 | X1 plus 4 to 12 CU per in-place digest (up to 975 of them): +4,000 to +12,000 over X1. | X1 + 7,000 |
+
+Acceptance, fixed now:
+- Both replays must accept and end in the same state as the control, and the changed-certificate
+  and redirect attempts must still be rejected with no state change. Otherwise the build is wrong
+  and the number is void.
+- A build passes the owner's rule only if neither payment costs more than A6. A build that costs
+  more is not adopted on my authority. It goes to the owner with the measured cost, or the
+  rewrite is redone function by function until it costs nothing.
+- If X1 costs more, it is bisected by file (multiproof, wire, weights, the fold and final checks)
+  so that each function's cost is known.
