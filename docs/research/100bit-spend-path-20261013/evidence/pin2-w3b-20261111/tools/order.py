@@ -8,13 +8,15 @@ for line in open(sys.argv[1]):
     imp[m[:-6].replace('/', '.')] = [d for d in deps.split(',') if d and d != 'Init']
 dep = set(l.strip() for l in open(sys.argv[2])); dep.add('R0P.Core')
 ov = sys.argv[3]
-def built(m): return os.path.exists(os.path.join(ov, m.replace('.', '/') + '.olean'))
+def built(m):
+    p = os.path.join(ov, m.replace('.', '/') + '.olean')
+    return os.path.exists(p) and not os.path.islink(p)  # a symlink into objs/ is the stale closure object
 order, seen, shadow = [], set(), set()
 def visit(m, top=False):
     if m in seen: return
     seen.add(m)
     for d in imp.get(m, []): visit(d)
-    if top or (m in dep and not built(m)): order.append(m)
+    if top or ((m in dep or m.startswith('R0P.')) and not built(m)): order.append(m)
     elif m.startswith('R0P.') and not built(m): shadow.add(m)
 for t in sys.argv[4:]: visit(t, True)
 print('\n'.join(order))

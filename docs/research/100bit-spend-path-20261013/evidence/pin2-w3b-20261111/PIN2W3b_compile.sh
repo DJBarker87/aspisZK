@@ -14,6 +14,7 @@ mkdir -p $OV/$(dirname $M) $EV/logs
 N=$(( $(ls $EV/logs 2>/dev/null | grep -c '\.log$') + 1 )); ID=$(printf 'PIN2W3b_C%03d' $N)
 LOG=$EV/logs/$ID-${M//\//_}.log
 pgrep -x lean >/dev/null && { echo "another lean process is running; refusing"; exit 3; }
+[ -L $OV/$M.olean ] && { echo "overlay target $OV/$M.olean is a symlink (would overwrite the closure object); refusing"; exit 4; }
 SRCDIR=${SRCDIR:-$EV/sources}
 SHA=$(shasum -a 256 $SRCDIR/$M.lean | cut -d' ' -f1)
 REV=$(git -C $W rev-parse HEAD)
