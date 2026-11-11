@@ -1,5 +1,14 @@
 # Future version: soundness rows for the changed verifier
 
+> **Correction, 2026-11-11.** Two statements below are wrong as descriptions of the pinned
+> theorem: that a bound "of the pinned form ... keeps its largest row" when rows are added, and
+> the implication that the seven new rows cost about `2^-120.3` in the composed bound. The
+> pinned bound charges every transcript start a common envelope `B = 15/2^109` and holds
+> `34·B < 2^-100` with a margin of `2/2^109`. Seven more starts give about `1.2 · 2^-100`, so
+> under the pinned accounting this verifier misses criterion (A) of the contract. A per-row
+> accounting would be a different composition theorem and does not exist. See
+> `V8-LESSONS-CHECK.md`, finding 1. The per-row caps below stand as per-row caps only.
+
 Status: accounting sketch for the experiment on branch `future-version`.
 Nothing here is proved except where a Lean theorem is named. It states what
 would have to be proved, in the row form of
