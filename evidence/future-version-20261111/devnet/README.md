@@ -160,3 +160,59 @@ payments; open, writes and settlement in three consecutive slots; accounting exa
 3. The 15 writes are confirmed within 3 seconds of the start of their phase; none is re-sent.
 4. 18 transactions per payment, the payer signs one; the payer's balance falls by 1,981,880
    lamports per payment; session key, proof account and checkpoint gone.
+
+## Results of the timing run (devnet, 2026-11-11, 13:47 to 13:56 UTC)
+
+Receipts: receipts/FV_timing; config FV_devnet_timing.json (the private endpoint's address is not
+recorded). Both payments completed; the same validation and accounting as the registered run then
+passed on the finalized transactions.
+
+| | Transfer | Withdrawal |
+|---|---:|---:|
+| Open confirmed | 1.49 s | 1.47 s |
+| 15 writes confirmed (all in one slot) | 3.06 s | 3.13 s |
+| Settlement confirmed | 4.53 s | 4.52 s |
+| Close confirmed (rent returned) | 5.96 s | 5.95 s |
+| Slots from the open to the settlement | 13 | 13 |
+| Settlement compute units | 1,312,109 | 1,321,189 |
+
+Times are wall seconds from the first send with all 18 transactions signed beforehand, to
+confirmation (not finality), from this Mac through a container, each transaction broadcast to two
+endpoints. They do not include proving.
+
+| Prediction | Result |
+|---|---|
+| 1. Settlement compute units: transfer 1,303,000 to 1,321,000, withdrawal 1,315,000 to 1,331,000 | 1,312,109 and 1,321,189. Met. |
+| 2. First send to settlement confirmed under 8 s; at most 15 slots | 4.53 s and 4.52 s; 13 slots. Met. |
+| 3. Writes confirmed within 3 s of the start of their phase; none re-sent | 1.57 s and 1.66 s; none re-sent. Met. |
+| 4. 18 transactions, payer signs one, payer balance falls by 1,981,880 per payment | Met for both. Cleanup returned 2,976,880 lamports. |
+
+Settlement transactions:
+transfer 2SCDN6j4YX8ic6Zm3N9tjj6GLJpDqLw62t2L6xHr1stMfUEhiXEviLvix5L6DjigFikZLgo2ecBGxJzNax8KvjEf,
+withdrawal 3RY1xTw5AwMSDx6MFSYCmN7NKiA56tDrBoXXvDTTFsrrGmbjzHLPA4Kn9kprjQbpWFQgzVmyuQtKswW6diCLM27Q.
+
+The payer ended at 15.616580781 SOL; this run cost 136,877,000 lamports, of which 132,603,240 is
+the second fresh Pool state, registry entry, mint and vault (no close path in the frozen programs)
+and 3,413,760 the two nullifier markers.
+
+## Proving time (separate measurement, not part of either run)
+
+One proof on this Mac (Apple M3), native build of the same client source, single-threaded:
+26.7 s (transfer) and 26.8 s (withdrawal), peak resident memory 0.61 GB. On the efficiency cores
+at background priority: 154.6 s. In the runs above the prover ran in an emulated x86-64 container
+(about 40 s per proof), and on the shared build host 46 s to 67 s. No phone or browser measurement
+exists.
+
+## What the two runs establish, and what they do not
+
+Established, as fixture measurements on devnet: four payments (two transfers, two withdrawals) on
+two fresh Pool states were each verified and settled in one transaction, between 1,308,068 and
+1,321,318 compute units; changed proofs and replays were rejected without state change; each
+payment took 18 transactions with one signature from the payer; everything a payment created
+except its nullifier marker was closed and its rent returned.
+
+Not established: a compute bound over all inputs (root-page rollover and a Pool with a long history
+were not exercised; the smallest observed margin is 78,682); any soundness claim for this verifier
+(the rows are stated in docs/research/future-version/SOUNDNESS-ROWS.md and are not proved); the
+source correspondence of the changed kernels. The release target is unchanged and not yet
+established.
