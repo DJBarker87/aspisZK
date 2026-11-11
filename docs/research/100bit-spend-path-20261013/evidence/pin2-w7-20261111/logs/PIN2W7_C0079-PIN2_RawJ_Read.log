@@ -1,0 +1,2312 @@
+PIN2_RawJ_Read.lean:32:19: error: unsolved goals
+case Break.Ok.Ok.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  erase
+      (have i := pub.len;
+      do
+      let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (have i := pub.len;
+              do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read log frame
+a✝² : U32
+hr :
+  erase (liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)) = ok (core.result.Result.Ok a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              (core.result.Result.Ok a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : U32
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+            D)
+          (core.result.Result.Ok a✝²) ())) =
+    ok (core.result.Result.Ok a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s ←
+                  liftM
+                      (lift
+                        (Array.make 1#usize [0#u8]
+                            AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                let s1 ← liftM (lift a.to_slice)
+                let s2 ← liftM (lift root.to_slice)
+                let s3 ←
+                  liftM
+                      (lift
+                        (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Ok.Err.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  erase
+      (have i := pub.len;
+      do
+      let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (have i := pub.len;
+              do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read log frame
+a✝² : U32
+hr :
+  erase (liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)) = ok (core.result.Result.Ok a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              (core.result.Result.Ok a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : AspisR1PublicPreparationPIN2.r1_wire.Error
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+            D)
+          (core.result.Result.Ok a✝²) ())) =
+    ok (core.result.Result.Err a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s ←
+                  liftM
+                      (lift
+                        (Array.make 1#usize [0#u8]
+                            AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                let s1 ← liftM (lift a.to_slice)
+                let s2 ← liftM (lift root.to_slice)
+                let s3 ←
+                  liftM
+                      (lift
+                        (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Err.Ok.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  erase
+      (have i := pub.len;
+      do
+      let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (have i := pub.len;
+              do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read log frame
+a✝² : core.num.error.TryFromIntError
+hr :
+  erase (liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)) = ok (core.result.Result.Err a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              (core.result.Result.Err a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : U32
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+            D)
+          (core.result.Result.Err a✝²) ())) =
+    ok (core.result.Result.Ok a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s ←
+                  liftM
+                      (lift
+                        (Array.make 1#usize [0#u8]
+                            AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                let s1 ← liftM (lift a.to_slice)
+                let s2 ← liftM (lift root.to_slice)
+                let s3 ←
+                  liftM
+                      (lift
+                        (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Err.Err.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : Slice U8
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  erase
+      (have i := pub.len;
+      do
+      let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash pub root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (have i := pub.len;
+              do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read log frame
+a✝² : core.num.error.TryFromIntError
+hr :
+  erase (liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)) = ok (core.result.Result.Err a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                D)
+              (core.result.Result.Err a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM (core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from pub.len)
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : AspisR1PublicPreparationPIN2.r1_wire.Error
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ←
+            liftM
+                (lift
+                  (Array.make 1#usize [0#u8]
+                      AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+          let a ← liftM (lift (core.num.U32.to_le_bytes val))
+          let s1 ← liftM (lift a.to_slice)
+          let s2 ← liftM (lift root.to_slice)
+          let s3 ←
+            liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+          let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+          pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+            D)
+          (core.result.Result.Err a✝²) ())) =
+    ok (core.result.Result.Err a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s ←
+                  liftM
+                      (lift
+                        (Array.make 1#usize [0#u8]
+                            AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                let s1 ← liftM (lift a.to_slice)
+                let s2 ← liftM (lift root.to_slice)
+                let s3 ←
+                  liftM
+                      (lift
+                        (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let s ←
+                    liftM
+                        (lift
+                          (Array.make 1#usize [0#u8]
+                              AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+                  let a ← liftM (lift (core.num.U32.to_le_bytes val))
+                  let s1 ← liftM (lift a.to_slice)
+                  let s2 ← liftM (lift root.to_slice)
+                  let s3 ←
+                    liftM
+                        (lift
+                          (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+                  let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+                  pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+PIN2_RawJ_Read.lean:37:4: error: 'change' tactic failed, pattern
+  (erase do
+      let state ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash parts
+      pure (core.result.Result.Ok { state := state, hash := hash, next_row := 0#u8 })) =
+    ok (core.result.Result.Ok out)
+is not definitionally equal to target
+  erase
+      (match core.ops.control_flow.ControlFlow.Continue len with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ←
+          liftM
+              (lift
+                (Array.make 1#usize [0#u8] AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript._proof_4).to_slice)
+        let a ← liftM (lift (core.num.U32.to_le_bytes val))
+        let s1 ← liftM (lift a.to_slice)
+        let s2 ← liftM (lift root.to_slice)
+        let s3 ←
+          liftM (lift (Array.make 5#usize [AspisR1PublicPreparationPIN2.r1_wire.DOMAIN, s, s1, pub, s2] ⋯).to_slice)
+        let a1 ← effects.digest (AspisR1PublicPreparation.PIN2W7_PrefixGlue.digestBack D) hash s3
+        pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+            (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+PIN2_RawJ_Read.lean:62:19: error: unsolved goals
+case Break.Ok.Ok.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  (erase do
+      let r ← liftM pub.public_bytes
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.publicTranscript D pub hash root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read log frame
+a✝² : alloc.vec.Vec U8
+hr : erase (liftM pub.public_bytes) = ok (core.result.Result.Ok a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              (core.result.Result.Ok a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : alloc.vec.Vec U8
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+            D)
+          (core.result.Result.Ok a✝²) ())) =
+    ok (core.result.Result.Ok a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                have s := val.deref;
+                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Ok.Err.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  (erase do
+      let r ← liftM pub.public_bytes
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.publicTranscript D pub hash root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read log frame
+a✝² : alloc.vec.Vec U8
+hr : erase (liftM pub.public_bytes) = ok (core.result.Result.Ok a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              (core.result.Result.Ok a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : AspisR1PublicPreparationPIN2.r1_wire.Error
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+            D)
+          (core.result.Result.Ok a✝²) ())) =
+    ok (core.result.Result.Err a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Ok a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                have s := val.deref;
+                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Err.Ok.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  (erase do
+      let r ← liftM pub.public_bytes
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.publicTranscript D pub hash root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read log frame
+a✝² : AspisR1PublicPreparationPIN2.aspis_core.state_only_prefix.r0.Error
+hr : erase (liftM pub.public_bytes) = ok (core.result.Result.Err a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              (core.result.Result.Err a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : alloc.vec.Vec U8
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+            D)
+          (core.result.Result.Err a✝²) ())) =
+    ok (core.result.Result.Ok a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                have s := val.deref;
+                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+
+case Break.Err.Err.Ok
+H : Type
+D : AspisR1PublicPreparationPIN2.aspis_core.digest.Digest32 H
+hash : H
+pub : AspisR1PublicPreparationPIN2.pool_v1.pair_forest_semantic_terminal.r0.Public
+root : Std.Array U8 32#usize
+out : AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H
+success :
+  (erase do
+      let r ← liftM pub.public_bytes
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              r ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+log : List (Bytes × State) :=
+  observe (run (AspisR1PublicPreparationPIN2.S1SemanticCode.publicTranscript D pub hash root)).1
+inc :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read log frame
+a✝² : AspisR1PublicPreparationPIN2.aspis_core.state_only_prefix.r0.Error
+hr : erase (liftM pub.public_bytes) = ok (core.result.Result.Err a✝²)
+s1 :
+  (erase do
+      let r1 ←
+        liftM
+            (PCWN_NewLib.core.result.Result.map_err
+              (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                D)
+              (core.result.Result.Err a✝²) ())
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+sub1 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r ← liftM pub.public_bytes
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      r ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝¹ : AspisR1PublicPreparationPIN2.r1_wire.Error
+s2 :
+  (erase do
+      let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          have s := val.deref;
+          AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+              (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+              (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)) =
+    ok (core.result.Result.Ok out)
+hr1 :
+  erase
+      (liftM
+        (PCWN_NewLib.core.result.Result.map_err
+          (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+            D)
+          (core.result.Result.Err a✝²) ())) =
+    ok (core.result.Result.Err a✝¹)
+sub2 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let r1 ←
+                liftM
+                    (PCWN_NewLib.core.result.Result.map_err
+                      (AspisR1PublicPreparationPIN2.r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        D)
+                      (core.result.Result.Err a✝²) ())
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+a✝ : PCWN_NewLib.Never
+hcf :
+  erase (liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))) =
+    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝))
+sub3 :
+  ∀ (frame : Bytes),
+    Read
+        (observe
+          (run
+              (match core.ops.control_flow.ControlFlow.Break (core.result.Result.Ok a✝) with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                have s := val.deref;
+                AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                    (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual))).1)
+        frame →
+      Read
+        (observe
+          (run do
+              let cf ← liftM (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝¹))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  have s := val.deref;
+                  AspisR1PublicPreparationPIN2.S1SemanticCode.newTranscript D hash s root
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (PCWN_NewLib.core.result.Result.Insts.CoreOpsTry_traitFromResidualResult.from_residual
+                      (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame AspisR1PublicPreparationPIN2.r1_wire.Error) residual)).1)
+        frame
+s3 :
+  PCWN_NewLib.Never.rec
+      (fun x =>
+        Result
+          (core.result.Result (AspisR1PublicPreparationPIN2.r1_wire.SemanticTranscript H)
+            AspisR1PublicPreparationPIN2.r1_wire.Error))
+      a✝ =
+    ok (core.result.Result.Ok out)
+⊢ ∃ frame, Read log frame ∧ BinRawByteCollisionTargets.pred 2 frame = some (decodeState root)
+PIN2_RawJ_Read.lean:88:31: error: Application type mismatch: The argument
+  read
+has type
+  Read
+    (observe
+      (run
+          (AspisR1PublicPreparationPIN2.S1SemanticCode.publicTranscript
+            (AspisR1PublicPreparation.PIN2W7_TranscriptCopy.digest D)
+            (AspisR1PublicPreparation.PreparationBinding.toPIN2 pub) hash root)).1)
+    frame
+but is expected to have type
+  Read
+    (observe
+      (run
+          (pure
+            (AspisR1PublicPreparation.PIN2W7_PrefixGlue.cres AspisR1PublicPreparation.PIN2W7_PrefixGlue.transcriptBack
+              AspisR1PublicPreparation.PIN2W7_PrefixGlue.errorBack (core.result.Result.Ok t)))).1)
+    frame
+in the application
+  sub1 frame read
+PIN2_RawJ_Read.lean:109:57: warning: 'head_reduce s2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:109:74: warning: 'split at s2' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:123:61: warning: 'head_reduce s5' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:123:78: warning: 'split at s5' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+PIN2_RawJ_Read.lean:109:57: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:109:74: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:123:61: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+PIN2_RawJ_Read.lean:123:78: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.PIN2_RawJ_Read.init_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.public_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.publicPIN2_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PIN2_RawJ_Read.verify_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       21.26 real         2.21 user         2.32 sys
+          4207558656  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              135237  page reclaims
+              190649  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               22637  voluntary context switches
+              152717  involuntary context switches
+         46345708912  instructions retired
+         16496624592  cycles elapsed
+           627442600  peak memory footprint
