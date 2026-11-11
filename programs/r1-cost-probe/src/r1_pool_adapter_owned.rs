@@ -428,6 +428,36 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     if proof_data.len() != proof_end {
         return Err(ProgramError::InvalidAccountData);
     }
+    // FUTURE-VERSION EXPERIMENT (default off): one transaction. No checkpoint is
+    // resumed. The statement reconstructed from the request and the
+    // authenticated accounts is validated here (stage 1 does this on the
+    // two-transaction path), and the whole proof is verified in this
+    // invocation with the stage D certificate read from the first bytes of the
+    // seventh account. Its candidate prefix is the one the statement was
+    // reconstructed from, so no separate prefix comparison is needed.
+    #[cfg(feature = "future-one-tx")]
+    {
+        validate_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
+            .map_err(|_| ProgramError::InvalidAccountData)?;
+        let certificate_bytes = verifier::candidate::fused::CERTIFICATE_BYTES;
+        if validated.proof_length != verifier::PROOF_BYTES
+            || proof_data[proof_start + 8] != Variant::S2.tag()
+            || checkpoint_data.len() < certificate_bytes
+        {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        verifier::candidate::fused::verify_summed(
+            validated.statement.semantic_public(),
+            &proof_data[proof_start..proof_end],
+            &checkpoint_data[..certificate_bytes],
+            super::super::SolanaDigest,
+            super::super::observer(),
+        )
+        .map_err(super::super::error)?;
+        return emit_result(&validated.statement);
+    }
+    #[cfg(not(feature = "future-one-tx"))]
+    {
     let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
         .map_err(|_| ProgramError::InvalidInstructionData)?;
     if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
@@ -442,6 +472,7 @@ fn stage2_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8], cur
     )
     .map_err(super::super::error)?;
     emit_result(&validated.statement)
+    }
 }
 
 pub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
