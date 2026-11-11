@@ -738,3 +738,33 @@ pinned accumulator (scalar canonicality at every push, and the 4,096-term
 limit), so adopting it needs the canonical-scalar fact and a static term bound
 at each call site; every current call site pushes at most 174 terms of values
 that are canonical by construction or by an earlier decode.
+
+### Round 4: result
+
+| Build | transfer-13 | transfer-255 | transfer-1023 | withdrawal-13 | withdrawal-255 | withdrawal-1023 | Saving on the previous build |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| W13 | 1,226,151 | 1,229,212 | 1,227,553 | 1,226,317 | 1,227,376 | 1,227,416 | |
+| W20 = W13 + G2 + G6 (the kept set) | 1,206,081 | 1,209,165 | 1,207,537 | 1,206,255 | 1,207,300 | 1,207,354 | 20,016 to 20,076 |
+| W21 = W20 + H1 | 1,204,371 | 1,207,444 | 1,205,783 | 1,204,528 | 1,205,592 | 1,205,624 | 1,708 to 1,754 |
+
+H1 was predicted at 25k and measured at 1.7k; dropped. In the replay the H1
+adapter build gives 1,326,537 (transfer) and 1,335,953 (withdrawal), 1,750
+below the kept build; the kept build's figures stand.
+
+The kept set, as a plain build, is W20: 1,206,081 to 1,209,165 on the six
+fixtures (ELF `3d5b5166…62db8e2`, source `b1189d085a1`).
+
+**Reading.** Kernel-level changes have stopped paying: of the last seven
+tried, two cleared the 3,000 rule. The predictions for them were wrong in the
+same direction each time, because the compiler had already removed most of
+what looked removable in the source. Further margin of a useful size would
+have to come from the proof format, not from the arithmetic:
+
+- one 22-query multiproof per tree in place of two batches: about 65 fewer
+  parent hashes (about 11k) and 2,176 fewer proof bytes;
+- a folded tree of depth 16 in place of the padded depth 18: about 40 fewer
+  parents (about 7k) and about 1.2 KB.
+
+Together with the 384-byte certificate that would leave the proof about 3 KB
+smaller than today, which is one upload transaction fewer. Both need the
+prover; neither has been built or measured.
