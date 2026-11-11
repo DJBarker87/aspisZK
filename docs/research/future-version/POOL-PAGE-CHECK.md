@@ -1,6 +1,6 @@
 # Aspis Pool: cheap zero checks of the root-history pages
 
-Status: gates 0-6 run, all passed. Tests and measurements only. Nothing here is proved, committed or deployed.
+Status: v2 (slice equality) is the final form; gates 0-6 run on v1 and rerun on v2, all passed. Tests and measurements only. Nothing here is proved, committed or deployed.
 
 Scope (owner's approval of 2026-11-11): the byte-by-byte zero checks of the Pool's root-history pages are
 replaced by a cheaper check of the same predicate. The checks cover the unused tail of the current page,
@@ -226,17 +226,111 @@ rollover remains the heaviest Pool path (73,779 against 70,947 for a nearly full
 account is sized to the ELF locks 288 × 5,080 = **1,463,040 lamports more** (about 0.0015 SOL). The
 change needs a new Pool deployment either way.
 
-## For review before deployment
+## v2, the final form: slice equality
 
-- `sol_memcmp_` is called with two overlapping regions (`data[..n-1]` and `data[1..]`). agave 4.2.1 in
-  LiteSVM accepts this, and all runs above depend on it. Check that the cluster runtime that will run
-  the Pool has no overlap check on `sol_memcmp_`. If one were added, every page check would abort,
-  every payment would fail, and no state would change (availability, not soundness). The deployed Pool
-  already imports `sol_memcmp_` through the compiler's `memcmp`.
-- For the Lean side, `solana_program::program_memory::sol_memcmp` (a deprecated re-export of
-  `solana-program-memory`) becomes an SDK/runtime item that the extracted Pool relies on. It needs a
-  trust row or a model, and the translator's handling of it was not tested here. If that blocks, A2
-  (slice equality, same cost) uses `PartialEq` on slices instead.
+**Why the form changed.** The soundness lead chose slice equality over the SDK call. Std slice
+equality already has a modelled external in the Lean gate library, so the Pool uses only items that are
+already trust rows. `sol_memcmp` would be a new SDK external to add and justify. The cost is the same
+(form A2 above). The sections above describe v1 (form A, committed in 958241d3b80). v2 replaces it.
+
+**The v2 change.** Tree `src-pool-final2` = `src-pool-final` with one edit in `history::page_bytes_are_zero`:
+
+```rust
+pub(crate) fn page_bytes_are_zero(data: &[u8]) -> bool {
+    data.is_empty() || (data[0] == 0 && data[..data.len() - 1] == data[1..])
+}
+```
+
+The name, signature and visibility are unchanged, and both borrows are shared. `#[allow(deprecated)]`
+is dropped because the SDK path is no longer used, and the doc comment is updated. The four call sites,
+the tests and every other line are as committed.
+
+- **Patch:** `docs/research/future-version/pool-page-check/pool-page-check-v2.patch`, sha256
+  `465a7bb5df06145edc31154bebc2ddc3e5e3470f942bdda19c98c237ebc20e2d`. It is the full change against
+  `src-xp1`, restricted to `programs/aspis-pool`: 439 lines added, 4 removed.
+- **ELF:** `2152a068a916169239138770cf27d272ba3c7dc72160564c245e4bebef50bb8a`, 345,720 bytes
+  (`PL2-build`, exit 0).
+
+**Per-function table for v2.**
+
+| File | Function | Lines before (deployed) | Lines in v2 | sha256 in v2 |
+|---|---|---|---|---|
+| history.rs | `page_bytes_are_zero` (new) | — | 60-62 (doc comment 52-59) | `7c2e3da6235aaf3c3cb8e3c39a695e84240e28f2083a82970f1521e5fef2c17d` |
+| history.rs | `validate_root_page_bytes` | 119-175 | 131-187 | `733339d6c485733a5594ce585e7e4b2b2ecc1d1129fa240cf6c9350212db414a` |
+| history.rs | `validate_new_page_account` | 284-297 | 296-309 | `b7e0747507ca48085ff5d5838127bdc9fe218530b5e7e364e8e8dde5656d1ea7` |
+| pair_forest.rs | `require_program_owned_zeroed` | 400-415 | 400-415 | `8de47156762705ad866f715003f827e793fb12eb226766340ac6ac995bcef3a3` |
+| pair_forest.rs | `account_is_zeroed_program_page` | 806-815 | 806-815 | `4dd1bb792a639b45978c5b33e7d3606d06d551978539fe43d6ebe9c344d9deea` |
+
+- The four functions' body hashes are **unchanged from v1**. Only the helper's body hash changed
+  (v1 `e5d86c6c…401e`).
+- The before-hashes are as in the v1 table.
+- `pair_forest.rs` is identical to v1: no line moved, and the planner and the terminal handler are
+  byte-identical to the deployed source.
+- In `history.rs`, every function after the helper sits 12 lines below its deployed position (v1: 20).
+
+**The comparison is the memory-compare syscall.** Confirmed from the built ELF by disassembly
+(`evidence/future-version-20261111/host/fv_pool_memcmp_calls.py`, output in
+`evidence/future-version-20261111/pool-page-check/v2/memcmp_calls.txt`). In each ELF, the script takes
+the `sol_memcmp_` relocation sites (`llvm-readelf -r`) and the function that contains each site, then
+counts the `call` instructions that target that function:
+- deployed ELF: the only syscall site is in the compiler's `memcmp` wrapper (0x4e528), called from 1 site;
+- v2 ELF: the only syscall site is in the same wrapper (0x4e570), which is four instructions plus
+  the syscall and no loop, now called from **5** sites. These are the deployed 1 plus the 4 page-check
+  call sites.
+
+The CU confirms it independently. An inlined byte loop over 8,255 bytes would cost at least about
+16,000, whereas v2 costs the same as form A to within 4.
+
+**v2 gates** (attempts `PL2-*`; receipts in `evidence/future-version-20261111/pool-page-check/v2/receipts/receipts.txt`,
+host script `evidence/future-version-20261111/host/fv_pool_v2.sh`). The old Pool and form A results are
+the v1 runs above, not rerun.
+1. **Differential and oracle tests:** all 11 pass.
+2. **Pool crate tests,** `--release`. Deployed feature set: 78 passed, 0 failed. Defaults: 45 passed,
+   0 failed.
+3. **Old Pool against v2,** same 14 positive scenarios (three marker states and the run one unit under
+   its cost each) and the same 18 negative scenarios (`new2-pos.json`, `new2-neg.json`;
+   `compare_v2.py` → `compare_v2.txt`: `ALL_RUNS_AGREE_AND_AS_EXPECTED True`):
+   - every run has the same proof, error and post-state hash under the old Pool, form A and v2;
+   - every settling run writes the expected state;
+   - every under-limit run fails with no change;
+   - every negative scenario is rejected with the same error and no change.
+4. **Replays and redirect attempts** (`final2-*.json`): same outcomes as the deployed Pool and as form
+   A, and every state-difference list is empty (including the control against the recorded devnet
+   final state). Redirect: the same errors, and the honest settlements pay the recorded destination.
+   `one_tx_replay` exits 1 for the same reason as in v1, because the control's Pool CU differs from the
+   recorded figure.
+5. **Compute** (X1, one-lamport marker; whole transaction, old / form A / v2):
+
+| Scenario | Old | Form A | v2 | v2 − A |
+|---|---:|---:|---:|---:|
+| Withdrawal, rollover n = 255, seed 60 (heaviest) | 1,354,102 | 1,287,576 | 1,287,572 | −4 |
+| Withdrawal, rollover n = 255 | 1,342,968 | 1,276,442 | 1,276,438 | −4 |
+| Withdrawal, rollover n = 1023 | 1,348,925 | 1,282,399 | 1,282,395 | −4 |
+| Withdrawal, n = 254 | 1,279,352 | 1,278,660 | 1,278,662 | +2 |
+| Withdrawal, n = 3 | 1,316,637 | 1,268,277 | 1,268,279 | +2 |
+| Withdrawal, n = 1 | 1,314,850 | 1,266,110 | 1,266,112 | +2 |
+| Withdrawal, n = 0 (initialised page) | 1,321,070 | 1,272,152 | 1,272,153 | +1 |
+| Withdrawal, genesis | 1,321,456 | 1,271,965 | 1,271,968 | +3 |
+| Transfers, same positions | | | | −4 to +3 |
+| Recorded transfer, one transaction | 1,306,700 | 1,257,960 | 1,257,962 | +2 |
+| Recorded withdrawal, one transaction | 1,313,188 | 1,264,448 | 1,264,450 | +2 |
+
+On every settling run, v2 is at most 3 CU above form A (largest difference +3, at genesis) and up to
+4 below it at the rollover.
+
+**New worst case (v2):** 1,287,572 + 10,697 = **1,298,269, headroom 101,731**.
+
+**Rent (v2):** 345,720 − 345,648 = 72 bytes more than the deployed ELF, so 72 × 5,080 = **365,760 lamports
+more** for a deployment sized to the ELF.
+
+## For review before deployment (applies to v2, the final form)
+
+- The slice comparison compiles to the compiler's `memcmp`, which makes one `sol_memcmp_` syscall
+  over two overlapping regions (`data[..n-1]` and `data[1..]`). agave 4.2.1 in LiteSVM accepts this,
+  and all runs depend on it. Check that the cluster runtime that will run the Pool has no overlap check
+  on `sol_memcmp_`. If one were added, every page check would abort, every payment would fail, and no
+  state would change (availability, not soundness). The deployed Pool already reaches `sol_memcmp_`
+  through the same `memcmp` wrapper.
 - Deposit, initialize and the older pair path are covered by unit tests and the crate's own tests only,
   not by a LiteSVM run.
 - Only fixture witnesses were used, with lane positions up to 1023.

@@ -53,20 +53,12 @@ pub(crate) fn digest_is_canonical(digest: &Digest) -> bool {
 /// `data` is zero, and true for the empty region. It decides the same
 /// predicate as `data.iter().all(|byte| *byte == 0)`.
 ///
-/// Form: one SDK call, no loop. A non-empty region is all zero iff its first
-/// byte is zero and every byte equals the byte after it; the second part is
-/// one `sol_memcmp` of the region without its last byte against the region
-/// without its first byte (both of length `len - 1`, so the call reads only
-/// bytes of `data`).
-#[allow(deprecated)]
+/// Form: no loop. A non-empty region is all zero iff its first byte is zero
+/// and every byte equals the byte after it, that is, iff the region without
+/// its last byte equals the region without its first byte (slice equality on
+/// two shared borrows of `data`, both of length `len - 1`).
 pub(crate) fn page_bytes_are_zero(data: &[u8]) -> bool {
-    data.is_empty()
-        || (data[0] == 0
-            && solana_program::program_memory::sol_memcmp(
-                &data[..data.len() - 1],
-                &data[1..],
-                data.len() - 1,
-            ) == 0)
+    data.is_empty() || (data[0] == 0 && data[..data.len() - 1] == data[1..])
 }
 
 pub(crate) fn require_program_account(
