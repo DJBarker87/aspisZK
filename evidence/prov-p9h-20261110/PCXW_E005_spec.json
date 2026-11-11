@@ -1,0 +1,53 @@
+{
+ "run": "PCXW_E005",
+ "kind": "aeneas",
+ "tool": "original",
+ "input": "input",
+ "tools": {
+  "charon": "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+  "aeneas": "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "tc": "nightly-2026-06-01"
+ },
+ "command": [
+  "bash",
+  "-c",
+  "mkdir -p /home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_E005_emitted && ln -sfn /home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_llbc/PCXW_E004.llbc /home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_E005_emitted/repro.llbc && python3 /home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_m31_adapter.py /home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_llbc/PCXW_E004.llbc /home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_llbc/PCXW_E004_m31.llbc /home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_E005_emitted/m31_adapter_receipt.json && exec /home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas -sequential -no-progress-bar -abort-on-error -backend lean -namespace PCXW_Pub -dest /home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_E005_emitted/raw -subdir PCXW_Pub -split-files -emit-json -print-unknown-externals -loops-to-rec /home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_llbc/PCXW_E004_m31.llbc"
+ ],
+ "argv": [
+  "/home/dombarker/project-offloads/codex-pc-prov-p4c-20261109/PCWC_T001_out/work/bin/aeneas",
+  "-sequential",
+  "-no-progress-bar",
+  "-abort-on-error",
+  "-backend",
+  "lean",
+  "-namespace",
+  "PCXW_Pub",
+  "-dest",
+  "/home/dombarker/project-offloads/codex-pc-prov-p9h-20261110/PCXW_E005_emitted/raw",
+  "-subdir",
+  "PCXW_Pub",
+  "-split-files",
+  "-emit-json",
+  "-print-unknown-externals",
+  "-loops-to-rec",
+  "/home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_llbc/PCXW_E004_m31.llbc"
+ ],
+ "env": {
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+  "RUSTUP_TOOLCHAIN": "nightly-2026-06-01",
+  "CARGO_BUILD_JOBS": "4",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "2",
+  "RUSTFLAGS": "-Zthreads=1 -C overflow-checks=yes -C link-arg=-Wl,--threads=1",
+  "RAYON_NUM_THREADS": "1",
+  "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pc-pin2-probe-20261111/PCXW_target_original",
+  "CARGO_NET_OFFLINE": "true"
+ },
+ "collect": [
+  "PCXW_E005_emitted"
+ ],
+ "expected": "Aeneas-only on saved LLBC; v4 recorded 9 s",
+ "identity_note": "identity by class receipt PCWE_E003; cargo --jobs 4 and CARGO_BUILD_JOBS=4; rustc -Zthreads=1",
+ "spec_id": "PCXW_E005",
+ "note": "shape change after PCXW_E002 (Aeneas name clash field.M31): v4 metadata adapter then Aeneas"
+}
