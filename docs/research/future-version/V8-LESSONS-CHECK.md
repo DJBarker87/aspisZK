@@ -120,6 +120,24 @@ through the public-statement bytes, which belong to the source-refinement layer 
 the Aspis statement has to carry that conjunct, and the soundness lead has been asked where the
 PIN2 statement carries it.
 
+**Soundness lead's interim answer (2026-11-11), recorded as received; file and line references to
+follow.** At PIN2 the pool, the deployment domain and the destination enter through the extracted
+`public_bytes`, that is through the transcript, not through the Pool-side association: the PIN2
+extraction of `public_bytes` appends them, bridge lemmas carry them into the serializer
+refinement, the model's public input is the PIN2 serialization, and the model public value used by
+the terminal chain holds the destination (none for a transfer). In R1 the Pool pays the UPLOADED
+statement's destination, and that statement is tied to the proved one by the first transaction's
+checkpoint hash of all 1,880 statement bytes, checked when the second transaction resumes; that
+check sits outside the Lean statement. Whether the headline names the destination as an explicit
+conjunct of the accepted relation, or only carries it inside the public object the relation is
+stated over, is still being read. Status at PIN2: fixed in code and in the model layer, not yet
+closed. **Until it is, nothing about Aspis may be written as "the relation covers the
+destination".** Two obligations for Aspis follow: carry at least the same conjunct as PIN2, and
+name the one-transaction replacement of that hash check explicitly. The replacement is: the entry
+rebuilds the statement from the request and the authenticated accounts in the call that verifies
+the proof, and the Pool pays the destination in that same request. It needs its own source-level
+statement for the entry and for the Pool's payout.
+
 ## V8 soundness failures and Aspis
 
 | V8 failure | Where it could recur in Aspis | Status |
