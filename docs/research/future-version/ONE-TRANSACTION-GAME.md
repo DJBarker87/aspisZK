@@ -627,8 +627,13 @@ quarters of them are copies.
 > up, soundness down or risk privacy". Recorded as: D1 adopted (one-phase game, same adversary,
 > metric, averaging and failure event); D2 adopted (the split-B failure event and an account term
 > are kept); D3 confirmed (the same normalisation rule for the single phase); D4 to be decided
-> together with R1's pending item, no new rule; D0 not decided: Aspis stays an experimental
-> candidate. Check against the owner's three conditions, by the lead: none of D1 to D4 changes any
+> together with R1's pending item, no new rule. D0: minutes later the owner added "but aspis is
+> ultimately the release target". Recorded as a direction: the one-transaction version is the
+> version intended for release, so every obligation of the security contract has to be met by
+> Aspis, including the source refinement of its changed code. It is not a claim that anything is
+> established, and it does not by itself move the frozen pin: the deployed two-transaction
+> verifier stays the frozen target until an Aspis pin exists (names settled, source frozen, built,
+> measured, deployed) and its obligations are closed. Check against the owner's three conditions, by the lead: none of D1 to D4 changes any
 > code, so compute units are unchanged; none weakens the adversary, the metric or the failure
 > event, D1 removes runtime hypotheses and adds none, and D2 keeps the stronger failure event, so
 > soundness is not lowered; none touches the prover or anything published, so privacy is
