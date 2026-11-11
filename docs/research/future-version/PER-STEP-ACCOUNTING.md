@@ -243,37 +243,87 @@ R1's `hit_mass` followed by (a) with the charge of (b) and the trace budget
 of (c). This is the template the Aspis instance has to reproduce over the
 40-row transcript; it is not an Aspis result.
 
-### Aspis start count (41 rows) — STATED
+### Aspis start count (41 starts) — COMPILED
 
-Aspis transcript: R1 rows 0–32 (with the row-26 reseed), then the combining
-challenge (row 33) and six round challenges (rows 34–39), all plain rows
-continuing the opening transcript (no new reseed, commit `a63f0dfc35c`).
-Starts: 34 + 7 = 41.
+`AspisPerStep.ChargedWeight40.charged_weight40` (lean/AspisChargedWeight40.lean,
+PSA-e-12):
 
 ```
 (hq : ∀ H, (eval H P).1.length ≤ Q)
-⊢ decoderFirstWeight decAspis (chargeAspis select) emptyTable (eval H (chargedAspis D P)).1
-   ≤ Q * capMaxAspis + Σ_{n<33} classCap n + capMax + capLambda + 6 * capRound
+⊢ decoderFirstWeight AspisRows40.FinalStarts.decFinal charge40 emptyTable
+    (eval H (AspisRec40.ChargePrefix.charged D P)).1
+   ≤ Q * capMax + verifierCharge40
+verifierCharge40 = verifierCharge + capLambda + 6 * capRound   -- verifierCharge40_eq
 ```
 
-`capLambda` and `capRound` are the new rows' caps (sampler mass of a bad set
-of size 1 and 2 under `qm31_sample`), `capMaxAspis = max(capMax, capLambda,
-capRound) = capMax`.
+`charge40` charges a frame of rows 33 to 39 the fixed cap of its row
+(`capLambda` at 33, `capRound` at 34 to 39) and every other frame R1's
+`charge`; `capMax` is R1's (the largest of the six class caps), which bounds
+`capLambda` and `capRound` (`finalCap_le_capMax`). The reseed frame (row 26)
+is charged `capMax` on top of its class cap. Items 8 to 10 in
+ASPIS-INSTANCE-PLAN.md section 5.
 
-What extends and what is new for rows 33–39:
+### Composition for the Aspis 40-row experiment (item 14) — COMPILED
 
-| R1 definition | Aspis |
-|---|---|
-| `UnifiedLabels.label`, `.row` | extend as is: labels `0xa0+n` for n ≤ 39 are distinct bytes (`(160+n) % 256`, n < 96); `row_label` needs `n < 40` instead of `n < 33` (new lemma, same proof) |
-| `UnifiedDecoder.component`, `.decode` | new instance: components 33–39 dispatch to a new final-sumcheck decoder; `component_none` moves to `n ≥ 40` |
-| context parsers (`UnifiedSemanticContext`, `JointContext`) | new parser for prefixes of 33–39 records: the R1 33-record prefix plus the absorbed `claim ‖ rhs2` and round messages |
-| `UnifiedSampler.samp`, `LiteralByteProtocol.protocol`, `rows` | new 40-row instance; rows 33–39 are `plain` samplers with the `qm31_sample` decoder |
-| `LiteralClassifier.bad`, `.budget` | new classifier: R1's for rows 0–32 except that the row-32 doomed condition covers the residual pair (first-fold and second-fold); rows 33–39 doomed as in SOUNDNESS-ARGUMENT.md section 6.2 |
-| `LiteralClassifier.density` for rows 33–39 | new: from `lambdaBad_card_le_one`, `roundBad_card_le_two` (StageDSumcheck.lean) and `R0C.ModuloCounting.event_mass_le` |
-| row-32 density | re-bind: `RhoSamplerBound` is stated for `QueryResidualBridge.rhoBad` (one family); Aspis needs it for `bad2` (two families, ≤ 21) |
-| `RawUnifiedDecoder`, `RawLiteralDecoderDensity`, `RawAdaptiveLiteralDecoder`, `RecordedBinaryExperimentBin.dec` | new instances over the new unified decoder (same constructions) |
-| pieces (a), trace bridge | reused unchanged (generic) |
-| the classifier's D1/D2/D3 and the extractor link for the 40-row protocol | new (the composition obligation of SOUNDNESS-ARGUMENT.md) |
+`AspisPerStep.ChargedHitMass40.restricted_union_bound_weighted40`
+(lean/AspisChargedHitMass40.lean, PSA-e-14):
+
+```
+theorem restricted_union_bound_weighted40 (decodePair : AspisAcceptance.Codec)
+    (D : LiteralByteProtocol.Decoder) (d : Decision) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    lazyMean (AspisRec40.HitMass.projected D d P) emptyTable
+      (fun run => indicator (AspisRec40.HitMass.prefixHit (classifier40 decodePair) D P run)) ≤
+      (Q : ℚ) * capMax + verifierCharge40
+```
+
+(`Decision` is `OraclePortStoredExperimentC4.Decision`.) Proof: the rows
+agent's `AspisRec40.HitMass.hit_mass` (no hypothesis on the decision), then
+(a) `weighted_decoded_first_read_bound` with the charge bound
+`decFinal_le_charge40` and the trace budget `charged_weight40` through
+`weightedReadsBound_of_traces`.
+
+R1's statement, `Frozen2StartChargeProbability.restricted_union_bound`:
+
+```
+(hq : ∀ H, (eval H P).1.length ≤ Q)
+⊢ lazyMean (projected D P) emptyTable (fun run => indicator (prefixHit D P run))
+   ≤ (Q+34) · B
+```
+
+Differences, one by one:
+
+1. Experiment. R1: `OraclePortFrozen2Consumer.projected D P`, the
+   two-transaction experiment with R1's fixed decision and 33-row verifier.
+   Aspis: `AspisRec40.HitMass.projected D d P`, the same construction with
+   the 40-row verifier and the decision `d` a parameter; the theorem holds for
+   every `d`, in particular the one-transaction decision `dV_aspis`.
+2. Decoder and starts. R1: `RawAdaptiveLiteralDecoder.decode select choose`,
+   at most `Q + 34` starts. Aspis: `AspisRows40.FinalStarts.decFinal`
+   (`decAspis fin`: R1's decoder for rows 0 to 32, the byte decoder of rows
+   33 to 39), at most `Q + 41` starts.
+3. Classifier. R1: `RawAdaptiveClassifierHitDensity.classifier`. Aspis:
+   `classifier40 decodePair` = `AspisAcceptance.bad decodePair`, which is R1's
+   classifier below row 32, the residual-pair event at row 32 (in place of
+   R1's rho event at that row), the combining-challenge event at 33 and the
+   round events at 34 to 39. It is universally quantified over the pair codec
+   `decodePair`; which codec the implementation uses is fixed by the
+   acceptance link (item 11), not here.
+4. Bound. R1: the uniform `(Q+34) · B`, each start charged `B = 15/2^109`.
+   Aspis: per-step charges (owner decision, Aspis only), `Q · capMax +
+   verifierCharge40`. R1's own figure is not restated or changed; the
+   weighted R1 form `Q · capMax + verifierCharge` in this note remains a
+   template, not an R1 claim.
+5. Hypothesis. Unchanged: `hq`, R1's bound on the adversary's query count.
+6. Event. Both bound the classifier-hit event of the recovered charged
+   prefix of the run (`prefixHit`); the tail of the full experiment after the
+   charged prefix is not in the event in either theorem.
+
+Kind of theorem: a bound on the mass of the classifier's hit event in the
+model experiment. It is not a bound on accepting a false statement; that also
+needs the clean event (collision and account terms), acceptance-to-checks and
+the extractor link for Aspis, all still open. No security figure follows from
+it alone.
 
 ### Check of the composition against R1 — COMPILED
 
@@ -341,6 +391,9 @@ are exactly `[propext, Classical.choice, Quot.sound]`; no `sorry`, `admit`,
 | PSA-c-06 | AspisChargedWeight | cbaad801…db3c37 | 0 | 2.98 s | 4,226,960 KB | 434,352,128 | 1 axiom line |
 | PSA-c-07 | AspisChargedHitMass | 17848dff…c31c7d | 0 | 2.00 s | 4,221,664 KB | 429,301,760 | 1 axiom line |
 | PSA-c-08 | AspisChargedHitMassCheck | 7afab2bb…69d7 | 0 | 2.42 s | 4,230,180 KB | 428,130,304 | 4 axiom lines |
+| PSA-e-12 | AspisChargedWeight40 | 934045c8…f404 | 0 | 3.63 s | 4,215,396 KB | 431,779,840 | 1 axiom line (items 8 to 10: ASPIS-INSTANCE-PLAN.md section 5) |
+| PSA-e-13 | AspisChargedHitMass40 | 20f7ae0c…c0f5 | 1 | 1.94 s | 4,193,592 KB | 421,072,896 | `Decision` ambiguous (two namespaces opened) |
+| PSA-e-14 | AspisChargedHitMass40 | 7b9954b4…4787 | 0 | 2.26 s | 4,213,072 KB | 429,793,280 | 1 axiom line |
 
 The two kernel memory failures were not retried unchanged (AGENTS.md
 resource rule 5): in both the proof was asking the kernel to reduce terms
@@ -351,34 +404,49 @@ compile in seconds. No scratch stand-in file was used.
 
 ## 3. Numeric corollary
 
-### 3.1 Shape check at Q = 0 (arithmetic from the stated forms; NOT established)
+### 3.1 Start term at Q = 0 (arithmetic from the compiled forms only)
+
+This section follows only from `restricted_union_bound_weighted40` and the
+compiled definitions of `capMax` and `verifierCharge40`; it replaces the
+earlier estimate made from the stated forms (which agreed). It is not a
+security figure: the other terms of the Aspis bound and their transport are
+open (below).
 
 Exact rational arithmetic (Python `fractions`) from the L187 definitions:
 `LiteralClassifier.budget` (R1LiteralClassifier.lean:40), `SemanticBudget.roots`
 and `atom = (1 + deltaQ)/P^4` with `deltaQ = P^4/256^32` (R0P/SemD2.lean),
-`LiteralCircleDensity.budget = atom`, `LiteralOpeningDensity.{gamma,kappa,fold}Budget`
-with `OpeningSamplerBound.{gammaAtom, atom}`, `UnifiedQueryDensity.queryCap =
-C(9557,22)/C(262144,22)`, `RhoSamplerBound.rhoCap = 21·(⌊2^256/P^4⌋+1)/2^256`.
-New rows: `capLambda = 1·(⌊2^256/P^4⌋+1)/2^256`, `capRound = 2·(⌊2^256/P^4⌋+1)/2^256`
-(same sampler form as `rhoCap`). `B = 15/2^109`.
+`LiteralCircleDensity.budget = atom`, `OpeningSamplerBound.openingCap`
+(with `gammaAtom`, `atom`), `UnifiedQueryDensity.queryCap =
+C(9557,22)/C(262144,22)`, `RhoSamplerBound.rhoCap = 21·perElem`, and
+`perElem = (⌊2^256/P^4⌋+1)/2^256`, `capLambda = perElem`,
+`capRound = 2·perElem` (AspisRowDensityQM31). `P = 2^31 − 1`, `B = 15/2^109`.
 
-| Quantity | Value | In units of B |
-|---|---|---|
-| classCap 0 (217,600·atom) | 2^-106.269 | 0.4427 |
-| classCap 1–25 (max is row 1, 54,400·atom) | 2^-108.269 | 0.1107 |
-| classCap 26 (circle) | 2^-124.000 | 0.000002 |
-| classCap 27–30 (compiled as the sum `openingCap`; max is row 27, γ, 2^-199.735) | 2^-199.657 | ≈ 0 |
-| classCap 31 (queryCap) = capMax | 2^-105.142 | 0.9666 |
-| classCap 32 (rhoCap) | 2^-119.608 | 0.00004 |
-| Σ_{n<33} classCap n | 2^-103.031 | 4.1763 |
-| capLambda | 2^-124.000 | 0.000002 |
-| capRound | 2^-123.000 | 0.000004 |
-| **Aspis total(0)** = Σ + capMax + capLambda + 6·capRound + 6(1161²+2965²)/2^256 + 2^-126 + 2^-454 | **0.15067·2^-100 = 2^-102.731** | **5.1429** |
+- `capMax = queryCap = C(9557,22)/C(262144,22)`
+  = 332233934228956685743727459727502257791407791653047 /
+  14872013861920722188613414594812101323350365360984194543156711866198653246277652480
+  ≈ 2^-105.1421 = 0.966613 B = 0.028319·2^-100.
+- `verifierCharge40 = 1,577,601·atom + 4·openingCap + 2·queryCap + 34·perElem`
+  (row 0: 217,600·atom; rows 1–25: 25·54,400·atom; row 26: atom + capMax;
+  rows 27–30: 4·openingCap; row 31: queryCap; row 32: 21·perElem; row 33:
+  perElem; rows 34–39: 12·perElem). As a reduced fraction (163-digit
+  numerator) it is ≈ 2^-102.7305 = 5.142932 B = 0.150672·2^-100.
+  The R1 part `verifierCharge` is 5.142905 B; rows 33 to 39 add 13·perElem
+  ≈ 2^-120.3.
+- **Aspis start term at Q = 0** = `verifierCharge40` = 0.150672·2^-100
+  (< 2^-100 as rationals). For comparison only, R1's uniform start term at
+  Q = 0 is 34·B = 0.996094·2^-100.
+- Q-dependence of the start term alone: `Q·capMax + verifierCharge40 ≤
+  (Q+1)·2^-100` for every Q (both `capMax` and `verifierCharge40` are below
+  2^-100). This is arithmetic on one term, not the `(Q+1)·2^-100`
+  corollary, which needs every term of the total.
 
-It clears `2^-100` (exactly: `total(0) < 2^-100` holds as rationals). For
-comparison only: with every row at its own cap instead of the class maxima
-the 33-row sum would be 1.583 B; the coarsenings cost about 2.6 B and are not
-close to mattering at Q = 0.
+`verifierCharge40` as a reduced fraction (checked equal to the closed form
+`1,577,601·atom + 4·openingCap + 2·queryCap + 34·perElem`):
+
+```
+1062773442900527284618072538139609068208588569703933048511394823620742700175052894973176713647326115520853987471734180279854157888412515638946586489477873528997799
+/ 8941454792004069557412375958262374959375728139616530084353653333888736915387129967121165815713683701297109050248842091403735849056796700788700151959357866091657515457228046590292036266575790080
+```
 
 Terms carried over unchanged from R1, and their status for Aspis:
 
