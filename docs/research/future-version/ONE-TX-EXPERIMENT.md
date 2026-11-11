@@ -1082,3 +1082,9 @@ once, at deployment.
   cleanliness wins while the heaviest measured payment stays at least 50,000 CU under the limit.
   X2's heaviest measured payment is 58,437 CU under the limit. The page-rollover path is not
   measured in any build. No decision is recorded until the owner confirms.
+- Owner, same day: "ok i say take sdk, although if thre is a way that you could work out the
+  worst case inputs before a final decision that would be great". Recorded as: the SDK hash route
+  (X2) is the owner's choice, and the final decision waits for the worst-case compute figure. The
+  owner did not answer the proposed working rule, so it is not in force: every other choice that
+  raises compute units still goes to the owner one by one. The worst-case work is in
+  WORST-CASE-COMPUTE.md.
