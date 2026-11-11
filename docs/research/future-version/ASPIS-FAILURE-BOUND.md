@@ -528,3 +528,76 @@ module.
 All `#print axioms` lines of LDJ-02 to LDJ-05 (32 of them) are `[propext, Classical.choice,
 Quot.sound]`. No warnings. These are focused compiles against cached objects, not a coherent
 rebuild of the closure; that rebuild is owed before any claim.
+
+## 8. The model theorem, and the coherent rebuild (lead, 2026-11-11)
+
+**Statements** (`lean/AspisFailureBoundModel.lean`):
+
+```lean
+theorem failure_bound40P_model (D) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    lazyMean (AspisFailureBound.exp D P) emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) ≤
+      BinCombinedMerkleCollision.kappa (Q+1111) +
+        ((Q : ℚ) * capMax + verifierCharge40) + 1/(2:ℚ)^126 + 1/(2:ℚ)^454
+
+theorem failure_le_per_query_model (D) (P : Prover) (Q : Nat) (hQ : Q ≤ 2^150)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    lazyMean (AspisFailureBound.exp D P) emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) ≤ ((Q : ℚ) + 1) / 2^100
+```
+
+The hypothesis of section 7 is discharged: `final_decoding40 : FinalDecoding40 D P Q` holds for
+every decoder, prover and budget (`AspisRec40.FinalDecoding.final_decodes`, from the follow, the
+context recovery, the selection, the word choice and the byte-to-address bridge of
+RECORDED-EXPERIMENT-40.md sections 10 to 14). The only hypotheses left are the bound on the
+prover's oracle queries, `hq`, and `Q ≤ 2^150` for the per-query form. `hq` is satisfiable
+(`hq_of_done`; any prover with at most `Q` queries in every oracle world).
+
+**What kind of result this is.** A model theorem about the 40-row recorded experiment with the
+Aspis decision, form (P) of section 2. It says: for a prover making at most `Q` oracle queries,
+the mean of R1's failure mass on that experiment, plus R1's query-scan allowance, is at most the
+right-hand side. It is not a statement about the deployed program or the Rust. In particular:
+- no account term (form (G) needs the extracted entry, the runtime transport and the account
+  budget);
+- no payout conjunct (ONE-TRANSACTION-GAME.md section 11 has it over a model, with five open
+  source obligations);
+- no binding to the one-transaction game's outcome, and no campaign accounting;
+- no source refinement: nothing ties the model's decision `dV_aspis` to the Rust
+  `verify_summed_format`;
+- no completeness statement: it is not compiled that the model verifier accepts an honest run.
+  A soundness bound is true but empty for a verifier that accepts nothing. The model was written
+  from the Rust that accepts on devnet, and section 11.4 of RECORDED-EXPERIMENT-40.md argues
+  the honest run meets the premises; the formal statement is part of the source refinement.
+So the release target is not established by this. What is closed is the protocol-level model
+bound, with R1's layer below it used by reference.
+
+**Coherent rebuild.** All Aspis proof modules were compiled once, in import order, from the
+committed sources into a new object directory, each against the objects of the same run.
+
+| Item | Value |
+|---|---|
+| Target | every `.lean` file of `docs/research/future-version/lean/` at the source revision, except the ten measurement-only files (`*Measure*`, which prove nothing and write files): 80 modules, list and per-module sha256 in `evidence/future-version-20261111/replay-c1/manifest.tsv` |
+| Source revision | future-version 5bf1b2216ff (sources taken with `git archive`; all 80 hashes in the manifest equal the files at that commit) |
+| Manifest sha256 | fbd1b37831fc67136dbd43259d2b9619a27254ae5678f7a8767bea83347fcce7 |
+| Host attempt | RPL-c1, one scope, MemoryHigh 6 GiB, MemoryMax 8 GiB, swap 0 |
+| Exit | 0; every module exit 0 |
+| Wall | 4 min 30.89 s for the scope (270.1 s summed over modules), 2026-11-11 20:02:26 to 20:06:57 UTC |
+| Peak RSS | 4,282,248 KB (`AspisRec40FinalWords`; mostly memory-mapped imports) |
+| cgroup peak | 474,685,440 B; memory events all zero; no swap |
+| Toolchain | Lean 4.32.0, `-j1 -M7000 -DElab.async=false` |
+| R1 layer | not rebuilt here: the L187 release objects (`codex-cx-replay-l187-20261109/{objs,base_ref}`) by reference, read only. Their coherence is the soundness lead's L187 replay. |
+| `#print axioms` | 511 lines naming axioms across the 80 modules, and 2 theorems with none. The only names that occur are `propext` (511), `Classical.choice` (459, of which 7 print as `choice` in a file that opens `Classical`) and `Quot.sound` (502). The four theorems of `AspisFailureBoundModel` each print `[propext, Classical.choice, Quot.sound]`. |
+| `sorry` | none in any output |
+| Warnings | 21 linter warnings in 10 modules (duplicated namespace component, unused simp argument, `<;>` where `;` suffices, unused section variable, one `change` that does nothing); none about a missing proof |
+| Constant walk | from both model theorems, with constructors and recursors visited (PSD-105, focused compile before the rebuild): 1,024 project modules, 12,362 project constants, no two-transaction (class iii) module; `final-model-measure.tsv` |
+
+Before the rebuild, three file headers were corrected (comment only) and the final sumcheck
+model file was renamed to its module name (content unchanged), so the hashes of
+`AspisOneTxMergedBudget`, `AspisRec40CleanWords` and `AspisRec40CleanTag` in the manifest differ
+from their earlier receipts. Scripts: `evidence/future-version-20261111/host/fv_replay_aspis.sh`
+and `fv_replay_order.py`.
+
+Not yet done on this result: the soundness lead's reviewer has read the chain up to the restated
+hypothesis (06fb221ac96) and has not read the final files (the follow, the bridge, the final
+decoding, the model theorem).
